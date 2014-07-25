@@ -38,9 +38,7 @@ $tool_name = get_lang('AddCoursesToURL');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
-/*		MAIN CODE   */
-
-Display::display_header($tool_name);
+Display :: display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
@@ -71,19 +69,16 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 	}
 }
 
-
-
-/*	Display GUI */
-
-if(empty($first_letter_user)) {
-	$sql = "SELECT count(*) as num_courses FROM $tbl_course";
-	$result = Database::query($sql);
-	$num_row = Database::fetch_array($result);
+if (empty($first_letter_user)) {
+    $sql = "SELECT count(*) as num_courses FROM $tbl_course";
+    $result = Database::query($sql);
+    $num_row = Database::fetch_array($result);
     if ($num_row['num_courses']>1000) {
-	 // assign a default filter on users names
-		$first_letter_user = 'A';
-	}
-	unset($result);
+        //if there are too much num_courses to gracefully handle with the HTML select list,
+        // assign a default filter on users names
+        $first_letter_user = 'A';
+    }
+    unset($result);
 }
 
 $first_letter_course = Database::escape_string($first_letter_course);
@@ -152,4 +147,5 @@ unset($result);
  </table>
 </form>
 <?php
+
 Display :: display_footer();

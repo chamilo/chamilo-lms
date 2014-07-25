@@ -84,7 +84,7 @@ class LinkForm extends FormValidator
             // The hot potatoe link will be added "inside" the exercise option.
             if ($linkType == LINK_HOTPOTATOES) {
                 continue;
-			}
+            }
             $link = $this->createLink($linkType, $courseCode);
 			// disable this element if the link works with a dropdownlist
 			// and if there are no links left
@@ -110,6 +110,7 @@ class LinkForm extends FormValidator
 			$this->setDefaults(array('select_link' => $this->extra));
 		}
 	}
+
     /**
      * @param $link
      * @param $courseCode
@@ -122,4 +123,8 @@ class LinkForm extends FormValidator
             $link->set_course_code($courseCode);
         } elseif(!empty($_GET['course_code'])) {
             $link->set_course_code(Database::escape_string($_GET['course_code']));
+        }
+
+        return $link;
+    }
 }

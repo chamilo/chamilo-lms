@@ -37,14 +37,13 @@ if (api_is_multiple_url_enabled()) {
 
 $res = Database::query($sql);
 $teachers = array();
-//$teachers[0] = '-- '.get_lang('NoManager').' --';
-while($obj = Database::fetch_object($res)) {
+while ($obj = Database::fetch_object($res)) {
     $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
 // Build the form.
 $form = new FormValidator('update_course');
-$form->addElement('header', '', $tool_name);
+$form->addElement('header', $tool_name);
 
 // Title
 $form->add_textfield('title', get_lang('Title'), true, array ('class' => 'span6'));
@@ -52,14 +51,11 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')), false, array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
+$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 $form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
-
-//$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_id'));
-//$form->applyFilter('tutor_id', 'html_filter');
 
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" ');
 $form->applyFilter('course_teachers', 'html_filter');
@@ -125,23 +121,26 @@ if (isset($default_course_visibility)) {
 }
 $values['subscribe']        = 1;
 $values['unsubscribe']      = 0;
-reset($teachers);
-//$values['course_teachers'] = key($teachers);
 
 $form->setDefaults($values);
 
 // Validate the form
 if ($form->validate()) {
     $course          = $form->exportValues();
-    //$tutor_name      = $teachers[$course['tutor_id']];
-    $course['user_id']      = isset($course['tutor_id']) ? $course['tutor_id'] : null;
-    $course['teachers']  = isset($course['course_teachers']) ? $course['course_teachers'] : null;
+    $teacher_id      = $course['tutor_id'];
+    $course_teachers = $course['course_teachers'];
+
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
+
     $course['exemplary_content']    = empty($course['exemplary_content']) ? false : true;
-    //$course['tutor_name']           = $tutor_name;
+    $course['teachers']             = $course_teachers;
+    $course['user_id']              = $teacher_id;
     $course['wanted_code']          = $course['visual_code'];
     $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
+    // Fixing category code
+    $course['course_category'] = $course['category_code'];
     $course_info = CourseManager::create_course($course);
+
     header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));
     exit;
 }

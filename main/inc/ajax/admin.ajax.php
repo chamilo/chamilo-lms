@@ -108,6 +108,9 @@ function check_system_version()
         $number_of_users = Statistics::count_users();
         $number_of_active_users = Statistics::count_users(null, null, null, true);
 
+        // The number of sessions
+        $number_of_sessions = Statistics::count_sessions();
+
         $data = array(
             'url' => api_get_path(WEB_PATH),
             'campus' => api_get_setting('siteName'),
@@ -116,6 +119,7 @@ function check_system_version()
             'numberofcourses' => $number_of_courses,
             'numberofusers' => $number_of_users,
             'numberofactiveusers' => $number_of_active_users,
+            'numberofsessions' => $number_of_sessions,
             //The donotlistcampus setting recovery should be improved to make
             // it true by default - this does not affect numbers counting
             'donotlistcampus' => api_get_setting('donotlistcampus'),

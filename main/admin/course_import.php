@@ -119,9 +119,8 @@ function save_data($courses) {
                 $teacherInfo = api_get_user_info_from_username($teacher);
                 if (!empty($teacherInfo)) {
                     $teacherList[] = $teacherInfo;
+                }
             }
-        }
-
         }
 
         $params = array();
@@ -220,7 +219,7 @@ if (isset($errors) && count($errors) != 0) {
         <input type="file" name="import_file"/>
     </div>
 </div>
-<div class="control-group ">
+<div class="control-group">
     <div class="control">
         <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
     </div>

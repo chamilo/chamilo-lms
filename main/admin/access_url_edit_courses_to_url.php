@@ -39,13 +39,12 @@ $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAd
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 $add_type = 'multiple';
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
-
 }
 
-$access_url_id = 1;
-if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
+$access_url_id=1;
+if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!='') {
 	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
 }
 
@@ -65,7 +64,6 @@ function add_user_to_url(code, content) {
 }
 
 function send() {
-
 	if (document.formulaire.access_url_id.value != 0) {
 		document.formulaire.form_sent.value=0;
 		document.formulaire.add_type.value=\''.$add_type.'\';
@@ -73,8 +71,7 @@ function send() {
 	}
 }
 
-function remove_item(origin)
-{
+function remove_item(origin) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			origin.options[i]=null;
@@ -84,14 +81,14 @@ function remove_item(origin)
 }
 </script>';
 
-$form_sent=0;
-$errorMsg='';
-$UserList=$SessionList=array();
-$users=$sessions=array();
+$form_sent = 0;
+$errorMsg = '';
+$UserList = $SessionList = array();
+$users = $sessions = array();
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-	$form_sent = $_POST['form_sent'];
-	$course_list = $_POST['course_list'];
+	$form_sent=$_POST['form_sent'];
+	$course_list=$_POST['course_list'];
 
 	if (!is_array($course_list)) {
 		$course_list=array();
@@ -302,9 +299,7 @@ function loadUsersInSelect(select){
 	alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
 	nosessionUsers = makepost(document.getElementById('origin_users'));
 	sessionUsers = makepost(document.getElementById('destination_users'));
 	nosessionClasses = makepost(document.getElementById('origin_classes'));
@@ -326,7 +321,6 @@ function makepost(select){
 		ret = ret + options[i].value +'::'+options[i].text+";;";
 
 	return ret;
-
 }
 </script>
 <?php

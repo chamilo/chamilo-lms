@@ -261,12 +261,12 @@ class Category implements GradebookItem
         }
 
         $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql                  = 'SELECT * FROM '.$tbl_grade_categories;
-        $paramcount           = 0;
+        $sql = 'SELECT * FROM '.$tbl_grade_categories;
+        $paramcount = 0;
         if (isset($id)) {
             $id = Database::escape_string($id);
-            $sql .= ' WHERE id = '.intval($id);
-            $paramcount++;
+            $sql.= ' WHERE id = '.intval($id);
+            $paramcount ++;
         }
 
         if (isset($user_id)) {
@@ -395,7 +395,7 @@ class Category implements GradebookItem
 
         if (isset($this->name) && isset($this->user_id)) {
             $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql                  = 'INSERT INTO '.$tbl_grade_categories.' (name,user_id,weight,visible';
+            $sql = 'INSERT INTO '.$tbl_grade_categories.' (name,user_id,weight,visible';
             if (isset($this->description)) {
                 $sql .= ',description';
             }
@@ -403,7 +403,7 @@ class Category implements GradebookItem
                 $sql .= ',course_code';
             }
             if (isset($this->parent)) {
-                $sql .= ',parent_id';
+                 $sql .= ',parent_id';
             }
             if (!empty($this->session_id)) {
                 $sql .= ', session_id';
@@ -415,7 +415,6 @@ class Category implements GradebookItem
             if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
                 $sql .= ', certif_min_score ';
             }
-
 
             /*
             $setting = api_get_setting('tool_visible_by_default_at_creation');

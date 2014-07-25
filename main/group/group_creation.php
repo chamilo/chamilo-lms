@@ -19,7 +19,7 @@ api_protect_course_script(true);
 
 /*	Create the groups */
 
-if (isset ($_POST['action'])) {
+if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'create_groups':
             $groups = array();

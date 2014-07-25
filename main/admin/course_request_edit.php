@@ -65,7 +65,6 @@ if ($course_validation_feature) {
 
         // The teacher.
         $titular = $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
-        //$form->applyFilter('tutor_name', 'html_filter');
 
         // Description of the requested course.
         $form->addElement('textarea', 'description', get_lang('Description'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));
@@ -212,9 +211,8 @@ if ($course_validation_feature) {
                     $back_url = api_add_url_param($back_url, 'is_error_message=1', false);
                 }
                 header('location:'.$back_url);
-
+                exit;
             } else {
-
                 $message = $course_request_values['wanted_code'].' - '.get_lang('CourseCodeAlreadyExists');
                 $is_error_message = true;
             }

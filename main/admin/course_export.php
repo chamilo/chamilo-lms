@@ -53,15 +53,27 @@ if ($_POST['formSent']) {
 		$archiveFile = 'export_courses_list_'.date('Y-m-d_H-i-s').'.'.$file_type;
 		$fp = fopen($archivePath.$archiveFile,'w');
 		if ($file_type == 'csv') {
-			$add = "Code;Title;CourseCategory;Teacher;Language;".PHP_EOL;
+			$add = "Code;Title;CourseCategory;Teacher;Language;OtherTeachers;Users;".PHP_EOL;
 			foreach($courses as $course) {
 				$course['code'] = str_replace(';',',',$course['code']);
 				$course['title'] = str_replace(';',',',$course['title']);
 				$course['category_code'] = str_replace(';',',',$course['category_code']);
 				$course['tutor_name'] = str_replace(';',',',$course['tutor_name']);
 				$course['course_language'] = str_replace(';',',',$course['course_language']);
+                $course['course_users'] = CourseManager::get_user_list_from_course_code($course['code']);
+                $course['students'] = '';
+                $course['teachers'] = '';
+                foreach ($course['course_users'] as $user) {
+                    if ($user['status_rel'] == 1) {
+                        $course['teachers'] .= $user['username'].'|';
+                    } else {
+                        $course['students'] .= $user['username'].'|';
+                    }
+                }
+                $course['students'] = substr($course['students'],0,-1);
+                $course['teachers'] = substr($course['teachers'],0,-1);
 
-				$add.= $course['code'].';'.$course['title'].';'.$course['category_code'].';'.$course['tutor_name'].';'.$course['course_language'].';'.PHP_EOL;
+				$add.= $course['code'].';'.$course['title'].';'.$course['category_code'].';'.$course['tutor_name'].';'.$course['course_language'].';'.$course['teachers'].';'.$course['students'].';'.PHP_EOL;
 			}
 			fputs($fp, $add);
 		}

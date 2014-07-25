@@ -196,6 +196,8 @@ CREATE TABLE IF NOT EXISTS lp_field_options (
     option_display_text varchar(64),
     option_order int,
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
+    priority VARCHAR(255),
+    priority_message VARCHAR(255),
     PRIMARY KEY (id)
 );
 DROP TABLE IF EXISTS lp_field_values;

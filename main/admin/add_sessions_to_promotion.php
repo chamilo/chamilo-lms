@@ -5,18 +5,16 @@
 */
 
 // name of the language file that needs to be included
-$language_file=array('admin','registration');
+$language_file = array('admin','registration');
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
 
 $xajax = new xajax();
-
-//$xajax->debugOn();
-$xajax -> registerFunction ('search_sessions');
+$xajax->registerFunction ('search_sessions');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -29,12 +27,9 @@ $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'
 $interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
 
 // Database Table Definitions
-
-// setting the name of the tool
-$tool_name=get_lang('SubscribeSessionsToPromotions');
-
+$tool_name = get_lang('SubscribeSessionsToPromotions');
 $add_type = 'multiple';
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -79,9 +74,9 @@ $errorMsg   = '';
 $users      =$sessions=array();
 $promotion = new Promotion();
 $id = intval($_GET['id']);
-if($_POST['form_sent']) {
-    $form_sent          = $_POST['form_sent'];
-    $session_in_promotion_posted       = $_POST['session_in_promotion_name'];
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+    $form_sent = $_POST['form_sent'];
+    $session_in_promotion_posted = $_POST['session_in_promotion_name'];
     if (!is_array($session_in_promotion_posted)) {
         $session_in_promotion_posted=array();
     }
@@ -95,12 +90,10 @@ if($_POST['form_sent']) {
 
 $promotion_data = $promotion->get($id);
 $session_list   = SessionManager::get_sessions_list(array(), array('name'));
-
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
 $session_not_in_promotion = $session_in_promotion= array();
 
 if (!empty($session_list)) {
-    foreach($session_list as $session) {
+    foreach ($session_list as $session) {
         $promotion_id = $session['promotion_id'];
         if (isset($promotion_id) && !empty($promotion_id)) {
             if ($promotion_id == $id) {
@@ -117,8 +110,9 @@ $ajax_search = $add_type == 'unique' ? true : false;
 
 //checking for extra field with filter on
 
-function search_sessions($needle,$type) {
-    global $tbl_user,$session_in_promotion;
+function search_sessions($needle, $type)
+{
+    global $session_in_promotion;
     $xajax_response = new XajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
@@ -128,44 +122,20 @@ function search_sessions($needle,$type) {
         $needle = Database::escape_string($needle);
         $needle = api_convert_encoding($needle, $charset, 'utf-8');
 
-        if ($type == 'single') {
-            // search users where username or firstname or lastname begins likes $needle
-          /*  $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-                    WHERE (username LIKE "'.$needle.'%"
-                    OR firstname LIKE "'.$needle.'%"
-                OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''.
-                $order_clause.
-                ' LIMIT 11';*/
-        } else {
-            $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "$needle%"));
-        }
-        $i=0;
-        if ($type=='single') {
-            /*
-            while ($user = Database :: fetch_array($rs)) {
-                $i++;
-                if ($i<=10) {
-                    $person_name = api_get_person_name($user['firstname'], $user['lastname']);
-                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
-                } else {
-                    $return .= '...<br />';
-                }
+        $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "$needle%"));
+        $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';
+        foreach ($session_list as $row ) {
+            if (!in_array($row['id'], array_keys($session_in_promotion))) {
+                $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
             }
-            $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));*/
-        } else {
-            $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';
-            foreach ($session_list as $row ) {
-                if (!in_array($row['id'], array_keys($session_in_promotion))) {
-                    $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
-                }
-            }
-            $return .= '</select>';
-            $xajax_response -> addAssign('ajax_list_multiple','innerHTML',api_utf8_encode($return));
         }
+        $return .= '</select>';
+        $xajax_response -> addAssign('ajax_list_multiple','innerHTML',api_utf8_encode($return));
+
     }
     return $xajax_response;
 }
-$xajax -> processRequests();
+$xajax->processRequests();
 
 Display::display_header($tool_name);
 
@@ -187,7 +157,7 @@ echo '</div>';
 
 if ($add_type=='multiple') {
     if (is_array($extra_field_list)) {
-        if (is_array($new_field_list) && count($new_field_list)>0 ) {
+        if (is_array($new_field_list) && count($new_field_list) > 0) {
             echo '<h3>'.get_lang('FilterUsers').'</h3>';
             foreach ($new_field_list as $new_field) {
                 echo $new_field['name'];
@@ -211,10 +181,10 @@ if ($add_type=='multiple') {
         }
     }
 }
-echo Display::input('hidden','id',$id);
-echo Display::input('hidden','form_sent','1');
-echo Display::input('hidden','add_type',null);
-if(!empty($errorMsg)) {
+echo Display::input('hidden', 'id', $id);
+echo Display::input('hidden', 'form_sent', '1');
+echo Display::input('hidden', 'add_type', null);
+if (!empty($errorMsg)) {
     Display::display_normal_message($errorMsg); //main API
 }
 ?>
@@ -278,7 +248,13 @@ if(!empty($errorMsg)) {
   </td>
   <td align="center">
 <?php
-    echo Display::select('session_in_promotion_name[]', $session_in_promotion, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'session_in_promotion','size'=>'15px'),false );
+    echo Display::select(
+        'session_in_promotion_name[]',
+        $session_in_promotion,
+        '',
+        array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'session_in_promotion','size'=>'15px'),
+        false
+    );
     unset($sessionUsersList);
 ?>
  </td>
@@ -293,8 +269,40 @@ if(!empty($errorMsg)) {
 </tr>
 </table>
 </form>
-
 <script>
+function moveItem(origin , destination) {
+    for(var i = 0 ; i<origin.options.length ; i++) {
+        if(origin.options[i].selected) {
+            destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
+            origin.options[i]=null;
+            i = i-1;
+        }
+    }
+    destination.selectedIndex = -1;
+    sortOptions(destination.options);
+}
+
+function sortOptions(options) {
+    newOptions = new Array();
+    for (i = 0 ; i<options.length ; i++)
+        newOptions[i] = options[i];
+
+    newOptions = newOptions.sort(mysort);
+    options.length = 0;
+    for(i = 0 ; i < newOptions.length ; i++)
+        options[i] = newOptions[i];
+}
+
+function mysort(a, b){
+    if (a.text.toLowerCase() > b.text.toLowerCase()){
+        return 1;
+    }
+    if (a.text.toLowerCase() < b.text.toLowerCase()){
+        return -1;
+    }
+    return 0;
+}
+
 function valide(){
     var options = document.getElementById('session_in_promotion').options;
     for (i = 0 ; i<options.length ; i++)
@@ -302,11 +310,8 @@ function valide(){
     document.forms.formulaire.submit();
 }
 
-
-function loadUsersInSelect(select){
-
+function loadUsersInSelect(select) {
     var xhr_object = null;
-
     if(window.XMLHttpRequest) // Firefox
         xhr_object = new XMLHttpRequest();
     else if(window.ActiveXObject) // Internet Explorer
@@ -316,10 +321,7 @@ function loadUsersInSelect(select){
 
     //xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-
     xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-
     nosessionUsers = makepost(document.getElementById('session_not_in_promotion'));
     sessionUsers = makepost(document.getElementById('session_in_promotion'));
     nosessionClasses = makepost(document.getElementById('origin_classes'));
@@ -334,16 +336,11 @@ function loadUsersInSelect(select){
     }
 }
 
-function makepost(select){
-
+function makepost(select) {
     var options = select.options;
     var ret = "";
     for (i = 0 ; i<options.length ; i++)
         ret = ret + options[i].value +'::'+options[i].text+";;";
-
     return ret;
-
 }
 </script>
-<?php
-Display::display_footer();

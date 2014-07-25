@@ -5,10 +5,10 @@
 */
 
 // name of the language file that needs to be included
-$language_file=array('admin','registration','userInfo');
+$language_file = array('admin','registration','userInfo');
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
@@ -16,27 +16,29 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-global $_configuration;
 // Access restrictions
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'group_list.php','name' => get_lang('GroupList'));
+$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'group_list.php','name' => get_lang('GroupList'));
 
 // Database Table Definitions
 $tbl_group			= Database::get_main_table(TABLE_MAIN_GROUP);
 $tbl_user			= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$needle = null;
+$user_anonymous = api_get_anonymous_id();
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToGroup');
 $group_id = intval($_GET['id']);
+$without_user_id = null;
 
 $add_type = 'multiple';
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
-	$add_type = Security::remove_XSS($_REQUEST['add_type']);
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
+    $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 //checking for extra field with filter on
@@ -177,16 +179,10 @@ function search_users($needle,$type,$relation_type) {
 
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-
 $htmlHeadXtra[] = '
 <script>
 function add_user (code, content) {
-
-	// document.getElementById("user_to_add").value = "";
-	//document.getElementById("ajax_list_users_single").innerHTML = "";
-
 	destination = document.getElementById("destination_users");
-
 	for (i=0;i<destination.length;i++) {
 		if(destination.options[i].text == content) {
 				return false;
@@ -196,8 +192,8 @@ function add_user (code, content) {
 	destination.options[destination.length] = new Option(content,code);
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-
 }
+
 function remove_item(origin)
 {
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -209,30 +205,28 @@ function remove_item(origin)
 }
 
 function validate_filter() {
-		document.formulaire.add_type.value = \''.$add_type.'\';
-		document.formulaire.form_sent.value=0;
-		document.formulaire.submit();
+    document.formulaire.add_type.value = \''.$add_type.'\';
+    document.formulaire.form_sent.value=0;
+    document.formulaire.submit();
 }
 </script>';
 
-$form_sent=0;
-$errorMsg=$firstLetterUser=$firstLetterSession='';
-$UserList=$SessionList=array();
-$users=$sessions=array();
-$noPHP_SELF=true;
-
+$form_sent = 0;
+$errorMsg = $firstLetterUser = $firstLetterSession='';
+$UserList = $SessionList = array();
+$users = $sessions = array();
+$noPHP_SELF = true;
 $group_info = GroupPortalManager::get_group_data($group_id);
 $group_name = $group_info['name'];
 
 Display::display_header($group_name);
 
-if ($_POST['form_sent']) {
-
-	$form_sent			= $_POST['form_sent'];
-	$firstLetterUser	= $_POST['firstLetterUser'];
-	$UserList			= $_POST['sessionUsersList'];
-	$group_id			= intval($_POST['id']);
-	$relation_type		= intval($_POST['relation']);
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+    $form_sent			= $_POST['form_sent'];
+    $firstLetterUser	= isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
+    $UserList			= $_POST['sessionUsersList'];
+    $group_id			= intval($_POST['id']);
+    $relation_type		= intval($_POST['relation']);
 
 	if(!is_array($UserList)) {
 		$UserList=array();

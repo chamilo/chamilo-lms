@@ -255,9 +255,10 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 										<div class="topics">'.get_lang('NextTopics').'</div>
 										<div class="row-fluid">';
 		$thematic_description_html.='<div class="span6 items-progress">
+										<p class="title_topics">'.$thematic_info['title'].'</p>
 										<p class="date">'.$thematic_advance_info['start_date'].'</p>
 										<h3 class="title">'.$thematic_advance_info['content'].'</h3>
-										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].' <a href="'.$thematicUrl.'">'.get_lang('ShowDetails').'</a></p>
+										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('ShowDetails').'</a></p>
 									</div>';
 
 
@@ -279,9 +280,10 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 			$thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
 			$thematic_description_html.='<div class="span6 items-progress">
+										<p class="title_topics">'.$thematic_info['title'].'</p>
 										<p class="date">'.$thematic_advance_info2['start_date'].'</p>
 										<h3 class="title">'.$thematic_advance_info2['content'].'</h3>
-										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' <a href="'.$thematicUrl.'">'.get_lang('ShowDetails').'</a></p>
+										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('ShowDetails').'</a></p>
 									</div>';
 
 

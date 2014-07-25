@@ -26,110 +26,6 @@ a:active {
     text-decoration: none;
     color : #3757f7;
 }
-/* START COURSE PROGRESS */
-.thematic-postit{
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.thematic-postit .tittle-score{
-  padding-bottom: 5px;
-  font-size: 16px;
-  color: #006699;
-}
-.thematic-postit .topics{
-  font-size: 12px;
-  padding-bottom: 5px;
-  color: #006699;
-}
-.items-progress {
-  border: 1px solid #ccc;
-  padding: 5px;
-  margin-top: 5px;
-  background-color: #FEF4FF;
-}
-.items-progress .date{
-  color: #666;
-  font-size: 11px;
-  display: block;
-}
-.items-progress .title{
-  font-size: 14px;
-  line-height: 18px;
-  display: block;
-}
-.items-progress .time{
-  display: block;
-  padding-top: 5px;
-}
-.info-progress{
-  padding: 10px;
-}
-.score-thematic .score{
-  text-align: right;
-}
-
-.score-thematic .name-student{
-  font-weight: bold;
-  font-size: 16px;
-  padding-left: 70px;
-  margin: 0px;
-}
-.score-thematic{
-  color: #666;
-}
-.score-thematic p{
-  padding: 0px;
-  margin: 0px;
-}
-.row-fluid.score-thematic {
-  padding-top: 5px;
-}
-.accordion-heading .accordion-toggle {
-  display: inline;
-  padding-bottom: 3px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 3px;
-  float: right;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-right: 15px;
-}
-.accordion-heading .title-accordion{
-  padding:0px;
-  background:url(images/thematic.png) no-repeat left bottom transparent;
-}
-.name-student h2{
-  font-size: 18px;
-  margin: 0;
-}
-.accordion-heading h3, .accordion-heading h2{
-  line-height: 17px;
-}
-.accordion-group{
-  border: auto;
-
-}
-.name-student h3{
-  font-size: 13px;
-  font-weight: normal;
-  margin: 0;
-
-}
-.accordion-heading {
-  background: rgb(255,255,255); /* Old browsers */
-  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(192,219,234,1) 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(192,219,234,1))); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* IE10+ */
-  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#c0dbea',GradientType=0 ); /* IE6-9 */
-}
-.collapse.in {
-  height: auto;
-}
-/* END COURSE PROGRESS*/
 .navbar .nav > li > a {
     float: none;
     line-height: 24px;
@@ -413,31 +309,6 @@ a.thumbnail:hover{
   width: 800px;
 }
 
-/* COURSE INTRO CONTENT */
-
-.page-course-intro{
-    padding: 2em;
-    border: 1px solid #DDDDDD;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    margin-bottom: 2em;
-}
-
-.page-course-intro ul{
-    list-style-image:url(images/vineta.png);
-    padding-top: 10px;
-}
-.page-course-intro a{
-    color: #FD6600;
-}
-.page-course-intro a:hover{
-    color: #FD6600;
-    text-decoration: underline;
-}
-
-
-/* END OF COURSE INTRO*/
 .fc-header-title h2{
     color: #0191C7;
 }
@@ -681,14 +552,20 @@ a.thumbnail:hover{
 /*CSS PARA CONTENIDO DE CURSO INTRODUCCION*/
 
 .page-course-intro{
-    padding: 10px;
+    padding: 5px;
     border: none;
     /*-webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;*/
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
-
+.thumbnail > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  height: auto;
+}
 .page-course-intro ul{
     list-style-image:url(images/vineta.png);
     padding-top: 10px;
@@ -1221,6 +1098,14 @@ RESPONSIVE CSS
     #top_main_content .menu-column #user_image_block{
       box-shadow: none;
     }
+    .navbar .nav > li > a {
+    float: none;
+    line-height: 20px;
+    padding-bottom: 7px;
+    padding-right: 10px;
+    padding-top: 7px;
+    color: #FFFFFF;
+}
 
 }
 @media (max-width: 600px) {
@@ -1316,6 +1201,8 @@ footer {
 #announcements{
   display: none;
 }
+
+
 }
 /*+++++++++++++++++++++++++++++++++
 END RESPONSIVE CSS

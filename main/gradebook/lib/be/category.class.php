@@ -54,7 +54,7 @@ class Category implements GradebookItem
 
     public function get_certificate_min_score()
     {
-        if(!empty($this->certificate_min_score)) {
+        if (!empty($this->certificate_min_score)) {
             return $this->certificate_min_score;
         } else {
             return null;
@@ -116,7 +116,7 @@ class Category implements GradebookItem
         $this->certificate_min_score = $min_score;
     }
 
-    public function set_parent_id ($parent)
+    public function set_parent_id($parent)
     {
         $this->parent = intval($parent);
     }
@@ -245,7 +245,7 @@ class Category implements GradebookItem
     ) {
         //if the category given is explicitly 0 (not null), then create
         // a root category object (in memory)
-        if (isset($id) && (int)$id === 0 ) {
+        if (isset($id) && (int)$id === 0) {
             $cats = array();
             $cats[] = Category::create_root_category();
 
@@ -269,7 +269,7 @@ class Category implements GradebookItem
                 $sql .= ' WHERE';
             }
             $sql .= ' user_id = '.intval($user_id);
-            $paramcount ++;
+            $paramcount++;
         }
 
         if (isset($course_code)) {
@@ -296,7 +296,7 @@ class Category implements GradebookItem
             if (empty($session_id)) {
                 $sql .= ' AND (session_id IS NULL OR session_id = 0) ';
             } else {
-                $sql .= ' AND session_id = '.(int) $session_id.' ';
+                $sql .= ' AND session_id = '.(int)$session_id.' ';
             }
             //}
             $paramcount ++;
@@ -310,7 +310,7 @@ class Category implements GradebookItem
                 $sql .= ' WHERE ';
             }
             $sql .= ' parent_id = '.intval($parent_id);
-            $paramcount ++;
+            $paramcount++;
         }
 
         if (isset($visible)) {
@@ -380,7 +380,7 @@ class Category implements GradebookItem
      */
     public function add()
     {
-        if (isset($this->name) && '-1'==$this->name) {
+        if (isset($this->name) && '-1' == $this->name) {
             return false;
         }
 

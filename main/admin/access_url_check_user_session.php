@@ -34,14 +34,14 @@ $url_id                             = api_get_current_access_url_id();
 $action = $_GET['action'];
 
 switch($action) {
-    case 'add_user_to_url':        
+    case 'add_user_to_url':
         $user_id = $_REQUEST['user_id'];
         $result = UrlManager::add_user_to_url($user_id, $url_id);
         $user_info = api_get_user_info($user_id);
         if ($result) {
             $message = Display::return_message(get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']), 'confirm');
         }
-        break;    
+        break;
 }
 
 Display::display_header($tool_name);
@@ -69,7 +69,7 @@ if ($show_users_with_problems) {
 foreach($session_list  as $session_item) {
     $session_id = $session_item['id'];
     $html .= '<h3>'.$session_item['name'].'</h3>';
-    
+
     $access_where = "(access_url_id = $url_id OR access_url_id is null )";
     if ($show_users_with_problems) {
         $access_where = "(access_url_id is null)";
@@ -85,24 +85,24 @@ foreach($session_list  as $session_item) {
 
     $result = Database::query($sql);
     $users  = Database::store_result($result);
-    
+
     if (!empty($users)) {
-        $html .= '<table class="data_table"><tr><th>'.get_lang('User').'<th>'.get_lang('Actions').'</th></tr>';   
-    
+        $html .= '<table class="data_table"><tr><th>'.get_lang('User').'<th>'.get_lang('Actions').'</th></tr>';
+
         foreach ($users as $user) {
             $user_link = '';
             if (!empty($user['user_id'])) {
-                $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']),ENT_QUOTES,$charset).' ('.$user['username'].')</a>';
+                $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.Security::remove_XSS(api_get_person_name($user['firstname'], $user['lastname'])).' ('.$user['username'].')</a>';
             }
 
             $link_to_add_user_in_url = '';
 
             if ($multiple_url_is_on) {
-                if ($user['access_url_id'] != $url_id) {            
+                if ($user['access_url_id'] != $url_id) {
                     $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), ICON_SIZE_MEDIUM);
-                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), ICON_SIZE_MEDIUM);                    
+                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), ICON_SIZE_MEDIUM);
                     $link_to_add_user_in_url = '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
-                }                
+                }
             }
             $html .= '<tr>
                     <td>

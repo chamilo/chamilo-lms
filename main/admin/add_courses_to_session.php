@@ -56,7 +56,7 @@ function add_course_to_session(code, content) {
 	document.getElementById("ajax_list_courses_single").innerHTML = "";
 	destination = document.getElementById("destination");
 	for (i=0;i<destination.length;i++) {
-		if(destination.options[i].text == content) {
+		if (destination.options[i].text == content) {
             return false;
 		}
 	}

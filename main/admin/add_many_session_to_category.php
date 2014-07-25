@@ -71,7 +71,6 @@ function add_course_to_session (code, content) {
 }
 function send() {
 	if (document.formulaire.CategorySessionId.value!=0) {
-		//alert(document.formulaire.CategorySessionId.value);
 		document.formulaire.formSent.value=0;
 		document.formulaire.submit();
 	}

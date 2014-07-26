@@ -49,16 +49,16 @@ require_once dirname(__FILE__).'/../inc/global.inc.php';
 
 $htmlHeadXtra[] ='<script>
 
-/* option show/hidden thematic-postit */
+/* option show/hide thematic-block */
 
 $(document).ready(function(){
-        $("#thematic-show").click(function(){
-            $(".btn-hidden-thematic").hide();
-            $(".btn-show-thematic").show(); //show using class
-        });
-        $("#thematic-hidden").click(function(){
+    $("#thematic-show").click(function(){
+        $(".btn-hide-thematic").hide();
+        $(".btn-show-thematic").show(); //show using class
+    });
+    $("#thematic-hide").click(function(){
         $(".btn-show-thematic").hide(); //show using class
-        $(".btn-hidden-thematic").show();
+        $(".btn-hide-thematic").show();
     });
 });
 

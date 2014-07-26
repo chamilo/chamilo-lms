@@ -142,8 +142,13 @@ header #logo img{
 .items-progress p{
   margin-bottom: 3px;
 }
-.collapse.in {
+.accordion-body.collapse {
+  height: 0;
+  display: none;
+}
+.accordion-body.collapse.in {
   height: auto;
+  display: block;
 }
 /* END COURSE PROGRESS*/
 

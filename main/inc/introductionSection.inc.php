@@ -254,10 +254,10 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                         </div>';
         $thematic_description_html .=
                                         '<div class="span4">
-                                            <a id="thematic-hidden" class="btn btn-small btn-primary accordion-toggle btn-show-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
+                                            <a id="thematic-show" class="btn btn-small btn-primary accordion-toggle btn-hide-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
                                             ' . get_lang('SeeDetail') . '
                                             </a>
-                                            <a id="thematic-show" class="btn btn-small accordion-toggle btn-hidden-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course" style="display:none;">
+                                            <a id="thematic-hide" class="btn btn-small accordion-toggle btn-show-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course" style="display:none;">
                                             ' . get_lang('Hide') . '
                                             </a>
                                         </div>
@@ -265,7 +265,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                 </div>
                             </div>';
         $thematic_description_html .=
-                            '<div class="accordion-body collapse in" id="pross" style="height:auto;">
+                            '<div class="accordion-body collapse in" id="pross" style="height: auto;">
                                 <div class="accordion-inner">
                                     <div class="row-fluid">
                                         <div class="span4">

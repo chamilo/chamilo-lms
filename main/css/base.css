@@ -306,9 +306,10 @@ header {
   width: 0%;
  }
 
- .breadcrumb li img:nth-child(n) {
+.breadcrumb li img:nth-child(n) {
   width: auto;
- }
+  margin-top: -4px;
+}
 
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {

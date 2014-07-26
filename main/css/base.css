@@ -67,6 +67,12 @@ header #logo img{
   margin-top: 0px;
   background-color: #ECF4F8;
 }
+.items-progress.current {
+    border-top: 2px solid #C4DDEB;
+    padding: 5px;
+    margin-top: 0px;
+    background-color: #C4DDEB;
+}
 .items-progress .date{
   color: #666;
   font-size: 11px;

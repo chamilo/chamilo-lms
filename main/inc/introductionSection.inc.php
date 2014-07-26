@@ -182,12 +182,14 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
     // Only show this if we're on the course homepage and we're not currently editing
     $thematic = new Thematic();
     $displayMode = api_get_course_setting('display_info_advance_inside_homecourse');
+    $class1 = '';
     if ($displayMode == '1') {
         // Show only the current course progress step
         // $information_title = get_lang('InfoAboutLastDoneAdvance');
         $last_done_advance =  $thematic->get_last_done_thematic_advance();
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $subTitle1 = get_lang('CurrentTopic');
+        $class1 = ' current';
     } else if($displayMode == '2') {
         // Show only the two next course progress steps
         // $information_title = get_lang('InfoAboutNextAdvanceNotDone');
@@ -205,6 +207,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
         $subTitle1 = get_lang('CurrentTopic');
         $subTitle2 = get_lang('NextTopic');
+        $class1 = ' current';
     }
 
     if (!empty($thematic_advance_info)) {
@@ -291,7 +294,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                         '<div class="span8">
                                             <div class="row-fluid">';
         $thematic_description_html .=
-                                                '<div class="span6 items-progress">
+                                                '<div class="span6 items-progress'.$class1.'">
                                                     <div class="topics">' . $subTitle1 . '</div>
                                                     <p class="title_topics">' . $thematic_info['title'] . '</p>
                                                     <p class="date">' . $thematic_advance_info['start_date'] . '</p>

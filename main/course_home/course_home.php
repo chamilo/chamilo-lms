@@ -54,10 +54,10 @@ $htmlHeadXtra[] ='<script>
 $(document).ready(function(){
         $("#thematic-show").click(function(){
             $(".btn-hidden-thematic").hide();
-            $(".btn-show-thematic").show(); //muestro mediante clase
+            $(".btn-show-thematic").show(); //show using class
         });
         $("#thematic-hidden").click(function(){
-        $(".btn-show-thematic").hide(); //muestro mediante clase
+        $(".btn-show-thematic").hide(); //show using class
         $(".btn-hidden-thematic").show();
     });
 });

@@ -2,24 +2,29 @@
 /* For licensing terms, see /license.txt */
 /**
  * The INTRODUCTION MICRO MODULE is used to insert and edit
- * an introduction section on a Chamilo Module. It can be inserted on any
- * Chamilo Module, provided a connection to a course Database is already active.
+ * an introduction section on a Chamilo module or on the course homepage.
+ * It can be inserted on any Chamilo module, provided the corresponding setting
+ * is enabled in the administration section.
  *
- * The introduction content are stored on a table called "introduction"
- * in the course Database. Each module introduction has an Id stored on
- * the table. It is this id that can make correspondance to a specific module.
+ * The introduction content are stored in a table called "tool_intro"
+ * in the course Database. Each module introduction has an Id stored in
+ * the table, which matches a specific module.
  *
- * 'introduction' table description
+ * '(c_)tool_intro' table description
+ *   c_id: int
  *   id : int
  *   intro_text :text
- *
+ *   session_id: int
  *
  * usage :
  *
  * $moduleId = XX // specifying the module Id
- * include(moduleIntro.inc.php);
+ * include(introductionSection.inc.php);
  *
- *	@package chamilo.include
+ * This script is also used since Chamilo 1.9 to show course progress (from the
+ * course_progress module)
+ *
+ * @package chamilo.include
  */
 
 /*  Constants and variables */
@@ -82,7 +87,7 @@ if (is_array($editor_config)) {
 $form->add_html_editor('intro_content', null, null, false, $editor_config);
 $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroText'), 'class="save"');
 
-/*	INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
+/* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
 $course_id = api_get_course_int_id();
 
 if ($intro_editAllowed) {
@@ -113,7 +118,7 @@ if ($intro_editAllowed) {
 }
 
 
-/*	INTRODUCTION MICRO MODULE - DISPLAY SECTION */
+/* INTRODUCTION MICRO MODULE - DISPLAY SECTION */
 
 /* Retrieves the module introduction text, if exist */
 /* @todo use a lib to query the $TBL_INTRODUCTION table */
@@ -174,23 +179,26 @@ if ($intro_dispForm) {
 $thematic_description_html = '';
 
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
-
+    // Only show this if we're on the course homepage and we're not currently editing
     $thematic = new Thematic();
     $displayMode = api_get_course_setting('display_info_advance_inside_homecourse');
     if ($displayMode == '1') {
-        //$information_title = get_lang('InfoAboutLastDoneAdvance');
+        // Show only the current course progress step
+        // $information_title = get_lang('InfoAboutLastDoneAdvance');
         $last_done_advance =  $thematic->get_last_done_thematic_advance();
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $subTitle1 = get_lang('CurrentTopic');
     } else if($displayMode == '2') {
-        //$information_title = get_lang('InfoAboutNextAdvanceNotDone');
+        // Show only the two next course progress steps
+        // $information_title = get_lang('InfoAboutNextAdvanceNotDone');
         $last_done_advance = $thematic->get_next_thematic_advance_not_done();
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done(2);
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
         $subTitle1 = $subTitle2 = get_lang('NextTopic');
     } else if($displayMode == '3') {
-        //$information_title = get_lang('InfoAboutLastDoneAdvanceAndNextAdvanceNotDone');
+        // Show the current and next course progress steps
+        // $information_title = get_lang('InfoAboutLastDoneAdvanceAndNextAdvanceNotDone');
         $last_done_advance =  $thematic->get_last_done_thematic_advance();
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
@@ -201,17 +209,12 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
     if (!empty($thematic_advance_info)) {
 
-        /*$thematic_advance = get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%';*/
+        /*$thematic_advance = get_lang('CourseThematicAdvance').'&nbsp;'.
+            $thematic->get_total_average_of_thematic_advances().'%';*/
         $thematic_advance = get_lang('CourseThematicAdvance');
-        $thematicScore = $thematic->get_total_average_of_thematic_advances(
-            ) . '%';
-        $thematicUrl = api_get_path(
-                WEB_CODE_PATH
-            ) . 'course_progress/index.php?action=thematic_details&' . api_get_cidreq(
-            );
-        if (api_is_allowed_to_edit(null, true)) {
-            //$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq().'">'.get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%</a>';
-        }
+        $thematicScore = $thematic->get_total_average_of_thematic_advances() . '%';
+        $thematicUrl = api_get_path(WEB_CODE_PATH) .
+            'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
         $thematic_info = $thematic->get_thematic_list(
             $thematic_advance_info['thematic_id']
         );

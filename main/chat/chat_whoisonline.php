@@ -43,8 +43,8 @@ if (!empty($course)) {
 
     list($pseudo_user) = Database::fetch_array($result);
 
-    $isAllowed = !(empty($pseudo_user) || !$_cid);
-    $isMaster = (bool)$is_courseAdmin;
+	$isAllowed = !(empty($pseudo_user) || !$_cid);
+	$isMaster = api_is_course_admin();
 
     $date_inter = date('Y-m-d H:i:s', time() - 120);
 

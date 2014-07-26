@@ -6,9 +6,7 @@
 
 // Language files that should be included
 $language_file = array('admin', 'registration');
-
 $cidReset = true;
-
 require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -182,9 +180,9 @@ if (api_get_setting('login_is_email') != 'true') {
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
 $nb_ext_auth_source_added = 0;
-if (count($extAuthSource) > 0) {
+if (isset($extAuthSource) && count($extAuthSource) > 0) {
 	$auth_sources = array();
-	foreach($extAuthSource as $key => $info) {
+	foreach ($extAuthSource as $key => $info) {
 	    // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
 	    // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
 	    // extAuthSource always on for CAS even if not activated
@@ -325,11 +323,12 @@ if ($form->validate()) {
 	if ($user['status'] == DRH && $is_user_subscribed_in_course) {
 		$error_drh = true;
 	} else {
+        $userInfo = api_get_user_info($user_id);
 		$picture_element = $form->getElement('picture');
 		$picture = $picture_element->getValue();
 
 		$picture_uri = $user_data['picture_uri'];
-		if ($user['delete_picture']) {
+		if (isset($user['delete_picture']) && $user['delete_picture']) {
 			$picture_uri = UserManager::delete_user_picture($user_id);
 		} elseif (!empty($picture['name'])) {
 			$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
@@ -338,18 +337,18 @@ if ($form->validate()) {
 		$lastname = $user['lastname'];
 		$firstname = $user['firstname'];
         $password = $user['password'];
-        $auth_source = $user['auth_source'];
-
+        $auth_source = isset($user['auth_source']) ? $user['auth_source'] : $userInfo['auth_source'];
 		$official_code = $user['official_code'];
 		$email = $user['email'];
 		$phone = $user['phone'];
-		$username = $user['username'];
+		$username = isset($user['username']) ? $user['username'] : $userInfo['username'];
 		$status = intval($user['status']);
 		$platform_admin = intval($user['platform_admin']);
 		$send_mail = intval($user['send_mail']);
 		$reset_password = intval($user['reset_password']);
-		$hr_dept_id = intval($user['hr_dept_id']);
+		$hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
 		$language = $user['language'];
+
 		if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
             $expiration_date = return_datetime_from_array($user['expiration_date']);
 		} else {
@@ -366,12 +365,35 @@ if ($form->validate()) {
         if (api_get_setting('login_is_email') == 'true') {
             $username = $email;
         }
-		UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language, null, $send_mail, $reset_password);
+
+        UserManager::update_user(
+            $user_id,
+            $firstname,
+            $lastname,
+            $username,
+            $password,
+            $auth_source,
+            $email,
+            $status,
+            $official_code,
+            $phone,
+            $picture_uri,
+            $expiration_date,
+            $active,
+            null,
+            $hr_dept_id,
+            null,
+            $language,
+            null,
+            $send_mail,
+            $reset_password
+        );
 
 		if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
 			$up = UserManager::update_openid($user_id,$user['openid']);
 		}
-		if ($user_id != $_SESSION['_uid']) {
+        $currentUserId = api_get_user_id();
+		if ($user_id != $currentUserId) {
 			if ($platform_admin == 1) {
                 UserManager::add_user_as_admin($user_id);
 			} else {

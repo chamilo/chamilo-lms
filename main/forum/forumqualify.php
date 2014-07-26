@@ -27,9 +27,7 @@ if (isset($_GET['origin'])) {
 }
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
-
 api_block_course_item_locked_by_gradebook($_GET['thread'], LINK_FORUM_THREAD);
-
 $nameTools = get_lang('ToolForum');
 
 /*     Including necessary files */

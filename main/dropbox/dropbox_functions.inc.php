@@ -80,7 +80,6 @@ function handle_multiple_actions()
     }
 
     // STEP 3C: moving
-
     if (strstr($_POST['action'], 'move_')) {
         // check move_received_n or move_sent_n command
         if (strstr($_POST['action'], 'received')) {

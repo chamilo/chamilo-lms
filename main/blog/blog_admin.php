@@ -49,8 +49,8 @@ if (api_is_allowed_to_edit()) {
 		'name' => $current_section
 		);
 		Display::display_header('');
-	} else {		
-	}	
+	} else {
+	}
 	echo '<div class="actions">';
 	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",Display::return_icon('new_blog.png',get_lang('AddBlog'),'',ICON_SIZE_MEDIUM)."</a>";
 	echo '</div>';
@@ -83,7 +83,7 @@ if (api_is_allowed_to_edit()) {
 		Display::display_confirmation_message(get_lang('BlogDeleted'));
 	}
 
-	/*	
+	/*
 		DISPLAY
 	*/
 	//api_display_tool_title($nameTools);

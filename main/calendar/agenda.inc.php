@@ -795,9 +795,6 @@ function selectAll(cbList,bSelect,showwarning) {
 			}
 			document.new_calendar_item.submit();
 		}
-
-
-
 }
 
 function reverseAll(cbList)
@@ -847,15 +844,12 @@ function plus_ical() {
  */
 function user_group_filter_javascript()
 {
-    return "<script language=\"JavaScript\" type=\"text/JavaScript\">
-	<!--
+    return "<script>
 	function MM_jumpMenu(targ,selObj,restore){
 	  eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");
 	  if (restore) selObj.selectedIndex=0;
 	}
-	//-->
-	</script>
-	";
+	</script>";
 }
 
 /**
@@ -911,7 +905,6 @@ function get_course_users()
  */
 function get_course_groups()
 {
-    $group_list = array();
     $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
     return $group_list;
 }
@@ -1405,7 +1398,11 @@ function show_user_group_filter_form()
         $option = "<optgroup label=\"".get_lang("Groups")."\">";
         foreach ($group_list as $this_group) {
             // echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
-            $has_access = GroupManager::user_has_access(api_get_user_id(), $this_group['id'], GroupManager::GROUP_TOOL_CALENDAR);
+            $has_access = GroupManager::user_has_access(
+                api_get_user_id(),
+                $this_group['id'],
+                GroupManager::GROUP_TOOL_CALENDAR
+            );
             $result = GroupManager::get_group_properties($this_group['id']);
 
             if ($result['calendar_state'] != '0') {

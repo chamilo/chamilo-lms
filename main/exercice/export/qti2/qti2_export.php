@@ -205,7 +205,6 @@ class ImsSection
      */
     function export_ordering()
     {
-
         $out = '';
         if ($n = $this->exercise->getShuffle()) {
             $out.= "<selection_ordering>"

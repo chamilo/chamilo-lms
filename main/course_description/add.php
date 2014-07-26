@@ -9,6 +9,7 @@
 
 // protect a course script
 api_protect_course_script(true);
+
 // display categories
 $categories = array ();
 foreach ($default_description_titles as $id => $title) {

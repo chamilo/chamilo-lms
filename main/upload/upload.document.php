@@ -3,7 +3,7 @@
 /**
  * Process part of the document sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
- * 
+ *
  * @todo check if this file is deprecated ... jmontoya
  * @package chamilo.upload
  * @author Yannick Warnier <ywarnier@beeznest.org>
@@ -83,7 +83,7 @@ if(isset($_FILES['user_upload'])) {
 }
 //missing images are submitted
 if(isset($_POST['submit_image'])) {
-	$number_of_uploaded_images = count($_FILES['img_file']['name']);	
+	$number_of_uploaded_images = count($_FILES['img_file']['name']);
 	//if images are uploaded
 	if ($number_of_uploaded_images > 0)
 	{
@@ -137,11 +137,6 @@ else {	//give them a link to create a directory
 ?>
 
 <div id="folderselector">
-<?php
-//form to select directory
-//$folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit);
-//echo(build_directory_selector($folders,$path,$group_properties['directory']));
-?>
 </div>
 
 <!-- start upload form -->

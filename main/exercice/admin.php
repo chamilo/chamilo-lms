@@ -44,9 +44,6 @@
 * 	@author Olivier Brouckaert
 * Modified by Hubert Borderiou 21-10-2011 Question by category
 */
-/**
- * Code
- */
 
 use \ChamiloSession as Session;
 
@@ -91,7 +88,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 if (empty($exerciseId)) {
     $exerciseId = isset($_GET['exerciseId']) ? intval($_GET['exerciseId']):'0';
 }
-
 if (empty($newQuestion)) {
     $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
 }
@@ -121,7 +117,8 @@ $cancelAnswers = isset($cancelAnswers) ? $cancelAnswers : null;
 $modifyIn = isset($modifyIn) ? $modifyIn : null;
 $cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
 
-// Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
+/* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
+    when changing the exercise settings, number of questions, etc */
 
 delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
 
@@ -140,31 +137,39 @@ $picturePath = $documentPath.'/images';
 $audioPath = $documentPath.'/audio';
 
 // the 5 types of answers
-$aType = array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('FreeAnswer'));
+$aType = array(
+    get_lang('UniqueSelect'),
+    get_lang('MultipleSelect'),
+    get_lang('FillBlanks'),
+    get_lang('Matching'),
+    get_lang('FreeAnswer')
+);
 
 // tables used in the exercise tool
 
 if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
-	require_once 'export/qti2/qti2_export.php';
-	$export = export_question($_GET['questionId'],true);
-	$qid = (int)$_GET['questionId'];
-	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
-	$temp_dir_short = uniqid();
-	$temp_zip_dir = $archive_path."/".$temp_dir_short;
-	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
-	$temp_zip_file = $temp_zip_dir."/".api_get_unique_id().".zip";
-	$temp_xml_file = $temp_zip_dir."/qti2export_".$qid.'.xml';
-	file_put_contents($temp_xml_file,$export);
-	$zip_folder=new PclZip($temp_zip_file);
-	$zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
-	$name = 'qti2_export_'.$qid.'.zip';
+    require_once 'export/qti2/qti2_export.php';
+    $export = export_question($_GET['questionId'], true);
+    $qid = (int)$_GET['questionId'];
+    $archive_path = api_get_path(SYS_ARCHIVE_PATH);
+    $temp_dir_short = uniqid();
+    $temp_zip_dir = $archive_path."/".$temp_dir_short;
+    if (!is_dir($temp_zip_dir)) {
+        mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
+    }
+    $temp_zip_file = $temp_zip_dir."/".api_get_unique_id().".zip";
+    $temp_xml_file = $temp_zip_dir."/qti2export_".$qid.'.xml';
+    file_put_contents($temp_xml_file, $export);
+    $zip_folder = new PclZip($temp_zip_file);
+    $zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
+    $name = 'qti2_export_'.$qid.'.zip';
 
-	DocumentManager::file_send_for_download($temp_zip_file,true,$name);
-	unlink($temp_zip_file);
-	unlink($temp_xml_file);
-	rmdir($temp_zip_dir);
-	//DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
-	exit; //otherwise following clicks may become buggy
+    DocumentManager::file_send_for_download($temp_zip_file, true, $name);
+    unlink($temp_zip_file);
+    unlink($temp_xml_file);
+    rmdir($temp_zip_dir);
+    //DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
+    exit; //otherwise following clicks may become buggy
 }
 
 // Exercise object creation.

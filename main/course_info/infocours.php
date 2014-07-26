@@ -92,7 +92,7 @@ while ($a_titulars = Database::fetch_array($q_result_titulars)) {
         $s_selected_tutor = api_get_person_name($s_firstname, $s_lastname);
     }
     $s_disabled_select_titular = '';
-    if (!$is_courseAdmin) {
+    if (!api_is_course_admin()) {
         $s_disabled_select_titular = 'disabled=disabled';
     }
     $a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
@@ -103,7 +103,7 @@ $categories = getCategoriesCanBeAddedInCourse($_course['categoryCode']);
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed grey"></div></div>';
 
 // Build the form
-$form = new FormValidator('update_course');
+$form = new FormValidator('update_course', 'post', api_get_self().'?'.api_get_cidreq());
 
 // COURSE SETTINGS
 $form->addElement('html', '<div><h3>'.Display::return_icon('settings.png', Security::remove_XSS(get_lang('CourseSettings')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('CourseSettings')).'</h3><div>');
@@ -305,13 +305,6 @@ if (api_get_setting('allow_course_theme') == 'true') {
     $group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '');
 }
-/*
-$group = array(
-    $form->createElement('radio', 'lp_return_link', get_lang('LpReturnLink'), get_lang('RedirectToTheLearningPathList'), 1),
-    $form->createElement('radio', 'lp_return_link', null, get_lang('RedirectToCourseHome'), 0)
-);
-$form->addGroup($group, '', array(get_lang("LpReturnLink")), '');
-*/
 
 if (is_settings_editable()) {
     $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
@@ -374,9 +367,7 @@ $all_course_information = CourseManager::get_course_information($_course['sysCod
 $values = array();
 
 $values['title']                        = $_course['name'];
-//$values['visual_code']                  = $_course['official_code'];
 $values['category_code']                = $_course['categoryCode'];
-//$values['tutor_name']                 = $_course['titular'];
 $values['course_language']              = $_course['language'];
 $values['department_name']              = $_course['extLink']['name'];
 $values['department_url']               = $_course['extLink']['url'];

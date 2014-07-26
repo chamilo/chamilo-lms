@@ -13,7 +13,9 @@ require '../../inc/global.inc.php';
 
 //SECURITY CHECK
 
-if ( api_is_platform_admin() ) api_not_allowed();
+if (api_is_platform_admin()) {
+    api_not_allowed();
+}
 
 //DECLARE NEEDED LIBRARIES
 
@@ -27,8 +29,8 @@ include_once 'qti/qti_classes.php';
 
 //SQL table name
 
-$tbl_exercise              = Database::get_course_table(TABLE_QUIZ_TEST);
-$tbl_question              = Database::get_course_table(TABLE_QUIZ_QUESTION);
+$tbl_exercise = Database::get_course_table(TABLE_QUIZ_TEST);
+$tbl_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $tbl_rel_exercise_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
 // tool libraries
@@ -41,7 +43,7 @@ $nameTools = get_lang('ImportExercise');
 
 //bredcrump
 
-$interbredcrump[]= array ('url' => '../exercice.php','name' => get_lang('Exercises'));
+$interbredcrump[] = array('url' => '../exercice.php', 'name' => get_lang('Exercises'));
 
 //----------------------------------
 // EXECUTE COMMAND
@@ -49,8 +51,7 @@ $interbredcrump[]= array ('url' => '../exercice.php','name' => get_lang('Exercis
 
 $cmd = (isset($_REQUEST['cmd'])? $_REQUEST['cmd'] : 'show_import');
 
-switch ( $cmd )
-{
+switch ($cmd) {
     case 'show_import' :
     {
         $display = '<p>'
@@ -68,23 +69,20 @@ switch ( $cmd )
     }
     break;
 
-    case 'import' :
-    {
+    case 'import': {
         //include needed librabries for treatment
 
         $result_log = import_exercise($_FILES['uploadedExercise']['name']);
 
         //display the result message (fail or success)
-
         $dialogBox = '';
 
-        foreach ($result_log as $log)
-        {
-            $dialogBox .= $log . '<br>';
+        foreach ($result_log as $log) {
+            $dialogBox .= $log.'<br>';
         }
 
     }
-    break;
+        break;
 }
 
 //----------------------------------
@@ -114,11 +112,15 @@ Display::display_introduction_section(TOOL_QUIZ, array(
 
 //Display Forms or dialog box(if needed)
 
-if ( isset($dialogBox) ) echo Display::display_normal_message($dialogBox,false);
+if (isset($dialogBox)) {
+    echo Display::display_normal_message($dialogBox, false);
+}
 
 //display content
 
-if (isset($display) ) echo $display;
+if (isset($display)) {
+    echo $display;
+}
 
 //footer display
 

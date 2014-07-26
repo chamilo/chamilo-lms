@@ -82,7 +82,7 @@ class CourseBuilder
         $this->course->path         = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
         $this->course->backup_path  = api_get_path(SYS_COURSE_PATH).$_course['path'];
         $this->course->encoding     = api_get_system_encoding(); //current platform encoding
-        // db_name is deprecated (only one database now)
+  
         $this->course->db_name      = $_course['dbName'];
         $this->course->info         = $_course;
     }
@@ -783,7 +783,8 @@ class CourseBuilder
     /**
      * Build the announcements
      */
-    public function build_announcements($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
+    public function build_announcements($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
+    {
         $table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
         $course_id = api_get_course_int_id();
 
@@ -1128,8 +1129,7 @@ class CourseBuilder
                     //$thematic_plan_complete_list[$item['ref']] = $item;
                 }
             }
-            //$sql = 'SELECT * FROM '.$table_thematic_plan.' WHERE c_id = '.$course_id.' AND thematic_id = '.$row['id'];
-            if (count($thematic_plan_id_list) > 0) {
+             if (count($thematic_plan_id_list) > 0) {
                 $sql = "SELECT tp.*
                         FROM $table_thematic_plan tp
                             INNER JOIN $table_thematic t ON (t.id=tp.thematic_id)

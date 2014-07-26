@@ -210,7 +210,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		
 		$thematic_description_html = '<div class="thematic-postit">
 									  <div class="row-fluid"><div class="span12">
-			    	                  <div class="accordion" id="progress-bar-course">
+			    	 <div class="accordion" id="progress-bar-course">
 						              		<div class="accordion-group">
 						              		<div class="accordion-heading">
 									  		<div class="title-accordion">
@@ -220,17 +220,17 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 									<div class="span2 score"><h1>'.$thematicScore.'</h1></div>
 									 <div class="span4"><h3>'.$thematic_advance.'</h3><p>'.$courseInfo['name'].'</p></div></div>';
 		$thematic_description_html.='<div class="span4">
-									 <a id="thematic-show" class="btn btn-small accordion-toggle btn-hidden-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
-								     '.get_lang('Hide').'
+									 <a id="thematic-hidden" class="btn btn-small btn-primary accordion-toggle btn-show-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
+								     '.get_lang('SeeDetail').'
 								     </a>
-								     <a id="thematic-hidden" class="btn btn-small btn-primary accordion-toggle btn-show-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course" style="display:none;">
-									 '.get_lang('SeeDetail').'
+								     <a id="thematic-show" class="btn btn-small accordion-toggle btn-hidden-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course" style="display:none;">
+									 '.get_lang('Hide').'
 								     </a>
 								     </div>
 								     </div>
 									</div>	 
 									</div>';
-		$thematic_description_html.='<div class="accordion-body collapse" id="pross" style="height:auto;">
+		$thematic_description_html.='<div class="accordion-body collapse in" id="pross" style="height:auto;">
 									<div class="accordion-inner">
 									<div class="row-fluid">
 									<div class="span4">

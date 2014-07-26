@@ -221,10 +221,10 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 									 <div class="span4"><h3>'.$thematic_advance.'</h3><p>'.$courseInfo['name'].'</p></div></div>';
 		$thematic_description_html.='<div class="span4">
 									 <a id="thematic-show" class="btn btn-small accordion-toggle btn-hidden-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
-								     '.get_lang('ClickToHideDetails').'
+								     '.get_lang('Hide').'
 								     </a>
 								     <a id="thematic-hidden" class="btn btn-small btn-primary accordion-toggle btn-show-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course" style="display:none;">
-									 '.get_lang('ClickToShowDetails').'
+									 '.get_lang('SeeDetail').'
 								     </a>
 								     </div>
 								     </div>
@@ -252,13 +252,13 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 										</div>
 									</div>';
 		$thematic_description_html.='<div class="span8">
-										<div class="topics">'.get_lang('NextTopics').'</div>
 										<div class="row-fluid">';
 		$thematic_description_html.='<div class="span6 items-progress">
+										<div class="topics">'.get_lang('NextTopics').'</div>
 										<p class="title_topics">'.$thematic_info['title'].'</p>
 										<p class="date">'.$thematic_advance_info['start_date'].'</p>
 										<h3 class="title">'.$thematic_advance_info['content'].'</h3>
-										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('ShowDetails').'</a></p>
+										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
 									</div>';
 
 
@@ -280,10 +280,11 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 			$thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
 			$thematic_description_html.='<div class="span6 items-progress">
+										<div class="topics">'.get_lang('NextTopics').'</div>
 										<p class="title_topics">'.$thematic_info['title'].'</p>
 										<p class="date">'.$thematic_advance_info2['start_date'].'</p>
 										<h3 class="title">'.$thematic_advance_info2['content'].'</h3>
-										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('ShowDetails').'</a></p>
+										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
 									</div>';
 
 

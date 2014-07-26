@@ -175,21 +175,28 @@ $thematic_description_html = '';
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
 	$thematic = new Thematic();
-	if (api_get_course_setting('display_info_advance_inside_homecourse') == '1') {
-		$information_title = get_lang('InfoAboutLastDoneAdvance');
+    $displayMode = api_get_course_setting('display_info_advance_inside_homecourse');
+	if ($displayMode == '1') {
+		//$information_title = get_lang('InfoAboutLastDoneAdvance');
 		$last_done_advance =  $thematic->get_last_done_thematic_advance();
 		$thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
-	} else if(api_get_course_setting('display_info_advance_inside_homecourse') == '2') {
-		$information_title = get_lang('InfoAboutNextAdvanceNotDone');
-		$next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
-		$thematic_advance_info = $thematic->get_thematic_advance_list($next_advance_not_done);
-	} else if(api_get_course_setting('display_info_advance_inside_homecourse') == '3') {
-		$information_title = get_lang('InfoAboutLastDoneAdvanceAndNextAdvanceNotDone');
+        $subTitle1 = get_lang('CurrentTopic');
+	} else if($displayMode == '2') {
+        //$information_title = get_lang('InfoAboutNextAdvanceNotDone');
+        $last_done_advance = $thematic->get_next_thematic_advance_not_done();
+		$next_advance_not_done = $thematic->get_next_thematic_advance_not_done(2);
+		$thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
+        $thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
+        $subTitle1 = $subTitle2 = get_lang('NextTopic');
+	} else if($displayMode == '3') {
+		//$information_title = get_lang('InfoAboutLastDoneAdvanceAndNextAdvanceNotDone');
 		$last_done_advance =  $thematic->get_last_done_thematic_advance();
 		$next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
 		$thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
 		$thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
-	}
+        $subTitle1 = get_lang('CurrentTopic');
+        $subTitle2 = get_lang('NextTopic');
+    }
 
 	if (!empty($thematic_advance_info)) {
 
@@ -254,7 +261,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		$thematic_description_html.='<div class="span8">
 										<div class="row-fluid">';
 		$thematic_description_html.='<div class="span6 items-progress">
-										<div class="topics">'.get_lang('NextTopics').'</div>
+										<div class="topics">'.$subTitle1.'</div>
 										<p class="title_topics">'.$thematic_info['title'].'</p>
 										<p class="date">'.$thematic_advance_info['start_date'].'</p>
 										<h3 class="title">'.$thematic_advance_info['content'].'</h3>
@@ -280,7 +287,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 			$thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
 			$thematic_description_html.='<div class="span6 items-progress">
-										<div class="topics">'.get_lang('NextTopics').'</div>
+										<div class="topics">'.$subTitle2.'</div>
 										<p class="title_topics">'.$thematic_info['title'].'</p>
 										<p class="date">'.$thematic_advance_info2['start_date'].'</p>
 										<h3 class="title">'.$thematic_advance_info2['content'].'</h3>

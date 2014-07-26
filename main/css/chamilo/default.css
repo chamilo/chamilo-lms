@@ -437,7 +437,7 @@ a.thumbnail:hover{
   box-shadow: none;
 }
 .breadcrumb a{
-
+  padding-top: 0;
   line-height: 30px;
   text-transform: none;
 }
@@ -798,16 +798,6 @@ footer a:link, footer a:visited {
     background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
 }
 
-.topa {
-    background:transparent url('images/logoa4.gif') no-repeat;
-}
-.topb {
-    background:transparent url('images/logob4.gif') no-repeat;
-}
-
-#bottomhellomindfactory {
-    background:transparent url('images/textologo.jpg') no-repeat;
-}
 .user_login_icon{
   background: url(images/user_icon.png) no-repeat 5px center;
 }

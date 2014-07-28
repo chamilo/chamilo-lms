@@ -4,10 +4,24 @@ services:
     chamilolms.tool_chain:
         class: %tool_chain.class%
 
+    chamilolms.coursebundle.tool.announcements.class:
+        class: ChamiloLMS\CourseBundle\Tool\Announcements
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
     chamilolms.coursebundle.tool.calendar.class:
         class: ChamiloLMS\CourseBundle\Tool\Calendar
         arguments:
             - calendar
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.course_description.class:
+        class: ChamiloLMS\CourseBundle\Tool\CourseDescription
+        arguments:
+            - document
         tags:
             - { name: chamilolm.course.tool }
 
@@ -17,3 +31,95 @@ services:
             - document
         tags:
             - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.dropbox.class:
+        class: ChamiloLMS\CourseBundle\Tool\Dropbox
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.exercise.class:
+        class: ChamiloLMS\CourseBundle\Tool\Exercise
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.forum.class:
+        class: ChamiloLMS\CourseBundle\Tool\Forum
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.glossary.class:
+        class: ChamiloLMS\CourseBundle\Tool\Glossary
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.gradebook.class:
+        class: ChamiloLMS\CourseBundle\Tool\Gradebook
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.group.class:
+        class: ChamiloLMS\CourseBundle\Tool\Group
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.learning_path.class:
+        class: ChamiloLMS\CourseBundle\Tool\LearningPath
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.link.class:
+        class: ChamiloLMS\CourseBundle\Tool\Link
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.notebook.class:
+        class: ChamiloLMS\CourseBundle\Tool\Notebook
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.survey.class:
+        class: ChamiloLMS\CourseBundle\Tool\Survey
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.user.class:
+        class: ChamiloLMS\CourseBundle\Tool\User
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.wiki.class:
+        class: ChamiloLMS\CourseBundle\Tool\Wiki
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.work.class:
+        class: ChamiloLMS\CourseBundle\Tool\Work
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+

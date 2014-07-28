@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$NextTopic = "Next topic";
+$CurrentTopic = "Current topic";
+$ShowFullCourseAdvance = "Show course planning";
 $RedirectToCourseHome = "Redirect to Course home";
 $LpReturnLink = "Learning path return link";
 $LearningPathList = "Learning path list";

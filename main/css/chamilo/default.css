@@ -35,9 +35,9 @@ a:active {
     color: #FFFFFF;
 }
 .subnav .navbar-inner {
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     border: 1px solid #178ACC;
     background: #4fb2ea; /* Old browsers */
     background: -moz-linear-gradient(top, #4fb2ea 0%, #0191c7 100%); /* FF3.6+ */
@@ -129,6 +129,7 @@ a.thumbnail:hover{
 .breadcrumb a.btn-mini{
     line-height: 17px;
     text-transform: none;
+    margin-top: 5px;
 }
 .breadcrumb a.btn-mini > .btn-success{
   color: #FFFFFF;
@@ -308,31 +309,6 @@ a.thumbnail:hover{
   width: 800px;
 }
 
-/* COURSE INTRO CONTENT */
-
-.page-course-intro{
-    padding: 2em;
-    border: 1px solid #DDDDDD;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    margin-bottom: 2em;
-}
-
-.page-course-intro ul{
-    list-style-image:url(images/vineta.png);
-    padding-top: 10px;
-}
-.page-course-intro a{
-    color: #FD6600;
-}
-.page-course-intro a:hover{
-    color: #FD6600;
-    text-decoration: underline;
-}
-
-
-/* END OF COURSE INTRO*/
 .fc-header-title h2{
     color: #0191C7;
 }
@@ -452,22 +428,16 @@ a.thumbnail:hover{
 }
 .breadcrumb {
   margin-bottom: 0;
-  background: rgb(255,255,255); /* Old browsers */
-  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(192,219,234,1) 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(192,219,234,1))); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* IE10+ */
-  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#c0dbea',GradientType=0 ); /* IE6-9 */
-  padding-top: 5px;
-  padding-bottom: 5px;
+  background-image: none;
+  background-color: #e7f1f7;
+  padding-top: 0;
+  padding-bottom: 0;
   margin-top: 5px;
-  border: 1px solid #B1D6EC;
+  border: 1px solid #d4e6f0;
   box-shadow: none;
 }
 .breadcrumb a{
-
+  padding-top: 0;
   line-height: 30px;
   text-transform: none;
 }
@@ -576,14 +546,20 @@ a.thumbnail:hover{
 /*CSS PARA CONTENIDO DE CURSO INTRODUCCION*/
 
 .page-course-intro{
-    padding: 2em;
-    border: 1px solid #DDDDDD;
-    -webkit-border-radius: 10px;
+    padding: 5px;
+    border: none;
+    /*-webkit-border-radius: 10px;
     -moz-border-radius: 10px;
-    border-radius: 10px;
-    margin-bottom: 2em;
+    border-radius: 10px;*/
+    margin-bottom: 5px;
 }
-
+.thumbnail > img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  height: auto;
+}
 .page-course-intro ul{
     list-style-image:url(images/vineta.png);
     padding-top: 10px;
@@ -822,16 +798,6 @@ footer a:link, footer a:visited {
     background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
 }
 
-.topa {
-    background:transparent url('images/logoa4.gif') no-repeat;
-}
-.topb {
-    background:transparent url('images/logob4.gif') no-repeat;
-}
-
-#bottomhellomindfactory {
-    background:transparent url('images/textologo.jpg') no-repeat;
-}
 .user_login_icon{
   background: url(images/user_icon.png) no-repeat 5px center;
 }
@@ -1116,6 +1082,14 @@ RESPONSIVE CSS
     #top_main_content .menu-column #user_image_block{
       box-shadow: none;
     }
+    .navbar .nav > li > a {
+    float: none;
+    line-height: 20px;
+    padding-bottom: 7px;
+    padding-right: 10px;
+    padding-top: 7px;
+    color: #FFFFFF;
+}
 
 }
 @media (max-width: 600px) {
@@ -1211,6 +1185,8 @@ footer {
 #announcements{
   display: none;
 }
+
+
 }
 /*+++++++++++++++++++++++++++++++++
 END RESPONSIVE CSS

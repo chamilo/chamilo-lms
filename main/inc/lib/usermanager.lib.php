@@ -3678,7 +3678,7 @@ class UserManager
         $course_list_sql = '';
         $course_list = array();
         if(!empty($code_special_courses)) {
-            $course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+            $course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
                                 FROM    ".$tbl_course_user." course_rel_user
                                 LEFT JOIN ".$tbl_course." course
                                 ON course.id = course_rel_user.c_id

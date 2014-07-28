@@ -586,7 +586,7 @@ $(document).ready( function() {
 Display::display_header('', 'Doc');
 
 // Lib for event log, stats & tracking & record of the access
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 /* 	DISPLAY */
 if ($to_group_id != 0) { // Add group name after for group documents

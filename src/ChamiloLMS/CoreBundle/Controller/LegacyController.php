@@ -64,9 +64,10 @@ class LegacyController extends BaseController
             $toolNameFromFile = basename(dirname($fileToLoad));
             $charset = 'UTF-8';
             // Default values
-            /*$_course = api_get_course_info();
+            $_course = api_get_course_info();
             $_user = api_get_user_info();
 
+            /*
             $text_dir = api_get_text_direction();
             $is_platformAdmin = api_is_platform_admin();
             $_cid = api_get_course_id();*/

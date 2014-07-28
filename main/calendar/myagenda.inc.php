@@ -586,7 +586,7 @@ function get_courses_of_user() {
 	$TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql_select_courses = "SELECT course.code k, course.visual_code  vc,
-                            course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status
+                            course.title i, course.tutor_name t, course.directory dir, course_rel_user.status status
                             FROM    $TABLECOURS       course,
                                     $TABLECOURSUSER   course_rel_user
                             WHERE course.id = course_rel_user.c_id

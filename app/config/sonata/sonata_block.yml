@@ -6,6 +6,7 @@ sonata_block:
             listener: true
     menus:
         "ChamiloLMSCoreBundle:MainMenuBuilder:mainMenu": "Main Menu"
+        #"SonataDemoBundle:Builder:mainMenu": "Main Menu"
 
     blocks:
         sonata.admin.block.admin_list:

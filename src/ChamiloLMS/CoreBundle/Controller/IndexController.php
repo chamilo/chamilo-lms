@@ -3,6 +3,7 @@
 
 namespace ChamiloLMS\CoreBundle\Controller;
 
+use ChamiloLMS\CoreBundle\Admin\CourseAdmin;
 use ChamiloLMS\CoreBundle\Framework\PageController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

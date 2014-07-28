@@ -30,7 +30,7 @@ sonata_page:
         - sonata_page_cache_ssi
         - sonata_page_js_sync_cache
         - sonata_page_js_async_cache
-        - sonata_cache_es
+        - sonata_cache_esi
         - sonata_cache_ssi
         - sonata_cache_js_async
         - sonata_cache_js_sync
@@ -42,7 +42,6 @@ sonata_page:
         classes:
             "Application\Sonata\PageBundle\Entity\Block": getId
 
-    # generate page css styles
     assets:
         stylesheets:
             #- assetic/sonata_front_css.css
@@ -53,7 +52,7 @@ sonata_page:
     default_template: default
     templates:
         default:
-            #path: 'ApplicationSonataPageBundle::default_layout.html.twig'
+            #path: 'ApplicationSonataPageBundle::demo_layout.html.twig'
             path: 'ChamiloLMSCoreBundle::main_layout.html.twig'
             name: 'default'
             containers:

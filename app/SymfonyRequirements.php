@@ -409,20 +409,18 @@ class SymfonyRequirements extends RequirementCollection
                 'Then run "<strong>php composer.phar install</strong>" to install them.'
         );
 
-        $cacheDir = is_dir(__DIR__.'/../var/cache') ? __DIR__.'/../var/cache' : __DIR__.'/cache';
+        $baseDir = basename(__DIR__);
 
         $this->addRequirement(
-            is_writable($cacheDir),
-            'app/cache/ or var/cache/ directory must be writable',
-            'Change the permissions of either "<strong>app/cache/</strong>" or  "<strong>var/cache/</strong>" directory so that the web server can write into it.'
+            is_writable(__DIR__.'/cache'),
+            "$baseDir/cache/ directory must be writable",
+            "Change the permissions of the \"<strong>$baseDir/cache/</strong>\" directory so that the web server can write into it."
         );
 
-        $logsDir = is_dir(__DIR__.'/../var/logs') ? __DIR__.'/../var/logs' : __DIR__.'/logs';
-
         $this->addRequirement(
-            is_writable($logsDir),
-            'app/logs/ or var/logs/ directory must be writable',
-            'Change the permissions of either "<strong>app/logs/</strong>" or  "<strong>var/logs/</strong>" directory so that the web server can write into it.'
+            is_writable(__DIR__.'/logs'),
+            "$baseDir/logs/ directory must be writable",
+            "Change the permissions of the \"<strong>$baseDir/logs/</strong>\" directory so that the web server can write into it."
         );
 
         $this->addPhpIniRequirement(
@@ -602,12 +600,6 @@ class SymfonyRequirements extends RequirementCollection
             'Install and enable the <strong>XML</strong> extension.'
         );
 
-        $this->addRecommendation(
-            function_exists('filter_var'),
-            'filter_var() should be available',
-            'Install and enable the <strong>filter</strong> extension.'
-        );
-
         if (!defined('PHP_WINDOWS_VERSION_BUILD')) {
             $this->addRecommendation(
                 function_exists('posix_isatty'),
@@ -656,8 +648,6 @@ class SymfonyRequirements extends RequirementCollection
             ||
             (extension_loaded('apc') && ini_get('apc.enabled'))
             ||
-            (extension_loaded('Zend Optimizer+') && ini_get('zend_optimizerplus.enable'))
-            ||
             (extension_loaded('Zend OPcache') && ini_get('opcache.enable'))
             ||
             (extension_loaded('xcache') && ini_get('xcache.cacher'))
@@ -668,18 +658,8 @@ class SymfonyRequirements extends RequirementCollection
         $this->addRecommendation(
             $accelerator,
             'a PHP accelerator should be installed',
-            'Install and/or enable a <strong>PHP accelerator</strong> (highly recommended).'
+            'Install and enable a <strong>PHP accelerator</strong> like APC (highly recommended).'
         );
-
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $this->addPhpIniRecommendation(
-                'realpath_cache_size',
-                create_function('$cfgValue', 'return (int) $cfgValue > 1000;'),
-                false,
-                'realpath_cache_size should be above 1024 in php.ini',
-                'Set "<strong>realpath_cache_size</strong>" to e.g. "<strong>1024</strong>" in php.ini<a href="#phpini">*</a> to improve performance on windows.'
-            );
-        }
 
         $this->addPhpIniRecommendation('short_open_tag', false);
 
@@ -698,7 +678,7 @@ class SymfonyRequirements extends RequirementCollection
         if (class_exists('PDO')) {
             $drivers = PDO::getAvailableDrivers();
             $this->addRecommendation(
-                count($drivers) > 0,
+                count($drivers),
                 sprintf('PDO should have some drivers installed (currently available: %s)', count($drivers) ? implode(', ', $drivers) : 'none'),
                 'Install <strong>PDO drivers</strong> (mandatory for Doctrine).'
             );

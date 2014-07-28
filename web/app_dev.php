@@ -1,7 +1,5 @@
 <?php
 
-//use Symfony\Component\HttpFoundation\Request;
-
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
 umask(0000);
@@ -17,22 +15,18 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 }
 
 require_once __DIR__.'/../app/bootstrap.php.cache';
-
 require_once __DIR__.'/../app/AppKernel.php';
 require_once __DIR__.'/legacy.php';
 
 // if you want to use the SonataPageBundle with multisite
 // using different relative paths, you must change the request
 // object to use the SiteRequest
-use Sonata\PageBundle\Request\RequestFactory;
 //$request = Request::createFromGlobals('host_with_path');
-$request = RequestFactory::createFromGlobals('host_with_path');
-
+$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals('host_with_path');
 
 $kernel = new AppKernel('dev', true);
 
-$kernel->loadClassCache();
 $response = $kernel->handle($request);
-
 $response->send();
+
 $kernel->terminate($request, $response);

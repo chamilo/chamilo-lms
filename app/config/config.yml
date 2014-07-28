@@ -137,6 +137,7 @@ assetic:
 doctrine:
     dbal:
         default_connection: default
+
         connections:
             default:
                 driver:   "%database_driver%"
@@ -149,8 +150,8 @@ doctrine:
         types:
             json: Sonata\Doctrine\Types\JsonType
             #currency: Sonata\Component\Currency\CurrencyDoctrineType
-    orm:
 
+    orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         default_entity_manager: default
         # auto_mapping: true
@@ -164,11 +165,10 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
-    spool:     { type: memory }
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
 
 jms_security_extra:
     secure_all_services: false
@@ -208,8 +208,7 @@ nelmio_api_doc: ~
 sensio_framework_extra:
     view:    { annotations: false }
     router:  { annotations: true }
-    request:
-        converters: true
+    request: { converters:  true }
 
 # Doctrine extensions configuration
 stof_doctrine_extensions:

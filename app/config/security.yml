@@ -39,7 +39,7 @@ security:
             context:            user
             form_login:
                 provider:       fos_userbundle
-                login_path:     /admin/login
+                login_path:     /login
                 use_forward:    false
                 check_path:     /admin/login_check
                 failure_path:   null

@@ -3,7 +3,6 @@
 namespace ChamiloLMS\CourseBundle\Tool;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-
 abstract class BaseTool implements ToolInterface
 {
     protected $name;

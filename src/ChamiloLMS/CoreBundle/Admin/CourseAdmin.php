@@ -118,6 +118,7 @@ class CourseAdmin extends Admin
         $tools = $toolChain->getTools();
 
         $currentTools = $course->getTools();
+
         $addedTools = array();
         if (!empty($currentTools)) {
             foreach ($currentTools as $tool) {

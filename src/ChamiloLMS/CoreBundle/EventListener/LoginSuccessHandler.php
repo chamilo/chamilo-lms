@@ -26,7 +26,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      */
     public function __construct($dbConnection, UrlGeneratorInterface $urlGenerator, SecurityContext $security)
     {
-        //$dbConnection = $this->container->get('database_connection');
         $database  = new \Database($dbConnection, array());
 
         $this->router = $urlGenerator;

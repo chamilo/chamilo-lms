@@ -467,7 +467,7 @@ class CourseManager
 
         $course_code = Database::escape_string($course_code);
 
-        if (empty ($user_id) || empty ($course_code)) {
+        if (empty($user_id) || empty ($course_code)) {
             return false;
         }
 
@@ -1614,7 +1614,6 @@ class CourseManager
         $users[$session_id_coach] = $user_info;
         return $users;
     }
-
 
     /**
      *    Return user info array of all users registered in the specified real or virtual course

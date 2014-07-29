@@ -3799,6 +3799,7 @@ class SessionManager
                 Database::query($sql_update_users);
             }
         }
+
         return array(
             'error_message' => $error_message,
             'session_counter' => $session_counter,

@@ -134,6 +134,7 @@ class Chat extends Model
                 }
             }
         }
+
         $sql = "UPDATE ".$this->table." SET recd = 1 WHERE to_user = '".$to_user_id."' AND recd = 0";
         Database::query($sql);
 

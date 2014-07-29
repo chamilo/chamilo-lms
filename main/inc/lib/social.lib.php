@@ -999,6 +999,7 @@ class SocialManager extends UserManager
         $html .= '<div class="well_border">';
         $html .= $content;
         $html .= '</div></div>';
+
         return $html;
     }
 

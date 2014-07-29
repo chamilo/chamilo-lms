@@ -26,7 +26,10 @@ class CourseDescription
    	/**
 	 * Constructor
 	 */
-	public function __construct() {}
+	public function __construct()
+    {
+
+    }
 
 	/**
 	 * Returns an array of objects of type CourseDescription corresponding to a specific course, without session ids (session id = 0)
@@ -65,7 +68,8 @@ class CourseDescription
      * first you must set session_id property with the object CourseDescription
      * @return array
      */
-	public function get_description_data() {
+	public function get_description_data()
+    {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 		$condition_session = api_get_session_condition($this->session_id, true, true);
         $course_id = api_get_course_int_id();
@@ -139,7 +143,6 @@ class CourseDescription
 		}
 		return $data;
 	}
-
 
     public function get_data_by_id($id, $course_code = '', $session_id = null) {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
@@ -267,7 +270,8 @@ class CourseDescription
      * Delete a description, first you must set description_type and session_id properties with the object CourseDescription
      * @return int	affected rows
      */
-	public function delete() {
+	public function delete()
+    {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 		$course_id = api_get_course_int_id();
 		$sql = "DELETE FROM $tbl_course_description WHERE c_id = $course_id AND id = '".intval($this->id)."' AND session_id = '".intval($this->session_id)."'";
@@ -285,7 +289,8 @@ class CourseDescription
 	 * @param int description type
 	 * @return int description id
 	 */
-	public function get_id_by_description_type($description_type) {
+	public function get_id_by_description_type($description_type)
+    {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
 
@@ -330,7 +335,8 @@ class CourseDescription
 	 * Get description titles by default
 	 * @return array
 	 */
-	public function get_default_description_title() {
+	public function get_default_description_title()
+    {
 		$default_description_titles = array();
 		$default_description_titles[1]= get_lang('GeneralDescription');
 		$default_description_titles[2]= get_lang('Objectives');

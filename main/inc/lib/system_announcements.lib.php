@@ -1,12 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * @package chamilo.library
- */
-/**
- * Code
- */
-/**
 *	This is the system announcements library.
 *
 *	@package chamilo.library
@@ -329,9 +323,9 @@ class SystemAnnouncementManager
         $visible_guest = 0,
         $lang = null,
         $send_mail = 0,
-        $add_to_calendar = false
+        $add_to_calendar = false,
+        $sendEmailTest = false
     ) {
-
 		$original_content = $content;
 		$a_dateS = explode(' ',$date_start);
 		$a_arraySD = explode('-',$a_dateS[0]);
@@ -349,12 +343,10 @@ class SystemAnnouncementManager
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
 		}
-
 		if (($date_end_to_compare[1] || $date_end_to_compare[2] || $date_end_to_compare[0]) && !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
-
 		if (strlen(trim($title)) == 0) {
 			Display::display_normal_message(get_lang('InvalidTitle'));
 			return false;
@@ -381,9 +373,13 @@ class SystemAnnouncementManager
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang, access_url_id)
 				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$langsql.", ".$current_access_url_id.")";
 
-		if ($send_mail==1) {
-			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
-		}
+        if ($sendEmailTest) {
+            SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang, true);
+        } else {
+            if ($send_mail == 1) {
+                SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
+            }
+        }
 		$res = Database::query($sql);
 		if ($res === false) {
 			Debug::log_s(mysql_error());
@@ -469,14 +465,17 @@ class SystemAnnouncementManager
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
 		}
+
 		if (($date_end_to_compare[1] || $date_end_to_compare[2] || $date_end_to_compare[0]) && !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
-		if( strlen(trim($title)) == 0) {
+
+		if (strlen(trim($title)) == 0) {
 			Display::display_normal_message(get_lang('InvalidTitle'));
 			return false;
 		}
+
 	    $start    = api_get_utc_datetime($date_start);
         $end      = api_get_utc_datetime($date_end);
 
@@ -491,9 +490,13 @@ class SystemAnnouncementManager
 		$sql = "UPDATE ".$db_table." SET lang=$langsql,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' , access_url_id = '".api_get_current_access_url_id()."'  WHERE id = ".$id;
 
-		if ($send_mail==1) {
-			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
-		}
+        if ($sendEmailTest) {
+            SystemAnnouncementManager::send_system_announcement_by_email($title, $content, null, null, $lang, $sendEmailTest);
+        } else {
+            if ($send_mail==1) {
+                SystemAnnouncementManager::send_system_announcement_by_email($title, $content, $visible_teacher, $visible_student, $lang);
+            }
+        }
 		$res = Database::query($sql);
 		if ($res === false) {
 			Debug::log_s(mysql_error());
@@ -501,6 +504,7 @@ class SystemAnnouncementManager
 		}
 		return true;
 	}
+
 	/**
 	 * Deletes an announcement
 	 * @param 	int $id The identifier of the announcement that should be
@@ -524,7 +528,8 @@ class SystemAnnouncementManager
 	 * @param 	int		$id The identifier of the announcement that should be
 	 * @return	object	Object of class StdClass or the required class, containing the query result row
 	 */
-	public static function get_announcement($id) {
+	public static function get_announcement($id)
+    {
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "SELECT * FROM ".$db_table." WHERE id = ".$id;
@@ -568,19 +573,26 @@ class SystemAnnouncementManager
 	 * @param	string	Language (optional, considered for all languages if left empty)
      * @return  bool    True if the message was sent or there was no destination matching. False on database or e-mail sending error.
 	 */
-	public static function send_system_announcement_by_email($title, $content, $teacher, $student, $language = null)
+	public static function send_system_announcement_by_email($title, $content, $teacher, $student, $language = null, $sendEmailTest = false)
     {
 		global $charset;
 
+        $title = api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset);
+        $content = api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'', $content)), ENT_QUOTES, $charset);
+
+        if ($sendEmailTest) {
+            MessageManager::send_message_simple(api_get_user_id(), $title, $content);
+            return true;
+        }
+
+        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         if (api_is_multiple_url_enabled()) {
             $current_access_url_id = api_get_current_access_url_id();
             $url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $url_condition = " INNER JOIN $url_rel_user uu ON uu.user_id = u.user_id ";
         }
 
-		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-
-		if ($teacher <> 0 AND $student == 0) {
+        if ($teacher <> 0 AND $student == 0) {
 			$sql = "SELECT DISTINCT u.user_id FROM $user_table u $url_condition WHERE status = '1' ";
 		}
 
@@ -611,9 +623,6 @@ class SystemAnnouncementManager
 		if ($result === false) {
 			return false;
 		}
-
-        $title      = api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset);
-        $content    = api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'', $content)), ENT_QUOTES, $charset);
 
         $message_sent = false;
 

@@ -1,17 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	This class provides methods for the notebook management.
-*	Include/require it in your code to use its features.
-*	@package chamilo.library
-*/
-/**
- * Code
- */
+
 require_once 'promotion.lib.php';
 
 /**
- * @package chamilo.library
+ * Class Career
+ *
+ *	This class provides methods for the notebook management.
+ *	Include/require it in your code to use its features.
+ *	@package chamilo.library
  */
 class Career extends Model
 {
@@ -34,7 +31,12 @@ class Career extends Model
         return $row['count'];
     }
 
-    public function get_all($where_conditions = array()) {
+    /**
+     * @param array $where_conditions
+     * @return array
+     */
+    public function get_all($where_conditions = array())
+    {
         return Database::select('*',$this->table, array('where'=>$where_conditions,'order' =>'name ASC'));
     }
 
@@ -43,7 +45,8 @@ class Career extends Model
      * @param   int     career id
      * @param   int     status (1 or 0)
     */
-    public function update_all_promotion_status_by_career_id($career_id, $status) {
+    public function update_all_promotion_status_by_career_id($career_id, $status)
+    {
         $promotion = new Promotion();
         $promotion_list = $promotion->get_all_promotions_by_career_id($career_id);
         if (!empty($promotion_list)) {
@@ -61,7 +64,6 @@ class Career extends Model
      */
 	public function display()
     {
-		// action links
 		echo '<div class="actions" style="margin-bottom:20px">';
         echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
 		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_career.png',get_lang('Add'),'','32').'</a>';
@@ -69,6 +71,9 @@ class Career extends Model
         echo Display::grid_html('careers');
 	}
 
+    /**
+     * @return array
+     */
     public function get_status_list()
     {
         return array(self::CAREER_STATUS_ACTIVE => get_lang('Unarchived'), self::CAREER_STATUS_INACTIVE => get_lang('Archived'));
@@ -130,7 +135,8 @@ class Career extends Model
      * @param   boolean     Whether or not to copy the promotions inside
      * @return  integer     New career ID on success, false on failure
      */
-    public function copy($id, $copy_promotions = false) {
+    public function copy($id, $copy_promotions = false)
+    {
         $career = $this->get($id);
         $new = array();
         foreach ($career as $key => $val) {
@@ -165,7 +171,12 @@ class Career extends Model
         return $cid;
     }
 
-     public function get_status($career_id) {
+    /**
+     * @param int $career_id
+     * @return bool
+     */
+    public function get_status($career_id)
+    {
         $TBL_CAREER             = Database::get_main_table(TABLE_CAREER);
         $career_id = intval($career_id);
         $sql 	= "SELECT status FROM $TBL_CAREER WHERE id = '$career_id'";
@@ -176,7 +187,6 @@ class Career extends Model
         } else {
             return false;
         }
-
     }
 
 
@@ -188,7 +198,12 @@ class Career extends Model
    		return $id;
     }
 
-    public function delete($id) {
+     /**
+     * @param int $id
+     * @return bool|void
+     */
+    public function delete($id) 
+    {
 	    parent::delete($id);
 	    Event::addEvent(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
     }

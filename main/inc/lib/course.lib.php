@@ -491,13 +491,14 @@ class CourseManager
      * @param   int     Status (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
      * @return  bool    True on success, false on failure
      * @see add_user_to_course
+     * @assert ('', '') === false
      */
     public static function subscribe_user($user_id, $course_code, $status = STUDENT, $session_id = 0)
     {
-
         if ($user_id != strval(intval($user_id))) {
             return false; //detected possible SQL injection
         }
+
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
@@ -601,9 +602,9 @@ class CourseManager
     public static function get_course_code_from_original_id($original_course_id_value, $original_course_id_name) {
         $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $sql_course = "SELECT course_code FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
-                       WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res = Database::query($sql_course);
+        $sql = "SELECT course_code FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
+                WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $res = Database::query($sql);
         $row = Database::fetch_object($res);
         if ($row) {
             return $row->course_code;
@@ -619,7 +620,8 @@ class CourseManager
      * @return string Course code
      * @assert ('') === false
      */
-    public static function get_course_code_from_course_id($id) {
+    public static function get_course_code_from_course_id($id)
+    {
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $id = intval($id);
         $sql = "SELECT code FROM $table WHERE id = '$id' ";
@@ -744,10 +746,16 @@ class CourseManager
         return $courses_as_admin;
     }
 
-    public static function get_user_list_from_courses_as_coach($user_id, $include_sessions = true) {
+    /**
+     * @param int $user_id
+     * @param bool $include_sessions
+     * @return array
+     */
+    public static function get_user_list_from_courses_as_coach($user_id, $include_sessions = true)
+    {
         $students_in_courses = array();
-
         $sessions = CourseManager::get_course_list_as_coach($user_id, true);
+
         if (!empty($sessions)) {
             foreach($sessions as $session_id => $courses) {
                 if (!$include_sessions) {
@@ -794,9 +802,12 @@ class CourseManager
     }
 
     /**
-     *    @return an array with the course info of all the courses of whichthe current user is course admin
+     * @param int $user_id
+     * @return an array with the course info of all the courses (real and virtual)
+     * of which the current user is course admin.
      */
-    public static function get_course_list_of_user_as_course_admin($user_id) {
+    public static function get_course_list_of_user_as_course_admin($user_id)
+    {
         if ($user_id != strval(intval($user_id))) {
             return array();
         }
@@ -890,6 +901,7 @@ class CourseManager
                 ' WHERE id='.$session_id.' AND id_coach='.$user_id)) > 0) {
             return true;
         }
+
         return false;
     }
 

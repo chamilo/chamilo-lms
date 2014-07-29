@@ -629,4 +629,63 @@ class Text
         $number = (int)$number;
         return ($number < 10) ? '0'.$number : $number;
     }
+
+    
+    /**
+     * Transform the file size in a human readable format.
+     *
+     * @param  int      Size of the file in bytes
+     * @return string A human readable representation of the file size
+     */
+    function format_file_size($file_size) {
+        $file_size = intval($file_size);
+        if($file_size >= 1073741824) {
+            $file_size = round($file_size / 1073741824 * 100) / 100 . 'G';
+        } elseif($file_size >= 1048576) {
+            $file_size = round($file_size / 1048576 * 100) / 100 . 'M';
+        } elseif($file_size >= 1024) {
+            $file_size = round($file_size / 1024 * 100) / 100 . 'k';
+        } else {
+            $file_size = $file_size . 'B';
+        }
+        return $file_size;
+    }
+
+    function return_datetime_from_array($array) {
+        $year	 = '0000';
+        $month = $day = $hours = $minutes = $seconds = '00';
+        if (isset($array['Y']) && (isset($array['F']) || isset($array['M']))  && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
+            $year = $array['Y'];
+            $month = isset($array['F'])?$array['F']:$array['M'];
+            if (intval($month) < 10 ) $month = '0'.$month;
+            $day = $array['d'];
+            if (intval($day) < 10 ) $day = '0'.$day;
+            $hours = $array['H'];
+            if (intval($hours) < 10 ) $hours = '0'.$hours;
+            $minutes = $array['i'];
+            if (intval($minutes) < 10 ) $minutes = '0'.$minutes;
+        }
+        if (checkdate($month,$day,$year)) {
+            $datetime = $year.'-'.$month.'-'.$day.' '.$hours.':'.$minutes.':'.$seconds;
+        }
+        return $datetime;
+    }
+
+    /**
+     * Converts an string CLEANYO[admin][amann,acostea]
+     * into an array:
+     *
+     * array(
+     *  CLEANYO
+     *  admin
+     *  amann,acostea
+     * )
+     *
+     * @param $array
+     * @return array
+     */
+    function bracketsToArray($array)
+    {
+        return preg_split('/[\[\]]+/', $array, -1, PREG_SPLIT_NO_EMPTY);
+    }
 }

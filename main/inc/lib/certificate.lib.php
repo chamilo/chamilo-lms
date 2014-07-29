@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Certificate Class
  * The certificates class is used to generate certificates from inside the
  * gradebook tool.
  * @package chamilo.library.certificates
  */
-
 class Certificate extends Model
 {
     public $table;
@@ -76,7 +76,6 @@ class Certificate extends Model
         }
     }
 
-
     /**
      * Checks if the certificate user path directory is created
      */
@@ -89,7 +88,6 @@ class Certificate extends Model
         $web_path_info = UserManager::get_user_picture_path_by_id($this->user_id, 'web');
 
         if (!empty($path_info) && isset($path_info['dir'])) {
-
             $this->certification_user_path = $path_info['dir'].'certificate/';
             $this->certification_web_user_path = $web_path_info['dir'].'certificate/';
 
@@ -111,7 +109,6 @@ class Certificate extends Model
     public function delete($force_delete = false)
     {
         if (!empty($this->certificate_data)) {
-
             if (!is_null($this->html_file) || $this->html_file != '' || strlen($this->html_file)) {
                 //Deleting HTML file
                 if (is_file($this->html_file)) {
@@ -137,9 +134,8 @@ class Certificate extends Model
     }
 
     /**
-     * Generates an HTML Certificate and fills the path_certificate field in the DB
-     * */
-
+    *  Generates an HTML Certificate and fills the path_certificate field in the DB
+    **/
     public function generate($params = array())
     {
         //The user directory should be set
@@ -368,7 +364,6 @@ class Certificate extends Model
         //Read file or preview file
         if (!empty($this->certificate_data['path_certificate'])) {
             $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
-
             if (file_exists($user_certificate)) {
                 if ($returnContent) {
                     return file_get_contents($user_certificate);
@@ -386,7 +381,8 @@ class Certificate extends Model
         exit;
     }
 
-    static function getCertificatePublicURL($id) {
+    static function getCertificatePublicURL($id)
+    {
         return api_get_path(WEB_PUBLIC_PATH).'certificates/'.$id;
     }
 }

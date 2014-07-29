@@ -1,9 +1,14 @@
 <?php
 /* See license terms in /license.txt */
 
+/**
+ * Class AppPlugin
+ */
 class AppPlugin
 {
     public $plugin_regions = array(
+        'main_top',
+        'main_bottom',
         'login_top',
         'login_bottom',
         'menu_top',
@@ -20,133 +25,264 @@ class AppPlugin
         'course_tool_plugin'
     );
 
+    public $installedPluginListName = array();
+    public $installedPluginListObject = array();
+
+    /**
+     *
+     */
     public function __construct()
     {
     }
 
-    function read_plugins_from_path() {
+    /**
+     * Read plugin from path
+     * @return array
+     */
+    public function read_plugins_from_path()
+    {
         /* We scan the plugin directory. Each folder is a potential plugin. */
-        $pluginpath = api_get_path(SYS_PLUGIN_PATH);
-        $possible_plugins = array();
-        $handle = @opendir($pluginpath);
+        $pluginPath = api_get_path(SYS_PLUGIN_PATH);
+        $plugins = array();
+        $handle = @opendir($pluginPath);
         while (false !== ($file = readdir($handle))) {
             if ($file != '.' && $file != '..' && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
-                $possible_plugins[] = $file;
+                $plugins[] = $file;
             }
         }
         @closedir($handle);
-        sort($possible_plugins);
-        return $possible_plugins;
+        sort($plugins);
+
+        return $plugins;
     }
 
-    function get_installed_plugins_by_region(){
-        $used_plugins = array();
+    /**
+     * @return array
+     */
+    public function get_installed_plugins_by_region()
+    {
+        $plugins = array();
         /* We retrieve all the active plugins. */
         $result = api_get_settings('Plugins');
-        foreach ($result as $row) {
-            $used_plugins[$row['variable']][] = $row['selected_value'];
-        }
-        return $used_plugins;
-    }
-
-    function get_installed_plugins() {
-        $installed_plugins = array();
-        $plugin_array = api_get_settings_params(array("variable = ? AND selected_value = ? AND category = ? " =>
-                                                array('status', 'installed', 'Plugins')));
-
-        if (!empty($plugin_array)) {
-            foreach ($plugin_array as $row) {
-                $installed_plugins[$row['subkey']] = true;
+        if (!empty($result)) {
+            foreach ($result as $row) {
+                $plugins[$row['variable']][] = $row['selected_value'];
             }
-            $installed_plugins = array_keys($installed_plugins);
         }
-        return $installed_plugins;
+
+        return $plugins;
     }
 
-    function install($plugin_name, $access_url_id = null) {
-        if (empty($access_url_id)) {
-            $access_url_id = api_get_current_access_url_id();
+    /**
+     * @return array
+     */
+    public function getInstalledPluginListName()
+    {
+        if (empty($this->installedPluginListName)) {
+            $this->installedPluginListName = $this->get_installed_plugins();
+        }
+
+        return $this->installedPluginListName;
+    }
+
+    /**
+     * @return array List of Plugin
+     */
+    public function getInstalledPluginListObject()
+    {
+        if (empty($this->installedPluginListObject)) {
+            $this->setInstalledPluginListObject();
+        }
+
+        return $this->installedPluginListObject;
+    }
+
+    /**
+     * @return array
+     */
+    public function setInstalledPluginListObject()
+    {
+        $pluginListName = $this->getInstalledPluginListName();
+        $pluginList = array();
+        if (!empty($pluginListName)) {
+            foreach ($pluginListName as $pluginName) {
+                $plugin_info = $this->getPluginInfo($pluginName);
+                if (isset($plugin_info['plugin_class'])) {
+                    $pluginList[] = $plugin_info['plugin_class']::create();
+                }
+            }
+        }
+        $this->installedPluginListObject = $pluginList;
+    }
+
+    /**
+     * @return array
+     */
+    public function get_installed_plugins()
+    {
+        $installedPlugins = array();
+        $plugins = api_get_settings_params(
+            array(
+                "variable = ? AND selected_value = ? AND category = ? " => array('status', 'installed', 'Plugins')
+            )
+        );
+
+        if (!empty($plugins)) {
+            foreach ($plugins as $row) {
+                $installedPlugins[$row['subkey']] = true;
+            }
+            $installedPlugins = array_keys($installedPlugins);
+        }
+
+        return $installedPlugins;
+    }
+
+    /**
+     * @param string $pluginName
+     * @param int    $urlId
+     */
+    public function install($pluginName, $urlId = null)
+    {
+        if (empty($urlId)) {
+            $urlId = api_get_current_access_url_id();
         } else {
-            $access_url_id = intval($access_url_id);
+            $urlId = intval($urlId);
         }
-        api_add_setting('installed', 'status', $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $access_url_id, 1);
 
-        //api_add_setting($plugin, $area, $plugin, null, 'Plugins', $plugin, null, null, null, $_configuration['access_url'], 1);
-        $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin_name.'/install.php';
+        api_add_setting(
+            'installed',
+            'status',
+            $pluginName,
+            'setting',
+            'Plugins',
+            $pluginName,
+            null,
+            null,
+            null,
+            $urlId,
+            1
+        );
 
-        if (is_file($pluginpath) && is_readable($pluginpath)) {
-            // Executes the install procedure
-            require $pluginpath;
+        $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/install.php';
+
+        if (is_file($pluginPath) && is_readable($pluginPath)) {
+            // Execute the install procedure.
+
+            require $pluginPath;
         }
     }
 
-    function uninstall($plugin_name, $access_url_id = null) {
-        if (empty($access_url_id)) {
-            $access_url_id = api_get_current_access_url_id();
+    /**
+    * @param string $pluginName
+    * @param int    $urlId
+    */
+    public function uninstall($pluginName, $urlId = null)
+    {
+        if (empty($urlId)) {
+            $urlId = api_get_current_access_url_id();
         } else {
-            $access_url_id = intval($access_url_id);
+            $urlId = intval($urlId);
         }
-        api_delete_settings_params(array('category = ? AND access_url = ? AND subkey = ? ' =>
-                                   array('Plugins', $access_url_id, $plugin_name)));
-        $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin_name.'/uninstall.php';
-        if (is_file($pluginpath) && is_readable($pluginpath)) {
-            //execute the uninstall procedure
-            require $pluginpath;
+        // First call the custom uninstall to allow full access to global settings
+        $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/uninstall.php';
+        if (is_file($pluginPath) && is_readable($pluginPath)) {
+            // Execute the uninstall procedure.
+
+            require $pluginPath;
         }
+        // Second remove all remaining global settings
+        api_delete_settings_params(
+            array('category = ? AND access_url = ? AND subkey = ? ' => array('Plugins', $urlId, $pluginName))
+        );
     }
 
-    function get_areas_by_plugin($plugin_name) {
+    /**
+     * @param string $pluginName
+     *
+     * @return array
+     */
+    public function get_areas_by_plugin($pluginName)
+    {
         $result = api_get_settings('Plugins');
         $areas = array();
         foreach ($result as $row) {
-            if ($plugin_name == $row['selected_value']) {
+            if ($pluginName == $row['selected_value']) {
                 $areas[] = $row['variable'];
             }
         }
+
         return $areas;
     }
 
-    function is_valid_plugin_location($location) {
+    /**
+     * @param string $location
+     *
+     * @return bool
+     */
+    public function is_valid_plugin_location($location)
+    {
         return in_array($location, $this->plugin_list);
     }
 
-    function is_valid_plugin($plugin_name) {
-        if (is_dir(api_get_path(SYS_PLUGIN_PATH).$plugin_name)) {
-            if (is_file(api_get_path(SYS_PLUGIN_PATH).$plugin_name.'/index.php')) {
+    /**
+     * @param string $pluginName
+     *
+     * @return bool
+     */
+    public function is_valid_plugin($pluginName)
+    {
+        if (is_dir(api_get_path(SYS_PLUGIN_PATH).$pluginName)) {
+            if (is_file(api_get_path(SYS_PLUGIN_PATH).$pluginName.'/index.php')) {
                 return true;
             }
         }
+
         return false;
     }
 
-    function get_plugin_regions() {
+    /**
+     * @return array
+     */
+    public function get_plugin_regions()
+    {
         sort($this->plugin_regions);
+
         return $this->plugin_regions;
     }
 
-    function load_region($plugins, $region, $main_template, $forced = false)
+    /**
+    * @param string $region
+    * @param string $template
+    * @param bool   $forced
+    *
+    * @return null|string
+    */
+    public function load_region($region, $template, $forced = false)
     {
         if ($region == 'course_tool_plugin') {
             return null;
         }
         ob_start();
-        $this->get_all_plugin_contents_by_region($plugins, $region, $main_template, $forced);
+        $this->get_all_plugin_contents_by_region($region, $template, $forced);
         $content = ob_get_contents();
         ob_end_clean();
+
         return $content;
     }
 
     /**
      * Loads the translation files inside a plugin if exists. It loads by default english see the hello world plugin
      *
-     * @todo add caching
      * @param string $plugin_name
+     *
+     * @todo add caching
      */
-    function load_plugin_lang_variables($plugin_name) {
+    public function load_plugin_lang_variables($plugin_name)
+    {
         global $language_interface;
         $root = api_get_path(SYS_PLUGIN_PATH);
 
-        //1. Loading english if exists
+        // 1. Loading english if exists
         $english_path = $root.$plugin_name."/lang/english.php";
 
         if (is_readable($english_path)) {
@@ -157,7 +293,7 @@ class AppPlugin
             }
         }
 
-        //2. Loading the system language
+        // 2. Loading the system language
         if ($language_interface != 'english') {
             $path = $root.$plugin_name."/lang/$language_interface.php";
 
@@ -173,20 +309,24 @@ class AppPlugin
     }
 
     /**
+     * @param string    $region
+     * @param Template  $template
+     * @param bool      $forced
      *
-     * @param string $block
-     * @param obj   template obj
+     * @return bool
+     *
      * @todo improve this function
      */
-    function get_all_plugin_contents_by_region($_plugins, $region, $template, $forced = false)
+    public function get_all_plugin_contents_by_region($region, $template, $forced = false)
     {
+        global $_plugins;
         if (isset($_plugins[$region]) && is_array($_plugins[$region])) {
         //if (1) {
             //Load the plugin information
             foreach ($_plugins[$region] as $plugin_name) {
 
                 //The plugin_info variable is available inside the plugin index
-                $plugin_info = $this->get_plugin_info($plugin_name, $forced);
+                $plugin_info = $this->getPluginInfo($plugin_name, $forced);
 
                 //We also know where the plugin is
                 $plugin_info['current_region'] = $region;
@@ -236,14 +376,28 @@ class AppPlugin
     }
 
     /**
-     * Loads plugin info
-     * @staticvar array $plugin_data
-     * @param string plugin name
-     * @param bool load from DB or from the static array
-     * @todo filter setting_form
-     * @return array
+     * @param string    $plugin_name
+     * @param bool      $forced
+     *
+     * @deprecated
      */
-    function get_plugin_info($plugin_name, $forced = false) {
+    public function get_plugin_info($plugin_name, $forced = false)
+    {
+        return $this->getPluginInfo($plugin_name, $forced);
+    }
+
+    /**
+     * Loads plugin info
+     *
+     * @staticvar array $plugin_data
+     * @param string    $plugin_name
+     * @param bool      $forced load from DB or from the static array
+     *
+     * @return array
+     * @todo filter setting_form
+     */
+    public function getPluginInfo($plugin_name, $forced = false)
+    {
         static $plugin_data = array();
 
         if (isset($plugin_data[$plugin_name]) && $forced == false) {
@@ -257,8 +411,11 @@ class AppPlugin
             }
 
             //extra options
-            $plugin_settings = api_get_settings_params(array("subkey = ? AND category = ? AND type = ? " =>
-                                            array($plugin_name, 'Plugins','setting')));
+            $plugin_settings = api_get_settings_params(
+                array(
+                    "subkey = ? AND category = ? AND type = ? " => array($plugin_name, 'Plugins','setting')
+                )
+            );
             $settings_filtered = array();
             foreach ($plugin_settings as $item) {
                 $settings_filtered[$item['variable']] = $item['selected_value'];
@@ -269,11 +426,14 @@ class AppPlugin
         }
     }
 
-    /*
+    /**
      * Get the template list
+     * @param  string $pluginName
+     * @return bool
      */
-    function get_templates_list($plugin_name) {
-        $plugin_info = $this->get_plugin_info($plugin_name);
+    public function get_templates_list($pluginName)
+    {
+        $plugin_info = $this->getPluginInfo($pluginName);
         if (isset($plugin_info) && isset($plugin_info['templates'])) {
             return $plugin_info['templates'];
         } else {
@@ -281,156 +441,135 @@ class AppPlugin
         }
     }
 
-    /* *
+    /**
      * Remove all regions of an specific plugin
      */
-    function remove_all_regions($plugin) {
+    public function remove_all_regions($plugin)
+    {
         $access_url_id = api_get_current_access_url_id();
         if (!empty($plugin)) {
-            api_delete_settings_params(array('category = ? AND type = ? AND access_url = ? AND subkey = ? ' =>
-                                array('Plugins', 'region', $access_url_id, $plugin)));
-
+            api_delete_settings_params(
+                array(
+                    'category = ? AND type = ? AND access_url = ? AND subkey = ? ' => array('Plugins', 'region', $access_url_id, $plugin)
+                )
+            );
         }
     }
 
-    /*
+    /**
      * Add a plugin to a region
+     * @param string $plugin
+     * @param string $region
      */
-    function add_to_region($plugin, $region) {
+    public function add_to_region($plugin, $region)
+    {
         $access_url_id = api_get_current_access_url_id();
         api_add_setting($plugin, $region, $plugin, 'region', 'Plugins', $plugin, null, null, null, $access_url_id, 1);
     }
 
-    function install_course_plugins($course_id) {
-        $plugin_list = $this->get_installed_plugins();
+    /**
+     * @param int $courseId
+     */
+    public function install_course_plugins($courseId)
+    {
+        $pluginList = $this->getInstalledPluginListObject();
 
-        if (!empty($plugin_list)) {
-            foreach ($plugin_list as $plugin_name) {
-                $plugin_path = api_get_path(SYS_PLUGIN_PATH).$plugin_name.'/plugin.php';
+        if (!empty($pluginList)) {
+            /** @var Plugin $obj */
+            foreach ($pluginList as $obj) {
+                $pluginName = $obj->get_name();
+                $plugin_path = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+
                 if (file_exists($plugin_path)) {
-                    require_once $plugin_path;
+                    require $plugin_path;
                     if (isset($plugin_info) && isset($plugin_info['plugin_class'])) {
-                        $plugin_info['plugin_class']::create()->course_install($course_id);
+                        $obj->course_install($courseId);
                     }
                 }
             }
         }
     }
 
-    function add_course_settings_form($form) {
-        $plugin_list = $this->get_installed_plugins();
-        foreach ($plugin_list as $plugin_name) {
-            $plugin_info = $this->get_plugin_info($plugin_name);
-            if (isset($plugin_info['plugin_class'])) {
-                $obj = $plugin_info['plugin_class']::create();
+    /**
+     * @param FormValidator $form
+     */
+    public function add_course_settings_form($form)
+    {
+        $pluginList = $this->getInstalledPluginListObject();
+        /** @var Plugin $obj */
+        foreach ($pluginList as $obj) {
+            $plugin_name = $obj->get_name();
+            $pluginTitle = $obj->get_title();
+            if (!empty($obj->course_settings)) {
+                $icon = Display::return_icon($plugin_name.'.png', Security::remove_XSS($pluginTitle),'', ICON_SIZE_SMALL);
+                //$icon = null;
+                $form->addElement('html', '<div><h3>'.$icon.' '.Security::remove_XSS($pluginTitle).'</h3><div>');
 
-                if (!empty($obj->course_settings)) {
-                    $icon = Display::return_icon($plugin_name.'.png', Security::remove_XSS($plugin_info['title']),'', ICON_SIZE_SMALL);
-                    //$icon = null;
-                    $form->addElement('html', '<div><h3>'.$icon.' '.Security::remove_XSS($plugin_info['title']).'</h3><div>');
-
-                    $groups = array();
-                    foreach ($obj->course_settings as $setting) {
-                        if ($setting['type'] != 'checkbox') {
-                            $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
-                        } else {
-                            //if (isset($groups[$setting['group']])) {
-                                $element = & $form->createElement($setting['type'], $setting['name'], '', $obj->get_lang($setting['name']));
-                                if ($setting['init_value'] == 1) {
-                                    $element->setChecked(true);
-                                }
-                                $groups[$setting['group']][] = $element;
-                            //}
+                $groups = array();
+                foreach ($obj->course_settings as $setting) {
+                    if ($setting['type'] != 'checkbox') {
+                        $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
+                    } else {
+                        $element = & $form->createElement($setting['type'], $setting['name'], '', $obj->get_lang($setting['name']));
+                        if ($setting['init_value'] == 1) {
+                            $element->setChecked(true);
                         }
+                        $groups[$setting['group']][] = $element;
                     }
-                    foreach ($groups as $k => $v) {
-                        $form->addGroup($groups[$k], $k, array($obj->get_lang($k)));
-                    }
-                    $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-                    $form->addElement('html', '</div></div>');
                 }
+                foreach ($groups as $k => $v) {
+                    $form->addGroup($groups[$k], $k, array($obj->get_lang($k)));
+                }
+                $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+                $form->addElement('html', '</div></div>');
             }
         }
     }
 
-    function set_course_settings_defaults(& $values) {
-        $plugin_list = $this->get_installed_plugins();
-
-        foreach ($plugin_list as $plugin_name) {
-            $plugin_info = $this->get_plugin_info($plugin_name);
-            if (isset($plugin_info['plugin_class'])) {
-                $obj = $plugin_info['plugin_class']::create();
-                if (!empty($obj->course_settings)) {
-                    foreach ($obj->course_settings as $setting) {
-                        if (isset($setting['name'])) {
-                             $result = api_get_course_setting($setting['name']);
-                             if ($result != '-1') {
-                                $values[$setting['name']] = $result;
-                             }
-                        }
-                    }
-                }
+    /**
+     * Get all course settings from all installed plugins.
+     * @return array
+     */
+    public function getAllPluginCourseSettings()
+    {
+        $pluginList = $this->getInstalledPluginListObject();
+        /** @var Plugin $obj */
+        $courseSettings = array();
+        if (!empty($pluginList)) {
+            foreach ($pluginList as $obj) {
+                $pluginCourseSetting = $obj->getCourseSettings();
+                $courseSettings = array_merge($courseSettings, $pluginCourseSetting);
             }
         }
+        return $courseSettings;
     }
 
     /**
      * When saving the plugin values in the course settings, check whether
      * a callback method should be called and send it the updated settings
-     * @param array The new settings the user just saved
+     * @param array $values The new settings the user just saved
      * @return void
      */
-    function save_course_settings($values) {
-        $plugin_list = $this->get_installed_plugins();
-        foreach ($plugin_list as $plugin_name) {
-            $settings = $this->get_plugin_course_settings($plugin_name);
-            $subvalues = array();
-            $i = 0;
-            foreach ($settings as $v) {
-                if (isset($values[$v])) {
-                    $subvalues[$v] = $values[$v];
-                    $i++;
-                }
-            }
-            if ($i>0) {
-                $plugin_info = $this->get_plugin_info($plugin_name);
+    public function saveCourseSettingsHook($values)
+    {
+        $pluginList = $this->getInstalledPluginListObject();
 
-                if (isset($plugin_info['plugin_class'])) {
-                    $obj = $plugin_info['plugin_class']::create();
-                    $obj->course_settings_updated($subvalues);
-                }
-            }
-        }
-    }
+        /** @var Plugin $obj */
+        foreach ($pluginList as $obj) {
+            $settings = $obj->getCourseSettings();
 
-    /**
-     * Gets a nice array of keys for just the plugin's course settings
-     * @param string The plugin ID
-     * @return array Nice array of keys for course settings
-     */
-    public function get_plugin_course_settings($plugin_name) {
-        $settings = array();
-        if (empty($plugin_name)) {
-            return $settings;
-        }
-        $plugin_info = $this->get_plugin_info($plugin_name);
-
-        if (isset($plugin_info['plugin_class'])) {
-            $obj = $plugin_info['plugin_class']::create();
-            if (is_array($obj->course_settings)) {
-                foreach ($obj->course_settings as $item) {
-                    if (isset($item['group'])) {
-                        if (!in_array($item['group'],$settings)) {
-                            $settings[] = $item['group'];
-                        }
-                    } else {
-                        $settings[] = $item['name'];
+            $subValues = array();
+            if (!empty($settings)) {
+                foreach ($settings as $v) {
+                    if (isset($values[$v])) {
+                        $subValues[$v] = $values[$v];
                     }
                 }
             }
-            unset($obj);
-            unset($plugin_info);
+
+            if (!empty($subValues)) {
+                $obj->course_settings_updated($subValues);
+            }
         }
-        return $settings;
     }
 }

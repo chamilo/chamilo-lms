@@ -86,12 +86,26 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     $a_courses = array_keys($courses);
 
     if (!api_is_session_admin()) {
-        $menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
-        $menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), "index.php?view=drh_students&amp;display=yourstudents");
-        $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php');
-        $menu_items[] = Display::url(Display::return_icon('course_na.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), '#');
-        $menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php');
-
+        $menu_items[] = Display::url(
+            Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
+            "index.php?view=drh_students&amp;display=yourstudents"
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM),
+            'teachers.php'
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('course_na.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM),
+            '#'
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM),
+            'session.php'
+        );
         if (api_can_login_as($user_id)) {
             $link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.Security::get_existing_token().'">'.
                     Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
@@ -170,7 +184,8 @@ function get_count_courses()
             null,
             null,
             true,
-            $keyword
+            $keyword,
+            $sessionId
         );
     }
 
@@ -182,7 +197,6 @@ function get_courses($from, $limit, $column, $direction)
     $userId = api_get_user_id();
     $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
-
     $drhLoaded = false;
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
@@ -209,7 +223,8 @@ function get_courses($from, $limit, $column, $direction)
             $column,
             $direction,
             false,
-            $keyword
+            $keyword,
+            $sessionId
         );
     }
 

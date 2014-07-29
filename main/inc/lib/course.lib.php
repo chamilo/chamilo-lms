@@ -1299,6 +1299,11 @@ class CourseManager
                 $filter_by_status = intval($filter_by_status);
                 $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";
             }
+
+            if (SessionManager::orderCourseIsEnabled()) {
+                //$order_by = "ORDER BY position";
+            }
+
         } else {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
@@ -1373,7 +1378,6 @@ class CourseManager
         }
 
         $sql .= ' '.$order_by.' '.$limit;
-
         $rs = Database::query($sql);
         $users = array();
 
@@ -3092,13 +3096,14 @@ class CourseManager
         $column = null,
         $direction = null,
         $getCount = false,
-        $keyword = null
+        $keyword = null,
+        $sessionId = null
     ) {
         // Database Table Definitions
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
+        $sessionId = intval($sessionId);
         $user_id = intval($user_id);
         $select  = "SELECT DISTINCT *, id as real_id ";
 
@@ -3129,14 +3134,38 @@ class CourseManager
             $keywordCondition = " AND (c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%' ) ";
         }
 
+        $orderBy = null;
+        $extraInnerJoin = null;
+
+        if (!empty($sessionId)) {
+            if (!empty($sessionId)) {
+                $courseList = SessionManager::get_course_list_by_session_id(
+                    $sessionId
+                );
+                if (!empty($courseList)) {
+                    $courseListToString = implode("','", array_keys($courseList));
+                    $whereConditions .= " AND c.id IN ('".$courseListToString."')";
+                }
+            }
+
+            if (SessionManager::orderCourseIsEnabled() && !empty($sessionId)) {
+                $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+                $orderBy =  ' ORDER BY position';
+                $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
+                                    ON (c.code = src.course_code AND id_session = $sessionId) ";
+            }
+        }
+
         $whereConditions .= $keywordCondition;
         $sql = "$select
                 FROM $tbl_course c
                     INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)
                     INNER JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+                    $extraInnerJoin
                 WHERE
                     access_url_id = ".api_get_current_access_url_id()."
                     $whereConditions
+                $orderBy
                 ";
         if (isset($from) && isset($limit)) {
             $from = intval($from);

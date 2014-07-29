@@ -1070,12 +1070,18 @@ function get_all_exercise_results_by_user($user_id,  $course_code, $session_id =
     $table_track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_code = Database::escape_string($course_code);
-    $exercise_id = intval($exercise_id);
+    //$exercise_id = intval($exercise_id);
     $session_id = intval($session_id);
     $user_id    = intval($user_id);
 
     $sql = "SELECT * FROM $table_track_exercises
-            WHERE status = '' AND exe_user_id = $user_id AND exe_cours_id = '$course_code' AND session_id = $session_id AND orig_lp_id = 0 AND orig_lp_item_id = 0
+            WHERE
+              status = '' AND
+              exe_user_id = $user_id AND
+              exe_cours_id = '$course_code' AND
+              session_id = $session_id AND
+              orig_lp_id = 0 AND
+              orig_lp_item_id = 0
             ORDER by exe_id";
 
     $res = Database::query($sql);
@@ -1249,11 +1255,14 @@ function get_best_exercise_results_by_user($exercise_id, $course_code, $session_
     //Getting the best results of every student
     $best_score_return = array();
 
-    foreach($list as $student_result) {
+    foreach ($list as $student_result) {
         $user_id = $student_result['exe_user_id'];
         $current_best_score[$user_id] = $student_result['exe_result'];
         //echo $current_best_score[$user_id].' - '.$best_score_return[$user_id]['exe_result'].'<br />';
-        if ($current_best_score[$user_id] > $best_score_return[$user_id]['exe_result']) {
+        if (isset($current_best_score[$user_id]) &&
+            isset($best_score_return[$user_id]['exe_result']) &&
+            $current_best_score[$user_id] > $best_score_return[$user_id]['exe_result']
+        ) {
             $best_score_return[$user_id] = $student_result;
         }
     }
@@ -1270,14 +1279,15 @@ function get_best_attempt_exercise_results_per_user($user_id, $exercise_id, $cou
     $user_id               = intval($user_id);
 
     $sql = "SELECT * FROM $table_track_exercises
-            WHERE   status = ''  AND
-                    exe_cours_id = '$course_code' AND
-                    exe_exo_id = '$exercise_id' AND
-                    session_id = $session_id  AND
-                    exe_user_id = $user_id AND
-                    orig_lp_id =0 AND
-                    orig_lp_item_id = 0
-                    ORDER BY exe_id";
+            WHERE
+                status = ''  AND
+                exe_cours_id = '$course_code' AND
+                exe_exo_id = '$exercise_id' AND
+                session_id = $session_id  AND
+                exe_user_id = $user_id AND
+                orig_lp_id =0 AND
+                orig_lp_item_id = 0
+            ORDER BY exe_id";
 
     $res = Database::query($sql);
     $list = array();
@@ -1288,15 +1298,17 @@ function get_best_attempt_exercise_results_per_user($user_id, $exercise_id, $cou
     $best_score_return = array();
     $best_score_return['exe_result'] = 0;
 
-    foreach($list as $result) {
+    foreach ($list as $result) {
         $current_best_score = $result;
         if ($current_best_score['exe_result'] > $best_score_return['exe_result']) {
             $best_score_return = $result;
         }
     }
+
     if (!isset($best_score_return['exe_weighting'])) {
         $best_score_return = array();
     }
+
     return $best_score_return;
 }
 

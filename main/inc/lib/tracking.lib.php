@@ -2812,10 +2812,15 @@ class Tracking
 
     /**
      * Shows the user progress (when clicking in the Progress tab)
-     * @param   int     user id
-     * @return  string  html code
+     *
+     * @param int $user_id
+     * @param int $session_id
+     * @param string $extra_params
+     * @param bool $show_courses
+     *
+     * @return string
      */
-    static function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true)
+    public static function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true, $showAllSessions = true)
     {
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -2825,26 +2830,24 @@ class Tracking
         $tbl_access_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
         $user_id = intval($user_id);
-
-        // get course list
         if (api_is_multiple_url_enabled()) {
-            $sql = 'SELECT cu.course_code as code, title
-                    FROM '.$tbl_course_user.' cu INNER JOIN '.$tbl_access_rel_course.' a
-                    ON(a.course_code = cu.course_code)
-                    INNER JOIN '.$tbl_course.' c ON( cu.course_code = c.code)
+            $sql = "SELECT cu.course_code as code, title
+                    FROM $tbl_course_user cu INNER JOIN $tbl_access_rel_course a
+                    ON (a.course_code = cu.course_code)
+                    INNER JOIN $tbl_course c ON (cu.course_code = c.code)
                     WHERE
-                        user_id='.$user_id.' AND
-                        relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND
-                        access_url_id = '.api_get_current_access_url_id().'
-                    ORDER BY title ';
+                        user_id = $user_id AND
+                        relation_type<> ".COURSE_RELATION_TYPE_RRHH." AND
+                        access_url_id = ".api_get_current_access_url_id()."
+                    ORDER BY title";
         } else {
-            $sql = 'SELECT course_code as code, title
-                    FROM '.$tbl_course_user.' u
-                    INNER JOIN '.$tbl_course.' c ON(course_code = c.code)
+            $sql = "SELECT course_code as code, title
+                    FROM $tbl_course_user u
+                    INNER JOIN $tbl_course c ON (course_code = c.code)
                     WHERE
-                        u.user_id='.$user_id.' AND
-                        relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
-                    ORDER BY title ';
+                        u.user_id= $user_id AND
+                        relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                    ORDER BY title";
         }
 
         $rs = Database::query($sql);
@@ -2853,40 +2856,56 @@ class Tracking
             $courses[$row['code']] = $row['title'];
         }
 
+        $orderBy = " ORDER BY name ";
+        $extraInnerJoin = null;
+
+        if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
+            $orderBy = " ORDER BY s.id, position ";
+            $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src ON (cu.course_code = src.course_code AND src.id_session = $session_id) ";
+        }
+
         // Get the list of sessions where the user is subscribed as student
         if (api_is_multiple_url_enabled()) {
-            $sql = 'SELECT DISTINCT cu.course_code, id_session as session_id, name
-                    FROM '.$tbl_session_course_user.' cu
-                    INNER JOIN '.$tbl_access_rel_session.' a
-                        ON(a.session_id = cu.id_session)
-                    INNER JOIN '.$tbl_session.' s  ON(s.id = a.session_id)
+            $sql = "SELECT DISTINCT cu.course_code, s.id as session_id, name
+                    FROM $tbl_session_course_user cu
+                    INNER JOIN $tbl_access_rel_session a
+                    ON (a.session_id = cu.id_session)
+                    INNER JOIN $tbl_session s  ON (s.id = a.session_id)
+                    $extraInnerJoin
                     WHERE
-                        id_user='.$user_id.' AND
-                        access_url_id = '.api_get_current_access_url_id().'
-                    ORDER BY name ';
+                        id_user = $user_id AND
+                        access_url_id = ".api_get_current_access_url_id()."
+                    $orderBy ";
         } else {
-            $sql = 'SELECT DISTINCT course_code, id_session as session_id, name
-                    FROM '.$tbl_session_course_user.' u
-                    INNER JOIN '.$tbl_session.' s ON(s.id = u.id_session)
-                    WHERE id_user='.$user_id.'
-                    ORDER BY name ';
+            $sql = "SELECT DISTINCT cu.course_code, s.id as session_id, name
+                    FROM $tbl_session_course_user cu
+                    INNER JOIN $tbl_session s ON (s.id = cu.id_session)
+                    $extraInnerJoin
+                    WHERE id_user = $user_id
+                    $orderBy ";
         }
 
         $rs = Database::query($sql);
         $simple_session_array = array();
         while ($row = Database :: fetch_array($rs)) {
             $course_info = CourseManager::get_course_information($row['course_code']);
-            $temp_course_in_session[$row['session_id']]['course_list'][$course_info['id']]  = $course_info;
+            $temp_course_in_session[$row['session_id']]['course_list'][$course_info['id']] = $course_info;
             $temp_course_in_session[$row['session_id']]['name'] = $row['name'];
             $simple_session_array[$row['session_id']] = $row['name'];
         }
-        foreach($simple_session_array as $my_session_id => $session_name) {
+
+        foreach ($simple_session_array as $my_session_id => $session_name) {
             $course_list = $temp_course_in_session[$my_session_id]['course_list'];
             $my_course_data = array();
             foreach ($course_list as $course_data) {
                 $my_course_data[$course_data['id']] = $course_data['title'];
             }
-            $my_course_data = utf8_sort($my_course_data);
+
+            if (!SessionManager::orderCourseIsEnabled() && empty($session_id)) {
+                $my_course_data = utf8_sort($my_course_data);
+            }
+
             $final_course_data = array();
 
             foreach($my_course_data as $course_id => $value) {
@@ -3002,7 +3021,6 @@ class Tracking
                 foreach ($course_list as $course_data) {
 
                     $exercise_list = get_all_exercises($course_data, $my_session_id);
-
                     foreach ($exercise_list as $exercise_data) {
                         $exercise_obj = new Exercise($course_data['id']);
                         $exercise_obj->read($exercise_data['id']);
@@ -3010,8 +3028,15 @@ class Tracking
                         //$visible_return = $exercise_obj->is_visible();
 
                         if ($exercise_data['results_disabled'] == 0 || $exercise_data['results_disabled'] == 2) {
-                        //if ($visible_return['value'] == true) {
-                            $best_average = intval(get_best_average_score_by_exercise($exercise_data['id'], $course_data['code'], $my_session_id, $user_count));
+
+                            $best_average = intval(
+                                get_best_average_score_by_exercise(
+                                    $exercise_data['id'],
+                                    $course_data['code'],
+                                    $my_session_id,
+                                    $user_count
+                                )
+                            );
                             $exercise_graph_list[] 		= $best_average;
                             $all_exercise_graph_list[] 	= $best_average;
 
@@ -3057,7 +3082,6 @@ class Tracking
                     $label_time = '';
                     if (!empty($time)) {
                         $label_time = date('d-m-y', $time);
-                        //$label_time = api_format_date($time, DATE_FORMAT_NUMBER);
                     }
                     $final_all_exercise_graph_name_list[] = $all_exercise_graph_name_list[$key].' '.$label_time;
                     $my_results_final[] = $my_results[$key];
@@ -3085,9 +3109,11 @@ class Tracking
                 $course_list  = $session_data['course_list'];
                 $session_name = $session_data['name'];
 
-                if (isset($session_id) && !empty($session_id)) {
-                    if ($session_id != $my_session_id) {
-                        continue;
+                if ($showAllSessions == false) {
+                    if (isset($session_id) && !empty($session_id)) {
+                        if ($session_id != $my_session_id) {
+                            continue;
+                        }
                     }
                 }
 
@@ -3226,8 +3252,9 @@ class Tracking
                     $total_time_login      = Tracking :: get_time_spent_on_the_course($user_id, $course_code, $session_id_from_get);
                     $time                  = api_time_to_hms($total_time_login);
                     $percentage_score      = Tracking :: get_avg_student_score($user_id, $course_code, array(), $session_id_from_get);
+                    $courseCodeFromGet = isset($_GET['course']) ? $_GET['course'] : null;
 
-                    if ($course_code == $_GET['course'] && $_GET['session_id'] == $session_id_from_get) {
+                    if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
                         $html .= '<tr class="row_odd" style="background-color:#FBF09D" >';
                     } else {
                         $html .= '<tr class="row_even">';
@@ -3261,7 +3288,7 @@ class Tracking
                     $html .= Display::tag('td', $percentage_score, array('align'=>'center'));
                     $html .= Display::tag('td', $last_connection,  array('align'=>'center'));
 
-                    if ($course_code == $_GET['course'] && $_GET['session_id'] == $session_id_from_get) {
+                    if ($course_code == $courseCodeFromGet && $_GET['session_id'] == $session_id_from_get) {
                         $details = '<a href="#">';
                         $details .=Display::return_icon('2rightarrow_na.gif', get_lang('Details'));
                     } else {
@@ -3542,8 +3569,8 @@ class Tracking
         $graph->drawTitle(50, 30, get_lang('ExercisesInTimeProgressChart'), 50,50,50,$main_width-110, true);
 
         // $main_graph = new pChart($main_width,$main_height);
-
-        $graph_id = 'generate_session_exercise_graph'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
+        $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
+        $graph_id = 'generate_session_exercise_graph'.$courseCode.'-'.intval($_GET['session_id']).'-'.api_get_user_id();
         if ($cache->IsInCache($graph_id, $data_set->GetData())) {
         //if (0) {
             //if we already created the img

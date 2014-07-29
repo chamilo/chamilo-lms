@@ -46,7 +46,6 @@ $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 // Getting all sessions where I'm subscribed
 $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-
 $user_course_list = array();
 foreach ($new_session_list as $session_item) {
     $user_course_list[] = $session_item['code'];
@@ -516,9 +515,11 @@ $(function() {
 </script>
 
 <?php
-$my_reporting = Tracking::show_user_progress(api_get_user_id(), $session_id, '#tabs-4', false);
+
+$courseCode = isset($_GET['course']) ? $_GET['course'] : null;
+$my_reporting = Tracking::show_user_progress(api_get_user_id(), $session_id, '#tabs-4', false, false);
 if (!empty($my_reporting))  {
-    $my_reporting  .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $session_id);
+    $my_reporting  .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $courseCode, $session_id);
 }
 if (empty($my_reporting)) {
     $my_reporting  = Display::return_message(get_lang('NoDataAvailable'), 'warning');

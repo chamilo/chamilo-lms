@@ -2481,6 +2481,11 @@ class UserManager
             $sessionListFromCourseCoach = array();
             $sql =" SELECT DISTINCT id_session FROM $tbl_session_course_user
                     WHERE id_user = $user_id AND status = 2 ";
+
+            if (SessionManager::orderCourseIsEnabled()) {
+                $sql .= "ORDER BY position";
+            }
+
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $result = Database::store_result($result);

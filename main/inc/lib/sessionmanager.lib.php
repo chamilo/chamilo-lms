@@ -187,7 +187,8 @@ class SessionManager
                                 WHERE id = $session_id";
                         Database::query($sql);
                     }
-                    $sql = "UPDATE $tbl_session SET duration = $duration
+                    $sql = "UPDATE $tbl_session
+                            SET duration = '$duration'
                             WHERE id = $session_id";
                     Database::query($sql);
                 }
@@ -2673,7 +2674,7 @@ class SessionManager
      * @param string $course_name
      * @return array list of courses
      */
-    public static function get_course_list_by_session_id($session_id, $course_name = '', $orderBy = 'title')
+    public static function get_course_list_by_session_id($session_id, $course_name = '', $orderBy = null)
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -2690,9 +2691,17 @@ class SessionManager
             $sql .= " AND c.title LIKE '%$course_name%' ";
         }
 
-        $orderBy = Database::escape_string($orderBy);
+        if (!empty($orderBy)) {
+            $orderBy = "ORDER BY $orderBy";
+        } else {
+            if (SessionManager::orderCourseIsEnabled()) {
+                $orderBy .= " ORDER BY position ";
+            } else {
+                $orderBy .= " ORDER BY title ";
+            }
+        }
 
-        $sql .= "ORDER BY $orderBy";
+        $sql .= Database::escape_string($orderBy);
 
         $result 	= Database::query($sql);
         $num_rows 	= Database::num_rows($result);
@@ -2905,6 +2914,7 @@ class SessionManager
         }
 
         $result = Database::query($sql);
+        $return_array = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $return_array[] = $row;
         }

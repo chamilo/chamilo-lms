@@ -37,8 +37,8 @@ $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$sessionId,
 
 $form = new FormValidator('edit', 'post', api_get_self().'?session_id='.$sessionId.'&user_id='.$userId);
 $form->add_header(get_lang('EditUserSessionDuration'));
-$sessionInfo = SessionManager::fetch($sessionId);
 $data = SessionManager::getUserSession($userId, $sessionId);
+$userInfo = api_get_user_info($userId);
 
 // Show current end date for the session for this user, if any
 $userAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
@@ -64,6 +64,8 @@ if (count($userAccess) == 0) {
         $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateWasZ'), $firstAccess, $duration, $last);
     }
 }
+$form->addElement('html', sprintf(get_lang('UserXSessionY'), $userInfo['complete_name'], $sessionInfo['name']));
+$form->addElement('html', '<br>');
 $form->addElement('html', $msg);
 
 $form->addElement('text', 'duration', array(get_lang('Duration'), null, get_lang('Days')));

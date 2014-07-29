@@ -4198,15 +4198,20 @@ function downloadFile($id, $course_info)
 }
 
 /**
+ * Get the file contents for an assigment
  * @param int $id
  * @param array $course_info
+ * @param int Session ID
  * @return array|bool
  */
-function getFileContents($id, $course_info)
+function getFileContents($id, $course_info, $sessionId = 0)
 {
     $id = intval($id);
     if (empty($course_info) || empty($id)) {
         return false;
+    }
+    if (empty($sessionId)) {
+        $sessionId = api_get_session_id();
     }
 
     $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -4219,7 +4224,7 @@ function getFileContents($id, $course_info)
             $row = Database::fetch_array($result, 'ASSOC');
             $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$row['url'];
 
-            $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id']);
+            $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id'], $sessionId);
             allowOnlySubscribedUser(api_get_user_id(), $row['parent_id'], $course_info['real_id']);
 
             if (empty($item_info)) {

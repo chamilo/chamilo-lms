@@ -70,6 +70,10 @@ $form->addElement('html', $msg);
 
 $form->addElement('text', 'duration', array(get_lang('Duration'), null, get_lang('Days')));
 $form->addElement('button', 'submit', get_lang('Send'));
+
+if (empty($data['duration'])) {
+    $data['duration'] = $sessionInfo['duration'];
+}
 $form->setDefaults($data);
 $message = null;
 if ($form->validate()) {

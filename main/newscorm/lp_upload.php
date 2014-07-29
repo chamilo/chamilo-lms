@@ -35,9 +35,7 @@ if (Request::is_post() && $is_error) {
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
 
     // A file upload has been detected, now deal with the file...
-
     // Directory creation.
-
     $stopping_error = false;
 
     $s = $_FILES['user_file']['name'];
@@ -66,7 +64,8 @@ if (Request::is_post() && $is_error) {
             require_once 'scorm.class.php';
             $oScorm = new scorm();
             $manifest = $oScorm->import_package($_FILES['user_file'], $current_dir);
-            if (!$manifest) { //if api_set_failure
+            if (!$manifest) {
+                //if api_set_failure
                 return api_failure::set_failure(api_failure::get_last_failure());
             }
             if (!empty($manifest)) {
@@ -109,13 +108,9 @@ if (Request::is_post() && $is_error) {
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // end if is_uploaded_file
-
-    // If file name given to get in claroline/upload/, try importing this way.
-
+    // If file name given to get in /upload/, try importing this way.
     // A file upload has been detected, now deal with the file...
-
     // Directory creation.
-
     $stopping_error = false;
 
     // Escape path with basename so it can only be directly into the claroline/upload directory.
@@ -132,7 +127,6 @@ if (Request::is_post() && $is_error) {
     $result = learnpath::verify_document_size($s);
     if ($result == true) {
         return api_failure::set_failure('upload_file_too_big');
-
     }
     $type = learnpath::get_package_type($s, basename($s));
 

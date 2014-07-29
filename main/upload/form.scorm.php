@@ -18,7 +18,8 @@ function get_zip_files_in_garbage() {
         //ignore
     } else {
         while ($entry = readdir($dh)) {
-            if (substr($entry, 0, 1) == '.') {/* ignore files starting with . */
+            if (substr($entry, 0, 1) == '.') {
+                /* ignore files starting with . */
             } else {
                 if (preg_match('/^.*\.zip$/i', $entry)) {
                     $list[] = $entry;
@@ -28,6 +29,7 @@ function get_zip_files_in_garbage() {
         natcasesort($list);
         closedir($dh);
     }
+
     return $list;
 }
 
@@ -70,7 +72,6 @@ if (api_is_platform_admin()) {
 }
 
 $form->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="upload"');
-
 $form->addElement('html', '<br /><br /><br />');
 
 if (is_dir(api_get_path(PLUGIN_PATH)."/pens")) {
@@ -87,7 +88,10 @@ if (is_dir(api_get_path(PLUGIN_PATH)."/pens")) {
 // the default values for the form
 $defaults = array('index_document' => 'checked="checked"', 'use_max_score' => 1);
 $form->setDefaults($defaults);
-Display::display_normal_message(Display::tag('strong', get_lang('SupportedScormContentMakers')).': '.implode(', ', $content_origins), false);
+Display::display_normal_message(
+    Display::tag('strong', get_lang('SupportedScormContentMakers')).': '.implode(', ', $content_origins),
+    false
+);
 $form->display();
 
 // footer

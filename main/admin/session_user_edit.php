@@ -52,7 +52,7 @@ if (count($userAccess) == 0) {
     // The user already accessed the session. Show a clear detail of the days count.
     $duration = $sessionInfo['duration'];
     if (!empty($data['duration'])) {
-        $duration = $data['duration'];
+        $duration = $duration + $data['duration'];
     }
     $days = SessionManager::getDayLeftInSession($sessionId, $userId, $duration);
     $firstAccess = api_strtotime($userAccess['login_course_date'], 'UTC');
@@ -68,18 +68,18 @@ $form->addElement('html', sprintf(get_lang('UserXSessionY'), $userInfo['complete
 $form->addElement('html', '<br>');
 $form->addElement('html', $msg);
 
-$form->addElement('text', 'duration', array(get_lang('Duration'), null, get_lang('Days')));
+$form->addElement('text', 'duration', array(get_lang('ExtraDuration'), null, get_lang('Days')));
 $form->addElement('button', 'submit', get_lang('Send'));
 
 if (empty($data['duration'])) {
-    $data['duration'] = $sessionInfo['duration'];
+    $data['duration'] = 0;
 }
 $form->setDefaults($data);
 $message = null;
 if ($form->validate()) {
     $duration = $form->getSubmitValue('duration');
     // Only update if the duration is different from the default duration
-    if ($duration != $sessionInfo['duration']) {
+    if ($duration != 0) {
         SessionManager::editUserSessionDuration($duration, $userId, $sessionId);
         $message = Display::return_message(get_lang('ItemUpdated'), 'confirmation');
     } else {

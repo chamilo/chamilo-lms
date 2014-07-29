@@ -37,7 +37,34 @@ $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$sessionId,
 
 $form = new FormValidator('edit', 'post', api_get_self().'?session_id='.$sessionId.'&user_id='.$userId);
 $form->add_header(get_lang('EditUserSessionDuration'));
+$sessionInfo = SessionManager::fetch($sessionId);
 $data = SessionManager::getUserSession($userId, $sessionId);
+
+// Show current end date for the session for this user, if any
+$userAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
+    $sessionId,
+    $userId
+);
+if (count($userAccess) == 0) {
+    // User never accessed the session. End date is still open
+    $msg = sprintf(get_lang('UserNeverAccessedSessionDefaultDurationIsX'), $sessionInfo['duration']);
+} else {
+    // The user already accessed the session. Show a clear detail of the days count.
+    $duration = $sessionInfo['duration'];
+    if (!empty($data['duration'])) {
+        $duration = $data['duration'];
+    }
+    $days = SessionManager::getDayLeftInSession($sessionId, $userId, $duration);
+    $firstAccess = api_strtotime($userAccess['login_course_date'], 'UTC');
+    if ($days > 0) {
+        $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateInZ'), $firstAccess, $duration, $days);
+    } else {
+        $endDateInSeconds = $firstAccess + $duration*24*60*60;
+        $last = api_get_local_time($endDateInSeconds);
+        $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateWasZ'), $firstAccess, $duration, $last);
+    }
+}
+$form->addElement('html', $msg);
 
 $form->addElement('text', 'duration', array(get_lang('Duration'), null, get_lang('Days')));
 $form->addElement('button', 'submit', get_lang('Send'));
@@ -45,8 +72,13 @@ $form->setDefaults($data);
 $message = null;
 if ($form->validate()) {
     $duration = $form->getSubmitValue('duration');
-    SessionManager::editUserSessionDuration($duration, $userId, $sessionId);
-    $message = Display::return_message(get_lang('ItemUpdated'), 'confirmation');
+    // Only update if the duration is different from the default duration
+    if ($duration != $sessionInfo['duration']) {
+        SessionManager::editUserSessionDuration($duration, $userId, $sessionId);
+        $message = Display::return_message(get_lang('ItemUpdated'), 'confirmation');
+    } else {
+        $message = Display::return_message(get_lang('DurationIsSameAsDefault'), 'warning');
+    }
 }
 
 // display the header

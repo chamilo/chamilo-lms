@@ -56,12 +56,13 @@ if (count($userAccess) == 0) {
     }
     $days = SessionManager::getDayLeftInSession($sessionId, $userId, $duration);
     $firstAccess = api_strtotime($userAccess['login_course_date'], 'UTC');
+    $firstAccessString = api_convert_and_format_date($userAccess['login_course_date'], DATE_FORMAT_SHORT, 'UTC');
     if ($days > 0) {
-        $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateInZDays'), $firstAccess, $duration, $days);
+        $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateInZDays'), $firstAccessString, $duration, $days);
     } else {
         $endDateInSeconds = $firstAccess + $duration*24*60*60;
         $last = api_convert_and_format_date($endDateInSeconds, DATE_FORMAT_SHORT);
-        $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateWasZ'), $firstAccess, $duration, $last);
+        $msg = sprintf(get_lang('FirstAccessWasXSessionDurationYEndDateWasZ'), $firstAccessString, $duration, $last);
     }
 }
 $form->addElement('html', sprintf(get_lang('UserXSessionY'), $userInfo['complete_name'], $sessionInfo['name']));

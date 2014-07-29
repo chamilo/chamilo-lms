@@ -35,6 +35,8 @@ tests/doctrine_console/Proxies
 # OS stuff
 .DS_Store
 
+/.htaccess
+
 # Symfony
 
 behat.yml

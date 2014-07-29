@@ -155,9 +155,7 @@ if (api_get_setting('profile', 'login') !== 'true') {
 $form->applyFilter('username', 'stripslashes');
 $form->applyFilter('username', 'trim');
 $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-if (api_get_setting('login_is_email') != 'true'){
-    $form->addRule('username', get_lang('UsernameWrong'), 'username');
-}
+$form->addRule('username', get_lang('UsernameWrong'), 'username');
 $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 
 //    OFFICIAL CODE

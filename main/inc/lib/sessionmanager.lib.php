@@ -4666,7 +4666,9 @@ class SessionManager
 
     /**
      * Use the session duration to allow/block user access see BT#8317
-     * Needs "ALTER TABLE session ADD COLUMN duration int;"
+     * Needs these DB changes
+     * ALTER TABLE session ADD COLUMN duration int;
+     * ALTER TABLE session_rel_user ADD COLUMN duration int;
      */
     public static function durationPerUserIsEnabled()
     {
@@ -4683,24 +4685,70 @@ class SessionManager
     /**
      * @param int $userId
      * @param int $sessionId
+     * @param int $duration in days
      * @return int
      */
-    public function getDayLeftInSession($sessionId, $userId, $duration)
+    public static function getDayLeftInSession($sessionId, $userId, $duration)
     {
         $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
             $sessionId,
             $userId
         );
+
         $currentTime = time();
 
         $firstAccess = api_strtotime($courseAccess['login_course_date'], 'UTC');
-        //var_dump(api_get_utc_datetime($firstAccess));
-        //var_dump($duration);
+
         $endDateInSeconds = $firstAccess + $duration*24*60*60;
         $leftDays = round(($endDateInSeconds- $currentTime) / 60 / 60 / 24);
-        /*var_dump(api_get_utc_datetime($endDateInSeconds));
-        var_dump(api_get_utc_datetime($currentTime));*/
-        return $leftDays;
 
+        return $leftDays;
+    }
+
+    /**
+     * @param int $duration
+     * @param int $userId
+     * @param int $sessionId
+     */
+    public static function editUserSessionDuration($duration, $userId, $sessionId)
+    {
+        $duration = intval($duration);
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+
+        if (empty($userId) || empty($sessionId)) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $parameters = array('duration' => $duration);
+        $where = array('id_session = ? AND id_user = ? ' => array($sessionId, $userId));
+        Database::update($table, $parameters, $where);
+    }
+
+    /**
+     * @param int $userId
+     * @param int $sessionId
+     *
+     * @param return array
+     */
+    public static function getUserSession($userId, $sessionId)
+    {
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+
+        if (empty($userId) || empty($sessionId)) {
+            return false;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $sql = "SELECT * FROM $table WHERE id_session =$sessionId AND id_user = $userId";
+        $result = Database::query($sql);
+        $values = array();
+        if (Database::num_rows($result)) {
+            $values = Database::fetch_array($result, 'ASSOC');
+        }
+
+        return $values;
     }
 }

@@ -230,10 +230,22 @@ if ($multiple_url_is_on) {
     echo '</td>';
     echo '<td>';
     $url_list = UrlManager::get_access_url_from_session($id_session);
-    foreach($url_list as $url_data) {
+    foreach ($url_list as $url_data) {
         echo $url_data['url'].'<br />';
     }
     echo '</td></tr>';
+}
+
+if (SessionManager::durationPerUserIsEnabled()) {
+    $sessionInfo = api_get_session_info($id_session);
+    echo '<tr><td>';
+    echo get_lang('Duration');
+    echo '</td>';
+    echo '<td>';
+    echo $sessionInfo['duration'].' ';
+    echo get_lang('Days');
+    echo '</td></tr>';
+
 }
 ?>
 </table>
@@ -387,11 +399,8 @@ $url .= Display::url(
     "session_user_import.php?id_session=$id_session"
 );
 echo Display::page_subheader(get_lang('UserList').$url);
-
 ?>
-
 <!--List of users -->
-
 <table class="data_table">
     <tr>
         <th>
@@ -444,15 +453,28 @@ if ($session['nbr_users']==0) {
                 $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
             }
         }
+
+        $editUrl = null;
+        if (SessionManager::durationPerUserIsEnabled()) {
+            if (isset($sessionInfo['duration']) && !empty($sessionInfo['duration'])) {
+                $editUrl = api_get_path(WEB_CODE_PATH) . 'admin/session_user_edit.php?session_id=' . $id_session . '&user_id=' . $user['user_id'];
+                $editUrl = Display::url(
+                    Display::return_icon('edit.png', get_lang('Edit')),
+                    $editUrl
+                );
+            }
+        }
 		echo '<tr>
-                <td width="90%">
+                <td width="80%">
                     '.$user_link.'
                 </td>
                 <td>
+                    '.$editUrl.'
                     <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
                     <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
                     <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
                     '.$link_to_add_user_in_url.'
+
                 </td>
                 </tr>';
 	}
@@ -460,11 +482,16 @@ if ($session['nbr_users']==0) {
 ?>
 </table>
 <?php
-// footer
+
 Display :: display_footer();
 
 /*
  ALTER TABLE session_rel_course ADD COLUMN position int;
  ALTER TABLE session_rel_course ADD COLUMN category varchar(255);
+
+ https://task.beeznest.com/issues/8317:
+
+ ALTER TABLE session ADD COLUMN duration int;
+ ALTER TABLE session_rel_user ADD COLUMN duration int;
  *
 */

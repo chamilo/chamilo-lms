@@ -2026,7 +2026,14 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                         );
                         $currentTime = time();
                         $firstAccess = api_strtotime($courseAccess['login_course_date'], 'UTC');
-                        if (($firstAccess + $duration) > $currentTime) {
+                        $userDurationData = SessionManager::getUserSession(
+                            api_get_user_id(),
+                            $session_id
+                        );
+                        $userDuration = intval($userDurationData['duration'])*24*60*60;
+
+                        $totalDuration = $firstAccess + $duration + $userDuration;
+                        if ($totalDuration > $currentTime) {
                             return SESSION_AVAILABLE;
                         } else {
                             return SESSION_INVISIBLE;

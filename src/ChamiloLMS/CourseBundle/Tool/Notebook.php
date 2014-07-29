@@ -1,9 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\CourseBundle\Tool;
 
 /**
- * Class Announcements
+ * Class Notebook
  * @package ChamiloLMS\CourseBundle\Tool
  */
 class Notebook extends BaseTool
@@ -13,7 +14,7 @@ class Notebook extends BaseTool
      */
     public function getName()
     {
-        return 'Exercise';
+        return 'Notebook';
     }
 
     /**

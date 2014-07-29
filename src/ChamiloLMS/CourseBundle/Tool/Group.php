@@ -1,9 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\CourseBundle\Tool;
 
 /**
- * Class Dropbox
+ * Class Group
  * @package ChamiloLMS\CourseBundle\Tool
  */
 class Group extends BaseTool

@@ -1,9 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\CourseBundle\Tool;
 
 /**
- * Class Announcements
+ * Class Survey
  * @package ChamiloLMS\CourseBundle\Tool
  */
 class Survey extends BaseTool

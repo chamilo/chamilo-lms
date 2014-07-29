@@ -1,8 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\CourseBundle\Tool;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class BaseTool
+ * @package ChamiloLMS\CourseBundle\Tool
+ */
 abstract class BaseTool implements ToolInterface
 {
     protected $name;

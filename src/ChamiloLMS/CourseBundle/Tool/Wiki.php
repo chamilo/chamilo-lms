@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\CourseBundle\Tool;
 
@@ -13,7 +14,7 @@ class Wiki extends BaseTool
      */
     public function getName()
     {
-        return 'Exercise';
+        return 'Wiki';
     }
 
     /**

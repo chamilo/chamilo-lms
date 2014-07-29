@@ -3,7 +3,7 @@
 namespace ChamiloLMS\CourseBundle\Tool;
 
 /**
- * Class Calendar
+ * Class Document
  * @package ChamiloLMS\CourseBundle\Tool
  */
 class Document extends BaseTool

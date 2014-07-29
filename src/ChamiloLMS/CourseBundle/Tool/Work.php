@@ -1,9 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\CourseBundle\Tool;
 
 /**
- * Class Dropbox
+ * Class Work
  * @package ChamiloLMS\CourseBundle\Tool
  */
 class Work extends BaseTool
@@ -13,7 +14,7 @@ class Work extends BaseTool
      */
     public function getName()
     {
-        return 'Exercise';
+        return 'Work';
     }
 
     /**

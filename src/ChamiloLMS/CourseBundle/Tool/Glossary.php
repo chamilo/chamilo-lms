@@ -1,9 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\CourseBundle\Tool;
 
 /**
- * Class LearningPath
+ * Class Glossary
  * @package ChamiloLMS\CourseBundle\Tool
  */
 class Glossary extends BaseTool

@@ -14,12 +14,6 @@ $language_file = array('admin', 'agenda', 'announcements');
 // Resetting the course id.
 $cidReset = true;
 
-// Including the global initialization file.
-require_once '../inc/global.inc.php';
-
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
-
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section']=$this_section;
@@ -173,9 +167,6 @@ if ($action_todo) {
     }
 
     $form->addElement('style_submit_button', 'submit', $text,'class="'.$class.'"');
-    if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-        $values['content'] = WCAG_Rendering::HTML_to_text($values['content']);
-    }
     $form->setDefaults($values);
     if ($form->validate()) {
         $values = $form->exportValues();
@@ -190,9 +181,6 @@ if ($action_todo) {
         }
         if ($values['lang'] == 'all') {
             $values['lang'] = null;
-        }
-        if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-            $values['content'] = WCAG_Rendering::text_to_HTML($values['content']);
         }
         switch ($values['action']) {
             case 'add':

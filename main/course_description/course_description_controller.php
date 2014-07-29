@@ -74,11 +74,7 @@ class CourseDescriptionController
                 $check = Security::check_token();
                 if ($check) {
                     $title = $_POST['title'];
-                    if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-                        $content = WCAG_Rendering::prepareXHTML();
-                    } else {
-                        $content = $_POST['contentDescription'];
-                    }
+                    $content = $_POST['contentDescription'];
                     $description_type = $_POST['description_type'];
                     $id = $_POST['id'];
                     $progress = $_POST['progress'];
@@ -166,11 +162,7 @@ class CourseDescriptionController
         		$check = Security::check_token();
         		if ($check) {
         			$title = $_POST['title'];
-		        	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-						$content = WCAG_Rendering::prepareXHTML();
-					} else {
-						$content = $_POST['contentDescription'];
-					}
+                    $content = $_POST['contentDescription'];
 		        	$description_type = $_POST['description_type'];
 		        	if ($description_type >= ADD_BLOCK) {
 		        		$course_description->set_description_type($description_type);

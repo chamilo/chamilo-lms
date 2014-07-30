@@ -3761,7 +3761,7 @@ class DocumentManager
      */
     public static function get_web_odf_extension_list()
     {
-        return array('ods', 'odt');
+        return array('ods', 'odt', 'odp');
     }
 
     /**

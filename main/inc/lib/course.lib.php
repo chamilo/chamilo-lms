@@ -4611,9 +4611,14 @@ class CourseManager
             'email_alert_to_teacher_on_new_user_in_course',
             'enable_lp_auto_launch',
             'pdf_export_watermark_text',
-            'show_system_folders',
-            //'lp_return_link'
+            'show_system_folders'
         );
+
+        global $_configuration;
+        if (isset($_configuration['allow_lp_return_link']) && $_configuration['allow_lp_return_link']) {
+            $courseSettings[] = 'lp_return_link';
+        }
+
         if (!empty($pluginCourseSettings)) {
             $courseSettings = array_merge(
                 $courseSettings,

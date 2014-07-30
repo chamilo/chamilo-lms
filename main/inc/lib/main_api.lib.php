@@ -2025,12 +2025,21 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                             api_get_user_id()
                         );
                         $currentTime = time();
-                        $firstAccess = api_strtotime($courseAccess['login_course_date'], 'UTC');
+                        $firstAccess = 0;
+                        if (isset($courseAccess['login_course_date'])) {
+                            $firstAccess = api_strtotime(
+                                $courseAccess['login_course_date'],
+                                'UTC'
+                            );
+                        }
                         $userDurationData = SessionManager::getUserSession(
                             api_get_user_id(),
                             $session_id
                         );
-                        $userDuration = intval($userDurationData['duration'])*24*60*60;
+                        $userDuration = 0;
+                        if (isset($userDurationData['duration'])) {
+                            $userDuration = intval($userDurationData['duration']) * 24 * 60 * 60;
+                        }
 
                         $totalDuration = $firstAccess + $duration + $userDuration;
                         if ($totalDuration > $currentTime) {

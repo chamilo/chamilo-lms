@@ -459,7 +459,7 @@ if ($session['nbr_users']==0) {
             if (isset($sessionInfo['duration']) && !empty($sessionInfo['duration'])) {
                 $editUrl = api_get_path(WEB_CODE_PATH) . 'admin/session_user_edit.php?session_id=' . $id_session . '&user_id=' . $user['user_id'];
                 $editUrl = Display::url(
-                    Display::return_icon('edit.png', get_lang('Edit')),
+                    Display::return_icon('agenda.png', get_lang('SessionDurationEdit')),
                     $editUrl
                 );
             }

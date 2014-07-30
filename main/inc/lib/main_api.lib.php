@@ -2024,6 +2024,11 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                             $session_id,
                             api_get_user_id()
                         );
+                        // If there is a session duration but there is no previous
+                        // access by the user, then the session is still available
+                        if (count($courseAccess) == 0) {
+                            return SESSION_AVAILABLE;
+                        }
                         $currentTime = time();
                         $firstAccess = 0;
                         if (isset($courseAccess['login_course_date'])) {

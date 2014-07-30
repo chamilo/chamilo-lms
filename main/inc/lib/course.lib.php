@@ -4695,7 +4695,8 @@ class CourseManager
     }
 
     /**
-     * Get information from the track_e_course_access table
+     * Get login information from the track_e_course_access table, for any
+     * course in the given session
      * @param int $sessionId
      * @param int $userId
      * @return array

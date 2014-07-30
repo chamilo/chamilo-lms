@@ -4684,6 +4684,8 @@ class SessionManager
     }
 
     /**
+     * Returns the number of days the student has left in a session when using
+     * sessions durations
      * @param int $userId
      * @param int $sessionId
      * @param int $duration in days
@@ -4691,12 +4693,19 @@ class SessionManager
      */
     public static function getDayLeftInSession($sessionId, $userId, $duration)
     {
+        // Get an array with the details of the first access of the student to
+        // this session
         $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
             $sessionId,
             $userId
         );
 
         $currentTime = time();
+
+        // If no previous access, return false
+        if (count($courseAccess) == 0) {
+            return false;
+        }
 
         $firstAccess = api_strtotime($courseAccess['login_course_date'], 'UTC');
 
@@ -4728,10 +4737,10 @@ class SessionManager
     }
 
     /**
-     * @param int $userId
-     * @param int $sessionId
-     *
-     * @param return array
+     * Gets one row from the session_rel_user table
+     * @param int The user ID
+     * @param int The session ID
+     * @return array
      */
     public static function getUserSession($userId, $sessionId)
     {

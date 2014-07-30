@@ -2483,7 +2483,7 @@ class UserManager
                     WHERE id_user = $user_id AND status = 2 ";
 
             if (SessionManager::orderCourseIsEnabled()) {
-                $sql .= "ORDER BY position";
+                //$sql .= "ORDER BY position";
             }
 
             $result = Database::query($sql);

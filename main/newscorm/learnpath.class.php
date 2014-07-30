@@ -8527,7 +8527,6 @@ class learnpath
                                 $my_dep_file->setAttribute('href', $doc_info[0]);
                                 $my_dep->setAttribute('xml:base', '');
 
-                                //$current_dir = str_replace('\\', '/', dirname($current_course_path.'/'.$item->get_file_path())).'/';
                                 // The next lines fix a bug when using the "subdir" mode of Chamilo, whereas
                                 // an image path would be constructed as /var/www/subdir/subdir/img/foo.bar
                                 $abs_img_path_without_subdir = $doc_info[0];
@@ -8536,11 +8535,10 @@ class learnpath
                                 if ($pos === 0) {
                                     $abs_img_path_without_subdir = '/'.substr($abs_img_path_without_subdir, strlen($relp));
                                 }
-                                //$file_path = realpath(api_get_path(SYS_PATH).$doc_info[0]);
                                 $file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
                                 $file_path = str_replace('\\', '/', $file_path);
                                 $file_path = str_replace('//', '/', $file_path);
-                                //error_log(__LINE__.'Abs path: '.$file_path, 0);
+
                                 // Prepare the current directory path (until just under 'document') with a trailing slash.
                                 $cur_path = substr($current_course_path, -1) == '/' ? $current_course_path : $current_course_path.'/';
                                 // Check if the current document is in that path.
@@ -8551,7 +8549,8 @@ class learnpath
                                     $orig_file_path = str_replace('\\', '/', $orig_file_path);
                                     $relative_path = '';
                                     if (strstr($file_path, $cur_path) !== false) {
-                                        $relative_path = substr($file_path, strlen($orig_file_path));
+                                        //$relative_path = substr($file_path, strlen($orig_file_path));
+                                        $relative_path = str_replace($cur_path, '', $file_path);
                                         $file_path = substr($file_path, strlen($cur_path));
                                     } else {
                                         // This case is still a problem as it's difficult to calculate a relative path easily
@@ -8700,11 +8699,9 @@ class learnpath
                             $url = $link['url'];
                             $title = stripslashes($link['title']);
                             $links_to_create[$my_file_path] = array('title' => $title, 'url' => $url);
-                            //$my_xml_file_path = api_htmlentities(api_utf8_encode($my_file_path), ENT_QUOTES, 'UTF-8');
                             $my_xml_file_path = $my_file_path;
                             $my_sub_dir = dirname($my_file_path);
                             $my_sub_dir = str_replace('\\', '/', $my_sub_dir);
-                            //$my_xml_sub_dir = api_htmlentities(api_utf8_encode($my_sub_dir), ENT_QUOTES, 'UTF-8');
                             $my_xml_sub_dir = $my_sub_dir;
                             // Give a <resource> child to the <resources> element.
                             $my_resource = $xmldoc->createElement('resource');
@@ -8806,7 +8803,6 @@ class learnpath
                             $my_dep->setAttribute('adlcp:scormtype', 'asset');
                             $my_dep_file = $xmldoc->createElement('file');
                             // Check type of URL.
-                            //error_log(__LINE__.'Now dealing with '.$doc_info[0].' of type '.$doc_info[1].'-'.$doc_info[2], 0);
                             if ($doc_info[1] == 'remote') {
                                 // Remote file. Save url as is.
                                 $my_dep_file->setAttribute('href', $doc_info[0]);
@@ -8968,6 +8964,8 @@ class learnpath
         // TODO: Add a readme file here, with a short description and a link to the Reload player
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
+        global $_configuration;
+        $append = $_configuration['url_append'];
 
         foreach ($zip_files as $file_path) {
             if (empty($file_path)) {
@@ -8975,6 +8973,9 @@ class learnpath
             }
 
             $dest_file = $archive_path.$temp_dir_short.'/'.$file_path;
+            if (!empty($path_to_remove) && !empty($path_to_replace)) {
+                $dest_file = str_replace($path_to_remove, $path_to_replace, $dest_file);
+            }
             $this->create_path($dest_file);
             @copy($sys_course_path.$_course['path'].'/'.$file_path, $dest_file);
             // Check if the file needs a link update.
@@ -8995,19 +8996,22 @@ class learnpath
                     if (strpos("main/default_course_document", $old_new['dest'] === false)) {
                         $new_dest = str_replace('document/', $mult.'document/', $old_new['dest']);
                     } else {
-                        $new_dest = $old_new['dest'];
+                        //$new_dest = $old_new['dest'];
+                        $new_dest = str_replace('document/', '', $old_new['dest']);
                     }
                     $string = str_replace($old_new['orig'], $new_dest, $string);
 
                     //Add files inside the HTMLs
                     $new_path = str_replace('/courses/', '', $old_new['orig']);
+                    $destinationFile = $archive_path.$temp_dir_short.'/'.$old_new['dest'];
                     if (file_exists($sys_course_path.$new_path)) {
-                        copy($sys_course_path.$new_path, $archive_path.$temp_dir_short.'/'.$old_new['dest']);
+                        copy($sys_course_path.$new_path, $destinationFile);
                     }
                 }
                 file_put_contents($dest_file, $string);
             }
         }
+
         foreach ($zip_files_abs as $file_path) {
             if (empty($file_path)) {
                 continue;

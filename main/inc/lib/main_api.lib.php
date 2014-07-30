@@ -2529,7 +2529,7 @@ function api_is_course_session_coach($user_id, $course_code, $session_id)
  * @param string - optional, course code
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $course_code = null) {
+function api_is_coach($session_id = 0, $course_code = null, $check_student_view = true) {
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
@@ -2537,7 +2537,9 @@ function api_is_coach($session_id = 0, $course_code = null) {
     }
 
     // The student preview was on
-    if (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
+    if ($check_student_view &&
+        isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview"
+    ) {
         return false;
     }
 
@@ -2572,6 +2574,7 @@ function api_is_coach($session_id = 0, $course_code = null) {
 	    } else {
 	    	$sessionIsCoach = Database::store_result($result);
 	    }
+
 	}
     return (count($sessionIsCoach) > 0);
 }
@@ -2821,10 +2824,10 @@ function api_display_debug_info($debug_info) {
 function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true)
 {
     $my_session_id 				= api_get_session_id();
-    $is_allowed_coach_to_edit 	= api_is_coach();
+    $is_allowed_coach_to_edit 	= api_is_coach(null, null, $check_student_view);
     $session_visibility 		= api_get_session_visibility($my_session_id);
 
-    //Admins can edit anything
+    // Admins can edit anything.
     if (api_is_platform_admin(false)) {
         //The student preview was on
         if ($check_student_view && isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
@@ -2857,16 +2860,17 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
     }
 
     if (!$is_courseAdmin && $session_coach) {
-        $is_courseAdmin = $is_courseAdmin || api_is_coach();
+        $is_courseAdmin = $is_courseAdmin || $is_allowed_coach_to_edit;
     }
 
     // Check if the student_view is enabled, and if so, if it is activated.
     if (api_get_setting('student_view_enabled') == 'true') {
         if (!empty($my_session_id)) {
-            // Check if session visibility is read only for coachs
+            // Check if session visibility is read only for coaches.
             if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
                 $is_allowed_coach_to_edit = false;
             }
+
             if (api_get_setting('allow_coach_to_edit_course_session') == 'true') {
                 // Check if coach is allowed to edit a course.
                 $is_allowed = $is_allowed_coach_to_edit;

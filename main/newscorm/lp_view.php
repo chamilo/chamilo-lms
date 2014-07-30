@@ -319,7 +319,7 @@ $sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE c_id = $course_id AND lp_id
 $res_media= Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {
-    while ($row_media= Database::fetch_array($res_media)) {
+    while ($row_media = Database::fetch_array($res_media)) {
         if (!empty($row_media['audio'])) {
             $show_audioplayer = true;
             break;
@@ -328,7 +328,8 @@ if (Database::num_rows($res_media) > 0) {
 }
 
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
+$is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
+
 if ($is_allowed_to_edit) {
     echo '<div id="learning_path_breadcrumb_zone">';
     global $interbreadcrumb;

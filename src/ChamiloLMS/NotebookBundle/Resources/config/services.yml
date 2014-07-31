@@ -1,0 +1,7 @@
+services:
+    chamilolms.coursebundle.tool.notebook.class:
+        class: ChamiloLMS\CourseBundle\Tool\Notebook
+        arguments:
+            - notebook
+        tags:
+            - { name: chamilolm.course.tool }

@@ -1,6 +1,6 @@
 <?php
 
-namespace ChamiloLMS\CourseBundle\Entity;
+namespace ChamiloLMS\NotebookBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -90,7 +90,6 @@ class CNotebook
      * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $status;
-
 
     /**
      * Get iid

@@ -1,0 +1,5 @@
+chamilo_lms_notebook:
+    resource: "@ChamiloLMSNotebookBundle/Controller/"
+    type:     annotation
+    prefix:   /notebook
+

@@ -129,7 +129,8 @@ class AppKernel extends Kernel
             new ChamiloLMS\InstallerBundle\ChamiloLMSInstallerBundle(),
             new ChamiloLMS\MessageBundle\ChamiloLMSMessageBundle(),
 
-            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle()
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new ChamiloLMS\NotebookBundle\ChamiloLMSNotebookBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

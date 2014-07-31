@@ -2,6 +2,9 @@ chamilo_lms_course:
     resource: "@ChamiloLMSCourseBundle/Resources/config/routing.yml"
     prefix:   /
 
+_courses:
+    resource: routing_courses.yml
+
 _front:
     resource: routing_front.yml
 

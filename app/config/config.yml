@@ -4,6 +4,7 @@ imports:
     - { resource: assetic.yml }
 
     - { resource: @ChamiloLMSCoreBundle/Resources/config/admin.yml }
+    - { resource: @ChamiloLMSNotebookBundle/Resources/config/admin.yml }
 
     # Mopa Bootstrap
     - { resource: mopa/mopa_bootstrap.yml }

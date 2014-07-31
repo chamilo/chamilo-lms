@@ -91,7 +91,68 @@ class SimpleMenuBuilder extends ContainerAware
             )
         );
 
-        $menu->addChild('Administration',array('route' => 'administration'));
+        /*$menu->addChild(
+            'Plugins',
+            array(
+                'route' => 'main',
+                'routeParameters' => array('name' => urlencode('admin/plugins.php')),
+                array("attributes" => array("id" => 'nav'))
+            )
+        );*/
+
+        /*$menu->addChild(
+            'Sonata Admin',
+            array(
+                'route' => 'admin'
+            )
+        );*/
+
+
+
+        $admin = $menu->addChild(
+            'Administration',
+            array(
+                'route' => 'administration',
+
+            )
+        );
+
+        $admin->addChild(
+            'Users',
+            array(
+                'route' => 'main',
+                'routeParameters' => array('name' => 'admin/user_list.php'),
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        $admin->addChild(
+            'Courses',
+            array(
+                'route' => 'main',
+                'routeParameters' => array('name' => 'admin/course_list.php'),
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        $admin->addChild(
+            'Sessions',
+            array(
+                'route' => 'main',
+                'routeParameters' => array('name' => 'session/session_list.php'),
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        $menu->addChild(
+            'Sonata Admin',
+            array(
+                'route' => 'sonata_admin_dashboard'
+            )
+        );
+
+        // Sonata admin
+        //$menu->addChild('Administration', array('route' => 'administration'));
 
         /*
         $dropdownExtrasOptions = $isFooter ? array(

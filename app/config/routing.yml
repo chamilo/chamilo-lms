@@ -10,7 +10,7 @@ _front:
 
 _admin:
     resource: routing_admin.yml
-    prefix:   /admin
+    prefix:   /administration
 
 _api:
     resource: routing_api.yml

@@ -14,11 +14,11 @@ sonata_page:
     use_streamed_response: false # set the value to false in debug mode or if the reverse proxy does not handle streamed response
 
     ignore_uri_patterns:
-        - ^/admin(.*)
+        - ^/administration(.*) # sonata admin
         - ^/api/(.*)
 
     ignore_route_patterns:
-        - (.*)admin(.*)     # ignore admin route, ie route containing 'admin'
+        - (.*)administration(.*)     # ignore admin route, ie route containing 'admin'  # sonata admin
         - ^_(.*)            # ignore symfony routes
         - login
         - home

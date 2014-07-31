@@ -24,12 +24,11 @@ class AdminController extends BaseController
      */
     public function indexAction()
     {
-        $template = $this->getTemplate();
         $security = $this->getSecurity();
-
-        if (!$security->isGranted('ROLE_ADMIN')) {
-            //return $this->abort(403, 'Access denied');
-        }
+        // Already filter by the router
+        /*if (!$security->isGranted('ROLE_ADMIN')) {
+            return $this->abort(403, 'Access denied');
+        }*/
 
         if ($security->isGranted('ROLE_ADMIN')) {
             return $this->loadAdminMenu();
@@ -214,7 +213,7 @@ class AdminController extends BaseController
                 $items[] = array('url' => $adminUrl.'filler.php', 	'label' => get_lang('DataFiller'));
             }
             $items[] = array('url' => $adminUrl.'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-            $items[] = array('url' => $adminUrl.'system_management.php', 'label' => get_lang('SystemManagement'));
+            //$items[] = array('url' => $adminUrl.'system_management.php', 'label' => get_lang('SystemManagement'));
 
             $blocks['settings']['items'] = $items;
             $blocks['settings']['extra'] = null;

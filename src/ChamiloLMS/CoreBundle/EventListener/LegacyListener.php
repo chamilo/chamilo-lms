@@ -30,6 +30,7 @@ class LegacyListener
     {
         $kernel = $event->getKernel();
         $request = $event->getRequest();
+        $session = $request->getSession();
         $container = $this->container;
 
         // Loading legacy variables
@@ -69,9 +70,10 @@ class LegacyListener
             $courseCodeFromRequest = $request->get('cidReq');
             $courseCode = $courseCodeFromRequest;
         }
+        /** @var \Doctrine\ORM\EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
 
         if (!empty($courseCode)) {
-            $em = $this->container->get('doctrine')->getManager();
             $course = $em->getRepository('ChamiloLMSCoreBundle:Course')->findOneByCode($courseCode);
             if ($course) {
                 $courseInfo = api_get_course_info($course->getCode());
@@ -83,15 +85,17 @@ class LegacyListener
         }
 
         // Loading portal settings from DB.
-        $settingsRefreshInfo = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
-        $settingsLatestUpdate = $settingsRefreshInfo ? $settingsRefreshInfo['selected_value'] : null;
+        $settingsRefreshInfo = $em->getRepository('ChamiloLMSCoreBundle:SettingsCurrent')->findOneByVariable('settings_latest_update');
+        $settingsLatestUpdate = !empty($settingsRefreshInfo) ? $settingsRefreshInfo->getSelectedValue() : null;
 
-        $settings = Session::read('_setting');
+        $settings = $session->get('_setting');
 
         if (empty($settings)) {
             api_set_settings_and_plugins();
         } else {
-            if (isset($settings['settings_latest_update']) && $settings['settings_latest_update'] != $settingsLatestUpdate) {
+            if (isset($settings['settings_latest_update']) &&
+                $settings['settings_latest_update'] != $settingsLatestUpdate
+            ) {
                 api_set_settings_and_plugins();
             }
         }

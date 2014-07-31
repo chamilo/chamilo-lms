@@ -14,7 +14,7 @@ class CourseDescription extends BaseTool
      */
     public function getName()
     {
-        return 'CourseDescription';
+        return 'course_description';
     }
 
     /**
@@ -23,11 +23,6 @@ class CourseDescription extends BaseTool
     public function getLink()
     {
         return 'course_description/index.php';
-    }
-
-    public function getTarget()
-    {
-        return '_self';
     }
 
     public function getCategory()

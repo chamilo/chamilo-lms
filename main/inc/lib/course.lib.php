@@ -1569,7 +1569,7 @@ class CourseManager
     {
         $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
+        //$table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
 
         $table_session_course               = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session_course_user          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1621,8 +1621,8 @@ class CourseManager
         }
 
         // Unsubscribe all classes from the course
-        $sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
-        Database::query($sql);
+        /*$sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
+        Database::query($sql);*/
         // Unsubscribe all users from the course
         $sql = "DELETE FROM $table_course_user WHERE c_id ='".$courseId."'";
         Database::query($sql);
@@ -1632,7 +1632,7 @@ class CourseManager
         $sql = "DELETE FROM $table_session_course_user WHERE c_id='".$courseId."'";
         Database::query($sql);
         // Delete from Course - URL
-        $sql = "DELETE FROM $table_course_rel_url WHERE c_id = '".$code."'";
+        $sql = "DELETE FROM $table_course_rel_url WHERE c_id = '".$courseId."'";
         Database::query($sql);
 
         $sql = 'SELECT survey_id FROM '.$table_course_survey.' WHERE course_code="'.$code.'"';
@@ -1680,9 +1680,6 @@ class CourseManager
             UrlManager::delete_url_rel_course($courseId, $url_id);
         }
 
-        // Delete the course from the database
-        $sql = "DELETE FROM $table_course WHERE id = '".$courseId."'";
-        Database::query($sql);
 
         // delete extra course fields
         $t_cf         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
@@ -1721,6 +1718,10 @@ class CourseManager
                 }
             }
         }
+
+        // Delete the course from the database
+        $sql = "DELETE FROM $table_course WHERE id = '".$courseId."'";
+        Database::query($sql);
 
         // Add event to system log
         $user_id = api_get_user_id();
@@ -4117,8 +4118,8 @@ class CourseManager
         $tables[]= 'group_rel_user';
         $tables[]= 'group_rel_tutor';
         $tables[]= 'item_property';
-        $tables[]= 'userinfo_content';
-        $tables[]= 'userinfo_def';
+        //$tables[]= 'userinfo_content';
+        //$tables[]= 'userinfo_def';
         $tables[]= 'course_description';
         $tables[]= 'calendar_event';
         $tables[]= 'calendar_event_repeat';
@@ -4126,7 +4127,7 @@ class CourseManager
         $tables[]= 'calendar_event_attachment';
         $tables[]= 'announcement';
         $tables[]= 'announcement_attachment';
-        $tables[]= 'resource';
+        //$tables[]= 'resource';
         $tables[]= 'student_publication';
         $tables[]= 'student_publication_assignment';
         $tables[]= 'document';
@@ -4173,10 +4174,10 @@ class CourseManager
         $tables[]= 'permission_group';
         $tables[]= 'permission_user';
         $tables[]= 'permission_task';
-        $tables[]= 'role';
+        /*$tables[]= 'role';
         $tables[]= 'role_group';
         $tables[]= 'role_permissions';
-        $tables[]= 'role_user';
+        $tables[]= 'role_user';*/
         $tables[]= 'survey';
         $tables[]= 'survey_question';
         $tables[]= 'survey_question_option';
@@ -4254,9 +4255,8 @@ class CourseManager
 
     /**
      * Fills the course database with some required content and example content.
-     * @version 1.2
      */
-    static function fill_db_course($course_id, $course_repository, $language, $fill_with_exemplary_content = null)
+    public static function fill_db_course($course_id, $course_repository, $language, $fill_with_exemplary_content = null)
     {
         if (is_null($fill_with_exemplary_content)) {
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
@@ -4268,7 +4268,7 @@ class CourseManager
         }
         $now = api_get_utc_datetime(time());
 
-        $tbl_course_homepage 	= Database::get_course_table(TABLE_TOOL_LIST);
+        $toolTable 	= Database::get_course_table(TABLE_TOOL_LIST);
         $TABLEINTROS 			= Database::get_course_table(TABLE_TOOL_INTRO);
         $TABLEGROUPCATEGORIES 	= Database::get_course_table(TABLE_GROUP_CATEGORY);
         $TABLEITEMPROPERTY 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4290,62 +4290,58 @@ class CourseManager
         $TABLEGRADEBOOKLINK		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $TABLEGRADEBOOKCERT		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 
-        /*include api_get_path(SYS_CODE_PATH).'lang/english/create_course.inc.php';
-        $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$language.'/create_course.inc.php';
-
-        if (file_exists($file_to_include)) {
-            include $file_to_include;
-        }*/
 
         $visible_for_all = 1;
         $visible_for_course_admin = 0;
         $visible_for_platform_admin = 2;
 
+
+
         /*    Course tools  */
 
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'course_description')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_CALENDAR_EVENT . "','calendar/agenda.php','agenda.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'agenda')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_DOCUMENT . "','document/document.php','folder_document.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'documents')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_LEARNPATH . "','newscorm/lp_controller.php','scorms.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'learning_path')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_LINK . "','link/link.php','links.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'links')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_QUIZ . "','exercice/exercice.php','quiz.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'quiz')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_ANNOUNCEMENT . "','announcements/announcements.php','valves.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'announcements')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_FORUM . "','forum/index.php','forum.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'forums')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_DROPBOX . "','dropbox/index.php','dropbox.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'dropbox')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_USER . "','user/user.php','members.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'users')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_GROUP . "','group/group.php','group.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_GRADEBOOK."','gradebook/index.php','gradebook.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'gradebook')). "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_GLOSSARY."','glossary/index.php','glossary.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'glossary')). "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_NOTEBOOK."','notebook/index.php','notebook.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'notebook'))."','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_ATTENDANCE."','attendance/index.php','attendance.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'attendances'))."','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_COURSE_PROGRESS."','course_progress/index.php','course_progress.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'course_progress'))."','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_CURRICULUM."','curriculum','cv.png','".Text::string2binary(api_get_setting('course_create_active_tools', 'curriculum'))."','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'course_description')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_CALENDAR_EVENT . "','calendar/agenda.php','agenda.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'agenda')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_DOCUMENT . "','document/document.php','folder_document.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'documents')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_LEARNPATH . "','newscorm/lp_controller.php','scorms.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'learning_path')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_LINK . "','link/link.php','links.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'links')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_QUIZ . "','exercice/exercice.php','quiz.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'quiz')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_ANNOUNCEMENT . "','announcements/announcements.php','valves.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'announcements')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_FORUM . "','forum/index.php','forum.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'forums')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_DROPBOX . "','dropbox/index.php','dropbox.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'dropbox')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_USER . "','user/user.php','members.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'users')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_GROUP . "','group/group.php','group.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_GRADEBOOK."','gradebook/index.php','gradebook.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'gradebook')). "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_GLOSSARY."','glossary/index.php','glossary.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'glossary')). "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_NOTEBOOK."','notebook/index.php','notebook.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'notebook'))."','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_ATTENDANCE."','attendance/index.php','attendance.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'attendances'))."','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_COURSE_PROGRESS."','course_progress/index.php','course_progress.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'course_progress'))."','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_CURRICULUM."','curriculum','cv.png','".Text::string2binary(api_get_setting('course_create_active_tools', 'curriculum'))."','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
 
         if (api_get_setting('service_visio', 'active') == 'true') {
             $mycheck = api_get_setting('service_visio', 'visio_host');
             if (!empty($mycheck)) {
-                Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-                Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+                Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+                Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
             }
         }
 
         if (api_get_setting('search_enabled') == 'true') {
-            Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_SEARCH. "','search/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring','0', '', '')");
+            Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_SEARCH. "','search/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring','0', '', '')");
         }
 
         // Blogs (Kevin Van Den Haute :: kevin@develop-it.be)
-        $sql = "INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . Text::string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0', '', '')";
+        $sql = "INSERT INTO $toolTable VALUES ($course_id, NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . Text::string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0', '', '')";
         Database::query($sql);
 
         /*  Course homepage tools for course admin only    */
 
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0', '', '')");
 
         /* Course_setting table (courseinfo tool)   */
 

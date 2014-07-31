@@ -1,8 +1,19 @@
 parameters:
     tool_chain.class: ChamiloLMS\CourseBundle\ToolChain
+
 services:
     chamilolms.tool_chain:
         class: %tool_chain.class%
+
+    chamilolms.coursebundle.tool.agenda.class:
+        class: ChamiloLMS\CourseBundle\Tool\Agenda
+        arguments:
+            - agenda
+            - calendar_event
+            - calendar/agenda.php
+            - agenda.gif
+        tags:
+            - { name: chamilolm.course.tool }
 
     chamilolms.coursebundle.tool.announcements.class:
         class: ChamiloLMS\CourseBundle\Tool\Announcements
@@ -11,12 +22,6 @@ services:
         tags:
             - { name: chamilolm.course.tool }
 
-    chamilolms.coursebundle.tool.calendar.class:
-        class: ChamiloLMS\CourseBundle\Tool\Calendar
-        arguments:
-            - calendar
-        tags:
-            - { name: chamilolm.course.tool }
 
     chamilolms.coursebundle.tool.course_description.class:
         class: ChamiloLMS\CourseBundle\Tool\CourseDescription
@@ -83,13 +88,6 @@ services:
 
     chamilolms.coursebundle.tool.link.class:
         class: ChamiloLMS\CourseBundle\Tool\Link
-        arguments:
-            - document
-        tags:
-            - { name: chamilolm.course.tool }
-
-    chamilolms.coursebundle.tool.notebook.class:
-        class: ChamiloLMS\CourseBundle\Tool\Notebook
         arguments:
             - document
         tags:

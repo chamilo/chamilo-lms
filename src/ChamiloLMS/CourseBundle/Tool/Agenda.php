@@ -4,19 +4,11 @@
 namespace ChamiloLMS\CourseBundle\Tool;
 
 /**
- * Class Calendar
+ * Class Agenda
  * @package ChamiloLMS\CourseBundle\Tool
  */
-class Calendar extends BaseTool
+class Agenda extends BaseTool
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'Calendar';
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -25,10 +17,6 @@ class Calendar extends BaseTool
         return 'calendar/agenda.php';
     }
 
-    public function getTarget()
-    {
-        return '_self';
-    }
 
     public function getCategory()
     {

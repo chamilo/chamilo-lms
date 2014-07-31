@@ -403,9 +403,10 @@ class UrlManager
     public static function relation_url_course_exist($course_id, $url_id)
     {
         $table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql= "SELECT course_code FROM $table_url_rel_course
-               WHERE access_url_id = ".Database::escape_string($url_id)." AND
-                     course_code = '".Database::escape_string($course_id)."'";
+        $sql= "SELECT c_id FROM $table_url_rel_course
+               WHERE
+                  access_url_id = ".Database::escape_string($url_id)." AND
+                  c_id = '".Database::escape_string($course_id)."'";
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         return $num;
@@ -663,7 +664,7 @@ class UrlManager
     }
 
     /**
-     * @param string $course_code
+     * @param int $courseId
      * @param int $url_id
      * @return resource
      */
@@ -676,10 +677,9 @@ class UrlManager
         $count  = UrlManager::relation_url_course_exist($courseId, $url_id);
         $result = false;
         if (empty($count)) {
-            $sql    = "INSERT INTO $table_url_rel_course
-           			    SET c_id = '".Database::escape_string(
-                    $courseId
-                )."', access_url_id = ".Database::escape_string($url_id);
+            $sql = "INSERT INTO $table_url_rel_course SET
+                      c_id = '".Database::escape_string($courseId)."',
+           			  access_url_id = ".Database::escape_string($url_id);
             $result = Database::query($sql);
         }
 

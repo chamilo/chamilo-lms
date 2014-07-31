@@ -132,6 +132,7 @@ class CourseAdmin extends Admin
 
                 $toolEntity = new CTool();
                 $toolEntity->setCId($course->getId());
+                $toolEntity->setImage($tool->getImage());
                 $toolEntity->setName($tool->getName());
                 $toolEntity->setLink($tool->getLink());
                 $toolEntity->setTarget($tool->getTarget());

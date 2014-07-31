@@ -12,6 +12,7 @@ abstract class BaseTool implements ToolInterface
 {
     protected $name;
     protected $link;
+    protected $image;
 
     /**
      * @param string $name
@@ -29,6 +30,16 @@ abstract class BaseTool implements ToolInterface
         return $this->name;
     }
 
+    public function getTarget()
+    {
+        return '_self';
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -36,4 +47,9 @@ abstract class BaseTool implements ToolInterface
     {
 
     }
+
+
+
+
+
 }

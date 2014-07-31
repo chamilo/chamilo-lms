@@ -14,7 +14,7 @@ class Announcements extends BaseTool
      */
     public function getName()
     {
-        return 'Exercise';
+        return 'announcement';
     }
 
     /**

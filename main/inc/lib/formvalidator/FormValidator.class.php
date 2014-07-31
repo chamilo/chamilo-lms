@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Zend\Filter\StripTags;
 /**
  * Objects of this class can be used to create/manipulate/validate user input.
  */
@@ -669,17 +670,16 @@ EOT;
 
 /**
  * Cleans HTML text
- * @param string $html                        HTML to clean
+ * @param string $html HTML to clean
  * @param int $mode (optional)
- * @return string                                The cleaned HTML
+ * @return string The cleaned HTML
  */
 function html_filter($html, $mode = NO_HTML)
 {
-    return $html;
-    //$filter = new Zend\Filter\StripTags(array('allowTags' => 'a'));
-    $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
-    $cleaned_html = kses($html, $allowed_tags);
-    return $cleaned_html;
+    $allowedTags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
+    $filter = new StripTags($allowedTags);
+    $cleanedHtml = $filter->filter($html);
+    return $cleanedHtml;
 }
 
 function html_filter_teacher($html)

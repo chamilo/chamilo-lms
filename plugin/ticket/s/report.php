@@ -60,7 +60,7 @@ div.formulario {
     width: 70%;
 	float: center;
 	margin-left: 15%;
-	
+
 }
 
 </style>';
@@ -90,12 +90,12 @@ function js_str($s) {
 }
 
 function show_form(){
-	global $types; 
+	global $types;
 	global $tools;
 	echo '<div class="formulario">';
 	echo '<form enctype="multipart/form-data" action="'.api_get_self().'" method="post" name="send_ticket" id="send_ticket"
  	onsubmit="return validate()" style="width:100%">';
-	
+
 	$courses_list = CourseManager::get_courses_list_by_user_id($user_id,false,true);
 	 $select_course = '<div id="user_request" >
 	 </div>';
@@ -124,11 +124,11 @@ function show_form(){
 	echo '<div class="row">
 		<div class="label2">
 		</div>
-		<div class="formw2">	
+		<div class="formw2">
 			<button class="save" name="report" type="submit" id="btnsubmit" disabled="disabled">Generar Reporte</button>
 		</div>
 	</div>';
-	
+
 }
 /**
  * Get the total number of users on the platform
@@ -180,7 +180,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
    	if (isset ($_GET['keyword']) ) {
 		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%' OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%' OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%' )";
-	} 
+	}
     if (!in_array($direction, array('ASC','DESC'))) {
     	$direction = 'ASC';
     }
@@ -208,7 +208,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $button= '<a  href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')">
 					<img onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')"  src="../../../main/img/view_more_stats.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
 					</a>&nbsp;&nbsp;';
-        $users[] = array($photo,$user[1],$user[2],$user[3],$user[4],$user[5],$button);        
+        $users[] = array($photo,$user[1],$user[2],$user[3],$user[4],$user[5],$button);
 	}
 	return $users;
 }
@@ -241,16 +241,16 @@ Display::display_header('Reportes');
 			$table->display();
 		}
 		//if(isset($_GET['user_request']))
-				
+
 	if(isset($_POST['report'])){
 		$course_id = $_POST['course_id'];
 		$tool = $_POST['tool'];
 		$course_info = api_get_course_info_by_id($course_id);
 		$user_id =  $_POST['user_id_request'];
-		$sql ="SELECT  u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname, DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date, c.title AS curso, access_tool AS herramienta 
-				FROM  ".Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS)." access 
-				LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_USER)." u ON access.access_user_id = u.user_id 
-				LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_COURSE)." c ON access.access_cours_code = c.CODE 
+		$sql ="SELECT  u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname, DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date, c.title AS curso, access_tool AS herramienta
+				FROM  ".Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS)." access
+				LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_USER)." u ON access.access_user_id = u.user_id
+				LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_COURSE)." c ON access.access_cours_code = c.CODE
 				WHERE access.access_cours_code = '".$course_info['code']."' AND u.user_id = '$user_id' ";
 		if($tool!= '') $sql.="AND access.access_tool = '$tool' ";
 		$start_date = $_POST['keyword_start_date_start'];
@@ -262,7 +262,7 @@ Display::display_header('Reportes');
 				$sql = ($start_date == '')?$sql:($sql." AND ");
 				$sql .=  "  access_date <= '$end_date'   ";
 			}
-				
+
 		}
 		$result = Database::query($sql);
 		$table_result = new SortableTable();
@@ -276,8 +276,8 @@ Display::display_header('Reportes');
 			$table_result->addRow($row);
 		}
 		$table_result->display();
-		
-		
+
+
 	}else{
 		show_form();
 	}

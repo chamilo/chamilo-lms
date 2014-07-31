@@ -16,7 +16,7 @@
 
 function get_exercise_track_exercise_info($exe_id) {
     $TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
-    $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TBL_TRACK_EXERCICES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_COURSE             = Database::get_main_table(TABLE_MAIN_COURSE);
     $exe_id = intval($exe_id);
     $result = array();
@@ -120,7 +120,7 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
         $in_column = 'firstname';
     }
 
-    $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+    $TBL_TRACK_HOTPOTATOES      = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
     $TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
     $TBL_GROUP                  = Database :: get_course_table(TABLE_GROUP);
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
@@ -174,9 +174,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     $TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
     $TBL_GROUP                  = Database :: get_course_table(TABLE_GROUP);
 
-    $TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-    $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+    $TBL_TRACK_EXERCICES        = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TBL_TRACK_HOTPOTATOES      = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+    $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
     $session_id_and = ' AND te.session_id = '.api_get_session_id().' ';
 
@@ -1012,8 +1012,8 @@ function get_exercises_to_be_taken($course_code, $session_id) {
  *
  * */
 function get_student_stats_by_question($question_id,  $exercise_id, $course_code, $session_id) {
-    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
     $question_id 		= intval($question_id);
     $exercise_id 		= intval($exercise_id);
@@ -1036,8 +1036,8 @@ function get_student_stats_by_question($question_id,  $exercise_id, $course_code
 }
 
 function get_number_students_question_with_answer_count($question_id, $exercise_id, $course_code, $session_id) {
-    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
     $question_id 		= intval($question_id);
@@ -1066,8 +1066,8 @@ function get_number_students_question_with_answer_count($question_id, $exercise_
 }
 
 function get_number_students_answer_hotspot_count($answer_id, $question_id,  $exercise_id, $course_code, $session_id) {
-    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_hotspot		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+    $track_exercises	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_hotspot		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
     $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
     $question_id 		= intval($question_id);
@@ -1099,8 +1099,8 @@ function get_number_students_answer_hotspot_count($answer_id, $question_id,  $ex
 
 
 function get_number_students_answer_count($answer_id, $question_id, $exercise_id, $course_code, $session_id, $question_type = null, $correct_answer = null, $current_answer = null) {
-    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
     $question_id 		= intval($question_id);
@@ -1271,8 +1271,8 @@ function check_fill_in_blanks($answer, $user_answer) {
 
 
 function get_number_students_finish_exercise($exercise_id, $course_code, $session_id) {
-    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
     $exercise_id 		= intval($exercise_id);
     $course_code 		= Database::escape_string($course_code);

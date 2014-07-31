@@ -10,7 +10,7 @@
 
 use \ChamiloSession as Session;
 use Symfony\Component\Validator\Constraints as Assert;
-use ChamiloLMS\UserBundle\Entity\User;
+use Application\Sonata\UserBundle\Entity\User;
 use ChamiloLMS\CoreBundle\Entity\Course;
 
 /**
@@ -655,7 +655,7 @@ function api_get_path($path_type, $path = null) {
 
         // Initialization of a table that contains common-purpose paths.
         $paths[WEB_PATH]                = $root_web;
-        $paths[WEB_PUBLIC_PATH]         = $root_web.'web/';
+        $paths[WEB_PUBLIC_PATH]         = $root_web;
         $paths[SYS_PATH]                = $root_sys;
 
         // Update data path to get it from config file if defined
@@ -6783,6 +6783,7 @@ function api_get_language_interface()
 function api_get_user_roles()
 {
     $em = Database::getManager();
+    //var_dump(Session::getSecurity()->getToken()->getRoles());
     $roles = $em->getRepository('ChamiloLMSCoreBundle:Role')->findBy(array(), array('name'=>'asc'));
     $userRoles = array();
     foreach ($roles as $role) {

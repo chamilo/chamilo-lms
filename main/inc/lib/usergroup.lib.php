@@ -643,7 +643,7 @@ class UserGroup extends Model
         $res = Database::query($sql);
         return Database::num_rows($res) != 0;
     }
-    
+
     /**
      * @param int $sidx
      * @param int $sord
@@ -745,20 +745,6 @@ class UserGroup extends Model
     }
 
     /**
-     * @param $params
-     * @param bool $show_query
-     * @return bool|void
-     */
-    public function save($params, $show_query = false)
-    {
-        $id = parent::save($params, $show_query);
-        if ($this->useMultipleUrl) {
-            $this->subscribeToUrl($id, api_get_current_access_url_id());
-        }
-        return $id;
-    }
-
-    /**
      * @param int $id
      * @return bool|void
      */
@@ -834,12 +820,21 @@ class UserGroup extends Model
         return $response;
     }
 
-    function save($values, $show_query = false)
+    /**
+     * @param $params
+     * @param bool $show_query
+     * @return bool|void
+     */
+    public function save($values, $show_query = false)
     {
         $values['updated_on'] = $values['created_on'] = api_get_utc_datetime();
         $values['group_type'] = isset($values['group_type']) ? intval($values['group_type']) : $this->getGroupType();
 
         $groupId = parent::save($values, $show_query);
+
+        if ($this->useMultipleUrl) {
+            $this->subscribeToUrl($groupId, api_get_current_access_url_id());
+        }
 
         if ($groupId) {
             $this->add_user_to_group(api_get_user_id(), $groupId, $values['visibility']);

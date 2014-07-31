@@ -149,7 +149,7 @@ function search_sessions($needle,$type) {
         } else {
             $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "$needle%"));
         }
-        $i=0;        
+        $i=0;
         if ($type=='single') {
             /*
             while ($user = Database :: fetch_array($rs)) {
@@ -164,9 +164,9 @@ function search_sessions($needle,$type) {
             $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));*/
         } else {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
-            
-            foreach ($session_list as $row ) {         
-                if (!in_array($row['id'], array_keys($elements_in))) {       
+
+            foreach ($session_list as $row ) {
+                if (!in_array($row['id'], array_keys($elements_in))) {
                     $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
                 }
             }

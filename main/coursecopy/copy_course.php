@@ -47,7 +47,7 @@ echo Display::page_header(get_lang('CopyCourse'));
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
 if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
-        $course = CourseSelectForm::get_posted_course('copy_course');
+        $course = CourseSelectForm :: get_posted_course('copy_course');
     } else {
         $cb = new CourseBuilder();
         $course = $cb->build();

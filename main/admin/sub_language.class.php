@@ -4,7 +4,7 @@
 
 /**
  * SubLanguageManager class definition file
- * @package chamilo.admin.sublanguage 
+ * @package chamilo.admin.sublanguage
  * @todo clean this lib and move to main/inc/lib
  */
 class SubLanguageManager {

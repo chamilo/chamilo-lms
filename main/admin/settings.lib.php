@@ -238,6 +238,8 @@ function handle_stylesheets()
         }
     }
 
+    // Stylesheet upload.
+
     if (isset($_POST['stylesheet_upload'])) {
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -717,6 +719,7 @@ function handle_search()
  * Wrapper for the templates
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @author Julio Montoya.
  * @version August 2008
  * @since Dokeos 1.8.6
  */
@@ -747,7 +750,6 @@ function handle_templates() {
             $category = $_GET['category'];
             event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
         }
-
         display_templates();
     }
 }
@@ -969,7 +971,7 @@ function add_edit_template() {
            if ($_GET['action'] == 'add') {
                $content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
                $sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".$content_template."','".Database::escape_string($new_file_name)."')";
-               $result = Database::query($sql);
+               Database::query($sql);
 
                // Display a feedback message.
                Display::display_confirmation_message(get_lang('TemplateAdded'));
@@ -981,7 +983,7 @@ function add_edit_template() {
                    $sql .= ", image = '".Database::escape_string($new_file_name)."'";
                }
                $sql .= " WHERE id='".Database::escape_string($_GET['id'])."'";
-               $result = Database::query($sql);
+               Database::query($sql);
 
                // Display a feedback message.
                Display::display_confirmation_message(get_lang('TemplateEdited'));
@@ -1030,7 +1032,7 @@ function delete_template($id) {
 
 /**
  * Returns the list of timezone identifiers used to populate the select
- *
+ * This function is called through a call_user_func() in the generate_settings_form function.
  * @return array List of timezone identifiers
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -1042,7 +1044,7 @@ function select_timezone_value() {
 
 /**
  * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
- *
+ * This function is called through a call_user_func() in the generate_settings_form function.
  * @return array List of gradebook_number_decimals options
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -1106,7 +1108,6 @@ function generate_settings_form($settings, $settings_by_access_list) {
     }
 
     $default_values = array();
-
     $url_info = api_get_access_url($url_id);
 
     $i = 0;

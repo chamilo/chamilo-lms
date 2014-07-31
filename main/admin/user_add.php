@@ -163,9 +163,9 @@ if (api_get_setting('login_is_email') != 'true') {
 $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 $nb_ext_auth_source_added = 0;
-if (count($extAuthSource) > 0) {
+if (isset($extAuthSource) && count($extAuthSource) > 0) {
 	$auth_sources = array();
-	foreach($extAuthSource as $key => $info) {
+	foreach ($extAuthSource as $key => $info) {
 	    // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
 	    // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
 	    // extAuthSource always on for CAS even if not activated
@@ -291,9 +291,9 @@ if( $form->validate()) {
 		$picture        = $_FILES['picture'];
 		$platform_admin = intval($user['admin']['platform_admin']);
 		$send_mail      = intval($user['mail']['send_mail']);
-		$hr_dept_id     = intval($user['hr_dept_id']);
+		$hr_dept_id     = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
 
-		if (count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
+		if (isset($extAuthSource) && count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
 			$auth_source = $user['password']['auth_source'];
 			$password = 'PLACEHOLDER';
 		} else {

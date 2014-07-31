@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * EXTRA FUNCTIONS FOR DOCUMENTS TOOL
@@ -180,9 +179,6 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 
     $tooltip_title = $title;
 
-    //Cut long titles
-    //$title = cut($title, 120);
-
     $tooltip_title_alt = $tooltip_title;
     if ($path == '/shared_folder') {
         $tooltip_title_alt = get_lang('UserFolders');
@@ -297,6 +293,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                         (preg_match('/wav$/i', urldecode($url)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
                         preg_match('/ogg$/i', urldecode($url))) {
                     $sound_preview = DocumentManager::generate_media_preview($counter);
+
                     return $sound_preview;
                 } elseif (
                     //Show preview
@@ -326,6 +323,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                         (preg_match('/wav$/i', urldecode($url)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
                         preg_match('/ogg$/i', urldecode($url))) {
                     $sound_preview = DocumentManager::generate_media_preview($counter);
+
                     return $sound_preview;
                 } elseif (
                         //Show preview

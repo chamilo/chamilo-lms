@@ -86,54 +86,52 @@ function remove_item(origin)
 }
 </script>';
 
-$formSent=0;
-$errorMsg = $firstLetterCourse = $firstLetterSession='';
-$CourseList=$SessionList=array();
-$courses=$sessions=array();
-$Categoryid = intval($_POST['CategorySessionId']);
+$formSent = 0;
+$errorMsg = $firstLetterCourse = $firstLetterSession = '';
+$CourseList = $SessionList = array();
+$courses = $sessions = array();
+$Categoryid = isset($_POST['CategorySessionId']) ? intval($_POST['CategorySessionId']) : null;
 
-if ($_POST['formSent']) {
-	$formSent=$_POST['formSent'];
-	$SessionCategoryList = $_POST['SessionCategoryList'];
+if (isset($_POST['formSent']) && $_POST['formSent']) {
+    $formSent = $_POST['formSent'];
+    $SessionCategoryList = $_POST['SessionCategoryList'];
 
-	if($Categoryid != 0 && count($SessionCategoryList)>0 ){
-		$session_id = join(',', $SessionCategoryList);
-		$sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
-		Database::query($sql);
-		//header('Location: session_list.php?id_category='.$Categoryid);
-		header('Location: add_many_session_to_category.php?id_category='.$Categoryid.'&msg=ok');
-		exit;
-	} else {
-		header('Location: add_many_session_to_category.php?msg=error');
-		exit;
-	}
+    if ($Categoryid != 0 && count($SessionCategoryList) > 0) {
+        $session_id = join(',', $SessionCategoryList);
+        $sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
+        Database::query($sql);
+        header('Location: add_many_session_to_category.php?id_category=' . $Categoryid . '&msg=ok');
+        exit;
+    } else {
+        header('Location: add_many_session_to_category.php?msg=error');
+        exit;
+    }
 }
 
 if (isset($_GET['id_category'])) {
-	$Categoryid = intval($_GET['id_category']);
+    $Categoryid = intval($_GET['id_category']);
 }
 
-if(isset($_GET['msg']) && $_GET['msg']=='error'){
-	$errorMsg = get_lang('MsgErrorSessionCategory');
+if (isset($_GET['msg']) && $_GET['msg'] == 'error') {
+    $errorMsg = get_lang('MsgErrorSessionCategory');
 }
 
-if(isset($_GET['msg']) && $_GET['msg']=='ok'){
-	$OkMsg = get_lang('SessionCategoryUpdate');
+if (isset($_GET['msg']) && $_GET['msg'] == 'ok') {
+    $OkMsg = get_lang('SessionCategoryUpdate');
 }
 
-
+$page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 // display the dokeos header
 Display::display_header($tool_name);
 
-
-$where ='';
+$where = '';
 $rows_category_session = array();
-if((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category']) ) {
-	
-	$where = 'WHERE session_category_id !='.$Categoryid;
-	$sql = 'SELECT id, name  FROM '.$tbl_session .' WHERE session_category_id ='.$Categoryid.' ORDER BY name';
-	$result=Database::query($sql);
-	$rows_category_session = Database::store_result($result);
+if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category'])) {
+
+    $where = 'WHERE session_category_id !=' . $Categoryid;
+    $sql = 'SELECT id, name  FROM ' . $tbl_session . ' WHERE session_category_id =' . $Categoryid . ' ORDER BY name';
+    $result = Database::query($sql);
+    $rows_category_session = Database::store_result($result);
 }
 
 $rows_session_category = SessionManager::get_all_session_category();
@@ -153,13 +151,17 @@ if (api_get_multiple_access_url()) {
 $result=Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
-    <?php echo '<legend>'.$tool_name.'</legend>'; ?>
-<input type="hidden" name="formSent" value="1" />
-<?php
-if(!empty($errorMsg)) {
-	Display::display_error_message($errorMsg); //main API
-}
+<form name="formulaire" method="post"
+      action="<?php echo api_get_self(); ?>?page=<?php echo $page;
+      if (!empty($_GET['add'])) {
+          echo '&add=true';
+      } ?>" style="margin:0px;">
+    <?php echo '<legend>' . $tool_name . '</legend>'; ?>
+    <input type="hidden" name="formSent" value="1"/>
+    <?php
+    if (!empty($errorMsg)) {
+        Display::display_error_message($errorMsg); //main API
+    }
 
 if(!empty($OkMsg)) {
 	Display::display_confirmation_message($OkMsg); //main API

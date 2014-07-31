@@ -94,7 +94,7 @@ if ($origin == 'learnpath') {
 Display::display_introduction_section(TOOL_FORUM);
 
 // Tracking
-event_access_tool(TOOL_FORUM);
+Event::event_access_tool(TOOL_FORUM);
 
 // Forum search
 forum_search();

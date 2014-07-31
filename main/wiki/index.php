@@ -73,7 +73,7 @@ api_protect_course_script();
 api_block_anonymous_users();
 
 /* TRACKING */
-event_access_tool(TOOL_WIKI);
+Event::event_access_tool(TOOL_WIKI);
 
 if ($groupId) {
     $group_properties = GroupManager::get_group_properties($groupId);

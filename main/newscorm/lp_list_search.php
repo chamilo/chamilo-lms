@@ -17,7 +17,7 @@ require api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
-event_access_tool(TOOL_SEARCH);
+Event::event_access_tool(TOOL_SEARCH);
 
 if (isset($_SESSION['gradebook'])){
     $gradebook = $_SESSION['gradebook'];

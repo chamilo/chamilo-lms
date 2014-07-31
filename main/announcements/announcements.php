@@ -56,7 +56,7 @@ $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $course_id = api_get_course_int_id();
 
 /* 	Tracking	 */
-event_access_tool(TOOL_ANNOUNCEMENT);
+Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
 if (!empty($_POST['To'])) {
     if (api_get_session_id() != 0 && api_is_allowed_to_session_edit(false, true) == false) {

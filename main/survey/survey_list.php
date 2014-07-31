@@ -29,7 +29,7 @@ api_protect_course_script(true);
 require_once 'survey.lib.php';
 
 // Tracking
-event_access_tool(TOOL_SURVEY);
+Event::event_access_tool(TOOL_SURVEY);
 
 /** @todo This has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) { // Coach can see this

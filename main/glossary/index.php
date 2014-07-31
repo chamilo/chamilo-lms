@@ -34,7 +34,7 @@ $(document).ready(function () {
 $tool = TOOL_GLOSSARY;
 
 // Tracking
-event_access_tool(TOOL_GLOSSARY);
+Event::event_access_tool(TOOL_GLOSSARY);
 
 function sorter($item1, $item2) {
 	if ($item1[2] == $item2[2])

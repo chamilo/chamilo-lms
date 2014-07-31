@@ -38,7 +38,7 @@ function confirmation(name) {
 </script>";
 $nameTools = get_lang('LearningPaths');
 
-event_access_tool(TOOL_LEARNPATH);
+Event::event_access_tool(TOOL_LEARNPATH);
 
 api_protect_course_script();
 

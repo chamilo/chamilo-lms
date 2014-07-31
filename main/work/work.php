@@ -228,7 +228,7 @@ if (!empty($group_id)) {
 }
 
 //stats
-event_access_tool(TOOL_STUDENTPUBLICATION);
+Event::event_access_tool(TOOL_STUDENTPUBLICATION);
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 

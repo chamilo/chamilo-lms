@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Layout (principal view) used for structuring other views  
+* Layout (principal view) used for structuring other views
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.course_progress
 */
@@ -18,7 +18,7 @@ Display :: display_header('');
 Display::display_introduction_section($tool);
 
 // Tracking
-event_access_tool($tool);
+Event::event_access_tool($tool);
 
 // Display
 echo $content;

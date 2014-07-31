@@ -373,7 +373,7 @@ if (isset($origin) && $origin == 'learnpath') {
 }
 
 //statistics
-event_access_tool(TOOL_USER);
+Event::event_access_tool(TOOL_USER);
 
 /*	Setting the permissions for this page */
 $is_allowed_to_track = (api_is_course_admin() || $is_courseTutor);

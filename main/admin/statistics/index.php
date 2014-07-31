@@ -48,7 +48,6 @@ $tools[$strSocial]['report=messagesent'] = get_lang('MessagesSent');
 $tools[$strSocial]['report=messagereceived'] = get_lang('MessagesReceived');
 $tools[$strSocial]['report=friends'] = get_lang('CountFriends');
 
-
 echo '<table><tr>';
 foreach ($tools as $section => $items) {
     echo '<td style="vertical-align:top;">';

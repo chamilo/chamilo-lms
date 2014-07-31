@@ -8,7 +8,7 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -24,8 +24,8 @@ Display::display_header($tool_name);
 
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-if ( isset($_GET['action']) ) {
-    switch($_GET['action']) {
+if (isset($_GET['action'])) {
+    switch ($_GET['action']) {
         case 'unsubscribe':
             if ( CourseManager::get_user_in_course_status($_GET['user_id'],$_GET['courseId']) == STUDENT) {
                 CourseManager::unsubscribe_user($_GET['user_id'], $_GET['courseId']);

@@ -317,7 +317,7 @@ function loadUsersInSelect(select){
     else if(window.ActiveXObject) // Internet Explorer
         xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
     else  // XMLHttpRequest non supporté par le navigateur
-        alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
+    alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
 

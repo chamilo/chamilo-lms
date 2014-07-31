@@ -10,7 +10,7 @@ $language_file = array('admin', 'registration', 'userInfo');
 $cidReset = true;
 
 // Including necessary libraries.
-require '../inc/global.inc.php';
+//require '../inc/global.inc.php';
 
 // Section for the tabs
 $this_section = SECTION_PLATFORM_ADMIN;

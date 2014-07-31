@@ -6,7 +6,7 @@
 /**
  * Code
  * This tool allows platform admins to update class-user relations by uploading
- * a CSVfile
+ * a CSV file
  */
 
 /**
@@ -67,7 +67,7 @@ function validate_data($user_classes) {
 /**
  * Saves imported data.
  */
-function save_data($users_classes) {
+function save_data($users_classes, $deleteUsersNotInList = false) {
 
     global $purification_option_for_usernames;
 
@@ -81,7 +81,8 @@ function save_data($users_classes) {
     if (!empty($users_classes)) {
 
         foreach ($users_classes as $user_class) {
-            $sql1 = "SELECT user_id FROM $user_table WHERE username = '" . Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames)) . "'";
+            $sql1 = "SELECT user_id FROM $user_table
+                     WHERE username = '".Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames))."'";
             $res1 = Database::query($sql1);
             $obj1 = Database::fetch_object($res1);
 
@@ -103,7 +104,7 @@ function save_data($users_classes) {
             $user_list = $user_data['user_list'];
             $class_name = $user_data['class_name'];
             $user_list_name = $user_data['user_list_name'];
-            $usergroup->subscribe_users_to_usergroup($class_id, $user_list, false);
+            $usergroup->subscribe_users_to_usergroup($class_id, $user_list, $deleteUsersNotInList);
             $message .= Display::return_message(get_lang('Class') . ': ' . $class_name . '<br />', 'normal', false);
             $message .= Display::return_message(get_lang('Users') . ': ' . implode(', ', $user_list_name));
         }
@@ -143,14 +144,16 @@ $form = new FormValidator('class_user_import');
 $form->addElement('header', $tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 //$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
-//$form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
+$form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 
+$errors = array();
 if ($form->validate()) {
     $users_classes = parse_csv_data($_FILES['import_file']['tmp_name']);
     $errors = validate_data($users_classes);
     if (count($errors) == 0) {
-        $return = save_data($users_classes);
+        $deleteUsersNotInList = isset($_REQUEST['unsubscribe']) && !empty($_REQUEST['unsubscribe']) ? true : false;
+        $return = save_data($users_classes, $deleteUsersNotInList);
     }
 }
 

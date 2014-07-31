@@ -12,7 +12,6 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-//api_protect_admin_script();
 api_protect_global_admin_script();
 
 if (!api_get_multiple_access_url()) {
@@ -107,15 +106,14 @@ if ($form->validate()) {
 	$form->setConstants(array('sec_token' => $token));
 }
 
-
 $form->addElement('text','url', get_lang('URLIP'), array('class'=>'span6'));
 $form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('url', '', 'maxlength',254);
 
 $types = array(
-  1=>get_lang('AccessURL'),
-  2=>get_lang('SincroServer'),
-  3=>get_lang('SincroClient'),
+    1=>get_lang('AccessURL'),
+    2=>get_lang('SincroServer'),
+    3=>get_lang('SincroClient'),
 );
 $form->addElement('select', 'url_type', get_lang('Type'), $types);
 

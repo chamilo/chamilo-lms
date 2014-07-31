@@ -164,9 +164,11 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
     	$group[] = $form->createElement('static', '', '', '<br />');
     }
 }
+
 $group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] = $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
-$group[] = $form->createElement('password', 'password', null, array('id'=> 'password', 'onkeydown' => 'javascript: password_switch_radio_button();'));
+$group[] = $form->createElement('password', 'password', null, array('id'=> 'password', 'autocomplete' => 'off', 'onkeydown' => 'javascript: password_switch_radio_button();'));
+
 $form->addGroup($group, 'password', get_lang('Password'), '');
 
 if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
@@ -197,6 +199,17 @@ if (isset($drh_list) && is_array($drh_list)) {
 	}
 }
 $form->addElement('html', '</div>');
+
+if (api_is_platform_admin()) {
+    // Platform admin
+    $group = array();
+    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
+    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
+    //$display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
+    $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
+    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
+    $form->addElement('html', '</div>');
+}
 
 $form->addElement('select_language', 'language', get_lang('Language'), null);
 
@@ -234,7 +247,8 @@ $(document).ready(function(){
 </script>';
 
 // Set default values
-$defaults['mail']['send_mail'] = 0;
+$defaults['admin']['platform_admin'] = 0;
+$defaults['mail']['send_mail'] = 1;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
 $defaults['expiration_date'] = array();
@@ -267,6 +281,7 @@ if( $form->validate()) {
 		$status         = intval($user['status']);
 		$language       = $user['language'];
 		$picture        = $_FILES['picture'];
+		$platform_admin = intval($user['admin']['platform_admin']);
 		$send_mail      = intval($user['mail']['send_mail']);
 		$hr_dept_id     = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
 
@@ -352,6 +367,9 @@ if( $form->validate()) {
 				if (substr($key, 0, 6) == 'extra_') { //an extra field
 					UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
 				}
+			}
+			if ($platform_admin) {
+                UserManager::add_user_as_admin($user_id);
 			}
 			$message = get_lang('UserAdded');
 		}

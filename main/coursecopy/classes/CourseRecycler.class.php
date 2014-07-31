@@ -402,7 +402,6 @@ class CourseRecycler
             // Identifying again and deletion of the orphan questions, if it was desired.
             if ($delete_orphan_questions) {
 
-
                 //@todo fix query in order to use iid
                 $sql = " (
                     SELECT q.iid FROM $table_qui_que q

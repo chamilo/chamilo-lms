@@ -13,7 +13,7 @@
 $language_file = array('admin', 'create_course');
 
 $cidReset = true;
-require '../inc/global.inc.php';
+//require '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 $tool_name = get_lang('CourseRequestEdit');
 
@@ -45,7 +45,7 @@ if ($course_validation_feature) {
         $form = new FormValidator('add_course', 'post', 'course_request_edit.php?id='.$id.'&caller='.$caller);
 
         // Form title.
-        $form->addElement('header', '', $tool_name);
+        $form->addElement('header', $tool_name);
 
         // Title.
         $form->addElement('text', 'title', get_lang('CourseName'), array('size' => '60', 'id' => 'title'));
@@ -53,9 +53,25 @@ if ($course_validation_feature) {
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
         // Course category.
-        $categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), array());
-        $form->applyFilter('category_code', 'html_filter');
-        CourseManager::select_and_sort_categories($categories_select);
+        $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+        $categoryList = array();
+
+        if (!empty($course_request_info['category_code'])) {
+            $data = getCategory($course_request_info['category_code']);
+            $categoryList[] = array('id' => $data['code'], 'text' => $data['name']);
+        }
+
+        $form->addElement(
+            'select_ajax',
+            'category_code',
+            get_lang('CourseFaculty'),
+            null,
+            array(
+                'url' => $url,
+                'defaults' => $categoryList
+            )
+        );
 
         // Course code.
         $form->add_textfield('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
@@ -86,15 +102,15 @@ if ($course_validation_feature) {
         $form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
 
         // Submit buttons.
-        $submit_buttons[] = FormValidator::createElement('style_submit_button', 'save_button', get_lang('Save'), array('class' => 'save'));
+        $submit_buttons[] = $form->createElement('style_submit_button', 'save_button', get_lang('Save'), array('class' => 'save'));
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED) {
-            $submit_buttons[] = FormValidator::createElement('style_submit_button', 'accept_button', get_lang('Accept'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'icons/16/accept.png);'));
+            $submit_buttons[] = $form->createElement('style_submit_button', 'accept_button', get_lang('Accept'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'icons/16/accept.png);'));
         }
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED && $course_request_info['status'] != COURSE_REQUEST_REJECTED) {
-            $submit_buttons[] = FormValidator::createElement('style_submit_button', 'reject_button', get_lang('Reject'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'icons/16/error.png);'));
+            $submit_buttons[] = $form->createElement('style_submit_button', 'reject_button', get_lang('Reject'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'icons/16/error.png);'));
         }
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED && intval($course_request_info['info']) <= 0) {
-            $submit_buttons[] = FormValidator::createElement('style_submit_button', 'ask_info_button', get_lang('AskAdditionalInfo'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'request_info.gif);'));
+            $submit_buttons[] = $form->createElement('style_submit_button', 'ask_info_button', get_lang('AskAdditionalInfo'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'request_info.gif);'));
         }
         $form->addGroup($submit_buttons);
 
@@ -152,7 +168,8 @@ if ($course_validation_feature) {
                 $is_error_message = false;
 
                 // Update the course request.
-                $update_ok = CourseRequestManager::update_course_request($id,
+                $update_ok = CourseRequestManager::update_course_request(
+                    $id,
                     $course_request_values['wanted_code'],
                     $course_request_values['title'],
                     $course_request_values['description'],
@@ -165,7 +182,7 @@ if ($course_validation_feature) {
                 );
 
                 if ($update_ok) {
-                    $message[] = sprintf(get_lang(CourseRequestUpdated), $course_request_values['wanted_code']);
+                    $message[] = sprintf(get_lang('CourseRequestUpdated'), $course_request_values['wanted_code']);
 
                     switch ($submit_button) {
                         case 'accept_button':
@@ -197,7 +214,7 @@ if ($course_validation_feature) {
                     //$message = 'The button "'.$submit_button.'" has been pressed.';
 
                 } else {
-                    $message[] = sprintf(get_lang(CourseRequestUpdateFailed), $course_request_values['wanted_code']);
+                    $message[] = sprintf(get_lang('CourseRequestUpdateFailed'), $course_request_values['wanted_code']);
                     $is_error_message = true;
                 }
 
@@ -218,14 +235,11 @@ if ($course_validation_feature) {
             }
         }
     }
-
 } else {
-
     // Prepare an error message notifying that the course validation feature has not been enabled.
-    $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
+    $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?search_field=course_validation&submit_button=&category=search_setting';
     $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
     $is_error_message = true;
-
 }
 
 // Functions.

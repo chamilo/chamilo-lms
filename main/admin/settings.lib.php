@@ -446,7 +446,7 @@ function upload_stylesheet($values, $picture)
 }
 
 /**
- *
+ * Store plugin regions.
  */
 function store_regions()
 {
@@ -464,6 +464,7 @@ function store_regions()
         }
     }
     $shortlist_installed = array_flip(array_flip($shortlist_installed));
+
     $plugin_list = $plugin_obj->read_plugins_from_path();
 
     foreach ($plugin_list as $plugin) {
@@ -487,16 +488,16 @@ function store_regions()
 */
 function store_plugins()
 {
-    $plugin_obj = new AppPlugin();
+    $appPlugin = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
-    $plugin_list = $plugin_obj->read_plugins_from_path();
+    $plugin_list = $appPlugin->read_plugins_from_path();
 
     $installed_plugins = array();
 
     foreach ($plugin_list as $plugin) {
         if (isset($_POST['plugin_'.$plugin])) {
-            $plugin_obj->install($plugin);
+            $appPlugin->install($plugin);
             $installed_plugins[] = $plugin;
         }
     }
@@ -506,8 +507,9 @@ function store_plugins()
     } else {
         $remove_plugins = $plugin_list;
     }
+
     foreach ($remove_plugins as $plugin) {
-        $plugin_obj->uninstall($plugin);
+        $appPlugin->uninstall($plugin);
     }
 }
 
@@ -709,9 +711,11 @@ function handle_search()
  * @version August 2008
  * @since Dokeos 1.8.6
  */
-function handle_templates()
-{
-    $action = isset($_GET['action']) ? $_GET['action'] : null;
+function handle_templates() {
+    /* Drive-by fix to avoid undefined var warnings, without repeating
+     * isset() combos all over the place. */
+    $action = isset($_GET['action']) ? $_GET['action'] : "invalid";
+
     if ($action != 'add') {
         echo '<div class="actions" style="margin-left: 1px;">';
         echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -853,7 +857,8 @@ function image_filter($image) {
  */
 function add_edit_template() {
     // Initialize the object.
-    $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
+    $id = isset($_GET['id']) ? '&id='.Security::remove_XSS($_GET['id']) : '';
+    $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).$id);
 
     // Settting the form elements: the header.
     if ($_GET['action'] == 'add') {
@@ -1007,6 +1012,7 @@ function delete_template($id) {
     // Display a feedback message.
     Display::display_confirmation_message(get_lang('TemplateDeleted'));
 }
+
 /**
  * Returns the list of timezone identifiers used to populate the select
  * This function is called through a call_user_func() in the generate_settings_form function.
@@ -1029,6 +1035,7 @@ function select_timezone_value() {
 function select_gradebook_number_decimals() {
     return array('0', '1', '2');
 }
+
 function select_gradebook_default_grade_model_id() {
     $grade_model = new GradeModel();
     $models = $grade_model->get_all();
@@ -1287,7 +1294,7 @@ function generate_settings_form($settings, $settings_by_access_list, $settings_t
                 }
 
                 $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
-                $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+                $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
                 $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
                 break;

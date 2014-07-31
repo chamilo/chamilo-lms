@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
+* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action  
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.dashboard
 */
@@ -13,7 +13,7 @@ $language_file = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
 $cidReset = true;
 
 // including files
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'dashboard_controller.php';
 require_once 'block.class.php';
 

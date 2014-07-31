@@ -14,7 +14,6 @@ require_once 'Course.class.php';
  */
 class CourseArchiver
 {
-
     /**
      * Delete old temp-dirs
      */

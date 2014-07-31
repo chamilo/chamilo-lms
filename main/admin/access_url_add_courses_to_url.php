@@ -21,7 +21,6 @@ if (!api_get_multiple_access_url()) {
 	exit;
 }
 
-
 $form_sent = 0;
 $first_letter_course = '';
 $courses = array ();

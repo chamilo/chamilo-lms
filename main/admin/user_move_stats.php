@@ -14,6 +14,7 @@ require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+//require_once '../newscorm/learnpathList.class.php';
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $debug = 0;
@@ -188,7 +189,6 @@ if (isset($_REQUEST['load_ajax'])) {
                     }
                 }
 
-
                 //2.track_e_attempt, track_e_attempt_recording, track_e_downloads
                 //Nothing to do because there are not relationship with a session
 
@@ -236,7 +236,6 @@ if (isset($_REQUEST['load_ajax'])) {
                 }
 
                 //5. lp_item_view
-
                //CHECK ORIGIN
 
                 $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id ";

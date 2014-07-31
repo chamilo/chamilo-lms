@@ -61,6 +61,7 @@ $column_model   = array(
     array('name'=>'group_type',    	'index'=>'group_type', 	    'width'=>'15',  'align'=>'left'),
     array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false','formatter'=>'action_formatter'),
 );
+
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -138,6 +139,9 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
     $form->setDefaults($defaults);
 
     // The validation or display
+    $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+
+    // The validation or display.
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
@@ -158,9 +162,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-}
-// Action handling: deleting a note
-elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
+} elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
     $res = $usergroup->delete(Security::remove_XSS($_GET['id']));
     if ($res) {
         Display::display_confirmation_message(get_lang('Deleted'));

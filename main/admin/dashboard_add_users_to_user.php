@@ -6,8 +6,6 @@
 *	@package chamilo.admin
 */
 
-// name of the language file that needs to be included
-$language_file='admin';
 // resetting the course id
 $cidReset=true;
 

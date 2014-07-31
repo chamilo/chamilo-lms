@@ -66,6 +66,7 @@ if (Database::num_rows($res) != 1) {
 }
 
 $user_data = Database::fetch_array($res, 'ASSOC');
+$user_data['platform_admin'] = is_null($user_data['is_admin']) ? 0 : 1;
 $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 //Convert the registration date of the user
@@ -236,6 +237,19 @@ $form->addElement('html', '</div>');
 */
 
 //Language
+if (api_is_platform_admin()) {
+	$group = array();
+	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
+	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
+
+	$user_data['status'] == 1 ? $display = 'block':$display = 'none';
+
+	$form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
+	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
+	$form->addElement('html', '</div>');
+}
+
+//Language
 $form->addElement('select_language', 'language', get_lang('Language'));
 
 // Send email
@@ -245,23 +259,24 @@ $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
 
 // Registration Date
-$form->addElement('static', 'registration_date', get_lang('RegistrationDate'), $user_data['registration_date']);
+$creatorInfo = api_get_user_info($user_data['creator_id']);
+$date = sprintf(get_lang('CreatedByXYOnZ'), 'user_information.php?user_id='.$user_data['creator_id'], $creatorInfo['username'], $user_data['registration_date']);
+$form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('RegistrationDate').'</label><div class="controls">'.$date.'</div></div>');
 
 // Expiration Date
-$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-$group = array();
-$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-$group[] = $form->createElement(
-    'datepicker',
-    'expiration_date',
-    null,
-    array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();')
-);
-$form->addGroup($group, 'max_member_group', null, '', false);
+if (!$user_data['platform_admin']) {
+	// Expiration Date
+	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
+	$group = array ();
+	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
+	$group[] = $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
+	$form->addGroup($group, 'max_member_group', null, '', false);
 
+	// Active account or inactive account
+	$form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
+	$form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
+}
 // Active account or inactive account
-$form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
-$form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');

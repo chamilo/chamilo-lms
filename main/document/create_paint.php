@@ -33,7 +33,7 @@ if (api_get_setting('enabled_support_paint') == 'false') {
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
         $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
         $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
     }
@@ -91,6 +91,10 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
 }
 
 $interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
+
+if (!$is_allowed_in_course) {
+	api_not_allowed(true);
+}
 
 if (!($is_allowed_to_edit || GroupManager::groupMemberWithUploadRights() || is_my_shared_folder($_user['user_id'], Security::remove_XSS($dir),api_get_session_id()))) {
 	api_not_allowed(true);
@@ -158,7 +162,7 @@ else {
 	$credentials="false";
 }
 
-$pixlr_url = 'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials;
+$pixlr_url = api_get_protocol().'://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials;
 
 
 ?>

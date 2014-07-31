@@ -25,9 +25,10 @@ $archivePath = api_get_path(SYS_ARCHIVE_PATH);
 $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
 $course_list = CourseManager::get_courses_list();
+$formSent = null;
 
-if ($_POST['formSent']) {
-	$formSent	=$_POST['formSent'];
+if (isset($_POST['formSent']) && $_POST['formSent']) {
+	$formSent = $_POST['formSent'];
 	$select_type=intval($_POST['select_type']);
 	$file_type = 'csv';
 	$courses = $selected_courses = array();

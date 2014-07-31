@@ -152,7 +152,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         $mark_all = false;
         $un_mark_all = false;
 
-        if (!empty($_configuration['multiple_access_urls'])) {
+        if (api_is_multiple_url_enabled()) {
             if (isset($values['buttons_in_action_right']) && isset($values['buttons_in_action_right']['mark_all'])) {
                 $mark_all = true;
             }

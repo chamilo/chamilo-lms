@@ -32,5 +32,4 @@ while($row = Database::fetch_array($result)) {
     //$last_connection_date = UserManager:: delete_inactive_student($user_id, 2, true);
 }
 
-/*  		FOOTER    */
 Display :: display_footer();

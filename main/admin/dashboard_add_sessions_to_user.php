@@ -11,8 +11,6 @@ $language_file='admin';
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
-require_once '../inc/global.inc.php';
 global $_configuration;
 
 // create an ajax object
@@ -98,8 +96,7 @@ function search_sessions($needle,$type) {
 
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script>
+$htmlHeadXtra[] = '<script>
 function valide() {
 	var options = document.getElementById("destination").options;
 	for (i = 0 ; i<options.length ; i++) {
@@ -115,7 +112,6 @@ function remove_item(origin) {
 		}
 	}
 }
--->
 </script>';
 
 $formSent=0;
@@ -147,6 +143,7 @@ echo Display::page_header(sprintf(get_lang('AssignSessionsToX'), api_get_person_
 
 $assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
 $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
+
 $without_assigned_sessions = '';
 if (count($assigned_sessions_id) > 0) {
 	$without_assigned_sessions = " AND s.id NOT IN(".implode(',',$assigned_sessions_id).")";
@@ -257,7 +254,6 @@ if(!empty($msg)) {
   </select></td>
 </tr>
 </table>
-
 </form>
 
 <?php

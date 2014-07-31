@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**	
+/**
 * This script allows platform admins to add users to urls.
 *	It displays a list of users and a list of courses;
 *	you can select multiple users and courses and then click on

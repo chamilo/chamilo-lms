@@ -60,11 +60,19 @@ $form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_C
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" ');
 $form->applyFilter('course_teachers', 'html_filter');
 
-$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), array(), array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
-$categories_select->addOption('-','');
-$form->applyFilter('category_code', 'html_filter');
 //This function fills the category_code select ...
-CourseManager::select_and_sort_categories($categories_select);
+$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+$form->addElement(
+    'select_ajax',
+    'category_code',
+    get_lang('CourseFaculty'),
+    null,
+    array(
+        'url' => $url
+    //    'formatResult' => 'function(item) { return item.name + "'" +item.code; }'
+    )
+);
 
 // Course department
 $form->add_textfield('department_name', get_lang('CourseDepartment'), false, array ('size' => '60'));

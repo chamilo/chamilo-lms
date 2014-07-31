@@ -344,3 +344,5 @@ function makepost(select) {
     return ret;
 }
 </script>
+<?php
+Display::display_footer();

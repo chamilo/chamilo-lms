@@ -18,6 +18,8 @@ $cidReset = true;
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section']=$this_section;
 
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+
 // Access restrictions
 api_protect_admin_script(true);
 
@@ -32,12 +34,12 @@ if (empty($_GET['lang'])) {
 
 $usergroup = new UserGroup();
 
-if (isset($_GET['action'])) {
+if (!empty($action)) {
     $interbreadcrumb[] = array ("url" => "system_announcements.php", "name" => get_lang('SystemAnnouncements'));
-    if ($_GET['action'] == 'add') {
+    if ($action == 'add') {
         $interbreadcrumb[] = array ("url" => '#', "name" => get_lang('AddAnnouncement'));
     }
-    if ($_GET['action'] == 'edit') {
+    if ($action == 'edit') {
         $interbreadcrumb[] = array ("url" => '#', "name" => get_lang('Edit'));
     }
 } else {
@@ -47,7 +49,7 @@ if (isset($_GET['action'])) {
 // Displaying the header.
 Display :: display_header($tool_name);
 
-if ($_GET['action'] != 'add' && $_GET['action'] != 'edit') {
+if ($action != 'add' && $action != 'edit') {
     echo '<div class="actions">';
     echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('AddAnnouncement'), array(), 32).'</a>';
     echo '</div>';
@@ -59,7 +61,6 @@ $show_announcement_list = true;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 // Form was posted?
-$action_todo = false;
 if (isset($_POST['action'])) {
     $action_todo = true;
 }
@@ -93,6 +94,10 @@ switch($action) {
         // Set default time window: NOW -> NEXT WEEK
         $values['start'] = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()));
         $values['end']   = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
+
+        $values['range'] =
+            substr(api_get_local_time(api_get_local_time()), 0, 16).' / '.
+            substr(api_get_local_time(api_get_local_time()) + (7 * 24 * 60 * 60), 0, 16);
         $action_todo = true;
         break;
     case 'edit':
@@ -103,6 +108,11 @@ switch($action) {
         $values['content']			= $announcement->content;
         $values['start'] 			= api_get_local_time($announcement->date_start);
         $values['end'] 				= api_get_local_time($announcement->date_end);
+
+        $values['range'] =
+            substr(api_get_local_time($announcement->date_start), 0, 16).' / '.
+            substr(api_get_local_time($announcement->date_end), 0, 16);
+
         $values['visible_teacher'] 	= $announcement->visible_teacher;
         $values['visible_student'] 	= $announcement->visible_student ;
         $values['visible_guest'] 	= $announcement->visible_guest ;
@@ -136,7 +146,8 @@ if ($action_todo) {
     } else {
         $form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
     }
-    $form->add_timewindow('start','end',get_lang('StartTimeWindow'),get_lang('EndTimeWindow'));
+    $form->addDateRangePicker('range', get_lang('StartTimeWindow'), true, array('id' => 'date_range'));
+
     $group = array();
 
     $group[]= $form->createElement('checkbox', 'visible_teacher', null, get_lang('Teacher'));
@@ -158,16 +169,20 @@ if ($action_todo) {
         $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
         $text=get_lang('AddNews');
         $class='add';
-        $form->addElement('hidden', 'action','add');
+        $form->addElement('hidden', 'action', 'add');
 
-    } elseif (isset($_REQUEST['action']) && $_REQUEST['action']=='edit') {
+    } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
         $text=get_lang('EditNews');
         $class='save';
-        $form->addElement('hidden', 'action','edit');
+        $form->addElement('hidden', 'action', 'edit');
     }
 
-    $form->addElement('style_submit_button', 'submit', $text,'class="'.$class.'"');
+    $form->addElement('checkbox', 'send_email_test', null, get_lang('SendOnlyAnEmailToMySelfToTest'));
+
+    $form->addElement('style_submit_button', 'submit', $text, 'class="'.$class.'"');
+
     $form->setDefaults($values);
+
     if ($form->validate()) {
         $values = $form->exportValues();
         if ( !isset($values['visible_teacher'])) {
@@ -182,10 +197,26 @@ if ($action_todo) {
         if ($values['lang'] == 'all') {
             $values['lang'] = null;
         }
+
+        $sendMail = isset($values['send_mail']) ? $values['send_mail'] : null;
+
         switch ($values['action']) {
             case 'add':
-                $announcement_id = SystemAnnouncementManager::add_announcement($values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang'],$values['send_mail'],  $values['add_to_calendar']);
-                if ($announcement_id !== false )  {
+                $announcement_id = SystemAnnouncementManager::add_announcement(
+                    $values['title'],
+                    $values['content'],
+                    $values['range_start'],
+                    $values['range_end'],
+                    $values['visible_teacher'],
+                    $values['visible_student'],
+                    $values['visible_guest'],
+                    $values['lang'],
+                    $sendMail,
+                    $values['add_to_calendar'],
+                    $values['send_email_test']
+                );
+
+                if ($announcement_id !== false)  {
                     SystemAnnouncementManager::announcement_for_groups($announcement_id, array($values['group']));
                     Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
                 } else {
@@ -194,7 +225,20 @@ if ($action_todo) {
                 }
                 break;
             case 'edit':
-                if (SystemAnnouncementManager::update_announcement($values['id'], $values['title'], $values['content'], $values['start'], $values['end'], $values['visible_teacher'], $values['visible_student'], $values['visible_guest'], $values['lang'], $values['send_mail'])) {
+                if (SystemAnnouncementManager::update_announcement(
+                    $values['id'],
+                    $values['title'],
+                    $values['content'],
+                    $values['range_start'],
+                    $values['range_end'],
+                    $values['visible_teacher'],
+                    $values['visible_student'],
+                    $values['visible_guest'],
+                    $values['lang'],
+                    $sendMail,
+                    $values['send_email_test']
+                )
+                ) {
                     SystemAnnouncementManager::announcement_for_groups($values['id'], array($values['group']));
                     Display :: display_confirmation_message(get_lang('AnnouncementUpdated'));
                 } else {

@@ -222,3 +222,4 @@ function setDisable(select) {
 }
 </script>
 <?php
+Display::display_footer();

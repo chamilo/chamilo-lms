@@ -13,7 +13,7 @@
 $language_file = array('admin', 'registration');
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
@@ -183,6 +183,8 @@ function parse_csv_data($file) {
 }
 /**
  * XML-parser: handle start of element
+ * @param   string  $parser Deprecated?
+ * @param   string  $data The data to be parsed
  */
 function element_start($parser, $data) {
 	$data = api_utf8_decode($data);
@@ -199,6 +201,8 @@ function element_start($parser, $data) {
 
 /**
  * XML-parser: handle end of element
+ * @param   string  $parser Deprecated?
+ * @param   string  $data   The data to be parsed
  */
 function element_end($parser, $data) {
 	$data = api_utf8_decode($data);
@@ -223,6 +227,9 @@ function element_end($parser, $data) {
 
 /**
  * XML-parser: handle character data
+ * @param   string  $parser Parser (deprecated?)
+ * @param   string  $data The data to be parsed
+ * @return  void
  */
 function character_data($parser, $data) {
 	$data = trim(api_utf8_decode($data));

@@ -138,7 +138,6 @@ function save_data($courses) {
                     CourseManager::add_user_to_course($teacher['user_id'], $course_info['code'], COURSEMANAGER);
                 }
             }
-
             $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/">
                     '.$course_info['title'].'</a> '.get_lang('Created').'<br />';
         }

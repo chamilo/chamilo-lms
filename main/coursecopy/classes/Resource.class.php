@@ -1,13 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * General resources backup script
- * @package chamilo.backup
- */
-/**
- * Definition of all possible resource-types
- */
+
 define('RESOURCE_DOCUMENT', 'document');
 define('RESOURCE_GLOSSARY', 'glossary');
 define('RESOURCE_EVENT', 'calendar_event');
@@ -19,6 +12,7 @@ define('RESOURCE_FORUM', 'forum');
 define('RESOURCE_FORUMTOPIC', 'thread');
 define('RESOURCE_FORUMPOST', 'post');
 define('RESOURCE_QUIZ', 'quiz');
+define('RESOURCE_TEST_CATEGORY', 'test_category');
 define('RESOURCE_QUIZQUESTION', 'Exercise_Question');
 define('RESOURCE_TOOL_INTRO', 'Tool introduction');
 define('RESOURCE_LINKCATEGORY', 'Link_Category');
@@ -33,6 +27,7 @@ define('RESOURCE_ATTENDANCE', 'attendance');
 define('RESOURCE_WORK', 'work');
 
 /**
+ * Class Resource
  * Representation of a resource in a Chamilo-course.
  * This is a base class of which real resource-classes (for Links,
  * Documents,...) should be derived.
@@ -43,7 +38,6 @@ define('RESOURCE_WORK', 'work');
  */
 class Resource
 {
-
     /**
      * The id from this resource in the source course
      */
@@ -88,29 +82,29 @@ class Resource
     /**
      * Add linked resource
      */
-    function add_linked_resource($type, $id)
-    {
+    function add_linked_resource($type, $id) {
         $this->linked_resources[$type][] = $id;
     }
 
     /**
      * Get linked resources
      */
-    function get_linked_resources()
-    {
+    function get_linked_resources() {
         return $this->linked_resources;
     }
 
     /**
      * Checks if this resource links to a given resource
      */
-    function links_to(& $resource)
-    {
-        if (isset($this->linked_resources[$resource->get_type()]) && is_array(
-                $this->linked_resources[$resource->get_type()]
-            )
+    function links_to(& $resource) {
+        $type = $resource->get_type();
+        if (isset($this->linked_resources[$type]) &&
+            is_array($this->linked_resources[$type])
         ) {
-            return in_array($resource->get_id(), $this->linked_resources[$resource->get_type()]);
+            return in_array(
+                $resource->get_id(),
+                $this->linked_resources[$type]
+            );
         }
         return false;
     }
@@ -169,6 +163,8 @@ class Resource
                 return TOOL_POST;
             case RESOURCE_QUIZ:
                 return TOOL_QUIZ;
+            case RESOURCE_TEST_CATEGORY:
+                return TOOL_TEST_CATEGORY;
             //case RESOURCE_QUIZQUESTION: //no corresponding global constant
             //	return TOOL_QUIZ_QUESTION;
             //case RESOURCE_TOOL_INTRO:

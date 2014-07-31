@@ -12,7 +12,7 @@ $language_file = 'admin';
 // resetting the course id
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $xajax = new xajax();
 $xajax -> registerFunction (array('search_courses', 'Accessurleditcoursestourl', 'search_courses'));

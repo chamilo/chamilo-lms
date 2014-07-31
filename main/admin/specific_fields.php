@@ -10,7 +10,7 @@ $language_file[] = 'admin';
 $cidReset = true;
 
 // Including some necessary chamilo files
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // User permissions
 api_protect_admin_script();
@@ -69,7 +69,7 @@ if(!empty($_GET['message'])) {
 echo '<div class="actions">';
 $form->display();
 echo '</div>';
-if (!empty($extra_fields)) { 
+if (!empty($extra_fields)) {
     $table->display();
 }
 

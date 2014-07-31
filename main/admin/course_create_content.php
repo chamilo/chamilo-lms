@@ -12,7 +12,7 @@
 
 // name of the language file that needs to be included
 $language_file = 'admin';
-include ('../inc/global.inc.php');
+//include ('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();

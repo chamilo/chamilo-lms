@@ -12,7 +12,7 @@
  */
 $language_file = 'admin';
 $cidReset = true;
-require_once '../main/inc/global.inc.php';
+//require_once '../main/inc/global.inc.php';
 $this_section = SECTION_GLOBAL;
 
 //api_protect_admin_script();

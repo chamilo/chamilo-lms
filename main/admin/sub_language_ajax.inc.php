@@ -9,7 +9,7 @@
  */
 $language_file = 'admin';
 $this_script = 'sub_language';
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'sub_language.class.php';
 
 api_protect_admin_script();
@@ -50,6 +50,6 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
         echo $path_folder.' '.get_lang('IsNotWritable').'<br /> '.api_ucwords(get_lang('ErrorsFound')).': <br />'.$variables_with_problems;
     } else {
         echo get_lang('Saved');
-    } 
+    }
 }
 

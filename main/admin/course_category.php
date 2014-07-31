@@ -12,7 +12,7 @@ $language_file = 'admin';
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -100,9 +100,9 @@ if (!empty($category)) {
 }
 
 if (empty($action)) {
-    $myquery = "SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses 
-			 	FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code 
-				WHERE t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . " 
+    $myquery = "SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses
+			 	FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code
+				WHERE t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . "
 				GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count ORDER BY t1.tree_pos";
     $result = Database::query($myquery);
     $Categories = Database::store_result($result);
@@ -230,7 +230,7 @@ if ($action == 'add' || $action == 'edit') {
     }
     } else {
         Display :: display_error_message(get_lang('CourseCategoriesAreGlobal'));
-        
+
     }?>
     </ul>
 

@@ -21,7 +21,7 @@ else
 }
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require('../inc/global.inc.php');
+//require('../inc/global.inc.php');
 
 
 

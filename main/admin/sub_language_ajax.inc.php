@@ -9,7 +9,7 @@
  */
 $language_file = 'admin';
 $this_script = 'sub_language';
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once 'sub_language.class.php';
 
 api_protect_admin_script();

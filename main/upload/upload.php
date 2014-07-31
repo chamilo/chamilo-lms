@@ -15,7 +15,7 @@ $language_file[] = 'scorm';
  //the document file is loaded because most of the upload vocab relates to the document tool
 // global settings initialisation
 // also provides access to main api (inc/lib/api.lib.php)
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // return to index if no tool is set
 if(empty($_SESSION['my_tool'])){header('location:index.php');}

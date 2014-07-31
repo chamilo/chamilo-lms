@@ -29,7 +29,7 @@ use \ChamiloSession as Session;
 $language_file = array('forum', 'document', 'gradebook');
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 // The section (tabs).

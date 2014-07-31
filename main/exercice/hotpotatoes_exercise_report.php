@@ -13,7 +13,7 @@
 $language_file = array('exercice');
 
 // including the global library
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 
 // Setting the tabs

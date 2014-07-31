@@ -31,7 +31,7 @@ $language_file[] = 'registration';
 $language_file[] = 'exercice';
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LEARNPATH;
 
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
@@ -89,7 +89,7 @@ if ($debug > 0) error_log('New LP - Included aicc', 0);
 require_once 'aiccItem.class.php';
 if ($debug > 0) error_log('New LP - Included aiccItem', 0);
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 if ($debug > 0) error_log('New LP - Included back_compat', 0);
 
 $session_id = api_get_session_id();

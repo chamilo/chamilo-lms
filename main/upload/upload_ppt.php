@@ -16,7 +16,7 @@ $language_file[] = "learnpath";
 $language_file[] = "scormdocument";
 
 // global settings initialisation
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
 	var myUpload = new upload(0);

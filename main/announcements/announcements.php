@@ -27,7 +27,7 @@ $language_file = array('announcements', 'group', 'survey', 'document');
 $use_anonymous = true;
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $ctok = Security::getCurrentToken();
 $stok = Security::get_token();

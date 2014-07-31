@@ -13,10 +13,10 @@
  * Code
  */
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 api_protect_course_script();
 api_block_anonymous_users();
-	
+
 //delete temporal file
 unlink($_SESSION['temp_realpath_image']);
 
@@ -28,7 +28,7 @@ unset($_SESSION['temp_realpath_image']);
 
 if (!isset($_SESSION['exit_pixlr'])){
 	$location=api_get_path(WEB_CODE_PATH).'document/document.php';
-	echo '<script>window.parent.location.href="'.$location.'"</script>';					 
+	echo '<script>window.parent.location.href="'.$location.'"</script>';
 	api_not_allowed(true);
 }
 else{

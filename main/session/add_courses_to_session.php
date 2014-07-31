@@ -11,7 +11,7 @@ $language_file='admin';
 // resetting the course id
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $id_session = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 

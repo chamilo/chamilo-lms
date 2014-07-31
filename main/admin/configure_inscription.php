@@ -8,7 +8,7 @@
 
 $language_file = array('registration', 'admin');
 $cidReset = true;
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 api_protect_admin_script();
 

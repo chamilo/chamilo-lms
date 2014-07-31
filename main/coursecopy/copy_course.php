@@ -10,7 +10,7 @@
 $language_file = array('exercice', 'coursebackup', 'admin');
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 // Including additional libraries
 require_once 'classes/CourseBuilder.class.php';

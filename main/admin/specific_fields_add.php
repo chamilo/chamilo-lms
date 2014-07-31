@@ -11,7 +11,7 @@ $language_file[] = 'admin';
 $cidReset = true;
 
 // including necessary libraries
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 include_once $libpath.'specific_fields_manager.lib.php';
 

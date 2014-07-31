@@ -9,7 +9,7 @@
  */
 $language_file = 'gradebook';
 //$cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/evalform.class.php';
@@ -49,6 +49,6 @@ if ($add_result_form->validate()) {
 }
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('Gradebook'));
 Display :: display_header(get_lang('AddResult'));
-DisplayGradebook :: display_header_result ($evaluation[0], null, 0,0);      
+DisplayGradebook :: display_header_result ($evaluation[0], null, 0,0);
 echo $table;
 Display :: display_footer();

@@ -19,7 +19,7 @@ use \ChamiloSession as Session;
 //$language_file = array('exercice', 'tracking');
 
 // including the global library
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';

@@ -12,7 +12,7 @@
 define('FRAME', 'online');
 $language_file = array('chat');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $course = api_get_course_id();
 $group_id = api_get_group_id();

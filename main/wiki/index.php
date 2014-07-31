@@ -15,7 +15,7 @@ use \ChamiloSession as Session;
 $language_file = 'wiki';
 
 // including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'wiki.inc.php';
 
 global $charset;

@@ -10,7 +10,7 @@
 $language_file = array('glossary', 'admin');
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $current_course_tool  = TOOL_GLOSSARY;
 

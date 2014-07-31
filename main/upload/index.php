@@ -27,7 +27,7 @@ $language_file[] = "learnpath";
 
 // global settings initialisation
 // also provides access to main api (inc/lib/api.lib.php)
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] =
     "<script type=\"text/javascript\">

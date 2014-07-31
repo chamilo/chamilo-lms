@@ -10,7 +10,7 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @package chamilo.webservices
  */
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'nusoap/nusoap.php';
 

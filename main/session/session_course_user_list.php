@@ -9,7 +9,7 @@
 $language_file = array('admin', 'registration');
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $id_session = intval($_GET['id_session']);
 

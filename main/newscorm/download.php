@@ -11,7 +11,7 @@
  */
 session_cache_limiter('none');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 // Protection
@@ -37,14 +37,14 @@ $user_id = api_get_user_id();
 
 if ($_SESSION['oLP']) {
     $lp_id      = $_SESSION['oLP']->get_id();
-    $lp_item_id = $_SESSION['oLP']->current;    
+    $lp_item_id = $_SESSION['oLP']->current;
     $lp_item_info = new learnpathItem($lp_item_id);
     if (!empty($lp_item_info)) {
     //if (basename($lp_item_info->path) == basename($doc_url)) {
         $visible = learnpath::is_lp_visible_for_student($lp_id, $user_id);
-        
+
         if ($visible) {
-            event_download($doc_url);  
+            event_download($doc_url);
             if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
                 $full_file_name = $sys_course_path.$doc_url;
                 DocumentManager::file_send_for_download($full_file_name);
@@ -52,7 +52,7 @@ if ($_SESSION['oLP']) {
             }
         }
     //}
-    }        
+    }
 }
 
 Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.

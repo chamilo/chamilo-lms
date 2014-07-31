@@ -13,7 +13,7 @@ $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 $language_file = array('admin', 'tracking', 'scorm', 'exercice');
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
 $courseCode = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : null;

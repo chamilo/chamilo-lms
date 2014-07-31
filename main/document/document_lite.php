@@ -14,7 +14,7 @@ exit;
 // Language files that need to be included
 $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 require_once 'document.inc.php';

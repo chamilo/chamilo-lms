@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 
+ *
  * Get the all events by session/course
- * @author Julio Montoya cleaning code, chamilo code style changes, all agenda feature work with courses and sessions, only admins and rrhh users can see this page 
- * 
- *  
- * @author Carlos Brolo First code submittion  
+ * @author Julio Montoya cleaning code, chamilo code style changes, all agenda feature work with courses and sessions, only admins and rrhh users can see this page
+ *
+ *
+ * @author Carlos Brolo First code submittion
  */
 
 // name of the language file that needs to be included
@@ -15,7 +15,7 @@ $language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 
 require_once 'agenda.inc.php';

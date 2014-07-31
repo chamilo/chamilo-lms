@@ -13,7 +13,7 @@
 $language_file = array('exercice', 'gradebook');
 
 // including the global Chamilo file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 $main_path = api_get_path(SYS_CODE_PATH);
 require_once $lib_path.'document.lib.php';

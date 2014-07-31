@@ -8,7 +8,7 @@
  * Code
  */
 $language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // resetting the course id
 $cidReset = true;

@@ -14,7 +14,7 @@
 
 exit; //Uncomment this in order to execute the page
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'nusoap/nusoap.php';
 
 // Create the client instance

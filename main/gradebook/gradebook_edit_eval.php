@@ -9,7 +9,7 @@
  */
 $language_file = 'gradebook';
 //$cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/evalform.class.php';
@@ -30,21 +30,21 @@ if ($form->validate()) {
 	$eval->set_user_id($values['hid_user_id']);
 	$eval->set_course_code($values['hid_course_code']);
 	$eval->set_category_id($values['hid_category_id']);
-        
-    $parent_cat = Category :: load($values['hid_category_id']);                
-    
+
+    $parent_cat = Category :: load($values['hid_category_id']);
+
     /*$final_weight = null;
     if ($parent_cat[0]->get_parent_id() == 0) {
-        $final_weight = $values['weight_mask'];    
+        $final_weight = $values['weight_mask'];
     } else {
         $cat = Category :: load($parent_cat[0]->get_parent_id());
         $global_weight = $cat[0]->get_weight();
-        $final_weight = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();        
-    }*/   
+        $final_weight = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
+    }*/
     $final_weight = $values['weight_mask'];
-    
+
     $eval->set_weight($final_weight);
-    
+
 	$eval->set_max($values['max']);
 	if (empty ($values['visible'])) {
 		$visible = 0;
@@ -66,18 +66,18 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 
     $("#hid_category_id").change(function(){
-        
+
        $("#hid_category_id option:selected").each(function () {
            var cat_id = $(this).val();
-            $.ajax({ 
-                url: "'.api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=get_gradebook_weight", 
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=get_gradebook_weight",
                 data: "cat_id="+cat_id,
                 success: function(return_value) {
                     if (return_value != 0 ) {
-                        $("#max_weight").html(return_value);                                             
-                    }                    
-                },            
-            });    
+                        $("#max_weight").html(return_value);
+                    }
+                },
+            });
        });
     });
 });

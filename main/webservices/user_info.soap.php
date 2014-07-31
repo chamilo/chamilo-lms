@@ -4,11 +4,11 @@
  * This script provides the caller service with user details.
  * It is set to work with the Chamilo module for Drupal:
  * http://drupal.org/project/chamilo
- * 
+ *
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  * @package chamilo.webservices
  */
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'nusoap/nusoap.php';
 
@@ -65,7 +65,7 @@ $server->register('WSCourseListOfUser',   // method name
  * Get a list of courses (code, url, title, teacher, language) for a specific
  * user and return to caller
  * Function registered as service. Returns strings in UTF-8.
- * @param string User name in Chamilo 
+ * @param string User name in Chamilo
  * @param string Signature (composed of the sha1(username+apikey)
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */

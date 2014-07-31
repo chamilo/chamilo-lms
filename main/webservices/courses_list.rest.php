@@ -11,7 +11,7 @@
  * @package chamilo.webservices
  */
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 /**
  * Get a list of courses (code, url, title, teacher, language) and return to caller

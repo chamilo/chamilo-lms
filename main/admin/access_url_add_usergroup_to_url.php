@@ -11,7 +11,7 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 $this_section = SECTION_PLATFORM_ADMIN;

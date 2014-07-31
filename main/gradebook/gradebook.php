@@ -13,7 +13,7 @@ $language_file= 'gradebook';
 $cidReset= true;
 $_in_course = false;
 //make sure the destination for scripts is index.php instead of gradebook.php
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 if (!empty($_GET['course'])) {
 	$_SESSION['gradebook_dest'] = 'index.php';
 	$this_section = SECTION_COURSES;

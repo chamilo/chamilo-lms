@@ -10,7 +10,7 @@
 
 $language_file = 'gradebook';
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
 
 api_protect_course_script();

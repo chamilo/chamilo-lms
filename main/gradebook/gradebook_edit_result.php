@@ -9,7 +9,7 @@
  */
 $language_file = 'gradebook';
 //$cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/gradebook_functions.inc.php';
@@ -34,10 +34,10 @@ if ($edit_result_form->validate()) {
 	foreach ($scores as $row) {
 		$resultedit = Result :: load (key($scores));
 		$row_value = $row;
-		if ($row_value != '' ) {            
+		if ($row_value != '' ) {
 			$resultedit[0]->set_score(floatval(number_format($row_value, api_get_setting('gradebook_number_decimals'))));
             $resultedit[0]->save();
-		}		
+		}
 		next($scores);
 	}
 	header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&editallresults=');

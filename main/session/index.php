@@ -15,7 +15,7 @@ use \ChamiloSession as Session;
 $language_file = array('learnpath', 'courses', 'index','tracking','exercice', 'admin');
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.

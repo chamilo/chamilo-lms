@@ -15,7 +15,7 @@
 // Language files that should be included.
 $language_file = array('registration', 'messages', 'userInfo');
 $cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 if (api_is_profile_readable() == false) {
     api_not_allowed(true);

@@ -5,7 +5,7 @@ require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 $language_file = array('exercice','tracking');
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $exercise_id = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? intval($_GET['exerciseId']) : 0;
 

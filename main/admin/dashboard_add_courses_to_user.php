@@ -12,7 +12,7 @@ $language_file = 'admin';
 $cidReset = true;
 
 // including some necessary dokeos files
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 global $_configuration;
 // create an ajax object

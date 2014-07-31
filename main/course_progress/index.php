@@ -13,7 +13,7 @@
 $language_file = array ('course_description', 'userInfo', 'admin');
 
 // including files
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'thematic_controller.php';
 

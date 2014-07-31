@@ -14,7 +14,7 @@
 $language_file = 'survey';
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'survey.lib.php';
 $this_section = SECTION_COURSES;
 $survey_id = intval($_GET['survey_id']);

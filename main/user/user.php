@@ -21,7 +21,7 @@
 // name of the language file that needs to be included
 $language_file = array('registration', 'admin', 'userInfo', 'registration');
 $use_anonymous = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_USER;
 $this_section = SECTION_COURSES;
 

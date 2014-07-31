@@ -10,7 +10,7 @@
 
 $language_file = array('document');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);

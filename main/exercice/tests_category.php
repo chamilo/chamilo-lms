@@ -10,7 +10,7 @@
 $language_file = 'exercice';
 $nameTools = "";
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'question.class.php';
 
 $this_section = SECTION_COURSES;

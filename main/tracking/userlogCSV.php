@@ -18,7 +18,7 @@ $view = $_REQUEST['view'];
 // name of the language file that needs to be included
 $language_file = 'tracking';
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // Roles and rights system
 $user_id = api_get_user_id();

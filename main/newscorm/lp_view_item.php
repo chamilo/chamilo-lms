@@ -15,7 +15,7 @@
  */
 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 require_once 'learnpath_functions.inc.php';

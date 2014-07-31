@@ -22,7 +22,7 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'learnpath') {
     require_once '../newscorm/aiccItem.class.php';
 }
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $_cid = api_get_course_id();

@@ -8,7 +8,7 @@
 
 // name of the language file that needs to be included
 $language_file = array('admin', 'forum');
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
@@ -219,11 +219,11 @@ if ($allowed_to_edit) {
         $return_message = get_lang('QualificationCanNotBeGreaterThanMaxScore');
         Display :: display_error_message($return_message,false);
     }
-    
-    // show qualifications history    
-    $qualify_historic = get_historical_qualify($user_id, $threadid, $_GET['type']);    
+
+    // show qualifications history
+    $qualify_historic = get_historical_qualify($user_id, $threadid, $_GET['type']);
     $counter = count($qualify_historic);
-    
+
     $act_qualify = $_REQUEST['idtextqualify'];
     if ($counter>0) {
         if (isset($_GET['gradebook'])){

@@ -17,7 +17,7 @@
 
 $language_file = array('document');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/editdraw';
 $this_section = SECTION_COURSES;

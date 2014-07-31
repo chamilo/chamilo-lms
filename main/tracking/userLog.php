@@ -22,7 +22,7 @@ $view  = isset($_REQUEST['view']) ? $_REQUEST['view'] : null;
 $language_file = 'tracking';
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // the section (for the tabs)
 $this_section = "session_my_space";

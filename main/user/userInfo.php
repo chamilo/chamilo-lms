@@ -1,6 +1,6 @@
 <?php
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 if (isset($_REQUEST['uInfo'])) {
     $url = api_get_path(WEB_CODE_PATH)."social/profile.php?u=".intval($_REQUEST['uInfo']);

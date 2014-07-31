@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $type = $_REQUEST['type'];
 $src  = Security::remove_XSS($_REQUEST['src']);

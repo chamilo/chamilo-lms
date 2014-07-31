@@ -16,7 +16,7 @@
 $language_file = array('coursebackup', 'admin');
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true, true);
 
@@ -143,7 +143,7 @@ function display_form()
     echo $html;
 }
 
-function search_courses($id_session, $type) 
+function search_courses($id_session, $type)
 {
     global $tbl_course, $tbl_session_rel_course, $course_list;
     $xajax_response = new XajaxResponse();

@@ -9,7 +9,7 @@
 
 $language_file = array('userInfo', 'index');
 $cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 if (api_get_setting('allow_social_tool') != 'true') {
     $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.intval($_GET['u']);

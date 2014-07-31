@@ -13,7 +13,7 @@ $nameTools = 'Cours';
 $language_file = array ('admin', 'registration', 'index', 'tracking');
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
 $id_session = intval($_GET['id_session']);

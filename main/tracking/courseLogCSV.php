@@ -22,7 +22,7 @@ $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 // name of the language file that needs to be included
 $language_file = "tracking";
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 //includes for SCORM and LP
 require_once '../newscorm/learnpath.class.php';
 require_once '../newscorm/learnpathItem.class.php';

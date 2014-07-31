@@ -11,7 +11,7 @@
 $language_file='exercice';
 
 // including global Dokeos file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // including additional libraries
 require_once 'question.class.php';

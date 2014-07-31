@@ -14,7 +14,7 @@ $language_file = 'admin';
 // we are in the admin area so we do not need a course id
 $cidReset = true;
 // include global script
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 // make sure only logged-in admins can execute this
 api_protect_admin_script();

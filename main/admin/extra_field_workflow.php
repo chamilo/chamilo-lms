@@ -9,7 +9,7 @@ use \ChamiloSession as Session;
 $language_file = array('admin');
 
 $cidReset = true;
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -188,7 +188,7 @@ if ($form->validate()) {
 
                 if ($value == 1) {
                     if (empty($extraFieldOptionRelFieldOption)) {
-                        $extraFieldOptionRelFieldOption = new \ChamiloLMSCoreBundle:ExtraFieldOptionRelFieldOption();
+                        $extraFieldOptionRelFieldOption = new ChamiloLMS\ExtraFieldOptionRelFieldOption();
                         $extraFieldOptionRelFieldOption->setFieldId($field_id);
                         $extraFieldOptionRelFieldOption->setFieldOptionId($subItemId);
                         $extraFieldOptionRelFieldOption->setRelatedFieldOptionId($id);

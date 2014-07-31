@@ -18,7 +18,7 @@
 // Name of the language file that needs to be included
 $language_file = array('document');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/webcamclip';
 $this_section = SECTION_COURSES;

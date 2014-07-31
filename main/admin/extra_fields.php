@@ -11,7 +11,7 @@ $language_file = array('admin');
 $cidReset = true;
 
 $cidReset = true;
-//require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $extraFieldType =  isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 

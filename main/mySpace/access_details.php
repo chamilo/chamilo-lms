@@ -18,7 +18,7 @@
 // name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // including additional libraries
 require_once 'myspace.lib.php';

@@ -9,7 +9,7 @@
  */
 $language_file = array ('registration', 'index', 'tracking', 'exercice','admin');
 $cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';

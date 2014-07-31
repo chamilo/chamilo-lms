@@ -191,6 +191,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     $show_web_odf  = true;
+    /*
     $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
     $htmlHeadXtra[] = '
@@ -204,6 +205,16 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
             window.setTimeout(init, 0);
         });
   </script>';
+    */
+    $htmlHeadXtra[] = '
+    <script charset="utf-8">
+        resizeIframe = function(obj) {
+                var bodyHeight = $("body").height();
+                var topbarHeight = $("#topbar").height();
+                obj.style.height = (bodyHeight - topbarHeight) + "px";
+
+            }
+    </script>';
 }
 
 $execute_iframe = true;
@@ -285,19 +296,26 @@ Display::display_header('');
 
 echo '<div align="center">';
 
-$file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
+$file_url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file;
+$file_url_web = $file_url.'?'.api_get_cidreq();
 
 if (!$is_nanogong_available) {
     if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
         echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';
-    } else {
-        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
     }
 }
 
 if ($show_web_odf) {
     //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
-    echo '<div id="odf"></div>';
+
+    echo '<div id="viewerJSContent">';
+    echo '<iframe frameborder="0" allowfullscreen="allowfullscreen" onload="resizeIframe(this)" style="width:100%;"
+        src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url.'">
+        </iframe>';
+    echo '</div>';
+} else {
+    // ViewerJS already have download button
+    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
 }
 
 echo '</div>';

@@ -28,7 +28,7 @@ $tool_name = get_lang('ImportUsers');
 $session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 
 if (empty($session_id)) {
-    api_not_allowed(true);
+    api_not_allowed(true);    
 }
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -43,7 +43,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $send_mail = $_POST['sendMail'] ? 1 : 0;
 
         // CSV
-        $users     = Import::csv_to_array($_FILES['import_file']['tmp_name']);
+        $users = Import::csv_to_array($_FILES['import_file']['tmp_name']);
         $user_list = array();
         foreach ($users as $user_data) {
             $username = $user_data['username'];

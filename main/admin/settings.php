@@ -159,12 +159,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                             $changeable = 1;
                         }
 
-                        $params = array('variable = ?' =>  array($key));
+                        $params = array('variable = ?' => array($key));
                         $data = api_get_settings_params($params);
 
                         if (!empty($data)) {
                             foreach ($data as $item) {
-                                $params = array('id' =>$item['id'], 'access_url_changeable' => $changeable);
+                                $params = array('id' => $item['id'], 'access_url_changeable' => $changeable);
                                 api_set_setting_simple($params);
                             }
                         }

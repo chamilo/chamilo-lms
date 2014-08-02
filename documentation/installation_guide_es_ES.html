@@ -729,7 +729,7 @@ Nota: Este paso requiere un servidor dedicado o un servidor dedicado virtual ya 
 En Debian o Ubuntu 11.10 y superior, instale LibreOffice.org v3 e iniciarlo como un servidor en segundo plano:
 <pre>
 sudo apt-get install libreoffice
-sudo soffice -accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" -headless -nodefault -nofirststartwizard -nolockcheck -nologo -norestore &amp;
+sudo soffice --accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore &amp;
 </pre>
 </p>
 <p>

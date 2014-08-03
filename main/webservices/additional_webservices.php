@@ -82,6 +82,10 @@ function wsConvertPpt($pptData)
     }
 }
 
+/**
+ * @param $directoryPath
+ * @return bool
+ */
 function deleteDirectory($directoryPath)
 {
     $files = array_diff(scandir($directoryPath), array('.','..'));
@@ -99,6 +103,7 @@ $options = array(
     'uri' => $webPath,
     'location' => $webCodePath . 'webservices/additional_webservices.php'
 );
+
 $soapServer = new SoapServer(NULL, $options);
 $soapServer->addFunction('wsConvertPpt');
 $soapServer->handle();

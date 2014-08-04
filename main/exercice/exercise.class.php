@@ -2332,8 +2332,8 @@ class Exercise
         if ($type == 'full') {
             // rules
             $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
-            $form->addRule('start_time', get_lang('InvalidDate'), 'date');
-            $form->addRule('end_time', get_lang('InvalidDate'), 'date');
+            $form->addRule('start_time', get_lang('InvalidDate'), 'datetime');
+            $form->addRule('end_time', get_lang('InvalidDate'), 'datetime');
         }
 
         // defaults

@@ -532,7 +532,10 @@ function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_c
 	} elseif($call_from_tool=='editdraw') {
 		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Draw'), array(), 32).'</a>';
-	} elseif($call_from_tool=='editpaint'){
+	} elseif($call_from_tool=='editodf') {
+        echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), array(), 32).'</a>';
+    } elseif($call_from_tool=='editpaint'){
 		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), array(), 32).'</a>';
 	} else {

@@ -159,7 +159,6 @@ class Notification extends Model
                     //Send notification right now!
                     case self::NOTIFY_MESSAGE_AT_ONCE:
                     case self::NOTIFY_INVITATION_AT_ONCE:
-                    // Saving the notification to be sent some day.
                     case self::NOTIFY_GROUP_AT_ONCE:
                         $mail = api_get_setting('noreply_email_address');
                         if ($user_setting == NOTIFY_INVITATION_AT_ONCE) {
@@ -183,7 +182,7 @@ class Notification extends Model
                                     $extra_headers['reply_to']['mail'] = $sender_info['email'];
                                     $extra_headers['reply_to']['name'] = $sender_info['complete_name'];
                                 }
-                            } else{
+                            } else {
                                 $extra_headers = array();
                                 $sender_info['complete_name'] = $this->admin_name;
                                 $sender_info['email'] = $this->admin_email;

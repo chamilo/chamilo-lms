@@ -123,7 +123,7 @@ function complete_missing_data($user)
     if (empty($user['AuthSource'])) {
         $user['AuthSource'] = PLATFORM_AUTH_SOURCE;
     }
-     if (empty($user['AuthSource'])) {
+     if (empty($user['ExpiryDate'])) {
         $user['ExpiryDate'] = '0000-00-00 00:00:00';
     }
     return $user;

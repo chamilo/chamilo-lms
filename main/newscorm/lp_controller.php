@@ -694,6 +694,10 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        global $_configuration;
+        if (isset($_configuration['hide_scorm_export_link']) && $_configuration['hide_scorm_export_link']) {
+            api_not_allowed(true);
+        }
         if ($debug > 0) error_log('New LP - export action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for export', 0); require 'lp_list.php'; }
         else {

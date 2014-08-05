@@ -195,4 +195,6 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // Allow course tutors in sessions to add existing students to their session
 //$_configuration['allow_tutors_to_assign_students_to_session'] = 'false';
 // Allow select the return link in the LP view
-//$_configuration['allow_lp_return_link'] = 'false';
+//$_configuration['allow_lp_return_link'] = false;
+// Allow select the return link in the LP view
+//$_configuration['hide_scorm_export_link'] = false;

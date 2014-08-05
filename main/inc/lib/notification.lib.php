@@ -159,60 +159,45 @@ class Notification extends Model
                     //Send notification right now!
                     case self::NOTIFY_MESSAGE_AT_ONCE:
                     case self::NOTIFY_INVITATION_AT_ONCE:
-                        $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
-                        $mail= api_get_setting('noreply_email_address');
-                        if (!empty($mail)) {
-                            $extra_headers = array();
-                            $extra_headers['reply_to']['mail'] = $mail;
-                            $extra_headers['reply_to']['name'] = $this->admin_name;
-                            api_mail_html(
-                                $name,
-                                $user_info['mail'],
-                                Security::filter_terms($title),
-                                Security::filter_terms($content),
-                                $this->admin_name,
-                                $mail,
-                                $extra_headers
-                            );
-                        } else {
-                            echo "ed2";
-                            api_mail_html(
-                                $name,
-                                $user_info['mail'],
-                                Security::filter_terms($title),
-                                Security::filter_terms($content),
-                                $this->admin_name,
-                                $this->admin_email
-                            );
-                        }
-                        
-                        // Saving the notification to be sent some day.
+                    // Saving the notification to be sent some day.
                     case self::NOTIFY_GROUP_AT_ONCE:
-                        if (!empty($user_info['mail'])) {
+                        $mail = api_get_setting('noreply_email_address');
+                        if ($user_setting == NOTIFY_INVITATION_AT_ONCE) {
+                            $sender_info['complete_name'] = $this->admin_name;
+                            $extra_headers = array();
+                            $extra_headers['reply_to']['name'] = $this->admin_name;
+                            if (!empty($mail)) {
+                                $sender_info['email'] = $mail;
+                                $extra_headers['reply_to']['mail'] = $mail;
+                                
+                            } else {
+                                $sender_info['email'] = $this->admin_email;
+                                $extra_headers['reply_to']['mail'] = $this->admin_email;
+                            }
+                        }
+                        if (!empty($user_info['mail']) || !empty($mail)) {
                             $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
                             if (!empty($sender_info['complete_name']) && !empty($sender_info['email'])) {
+                                if ($user_setting != NOTIFY_INVITATION_AT_ONCE) {
+                                    $extra_headers = array();
+                                    $extra_headers['reply_to']['mail'] = $sender_info['email'];
+                                    $extra_headers['reply_to']['name'] = $sender_info['complete_name'];
+                                }
+                            } else{
                                 $extra_headers = array();
-                                $extra_headers['reply_to']['mail'] = $sender_info['email'];
-                                $extra_headers['reply_to']['name'] = $sender_info['complete_name'];
-                                api_mail_html(
-                                    $name,
-                                    $user_info['mail'],
-                                    Security::filter_terms($title),
-                                    Security::filter_terms($content),
-                                    $sender_info['complete_name'],
-                                    $sender_info['email'],
-                                    $extra_headers
-                                );
-                            } else {
-                                api_mail_html(
-                                    $name,
-                                    $user_info['mail'],
-                                    Security::filter_terms($title),
-                                    Security::filter_terms($content),
-                                    $this->admin_name,
-                                    $this->admin_email
-                                );
+                                $sender_info['complete_name'] = $this->admin_name;
+                                $sender_info['email'] = $this->admin_email;
                             }
+                            api_mail_html(
+                                $name,
+                                $user_info['mail'],
+                                Security::filter_terms($title),
+                                Security::filter_terms($content),
+                                $sender_info['complete_name'],
+                                $sender_info['email'],
+                                $extra_headers
+                            );
+                    
                         }
                         $params['sent_at'] = api_get_utc_datetime();
                         // Saving the notification to be sent some day.

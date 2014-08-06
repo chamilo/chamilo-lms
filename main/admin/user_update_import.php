@@ -441,11 +441,9 @@ $user_id_error = array();
 $error_message = '';
 
 if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
-    if (!isset($_POST['file_type'])) {
-        $file_type = 'csv';    
-    } else {
-        $file_type = $_POST['file_type'];
-    }
+    
+    $file_type = 'csv';    
+   
     Security::clear_token();
     $tok = Security::get_token();
     $allowed_file_mimetype = array('csv', 'xml');
@@ -492,7 +490,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['
     if (strcmp($file_type, 'csv') === 0) {
         updateUsers($users_to_insert);
     } else {
-        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
+        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption1');
     }
 
     if (count($errors) > 0) {
@@ -519,7 +517,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['
     $warning_message = 'session_message';
 
     if ($error_kind_file) {
-        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption1');
+        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
     } else {
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.urlencode($warning_message).'&message='.urlencode($see_message_import).'&sec_token='.$tok);
         exit;
@@ -532,7 +530,7 @@ if (!empty($error_message)) {
     Display::display_error_message($error_message);
 }
 
-$form = new FormValidator('user_import','post','user_import.php');
+$form = new FormValidator('user_update_import','post','user_update_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));

@@ -278,3 +278,7 @@ $ConvertedFromX = "Convertido desde %s";
 $PleaseSelectConvertFormat = "Por favor, Seleccione un formato de conversión";
 $ConvertFormats = "Formatos de conversión";
 $SelectConvertFormat = "Seleccione el formato de conversión";
+$ConvertedFromXToY = "Convertido desde %s a %s";
+$Convert = "Convertir";
+$FormatNotSupported = "Formatos de conversión no soportados";
+$ErrorSameFormat = "El formato de destino es el mismo del formato de origen";

@@ -49,9 +49,11 @@ api_protect_course_script(true);
 
 DocumentManager::removeGeneratedAudioTempFile();
 
-if (isset($_SESSION['temp_realpath_image'])
-    && !empty($_SESSION['temp_realpath_image'])
-    && is_file($_SESSION['temp_realpath_image'])) {
+if(
+    isset($_SESSION['temp_realpath_image']) &&
+    !empty($_SESSION['temp_realpath_image']) &&
+    file_exists($_SESSION['temp_realpath_image'])
+) {
     unlink($_SESSION['temp_realpath_image']);
 }
 $courseInfo = api_get_course_info();
@@ -424,9 +426,11 @@ switch ($action) {
         );
         $file = $sys_course_path.$courseInfo['directory'].'/document'.$document_info['path'];
         $fileInfo = pathinfo($file);
-        if (!(in_array($fileInfo['extension'], DocumentManager::get_jodconverter_extension_list('from', $formatType))) ||
+        if ($fileInfo['extension'] == $formatTarget) {
+            $message = Display::return_message(get_lang('ErrorSameFormat'), 'warning');
+        } elseif (!(in_array($fileInfo['extension'], DocumentManager::get_jodconverter_extension_list('from', $formatType))) ||
             !(in_array($formatTarget, DocumentManager::get_jodconverter_extension_list('to', $formatType)))) {
-            $message = Display::return_message(get_lang('FormatNotSupported'), 'error');
+            $message = Display::return_message(get_lang('FormatNotSupported'), 'warning');
         } else {
             $convertedFile = $fileInfo['dirname'] . DIRECTORY_SEPARATOR . $fileInfo['filename'] .
                 '_from_' . $fileInfo['extension'] . '.' . $formatTarget;
@@ -436,7 +440,7 @@ switch ($action) {
                 $message = Display::return_message(get_lang('FileExists'), 'error');
             } else {
                 $result = $obj->convertCopyDocument($file, $convertedFile, $convertedTitle);
-                if ((empty($result))) {
+                if (empty($result)) {
                     $message = Display::return_message(get_lang('CopyFailed'), 'error');
                 } else {
                     $cidReq = Security::remove_XSS($_GET['cidReq']);
@@ -452,7 +456,6 @@ switch ($action) {
                 }
             }
         }
-        Session::write('message', $message);
         break;
 }
 

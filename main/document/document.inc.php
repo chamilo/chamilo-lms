@@ -630,7 +630,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         } else {
             if ($usePpt2lp && $formatType) {
                 $modify_icons .= '&nbsp;<a class="convertAction" href="#" data-documentId = ' . $document_id . ' data-formatType = ' . $formatType . '>' .
-                    Display::return_icon('convert.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+                    Display::return_icon('convert.png', get_lang('Convert'), array(), ICON_SIZE_SMALL) . '</a>';
             }
         }
     }

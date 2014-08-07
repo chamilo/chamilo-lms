@@ -4042,7 +4042,14 @@ class DocumentManager
         if (api_get_setting('show_chat_folder') == 'false') {
             $foldersToAvoid[] = '/chat_files';
         }
-        return in_array($path, $foldersToAvoid);
+
+        if (is_array($foldersToAvoid)) {
+
+            return in_array($path, $foldersToAvoid);
+        } else {
+
+            return false;
+        }
     }
 
     /**

@@ -222,6 +222,9 @@ if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 	array_walk_recursive_limited($_COOKIE,  'stripslashes', true);
 	array_walk_recursive_limited($_REQUEST, 'stripslashes', true);
 }
+// Commented because avoid refresh plugin values - refs BT#8274
+// $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
+// $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
 
 // access_url == 1 is the default chamilo location
 if ($_configuration['access_url'] != 1) {

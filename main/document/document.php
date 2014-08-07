@@ -54,6 +54,13 @@ if (isset($_SESSION['temp_realpath_image'])
     && is_file($_SESSION['temp_realpath_image'])) {
     unlink($_SESSION['temp_realpath_image']);
 }
+$courseInfo = api_get_course_info();
+$course_dir = $courseInfo['directory'].'/document';
+$sys_course_path = api_get_path(SYS_COURSE_PATH);
+$base_work_dir = $sys_course_path.$course_dir;
+$http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
+$document_path = $base_work_dir;
+$usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
 
 $courseInfo = api_get_course_info();
 $course_dir = $courseInfo['directory'].'/document';
@@ -404,6 +411,49 @@ switch ($action) {
             Session::write('message', $message);
         }
         break;
+    case 'convertToPdf':
+        // PDF format as target by default
+        $formatTarget = $_REQUEST['formatTarget']? strtolower(Security::remove_XSS($_REQUEST['formatTarget'])) : 'pdf';
+        $formatType = $_REQUEST['formatType']? strtolower(Security::remove_XSS($_REQUEST['formatType'])) : 'text';
+        // Get the document data from the ID
+        $document_info = DocumentManager::get_document_data_by_id(
+            $document_id,
+            api_get_course_id(),
+            true,
+            $session_id
+        );
+        $file = $sys_course_path.$courseInfo['directory'].'/document'.$document_info['path'];
+        $fileInfo = pathinfo($file);
+        if (!(in_array($fileInfo['extension'], DocumentManager::get_jodconverter_extension_list('from', $formatType))) ||
+            !(in_array($formatTarget, DocumentManager::get_jodconverter_extension_list('to', $formatType)))) {
+            $message = Display::return_message(get_lang('FormatNotSupported'), 'error');
+        } else {
+            $convertedFile = $fileInfo['dirname'] . DIRECTORY_SEPARATOR . $fileInfo['filename'] .
+                '_from_' . $fileInfo['extension'] . '.' . $formatTarget;
+            $convertedTitle = $document_info['title'];
+            $obj = new OpenofficePresentation(true);
+            if (file_exists($convertedFile)) {
+                $message = Display::return_message(get_lang('FileExists'), 'error');
+            } else {
+                $result = $obj->convertCopyDocument($file, $convertedFile, $convertedTitle);
+                if ((empty($result))) {
+                    $message = Display::return_message(get_lang('CopyFailed'), 'error');
+                } else {
+                    $cidReq = Security::remove_XSS($_GET['cidReq']);
+                    $id_session = api_get_session_id();
+                    $gidReq = Security::remove_XSS($_GET['gidReq']);
+                    $file_link = Display::url(
+                        get_lang('SeeFile'),
+                        api_get_path(WEB_CODE_PATH).'document/showinframes.php?'.
+                        'cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;'.
+                        'gidReq='.$gidReq.'&amp;id='.current($result)
+                    );
+                    $message = Display::return_message(get_lang('CopyMade').' '.$file_link, 'confirmation', false);
+                }
+            }
+        }
+        Session::write('message', $message);
+        break;
 }
 
 // I'm in the certification module?
@@ -588,15 +638,38 @@ if ($tool_visibility == '0' && $groupId == '0' && !($is_allowed_to_edit || $grou
     api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = "<script>
+$htmlHeadXtra[] = '<script>
 function confirmation (name) {
-    if (confirm(\" ".get_lang("AreYouSureToDelete")." \"+ name + \" ?\")) {
+    if (confirm(" '.get_lang('AreYouSureToDelete').' "+ name + " ?")) {
         return true;
     } else {
         return false;
     }
 }
-</script>";
+
+$(document).ready(function() {
+    $(".convertAction").click(function() {
+        var id = $(this).attr("data-documentId");
+        var format = $(this).attr("data-formatType");
+        convertModal(id, format);
+    });
+});
+function convertModal (id, format) {
+    $("#convertModal").modal("show");
+    $("." + format + "FormatType").show();
+    $("#convertSelect").change(function() {
+        var formatTarget = $(this).val();
+        window.location.href = "'.
+            api_get_self() . '?' . api_get_cidreq() . '&curdirpath=' . $curdirpath .
+            '&action=convertToPdf&formatTarget='.'" + formatTarget + "&id=" + id + "'.
+            $req_gid . '&formatType=" + format
+            ;
+    });
+    $("#convertModal").on("hidden", function(){
+        $("." + format + "FormatType").hide();
+    });
+}
+</script>';
 
 // If they are looking at group documents they can't see the root
 if ($groupId != 0 && $curdirpath == '/') {
@@ -1759,7 +1832,7 @@ if (count($documentAndFolders) > 1) {
         $form_action['set_invisible'] = get_lang('SetInvisible');
         $form_action['set_visible'] = get_lang('SetVisible');
         $form_action['delete'] = get_lang('Delete');
-
+        // $form_action['convert'] = get_lang('ConvertFormat');
         $portfolio_actions = Portfolio::actions();
         foreach ($portfolio_actions as $action) {
             $form_action[$action->get_name()] = $action->get_title();
@@ -1810,6 +1883,44 @@ if (count($documentAndFolders) > 1) {
 if (!empty($table_footer)) {
     Display::display_warning_message($table_footer);
 }
+
+echo '
+    <div id="convertModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header" style="text-align: center;">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">' . get_lang('Close') . '</span>
+            </button>
+            <h4 class="modal-title">' . get_lang('PleaseSelectConvertFormat') . '</h4>
+          </div>
+          <div class="modal-body" style="text-align: center;">
+            <p>' . get_lang('ConvertFormats') . '&hellip;</p>
+            <select id="convertSelect" class="input-lg text-center">
+                <option value="">
+                    ' . get_lang('SelectConvertFormat') . '
+                </option>
+                <option value="pdf">
+                    PDF - Portable Document File
+                </option>
+                <option value="odt" style="display:none;" class="textFormatType">
+                    ODT - Open Document Text
+                </option>
+                <option value="odp" style="display:none;" class="presentationFormatType">
+                    ODP - Open Document Portable
+                </option>
+                <option value="ods" style="display:none;" class="spreadsheetFormatType">
+                    ODS - Open Document Spreadsheet
+                </option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">' . get_lang('Close') . '</button>
+          </div>
+        </div>
+      </div>
+    </div>';
 
 // Footer
 Display::display_footer();

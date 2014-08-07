@@ -3901,6 +3901,99 @@ class DocumentManager
     }
 
     /**
+     * Set of extension allowed to use Jodconverter
+     * @param $mode 'from'
+     *              'to'
+     *              'all'
+     * @param $format   'text'
+     *                  'spreadsheet'
+     *                  'presentation'
+     *                  'drawing'
+     *                  'all'
+     * @return array
+     */
+    public static function get_jodconverter_extension_list($mode, $format)
+    {
+        $extensionList = array();
+        $extensionListFromText = array('odt', 'sxw', 'rtf', 'doc', 'docx', 'wpd', 'txt');
+        $extensionListToText = array('pdf', 'odt', 'sxw', 'rtf', 'doc', 'docx', 'txt');
+        $extensionListFromSpreadsheet = array('ods', 'sxc', 'xls', 'xlsx', 'csv', 'tsv');
+        $extensionListToSpreadsheet = array('pdf', 'ods', 'sxc', 'xls', 'xlsx', 'csv', 'tsv');
+        $extensionListFromPresentation = array('odp', 'sxi', 'ppt', 'pptx');
+        $extensionListToPresentation = array('pdf', 'swf', 'odp', 'sxi', 'ppt', 'pptx');
+        $extensionListFromDrawing = array('odg');
+        $extensionListToDrawing = array('svg', 'swf');
+
+        if ($mode === 'from') {
+            if ($format === 'text') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+            } elseif ($format === 'spreadsheet') {
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+            } elseif ($format === 'presentation') {
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+            } elseif ($format === 'drawing') {
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+            } elseif ($format === 'all') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+            }
+        } elseif ($mode === 'to') {
+            if ($format === 'text') {
+                $extensionList = array_merge($extensionList, $extensionListToText);
+            } elseif ($format === 'spreadsheet') {
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+            } elseif ($format === 'presentation') {
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+            } elseif ($format === 'drawing') {
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            } elseif ($format === 'all') {
+                $extensionList = array_merge($extensionList, $extensionListToText);
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            }
+        } elseif ($mode === 'all') {
+            if ($format === 'text') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+                $extensionList = array_merge($extensionList, $extensionListToText);
+            } elseif ($format === 'spreadsheet') {
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+            } elseif ($format === 'presentation') {
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+            } elseif ($format === 'drawing') {
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            } elseif ($format === 'all') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+                $extensionList = array_merge($extensionList, $extensionListToText);
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            }
+        }
+        return $extensionList;
+    }
+
+    public static function getFormatTypeListConvertor($mode = 'from', $extension)
+    {
+        $formatTypesList = array();
+        $formatTypes = array('text', 'spreadsheet', 'presentation', 'drawing');
+        foreach ($formatTypes as $formatType) {
+            if (in_array($extension, self::get_jodconverter_extension_list($mode, $formatType))) {
+                $formatTypesList[] = $formatType;
+            }
+        }
+        return $formatTypesList;
+    }
+
+    /**
      * @param string $path
      * @param bool $is_certificate_mode
      * @return bool

@@ -274,4 +274,7 @@ $NoSVGImagesInImagesGalleryPath = "There are no SVG images in your images galler
 $NoSVGImages = "No SVG image";
 $WamiNeedFilename = "Before you activate recording it is necessary a file name.";
 $SelectAnAudioFileFromDocuments = "Select an audio file from documents";
-?>
+$ConvertedFromX = "Converted from %s";
+$PleaseSelectConvertFormat = "Please, Select a format for conversion";
+$ConvertFormats = "Formats for conversion";
+$SelectConvertFormat = "Select target format";

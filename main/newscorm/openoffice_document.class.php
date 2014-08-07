@@ -211,4 +211,113 @@ abstract class OpenofficeDocument extends learnpath
     abstract function add_docs_to_visio();
 
     abstract function add_command_parameters();
+
+    /**
+     * Used to convert copied from document
+     * @param $originalPath
+     * @param $convertedPath
+     * @param string $action_after_conversion
+     * @return bool
+     */
+    function convertCopyDocument($originalPath, $convertedPath, $convertedTitle){
+        global $_course;
+        $ids = array();
+        $originalPathInfo = pathinfo($originalPath);
+        $convertedPathInfo = pathinfo($convertedPath);
+        $this->base_work_dir = $originalPathInfo['dirname'];
+        $this->file_path = $originalPathInfo['basename'];
+        $this->created_dir = $convertedPathInfo['basename'];
+        $ppt2lpHost = api_get_setting('service_ppt2lp', 'host');
+        $permissionFile = api_get_permissions_for_new_files();
+        $permissionFolder = api_get_permissions_for_new_directories();
+        if (file_exists($this->base_work_dir . '/' . $this->created_dir)) {
+
+            return $ids;
+        }
+
+        if ($ppt2lpHost == 'localhost') {
+            if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
+                $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png');
+                $classPath = $converterPath . ';' . $converterPath . '/jodconverter-2.2.2.jar;' . $converterPath . '/jodconverter-cli-2.2.2.jar';
+                $cmd = 'java -Dfile.encoding=UTF-8 -jar "' . $classPath . '/jodconverter-2.2.2.jar"';
+            } else {
+                $converterPath = api_get_path(SYS_PATH) . 'main/inc/lib/ppt2png';
+                $classPath = ' -Dfile.encoding=UTF-8 -jar jodconverter-cli-2.2.2.jar';
+                $cmd = 'cd ' . $converterPath . ' && java ' . $classPath . ' ';
+            }
+
+            $cmd .= ' -p ' . api_get_setting('service_ppt2lp', 'port');
+            // Call to the function implemented by child.
+            $cmd .= ' "' . $this->base_work_dir . '/' . $this->file_path . '"  "' . $this->base_work_dir . '/' . $this->created_dir . '"';
+            // To allow openoffice to manipulate docs.
+            @chmod($this->base_work_dir, $permissionFolder);
+            @chmod($this->base_work_dir . '/' . $this->file_path, $permissionFile);
+
+            $locale = $this->original_locale; // TODO: Improve it because we're not sure this locale is present everywhere.
+            putenv('LC_ALL=' . $locale);
+
+            $files = array();
+            $return = 0;
+            $shell = exec($cmd, $files, $return);
+            // TODO: Chown is not working, root keep user privileges, should be www-data
+            @chown($this->base_work_dir . '/' . $this->created_dir, 'www-data');
+            @chmod($this->base_work_dir . '/' . $this->created_dir, $permissionFile);
+
+            if ($return != 0) { // If the java application returns an error code.
+                switch ($return) {
+                    // Can't connect to openoffice.
+                    case 1: $this->error = get_lang('CannotConnectToOpenOffice');
+                        break;
+                    // Conversion failed in openoffice.
+                    case 2: $this->error = get_lang('OogieConversionFailed');
+                        break;
+                    // Conversion can't be launch because command failed.
+                    case 255: $this->error = get_lang('OogieUnknownError');
+                        break;
+                }
+                DocumentManager::delete_document($_course, $this->created_dir, $this->base_work_dir);
+                return false;
+            }
+        } else {
+            /*
+             * @TODO Create method to use webservice
+            // get result from webservices
+            $result = $this->_get_remote_ppt2lp_files($file);
+            $result = unserialize(base64_decode($result));
+
+            // Save remote images to server
+            chmod($this->base_work_dir.$this->created_dir, api_get_permissions_for_new_directories());
+            if (!empty($result['images'])) {
+                foreach ($result['images'] as $image => $img_data) {
+                    $image_path = $this->base_work_dir.$this->created_dir;
+                    @file_put_contents($image_path . '/' . $image, base64_decode($img_data));
+                    @chmod($image_path . '/' . $image, 0777);
+                }
+            }
+
+            // files info
+            $files = $result['files'];
+            */
+        }
+
+        if (file_exists($this->base_work_dir . '/' . $this->created_dir)) {
+
+            // Register Files to Document tool
+            $ids[] = add_document(
+                $_course,
+                '/' . $this->created_dir,
+                'file',
+                filesize($this->base_work_dir . '/' . $this->created_dir),
+                $convertedTitle,
+                sprintf(get_lang('ConvertedFromX', strtoupper($originalPathInfo['extension']))),
+                0,
+                true,
+                null,
+                api_get_session_id()
+            );
+            chmod($this->base_work_dir, $permissionFolder);
+        }
+
+        return $ids;
+    }
 }

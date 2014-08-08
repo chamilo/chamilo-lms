@@ -50,7 +50,7 @@ security:
                 failure_path:   null
             logout:
                 path:           /administration/logout
-            anonymous:          true
+            anonymous:          false
 
         main:
             pattern: .*

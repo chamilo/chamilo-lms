@@ -1,5 +1,15 @@
 {% extends "AvanzuAdminThemeBundle:layout:base-layout.html.twig" %}
 
+{#{% block stylesheets %}#}
+    {#<link rel="stylesheet" href="{{ asset_url }}" />#}
+{#{% endblock %}#}
+
+{#{% javascripts#}
+{#"@bootstrap_js" %}#}
+{#<script src="{{ asset_url }}"></script>#}
+{#{% endjavascripts %}#}
+
+
 {% block title %}
     {#{{ parent() }}#}
     {{- 'Institution' | get_setting }} - {{ 'siteName' | get_setting -}}

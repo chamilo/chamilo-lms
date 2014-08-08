@@ -53,13 +53,14 @@ logout:
 login_check:
     path: /administration/login_check
 
-# Always at the end
-core_bundle:
-    resource: "@ChamiloLMSCoreBundle/Resources/config/routing.yml"
-
 chamilolms_installer:
     resource: "@ChamiloLMSInstallerBundle/Resources/config/routing.yml"
 
 sylius_settings:
     resource: @SyliusSettingsBundle/Resources/config/routing.yml
     prefix: /settings
+
+# Always at the end
+core_bundle:
+    resource: "@ChamiloLMSCoreBundle/Resources/config/routing.yml"
+

@@ -14,9 +14,7 @@ class AppKernel extends Kernel
             new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
             new Sylius\Bundle\SettingsBundle\SyliusSettingsBundle(),
             new Sylius\Bundle\FlowBundle\SyliusFlowBundle(),
-
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
-
 
             // Symfony standard edition
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),

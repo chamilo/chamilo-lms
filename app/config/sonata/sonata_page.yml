@@ -16,6 +16,9 @@ sonata_page:
     ignore_uri_patterns:
         - ^/administration(.*) # sonata admin
         - ^/api/(.*)
+        - ^installer
+        - ^/installer/(.*)
+        - install.php
 
     ignore_route_patterns:
         - (.*)administration(.*)     # ignore admin route, ie route containing 'admin'  # sonata admin
@@ -35,6 +38,10 @@ sonata_page:
         - sonata_cache_js_async
         - sonata_cache_js_sync
         - sonata_cache_apc
+        - chamilo_installer_flow
+        - sylius_flow_start
+        - sylius_flow_display
+        - sylius_flow_forward
 
     cache_invalidation:
         service:  sonata.page.cache.invalidation.simple

@@ -5,3 +5,11 @@ services:
             - notebook
         tags:
             - { name: chamilolm.course.tool }
+
+    chamilolms_notebook:
+      class: ChamiloLMS\NotebookBundle\Form\Type\CNotebookType
+      tags:
+         -  { name: form.type }
+
+    notebook.manager:
+        class: ChamiloLMS\NotebookBundle\Entity\CNotebookManager

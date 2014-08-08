@@ -3,12 +3,16 @@
 namespace ChamiloLMS\NotebookBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * CNotebook
  *
  * @ORM\Table(name="c_notebook")
  * @ORM\Entity
+ *
+ * @GRID\Source(columns="iid, title")
+ *
  */
 class CNotebook
 {
@@ -91,6 +95,24 @@ class CNotebook
      */
     private $status;
 
+    public function __construct()
+    {
+        $this->creationDate = new \DateTime();
+        $this->updateDate = new \DateTime();
+    }
+
+    public function getId()
+    {
+        return $this->getIid();
+    }
+
+    public function setId($id)
+    {
+        return $this->setIid($id);
+    }
+
+
+
     /**
      * Get iid
      *
@@ -99,6 +121,13 @@ class CNotebook
     public function getIid()
     {
         return $this->iid;
+    }
+
+    public function setIid($id)
+    {
+        $this->iid = $id;
+
+        return $this;
     }
 
     /**

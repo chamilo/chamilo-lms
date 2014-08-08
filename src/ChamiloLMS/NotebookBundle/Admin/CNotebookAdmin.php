@@ -27,6 +27,11 @@ class CNotebookAdmin extends Admin
         $formMapper
             ->add('title')
             ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
+            ->add('cId')
+            ->add('notebookId')
+            ->add('userId')
+            ->add('course')
+            ->add('sessionId')
         ;
     }
 

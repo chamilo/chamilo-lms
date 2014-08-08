@@ -22,6 +22,9 @@ require_once __DIR__.'/legacy.php';
 // using different relative paths, you must change the request
 // object to use the SiteRequest
 //$request = Request::createFromGlobals('host_with_path');
+/*use Symfony\Component\HttpFoundation\Request;
+Request::enableHttpMethodParameterOverride();
+$request = Request::createFromGlobals();*/
 $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals('host_with_path_by_locale');
 
 $kernel = new AppKernel('dev', true);

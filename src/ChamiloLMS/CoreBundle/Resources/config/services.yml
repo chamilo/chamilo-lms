@@ -95,7 +95,6 @@ services:
         arguments: [@knp_menu.factory, @chamilolms.coursebundle.course, @router]
 
     # Blocks
-
     chamilolms.corebundle.block.main_menu:
         class: ChamiloLMS\CoreBundle\Block\MainMenuBlockService
         arguments: ["chamilolms.corebundle.block.main_menu", @templating, @knp_menu.menu_provider, @chamilolms.corebundle.menu.main_menu_builder ]
@@ -112,3 +111,9 @@ services:
 
     chamilolms.userbundle.encoder:
         class: Application\Sonata\UserBundle\Security\Encoder
+
+    # Settings
+    chamilolms.settings_schema.platform:
+        class: ChamiloLMS\CoreBundle\Settings\PlatformSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: meta  }

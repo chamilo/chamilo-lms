@@ -4,12 +4,12 @@ require_once __DIR__ . '/SymfonyRequirements.php';
 
 use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Intl\Intl;
-use Symfony\Component\Process\PhpExecutableFinder;
+
 //use Oro\Bundle\InstallerBundle\Process\PhpExecutableFinder;
 
 /**
- * This class specifies all requirements and optional recommendations that are
- * necessary to run the Application.
+ * This class specifies all requirements and optional recommendations
+ * that are necessary to run the Chamilo Application.
  */
 class ChamiloRequirements extends SymfonyRequirements
 {
@@ -29,43 +29,43 @@ class ChamiloRequirements extends SymfonyRequirements
         $curlVersion = function_exists('curl_version') ? curl_version() : null;
         $icuVersion  = Intl::getIcuVersion();
 
-        $this->addRequirement(
+        $this->addChamiloRequirement(
             version_compare($phpVersion, self::REQUIRED_PHP_VERSION, '>='),
             sprintf('PHP version must be at least %s (%s installed)', self::REQUIRED_PHP_VERSION, $phpVersion),
             sprintf(
-                'You are running PHP version "<strong>%s</strong>", but Oro needs at least PHP "<strong>%s</strong>" to run.' .
-                'Before using Oro, upgrade your PHP installation, preferably to the latest version.',
+                'You are running PHP version "<strong>%s</strong>", but Chamilo needs at least PHP "<strong>%s</strong>" to run.' .
+                'Before using Chamilo, upgrade your PHP installation, preferably to the latest version.',
                 $phpVersion,
                 self::REQUIRED_PHP_VERSION
             ),
             sprintf('Install PHP %s or newer (installed version is %s)', self::REQUIRED_PHP_VERSION, $phpVersion)
         );
 
-        $this->addRequirement(
+        $this->addChamiloRequirement(
             null !== $gdVersion && version_compare($gdVersion, self::REQUIRED_GD_VERSION, '>='),
             'GD extension must be at least ' . self::REQUIRED_GD_VERSION,
             'Install and enable the <strong>GD</strong> extension at least ' . self::REQUIRED_GD_VERSION . ' version'
         );
 
-        $this->addRequirement(
+        $this->addChamiloRequirement(
             null !== $curlVersion && version_compare($curlVersion['version'], self::REQUIRED_CURL_VERSION, '>='),
             'cURL extension must be at least ' . self::REQUIRED_CURL_VERSION,
             'Install and enable the <strong>cURL</strong> extension at least ' . self::REQUIRED_CURL_VERSION . ' version'
         );
 
-        $this->addRequirement(
+        $this->addChamiloRequirement(
             function_exists('mcrypt_encrypt'),
             'mcrypt_encrypt() should be available',
             'Install and enable the <strong>Mcrypt</strong> extension.'
         );
 
-        $this->addRequirement(
+        $this->addChamiloRequirement(
             class_exists('Locale'),
             'intl extension should be available',
             'Install and enable the <strong>intl</strong> extension.'
         );
 
-        $this->addRequirement(
+        $this->addChamiloRequirement(
             null !== $icuVersion && version_compare($icuVersion, self::REQUIRED_ICU_VERSION, '>='),
             'icu library must be at least ' . self::REQUIRED_ICU_VERSION,
             'Install and enable the <strong>icu</strong> library at least ' . self::REQUIRED_ICU_VERSION . ' version'
@@ -103,9 +103,9 @@ class ChamiloRequirements extends SymfonyRequirements
 
         // Web installer specific checks
         if ('cli' !== PHP_SAPI) {
-            //$output = $this->checkCliRequirements();
+            /*$output = $this->checkCliRequirements();
 
-            /*$requirement = new CliRequirement(
+            $requirement = new CliRequirement(
                 !$output,
                 'Requirements validation for PHP CLI',
                 'If you have multiple PHP versions installed, you need to configure ORO_PHP_PATH variable with PHP binary path used by web server'
@@ -135,31 +135,32 @@ class ChamiloRequirements extends SymfonyRequirements
             'Install the <strong>NodeJS</strong>.'
         );
 
-        $this->addRequirement(
+        $this->addChamiloRequirement(
             is_writable($baseDir . '/web/uploads'),
             'web/uploads/ directory must be writable',
             'Change the permissions of the "<strong>web/uploads/</strong>" directory so that the web server can write into it.'
-        );/*
-        $this->addRequirement(
+        );
+
+        /*$this->addChamiloRequirement(
             is_writable($baseDir . '/web/media'),
             'web/media/ directory must be writable',
             'Change the permissions of the "<strong>web/media/</strong>" directory so that the web server can write into it.'
-        );*/
-        $this->addRequirement(
+        );
+
+        $this->addChamiloRequirement(
             is_writable($baseDir . '/web/bundles'),
             'web/bundles/ directory must be writable',
             'Change the permissions of the "<strong>web/bundles/</strong>" directory so that the web server can write into it.'
-        );
-        /*
-        $this->addRequirement(
+        );*/
+
+        /*$this->addChamiloRequirement(
             is_writable($baseDir . '/app/attachment'),
             'app/attachment/ directory must be writable',
             'Change the permissions of the "<strong>app/attachment/</strong>" directory so that the web server can write into it.'
         );*/
 
-
         if (is_dir($baseDir . '/web/js')) {
-            $this->addRequirement(
+            $this->addChamiloRequirement(
                 is_writable($baseDir . '/web/js'),
                 'web/js directory must be writable',
                 'Change the permissions of the "<strong>web/js</strong>" directory so that the web server can write into it.'
@@ -167,7 +168,7 @@ class ChamiloRequirements extends SymfonyRequirements
         }
 
         if (is_dir($baseDir . '/web/css')) {
-            $this->addRequirement(
+            $this->addChamiloRequirement(
                 is_writable($baseDir . '/web/css'),
                 'web/css directory must be writable',
                 'Change the permissions of the "<strong>web/css</strong>" directory so that the web server can write into it.'
@@ -175,7 +176,7 @@ class ChamiloRequirements extends SymfonyRequirements
         }
 
         if (!is_dir($baseDir . '/web/css') || !is_dir($baseDir . '/web/js')) {
-            $this->addRequirement(
+            $this->addChamiloRequirement(
                 is_writable($baseDir . '/web'),
                 'web directory must be writable',
                 'Change the permissions of the "<strong>web</strong>" directory so that the web server can write into it.'
@@ -183,7 +184,7 @@ class ChamiloRequirements extends SymfonyRequirements
         }
 
         if (is_file($baseDir . '/app/config/parameters.yml')) {
-            $this->addRequirement(
+            $this->addChamiloRequirement(
                 is_writable($baseDir . '/app/config/parameters.yml'),
                 'app/config/parameters.yml file must be writable',
                 'Change the permissions of the "<strong>app/config/parameters.yml</strong>" file so that the web server can write into it.'
@@ -193,14 +194,14 @@ class ChamiloRequirements extends SymfonyRequirements
     }
 
     /**
-     * Adds an Oro specific requirement.
+     * Adds an Chamilo specific requirement.
      *
-     * @param Boolean     $fulfilled Whether the requirement is fulfilled
+     * @param boolean     $fulfilled Whether the requirement is fulfilled
      * @param string      $testMessage The message for testing the requirement
      * @param string      $helpHtml The help text formatted in HTML for resolving the problem
      * @param string|null $helpText The help text (when null, it will be inferred from $helpHtml, i.e. stripped from HTML tags)
      */
-    public function addRequirement($fulfilled, $testMessage, $helpHtml, $helpText = null)
+    public function addChamiloRequirement($fulfilled, $testMessage, $helpHtml, $helpText = null)
     {
         $this->add(new ChamiloRequirement($fulfilled, $testMessage, $helpHtml, $helpText, false));
     }
@@ -216,7 +217,7 @@ class ChamiloRequirements extends SymfonyRequirements
             $this->getRequirements(),
             function ($requirement) {
                 return !($requirement instanceof PhpIniRequirement)
-                && !($requirement instanceof OroRequirement)
+                && !($requirement instanceof ChamiloRequirement)
                 && !($requirement instanceof CliRequirement);
             }
         );
@@ -238,16 +239,16 @@ class ChamiloRequirements extends SymfonyRequirements
     }
 
     /**
-     * Get the list of Oro specific requirements
+     * Get the list of Chamilo specific requirements
      *
      * @return array
      */
-    public function getOroRequirements()
+    public function getChamiloRequirements()
     {
         return array_filter(
             $this->getRequirements(),
             function ($requirement) {
-                return $requirement instanceof OroRequirement;
+                return $requirement instanceof ChamiloRequirement;
             }
         );
     }
@@ -379,14 +380,13 @@ class ChamiloRequirements extends SymfonyRequirements
     {
         $finder  = new PhpExecutableFinder();
         $command = sprintf(
-            '%s %scheck.php',
+            '%s %schamilo-check.php',
             $finder->find(),
             __DIR__ . DIRECTORY_SEPARATOR
         );
 
         return shell_exec($command);
     }
-
 }
 
 class ChamiloRequirement extends Requirement

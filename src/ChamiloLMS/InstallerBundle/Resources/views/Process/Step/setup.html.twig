@@ -1,0 +1,25 @@
+{% extends 'ChamiloLMSInstallerBundle::layout.html.twig' %}
+
+{% set step = 'setup' %}
+{% block title %}
+    {% autoescape false %}
+    {{ 'process.step.setup.header'|trans }} - {{ parent() }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ 'process.step.setup.header'|trans|raw }}</h2>
+</div>
+
+<form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'chamilo_installer', 'stepName': 'setup'}) }}" method="post" class="form-horizontal">
+    <div>{{ form_widget(form) }}</div>
+    <div class="form-actions">
+        <a href="{{ path('sylius_flow_display', {'scenarioAlias': 'chamilo_installer', 'stepName': 'configure'}) }}" class="btn btn-default btn-lg"><i class="icon-chevron-left"></i>
+            {{ 'process.button.back'|trans }}</a> &nbsp;
+        <button class="btn btn-lg btn-primary" type="submit">
+            <i class="icon-magic"></i> {{ 'process.button.install'|trans }}
+        </button>
+    </div>
+</form>
+{% endblock %}

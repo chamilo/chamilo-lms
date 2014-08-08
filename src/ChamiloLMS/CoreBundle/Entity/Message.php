@@ -8,6 +8,7 @@ use FOS\MessageBundle\Entity\Message as BaseMessage;
 use Avanzu\AdminThemeBundle\Model\MessageInterface as ThemeMessage;
 
 /**
+ * @ORM\Table(name="message")
  * @ORM\Entity
  */
 class Message extends BaseMessage implements ThemeMessage

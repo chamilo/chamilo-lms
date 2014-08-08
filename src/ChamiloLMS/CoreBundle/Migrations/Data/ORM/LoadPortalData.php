@@ -1,6 +1,6 @@
 <?php
 
-namespace ChamiloLMS\CoreBundle\DataFixtures\ORM;
+namespace ChamiloLMS\CoreBundle\Migrations\Data\ORM;
 
 use ChamiloLMS\CoreBundle\Entity\CourseCategory;
 use ChamiloLMS\CoreBundle\Entity\CourseField;
@@ -25,21 +25,33 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\Finder\Finder;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
 /**
  * Class LoadPortalData
  * @package ChamiloLMS\CoreBundle\DataFixtures\ORM
  */
-class LoadPortalData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+class LoadPortalData extends AbstractFixture implements
+    ContainerAwareInterface,
+    OrderedFixtureInterface,
+    VersionedFixtureInterface
 {
     private $container;
 
     /**
-     * @return int
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.0';
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getOrder()
     {
-        return 2;
+        return 5;
     }
 
     /**
@@ -131,8 +143,10 @@ class LoadPortalData extends AbstractFixture implements ContainerAwareInterface,
             $manager->persist($lang);
         }
 
+        $adminUser = $this->getUserManager()->findUserByUsername('admin');
+
         // Ids used
-        $adminUserId = $this->getReference('admin-user')->getId();
+        $adminUserId = $adminUser->getId();
         $accessUrlId = 1;
 
         $accessUrl = new AccessUrl();
@@ -275,4 +289,13 @@ class LoadPortalData extends AbstractFixture implements ContainerAwareInterface,
     {
         return $this->container->get('faker.generator');
     }
+
+    /**
+     * @return \FOS\UserBundle\Model\UserManagerInterface
+     */
+    public function getUserManager()
+    {
+        return $this->container->get('fos_user.user_manager');
+    }
+
 }

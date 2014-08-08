@@ -1,6 +1,6 @@
 <?php
 
-namespace ChamiloLMS\CoreBundle\DataFixtures\ORM;
+namespace ChamiloLMS\CoreBundle\Migrations\Data\ORM;
 
 use ChamiloLMS\CoreBundle\Entity\SettingsCurrent;
 use ChamiloLMS\CoreBundle\Entity\SettingsOptions;
@@ -14,21 +14,33 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\Finder\Finder;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
 /**
  * Class LoadSettingsData
  * @package ChamiloLMS\CoreBundle\DataFixtures\ORM
  */
-class LoadSettingsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+class LoadSettingsData extends AbstractFixture implements
+    ContainerAwareInterface,
+    OrderedFixtureInterface,
+    VersionedFixtureInterface
 {
     private $container;
 
     /**
-     * @return int
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.0';
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getOrder()
     {
-        return 4;
+        return 7;
     }
 
     /**

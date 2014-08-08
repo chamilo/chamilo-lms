@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\MessageBundle\Entity\ThreadMetadata as BaseThreadMetadata;
 
 /**
+ * @ORM\Table(name="thread_metadata")
  * @ORM\Entity
  */
 class ThreadMetadata extends BaseThreadMetadata

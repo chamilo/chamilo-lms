@@ -1,6 +1,6 @@
 <?php
 
-namespace ChamiloLMS\CoreBundle\DataFixtures\ORM;
+namespace ChamiloLMS\CoreBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -13,14 +13,29 @@ use Sonata\PageBundle\Model\PageInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Tests\Unit\Doctrine\Orm\ContentRepositoryTest;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
-class LoadPageData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+class LoadPageData extends AbstractFixture implements
+    ContainerAwareInterface,
+    OrderedFixtureInterface,
+    VersionedFixtureInterface
 {
     private $container;
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getOrder()
     {
-        return 3;
+        return 6;
     }
 
     public function setContainer(ContainerInterface $container = null)

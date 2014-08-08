@@ -1,6 +1,6 @@
 <?php
 
-namespace ChamiloLMS\CoreBundle\DataFixtures\ORM;
+namespace ChamiloLMS\CoreBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -9,14 +9,29 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
-class LoadUserData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+class LoadUserData extends AbstractFixture implements
+    ContainerAwareInterface,
+    OrderedFixtureInterface,
+    VersionedFixtureInterface
 {
     private $container;
 
-    function getOrder()
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
     {
-        return 1;
+        return '1.0';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrder()
+    {
+        return 3;
     }
 
     /**
@@ -36,32 +51,8 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         $groupManager = $this->getGroupManager();
         $faker = $this->getFaker();
 
-        // Creating groups
-        $studentGroup = $groupManager->createGroup('students');
-        $studentGroup->addRole('ROLE_STUDENT');
-
-        $groupManager->updateGroup($studentGroup);
-
-        $teacherGroup = $groupManager->createGroup('teachers');
-        $teacherGroup->addRole('ROLE_TEACHER');
-        $groupManager->updateGroup($teacherGroup);
-
-        // Creating admin user.
-        $admin = $manager->createUser();
-
-        $admin->setUsername('admin');
-        $admin->setUserId(1);
-        $admin->setFirstname('Jane');
-        $admin->setLastname('Doe');
-        $admin->setEmail($faker->safeEmail);
-        $admin->setPlainPassword('admin');
-        $admin->setEnabled(true);
-        $admin->setSuperAdmin(true);
-        $admin->setLocked(false);
-
-        $manager->updateUser($admin);
-
-        $this->addReference('admin-user', $admin);
+        $studentGroup = $groupManager->findGroupByName('students');
+        $teacherGroup = $groupManager->findGroupByName('teachers');
 
         // Creating student user.
 

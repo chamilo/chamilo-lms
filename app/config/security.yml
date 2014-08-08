@@ -34,17 +34,22 @@ security:
           pattern:  ^/(_(profiler|wdt)|css|images|js|admin/_(wdt|profiler)|api/_(wdt|profiler))/
           security: false
 
+        install:
+            pattern:                        ^/installer
+            security:                       false
+            anonymous:                      true
+
         admin:
-            pattern:            /admin(.*)
+            pattern:            /administration(.*)
             context:            user
             form_login:
                 provider:       fos_userbundle
-                login_path:     /login
+                login_path:     /administration/login
                 use_forward:    false
-                check_path:     /admin/login_check
+                check_path:     /administration/login_check
                 failure_path:   null
             logout:
-                path:           /admin/logout
+                path:           /administration/logout
             anonymous:          true
 
         main:
@@ -72,14 +77,14 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         # Admin login page needs to be access without credential
-        - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/administration/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/administration/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/administration/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         # Secured part of the site
         # This config requires being logged for the whole site and having the admin role for the admin part.
         # Change these rules to adapt them to your needs
-        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+        - { path: ^/administration/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
         - { path: ^/profile/, role: IS_AUTHENTICATED_FULLY }
         - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
 

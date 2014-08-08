@@ -1,6 +1,6 @@
 <?php
 
-namespace ChamiloLMS\CoreBundle\DataFixtures\ORM;
+namespace ChamiloLMS\CoreBundle\Migrations\Data\ORM;
 
 use ChamiloLMS\CoreBundle\Entity\UserField;
 use ChamiloLMS\CoreBundle\Entity\UserFieldOptions;
@@ -12,21 +12,33 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
 /**
  * Class LoadUserFieldData
  * @package ChamiloLMS\CoreBundle\DataFixtures\ORM
  */
-class LoadUserFieldData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+class LoadUserFieldData extends AbstractFixture implements
+    ContainerAwareInterface,
+    OrderedFixtureInterface,
+    VersionedFixtureInterface
 {
     private $container;
 
     /**
-     * @return int
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.0';
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getOrder()
     {
-        return 5;
+        return 4;
     }
 
     /**

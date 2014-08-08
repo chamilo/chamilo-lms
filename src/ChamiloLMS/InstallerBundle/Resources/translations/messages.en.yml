@@ -1,0 +1,93 @@
+flashes:
+    installed: Chamilo has been successfully installed.
+form:
+    configuration:
+        database:
+            header: Database connection
+            driver:
+                0: Driver
+                microsoft_sql_server: Microsoft SQL Server
+                mysql: MySQL
+                oracle: Oracle
+                postgresql: PostgreSQL
+                sqlite: SQLite
+            host: Host
+            name: Name
+            password: Password
+            port: Port
+            user: User
+            drop_full:    Drop Full Database
+        locale:
+            header: Locale settings
+            currency: Currency
+            locale: Locale
+        mailer:
+            header: Mailer settings
+            host: Host
+            password: Password
+            transport:
+                0: Transport
+                gmail: Gmail
+                mail: Mail
+                sendmail: Sendmail
+                smtp: SMTP
+            user: User
+        system:
+            header:       System settings
+            secret:       Secret
+            locale:       Locale
+    setup:
+        email:            Email
+        company_name:     Company short name
+        company_title:    Company name
+        username:         Username
+        firstname:        First name
+        lastname:         Last name
+        password:         Password
+        password_re:      Re-enter password
+        load_fixtures:    Load Sample Data
+
+process:
+    step:
+        welcome:
+            content: <p>Welcome to Chamilo installer.</p>
+            header: Welcome <small>Chamilo installer</small>
+        check:
+            header: System requirements check
+        configure:
+            header: Configuration
+        schema:
+            header:        Database initialization
+            cache:         Clear cache before database initialization
+            clear-config:  Clear entities cache
+            clear-extend:  Clear extended entities data
+            schema-drop:   Drop current schema
+            schema-update: Schema update
+            fixtures:      Load fixtures
+            workflows:     Load workflow definitions
+            processes:     Load processes configuration
+        setup:
+            header: Administration setup
+        installation:
+            header:        Installation
+            fixtures:      Load sample data
+            navigation:    Init navigation
+            js-routing:    Dump JS routing
+            localization:  Dump localization
+            assets:        Install assets
+            assetic:       Dump assetic
+            translation:   Prepare translations
+            requirejs:     Optimize JS resources (optional)
+            finish:        Clear cache to finalize installation
+        final:
+            header:        Finish
+            greeting:      Success!!!
+            content:       You are now ready to start using Chamilo.<br>For help please join our community <a href="http://www.chamilo.org/forums">forums</a>.
+
+    button:
+        back:              Back
+        next:              Next
+        install:           Install
+        finish:            Launch application
+    operation:             Operation
+    status:                Status

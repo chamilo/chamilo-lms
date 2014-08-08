@@ -8,6 +8,7 @@ use FOS\MessageBundle\Model\MessageInterface;
 use FOS\MessageBundle\Model\ParticipantInterface;
 
 /**
+ * @ORM\Table(name="message_metadata")
  * @ORM\Entity
  */
 class MessageMetadata extends BaseMessageMetadata

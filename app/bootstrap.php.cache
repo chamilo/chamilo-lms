@@ -1981,6 +1981,9 @@ if (self::SCOPE_PROTOTYPE === $scope) {
 throw new InvalidArgumentException(sprintf('You cannot set service "%s" of scope "prototype".', $id));
 }
 $id = strtolower($id);
+if ('service_container'=== $id) {
+return;
+}
 if (self::SCOPE_CONTAINER !== $scope) {
 if (!isset($this->scopedServices[$scope])) {
 throw new RuntimeException(sprintf('You cannot set service "%s" of inactive scope.', $id));
@@ -2001,6 +2004,9 @@ unset($this->services[$id]);
 public function has($id)
 {
 $id = strtolower($id);
+if ('service_container'=== $id) {
+return true;
+}
 return isset($this->services[$id])
 || array_key_exists($id, $this->services)
 || isset($this->aliases[$id])
@@ -2012,6 +2018,9 @@ public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE
 foreach (array(false, true) as $strtolower) {
 if ($strtolower) {
 $id = strtolower($id);
+}
+if ('service_container'=== $id) {
+return $this;
 }
 if (isset($this->aliases[$id])) {
 $id = $this->aliases[$id];
@@ -2061,6 +2070,9 @@ return $service;
 public function initialized($id)
 {
 $id = strtolower($id);
+if ('service_container'=== $id) {
+return true;
+}
 return isset($this->services[$id]) || array_key_exists($id, $this->services);
 }
 public function getServiceIds()
@@ -2072,6 +2084,7 @@ if (preg_match('/^get(.+)Service$/', $method->name, $match)) {
 $ids[] = self::underscore($match[1]);
 }
 }
+$ids[] ='service_container';
 return array_unique(array_merge($ids, array_keys($this->services)));
 }
 public function enterScope($name)
@@ -2244,11 +2257,11 @@ protected $booted = false;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.5.2';
-const VERSION_ID ='20502';
+const VERSION ='2.5.3';
+const VERSION_ID ='20503';
 const MAJOR_VERSION ='2';
 const MINOR_VERSION ='5';
-const RELEASE_VERSION ='2';
+const RELEASE_VERSION ='3';
 const EXTRA_VERSION ='';
 public function __construct($environment, $debug)
 {

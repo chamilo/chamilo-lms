@@ -11,6 +11,13 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
+            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
+            new Sylius\Bundle\SettingsBundle\SyliusSettingsBundle(),
+            new Sylius\Bundle\FlowBundle\SyliusFlowBundle(),
+
+            new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
+
+
             // Symfony standard edition
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -124,16 +131,25 @@ class AppKernel extends Kernel
             new FOS\MessageBundle\FOSMessageBundle(),
 
             // Chamilo
+            new ChamiloLMS\InstallerBundle\ChamiloLMSInstallerBundle(),
             new ChamiloLMS\CoreBundle\ChamiloLMSCoreBundle(),
             new ChamiloLMS\CourseBundle\ChamiloLMSCourseBundle(),
-            new ChamiloLMS\InstallerBundle\ChamiloLMSInstallerBundle(),
             new ChamiloLMS\MessageBundle\ChamiloLMSMessageBundle(),
 
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new ChamiloLMS\NotebookBundle\ChamiloLMSNotebookBundle(),
+            new APY\DataGridBundle\APYDataGridBundle(),
+            new JMS\TranslationBundle\JMSTranslationBundle(),
+
+            //new FOS\RestBundle\FOSRestBundle(),
+            //new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            new Sp\BowerBundle\SpBowerBundle(),
+            new Oro\Bundle\MigrationBundle\OroMigrationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+            //$bundles[] = new Jjanvier\Bundle\CrowdinBundle\JjanvierCrowdinBundle(),
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();

@@ -1,3 +1,5 @@
+title: Chamilo Application installation
+
 flashes:
     installed: Chamilo has been successfully installed.
 form:
@@ -50,8 +52,8 @@ form:
 process:
     step:
         welcome:
-            content: <p>Welcome to Chamilo installer.</p>
-            header: Welcome <small>Chamilo installer</small>
+            header: Welcome!
+            content: <p>Welcome to the installer.</p>
         check:
             header: System requirements check
         configure:

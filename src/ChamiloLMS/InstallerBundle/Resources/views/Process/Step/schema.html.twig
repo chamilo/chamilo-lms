@@ -1,8 +1,7 @@
 {% extends 'ChamiloLMSInstallerBundle::layout.html.twig' %}
-{% use 'ChamiloLMSInstallerBundle::progress.html.twig' %}
-
 {#{% set step, steps = 'schema', ['cache', 'schema-drop', 'clear-config', 'clear-extend', 'schema-update', 'workflows', 'processes', 'fixtures'] %}#}
 {% set step, steps = 'schema', ['cache', 'schema-drop', 'schema-update', 'fixtures'] %}
+{% use 'ChamiloLMSInstallerBundle::progress.html.twig' %}
 
 {% block title %}
     {% autoescape false %}

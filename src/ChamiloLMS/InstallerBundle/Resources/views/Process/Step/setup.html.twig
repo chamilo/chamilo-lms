@@ -1,6 +1,7 @@
 {% extends 'ChamiloLMSInstallerBundle::layout.html.twig' %}
-
 {% set step = 'setup' %}
+{% use 'ChamiloLMSInstallerBundle::progress.html.twig' %}
+
 {% block title %}
     {% autoescape false %}
     {{ 'process.step.setup.header'|trans }} - {{ parent() }}

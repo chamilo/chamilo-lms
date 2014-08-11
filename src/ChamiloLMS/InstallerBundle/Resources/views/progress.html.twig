@@ -1,38 +1,40 @@
 {% block progress %}
 {% set step = step is defined ? step|lower : 'welcome' %}
-<div class="container">
-    <ul class="nav nav-wizard">
-        <li{% if step == 'welcome' %} class="active"{% endif %}>
-            <em class="fix-bg">&nbsp;</em>
-            <strong class="step">1</strong>
-            <span>{{ 'process.step.welcome.header'|trans }}</span>
-        </li>
-        <li{% if step == 'check' %} class="active"{% endif %}>
-            <em class="fix-bg">&nbsp;</em>
-            <strong class="step">2</strong>
-            <span>{{ 'process.step.check.header'|trans }}</span>
-        </li>
-        <li{% if step == 'configure' %} class="active"{% endif %}>
-            <em class="fix-bg">&nbsp;</em>
-            <strong class="step">3</strong>
-            <span>{{ 'process.step.configure.header'|trans }}</span>
-        </li>
-        <li{% if step == 'schema' %} class="active"{% endif %}>
-            <em class="fix-bg">&nbsp;</em>
-            <strong class="step">4</strong>
-            <span>{{ 'process.step.schema.header'|trans }}</span>
-        </li>
-        <li{% if step == 'setup' %} class="active"{% endif %}>
-            <em class="fix-bg">&nbsp;</em>
-            <strong class="step">5</strong>
-            <span>{{ 'process.step.setup.header'|trans }}</span>
-        </li>
-        <li{% if step == 'final' %} class="active"{% endif %}>
-            <em class="fix-bg">&nbsp;</em>
-            <strong class="step">6</strong>
-            <span>{{ 'process.step.final.header'|trans }}</span>
-        </li>
-    </ul>
+<div class="row">
+    <div class="col-sm-12">
+        <ul class="nav nav-wizard">
+            <li{% if step == 'welcome' %} class="active"{% endif %}>
+                <em class="fix-bg">&nbsp;</em>
+                <strong class="step">1</strong>
+                <span>{{ 'process.step.welcome.header'|trans }}</span>
+            </li>
+            <li{% if step == 'check' %} class="active"{% endif %}>
+                <em class="fix-bg">&nbsp;</em>
+                <strong class="step">2</strong>
+                <span>{{ 'process.step.check.header'|trans }}</span>
+            </li>
+            <li{% if step == 'configure' %} class="active"{% endif %}>
+                <em class="fix-bg">&nbsp;</em>
+                <strong class="step">3</strong>
+                <span>{{ 'process.step.configure.header'|trans }}</span>
+            </li>
+            <li{% if step == 'schema' %} class="active"{% endif %}>
+                <em class="fix-bg">&nbsp;</em>
+                <strong class="step">4</strong>
+                <span>{{ 'process.step.schema.header'|trans }}</span>
+            </li>
+            <li{% if step == 'setup' %} class="active"{% endif %}>
+                <em class="fix-bg">&nbsp;</em>
+                <strong class="step">5</strong>
+                <span>{{ 'process.step.setup.header'|trans }}</span>
+            </li>
+            <li{% if step == 'final' %} class="active"{% endif %}>
+                <em class="fix-bg">&nbsp;</em>
+                <strong class="step">6</strong>
+                <span>{{ 'process.step.final.header'|trans }}</span>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <style>

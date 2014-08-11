@@ -116,4 +116,4 @@ services:
     chamilolms.settings_schema.platform:
         class: ChamiloLMS\CoreBundle\Settings\PlatformSettingsSchema
         tags:
-            - { name: sylius.settings_schema, namespace: meta  }
+            - { name: sylius.settings_schema, namespace: platform  }

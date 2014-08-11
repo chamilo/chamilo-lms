@@ -17,7 +17,7 @@ class MailerType extends AbstractType
                 'chamilo_installer_mailer_transport',
                 'choice',
                 array(
-                    'label'         => 'form.configuration.mailer.transport',
+                    'label'         => 'form.configuration.mailer.transport.header',
                     'preferred_choices' => array('mail'),
                     'choices'       => array(
                         'mail'      => 'PHP mail',

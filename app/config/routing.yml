@@ -57,8 +57,11 @@ chamilolms_installer:
     resource: "@ChamiloLMSInstallerBundle/Resources/config/routing.yml"
 
 sylius_settings:
-    resource: @SyliusSettingsBundle/Resources/config/routing.yml
-    prefix: /settings
+    pattern: /settings
+    defaults:
+        _controller: sylius.controller.settings:updateAction
+        namespace: platform
+        template: SyliusSettingsBundle:Settings:update.html.twig
 
 # Always at the end
 core_bundle:

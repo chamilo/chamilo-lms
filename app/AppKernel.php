@@ -11,10 +11,16 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
-            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
-            new Sylius\Bundle\SettingsBundle\SyliusSettingsBundle(),
-            new Sylius\Bundle\FlowBundle\SyliusFlowBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
+            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+
+            // Sylius
+            new Sylius\Bundle\SettingsBundle\SyliusSettingsBundle(),
+            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
+            new Sylius\Bundle\FlowBundle\SyliusFlowBundle(),
 
             // Symfony standard edition
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
@@ -64,7 +70,6 @@ class AppKernel extends Kernel
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
 
             // API
-            new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
 
             // E-COMMERCE
@@ -85,7 +90,6 @@ class AppKernel extends Kernel
             new Sonata\PriceBundle\SonataPriceBundle(),
 
             */
-            new JMS\SerializerBundle\JMSSerializerBundle($this),
             new FOS\CommentBundle\FOSCommentBundle(),
             new Sonata\CommentBundle\SonataCommentBundle(),
             new Application\Sonata\CommentBundle\ApplicationSonataCommentBundle(),
@@ -134,14 +138,13 @@ class AppKernel extends Kernel
             new ChamiloLMS\CourseBundle\ChamiloLMSCourseBundle(),
             new ChamiloLMS\MessageBundle\ChamiloLMSMessageBundle(),
 
-            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+
             new ChamiloLMS\NotebookBundle\ChamiloLMSNotebookBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
             new JMS\TranslationBundle\JMSTranslationBundle(),
 
             //new FOS\RestBundle\FOSRestBundle(),
             //new JMS\SerializerBundle\JMSSerializerBundle($this),
-            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             new Sp\BowerBundle\SpBowerBundle(),
             new Oro\Bundle\MigrationBundle\OroMigrationBundle(),
         );

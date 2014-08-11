@@ -12,24 +12,29 @@ class PlatformSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                    'title'            => 'Sylius - Modern ecommerce for Symfony2',
-                    'meta_keywords'    => 'symfony, sylius, ecommerce, webshop, shopping cart',
-                    'meta_description' => 'Sylius is modern ecommerce solution for PHP. Based on the Symfony2 framework.',
-                ))
+                'portal_name' => 'Campus Chamilo',
+                'company_title'    => 'Chamilo Association',
+                'company_url' => 'http://www.chamilo.org',
+                'enable_help_link' => ''
+            ))
             ->setAllowedTypes(array(
-                    'title'            => array('string'),
-                    'meta_keywords'    => array('string'),
-                    'meta_description' => array('string'),
-                ))
+                'portal_name' => array('string'),
+                'company_title' => array('string'),
+                'company_url' => array('string'),
+                'enable_help_link' => array('string'),
+            ))
         ;
     }
 
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('title')
-            ->add('meta_keywords')
-            ->add('meta_description', 'textarea')
+            ->add('portal_name')
+            ->add('company_title')
+            ->add('company_url')
+            ->add('enable_help_link', 'choice', array('choices' =>
+                array('true' => 'Yes', 'no' => 'No'))
+            )
         ;
     }
 }

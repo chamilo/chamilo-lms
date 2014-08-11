@@ -1,20 +1,19 @@
-{% extends 'OroFormBundle:Form:fields.html.twig' %}
+{% block _chamilo_installer_configuration_mailer_chamilo_installer_mailer_transport_row %}
 
-{% block _oro_installer_configuration_mailer_oro_installer_mailer_transport_row %}
 <script type="text/javascript">
     $(function () {
-        var con = $('#oro_installer_configuration_mailer');
+        var con = $('#chamilo_installer_configuration_mailer');
 
         checkTransport();
 
-        con.find('.control-group:first select').change(checkTransport);
+        con.find('.form-group:first select').change(checkTransport);
 
         function checkTransport() {
-            if (con.find('.control-group:first select').val() != 'smtp') {
-                con.find('.control-group:not(:first)').hide()
+            if (con.find('.form-group:first select').val() != 'smtp') {
+                con.find('.form-group:not(:first)').hide()
                    .find('input').attr('disabled', 'disabled');
             } else {
-                con.find('.control-group:not(:first)').show()
+                con.find('.form-group:not(:first)').show()
                     .find('input').attr('disabled', null);
             }
         }

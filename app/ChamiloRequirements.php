@@ -5,7 +5,7 @@ require_once __DIR__ . '/SymfonyRequirements.php';
 use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Intl\Intl;
 
-//use Oro\Bundle\InstallerBundle\Process\PhpExecutableFinder;
+use ChamiloLMS\InstallerBundle\Process\PhpExecutableFinder;
 
 /**
  * This class specifies all requirements and optional recommendations
@@ -103,17 +103,17 @@ class ChamiloRequirements extends SymfonyRequirements
 
         // Web installer specific checks
         if ('cli' !== PHP_SAPI) {
-            /*$output = $this->checkCliRequirements();
+            $output = $this->checkCliRequirements();
 
             $requirement = new CliRequirement(
                 !$output,
                 'Requirements validation for PHP CLI',
-                'If you have multiple PHP versions installed, you need to configure ORO_PHP_PATH variable with PHP binary path used by web server'
+                'If you have multiple PHP versions installed, you need to configure CHAMILO_PHP_PATH variable with PHP binary path used by web server'
             );
 
             $requirement->setOutput($output);
 
-            $this->add($requirement);*/
+            $this->add($requirement);
         }
 
         $baseDir = realpath(__DIR__ . '/..');
@@ -129,11 +129,11 @@ class ChamiloRequirements extends SymfonyRequirements
             'Set the "<strong>memory_limit</strong>" setting in php.ini<a href="#phpini">*</a> to at least "256M".'
         );
 
-        $this->addRecommendation(
+        /*$this->addRecommendation(
             $this->checkNodeExists(),
             'NodeJS should be installed',
             'Install the <strong>NodeJS</strong>.'
-        );
+        );*/
 
         $this->addChamiloRequirement(
             is_writable($baseDir . '/web/uploads'),

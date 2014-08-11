@@ -28,7 +28,7 @@ form:
             host: Host
             password: Password
             transport:
-                0: Transport
+                header: Transport
                 gmail: Gmail
                 mail: Mail
                 sendmail: Sendmail
@@ -39,14 +39,23 @@ form:
             secret:       Secret
             locale:       Locale
     setup:
-        email:            Email
-        company_name:     Company short name
-        company_title:    Company name
-        username:         Username
-        firstname:        First name
-        lastname:         Last name
-        password:         Password
-        password_re:      Re-enter password
+        admin:
+            header: Admin information
+            username:         Username
+            firstname:        First name
+            lastname:         Last name
+            password:         Password
+            password_re:      Re-enter password
+            email:            Email
+            phone:            Phone
+        portal:
+            header: Portal information
+            portal_name: Portal name
+            company_title:    Company name
+            company_url: Company URL
+            allow_self_registration_as_trainer: Allow self-registration as a trainer
+            allow_self_registration: Allow self-registration
+
         load_fixtures:    Load Sample Data
 
 process:

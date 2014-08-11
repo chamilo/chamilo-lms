@@ -1,6 +1,7 @@
 {% extends 'ChamiloLMSInstallerBundle::layout.html.twig' %}
 {% set step = 'configure' %}
 {% use 'ChamiloLMSInstallerBundle::progress.html.twig' %}
+{% form_theme form with 'ChamiloLMSInstallerBundle:Form:fields.html.twig' %}
 
 {% block title %}
     {% autoescape false %}
@@ -26,26 +27,22 @@
      <div>
         <form action="{{ path('sylius_flow_forward', { scenarioAlias: 'chamilo_installer', stepName: 'configure'}) }}" method="post">
             {{ form_errors(form) }}
-
             <div class="row">
-                <div class="box">
+                <div class="col-sm-6">
                     <h3 class="sub-title">{{ form.database.vars.label|trans }}</h3>
-
                     {{ form_widget(form.database) }}
                 </div>
-                <div class="box">
+                <div class="col-sm-6">
                     <h3 class="sub-title">{{ form.mailer.vars.label|trans }}</h3>
 
                     {{ form_widget(form.mailer) }}
                 </div>
             </div>
             <div class="row">
-                <div class="box">
+                <div class="col-sm-12">
                     <h3 class="sub-title">{{ form.system.vars.label|trans }}</h3>
-
                     {{ form_widget(form.system) }}
                 </div>
-
                 {{ form_rest(form) }}
             </div>
 

@@ -9,10 +9,5 @@ foreach ($requirements->getChamiloRequirements() as $requirement) {
     /** @var Requirement $requirement */
     if (!$requirement->isFulfilled()) {
         echo $requirement->getTestMessage() . "\n";
-        $requirementNeeded = false;
     }
-}
-
-if ($requirementNeeded == true) {
-    echo 'Chamilo is ready to be installed.';
 }

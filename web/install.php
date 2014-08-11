@@ -21,8 +21,6 @@ if (file_exists($paramFile)) {
         && isset($data['parameters']['installed'])
         && false != $data['parameters']['installed']
     ) {
-
-
         require_once __DIR__.'/app_dev.php';
         exit;
 
@@ -69,7 +67,21 @@ function iterateRequirements(array $collection)
                 <pre class="output"><?php echo $requirement->getOutput(); ?></pre>
             <?php endif; ?>
         </td>
-        <td><?php echo $requirement->isFulfilled() ? '<span class="label label-success">OK</span>' : $requirement->getHelpHtml(); ?></td>
+        <td>
+            <?php
+                if ($requirement->isFulfilled()) {
+                    echo '<span class="label label-success">OK</span>';
+                } else {
+                    if (!$requirement->isOptional()) {
+                        echo '<span class="label label-danger">';
+                    } else {
+                        echo '<span class="label label-warning">';
+                    }
+                    $requirement->getHelpHtml();
+                    echo '</span>';
+                }
+            ?>
+        </td>
     </tr>
 <?php
     endforeach;
@@ -116,6 +128,17 @@ function iterateRequirements(array $collection)
             <?php endif; ?>
         });
     </script>
+    <style>
+        td pre.output {
+            background-color: #232125;
+            overflow: auto;
+            line-height: 1.3em;
+            color: #fff;
+            font-size: 14px;
+            padding: .7em;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">

@@ -8,11 +8,12 @@
  * Init
  */
 require_once '../inc/global.inc.php';
-exit;
+//exit;
 $document_id = $_GET['id'];
+$courseCode = api_get_course_id();
 
 if ($document_id) {
-    $document_data = DocumentManager::get_document_data_by_id($document_id);
+    $document_data = DocumentManager::get_document_data_by_id($document_id, $courseCode);
     if (empty($document_data)) {
         api_not_allowed();
     }
@@ -38,24 +39,36 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     $show_web_odf  = true;
 }
 
-$file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
+$file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file;
 
 if ($show_web_odf) {
-    $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
-    $htmlHeadXtra[] = '
+    //$htmlHeadXtra[] = api_get_js('webodf/webodf.js');
+    $htmlHeadXtra[] = api_get_js('wodotexteditor/wodotexteditor.js');
+    $htmlHeadXtra[] = api_get_js('wodotexteditor/localfileeditor.js');
+    $htmlHeadXtra[] = api_get_js('wodotexteditor/FileSaver.js');
+    //$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
+    /*$htmlHeadXtra[] = '
     <script type="text/javascript" charset="utf-8">
         function init() {
                 var odfelement = document.getElementById("odf"),
                 odfcanvas = new odf.OdfCanvas(odfelement);
                 odfcanvas.load("'.$file_url_web.'");
+                createEditor();
         }
         $(document).ready(function() {
+            //createEditor();
             window.setTimeout(init, 0);
         });
   </script>';
+    */
+    $htmlHeadXtra[] = '
+    <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        createEditor("'.$file_url_web.'");
+    });
+    </script>';
 }
-
+/*
 $interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
 
 // Interbreadcrumb for the current directory root path
@@ -69,6 +82,15 @@ if (empty($document_data['parents'])) {
         $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
     }
 }
-Display::display_header('');
-echo '<div id="odf"></div>';
+*/
+//
+echo Display::display_header('');
+
+echo '<div class="actions">';
+echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&origin=editodf">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '</div>';
+
+// echo '<div id="odf"></div>';
+echo '<div id="editorContainer" style="width:100%; height:600px; margin:0px; padding:0px"></div>';
 Display::display_footer();

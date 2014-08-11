@@ -197,3 +197,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['allow_lp_return_link'] = false;
 // If true the export link is blocked.
 //$_configuration['hide_scorm_export_link'] = false;
+// If true the copy link is blocked.
+//$_configuration['hide_scorm_copy_link'] = false;

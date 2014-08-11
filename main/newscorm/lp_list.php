@@ -371,7 +371,7 @@ if (!empty($flat_list)) {
                 $dsp_disk = Display::return_icon('cd_gray.gif', get_lang('Export'), array(), ICON_SIZE_SMALL);
             }
 
-            //Copy
+            // Copy
             $copy = Display::url(Display::return_icon('cd_copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
 
             /* Auto Lunch LP code */
@@ -401,7 +401,6 @@ if (!empty($flat_list)) {
             } else {
                 $dsp_delete = Display::return_icon('delete_na.png', get_lang('LearnpathDeleteLearnpath'), '', ICON_SIZE_SMALL);
             }
-
 
             /* COLUMN ORDER	 */
 
@@ -438,6 +437,11 @@ if (!empty($flat_list)) {
         if (isset($_configuration['hide_scorm_export_link']) && $_configuration['hide_scorm_export_link']) {
             $dsp_disk = null;
         }
+
+        if (isset($_configuration['hide_scorm_copy_link']) && $_configuration['hide_scorm_copy_link']) {
+            $copy = null;
+        }
+
 
         echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
         $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;

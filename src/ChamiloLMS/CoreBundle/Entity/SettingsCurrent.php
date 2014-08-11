@@ -3,6 +3,7 @@
 namespace ChamiloLMS\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Bundle\SettingsBundle\Model\ParameterInterface;
 
 /**
  * SettingsCurrent
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="settings_current", uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting", columns={"variable", "subkey", "category", "access_url"})}, indexes={@ORM\Index(name="access_url", columns={"access_url"}), @ORM\Index(name="idx_settings_current_au_cat", columns={"access_url", "category"})})
  * @ORM\Entity
  */
-class SettingsCurrent
+class SettingsCurrent implements ParameterInterface
 {
     /**
      * @var integer
@@ -109,8 +110,8 @@ class SettingsCurrent
     {
         $this->accessUrl = 1;
         $this->accessUrlLocked = 0;
+        $this->access_url_changeable = 1;
     }
-
 
     /**
      * Get id
@@ -396,5 +397,57 @@ class SettingsCurrent
     public function getAccessUrlLocked()
     {
         return $this->accessUrlLocked;
+    }
+
+    /**
+    * {@inheritdoc}
+    */
+    public function getNamespace()
+    {
+        return $this->getCategory();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setNamespace($namespace)
+    {
+        $this->setCategory($namespace);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->getVariable();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->setTitle($name);
+        $this->setVariable($name);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue()
+    {
+        return $this->getSelectedValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue($value)
+    {
+        $this->setSelectedValue($value);
+        return $this;
     }
 }

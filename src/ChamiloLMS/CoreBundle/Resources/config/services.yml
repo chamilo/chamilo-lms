@@ -116,4 +116,9 @@ services:
     chamilolms.settings_schema.platform:
         class: ChamiloLMS\CoreBundle\Settings\PlatformSettingsSchema
         tags:
-            - { name: sylius.settings_schema, namespace: platform  }
+            - { name: sylius.settings_schema, namespace: platform }
+
+    chamilolms.settings_schema.course:
+        class: ChamiloLMS\CoreBundle\Settings\CourseSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: course }

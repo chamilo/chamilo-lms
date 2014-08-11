@@ -56,12 +56,20 @@ login_check:
 chamilolms_installer:
     resource: "@ChamiloLMSInstallerBundle/Resources/config/routing.yml"
 
-sylius_settings:
-    pattern: /settings
+chamilolms_corebundle_platform_settings:
+    pattern: /settings/platform
     defaults:
         _controller: sylius.controller.settings:updateAction
         namespace: platform
-        template: SyliusSettingsBundle:Settings:update.html.twig
+        template: ChamiloLMSCoreBundle:Settings:platform.html.twig
+
+chamilolms_corebundle_course_settings:
+    pattern: /settings/course
+    defaults:
+        _controller: sylius.controller.settings:updateAction
+        namespace: course
+        template: ChamiloLMSCoreBundle:Settings:platform.html.twig
+
 
 # Always at the end
 core_bundle:

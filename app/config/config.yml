@@ -234,6 +234,10 @@ sylius_resource:
 
 sylius_settings:
     driver: doctrine/orm
+    classes:
+        parameter:
+            model: ChamiloLMS\CoreBundle\Entity\SettingsCurrent
+
 
 doctrine_cache:
     providers:

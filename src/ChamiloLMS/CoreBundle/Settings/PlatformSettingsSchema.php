@@ -12,16 +12,24 @@ class PlatformSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'portal_name' => 'Campus Chamilo',
-                'company_title'    => 'Chamilo Association',
-                'company_url' => 'http://www.chamilo.org',
-                'enable_help_link' => ''
+                'institution' => 'Campus Chamilo',
+                'institution_url' => 'http://www.chamilo.org',
+                'site_name'    => 'Chamilo Association',
+                'administrator_email' => '',
+                'administrator_name' => '',
+                'administrator_surname' => '',
+                'administrator_phone' => '',
+                'timezone_value' => '',
+                'settings_latest_update' => '',
             ))
             ->setAllowedTypes(array(
-                'portal_name' => array('string'),
-                'company_title' => array('string'),
-                'company_url' => array('string'),
-                'enable_help_link' => array('string'),
+                'institution' => array('string'),
+                'institution_url' => array('string'),
+                'site_name' => array('string'),
+                'administrator_email' => array('string'),
+                'administrator_name' => array('string'),
+                'administrator_surname' => array('string'),
+                'administrator_phone' => array('string')
             ))
         ;
     }
@@ -29,12 +37,13 @@ class PlatformSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('portal_name')
-            ->add('company_title')
-            ->add('company_url')
-            ->add('enable_help_link', 'choice', array('choices' =>
-                array('true' => 'Yes', 'no' => 'No'))
-            )
+            ->add('institution')
+            ->add('institution_url')
+            ->add('site_name')
+            ->add('administrator_email')
+            ->add('administrator_name')
+            ->add('administrator_surname')
+            ->add('administrator_phone')
         ;
     }
 }

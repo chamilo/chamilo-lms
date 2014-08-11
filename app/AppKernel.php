@@ -147,6 +147,7 @@ class AppKernel extends Kernel
             //new JMS\SerializerBundle\JMSSerializerBundle($this),
             new Sp\BowerBundle\SpBowerBundle(),
             new Oro\Bundle\MigrationBundle\OroMigrationBundle(),
+            new ChamiloLMS\SettingsBundle\ChamiloLMSSettingsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -57,18 +57,16 @@ class SetupStep extends AbstractStep
             $settingsManager = $this->get('sylius.settings.manager');
             $settings = $settingsManager->loadSettings('platform');
 
-            $settings->set(
-                'portal_name',
-                $form->get('portal')->get('portal_name')->getData()
+            $parameters = array(
+                'institution' => $form->get('portal')->get('institution')->getData(),
+                'institution_url' => $form->get('portal')->get('institution_url')->getData(),
+                'site_name' => $form->get('portal')->get('site_name')->getData(),
+                'administrator_email' => $adminUser->getEmail(),
+                'administrator_name' => $adminUser->getName(),
+                'administrator_surname' => $adminUser->getLastName(),
+                'administrator_phone' => $adminUser->getPhone()
             );
-            $settings->set(
-                'company_title',
-                $form->get('portal')->get('company_title')->getData()
-            );
-            $settings->set(
-                'company_url',
-                $form->get('portal')->get('company_url')->getData()
-            );
+            $settings->setParameters($parameters);
 
             $settingsManager->saveSettings('platform', $settings);
 

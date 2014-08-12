@@ -45,3 +45,18 @@ remove_trailing_slash:
     requirements:
         url: .*/$
         _method: GET
+
+chamilolms_platform_settings:
+    pattern: /settings/platform
+    defaults:
+        _controller: ChamiloLMSSettingsBundle:Settings:update
+        namespace: platform
+        template: ChamiloLMSCoreBundle:Settings:default.html.twig
+
+chamilolms_course_settings:
+    pattern: /settings/course
+    defaults:
+        _controller: ChamiloLMSSettingsBundle:Settings:update
+        namespace: course
+        template: ChamiloLMSCoreBundle:Settings:default.html.twig
+

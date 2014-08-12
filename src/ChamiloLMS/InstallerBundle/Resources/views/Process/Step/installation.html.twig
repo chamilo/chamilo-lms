@@ -1,6 +1,6 @@
 {% extends 'ChamiloLMSInstallerBundle::layout.html.twig' %}
 {#{% set step, platformSteps = 'administration', ['navigation', 'js-routing', 'localization', 'assets', 'assetic', 'translation', 'requirejs'] %}#}
-{% set step, platformSteps = 'administration', [ 'assets', 'assetic', 'fixtures' ] %}
+{% set step, platformSteps = 'installation', [ 'assets', 'assetic', 'fixtures' ] %}
 {% use 'ChamiloLMSInstallerBundle::progress.html.twig' %}
 
 {% if loadFixtures %}
@@ -28,8 +28,8 @@
         <h2>{{ 'process.step.installation.header'|trans }}</h2>
     </div>
 
-    <div class="well">
-        <table class="table">
+    <div>
+        <table class="table table-striped">
             <col width="75%" valign="top">
             <col width="25%" valign="top">
             <thead>

@@ -23,7 +23,17 @@ class ForumSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('default_forum_view')
+            ->add(
+                'default_forum_view',
+                'choice',
+                array(
+                    'choices' => array(
+                        'flat' => 'Flat',
+                        'threaded' => 'Threaded',
+                        'nested' => 'Nested'
+                    )
+                )
+            )
         ;
     }
 }

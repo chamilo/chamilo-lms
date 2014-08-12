@@ -49,6 +49,9 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
+        form:
+            resources:
+                - 'ChamiloLMSCoreBundle:Form'
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
@@ -74,6 +77,8 @@ twig:
             - 'SonataFormatterBundle:Form:formatter.html.twig'
             - 'SonataMediaBundle:Form:media_widgets.html.twig'
             - 'SonataCoreBundle:Form:datepicker.html.twig'
+            - 'ChamiloLMSCoreBundle:Form:fields.html.twig'
+
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
 
     paths:

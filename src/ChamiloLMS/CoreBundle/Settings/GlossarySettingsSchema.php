@@ -6,7 +6,7 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class DisplaySettingsSchema implements SchemaInterface
+class GlossarySettingsSchema implements SchemaInterface
 {
     public function buildSettings(SettingsBuilderInterface $builder)
     {
@@ -25,9 +25,8 @@ class DisplaySettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('enable_help_link', 'choice', array('choices' =>
-                    array('true' => 'Yes', 'no' => 'No'))
-            );
+            ->add('show_glossary_in_extra_tools', 'yes_no')
+        ;
 
     }
 }

@@ -16,10 +16,15 @@ class CourseSettingsSchema implements SchemaInterface
                 'display_mini_month_calendar' => '',
                 'display_upcoming_events' => '',
                 'number_of_upcoming_events' => '',
-                'default_calendar_view' => '',
+                //'default_calendar_view' => '',
             ))
             ->setAllowedTypes(array(
-                'allow_personal_agenda' => array('string')
+                'allow_personal_agenda' => array('string'),
+                'display_mini_month_calendar' => array('string'),
+                'display_upcoming_events' => array('string'),
+                'number_of_upcoming_events' => array('integer'),
+                //'default_calendar_view' => array('string'),
+
             ))
         ;
     }
@@ -27,7 +32,12 @@ class CourseSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('allow_personal_agenda')
+            ->add('allow_personal_agenda', 'yes_no')
+            ->add('display_mini_month_calendar', 'yes_no')
+            ->add('display_upcoming_events', 'yes_no')
+            ->add('number_of_upcoming_events')
+            //->add('default_calendar_view', 'yes_no')
+
         ;
     }
 }

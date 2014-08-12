@@ -6,8 +6,15 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Class PlatformSettingsSchema
+ * @package ChamiloLMS\CoreBundle\Settings
+ */
 class PlatformSettingsSchema implements SchemaInterface
 {
+    /**
+     * @param SettingsBuilderInterface $builder
+     */
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
@@ -15,12 +22,11 @@ class PlatformSettingsSchema implements SchemaInterface
                 'institution' => 'Campus Chamilo',
                 'institution_url' => 'http://www.chamilo.org',
                 'site_name'    => 'Chamilo Association',
-                'administrator_email' => '',
-                'administrator_name' => '',
-                'administrator_surname' => '',
-                'administrator_phone' => '',
-                'timezone_value' => '',
-                'settings_latest_update' => '',
+                'administrator_email' => 'admin@example.org',
+                'administrator_name' => 'Jane',
+                'administrator_surname' => 'Doe',
+                'administrator_phone' => '123456',
+                'timezone' => 'Europe/Paris',
             ))
             ->setAllowedTypes(array(
                 'institution' => array('string'),
@@ -29,21 +35,26 @@ class PlatformSettingsSchema implements SchemaInterface
                 'administrator_email' => array('string'),
                 'administrator_name' => array('string'),
                 'administrator_surname' => array('string'),
-                'administrator_phone' => array('string')
+                'administrator_phone' => array('string'),
+                'timezone' => array('string'),
             ))
         ;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     */
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
             ->add('institution')
-            ->add('institution_url')
+            ->add('institution_url', 'url')
             ->add('site_name')
-            ->add('administrator_email')
+            ->add('administrator_email', 'email')
             ->add('administrator_name')
             ->add('administrator_surname')
             ->add('administrator_phone')
+            ->add('timezone', 'timezone')
         ;
     }
 }

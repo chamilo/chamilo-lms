@@ -13,11 +13,12 @@ class TrackingSettingsSchema implements SchemaInterface
         $builder
             ->setDefaults(array(
                 'header_extra_content' => '',
-                    footer_extra_content
+                'footer_extra_content' => ''
 
             ))
             ->setAllowedTypes(array(
-                'allow_personal_agenda' => array('string')
+                'header_extra_content' => array('string'),
+                'footer_extra_content' => array('string')
             ))
         ;
     }
@@ -25,7 +26,8 @@ class TrackingSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('allow_personal_agenda')
+            ->add('header_extra_content', 'textarea')
+            ->add('footer_extra_content', 'textarea')
         ;
     }
 }

@@ -12,7 +12,7 @@ class SessionSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'add_users_by_coach' => '',
+                'add_users_by_coach' => 'false',
                 'extend_rights_for_coach' => '',
                 'show_session_coach' => '',
                 'show_session_data' => '',
@@ -33,7 +33,17 @@ class SessionSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('add_users_by_coach')
+            ->add('add_users_by_coach', 'yes_no')
+            ->add('extend_rights_for_coach', 'yes_no')
+            ->add('show_session_coach', 'yes_no')
+            ->add('show_session_data', 'yes_no')
+            ->add('allow_coach_to_edit_course_session', 'yes_no')
+            ->add('show_groups_to_users', 'yes_no')
+            ->add('hide_courses_in_sessions', 'yes_no')
+            ->add('allow_session_admins_to_manage_all_sessions', 'yes_no')
+            ->add('session_tutor_reports_visibility', 'yes_no')
+            ->add('session_page_enabled', 'yes_no')
+            ->add('allow_teachers_to_create_sessions', 'yes_no')
         ;
     }
 }

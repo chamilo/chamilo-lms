@@ -9,14 +9,13 @@
 {#<script src="{{ asset_url }}"></script>#}
 {#{% endjavascripts %}#}
 
-
 {% block title %}
     {#{{ parent() }}#}
-    {{- 'Institution' | get_setting }} - {{ 'siteName' | get_setting -}}
+    {{ 'site_name' | get_setting -}}
 {% endblock %}
 
 {% block avanzu_logo %}
-    {{- 'Institution' | get_setting -}}
+    {{- 'institution' | get_setting -}}
 {% endblock %}
 
 {% block page_title %}

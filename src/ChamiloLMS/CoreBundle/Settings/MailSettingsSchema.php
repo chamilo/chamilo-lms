@@ -13,7 +13,7 @@ class MailSettingsSchema implements SchemaInterface
         $builder
             ->setDefaults(array(
                'noreply_email_address' => '',
-                    activate_email_template
+               'activate_email_template' => '',
 
             ))
             ->setAllowedTypes(array(
@@ -26,6 +26,7 @@ class MailSettingsSchema implements SchemaInterface
     {
         $builder
             ->add('noreply_email_address', 'email')
+            ->add('activate_email_template', 'yes_no')
         ;
     }
 }

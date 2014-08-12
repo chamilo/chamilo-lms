@@ -41,15 +41,45 @@ class CourseSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('registration')
-            ->add('allow_registration')
-            ->add('allow_registration_as_teacher')
-            ->add('allow_lostpassword')
-
-
-            /*->add('enable_help_link', 'choice', array('choices' =>
-                array('true' => 'Yes', 'no' => 'No'))
-            )*/
+            ->add(
+                'registration',
+                'choice',
+                array('choices' => array('officialcode', 'email', 'language', 'phone'))
+            )
+            ->add(
+                'allow_registration',
+                'choice',
+                array(
+                    'choices' => array(
+                        'true' => 'Yes',
+                        'false' => 'No',
+                        'approval' => 'Approval'
+                    )
+                )
+            )
+            ->add('allow_registration_as_teacher', 'yes_no')
+            ->add('allow_lostpassword', 'yes_no')
+            ->add(
+                'page_after_login', 'choice',
+                array(
+                    'choices' => array(
+                        'index.php' => 'Homepage',
+                        'user_portal.php' => 'My courses',
+                        'main/auth/courses.php' => 'Course catalog'
+                    )
+                )
+            )
+            //->add('extendedprofile_registration', '') // ?
+            ->add('allow_terms_conditions', 'yes_no')
+            ->add('student_page_after_login')
+            ->add('teacher_page_after_login')
+            ->add('drh_page_after_login')
+            ->add('sessionadmin_page_after_login')
+            ->add('student_autosubscribe') // ?
+            ->add('teacher_autosubscribe') // ?
+            ->add('drh_autosubscribe', '') // ?
+            ->add('sessionadmin_autosubscribe', '') // ?
+            ->add('platform_unsubscribe_allowed', 'yes_no')
         ;
     }
 }

@@ -19,6 +19,7 @@ sonata_page:
         - ^installer
         - ^/installer/(.*)
         - install.php
+        - settings/(.*)
 
     ignore_route_patterns:
         - (.*)administration(.*)     # ignore admin route, ie route containing 'admin'  # sonata admin
@@ -26,7 +27,8 @@ sonata_page:
         - login
         - home
         - homepage
-        - (.*)fos_user_(.*)
+        - _settings
+        - avanzu_admin_(.*)
 
     ignore_routes:
         - sonata_page_cache_esi
@@ -122,7 +124,7 @@ sonata_page:
                      F: footer
 
     page_defaults:
-        homepage: { decorate: false, enabled: true }
+        homepage: { decorate: true, enabled: true }
 
     caches:
         esi:

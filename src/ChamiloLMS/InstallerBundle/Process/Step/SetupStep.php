@@ -12,17 +12,26 @@ class SetupStep extends AbstractStep
 {
     public function displayAction(ProcessContextInterface $context)
     {
-        $form = $this->createForm('chamilo_installer_setup');
+        //$form = $this->createForm('chamilo_installer_setup');
+        $form = $this->createSetupForm();
+
+        /** @var SettingsManager $settingsManager */
+        $settingsManager = $this->get('sylius.settings.manager');
+        $settings = $settingsManager->loadSettings('platform');
 
         /** @var ConfigManager $configManager */
         //$configManager = $this->get('oro_config.global');
-        //$form->get('company_name')->setData($configManager->get('oro_ui.application_name'));
-        //$form->get('company_title')->setData($configManager->get('oro_ui.application_title'));
+        $form->get('portal')->get('institution')->setData($settings->get('institution'));
+        $form->get('portal')->get('institution_url')->setData($settings->get('institution_url'));
+        $form->get('portal')->get('site_name')->setData($settings->get('site_name'));
+        $date = new \DateTime();
+        $timezone = $date->getTimezone();
+        $form->get('portal')->get('timezone')->setData($timezone->getName());
 
         return $this->render(
             'ChamiloLMSInstallerBundle:Process/Step:setup.html.twig',
             array(
-                'form' => $this->createSetupForm()->createView()
+                'form' => $form->createView()
             )
         );
     }
@@ -62,9 +71,10 @@ class SetupStep extends AbstractStep
                 'institution_url' => $form->get('portal')->get('institution_url')->getData(),
                 'site_name' => $form->get('portal')->get('site_name')->getData(),
                 'administrator_email' => $adminUser->getEmail(),
-                'administrator_name' => $adminUser->getName(),
+                'administrator_name' => $adminUser->getFirstName(),
                 'administrator_surname' => $adminUser->getLastName(),
-                'administrator_phone' => $adminUser->getPhone()
+                'administrator_phone' => $adminUser->getPhone(),
+                'timezone' => $form->get('portal')->get('timezone')->getData(),
             );
             $settings->setParameters($parameters);
 

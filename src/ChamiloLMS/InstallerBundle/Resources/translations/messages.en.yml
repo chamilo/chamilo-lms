@@ -55,6 +55,7 @@ form:
             company_url: Company URL
             allow_self_registration_as_trainer: Allow self-registration as a trainer
             allow_self_registration: Allow self-registration
+            timezone: Timezone
 
         load_fixtures:    Load Sample Data
 

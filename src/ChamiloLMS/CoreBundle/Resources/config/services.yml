@@ -1,4 +1,9 @@
 services:
+    chamilolms.form.type.yes_no:
+        class: ChamiloLMS\CoreBundle\Form\Type\YesNoType
+        tags:
+            - { name: form.type, alias: yes_no }
+
 #    chamilolms.doctrine.entity_listener_resolver:
 #        class: ChamiloLMS\CoreBundle\Doctrine\EntityListenerResolver
 #        arguments: [ "@service_container" ]

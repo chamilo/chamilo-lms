@@ -23,9 +23,7 @@ class GroupSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('allow_group_categories', 'choice', array('choices' =>
-                array('true' => 'Yes', 'no' => 'No'))
-            )
+            ->add('allow_group_categories', 'yes_no')
         ;
     }
 }

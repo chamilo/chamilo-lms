@@ -13,10 +13,10 @@ class PortalType extends AbstractType
     {
         $builder
             ->add(
-                'portal_name',
+                'institution',
                 'text',
                 array(
-                    'label'    => 'form.setup.portal.portal_name',
+                    'label'    => 'form.setup.portal.institution',
                     'mapped'   => false,
                     'constraints'   => array(
                         new Assert\NotBlank(),
@@ -25,19 +25,19 @@ class PortalType extends AbstractType
                 )
             )
             ->add(
-                'company_title',
+                'site_name',
                 'text',
                 array(
-                    'label'    => 'form.setup.portal.company_title',
+                    'label'    => 'form.setup.portal.site_name',
                     'mapped'   => false,
                     'required' => false,
                 )
             )
             ->add(
-                'company_url',
+                'institution_url',
                 'url',
                 array(
-                    'label'    => 'form.setup.portal.company_url',
+                    'label'    => 'form.setup.portal.institution_url',
                     'mapped'   => false,
                     'required' => false,
                 )
@@ -69,7 +69,18 @@ class PortalType extends AbstractType
                         '0'       => 'No',
                     ),
                 )
+            )
+            ->add(
+                'timezone',
+                'timezone',
+                array(
+                    'label'    => 'form.setup.portal.timezone',
+                    'mapped'   => false,
+                    'required' => false,
+                    'preferred_choices' => array('Europe/Paris'),
+                )
             );
+
     }
 
     /**

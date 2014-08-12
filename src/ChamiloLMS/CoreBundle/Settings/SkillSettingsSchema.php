@@ -13,13 +13,9 @@ class SkillSettingsSchema implements SchemaInterface
         $builder
             ->setDefaults(array(
                 'allow_skills_tool' => '',
-                'display_mini_month_calendar' => '',
-                'display_upcoming_events' => '',
-                'number_of_upcoming_events' => '',
-
             ))
             ->setAllowedTypes(array(
-                'allow_personal_agenda' => array('string')
+                'allow_skills_tool' => array('string')
             ))
         ;
     }
@@ -27,7 +23,7 @@ class SkillSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('allow_personal_agenda')
+            ->add('allow_skills_tool', 'yes_no')
         ;
     }
 }

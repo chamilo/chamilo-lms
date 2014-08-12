@@ -87,6 +87,7 @@ class LoadSettingsData extends AbstractFixture implements
     {
         //$this->generateSettingsCode($manager);
         $this->createSettings($manager);
+        return;
         $this->createOptions($manager);
     }
 
@@ -96,11 +97,11 @@ class LoadSettingsData extends AbstractFixture implements
     public function createSettings(ObjectManager $manager)
     {
         $setting = new SettingsCurrent();
-        $setting->setVariable('Institution');
+        $setting->setVariable('institution');
         $setting->setSubkey('');
         $setting->setType('textfield');
         $setting->setCategory('Platform');
-        $setting->setSelectedValue('{ORGANISATIONNAME}');
+        $setting->setSelectedValue('Chamilo');
         $setting->setTitle('InstitutionTitle');
         $setting->setComment('InstitutionComment');
         $setting->setScope('platform');
@@ -108,13 +109,12 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setAccessUrlChangeable('1');
         $manager->persist($setting);
 
-
         $setting = new SettingsCurrent();
-        $setting->setVariable('InstitutionUrl');
+        $setting->setVariable('institution_url');
         $setting->setSubkey('');
         $setting->setType('textfield');
-        $setting->setCategory('Platform');
-        $setting->setSelectedValue('{ORGANISATIONURL}');
+        $setting->setCategory('platform');
+        $setting->setSelectedValue('http://www.chamilo.org');
         $setting->setTitle('InstitutionUrlTitle');
         $setting->setComment('InstitutionUrlComment');
         $setting->setScope('');
@@ -122,13 +122,12 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setAccessUrlChangeable('1');
         $manager->persist($setting);
 
-
         $setting = new SettingsCurrent();
-        $setting->setVariable('siteName');
+        $setting->setVariable('site_name');
         $setting->setSubkey('');
         $setting->setType('textfield');
-        $setting->setCategory('Platform');
-        $setting->setSelectedValue('{CAMPUSNAME}');
+        $setting->setCategory('platform');
+        $setting->setSelectedValue('Campus Chamilo');
         $setting->setTitle('SiteNameTitle');
         $setting->setComment('SiteNameComment');
         $setting->setScope('');
@@ -136,6 +135,62 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setAccessUrlChangeable('1');
         $manager->persist($setting);
 
+        $setting = new SettingsCurrent();
+        $setting->setVariable('administrator_email');
+        $setting->setSubkey('');
+        $setting->setType('textfield');
+        $setting->setCategory('admin');
+        $setting->setSelectedValue('admin@example.org');
+        $setting->setTitle('emailAdministratorTitle');
+        $setting->setComment('emailAdministratorComment');
+        $setting->setScope('');
+        $setting->setSubkeytext('');
+        $setting->setAccessUrlChangeable('1');
+        $manager->persist($setting);
+
+
+        $setting = new SettingsCurrent();
+        $setting->setVariable('administrator_surname');
+        $setting->setSubkey('');
+        $setting->setType('textfield');
+        $setting->setCategory('admin');
+        $setting->setSelectedValue('Doe');
+        $setting->setTitle('administratorSurnameTitle');
+        $setting->setComment('administratorSurnameComment');
+        $setting->setScope('');
+        $setting->setSubkeytext('');
+        $setting->setAccessUrlChangeable('1');
+        $manager->persist($setting);
+
+
+        $setting = new SettingsCurrent();
+        $setting->setVariable('administrator_name');
+        $setting->setSubkey('');
+        $setting->setType('textfield');
+        $setting->setCategory('admin');
+        $setting->setSelectedValue('Jane');
+        $setting->setTitle('administratorNameTitle');
+        $setting->setComment('administratorNameComment');
+        $setting->setScope('');
+        $setting->setSubkeytext('');
+        $setting->setAccessUrlChangeable('1');
+        $manager->persist($setting);
+
+
+        $setting = new SettingsCurrent();
+        $setting->setVariable('administrator_phone');
+        $setting->setSubkey('');
+        $setting->setType('textfield');
+        $setting->setCategory('admin');
+        $setting->setSelectedValue('(000) 001 02 03');
+        $setting->setTitle('administratorTelephoneTitle');
+        $setting->setComment('administratorTelephoneComment');
+        $setting->setScope('');
+        $setting->setSubkeytext('');
+        $setting->setAccessUrlChangeable('1');
+        $manager->persist($setting);
+
+        return;
 
         $setting = new SettingsCurrent();
         $setting->setVariable('noreply_email_address');
@@ -148,62 +203,6 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
-        $manager->persist($setting);
-
-
-        $setting = new SettingsCurrent();
-        $setting->setVariable('emailAdministrator');
-        $setting->setSubkey('');
-        $setting->setType('textfield');
-        $setting->setCategory('Admin');
-        $setting->setSelectedValue('{ADMINEMAIL}');
-        $setting->setTitle('emailAdministratorTitle');
-        $setting->setComment('emailAdministratorComment');
-        $setting->setScope('');
-        $setting->setSubkeytext('');
-        $setting->setAccessUrlChangeable('1');
-        $manager->persist($setting);
-
-
-        $setting = new SettingsCurrent();
-        $setting->setVariable('administratorSurname');
-        $setting->setSubkey('');
-        $setting->setType('textfield');
-        $setting->setCategory('Admin');
-        $setting->setSelectedValue('{ADMINLASTNAME}');
-        $setting->setTitle('administratorSurnameTitle');
-        $setting->setComment('administratorSurnameComment');
-        $setting->setScope('');
-        $setting->setSubkeytext('');
-        $setting->setAccessUrlChangeable('1');
-        $manager->persist($setting);
-
-
-        $setting = new SettingsCurrent();
-        $setting->setVariable('administratorName');
-        $setting->setSubkey('');
-        $setting->setType('textfield');
-        $setting->setCategory('Admin');
-        $setting->setSelectedValue('{ADMINFIRSTNAME}');
-        $setting->setTitle('administratorNameTitle');
-        $setting->setComment('administratorNameComment');
-        $setting->setScope('');
-        $setting->setSubkeytext('');
-        $setting->setAccessUrlChangeable('1');
-        $manager->persist($setting);
-
-
-        $setting = new SettingsCurrent();
-        $setting->setVariable('administratorTelephone');
-        $setting->setSubkey('');
-        $setting->setType('textfield');
-        $setting->setCategory('Admin');
-        $setting->setSelectedValue('(000) 001 02 03');
-        $setting->setTitle('administratorTelephoneTitle');
-        $setting->setComment('administratorTelephoneComment');
-        $setting->setScope('');
-        $setting->setSubkeytext('');
-        $setting->setAccessUrlChangeable('1');
         $manager->persist($setting);
 
 
@@ -1326,6 +1325,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setAccessUrlChangeable('0');
         $manager->persist($setting);
 
+            //aqui
 
         $setting = new SettingsCurrent();
         $setting->setVariable('upload_extensions_blacklist');
@@ -4394,7 +4394,7 @@ class LoadSettingsData extends AbstractFixture implements
 
 
         $setting = new SettingsCurrent();
-        $setting->setVariable('login_as_allowed');
+        $setting->setVariable('login_as_allowed'); // N???
         $setting->setSubkey('');
         $setting->setType('radio');
         $setting->setCategory('Security');

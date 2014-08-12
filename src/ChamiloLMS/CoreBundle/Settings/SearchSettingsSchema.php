@@ -6,7 +6,7 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class CourseSettingsSchema implements SchemaInterface
+class SearchSettingsSchema implements SchemaInterface
 {
     public function buildSettings(SettingsBuilderInterface $builder)
     {
@@ -19,7 +19,8 @@ class CourseSettingsSchema implements SchemaInterface
 
             ))
             ->setAllowedTypes(array(
-                'allow_personal_agenda' => array('string')
+                'allow_personal_agenda' => array('string'),
+                'number_of_upcoming_events' => array('integer')
             ))
         ;
     }
@@ -27,7 +28,19 @@ class CourseSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('allow_personal_agenda')
+            ->add('search_enabled', 'yes_no')
+            ->add('search_prefilter_prefix', 'yes_no')
+            ->add(
+                'search_show_unlinked_results',
+                'choice',
+                array(
+                    'choices' => array(
+                        'search_show_unlinked_results',
+                        'search_show_unlinked_results'
+                    )
+                )
+            )
+            ->add('number_of_upcoming_events')
         ;
     }
 }

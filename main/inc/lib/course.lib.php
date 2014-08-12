@@ -3063,6 +3063,7 @@ class CourseManager
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                 $course_title .= ' ('.$course_info['visual_code'].') ';
             }
+            $teachers = null;
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
                 $teachers = $course_info['teacher_list_formatted'];
             }
@@ -4288,7 +4289,7 @@ class CourseManager
         $TABLEFORUMPOSTS 		= Database::get_course_table(TABLE_FORUM_POST);
         $TABLEGRADEBOOK 		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $TABLEGRADEBOOKCERT		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        //$TABLEGRADEBOOKCERT		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 
 
         $visible_for_all = 1;

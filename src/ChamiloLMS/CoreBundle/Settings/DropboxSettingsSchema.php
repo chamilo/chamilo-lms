@@ -6,8 +6,15 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Class DropboxSettingsSchema
+ * @package ChamiloLMS\CoreBundle\Settings
+ */
 class DropboxSettingsSchema implements SchemaInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
@@ -26,6 +33,9 @@ class DropboxSettingsSchema implements SchemaInterface
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder

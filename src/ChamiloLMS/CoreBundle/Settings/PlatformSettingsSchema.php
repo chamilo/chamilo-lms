@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class PlatformSettingsSchema implements SchemaInterface
 {
     /**
-     * @param SettingsBuilderInterface $builder
+     * {@inheritdoc}
      */
     public function buildSettings(SettingsBuilderInterface $builder)
     {
@@ -42,7 +42,7 @@ class PlatformSettingsSchema implements SchemaInterface
     }
 
     /**
-     * @param FormBuilderInterface $builder
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder)
     {

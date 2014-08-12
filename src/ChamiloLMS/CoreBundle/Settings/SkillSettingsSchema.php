@@ -6,8 +6,15 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Class SkillSettingsSchema
+ * @package ChamiloLMS\CoreBundle\Settings
+ */
 class SkillSettingsSchema implements SchemaInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
@@ -20,6 +27,9 @@ class SkillSettingsSchema implements SchemaInterface
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder

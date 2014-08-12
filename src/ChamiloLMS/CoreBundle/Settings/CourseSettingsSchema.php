@@ -6,10 +6,14 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Class CourseSettingsSchema
+ * @package ChamiloLMS\CoreBundle\Settings
+ */
 class CourseSettingsSchema implements SchemaInterface
 {
     /**
-     * @param SettingsBuilderInterface $builder
+     * {@inheritdoc}
      */
     public function buildSettings(SettingsBuilderInterface $builder)
     {
@@ -50,7 +54,7 @@ class CourseSettingsSchema implements SchemaInterface
     }
 
     /**
-     * @param FormBuilderInterface $builder
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder)
     {

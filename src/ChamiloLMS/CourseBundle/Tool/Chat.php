@@ -4,17 +4,17 @@
 namespace ChamiloLMS\CourseBundle\Tool;
 
 /**
- * Class Work
+ * Class CourseDescription
  * @package ChamiloLMS\CourseBundle\Tool
  */
-class Work extends BaseTool
+class Chat extends BaseTool
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'Work';
+        return 'chat';
     }
 
     /**
@@ -22,16 +22,11 @@ class Work extends BaseTool
      */
     public function getLink()
     {
-        return 'work/work.php';
-    }
-
-    public function getTarget()
-    {
-        return '_self';
+        return 'chat/chat.php';
     }
 
     public function getCategory()
     {
-        return 'authoring';
+        return 'interaction';
     }
 }

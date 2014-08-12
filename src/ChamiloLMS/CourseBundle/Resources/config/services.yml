@@ -16,17 +16,44 @@ services:
             - { name: chamilolm.course.tool }
 
     chamilolms.coursebundle.tool.announcements.class:
-        class: ChamiloLMS\CourseBundle\Tool\Announcements
+        class: ChamiloLMS\CourseBundle\Tool\Announcement
         arguments:
             - document
         tags:
             - { name: chamilolm.course.tool }
 
+    chamilolms.coursebundle.tool.assignment.class:
+        class: ChamiloLMS\CourseBundle\Tool\Assignment
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.attendance.class:
+        class: ChamiloLMS\CourseBundle\Tool\Attendance
+        arguments:
+            - attendance
+        tags:
+            - { name: chamilolm.course.tool }
 
     chamilolms.coursebundle.tool.course_description.class:
         class: ChamiloLMS\CourseBundle\Tool\CourseDescription
         arguments:
             - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.chat.class:
+        class: ChamiloLMS\CourseBundle\Tool\Chat
+        arguments:
+            - chat
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.course_progress.class:
+        class: ChamiloLMS\CourseBundle\Tool\CourseProgress
+        arguments:
+            - course_progress
         tags:
             - { name: chamilolm.course.tool }
 
@@ -114,10 +141,5 @@ services:
         tags:
             - { name: chamilolm.course.tool }
 
-    chamilolms.coursebundle.tool.work.class:
-        class: ChamiloLMS\CourseBundle\Tool\Work
-        arguments:
-            - document
-        tags:
-            - { name: chamilolm.course.tool }
+
 

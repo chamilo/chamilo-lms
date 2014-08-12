@@ -4,17 +4,17 @@
 namespace ChamiloLMS\CourseBundle\Tool;
 
 /**
- * Class User
+ * Class CourseDescription
  * @package ChamiloLMS\CourseBundle\Tool
  */
-class User extends BaseTool
+class CourseProgress extends BaseTool
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'User';
+        return 'course_progress';
     }
 
     /**
@@ -22,16 +22,11 @@ class User extends BaseTool
      */
     public function getLink()
     {
-        return 'user/user.php';
-    }
-
-    public function getTarget()
-    {
-        return '_self';
+        return 'course_progress/index.php';
     }
 
     public function getCategory()
     {
-        return 'interaction';
+        return 'authoring';
     }
 }

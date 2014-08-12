@@ -32,6 +32,6 @@ class Forum extends BaseTool
 
     public function getCategory()
     {
-        return 'authoring';
+        return 'interaction';
     }
 }

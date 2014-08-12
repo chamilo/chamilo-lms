@@ -13,3 +13,9 @@ services:
 
     notebook.manager:
         class: ChamiloLMS\NotebookBundle\Entity\CNotebookManager
+
+    notebook.settings_schema.notebook:
+        class: ChamiloLMS\NotebookBundle\Settings\NotebookSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: notebook }
+

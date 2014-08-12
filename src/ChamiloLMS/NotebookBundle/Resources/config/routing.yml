@@ -24,4 +24,10 @@ chamilolms_notebook_index:
     defaults:
         _controller: chamilolms.controller.notebook:indexAction
 
+chamilolms_notebook_settings:
+    pattern: /settings/notebook
+    defaults:
+        _controller: sylius.controller.settings:updateAction
+        namespace: notebook
+        template: ChamiloLMSCoreBundle:Settings:default.html.twig
 

@@ -8,4 +8,14 @@
         <parameter key="sylius.settings.manager.class">ChamiloLMS\SettingsBundle\Manager\SettingsManager</parameter>
     </parameters>
 
+    <services>
+        <service id="chamilo.settings.manager" class="%sylius.settings.manager.class%">
+            <argument type="service" id="sylius.settings.schema_registry" />
+            <argument type="service" id="sylius.manager.parameter" />
+            <argument type="service" id="sylius.repository.parameter" />
+            <argument type="service" id="sylius.settings.cache" />
+            <argument type="service" id="validator" />
+        </service>
+    </services>
+
 </container>

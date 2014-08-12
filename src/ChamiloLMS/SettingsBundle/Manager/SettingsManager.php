@@ -30,6 +30,19 @@ use ChamiloLMS\CoreBundle\Entity\SettingsCurrent;
  */
 class SettingsManager extends SyliusSessionManager
 {
+    public function getSetting($name)
+    {
+        if (false === strpos($name, '.')) {
+            throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
+        }
+
+        list($namespace, $name) = explode('.', $name);
+
+        $settings = $this->loadSettings($namespace);
+
+        return $settings->get($name);
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -41,20 +41,20 @@ sonata_admin:
             #- { position: right, type: sonata.block.service.rss, settings: { title: Sonata Project's Feeds, url: http://sonata-project.org/blog/archive.rss }}
 
         groups:
-#            sonata_page:
-#                items:
-#                    - sonata.page.admin.page
-#            sonata.admin.group.content:
-#                label:           sonata_content
-#                label_catalogue: SonataDemoBundle
-#                icon:            '<i class="fa fa-th"></i>'
-#                items:
-#                    #- sonata.page.admin.page
-#                    - sonata.news.admin.comment
-#                    - sonata.news.admin.post
-#                    - sonata.media.admin.media
-#                    - sonata.media.admin.gallery
-#                    - sonata.comment.admin.thread
+            sonata_page:
+                items:
+                    - sonata.page.admin.page
+            sonata.admin.group.content:
+                label:           sonata_content
+                label_catalogue: SonataDemoBundle
+                icon:            '<i class="fa fa-th"></i>'
+                items:
+                    #- sonata.page.admin.page
+                    - sonata.news.admin.comment
+                    - sonata.news.admin.post
+                    - sonata.media.admin.media
+                    - sonata.media.admin.gallery
+                    - sonata.comment.admin.thread
             #sonata.admin.group.ecommerce:
              #   label:           sonata_ecommerce
               #  label_catalogue: SonataAdminBundle
@@ -71,13 +71,13 @@ sonata_admin:
 #                    - sonata.classification.admin.category
 #                    - sonata.classification.admin.tag
 #                    - sonata.classification.admin.collection
-#            sonata.admin.group.site_builder:
-#                label:           Site Builder
-#                label_catalogue: SonataDemoBundle
-#                icon:            '<i class="fa fa-puzzle-piece"></i>'
-#                items:
-#                    - sonata.page.admin.page
-#                    - sonata.page.admin.site
+            sonata.admin.group.site_builder:
+                label:           Site Builder
+                label_catalogue: SonataDemoBundle
+                icon:            '<i class="fa fa-puzzle-piece"></i>'
+                items:
+                    - sonata.page.admin.page
+                    - sonata.page.admin.site
             sonata.admin.group.administration:
                 label:           sonata_administration
                 label_catalogue: SonataAdminBundle

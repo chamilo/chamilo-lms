@@ -24,7 +24,7 @@ require_once __DIR__.'/legacy.php';
 // using different relative paths, you must change the request
 // object to use the SiteRequest
 use Sonata\PageBundle\Request\RequestFactory;
-$request = RequestFactory::createFromGlobals('host_with_path');
+$request = RequestFactory::createFromGlobals('host_with_path_by_locale');
 
 // When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
 //Request::enableHttpMethodParameterOverride();

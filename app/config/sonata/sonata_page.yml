@@ -124,7 +124,7 @@ sonata_page:
                      F: footer
 
     page_defaults:
-        homepage: { decorate: true, enabled: true }
+        homepage: { decorate: false, enabled: true }
 
     caches:
         esi:

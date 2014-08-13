@@ -89,6 +89,10 @@ class IndexController extends BaseController
         /** @var \Chamilo\CoreBundle\Entity\CourseManager $courseManager */
         $courseManager = $this->get('chamilo.manager.course');
 
+        /** @var \Application\Sonata\PageBundle\Entity\Site $site */
+        $site = $this->get('sonata.page.site.selector')->retrieve();
+        $site->getId();
+
         $user = $this->getUser();
         $pageController = new \Chamilo\CoreBundle\Framework\PageController();
         $items = null;

@@ -19,9 +19,9 @@ class PlatformSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'institution' => 'Campus Chamilo',
+                'institution' => 'Chamilo.org',
                 'institution_url' => 'http://www.chamilo.org',
-                'site_name'    => 'Chamilo Association',
+                'site_name'    => 'Chamilo site',
                 'administrator_email' => 'admin@example.org',
                 'administrator_name' => 'Jane',
                 'administrator_surname' => 'Doe',

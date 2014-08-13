@@ -831,8 +831,9 @@ switch ($action) {
         $default['link_name'] = $link_name;
     	}
 		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
-		$form->addElement('text', 'link_url', array(get_lang('LinkURL'), get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately')), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
-
+        $linkUrlComment = ($action == 'insert_tabs') ? get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately') : '';
+        $form->addElement('text', 'link_url', array(get_lang('LinkURL'), $linkUrlComment), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
+        
         $options = array('-1' => get_lang('FirstPlace'));
 
 		$selected = '';

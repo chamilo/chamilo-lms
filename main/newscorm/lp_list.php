@@ -106,7 +106,7 @@ $token = Security::get_token();
 /* DISPLAY SCORM LIST */
 
 $categories_temp = learnpath::get_categories(api_get_course_int_id());
-$category_test = new ChamiloLMS\Entity\CLpCategory();
+$category_test = new Chamilo\Entity\CLpCategory();
 $category_test->setId(0);
 $category_test->setName(get_lang('WithOutCategory'));
 $category_test->setPosition(0);

@@ -215,5 +215,5 @@ if (!empty($userId)) {
 }
 $tpl->addGlobal('form_add', $form->return_form());
 
-echo $tpl->render('ChamiloLMSCoreBundle:Calendar:month.html.twig');
+echo $tpl->render('ChamiloCoreBundle:Calendar:month.html.twig');
 

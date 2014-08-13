@@ -7,7 +7,7 @@ require_once 'main/inc/global.inc.php';
 $dir = api_get_path(SYS_CODE_PATH).'lang/';
 
 //Destination
-$save_path = api_get_path(SYS_PATH).'src/ChamiloLMS/Resources/translations';
+$save_path = api_get_path(SYS_PATH).'src/Chamilo/Resources/translations';
 
 if (!is_dir(api_get_path(SYS_PATH).'resources')) {
     //mkdir(api_get_path(SYS_PATH).'resources');

@@ -204,7 +204,7 @@ foreach ($question_list as $questionId) {
     }
 
     $rootCategories = null;
-    $repo = Database::getManager()->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
+    $repo = Database::getManager()->getRepository('ChamiloCoreBundle:CQuizCategory');
     foreach ($objQuestionTmp->category_list as $categoryId) {
         $cat = $repo->find($categoryId);
         $parentCat = $repo->getPath($cat);

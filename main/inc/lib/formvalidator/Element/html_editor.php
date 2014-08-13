@@ -6,7 +6,7 @@
  */
 class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 {
-    /** @var \ChamiloLMS\Component\Editor\Editor */
+    /** @var \Chamilo\Component\Editor\Editor */
     public $editor;
 
     /**

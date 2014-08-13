@@ -36,7 +36,7 @@ if ($form->validate()) {
 	}
 	if ($result) {
         // Creating temp folders
-        /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
+        /** @var Chamilo\Component\DataFilesystem\DataFilesystem $filesystem */
 /*        $filesystem = $app['chamilo.filesystem'];
         $filesystem->createFolders($app['temp.paths']->folders); */
 

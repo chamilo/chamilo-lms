@@ -1,5 +1,5 @@
-chamilo_lms_course:
-    resource: "@ChamiloLMSCourseBundle/Resources/config/routing.yml"
+chamilo_course:
+    resource: "@ChamiloCourseBundle/Resources/config/routing.yml"
     prefix:   /
 
 _courses:
@@ -52,10 +52,10 @@ logout:
 login_check:
     path: /administration/login_check
 
-chamilolms_installer:
-    resource: "@ChamiloLMSInstallerBundle/Resources/config/routing.yml"
+chamilo_installer:
+    resource: "@ChamiloInstallerBundle/Resources/config/routing.yml"
 
 # Always at the end
 core_bundle:
-    resource: "@ChamiloLMSCoreBundle/Resources/config/routing.yml"
+    resource: "@ChamiloCoreBundle/Resources/config/routing.yml"
 

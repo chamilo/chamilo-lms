@@ -1,0 +1,33 @@
+#chamilo_lms_notebook:
+#    resource: "@ChamiloNotebookBundle/Controller/"
+#    type:     annotation
+#    prefix:   /notebook
+chamilo_notebook_new:
+    pattern: /notebook/new
+    methods: [GET, POST]
+    defaults:
+        _controller: chamilo.controller.notebook:createAction
+
+chamilo_notebook_show:
+    pattern: /notebook/{iid}
+    methods: [GET]
+    requirements:
+            iid:  \d+
+    defaults:
+        _controller: chamilo.controller.notebook:showAction
+        _sylius:
+            criteria: { iid: $iid }
+
+chamilo_notebook_index:
+    pattern: /notebook
+    methods: [GET]
+    defaults:
+        _controller: chamilo.controller.notebook:indexAction
+
+chamilo_notebook_settings:
+    pattern: /settings/notebook
+    defaults:
+        _controller: sylius.controller.settings:updateAction
+        namespace: notebook
+        template: ChamiloCoreBundle:Settings:default.html.twig
+

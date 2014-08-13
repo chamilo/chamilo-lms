@@ -11,7 +11,7 @@
 use \ChamiloSession as Session;
 use Symfony\Component\Validator\Constraints as Assert;
 use Application\Sonata\UserBundle\Entity\User;
-use ChamiloLMS\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Constants declaration
@@ -527,7 +527,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
  * api_get_path(LIBRARY_PATH)                   /var/www/chamilo/main/inc/lib/
- * api_get_path(SYS_LIBRARY_JS_PATH)            /var/www/chamilo/web/ChamiloLMS/js
+ * api_get_path(SYS_LIBRARY_JS_PATH)            /var/www/chamilo/web/Chamilo/js
  * api_get_path(CONFIGURATION_PATH)             /var/www/chamilo/main/inc/conf/
  * api_get_path(SYS_LANG_PATH)                  /var/www/chamilo/main/lang/
  * api_get_path(SYS_PLUGIN_PATH)                /var/www/chamilo/plugin/
@@ -542,12 +542,12 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
  * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/archive/
- * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/web/chamiloLMS/img/
- * api_get_path(SYS_IMG_PATH)                   /var/www/chamilo/web/bundles/chamilolmscore/img/
+ * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/web/chamilo/img/
+ * api_get_path(SYS_IMG_PATH)                   /var/www/chamilo/web/bundles/chamilocore/img/
  *
  * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
- * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/ChamiloLMS/javascript
+ * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/Chamilo/javascript
  * api_get_path(WEB_TEMPLATE_PATH)              http://www.mychamilo.org/chamilo/main/template/
  *
  *
@@ -576,20 +576,20 @@ function api_get_path($path_type, $path = null) {
         WEB_DATA_COURSE_PATH    => 'courses/',
         WEB_DATA_PATH           => '/',
         SYS_COURSE_PATH         => 'data/',
-        SYS_CSS_PATH            => 'bundles/chamilolmscore/css/',
+        SYS_CSS_PATH            => 'bundles/chamilocore/css/',
         SYS_LANG_PATH           => 'lang/',
-        WEB_IMG_PATH            => 'bundles/chamilolmscore/img/',
-        SYS_IMG_PATH            => 'web/bundles/chamilolmscore/img/',
-        WEB_CSS_PATH            => 'bundles/chamilolmscore/css/',
+        WEB_IMG_PATH            => 'bundles/chamilocore/img/',
+        SYS_IMG_PATH            => 'web/bundles/chamilocore/img/',
+        WEB_CSS_PATH            => 'bundles/chamilocore/css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
         WEB_ARCHIVE_PATH        => 'temp/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
-        SYS_LIBRARY_JS_PATH     => 'bundles/chamilolmscore//js/',
+        SYS_LIBRARY_JS_PATH     => 'bundles/chamilocore//js/',
         CONFIGURATION_PATH      => 'inc/conf/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
-        WEB_LIBRARY_JS_PATH     => 'bundles/chamilolmscore//js/',
+        WEB_LIBRARY_JS_PATH     => 'bundles/chamilocore//js/',
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
@@ -2117,6 +2117,7 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
  * @author Bart Mollet
  */
 function api_get_setting($variable, $key = null) {
+
     $_setting = Session::read('_setting');
     if ($variable == 'header_extra_content') {
         $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
@@ -6784,7 +6785,7 @@ function api_get_user_roles()
 {
     $em = Database::getManager();
     //var_dump(Session::getSecurity()->getToken()->getRoles());
-    $roles = $em->getRepository('ChamiloLMSCoreBundle:Role')->findBy(array(), array('name'=>'asc'));
+    $roles = $em->getRepository('ChamiloCoreBundle:Role')->findBy(array(), array('name'=>'asc'));
     $userRoles = array();
     foreach ($roles as $role) {
         $userRoles[$role->getId()] = $role->getName();

@@ -1,0 +1,62 @@
+index:
+    resource: "@ChamiloCoreBundle/Controller/IndexController.php"
+    type:     annotation
+    prefix:   /
+
+# legacy routes
+main:
+    path:     /main/{name}
+    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
+    requirements:
+      name: .+
+
+# web url shortcuts
+web.ajax:
+    path: main/inc/ajax/
+
+web.main:
+    path: main/
+
+web.img:
+    path: bundles/chamilocore/img/
+
+# core controllers
+
+core_admin:
+    resource: "@ChamiloCoreBundle/Controller/Admin"
+    type: annotation
+    prefix:   /admin
+
+core_app:
+    resource: "@ChamiloCoreBundle/Controller/App"
+    type: annotation
+    prefix:   /app
+
+core_tool:
+    resource: "@ChamiloCourseBundle/Controller"
+    type: annotation
+    prefix: /courses/{course}/
+
+# redirects /url/ to /url
+
+remove_trailing_slash:
+    path: /{url}
+    defaults: { _controller: ChamiloCoreBundle:Redirecting:removeTrailingSlash }
+    requirements:
+        url: .*/$
+        _method: GET
+
+chamilo_platform_settings:
+    pattern: /settings/platform
+    defaults:
+        _controller: ChamiloSettingsBundle:Settings:update
+        namespace: platform
+        template: ChamiloCoreBundle:Settings:default.html.twig
+
+chamilo_course_settings:
+    pattern: /settings/course
+    defaults:
+        _controller: ChamiloSettingsBundle:Settings:update
+        namespace: course
+        template: ChamiloCoreBundle:Settings:default.html.twig
+

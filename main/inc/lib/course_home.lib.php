@@ -681,7 +681,7 @@ class CourseHome
                             );
                             if (!empty($tool['id'])) {
                                 $link['cmd'] = $urlGenerator->generate(
-                                    'chamilolms_core_tool_coursehome_coursehome_hideicon',
+                                    'chamilo_core_tool_coursehome_coursehome_hideicon',
                                     array(
                                         'courseCode' => api_get_course_id(),
                                         'iconId' => $tool['id']
@@ -694,7 +694,7 @@ class CourseHome
                             $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
                             if (!empty($tool['id'])) {
                                 $link['cmd'] = $urlGenerator->generate(
-                                    'chamilolms_core_tool_coursehome_coursehome_showicon',
+                                    'chamilo_core_tool_coursehome_coursehome_showicon',
                                     array(
                                         'courseCode' => api_get_course_id(),
                                         'iconId' => $tool['id']

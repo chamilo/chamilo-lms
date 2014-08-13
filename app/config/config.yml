@@ -3,8 +3,8 @@ imports:
     - { resource: security.yml }
     - { resource: assetic.yml }
 
-    - { resource: @ChamiloLMSCoreBundle/Resources/config/admin.yml }
-    - { resource: @ChamiloLMSNotebookBundle/Resources/config/admin.yml }
+    - { resource: @ChamiloCoreBundle/Resources/config/admin.yml }
+    - { resource: @ChamiloNotebookBundle/Resources/config/admin.yml }
 
     # Mopa Bootstrap
     - { resource: mopa/mopa_bootstrap.yml }
@@ -51,7 +51,7 @@ framework:
         engines: ['twig']
         form:
             resources:
-                - 'ChamiloLMSCoreBundle:Form'
+                - 'ChamiloCoreBundle:Form'
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
@@ -77,12 +77,12 @@ twig:
             - 'SonataFormatterBundle:Form:formatter.html.twig'
             - 'SonataMediaBundle:Form:media_widgets.html.twig'
             - 'SonataCoreBundle:Form:datepicker.html.twig'
-            - 'ChamiloLMSCoreBundle:Form:fields.html.twig'
+            - 'ChamiloCoreBundle:Form:fields.html.twig'
 
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
 
     paths:
-      "%kernel.root_dir%/../src/ChamiloLMS/CoreBundle/Resources/views/default": template_style
+      "%kernel.root_dir%/../src/Chamilo/CoreBundle/Resources/views/default": template_style
 
     globals:
       show_toolbar: true
@@ -122,7 +122,7 @@ twig:
 #assetic:
 #    debug:          "%kernel.debug%"
 #    use_controller: false
-#    bundles:        [ ChamiloLMSCoreBundle, ChamiloLMSInstallerBundle ]
+#    bundles:        [ ChamiloCoreBundle, ChamiloInstallerBundle ]
 #    #java: /usr/bin/java
 #    filters:
 #        cssrewrite: ~
@@ -203,10 +203,10 @@ fos_advanced_encoder:
     encoders:
         FOS\UserBundle\Model\UserInterface: sha512
         legacy_encoder:
-            id: chamilolms.userbundle.encoder
+            id: chamilo.userbundle.encoder
 
 sonata_admin:
-    title:      ChamiloLMS
+    title:      Chamilo
     title_logo: apple-touch-icon.png
 
 nelmio_api_doc: ~
@@ -231,17 +231,17 @@ avanzu_admin_theme:
 
 sylius_resource:
     resources:
-        chamilolms.notebook:
+        chamilo.notebook:
             driver: doctrine/orm
-            templates: ChamiloLMSNotebookBundle:Notebook
+            templates: ChamiloNotebookBundle:Notebook
             classes:
-                model: ChamiloLMS\NotebookBundle\Entity\CNotebook
+                model: Chamilo\NotebookBundle\Entity\CNotebook
 
 sylius_settings:
     driver: doctrine/orm
     classes:
         parameter:
-            model: ChamiloLMS\CoreBundle\Entity\SettingsCurrent
+            model: Chamilo\CoreBundle\Entity\SettingsCurrent
 
 
 doctrine_cache:
@@ -253,4 +253,4 @@ sp_bower:
     assetic: true
     install_on_warmup: true
     bundles:
-        ChamiloLMSCoreBundle: ~
+        ChamiloCoreBundle: ~

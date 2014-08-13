@@ -20,8 +20,8 @@ set_time_limit(0);
 
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\HttpFoundation\Request;
-use ChamiloLMS\Component\Console\Output\BufferedOutput;
-use ChamiloLMS\Framework\Application;
+use Chamilo\Component\Console\Output\BufferedOutput;
+use Chamilo\Framework\Application;
 use Chash\Command\Installation\InstallCommand;
 use Chash\Command\Installation\UpgradeCommand;
 
@@ -29,7 +29,7 @@ $app = new Application();
 
 // Setting paths
 $app['path.base'] = dirname(dirname(__DIR__)).'/';
-$app['path.app'] = $app['path.base'].'src/ChamiloLMS/';
+$app['path.app'] = $app['path.base'].'src/Chamilo/';
 $app['path.config'] = $app['path.base'].'config/';
 
 $app->bindInstallPaths(require $app['path.app'].'paths.php');
@@ -173,7 +173,7 @@ $app->match('/', function () use ($app) {
         ))
         ->add('continue', 'submit', array('attr' => array('class' => 'btn')))
         ->getForm();
-    
+
     if ('POST' == $request->getMethod()) {
         $url = $app['url_generator']->generate('requirements');
 
@@ -189,7 +189,7 @@ $app->match('/', function () use ($app) {
 ->before($blockInstallation);
 
 $app->match('/requirements', function () use ($app) {
-    
+
     $allowedToContinue = checkRequiredSettings();
 
     $request = $app['request'];

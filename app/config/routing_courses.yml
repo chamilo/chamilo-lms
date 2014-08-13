@@ -1,2 +1,2 @@
 notebook:
-    resource: "@ChamiloLMSNotebookBundle/Resources/config/routing.yml"
+    resource: "@ChamiloNotebookBundle/Resources/config/routing.yml"

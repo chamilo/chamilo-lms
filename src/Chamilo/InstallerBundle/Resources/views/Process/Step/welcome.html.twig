@@ -1,0 +1,20 @@
+{% extends 'ChamiloInstallerBundle::layout.html.twig' %}
+{% set step = 'welcome' %}
+{% use 'ChamiloInstallerBundle::progress.html.twig' %}
+{% block title %}
+    {% autoescape false %}
+    {{ 'process.step.welcome.header'|trans }} - {{ parent() }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block content %}
+
+
+{{ 'process.step.welcome.content'|trans|raw }}
+
+<div class="form-actions">
+    <a href="{{ path('sylius_flow_forward', {'scenarioAlias': 'chamilo_installer', 'stepName': 'welcome'}) }}" class="btn btn-lg btn-primary">
+        {{ 'process.button.install'|trans }} <i class="icon-chevron-right"></i>
+    </a>
+</div>
+{% endblock %}

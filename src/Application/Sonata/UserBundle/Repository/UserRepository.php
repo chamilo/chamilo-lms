@@ -88,10 +88,10 @@ class UserRepository extends EntityRepository
         $queryBuilder->select('c');
 
         // Loading User.
-        //$qb->from('ChamiloLMS\UserBundle\Entity\User', 'u');
+        //$qb->from('Chamilo\UserBundle\Entity\User', 'u');
 
         // Selecting course
-        $queryBuilder->innerJoin('ChamiloLMS\CoreBundle\Entity\Course', 'c');
+        $queryBuilder->innerJoin('Chamilo\CoreBundle\Entity\Course', 'c');
 
         //@todo check app settings
         //$qb->add('orderBy', 'u.lastname ASC');

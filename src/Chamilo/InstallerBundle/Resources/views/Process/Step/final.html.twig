@@ -1,0 +1,27 @@
+{% extends 'ChamiloInstallerBundle::layout.html.twig' %}
+{% set step = 'final' %}
+{% use 'ChamiloInstallerBundle::progress.html.twig' %}
+
+{% block title %}
+    {% autoescape false %}
+    {{ 'process.step.final.header'|trans }} - {{ parent() }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block content %}
+<div class="page-title">
+    <h2>{{ 'process.step.final.header'|trans }}</h2>
+</div>
+
+<div class="well">
+    <p>{{ 'process.step.final.content'|trans|raw }}</p>
+</div>
+
+<div class="button-set">
+    <a href="{{ path('home') }}" class="btn btn-success btn-lg" target="_blank">{{ 'process.button.finish'|trans }}</a>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+{% endblock javascript %}

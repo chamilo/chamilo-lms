@@ -1,0 +1,87 @@
+{% extends 'ChamiloInstallerBundle::layout.html.twig' %}
+{#{% set step, platformSteps = 'administration', ['navigation', 'js-routing', 'localization', 'assets', 'assetic', 'translation', 'requirejs'] %}#}
+{% set step, platformSteps = 'installation', [ 'assets', 'assetic', 'fixtures' ] %}
+{% use 'ChamiloInstallerBundle::progress.html.twig' %}
+
+{% if loadFixtures %}
+    {% set platformSteps = ['fixtures']|merge(platformSteps) %}
+{% endif %}
+
+{% set steps = platformSteps %}
+
+{% if installerScripts is not empty %}
+    {% for stepName in installerScripts|keys %}
+        {% set steps = steps|merge(['installerScript-' ~ stepName]) %}
+    {% endfor %}
+{% endif %}
+
+{% set steps = steps|merge(['finish']) %}
+
+{% block title %}
+    {% autoescape false %}
+    {{ 'process.step.installation.header'|trans }} - {{ parent() }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block content %}
+    <div class="page-title">
+        <h2>{{ 'process.step.installation.header'|trans }}</h2>
+    </div>
+
+    <div>
+        <table class="table table-striped">
+            <col width="75%" valign="top">
+            <col width="25%" valign="top">
+            <thead>
+            <tr>
+                <th>{{ 'process.operation'|trans }}</th>
+                <th>{{ 'process.status'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for step in platformSteps %}
+                <tr>
+                    <td><span id="step-{{ step }}"></span>{{ ('process.step.installation.' ~ step)|trans }}</td>
+                    <td>&nbsp;</td>
+                </tr>
+            {% endfor %}
+            {% if installerScripts is not empty %}
+                {% for stepKey, stepLabel in installerScripts %}
+                    <tr>
+                        <td><span id="step-installerScript-{{ stepKey }}"></span>{{ stepLabel|trans }}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            <tr>
+                <td><span id="step-finish"></span>{{ 'process.step.installation.finish'|trans }}</td>
+                <td>&nbsp;</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="button-set">
+            <div class="pull-right">
+                <a href="{{ path('sylius_flow_display', { scenarioAlias: 'chamilo_installer', stepName: 'configure' }) }}" class="btn btn-default back disabled">
+                    <span>{{ 'process.button.back'|trans }}</span>
+                </a>
+                <a href="javascript: void(0)" class="btn btn-primary next primary disabled">
+                    <span>{{ 'process.button.next'|trans }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function() {
+            ajaxQueue(
+                    [{% for step in steps %}'{{ step }}'{{ loop.last ? '' : ', ' }}{% endfor %}],
+                    '{{ path('sylius_flow_forward', { scenarioAlias: 'chamilo_installer', stepName: 'installation' }) }}'
+            );
+        });
+    </script>
+{% endblock javascript %}

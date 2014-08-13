@@ -213,7 +213,7 @@ class Display
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
 
                     $url = $urlGenerator->generate(
-                        'chamilolms_course_introduction_introduction_edit',
+                        'chamilo_course_introduction_introduction_edit',
                         array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
@@ -227,7 +227,7 @@ class Display
                     // Displays "edit intro && delete intro" commands
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
                     $url = $urlGenerator->generate(
-                        'chamilolms_course_introduction_introduction_edit',
+                        'chamilo_course_introduction_introduction_edit',
                         array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
@@ -236,7 +236,7 @@ class Display
                     $introduction_section .=  "</a>";
 
                     $url = $urlGenerator->generate(
-                        'chamilolms_course_introduction_introduction_delete',
+                        'chamilo_course_introduction_introduction_delete',
                         array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
@@ -814,7 +814,7 @@ class Display
             $icon = $image;
         }
 
-        $icon = 'bundles/chamilolmscore/img/'.$icon;
+        $icon = 'bundles/chamilocore/img/'.$icon;
 
         $icon = Session::getAsset()->getUrl($icon);
         //$icon = api_get_cdn_path($icon);

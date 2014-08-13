@@ -1,0 +1,21 @@
+services:
+    chamilo.coursebundle.tool.notebook.class:
+        class: Chamilo\CourseBundle\Tool\Notebook
+        arguments:
+            - notebook
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo_notebook:
+      class: Chamilo\NotebookBundle\Form\Type\CNotebookType
+      tags:
+         -  { name: form.type }
+
+    notebook.manager:
+        class: Chamilo\NotebookBundle\Entity\CNotebookManager
+
+    notebook.settings_schema.notebook:
+        class: Chamilo\NotebookBundle\Settings\NotebookSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: notebook }
+

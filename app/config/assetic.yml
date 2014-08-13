@@ -3,7 +3,7 @@ assetic:
     use_controller: false
     read_from:      %kernel.root_dir%/../web
     write_to:       %kernel.root_dir%/../web
-    bundles:        [ChamiloLMSCoreBundle, ChamiloLMSInstallerBundle] # disable bundles parsing
+    bundles:        [ChamiloCoreBundle, ChamiloInstallerBundle] # disable bundles parsing
 
     filters:
         cssrewrite: ~

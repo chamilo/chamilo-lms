@@ -261,7 +261,7 @@
                 <aside class="left-side sidebar-offcanvas">
                     <section class="sidebar">
 
-                        {{ sonata_block_render({'type': 'chamilolms.corebundle.block.main_menu', 'settings': {
+                        {{ sonata_block_render({'type': 'chamilo.corebundle.block.main_menu', 'settings': {
                             'current_uri': app.request.requestUri,
                             'ttl': 60
                         }}) }}
@@ -337,7 +337,7 @@
                         {% block sidebar %}
 
                             {#{{ sonata_block_render({ 'type': 'sonata.block.service.menu' }, {#}
-                                {#'menu_name': 'ChamiloLMSCoreBundle:MainMenuBuilder:profileMenu',#}
+                                {#'menu_name': 'ChamiloCoreBundle:MainMenuBuilder:profileMenu',#}
                             {#}) }}#}
 
                             {% include "@template_style/layout/sidebar.tpl" %}

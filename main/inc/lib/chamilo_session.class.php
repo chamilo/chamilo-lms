@@ -78,7 +78,7 @@ class ChamiloSession
     }
 
     /**
-     * @return ChamiloLMS\CoreBundle\Component\Editor\Editor
+     * @return Chamilo\CoreBundle\Component\Editor\Editor
      */
     public static function getHtmlEditor()
     {

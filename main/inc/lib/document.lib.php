@@ -9,7 +9,7 @@
  *
  * 	@package chamilo.library
  */
-use ChamiloLMS\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Code

@@ -3,9 +3,9 @@
     <title>Chamilo Installation</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="{{ app.request.basepath }}/../../web/ChamiloLMS/js/bootstrap/css/bootstrap.css">
-    <script type="text/javascript" src="{{ app.request.basepath }}/../../web/ChamiloLMS/js/jquery.js"></script>
-    <script type="text/javascript" src="{{ app.request.basepath }}/../../web/ChamiloLMS/js/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/../../web/Chamilo/js/bootstrap/css/bootstrap.css">
+    <script type="text/javascript" src="{{ app.request.basepath }}/../../web/Chamilo/js/jquery.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/../../web/Chamilo/js/bootstrap/js/bootstrap.js"></script>
 </head>
 
 <body>

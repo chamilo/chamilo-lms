@@ -5,7 +5,7 @@ require_once __DIR__ . '/SymfonyRequirements.php';
 use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Intl\Intl;
 
-use ChamiloLMS\InstallerBundle\Process\PhpExecutableFinder;
+use Chamilo\InstallerBundle\Process\PhpExecutableFinder;
 
 /**
  * This class specifies all requirements and optional recommendations

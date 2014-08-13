@@ -1,0 +1,45 @@
+{% extends 'ChamiloInstallerBundle::layout.html.twig' %}
+{% set step = 'setup' %}
+{% use 'ChamiloInstallerBundle::progress.html.twig' %}
+
+{% block title %}
+    {% autoescape false %}
+    {{ 'process.step.setup.header'|trans }} - {{ parent() }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header">
+            <h2>{{ 'process.step.setup.header'|trans|raw }}</h2>
+        </div>
+
+        <form action="{{ path('sylius_flow_forward', {'scenarioAlias': 'chamilo_installer', 'stepName': 'setup'}) }}" method="post">
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 class="sub-title">{{ form.admin.vars.label|trans }}</h3>
+
+                    {{ form_widget(form.admin) }}
+                </div>
+                <div class="col-sm-6">
+                    <h3 class="sub-title">{{ form.portal.vars.label|trans }}</h3>
+
+                    {{ form_widget(form.portal) }}
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            <div class="form-actions">
+                <a href="{{ path('sylius_flow_display', {'scenarioAlias': 'chamilo_installer', 'stepName': 'configure'}) }}" class="btn btn-default btn-lg">
+                    <i class="icon-chevron-left"></i>
+                    {{ 'process.button.back'|trans }}
+                </a> &nbsp;
+                <button class="btn btn-lg btn-primary" type="submit">
+                    <i class="icon-magic"></i> {{ 'process.button.install'|trans }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

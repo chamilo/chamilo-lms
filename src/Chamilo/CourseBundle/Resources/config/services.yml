@@ -1,0 +1,145 @@
+parameters:
+    tool_chain.class: Chamilo\CourseBundle\ToolChain
+
+services:
+    chamilo.tool_chain:
+        class: %tool_chain.class%
+
+    chamilo.coursebundle.tool.agenda.class:
+        class: Chamilo\CourseBundle\Tool\Agenda
+        arguments:
+            - agenda
+            - calendar_event
+            - calendar/agenda.php
+            - agenda.gif
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.announcements.class:
+        class: Chamilo\CourseBundle\Tool\Announcement
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.assignment.class:
+        class: Chamilo\CourseBundle\Tool\Assignment
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.attendance.class:
+        class: Chamilo\CourseBundle\Tool\Attendance
+        arguments:
+            - attendance
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.course_description.class:
+        class: Chamilo\CourseBundle\Tool\CourseDescription
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.chat.class:
+        class: Chamilo\CourseBundle\Tool\Chat
+        arguments:
+            - chat
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.course_progress.class:
+        class: Chamilo\CourseBundle\Tool\CourseProgress
+        arguments:
+            - course_progress
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.document.class:
+        class: Chamilo\CourseBundle\Tool\Document
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.dropbox.class:
+        class: Chamilo\CourseBundle\Tool\Dropbox
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.exercise.class:
+        class: Chamilo\CourseBundle\Tool\Exercise
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.forum.class:
+        class: Chamilo\CourseBundle\Tool\Forum
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.glossary.class:
+        class: Chamilo\CourseBundle\Tool\Glossary
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.gradebook.class:
+        class: Chamilo\CourseBundle\Tool\Gradebook
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.group.class:
+        class: Chamilo\CourseBundle\Tool\Group
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.learning_path.class:
+        class: Chamilo\CourseBundle\Tool\LearningPath
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.link.class:
+        class: Chamilo\CourseBundle\Tool\Link
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.survey.class:
+        class: Chamilo\CourseBundle\Tool\Survey
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.user.class:
+        class: Chamilo\CourseBundle\Tool\User
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilo.coursebundle.tool.wiki.class:
+        class: Chamilo\CourseBundle\Tool\Wiki
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }
+
+
+

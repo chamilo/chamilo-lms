@@ -15,7 +15,7 @@
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
-use ChamiloLMS\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Course;
 
 class FileManager
 {

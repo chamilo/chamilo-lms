@@ -133,13 +133,13 @@ class AppKernel extends Kernel
             new FOS\MessageBundle\FOSMessageBundle(),
 
             // Chamilo
-            new ChamiloLMS\InstallerBundle\ChamiloLMSInstallerBundle(),
-            new ChamiloLMS\CoreBundle\ChamiloLMSCoreBundle(),
-            new ChamiloLMS\CourseBundle\ChamiloLMSCourseBundle(),
-            new ChamiloLMS\MessageBundle\ChamiloLMSMessageBundle(),
+            new Chamilo\InstallerBundle\ChamiloInstallerBundle(),
+            new Chamilo\CoreBundle\ChamiloCoreBundle(),
+            new Chamilo\CourseBundle\ChamiloCourseBundle(),
+            new Chamilo\MessageBundle\ChamiloMessageBundle(),
+            new Chamilo\NotebookBundle\ChamiloNotebookBundle(),
+            new Chamilo\SettingsBundle\ChamiloSettingsBundle(),
 
-
-            new ChamiloLMS\NotebookBundle\ChamiloLMSNotebookBundle(),
             new APY\DataGridBundle\APYDataGridBundle(),
             new JMS\TranslationBundle\JMSTranslationBundle(),
 
@@ -147,7 +147,7 @@ class AppKernel extends Kernel
             //new JMS\SerializerBundle\JMSSerializerBundle($this),
             new Sp\BowerBundle\SpBowerBundle(),
             new Oro\Bundle\MigrationBundle\OroMigrationBundle(),
-            new ChamiloLMS\SettingsBundle\ChamiloLMSSettingsBundle(),
+
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

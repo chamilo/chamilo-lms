@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\DateTime;
-use ChamiloLMS\CoreBundle\Component\Auth;
+use Chamilo\CoreBundle\Component\Auth;
 use FOS\AdvancedEncoderBundle\Security\Encoder\EncoderAwareInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use FOS\MessageBundle\Model\ParticipantInterface;
@@ -238,32 +238,32 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     private $hrDeptId;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\CourseRelUser", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
      **/
     protected $courses;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CourseBundle\Entity\CItemProperty", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="user")
      **/
     protected $items;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
      **/
     protected $classes;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CourseBundle\Entity\CDropboxPost", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxPost", mappedBy="user")
      **/
     protected $dropBoxReceivedFiles;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CourseBundle\Entity\CDropboxFile", mappedBy="userSent")
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxFile", mappedBy="userSent")
      **/
     protected $dropBoxSentFiles;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\JuryMembers", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
      **/
     //protected $jurySubscriptions;
 
@@ -284,12 +284,12 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     private $isActive;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user")
      **/
     protected $curriculumItems;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\AccessUrl")
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
      * @ORM\JoinTable(
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="access_url_id", referencedColumnName="id")}
@@ -298,7 +298,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     protected $portals;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\Session", mappedBy="generalCoach")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
      **/
     protected $sessionAsGeneralCoach;
 

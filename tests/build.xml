@@ -99,7 +99,7 @@
 
  <target name="phpdoc" description="Generate API documentation">
    <exec executable="phpdoc">
-     <arg line="-d ${basedir}/../ -t ${basedir}/logs/docs -ti ChamiloLMS -i archive/,home/,entity/,symfony/,phpdocx/,phpqrcode/,mpdf/,transliteration/*,phpmailer/*,htmlpurifier/,fckeditor/*,formvalidator/*,upload/users/,lang/,courses/,main/inc/lib/internationalization_database/,.htaccess -ct covers,assert" />
+     <arg line="-d ${basedir}/../ -t ${basedir}/logs/docs -ti Chamilo -i archive/,home/,entity/,symfony/,phpdocx/,phpqrcode/,mpdf/,transliteration/*,phpmailer/*,htmlpurifier/,fckeditor/*,formvalidator/*,upload/users/,lang/,courses/,main/inc/lib/internationalization_database/,.htaccess -ct covers,assert" />
    </exec>
  </target>
  <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">

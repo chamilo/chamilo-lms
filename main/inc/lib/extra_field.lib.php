@@ -643,13 +643,13 @@ class ExtraField extends Model
 
                         $addOptions = array();
 
-                        $optionsExists = Database::getManager()->getRepository('ChamiloLMSCoreBundle:ExtraFieldOptionRelFieldOption')->
+                        $optionsExists = Database::getManager()->getRepository('ChamiloCoreBundle:ExtraFieldOptionRelFieldOption')->
                             findOneBy(array('fieldId' => $field_details['id']));
 
                         if ($optionsExists) {
                             if (isset($userInfo['status']) && !empty($userInfo['status'])) {
 
-                                $fieldWorkFlow = Database::getManager()->getRepository('ChamiloLMSCoreBundle:ExtraFieldOptionRelFieldOption')
+                                $fieldWorkFlow = Database::getManager()->getRepository('ChamiloCoreBundle:ExtraFieldOptionRelFieldOption')
                                     ->findBy(
                                         array(
                                             'fieldId' => $field_details['id'],

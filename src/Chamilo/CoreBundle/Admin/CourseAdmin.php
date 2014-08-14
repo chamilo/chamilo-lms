@@ -4,6 +4,7 @@ namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CoreBundle\Entity\Course;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;

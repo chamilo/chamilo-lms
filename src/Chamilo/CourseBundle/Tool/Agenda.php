@@ -9,17 +9,5 @@ namespace Chamilo\CourseBundle\Tool;
  */
 class Agenda extends BaseTool
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getLink()
-    {
-        return 'calendar/agenda.php';
-    }
 
-
-    public function getCategory()
-    {
-        return 'authoring';
-    }
 }

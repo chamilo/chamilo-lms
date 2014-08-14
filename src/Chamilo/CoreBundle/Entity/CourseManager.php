@@ -22,6 +22,11 @@ class CourseManager extends BaseEntityManager
         return $this->getRepository()->findByTitle($name);
     }
 
+    public function saveTools($courseId)
+    {
+
+    }
+
     /**
      * {@inheritdoc}
      */

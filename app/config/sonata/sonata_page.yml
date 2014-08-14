@@ -19,7 +19,6 @@ sonata_page:
         - ^installer
         - ^/installer/(.*)
         - install.php
-        - settings/(.*)
 
     ignore_route_patterns:
         - (.*)administration(.*)     # ignore admin route, ie route containing 'admin'  # sonata admin

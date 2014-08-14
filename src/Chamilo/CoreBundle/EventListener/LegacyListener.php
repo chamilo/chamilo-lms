@@ -39,6 +39,7 @@ class LegacyListener
         $database  = new \Database($dbConnection, array());
 
         \Database::setManager($this->container->get('doctrine')->getManager());
+        \CourseManager::setToolList($this->container->get('chamilo.tool_chain'));
         Session::$urlGenerator = $this->container->get('router');
         Session::$security = $this->container->get('security.context');
         Session::$translator = $this->container->get('translator');

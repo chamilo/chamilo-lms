@@ -3,13 +3,17 @@ services:
         class: Chamilo\CourseBundle\Tool\Notebook
         arguments:
             - notebook
+            - interaction
+            - notebook/index.php
+            - notebook.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo_notebook:
-      class: Chamilo\NotebookBundle\Form\Type\CNotebookType
-      tags:
-         -  { name: form.type }
+        class: Chamilo\NotebookBundle\Form\Type\CNotebookType
+        tags:
+           -  { name: form.type }
 
     notebook.manager:
         class: Chamilo\NotebookBundle\Entity\CNotebookManager

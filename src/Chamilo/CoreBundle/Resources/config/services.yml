@@ -21,7 +21,6 @@ services:
         arguments: [ @chamilo.tool_chain ]
         tags:
             - { name: doctrine.orm.entity_listener }
-
 #            - { name: doctrine.event_listener, event: prePersist }
 
     html_editor:

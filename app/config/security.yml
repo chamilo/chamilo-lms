@@ -31,11 +31,11 @@ security:
             id: fos_user.user_manager
     firewalls:
         dev:
-          pattern:  ^/(_(profiler|wdt)|css|images|js|admin/_(wdt|profiler)|api/_(wdt|profiler))/
-          security: false
+            pattern:  ^/(_(profiler|wdt)|css|images|js|admin/_(wdt|profiler)|api/_(wdt|profiler))/
+            security: false
 
         install:
-            pattern:                        ^/installer
+            pattern:                        /installer/(.*)
             security:                       false
             anonymous:                      true
 
@@ -50,7 +50,7 @@ security:
                 failure_path:   null
             logout:
                 path:           /administration/logout
-            anonymous:          false
+            anonymous:          true
 
         main:
             pattern: .*

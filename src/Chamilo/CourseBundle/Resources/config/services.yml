@@ -8,138 +8,202 @@ services:
     chamilo.coursebundle.tool.agenda.class:
         class: Chamilo\CourseBundle\Tool\Agenda
         arguments:
-            - agenda
             - calendar_event
+            - authoring
             - calendar/agenda.php
             - agenda.gif
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.announcements.class:
         class: Chamilo\CourseBundle\Tool\Announcement
         arguments:
-            - document
+            - announcement
+            - authoring
+            - announcements/announcements.php
+            - valves.gif
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.assignment.class:
         class: Chamilo\CourseBundle\Tool\Assignment
         arguments:
-            - document
+            - assignment
+            - interaction
+            - work/work.php
+            - works.gif
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.attendance.class:
         class: Chamilo\CourseBundle\Tool\Attendance
         arguments:
             - attendance
+            - authoring
+            - attendance/index.php
+            - attendance.gif
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.course_description.class:
         class: Chamilo\CourseBundle\Tool\CourseDescription
         arguments:
-            - document
+            - course_description
+            - authoring
+            - course_description/index.php
+            - info.gif
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.chat.class:
         class: Chamilo\CourseBundle\Tool\Chat
         arguments:
             - chat
+            - interaction
+            - chat/chat.php
+            - chat.gif
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.course_progress.class:
         class: Chamilo\CourseBundle\Tool\CourseProgress
         arguments:
             - course_progress
+            - authoring
+            - course_progress/index.php
+            - course_progress.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.document.class:
         class: Chamilo\CourseBundle\Tool\Document
         arguments:
             - document
+            - authoring
+            - document/document.php
+            - folder_document.gif
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.dropbox.class:
         class: Chamilo\CourseBundle\Tool\Dropbox
         arguments:
-            - document
+            - dropbox
+            - interaction
+            - dropbox/index.php
+            - dropbox.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.exercise.class:
         class: Chamilo\CourseBundle\Tool\Exercise
         arguments:
-            - document
+            - quiz
+            - authoring
+            - exercice/exercice.php
+            - quiz.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.forum.class:
         class: Chamilo\CourseBundle\Tool\Forum
         arguments:
-            - document
+            - forum
+            - interaction
+            - forum/index.php
+            - forum.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.glossary.class:
         class: Chamilo\CourseBundle\Tool\Glossary
         arguments:
-            - document
+            - glossary
+            - authoring
+            - glossary/index.php
+            - glossary.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.gradebook.class:
         class: Chamilo\CourseBundle\Tool\Gradebook
         arguments:
-            - document
+            - gradebook
+            - authoring
+            - gradebook/index.php
+            - gradebook.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.group.class:
         class: Chamilo\CourseBundle\Tool\Group
         arguments:
-            - document
+            - group
+            - interaction
+            - group/group.php
+            - group.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.learning_path.class:
         class: Chamilo\CourseBundle\Tool\LearningPath
         arguments:
-            - document
+            - learnpath
+            - authoring
+            - newscorm/lp_controller.php
+            - scorms.gif
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.link.class:
         class: Chamilo\CourseBundle\Tool\Link
         arguments:
-            - document
+            - link
+            - authoring
+            - link/link.php
+            - links.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.survey.class:
         class: Chamilo\CourseBundle\Tool\Survey
         arguments:
-            - document
+            - survey
+            - interaction
+            - survey/survey_list.php
+            - survey.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.user.class:
         class: Chamilo\CourseBundle\Tool\User
         arguments:
-            - document
+            - user
+            - interaction
+            - user/user.php
+            - members.gif
+
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
     chamilo.coursebundle.tool.wiki.class:
         class: Chamilo\CourseBundle\Tool\Wiki
         arguments:
-            - document
+            - wiki
+            - interaction
+            - wiki/index.php
+            - wiki.gif
         tags:
-            - { name: chamilolm.course.tool }
+            - { name: chamilo.course.tool }
 
 
 

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\Process\ProcessBuilder;
 
 use Oro\Bundle\CacheBundle\Manager\OroDataCacheManager;
-use Oro\Bundle\InstallerBundle\Process\PhpExecutableFinder;
+use Chamilo\InstallerBundle\Process\PhpExecutableFinder;
 
 class CommandExecutor
 {
@@ -54,13 +54,13 @@ class CommandExecutor
     public function __construct(
         $env,
         OutputInterface $output,
-        Application $application,
-        OroDataCacheManager $dataCacheManager = null
+        Application $application
+        //OroDataCacheManager $dataCacheManager = null
     ) {
         $this->env              = $env;
         $this->output           = $output;
         $this->application      = $application;
-        $this->dataCacheManager = $dataCacheManager;
+        //$this->dataCacheManager = $dataCacheManager;
     }
 
     /**
@@ -125,9 +125,9 @@ class CommandExecutor
             $this->lastCommandExitCode = $process->getExitCode();
 
             // synchronize all data caches
-            if ($this->dataCacheManager) {
+            /*if ($this->dataCacheManager) {
                 $this->dataCacheManager->sync();
-            }
+            }*/
         } else {
             $this->application->setAutoExit(false);
             $this->lastCommandExitCode = $this->application->run(new ArrayInput($params), $this->output);

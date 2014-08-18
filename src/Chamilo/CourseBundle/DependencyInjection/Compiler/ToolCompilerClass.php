@@ -23,7 +23,7 @@ class ToolCompilerClass implements CompilerPassInterface
         );
 
         $taggedServices = $container->findTaggedServiceIds(
-            'chamilo.course.tool'
+            'chamilo_course.tool'
         );
 
         foreach ($taggedServices as $id => $attributes) {

@@ -9,7 +9,7 @@ services:
             - notebook.gif
 
         tags:
-            - { name: chamilo.course.tool }
+            - { name: chamilo_course.tool }
 
     # Form (add/edit)
     chamilo_notebook.form.type:

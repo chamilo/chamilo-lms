@@ -3,6 +3,7 @@
 
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class Display
@@ -107,7 +108,7 @@ class Display
     }
 
     /**
-     * @param \Symfony\Component\Routing\RouterInterface $urlGenerator
+     * @param RouterInterface $urlGenerator
      * @param string $tool
      * @param array $toolList
      * @return null|string

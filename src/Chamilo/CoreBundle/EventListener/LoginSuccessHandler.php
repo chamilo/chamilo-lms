@@ -24,10 +24,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param Router $urlGenerator
      * @param SecurityContext $security
      */
-    public function __construct($dbConnection, UrlGeneratorInterface $urlGenerator, SecurityContext $security)
+    public function __construct(UrlGeneratorInterface $urlGenerator, SecurityContext $security)
     {
-        $database  = new \Database($dbConnection, array());
-
         $this->router = $urlGenerator;
         $this->security = $security;
     }
@@ -44,10 +42,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $userId = $user->getId();
 
         $session = $request->getSession();
-
-        \ChamiloSession::setSession($session);
-        \ChamiloSession::$urlGenerator = $this->router;
-
         //event_login($user);
 
         $userInfo = api_get_user_info($user->getId());

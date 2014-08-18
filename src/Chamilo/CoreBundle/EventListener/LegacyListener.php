@@ -39,11 +39,12 @@ class LegacyListener
         $dbConnection = $container->get('database_connection');
 
         // Setting db manager.
-        $database  = new \Database($dbConnection, array());
+        $database  = new \Database();
+        $database->setConnection($dbConnection);
         \Database::setManager($container->get('doctrine')->getManager());
 
         // Setting course tool chain.
-        \CourseManager::setToolList($container->get('chamilo.tool_chain'));
+        \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
 
         // Setting legacy properties
         Container::$urlGenerator = $container->get('router');
@@ -56,7 +57,7 @@ class LegacyListener
         Container::$courseDir = $container->get('kernel')->getDataDir();
         //Container::$configDir = $container->get('kernel')->getConfigDir();
         Container::$assets = $container->get('templating.helper.assets');
-        Container::$htmlEditor = $container->get('html_editor');
+        Container::$htmlEditor = $container->get('chamilo_core.html_editor');
 
         if (!defined('DEFAULT_DOCUMENT_QUOTA')) {
             $default_quota = api_get_setting('default_document_quotum');
@@ -77,6 +78,7 @@ class LegacyListener
             $courseCodeFromRequest = $request->get('cidReq');
             $courseCode = $courseCodeFromRequest;
         }
+
         /** @var \Doctrine\ORM\EntityManager $em */
         $em = $container->get('doctrine')->getManager();
 

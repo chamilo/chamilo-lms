@@ -9,29 +9,5 @@ namespace Chamilo\CourseBundle\Tool;
  */
 class Dropbox extends BaseTool
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'Exercise';
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getLink()
-    {
-        return 'dropbox/index.php';
-    }
-
-    public function getTarget()
-    {
-        return '_self';
-    }
-
-    public function getCategory()
-    {
-        return 'interaction';
-    }
 }

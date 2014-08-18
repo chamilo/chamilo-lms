@@ -1,6 +1,6 @@
 services:
     # Icon in course home
-    chamilo.notebookbundle.tool.notebook.class:
+    chamilo_notebook.tool.notebook.class:
         class: Chamilo\NotebookBundle\Tool\Notebook
         arguments:
             - notebook
@@ -12,17 +12,17 @@ services:
             - { name: chamilo.course.tool }
 
     # Form (add/edit)
-    chamilo_notebook:
+    chamilo_notebook.form.type:
         class: Chamilo\NotebookBundle\Form\Type\CNotebookType
         tags:
            -  { name: form.type }
 
     # Database manager
-    notebook.manager:
+    chamilo_notebook.notebook_manager:
         class: Chamilo\NotebookBundle\Entity\CNotebookManager
 
     # Admin settings for the tool
-    notebook.settings_schema.notebook:
+    chamilo_notebook.settings_schema.notebook:
         class: Chamilo\NotebookBundle\Settings\NotebookSettingsSchema
         tags:
             - { name: sylius.settings_schema, namespace: notebook }

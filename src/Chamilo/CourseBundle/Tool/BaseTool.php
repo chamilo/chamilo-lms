@@ -14,6 +14,7 @@ abstract class BaseTool implements ToolInterface
     protected $category;
     protected $link;
     protected $image;
+    protected $admin;
 
     /**
      * @param $name
@@ -27,6 +28,7 @@ abstract class BaseTool implements ToolInterface
         $this->category = $category;
         $this->link = $link;
         $this->image = $image;
+        $this->admin = 0;
     }
 
     /**
@@ -70,15 +72,28 @@ abstract class BaseTool implements ToolInterface
     }
 
     /**
+     * @param int $admin
+     */
+    public function setAdmin($admin)
+    {
+        $this->admin = $admin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAdmin()
+    {
+        return $this->admin;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
 
     }
-
-
-
 
 
 }

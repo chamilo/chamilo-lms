@@ -135,6 +135,7 @@ class CTool
         // Default values
         $this->id = 0;
         $this->sessionId = 0;
+        $this->address = 'squaregrey.gif';
     }
 
     /**

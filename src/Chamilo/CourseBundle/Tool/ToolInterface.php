@@ -33,5 +33,4 @@ interface ToolInterface
      * @return string
      */
     //public function getName();
-
 }

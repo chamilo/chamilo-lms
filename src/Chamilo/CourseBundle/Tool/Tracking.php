@@ -4,9 +4,10 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class Glossary
+ * Class Tracking
  * @package Chamilo\CourseBundle\Tool
  */
-class Glossary extends BaseTool
+class Tracking extends BaseTool
 {
+
 }

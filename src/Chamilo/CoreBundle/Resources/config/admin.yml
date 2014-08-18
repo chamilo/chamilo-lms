@@ -9,7 +9,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [ChamiloCoreBundle]]
-            - [ setToolChain, [@chamilo.tool_chain]]
+            - [ setToolChain, [@chamilo_course.tool_chain]]
 
     sonata.admin.session:
         class: Chamilo\CoreBundle\Admin\SessionAdmin

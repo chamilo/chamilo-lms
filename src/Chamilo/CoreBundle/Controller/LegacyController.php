@@ -56,7 +56,7 @@ class LegacyController extends BaseController
         Container::$tempDir = $this->container->get('kernel')->getCacheDir();
         Container::$courseDir = $this->container->get('kernel')->getDataDir();
         //Container::$configDir = $this->container->get('kernel')->getConfigDir();
-        Container::$htmlEditor = $this->container->get('html_editor');
+        Container::$htmlEditor = $this->container->get('chamilo_core.html_editor');
         Container::$twig = $this->container->get('twig');
 
         if (is_file($fileToLoad) &&

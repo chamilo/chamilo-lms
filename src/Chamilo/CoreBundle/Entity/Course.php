@@ -276,10 +276,8 @@ class Course
      */
     public function setTools($tools)
     {
-        $this->tools = new ArrayCollection();
-
         foreach ($tools as $tool) {
-            $this->addTool($tool);
+            $this->addTools($tool);
         }
     }
 

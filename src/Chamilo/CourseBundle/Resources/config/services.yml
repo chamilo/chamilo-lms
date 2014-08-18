@@ -2,7 +2,7 @@ parameters:
     tool_chain.class: Chamilo\CourseBundle\ToolChain
 
 services:
-    chamilo.tool_chain:
+    chamilo_course.tool_chain:
         class: %tool_chain.class%
 
     chamilo.coursebundle.tool.agenda.class:
@@ -42,6 +42,16 @@ services:
             - authoring
             - attendance/index.php
             - attendance.gif
+        tags:
+            - { name: chamilo.course.tool }
+
+    chamilo.coursebundle.tool.blog.class:
+        class: Chamilo\CourseBundle\Tool\Blog
+        arguments:
+            - blog_management
+            - admin
+            - blog/blog_admin.php
+            - blog_admin.gif
         tags:
             - { name: chamilo.course.tool }
 
@@ -173,6 +183,27 @@ services:
         tags:
             - { name: chamilo.course.tool }
 
+    chamilo.coursebundle.tool.maintenance.class:
+        class: Chamilo\CourseBundle\Tool\Maintenance
+        arguments:
+            - course_maintenance
+            - admin
+            - course_info/maintenance.php
+            - backup.gif
+        tags:
+            - { name: chamilo.course.tool }
+
+    chamilo.coursebundle.tool.settings.class:
+        class: Chamilo\CourseBundle\Tool\Settings
+        arguments:
+            - course_setting
+            - admin
+            - course_info/infocours.php
+            - reference.gif
+
+        tags:
+            - { name: chamilo.course.tool }
+
     chamilo.coursebundle.tool.survey.class:
         class: Chamilo\CourseBundle\Tool\Survey
         arguments:
@@ -180,6 +211,17 @@ services:
             - interaction
             - survey/survey_list.php
             - survey.gif
+
+        tags:
+            - { name: chamilo.course.tool }
+
+    chamilo.coursebundle.tool.tracking.class:
+        class: Chamilo\CourseBundle\Tool\Tracking
+        arguments:
+            - tracking
+            - admin
+            - tracking/courseLog.php
+            - statistics.gif
 
         tags:
             - { name: chamilo.course.tool }
@@ -204,6 +246,3 @@ services:
             - wiki.gif
         tags:
             - { name: chamilo.course.tool }
-
-
-

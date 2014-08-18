@@ -1,6 +1,7 @@
 services:
-    chamilo.coursebundle.tool.notebook.class:
-        class: Chamilo\CourseBundle\Tool\Notebook
+    # Icon in course home
+    chamilo.notebookbundle.tool.notebook.class:
+        class: Chamilo\NotebookBundle\Tool\Notebook
         arguments:
             - notebook
             - interaction
@@ -10,14 +11,17 @@ services:
         tags:
             - { name: chamilo.course.tool }
 
+    # Form (add/edit)
     chamilo_notebook:
         class: Chamilo\NotebookBundle\Form\Type\CNotebookType
         tags:
            -  { name: form.type }
 
+    # Database manager
     notebook.manager:
         class: Chamilo\NotebookBundle\Entity\CNotebookManager
 
+    # Admin settings for the tool
     notebook.settings_schema.notebook:
         class: Chamilo\NotebookBundle\Settings\NotebookSettingsSchema
         tags:

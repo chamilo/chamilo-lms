@@ -203,7 +203,7 @@ fos_advanced_encoder:
     encoders:
         FOS\UserBundle\Model\UserInterface: sha512
         legacy_encoder:
-            id: chamilo.userbundle.encoder
+            id: chamilo_core.encoder
 
 sonata_admin:
     title:      Chamilo
@@ -242,7 +242,6 @@ sylius_settings:
     classes:
         parameter:
             model: Chamilo\CoreBundle\Entity\SettingsCurrent
-
 
 doctrine_cache:
     providers:

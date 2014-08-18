@@ -14,12 +14,12 @@ class ToolCompilerClass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('chamilo.tool_chain')) {
+        if (!$container->hasDefinition('chamilo_course.tool_chain')) {
             return;
         }
 
         $definition = $container->getDefinition(
-            'chamilo.tool_chain'
+            'chamilo_course.tool_chain'
         );
 
         $taggedServices = $container->findTaggedServiceIds(

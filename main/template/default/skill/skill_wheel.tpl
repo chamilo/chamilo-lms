@@ -375,13 +375,15 @@ $(document).ready(function() {
         $("#dialog-form-profile").dialog({
             buttons: {
                 "{{ "Save"|get_lang }}" : function() {
-                    var params = $("#save_profile_form").serialize();
+                    //var params = $("#save_profile_form").serialize();
+                    var name = $("#name_profile").val();
+                    var description = $("#description_profile").val();
                     var skill_list = return_skill_list_from_profile_search();                    
                     skill_list = { 'skill_id' : skill_list };
                     skill_params = $.param(skill_list);
         
                     $.ajax({
-                        url: '{{ url }}&a=save_profile&'+params+'&'+skill_params,
+                        url: '{{ url }}&a=save_profile&name='+name+'&description='+description+'&'+skill_params,
                         success:function(data) {
                             if (data == 1 ) {
                                 update_my_saved_profiles();
@@ -391,15 +393,15 @@ $(document).ready(function() {
                             }
                             
                             $("#dialog-form-profile").dialog("close");                            
-                            $("#name").attr('value', '');
-                            $("#description").attr('value', '');                             
+                            $("#name_profile").attr('value', '');
+                            $("#description_profile").attr('value', '');                             
                          }                           
                      });
                   }
             },
             close: function() {     
-                $("#name").attr('value', '');
-                $("#description").attr('value', '');                
+                $("#name_profile").attr('value', '');
+                $("#description_profile").attr('value', '');                
             }
         });
         $("#dialog-form-profile").dialog("open");
@@ -551,13 +553,13 @@ $(document).ready(function() {
             <div class="control-group">            
                 <label class="control-label" for="name">{{"Name"|get_lang}}</label>            
                 <div class="controls">
-                    <input type="text" name="name" id="name" size="40" />             
+                    <input type="text" name="name" id="name_profile" size="40" />             
                 </div>
             </div>        
             <div class="control-group">            
                 <label class="control-label" for="name">{{"Description"|get_lang}}</label>            
                 <div class="controls">
-                    <textarea name="description" id="description" class="span2"  rows="7"></textarea>
+                    <textarea name="description" id="description_profile" class="span2"  rows="7"></textarea>
                 </div>
             </div>  
         </fieldset>

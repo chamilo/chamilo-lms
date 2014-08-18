@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * A html editor field to use with QuickForm
@@ -29,7 +30,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 
         global $fck_attribute;
 
-        $editor = \ChamiloSession::getHtmlEditor();
+        $editor = Container::getHtmlEditor();
         if ($editor) {
             $this->editor = $editor;
             $this->editor->setName($name);

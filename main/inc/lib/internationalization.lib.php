@@ -11,6 +11,7 @@
  * @package chamilo.library
  */
 use \ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 
 // Predefined date formats in Chamilo provided by the language sub-system.
@@ -50,11 +51,11 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER); // Contextual: for
 function get_lang($variable)
 {
     $defaultDomain = 'all';
-    $translated = Session::getTranslator()->trans($variable, array(), $defaultDomain);
+    $translated = Container::getTranslator()->trans($variable, array(), $defaultDomain);
 
     if ($translated == $variable) {
         // Check the langVariable for BC
-        $translated = Session::getTranslator()->trans("lang$variable", array(), $defaultDomain);
+        $translated = Container::getTranslator()->trans("lang$variable", array(), $defaultDomain);
         if ($translated == "lang$variable") {
             return $variable;
         }
@@ -123,7 +124,7 @@ function api_purify_language_id($language)
  */
 function api_get_language_isocode($language = null, $default_code = 'en')
 {
-    return Session::getTranslator()->getLocale();
+    return Container::getTranslator()->getLocale();
 
     static $iso_code = array();
     if (empty($language)) {

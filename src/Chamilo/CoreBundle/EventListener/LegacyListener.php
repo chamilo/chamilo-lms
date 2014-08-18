@@ -5,11 +5,10 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
-use \ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 class LegacyListener
 {
@@ -33,24 +32,31 @@ class LegacyListener
         $session = $request->getSession();
         $container = $this->container;
 
-        // Loading legacy variables
-        Session::setSession($request->getSession());
-        $dbConnection = $this->container->get('database_connection');
-        $database  = new \Database($dbConnection, array());
+        // Setting session.
+        Container::setSession($request->getSession());
 
-        \Database::setManager($this->container->get('doctrine')->getManager());
-        \CourseManager::setToolList($this->container->get('chamilo.tool_chain'));
-        Session::$urlGenerator = $this->container->get('router');
-        Session::$security = $this->container->get('security.context');
-        Session::$translator = $this->container->get('translator');
-        Session::$rootDir = $this->container->get('kernel')->getRealRootDir();
-        Session::$logDir = $this->container->get('kernel')->getLogDir();
-        Session::$dataDir = $this->container->get('kernel')->getDataDir();
-        Session::$tempDir = $this->container->get('kernel')->getCacheDir();
-        Session::$courseDir = $this->container->get('kernel')->getDataDir();
-        //Session::$configDir = $this->container->get('kernel')->getConfigDir();
-        Session::$assets = $this->container->get('templating.helper.assets');
-        Session::$htmlEditor = $this->container->get('html_editor');
+        // Setting database.
+        $dbConnection = $container->get('database_connection');
+
+        // Setting db manager.
+        $database  = new \Database($dbConnection, array());
+        \Database::setManager($container->get('doctrine')->getManager());
+
+        // Setting course tool chain.
+        \CourseManager::setToolList($container->get('chamilo.tool_chain'));
+
+        // Setting legacy properties
+        Container::$urlGenerator = $container->get('router');
+        Container::$security = $container->get('security.context');
+        Container::$translator = $container->get('translator');
+        Container::$rootDir = $container->get('kernel')->getRealRootDir();
+        Container::$logDir = $container->get('kernel')->getLogDir();
+        Container::$dataDir = $container->get('kernel')->getDataDir();
+        Container::$tempDir = $container->get('kernel')->getCacheDir();
+        Container::$courseDir = $container->get('kernel')->getDataDir();
+        //Container::$configDir = $container->get('kernel')->getConfigDir();
+        Container::$assets = $container->get('templating.helper.assets');
+        Container::$htmlEditor = $container->get('html_editor');
 
         if (!defined('DEFAULT_DOCUMENT_QUOTA')) {
             $default_quota = api_get_setting('default_document_quotum');
@@ -72,13 +78,13 @@ class LegacyListener
             $courseCode = $courseCodeFromRequest;
         }
         /** @var \Doctrine\ORM\EntityManager $em */
-        $em = $this->container->get('doctrine')->getManager();
+        $em = $container->get('doctrine')->getManager();
 
         if (!empty($courseCode)) {
             $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
             if ($course) {
                 $courseInfo = api_get_course_info($course->getCode());
-                $this->container->get('twig')->addGlobal('course', $course);
+                $container->get('twig')->addGlobal('course', $course);
                 $request->getSession()->set('_real_cid', $course->getId());
                 $request->getSession()->set('_cid', $course->getCode());
                 $request->getSession()->set('_course', $courseInfo);

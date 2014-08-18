@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use \ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
 use Display;
 
 /**
@@ -42,21 +43,21 @@ class LegacyController extends BaseController
         $fileToLoad = $mainPath.$name;
 
         // Legacy inclusions
-        Session::setSession($this->getRequest()->getSession());
+        Container::setSession($request->getSession());
         $dbConnection = $this->container->get('database_connection');
         $database  = new \Database($dbConnection, array());
-        Session::$urlGenerator = $this->container->get('router');
-        Session::$security = $this->container->get('security.context');
-        Session::$translator = $this->container->get('translator');
-        Session::$assets = $this->container->get('templating.helper.assets');
-        Session::$rootDir = $this->container->get('kernel')->getRealRootDir();
-        Session::$logDir = $this->container->get('kernel')->getLogDir();
-        Session::$dataDir = $this->container->get('kernel')->getDataDir();
-        Session::$tempDir = $this->container->get('kernel')->getCacheDir();
-        Session::$courseDir = $this->container->get('kernel')->getDataDir();
-        //Session::$configDir = $this->container->get('kernel')->getConfigDir();
-        Session::$htmlEditor = $this->container->get('html_editor');
-        Session::$twig = $this->container->get('twig');
+        Container::$urlGenerator = $this->container->get('router');
+        Container::$security = $this->container->get('security.context');
+        Container::$translator = $this->container->get('translator');
+        Container::$assets = $this->container->get('templating.helper.assets');
+        Container::$rootDir = $this->container->get('kernel')->getRealRootDir();
+        Container::$logDir = $this->container->get('kernel')->getLogDir();
+        Container::$dataDir = $this->container->get('kernel')->getDataDir();
+        Container::$tempDir = $this->container->get('kernel')->getCacheDir();
+        Container::$courseDir = $this->container->get('kernel')->getDataDir();
+        //Container::$configDir = $this->container->get('kernel')->getConfigDir();
+        Container::$htmlEditor = $this->container->get('html_editor');
+        Container::$twig = $this->container->get('twig');
 
         if (is_file($fileToLoad) &&
             \Security::check_abs_path($fileToLoad, $mainPath)

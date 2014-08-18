@@ -9,6 +9,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/answer.class.php';
 
 use \ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 api_protect_course_script(true);
 

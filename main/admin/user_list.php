@@ -5,7 +5,8 @@
 	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
 *	@package chamilo.admin
 */
-use ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
+
 // name of the language file that needs to be included
 $language_file = array ('registration','admin');
 $cidReset = true;
@@ -410,7 +411,7 @@ function modify_filter($user_id, $url_params, $row) {
         )
     ) {
         if (!$user_is_anonymous) {
-            if (Session::getSecurity()->isGranted('ROLE_GLOBAL_ADMIN')) {
+            if (Container::getSecurity()->isGranted('ROLE_GLOBAL_ADMIN')) {
                 // everything looks good, show "login as" link
                 if ($user_id != $userId) {
                     $result .= '<a href="'.api_get_path(WEB_PUBLIC_PATH).'?_switch_user='.$row[5].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';

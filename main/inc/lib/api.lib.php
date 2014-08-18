@@ -12,6 +12,7 @@ use \ChamiloSession as Session;
 use Symfony\Component\Validator\Constraints as Assert;
 use Application\Sonata\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Constants declaration
@@ -617,8 +618,8 @@ function api_get_path($path_type, $path = null) {
     // Default $_configuration['root_web'] configuration
     //$root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : $app['url_generator'];
 
-    $root_web = Session::getUrlGenerator()->generate('home'); //$_configuration['root_web'];
-    $rootDir = Session::getRootDir();
+    $root_web = Container::getUrlGenerator()->generate('home'); //$_configuration['root_web'];
+    $rootDir = Container::getRootDir();
 
     // Configuration data for already installed system.
     $root_sys = $rootDir;
@@ -659,10 +660,10 @@ function api_get_path($path_type, $path = null) {
         $paths[SYS_PATH]                = $root_sys;
 
         // Update data path to get it from config file if defined
-        $paths[SYS_DATA_PATH]           = Session::getDataDir();
-        $paths[SYS_LOG_PATH]            = Session::getLogDir();
-        $paths[SYS_CONFIG_PATH]         = Session::getConfigDir();
-        $paths[SYS_COURSE_PATH]         = Session::getCourseDir();
+        $paths[SYS_DATA_PATH]           = Container::getDataDir();
+        $paths[SYS_LOG_PATH]            = Container::getLogDir();
+        $paths[SYS_CONFIG_PATH]         = Container::getConfigDir();
+        $paths[SYS_COURSE_PATH]         = Container::getCourseDir();
 
         $paths[SYS_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[SYS_DATA_PATH].'default_course_document/';
 
@@ -689,7 +690,7 @@ function api_get_path($path_type, $path = null) {
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
-        $paths[SYS_ARCHIVE_PATH]        = Session::getTempDir();
+        $paths[SYS_ARCHIVE_PATH]        = Container::getTempDir();
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
         $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
@@ -2198,7 +2199,7 @@ function api_get_self() {
  */
 function api_is_platform_admin($allow_sessions_admins = false)
 {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     if ($security) {
         $token = $security->getToken();
 
@@ -2221,7 +2222,7 @@ function api_is_platform_admin($allow_sessions_admins = false)
  */
 function api_is_question_manager()
 {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_QUESTION_MANAGER')) {
@@ -2238,7 +2239,7 @@ function api_is_question_manager()
  */
 function api_is_session_admin()
 {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_SESSION_MANAGER')) {
@@ -2253,7 +2254,7 @@ function api_is_session_admin()
  * @return boolean True if current user is a human resources manager
  */
 function api_is_drh() {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_RRHH')) {
@@ -2268,7 +2269,7 @@ function api_is_drh() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_student() {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_STUDENT')) {
@@ -2283,7 +2284,7 @@ function api_is_student() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_teacher() {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_TEACHER')) {

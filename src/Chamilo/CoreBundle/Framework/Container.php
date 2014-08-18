@@ -1,0 +1,145 @@
+<?php
+
+namespace Chamilo\CoreBundle\Framework;
+
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\Templating\Helper\CoreAssetsHelper;
+use Chamilo\CoreBundle\Component\Editor\Editor;
+
+/**
+ * Class Container
+ * @package Chamilo\CoreBundle\Framework
+ */
+class Container
+{
+    public static $session;
+    public static $configuration;
+    public static $urlGenerator;
+    public static $security;
+    public static $translator;
+
+    public static $rootDir;
+    public static $logDir;
+    public static $tempDir;
+    public static $dataDir;
+    public static $courseDir;
+    public static $configDir;
+    public static $assets;
+    public static $htmlEditor;
+    public static $twig;
+
+    /**
+     * @return string
+     */
+    public static function getConfigDir()
+    {
+        return self::$configDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getLogDir()
+    {
+        return self::$logDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTempDir()
+    {
+        return self::$tempDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getRootDir()
+    {
+        return self::$rootDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getDataDir()
+    {
+        return self::$dataDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCourseDir()
+    {
+        return self::$courseDir;
+    }
+
+    /**
+     * @return \Twig_Environment
+     */
+    public static function getTwig()
+    {
+        return self::$twig;
+    }
+
+    /**
+     * @return Editor
+     */
+    public static function getHtmlEditor()
+    {
+        return self::$htmlEditor;
+    }
+
+    /**
+     * @return UrlGeneratorInterface
+     */
+    public static function getUrlGenerator()
+    {
+        return self::$urlGenerator;
+    }
+
+    /**
+     * @return SessionInterface;
+     */
+    public static function getSession()
+    {
+        return self::$session;
+    }
+
+    /**
+     * @param SessionInterface $session
+     */
+    public static function setSession($session)
+    {
+        self::$session = $session;
+    }
+
+    /**
+     * @return SecurityContextInterface
+     */
+    public static function getSecurity()
+    {
+        return self::$security;
+    }
+
+    /**
+     * @return Translator
+     */
+    public static function getTranslator()
+    {
+        return self::$translator;
+    }
+
+    /**
+     * @return CoreAssetsHelper
+     */
+    public static function getAsset()
+    {
+        return self::$assets;
+    }
+}

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class Display
@@ -816,7 +817,7 @@ class Display
 
         $icon = 'bundles/chamilocore/img/'.$icon;
 
-        $icon = Session::getAsset()->getUrl($icon);
+        $icon = Container::getAsset()->getUrl($icon);
         //$icon = api_get_cdn_path($icon);
         if ($return_only_path) {
             return $icon;

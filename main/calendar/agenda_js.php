@@ -4,7 +4,7 @@
  * @package chamilo.calendar
  */
 
-use \ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -60,7 +60,7 @@ if (!empty($group_id)) {
 }
 
 $app['title'] = get_lang('Agenda');
-$tpl = Session::getTwig();
+$tpl = Container::getTwig();
 $tpl->addGlobal('use_google_calendar', 0);
 
 $can_add_events = 0;

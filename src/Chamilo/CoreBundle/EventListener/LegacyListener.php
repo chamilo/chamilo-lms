@@ -7,9 +7,15 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Doctrine\ORM\EntityManager;
 
 use Chamilo\CoreBundle\Framework\Container;
 
+/**
+ * Class LegacyListener
+ * Adds objects into the session like the old global.inc
+ * @package Chamilo\CoreBundle\EventListener
+ */
 class LegacyListener
 {
     protected $container;
@@ -38,18 +44,20 @@ class LegacyListener
         // Setting database.
         $dbConnection = $container->get('database_connection');
 
-        // Setting db manager.
+        // Setting DB connection and Doctrine Manager.
         $database  = new \Database();
         $database->setConnection($dbConnection);
-        \Database::setManager($container->get('doctrine')->getManager());
+        $database->setManager($container->get('doctrine')->getManager());
 
-        // Setting course tool chain.
+        // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
 
-        // Setting legacy properties
+        // Setting legacy properties.
         Container::$urlGenerator = $container->get('router');
         Container::$security = $container->get('security.context');
         Container::$translator = $container->get('translator');
+
+        // Setting paths.
         Container::$rootDir = $container->get('kernel')->getRealRootDir();
         Container::$logDir = $container->get('kernel')->getLogDir();
         Container::$dataDir = $container->get('kernel')->getDataDir();
@@ -57,6 +65,8 @@ class LegacyListener
         Container::$courseDir = $container->get('kernel')->getDataDir();
         //Container::$configDir = $container->get('kernel')->getConfigDir();
         Container::$assets = $container->get('templating.helper.assets');
+
+        // Setting editor
         Container::$htmlEditor = $container->get('chamilo_core.html_editor');
 
         if (!defined('DEFAULT_DOCUMENT_QUOTA')) {
@@ -70,7 +80,7 @@ class LegacyListener
             define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
         }
 
-        // Injecting course in twig.
+        // 'course' variable example "123" for this URL: courses/123/index.php
         $courseCode = $request->get('course');
 
         // Detect if the course was set with a cidReq:
@@ -79,7 +89,7 @@ class LegacyListener
             $courseCode = $courseCodeFromRequest;
         }
 
-        /** @var \Doctrine\ORM\EntityManager $em */
+        /** @var EntityManager $em */
         $em = $container->get('doctrine')->getManager();
 
         if (!empty($courseCode)) {
@@ -115,20 +125,6 @@ class LegacyListener
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        $response = $event->getResponse();
-        $request = $event->getRequest();
-        $kernel = $event->getKernel();
-        $container = $this->container;
-
-        /*switch ($request->query->get('option')) {
-            case 2:
-                $response->setContent('Blah');
-                break;
-
-            case 3:
-                $response->headers->setCookie(new Cookie('test', 1));
-                break;
-        }*/
     }
 
     /**

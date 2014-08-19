@@ -21,9 +21,14 @@ services:
     chamilo_notebook.notebook_manager:
         class: Chamilo\NotebookBundle\Entity\CNotebookManager
 
-    # Admin settings for the tool
+    # Global settings for the tool (admin)
     chamilo_notebook.settings_schema.notebook:
         class: Chamilo\NotebookBundle\Settings\NotebookSettingsSchema
         tags:
             - { name: sylius.settings_schema, namespace: notebook }
 
+    # Course settings (teacher)
+    chamilo_notebook.course_settings_schema.notebook:
+        class: Chamilo\NotebookBundle\Settings\NotebookCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: notebook }

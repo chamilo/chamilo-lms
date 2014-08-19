@@ -3,6 +3,11 @@ parameters:
     chamilo_core.manager.course.entity: Chamilo\CoreBundle\Entity\Course
 
 services:
+    twig.extension.chamilo_extension:
+        class: Chamilo\CoreBundle\Twig\Extension\ChamiloExtension
+        tags:
+            - { name: twig.extension }
+
     chamilo_core.manager.course:
         class: %chamilo_core.manager.course.class%
         arguments: [%chamilo_core.manager.course.entity%, @doctrine]
@@ -27,16 +32,11 @@ services:
         class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
         arguments: [@translator, @router]
 
-    twig.extension.chamilo_extension:
-        class: Chamilo\CoreBundle\Twig\Extension\ChamiloExtension
-        tags:
-            - { name: twig.extension }
-
-    chamilo_core.listener.request_response:
+    chamilo_core.listener.legacy:
         class: Chamilo\CoreBundle\EventListener\LegacyListener
         arguments: [@service_container]
         tags:
-          - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+          - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 10 }
           - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
           - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
@@ -71,7 +71,7 @@ services:
 
     chamilo_core.listener.logout_success_handler:
         class: Chamilo\CoreBundle\EventListener\LogoutSuccessHandler
-        arguments:  [@database_connection, @router, @security.context]
+        arguments:  [@router, @security.context]
 
     # ORMs
     chamilo_course.entity.course:

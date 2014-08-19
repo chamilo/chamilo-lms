@@ -243,9 +243,17 @@ sylius_settings:
         parameter:
             model: Chamilo\CoreBundle\Entity\SettingsCurrent
 
+chamilo_course:
+    driver: doctrine/orm
+    classes:
+        parameter:
+            model: Chamilo\CourseBundle\Entity\CCourseSetting
+
 doctrine_cache:
     providers:
         sylius_settings:
+            type: file_system
+        chamilo_settings:
             type: file_system
 
 sp_bower:

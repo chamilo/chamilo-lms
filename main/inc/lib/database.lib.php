@@ -77,7 +77,7 @@ class Database
     /**
      * @param EntityManager $em
      */
-    public static function setManager($em)
+    public function setManager($em)
     {
         self::$em = $em;
     }

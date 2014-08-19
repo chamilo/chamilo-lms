@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt*/
 
 use Chamilo\CourseBundle\ToolChain;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CourseBundle\Entity\CTool;
 
 /**
  * Class CourseManager
@@ -4315,48 +4317,56 @@ class CourseManager
         $visible_for_course_admin = 0;
         $visible_for_platform_admin = 2;
 
+        // Move this in a doctrine  listener
         $toolList = self::getToolList();
+        $toolList = $toolList->getTools();
 
         /** @var Chamilo\CourseBundle\Tool\BaseTool $tool */
+        $tools = array();
         foreach ($toolList as $tool) {
-            $params = array(
-                'id' => '0',
-                'c_id' => $course_id,
-                'name' => $tool->getName(),
-                'category' => $tool->getCategory(),
-                'link' => $tool->getLink(),
-                'image' => $tool->getImage(),
-                'visibility' => Text::string2binary(api_get_setting('course_create_active_tools', $tool->getName())),
-                'admin' => 0,
-                'address' => 'squaregrey.gif',
-                'target' => 'self',
-                'session_id' => 0
-            );
-            Database::insert($toolTable, $params);
+            $visibility = Text::string2binary(api_get_setting('course_create_active_tools', $tool->getName()));
+            $toolObject = new CTool();
+            $toolObject->setName($tool->getName())
+                ->setCategory($tool->getCategory())
+                ->setLink($tool->getLink())
+                ->setImage($tool->getImage())
+                ->setVisibility($visibility)
+                ->setAdmin(0)
+                ->setTarget($tool->getTarget())
+            ;
+            $tools[] = $toolObject;
         }
+
+        /** @var Course $course */
+        $entityManager = Database::getManager();
+        $course = $entityManager->getRepository('ChamiloCoreBundle:Course')->find($course_id);
+        $course->setTools($tools);
+        $entityManager->persist($course);
+        $entityManager->flush($course);
+
         /*    Course tools  */
 
         if (api_get_setting('service_visio', 'active') == 'true') {
             $mycheck = api_get_setting('service_visio', 'visio_host');
             if (!empty($mycheck)) {
-                Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-                Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+                //Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+                //Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
             }
         }
 
         if (api_get_setting('search_enabled') == 'true') {
-            Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_SEARCH. "','search/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring','0', '', '')");
+            //Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_SEARCH. "','search/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring','0', '', '')");
         }
 
         // Blogs (Kevin Van Den Haute :: kevin@develop-it.be)
-        $sql = "INSERT INTO $toolTable VALUES ($course_id, NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . Text::string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0', '', '')";
-        Database::query($sql);
+        /*$sql = "INSERT INTO $toolTable VALUES ($course_id, NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . Text::string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0', '', '')";
+        Database::query($sql);*/
 
         /*  Course homepage tools for course admin only    */
 
-        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
+/*        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
         Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
-        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0', '', '')");*/
 
         /* Course_setting table (courseinfo tool)   */
 
@@ -4387,8 +4397,7 @@ class CourseManager
                 VALUES ($course_id, '2', '".Database::escape_string(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');");
 
         /*    Example Material  */
-        global $language_interface;
-        $language_interface = !empty($language_interface) ? $language_interface : api_get_setting('platformLanguage');
+        $language_interface = api_get_setting('platformLanguage');
 
         // Example material should be in the same language as the course is.
         $language_interface_original = $language_interface;

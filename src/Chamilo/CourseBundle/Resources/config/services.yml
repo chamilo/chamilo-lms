@@ -1,7 +1,38 @@
 parameters:
     tool_chain.class: Chamilo\CourseBundle\ToolChain
 
+    chamilo_course.controller.settings.class: Chamilo\CourseBundle\Controller\SettingsController
+    chamilo_course.settings.form_factory.class: Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory
+    chamilo_course.settings.manager.class: Chamilo\CourseBundle\Manager\SettingsManager
+    chamilo_course.settings.schema_registry.class: Sylius\Bundle\SettingsBundle\Schema\SchemaRegistry
+
 services:
+    chamilo_course.controller.settings:
+        class: "%chamilo_course.controller.settings.class%"
+        calls:
+          - [setContainer, [@service_container]]
+
+    chamilo_course.settings.schema_registry:
+        class: %chamilo_course.settings.schema_registry.class%
+
+    chamilo_course.settings.form_factory:
+        class: %chamilo_course.settings.form_factory.class%
+        arguments:
+            - @chamilo_course.settings.schema_registry
+            - @form.factory
+
+    chamilo_course.settings.cache:
+        alias: doctrine_cache.providers.chamilo_settings
+
+    chamilo_course.settings.manager:
+        class: %chamilo_course.settings.manager.class%
+        arguments:
+            - @chamilo_course.settings.schema_registry
+            - @doctrine.orm.default_entity_manager
+            - @sylius.repository.parameter
+            - @doctrine_cache.providers.chamilo_settings
+            - @validator
+
     chamilo_course.tool_chain:
         class: %tool_chain.class%
 

@@ -2,9 +2,9 @@
 
 namespace Chamilo\CourseBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
@@ -13,17 +13,48 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('chamilo_course');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->scalarNode('driver')->defaultValue('doctrine/orm')->cannotBeEmpty()->end()
+            ->end()
+        ;
+
+        $this->addClassesSection($rootNode);
 
         return $treeBuilder;
+    }
+
+    /**
+     * Adds `classes` section.
+     *
+     * @param ArrayNodeDefinition $node
+     */
+    private function addClassesSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+            ->arrayNode('classes')
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->arrayNode('parameter')
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->scalarNode('model')->defaultValue('Sylius\Bundle\SettingsBundle\Model\Parameter')->cannotBeEmpty()->end()
+            ->scalarNode('controller')->defaultValue('Sylius\Bundle\ResourceBundle\Controller\ResourceController')->end()
+            ->scalarNode('repository')->cannotBeEmpty()->end()
+            ->end()
+            ->end()
+            ->end()
+            ->end()
+            ->end()
+        ;
     }
 }

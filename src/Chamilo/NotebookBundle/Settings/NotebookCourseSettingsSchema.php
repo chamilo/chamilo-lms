@@ -7,10 +7,10 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class NotebookSettingsSchema
+ * Class NotebookCourseSettingsSchema
  * @package Chamilo\NotebookBundle\Settings
  */
-class NotebookSettingsSchema implements SchemaInterface
+class NotebookCourseSettingsSchema implements SchemaInterface
 {
     /**
      * {@inheritdoc}
@@ -19,10 +19,10 @@ class NotebookSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'allow_notebook_tool' => '',
+                'display' => '',
             ))
             ->setAllowedTypes(array(
-                'allow_notebook_tool' => array('string'),
+                'display' => array('string'),
             ))
         ;
     }
@@ -33,7 +33,7 @@ class NotebookSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('allow_notebook_tool', 'yes_no')
+            ->add('display', 'text')
         ;
     }
 }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Chamilo\SettingsBundle\Manager;
+namespace Chamilo\CourseBundle\Manager;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -20,33 +20,16 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\ValidatorInterface;
-use Sylius\Bundle\SettingsBundle\Manager\SettingsManager as SyliusSettingsManager;
-use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\SettingsBundle\Manager\SettingsManager as ChamiloSettingsManager;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 
 /**
- * Settings manager.
- *
- * @author Paweł Jędrzejewski <pawel@sylius.org>
+ * Class SettingsManager
+ * Course settings manager.
+ * @package Chamilo\CourseBundle\Manager
  */
-class SettingsManager extends SyliusSettingsManager
+class SettingsManager extends ChamiloSettingsManager
 {
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function getSetting($name)
-    {
-        if (false === strpos($name, '.')) {
-            throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
-        }
-
-        list($namespace, $name) = explode('.', $name);
-
-        $settings = $this->loadSettings($namespace);
-
-        return $settings->get($name);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -112,14 +95,14 @@ class SettingsManager extends SyliusSettingsManager
             if (isset($persistedParametersMap[$name])) {
                 $persistedParametersMap[$name]->setValue($value);
             } else {
-                /** @var SettingsCurrent $parameter */
+                /** @var CCourseSetting $parameter */
                 $parameter = $this->parameterRepository->createNew();
 
                 $parameter
                     ->setNamespace($namespace)
                     ->setName($name)
                     ->setValue($value)
-                    ->setAccessUrlChangeable(1)
+                    ->setCId(1)
                 ;
 
                 /* @var $errors ConstraintViolationListInterface */
@@ -147,7 +130,6 @@ class SettingsManager extends SyliusSettingsManager
     private function getParameters($namespace)
     {
         $parameters = array();
-
         foreach ($this->parameterRepository->findBy(array('category' => $namespace)) as $parameter) {
             $parameters[$parameter->getName()] = $parameter->getValue();
         }

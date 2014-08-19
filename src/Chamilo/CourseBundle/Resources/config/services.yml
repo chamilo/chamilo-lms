@@ -2,7 +2,7 @@ parameters:
     tool_chain.class: Chamilo\CourseBundle\ToolChain
 
     chamilo_course.controller.settings.class: Chamilo\CourseBundle\Controller\SettingsController
-    chamilo_course.settings.form_factory.class: Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory
+    chamilo_course.settings.form_factory.class: Chamilo\CourseBundle\Form\Factory\SettingsFormFactory
     chamilo_course.settings.manager.class: Chamilo\CourseBundle\Manager\SettingsManager
     chamilo_course.settings.schema_registry.class: Sylius\Bundle\SettingsBundle\Schema\SchemaRegistry
 

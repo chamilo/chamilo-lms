@@ -22,6 +22,7 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\ValidatorInterface;
 use Chamilo\SettingsBundle\Manager\SettingsManager as ChamiloSettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
+use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Class SettingsManager
@@ -30,6 +31,24 @@ use Chamilo\CourseBundle\Entity\CCourseSetting;
  */
 class SettingsManager extends ChamiloSettingsManager
 {
+    protected $course;
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -84,7 +103,10 @@ class SettingsManager extends ChamiloSettingsManager
             $this->resolvedSettings[$namespace]->setParameters($parameters);
         }
 
-        $persistedParameters = $this->parameterRepository->findBy(array('category' => $namespace));
+        $persistedParameters = $this->parameterRepository->findBy(
+            array('category' => $namespace, 'cId' => $this->getCourse()->getId())
+        );
+
         $persistedParametersMap = array();
 
         foreach ($persistedParameters as $parameter) {
@@ -97,12 +119,11 @@ class SettingsManager extends ChamiloSettingsManager
             } else {
                 /** @var CCourseSetting $parameter */
                 $parameter = $this->parameterRepository->createNew();
-
                 $parameter
                     ->setNamespace($namespace)
                     ->setName($name)
                     ->setValue($value)
-                    ->setCId(1)
+                    ->setCId($this->getCourse()->getId())
                 ;
 
                 /* @var $errors ConstraintViolationListInterface */

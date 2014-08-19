@@ -1,5 +1,5 @@
 chamilo_course_notebook_settings:
-    pattern: /course_settings/notebook
+    pattern: /courses/{course}/settings/notebook
     defaults:
         _controller: chamilo_course.controller.settings:updateAction
         namespace: notebook

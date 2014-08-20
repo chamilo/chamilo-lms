@@ -948,7 +948,6 @@ class IndexManager
         global $_configuration;
 
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
-
         if ($load_history) {
             //Load sessions in category in *history*
             $session_categories = UserManager::get_sessions_by_category($user_id, true);
@@ -981,7 +980,6 @@ class IndexManager
 
         $sessions_with_category = '';
         $sessions_with_no_category = '';
-
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
@@ -1015,10 +1013,13 @@ class IndexManager
                             $is_coach_course = api_is_coach($session_id, $course['code']);
                             $allowed_time = 0;
                             $dif_time_after = 0;
-
                             if ($date_session_start != '0000-00-00') {
-                                if ($is_coach_course && !isset($_GET['history'])) {
+                                if ($is_coach_course) {
                                     $allowed_time = api_strtotime($date_session_start.' 00:00:00') - ($days_access_before_beginning * 86400);
+                                } else {
+                                    $allowed_time = api_strtotime($date_session_start.' 00:00:00');
+                                }
+                                if (!isset($_GET['history'])) {
                                     if ($date_session_end != '0000-00-00') {
                                         $endSessionToTms = api_strtotime($date_session_end.' 23:59:59');
                                         if ($session_now > $endSessionToTms) {
@@ -1026,14 +1027,11 @@ class IndexManager
                                             $dif_time_after = round($dif_time_after/86400);
                                         }
                                     }
-                                } else {
-                                    $allowed_time = api_strtotime($date_session_start.' 00:00:00');
                                 }
-                            }
 
+                            }
                             if ($session_now > $allowed_time && $days_access_after_end > $dif_time_after - 1) {
                                 // Read only and accessible.
-
                                 $atLeastOneCourseIsVisible = true;
 
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {

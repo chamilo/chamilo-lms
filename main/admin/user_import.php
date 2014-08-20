@@ -123,6 +123,9 @@ function complete_missing_data($user)
     if (empty($user['AuthSource'])) {
         $user['AuthSource'] = PLATFORM_AUTH_SOURCE;
     }
+     if (empty($user['ExpiryDate'])) {
+        $user['ExpiryDate'] = '0000-00-00 00:00:00';
+    }
     return $user;
 }
 
@@ -158,7 +161,7 @@ function save_data($users)
                 $user['PhoneNumber'],
                 '',
                 $user['AuthSource'],
-                null,
+                $user['ExpiryDate'],
                 1,
                 0,
                 null,
@@ -466,8 +469,8 @@ if ($count_fields > 0) {
     <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
     <blockquote>
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<span style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></span>Courses;ClassId;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
+<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></span>Courses;ClassId;
+<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
 </pre>
 </blockquote>
 <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>

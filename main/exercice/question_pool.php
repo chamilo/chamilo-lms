@@ -403,7 +403,8 @@ if ($exerciseId > 0) {
 		$where .= ' AND type='.$answerType;
 	}
 	$sql = "SELECT DISTINCT
-	            id,question,
+	            id,
+	            question,
 	            type,
 	            level
 	        FROM
@@ -531,14 +532,19 @@ if ($exerciseId > 0) {
                 }
             }
     } else {
+
+        if ($session_id == -1 or empty($session_id)) {
+            $session_id = 0;
+        }
         // All tests for the course selected, not in session
         $sql = "SELECT DISTINCT qu.id, question, qu.type, level, q.session_id
                 FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q $from
                 WHERE
-                  qu.c_id = $selected_course AND
+                    qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND
                     q.c_id = $selected_course AND
                     qu.id = qt.question_id AND
+                    q.session_id = $session_id AND
                     q.id = qt.exercice_id $filter
                 ORDER BY session_id ASC";
         $result = Database::query($sql);
@@ -608,14 +614,22 @@ if (is_array($main_question_list)) {
     foreach ($main_question_list as $tabQuestion) {
         $row = array();
 
-        //This function checks if the question can be read
+        // This function checks if the question can be read
         $question_type = get_question_type_for_question($selected_course, $tabQuestion['id']);
 
         if (empty($question_type)) {
             continue;
         }
 
-        $row[] = get_a_tag_for_question($questionTagA, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], $tabQuestion['question']);
+        $sessionId = isset($tabQuestion['session_id']) ? $tabQuestion['session_id'] : null;
+        $row[] = get_a_tag_for_question(
+            $questionTagA,
+            $fromExercise,
+            $tabQuestion['id'],
+            $tabQuestion['type'],
+            $tabQuestion['question'],
+            $sessionId
+        );
         $row[] = $question_type;
         $row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
         $row[] = $tabQuestion['level'];
@@ -687,13 +701,33 @@ function reset_menu_exo_lvl_type() {
 	$courseCategoryId = 0;
 }
 
-// return the <a> link to admin question, if needed
-// hubert.borderiou 13-10-2011
-function get_a_tag_for_question($in_addA, $in_fromex, $in_questionid, $in_questiontype, $in_questionname)
-{
+/**
+ * return the <a> link to admin question, if needed
+ * @param int $in_addA
+ * @param int $in_fromex
+ * @param int $in_questionid
+ * @param int $in_questiontype
+ * @param string $in_questionname
+ * @param int $sessionId
+ * @return string
+ * @author hubert.borderiou
+ */
+function get_a_tag_for_question(
+    $in_addA,
+    $in_fromex,
+    $in_questionid,
+    $in_questiontype,
+    $in_questionname,
+    $sessionId
+) {
 	$res = $in_questionname;
 	if ($in_addA) {
-		$res = "<a href='admin.php?".api_get_cidreq()."&editQuestion=$in_questionid&type=$in_questiontype&fromExercise=$in_fromex'>".$res."</a>";
+        if (!empty($sessionId)) {
+            $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
+        }
+		$res = "<a href='admin.php?".api_get_cidreq()."&editQuestion=$in_questionid&type=$in_questiontype&fromExercise=$in_fromex'>".
+            $res.$sessionIcon.
+            "</a>";
 	}
 	return $res;
 }

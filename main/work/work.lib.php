@@ -2834,7 +2834,7 @@ function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessio
             $sessionId,
             null,
             null,
-            STUDENT,
+            null,
             $getCount
         );
     } else {

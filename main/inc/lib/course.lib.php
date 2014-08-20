@@ -1286,6 +1286,9 @@ class CourseManager
 
         if (!empty($session_id)) {
             $sql = 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
+            if ($return_count) {
+                $sql = " SELECT COUNT(user.user_id) as count";
+            }
             $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
                       ON user.user_id = session_course_user.id_user
@@ -1393,11 +1396,11 @@ class CourseManager
         $table_user_field_value = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
-                $report_info = array();
-
                 if ($return_count) {
                     return $user['count'];
                 }
+                $report_info = array();
+
                 $user_info = $user;
                 $user_info['status'] = $user['status'];
 

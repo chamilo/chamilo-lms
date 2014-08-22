@@ -831,7 +831,7 @@ function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id =
     $sql 	= "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $exercise_id";
     $result = Database::query($sql);
     $row	= Database::fetch_array($result, 'ASSOC');
-    if (!empty($row['expired_time']) ) {
+    if (!empty($row['expired_time'])) {
     	$current_expired_time_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
     	if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
             $current_time = time();

@@ -874,7 +874,7 @@ function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_
     $exerciseId 	= intval($exerciseId);
     $lp_id 			= intval($lp_id);
     $lp_item_id 	= intval($lp_item_id);
-    $lp_item_view_id= intval($lp_item_view_id);
+    //$lp_item_view_id= intval($lp_item_view_id);
 
     $sql = "SELECT count(*) as count FROM $stat_table WHERE
         		exe_exo_id 			= $exerciseId AND

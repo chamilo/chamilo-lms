@@ -807,10 +807,10 @@ if (!empty($error)) {
                 $(".no_remind_highlight").hide();
 
                 // if the users validates the form using return key, prevent form action and simulates click on validation button
-                $("#exercise_form").submit(function(){
-                    /*$(".question-validate-btn").first().trigger("click");
-                    return false;*/
-                });
+                /*$("#exercise_form").submit(function(){
+                    $(".question-validate-btn").first().trigger("click");
+                    return false;
+                });*/
     		});
 
 		function previous_question(question_num) {

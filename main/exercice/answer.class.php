@@ -273,8 +273,8 @@ class Answer
 	 * @return string - answer title
 	 */
 	function selectAnswer($id)
-    {
-        return isset($this->answer[$id]) ? $this->answer[$id] : null;
+        {
+            return isset($this->answer[$id]) ? $this->answer[$id] : null;
 	}
 
 	/**

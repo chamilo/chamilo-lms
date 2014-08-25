@@ -156,17 +156,17 @@ function save_item(
             if ($debug > 1) { error_log('Done calling set_score '.$mylpi->get_score(), 0); }
         } else {
             if ($debug > 1) { error_log("Score not updated"); }
+        }
 
-            // Default behaviour
-            if (isset($status) && $status != '' && $status != 'undefined') {
-                if ($debug > 1) { error_log('Calling set_status('.$status.')', 0); }
+        // Default behaviour.
+        if (isset($status) && $status != '' && $status != 'undefined') {
+            if ($debug > 1) { error_log('Calling set_status('.$status.')', 0); }
 
-                $mylpi->set_status($status);
+            $mylpi->set_status($status);
 
-                if ($debug > 1) { error_log('Done calling set_status: checking from memory: '.$mylpi->get_status(false), 0); }
-            } else {
-                if ($debug > 1) { error_log("Status not updated"); }
-            }
+            if ($debug > 1) { error_log('Done calling set_status: checking from memory: '.$mylpi->get_status(false), 0); }
+        } else {
+            if ($debug > 1) { error_log("Status not updated"); }
         }
 
         // Hack to set status to completed for hotpotatoes if score > 80%.

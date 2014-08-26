@@ -3824,7 +3824,7 @@ class UserManager
 
         $userConditions = '';
         if (!empty($userStatus)) {
-            $userConditions .= ' AND u.status = '.$userStatus;
+            $userConditions .= ' AND u.status = '.intval($userStatus);
         }
 
         $select = " SELECT DISTINCT u.user_id, u.username, u.lastname, u.firstname, u.email ";

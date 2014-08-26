@@ -3,14 +3,16 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+
 use Application\Sonata\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * CItemProperty
- *
- * @ORM\Table(name="c_item_property", indexes={@ORM\Index(name="idx_item_property_toolref", columns={"tool", "ref"}), @ORM\Index(name="idx_item_property_tooliuid", columns={"tool", "insert_user_id"})})
+ * @todo fix names lastedit_date, lastedit_user_id
+ * @ORM\Table(name="c_item_property")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository")
  */
 class CItemProperty
@@ -18,31 +20,25 @@ class CItemProperty
   /**
      * @var integer
      *
-     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $iid;
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="item_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $itemId;
+
     /**
      * @var integer
      *
      * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $cId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tool", type="string", length=100, precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $tool;
 
     /**
      * @var integer
@@ -64,13 +60,6 @@ class CItemProperty
      * @ORM\Column(name="lastedit_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $lasteditDate;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="ref", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $ref;
 
     /**
      * @var string
@@ -101,37 +90,13 @@ class CItemProperty
     private $toUserId;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="visibility", type="boolean", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $visibility;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="start_visible", type="datetime", precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $startVisible;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="end_visible", type="datetime", precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $endVisible;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="id_session", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $idSession;
 
-    /* Adding many to many relationships */
-
     /**
-     *
      * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="items")
      * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
      **/
@@ -156,17 +121,40 @@ class CItemProperty
     private $session;
 
     /**
-     * @param Course $course
+     *
      */
-    public function __construct(Course $course)
+    public function __construct()
     {
-        //Mandatory
-        $this->course = $course;
+        // Mandatory
 
         $this->setInsertUserId(api_get_user_id());
         $this->setLasteditUserId(api_get_user_id());
         $this->setInsertDate(new \DateTime());
         $this->setLasteditDate(new \DateTime());
+    }
+
+    /**
+     * Set setItemId
+     *
+     * @param integer $itemId
+     *
+     * @return CItemVisibility
+     */
+    public function setItemId($itemId)
+    {
+        $this->itemId = $itemId;
+
+        return $this;
+    }
+
+    /**
+     * Get getItemId
+     *
+     * @return integer
+     */
+    public function getItemId()
+    {
+        return $this->itemId;
     }
 
     /**

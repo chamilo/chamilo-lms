@@ -1,5 +1,5 @@
 services:
-    # Icon in course home
+    # Tool settings
     chamilo_notebook.tool.notebook.class:
         class: Chamilo\NotebookBundle\Tool\Notebook
         arguments:
@@ -8,12 +8,13 @@ services:
             - notebook/index.php
             - notebook.gif
             - @chamilo_notebook.course_settings_schema.notebook
+            - @chamilo_notebook.notebook_manager
 
         tags:
             - { name: chamilo_course.tool }
 
     # Form (add/edit)
-    chamilo_notebook.form.type:
+    chamilo_notebook:
         class: Chamilo\NotebookBundle\Form\Type\CNotebookType
         tags:
            -  { name: form.type }
@@ -21,14 +22,17 @@ services:
     # Database manager
     chamilo_notebook.notebook_manager:
         class: Chamilo\NotebookBundle\Entity\CNotebookManager
+        arguments:
+            - Chamilo\NotebookBundle\Entity\CNotebook
+            - @doctrine
 
-    # Global settings for the tool (admin)
+    # Global settings
     chamilo_notebook.settings_schema.notebook:
         class: Chamilo\NotebookBundle\Settings\NotebookSettingsSchema
         tags:
             - { name: sylius.settings_schema, namespace: notebook }
 
-    # Course settings (teacher)
+    # Local settings
     chamilo_notebook.course_settings_schema.notebook:
         class: Chamilo\NotebookBundle\Settings\NotebookCourseSettingsSchema
         tags:

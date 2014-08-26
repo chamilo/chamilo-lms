@@ -3,29 +3,33 @@
 #    type:     annotation
 #    prefix:   /notebook
 chamilo_notebook_new:
-    pattern: /notebook/new
+    pattern: courses/{course}/notebook/new
     methods: [GET, POST]
     defaults:
         _controller: chamilo.controller.notebook:createAction
+        _sylius:
+            factory:
+                method: createNewWithCourse
+                arguments: [$course]
 
 chamilo_notebook_show:
-    pattern: /notebook/{iid}
+    pattern: courses/{course}/notebook/{id}
     methods: [GET]
     requirements:
-            iid:  \d+
+            id:  \d+
     defaults:
         _controller: chamilo.controller.notebook:showAction
         _sylius:
-            criteria: { iid: $iid }
+            criteria: { id: $id }
 
 chamilo_notebook_index:
-    pattern: /notebook
+    pattern: courses/{course}/notebook
     methods: [GET]
     defaults:
         _controller: chamilo.controller.notebook:indexAction
 
 chamilo_notebook_settings:
-    pattern: /settings/notebook
+    pattern: courses/{course}/notebook/settings
     defaults:
         _controller: sylius.controller.settings:updateAction
         namespace: notebook

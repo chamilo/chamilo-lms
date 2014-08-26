@@ -19,10 +19,10 @@ class NotebookSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'allow_notebook_tool' => '',
+                'enabled' => '',
             ))
             ->setAllowedTypes(array(
-                'allow_notebook_tool' => array('string'),
+                'enabled' => array('string'),
             ))
         ;
     }
@@ -33,7 +33,7 @@ class NotebookSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('allow_notebook_tool', 'yes_no')
+            ->add('enabled', 'yes_no')
         ;
     }
 }

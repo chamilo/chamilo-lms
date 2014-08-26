@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Tool;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
  * Class BaseTool
@@ -17,14 +18,16 @@ abstract class BaseTool implements ToolInterface
     protected $admin;
     protected $courseSettings;
     protected $platformSettings;
+    protected $manager;
 
     /**
-     * @param $name
-     * @param $category
-     * @param $link
-     * @param $image
+     * @param string $name
+     * @param string $category
+     * @param string $link
+     * @param string $image
+     * @param $courseSettings
      */
-    public function __construct($name, $category, $link, $image, $courseSettings = null)
+    public function __construct($name, $category, $link, $image, $courseSettings = null, $manager = null)
     {
         $this->name = $name;
         $this->category = $category;
@@ -32,6 +35,7 @@ abstract class BaseTool implements ToolInterface
         $this->image = $image;
         $this->admin = 0;
         $this->courseSettings = $courseSettings;
+        $this->manager = $manager;
     }
 
     /**
@@ -88,6 +92,14 @@ abstract class BaseTool implements ToolInterface
     public function getAdmin()
     {
         return $this->admin;
+    }
+
+    /**
+     * @return BaseEntityManager;
+     */
+    public function getManager()
+    {
+        return $this->manager;
     }
 
     /**

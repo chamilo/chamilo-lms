@@ -5,19 +5,23 @@ namespace Chamilo\NotebookBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Action\RowAction;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
+use Symfony\Component\HttpFoundation\Request;
+use Chamilo\NotebookBundle\Entity\CNotebookRepository;
+use Chamilo\NotebookBundle\Entity\CNotebookManager;
+use Chamilo\NotebookBundle\Entity\CNotebook;
 
-class CNotebookController extends Controller
+class CNotebookController extends ResourceController
 {
     /**
      * @Route("/")
      * @Template("ChamiloNotebookBundle::index.html.twig")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $source = new Entity('ChamiloNotebookBundle:CNotebook');
 
@@ -45,10 +49,36 @@ class CNotebookController extends Controller
     }
 
     /**
-     * @return NotebookManager
+     * {@inheritdoc}
+     */
+    public function createNew()
+    {
+        $request = $this->getRequest();
+        $courseCode = $request->get('course');
+        $course = $this->get('chamilo_core.manager.course')->findOneByCode($courseCode);
+        /** @var CNotebook $notebook */
+        $notebook = $this->getNotebookRepository()->createNewWithCourse($course);
+        $user = $this->getUser();
+        $notebook->setUser($user);
+        //$notebook->setSession();
+        return $notebook;
+    }
+
+    /**
+     * @return CNotebookManager
      */
     protected function getNotebookManager()
     {
-        return $this->get('notebook.manager');
+        return $this->get('chamilo_notebook.notebook_manager');
     }
+
+    /**
+     * @return CNotebookRepository
+     */
+    protected function getNotebookRepository()
+    {
+        return $this->get('chamilo.repository.notebook');
+    }
+
+
 }

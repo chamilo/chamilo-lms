@@ -228,6 +228,11 @@ class Course
     private $tools;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\NotebookBundle\Entity\CNotebook", mappedBy="course")
+     **/
+    private $notebooks;
+
+    /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course")
      **/
     //private $curriculumCategories;
@@ -253,6 +258,14 @@ class Course
     public function getSessions()
     {
         return $this->sessions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNotebooks()
+    {
+        return $this->notebooks;
     }
 
     /**

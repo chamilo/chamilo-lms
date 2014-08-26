@@ -4,14 +4,16 @@ namespace Chamilo\NotebookBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use APY\DataGridBundle\Grid\Mapping as GRID;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * CNotebook
  *
  * @ORM\Table(name="c_notebook")
- * @ORM\Entity
- *
- * @GRID\Source(columns="iid, title")
+ * @ORM\Entity(repositoryClass="Chamilo\NotebookBundle\Entity\CNotebookRepository")
+ * @GRID\Source(columns="id, title")
  *
  */
 class CNotebook
@@ -19,11 +21,11 @@ class CNotebook
     /**
      * @var integer
      *
-     * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $iid;
+    private $id;
 
     /**
      * @var integer
@@ -35,28 +37,14 @@ class CNotebook
     /**
      * @var integer
      *
-     * @ORM\Column(name="notebook_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $notebookId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $userId;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="course", type="string", length=40, precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $course;
-
-    /**
      * @var integer
      *
-     * @ORM\Column(name="session_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="session_id", type="integer", precision=0, scale=0, unique=false)
      */
     private $sessionId;
 
@@ -76,14 +64,14 @@ class CNotebook
 
     /**
      * @var \DateTime
-     *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="creation_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $creationDate;
 
     /**
      * @var \DateTime
-     *
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="update_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $updateDate;
@@ -95,6 +83,21 @@ class CNotebook
      */
     private $status;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="notebooks")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     **/
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="notebooks")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    private $course;
+
+    /**
+     *
+     */
     public function __construct()
     {
         $this->creationDate = new \DateTime();
@@ -103,31 +106,28 @@ class CNotebook
 
     public function getId()
     {
-        return $this->getIid();
+        return $this->id();
     }
 
     public function setId($id)
     {
-        return $this->setIid($id);
+        $this->id = $id;
     }
-
-
 
     /**
-     * Get iid
-     *
-     * @return integer
+     * @param User $user
      */
-    public function getIid()
+    public function setUser(User $user)
     {
-        return $this->iid;
+        $this->user = $user;
     }
 
-    public function setIid($id)
+    /**
+     * @param Course $course
+     */
+    public function setCourse(Course $course)
     {
-        $this->iid = $id;
-
-        return $this;
+        $this->course = $course;
     }
 
     /**
@@ -154,29 +154,6 @@ class CNotebook
     }
 
     /**
-     * Set notebookId
-     *
-     * @param integer $notebookId
-     * @return CNotebook
-     */
-    public function setNotebookId($notebookId)
-    {
-        $this->notebookId = $notebookId;
-
-        return $this;
-    }
-
-    /**
-     * Get notebookId
-     *
-     * @return integer
-     */
-    public function getNotebookId()
-    {
-        return $this->notebookId;
-    }
-
-    /**
      * Set userId
      *
      * @param integer $userId
@@ -200,22 +177,9 @@ class CNotebook
     }
 
     /**
-     * Set course
-     *
-     * @param string $course
-     * @return CNotebook
-     */
-    public function setCourse($course)
-    {
-        $this->course = $course;
-
-        return $this;
-    }
-
-    /**
      * Get course
      *
-     * @return string
+     * @return Course
      */
     public function getCourse()
     {

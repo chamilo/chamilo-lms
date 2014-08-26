@@ -13,6 +13,16 @@ use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
  */
 class CourseManager extends BaseEntityManager
 {
+
+    /**
+     * @param $code
+     * @return mixed
+     */
+    public function findOneByCode($code)
+    {
+        return $this->getRepository()->findOneByCode($code);
+    }
+
     /**
      * @param $name
      * @return mixed
@@ -20,37 +30,5 @@ class CourseManager extends BaseEntityManager
     public function findByTitle($name)
     {
         return $this->getRepository()->findByTitle($name);
-    }
-
-    public function saveTools($courseId)
-    {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPager(array $criteria, $page, $limit = 10, array $sort = array())
-    {
-        $parameters = array();
-
-        $query = $this->getRepository()
-            ->createQueryBuilder('t')
-            ->select('t');
-
-        /*if (isset($criteria['enabled'])) {
-            $query->andWhere('t.enabled = :enabled');
-            $parameters['enabled'] = (bool) $criteria['enabled'];
-        }*/
-
-        $query->setParameters($parameters);
-
-        $pager = new Pager();
-        $pager->setMaxPerPage($limit);
-        $pager->setQuery(new ProxyQuery($query));
-        $pager->setPage($page);
-        $pager->init();
-
-        return $pager;
     }
 }

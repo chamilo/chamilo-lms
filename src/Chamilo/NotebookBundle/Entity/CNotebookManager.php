@@ -10,4 +10,5 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
  */
 class CNotebookManager extends BaseEntityManager
 {
+
 }

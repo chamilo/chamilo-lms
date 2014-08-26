@@ -19,10 +19,10 @@ class NotebookCourseSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'display' => '',
+                'enabled' => '',
             ))
             ->setAllowedTypes(array(
-                'display' => array('string'),
+                'enabled' => array('string'),
             ))
         ;
     }
@@ -33,7 +33,7 @@ class NotebookCourseSettingsSchema implements SchemaInterface
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            ->add('display', 'text')
+            ->add('enabled', 'yes_no')
         ;
     }
 }

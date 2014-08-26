@@ -13,11 +13,11 @@ class CNotebookType extends AbstractType
         $builder
             ->add('title')
             ->add('description', 'textarea')
-            ->add('cId')
+            /*->add('cId')
             ->add('notebookId')
             ->add('userId')
             ->add('course')
-            ->add('sessionId')
+            ->add('sessionId')*/
             ->add('save', 'submit');
     }
 

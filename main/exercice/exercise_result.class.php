@@ -193,10 +193,15 @@ class ExerciseResult
 				$return[$i] = array();
 				if (empty($user_id)) {
                     $return[$i]['official_code']   = $result['official_code'];
-					$return[$i]['first_name']   = $result['userpart1'];
-					$return[$i]['last_name']    = $result['userpart2'];
-					$return[$i]['user_id']      = $result['excruid'];
-					$return[$i]['email']        = $result['exemail'];
+                    if (api_is_western_name_order()) {
+                        $return[$i]['first_name']   = $results[$i]['userpart1'];
+                        $return[$i]['last_name']    = $results[$i]['userpart2'];
+                    } else {
+                        $return[$i]['first_name']   = $results[$i]['userpart2'];
+                        $return[$i]['last_name']    = $results[$i]['userpart1'];
+                    }
+					$return[$i]['user_id']      = $results[$i]['excruid'];
+					$return[$i]['email']        = $results[$i]['exemail'];
 				}
 				$return[$i]['title'] = $result['extitle'];
 				$return[$i]['start_date'] = api_get_local_time($result['exstart']);

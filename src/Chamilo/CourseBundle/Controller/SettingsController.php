@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Settings controller.
@@ -31,10 +32,11 @@ class SettingsController extends Controller
      *
      * @param Request $request
      * @param string  $namespace
+     * @ParamConverter("course", class="ChamiloCoreBundle:Course", options={"repository_method" = "findOneByCode"})
      *
      * @return Response
      */
-    public function updateAction(Request $request, $namespace)
+    public function updateAction(Request $request, $namespace, $course)
     {
         $manager = $this->getSettingsManager();
         $settings = $manager->loadSettings($namespace);
@@ -49,6 +51,7 @@ class SettingsController extends Controller
         if ($form->handleRequest($request)->isValid()) {
             $messageType = 'success';
             try {
+                $manager->setCourse($course);
                 $manager->saveSettings($namespace, $form->getData());
                 $message = $this->getTranslator()->trans('sylius.settings.update', array(), 'flashes');
             } catch (ValidatorException $exception) {

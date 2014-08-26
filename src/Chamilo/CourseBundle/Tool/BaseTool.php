@@ -15,6 +15,8 @@ abstract class BaseTool implements ToolInterface
     protected $link;
     protected $image;
     protected $admin;
+    protected $courseSettings;
+    protected $platformSettings;
 
     /**
      * @param $name
@@ -22,13 +24,14 @@ abstract class BaseTool implements ToolInterface
      * @param $link
      * @param $image
      */
-    public function __construct($name, $category, $link, $image)
+    public function __construct($name, $category, $link, $image, $courseSettings = null)
     {
         $this->name = $name;
         $this->category = $category;
         $this->link = $link;
         $this->image = $image;
         $this->admin = 0;
+        $this->courseSettings = $courseSettings;
     }
 
     /**
@@ -88,12 +91,26 @@ abstract class BaseTool implements ToolInterface
     }
 
     /**
+     * @return int
+     */
+    public function setCourseSettings($settings)
+    {
+        $this->courseSettings = $settings;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCourseSettings()
+    {
+        return $this->courseSettings;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
 
     }
-
-
 }

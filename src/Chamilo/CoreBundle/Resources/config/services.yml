@@ -32,6 +32,8 @@ services:
         class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
         arguments: [@translator, @router]
 
+    # Listeners
+
     chamilo_core.listener.legacy:
         class: Chamilo\CoreBundle\EventListener\LegacyListener
         arguments: [@service_container]

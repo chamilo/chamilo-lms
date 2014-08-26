@@ -778,9 +778,9 @@ class learnpathItem
             error_log('learnpathItem::get_max()', 0);
         }
         if ($this->type == 'sco') {
-            if (!empty($this->view_max_score) && $this->view_max_score > 0) {
+            if (isset($this->view_max_score) && !empty($this->view_max_score) && $this->view_max_score > 0) {
                 return $this->view_max_score;
-            } elseif ($this->view_max_score === '') {
+            } elseif (isset($this->view_max_score) && $this->view_max_score === '') {
                 return $this->view_max_score;
             } else {
                 if (!empty($this->max_score)) {
@@ -1668,9 +1668,9 @@ class learnpathItem
 
     /**
      * Gets the item status
-     * @param    boolean    Do or don't check into the database for the latest value. Optional. Default is true
-     * @param    boolean    Do or don't update the local attribute value with what's been found in DB
-     * @return    string    Current status or 'Not attempted' if no status set yet
+     * @param    boolean $check_db   Do or don't check into the database for the latest value. Optional. Default is true
+     * @param    boolean $update_local   Do or don't update the local attribute value with what's been found in DB
+     * @return   string  Current status or 'Not attempted' if no status set yet
      */
     public function get_status($check_db = true, $update_local = false)
     {
@@ -1684,8 +1684,11 @@ class learnpathItem
             }
             if (!empty($this->db_item_view_id)) {
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                $sql = "SELECT status FROM $table WHERE c_id = $course_id AND id = '" . $this->db_item_view_id . "' AND view_count = '" . $this->get_attempt_id(
-                    ) . "'";
+                $sql = "SELECT status FROM $table
+                        WHERE
+                            c_id = $course_id AND
+                            id = '" . $this->db_item_view_id . "' AND
+                            view_count = '" . $this->get_attempt_id() . "'";
                 if (self::debug > 2) {
                     error_log(
                         'learnpathItem::get_status() - Checking DB: ' . $sql,
@@ -3131,8 +3134,9 @@ class learnpathItem
                 TABLE_LP_IV_INTERACTION
             );
             $sql = "SELECT * FROM $item_view_interaction_table
-                WHERE c_id = $course_id
-                    AND lp_iv_id = '" . $this->db_item_view_id . "'";
+                    WHERE
+                        c_id = $course_id AND
+                        lp_iv_id = '" . $this->db_item_view_id . "'";
             //error_log('sql10->'.$sql);
             $res = Database::query($sql);
             if ($res !== false) {
@@ -3145,8 +3149,9 @@ class learnpathItem
                 TABLE_LP_IV_OBJECTIVE
             );
             $sql = "SELECT * FROM $item_view_objective_table
-                WHERE c_id = $course_id
-                    AND lp_iv_id = '" . $this->db_item_view_id . "'";
+                    WHERE
+                        c_id = $course_id AND
+                        lp_iv_id = '" . $this->db_item_view_id . "'";
             //error_log('sql11->'.$sql);
             $res = Database::query($sql);
             if ($res !== false) {
@@ -3265,21 +3270,22 @@ class learnpathItem
 
     /**
      * Sets the status for this item
-     * @param    string    Status - must be one of the values defined in $this->possible_status
-     * @return    boolean    True on success, false on error
+     * @param   string $status must be one of the values defined in $this->possible_status
+     * @return  boolean True on success, false on error
      */
     public function set_status($status)
     {
         if (self::debug > 0) {
             error_log('learnpathItem::set_status(' . $status . ')', 0);
         }
+
         $found = false;
         foreach ($this->possible_status as $possible) {
             if (preg_match('/^' . $possible . '$/i', $status)) {
                 $found = true;
             }
         }
-        //if (in_array($status, $this->possible_status)) {
+
         if ($found) {
             $this->status = Database::escape_string($status);
             if (self::debug > 1) {
@@ -3292,8 +3298,9 @@ class learnpathItem
             }
             return true;
         }
-        //error_log('New LP - '.$status.' was not in the possible status', 0);
+
         $this->status = $this->possible_status[0];
+
         return false;
     }
 
@@ -3319,14 +3326,15 @@ class learnpathItem
         }
         $new_terms = $a_terms;
         $new_terms_string = implode(',', $new_terms);
-        $terms_update_sql = '';
+
         // TODO: Validate csv string.
         $terms = Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES, $charset));
-        $terms_update_sql = "UPDATE $lp_item
+        $sql = "UPDATE $lp_item
                 SET terms = '$terms'
-                WHERE c_id = $course_id
-                    AND id=" . $this->get_id();
-        $res = Database::query($terms_update_sql);
+                WHERE
+                    c_id = $course_id AND
+                    id=" . $this->get_id();
+        Database::query($sql);
         // Save it to search engine.
         if (api_get_setting('search_enabled') == 'true') {
             $di = new ChamiloIndexer();

@@ -87,7 +87,7 @@ class IndexController extends BaseController
     public function userPortalAction($type = 'courses', $filter = 'current', $page = 1)
     {
         /** @var \Chamilo\CoreBundle\Entity\CourseManager $courseManager */
-        $courseManager = $this->get('chamilo.manager.course');
+        $courseManager = $this->get('chamilo_core.manager.course');
 
         /** @var \Application\Sonata\PageBundle\Entity\Site $site */
         $site = $this->get('sonata.page.site.selector')->retrieve();

@@ -245,7 +245,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="user")
      **/
-    protected $items;
+    //protected $items;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")

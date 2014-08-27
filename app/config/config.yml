@@ -236,6 +236,8 @@ sylius_resource:
             templates: ChamiloNotebookBundle:Notebook
             classes:
                 model: Chamilo\NotebookBundle\Entity\CNotebook
+                repository: Chamilo\NotebookBundle\Entity\CNotebookRepository
+                controller: Chamilo\NotebookBundle\Controller\CNotebookController
 
 sylius_settings:
     driver: doctrine/orm

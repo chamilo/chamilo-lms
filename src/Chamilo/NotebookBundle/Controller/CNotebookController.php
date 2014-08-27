@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\NotebookBundle\Controller;
 
@@ -25,26 +26,29 @@ class CNotebookController extends ResourceController
     {
         $source = new Entity('ChamiloNotebookBundle:CNotebook');
 
+        $courseCode = $request->get('course');
+
         /* @var $grid \APY\DataGridBundle\Grid\Grid */
         $grid = $this->get('grid');
-
         $grid->setSource($source);
-
-
         $grid->hideFilters();
 
         //$grid->setMaxResults(1);
         $grid->setLimits(1);
-        $grid->getColumn('iid')->manipulateRenderCell(
-            function($value, $row, $router) {
+        $grid->getColumn('id')->manipulateRenderCell(
+            function ($value, $row, $router) use ($courseCode) {
                 $router = $this->get('router');
-                return $router->generate('administration', array('param' => $row->getField('iid')));
+                return $router->generate(
+                    'chamilo_notebook_show',
+                    array('id' => $row->getField('id'), 'course' => $courseCode)
+                );
             }
         );
 
         $myRowAction = new RowAction('More Info', 'administration', false, '_self', array('class' => 'btn'));
         $grid->addRowAction($myRowAction);
         $grid->addExport(new CSVExport('CSV Export'));
+
         return $grid->getGridResponse('ChamiloNotebookBundle:Notebook:index.html.twig');
     }
 
@@ -59,7 +63,7 @@ class CNotebookController extends ResourceController
         /** @var CNotebook $notebook */
         $notebook = $this->getNotebookRepository()->createNewWithCourse($course);
         $user = $this->getUser();
-        $notebook->setUser($user);
+
         //$notebook->setSession();
         return $notebook;
     }

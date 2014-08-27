@@ -144,7 +144,7 @@ class CGroupInfo
     /**
      *  @ORM\OneToMany(targetEntity="CItemProperty", mappedBy="group")
      **/
-    private $items;
+    //private $items;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="group")

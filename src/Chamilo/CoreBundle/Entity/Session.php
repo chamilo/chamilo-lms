@@ -130,7 +130,7 @@ class Session
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="session")
      **/
-    private $items;
+    //private $items;
 
     /**
      * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="sessionAsGeneralCoach")

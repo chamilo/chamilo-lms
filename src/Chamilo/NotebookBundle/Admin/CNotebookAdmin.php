@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\NotebookBundle\Admin;
 
@@ -14,7 +15,7 @@ use Chamilo\CourseBundle\ToolChain;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
 /**
- * Class CourseAdmin
+ * Class CourseAdmin (Sonata)
  * @package Chamilo\CoreBundle\Admin
  */
 class CNotebookAdmin extends Admin

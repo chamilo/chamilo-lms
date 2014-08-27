@@ -11,7 +11,7 @@ class CNotebookType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            ->add('name')
             ->add('description', 'textarea')
             /*->add('cId')
             ->add('notebookId')

@@ -220,7 +220,7 @@ class Course
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="course")
      **/
-    private $items;
+    //private $items;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist"})

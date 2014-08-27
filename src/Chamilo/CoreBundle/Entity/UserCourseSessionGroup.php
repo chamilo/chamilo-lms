@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CItemProperty
+ * UserCourseSessionGroup
  *
  */
 class UserCourseSessionGroup

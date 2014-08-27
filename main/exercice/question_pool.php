@@ -79,6 +79,8 @@ if ($is_allowedToEdit) {
         //Reading the source question
 		$old_question_obj = Question::read($old_question_id, $origin_course_id);
 
+        $courseId = $current_course['real_id'];
+
 		if ($old_question_obj) {
 			$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
             //Duplicating the source question, in the current course
@@ -94,10 +96,9 @@ if ($is_allowedToEdit) {
 			// destruction of the Question object
 			unset($new_question_obj);
 			unset($old_question_obj);
-            if (!$objExercise instanceOf Exercise) {
-                $objExercise = new Exercise();
-                $objExercise->read($fromExercise);
-            }
+
+            $objExercise = new Exercise($courseId);
+            $objExercise->read($fromExercise);
 			Session::write('objExercise', $objExercise);
 		}
 		$displayMessage = get_lang('ItemAdded');

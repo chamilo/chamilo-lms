@@ -1,5 +1,6 @@
 {
     "name": "chamilo/chamilo-lms",
+    "description": "E-learning and collaboration software",
     "type": "project",
     "homepage": "http://www.chamilo.org",
     "license": "GPL-3.0",
@@ -7,7 +8,6 @@
         "forum": "http://www.chamilo.org/forum",
         "irc": "irc://irc.freenode.org/chamilo"
     },
-
     "autoload": {
         "psr-0": {
             "": "src/",
@@ -27,7 +27,6 @@
             "main/survey"
         ]
     },
-
     "repositories": [
         {
             "type": "package",
@@ -49,7 +48,6 @@
             "url": "https://github.com/jmontoyaa/MigrationBundle.git"
         }
     ],
-
     "require": {
         "php": ">=5.3.3",
 
@@ -131,7 +129,6 @@
         "oyejorge/less.php": "~1.5",
 
         "hwi/oauth-bundle": "0.4.*@dev",
-        "stof/doctrine-extensions-bundle": "~1.1@dev",
         "gedmo/doctrine-extensions": "~2.3",
 
         "zendframework/zend-filter": "2.3.*@dev",
@@ -143,7 +140,6 @@
         "white-october/pagerfanta-bundle": "dev-master",
         "sylius/resource-bundle": "dev-master",
         "sylius/resource": "dev-master",
-        "sylius/resource": "dev-master",
         "apy/datagrid-bundle": "dev-master",
         "jms/translation-bundle": "dev-master",
         "sylius/flow-bundle": "0.11.*@dev",
@@ -152,12 +148,10 @@
         "jmontoyaa/migration-bundle":"dev-master"
     },
     "require-dev": {
-        "jjanvier/crowdin-bundle": "dev-master",
         "akeneo/crowdin-api": "1.0.*@dev",
         "elao/web-profiler-extra-bundle" : "~2.3@dev",
         "lexik/maintenance-bundle": "dev-master"
     },
-
     "scripts": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
@@ -176,11 +170,9 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ]
     },
-
     "config": {
         "bin-dir": "bin"
     },
-
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web",
@@ -188,7 +180,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "2.4-dev"
+            "dev-master": "10.0.x-dev"
         }
     }
 }

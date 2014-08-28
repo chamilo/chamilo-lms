@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
  */
 class CNotebook extends AbstractResource
 {
-
     /**
      * @var string
      *

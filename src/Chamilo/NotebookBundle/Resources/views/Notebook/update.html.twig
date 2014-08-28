@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('chamilo_notebook_edit', {'course': course, 'id' : notebook.id } ) }}">
+    <input type="hidden" name="_method" value="PUT" />
+    {{ form_widget(form) }}
+</form>

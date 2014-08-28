@@ -1,0 +1,23 @@
+{% extends 'ChamiloCoreBundle::grid.html.twig' %}
+
+{% block grid_column_id_cell %}
+    <a href="{{ url('chamilo_notebook_show', {'id': row.getField('id'), 'course': course }) }}">
+        {{ row.getField('id') }}
+    </a>
+{% endblock %}
+
+{% block grid_column_name_cell %}
+    <a href="{{ url('chamilo_notebook_show', {'id': row.getField('id'), 'course': course }) }}">
+        {{ value }}
+    </a>
+{% endblock %}
+
+
+
+{#{% block grid_column_actions_cell %}#}
+    {#<div class="btn-group">#}
+
+
+    {#{{ parent() }}#}
+    {#</div>#}
+{#{% endblock grid_column_actions_cell %}#}

@@ -30,6 +30,7 @@ class UserManager
     const USER_FIELD_TYPE_TIMEZONE = 11;
     const USER_FIELD_TYPE_SOCIAL_PROFILE = 12;
     const USER_FIELD_TYPE_FILE = 13;
+    const USER_FIELD_TYPE_TELEPHONE  = 14;
 
     /**
      * The default constructor only instanciates an empty user object
@@ -4556,6 +4557,19 @@ EOF;
                         $form->freeze($extra_field);
                     }
                     break;
+
+                case self::USER_FIELD_TYPE_TELEPHONE:
+                    $form->addElement('text', 'extra_'.$field_details[1], $field_details[3]." (".get_lang('TelephonePrefix').")", 
+                        array('size' => 40, 'placeholder'  => '(xx)xxxxxxxxx'));
+                    $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+                    $form->applyFilter('extra_'.$field_details[1], 'trim');
+                    $form->applyFilter('extra_'.$field_details[1], 'telephone_filter');
+                    $form->addRule('extra_'.$field_details[1], get_lang('TelephoneWrong'), 'telephone');
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0)
+                            $form->freeze('extra_'.$field_details[1]);
+                    }                 
+                    break;
             }
         }
         $return = array();
@@ -4582,6 +4596,7 @@ EOF;
         $types[self::USER_FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
         $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
         $types[self::USER_FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
+        $types[self::USER_FIELD_TYPE_TELEPHONE] = get_lang('FieldTypeTelephone');
 
         return $types;
     }

@@ -51,6 +51,7 @@ class ExtraField extends Model
     const FIELD_TYPE_TIMEZONE        = 11;
     const FIELD_TYPE_SOCIAL_PROFILE  = 12;
     const FIELD_TYPE_CHECKBOX        = 13;
+    const FIELD_TYPE_TELEPHONE       = 14;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
@@ -204,6 +205,7 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_TAG]             = get_lang('FieldTypeTag');
         $types[self::FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
         $types[self::FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
+        $types[self::FIELD_TYPE_TELEPHONE]       = get_lang('FieldTypeTelephone');
 
         switch ($handler) {
             case 'course':
@@ -1032,6 +1034,17 @@ EOF;
                         );
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+                        if ($field_details['field_visible'] == 0) {
+                            $form->freeze('extra_'.$field_details['field_variable']);
+                        }
+                        break;
+                        case ExtraField::FIELD_TYPE_TELEPHONE:
+                        $form->addElement('text', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'],
+                            array('placeholder'  => '(xx)xxxxxxxxx'));
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'telephone');
+                        $form->addRule('extra_'.$field_details[1], get_lang('TelephoneWrong'), 'telephone');
                         if ($field_details['field_visible'] == 0) {
                             $form->freeze('extra_'.$field_details['field_variable']);
                         }

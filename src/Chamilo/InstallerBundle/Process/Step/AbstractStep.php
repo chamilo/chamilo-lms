@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle\Process\Step;
 
@@ -9,6 +10,10 @@ use Symfony\Component\Console\Output\StreamOutput;
 
 use Sylius\Bundle\FlowBundle\Process\Step\ControllerStep;
 
+/**
+ * Class AbstractStep
+ * @package Chamilo\InstallerBundle\Process\Step
+ */
 abstract class AbstractStep extends ControllerStep
 {
     /**

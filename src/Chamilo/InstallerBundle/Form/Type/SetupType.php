@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle\Form\Type;
 
@@ -6,6 +7,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class SetupType
+ * @package Chamilo\InstallerBundle\Form\Type
+ */
 class SetupType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)

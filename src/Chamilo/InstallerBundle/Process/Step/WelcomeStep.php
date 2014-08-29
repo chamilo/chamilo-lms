@@ -1,19 +1,15 @@
 <?php
-
-/*
- * This file is part of the Sylius package.
- *
- * (c) Paweł Jędrzejewski
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle\Process\Step;
 
 use Sylius\Bundle\FlowBundle\Process\Context\ProcessContextInterface;
 use Sylius\Bundle\FlowBundle\Process\Step\ControllerStep;
 
+/**
+ * Class WelcomeStep
+ * @package Chamilo\InstallerBundle\Process\Step
+ */
 class WelcomeStep extends ControllerStep
 {
     /**

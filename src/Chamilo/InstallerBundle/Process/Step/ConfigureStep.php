@@ -4,6 +4,10 @@ namespace Chamilo\InstallerBundle\Process\Step;
 
 use Sylius\Bundle\FlowBundle\Process\Context\ProcessContextInterface;
 
+/**
+ * Class ConfigureStep
+ * @package Chamilo\InstallerBundle\Process\Step
+ */
 class ConfigureStep extends AbstractStep
 {
     public function displayAction(ProcessContextInterface $context)

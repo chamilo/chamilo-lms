@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle\Form\Type\Configuration;
 
@@ -8,6 +9,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class MailerType
+ * @package Chamilo\InstallerBundle\Form\Type\Configuration
+ */
 class MailerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)

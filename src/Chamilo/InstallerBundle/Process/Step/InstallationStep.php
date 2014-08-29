@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle\Process\Step;
 
@@ -10,6 +11,10 @@ use Chamilo\InstallerBundle\InstallerEvents;
 use Chamilo\InstallerBundle\CommandExecutor;
 use Chamilo\InstallerBundle\ScriptExecutor;
 
+/**
+ * Class InstallationStep
+ * @package Chamilo\InstallerBundle\Process\Step
+ */
 class InstallationStep extends AbstractStep
 {
     public function displayAction(ProcessContextInterface $context)

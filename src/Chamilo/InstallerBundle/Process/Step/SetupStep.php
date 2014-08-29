@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle\Process\Step;
 
@@ -8,6 +9,10 @@ use Chamilo\CoreBundle\Migrations\Data\ORM\LoadAdminUserData;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManager;
 use Application\Sonata\UserBundle\Entity\User;
 
+/**
+ * Class SetupStep
+ * @package Chamilo\InstallerBundle\Process\Step
+ */
 class SetupStep extends AbstractStep
 {
     public function displayAction(ProcessContextInterface $context)

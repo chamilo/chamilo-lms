@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle\Form\Type\Setup;
 
@@ -7,6 +8,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class PortalType
+ * @package Chamilo\InstallerBundle\Form\Type\Setup
+ */
 class PortalType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)

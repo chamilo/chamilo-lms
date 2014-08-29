@@ -642,8 +642,8 @@ function html_filter_student_fullpage($html)
 
 /**
  * Cleans telephone text
- * @param string $telephone     Telephone to clean
- * @return string               The cleaned telephone
+ * @param string $telephone     Telephone number to clean
+ * @return string               The cleaned telephone number
  */
 function telephone_filter($telephone)
 {

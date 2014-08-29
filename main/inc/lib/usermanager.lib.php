@@ -4564,10 +4564,11 @@ EOF;
                     $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
                     $form->applyFilter('extra_'.$field_details[1], 'telephone_filter');
-                    $form->addRule('extra_'.$field_details[1], get_lang('TelephoneWrong'), 'telephone');
+                    $form->addRule('extra_'.$field_details[1], get_lang('TelephoneNumberIsWrong'), 'telephone');
                     if (!$admin_permissions) {
-                        if ($field_details[7] == 0)
+                        if ($field_details[7] == 0) {
                             $form->freeze('extra_'.$field_details[1]);
+                        }
                     }                 
                     break;
             }

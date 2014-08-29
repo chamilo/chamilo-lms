@@ -1038,13 +1038,17 @@ EOF;
                             $form->freeze('extra_'.$field_details['field_variable']);
                         }
                         break;
-                        case ExtraField::FIELD_TYPE_TELEPHONE:
-                        $form->addElement('text', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'],
-                            array('placeholder'  => '(xx)xxxxxxxxx'));
+                    case ExtraField::FIELD_TYPE_TELEPHONE:
+                        $form->addElement(
+                            'text', 
+                            'extra_'.$field_details['field_variable'], 
+                            $field_details['field_display_text'],
+                            array('placeholder'  => '(xx)xxxxxxxxx')
+                        );
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'telephone');
-                        $form->addRule('extra_'.$field_details[1], get_lang('TelephoneWrong'), 'telephone');
+                        $form->addRule('extra_'.$field_details[1], get_lang('TelephoneNumberIsWrong'), 'telephone');
                         if ($field_details['field_visible'] == 0) {
                             $form->freeze('extra_'.$field_details['field_variable']);
                         }

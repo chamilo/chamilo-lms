@@ -51,7 +51,7 @@ class LegacyListener
 
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
-        \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
+        //\CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
 
         // Setting legacy properties.
         Container::$urlGenerator = $container->get('router');

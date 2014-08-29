@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Data\ORM;
 
@@ -232,7 +233,7 @@ class LoadPortalData extends AbstractFixture implements
         $manager->persist($branchTransactionStatus);
 
         $branchTransactionStatus = new BranchTransactionStatus();
-        $branchTransactionStatus->setTitle('Executed successfully');
+        $branchTransactionStatus->setTitle('Executed success');
         $manager->persist($branchTransactionStatus);
 
         $branchTransactionStatus = new BranchTransactionStatus();

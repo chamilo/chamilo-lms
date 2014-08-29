@@ -9,20 +9,6 @@
     {% endautoescape %}
 {% endblock %}
 
-{% block form_errors %}
-    {% spaceless %}
-        {% if errors|length > 0 %}
-            <div class="alert alert-warning" role="alert">
-            <ul>
-                {% for error in errors %}
-                    <li>{{ error.message }}</li>
-                {% endfor %}
-            </ul>
-            </div>
-        {% endif %}
-    {% endspaceless %}
-{% endblock form_errors %}
-
 {% block content %}
      <div>
         <form action="{{ path('sylius_flow_forward', { scenarioAlias: 'chamilo_installer', stepName: 'configure'}) }}" method="post">
@@ -34,7 +20,6 @@
                 </div>
                 <div class="col-sm-6">
                     <h3 class="sub-title">{{ form.mailer.vars.label|trans }}</h3>
-
                     {{ form_widget(form.mailer) }}
                 </div>
             </div>

@@ -10,32 +10,23 @@ class NotebookBundle implements Migration
 {
     public function up(Schema $schema, QueryBag $queries)
     {
-        $queries->addQuery("CREATE TABLE c_notebook (iid INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, notebook_id INT NOT NULL, user_id INT NOT NULL, course VARCHAR(40) NOT NULL, session_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, creation_date DATETIME NOT NULL, update_date DATETIME NOT NULL, status INT DEFAULT NULL, PRIMARY KEY(iid)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
-        $queries->addQuery("CREATE TABLE c_notebook_audit (iid INT NOT NULL, rev INT NOT NULL, c_id INT DEFAULT NULL, notebook_id INT DEFAULT NULL, user_id INT DEFAULT NULL, course VARCHAR(40) DEFAULT NULL, session_id INT DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, creation_date DATETIME DEFAULT NULL, update_date DATETIME DEFAULT NULL, status INT DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(iid, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
+        $queries->addQuery("CREATE TABLE c_notebook (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
+        $queries->addQuery("CREATE TABLE c_notebook_audit (id INT NOT NULL, rev INT NOT NULL, name VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
         $queries->addQuery('CREATE TABLE c_item_visibility (id INT AUTO_INCREMENT NOT NULL, property_id INT NOT NULL, visibility TINYINT(1) NOT NULL, start_visible DATETIME DEFAULT NULL, end_visible DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $queries->addQuery('CREATE TABLE c_item (id INT AUTO_INCREMENT NOT NULL, to_user_id INT DEFAULT NULL, tool VARCHAR(100) NOT NULL, created_at DATETIME NOT NULL, ref INT NOT NULL, user_id INT NOT NULL, INDEX IDX_BBBE7E4F29F6EE60 (to_user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $queries->addQuery('ALTER TABLE c_item ADD CONSTRAINT FK_BBBE7E4F29F6EE60 FOREIGN KEY (to_user_id) REFERENCES user (id)');
-        $queries->addQuery('DROP TABLE oro_migrations');
-        $queries->addQuery('DROP TABLE oro_migrations_data');
+        //$queries->addQuery('DROP TABLE oro_migrations');
+        //$queries->addQuery('DROP TABLE oro_migrations_data');
         $queries->addQuery('DROP TABLE sylius_settings_parameter');
         $queries->addQuery('ALTER TABLE media__media CHANGE content_type content_type VARCHAR(255) DEFAULT NULL');
         $queries->addQuery('ALTER TABLE media__media_audit CHANGE content_type content_type VARCHAR(255) DEFAULT NULL');
         $queries->addQuery('ALTER TABLE settings_current DROP namespace, DROP name');
-        $queries->addQuery('DROP INDEX idx_item_property_toolref ON c_item_property');
+        /*$queries->addQuery('DROP INDEX idx_item_property_toolref ON c_item_property');
         $queries->addQuery('DROP INDEX idx_item_property_tooliuid ON c_item_property');
         $queries->addQuery('ALTER TABLE c_item_property DROP PRIMARY KEY');
         $queries->addQuery('ALTER TABLE c_item_property DROP iid, DROP tool, DROP visibility, DROP start_visible, DROP end_visible, CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE ref item_id INT NOT NULL');
-        $queries->addQuery('ALTER TABLE c_item_property ADD PRIMARY KEY (id)');
-        $queries->addQuery('ALTER TABLE c_notebook DROP PRIMARY KEY');
-        $queries->addQuery('ALTER TABLE c_notebook DROP notebook_id, DROP course, CHANGE iid id INT AUTO_INCREMENT NOT NULL');
-        $queries->addQuery('ALTER TABLE c_notebook ADD CONSTRAINT FK_E7EE1CE0A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $queries->addQuery('ALTER TABLE c_notebook ADD CONSTRAINT FK_E7EE1CE091D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
-        $queries->addQuery('CREATE INDEX IDX_E7EE1CE0A76ED395 ON c_notebook (user_id)');
-        $queries->addQuery('CREATE INDEX IDX_E7EE1CE091D79BD3 ON c_notebook (c_id)');
-        $queries->addQuery('ALTER TABLE c_notebook ADD PRIMARY KEY (id)');
-        $queries->addQuery('ALTER TABLE c_notebook_audit DROP PRIMARY KEY');
-        $queries->addQuery('ALTER TABLE c_notebook_audit DROP notebook_id, DROP course, CHANGE iid id INT NOT NULL');
-        $queries->addQuery('ALTER TABLE c_notebook_audit ADD PRIMARY KEY (id, rev)');
+        $queries->addQuery('ALTER TABLE c_item_property ADD PRIMARY KEY (id)');*/
+
     }
 
     public function down(Schema $schema, QueryBag $queries)

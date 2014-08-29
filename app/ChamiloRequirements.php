@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 require_once __DIR__ . '/SymfonyRequirements.php';
 
@@ -20,6 +21,9 @@ class ChamiloRequirements extends SymfonyRequirements
 
     const EXCLUDE_REQUIREMENTS_MASK = '/5\.3\.(3|4|8|16)|5\.4\.0/';
 
+    /**
+     * @inheritdoc
+     */
     public function __construct()
     {
         parent::__construct();
@@ -51,6 +55,12 @@ class ChamiloRequirements extends SymfonyRequirements
             null !== $curlVersion && version_compare($curlVersion['version'], self::REQUIRED_CURL_VERSION, '>='),
             'cURL extension must be at least ' . self::REQUIRED_CURL_VERSION,
             'Install and enable the <strong>cURL</strong> extension at least ' . self::REQUIRED_CURL_VERSION . ' version'
+        );
+
+        $this->addChamiloRequirement(
+            function_exists('mb_strlen'),
+            'mb_strlen() should be available',
+            'Install and enable the <strong>mbstring</strong> extension.'
         );
 
         $this->addChamiloRequirement(

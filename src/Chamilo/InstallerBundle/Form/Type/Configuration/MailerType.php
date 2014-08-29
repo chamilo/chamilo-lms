@@ -89,19 +89,24 @@ class MailerType extends AbstractType
             );
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'validation_groups' => function (FormInterface $form) {
                 $data = $form->getData();
-
                 return 'smtp' == $data['chamilo_installer_mailer_transport']
                     ? array('Default', 'SMTP')
-                    : array('Default');
+                    : array('Default', '');
             },
         ));
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'chamilo_installer_configuration_mailer';

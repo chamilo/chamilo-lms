@@ -15,7 +15,7 @@ process:
             table:
                 mandatory:  Mandatory requirements
                 php:        PHP settings
-                oro:        Specific requirements
+                chamilo:    Chamilo Specific requirements
                 optional:   Optional recommendations
                 check:      Check
                 cli:        PHP CLI

@@ -884,16 +884,14 @@ class SocialManager extends UserManager
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT * FROM $user_table WHERE user_id = ".$safe_user_id;
         $result = Database::query($sql);
+        $html = null;
         if (Database::num_rows($result) == 1) {
             $user_object = Database::fetch_object($result);
             $alt = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
-
             $status = get_status_from_code($user_object->status);
-
             $interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
-            Display::display_header($alt, null, $alt);
 
-            echo '<div class ="thumbnail">';
+            $html .= '<div class ="thumbnail">';
             if (strlen(trim($user_object->picture_uri)) > 0) {
                 $sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
                 $sysdir = $sysdir_array['dir'];
@@ -911,47 +909,47 @@ class SocialManager extends UserManager
                 $big_image_height = $big_image_size['height'];
                 $url_big_image = $big_image.'?rnd='.time();
                 //echo '<a href="javascript:void()" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');" >';
-                echo '<img src="'.$fullurl.'" alt="'.$alt.'" />';
+                $html .= '<img src="'.$fullurl.'" alt="'.$alt.'" />';
             } else {
-                echo Display::return_icon('unknown.jpg', get_lang('Unknown'));
+                $html .= Display::return_icon('unknown.jpg', get_lang('Unknown'));
             }
             if (!empty($status)) {
-                echo '<div class="caption">'.$status.'</div>';
+                $html .= '<div class="caption">'.$status.'</div>';
             }
-            echo '</div>';
-
+            $html .= '</div>';
 
             if (api_get_setting('show_email_addresses') == 'true') {
-                echo Display::encrypted_mailto_link($user_object->email, $user_object->email).'<br />';
+                $html .= Display::encrypted_mailto_link($user_object->email, $user_object->email).'<br />';
             }
 
             if ($user_object->competences) {
-                echo Display::page_subheader(get_lang('MyCompetences'));
-                echo '<p>'.$user_object->competences.'</p>';
+                $html .= Display::page_subheader(get_lang('MyCompetences'));
+                $html .= '<p>'.$user_object->competences.'</p>';
             }
             if ($user_object->diplomas) {
-                echo Display::page_subheader(get_lang('MyDiplomas'));
-                echo '<p>'.$user_object->diplomas.'</p>';
+                $html .= Display::page_subheader(get_lang('MyDiplomas'));
+                $html .= '<p>'.$user_object->diplomas.'</p>';
             }
             if ($user_object->teach) {
-                echo Display::page_subheader(get_lang('MyTeach'));
-                echo '<p>'.$user_object->teach.'</p>';
+                $html .= Display::page_subheader(get_lang('MyTeach'));
+                $html .= '<p>'.$user_object->teach.'</p>';
             }
             SocialManager::display_productions($user_object->user_id);
             if ($user_object->openarea) {
-                echo Display::page_subheader(get_lang('MyPersonalOpenArea'));
-                echo '<p>'.$user_object->openarea.'</p>';
+                $html .= Display::page_subheader(get_lang('MyPersonalOpenArea'));
+                $html .= '<p>'.$user_object->openarea.'</p>';
             }
         } else {
-            Display::display_header(get_lang('UsersOnLineList'));
-            echo '<div class="actions-title">';
-            echo get_lang('UsersOnLineList');
-            echo '</div>';
+            $html .= '<div class="actions-title">';
+            $html .= get_lang('UsersOnLineList');
+            $html .= '</div>';
         }
+
+        return $html;
     }
 
     /**
-     * Display productions in whoisonline
+     * Display productions in who is online
      * @param int $user_id User id
      */
     public static function display_productions($user_id)
@@ -960,6 +958,7 @@ class SocialManager extends UserManager
         $sysdir = $sysdir_array['dir'];
         $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true);
         $webdir = $webdir_array['dir'];
+
         if (!is_dir($sysdir)) {
             mkdir($sysdir, api_get_permissions_for_new_directories(), true);
         }
@@ -988,6 +987,11 @@ class SocialManager extends UserManager
         }
     }
 
+    /**
+     * @param string $content
+     * @param string $span_count
+     * @return string
+     */
     public static function social_wrapper_div($content, $span_count)
     {
         $span_count = intval($span_count);
@@ -995,6 +999,7 @@ class SocialManager extends UserManager
         $html .= '<div class="well_border">';
         $html .= $content;
         $html .= '</div></div>';
+
         return $html;
     }
 

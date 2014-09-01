@@ -36,7 +36,6 @@ $LastPost = "Ultimo messaggio";
 $Quoting = "Ha detto";
 $NotifyByEmail = "Notificami via e-mail le eventuali risposte";
 $StickyPost = "E' un messaggio in evidenza (verrà posizionato in alto, accompagnato da un'icona speciale)";
-$ReplyShort = "Re:";
 $DeletePost = "Sei sicuro di voler eliminare il messaggio? Ricorda che anche le risposte successive verranno eliminate. Puoi verificare quali risposte saranno eliminate scegliendo la vista indentata";
 $Locked = "Bloccato: i corsisti non potranno aggiungere messaggi di risposta o nuovi messaggi o argomenti. I messaggi vecchi resteranno visibili";
 $Unlocked = "Sbloccato: viene ripristinata la possibilità di rispondere o inviare nuovi messaggi";

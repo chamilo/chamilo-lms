@@ -64,7 +64,6 @@ $path_array = array_map('urldecode', $path_array);
 $header_file = implode('/', $path_array);
 
 $file = Security::remove_XSS(urldecode($document_data['path']));
-
 $file_root = $course_info['path'].'/document'.str_replace('%2F', '/', $file);
 $file_url_sys = api_get_path(SYS_COURSE_PATH).$file_root;
 $file_url_web = api_get_path(WEB_COURSE_PATH).$file_root;
@@ -192,6 +191,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     $show_web_odf  = true;
+    /*
     $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
     $htmlHeadXtra[] = '
@@ -205,6 +205,16 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
             window.setTimeout(init, 0);
         });
   </script>';
+    */
+    $htmlHeadXtra[] = '
+    <script charset="utf-8">
+        resizeIframe = function(obj) {
+                var bodyHeight = $("body").height();
+                var topbarHeight = $("#topbar").height();
+                obj.style.height = (bodyHeight - topbarHeight) + "px";
+
+            }
+    </script>';
 }
 
 $execute_iframe = true;
@@ -286,19 +296,26 @@ Display::display_header('');
 
 echo '<div align="center">';
 
-$file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
+$file_url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file;
+$file_url_web = $file_url.'?'.api_get_cidreq();
 
 if (!$is_nanogong_available) {
     if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
         echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';
-    } else {
-        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
     }
 }
 
 if ($show_web_odf) {
     //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
-    echo '<div id="odf"></div>';
+
+    echo '<div id="viewerJSContent">';
+    echo '<iframe frameborder="0" allowfullscreen="allowfullscreen" onload="resizeIframe(this)" style="width:100%;"
+        src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url.'">
+        </iframe>';
+    echo '</div>';
+} else {
+    // ViewerJS already have download button
+    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
 }
 
 echo '</div>';
@@ -377,49 +394,16 @@ if ($is_freemind_available) {
 
 if ($is_nanogong_available) {
 
-		//make temp audio
-        $temp_folder=api_get_path(SYS_ARCHIVE_PATH).'temp/audio';
-        if (!file_exists($temp_folder)) {
-            @mkdir($temp_folder, api_get_permissions_for_new_directories(), true);
-        }
+    $file_url_web = DocumentManager::generateAudioTempFolder($file_url_sys);
 
-		//make htaccess with allow from all, and file index.html into temp/audio
-		$htaccess = api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htaccess';
-		if (!file_exists($htaccess)) {
-			$htaccess_content="order deny,allow\r\nallow from all\r\nOptions -Indexes";
-			$fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htaccess', 'w');
-			if ($fp) {
-				fwrite($fp, $htaccess_content);
-				fclose($fp);
-			}
-		}
+    echo '<div align="center">';
+    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
+    echo '<br/>';
+    echo '<br/>';
 
-		//encript temp name file
-		$name_crip = sha1(uniqid());//encript
-		$findext= explode(".", $file);
-		$extension= $findext[count($findext)-1];
-		$file_crip=$name_crip.'.'.$extension;
+    echo DocumentManager::readNanogongFile($to_url);
 
-		//copy file to temp/audio directory
-		$from_sys=$file_url_sys;
-		$to_sys=api_get_path(SYS_ARCHIVE_PATH).'temp/audio/'.$file_crip;
-
-        if (file_exists($from_sys)) {
-            copy($from_sys, $to_sys);
-        }
-
-		//get file from tmp directory
-		$to_url = api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
-
-        echo '<div align="center">';
-        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
-        echo '<br/>';
-        echo '<br/>';
-
-        echo DocumentManager::readNanogongFile($to_url);
-
-		//erase temp file in tmp directory when return to documents
-		$_SESSION['temp_audio_nanogong']=$to_sys;
+    //erase temp file in tmp directory when return to documents
     echo '</div>';
 }
 

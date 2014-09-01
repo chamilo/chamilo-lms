@@ -35,7 +35,6 @@ $LastPost = "Viimeisin viesti";
 $Quoting = "Lainaa";
 $NotifyByEmail = "Ilmoita vastauksesta sähköpostilla";
 $StickyPost = "Tämä on kiinnitetty viesti (näkyy aina ensimmäisenä)";
-$ReplyShort = "VS:";
 $DeletePost = "Haluatko varmasti poistaa tämän viestin? Viestin poistaminen poistaa myös vastaukset tähän viestiin. Ole hyvä ja tarkista mitkä muut viestit myös poistetaan.";
 $Locked = "Lukittu: käyttäjät eivät voi enää kirjoittaa uusia viestejä tähän keskustelualue ryhmään, keskustelualueeseen tai keskusteluun. Mutta he voivat silti lukea aiemmin kirjoitettuja viestejä.";
 $Unlocked = "Avattu: käyttäjät voivat kirjoittaa uusia viestejä.";

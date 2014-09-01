@@ -44,7 +44,55 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-<h1>Chamilo 1.9.8 - Mystery name, Mystery date, 2013</h1>
+<h1>Chamilo 1.9.8.3 - 21st of July, 2014</h1>
+<h3>Release notes - summary</h3>
+<p>Chamilo 1.9.8.3 is a small patch version with a few minor bugfixes and a new packaging. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.8.3, with a few changes to this changelog file and a few fixes throughout the code (as such, you can just overwrite previous files to upgrade from 1.9.8, 1.9.8.1 or 1.9.8.2 to 1.9.8.3).</p>
+<h3>Release name</h3>
+<p><a href="http://es.wikipedia.org/wiki/Departamento_de_Huánuco">Huánuco</a> is a small city in the Peruvian Andes, Northeast of Lima. This is a special version in memory of our cherished development team member César Perales, who passed away on July 22nd, 2014, at age 27. César contributed mostly "in the shadow" to Chamilo LMS, allowing the rest of the team to contribute more actively. He was a vibrant young man. He will be missed. César lived in calle Huánuco, in La Molina, Lima, Peru, where other team members bid him their last farewell for his last, eternal trip.</p>
+
+<h3>New Features</h3>
+<ul>
+  <li>(eadeaf8 - BT#8317) Add sessions duration feature</li>
+  <li>(019987d - BT#8316) Allow courses to be sorted inside a session (requires manual database change)</li>
+</ul>
+
+<h3>Improvements (minor features)</h3>
+<ul>
+  <li>(4d15a0f - BT#8417) Fix hide buttons in users report<li>
+  <li>(5213de2) Fix 1800 seconds flaw in learning paths availability</li>
+  <li>(5660b37) Fix download link in install doc</li>
+  <li>(09dc3f3) Update install doc for full-text indexing</li>
+  <li>(333319b) Fix deadlock condition in documents download</li>
+  <li>(bc94d5c - BT#8392) Allow ExtraFieldValue method to get the last value instead of the first in case of duplicates</li>
+  <li>(bbe627b - BT#8268) Add sso_challenge method as a second alternative to SSO authentication</li>
+  <li>(5ed701e) Add optimization documentation for user_rel_tag table index</li>
+  <li>(1204e13) Fix who is online user preview</li>
+  <li>(a98ab8c - BT#8157) Fix error loading wav files using LP</li>
+  <li>(cfac025 - BT#7780) Fix QTI import response</li>
+  <li>(c830878 - BT#7780, BT#6819) Fix condition showing deleted exercises</li>
+  <li>(c98d190 - BT#7803) Show events for "everyone" when showing user events</li>
+  <li>(f01b3b5 - BT#7780) Fix Aiken exercise import redirect display</li>
+  <li>(595fafb - BT#8231) Add setting to decode UTF-8 in registration web services</li>
+  <li>(39f5916 - BT#8295) Add Spanish to available languages in custom pages</li>
+  <li>(3995283 - BT#8295) Fix lost password page in custom pages</li>
+  <li>(528102f - BT#8289) Fix Chrome error when loading page HTML source</li>
+  <li>(9c0c73a - BT#8157) Fix issue in documents edition in multiple open courses context</li>
+  <li>(fbda6e2 - BT#8157) Add export users-class to CSV</li>
+  <li>(fd61c0f) Add missing icons</li>
+  <li>(a55776c - BT#8189) Fix for users inscription with approval setting</li>
+  <li></li>
+</ul>
+
+
+<h1>Chamilo 1.9.8.2 - 21st of June, 2014</h1>
+<h3>Release notes - summary</h3>
+<p>Chamilo 1.9.8.2 is a very little patch version with one bugfix regarding the learning paths tool. Considering the fact that 1.9.8 is planned for the long term, we'd hate to have such a minor patch left on the side for a year or so. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.8.2, with a change to this changelog file and a one-line change to main/newscorm/learnpathItem.class.php (as such, you can update just this file to upgrade from 1.9.8.1 to 1.9.8.2. See <a href="https://github.com/chamilo/chamilo-lms/commit/642a80e9e838f98f25135fbb64795e4f3df86260">the code change</a> for detais.</p>
+
+<h1>Chamilo 1.9.8.1 - 18th of June, 2014</h1>
+<h3>Release notes - summary</h3>
+<p>Chamilo 1.9.8.1 is a patch version with one security patch on top of 1.9.8 (in the included library for FCKeditor). Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
+
+<h1>Chamilo 1.9.8 - Thon, 15th of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8 is a minor stable version with a series of improvements on top of 1.9.6.<br />
 This version is the first Chamilo version to drop support for Internet Explorer
@@ -53,10 +101,12 @@ web standards. If they *cannot* avoid Internet Explorer, make sure they use at
 least version 10, which respects a little bit more than half of the W3C
 standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
 <h3>Release name</h3>
-<p><a href="http://fr.wikipedia.org/wiki/">City name</a> is a city ... </p>
+<p><a href="http://fr.wikipedia.org/wiki/Thon-Samson">Thon</a> is a small city in the Belgian region of Wallonia, several times classified as the most beautiful village of the South region of Belgium. It is a quite, beautiful place without anything out of the ordinary but made of beautiful, hundred years old homes built from famous Wallonia blue stone and crossed by the Samson river. Its stability and it's position just next to the large cliffs surrounding the Meuse are symbolically close to Chamilo 1.9.8, highly stable but a few steps away for the huge jump to the next major version.</p>
 <h3>Security</h3>
+All security issues are published and patches are attached on <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a>. If you think you found an additional security issue you'd like to report, please check our procedure there.
 <ul>
-  <li></li>
+  <li>Patches have been applied to one of the packages of FCKEditor used for image uploads in Chamilo 1.9.6.1. These patches are included in 1.9.8 (see issues 11 and 12)</li>
+  <li>Some other possible XSS attack vectors through initially privileged access have been fixed (see issue #13)</li>
 </ul>
 <h3>New Features</h3>
 <ul>
@@ -67,7 +117,6 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
     <li>(#6165) Added option to prevent "login as" feature on enhanced-security portals</li>
     <li>(#6213) Register "user disabling" action in important activities</li>
     <li>(#6216) Make check_version() AJAX-based</li>
-    <li>(#6348 - ongoing) Added possibility to add individual tasks to learning paths</li>
     <li>(#6373) Added CAPTCHA on registration page (requires manual configuration edition)</li>
     <li>(#6416) Added "Sessions subscribed to" icon in users list</li>
     <li>(#6513) Exercises: Added auto-evaluation mode with feedback but without correct answer hint</li>
@@ -82,6 +131,9 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
     <li>(#7056) Exercises: Added auditing of "clean results" action by teachers</li>
     <li>(#7063) Added support for "for" attributes in &lt;label&gt; fields for WCAG/WAI AA compatibility</li>
     <li>(#7072) Added user profile fields of type "File upload"</li>
+    <li>(BT#7010) Add Aiken (Word) import format in exercises</li>
+    <li>(#6224) Add browser language auto-detection at first connection</li>
+    <li>(#5464) Added BuyCourses plugin for PayPal payments</li>
 </ul>
 <h3>Improvements (minor features)</h3>
 <ul>
@@ -112,13 +164,19 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
     <li>(#6836) Added select_ajax element to FormValidator (internal stuff)</li>
     <li>(#6882) Courses catalog: Now showing courses that were not in any category</li>
     <li>(#6889) Exercises: Group feedback and results options in exercises creation/edition form</li>
+    <li>(#7158) Increase recommended max memory limit to 128MB to avoid problems with reports with lots of users</li>
+    <li>(#7161) Thematic plan's edition mode doesn't display properly</li>
+    <li>(#6768) Always redirect user to expected page after "Not allowed" message (always load the require_uri in api_not_allowed) and fix login button</li>
+    <li>(bd0320a,d2ddee1 - BT#8199) Add session support in exams report</li>
+    <li>(#6173) Add partial French translation to installation guide</li>
+    <li>(#7192) Add possibility to download student assignment document from grading form</li>
 </ul>
 <h3>Debugging</h3>
 <ul>
-    <li>(#398)  Learning paths: Fixed issue with SCORM Scenari courses which did not set status to completed when expected</li>
     <li>(#4067) Groups: Student cannot see group documents on first access</li>
     <li>(#4788) Documents: Nanogong files do not play in document tool</li>
     <li>(#5751) Exercises: Quotes were forbidden/filtered in "question" field</li>
+    <li>(#----) Fix CSV import to allow default export format</li>
     <li>(#5755) Documents: Audio creation with Pediaphon was broken</li>
     <li>(#5878) Exercises: Validation bug for answers</li>
     <li>(#5881) Exercises: Link when opened question was answered opened a blank page</li>
@@ -183,10 +241,10 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
     <li>(#6708) User cannot move to next question</li>
     <li>(#6724) Group forum not added in forum tool if forum category doesn't exist</li>
     <li>(#6728) YesNo survey icon show checkbox instead of radio</li>
-    <li>(#6735) Escape MySQL wildcards characters in admin > user list advanced search form</li>
+    <li>(#6735) Escape MySQL wildcards characters in admin &gt; user list advanced search form</li>
     <li>(#6741) Create course link in admin panel is removed when course suggestion enabled</li>
     <li>(#6755) Search in session screen doesn't work</li>
-    <li>(#6761) Admin > Create new user > "Is admin" should be hidden by default</li>
+    <li>(#6761) Admin &gt; Create new user &gt; "Is admin" should be hidden by default</li>
     <li>(#6764) Weird multi-url splitting condition bug when using multiple server_name in Nginx</li>
     <li>(#6772) Hotspot: not registering first area (related to #6310)</li>
     <li>(#6773) Long-standing sub-language bug: terms saving sometimes misses "</li>
@@ -206,7 +264,7 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
     <li>(#6827) SQL error when backuping a course</li>
     <li>(#6828) Question categories are not restored from course backup</li>
     <li>(#6829) Anonymous Surveys doesn't work</li>
-    <li>(#6831) Copy & paste from Word gives some errors</li>
+    <li>(#6831) Copy &amp; paste from Word gives some errors</li>
     <li>(#6835) Constant TOOL_AGENDA does not exists</li>
     <li>(#6842) Forum messages issues</li>
     <li>(#6845) Problem submitting work to legacy deleted folders</li>
@@ -274,21 +332,275 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
     <li>(#7073) Session coach does not see session</li>
     <li>(#7076) Chozen languages bar too large in IE11 and Safari 7</li>
     <li>(#7077) Learning path - Didn't show the bottom part of large documents</li>
+    <li>(#7111) Blank screen when accessing public learning path as anonymous user with Chrome</li>
+    <li>(#7112) Recycle course doesn't delete all documents</li>
+    <li>(#7131) Time issues with total time connected when switching courses in a non-0 timezone</li>
+    <li>(#7137) Course catalog - "Display all" mode only shows one course</li>
+    <li>(#7149) DatePicker class not found on Windows</li>
+    <li>(#7153) Wrong gradebook results in sessions with gradebook categories</li>
+    <li>(#7155) Exercise description JS bug inside exercise view</li>
+    <li>(#7162) Date not editable in announcements</li>
+    <li>(#7171) Impossible to preview exercise with unlimited attempts more than once</li>
+    <li>(BT#6294) Works: Fix insert_user_id for uploads + added cidReq in work forms to avoid loosing reference</li>
+    <li>(BT#6223) Add missing "group by" in SQL clause</li>
+    <li>(BT#6329) Fix many notice messages</li>
+    <li>(BT#5928) Do not set sections as prequerisites in learning paths</li>
+    <li>(31984a1) Add Euskera translation</li>
+    <li>(c3a1b4a) Update Chamilo Rapid setup procedure in installation guide</li>
+    <li>(baba938) Register survey answers with neutral (anonymous) link</li>
+    <li>(b837405 - BT#6369) Add CSV import through CRON capability</li>
+    <li>(bc13344) SCORM: Update scorm_api to manage progress and time on documents inserted inside a SCORM LP</li>
+    <li>(405f950 - BT#6369) Integrate Monolog</li>
+    <li>(69f3809 - BT#6369) Grouping of notification messages into one single e-mail</li>
+    <li>(b7034b0 - BT#6451) Add sessions list icon to admin's users list</li>
+    <li>(18cda53 - BT#6451) Remove useless spacing in icon groups in admin's users list</li>
+    <li>(3f178c6 - BT#6487) Add jQuery password strength meter</li>
+    <li>(c2cf9c2 - BT#6487) Add password strength filter</li>
+    <li>(37597b8 - BT#6486) Add CAPTCHA after failed login attempts - see configuration.dist.php for config template</li>
+    <li>(e9a0925 - BT#6486) loginFailed check now based on session (instead of $_GET)</li>
+    <li>(fc452e9 - BT#6369) Add dump all and extra fields to cron CSV import</li>
+    <li>(21021fb) Change wordwrap param to 120 in jQGrid</li>
+    <li>(3cfed54) Fix document templates not appearing in learning path edition page</li>
+    <li>(ec82b74 - BT#6449) Add new params when creating a session</li>
+    <li>(b13415c - BT#6369) Add configuration setting for default import admin user in cron CSV import</li>
+    <li>(51b6982 - BT#6418) Add new UI for works tool</li>
+    <li>(16af474 - BT#6418) Fix bug in expiry time check in works tool</li>
+    <li>(e29a326 - BT#6418) Add mising works + reminder options in works tool</li>
+    <li>(d0f01d6 - BT#6537) Add Vimeo embed code for LPs</li>
+    <li>(af9a4ad - BT#6509) Fix file element size in form</li>
+    <li>(75f7f7b - BT#6509) Remove input fields decoration inside questions</li>
+    <li>(4e01256 - BT#6536) Force download for DWG and DWF files</li>
+    <li>(03b46d3) Update jQGrid version to 4.5.2</li>
+    <li>(33c43a1 - BT#6369) Force session list for user when looking as an admin</li>
+    <li>(f26a010 - BT#6369) Admin can see the relations between user and sessions</li>
+    <li>(38b2a1e) Remove possibility to download invisible works</li>
+    <li>(3b5b267) Only teachers can edit works</li>
+    <li>(237dd03) Fix upload and add view icon for students in works tool</li>
+    <li>(48f7d5d - BT#6560) Fix bug in MATCHING question type when using shuffled answers</li>
+    <li>(48fc623 - BT#5854) Fix orphan questions bug</li>
+    <li>(a941044 - BT#6509) Calculate fill-blanks input width on the fly</li>
+    <li>(3592e1b, 02751d5) Fix learnpath_item_id param in SOAP web service for learning path</li>
+    <li>(a4b86fc - BT#5848) Reading the Username, username, Id or id rows when importing users to a course</li>
+    <li>(7c1cb6f - BT#6418) Fix local dates issues in works tool</li>
+    <li>(8d0c9da) Fix right-floating footer in all Chamilo styles</li>
+    <li>(7fcbd56, 24495c9) Implementation of "hidden" visibility for courses</li>
+    <li>(c000a0e - BT#6619) Add studentview support in api_is_coach()</li>
+    <li>(5f4c961 - BT#6613) Testing addition of audio recording through WebRTC (later disabled)</li>
+    <li>(8f4f547 - BT#6613) Add mediaelement JS library to reproduce audio and video tags</li>
+    <li>(b0e020c - BT#6614, BT#6615) Add "Add document" and "Add user" to new works tool UI</li>
+    <li>(37f6995 - BT#6615) Block works list access for students not subscribed</li>
+    <li>(fbc9eaa - BT#6449) Add fields exclusion in cron CSV import</li>
+    <li>(2ab57d4 - BT#6616) Add document/works templates in works tool</li>
+    <li>(8213304, 954c8f1) Fix FCKEditor + IE10 bug SCRIPT438</li>
+    <li>(db03389) Fix IE8 issue when loading LP audio</li>
+    <li>(37d724f - BT#6660) Fix icon in users folder (documents tool)</li>
+    <li>(3112a12 - BT#6666) Fix category code on course creation</li>
+    <li>(85a1d62 - BT#6675) Fix bug in AJAX filemanager search</li>
+    <li>(ea749fa - BT#6675) User must login to search a document</li>
+    <li>(fb51cb0) Add trim when looking for usernames</li>
+    <li>(a475e63 - BT#6449) Allow multiple teachers in a course on CSV import</li>
+    <li>(b792956 - BT#6692) Fix jQGrid count when searching for sessions + fix category URL</li>
+    <li>(c0c4e1e) Add access_url_id in sessions category queries</li>
+    <li>(5c29dd4 - BT#6695) Add a global default_calendar_view setting in the agenda</li>
+    <li>(6145ecb - BT#6708) Add pagination when searching users in the social network</li>
+    <li>(5f63106 - BT#6708) Fix user search query</li>
+    <li>(8f5b7e0) Allow session manager to see session (query fix)</li>
+    <li>(105e30e) Add SCORM logs colouring in JS console</li>
+    <li>(c6b00d7) Fix missing real_id and point_info keys, while searching the catalog</li>
+    <li>(9f5e804) Fix password protected course</li>
+    <li>(dde291e) Fix coaches assignation when updating the course session using course_edit.php</li>
+    <li>(45ee32f - BT#6692) If a coach user is deleted, the admin is assigned as coach and session_admin_id</li>
+    <li>(9e045b8 - BT#6524, #6708) Comment code that deletes the attempt of the user</li>
+    <li>(c08cbc0 - BT#6722) Fix class import</li>
+    <li>(4c7a861 - BT#6682) Adding setVisible/setInvisible actions in the document list</li>
+    <li>(4c7a861) Adding user_name_order setting does not work in 1.9 + fixing the user list order</li>
+    <li>(82914a0) Add new Drupal SSO counterpart</li>
+    <li>(fe018b5 - BT#6418) Work authors can *always* see their work</li>
+    <li>(fd502ac) Fix for IP address tracking</li>
+    <li>(67c2748 - BT#6532) Hiding certificate URL</li>
+    <li>(5b8c384) If sender info is not set then try to use: 1. the no-reply email 2. the admin email</li>
+    <li>(a425a23 - BT#6418) User can edit work if the "delete own document" is on and the work has not been reviewed</li>
+    <li>(a035d0f) Allow modification of max number of user in groups</li>
+    <li>(f658496) When editing a category group all settings are copied to the groups</li>
+    <li>(dce1900 - BT#6738) Fixed 'shared_survey' mysql error during migration from 1.6.x to 1.8.x</li>
+    <li>(480eb84) drh can access all content (courses, users) inside a session - see config template in configuration.dist.php</li>
+    <li>(b81625b - BT#6687) Hide session if it doesn't have any content (courses)</li>
+    <li>(efdc138) WARNING - This is a hack to the database structure, which will be ignored if not present: Add "c_student_publication.filename" field in order to separate the changes between student and teacher</li>
+    <li>(cc1dfbb) WARNING - This is a hack to the database structure, which will be ignored if it isn't present: Add new field in the DB course.add_teachers_to_sessions_courses (ignored if field doesn't exist)</li>
+    <li>(2de4c45 - BT#6449) Changing course_edit.php update teachers</li>
+    <li>(b044222 - BT#6776) Adding an event_system() notification when personal documents are deleted</li>
+    <li>(c1d3e10 - BT#6799) left_width value is now generated at runtime via jquery</li>
+    <li>(c623215) Add coments per work, see template config in configuration.dist.php</li>
+    <li>(2e7a124) Fix install issue preventing the right check on directories creation</li>
+    <li>(3f23c7f) Teachers can be removed in the course_edit.php page</li>
+    <li>(599734e - BT#6449) Add course coaches addition feature on admin/course_edit.php page</li>
+    <li>(df5ea90) Add new settings documents_default_visibility_defined_in_course/documents_default_visibility...</li>
+    <li>(90f6055 - BT#6815) Add course id when showing items</li>
+    <li>(b00b6da - BT#6734) Add agenda events list</li>
+    <li>(ed9df81) Fix LDAP code</li>
+    <li>(dbdc8cc - BT#6621) When hiding a document in a course it also hides the document in all sessions</li>
+    <li>(804ef62 - BT#6848) Fix session history link</li>
+    <li>(cfef1d8 - BT#6801) Fix SQL error when getting orphan questions</li>
+    <li>(9985547 - BT#6845) Add unsubscribe user from session/course option</li>
+    <li>(2bc0785 - BT#6770) Add "login as" button for admins in course tracking</li>
+    <li>(fcd6e26) Teacher don't need the show_email_addresses option to see phone/email when exporting to PDF</li>
+    <li>(9d2fc90 - BT#6770) DRH can "login as" users</li>
+    <li>(9533f3b) Adding icon + fixing course count in tracking pages</li>
+    <li>(428a2b2) Admin can access the users' stats</li>
+    <li>(4ee3a13 - BT#6770) Add user list for DRH with search box in tracking pages</li>
+    <li>(5cfe24f) WARNING - This is a hack to the database structure, which will be ignored if not present: Add multiple URL support for classes (user group) new DB table added "access_url_rel_user_class" - only available on fresh installs, on manual DB update or by waiting for v10</li>
+    <li>(9063249 - BT#6845) Add course session coaches in the get_personal_session_course_list()</li>
+    <li>(1f162d6 - BT#6195) Add support for multiple URL for course categories</li>
+    <li>(09a2e8a - BT#6782) Add teachers to course from a session</li>
+    <li>(4bc737b - BT#6782) Change session source to multiple option</li>
+    <li>(bc15484 - BT#6962) Add course code in URL in order to fix the "newscorm -1" error</li>
+    <li>(e84ef79) Add handy function api_get_plugin_setting(), adding new "main_top" and "main_bottom"</li>
+    <li>(05db5ec - BT#6939) Add language support in the before login plugin (other commits improve the plugin in other areas)</li>
+    <li>(d13198c - BT#6963) Fix jQGrid ordering by column</li>
+    <li>(cfa3ee4) Fix issue whereby platform admins are not considered course admins</li>
+    <li>(f84285b) Fix youtube fckeditor plugin : use protocol relative url</li>
+    <li>(ed93152) Implement new work student adding score/status in student view</li>
+    <li>(6d3a26b - BT#6977) Add $_configuration['allow_my_files_link_in_homepage']</li>
+    <li>(6e572a9) Fix flashvars in learnpath : replace only relative urls</li>
+    <li>(8e8ab98 - BT#6985) Group tool: Adding import/export categories and groups CSV</li>
+    <li>(5a696e6 - BT#6985) Add search form, tutors and members list in group overview</li>
+    <li>(f227d91 - BT#6985) Add PDF export to group overview page</li>
+    <li>(6c2506c - BT#6770) Do not edit DRH relationships when importing by CSV</li>
+    <li>(979e4f5 - BT#7041) Only show courses from the current url</li>
+    <li>(80a519f - BT#7027) When removing a user from a course the works are deleted too</li>
+    <li>(21ed2a1 - BT#7007) Implemented webservice-based authentication</li>
+    <li>(726eba9 - BT#6916) Move extra DB changes in an extra.sql custom file</li>
+    <li>(fde063a - BT#6700) Fix IE10 bug in messages</li>
+    <li>(f1a474f - BT#7008) Hiding Home_top when connected and hide global announcements when not connected - special options hide_global_announcements_when_not_connected and hide_home_top_when_connected, see config template in configuration.dist.php</li>
+    <li>(1b939ab - BT#7007) Added phpseclib library to allow for AES128/CFB encryption mode</li>
+    <li>(3c21fdb - BT#6613) Add php-ffmpeg library</li>
+    <li>(c768066 - BT#7010) Add special options for Aiken format reading in non-UTF8</li>
+    <li>(2a3c26b - BT#7008) Allow public/private tab links in navigation menu</li>
+    <li>(d667207 - BT#7064) Added use of default course template parameter (course_creation_use_template) - see template config in configuration.dist.php</li>
+    <li>(870673c - BT#7011) Add sessions filter to courses list</li>
+    <li>(ba45725) Fix unzip_uploaded_file()</li>
+    <li>(5bd2e52 - BT#7066) Add script to massively upload one file into each course's documents and link from course introduction - needs to be enabled in main/admin/index.php</li>
+    <li>(be2304e - BT#7070) Fix default documents listing order</li>
+    <li>(fa868fb - BT#7011) Add courses filter to sessions list</li>
+    <li>(e9035f5 - BT#7089) Add support for DRH in api_is_platform_admin()</li>
+    <li>(a937194 - BT#7013) Add user access by session report</li>
+    <li>(c8e3425 - BT#7015) Add user learning path progress by session report</li>
+    <li>(86d47af - BT#7089) Add link to "company report" in admin page for DRH</li>
+    <li>(ebc2324) Add support for test categories in course backup/restore</li>
+    <li>(138e5e4 - BT#6642) Fix error when deleting documents</li>
+    <li>(cc5b2ec - BT#6770) Allow DRH to enter course as student, see config template in configuration.dist.php</li>
+    <li>(a721c2b - BT#6770) Add courses and sessions filter on active status</li>
+    <li>(7640e68 - BT#7016) Log user access to wiki</li>
+    <li>(4052f7e - BT#7017) Add exercise progress report</li>
+    <li>(092a136) Add permissions check in dropbox</li>
+    <li>(48d356f) Add sessions count to data reporting from Chamilo</li>
+    <li>(4f0a911) Fix text escaping issues in exercises titles</li>
+    <li>(d07dbf1 - BT#7110) Course introduction is now the default for sessions, then any edition in session makes a session-level copy</li>
+    <li>(62ebad5 - BT#7116) Session import fixes allowing multiple users in all sessions</li>
+    <li>(84c261c - BT#7123) Add tracking info about who created the user in user edition page</li>
+    <li>(65e26c4) Fix bug blocking JS from executing under HTTPS</li>
+    <li>(311e823 - BT#6770) Add sleeping teachers/students counter in reporting tab</li>
+    <li>(05a26a4 - BT#7119) Disabling messages/emails if user is inactive</li>
+    <li>(c75cc0b - BT#7017) Add CSV export to admin reports</li>
+    <li>(a39abd0) Don't unregister teacher course when adding user in course with csv import</li>
+    <li>(69bc79f - BT#7128) Change delete document mechanism to use doc ID instead of path</li>
+    <li>(030315b) Fix access to document folders inside sessions: Add first check on session doc, then check base course</li>
+    <li>(703b1be) Redirect DRH directly to sessions (paginated list) to avoid loading the very expensive index</li>
+    <li>(3eda877 - BT#7140) Add link to course from session tracking detailed list</li>
+    <li>(b159706 - BT#7142) Add code to course search possibilities</li>
+    <li>(e4bc5ed - BT#7140) Add condition to avoid high-load useless session queries</li>
+    <li>(a0901d0 - BT#7156) Groups changes: add event_system() call to log stuff from groups, add 'allow_members_leave_group' option. WARNING: this requires a database change which is ignored if it doesn't exist</li>
+    <li>(d2514af - BT#7163) Add session_import_drh.php script</li>
+    <li>(9a73828 - BT#7174) Allow exercise edition even if it's added in a LP, "dangerous" fields are frozen</li>
+    <li>(59d48b7) Change REL_COURSE PATH by WEB_COURSE_PATH when it convert a mp3 url to absolute</li>
+    <li>(24565f3 - BT#7217) Add addAnnouncementToAllUsersInSessions option</li>
+    <li>(a27ce6b - BT#7217) Add session ID to link in announcement sent from session</li>
+    <li>(4e0f217 - BT#7104) Add hack to show new assignments in work tool on the courses list page</li>
+    <li>(3d51602 - BT#7016) Add reading and participation report to reporting tab for admins</li>
+    <li>(114fb7b - BT#7277) Add survey report to reporting tab for admins</li>
+    <li>(55f2c8a - BT#7154) Extend set_course_parameters in template.lib to provide _c array in templates - see developers guide</li>
+    <li>(a1bae6b - BT#7301) change exercise Id format to avoid excel treat it as a date</li>
+    <li>(71e0e9c - BT#7293) Fix transparency for transparent PNGs when resizing</li>
+    <li>(ccdb0c5 - BT#7316) check if user is also course_coach to allow exercise qualification</li>
+    <li>(3d26545, 629afbf) Use https when necessary (including Pixlr)</li>
+    <li>(94cc409 - BT#7392) Forcing Content-Type: text/html;utf8 for all pages</li>
+    <li>(a11f828 - BT#7345) Change Galician name order</li>
+    <li>(2fcd765 - BT#7356) studentview is only modified in local.inc.php</li>
+    <li>(977e5da) Allow platform's student to see courselog of courses they are admin</li>
+    <li>(5cf1da7 - BT#7273) Add "delete all" in works</li>
+    <li>(f1ca812 - BT#6638) Add delete button for hotpotatoes attempts</li>
+    <li>(ef5f4e4 - BT#4705) Add show_system_folders option in course</li>
+    <li>(72f22cc) Add images sprite for sidebar menu icons</li>
+    <li>(28e9d64 - BT#6418) Add attachments possibility in work comments</li>
+    <li>(56f4a78 - BT#6735) Add option $_configuration['show_simple_session_info']</li>
+    <li>(59de1f3) Add field Description (EnrichQuestion) in MultipleAnswer Excel test import</li>
+    <li>(75d0c15 - BT#7311) Fix error when creating a folder inside a group</li>
+    <li>(65119bc - BT#7682) Fix announcements bug in groups</li>
+    <li>(2a3adc5 - BT#7688) Teacher can see invisible elements during LP construction</li>
+    <li>(36486de - BT#7311) Fixing remove_XSS that always has ANONYMOUS even if you're in course</li>
+    <li>(02eb40b - BT#7682) Show forums that have a category = 0 in learning paths building</li>
+    <li>(efb50f8 - BT#7706) Removing COURSEMANAGERLOWSECURITY otherwise content will be truncated</li>
+    <li>(ea500a2 - BT#7780) Fix multiple true/false/doubt question</li>
+    <li>(e349c55 - BT#7763) Score per course report</li>
+    <li>(d628a49) Finetune CSS loading order in template.lib.php</li>
+    <li>(63d0324) Fix unintentional wildcard search on user_list</li>
+    <li>(ae5ab7f) Print the full path of the directories checked by Chamilo installation instead of just their pseudo–relative paths</li>
+    <li>(a5f40a2 - BT#7644) Change of conversion number from bytes to MB</li>
+    <li>(3ef2245) Fix phpCAS error on logout, and redirection loop</li>
+    <li>(86a3bc4 - BT#7297 - #7042) Setting $_configuration['save_user_last_login'] option. WARNING: this feature requires a database change - ignored if not present </li>
+    <li>(9e0e4e1 - BT#7870) Don't delete documents when removing an LP</li>
+    <li>(68d3c93) Table track_e_course_access now registers time in UTC</li>
+    <li>(9d0baf3 - BT#7930) Fix XSS problem when using Google Chrome and Youtube src</li>
+    <li>(64cda54) Removing PHP 5.2 validations</li>
+    <li>(4c6799f - BT#7803) Improving agenda UI, fixing event edition, Adding date-range-picker element in FormValidator, Updating datetimepicker js library, Adding sabre-vobject ical library</li>
+    <li>(0d0daa4 - BT#7780) Fix QTI import total question weight bug</li>
+    <li>(cac3061 - BT#7688) Fix tool LP link when copying a LP</li>
+    <li>(1e7a5c8) If event was marked as send to everyone clean the $sendToUsers list</li>
+    <li>(48d9010 - BT#7968) Remove disabled teachers from list of session course coaches</li>
+    <li>(f6b711f) Fix undefined watermark variable</li>
+    <li>(b4bd250 - BT#7975) Adding lp extra fields - WARNING requires database structure change - ignored if not applied</li>
+    <li>(0300ea0) Update course creation intro to show more relevant tools for teachers</li>
+    <li>(f5e8a0f - BT#8074) Shared and chat folders now filtered by session</li>
+    <li>(387cf2a - BT#8072) Show top menu bar even if empty to show logout button</li>
+    <li>(cd7b428) Sound notification of incoming messages in chat</li>
+    <li>(ef4d1ae) Add Adminer 4.1.0</li>
+    <li>(a346e5a) Reversed gradebook scores array to reduce confusion</li>
+    <li>(893d3ea) Fix issue getting last connexion date to a course (was getting it from the table track_e_course_access)</li>
+    <li>(40a1e95 - BT#7780) Fix issue in course URL inside documents copied from one course to another</li>
+    <li>(9b1ddc0, 82df5fb - BT#8207, BT#6768) Fix redirection issue in custom pages</li>
+    <li>(#7153) Fix partial scores, total score, PDF export, percentage score,  and certificate link in gradebook</li>
+    <li>(#5565) Fix installation bug (again)</li>
+    <li>(#7191) Fix SCORM autocompletion of parents</li>
 </ul>
 <h3>Stylesheets and theming</h3>
+Stylesheets have been considerably changed in version 1.9.8, which might require a little update on your side if you have a custom stylesheet. We're sorry about it, but it was really necessary to improve the adaptability of the interface for mobile devices (which we are sure you will appreciate). If you only changed the logo, we recommend you make a copy of an existing Chamilo style (main/css/chamilo*) again, rename it and simply replace the logo then upload the new style. If you have more complex styles, you might want to ask for the assistance of your web designer at the moment you update Chamilo to this version.
 <ul>
     <li>(#6217) Updated logo to new Chamilo logo in config section</li>
     <li>(#7007) Dropped support for IE7</li>
+    <li>(#7126) Improve styling for profile-attached files</li>
+    <li>(#7141) Great update to learning paths visualization</li>
+    <li>(#7142) Changed help image in learning paths</li>
+    <li>(#7147) Updated chat screen appearance</li>
+    <li>(d64b865 - BT#8230) Add "section-login" class in login pages</li>
 </ul>
 <h3>Web services</h3>
 <ul>
-    <li></li>
+    <li>(BT#6246) Improved sessions list in sessions_list.soap.php and added GetLearnpathHighestLessonLocation() (also BT#6667)</li>
+    <li>(BT#6246) Updated WSCreateUser() to manage active status, added WSGetUser(), WSGetUserFromUsername() and WSSubscribeUserToSessionSimple() and fixed WSListSessions() to allow sessions sales from Ubercart Drupal module</li>
+    <li>(43949c7) Add check on existence of extra fields (optional)</li>
+    <li>(#6763) Added WSUserSubscribedInCourse()</li>
+    <li>(5ddc3c0) Assume student status in EditUser* services and prevent modifying an admin to student</li>
 </ul>
 <h3>Removals</h3>
 <ul>
-  <li>Custom tabs can no longer be defined directly in the settings_current table.
+    <li>Custom tabs can no longer be defined directly in the settings_current table.
       If you have custom_tabs in this table (select * from settings_current where variable='show_tabs' AND subkey like 'custom_tab_%'), please add them through the homepage edition screen.</li>
+    <li>(#7180) Remove custom_tab_* feature </li>
 </ul>
+
+<h1>Chamilo 1.9.6.1 - 22th of May, 2014</h1>
+<h3>Release notes - summary</h3>
+<p>Chamilo 1.9.6.1 is a patch version with security patches on top of 1.9.6. Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
 
 <h1>Chamilo 1.9.6 - Rochefort, 4th of June, 2013</h1>
 <h3>Release notes - summary</h3>

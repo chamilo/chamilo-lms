@@ -254,7 +254,7 @@ class AnnouncementManager
                 echo "<tr><td>";
                 $realname = $attachment_list['path'];
                 $user_filename = $attachment_list['filename'];
-                $full_file_name = 'download.php?file=' . $realname;
+                $full_file_name = 'download.php?'.api_get_cidreq().'&file=' . $realname;
                 echo '<br/>';
                 echo Display::return_icon('attachment.gif', get_lang('Attachment'));
                 echo '<a href="' . $full_file_name . ' "> ' . $user_filename . ' </a>';

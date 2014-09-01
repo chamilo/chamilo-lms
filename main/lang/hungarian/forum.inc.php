@@ -36,7 +36,6 @@ $LastPost = "Utolsó üzenet";
 $Quoting = "Idézve";
 $NotifyByEmail = "Kérek email értesítést, ha valaki reagál";
 $StickyPost = "Ez egy ragadós üzenet (mindíg a lista eleján szerepel különleges ikonnal)";
-$ReplyShort = "Vá:";
 $DeletePost = "Biztos benne, hogy törölni szeretné ezt az üzenetet? Az üzenet törlésével a rá érkezett válaszokat is törölni fogja. A téma szerinti megjelenítés módban ellenőrizheti, hogy milyen üzeneteket töröl ezzel egyidejűleg.";
 $Locked = "Zárolva: a hallgatók a továbbiakban nem küldhetnek üzeneteket erre a fórum kategóriára, de továbbra is olvashatják a korábban elküldött üzeneteket.";
 $Unlocked = "Nincs zárolva: a hallgatók küldhetnek új üzeneteket a kategóriára, fórumra, vagy témára";

@@ -1,16 +1,25 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- *   This class provides methods for the notebook management.
- *   Include/require it in your code to use its features.
- *   @package chamilo.library
- */
-/**
- * Code
+ * Class Gradebook
+ *  This class provides methods for the notebook management.
+ *  Include/require it in your code to use its features.
+ * @package chamilo.library
  */
 class Gradebook extends Model
 {
-    public $columns = array('id', 'name', 'description', 'course_code', 'parent_id', 'grade_model_id', 'session_id', 'weight', 'user_id');
+    public $columns = array(
+        'id',
+        'name',
+        'description',
+        'course_code',
+        'parent_id',
+        'grade_model_id',
+        'session_id',
+        'weight',
+        'user_id'
+    );
 
     public function __construct()
     {
@@ -50,9 +59,14 @@ class Gradebook extends Model
         if (empty($item)) {
             return true;
         }
+
         return $item['visibility'] == '1';
     }
 
+    /**
+     * @param array $options
+     * @return array
+     */
     public function get_all($options = array())
     {
         $gradebooks = parent::get_all($options);
@@ -65,14 +79,26 @@ class Gradebook extends Model
         return $gradebooks;
     }
 
+    /**
+     * @param array $params
+     * @return bool
+     */
     public function update($params)
     {
         return parent::update($params);
     }
 
-    public function update_skills_to_gradebook($gradebook_id, $skill_list)
+    /**
+     * @param int $gradebook_id
+     * @param array $skill_list
+     * @return bool
+     */
+    public function update_skills_to_gradebook(
+        $gradebook_id,
+        $skill_list,
+        $deleteSkillNotInList = true
+    )
     {
-
         if (!empty($skill_list)) {
 
             //Cleaning skills
@@ -81,11 +107,13 @@ class Gradebook extends Model
             $skill_gradebook = new SkillRelGradebook();
             $skill_gradebooks_source = $skill_gradebook->get_all(array('where'=>array('gradebook_id = ?' =>$gradebook_id)));
             $clean_gradebook = array();
+
             if (!empty($skill_gradebooks_source)) {
                 foreach($skill_gradebooks_source as $source) {
                     $clean_gradebook[]= $source['skill_id'];
                 }
             }
+
             if (!empty($clean_gradebook)) {
                 $skill_to_remove = array_diff($clean_gradebook, $skill_list);
             }
@@ -99,14 +127,21 @@ class Gradebook extends Model
                 }
             }
 
-            if (!empty($skill_to_remove)) {
-                foreach($skill_to_remove as $remove) {
-                    $skill_item = $skill_gradebook->get_skill_info($remove, $gradebook_id);
-                    $skill_gradebook->delete($skill_item['id']);
+            if ($deleteSkillNotInList) {
+                if (!empty($skill_to_remove)) {
+                    foreach ($skill_to_remove as $remove) {
+                        $skill_item = $skill_gradebook->get_skill_info(
+                            $remove,
+                            $gradebook_id
+                        );
+                        $skill_gradebook->delete($skill_item['id']);
+                    }
                 }
             }
+
             return true;
         }
+
         return false;
     }
 

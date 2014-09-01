@@ -499,10 +499,12 @@ class ExtraFieldValue extends Model
      * the given field is defined with the given value
      * @param string Field (type of data) we want to check
      * @param string Data we are looking for in the given field
+     * @param bool Whether to transform the result to a human readable strings
+     * @param bool Whether to return the last element or simply the first one we get
      * @return mixed Give the ID if found, or false on failure or not found
      * @assert (-1,-1) === false
      */
-    public function get_item_id_from_field_variable_and_field_value($field_variable, $field_value, $transform = false)
+    public function get_item_id_from_field_variable_and_field_value($field_variable, $field_value, $transform = false, $last = false)
     {
         $field_value = Database::escape_string($field_value);
         $field_variable = Database::escape_string($field_variable);
@@ -513,7 +515,15 @@ class ExtraFieldValue extends Model
                 WHERE
                     field_value  = '$field_value' AND
                     field_variable = '".$field_variable."'
+                ORDER BY {$this->handler_id}
                 ";
+
+        if ($last) {
+            // If we want the last element instead of the first
+            // This is useful in special cases where there might
+            // (erroneously) be more than one row for an item
+            $sql .= ' DESC';
+        }
 
         $result = Database::query($sql);
         if ($result !== false && Database::num_rows($result)) {

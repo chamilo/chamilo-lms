@@ -97,29 +97,46 @@ function fill_coach_field (username) {
 
 if ($_POST['formSent']) {
 	$formSent = 1;
-	$name                  = $_POST['name'];
-	$year_start            = $_POST['year_start'];
-	$month_start           = $_POST['month_start'];
-	$day_start             = $_POST['day_start'];
-	$year_end              = $_POST['year_end'];
-	$month_end             = $_POST['month_end'];
-	$day_end               = $_POST['day_end'];
-	$nb_days_acess_before  = $_POST['nb_days_acess_before'];
-	$nb_days_acess_after   = $_POST['nb_days_acess_after'];
-	//$nolimit               = $_POST['nolimit'];
-	$coach_username        = $_POST['coach_username'];
-	$id_session_category   = $_POST['session_category'];
-	$id_visibility         = $_POST['session_visibility'];
-
-    $end_limit             = $_POST['end_limit'];
-    $start_limit           = $_POST['start_limit'];
+    $name = $_POST['name'];
+    $year_start = $_POST['year_start'];
+    $month_start = $_POST['month_start'];
+    $day_start = $_POST['day_start'];
+    $year_end = $_POST['year_end'];
+    $month_end = $_POST['month_end'];
+    $day_end = $_POST['day_end'];
+    $nb_days_acess_before = $_POST['nb_days_acess_before'];
+    $nb_days_acess_after = $_POST['nb_days_acess_after'];
+    $coach_username = $_POST['coach_username'];
+    $id_session_category = $_POST['session_category'];
+    $id_visibility = $_POST['session_visibility'];
+    $end_limit = $_POST['end_limit'];
+    $start_limit = $_POST['start_limit'];
+    $duration = isset($_POST['duration']) ? $_POST['duration'] : null;
 
     if (empty($end_limit) && empty($start_limit)) {
         $nolimit = 1;
     } else {
     	$nolimit = null;
     }
-	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit, $end_limit);
+
+    $return = SessionManager::create_session(
+        $name,
+        $year_start,
+        $month_start,
+        $day_start,
+        $year_end,
+        $month_end,
+        $day_end,
+        $nb_days_acess_before,
+        $nb_days_acess_after,
+        $nolimit,
+        $coach_username,
+        $id_session_category,
+        $id_visibility,
+        $start_limit,
+        $end_limit,
+        $duration
+    );
 
 	if ($return == strval(intval($return))) {
 		// integer => no error on session creation
@@ -394,6 +411,23 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
         </div>
     </div>
 
+    <?php
+    if (SessionManager::durationPerUserIsEnabled()) {
+        ?>
+        <div class="control-group">
+            <label class="control-label">
+                <?php echo get_lang('SessionDurationTitle') ?> <br />
+            </label>
+            <div class="controls">
+                <input id="duration" type="text" name="duration" class="span1" maxlength="50" value="">
+                <br />
+                <?php echo get_lang('SessionDurationDescription') ?>
+            </div>
+        </div>
+
+    <?php
+    }
+    ?>
 
  <div class="control-group">
     <div class="controls">
@@ -433,6 +467,8 @@ function disable_endtime(select) {
         end_div.style.display = 'block';
      else
         end_div.style.display = 'none';
+
+    emptyDuration();
 }
 
 function disable_starttime(select) {
@@ -441,6 +477,14 @@ function disable_starttime(select) {
         start_div.style.display = 'block';
      else
         start_div.style.display = 'none';
+
+    emptyDuration();
+}
+
+function emptyDuration() {
+    if ($('#duration').val()) {
+        $('#duration').val('');
+    }
 }
 </script>
 <?php

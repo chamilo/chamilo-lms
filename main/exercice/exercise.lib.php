@@ -831,7 +831,7 @@ function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id =
     $sql 	= "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $exercise_id";
     $result = Database::query($sql);
     $row	= Database::fetch_array($result, 'ASSOC');
-    if (!empty($row['expired_time']) ) {
+    if (!empty($row['expired_time'])) {
     	$current_expired_time_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
     	if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
             $current_time = time();
@@ -1534,7 +1534,7 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
  * Get exercise information by id
  * @param int $exerciseId Exercise Id
  * @param int $courseId The course ID (necessary as c_quiz.id is not unique)
- * @return array Exercise info 
+ * @return array Exercise info
  */
 function get_exercise_by_id($exerciseId = 0, $courseId = null) {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
@@ -1554,37 +1554,45 @@ function get_exercise_by_id($exerciseId = 0, $courseId = null) {
  * @param   array   course data
  * @param   int     session id
  * @param	int		course c_id
- * @param   boolean only_active_exercices
+ * @param   boolean $only_active_exercises
  * @return  array   array with exercise data
  * modified by Hubert Borderiou
  */
-function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0, $only_active_exercises = true)
+function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id = 0, $only_active_exercises = true)
 {
     $TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
-    $tab_select_param = array();
 
-    if (!$only_active_exercises) {
-        $sql_active_exercises = "";
+    if ($only_active_exercises) {
+        // Only active exercises.
+        $sql_active_exercises = "active = 1 AND ";
     } else {
-        $sql_active_exercises = "active = ? AND";
-        $tab_select_param[] = '1';
+        // Not only active means visible and invisible NOT deleted (-2)
+        $sql_active_exercises = "active IN (1, 0) AND ";
     }
-
-    $tab_select_param[] = $session_id;
-    $tab_select_param[] = $course_id;
 
     if ($session_id == -1) {
     	$session_id  = 0;
     }
 
+    $params = array(
+        $session_id,
+        $course_id
+    );
+
     if ($session_id == 0) {
-    	$conditions = array('where'=>array("$sql_active_exercises session_id = ? AND c_id = ?" => $tab_select_param), 'order'=>'title');
+    	$conditions = array(
+            'where' => array("$sql_active_exercises session_id = ? AND c_id = ?" => $params),
+            'order'=>'title'
+        );
     } else {
-        //All exercises
-    	$conditions = array('where'=>array("$sql_active_exercises (session_id = 0 OR session_id = ? ) AND c_id=?" => $tab_select_param), 'order'=>'title');
+        // All exercises
+    	$conditions = array(
+            'where' => array("$sql_active_exercises (session_id = 0 OR session_id = ? ) AND c_id=?" => $params),
+            'order'=>'title'
+        );
     }
 
-    return Database::select('*',$TBL_EXERCISES, $conditions);
+    return Database::select('*', $TBL_EXERCISES, $conditions);
 }
 
 /**

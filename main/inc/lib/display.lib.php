@@ -418,7 +418,7 @@ class Display
      * @param   bool    Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
-    public static function return_message($message, $type='normal', $filter = true)
+    public static function return_message($message, $type = 'normal', $filter = true)
     {
         if ($filter) {
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
@@ -712,9 +712,9 @@ class Display
     /**
      * Returns the htmlcode for a tag (h3, h1, div, a, button), etc
      *
-     * @param string $image the filename of the file (in the main/img/ folder
-     * @param string $alt_text the alt text (probably a language variable)
-     * @param array additional attributes (for instance height, width, onclick, ...)
+     * @param string $tag the tag name
+     * @param string $content the tag's content
+     * @param array $additional_attributes (for instance height, width, onclick, ...)
      * @author Julio Montoya 2010
      */
     public static function tag($tag, $content, $additional_attributes = array()) {
@@ -1205,6 +1205,7 @@ class Display
         $notifications = array();
         // Filter all last edits of all tools of the course
         while ($res && ($item_property = Database::fetch_array($res))) {
+
             // First thing to check is if the user never entered the tool
             // or if his last visit was earlier than the last modification.
             if ((!isset($lastTrackInCourseDate[$item_property['tool']])
@@ -1217,12 +1218,15 @@ class Display
                       && $item_property['tool'] != TOOL_NOTEBOOK
                       && $item_property['tool'] != TOOL_CHAT)
                    )
-                  )
+                )
                 // Take only what's visible or "invisible but where the user is a teacher" or where the visibility is unset.
                 && ($item_property['visibility'] == '1'
                     || ($course_info['status'] == '1' && $item_property['visibility'] == '0')
-                    || !isset($item_property['visibility'])))
-            {
+                    || !isset($item_property['visibility']))
+            ) {
+                if ($course_info['real_id'] == 1) {
+                  //  var_dump($item_property);
+                }
                 // Also drop announcements and events that are not for the user or his group.
                 if (($item_property['tool'] == TOOL_ANNOUNCEMENT
                          || $item_property['tool'] == TOOL_CALENDAR_EVENT)
@@ -1250,6 +1254,12 @@ class Display
                 $notifications[$item_property['tool']] = $item_property;
             }
         }
+
+        if ($course_info['real_id'] == 1) {
+            /*var_dump($notifications);
+            exit;*/
+        }
+
         // Show all tool icons where there is something new.
         $retvalue = '&nbsp;';
         while (list($key, $notification) = each($notifications)) {
@@ -1378,6 +1388,24 @@ class Display
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
                 }
+                if (isset($session_info['duration']) && !empty($session_info['duration'])) {
+                    $userDurationData = SessionManager::getUserSession(
+                            api_get_user_id(),
+                            $session_id
+                    );
+                    $userDuration = 0;
+                    if (isset($userDurationData['duration'])) {
+                        $userDuration = intval($userDurationData['duration']);
+                    }
+                    $totalDuration = $session_info['duration'] + $userDuration;
+
+                    $daysLeft = SessionManager::getDayLeftInSession(
+                        $session_id,
+                        api_get_user_id(),
+                        $totalDuration
+                    );
+                    $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
+                }
                 $active = true;
             } else {
                 $start = $stop = false;
@@ -1474,30 +1502,47 @@ class Display
         return $html;
     }
 
-    public static function return_default_table_class() {
+    public static function return_default_table_class()
+    {
         return 'data_table';
     }
 
-    public static function page_header($title, $second_title = null, $size = 'h2') {
-        $title = Security::remove_XSS($title);
+    /**
+     * @param string $title
+     * @param string $second_title
+     * @param string $size
+     * @param bool $filter
+     * @return string
+     */
+    public static function page_header($title, $second_title = null, $size = 'h2', $filter = true)
+    {
+        if ($filter) {
+            $title = Security::remove_XSS($title);
+        }
+
         if (!empty($second_title)) {
-            $second_title = Security::remove_XSS($second_title);
+            if ($filter) {
+                $second_title = Security::remove_XSS($second_title);
+            }
             $title .= "<small> $second_title<small>";
         }
         return '<div class="page-header"><'.$size.'>'.$title.'</'.$size.'></div>';
     }
 
-    public static function page_header_and_translate($title, $second_title = null) {
+    public static function page_header_and_translate($title, $second_title = null)
+    {
         $title = get_lang($title);
         return self::page_header($title, $second_title);
     }
 
-     public static function page_subheader_and_translate($title, $second_title = null) {
+     public static function page_subheader_and_translate($title, $second_title = null)
+     {
         $title = get_lang($title);
         return self::page_subheader($title, $second_title);
     }
 
-    public static function page_subheader($title, $second_title = null) {
+    public static function page_subheader($title, $second_title = null)
+    {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
@@ -1505,15 +1550,18 @@ class Display
         return '<div class="page-header"><h2>'.Security::remove_XSS($title).'</h2></div>';
     }
 
-    public static function page_subheader2($title, $second_title = null) {
+    public static function page_subheader2($title, $second_title = null)
+    {
         return self::page_header($title, $second_title, 'h3');
     }
 
-    public static function page_subheader3($title, $second_title = null) {
+    public static function page_subheader3($title, $second_title = null)
+    {
         return self::page_header($title, $second_title, 'h4');
     }
 
-    public static function description($list) {
+    public static function description($list)
+    {
         $html = null;
         if (!empty($list)) {
             $html = '<dl class="dl-horizontal">';
@@ -1526,7 +1574,8 @@ class Display
         return $html;
     }
 
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null) {
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null)
+    {
         $percentage = intval($percentage);
         $div = '<div class="progress progress-striped">
                     <div class="bar" style="width: '.$percentage.'%;"></div>
@@ -1694,7 +1743,8 @@ class Display
         switch ($fileInfo['extension']) {
             case 'wav':
                 if (isset($params['url'])) {
-                    return DocumentManager::readNanogongFile($params['url']);
+                    $url = DocumentManager::generateAudioTempFile(basename($file), $file);
+                    return DocumentManager::readNanogongFile($url);
                 }
                 break;
             case 'mp3':

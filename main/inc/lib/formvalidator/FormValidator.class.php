@@ -150,6 +150,7 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('filetype', null, 'HTML_QuickForm_Rule_Filetype', $dir . 'Rule/Filetype.php');
         $this->registerRule('multiple_required', 'required', 'HTML_QuickForm_Rule_MultipleRequired', $dir . 'Rule/MultipleRequired.php');
         $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');
+        $this->registerRule('telephone', null, 'HTML_QuickForm_Rule_Telephone', $dir . 'Rule/Telephone.php');
         $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');
         $this->registerRule('CAPTCHA', 'rule', 'HTML_QuickForm_Rule_CAPTCHA', 'HTML/QuickForm/Rule/CAPTCHA.php');
 
@@ -339,7 +340,6 @@ EOT;
      * A rule is attached to check for unwanted HTML
      * @param string $name
      * @param string $label						The label for the form-element
-     * @param string $name						The element name
      * @param boolean $required	(optional)		Is the form-element required (default=true)
      * @param boolean $full_page (optional)		When it is true, the editor loads completed html code for a full page.
      * @param array $editor_config (optional)	Configuration settings for the online editor.
@@ -638,4 +638,18 @@ function html_filter_teacher_fullpage($html)
 function html_filter_student_fullpage($html)
 {
     return html_filter($html, STUDENT_HTML_FULLPAGE);
+}
+
+/**
+ * Cleans telephone text
+ * @param string $telephone     Telephone number to clean
+ * @return string               The cleaned telephone number
+ */
+function telephone_filter($telephone)
+{
+    $telephone= trim ($telephone,'(');
+    $telephone= trim ($telephone,')');
+    $telephone= ltrim ($telephone,'+');    
+    $telephone= ltrim ($telephone,'0');
+    return $telephone;
 }

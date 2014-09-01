@@ -60,7 +60,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$id_coach              = $_POST['id_coach'];
 	$id_session_category   = $_POST['session_category'];
 	$id_visibility         = $_POST['session_visibility'];
-
+    $duration = isset($_POST['duration']) ? $_POST['duration'] : null;
     $description = isset($_POST['description']) ? $_POST['description'] : null;
     $showDescription = isset($_POST['show_description']) ? 1 : 0;
 
@@ -91,7 +91,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $start_limit,
         $end_limit,
         $description,
-        $showDescription
+        $showDescription,
+        $duration
     );
 
 	if ($return == strval(intval($return))) {
@@ -376,6 +377,29 @@ if (!empty($return)) {
 
     <?php } ?>
 
+    <?php
+        if (SessionManager::durationPerUserIsEnabled()) {
+            if (empty($infos['duration'])) {
+                $duration = null;
+            } else {
+                $duration = $infos['duration'];
+            }
+            ?>
+            <div class="control-group">
+                <label class="control-label">
+                    <?php echo get_lang('SessionDurationTitle') ?> <br />
+                </label>
+                <div class="controls">
+                    <input id="duration" type="text" name="duration" class="span1" maxlength="50" value="<?php if($formSent) echo Security::remove_XSS($duration); else echo $duration; ?>">
+                    <br />
+                    <?php echo get_lang('SessionDurationDescription') ?>
+                </div>
+            </div>
+
+        <?php
+        }
+    ?>
+
     <div class="control-group">
         <div class="controls">
             <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
@@ -386,9 +410,11 @@ if (!empty($return)) {
 
 <script type="text/javascript">
 
-<?php if($year_start=="0000") echo "setDisable(document.form.nolimit);\r\n"; ?>
+<?php
+//if($year_start=="0000") echo "setDisable(document.form.nolimit);\r\n";
+?>
 
-function setDisable(select){
+function setDisable(select) {
 
 	document.form.day_start.disabled = (select.checked) ? true : false;
 	document.form.month_start.disabled = (select.checked) ? true : false;
@@ -419,6 +445,7 @@ function disable_endtime(select) {
         end_div.style.display = 'block';
      else
         end_div.style.display = 'none';
+    emptyDuration();
 }
 
 function disable_starttime(select) {
@@ -427,6 +454,13 @@ function disable_starttime(select) {
         start_div.style.display = 'block';
      else
         start_div.style.display = 'none';
+    emptyDuration();
+}
+
+function emptyDuration() {
+    if ($('#duration').val()) {
+        $('#duration').val('');
+    }
 }
 
 </script>

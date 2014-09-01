@@ -36,7 +36,6 @@ $LastPost = "Última mensaxe";
 $Quoting = "Citación";
 $NotifyByEmail = "Gostaría de ser informado por email sempre que alguén responder a esta mensaxe";
 $StickyPost = "Esta é unha mensaxe fixa (aparece sempre na parte superior e ten unha icona especial)";
-$ReplyShort = "Re:";
 $DeletePost = "Ten a certeza de que desexa eliminar esta mensaxe? Ao apagala, borrará igualmente todas as respostas. Por favor, verifique na visión en árbore as mensaxes que serán eliminadas";
 $Locked = "Bloqueado: os estudantes non poden publicar máis mensaxes nesta categoría, foro ou tema, mais poden visualizar e ler as mensaxes publicadas";
 $Unlocked = "Desbloquado: os estudantes poden publciar novas mensaxes nesta categoría, foro ou tema";

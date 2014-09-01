@@ -1,17 +1,11 @@
 <?php
 /* For licensing terms, see license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
 
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 
 /**
+ * GradebookTable Class
  * Table to display categories, evaluations and links
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised)
@@ -19,76 +13,76 @@ require_once dirname(__FILE__).'/../be.inc.php';
  */
 class GradebookTable extends SortableTable
 {
-	private $currentcat;
-	private $datagen;
-	private $evals_links;
+    private $currentcat;
+    private $datagen;
+    private $evals_links;
     public  $cats;
 
-	/**
-	 * Constructor
-	 */
-    function GradebookTable ($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null)
+    /**
+     * Constructor
+     */
+    public function GradebookTable($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null)
     {
-    	parent::__construct ('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
-		$this->evals_links = array_merge($evals, $links);
-		$this->currentcat = $currentcat;
+        parent::__construct ('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
+        $this->evals_links = array_merge($evals, $links);
+        $this->currentcat = $currentcat;
         $this->cats = $cats;
-		$this->datagen = new GradebookDataGenerator($cats, $evals, $links);
+        $this->datagen = new GradebookDataGenerator($cats, $evals, $links);
 
-		if (isset($addparams)) {
-			$this->set_additional_parameters($addparams);
-		}
+        if (isset($addparams)) {
+            $this->set_additional_parameters($addparams);
+        }
 
-		$column= 0;
-		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++,'','','width="25px"');
-		}
+        $column= 0;
+        if (api_is_allowed_to_edit(null, true)) {
+            $this->set_header($column++, '', '', 'width="25px"');
+        }
 
-		$this->set_header($column++, get_lang('Type'),'','width="35px"');
-		$this->set_header($column++, get_lang('Name'), false);
+        $this->set_header($column++, get_lang('Type'), '', 'width="35px"');
+        $this->set_header($column++, get_lang('Name'), false);
 
         $this->set_header($column++, get_lang('Description'), false);
 
-		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Weight'),'','width="100px"');
-		} else {
-			$this->set_header($column++, get_lang('Weight'), false);
-			$this->set_header($column++, get_lang('Result'), false);
+        if (api_is_allowed_to_edit(null, true)) {
+            $this->set_header(
+                $column++,
+                get_lang('Weight'),
+                '',
+                'width="100px"'
+            );
+        } else {
+            $this->set_header($column++, get_lang('Weight'), false);
+            $this->set_header($column++, get_lang('Result'), false);
 
             if (!empty($cats)) {
                 $this->set_header($column++, get_lang('Actions'), false);
             }
-		}
+        }
 
         // Deactivates the odd/even alt rows in order that the +/- buttons work see #4047
 
         $this->odd_even_rows_enabled = false;
 
-		// Admins get an edit column.
-		if (api_is_allowed_to_edit(null, true)) {
-			$this->set_header($column++, get_lang('Modify'), false, 'width="195px"');
-			// Actions on multiple selected documents.
-			$this->set_form_actions(array (
-				'setvisible' => get_lang('SetVisible'),
-				'setinvisible' => get_lang('SetInvisible'),
+        // Admins get an edit column.
+        if (api_is_allowed_to_edit(null, true)) {
+            $this->set_header($column++, get_lang('Modify'), false, 'width="195px"');
+            // Actions on multiple selected documents.
+            $this->set_form_actions(array (
+                'setvisible' => get_lang('SetVisible'),
+                'setinvisible' => get_lang('SetInvisible'),
                 'deleted' => get_lang('DeleteSelected')
                 ));
-		} else {
-	 	    if (empty($_GET['selectcat']) &&  !api_is_allowed_to_edit()) {
-			    $this->set_header($column++, get_lang('Certificates'),false);
-	 	    } else {
-	 	    	//$evals_links = array_merge($evals, $links);
-	 	    	//if (count($evals_links)>0) {
-             	    //$this->set_header($column++, get_lang('Results'), false);
-             	//}
-	 	    }
-		}
+        } else {
+            if (empty($_GET['selectcat']) && !api_is_allowed_to_edit()) {
+                $this->set_header($column++, get_lang('Certificates'), false);
+            }
+        }
     }
 
     /**
      * @return GradebookDataGenerator
      */
-    function get_data()
+    public function get_data()
     {
         return $this->datagen;
     }
@@ -97,7 +91,7 @@ class GradebookTable extends SortableTable
 	 * Function used by SortableTable to get total number of items in the table
      * @return int
 	 */
-	function get_total_number_of_items()
+    public function get_total_number_of_items()
     {
 		return $this->datagen->get_total_items_count();
 	}
@@ -111,7 +105,7 @@ class GradebookTable extends SortableTable
      * @param int $sort
      * @return array|mixed
      */
-    function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
+    public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
     {
         //variables load in index.php
         global $certificate_min_score;
@@ -244,6 +238,7 @@ class GradebookTable extends SortableTable
                     }
                 } else {
                     $score = $item->calc_score(api_get_user_id());
+
                     if (!empty($score[1])) {
                         $complete_score = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
                         $score = $score[0]/$score[1]*$item->get_weight();
@@ -470,22 +465,37 @@ class GradebookTable extends SortableTable
         return $sortable_data;
     }
 
-    // Other functions
+    /**
+     * @param $item
+     * @return mixed
+     */
     private function build_certificate_min_score ($item)
     {
         return $item->get_certificate_min_score();
     }
 
-    private function build_weight ($item)
+    /**
+     * @param $item
+     * @return mixed
+     */
+    private function build_weight($item)
     {
         return $item->get_weight();
     }
 
+    /**
+     * @param $item
+     * @return mixed
+     */
     private function build_course_code ($item)
     {
     	return $item->get_course_code();
     }
 
+    /**
+     * @param $item
+     * @return string
+     */
     private function build_id_column ($item)
     {
 		switch ($item->get_item_type()) {
@@ -501,13 +511,17 @@ class GradebookTable extends SortableTable
 		}
 	}
 
-	private function build_type_column ($item, $attributes = array())
+    /**
+     * @param $item
+     * @param array $attributes
+     * @return string
+     */
+    private function build_type_column ($item, $attributes = array())
     {
 		return build_type_icon_tag($item->get_icon_name(), $attributes);
 	}
 
 	/**
-	 *
 	 * Generate name column
 	 * @param unknown_type $item
 	 * @return string
@@ -594,7 +608,11 @@ class GradebookTable extends SortableTable
 		}
 	}
 
-	private function build_edit_column($item)
+    /**
+     * @param $item
+     * @return null|string
+     */
+    private function build_edit_column($item)
     {
 		switch ($item->get_item_type()) {
 			// category

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$StartSurvey = "Comença l'enquesta";
 $PublishSurvey = "Publicar enquesta";
 $CompareQuestions = "Comparar qüestió";
 $InformationUpdated = "Informació actualitzada";

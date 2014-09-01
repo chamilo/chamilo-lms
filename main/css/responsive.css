@@ -141,9 +141,41 @@ The more frequent ones have been marked with *
         display: none;
         visibility: hidden;
     }
+
     #header_right #notifications {
       padding:0;
     }
+/* THEMATIC COURSE */
+    .score-thematic .score {
+      text-align: left;
+      width: 90px;
+      float: left;
+      padding-left: 5px;
+    }
+    .score-thematic .name-student {
+       display: none;
+    }
+    .score-thematic .span8 {
+      width: 320px;
+    }
+    .accordion-heading .title-accordion{
+      background: none;
+    }
+    .accordion-heading .accordion-toggle{
+      margin-right: 0;
+    }
+    .accordion-inner .span4 .row-fluid .span4 {
+      width: 105px;
+    }
+    .navbar .nav > li > a {
+    float: none;
+    line-height: 20px;
+    padding-bottom: 7px;
+    padding-right: 10px;
+    padding-top: 7px;
+    color: #FFFFFF;
+    }
+/* END THEMATIC COURSE */
     #top_main_content .span6 {
         width: 100%;
     }
@@ -328,13 +360,12 @@ The more frequent ones have been marked with *
     .course-tool {
         float: left;
         height: 150px;
-        width: 150px;
+        width: 50%;
     }
 
     .course-tool h4 {
         font-size: 14px;
     }
-
     .subbav .nav > li > a:hover,
     .subbav .dropdown-menu a:hover {
         background-color: #555;
@@ -503,7 +534,7 @@ The more frequent ones have been marked with *
 
     }
     .course-tool {
-        width: 210px;
+        width: 160px;
     }
     .course-tool h4 {
         font-size: 14px;
@@ -660,13 +691,6 @@ The more frequent ones have been marked with *
     }
     .social-menu .social-background-content .thumbnail{
         border:none;
-        box-shadow: none;
-    }
-    .thumbnail > img{
-        -webkit-border-radius: 10px;
-        -moz-border-radius: 10px;
-        border-radius: 10px;
-        border: 3px solid #FFFFFF;
         box-shadow: none;
     }
 }
@@ -852,7 +876,7 @@ The more frequent ones have been marked with *
         float: left;
     }
     .course-tool {
-        width: 260px;
+        width: 160px;
     }
     .btn-invitations {
         margin-left: 120px;

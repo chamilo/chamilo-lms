@@ -147,6 +147,16 @@ if ($submitGroupWorkUrl) {
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'item_id', $item_id);
 $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
+if ($is_allowed_to_edit && !empty($item_id)) {
+    $sql = "SELECT contains_file, url FROM $work_table WHERE c_id = $course_id AND id ='$item_id' ";
+    $result = Database::query($sql);
+    if ($result !== false && Database::num_rows($result) > 0) {
+        $row = Database::fetch_array($result);
+        if ($row['contains_file'] || !empty($row['url'])) {
+            $form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('Download').'</label><div class="controls"><a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_MEDIUM).'</a></div></div>');
+        }
+    }
+}
 $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
 
 $defaults['title'] 			= $work_item['title'];

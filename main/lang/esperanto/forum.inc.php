@@ -33,7 +33,6 @@ $LastPost = "Lasta mesaĝo";
 $Quoting = "Cito";
 $NotifyByEmail = "Sciigu al mi per retpoŝto, kiam iu respondas";
 $StickyPost = "Ĉi tio estas fiksa mesaĝo (ĉiam aperas supre markata de speciala ikono)";
-$ReplyShort = "Respondo:";
 $DeletePost = "Ĉu certe, ke vi volas forigi tiun mesaĝon?";
 $Locked = "Riglite: studentoj ne povas meti novajn mesaĝojn en tiun foruman kategorion, forumon aŭ temon, sed ja povas legi la jam metitajn mesaĝojn";
 $Unlocked = "Malriglite: studentoj denove povas meti mesaĝojn en tiun foruman kategorion, forumon aŭ temon.";

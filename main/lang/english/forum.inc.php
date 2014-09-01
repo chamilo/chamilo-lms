@@ -36,7 +36,6 @@ $LastPost = "Latest post";
 $Quoting = "Quoting";
 $NotifyByEmail = "Notify me by e-mail when somebody replies";
 $StickyPost = "This is a sticky message (appears always on top and has a special sticky icon)";
-$ReplyShort = "Re:";
 $DeletePost = "Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted";
 $Locked = "Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted";
 $Unlocked = "Unlocked: learners can post new messages in this forum category, forum or thread";

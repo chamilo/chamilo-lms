@@ -152,12 +152,10 @@ if ($course_validation_feature) {
         $form->addElement('checkbox', 'legal', null, get_lang('IAcceptTermsAndConditions'), 1);
         $form->addRule('legal', get_lang('YouHaveToAcceptTermsAndConditions'), 'required');
         // Link to terms and conditions.
-        $link_terms_and_conditions = '<script type="text/JavaScript">
-        <!--
+        $link_terms_and_conditions = '<script>
         function MM_openBrWindow(theURL,winName,features) { //v2.0
             window.open(theURL,winName,features);
         }
-        //-->
         </script><a href="#" onclick="javascript: MM_openBrWindow(\''.$terms_and_conditions_url.'\',\'Conditions\',\'scrollbars=yes, width=800\')">';
         $link_terms_and_conditions .= get_lang('ReadTermsAndConditions').'</a>';
         $form->addElement('label', null, $link_terms_and_conditions);
@@ -188,16 +186,15 @@ $form->setDefaults($values);
 if ($form->validate()) {
     $course_values = $form->exportValues();
 
-    $wanted_code        = $course_values['wanted_code'];
-    //$tutor_name         = $course_values['tutor_name'];
-    $category_code      = $course_values['category_code'];
-    $title              = $course_values['title'];
-    $course_language    = $course_values['course_language'];
-    $exemplary_content  = !empty($course_values['exemplary_content']);
+    $wanted_code = $course_values['wanted_code'];
+    $category_code = $course_values['category_code'];
+    $title = $course_values['title'];
+    $course_language = $course_values['course_language'];
+    $exemplary_content = !empty($course_values['exemplary_content']);
 
     if ($course_validation_feature) {
-        $description     = $course_values['description'];
-        $objetives       = $course_values['objetives'];
+        $description = $course_values['description'];
+        $objetives = $course_values['objetives'];
         $target_audience = $course_values['target_audience'];
     }
 
@@ -267,7 +264,6 @@ if ($form->validate()) {
         // Display the form.
         $content = $form->return_form();
     }
-
 } else {
     if (!$course_validation_feature) {
         $message = Display :: return_message(get_lang('Explanation'));

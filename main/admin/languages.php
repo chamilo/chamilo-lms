@@ -28,6 +28,7 @@ require_once 'sub_language.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 //Ajax request
 if (isset($_POST['sent_http_request'])) {
@@ -49,7 +50,6 @@ if (isset($_POST['sent_http_request'])) {
     }
     exit;
 }
-
 
 $htmlHeadXtra[] = '<script>
  $(document).ready(function() {
@@ -124,13 +124,6 @@ $htmlHeadXtra[] = '<script>
 $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $tbl_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
-/*
-  ==============================================================================
-  STORING THE CHANGES
-  ==============================================================================
- */
-$action = isset($_GET['action']) ? $_GET['action'] : null;
-
 // we change the availability
 if ($action == 'makeunavailable') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
@@ -186,11 +179,6 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
     }
 }
 
-/*
-  ==============================================================================
-  MAIN CODE
-  ==============================================================================
- */
 // setting the name of the tool
 $tool_name = get_lang('PlatformLanguages');
 
@@ -220,12 +208,6 @@ $result_select = Database::query($sql_select);
 $sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE  category='Languages'";
 $result_select_lang = Database::query($sql_select_lang);
 $row_lang = Database::fetch_array($result_select_lang);
-
-/*
-  --------------------------------------
-  DISPLAY THE TABLE
-  --------------------------------------
-*/
 
 // the table data
 $language_data = array();
@@ -278,6 +260,9 @@ while ($row = Database::fetch_array($result_select)) {
             $allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=" . Security::remove_XSS($all_information_of_sub_language['parent_id']) . "&sub_language_id=" . Security::remove_XSS($row['id']) . "'>" . Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'), array('width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL)) . "</a>";
             $allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=" . Security::remove_XSS($all_information_of_sub_language['parent_id']) . "&sub_language_id=" . Security::remove_XSS($row['id']) . "'>" . Display::return_icon('delete.png', get_lang('DeleteSubLanguage'), array('width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL)) . "</a>";
         }
+    } else {
+        $allow_use_sub_language = '';
+        $allow_add_term_sub_language = '';
     }
 
     if ($row['english_name'] == $row_lang['selected_value']) {
@@ -306,10 +291,4 @@ $table->set_form_actions($form_actions);
 echo '<div id="id_content_message">&nbsp;</div>';
 $table->display();
 
-/*
-  ==============================================================================
-  FOOTER
-  ==============================================================================
- */
 Display :: display_footer();
-?>

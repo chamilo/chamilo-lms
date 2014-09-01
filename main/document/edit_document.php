@@ -308,7 +308,7 @@ if ($is_allowed_to_edit) {
 							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', api_get_user_id(), null, null, null, null, $current_session_id);
 							// Update parent folders
 							item_property_update_on_folder($_course, $dir, api_get_user_id());
-							header('Location: document.php?id='.$document_data['parent_id']);
+							header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq());
                             exit;
 						} else {
 							$msgError = get_lang('Impossible');
@@ -366,7 +366,7 @@ $owner_id       = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
 
 if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id() )) {
-	$action = api_get_self().'?id='.$document_data['id'];
+	$action = api_get_self().'?id='.$document_data['id'].'&'.api_get_cidreq();
 	$form = new FormValidator('formEdit', 'post', $action, null, array('class' => 'form-vertical'));
 
 	// Form title
@@ -532,7 +532,10 @@ function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_c
 	} elseif($call_from_tool=='editdraw') {
 		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Draw'), array(), 32).'</a>';
-	} elseif($call_from_tool=='editpaint'){
+	} elseif($call_from_tool=='editodf') {
+        echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), array(), 32).'</a>';
+    } elseif($call_from_tool=='editpaint'){
 		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), array(), 32).'</a>';
 	} else {

@@ -54,48 +54,31 @@ if(!$is_allowed_to_edit){
 	api_not_allowed(true);
 }
 
-
-/*
-	Libraries
-*/
-
-//many useful functions in main_api.lib.php, by default included
-
 require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 
-/*
-	Variables
-	- some need defining before inclusion of libraries
-*/
-$courseDir   = $_course['path']."/document";
+$courseDir = $_course['path'] . "/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir = $sys_course_path.$courseDir;
-$noPHP_SELF=true;
+$base_work_dir = $sys_course_path . $courseDir;
+$noPHP_SELF = true;
 $max_filled_space = DocumentManager::get_course_quota();
 
 //what's the current path?
-if(isset($_REQUEST['curdirpath'])) {
-	$path = $_REQUEST['curdirpath'];
-}else{
-	$path = '/';
+if (isset($_REQUEST['curdirpath'])) {
+    $path = $_REQUEST['curdirpath'];
+} else {
+    $path = '/';
 }
 // set calling tool
-if(isset($_REQUEST['tool'])) {
-	$my_tool = $_REQUEST['tool'];
-	$_SESSION['my_tool'] = $_REQUEST['tool'];
-}elseif(!empty($_SESSION['my_tool'])){
-	$my_tool = $_SESSION['my_tool'];
-}else{
-	$my_tool = 'document';
-	$_SESSION['my_tool'] = $my_tool;
+if (isset($_REQUEST['tool'])) {
+    $my_tool = $_REQUEST['tool'];
+    $_SESSION['my_tool'] = $_REQUEST['tool'];
+} elseif (!empty($_SESSION['my_tool'])) {
+    $my_tool = $_SESSION['my_tool'];
+} else {
+    $my_tool = 'document';
+    $_SESSION['my_tool'] = $my_tool;
 }
-
-// Check the path
-// If the path is not found (no document id), set the path to /
-//if(!DocumentManager::get_document_id($_course,$path)) { $path = '/'; }
-
-//$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($path).$req_gid, "name"=> $langDocuments);
 
 /**
  * Process
@@ -114,15 +97,15 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 /**
  * Now call the corresponding display script, the current script acting like a controller.
  */
-switch($my_tool){
-	case TOOL_LEARNPATH:
-		require('form.scorm.php');
-		break;
-	//the following cases need to be distinguished later on
-	case TOOL_DROPBOX:
-	case TOOL_STUDENTPUBLICATION:
-	case TOOL_DOCUMENT:
-	default:
-		require('form.document.php');
-		break;
+switch ($my_tool) {
+    case TOOL_LEARNPATH:
+        require('form.scorm.php');
+        break;
+    //the following cases need to be distinguished later on
+    case TOOL_DROPBOX:
+    case TOOL_STUDENTPUBLICATION:
+    case TOOL_DOCUMENT:
+    default:
+        require('form.document.php');
+        break;
 }

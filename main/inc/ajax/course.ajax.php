@@ -63,7 +63,7 @@ switch ($action) {
             } else {
                 //if session is not defined lets search all courses STARTING with $_GET['q']
                 //TODO change this function to search not only courses STARTING with $_GET['q']
-                $courseList = Coursemanager::get_courses_list(
+                $courseList = CourseManager::get_courses_list(
                     0, //offset
                     0, //howMany
                     1, //$orderby = 1

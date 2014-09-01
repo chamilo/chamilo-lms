@@ -111,8 +111,8 @@ $form->addRule('url', '', 'maxlength',254);
 $form->addElement('textarea','description',get_lang('Description'));
 
 //the first url with id = 1 will be always active
-if ($_GET['url_id'] != 1) {
-	$form->addElement('checkbox','active', null, get_lang('Active'));
+if (isset($_GET['url_id']) && $_GET['url_id'] != 1) {
+    $form->addElement('checkbox','active', null, get_lang('Active'));
 }
 
 $defaults['url']='http://';
@@ -132,14 +132,15 @@ if (isset($_GET['url_id'])) {
 	$submit_name = get_lang('AddUrl');
 }
 
-if (!$_configuration['multiple_access_urls']) {
-	header('Location: index.php');
+if (!api_is_multiple_url_enabled()) {
+    header('Location: index.php');
     exit;
 }
 
 $tool_name = get_lang('AddUrl');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'access_urls.php', "name" => get_lang('MultipleAccessURLs'));
+
 Display :: display_header($tool_name);
 
 if (isset ($_GET['action'])) {

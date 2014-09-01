@@ -4,7 +4,7 @@
 
 /**
  * SubLanguageManager class definition file
- * @package chamilo.admin.sublanguage 
+ * @package chamilo.admin.sublanguage
  * @todo clean this lib and move to main/inc/lib
  */
 class SubLanguageManager {
@@ -312,7 +312,7 @@ class SubLanguageManager {
     /**
      * Set platform language
      * @param Integer The language id
-     * @return void()
+     * @return bool
      */
     public static function set_platform_language($language_id) {
         if (empty($language_id) or (intval($language_id) != $language_id)) {
@@ -350,7 +350,6 @@ class SubLanguageManager {
      * @param    string  Children language path
      * @return   string  Parent language path or null
      */
-
     public static function get_parent_language_path($language_path) {
         $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
         $tbl_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -363,4 +362,52 @@ class SubLanguageManager {
         return $row['dokeos_folder'];
     }
 
+    /**
+     * Get language matching isocode
+     * @param   string  $isocode The language isocode (en, es, fr, zh-TW, etc)
+     * @return  mixed  English name of the matching language, or false if no active language could be found
+     */
+    public static function getLanguageFromIsocode($isocode) {
+        $isocode = Database::escape_string($isocode);
+        $adminLanguagesTable = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        // select language - if case several languages match, get the last (more recent) one
+        $sql = "SELECT english_name
+                FROM " . $adminLanguagesTable . "
+                WHERE isocode ='$isocode'
+                    AND available = 1
+                ORDER BY id
+                DESC LIMIT 1";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) < 1) {
+            return false;
+        }
+        $row = Database::fetch_assoc($res);
+        return $row['english_name'];
+    }
+    /**
+     * Get best language in browser preferences
+     * @param   string  $preferences The browser-configured language preferences (e.g. "en,es;q=0.7;en-us;q=0.3", etc)
+     * @return  mixed  English name of the matching language, or false if no active language could be found
+     */
+    public static function getLanguageFromBrowserPreference($preferences) {
+        if (empty($preferences)) {
+            return false;
+        }
+        $preferencesArray = explode(',', $preferences);
+        if (count($preferencesArray) > 0) {
+            foreach ($preferencesArray as $pref) {
+                $s = strpos($pref, ';');
+                if ($s >= 2) {
+                    $code = substr($pref, 0, $s);
+                } else {
+                    $code = $pref;
+                }
+                $name = self::getLanguageFromIsocode($code);
+                if ($name !== false) {
+                    return $name;
+                }
+            }
+        }
+        return false;
+    }
 }

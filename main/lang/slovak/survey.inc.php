@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$StartSurvey = "Začať prieskum";
 $PublishSurvey = "Publikovať prieskum";
 $CompareQuestions = "Porovnať otázky";
 $InformationUpdated = "Informácie aktualizované";

@@ -5,7 +5,7 @@
 */
 
 // Language files that should be included
-$language_file = array('admin', 'registration','userInfo');
+$language_file = array('admin', 'registration', 'userInfo');
 
 $cidReset = true;
 
@@ -36,10 +36,10 @@ function text_longitud(){
 
 // Database table definitions
 if (!empty($_GET['message'])) {
-	$message = urldecode($_GET['message']);
+    $message = urldecode($_GET['message']);
 }
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $tool_name = get_lang('AddGroups');
 
 // Create the form
@@ -47,25 +47,35 @@ $form = new FormValidator('group_add');
 $form->addElement('header', $tool_name);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
+$form->addElement('text', 'name', get_lang('Name'), array('size' => 60, 'maxlength' => 120));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, 'onKeyDown' => "text_longitud()", 'onKeyUp' => "text_longitud()"));
+$form->addElement(
+    'textarea',
+    'description',
+    get_lang('Description'),
+    array('rows' => 3, 'cols' => 58, 'onKeyDown' => "text_longitud()", 'onKeyUp' => "text_longitud()")
+);
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
 // url
-$form->addElement('text', 'url', get_lang('URL'), array('size'=>35));
+$form->addElement('text', 'url', get_lang('URL'), array('size' => 35));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 
 // Picture
 $form->addElement('file', 'picture', get_lang('AddPicture'));
-$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+$allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
+$form->addRule(
+    'picture',
+    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+    'filetype',
+    $allowed_picture_types
+);
 
 //Group Parentship
 $groups = array();
@@ -77,8 +87,8 @@ $form->addElement('select', 'parent_group', get_lang('GroupParentship'), $groups
 
 // Status
 $status = array();
-$status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
-$status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
+$status[GROUP_PERMISSION_OPEN] = get_lang('Open');
+$status[GROUP_PERMISSION_CLOSED] = get_lang('Closed');
 
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status);
 
@@ -153,8 +163,8 @@ if( $form->validate()) {
 // Display form
 Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
-if(!empty($message)){
-	Display::display_normal_message(stripslashes($message));
+if (!empty($message)) {
+    Display::display_normal_message(stripslashes($message));
 }
 $form->display();
 

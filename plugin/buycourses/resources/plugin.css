@@ -1,0 +1,79 @@
+.cleared {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+}
+
+table td.ta-center, table th.ta-center {
+    text-align: center;
+}
+
+#courses_table td, #transfer_table td, #order_table td {
+    vertical-align: middle;
+}
+
+#courses_table td input.price, #transfer_table td input, #currency_type {
+    margin: 0;
+}
+
+#courses_table td.btop {
+    border-top: 1px solid red;
+    border-bottom: 1px solid red;
+}
+
+#courses_table tr.fmod {
+    border: 1px solid red;
+    background: #FFE0E0;
+}
+
+.sprice {
+    color: #FF5555;
+    font-size: 26px;
+    font-weight: 500;
+    margin: 15px 0;
+    text-shadow: 2px 1px 0 #222222;
+}
+
+.dinline {
+    display: inline;
+}
+
+.fright {
+    float: right;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.ta-center {
+    text-align: center;
+}
+
+textarea#message {
+    width: 50%;
+}
+
+.send_result {
+    font-weight: bold;
+}
+
+select#lsessions, select#lcourses, select#lexercises, select#status {
+    margin-bottom: 0px;
+}
+
+.column_field_filter {
+    padding: 6px 10px 1px 1px;
+    text-align: right;
+}
+
+.height5 {
+    height: 5px;
+}
+
+.margin-left-fifty{
+    margin-left: 50px !important;
+}

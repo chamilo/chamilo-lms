@@ -37,11 +37,11 @@ $strings['Optional'] = "Optionnel";
 $strings['ErrorRegisterMessage'] = "Le ticket n'a pas pu être enregistré";
 $strings['Source'] = "Source";
 $strings['DeniedAccess'] = "Accès non autorisé.";
-$strings['StsNew'] = "Nouveau";
-$strings['StsPending'] = "En attente";
-$strings['StsUnconfirmed'] = "À confirmer";
-$strings['StsClose'] = "Fermé";
-$strings['StsForwarded'] = "Réenvoyé";
+$strings['StatusNew'] = "Nouveau";
+$strings['StatusPending'] = "En attente";
+$strings['StatusUnconfirmed'] = "À confirmer";
+$strings['StatusClose'] = "Fermé";
+$strings['StatusForwarded'] = "Réenvoyé";
 $strings['Priority'] = "Priorité";
 $strings['PriorityHigh'] = "Haute";
 $strings['PriorityNormal'] = "Normale";
@@ -81,4 +81,6 @@ $strings['TicketWasThisAnswerSatisfying'] = "La réponse au ticket est-elle sati
 $strings['TicketDetail'] = "Détails du ticket";
 $strings['AreYouSure'] = "Êtes-vous certain?";
 $strings['allow_student_add'] = "Permettre à l'étudiant de générer des tickets";
-?>
+$strings['PleaseBeforeRegisterATicketSelectOneUser'] = "Veuillez sélectionner un utilisateur avant d'enregistrer un ticket.";
+$strings['RequestConfirmation'] = "Demander confirmation";
+

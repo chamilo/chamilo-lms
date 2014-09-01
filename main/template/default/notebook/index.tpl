@@ -21,12 +21,12 @@
     <div class="btn-group sort">
         <a href="{{root}}&amp;action=index&amp;sort_column=creation_date&amp;sort_direction={%if sort_direction == 'ASC' and sort_column == 'creation_date' %}DESC{% else %}ASC{% endif %}"
         class="btn" 
-        title="{{'SorteByCreatedDate'|get_lang}}">
+        title="{{'SortByCreatedDate'|get_lang}}">
                 <i class="size-32 icon-sort-by-created-date"></i>
         </a>
         <a href="{{root}}&amp;action=index&amp;sort_column=update_date&amp;sort_direction={%if sort_direction == 'ASC' and sort_column == 'update_date' %}DESC{% else %}ASC{% endif %}" 
         class="btn" 
-        title="{{'SorteByUpdatedDate'|get_lang}}">
+        title="{{'SortByUpdatedDate'|get_lang}}">
                 <i class="size-32 icon-sort-by-modified-date"></i>
         </a>
         <a href="{{root}}&amp;action=index&amp;sort_column=title&amp;sort_direction={%if sort_direction == 'ASC' and sort_column == 'title' %}DESC{% else %}ASC{% endif %}" 

@@ -48,6 +48,21 @@ require_once dirname(__FILE__).'/../inc/global.inc.php';
 //unset($_SESSION['lpobject']);
 
 $htmlHeadXtra[] ='<script>
+
+/* option show/hide thematic-block */
+
+$(document).ready(function(){
+    $("#thematic-show").click(function(){
+        $(".btn-hide-thematic").hide();
+        $(".btn-show-thematic").show(); //show using class
+    });
+    $("#thematic-hide").click(function(){
+        $(".btn-show-thematic").hide(); //show using class
+        $(".btn-hide-thematic").show();
+    });
+});
+
+
 $(document).ready(function() {
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
 	$(".make_visible_and_invisible > img").click(function () {
@@ -102,12 +117,6 @@ $(document).ready(function() {
 	});
 });
 
-/* toogle for post-it in course home */
-$(function() {
-	$(".thematic-postit-head").click(function() {
-		$(".thematic-postit-center").slideToggle("fast");
-	});
-});
 
 </script>';
 
@@ -263,8 +272,9 @@ $tpl = new Template(null);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 
-// direct login to course
+// Direct login to course
 $tpl->assign('course_code', $course_code);
 
 $tpl->display_one_col_template();
 Session::erase('_gid');
+DocumentManager::removeGeneratedAudioTempFile();

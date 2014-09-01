@@ -104,6 +104,7 @@ $PasswordWeak = "Fraca";
 $PasswordIsTooShort = "A password é muito curta";
 $BadCredentials = "Más credenciais";
 $AddForum = "Acrescentar novo fórum";
+$ReplyShort = "Re:";
 $Title = "Título";
 $By = "Por";
 $UsersOnline = "Utilizadores online";

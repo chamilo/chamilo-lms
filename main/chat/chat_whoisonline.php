@@ -43,8 +43,8 @@ if (!empty($course)) {
 
     list($pseudo_user) = Database::fetch_array($result);
 
-    $isAllowed = !(empty($pseudo_user) || !$_cid);
-    $isMaster = (bool)$is_courseAdmin;
+	$isAllowed = !(empty($pseudo_user) || !$_cid);
+	$isMaster = api_is_course_admin();
 
     $date_inter = date('Y-m-d H:i:s', time() - 120);
 
@@ -109,11 +109,10 @@ if (!empty($course)) {
 	?>
 	<div class="user-connected">
 	<div id="user-online-scroll" class="user-online">
-
 		<div class="title"><?php echo get_lang('Users'); ?> <?php echo get_lang('Connected'); ?></div>
 		<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
 		<div class="viewport"><div id="hidden" class="overview">
-		<ul class="perfil list-group">
+		<ul class="profile list-group">
 			<?php
 				foreach ($users as & $user) {
 					if (empty($session_id)) {
@@ -121,19 +120,28 @@ if (!empty($course)) {
 					} else {
 						$status = CourseManager::is_course_teacher($user['user_id'], $_SESSION['_course']['id']) ? 1 : 5;
 					}
-					$user_image = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
-					$file_url = $user_image['dir'].'medium_'.$user_image['file'];
-					$email_url = $user['email'];
-					$url_user_profile=api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user['user_id'].'&';
+				$userImage = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
+                                if (substr($userImage['file'],0,7) != 'unknown') {
+				    $fileUrl = $userImage['dir'].'medium_'.$userImage['file'];
+                                } else {
+				    $fileUrl = $userImage['dir'].$userImage['file'];
+                                }
+				$email = $user['email'];
+				$url_user_profile=api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user['user_id'].'&';
 			?>
 			<li class="list-group-item">
-				<img src="<?php echo $file_url;?>" border="0" width="50" alt="" class="user-image-chat" />
+				<img src="<?php echo $fileUrl;?>" border="0" width="50" alt="" class="user-image-chat" />
 				<div class="user-name">
 					<a href="<?php echo $url_user_profile; ?>" target="_blank"><?php echo api_get_person_name($user['firstname'], $user['lastname']); ?></a>
-					<?php if ($status == 1) echo Display::return_icon('teachers.gif', get_lang('Teacher'), array('height' => '18')).' '; else echo Display::return_icon('students.gif', get_lang('Student'), array('height' => '18')); ?>
+					<?php
+						if ($status == 1) {
+							echo Display::return_icon('teachers.gif', get_lang('Teacher'), array('height' => '18'));
+						}else{
+							echo Display::return_icon('students.gif', get_lang('Student'), array('height' => '18'));
+						}
+					?>
 				</div>
-				<div class="user-email"><?php echo $email_url; ?></div>
-				
+				<div class="user-email"><?php echo $email; ?></div>
 			</li>
 			<?php  } unset($users); ?>
 		</ul>

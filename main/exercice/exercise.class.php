@@ -2283,7 +2283,8 @@ class Exercise
                     break;
                 case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                     if ($from_database) {
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = ".$exeId." AND question_id= ".$questionId;
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                                     WHERE exe_id = ".$exeId." AND question_id= ".$questionId;
                         $resultans = Database::query($queryans);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
@@ -2315,7 +2316,8 @@ class Exercise
                     break;
                 case MULTIPLE_ANSWER_COMBINATION:
                     if ($from_database) {
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                                     WHERE exe_id = '".$exeId."' and question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
@@ -2429,7 +2431,7 @@ class Exercise
                             }
                         } else {
 							// This value is the user input, not escaped while correct answer is escaped by fckeditor
-							$choice[$j] = htmlentities(trim($choice[$j]));
+							$choice[$j] = api_htmlentities(trim($choice[$j]));
                         }
 
                         //No idea why we api_strtolower user reponses
@@ -3781,35 +3783,46 @@ class Exercise
      *  Checks if the exercise is visible due a lot of conditions - visibility, time limits, student attempts
      * @return bool true if is active
      */
-    public function is_visible($lp_id = 0, $lp_item_id = 0 , $lp_item_view_id = 0, $filter_by_admin = true) {
-        //1. By default the exercise is visible
+    public function is_visible(
+        $lp_id = 0,
+        $lp_item_id = 0,
+        $lp_item_view_id = 0,
+        $filter_by_admin = true
+    ) {
+        // 1. By default the exercise is visible
         $is_visible = true;
         $message = null;
 
-        //1.1 Admins and teachers can access to the exercise
+        // 1.1 Admins and teachers can access to the exercise
         if ($filter_by_admin) {
             if (api_is_platform_admin() || api_is_course_admin()) {
                 return array('value' => true, 'message' => '');
             }
         }
 
-        //Checking visibility in the item_property table
+        // Checking visibility in the item_property table.
         $visibility = api_get_item_visibility(api_get_course_info(), TOOL_QUIZ, $this->id, api_get_session_id());
 
         if ($visibility == 0) {
             $this->active = 0;
         }
 
-        //2. If the exercise is not active
+        // 2. If the exercise is not active.
         if (empty($lp_id)) {
             //2.1 LP is OFF
             if ($this->active == 0) {
-                return array('value' => false, 'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false));
+                return array(
+                    'value' => false,
+                    'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false)
+                );
             }
         } else {
             //2.1 LP is loaded
             if ($this->active == 0 AND !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
-                return array('value' => false, 'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false));
+                return array(
+                    'value' => false,
+                    'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false)
+                );
             }
         }
 
@@ -3836,28 +3849,51 @@ class Exercise
                 }
             }
             if ($is_visible == false && $this->start_time != '0000-00-00 00:00:00' && $this->end_time != '0000-00-00 00:00:00') {
-                $message =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($this->start_time), api_convert_and_format_date($this->end_time));
+                $message = sprintf(
+                    get_lang('ExerciseWillBeActivatedFromXToY'),
+                    api_convert_and_format_date($this->start_time),
+                    api_convert_and_format_date($this->end_time)
+                );
             }
         }
 
         // 4. We check if the student have attempts
-        if ($is_visible) {
-            if ($this->selectAttempts() > 0) {
-                $attempt_count = get_attempt_count_not_finished(api_get_user_id(), $this->id, $lp_id, $lp_item_id, $lp_item_view_id);
+        $exerciseAttempts = $this->selectAttempts();
 
-                if ($attempt_count >= $this->selectAttempts()) {
-                    $message = sprintf(get_lang('ReachedMaxAttempts'), $this->name, $this->selectAttempts());
+        if ($is_visible) {
+            if ($exerciseAttempts > 0) {
+
+                $attempt_count = get_attempt_count_not_finished(
+                    api_get_user_id(),
+                    $this->id,
+                    $lp_id,
+                    $lp_item_id,
+                    $lp_item_view_id
+                );
+
+                if ($attempt_count >= $exerciseAttempts) {
+                    $message = sprintf(
+                        get_lang('ReachedMaxAttempts'),
+                        $this->name,
+                        $exerciseAttempts
+                    );
                     $is_visible = false;
                 }
             }
         }
+
         if (!empty($message)){
-            $message = Display :: return_message($message, 'warning', false);
+            $message = Display::return_message($message, 'warning', false);
         }
-        return array('value' => $is_visible, 'message' => $message);
+
+        return array(
+            'value' => $is_visible,
+            'message' => $message
+        );
     }
 
-    function added_in_lp() {
+    public function added_in_lp()
+    {
         $TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT max_score FROM $TBL_LP_ITEM WHERE c_id = ".$this->course_id." AND item_type = '".TOOL_QUIZ."' AND path = '".$this->id."'";
         $result = Database::query($sql);

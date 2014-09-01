@@ -2,16 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ *  Class DocumentManager
  * 	This is the document library for Chamilo.
  * 	It is / will be used to provide a service layer to all document-using tools.
  * 	and eliminate code duplication fro group documents, scorm documents, main documents.
  * 	Include/require it in your code to use its functionality.
  *
  * 	@package chamilo.library
- */
-
-/**
- * Code
  */
 class DocumentManager
 {
@@ -20,8 +17,10 @@ class DocumentManager
     }
 
     /**
-     * @param string
-     * @return the document folder quota for the current course, in bytes, or the default quota
+     * @param string $course_code
+     *
+     * @return int the document folder quota for the current course in bytes
+     * or the default quota
      */
     public static function get_course_quota($course_code = null)
     {
@@ -303,10 +302,12 @@ class DocumentManager
      * @param string $full_file_name
      * @param boolean $forced
      * @param string $name
+     *
      * @return false if file doesn't exist, true if stream succeeded
      */
     public static function file_send_for_download($full_file_name, $forced = false, $name = '')
     {
+        session_write_close(); //we do not need write access to session anymore
         if (!is_file($full_file_name)) {
             return false;
         }
@@ -341,6 +342,7 @@ class DocumentManager
 
             $res = fopen($full_file_name, 'r');
             fpassthru($res);
+
             return true;
         } else {
             //no forced download, just let the browser decide what to do according to the mimetype
@@ -379,6 +381,7 @@ class DocumentManager
                 header('Content-Disposition: inline; filename= ' . $filename);
             }
             readfile($full_file_name);
+
             return true;
         }
     }
@@ -389,9 +392,10 @@ class DocumentManager
      * otherwise it may cause subsequent use of the page to want to download
      * other pages in php rather than interpreting them.
      *
-     * @param string The string contents
-     * @param boolean Whether "save" mode is forced (or opening directly authorized)
-     * @param string The name of the file in the end (including extension)
+     * @param string $full_string The string contents
+     * @param boolean $forced Whether "save" mode is forced (or opening directly authorized)
+     * @param string $name The name of the file in the end (including extension)
+     *
      * @return false if file doesn't exist, true if stream succeeded
      */
     public static function string_send_for_download($full_string, $forced = false, $name = '')
@@ -524,13 +528,24 @@ class DocumentManager
 
         // The given path will not end with a slash, unless it's the root '/'
         // so no root -> add slash
-        $added_slash = ($path == '/') ? '' : '/';
+        $added_slash = $path == '/' ? '' : '/';
 
         // Condition for the session
-        $current_session_id = api_get_session_id();
-        $condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0') )";
+        $sessionId = api_get_session_id();
+        $condition_session = " AND (id_session = '$sessionId' OR (id_session = '0') )";
+        $condition_session .= self::getSessionFolderFilters($originalPath, $sessionId);
 
-        $condition_session .= self::getSessionFolderFilters($originalPath, $current_session_id);
+        $sharedCondition = null;
+        if ($originalPath == '/shared_folder') {
+            $students = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
+            if (!empty($students)) {
+                $conditionList = array();
+                foreach ($students as $studentId => $studentInfo) {
+                    $conditionList[] = '/shared_folder/sf_user_' . $studentInfo['user_id'];
+                }
+                $sharedCondition .= ' AND docs.path IN ("' . implode('","', $conditionList) . '")';
+            }
+        }
 
         $sql = "SELECT
                     docs.id,
@@ -559,6 +574,7 @@ class DocumentManager
                     last.visibility
                     $visibility_bit
                     $condition_session
+                    $sharedCondition
                 ";
         $result = Database::query($sql);
 
@@ -616,7 +632,7 @@ class DocumentManager
                 }
 
                 //@todo use the DocumentManager::is_visible function
-                // Checking disponibility in a session
+                // Checking visibility in a session
                 foreach ($my_repeat_ids as $id) {
                     foreach ($doc_list as $row) {
                         if ($id == $row['id']) {
@@ -646,13 +662,13 @@ class DocumentManager
                     }
                 }
 
-                // Checking parents visibility
+                // Checking parents visibility.
                 $final_document_data = array();
                 foreach ($document_data as $row) {
                     $is_visible = DocumentManager::check_visibility_tree(
                         $row['id'],
                         $_course['code'],
-                        $current_session_id,
+                        $sessionId,
                         api_get_user_id(),
                         $to_group_id
                     );
@@ -673,6 +689,7 @@ class DocumentManager
     /**
      * Gets the paths of all folders in a course
      * can show all folders (except for the deleted ones) or only visible ones
+     *
      * @param array $_course
      * @param int $to_group_id
      * @param boolean $can_see_invisible
@@ -681,13 +698,23 @@ class DocumentManager
      */
     public static function get_all_document_folders(
         $_course,
-        $to_group_id = '0',
+        $to_group_id = 0,
         $can_see_invisible = false
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $to_group_id = intval($to_group_id);
         $document_folders = array();
+
+        $students = CourseManager::get_user_list_from_course_code($_course['code'], api_get_session_id());
+        $sharedCondition = null;
+
+        if (!empty($students)) {
+            $conditionList = array();
+            foreach ($students as $studentId => $studentInfo) {
+                $conditionList[] = '/shared_folder/sf_user_' . $studentInfo['user_id'];
+            }
+        }
 
         if ($can_see_invisible) {
             //condition for the session
@@ -710,7 +737,7 @@ class DocumentManager
                        WHERE
                             docs.filetype 		= 'folder' AND
                             last.to_group_id	= " . $to_group_id . " AND
-                            docs.path           NOT LIKE '%shared_folder%' AND
+                            docs.path NOT LIKE '%shared_folder%' AND
                             last.visibility 	<> 2 $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
@@ -727,7 +754,6 @@ class DocumentManager
                             last.visibility 	<> 2
                             $show_users_condition $condition_session ";
             }
-
             $result = Database::query($sql);
 
             if ($result && Database::num_rows($result) != 0) {
@@ -735,6 +761,13 @@ class DocumentManager
                     if (DocumentManager::is_folder_to_avoid($row['path'])) {
                         continue;
                     }
+
+                    if (strpos($row['path'], '/shared_folder/') !== false) {
+                        if (!in_array($row['path'], $conditionList)) {
+                            continue;
+                        }
+                    }
+
                     $document_folders[$row['id']] = $row['path'];
                 }
 
@@ -768,7 +801,7 @@ class DocumentManager
                 $visibleFolders[$row['id']] = $row['path'];
             }
 
-            //condition for the session
+            // Condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             //get invisible folders
@@ -1500,7 +1533,6 @@ class DocumentManager
      */
     public static function is_visible_by_id($doc_id, $course_info, $session_id, $user_id, $admins_can_see_everything = true)
     {
-        $is_visible = false;
         $user_in_course = false;
 
         //1. Checking the course array
@@ -1513,7 +1545,6 @@ class DocumentManager
 
         $doc_id = intval($doc_id);
         $session_id = intval($session_id);
-
 
         //2. Course and Session visibility are handle in local.inc.php/global.inc.php
         //3. Checking if user exist in course/session
@@ -1534,11 +1565,11 @@ class DocumentManager
             }
         }
 
-        //4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
+        // 4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
 
         if ($user_in_course) {
 
-            //4.1 Checking document visibility for a Course
+            // 4.1 Checking document visibility for a Course
 
             if ($session_id == 0) {
                 $item_info = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, 0);
@@ -1553,7 +1584,7 @@ class DocumentManager
                     }
                 }
             } else {
-                //4.2 Checking document visibility for a Course in a Session
+                // 4.2 Checking document visibility for a Course in a Session
                 $item_info = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, 0);
                 $item_info_in_session = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, $session_id);
 
@@ -2234,15 +2265,18 @@ class DocumentManager
                 }
             }
         }
+
         return $attributes;
     }
 
     /**
      * Replace urls inside content html from a copy course
-     * @param string		content html
-     * @param string		origin course code
-     * @param string		destination course directory
-     * @param string
+     * @param string $content_html
+     * @param string $origin_course_code
+     * @param string $destination_course_directory
+     * @param string $origin_course_path_from_zip
+     * @param string $origin_course_info_path
+     *
      * @return string	new content html with replaced urls or return false if content is not a string
      */
     static function replace_urls_inside_content_html_from_copy_course(
@@ -2260,7 +2294,8 @@ class DocumentManager
 
         $orig_source_html = DocumentManager::get_resources_from_source_html($content_html);
         $orig_course_info = api_get_course_info($origin_course_code);
-        //Course does not exist in the current DB probably this cames from a zip file?
+
+        // Course does not exist in the current DB probably this came from a zip file?
         if (empty($orig_course_info)) {
             if (!empty($origin_course_path_from_zip)) {
                 $orig_course_path = $origin_course_path_from_zip.'/';
@@ -2274,15 +2309,17 @@ class DocumentManager
         $destination_course_code = CourseManager::get_course_id_from_path($destination_course_directory);
         $destination_course_info = api_get_course_info($destination_course_code);
         $dest_course_path = api_get_path(SYS_COURSE_PATH) . $destination_course_directory . '/';
+        $dest_course_path_rel = api_get_path(REL_COURSE_PATH) . $destination_course_directory . '/';
 
         $user_id = api_get_user_id();
 
         if (!empty($orig_source_html)) {
             foreach ($orig_source_html as $source) {
-                // get information about source url
+
+                // Get information about source url
                 $real_orig_url = $source[0]; // url
                 $scope_url = $source[1];   // scope (local, remote)
-                $type_url = $source[2]; // tyle (rel, abs, url)
+                $type_url = $source[2]; // type (rel, abs, url)
 
                 // Get path and query from origin url
                 $orig_parse_url = parse_url($real_orig_url);
@@ -2307,6 +2344,8 @@ class DocumentManager
                             $origin_filepath = $orig_course_path.$document_file;
                             $destination_filepath = $dest_course_path.$document_file;
 
+                            //var_dump($origin_filepath, $destination_filepath);
+
                             // copy origin file inside destination course
                             if (file_exists($origin_filepath)) {
                                 $filepath_dir = dirname($destination_filepath);
@@ -2318,8 +2357,24 @@ class DocumentManager
                                         $filepath_to_add = str_replace(array($dest_course_path, 'document'), '', $filepath_dir);
 
                                         //Add to item properties to the new folder
-                                        $doc_id = add_document($destination_course_info, $filepath_to_add, 'folder', 0, basename($filepath_to_add));
-                                        api_item_property_update($destination_course_info, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $user_id, null, null, null, null);
+                                        $doc_id = add_document(
+                                            $destination_course_info,
+                                            $filepath_to_add,
+                                            'folder',
+                                            0,
+                                            basename($filepath_to_add)
+                                        );
+                                        api_item_property_update(
+                                            $destination_course_info,
+                                            TOOL_DOCUMENT,
+                                            $doc_id,
+                                            'FolderCreated',
+                                            $user_id,
+                                            null,
+                                            null,
+                                            null,
+                                            null
+                                        );
                                     }
                                 }
 
@@ -2329,20 +2384,38 @@ class DocumentManager
                                         $filepath_to_add = str_replace(array($dest_course_path, 'document'), '', $destination_filepath);
                                         $size = filesize($destination_filepath);
 
-                                        //Add to item properties to the file
-                                        $doc_id = add_document($destination_course_info, $filepath_to_add, 'file', $size, basename($filepath_to_add));
-                                        api_item_property_update($destination_course_info, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $user_id, null, null, null, null);
+                                        // Add to item properties to the file
+                                        $doc_id = add_document(
+                                            $destination_course_info,
+                                            $filepath_to_add,
+                                            'file',
+                                            $size,
+                                            basename($filepath_to_add)
+                                        );
+                                        api_item_property_update(
+                                            $destination_course_info,
+                                            TOOL_DOCUMENT,
+                                            $doc_id,
+                                            'FolderCreated',
+                                            $user_id,
+                                            null,
+                                            null,
+                                            null,
+                                            null
+                                        );
                                     }
                                 }
                             }
 
-                            // Replace origin course path by destination course path
+                            // Replace origin course path by destination course path.
                             if (strpos($content_html, $real_orig_url) !== false) {
-                                //$origin_course_code
                                 $url_course_path = str_replace($orig_course_info_path.'/'.$document_file, '', $real_orig_path);
-                                $destination_url = $url_course_path . $destination_course_directory . '/' . $document_file . $dest_url_query;
+                                //var_dump($dest_course_path_rel);
+                                //$destination_url = $url_course_path . $destination_course_directory . '/' . $document_file . $dest_url_query;
+                                // See BT#7780
+                                $destination_url = $dest_course_path_rel . $document_file . $dest_url_query;
 
-                                //If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
+                                // If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
                                 if (strpos($real_orig_path, $origin_course_code) === false) {
                                     $url_course_path = $real_orig_path;
                                     $destination_url = $real_orig_path;
@@ -2355,9 +2428,6 @@ class DocumentManager
                         if (strpos($real_orig_url, '?') === 0) {
                             $dest_url = str_replace($origin_course_code, $destination_course_code, $real_orig_url);
                             $content_html = str_replace($real_orig_url, $dest_url, $content_html);
-                        }
-                    } else {
-                        if ($type_url == 'url') {
                         }
                     }
                 }
@@ -3725,7 +3795,7 @@ class DocumentManager
      */
     public static function get_web_odf_extension_list()
     {
-        return array('ods', 'odt');
+        return array('ods', 'odt', 'odp');
     }
 
     /**
@@ -3863,7 +3933,6 @@ class DocumentManager
     public static function readNanogongFile($file)
     {
         $nanoGongJarFile = api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar';
-
         $html = '<applet id="applet" archive="'.$nanoGongJarFile.'" code="gong.NanoGong" width="160" height="95">';
             $html .= '<param name="SoundFileURL" value="'.$file.'" />';
             $html .= '<param name="ShowSaveButton" value="false" />';
@@ -3989,5 +4058,64 @@ class DocumentManager
         }
 
         return false;
+    }
+
+    /**
+     * Sets
+     * @param string $file ($document_data['path'])
+     * @param string $file_url_sys
+     * @return string
+     */
+    public static function generateAudioTempFile($file, $file_url_sys)
+    {
+        //make temp audio
+        $temp_folder = api_get_path(SYS_ARCHIVE_PATH).'temp/audio';
+        if (!file_exists($temp_folder)) {
+            @mkdir($temp_folder, api_get_permissions_for_new_directories(), true);
+        }
+
+        //make htaccess with allow from all, and file index.html into temp/audio
+        $htaccess = api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htaccess';
+        if (!file_exists($htaccess)) {
+            $htaccess_content="order deny,allow\r\nallow from all\r\nOptions -Indexes";
+            $fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htaccess', 'w');
+            if ($fp) {
+                fwrite($fp, $htaccess_content);
+                fclose($fp);
+            }
+        }
+
+        //encript temp name file
+        $name_crip = sha1(uniqid());//encript
+        $findext= explode(".", $file);
+        $extension = $findext[count($findext)-1];
+        $file_crip = $name_crip.'.'.$extension;
+
+        //copy file to temp/audio directory
+        $from_sys = $file_url_sys;
+        $to_sys = api_get_path(SYS_ARCHIVE_PATH).'temp/audio/'.$file_crip;
+
+        if (file_exists($from_sys)) {
+            copy($from_sys, $to_sys);
+        }
+
+        //get  file from tmp directory
+        $_SESSION['temp_audio_nanogong'] = $to_sys;
+
+        return api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
+    }
+
+    /**
+     * Erase temp nanogong audio.
+     */
+    public static function removeGeneratedAudioTempFile()
+    {
+        if (isset($_SESSION['temp_audio_nanogong'])
+            && !empty($_SESSION['temp_audio_nanogong'])
+            && is_file($_SESSION['temp_audio_nanogong'])) {
+
+            unlink($_SESSION['temp_audio_nanogong']);
+            unset($_SESSION['temp_audio_nanogong']);
+        }
     }
 }

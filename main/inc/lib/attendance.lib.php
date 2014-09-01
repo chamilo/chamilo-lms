@@ -50,7 +50,6 @@ class Attendance
 		return $obj->total_number_of_items;
 	}
 
-
 	/**
 	 * Get attendance list only the id, name and attendance_qualify_max fields
 	 * @param   string  course db name (optional)
@@ -72,7 +71,8 @@ class Attendance
         $condition_session = api_get_session_condition($session_id);
 
 		// Get attendance data
-		$sql = "SELECT id, name, attendance_qualify_max FROM $tbl_attendance
+		$sql = "SELECT id, name, attendance_qualify_max
+                FROM $tbl_attendance
 		        WHERE c_id = $course_id AND active = 1 $condition_session ";
 		$rs  = Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
@@ -237,7 +237,8 @@ class Attendance
 	}
 
 	/**
-	 * add attendaces inside table
+	 * Add attendaces sheet inside table. This is the *list of* dates, not
+     * a specific date in itself.
 	 * @param  bool   true for adding link in gradebook or false otherwise (optional)
 	 * @return int    last attendance id
 	 */
@@ -288,7 +289,7 @@ class Attendance
 	 * @return 	int    last id
 	 */
 	public function attendance_edit($attendance_id, $link_to_gradebook = false) {
-		global $_course;
+        $_course = api_get_course_info();
 		$tbl_attendance     = Database :: get_course_table(TABLE_ATTENDANCE);
 		$table_link         = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$session_id         = api_get_session_id();
@@ -315,7 +316,7 @@ class Attendance
             // add link to gradebook
             if ($link_to_gradebook && !empty($this->category_id)) {
                 $description = '';
-                $link_id=is_resource_in_course_gradebook($course_code,7,$attendance_id,$session_id);
+                $link_id = is_resource_in_course_gradebook($course_code, 7, $attendance_id, $session_id);
                 if (!$link_id) {
                     add_resource_to_course_gradebook($this->category_id, $course_code, 7, $attendance_id, $title_gradebook,$weight_calification,$value_calification,$description,1,$session_id);
                 } else {

@@ -187,7 +187,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('CourseCategoryInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('CourseCategoryListIn').' '.$url_selected; ?></b></td>
+  <td align="center"><b><?php printf(get_lang('CourseCategoryListInX'),$url_selected); ?></b></td>
 </tr>
 
 <tr>

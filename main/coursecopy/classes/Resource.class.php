@@ -1,13 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * General resources backup script
- * @package chamilo.backup
- */
-/**
- * Definition of all possible resource-types
- */
+
 define('RESOURCE_DOCUMENT', 'document');
 define('RESOURCE_GLOSSARY', 'glossary');
 define('RESOURCE_EVENT', 'calendar_event');
@@ -34,6 +27,7 @@ define('RESOURCE_ATTENDANCE', 'attendance');
 define('RESOURCE_WORK', 'work');
 
 /**
+ * Class Resource
  * Representation of a resource in a Chamilo-course.
  * This is a base class of which real resource-classes (for Links,
  * Documents,...) should be derived.
@@ -119,7 +113,8 @@ class Resource
      * Returns the id of this resource.
      * @return int The id of this resource in the source course.
      */
-    function get_id() {
+    function get_id()
+    {
         return $this->source_id;
     }
 
@@ -127,7 +122,8 @@ class Resource
      * Resturns the type of this resource
      * @return constant The type.
      */
-    function get_type() {
+    function get_type()
+    {
         return $this->type;
     }
 
@@ -139,7 +135,8 @@ class Resource
      * @todo once the RESOURCE_* constants are replaced by the globally
      * defined TOOL_* constants, this function will be replaced by get_type()
      */
-    function get_tool($for_item_property_table = true) {
+    function get_tool($for_item_property_table = true)
+    {
         switch ($this->get_type()) {
             case RESOURCE_DOCUMENT:
                 return TOOL_DOCUMENT;
@@ -201,7 +198,8 @@ class Resource
      * Set the destination id
      * @param int $id The id of this resource in the destination course.
      */
-    function set_new_id($id) {
+    function set_new_id($id)
+    {
         $this->destination_id = $id;
     }
 
@@ -209,14 +207,16 @@ class Resource
      * Check if this resource is allready restored in the destination course.
      * @return bool true if allready restored (i.e. destination_id is set).
      */
-    function is_restored() {
+    function is_restored()
+    {
         return $this->destination_id > -1;
     }
 
     /**
      * Show this resource
      */
-    function show() {
+    function show()
+    {
         //echo 'RESOURCE: '.$this->get_id().' '.$type[$this->get_type()].' ';
     }
 }

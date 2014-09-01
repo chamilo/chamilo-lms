@@ -173,10 +173,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-}
-
-// Action handling: deleting a note
-elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
+} elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
     $res = $usergroup->delete(Security::remove_XSS($_GET['id']));
     if ($res) {
         Display::display_confirmation_message(get_lang('Deleted'));
@@ -185,5 +182,4 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GE
 } else {
     $usergroup->display();
 }
-
 Display :: display_footer();

@@ -23,6 +23,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Ten element jest nie
 $DeleteAllAttendances = "Usuń wszystkie stworzone frekwencje";
 $Unsubscribe = "Wypisz się";
 $AddForum = "Dodaj nowe forum";
+$ReplyShort = "Odp:";
 $SelectACategory = "Wybierz kategorię";
 $AdvancedEdit = "Zaawansowana edycja";
 $SearchXapianModuleNotInstalled = "Moduł wyszukiwania Xapian nie jest zainstalowany";

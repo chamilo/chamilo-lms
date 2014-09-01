@@ -40,7 +40,7 @@
 <h2><b>Contents</b></h2>
 
 <ol>
-  <li><a href="#1.Using-XCache">Using xCache, APC or Memcache</a></li>
+  <li><a href="#1.Using-XCache">Using xCache, APC, Memcache or Memcached</a></li>
   <li><a href="#2.Slow-queries">Slow queries</a></li>
   <li><a href="#3.Indexes-caching">Indexes caching</a></li>
   <li><a href="#4.Sessions-directories">Sessions directories</a></li>
@@ -49,6 +49,7 @@
   <li><a href="#7.High-numbers-memory">Memory considerations for high numbers of users</a></li>
   <li><a href="#8.Avoid-non-fixed-values">Avoiding non-fixed values</a></li>
   <li><a href="#9.xsendfile">Speeding file downloads with mod_xsendfile</a></li>
+  <li><a href="#10.igbinary">IGBinary for faster courses backups and better sessions</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using xCache or APC</h2>
@@ -173,6 +174,55 @@ If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>, you
         }
      ...
 </pre>
+<br />
+If you use php5-memcached (different set of functions than php5-memcache!), then this piece of code would look like this (you need to adjust depending on your settings):
+<pre>
+    global $_configuration;
+    $_course    = api_get_course_info();
+    $course_id  = api_get_course_id();
+    $user_id    = api_get_user_id();
+
+    $html = '';
+    $xc = method_exists('Memcached', 'add');
+    if ($xc) {
+        // Make sure the server is available
+        $xm = new Memcached;
+        $xm->addServer('localhost', 11211);
+        // The following concatenates the name of the database + the id of the
+        // access url to make it a unique variable prefix for the variables to
+        // be stored
+        $xs = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
+    $number = 0;
+    if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
+        if ($xc) {
+            if ($xm->get($xs.'wio_count_simple')) {
+                $number = $xm->get($xs.'wio_count_simple');
+            } else {
+                $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+                $xm->set($xs.'wio_count_simple',$number,120);
+            }
+        } else {
+              $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+        }
+        $number_online_in_course = 0;
+        if (!empty($_course['id'])) {
+            if ($xc) {
+                if ($xm->get($xs.'wio_count_simple_'.$_course['id'])) {
+                    $number_online_in_course = $xm->get($xs.'wio_count_simple_'.$_course['id']);
+                } else {
+                    $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
+                    $xm->set($xs.'wio_count_simple_'.$_course['id'],$number_online_in_course,120);
+                }
+            } else {
+                $number_online_in_course = who_is_online_in_this_course_count(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
+            }
+        }
+        // ...
+</pre>
+
+
+
 <p>It is also worth noting that the Université de Genève, Switzerland, observed that the calculation of the total size used by course documents is one of the heaviest queries in Chamilo, so you might want to cache the results of this one as well, using the same technique.</p>
 <p>Finally, if your portal is highly public *and* you are showing the popular courses on the homepage, you might want to also reduce the amount of queries this generates, using the same technique as above, but for the main/inc/lib/auth.lib.php library, looking for the "Tracking::get_course_connections_count()" call:</p>
 <pre>
@@ -195,6 +245,38 @@ If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>, you
             ...
         }
 </pre>
+Finally, the Free Campus of Chamilo has a very specific case of slow query: the courses catalog! Because there might be more than 30,000 courses in there, getting the number of "Connections last month" can be a desastrous query in terms of performances. This is why you should try to cache the results as well.<br />
+Obviously, as we are speaking about showing the number of visits this month, it doesn't really matter if the number doesn't refresh for an hour or so...<br />
+Locate the main/inc/lib/course_category.lib.php file, open it and go to the browseCoursesInCategory() function.<br />
+Locate the $count_connections_last_month = Tracking::get_course_connections_count(...) call, and wrap in into something like this:
+<pre>
+    $xc = method_exists('Memcached', 'add');
+    if ($xc) {
+        // Make sure the server is available
+        $xm = new Memcached;
+        $xm->addServer('localhost', 11211);
+        // The following concatenates the name of the database + the id of the
+        // access url to make it a unique variable prefix for the variables to
+        // be stored
+        $xs = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
+    $result = Database::query($sql);
+    $courses = array();
+    while ($row = Database::fetch_array($result)) {
+        $row['registration_code'] = !empty($row['registration_code']);
+        $count_users = CourseManager::get_users_count_in_course($row['code']);
+        if ($xc) {
+            if ($xm->get($xs.'cccount_'.$row['code'])) {
+                $number = $xm->get($xs.'cccount_'.$row['code']);
+            } else {
+                $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+                $xm->set($xs.'cccount_'.$row['code'], $count_connections_last_month, 3600);
+            }
+        } else {
+            $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+        }
+   ...
+</pre>
 <hr />
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log
@@ -204,6 +286,11 @@ To solve this performance issue, you can execute the following queries manually 
 <pre>
 ALTER TABLE lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
 ALTER TABLE lp_item_view ADD INDEX  idx_c_lp_item_view_cid_lp_view_id_lp_item_id (c_id, lp_view_id, lp_item_id);
+ALTER TABLE user_rel_tag ADD INDEX idx_user_rel_tag_user (user_id);
+</pre>
+In Chamilo 1.9.8, we use the c_item_property table more actively. This causes issues with the reporting pages for the assignments. You can reduce the impact by adding the following index:
+<pre>
+alter table c_item_property add index idx_itemprop_tooliuid(tool, insert_user_id);
 </pre>
 These will be available in Chamilo 1.10 directly, but we cannot put them into Chamilo 1.9 from now on for organizational reasons.<br />
 <hr />
@@ -309,6 +396,10 @@ Finally, you'll have to got to your Chamilo configuration file, and add the foll
 $_configuration['enable_x_sendfile_headers'] = true;
 </pre>
 Done! Now your downloads should go substantially faster. This is still a feature in observation. We're not sure the benefits are sufficient, so don't hesitate to let us know in <a href="https://support.chamilo.org/issues/6853">the related issue in Chamilo's tracking system</a>
+</p>
+<h2><a name="#10.igbinary"></a>IGBinary for courses backups and better sessions management</h2>
+<p>
+<a href="http://pecl.php.net/package/igbinary">IGBinary</a> is a small PECL library that replaces the PHP serializer. It uses less space (so less memory for serialized objects) and is particularly efficient with memory-based storages (like Memcached). Use it for course backups (see <a href="https://support.chamilo.org/issues/4443">issue 4443</a>) or <a href="http://www.neanderthal-technology.com/2011/11/ubuntu-10-install-php-memcached-with-igbinary-support/">to boost sessions management</a>.
 </p>
 <hr />
 <h2>Authors</h2>

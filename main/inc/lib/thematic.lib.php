@@ -1002,9 +1002,10 @@ class Thematic
 
 	/**
 	 * Get next thematic advance not done from thematic details interface
+     * @param   int Offset (if you want to get an item that is not directly the next)
 	 * @return	int		next thematic advance not done
 	 */
-	public function get_next_thematic_advance_not_done() {
+	public function get_next_thematic_advance_not_done($offset = 1) {
 
 		$thematic_data = $this->get_thematic_list();
 		$thematic_advance_data = $this->get_thematic_advance_list();
@@ -1012,7 +1013,6 @@ class Thematic
 		$next_advance_not_done = 0;
 		if (!empty($thematic_data)) {
 			foreach ($thematic_data as $thematic) {
-				$thematic_id = $thematic['id'];
 				if (!empty($thematic_advance_data[$thematic['id']])) {
 					foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
 						if ($thematic_advance['done_advance'] == 0) {
@@ -1024,7 +1024,9 @@ class Thematic
 		}
 
 		if (!empty($a_thematic_advance_ids)) {
-			$next_advance_not_done = array_shift($a_thematic_advance_ids);
+            for ($i = 0; $i < $offset; $i++) {
+                $next_advance_not_done = array_shift($a_thematic_advance_ids);
+            }
 			$next_advance_not_done = intval($next_advance_not_done);
 		}
 

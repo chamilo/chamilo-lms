@@ -36,7 +36,6 @@ $LastPost = "Letzter Beitrag";
 $Quoting = "Zitieren";
 $NotifyByEmail = "Mich per E-Mail über Antworten benachrichtigen";
 $StickyPost = "Dies ist ein Info-Beitrag (erscheint immer oben und hat ein besonderes Icon)";
-$ReplyShort = "Aw:";
 $DeletePost = "Wollen Sie diesen Beitrag wirklich löschen? Beim Löschen des Beitrags werden auch alle Antworten auf diesen Beitrag gelöscht. Prüfen Sie bitte, welche Beiträge ebenfalls gelöscht werden.";
 $Locked = "Geschlossen:  Es können keine neuen Beiträge in dieser Forum-Kategorie, diesem Forum oder dem Thema hinzugefügt werden; alle bisherigen Beiträge können jedoch weiter gelesen werden.";
 $Unlocked = "Offen: Neue Beiträge können in dieser Forums-Kategorie, diesem Forum oder Thema geschrieben werden";

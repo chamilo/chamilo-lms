@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Certificate Class
  * The certificates class is used to generate certificates from inside the
  * gradebook tool.
  * @package chamilo.library.certificates
@@ -242,7 +243,10 @@ class Certificate extends Model
         if (empty($this->certification_user_path)) {
             return false;
         }
-        if (!empty($this->certificate_data) && isset($this->certificate_data['path_certificate']) && !empty($this->certificate_data['path_certificate'])) {
+        if (!empty($this->certificate_data) &&
+            isset($this->certificate_data['path_certificate']) &&
+            !empty($this->certificate_data['path_certificate'])
+        ) {
             return true;
         }
         return false;

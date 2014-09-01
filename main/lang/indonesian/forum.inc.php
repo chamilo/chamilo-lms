@@ -33,7 +33,6 @@ $LastPost = "Posting terakhir";
 $Quoting = "Mengkutip";
 $NotifyByEmail = "Ingatkan saya melalaui email jika ada tanggapan";
 $StickyPost = "Ini pesan khusus (tampil selalu di atas dan memiliki ikon khusus)";
-$ReplyShort = "Re:";
 $DeletePost = "Anda yakin ingin mengapus postingan ini?  Menghapus ini juga akan menghapus tanggapan-nya. Silahkan tandai kenampakan thread untuk melihat postingan mana saja yang juga akan dihapus.";
 $Locked = "Terkunci: siswa tidak dapat memposting pesan baru di kategori forum , forum atau thread ini tapi mereka dapat tetap membaca pesan-pesan yang telah diposting";
 $Unlocked = "Tridak terkunci: siswa dapat memposting pesan pada kategori forum, forum atau thread";

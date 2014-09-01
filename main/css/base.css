@@ -44,6 +44,120 @@ header #logo {
 header #logo img{
     margin-left: 30px;
 }
+
+
+/* START COURSE PROGRESS */
+.thematic-postit{
+  padding-top: 5px;
+  padding-bottom: px;
+}
+.thematic-postit .tittle-score{
+  padding-bottom: 5px;
+  font-size: 16px;
+  color: #006699;
+}
+.thematic-postit .topics{
+  font-size: 12px;
+  padding-bottom: 5px;
+  color: #006699;
+}
+.items-progress {
+  border-top: 2px solid #C4DDEB;
+  padding: 5px;
+  margin-top: 0px;
+  background-color: #ECF4F8;
+}
+.items-progress.current {
+    border-top: 2px solid #C4DDEB;
+    padding: 5px;
+    margin-top: 0px;
+    background-color: #C4DDEB;
+}
+.items-progress .date{
+  color: #666;
+  font-size: 11px;
+  display: block;
+}
+.items-progress .title{
+  font-size: 14px;
+  line-height: 18px;
+  display: block;
+}
+.items-progress .time{
+  display: block;
+  padding-top: 5px;
+}
+.info-progress{
+  padding: 10px;
+}
+.score-thematic .score{
+  text-align: right;
+}
+
+.score-thematic .name-student{
+  font-weight: bold;
+  font-size: 16px;
+  padding-left: 70px;
+  margin: 0px;
+}
+.score-thematic{
+  color: #666;
+}
+.score-thematic p{
+  padding: 0px;
+  margin: 0px;
+}
+.row-fluid.score-thematic {
+  padding-top: 5px;
+}
+.accordion-heading .accordion-toggle {
+  display: inline;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  float: right;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 15px;
+}
+.accordion-heading .title-accordion{
+  padding:0px;
+  background:url(thematic.png) no-repeat left bottom transparent;
+}
+.name-student h2{
+  font-size: 18px;
+  margin: 0;
+}
+.accordion-heading h3, .accordion-heading h2{
+  line-height: 17px;
+}
+.accordion-group{
+  border: 1px solid #D4E6F0;
+
+}
+.name-student h3{
+  font-size: 13px;
+  font-weight: normal;
+  margin: 0;
+
+}
+.accordion-heading {
+  background-color: #E7F1F7;
+}
+.items-progress p{
+  margin-bottom: 3px;
+}
+.accordion-body.collapse {
+  height: 0;
+  display: none;
+}
+.accordion-body.collapse.in {
+  height: auto;
+  display: block;
+}
+/* END COURSE PROGRESS*/
+
 .subnav .brand {
     display:none;
 }
@@ -198,9 +312,10 @@ header {
   width: 0%;
  }
 
- .breadcrumb li img:nth-child(n) {
+.breadcrumb li img:nth-child(n) {
   width: auto;
- }
+  margin-top: -4px;
+}
 
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
@@ -300,10 +415,6 @@ form .formw input {
 [dir=rtl] #top_main_content .span9 {
   float: right;
 }
-#top_main_content .span6 {
-  width: 460px;
-}
-
 
 /* New changes Chamilo 1.9 */
 
@@ -1293,39 +1404,6 @@ button.next.disabled {
     color: #000000;
     padding-top: 10px;
     text-shadow: gray 3px 3px 2px;
-}
-
-/* THEMATIC ADVANCE */
-.thematic-postit {
-    width:250px;
-    height:auto;
-    overflow:hidden;
-    float:right;
-}
-.thematic-postit-top {
-    background-image: url('../img/postit_top.png');
-    height: 38px;
-
-}
-.thematic-postit-top h3 {
-    margin:20px 5px 10px 20px;
-    padding-top:40px;
-}
-
-.thematic-postit-bottom {
-    background-image: url('../img/postit_bottom.png');
-    height:40px;
-}
-.thematic-postit-center {
-    background-image: url('../img/postit_center.png');
-    height:auto;
-    margin-top: 0px;
-    margin-bottom:-16px;
-    padding: 28px 20px 0;
-}
-
-#titlethematic{
-    text-transform: uppercase;
 }
 
 /* ATTENDANCE */
@@ -3696,10 +3774,6 @@ a:active{
     line-height: 22px;
     margin-right: 70px;
     text-shadow: 1px 1px 2px #000000;
-}
-
-#course_tools .row h3 {
-    margin-top:10px;
 }
 
 .td_actions {

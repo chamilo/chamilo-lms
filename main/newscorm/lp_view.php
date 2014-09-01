@@ -41,11 +41,14 @@ api_protect_course_script();
 $lp_id = intval($_GET['lp_id']);
 
 // Check if the learning path is visible for student - (LP requisites)
-if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
-    api_not_allowed(true);
+
+if (!api_is_platform_admin()) {
+    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
+        api_not_allowed(true);
+    }
 }
 
-//Checking visibility (eye icon)
+// Checking visibility (eye icon)
 $visibility = api_get_item_visibility(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id(), api_get_session_id());
 if (!api_is_allowed_to_edit(false, true, false, false) && intval($visibility) == 0) {
     api_not_allowed(true);
@@ -217,7 +220,9 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
 
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 
-        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.$safe_exe_id;
+        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting
+                FROM ' . $TBL_TRACK_EXERCICES . '
+                WHERE exe_id = '.$safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
@@ -228,11 +233,18 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $score 		= (float)$row_dates['exe_result'];
         $max_score 	= (float)$row_dates['exe_weighting'];
 
-        $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE c_id = $course_id AND id = '".$safe_item_id."'";
-        Database::query($sql_upd_max_score);
+        $sql = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score'
+                WHERE c_id = $course_id AND id = '".$safe_item_id."'";
+        Database::query($sql);
 
-        $sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE c_id = $course_id AND lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
-        $res_last_attempt = Database::query($sql_last_attempt);
+        $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
+                WHERE
+                    c_id = $course_id AND
+                    lp_item_id = '$safe_item_id' AND
+                    lp_view_id = '".$_SESSION['oLP']->lp_view_id."'
+                ORDER BY id DESC
+                LIMIT 1";
+        $res_last_attempt = Database::query($sql);
 
         if (Database::num_rows($res_last_attempt)) {
         	$row_last_attempt = Database::fetch_row($res_last_attempt);
@@ -258,7 +270,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);
-$nameTools = Security :: remove_XSS($_SESSION['oLP']->get_name());
+$nameTools = Security::remove_XSS($_SESSION['oLP']->get_name());
 
 $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;
@@ -284,7 +296,7 @@ if (isset($_SESSION['status']) && $_SESSION['status'][$course_code] == 5) {
 $_SESSION['loaded_lp_view'] = true;
 
 $display_none = '';
-$margin_left = '305px';
+$margin_left = '340px';
 
 //Media player code
 
@@ -310,15 +322,17 @@ $sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE c_id = $course_id AND lp_id
 $res_media= Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {
-    while ($row_media= Database::fetch_array($res_media)) {
+    while ($row_media = Database::fetch_array($res_media)) {
         if (!empty($row_media['audio'])) {
             $show_audioplayer = true;
             break;
         }
     }
 }
+
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
+$is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
+
 if ($is_allowed_to_edit) {
     echo '<div id="learning_path_breadcrumb_zone">';
     global $interbreadcrumb;
@@ -338,14 +352,33 @@ if ($is_allowed_to_edit) {
                         </a>
                     </td>
                     <td>';
-                         if ($is_allowed_to_edit) {
-                            echo '<a class="link no-border" href="lp_controller.php?isStudentView=false&action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
-                         } else {
-                            echo '<a class="link no-border" href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
-                         }
-                        echo get_lang('CourseHomepageLink').'
-                        </a>
-                    </td>
+
+                    // Return to course home.
+                    if ($is_allowed_to_edit) {
+                        $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
+                    } else {
+                        $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
+                    }
+
+                    $name = get_lang('CourseHomepageLink');
+                    // Return to lp list
+                    if (api_get_course_setting('lp_return_link') == 1) {
+                        $url .= '&redirectTo=lp_list';
+                        $name = get_lang('LearningPathList');
+                    }
+
+                    echo Display::url(
+                        $name,
+                        $url,
+                        array(
+                            'class' => 'link no-border',
+                            'target' => '_self',
+                            'onclick' => 'javascript: window.parent.API.save_asset();'
+                        )
+                    );
+
+
+                    echo '</td>
                 </tr>
             </table>
         </div>';

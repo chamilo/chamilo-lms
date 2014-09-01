@@ -14,7 +14,7 @@ $language_file = array('exercice', 'admin', 'coursebackup');
 
 // Including the global initialization file
 require_once '../inc/global.inc.php';
-$current_course_tool  = TOOL_COURSE_MAINTENANCE;
+$current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_course_script(true);
 
@@ -22,7 +22,7 @@ api_check_archive_dir();
 
 // Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 // Remove memory and time limits as much as possible as this might be a long process...

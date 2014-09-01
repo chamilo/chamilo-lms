@@ -36,7 +36,6 @@ $LastPost = "Laatste bericht";
 $Quoting = "Quote";
 $NotifyByEmail = "Hou me via e-mail op de hoogte als iemand antwoordt";
 $StickyPost = "Dit is een vast bericht (verschijnt altijd bovenaan en wordt aangeduid met een speciaal icoon)";
-$ReplyShort = "Antwoord:";
 $DeletePost = "Bent u zeker dat u dit bericht wenst te verwijderen?";
 $Locked = "Vergrendeld: Studenten kunnen geen nieuwe berichten meer plaatsen in deze forumcategorie, forum of discussie maar ze kunnen de reeds geplaatste berichten wel nog lezen";
 $Unlocked = "Ontgrendeld: Studenten kunnen terug nieuwe berichten plaatsen in deze forumcategorie, forum of discussie.";

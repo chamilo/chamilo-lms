@@ -1,11 +1,9 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * Script
  * @package chamilo.gradebook
  */
-
 /**
  * Class
  * @package chamilo.gradebook
@@ -22,6 +20,7 @@ class DisplayGradebook
      */
     static function display_header_result($evalobj, $selectcat, $page)
     {
+        $header = null;
         if (api_is_allowed_to_edit(null, true)) {
             $header = '<div class="actions">';
             if ($page != 'statistics') {
@@ -353,18 +352,28 @@ class DisplayGradebook
 
     /**
      * Displays the header for the gradebook containing the navigation tree and links
-     * @param category_object $currentcat
+     * @param Category $currentcat
      * @param int $showtree '1' will show the browse tree and naviation buttons
      * @param boolean $is_course_admin
      * @param boolean $is_platform_admin
-     * @param boolean Whether to show or not the link to add a new qualification (we hide it in case of the course-embedded tool where we have only one calification per course or session)
-     * @param boolean Whether to show or not the link to add a new item inside the qualification (we hide it in case of the course-embedded tool where we have only one calification per course or session)
+     * @param boolean Whether to show or not the link to add a new qualification
+     * (we hide it in case of the course-embedded tool where we have only one
+     * calification per course or session)
+     * @param boolean Whether to show or not the link to add a new item inside
+     * the qualification (we hide it in case of the course-embedded tool
+     * where we have only one calification per course or session)
      * @return void Everything is printed on screen upon closing
      */
     static function display_header_gradebook(
-    $catobj, $showtree, $selectcat, $is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true
-    )
-    {
+        $catobj,
+        $showtree,
+        $selectcat,
+        $is_course_admin,
+        $is_platform_admin,
+        $simple_search_form,
+        $show_add_qualification = true,
+        $show_add_link = true
+    ) {
         // Student.
         $status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
         $objcat = new Category();
@@ -375,6 +384,7 @@ class DisplayGradebook
 
         //@todo move these in a function
         $sum_categories_weight_array = array();
+
         if (isset($catobj) && !empty($catobj)) {
             $categories = Category::load(null, null, null, $catobj->get_id());
             if (!empty($categories)) {
@@ -388,36 +398,41 @@ class DisplayGradebook
 
         if (!$is_course_admin && $status <> 1 && $selectcat <> 0) {
             $user_id = api_get_user_id();
+
             $catcourse = Category::load($catobj->get_id());
             $main_weight = $catcourse[0]->get_weight();
             $scoredisplay = ScoreDisplay :: instance();
-
+            //$categories = Category::getCategories($catcourse[0]->get_id());
             // generating the total score for a course
+            /*if (count($categories) > 0) {
+                foreach ($categories as $category) {
+                    $allevals = $category->get_evaluations($user_id, true);
+                    $alllinks = $category->get_links($user_id, true);
+                    $catEvalsLinks = array_merge($allevals, $alllinks);
+                }
+            }*/
             $allevals = $catcourse[0]->get_evaluations($user_id, true);
             $alllinks = $catcourse[0]->get_links($user_id, true);
-            $evals_links = array_merge($allevals, $alllinks);
 
-            $item_value = 0;
-            $item_total = 0;
-            $item_total_value = 0;
+            $allEvalsLinks = array_merge($allevals, $alllinks);
+
             $item_value_total = 0;
             $scoreinfo = null;
 
-            for ($count = 0; $count < count($evals_links); $count++) {
-                $item = $evals_links[$count];
+            for ($count = 0; $count < count($allEvalsLinks); $count++) {
+                $item = $allEvalsLinks[$count];
                 $score = $item->calc_score($user_id);
                 $divide = ( ($score[1]) == 0 ) ? 1 : $score[1];
-
-                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                //$item_value     = $score[0]/$divide;
-                $item_value = $score[0] / $divide * $item->get_weight() * $sub_cat_percentage / $main_weight;
-                $item_value_total +=$item_value;
+                //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+                //$item_value = $score[0] / $divide * $item->get_weight() / $sub_cat_percentage * $sub_cat_percentage / $main_weight * $main_weight;
+                $item_value = $score[0] / $divide * $item->get_weight();
+                //var_dump($score[0], $divide, $item->get_weight(), $sub_cat_percentage, $main_weight, $item_value);
+                $item_value_total += $item_value;
             }
-            $item_total = $main_weight;
 
+            $item_total = $main_weight;
             $total_score = array($item_value_total, $item_total);
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
-
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
                 $scoreinfo .= '<h2>' . get_lang('Total') . ' : ' . $scorecourse_display . '</h2>';
             }
@@ -437,7 +452,7 @@ class DisplayGradebook
 
             $tree = $cats[0]->get_tree();
             unset($cats);
-
+            $line = null;
             foreach ($tree as $cat) {
                 for ($i = 0; $i < $cat[2]; $i++) {
                     $line .= '&mdash;';

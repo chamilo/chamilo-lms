@@ -1,40 +1,57 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
+
 require_once dirname(__FILE__) . '/../../../inc/global.inc.php';
 require_once dirname(__FILE__) . '/../be.inc.php';
 set_time_limit(0);
 
 /**
+ * Class FlatViewTable
  * Table to display flat view (all evaluations and links for all students)
  * @author Stijn Konings
  * @author Bert Steppé  - (refactored, optimised)
  * @author Julio Montoya Armas - Gradebook Graphics
+ *
  * @package chamilo.gradebook
  */
 class FlatViewTable extends SortableTable
 {
-
-    private $selectcat;
     public $datagen;
+    private $selectcat;
     private $limit_enabled;
     private $offset;
+    private $mainCourseCategory;
 
     /**
-     * Constructor
+     * @param Category $selectcat
+     * @param array $users
+     * @param array $evals
+     * @param array $links
+     * @param bool $limit_enabled
+     * @param int $offset
+     * @param null $addparams
+     * @param Category $mainCourseCategory
      */
-    function FlatViewTable($selectcat, $users = array(), $evals = array(), $links = array(), $limit_enabled = false, $offset = 0, $addparams = null)
-    {
+    public function FlatViewTable(
+        $selectcat,
+        $users = array(),
+        $evals = array(),
+        $links = array(),
+        $limit_enabled = false,
+        $offset = 0,
+        $addparams = null,
+        $mainCourseCategory = null
+    ) {
         parent :: __construct('flatviewlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 1 : 0);
         $this->selectcat = $selectcat;
-        $this->datagen = new FlatViewDataGenerator($users, $evals, $links, array('only_subcat' => $this->selectcat->get_id()));
+
+        $this->datagen = new FlatViewDataGenerator(
+            $users,
+            $evals,
+            $links,
+            array('only_subcat' => $this->selectcat->get_id()),
+            $mainCourseCategory
+        );
 
         $this->limit_enabled = $limit_enabled;
         $this->offset = $offset;
@@ -44,12 +61,29 @@ class FlatViewTable extends SortableTable
 
         // step 2: generate rows: students
         $this->datagen->category = $this->selectcat;
+        $this->mainCourseCategory = $mainCourseCategory;
     }
 
     /**
-     * Display the graph of the total results of all students
-     * */
-    function display_graph()
+     * @param bool $value
+     */
+    public function setLimitEnabled($value)
+    {
+       $this->limit_enabled = (bool) $value;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getMainCourseCategory()
+    {
+        return $this->mainCourseCategory;
+    }
+
+    /**
+    * Display the graph of the total results of all students
+    * */
+    public function display_graph()
     {
         include_once api_get_path(LIBRARY_PATH) . 'pchart/pData.class.php';
         include_once api_get_path(LIBRARY_PATH) . 'pchart/pChart.class.php';
@@ -61,7 +95,7 @@ class FlatViewTable extends SortableTable
         $img_file = '';
 
         if ($this->datagen->get_total_items_count() > 0 && $total_users > 0) {
-            //Removing user names and total
+            // Removing user names and total
             array_shift($header_name);
             array_shift($header_name);
             array_pop($header_name);
@@ -78,6 +112,7 @@ class FlatViewTable extends SortableTable
                     $pre_result[$i + 3]+= $result[$i + 1];
                 }
             }
+
             $i = 1;
             $show_draw = false;
             if ($total_users > 0) {
@@ -163,7 +198,10 @@ class FlatViewTable extends SortableTable
         return api_get_path(WEB_ARCHIVE_PATH) . $img_file;
     }
 
-    function display_graph_by_resource()
+    /**
+     *
+     */
+    public function display_graph_by_resource()
     {
         require_once api_get_path(LIBRARY_PATH) . 'pchart/pData.class.php';
         require_once api_get_path(LIBRARY_PATH) . 'pchart/pChart.class.php';
@@ -186,7 +224,7 @@ class FlatViewTable extends SortableTable
 
                 $user_results = $this->datagen->get_data_to_graph2(false);
                 $pre_result = $new_result = array();
-                $DataSet = new pData();                
+                $DataSet = new pData();
                 //filling the Dataset
                 foreach ($user_results as $result) {
                     //print_r($result);
@@ -225,7 +263,7 @@ class FlatViewTable extends SortableTable
                     }
                 }
 
-                //fixing $resource_list        
+                //fixing $resource_list
                 $max = 0;
                 $new_list = array();
                 foreach ($resource_list as $key => $value) {
@@ -266,7 +304,7 @@ class FlatViewTable extends SortableTable
                     // the graph id
                     $gradebook_id = intval($_GET['selectcat']);
                     $graph_id = api_get_user_id() . 'ByResource' . $gradebook_id . api_get_course_id() . api_get_session_id();
-                  
+
                     if ($show_draw) {
                         //if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
                         if (0) {
@@ -283,12 +321,12 @@ class FlatViewTable extends SortableTable
 
                             // Adding the color schemma
                             $Test->loadColorPalette(api_get_path(LIBRARY_PATH) . "pchart/palette/pastel.txt");
-                            
+
                             // set font of the axes
                             $Test->setFontProperties(api_get_path(LIBRARY_PATH) . "pchart/fonts/tahoma.ttf", 8);
                             $area_graph_w = $chart_size_w - 130;
                             $Test->setGraphArea(50, 30, $area_graph_w, $chart_size_h - 50);
-                            
+
                             $Test->drawFilledRoundedRectangle(5, 5, $chart_size_w - 1, $chart_size_h - 20, 5, 240, 240, 240);
                             //$Test->drawRoundedRectangle(5,5,790,330,5,230,230,230);
                             //background color area & stripe or not
@@ -302,7 +340,7 @@ class FlatViewTable extends SortableTable
                                     $Test->setFixedScale(0, $max);
                                 }
                             }
-                            
+
                             $Test->drawScale($DataSet->GetData(), $DataSet->GetDataDescription(), SCALE_ADDALLSTART0, 150, 150, 150, TRUE, 0, 1, FALSE);
 
                             //background grid
@@ -411,7 +449,7 @@ class FlatViewTable extends SortableTable
     /**
      * Function used by SortableTable to get total number of items in the table
      */
-    function get_total_number_of_items()
+    public function get_total_number_of_items()
     {
         return $this->datagen->get_total_users_count();
     }
@@ -419,19 +457,21 @@ class FlatViewTable extends SortableTable
     /**
      * Function used by SortableTable to generate the data to display
      */
-    function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
+    public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
     {
         $is_western_name_order = api_is_western_name_order();
 
         // create page navigation if needed
         $totalitems = $this->datagen->get_total_items_count();
+
         if ($this->limit_enabled && $totalitems > LIMIT) {
             $selectlimit = LIMIT;
         } else {
             $selectlimit = $totalitems;
         }
+
+        $header = null;
         if ($this->limit_enabled && $totalitems > LIMIT) {
-            $calcprevious = LIMIT;
             $header .= '<table style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
                     . '<tbody>'
                     . '<tr>';
@@ -498,7 +538,13 @@ class FlatViewTable extends SortableTable
             $column++;
         }
 
-        $data_array = $this->datagen->get_data($users_sorting, $from, $this->per_page, $this->offset, $selectlimit);
+        $data_array = $this->datagen->get_data(
+            $users_sorting,
+            $from,
+            $this->per_page,
+            $this->offset,
+            $selectlimit
+        );
 
         $table_data = array();
         foreach ($data_array as $user_row) {
@@ -522,11 +568,13 @@ class FlatViewTable extends SortableTable
         return $table_data;
     }
 
-    // Other functions
-
+    /**
+     * @param $user_id
+     * @param $name
+     * @return string
+     */
     private function build_name_link($user_id, $name)
     {
         return '<a href="user_stats.php?userid=' . $user_id . '&selectcat=' . $this->selectcat->get_id() . '">' . $name . '</a>';
     }
-
 }

@@ -1151,7 +1151,9 @@ class Agenda
         if (empty($courseInfo)) {
             return array();
         }
+
         $course_id = $courseInfo['real_id'];
+
         if (empty($course_id)) {
             return array();
         }
@@ -1183,6 +1185,7 @@ class Agenda
         $session_id = intval($session_id);
 
         if (is_array($group_memberships) && count($group_memberships) > 0) {
+
             if (api_is_allowed_to_edit()) {
                 if (!empty($groupId)) {
                     $where_condition = "( ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
@@ -1197,8 +1200,15 @@ class Agenda
                 $where_condition = "( ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
             }
 
-            $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref, to_user_id
-                    FROM $tlb_course_agenda agenda INNER JOIN $tbl_property ip
+            $sql = "SELECT DISTINCT
+                        agenda.*,
+                        ip.visibility,
+                        ip.to_group_id,
+                        ip.insert_user_id,
+                        ip.ref,
+                        to_user_id
+                    FROM $tlb_course_agenda agenda
+                    INNER JOIN $tbl_property ip
                     ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id)
                     WHERE
                         ip.tool         ='".TOOL_CALENDAR_EVENT."' AND
@@ -1208,17 +1218,19 @@ class Agenda
                         ip.c_id         = $course_id
                     ";
         } else {
-            $visibilityCondition = "ip.visibility='1' AND";
+            $visibilityCondition = " ip.visibility='1' AND";
+
             if (api_is_allowed_to_edit()) {
                 if ($user_id == 0) {
                     $where_condition = "";
                 } else {
-                    $where_condition = "( ip.to_user_id=".$user_id. ") AND ";
+                    $where_condition = " ( ip.to_user_id = ".$user_id. " OR ip.to_group_id='0' ) AND ";
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {
-                $where_condition = "( ip.to_user_id=$user_id OR ip.to_group_id='0') AND ";
+                $where_condition = " ( ip.to_user_id = $user_id OR ip.to_group_id='0' ) AND ";
             }
+
             $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref, to_user_id
                     FROM $tlb_course_agenda agenda INNER JOIN $tbl_property ip
                     ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id)

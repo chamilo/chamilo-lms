@@ -2,6 +2,13 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SelectADateOnTheCalendar = "Seleccioneu una data del calendari";
+$AreYouSureDeleteTestResultBeforeDateD = "Esteu segur que desitgeu eliminar els resultats d'aquest exercici abans de la data seleccionada?";
+$CleanStudentsResultsBeforeDate = "Elimina tots els resultats abans de la data seleccionada";
+$AreYouSureToEmptyAllTestResults = "Esteu segur d'eliminar tots els resultats de tots els exercicis?";
+$CleanAllStudentsResultsForAllTests = "Esteu segur d'eliminar tots els resultats dels exercicis?";
+$TestFeedbackNotShown = "Aquesta prova està configurada per no donar retroacció als alumnes. Els comentaris corresponents no es mostraran al final de la prova, però podrien ser-li útil, com a docent, en el moment de revisar els detalls de les preguntes.";
+$FeedbackDisplayOptions = "Manera en la qual es mostrarà el comentari definit per a cada pregunta. Aquesta opció defineix com un estudiant visualitzarà els comentaris ingressats per a cada alternativa en cada pregunta. Recomanem avaluar les diferents opcions abans de convidar als estudiants a realitzar aquesta prova.";
 $ImportAikenQuizExplanationExample = "Aquest és el text de la pregunta 1 A. Resposta 1 B. Resposta 2 C. Resposta 3 ANSWER: B Aquest és el text de la pregunta 2 (noteu la línia en blanc a dalt). A. Resposta 1 B. Resposta 2 C. Resposta 3 D. Resposta 4 ANSWER: D ANSWER_EXPLANATION: aquest és un text opcional de feedback que apareixerà al costa de la resposta correcta.";
 $ImportAikenQuizExplanation = "El format Aiken és un simple format de text (arxiu .txt) amb diversos blocs amb preguntes, cada bloc separat per una línia en blanc. La primera línia és la pregunta. Les línies de respostes tenen un prefix de lletra i punt i, la resposta correcta segueix, amb el prefix 'ANSWER:'. Veure exemple a continuació.";
 $ExerciseAikenErrorNoAnswerOptionGiven = "L'arxiu importat té com a mínim una pregunta sense resposta (o les respostes no inclouen la lletra de prefix necessària). Assegureu-vos que cada pregunta tingui com a mínim una resposta i que estigui prefixada per una lletra i un punt o un parèntesi, com segueix: A. Resposta u";

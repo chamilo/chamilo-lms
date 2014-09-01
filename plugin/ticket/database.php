@@ -3,7 +3,7 @@
  * Contains the SQL for the tickets management plugin database structure
  */
 
-$objPlugin = new TicketPlugin();
+$objPlugin = TicketPlugin::create();
 
 $table = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
@@ -170,11 +170,11 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
 Database::query($sql);
 //Default status
 $defaultStatus = array(
-    'NAT' => $objPlugin->get_lang('StsNew'),
-    'PND' => $objPlugin->get_lang('StsPending'),
-    'XCF' => $objPlugin->get_lang('StsUnconfirmed'),
-    'CLS' => $objPlugin->get_lang('StsClose'),
-    'REE' => $objPlugin->get_lang('StsForwarded')
+    'NAT' => $objPlugin->get_lang('StatusNew'),
+    'PND' => $objPlugin->get_lang('StatusPending'),
+    'XCF' => $objPlugin->get_lang('StatusUnconfirmed'),
+    'CLS' => $objPlugin->get_lang('StatusClose'),
+    'REE' => $objPlugin->get_lang('StatusForwarded')
 );
 
 $i = 1;

@@ -36,7 +36,6 @@ $LastPost = "Última Mensagem";
 $Quoting = "Citação";
 $NotifyByEmail = "Gostaria de ser informado por email sempre que alguém responder a esta mensagem";
 $StickyPost = "Mensagem fixa (aparece sempre no topo e tem um ícone especial)";
-$ReplyShort = "Re:";
 $DeletePost = "Tem certeza que deseja excluir esta mensagem? Ao excluila, apagará igualmente todas as respostas. Por favor, verifique as discussões encadeadas que serão excluidas.";
 $Locked = "Bloqueado: os ususários não podem publicar mais mensagens nesta categoria, fórum ou discussões, mas podem visualizar e ler as mensagens publicadas.";
 $Unlocked = "Desbloqueado: os usuários podem publicar novas mensagens nesta categoria, fórum ou discussões.";

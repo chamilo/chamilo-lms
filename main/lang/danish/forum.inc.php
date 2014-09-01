@@ -36,7 +36,6 @@ $LastPost = "Seneste indlæg";
 $Quoting = "Brug af citater";
 $NotifyByEmail = "Send mig en e-mail, når mit indlæg besvares";
 $StickyPost = "Dette er et overordnet indlæg (vises øverst på siden og med et specielt ikon)";
-$ReplyShort = "SV:";
 $DeletePost = "Er du sikker på, at du vil slette indlægget? Hvis du sletter det, sletter du samtidig svarene til indlægget. Klik på \"Trådet\" for at finde ud af, hvilke indlæg der knytter sig til dette.";
 $Locked = "Låst: Deltagerne kan ikke længere skrive indlæg inden for denne forumkategori, forum eller tråd, men de kan stadigvæk læse de indlæg, der er kommet";
 $Unlocked = "Lås op: Deltagerne kan skrive nye indlæg i denne forumkategori, forum eller tråd";

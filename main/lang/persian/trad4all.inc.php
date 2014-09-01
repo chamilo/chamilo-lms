@@ -6,6 +6,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "این بخش برا
 $DeleteAllAttendances = "تمامی حضورها را حذف کن";
 $Unsubscribe = "لغو عضویت";
 $AddForum = "ایجاد یک تالار جدید";
+$ReplyShort = "پاسخ:";
 $SelectACategory = "انتخاب یک دسته";
 $AdvancedEdit = "ویرایش پیشرفته";
 $SearchXapianModuleNotInstalled = "ماژول جستجوی اگزاپیان نصب نیست";

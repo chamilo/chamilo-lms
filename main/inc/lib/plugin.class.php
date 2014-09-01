@@ -314,18 +314,22 @@ class Plugin
         if (empty($courseId)) {
             return false;
         }
-        // Ads course settings.
+
+        // Adding course settings.
         if (!empty($this->course_settings)) {
             foreach ($this->course_settings as $setting) {
                 $variable = Database::escape_string($setting['name']);
                 $value ='';
+
                 if (isset($setting['init_value'])) {
                     $value = Database::escape_string($setting['init_value']);
                 }
+
                 $type = 'textfield';
                 if (isset($setting['type'])) {
                     $type = Database::escape_string($setting['type']);
                 }
+
                 if (isset($setting['group'])) {
                     $group = Database::escape_string($setting['group']);
                     $sql = "SELECT value FROM $t_course
@@ -481,11 +485,10 @@ class Plugin
     public function addTab($tabName, $url)
     {
         $sql = "SELECT * FROM settings_current
-                WHERE
-                    variable = 'show_tabs' AND
-                    subkey like 'custom_tab_%'";
+            WHERE
+            variable = 'show_tabs' AND
+            subkey like 'custom_tab_%'";
         $result = Database::query($sql);
-
         $customTabsNum = Database::num_rows($result);
 
         $tabNum = $customTabsNum + 1;
@@ -493,6 +496,22 @@ class Plugin
         //Avoid Tab Name Spaces
         $tabNameNoSpaces = preg_replace('/\s+/', '', $tabName);
         $subkeytext = "Tabs" . $tabNameNoSpaces;
+
+
+        //Check if it is already added
+        $checkCondition = array(
+            'where' =>
+                array(
+                    "variable = 'show_tabs' AND subkeytext = ?" => array(
+                        $subkeytext
+                    )
+                )
+        );
+        $checkDuplicate = Database::select('*', 'settings_current', $checkCondition);
+        if (!empty($checkDuplicate)) {
+            return false;
+        }
+        //End Check
         $subkey = 'custom_tab_' . $tabNum;
         $attributes = array(
             'variable' => 'show_tabs',
@@ -517,7 +536,6 @@ class Plugin
         $whereCondition = array(
             'id = ?' => key($settings)
         );
-
         Database::update('settings_current', $setData, $whereCondition);
 
         return $resp;
@@ -526,6 +544,7 @@ class Plugin
     /**
      * Delete a tab to chamilo's platform
      * @param string $key
+     * @return boolean $resp Transaction response
      */
     public function deleteTab($key)
     {

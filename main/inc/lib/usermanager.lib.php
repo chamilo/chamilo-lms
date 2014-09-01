@@ -30,6 +30,7 @@ class UserManager
     const USER_FIELD_TYPE_TIMEZONE = 11;
     const USER_FIELD_TYPE_SOCIAL_PROFILE = 12;
     const USER_FIELD_TYPE_FILE = 13;
+    const USER_FIELD_TYPE_TELEPHONE  = 14;
 
     /**
      * The default constructor only instanciates an empty user object
@@ -1667,7 +1668,8 @@ class UserManager
                     6 => $rowf['field_visible'],
                     7 => $rowf['field_changeable'],
                     8 => $rowf['field_filter'],
-                    9 => array()
+                    9 => array(),
+                    10 => '<a name="'.$rowf['id'].'"></a>',
                 );
 
                 $sqlo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowf['id']." ORDER BY option_order ASC";
@@ -1709,19 +1711,19 @@ class UserManager
 
         $path_info = self::get_user_picture_path_by_id($user_id, 'web', true);
         $path = $path_info['dir'];
-        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
+        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.png';
         $del_text = get_lang('Delete');
         $extra_file_list = '';
         if (count($extra_files) > 0) {
-            $extra_file_list = '<ul id="productions">';
+            $extra_file_list = '<div class="files-production"><ul id="productions">';
             foreach ($extra_files as $file) {
                 $filename = substr($file,strlen($extra_field)+1);
-                $extra_file_list .= '<li><a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">'.htmlentities($filename).'</a>';
+                $extra_file_list .= '<li>'.Display::return_icon('archive.png').'<a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">'.htmlentities($filename).'</a> ';
                 if ($showdelete) {
                     $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_' . $extra_field . '['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
                 }
             }
-            $extra_file_list .= '</ul>';
+            $extra_file_list .= '</ul></div>';
         }
 
         return $extra_file_list;
@@ -2480,6 +2482,11 @@ class UserManager
             $sessionListFromCourseCoach = array();
             $sql =" SELECT DISTINCT id_session FROM $tbl_session_course_user
                     WHERE id_user = $user_id AND status = 2 ";
+
+            if (SessionManager::orderCourseIsEnabled()) {
+                //$sql .= "ORDER BY position";
+            }
+
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $result = Database::store_result($result);
@@ -2655,8 +2662,13 @@ class UserManager
                 INNER JOIN $tbl_session_course sc
                 ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
                 $join_access_url
-                WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
-                ORDER BY code";
+                WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url";
+
+        $orderBy = " ORDER BY code ";
+        if (SessionManager::orderCourseIsEnabled()) {
+            $orderBy =  ' ORDER BY position';
+        }
+        $sql .= $orderBy;
 
         $result = Database::query($sql);
 
@@ -2685,7 +2697,7 @@ class UserManager
                         s.id_coach = $user_id
                       )
                     $where_access_url
-                    ORDER BY code";
+                    $orderBy";
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
@@ -3813,7 +3825,7 @@ class UserManager
 
         $userConditions = '';
         if (!empty($userStatus)) {
-            $userConditions .= ' AND u.status = '.$userStatus;
+            $userConditions .= ' AND u.status = '.intval($userStatus);
         }
 
         $select = " SELECT DISTINCT u.user_id, u.username, u.lastname, u.firstname, u.email ";
@@ -4545,6 +4557,20 @@ EOF;
                         $form->freeze($extra_field);
                     }
                     break;
+
+                case self::USER_FIELD_TYPE_TELEPHONE:
+                    $form->addElement('text', 'extra_'.$field_details[1], $field_details[3]." (".get_lang('TelephonePrefix').")", 
+                        array('size' => 40, 'placeholder'  => '(xx)xxxxxxxxx'));
+                    $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+                    $form->applyFilter('extra_'.$field_details[1], 'trim');
+                    $form->applyFilter('extra_'.$field_details[1], 'telephone_filter');
+                    $form->addRule('extra_'.$field_details[1], get_lang('TelephoneNumberIsWrong'), 'telephone');
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0) {
+                            $form->freeze('extra_'.$field_details[1]);
+                        }
+                    }                 
+                    break;
             }
         }
         $return = array();
@@ -4571,6 +4597,7 @@ EOF;
         $types[self::USER_FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
         $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
         $types[self::USER_FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
+        $types[self::USER_FIELD_TYPE_TELEPHONE] = get_lang('FieldTypeTelephone');
 
         return $types;
     }

@@ -102,8 +102,12 @@ if ($is_allowed_to_edit) {
 $token = Security::get_token();
 
 /* DISPLAY SCORM LIST */
-$list = new LearnpathList(api_get_user_id());
+$userId = api_get_user_id();
+$userInfo = api_get_user_info();
+
+$list = new LearnpathList($userId);
 $flat_list = $list->get_flat_list();
+
 
 if (!empty($flat_list)) {
     echo '<table class="data_table">';
@@ -129,8 +133,8 @@ if (!empty($flat_list)) {
     $autolunch_exists = false;
     foreach ($flat_list as $id => $details) {
 
-        // Validacion when belongs to a session
-        $session_img = api_get_session_image($details['lp_session'], $_user['status']);
+        // Validation when belongs to a session.
+        $session_img = api_get_session_image($details['lp_session'], $userInfo['status']);
 
         if (!$is_allowed_to_edit && $details['lp_visibility'] == 0) {
             // This is a student and this path is invisible, skip.
@@ -138,15 +142,18 @@ if (!empty($flat_list)) {
         }
 
         // Check if the learnpath is visible for student.
-        if (!$is_allowed_to_edit && !learnpath::is_lp_visible_for_student($id, api_get_user_id())) {
+        if (!$is_allowed_to_edit && !learnpath::is_lp_visible_for_student($id, $userId)) {
             continue;
         }
+
         $start_time = $end_time = '';
         if (!$is_allowed_to_edit) {
             $time_limits = false;
 
             //This is an old LP (from a migration 1.8.7) so we do nothing
-            if ((empty($details['created_on']) || $details['created_on'] == '0000-00-00 00:00:00') && (empty($details['modified_on']) || $details['modified_on'] == '0000-00-00 00:00:00')) {
+            if ((empty($details['created_on']) || $details['created_on'] == '0000-00-00 00:00:00') &&
+                (empty($details['modified_on']) || $details['modified_on'] == '0000-00-00 00:00:00')
+            ) {
                 $time_limits = false;
             }
 
@@ -154,6 +161,7 @@ if (!empty($flat_list)) {
             if ($details['expired_on'] != '' && $details['expired_on'] != '0000-00-00 00:00:00') {
                 $time_limits = true;
             }
+
             if ($time_limits) {
                 // check if start time
                 if (!empty($details['publicated_on']) && $details['publicated_on'] != '0000-00-00 00:00:00' &&
@@ -192,14 +200,17 @@ if (!empty($flat_list)) {
         $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
         $name = Security::remove_XSS($details['lp_name']);
         $extra = null;
+
         if ($is_allowed_to_edit) {
             $url_start_lp .= '&isStudentView=true';
-            $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id()) ? '' : ' - ('.get_lang('LPNotVisibleToStudent').')');
+            $studentVisibility = learnpath::is_lp_visible_for_student($id, $userId);
+            $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.( $studentVisibility ? '' : ' - ('.get_lang('LPNotVisibleToStudent').')');
             $extra = '<div class ="lp_content_type_label">'.$dsp_desc.'</div>';
         }
 
         $my_title = $name;
         $icon_learnpath = Display::return_icon('learnpath.png', get_lang('LPName'), '', ICON_SIZE_SMALL);
+
         if ($details['lp_visibility'] == 0) {
             $my_title = Display::tag('font', $name, array('class' => 'invisible'));
             $icon_learnpath = Display::return_icon('learnpath_na.png', get_lang('LPName'), '', ICON_SIZE_SMALL);
@@ -218,12 +229,12 @@ if (!empty($flat_list)) {
         $dsp_debug = '';
         $dsp_order = '';
 
-        $progress = learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id());
+        $progress = learnpath::get_db_progress($id, $userId, '%', '', false, api_get_session_id());
 
         if ($is_allowed_to_edit) {
             $dsp_progress = '<td><center>'.$progress.'</center></td>';
         } else {
-            $dsp_progress = '<td>'.learnpath::get_progress_bar('%', learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</td>';
+            $dsp_progress = '<td>'.learnpath::get_progress_bar('%', learnpath::get_db_progress($id, $userId, '%', '', false, api_get_session_id())).'</td>';
         }
 
         $dsp_edit = '<td class="td_actions">';
@@ -360,7 +371,7 @@ if (!empty($flat_list)) {
                 $dsp_disk = Display::return_icon('cd_gray.gif', get_lang('Export'), array(), ICON_SIZE_SMALL);
             }
 
-            //Copy
+            // Copy
             $copy = Display::url(Display::return_icon('cd_copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
 
             /* Auto Lunch LP code */
@@ -390,7 +401,6 @@ if (!empty($flat_list)) {
             } else {
                 $dsp_delete = Display::return_icon('delete_na.png', get_lang('LearnpathDeleteLearnpath'), '', ICON_SIZE_SMALL);
             }
-
 
             /* COLUMN ORDER	 */
 
@@ -423,6 +433,16 @@ if (!empty($flat_list)) {
             $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
         }
 
+        global $_configuration;
+        if (isset($_configuration['hide_scorm_export_link']) && $_configuration['hide_scorm_export_link']) {
+            $dsp_disk = null;
+        }
+
+        if (isset($_configuration['hide_scorm_copy_link']) && $_configuration['hide_scorm_copy_link']) {
+            $copy = null;
+        }
+
+
         echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
         $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
@@ -448,4 +468,5 @@ learnpath::generate_learning_path_folder($course_info);
 //Deleting the objects
 Session::erase('oLP');
 Session::erase('lpobject');
+DocumentManager::removeGeneratedAudioTempFile();
 Display::display_footer();

@@ -100,6 +100,7 @@ function get_number_of_requests() {
 function get_request_data($from, $number_of_items, $column, $direction) {
     $keyword = Database::escape_string(trim($_GET['keyword']));
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
+
     $sql = "SELECT id AS col0,
                    code AS col1,
                    title AS col2,

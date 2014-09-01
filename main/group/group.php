@@ -192,7 +192,6 @@ $group_cats = GroupManager::get_categories(api_get_course_id());
 echo '</div>';
 
 /*  List all categories */
-
 if (api_get_setting('allow_group_categories') == 'true') {
     foreach ($group_cats as $index => $category) {
         $group_list = GroupManager :: get_group_list($category['id']);
@@ -202,8 +201,14 @@ if (api_get_setting('allow_group_categories') == 'true') {
         if (api_is_allowed_to_edit(false, true)) {
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$category['id'].'" title="'.get_lang('Edit').'">'.
                 Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
-            $actions .= '<a href="group.php?'.api_get_cidreq().'&action=delete_category&amp;id='.$category['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.
-                Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+            $actions .=
+                Display::url(
+                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
+                    'group.php?'.api_get_cidreq().'&action=delete_category&amp;id='.$category['id'],
+                    array(
+                        'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;'
+                    )
+                );
             if ($index != 0) {
                 $actions .=  ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index -1]['id'].'">'.
                     Display::return_icon('up.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
@@ -214,14 +219,19 @@ if (api_get_setting('allow_group_categories') == 'true') {
             }
         }
 
-        echo Display::page_header($category['title'].' '. $label.' '.$actions);
+        echo Display::page_header(
+            Security::remove_XSS($category['title'].' '. $label.' ').$actions,
+            null,
+            'h2',
+            false
+        );
+
         echo $category['description'];
         GroupManager::process_groups($group_list, $category['id']);
     }
 } else {
     $group_list = GroupManager::get_group_list();
     GroupManager::process_groups($group_list);
-
 }
 
 if (!isset($_GET['origin']) || $_GET['origin'] != 'learnpath') {

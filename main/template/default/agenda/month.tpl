@@ -20,15 +20,6 @@ function clean_user_select() {
 
 var region_value = '{{ region_value }}';
 $(document).ready(function() {
-
-    /*$("body").delegate(".datetime", "focusin", function(){
-        $(this).datepicker({
-            stepMinute: 10,
-            dateFormat: 'dd/mm/yy',
-            timeFormat: 'hh:mm:ss'
-        });
-    });*/
-
 	var date = new Date();
 	var d = date.getDate();
 	var m = date.getMonth()+1;
@@ -124,7 +115,7 @@ $(document).ready(function() {
                 //api.render();
             }
         },
-		//Add event
+		// Add event
 		select: function(start, end, allDay, jsEvent, view) {
 			//Removing UTC stuff
             var start_date = $.datepicker.formatDate("yy-mm-dd", start) + " " + start.toTimeString().substr(0, 8);
@@ -145,7 +136,6 @@ $(document).ready(function() {
 
 			if ({{ can_add_events }} == 1) {
 				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
-
                 var start_date_value = $.datepicker.formatDate('{{ js_format_date }}', start);
                 var end_date_value  = $.datepicker.formatDate('{{ js_format_date }}', end);
 
@@ -275,7 +265,6 @@ $(document).ready(function() {
 
                 {% if type != 'admin' %}
                     $('#visible_to_read_only').show();
-                console.log(calEvent.sent_to);
                     $("#visible_to_read_only_users").html(calEvent.sent_to);
 				{% endif %}
 
@@ -294,10 +283,6 @@ $(document).ready(function() {
                     my_end_month = calEvent.end.getMonth() +1;
                     $('#end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear());
                 }
-
-                /*$("#title").attr('value', calEvent.title);
-                $("#content").attr('value', calEvent.description);*/
-
 
                 if ($("#title").parent().find('#title_edit').length == 0) {
                     $("#title").parent().append('<div id="title_edit"></div>');
@@ -515,7 +500,7 @@ $(document).ready(function() {
 {{ actions_div }}
 
 <div id="simple-dialog-form" style="display:none;">
-    <div style="width:500px">d sqd qs
+    <div style="width:500px">
         <form name="form-simple" class="form-vertical">
             <div class="control-group">
                 <label class="control-label">

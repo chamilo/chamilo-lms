@@ -74,7 +74,7 @@ if (count($errors) != 0) {
 <input type="hidden" name="formSent" value="1"/>
 </form>
 <div style="clear: both;"></div>
-<p><?php echo get_lang('PDFsMustLookLike'); ?> :</p>
+<p><?php echo get_lang('PDFsMustLookLike'); ?></p>
 
 <blockquote>
 <pre>

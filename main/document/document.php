@@ -48,18 +48,14 @@ require_once $lib_path.'fileManage.lib.php';
 
 api_protect_course_script(true);
 
-//erase temp nanogons' audio, image edit
-if (isset($_SESSION['temp_audio_nanogong'])
-    && !empty($_SESSION['temp_audio_nanogong'])
-    && is_file($_SESSION['temp_audio_nanogong'])) {
-    unlink($_SESSION['temp_audio_nanogong']);
-}
+DocumentManager::removeGeneratedAudioTempFile();
 
 if (isset($_SESSION['temp_realpath_image'])
     && !empty($_SESSION['temp_realpath_image'])
     && is_file($_SESSION['temp_realpath_image'])) {
     unlink($_SESSION['temp_realpath_image']);
 }
+
 $courseInfo = api_get_course_info();
 $course_dir = $courseInfo['directory'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -813,8 +809,6 @@ $(document).ready( function() {
 });
 </script>';
 
-
-
 // Lib for event log, stats & tracking & record of the access
 event_access_tool(TOOL_DOCUMENT);
 
@@ -853,6 +847,7 @@ if ($is_allowed_to_edit ||
             false,
             $session_id
         );
+
         $move_path = $document_to_move['path'];
         if (!empty($document_to_move)) {
             $folders = DocumentManager::get_all_document_folders(
@@ -861,7 +856,7 @@ if ($is_allowed_to_edit ||
                 $is_allowed_to_edit || $group_member_with_upload_rights
             );
 
-            //filter if is my shared folder. TODO: move this code to build_move_to_selector function
+            // filter if is my shared folder. TODO: move this code to build_move_to_selector function
             if (is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) && !$is_allowed_to_edit) {
                 //only main user shared folder
                 $main_user_shared_folder_main = '/shared_folder/sf_user_'.api_get_user_id();
@@ -873,6 +868,7 @@ if ($is_allowed_to_edit ||
                         $user_shared_folders[] = $fold;
                     }
                 }
+
                 $moveForm .= '<legend>'.get_lang('Move').'</legend>';
                 $moveForm .= build_move_to_selector(
                     $user_shared_folders,
@@ -1516,7 +1512,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $row = array();
             $row['id'] = $document_data['id'];
             $row['type'] = $document_data['filetype'];
-            
+
             // If the item is invisible, wrap it in a span with class invisible.
             $is_visible = DocumentManager::is_visible_by_id(
                 $document_data['id'],
@@ -1538,6 +1534,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             } else {
                 $document_name = basename($document_data['path']);
             }
+
             $row['name'] = $document_name;
             // Data for checkbox
             if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($documentAndFolders) > 1) {
@@ -1581,6 +1578,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
 
             // Comments => display comment under the document name
             $display_size = format_file_size($size);
+
             $row[] = '<span style="display:none;">'.$size.'</span>'.
                 $invisibility_span_open.
                 $display_size.
@@ -1591,9 +1589,10 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $last_edit_date = api_get_local_time($document_data['lastedit_date']);
             $display_date = date_to_str_ago($last_edit_date).
                 ' <div class="muted"><small>'.$last_edit_date."</small></div>";
-            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
-            // Admins get an edit column
 
+            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
+
+            // Admins get an edit column
             if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
                 // If readonly, check if it the owner of the file or if the user is an admin

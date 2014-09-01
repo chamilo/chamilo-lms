@@ -107,7 +107,6 @@ $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
 $sessionId = api_get_session_id();
-
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 
 $document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true, $sessionId);
@@ -273,7 +272,7 @@ $form->setDefaults($defaults);
 
 $simple_form = $form->return_form();
 
-$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=upload_file';
+$url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
 //Adding icon replace the  <div>'.get_lang('UploadFiles').'</div> with this:
 //<div style="width:50%;margin:0 auto;"> '.Display::div(Display::return_icon('folder_document.png', '', array(), 64), array('style'=>'float:left')).' '.get_lang('UploadFiles').'</div>

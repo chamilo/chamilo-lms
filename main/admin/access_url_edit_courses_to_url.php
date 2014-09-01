@@ -46,14 +46,13 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
 }
 
 $access_url_id=1;
-if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
+if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!='') {
 	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
 }
 
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_user_to_url(code, content) {
 
 	document.getElementById("course_to_add").value = "";
@@ -67,7 +66,7 @@ function add_user_to_url(code, content) {
 }
 
 function send() {
-	if (document.formulaire.access_url_id.value!=0) {
+	if (document.formulaire.access_url_id.value != 0) {
 		document.formulaire.form_sent.value=0;
 		document.formulaire.add_type.value=\''.$add_type.'\';
 		document.formulaire.submit();
@@ -93,16 +92,16 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 	$form_sent=$_POST['form_sent'];
 	$course_list=$_POST['course_list'];
 
-	if(!is_array($course_list)) {
+	if (!is_array($course_list)) {
 		$course_list=array();
 	}
 
-	if($form_sent == 1) {
+	if ($form_sent == 1) {
 		if ($access_url_id==0) {
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
 		}
 		elseif(is_array($course_list) ) {
-			UrlManager::update_urls_rel_course($course_list,$access_url_id);
+			UrlManager::update_urls_rel_course($course_list, $access_url_id);
 			header('Location: access_urls.php?action=show_message&message='.get_lang('CoursesWereEdited'));
 		}
 	}
@@ -196,6 +195,7 @@ $url_list = UrlManager::get_url_data();
 if(!empty($errorMsg)) {
 	Display::display_normal_message($errorMsg); //main API
 }
+
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
@@ -318,11 +318,6 @@ function valide(){
 	var options = document.getElementById('destination_users').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;
-	/*
-	var options = document.getElementById('destination_classes').options;
-	for (i = 0 ; i<options.length ; i++)
-		options[i].selected = true;
-		*/
 	document.forms.formulaire.submit();
 }
 
@@ -362,7 +357,6 @@ function makepost(select){
 
 	return ret;
 }
--->
 </script>
 <?php
 Display::display_footer();

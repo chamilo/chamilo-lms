@@ -91,6 +91,7 @@ class Template
 
         $this->twig = new Twig_Environment($loader, $options);
 
+        $this->twig->addFilter('get_plugin_lang', new Twig_Filter_Function('get_plugin_lang'));
         $this->twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
         $this->twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
         $this->twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
@@ -133,6 +134,7 @@ class Template
         $this->assign('style', $this->style);
         $this->assign('css_style', $this->theme);
         $this->assign('template', $this->style);
+        $this->assign('login_class', null);
 
         //Chamilo plugins
         if ($this->show_header) {
@@ -356,7 +358,8 @@ class Template
             'user_is_teacher' => api_is_course_admin(),
             'student_view' => (!empty($_GET['isStudentView']) && $_GET['isStudentView'] == 'true'),
         );
-        $this->assign('_c',$_c);
+        $this->assign('course_code', $course['code']);
+        $this->assign('_c', $_c);
     }
 
     /** Set user parameters */
@@ -906,5 +909,13 @@ class Template
     public function display($template)
     {
         echo $this->twig->render($template, $this->params);
+    }
+
+    /**
+     * Adds a body class for login pages
+     */
+    public function setLoginBodyClass()
+    {
+        $this->assign('login_class', 'section-login');
     }
 }

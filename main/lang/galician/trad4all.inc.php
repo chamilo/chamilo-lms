@@ -6,6 +6,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item non é vis
 $DeleteAllAttendances = "Eliminar tódalas atencións creadas";
 $Unsubscribe = "Dar de baixa";
 $AddForum = "Engadir un novo foro";
+$ReplyShort = "Re:";
 $SelectACategory = "Seleccione unha categoría";
 $AdvancedEdit = "Edición avanzada";
 $SearchXapianModuleNotInstalled = "O módulo Xapian de PHP non está configurado no seu servidor, póñase en contacto con seu administrador.";

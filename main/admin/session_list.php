@@ -62,7 +62,6 @@ $actions = '
 $(function() {
     $("#course_name").on("change", function() {
        var courseId = $(this).val();
-       console.log(courseId);
        window.location = "'.$url.'?course_id="+courseId;
     });
 });

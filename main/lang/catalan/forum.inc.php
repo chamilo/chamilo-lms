@@ -36,7 +36,6 @@ $LastPost = "Últim missatge";
 $Quoting = "Notació";
 $NotifyByEmail = "Notificar per correu-e si algú respon a aquest missatge";
 $StickyPost = "Aquest és un missatge fix (apareix sempre a dalt i té una icona fixa especial)";
-$ReplyShort = "Re:";
 $DeletePost = "Esteu segurs de voler esborrar aquest missatge ? Destruireu també totes les respostes que s'hi han fet. Verifiqueu en la vista temàtica quins altres missatges seran igualment destruïts.";
 $Locked = "Accés limitat a la lectura dels antics missatges. Els alumnes ja no poden afegir més missatges en aquesta categoria del fòrum, en aquest fòrum o en aquest fil de discussió.";
 $Unlocked = "Accés obert al dipòsit de nous missatges en aquesta categoria del fòrum, en aquest fòrum o en aquest fil de discussió.";

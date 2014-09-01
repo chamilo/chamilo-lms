@@ -30,7 +30,7 @@ $result = Database::query($query);
 list($pseudo_user) = Database::fetch_row($result);
 
 $isAllowed = !(empty($pseudo_user) || !$_cid);
-$isMaster = (bool)$is_courseAdmin;
+$isMaster = (bool)api_is_course_admin();
 
 $date_now = date('Y-m-d');
 

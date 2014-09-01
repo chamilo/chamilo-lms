@@ -1,69 +1,61 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * Exercises questions backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
 
 /**
- * An QuizQuestion
+ * Exercises questions backup script
+ * Class QuizQuestion
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
 class QuizQuestion extends Resource
 {
-
     /**
      * The question
      */
-    var $question;
+    public $question;
 
     /**
      * The description
      */
-    var $description;
+    public $description;
 
     /**
      * Ponderation
      */
-    var $ponderation;
+    public $ponderation;
 
     /**
      * Type
      */
-    var $quiz_type;
+    public $quiz_type;
 
     /**
      * Position
      */
-    var $position;
+    public $position;
 
     /**
      * Level
      */
-    var $level;
+    public $level;
 
     /**
      * Answers
      */
-    var $answers;
+    public $answers;
 
     /**
      * Picture
      */
-    var $picture;
-    var $extra;
+    public $picture;
+    public $extra;
 
     /**
      * @var int the question category if any, 0 by default
      */
-
-    var $question_category;
+    public $question_category;
 
     /**
      * Create a new QuizQuestion
@@ -73,7 +65,18 @@ class QuizQuestion extends Resource
      * @param int $type
      * @param int $position
      */
-    function QuizQuestion($id, $question, $description, $ponderation, $type, $position, $picture, $level, $extra, $question_category = 0) {
+    public function QuizQuestion(
+        $id,
+        $question,
+        $description,
+        $ponderation,
+        $type,
+        $position,
+        $picture,
+        $level,
+        $extra,
+        $question_category = 0
+    ) {
         parent::Resource($id, RESOURCE_QUIZQUESTION);
         $this->question = $question;
         $this->description = $description;
@@ -90,7 +93,16 @@ class QuizQuestion extends Resource
     /**
      * Add an answer to this QuizQuestion
      */
-    function add_answer($answer_id, $answer_text, $correct, $comment, $ponderation, $position, $hotspot_coordinates, $hotspot_type) {
+    public function add_answer(
+        $answer_id,
+        $answer_text,
+        $correct,
+        $comment,
+        $ponderation,
+        $position,
+        $hotspot_coordinates,
+        $hotspot_type
+    ) {
         $answer = array();
         $answer['id'] = $answer_id;
         $answer['answer'] = $answer_text;
@@ -103,14 +115,16 @@ class QuizQuestion extends Resource
         $this->answers[] = $answer;
     }
 
-    function add_option($option_obj) {
+    public function add_option($option_obj)
+    {
         $this->question_options[$option_obj->obj->id] = $option_obj;
     }
 
     /**
      * Show this question
      */
-    function show() {
+    public function show()
+    {
         parent::show();
         echo $this->question;
     }

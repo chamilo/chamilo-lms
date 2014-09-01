@@ -33,11 +33,11 @@ class SurveyTree
 		if ($search_restriction) {
 			$search_restriction = ' AND '.$search_restriction;
 		}
-		$course_id = api_get_course_int_id();
-		$sql = "SELECT
-survey.survey_id , survey.parent_id, survey_version, survey.code as name
-				FROM $table_survey survey
-				LEFT JOIN $table_survey_question  survey_question
+		
+		$course_id = api_get_course_int_id();		
+
+		$sql = "SELECT survey.survey_id , survey.parent_id, survey_version, survey.code as name
+				FROM $table_survey survey LEFT JOIN $table_survey_question  survey_question
 				ON survey.survey_id = survey_question.survey_id , $table_user user
 				WHERE
 					survey.c_id 			=  $course_id AND
@@ -52,7 +52,8 @@ survey.survey_id , survey.parent_id, survey_version, survey.code as name
 		$last = array();
 		$plain_array=array();
 
-		while ($survey = Database::fetch_array($res,'ASSOC')) {
+		while ($survey = Database::fetch_array($res,'ASSOC'))
+		{
 			$plain_array[$survey['survey_id']]=$survey;
 			$surveys_parents[]=$survey['survey_version'];
 			$thisref = &$refs[ $survey['survey_id'] ];

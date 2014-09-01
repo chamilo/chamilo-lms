@@ -36,7 +36,6 @@ $LastPost = "Últimu mensaxe";
 $Quoting = "Cita";
 $NotifyByEmail = "Notificar per e-mail de la que daquién retruque";
 $StickyPost = "Esti ye un mensaxe d'avisu (apaez siempre a lo primero, al llau d'un iconu especial)";
-$ReplyShort = "Re:";
 $DeletePost = "¿ Ta seguru/a de querer esborrar esti mensaxe ? En esborrándolu va esborrar tamién tolos retruques que tenga. Por favor, pel traviés el visionáu n'árbol, compruebe qué mensaxes se van esborrar.";
 $Locked = "Peslláu: los estudiantes nun puen espublizar más mensaxes nesta categoría, foru o tema, pero puen ver los mensaxes que s'espublizaran enantes.";
 $Unlocked = "Abiertu: los estudiantes puen esbpublizar mensaxes nuevos nesta categoría, foru o tema";

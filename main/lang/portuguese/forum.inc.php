@@ -36,7 +36,6 @@ $LastPost = "Última notificação";
 $Quoting = "Citação";
 $NotifyByEmail = "Notificar-me por e-mail quando alguém responde";
 $StickyPost = "Esta mensagem é um rótulo (aparece sempre no topo e tem um ícone especial anexado)";
-$ReplyShort = "Re:";
 $DeletePost = "Tem a certeza que deseja eliminar este artigo? Ao eliminar este artigo também eliminará todas as respostas dadas a este artigo. Por favor, verifique a árvore de visualização para ver os artigos que também serão eliminados.";
 $Locked = "Bloqueado: os alunos não podem mais publicar novas mensagens nesta categoria do fórum, no fórum ou tópico, mas podem visualizar e ler as mensagens que já foram publicadas.";
 $Unlocked = "Desbloqueado: os alunos podem publicar novas mensagens nesta categoria do fórum, no fórum ou tópico.";

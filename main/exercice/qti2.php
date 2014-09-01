@@ -10,7 +10,7 @@
  * Code
  */
 // name of the language file that needs to be included
-$language_file = 'exercice';
+$language_file = array('exercice', 'document');
 
 // including the global Chamilo file
 require_once '../inc/global.inc.php';
@@ -62,7 +62,7 @@ function ch_qti2_display_form()
 
 /**
  * This function will import the zip file with the respective qti2
- * @param array $uploaded_file ($_FILES)
+ * @param array $array_file ($_FILES)
  */
 function ch_qti2_import_file($array_file)
 {
@@ -70,7 +70,9 @@ function ch_qti2_import_file($array_file)
 	$lib_path = api_get_path(LIBRARY_PATH);
 	require_once $lib_path.'fileUpload.lib.php';
 	require_once $lib_path.'fileManage.lib.php';
-	$process = process_uploaded_file($array_file);
+
+	$process = process_uploaded_file($array_file, false);
+
 	if (preg_match('/\.zip$/i', $array_file['name'])) {
 		// if it's a zip, allow zip upload
 		$unzip = 1;
@@ -81,28 +83,32 @@ function ch_qti2_import_file($array_file)
 		require_once $main_path.'exercice/export/exercise_import.inc.php';
         require_once $main_path.'exercice/export/qti2/qti2_classes.php';
 
-        $imported = import_exercise($array_file['name']);
+        return import_exercise($array_file['name']);
+	}
 
-        if ($imported) {
-        	header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
+    return 'langFileError';
+}
+
+$message = null;
+
+// import file
+if ((api_is_allowed_to_edit(null, true))) {
+    if (isset($_POST['submit'])) {
+        $imported = ch_qti2_import_file($_FILES['userFile']);
+
+        if (is_numeric($imported) && !empty($imported)) {
+            header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&exerciseId='.$imported);
             exit;
         } else {
-            Display::display_error_message(get_lang('UplNoFileUploaded'));
-
-            return false;
+            $message = Display::return_message(get_lang($imported));
         }
-	}
+    }
 }
 
 // Display header
 Display::display_header(get_lang('ImportQtiQuiz'), 'Exercises');
 
-// import file
-if ((api_is_allowed_to_edit(null, true))) {
-	if (isset($_POST['submit'])) {
-		ch_qti2_import_file($_FILES['userFile']);
-	}
-}
+echo $message;
 
 // display qti form
 ch_qti2_display_form();

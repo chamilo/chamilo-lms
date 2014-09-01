@@ -38,9 +38,11 @@
 
 <p>Thank you for downloading Chamilo</p>
 <ul>
-  <li>Test Chamilo on <a href="http://campus.chamilo.org">Free Campus</a></li>
+  <li>You can test Chamilo LMS, as teacher, without installing it, on <a href="http://campus.chamilo.org">Free Campus</a></li>
 </ul>
 <p>This guide explains how to install Chamilo FREE. Please read this fully before proceeding with the installation.</p>
+<p>Spanish: También puede leer <a href="installation_guide_es_ES.html">esta guía de instalación en español</a>.</p>
+<p>French: Vous pouvez aussi lire <a href="installation_guide_fr_FR.html">ce guide d'installation en français</a>.</p>
 
 
 <h2><b>Contents</b></h2>
@@ -60,7 +62,7 @@
   <li><a href="#11._Chamilo_rapid_ppt_conversion">Chamilo Rapid - PPT conversion system</a></li>
   <li><a href="#12._Setting_cron_up">Setting chronological tasks</a></li>
   <li><a href="#13._Changing_language_name_order">Changing the language's firstname/lastname order</a></li>
-  <li><a hreg="#14._Improving_files_download">Improving files download time</a></li>
+  <li><a href="#14._Improving_files_download">Improving files download time</a></li>
 </ol>
 
 <br />
@@ -117,7 +119,7 @@ and a deprecated single-database mode.</span><br />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
 
 <ol>
-  <li><a href="http://www.chamilo.org/download">Download Chamilo LMS</a></li>
+  <li><a href="http://www.chamilo.org/en/download">Download Chamilo LMS</a></li>
   <li>Unzip it</li>
   <li>Copy the Chamilo directory in your Apache web directory. This can be
     <span style="font-weight: bold;">C:\xampp\htdocs\</span> on a Windows server or <span style="font-weight: bold;">/var/www/html/</span> (or /var/www/chamilo/) on a Linux server</li>
@@ -152,7 +154,7 @@ enable CSS styles package upload and sub-language definition:
   <li>[chamilo]/main/css/</li>
   <li>[chamilo]/main/lang/</li>
 </ul>
-Since Chamilo 1.8.8, you can also enable full-text indexing features which
+Starting from Chamilo 1.8.8, you can also enable full-text indexing features which
 require the php5-xapian PHP's extension module to be installed. If you do use
 it, you will need to allow your system to write into the sarchdb directory:
 <ul>
@@ -197,7 +199,7 @@ in production), the login and password for MySQL will probably remain empty.</p>
 
 <ul>
 
-  <li><strong>Protect your configuration directory: </strong>
+  <li><strong>Protect your configuration folder: </strong>
 make sure no one (but you) can overwrite it. You can find the config directory in
 <em>(chamilo folder)</em>/main/inc/conf.
 Make it read-only (windows/xwindows: right-click the file to edit the
@@ -226,7 +228,7 @@ directories). Don't hesitate to hire an experienced administrator to do that,
 it might be a bit more expensive now, but you'll be happy not to have to loose
 all of your data to a hacker who attacked your site.</li>
 
-  <li><strong>Configure your Chamilo installation: </strong>
+  <li><strong>Configure your Chamilo portal: </strong>
 in the administration section of Chamilo, you can use the Chamilo Configuration
 Settings to adjust the behavior of your installation.</li>
 
@@ -288,27 +290,27 @@ in your php.ini:</p>
 date.timezone = 'America/New_York'
 </div>
 
-<p><strong>Note:</strong> PHP 5.3.9 introduces a new setting "max_input_vars", which limits the number of elements you can send in one single form. If you are dealing with numerous users, make sure you set this setting higher than its default value of 1000.</p>
+<p><strong>Note:</strong> PHP 5.3.9 introduces a new setting "max_input_vars", which limits the number of elements you can send in one single form. If you are dealing with numerous users or very long learning paths (many items), make sure you set this setting higher than its default value of 1000.</p>
 
 <p><strong>BSD users:</strong> these php libraries have to be included during
  php installation:</p>
 
 <ul>
-  <li>php5-mysql The mysql shared extension for php</li>
-  <li>php5-pcre The pcre shared extension for php</li>
-  <li>php5-session The session shared extension for php</li>
-  <li>php5-zlib The zlib shared extension for php</li>
-  <li>(optional) php5-ldap if you want to be able to use LDAP authentication</li>
+    <li>php5-mysql (or php5-mysqlnd) The mysql shared extension for php</li>
+    <li>php5-pcre The pcre shared extension for php</li>
+    <li>php5-session The session shared extension for php</li>
+    <li>php5-zlib The zlib shared extension for php</li>
+    <li>php5-gd The graphics-generation extension for php</li>
+    <li>php5-intl The international behaviours extension for php</li>
+    <li>(optional) php5-ldap if you want to be able to use LDAP authentication</li>
 </ul>
 
 <p>You might also add the following php modules and packages:</p>
 <ul>
     <li>php5-ctype</li>
-    <li>php5-gd</li>
     <li>php5-iconv</li>
     <li>php5-json</li>
     <li>php5-mbstring</li>
-    <li>php5-intl</li>
     <li>php5-curl</li>
     <li>php5-iconv</li>
     <li>php5-xsl</li>
@@ -323,14 +325,19 @@ previous version of Chamilo LMS (1.*) or Dok€os (&lt;2.0)</h2>
 Before upgrading, we <b>heavily</b> recommend you do a full backup of the previous
 Chamilo or Dok€os directories and databases. If you are unsure how to achieve this
 please ask your hosting provider for advice.<br />
-<em>Chamilo LMS 1.9 comes with a new database structure. Although the upgrade script
-takes the migration in charge, it will be generate a very heavy load on your server
-during the upgrade, and will change your database completely, preserving the data
-as well as possible (we have tested the procedure many times, but remember this is
-GNU/GPLv3 and we cannot be held responsible for what would happen to your data
-without professional supervision). This is why we *really* recommend you take
-a full backup of your system before you upgrade.</em>
+<em>Chamilo LMS 1.9 comes with a new database structure in comparison to 1.8. 
+Although the upgrade script takes the migration in charge, it might be generating
+a very heavy load on your server during the upgrade, and will change your 
+database completely, preserving the data as well as possible (we have tested 
+the procedure many times, but remember this is GNU/GPLv3 and we cannot be held 
+responsible for what would happen to your data without professional supervision).
+This is why we *really* recommend you take a full backup of your system before 
+you upgrade.</em>
 <br />
+<div class="muted"> NOTE: For very heavy Chamilo databases, some of our official 
+providers have developed improved migration procedures that use more memory but
+process the upgrades up to 20 times faster. If this is the kind of thing you
+need, we highly recommend you contact them (see reference below).</div>
 <div class="muted"> NOTE: This version of Chamilo can only be used to upgrade from
 smaller versions of Chamilo or Dok€os. For example, you cannot use the normal
 upgrade scripts from Chamilo 1.9 to upgrade from Dok€os 2.0. If you need this,
@@ -789,13 +796,21 @@ Provider</a> for) include a full review of the full-text search feature.
 <h2><a name="11._Chamilo_rapid_ppt_conversion"></a>Chamilo Rapid - PPT conversion system</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
-On Debian or Ubuntu 11.10 and superior, install LibreOffice.org v3 and start it as a headless server:
+On Debian or Ubuntu 11.10 and superior, install LibreOffice v3 (or v4) and start it as a headless server:
 <pre>
-sudo apt-get install libreoffice
-sudo soffice -accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" -headless -nodefault -nofirststartwizard -nolockcheck -nologo -norestore &amp;
+sudo apt-get install libreoffice screen
+sudo screen
+su - www-data
+soffice --accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore
+CTRL+a, CTRL+d
 </pre>
-Then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host to "localhost" and the port to "2002". Save. Go to your course, learning path tool and see the new icon appeared. Import your PPT. This should work.
-<em>Note</em>: Sometimes, this doesn't work out so easily. You can probably ask for the assistance of any system administrator around with a bit of Java and PHP experience, or you can always ask one of the Chamilo's Official Providers for assistance (ask for a guaranteed commercial contract).
+Please note that this will effectively launch LibreOffice in a "headless" mode (thanks to the --headless option), in a "headless" terminal (thanks to screen). You can later get back into your "headless" terminal by launching:
+<pre>
+sudo screen -r
+</pre>
+You can then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host to "localhost" and the port to "2002". Save. Go to your course, learning path tool and see the new icon appeared. Import your PPT. This should work.
+<em>Note</em>: Sometimes, this doesn't work out so easily. You can probably ask for the assistance of any system administrator around with a bit of Java and PHP experience, or you can always ask one of the Chamilo's Official Providers for assistance (ask for a guaranteed commercial contract). The above is *not* meant for production servers with a high load. You should get a real system administrator to look at it and develop init scripts, in a way that makes monitoring and relaunching feasable. If any sysadmin wants to contribute this, feel free to contribute it to Chamilo: send us an e-mail at info@chamilo.org.
+<em>Note</em>: If you use LibreOffice 4, please note that version 4.2 (available in Ubuntu 14.04) has demonstrated to be more successfull at converting documents than version 4.1, which tended to crash when sending a document for conversion.
 </p>
 
 <hr style="width: 100%; height: 2px;" />

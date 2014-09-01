@@ -37,11 +37,11 @@ $strings['Optional'] = "Optional";
 $strings['ErrorRegisterMessage'] = "The ticket could not be created";
 $strings['Source'] = "Source";
 $strings['DeniedAccess'] = "Unauthorized access.";
-$strings['StsNew'] = "New";
-$strings['StsPending'] = "Pending";
-$strings['StsUnconfirmed'] = "Unconfirmed";
-$strings['StsClose'] = "Closed";
-$strings['StsForwarded'] = "Resent";
+$strings['StatusNew'] = "New";
+$strings['StatusPending'] = "Pending";
+$strings['StatusUnconfirmed'] = "Unconfirmed";
+$strings['StatusClose'] = "Closed";
+$strings['StatusForwarded'] = "Resent";
 $strings['Priority'] = "Priority";
 $strings['PriorityHigh'] = "High";
 $strings['PriorityNormal'] = "Normal";
@@ -81,4 +81,6 @@ $strings['TicketWasThisAnswerSatisfying'] = "Was this answer satisfactory?";
 $strings['TicketDetail'] = "Ticket details";
 $strings['AreYouSure'] = "Are you sure?";
 $strings['allow_student_add'] = "Allow students to generate tickets";
-?>
+$strings['PleaseBeforeRegisterATicketSelectOneUser'] = "Please select a user before you register a ticket.";
+$strings['RequestConfirmation'] = "Request confirmation";
+

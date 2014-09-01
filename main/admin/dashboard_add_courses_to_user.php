@@ -17,7 +17,6 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 
 global $_configuration;
 
-// create an ajax object
 $xajax = new xajax();
 $xajax->registerFunction('search_courses');
 

@@ -163,7 +163,6 @@
 	 */
 	public function attendance_delete($attendance_id) {
 		$attendance = new Attendance();
-		//$attendance_id = intval($attendance_id);
 		if (!empty($attendance_id)) {
 			$affected_rows = $attendance->attendance_delete($attendance_id);
 		}
@@ -179,7 +178,6 @@
 	 */
 	public function attendance_restore($attendance_id) {
 		$attendance = new Attendance();
-		//$attendance_id = intval($attendance_id);
 		if (!empty($attendance_id)) {
 			$affected_rows = $attendance->attendance_restore($attendance_id);
 		}
@@ -488,7 +486,6 @@
         }
         $max_cols_per_page = 12; //10 dates + 2 name and number
         $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2;//10
-        //var_dump($cols);exit;
         $rows = count($data_table);
 
         if ($cols > $max_cols_per_page) {

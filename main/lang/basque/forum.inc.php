@@ -36,7 +36,6 @@ $LastPost = "Azken mezua";
 $Quoting = "Aipamena";
 $NotifyByEmail = "Jakinarazi mezu elektronikoaren bidez norbaitek erantzuten badu";
 $StickyPost = "Abisatzeko mezu erantsia da hau (beti lehen planoan agertzen da, erantsitako ikono berezi baten ondoan)";
-$ReplyShort = "Erantz:";
 $DeletePost = "Ziur al zaude mezu hau ezabatu nahi duzula? Mezu hau ezabatzean, jaso dituen erantzun guztiak ere ezabatuko dituzu. Mesedez, konprobatu haria ikusiz eta horrela ikusiko duzu zer mezu ezabatuko diren.";
 $Locked = "Itxita: ikasleek ezingo dute beste mezurik argitaratu foro, kategoria edo hari honetan. Hala ere, oraindik irakurri ahalko dituzte lehen argitaratu ziren mezuak.";
 $Unlocked = "Zabalik: ikasleek beste mezu batzuk argitaratu ahal dituzte foro, kategoria edo hari honetan";

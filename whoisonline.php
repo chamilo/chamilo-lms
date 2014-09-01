@@ -142,7 +142,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
             header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=".intval($_GET['id']));
             exit;
         } else {
-            SocialManager::display_individual_user($_GET['id']);
+            $social_right_content .= SocialManager::display_individual_user($_GET['id']);
         }
     }
 } else {

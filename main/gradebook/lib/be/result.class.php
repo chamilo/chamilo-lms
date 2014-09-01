@@ -1,35 +1,26 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * Defines a gradebook Result object
  * @author Bert Steppé, Stijn Konings
  * @package chamilo.gradebook
  */
-
 /**
  * Class
  * @package chamilo.gradebook
  */
 class Result
 {
-
-// PROPERTIES
-
     private $id;
     private $user_id;
     private $evaluation;
     private $created_at;
     private $score;
 
-// CONSTRUCTORS
-
     function Result()
     {
         $this->created_at = api_get_utc_datetime();
     }
-
-// GETTERS AND SETTERS
 
     public function get_id()
     {

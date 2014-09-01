@@ -467,7 +467,7 @@ class CourseManager
 
         $course_code = Database::escape_string($course_code);
 
-        if (empty ($user_id) || empty ($course_code)) {
+        if (empty($user_id) || empty ($course_code)) {
             return false;
         }
 
@@ -1286,6 +1286,9 @@ class CourseManager
 
         if (!empty($session_id)) {
             $sql = 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
+            if ($return_count) {
+                $sql = " SELECT COUNT(user.user_id) as count";
+            }
             $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
                       ON user.user_id = session_course_user.id_user
@@ -1299,6 +1302,11 @@ class CourseManager
                 $filter_by_status = intval($filter_by_status);
                 $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";
             }
+
+            if (SessionManager::orderCourseIsEnabled()) {
+                //$order_by = "ORDER BY position";
+            }
+
         } else {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
@@ -1373,7 +1381,6 @@ class CourseManager
         }
 
         $sql .= ' '.$order_by.' '.$limit;
-
         $rs = Database::query($sql);
         $users = array();
 
@@ -1389,11 +1396,11 @@ class CourseManager
         $table_user_field_value = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
-                $report_info = array();
-
                 if ($return_count) {
                     return $user['count'];
                 }
+                $report_info = array();
+
                 $user_info = $user;
                 $user_info['status'] = $user['status'];
 
@@ -1610,7 +1617,6 @@ class CourseManager
         $users[$session_id_coach] = $user_info;
         return $users;
     }
-
 
     /**
      *    Return user info array of all users registered in the specified real or virtual course
@@ -3092,13 +3098,14 @@ class CourseManager
         $column = null,
         $direction = null,
         $getCount = false,
-        $keyword = null
+        $keyword = null,
+        $sessionId = null
     ) {
         // Database Table Definitions
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
+        $sessionId = intval($sessionId);
         $user_id = intval($user_id);
         $select  = "SELECT DISTINCT *, id as real_id ";
 
@@ -3129,14 +3136,38 @@ class CourseManager
             $keywordCondition = " AND (c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%' ) ";
         }
 
+        $orderBy = null;
+        $extraInnerJoin = null;
+
+        if (!empty($sessionId)) {
+            if (!empty($sessionId)) {
+                $courseList = SessionManager::get_course_list_by_session_id(
+                    $sessionId
+                );
+                if (!empty($courseList)) {
+                    $courseListToString = implode("','", array_keys($courseList));
+                    $whereConditions .= " AND c.id IN ('".$courseListToString."')";
+                }
+            }
+
+            if (SessionManager::orderCourseIsEnabled() && !empty($sessionId)) {
+                $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+                $orderBy =  ' ORDER BY position';
+                $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
+                                    ON (c.code = src.course_code AND id_session = $sessionId) ";
+            }
+        }
+
         $whereConditions .= $keywordCondition;
         $sql = "$select
                 FROM $tbl_course c
                     INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)
                     INNER JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+                    $extraInnerJoin
                 WHERE
                     access_url_id = ".api_get_current_access_url_id()."
                     $whereConditions
+                $orderBy
                 ";
         if (isset($from) && isset($limit)) {
             $from = intval($from);
@@ -3206,7 +3237,8 @@ class CourseManager
 
         $my_course_image = new Image($source_file);
         $result = $my_course_image->send_image($course_image, -1, 'png');
-        //Redimension image to 100x85
+        //Redimension image to 100x85 (should be 85x85 but 100x85 visually gives
+        // better results for most images people put as course icon)
         if ($result) {
             $medium = new Image($course_image);
             //$picture_infos = $medium->get_image_size();
@@ -4359,7 +4391,7 @@ class CourseManager
         $row = Database::fetch_row($res);
         return $row[0];
     }
-    
+
     /**
      * Get availab le courses count
      * @param int Access URL ID (optional)
@@ -4375,7 +4407,7 @@ class CourseManager
         if (!empty($specialCourseList)) {
             $withoutSpecialCourses = ' AND c.code NOT IN ("'.implode('","',$specialCourseList).'")';
         }
-        
+
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND c.visibility != 0 AND c.visibility != 4 $withoutSpecialCourses";
         }
@@ -4584,6 +4616,12 @@ class CourseManager
             'pdf_export_watermark_text',
             'show_system_folders'
         );
+
+        global $_configuration;
+        if (isset($_configuration['allow_lp_return_link']) && $_configuration['allow_lp_return_link']) {
+            $courseSettings[] = 'lp_return_link';
+        }
+
         if (!empty($pluginCourseSettings)) {
             $courseSettings = array_merge(
                 $courseSettings,
@@ -4641,6 +4679,50 @@ class CourseManager
         $sql = "SELECT variable FROM $courseSetting WHERE c_id = $courseId AND variable = '$variable'";
         $result = Database::query($sql);
         return Database::num_rows($result) > 0;
+    }
+
+    /**
+     * Get information from the track_e_course_access table
+     * @param int $sessionId
+     * @param int $userId
+     * @return array
+     */
+    public static function getCourseAccessPerSessionAndUser($sessionId, $userId, $limit = null)
+    {
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT * FROM $table
+                WHERE session_id = $sessionId AND user_id = $userId";
+
+        if (!empty($limit)) {
+            $limit = intval($limit);
+            $sql .= " LIMIT $limit";
+        }
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
+     * Get login information from the track_e_course_access table, for any
+     * course in the given session
+     * @param int $sessionId
+     * @param int $userId
+     * @return array
+     */
+    public static function getFirstCourseAccessPerSessionAndUser($sessionId, $userId)
+    {
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT * FROM $table
+                WHERE session_id = $sessionId AND user_id = $userId
+                ORDER BY login_course_date ASC
+                LIMIT 1";
+
+        $result = Database::query($sql);
+        $courseAccess = array();
+        if (Database::num_rows($result)) {
+            $courseAccess = Database::fetch_array($result, 'ASSOC');
+        }
+        return $courseAccess;
     }
 
 }

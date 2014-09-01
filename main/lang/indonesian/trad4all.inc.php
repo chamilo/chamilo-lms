@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Tambah sebuah forum baru";
+$ReplyShort = "Re:";
 $Title = "Judul";
 $UsersOnline = "User Online";
 $Remove = "Hapus";

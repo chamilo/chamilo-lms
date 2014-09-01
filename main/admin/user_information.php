@@ -23,10 +23,6 @@ if (!isset($_GET['user_id'])) {
 }
 $user = api_get_user_info($_GET['user_id']);
 $tool_name = $user['complete_name'].(empty($user['official_code'])?'':' ('.$user['official_code'].')');
-
-/**
- * Display
- */
 Display::display_header($tool_name);
 
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -120,7 +116,6 @@ if (count($sessions) > 0) {
     $header[] = array (get_lang('Title'), true);
     $header[] = array (get_lang('Status'), true);
     $header[] = array ('', false);
-
 
     foreach ($sessions as $session_item) {
 

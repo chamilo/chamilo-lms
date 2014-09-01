@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Form\Type;
 
@@ -7,6 +8,9 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class YesNoType extends AbstractType
 {
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -17,11 +21,17 @@ class YesNoType extends AbstractType
         ));
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getParent()
     {
         return 'choice';
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'yes_no';

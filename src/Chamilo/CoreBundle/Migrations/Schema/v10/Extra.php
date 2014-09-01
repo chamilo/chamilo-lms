@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /chamilo_license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\v10;
 

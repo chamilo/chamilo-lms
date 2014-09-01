@@ -7,6 +7,7 @@ use Sylius\Bundle\FlowBundle\Process\Context\ProcessContextInterface;
 use Chamilo\CoreBundle\Migrations\Data\ORM\LoadAdminUserData;
 //use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManager;
+use Symfony\Component\HttpFoundation\Response;
 use Application\Sonata\UserBundle\Entity\User;
 
 /**
@@ -15,17 +16,19 @@ use Application\Sonata\UserBundle\Entity\User;
  */
 class SetupStep extends AbstractStep
 {
+    /**
+     * @param ProcessContextInterface $context
+     * @return Response
+     */
     public function displayAction(ProcessContextInterface $context)
     {
-        //$form = $this->createForm('chamilo_installer_setup');
         $form = $this->createSetupForm();
 
         /** @var SettingsManager $settingsManager */
-        $settingsManager = $this->get('sylius.settings.manager');
+        $settingsManager = $this->get('chamilo.settings.manager');
         $settings = $settingsManager->loadSettings('platform');
 
         /** @var ConfigManager $configManager */
-        //$configManager = $this->get('oro_config.global');
         $form->get('portal')->get('institution')->setData($settings->get('institution'));
         $form->get('portal')->get('institution_url')->setData($settings->get('institution_url'));
         $form->get('portal')->get('site_name')->setData($settings->get('site_name'));
@@ -41,6 +44,10 @@ class SetupStep extends AbstractStep
         );
     }
 
+    /**
+     * @param ProcessContextInterface $context
+     * @return null|\Sylius\Bundle\FlowBundle\Process\Step\ActionResult|Response
+     */
     public function forwardAction(ProcessContextInterface $context)
     {
         $adminUser = $this
@@ -108,11 +115,13 @@ class SetupStep extends AbstractStep
         );
     }
 
+    /**
+     * @return \Symfony\Component\Form\Form
+     */
     protected function createSetupForm()
     {
         $data = $this->get('chamilo_installer.yaml_persister')->parse();
 
         return $this->createForm('chamilo_installer_setup', empty($data) ? null : $data);
     }
-
 }

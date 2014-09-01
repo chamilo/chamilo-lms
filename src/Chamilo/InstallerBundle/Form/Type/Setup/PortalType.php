@@ -53,8 +53,7 @@ class PortalType extends AbstractType
                 array(
                     'label'    => 'form.setup.portal.allow_self_registration',
                     'mapped'   => false,
-                    'required' => false,
-                    'preferred_choices' => array(),
+                    'required' => true,
                     'choices'       => array(
                         '1'       => 'Yes',
                         '0'       => 'No',
@@ -67,8 +66,7 @@ class PortalType extends AbstractType
                 array(
                     'label'    => 'form.setup.portal.allow_self_registration_as_trainer',
                     'mapped'   => false,
-                    'required' => false,
-                    'preferred_choices' => array(),
+                    'required' => true,
                     'choices'       => array(
                         '1'       => 'Yes',
                         '0'       => 'No',
@@ -94,12 +92,15 @@ class PortalType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'allow_self_registration_as_trainer' => '1',
-            'allow_self_registration' => 'No'
+            'allow_self_registration_as_trainer' => '0',
+            'allow_self_registration' => '1'
             )
         );
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'chamilo_installer_setup_portal';

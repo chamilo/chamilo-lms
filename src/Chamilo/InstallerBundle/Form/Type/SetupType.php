@@ -32,6 +32,9 @@ class SetupType extends AbstractType
             );
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'chamilo_installer_setup';

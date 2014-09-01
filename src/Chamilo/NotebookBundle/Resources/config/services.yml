@@ -1,21 +1,5 @@
 services:
-#    chamilo.controller.notebook_configuration:
-#        class: Sylius\Bundle\ResourceBundle\Controller\Configuration
-#        factory_service: sylius.controller.configuration_factory
-#        factory_method: createConfiguration
-#        arguments:
-#            - "chamilo"
-#            - "notebook"
-#            - "ChamiloNotebookBundle:Notebook"
-#
-#    chamilo.controller.notebook:
-#        class: Chamilo\NotebookBundle\Controller\CNotebookController
-#        arguments:
-#            - @chamilo.controller.notebook_configuration
-#        calls:
-#            - [ setContainer,[ @service_container ] ]
-
-    # Tool settings
+    # Tool definition
     chamilo_notebook.tool.notebook.class:
         class: Chamilo\NotebookBundle\Tool\Notebook
         arguments:
@@ -42,13 +26,13 @@ services:
             - Chamilo\NotebookBundle\Entity\CNotebook
             - @doctrine
 
-    # Global settings
+    # Global course settings
     chamilo_notebook.settings_schema.notebook:
         class: Chamilo\NotebookBundle\Settings\NotebookSettingsSchema
         tags:
             - { name: sylius.settings_schema, namespace: notebook }
 
-    # Local settings
+    # Local course settings
     chamilo_notebook.course_settings_schema.notebook:
         class: Chamilo\NotebookBundle\Settings\NotebookCourseSettingsSchema
         tags:

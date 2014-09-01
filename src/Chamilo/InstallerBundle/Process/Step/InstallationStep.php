@@ -17,6 +17,10 @@ use Chamilo\InstallerBundle\ScriptExecutor;
  */
 class InstallationStep extends AbstractStep
 {
+    /**
+     * @param ProcessContextInterface $context
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function displayAction(ProcessContextInterface $context)
     {
         set_time_limit(900);

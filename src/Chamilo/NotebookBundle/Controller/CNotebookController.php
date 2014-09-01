@@ -80,6 +80,18 @@ class CNotebookController extends ResourceController
 
     /**
      * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     */
+    public function updateAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+
+        parent::updateAction($request);
+    }
+
+    /**
+     * @param Request $request
      * @return \FOS\RestBundle\View\View
      */
     public function deleteMassAction(Request $request)
@@ -103,8 +115,7 @@ class CNotebookController extends ResourceController
         $courseCode = $request->get('course');
         $course = $this->get('chamilo_core.manager.course')->findOneByCode($courseCode);
         /** @var CNotebook $notebook */
-        $notebook = $this->getNotebookRepository()->createNewWithCourse($course);
-        $user = $this->getUser();
+        $notebook = $this->getNotebookRepository()->createNewWithCourse($this->getUser(), $course);
 
         //$notebook->setSession();
         return $notebook;

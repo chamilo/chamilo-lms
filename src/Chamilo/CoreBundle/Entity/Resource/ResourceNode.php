@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
@@ -92,12 +93,12 @@ class ResourceNode
      */
     protected $path;
 
-    private $pathForCreationLog = '';
+    //private $pathForCreationLog = '';
 
     public function __construct()
     {
-        $this->rights = new ArrayCollection();
-        $this->children = new ArrayCollection();
+        //$this->rights = new ArrayCollection();
+        //$this->children = new ArrayCollection();
     }
 
     /**
@@ -180,6 +181,16 @@ class ResourceNode
     public function getTool()
     {
         return $this->tool;
+    }
+
+    /**
+     * Returns the resource type.
+     *
+     * @return string
+     */
+    public function setTool($tool)
+    {
+        $this->tool = $tool;
     }
 
     /**

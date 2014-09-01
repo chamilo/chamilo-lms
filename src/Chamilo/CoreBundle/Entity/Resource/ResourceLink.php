@@ -3,10 +3,12 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Application\Sonata\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * @ORM\Entity
@@ -79,11 +81,17 @@ class ResourceLink
     protected $course;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid")
+     */
+    protected $group;
+
+    /**
      * @return int
      */
     public function getId()
     {
-        return $this->id();
+        return $this->id;
     }
 
     /**
@@ -108,6 +116,22 @@ class ResourceLink
     public function setCourse(Course $course)
     {
         $this->course = $course;
+    }
+
+    /**
+     * @param Session $session
+     */
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
+    }
+
+    /**
+     * @param CGroupInfo $group
+     */
+    public function setGroup(CGroupInfo $group)
+    {
+        $this->group = $group;
     }
 
     /**

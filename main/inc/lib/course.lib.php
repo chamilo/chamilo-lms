@@ -4,6 +4,7 @@
 use Chamilo\CourseBundle\ToolChain;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Manager\SettingsManager;
 
 /**
  * Class CourseManager
@@ -29,6 +30,7 @@ class CourseManager
     public $columns = array();
 
     public static $toolList;
+    public static $courseSettingsManager;
 
     /**
      * @param ToolChain $toolList
@@ -44,6 +46,22 @@ class CourseManager
     public static function getToolList()
     {
         return self::$toolList;
+    }
+
+    /**
+     * @return SettingsManager
+     */
+    public static function getCourseSettingsManager()
+    {
+        return self::$courseSettingsManager;
+    }
+
+    /**
+     * @param SettingsManager $courseSettingsManager
+     */
+    public static function setCourseSettingsManager($courseSettingsManager)
+    {
+        self::$courseSettingsManager = $courseSettingsManager;
     }
 
     /**
@@ -4311,7 +4329,6 @@ class CourseManager
         $TABLEFORUMPOSTS 		= Database::get_course_table(TABLE_FORUM_POST);
         $TABLEGRADEBOOK 		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        //$TABLEGRADEBOOKCERT		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 
         $visible_for_all = 1;
         $visible_for_course_admin = 0;
@@ -4321,8 +4338,17 @@ class CourseManager
         $toolList = self::getToolList();
         $toolList = $toolList->getTools();
 
+
+        /** @var Course $course */
+        $entityManager = Database::getManager();
+        $course = $entityManager->getRepository('ChamiloCoreBundle:Course')->find($course_id);
+
+        // @todo move in a manager.
         /** @var Chamilo\CourseBundle\Tool\BaseTool $tool */
         $tools = array();
+        $settingsManager = self::getCourseSettingsManager();
+        $settingsManager->setCourse($course);
+
         foreach ($toolList as $tool) {
             $visibility = Text::string2binary(api_get_setting('course_create_active_tools', $tool->getName()));
             $toolObject = new CTool();
@@ -4335,11 +4361,10 @@ class CourseManager
                 ->setTarget($tool->getTarget())
             ;
             $tools[] = $toolObject;
+            $settings = $settingsManager->loadSettings($tool->getName());
+            $settingsManager->saveSettings($tool->getName(), $settings);
         }
 
-        /** @var Course $course */
-        $entityManager = Database::getManager();
-        $course = $entityManager->getRepository('ChamiloCoreBundle:Course')->find($course_id);
         $course->setTools($tools);
         $entityManager->persist($course);
         $entityManager->flush($course);
@@ -4370,7 +4395,7 @@ class CourseManager
 
         /* Course_setting table (courseinfo tool)   */
 
-        Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_doc',0,'work')");
+        /*Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_doc',0,'work')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_on_new_doc_dropbox',0,'dropbox')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_agenda',0,'agenda')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_announcement',0,'announcement')");
@@ -4387,7 +4412,7 @@ class CourseManager
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'pdf_export_watermark_text','','learning_path')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_public_certificates','','certificates')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_fast_exercise_edition', 0 ,'exercise')");
-        Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_exercise_auto_launch', 0 ,'exercise')");
+        Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_exercise_auto_launch', 0 ,'exercise')");*/
 
         /* Course homepage tools for platform admin only */
 
@@ -4406,7 +4431,12 @@ class CourseManager
         //Share folder
         Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/shared_folder','".get_lang('UserFolders')."','folder','0')");
         $example_doc_id = Database :: insert_id();
-        Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
+
+
+
+
+        Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+                         VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
         //Chat folder
         Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/chat_files','".get_lang('ChatFiles')."','folder','0')");

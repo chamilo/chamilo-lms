@@ -9,7 +9,7 @@ use Sylius\Bundle\SettingsBundle\Model\ParameterInterface;
  * CCourseSetting
  *
  * @ORM\Table(name="c_course_setting")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository")
  */
 class CCourseSetting implements ParameterInterface
 {

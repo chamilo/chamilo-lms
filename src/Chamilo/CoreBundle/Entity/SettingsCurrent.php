@@ -9,7 +9,7 @@ use Sylius\Bundle\SettingsBundle\Model\ParameterInterface;
  * SettingsCurrent
  *
  * @ORM\Table(name="settings_current", uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting", columns={"variable", "subkey", "category", "access_url"})}, indexes={@ORM\Index(name="access_url", columns={"access_url"}), @ORM\Index(name="idx_settings_current_au_cat", columns={"access_url", "category"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SettingsCurrentRepository")
  */
 class SettingsCurrent implements ParameterInterface
 {

@@ -239,17 +239,21 @@ sylius_resource:
                 repository: Chamilo\NotebookBundle\Entity\CNotebookRepository
                 controller: Chamilo\NotebookBundle\Controller\CNotebookController
 
+# Platform settings
 sylius_settings:
     driver: doctrine/orm
     classes:
         parameter:
             model: Chamilo\CoreBundle\Entity\SettingsCurrent
+            repository: Chamilo\CoreBundle\Entity\Repository\SettingsCurrentRepository
 
+# Course settings
 chamilo_course:
     driver: doctrine/orm
     classes:
         parameter:
             model: Chamilo\CourseBundle\Entity\CCourseSetting
+            repository: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
 
 doctrine_cache:
     providers:
@@ -258,11 +262,13 @@ doctrine_cache:
         chamilo_settings:
             type: file_system
 
+# Bower configuration
 sp_bower:
     assetic: true
     install_on_warmup: true
     bundles:
         ChamiloCoreBundle: ~
 
+# Grid default template
 apy_data_grid:
     theme: ChamiloCoreBundle::grid.html.twig

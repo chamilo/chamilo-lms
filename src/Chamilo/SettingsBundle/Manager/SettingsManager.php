@@ -1,13 +1,5 @@
 <?php
-
-/*
- * This file is part of the Sylius package.
- *
- * (c) Paweł Jędrzejewski
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\SettingsBundle\Manager;
 
@@ -26,13 +18,13 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 /**
  * Settings manager.
  *
- * @author Paweł Jędrzejewski <pawel@sylius.org>
  */
 class SettingsManager extends SyliusSettingsManager
 {
     /**
-     * @param string $name
+     * @param $name
      * @return mixed
+     * @throws \InvalidArgumentException
      */
     public function getSetting($name)
     {

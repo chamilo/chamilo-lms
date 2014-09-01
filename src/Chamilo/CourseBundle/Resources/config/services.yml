@@ -7,6 +7,7 @@ parameters:
     chamilo_course.settings.schema_registry.class: Sylius\Bundle\SettingsBundle\Schema\SchemaRegistry
 
 services:
+    # Course settings
     chamilo_course.controller.settings:
         class: "%chamilo_course.controller.settings.class%"
         calls:
@@ -33,9 +34,11 @@ services:
             - @doctrine_cache.providers.chamilo_settings
             - @validator
 
+    # Course tool container
     chamilo_course.tool_chain:
         class: %tool_chain.class%
 
+    # Course tool list
     chamilo_course.tool.agenda.class:
         class: Chamilo\CourseBundle\Tool\Agenda
         arguments:
@@ -370,7 +373,6 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: course_setting }
 
-
     chamilo_course.tool.survey.class:
         class: Chamilo\CourseBundle\Tool\Survey
         arguments:
@@ -424,7 +426,6 @@ services:
         class: Chamilo\CourseBundle\Settings\UserCourseSettingsSchema
         tags:
             - { name: chamilo_course.settings_schema, namespace: user }
-
 
     chamilo_course.tool.wiki.class:
         class: Chamilo\CourseBundle\Tool\Wiki

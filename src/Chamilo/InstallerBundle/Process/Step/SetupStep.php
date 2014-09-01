@@ -68,7 +68,8 @@ class SetupStep extends AbstractStep
 
             // update company name and title if specified
             /** @var SettingsManager $settingsManager */
-            $settingsManager = $this->get('sylius.settings.manager');
+            $settingsManager = $this->get('chamilo.settings.manager');
+
             $settings = $settingsManager->loadSettings('platform');
 
             $parameters = array(
@@ -82,7 +83,6 @@ class SetupStep extends AbstractStep
                 'timezone' => $form->get('portal')->get('timezone')->getData(),
             );
             $settings->setParameters($parameters);
-
             $settingsManager->saveSettings('platform', $settings);
 
             /*$defaultCompanyName  = $configManager->get('oro_ui.application_name');

@@ -16,8 +16,8 @@ use Sylius\Bundle\SettingsBundle\Manager\SettingsManager as SyliusSettingsManage
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 
 /**
- * Settings manager.
- *
+ * Class SettingsManager
+ * @package Chamilo\SettingsBundle\Manager
  */
 class SettingsManager extends SyliusSettingsManager
 {

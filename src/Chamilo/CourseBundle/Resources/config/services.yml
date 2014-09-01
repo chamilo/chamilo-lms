@@ -25,12 +25,18 @@ services:
     chamilo_course.settings.cache:
         alias: doctrine_cache.providers.chamilo_settings
 
+    chamilo_course.repository.parameter:
+        class: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
+        factory-service: doctrine.orm.entity_manager
+        factory-method: getRepository
+        arguments: [ ChamiloCourseBundle:CCourseSetting ]
+
     chamilo_course.settings.manager:
         class: %chamilo_course.settings.manager.class%
         arguments:
             - @chamilo_course.settings.schema_registry
             - @doctrine.orm.default_entity_manager
-            - @sylius.repository.parameter
+            - @chamilo_course.repository.parameter
             - @doctrine_cache.providers.chamilo_settings
             - @validator
 

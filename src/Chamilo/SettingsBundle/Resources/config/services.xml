@@ -6,23 +6,19 @@
 
     <parameters>
         <parameter key="chamilo_settings.settings.manager.class">Chamilo\SettingsBundle\Manager\SettingsManager</parameter>
-        <parameter key="chamilo_settings.repository.parameter.class">Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository</parameter>
+        <parameter key="chamilo_settings.repository.parameter.class">Chamilo\CoreBundle\Entity\Repository\SettingsCurrentRepository</parameter>
         <parameter key="chamilo_settings.repository.parameter.entity.class">Chamilo\CoreBundle\Entity\SettingsCurrent</parameter>
     </parameters>
 
     <services>
-        <service id="chamilo_settings.repository.parameter.entity" class="%chamilo_settings.repository.parameter.class%">
-        </service>
-
-        <service id="chamilo_settings.repository.parameter" class="%chamilo_settings.repository.parameter.class%">
-            <argument type="service" id="doctrine" />
-            <argument type="service" id="chamilo_settings.repository.parameter.entity"/>
+        <service id="chamilo_settings.repository.parameter" class="%chamilo_settings.repository.parameter.class%" factory-service="doctrine.orm.entity_manager" factory-method="getRepository" >
+            <argument>%chamilo_settings.repository.parameter.entity.class%</argument>
         </service>
 
         <service id="chamilo.settings.manager" class="%chamilo_settings.settings.manager.class%">
             <argument type="service" id="sylius.settings.schema_registry" />
             <argument type="service" id="sylius.manager.parameter" />
-            <argument type="service" id="sylius.repository.parameter" />
+            <argument type="service" id="chamilo_settings.repository.parameter" />
             <argument type="service" id="sylius.settings.cache" />
             <argument type="service" id="validator" />
         </service>

@@ -65,7 +65,7 @@ process:
             header: Welcome!
             content: <p>Welcome to the installer.</p>
         check:
-            header: System requirements check
+            header: System requirements
         configure:
             header: Configuration
         schema:

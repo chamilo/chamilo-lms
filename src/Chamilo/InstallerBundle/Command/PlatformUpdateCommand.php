@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle\Command;
 
@@ -9,6 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 use Chamilo\InstallerBundle\CommandExecutor;
 
+/**
+ * Class PlatformUpdateCommand
+ * * Based in OroInstallBundlePlatformUpdateCommand
+ * @package Chamilo\InstallerBundle\Command
+ */
 class PlatformUpdateCommand extends ContainerAwareCommand
 {
     /**

@@ -25,6 +25,7 @@
 
     {% block javascript %}
     <script type="text/javascript">
+
         $(function() {
             $('.progress-bar li:last-child em.fix-bg').width($('.progress-bar li:last-child').width() / 2);
             $('.progress-bar li:first-child em.fix-bg').width($('.progress-bar li:first-child').width() / 2);
@@ -33,6 +34,8 @@
                 $(this).find(':submit').attr('disabled', true).addClass('disabled');
             });
 
+            $('input[type="checkbox"]').addClass('icheckbox_minimal');
+            $('input[type="checkbox"]').removeClass('form-control');
         });
 
         function ajaxQueue(actions, url) {

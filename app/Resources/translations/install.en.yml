@@ -1,4 +1,4 @@
-title:                      Application installation
+title:                      Chamilo installation
 
 welcome:
     header:                 Welcome to the Installer
@@ -8,7 +8,7 @@ welcome:
 process:
     step:
         check:
-            header:         System requirements check
+            header:         System requirements
             invalid:        Some of the requirements are not met and the installation process cannot continue. Please check below for the minimum requirements to Install.
             phpchanges:     Changes to the <strong>php.ini</strong> file must be done in "<strong>%path%</strong>".
             phpcreate:      To change settings, create a "<strong>php.ini</strong>".

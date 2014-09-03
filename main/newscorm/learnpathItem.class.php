@@ -1771,6 +1771,7 @@ class learnpathItem
         $query_db = false
     ) {
         $h = get_lang('h');
+        $time = null;
         $course_id = api_get_course_int_id();
         if (!isset($given_time)) {
             if (self::debug > 2) {

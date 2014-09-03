@@ -301,7 +301,6 @@ if (is_profile_editable()) {
 } else {
     $form->freeze();
 }
-
 $user_data = array_merge($user_data, $extra_data);
 $form->setDefaults($user_data);
 

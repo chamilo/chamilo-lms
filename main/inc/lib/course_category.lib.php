@@ -485,7 +485,8 @@ function browseCourseCategories()
  * @return int
  */
 function countCoursesInCategory($category_code="")
-{
+{   
+    global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
     $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -508,9 +509,16 @@ function countCoursesInCategory($category_code="")
     if (!empty($special_course_list)) {
         $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
     }
-
+    
+    if (isset($_configuration['course_catalog_hide_private'])) {
+        if ($_configuration['course_catalog_hide_private'] == true) {
+            $courseInfo = api_get_course_info();
+            $courseVisibility = $courseInfo['visibility'];
+            $visibilityCondition = ' AND course.visibility <> 1';
+        }
+    }
     $sql = "SELECT * FROM $tbl_course
-            WHERE visibility != '0' AND visibility != '4' AND category_code" . "='" . $category_code . "'" . $without_special_courses;
+            WHERE visibility != '0' AND visibility != '4' AND category_code" . "='" . $category_code . "'" . $without_special_courses. $visibilityCondition;
     // Showing only the courses of the current portal access_url_id.
 
     if (api_is_multiple_url_enabled()) {
@@ -520,7 +528,7 @@ function countCoursesInCategory($category_code="")
             $sql = "SELECT * FROM $tbl_course as course
                     INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
-                    WHERE access_url_id = $url_access_id AND course.visibility != '0' AND course.visibility != '4' AND category_code" . "='" . $category_code . "'" . $without_special_courses;
+                    WHERE access_url_id = $url_access_id AND course.visibility != '0' AND course.visibility != '4' AND category_code" . "='" . $category_code . "'" . $without_special_courses. $visibilityCondition;
         }
     }
     return Database::num_rows(Database::query($sql));
@@ -532,7 +540,8 @@ function countCoursesInCategory($category_code="")
  * @return array
  */
 function browseCoursesInCategory($category_code, $random_value = null)
-{
+{   
+    global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
     $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -555,7 +564,14 @@ function browseCoursesInCategory($category_code, $random_value = null)
     if (!empty($special_course_list)) {
         $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
     }
+    if (isset($_configuration['course_catalog_hide_private'])) {
 
+        if ($_configuration['course_catalog_hide_private'] == true) {
+            $courseInfo = api_get_course_info();
+            $courseVisibility = $courseInfo['visibility'];
+            $visibilityCondition = ' AND course.visibility <> 1';
+        }
+    }
     if (!empty($random_value)) {
         $random_value = intval($random_value);
 
@@ -578,11 +594,11 @@ function browseCoursesInCategory($category_code, $random_value = null)
                         ON (url_rel_course.course_code=course.code)
                         WHERE   access_url_id = $url_access_id AND
                                 RAND()*$num_records< $random_value
-                                $without_special_courses
+                                $without_special_courses $visibilityCondition
                      ORDER BY RAND() LIMIT 0, $random_value";
         } else {
             $sql = "SELECT id FROM $tbl_course course
-                    WHERE RAND()*$num_records< $random_value $without_special_courses
+                    WHERE RAND()*$num_records< $random_value $without_special_courses $visibilityCondition
                     ORDER BY RAND() LIMIT 0, $random_value";
         }
 
@@ -599,12 +615,12 @@ function browseCoursesInCategory($category_code, $random_value = null)
     } else {
         $category_code = Database::escape_string($category_code);
         if (empty($category_code) || $category_code == "ALL") {
-            $sql = "SELECT * FROM $tbl_course WHERE 1=1 $without_special_courses ORDER BY title ";
+            $sql = "SELECT * FROM $tbl_course WHERE 1=1 $without_special_courses $visibilityCondition ORDER BY title ";
         } else {
             if ($category_code == 'NONE') {
                 $category_code = '';
             }
-            $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";
+            $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses $visibilityCondition ORDER BY title ";
         }
 
         //showing only the courses of the current Chamilo access_url_id
@@ -614,12 +630,12 @@ function browseCoursesInCategory($category_code, $random_value = null)
             if ($category_code != "ALL") {
                 $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
-                    WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses
+                    WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses $visibilityCondition
                     ORDER BY title";    
             } else{
                 $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
-                    WHERE access_url_id = $url_access_id $without_special_courses
+                    WHERE access_url_id = $url_access_id $without_special_courses $visibilityCondition
                     ORDER BY title";
             }
             

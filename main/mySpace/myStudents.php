@@ -710,12 +710,12 @@ if (empty($_GET['details'])) {
     // csv export headers
     $csv_content[] = array ();
     $csv_content[] = array (
-    	get_lang('Learnpath', ''),
-    	get_lang('Time', ''),
-    	get_lang('AverageScore', ''),
-    	get_lang('LatestScore', ''),
-    	get_lang('Progress', ''),
-    	get_lang('LastConnexion', '')
+    	get_lang('Learnpath'),
+    	get_lang('Time'),
+    	get_lang('AverageScore'),
+    	get_lang('LatestAttemptAverageScore'),
+    	get_lang('Progress'),
+    	get_lang('LastConnexion')
     );
 
     if (empty($session_id)) {

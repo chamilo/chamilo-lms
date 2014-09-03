@@ -285,7 +285,8 @@ $(document).ready(function() {
     
     /* Click in profile */
     $("#saved_profiles").on("click", "a.load_profile", function() {
-        profile_id = $(this).attr('rel');        
+        profile_id = $(this).attr('rel');
+        $('#profile_id').attr('value',profile_id);        
         $.ajax({
            url: '{{ url }}&a=get_skills_by_profile&profile_id='+profile_id,
            success:function(json) {
@@ -372,16 +373,29 @@ $(document).ready(function() {
     load_nodes(0, main_depth);
     
     function open_save_profile_popup() {
+        var profileId = $("#profile_id").val();
+        $.ajax({
+            url: '{{ url }}&a=get_profile&profile_id='+profileId,
+            success:function(data) {
+                if (data) {
+                    var obj = jQuery.parseJSON (data);
+                    $("#name_profile").attr('value', obj.name);
+                    $("#description_profile").attr('value', obj.description);
+                }
+            }
+        });
+        
         $("#dialog-form-profile").dialog({
             buttons: {
                 "{{ "Save"|get_lang }}" : function() {
-                    var params = $("#save_profile_form").serialize();
+                    var name = $("#name_profile").val();
+                    var description = $("#description_profile").val();
                     var skill_list = return_skill_list_from_profile_search();                    
                     skill_list = { 'skill_id' : skill_list };
                     skill_params = $.param(skill_list);
         
                     $.ajax({
-                        url: '{{ url }}&a=save_profile&'+params+'&'+skill_params,
+                        url: '{{ url }}&a=save_profile&name='+name+'&description='+description+'&'+skill_params+'&profile='+profileId,
                         success:function(data) {
                             if (data == 1 ) {
                                 update_my_saved_profiles();
@@ -391,15 +405,17 @@ $(document).ready(function() {
                             }
                             
                             $("#dialog-form-profile").dialog("close");                            
-                            $("#name").attr('value', '');
-                            $("#description").attr('value', '');                             
+                            $("#name_profile").attr('value', '');
+                            $("#description_profile").attr('value', '');
+                            $("#profile_id").attr('value', '0');                             
                          }                           
                      });
                   }
             },
             close: function() {     
-                $("#name").attr('value', '');
-                $("#description").attr('value', '');                
+                $("#name_profile").attr('value', '');
+                $("#description_profile").attr('value', '');
+                $("#profile_id").attr('value', '0');                
             }
         });
         $("#dialog-form-profile").dialog("open");
@@ -547,17 +563,18 @@ $(document).ready(function() {
         
 <div id="dialog-form-profile" style="display:none;">    
     <form id="save_profile_form" class="form-horizontal" name="form">       
+        <input type="hidden" id="profile_id" name="profile_id"/>
         <fieldset>
             <div class="control-group">            
                 <label class="control-label" for="name">{{"Name"|get_lang}}</label>            
                 <div class="controls">
-                    <input type="text" name="name" id="name" size="40" />             
+                    <input type="text" name="name" id="name_profile" size="40" />              
                 </div>
             </div>        
             <div class="control-group">            
                 <label class="control-label" for="name">{{"Description"|get_lang}}</label>            
                 <div class="controls">
-                    <textarea name="description" id="description" class="span2"  rows="7"></textarea>
+                    <textarea name="description" id="description_profile" class="span2" rows="7"></textarea>
                 </div>
             </div>  
         </fieldset>

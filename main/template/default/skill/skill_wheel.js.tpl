@@ -180,10 +180,16 @@ function set_skill_style(d, attribute, searched_skill_id) {
     }
     
     //4. Blue - if user achieved that skill
-    if (d.achieved) {        
-        return_fill = '#3A87AD';        
-        //return_stroke = '#FCD23A';
-    }
+    //var skill = false;
+    $.ajax({
+        url: url+'&a=get_user_skill&profile_id='+d.id,
+        async: false,
+        success: function(skill) {
+            if (skill == 1) {
+                return_fill = '#3A87AD';
+            }
+        }
+    }); 
 
     switch (attribute) {
         case 'fill':
@@ -490,7 +496,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     //.size([1, 2])
     .value(function(d) {
         //return 5.8 - d.depth;
-        //When having more than 4 children seems that the code above doesn't work
+        //When having more than 4 children seems that the code above doesnt work
         return 1;
     });
 

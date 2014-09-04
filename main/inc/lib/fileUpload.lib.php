@@ -9,9 +9,6 @@
  *	@package chamilo.library
  *	@todo test and reorganise
  */
-/**
- * Code
- */
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 /**
@@ -283,7 +280,6 @@ function handle_uploaded_document(
 						if ($file_exists && $docId) {
 							// UPDATE DATABASE
 							$document_id = DocumentManager::get_document_id($_course, $file_path);
-                            error_log($document_id);
 
 							if (is_numeric($document_id)) {
 								// Update file size
@@ -619,8 +615,8 @@ function add_ext_on_mime($file_name, $file_type) {
  *
  * @return boolean true if it succeds, false otherwise
  */
-function treat_uploaded_file($uploaded_file, $base_work_dir, $upload_path, $max_filled_space, $uncompress = '') {
-
+function treat_uploaded_file($uploaded_file, $base_work_dir, $upload_path, $max_filled_space, $uncompress = '')
+{
 	$uploaded_file['name'] = stripslashes($uploaded_file['name']);
 
 	if (!enough_size($uploaded_file['size'], $base_work_dir, $max_filled_space)) {

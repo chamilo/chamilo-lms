@@ -78,6 +78,7 @@ class ImportCsv
         $path = api_get_path(SYS_CODE_PATH).'cron/incoming/';
         if (!is_dir($path)) {
             echo "The folder! $path does not exits";
+
             return 0;
         }
 
@@ -128,6 +129,7 @@ class ImportCsv
 
             if (empty($fileToProcess)) {
                 echo 'Error - no files to process.';
+
                 return 0;
             }
 
@@ -581,15 +583,19 @@ class ImportCsv
     {
         $data = Import::csv_to_array($file);
 
-        //$language = $this->defaultLanguage;
-
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
 
             foreach ($data as $row) {
                 $row = $this->cleanCourseRow($row);
-                $courseCode = CourseManager::get_course_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['course']], $this->extraFieldIdNameList['course']);
+
+                $courseCode = CourseManager::get_course_id_from_original_id(
+                    $row['extra_' . $this->extraFieldIdNameList['course']],
+                    $this->extraFieldIdNameList['course']
+                );
+
                 $courseInfo = api_get_course_info($courseCode);
+
                 if (empty($courseInfo)) {
                     // Create
                     $params = array();
@@ -603,7 +609,12 @@ class ImportCsv
                     $courseInfo = CourseManager::create_course($params);
 
                     if (!empty($courseInfo)) {
-                        CourseManager::update_course_extra_field_value($courseInfo['code'], 'external_course_id', $row['extra_'.$this->extraFieldIdNameList['course']]);
+                        CourseManager::update_course_extra_field_value(
+                            $courseInfo['code'],
+                            'external_course_id',
+                            $row['extra_'.$this->extraFieldIdNameList['course']]
+                        );
+
                         $this->logger->addInfo("Courses - Course created ".$courseInfo['code']);
                     } else {
                         $this->logger->addError("Courses - Can't create course:".$row['title']);
@@ -617,6 +628,7 @@ class ImportCsv
                     $result = CourseManager::update_attributes($courseInfo['real_id'], $params);
 
                     $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
+
                     if ($addTeacherToSession) {
                         CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false);
                     } else {
@@ -844,7 +856,9 @@ if (isset($argv[1]) && $argv[1] = '--dump') {
     $dump = true;
 }
 
-if (isset($_configuration['import_csv_disable_dump']) && $_configuration['import_csv_disable_dump'] == true) {
+if (isset($_configuration['import_csv_disable_dump']) &&
+    $_configuration['import_csv_disable_dump'] == true
+) {
     $import->setDumpValues(false);
 } else {
     $import->setDumpValues($dump);
@@ -859,7 +873,9 @@ if (isset($_configuration['import_csv_test'])) {
 
 $import->run();
 
-if (isset($_configuration['import_csv_fix_permissions']) && $_configuration['import_csv_fix_permissions'] == true) {
+if (isset($_configuration['import_csv_fix_permissions']) &&
+    $_configuration['import_csv_fix_permissions'] == true
+) {
     $command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
     echo "Executing: ".$command.PHP_EOL;
     system($command);

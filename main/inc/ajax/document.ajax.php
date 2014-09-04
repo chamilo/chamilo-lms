@@ -24,7 +24,7 @@ switch($action) {
             exit;
         }
 
-        $ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : null;
+        $ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : 'rename';
 
         if (!empty($_FILES)) {
             require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
@@ -39,8 +39,14 @@ switch($action) {
                 false,
                 false
             );
+
             $json = array();
-            $json['name'] = Display::url(api_htmlentities($file['name']), api_htmlentities($result['url']), array('target'=>'_blank'));
+            $json['name'] = Display::url(
+                api_htmlentities($result['title']),
+                api_htmlentities($result['url']),
+                array('target'=>'_blank')
+            );
+
             $json['type'] = api_htmlentities($file['type']);
             $json['size'] = format_file_size($file['size']);
             if (!empty($result) && is_array($result)) {

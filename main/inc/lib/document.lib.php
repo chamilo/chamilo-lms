@@ -2641,12 +2641,12 @@ class DocumentManager
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
                         $params = array();
 
-                        if (!empty($title)) {
-                            $params['title'] = get_document_title($title);
+                        if ($if_exists == 'rename') {
+                            $new_path = basename($new_path);
+                            $params['title'] = get_document_title($new_path);
                         } else {
-                            if ($if_exists == 'rename') {
-                                $new_path = basename($new_path);
-                                $params['title'] = get_document_title($new_path);
+                            if (!empty($title)) {
+                                $params['title'] = get_document_title($title);
                             } else {
                                 $params['title'] = get_document_title($files['file']['name']);
                             }
@@ -2655,7 +2655,16 @@ class DocumentManager
                         if (!empty($comment)) {
                             $params['comment'] = trim($comment);
                         }
-                        Database::update($table_document, $params, array('id = ? AND c_id = ? ' => array($docid, $course_info['real_id'])));
+                        Database::update(
+                            $table_document,
+                            $params,
+                            array(
+                                'id = ? AND c_id = ? ' => array(
+                                    $docid,
+                                    $course_info['real_id']
+                                )
+                            )
+                        );
                     }
 
                     // Showing message when sending zip files

@@ -90,17 +90,24 @@ $formSent = 0;
 $errorMsg = $firstLetterCourse = $firstLetterSession = '';
 $CourseList = $SessionList = array();
 $courses = $sessions = array();
-$Categoryid = isset($_POST['CategorySessionId']) ? intval($_POST['CategorySessionId']) : null;
+$categoryId = isset($_POST['CategorySessionId']) ? intval($_POST['CategorySessionId']) : null;
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
-    $SessionCategoryList = $_POST['SessionCategoryList'];
+    $sessionCategoryList = $_POST['SessionCategoryList'];
 
-    if ($Categoryid != 0 && count($SessionCategoryList) > 0) {
-        $session_id = join(',', $SessionCategoryList);
-        $sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
+
+    if ($categoryId != 0 && count($sessionCategoryList) > 0) {
+        // Removing all
+        $sql = "UPDATE $tbl_session SET session_category_id = '' WHERE session_category_id = $categoryId";
         Database::query($sql);
-        header('Location: add_many_session_to_category.php?id_category=' . $Categoryid . '&msg=ok');
+        // Adding new
+        $sessionCategoryList = array_map('intval', $sessionCategoryList);
+        $session_id = join(',', $sessionCategoryList);
+
+        $sql = "UPDATE $tbl_session SET session_category_id = $categoryId WHERE id in ($session_id) ";
+        Database::query($sql);
+        header('Location: add_many_session_to_category.php?id_category=' . $categoryId . '&msg=ok');
         exit;
     } else {
         header('Location: add_many_session_to_category.php?msg=error');
@@ -109,7 +116,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 }
 
 if (isset($_GET['id_category'])) {
-    $Categoryid = intval($_GET['id_category']);
+    $categoryId = intval($_GET['id_category']);
 }
 
 if (isset($_GET['msg']) && $_GET['msg'] == 'error') {
@@ -121,15 +128,15 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'ok') {
 }
 
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
-// display the dokeos header
+
 Display::display_header($tool_name);
 
 $where = '';
 $rows_category_session = array();
 if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category'])) {
 
-    $where = 'WHERE session_category_id !=' . $Categoryid;
-    $sql = 'SELECT id, name  FROM ' . $tbl_session . ' WHERE session_category_id =' . $Categoryid . ' ORDER BY name';
+    $where = 'WHERE session_category_id !=' . $categoryId;
+    $sql = 'SELECT id, name  FROM ' . $tbl_session . ' WHERE session_category_id =' . $categoryId . ' ORDER BY name';
     $result = Database::query($sql);
     $rows_category_session = Database::store_result($result);
 }
@@ -195,7 +202,7 @@ if(!empty($OkMsg)) {
 		<?php
 		if (!empty($rows_session_category)) {
     		foreach($rows_session_category as $category) {
-    			if($category['id'] == $Categoryid)
+    			if($category['id'] == $categoryId)
       				echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
       			else
       				echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';

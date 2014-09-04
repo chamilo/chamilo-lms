@@ -268,8 +268,9 @@ function handle_uploaded_document(
 			$file_size = $uploaded_file['size'];
 
 			$files_perm = api_get_permissions_for_new_files();
-            $doc_path = '/'.$clean_name;
-            $docId = DocumentManager :: get_document_id($_course, $doc_path, $current_session_id);
+            //$doc_path = '/'.$clean_name;
+            $docId = DocumentManager::get_document_id($_course, $file_path, $current_session_id);
+
             // What to do if the target file exists
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
@@ -282,6 +283,7 @@ function handle_uploaded_document(
 						if ($file_exists && $docId) {
 							// UPDATE DATABASE
 							$document_id = DocumentManager::get_document_id($_course, $file_path);
+                            error_log($document_id);
 
 							if (is_numeric($document_id)) {
 								// Update file size

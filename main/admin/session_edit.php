@@ -37,9 +37,15 @@ $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" 
 list($year_start,$month_start,$day_start)   = explode('-', $infos['date_start']);
 list($year_end,$month_end,$day_end)         = explode('-', $infos['date_end']);
 
-$showDescriptionChecked = null;
-if (isset($infos['show_description']) && !empty($infos['show_description'])) {
-    $showDescriptionChecked = 'checked';
+// Default value
+$showDescriptionChecked = 'checked';
+
+if (isset($infos['show_description'])) {
+    if (!empty($infos['show_description'])) {
+        $showDescriptionChecked = 'checked';
+    } else {
+        $showDescriptionChecked = null;
+    }
 }
 
 $end_year_disabled = $end_month_disabled = $end_day_disabled = '';

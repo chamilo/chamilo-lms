@@ -24,7 +24,7 @@ switch($action) {
             exit;
         }
 
-        $ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : 'rename';
+        $ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : 'overwrite';
 
         if (!empty($_FILES)) {
             require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';

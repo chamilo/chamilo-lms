@@ -72,6 +72,7 @@ function validate_data($courses)
             }
         }
     }
+
     return $errors;
 }
 
@@ -80,12 +81,13 @@ function getTeacherListInArray($teachers)
     if (!empty($teachers)) {
         return explode('|', $teachers);
     }
+
     return array();
 }
 
 /**
  * Saves imported data.
- * @param array   List of courses
+ * @param array $courses List of courses
  */
 function save_data($courses)
 {

@@ -15,7 +15,7 @@ require_once api_get_path(LIBRARY_PATH).'add_many_session_to_category_functions.
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 $xajax = new xajax();
-$xajax -> registerFunction ('search_courses');
+$xajax->registerFunction('search_courses');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -36,12 +36,12 @@ $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE)
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
-$tool_name= get_lang('SubscribeSessionsToCategory');
-$id_session=intval($_GET['id_session']);
+$tool_name = get_lang('SubscribeSessionsToCategory');
+$id_session = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
-	$add_type = Security::remove_XSS($_REQUEST['add_type']);
+if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
+    $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 if (!api_is_platform_admin() && !api_is_session_admin()) {
@@ -147,7 +147,7 @@ if (api_get_multiple_access_url()) {
     $sql = "SELECT s.id, s.name  FROM $tbl_session s INNER JOIN $table_access_url_rel_session u ON s.id = u.session_id $where AND u.access_url_id = $access_url_id ORDER BY name";
 } else {
     $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
-} 
+}
 $result=Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>
@@ -167,10 +167,10 @@ if(!empty($OkMsg)) {
 	Display::display_confirmation_message($OkMsg); //main API
 }
 
-/* 
- * 
- * The a/b/c Filter is not a priority 
- *  
+/*
+ *
+ * The a/b/c Filter is not a priority
+ *
  * <td width="45%" align="center">
  <?php echo get_lang('FirstLetterCourse'); ?> :
      <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
@@ -188,7 +188,7 @@ if(!empty($OkMsg)) {
 <tr>
 	<td align="left"></td>
 	<td align="left"></td>
-	<td  align="center"> 
+	<td  align="center">
 	<b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
 	<select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
 		<option value="0" ></option>
@@ -228,19 +228,9 @@ if(!empty($OkMsg)) {
 <?php unset($nosessionCourses); ?>
   </td>
   <td width="10%" valign="middle" align="center">
-  <?php
-  if ($ajax_search) {
-  ?>
-  	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
-  <?php
-  } else {
-  ?>
   	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
 	<br /><br />
 	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
-  <?php
-  }
-  ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
 		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToCategory').'</button>';
@@ -258,7 +248,6 @@ if(!empty($OkMsg)) {
 
 </form>
 <script type="text/javascript">
-<!--
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -302,9 +291,7 @@ function valide(){
 
 	document.forms.formulaire.submit();
 }
--->
-
 </script>
 <?php
-/*		FOOTER	*/
+
 Display::display_footer();

@@ -51,13 +51,15 @@ function disable_dangerous_file($filename) {
 
 /**
  * This function generates a unique name for a file on a given location
- * filenames are changed to name_#.ext
+ * file names are changed to name_#.ext
  *
  * @param string $path
  * @param string $name
- * @return new unique name
+ *
+ * @return string new unique name
  */
-function unique_name($path, $name) {
+function unique_name($path, $name)
+{
 	$ext = substr(strrchr($name, '.'), 0);
 	$name_no_ext = substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
 	$n = 0;
@@ -339,9 +341,11 @@ function handle_uploaded_document(
 				case 'rename':
                     if ($docId) {
                         $new_name = unique_name($where_to_save, $clean_name);
+                        $document_name = $new_name;
                     } else {
                         $new_name = $clean_name;
                     }
+
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
 
@@ -362,7 +366,7 @@ function handle_uploaded_document(
 						item_property_update_on_folder($_course, $upload_path, $user_id);
 
 						// Display success message to user
-						if ($output){
+						if ($output) {
 							Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.get_lang('UplFileSavedAs').$new_file_path, false);
 						}
 						return $new_file_path;
@@ -446,8 +450,8 @@ function moveUploadedFile($file, $storePath)
 function enough_size($file_size, $dir, $max_dir_space)
 {
     // If the directory is the archive directory, safely ignore the size limit
-    if (api_get_path(SYS_ARCHIVE_PATH) == $dir) { 
-        return true; 
+    if (api_get_path(SYS_ARCHIVE_PATH) == $dir) {
+        return true;
     }
 
     if ($max_dir_space) {
@@ -1216,7 +1220,18 @@ function create_unexisting_directory(
                         $session_id
                     );
 				} else {
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'FolderCreated', $user_id, $to_group_id, $to_user_id, null, null, $session_id);
+                    api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $document_id,
+                        'FolderCreated',
+                        $user_id,
+                        $to_group_id,
+                        $to_user_id,
+                        null,
+                        null,
+                        $session_id
+                    );
 				}
 				return $desired_dir_name.$nb;
 			}

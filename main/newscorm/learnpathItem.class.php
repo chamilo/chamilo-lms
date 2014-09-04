@@ -1771,6 +1771,7 @@ class learnpathItem
         $query_db = false
     ) {
         $h = get_lang('h');
+        $time = null;
         $course_id = api_get_course_int_id();
         if (!isset($given_time)) {
             if (self::debug > 2) {
@@ -2460,7 +2461,7 @@ class learnpathItem
                                     );
                                 }
 
-                                if (isset($items[$refs_list[$prereqs_string]])) {
+                                if (isset($refs_list[$prereqs_string]) && isset($items[$refs_list[$prereqs_string]])) {
                                     if ($items[$refs_list[$prereqs_string]]->type == 'quiz') {
 
                                         // 1. Checking the status in current items.

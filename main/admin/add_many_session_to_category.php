@@ -15,7 +15,7 @@ require_once api_get_path(LIBRARY_PATH).'add_many_session_to_category_functions.
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 $xajax = new xajax();
-$xajax -> registerFunction ('search_courses');
+$xajax->registerFunction('search_courses');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -36,12 +36,12 @@ $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE)
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
-$tool_name= get_lang('SubscribeSessionsToCategory');
-$id_session=intval($_GET['id_session']);
+$tool_name = get_lang('SubscribeSessionsToCategory');
+$id_session = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
-	$add_type = Security::remove_XSS($_REQUEST['add_type']);
+if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
+    $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 if (!api_is_platform_admin() && !api_is_session_admin()) {
@@ -90,17 +90,24 @@ $formSent = 0;
 $errorMsg = $firstLetterCourse = $firstLetterSession = '';
 $CourseList = $SessionList = array();
 $courses = $sessions = array();
-$Categoryid = isset($_POST['CategorySessionId']) ? intval($_POST['CategorySessionId']) : null;
+$categoryId = isset($_POST['CategorySessionId']) ? intval($_POST['CategorySessionId']) : null;
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
-    $SessionCategoryList = $_POST['SessionCategoryList'];
+    $sessionCategoryList = $_POST['SessionCategoryList'];
 
-    if ($Categoryid != 0 && count($SessionCategoryList) > 0) {
-        $session_id = join(',', $SessionCategoryList);
-        $sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
+
+    if ($categoryId != 0 && count($sessionCategoryList) > 0) {
+        // Removing all
+        $sql = "UPDATE $tbl_session SET session_category_id = '' WHERE session_category_id = $categoryId";
         Database::query($sql);
-        header('Location: add_many_session_to_category.php?id_category=' . $Categoryid . '&msg=ok');
+        // Adding new
+        $sessionCategoryList = array_map('intval', $sessionCategoryList);
+        $session_id = join(',', $sessionCategoryList);
+
+        $sql = "UPDATE $tbl_session SET session_category_id = $categoryId WHERE id in ($session_id) ";
+        Database::query($sql);
+        header('Location: add_many_session_to_category.php?id_category=' . $categoryId . '&msg=ok');
         exit;
     } else {
         header('Location: add_many_session_to_category.php?msg=error');
@@ -109,7 +116,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 }
 
 if (isset($_GET['id_category'])) {
-    $Categoryid = intval($_GET['id_category']);
+    $categoryId = intval($_GET['id_category']);
 }
 
 if (isset($_GET['msg']) && $_GET['msg'] == 'error') {
@@ -121,15 +128,15 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'ok') {
 }
 
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
-// display the dokeos header
+
 Display::display_header($tool_name);
 
 $where = '';
 $rows_category_session = array();
 if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category'])) {
 
-    $where = 'WHERE session_category_id !=' . $Categoryid;
-    $sql = 'SELECT id, name  FROM ' . $tbl_session . ' WHERE session_category_id =' . $Categoryid . ' ORDER BY name';
+    $where = 'WHERE session_category_id !=' . $categoryId;
+    $sql = 'SELECT id, name  FROM ' . $tbl_session . ' WHERE session_category_id =' . $categoryId . ' ORDER BY name';
     $result = Database::query($sql);
     $rows_category_session = Database::store_result($result);
 }
@@ -147,7 +154,7 @@ if (api_get_multiple_access_url()) {
     $sql = "SELECT s.id, s.name  FROM $tbl_session s INNER JOIN $table_access_url_rel_session u ON s.id = u.session_id $where AND u.access_url_id = $access_url_id ORDER BY name";
 } else {
     $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
-} 
+}
 $result=Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>
@@ -167,10 +174,10 @@ if(!empty($OkMsg)) {
 	Display::display_confirmation_message($OkMsg); //main API
 }
 
-/* 
- * 
- * The a/b/c Filter is not a priority 
- *  
+/*
+ *
+ * The a/b/c Filter is not a priority
+ *
  * <td width="45%" align="center">
  <?php echo get_lang('FirstLetterCourse'); ?> :
      <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
@@ -188,14 +195,14 @@ if(!empty($OkMsg)) {
 <tr>
 	<td align="left"></td>
 	<td align="left"></td>
-	<td  align="center"> 
+	<td  align="center">
 	<b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
 	<select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
 		<option value="0" ></option>
 		<?php
 		if (!empty($rows_session_category)) {
     		foreach($rows_session_category as $category) {
-    			if($category['id'] == $Categoryid)
+    			if($category['id'] == $categoryId)
       				echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
       			else
       				echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
@@ -228,19 +235,9 @@ if(!empty($OkMsg)) {
 <?php unset($nosessionCourses); ?>
   </td>
   <td width="10%" valign="middle" align="center">
-  <?php
-  if ($ajax_search) {
-  ?>
-  	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
-  <?php
-  } else {
-  ?>
   	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
 	<br /><br />
 	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
-  <?php
-  }
-  ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
 		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToCategory').'</button>';
@@ -258,7 +255,6 @@ if(!empty($OkMsg)) {
 
 </form>
 <script type="text/javascript">
-<!--
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -302,9 +298,7 @@ function valide(){
 
 	document.forms.formulaire.submit();
 }
--->
-
 </script>
 <?php
-/*		FOOTER	*/
+
 Display::display_footer();

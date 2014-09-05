@@ -2,6 +2,7 @@
 
 namespace Chamilo\CoreBundle\Migrations\Data\ORM;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -51,9 +52,12 @@ class LoadAdminUserData extends AbstractFixture implements
     public function load(ObjectManager $manager)
     {
         $manager = $this->getUserManager();
+        $groupManager = $this->getGroupManager();
+
         $faker = $this->getFaker();
 
         // Creating admin user.
+        /** @var User $admin */
         $admin = $manager->createUser();
 
         $admin->setUsername('admin');
@@ -65,6 +69,9 @@ class LoadAdminUserData extends AbstractFixture implements
         $admin->setEnabled(true);
         $admin->setSuperAdmin(true);
         $admin->setLocked(false);
+
+        $adminGroup = $groupManager->findGroupByName('admins');
+        $admin->setGroups(array($adminGroup));
 
         $manager->updateUser($admin);
     }

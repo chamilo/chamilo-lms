@@ -22,6 +22,12 @@ class Group extends BaseGroup
     protected $id;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\User", mappedBy="groups")
+     *
+     */
+    protected $users;
+
+    /**
      * Get id
      *
      * @return integer $id
@@ -29,5 +35,10 @@ class Group extends BaseGroup
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

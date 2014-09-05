@@ -40,6 +40,9 @@ class LegacyListener
         /** @var ContainerInterface $container */
         $container = $this->container;
 
+        // Setting container
+        Container::setContainer($container);
+
         // Setting session.
         Container::setSession($request->getSession());
 

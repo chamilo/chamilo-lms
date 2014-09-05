@@ -256,13 +256,13 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     //protected $jurySubscriptions;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Group")
+     * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\Group")
      * @ORM\JoinTable(name="fos_user_user_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
      */
-    //protected $groups;
+    protected $groups;
 
     /**
      * @ORM\Column(type="string", length=255)

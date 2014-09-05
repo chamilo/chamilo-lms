@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Framework;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -18,6 +19,10 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
  */
 class Container
 {
+    /**
+     * @var ContainerInterface
+     */
+    public static $container;
     public static $session;
     public static $configuration;
     public static $urlGenerator;
@@ -34,6 +39,14 @@ class Container
     public static $htmlEditor;
     public static $twig;
     public static $roles;
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public static function setContainer($container)
+    {
+        self::$container = $container;
+    }
 
     /**
      * @return string
@@ -155,5 +168,19 @@ class Container
         return self::$assets;
     }
 
-    //public static function get
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public static function getEntityManager()
+    {
+        return \Database::getManager();
+    }
+
+    /**
+     * @return \Sonata\UserBundle\Entity\UserManager
+     */
+    public static function getUserManager()
+    {
+        return self::$container->get('fos_user.user_manager');
+    }
 }

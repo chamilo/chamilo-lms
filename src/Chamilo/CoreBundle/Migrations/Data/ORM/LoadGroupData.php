@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Data\ORM;
 
@@ -11,6 +12,10 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
+/**
+ * Class LoadGroupData
+ * @package Chamilo\CoreBundle\Migrations\Data\ORM
+ */
 class LoadGroupData extends AbstractFixture implements
     ContainerAwareInterface,
     OrderedFixtureInterface,
@@ -50,14 +55,20 @@ class LoadGroupData extends AbstractFixture implements
         $groupManager = $this->getGroupManager();
 
         // Creating groups
-        $studentGroup = $groupManager->createGroup('students');
-        $studentGroup->addRole('ROLE_STUDENT');
+        $group = $groupManager->createGroup('admin');
+        $group->addRole('ROLE_ADMIN');
+        $groupManager->updateGroup($group);
 
-        $groupManager->updateGroup($studentGroup);
+        $group = $groupManager->createGroup('students');
+        $group->addRole('ROLE_STUDENT');
+        $groupManager->updateGroup($group);
 
-        $teacherGroup = $groupManager->createGroup('teachers');
-        $teacherGroup->addRole('ROLE_TEACHER');
-        $groupManager->updateGroup($teacherGroup);
+        $group = $groupManager->createGroup('teachers');
+        $group->addRole('ROLE_TEACHER');
+        $groupManager->updateGroup($group);
+
+
+
     }
 
     /**

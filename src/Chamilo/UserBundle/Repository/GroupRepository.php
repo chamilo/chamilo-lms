@@ -11,5 +11,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class GroupRepository extends EntityRepository
 {
-
+    /**
+     * @return mixed
+     */
+    public function getAdmins()
+    {
+        $criteria = array('name' => 'admins');
+        $group = $this->findOneBy($criteria);
+        return $group->getUsers();
+    }
 }

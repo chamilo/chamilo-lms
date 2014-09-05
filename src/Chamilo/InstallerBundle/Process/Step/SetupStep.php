@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Migrations\Data\ORM\LoadAdminUserData;
 //use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManager;
 use Symfony\Component\HttpFoundation\Response;
-use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class SetupStep
@@ -52,7 +52,7 @@ class SetupStep extends AbstractStep
     {
         $adminUser = $this
             ->getDoctrine()
-            ->getRepository('ApplicationSonataUserBundle:User')
+            ->getRepository('ChamiloUserBundle:User')
             ->findOneBy(array('username' => LoadAdminUserData::DEFAULT_ADMIN_USERNAME));
 
         if (!$adminUser) {

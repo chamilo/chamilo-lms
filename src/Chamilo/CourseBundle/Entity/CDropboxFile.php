@@ -111,7 +111,7 @@ class CDropboxFile
     private $file;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="dropBoxSentFiles")
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="dropBoxSentFiles")
      * @ORM\JoinColumn(name="uploader_id", referencedColumnName="id")
      **/
     private $userSent;

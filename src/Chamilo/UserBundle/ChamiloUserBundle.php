@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Application\Sonata\UserBundle;
+namespace Chamilo\UserBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ApplicationSonataUserBundle
- * @package Application\Sonata\UserBundle
+ * Class ChamiloUserBundle
+ * @package Chamilo\UserBundle
  */
-class ApplicationSonataUserBundle extends Bundle
+class ChamiloUserBundle extends Bundle
 {
     /**
      * {@inheritdoc}

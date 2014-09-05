@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 use Chamilo\NotebookBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Tool\BaseTool;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;

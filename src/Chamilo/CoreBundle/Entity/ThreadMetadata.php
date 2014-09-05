@@ -28,7 +28,7 @@ class ThreadMetadata extends BaseThreadMetadata
     protected $thread;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @var ParticipantInterface
      */
     protected $participant;

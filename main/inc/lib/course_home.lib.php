@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class CourseHome
@@ -415,9 +416,12 @@ class CourseHome
         // Condition for the session
         $session_id 			= api_get_session_id();
         $course_id              = api_get_course_int_id();
+        var_dump($course_id);
         $condition_session = api_get_session_condition($session_id, true, true);
 
-        $studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
+        //$studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
+        $studentView = Container::getSession()->get('studentview');
+        //var_dump($studentView);
 
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
@@ -436,7 +440,6 @@ class CourseHome
                             c_id = $course_id
                             $condition_session
                         ORDER BY id";
-
                 $result = Database::query($sql);
                 $col_link ="##003399";
                 break;

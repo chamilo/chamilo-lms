@@ -1,8 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
+/**
+ * Class AppKernel
+ */
 class AppKernel extends Kernel
 {
     /**
@@ -45,7 +49,7 @@ class AppKernel extends Kernel
             // User
             new FOS\UserBundle\FOSUserBundle(),
             new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
-            new Application\Sonata\UserBundle\ApplicationSonataUserBundle(),
+            new Chamilo\UserBundle\ChamiloUserBundle(),
 
             // Page
             new Sonata\PageBundle\SonataPageBundle(),
@@ -158,6 +162,7 @@ class AppKernel extends Kernel
             $bundles[] = new Bazinga\Bundle\FakerBundle\BazingaFakerBundle();
             $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
             $bundles[] = new Elao\WebProfilerExtraBundle\WebProfilerExtraBundle();
+            $bundles[] = new Jns\Bundle\XhprofBundle\JnsXhprofBundle();
         }
 
         return $bundles;

@@ -6,7 +6,7 @@
         @author <yourname> <youremail>
     -->
 
-    <class name="Application\Sonata\UserBundle\Document\User" exclusion-policy="all" xml-root-name="_user">
+    <class name="Chamilo\UserBundle\Document\User" exclusion-policy="all" xml-root-name="_user">
 
         <property xml-attribute-map="true" name="id" type="integer" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
 

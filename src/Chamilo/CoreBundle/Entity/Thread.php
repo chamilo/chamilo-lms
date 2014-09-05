@@ -20,7 +20,7 @@ class Thread extends BaseThread
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      */
     protected $createdBy;
 

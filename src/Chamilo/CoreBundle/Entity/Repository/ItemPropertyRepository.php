@@ -204,7 +204,7 @@ class ItemPropertyRepository extends EntityRepository
     public function subscribeUsersToItem($tool, Course $course, Session $session = null, $itemId, $newUserList = array())
     {
         $em = $this->getEntityManager();
-        $user = $em->getRepository('Application\Sonata\UserBundle\Entity\User');
+        $user = $em->getRepository('Chamilo\UserBundle\Entity\User');
 
         $usersSubscribedToItem = $this->getUsersSubscribedToItem($tool, $itemId, $course, $session);
 

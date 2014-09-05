@@ -12,7 +12,7 @@
  *
  * @package chamilo.library
  */
-use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 
 class Event
 {

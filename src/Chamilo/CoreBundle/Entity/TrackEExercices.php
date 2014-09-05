@@ -167,7 +167,7 @@ class TrackEExercices
     private $attempt;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="id")
      */
     private $user;

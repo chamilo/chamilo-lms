@@ -55,7 +55,7 @@ while ($obj = Database::fetch_object($res)) {
             status = 1 or status = 2 ".$order_clause;*/
 /** @var Doctrine\ORM\EntityManager $em */
 /*$em = $this->getDoctrine()->getManager();
-$userManager = $em->getRepository('ApplicationSonataUserBundle:User');
+$userManager = $em->getRepository('ChamiloUserBundle:User');
 var_dump($userManager->getTeachers());*/
 //$userManager->get
 

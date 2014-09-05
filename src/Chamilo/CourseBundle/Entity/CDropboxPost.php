@@ -72,7 +72,7 @@ class CDropboxPost
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="dropBoxReceivedFiles")
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="dropBoxReceivedFiles")
      * @ORM\JoinColumn(name="dest_user_id", referencedColumnName="id")
      **/
     private $user;

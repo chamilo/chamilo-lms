@@ -1,8 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Framework;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
@@ -11,6 +13,7 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 
 /**
  * Class Container
+ * This class is a way to access Symfony2 services in legacy Chamilo code.
  * @package Chamilo\CoreBundle\Framework
  */
 class Container
@@ -30,6 +33,7 @@ class Container
     public static $assets;
     public static $htmlEditor;
     public static $twig;
+    public static $roles;
 
     /**
      * @return string
@@ -37,6 +41,14 @@ class Container
     public static function getConfigDir()
     {
         return self::$configDir;
+    }
+
+    /**
+     * @return RoleHierarchy
+     */
+    public static function getRoles()
+    {
+        return self::$roles;
     }
 
     /**
@@ -142,4 +154,6 @@ class Container
     {
         return self::$assets;
     }
+
+    //public static function get
 }

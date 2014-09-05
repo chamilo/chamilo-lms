@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 
@@ -45,7 +45,7 @@ class ResourceNode
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Application\Sonata\UserBundle\Entity\User",
+     *     targetEntity="Chamilo\UserBundle\Entity\User",
      *     inversedBy="resourceNodes",
      *     cascade={"persist"}
      * )

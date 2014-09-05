@@ -10,7 +10,7 @@ use Symfony\Component\Console;
 use Sunra\PhpSimple\HtmlDomParser;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Driver\CourseDriver;
-use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 use MediaAlchemyst\Alchemyst;
 use Unoconv\Unoconv;
 use Symfony\Component\Console\Output\OutputInterface;

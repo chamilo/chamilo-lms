@@ -4334,10 +4334,9 @@ class CourseManager
         $visible_for_course_admin = 0;
         $visible_for_platform_admin = 2;
 
-        // Move this in a doctrine  listener
+        // Move this in a doctrine listener
         $toolList = self::getToolList();
         $toolList = $toolList->getTools();
-
 
         /** @var Course $course */
         $entityManager = Database::getManager();
@@ -4431,9 +4430,6 @@ class CourseManager
         //Share folder
         Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/shared_folder','".get_lang('UserFolders')."','folder','0')");
         $example_doc_id = Database :: insert_id();
-
-
-
 
         Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
                          VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");

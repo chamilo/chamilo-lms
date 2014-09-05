@@ -38,7 +38,7 @@ services:
     chamilo_installer.form.type.setup.admin:
         class:                                            %chamilo_installer.form.type.setup.admin.class%
         arguments:
-            - Application\Sonata\UserBundle\Entity\User
+            - Chamilo\UserBundle\Entity\User
         tags:
             - { name: form.type, alias: chamilo_installer_setup_admin }
 

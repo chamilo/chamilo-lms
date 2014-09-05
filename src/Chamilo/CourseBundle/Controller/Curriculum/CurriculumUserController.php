@@ -207,7 +207,7 @@ class CurriculumUserController
                 }
 
                 // @todo check this
-                $user = $this->get('orm.em')->getRepository('Application\Sonata\UserBundle\Entity\User')->find($user->getUserId());
+                $user = $this->get('orm.em')->getRepository('Chamilo\UserBundle\Entity\User')->find($user->getUserId());
 
                 $counter = 1;
                 $parsed = array();

@@ -16,22 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ProfileController extends BaseController
 {
-    /**
-     * @Route("/{username}")
-     * @Method({"GET"})
-     */
-    public function indexAction($username)
-    {
-        $userId = \UserManager::get_user_id_from_username($username);
-        $userInfo = api_get_user_info($userId);
-
-        $this->getTemplate()->assign('user', $userInfo);
-        $this->getTemplate()->assign('form_send_message', \MessageManager::generate_message_form('send_message'));
-        $this->getTemplate()->assign('form_send_invitation', \MessageManager::generate_invitation_form('send_invitation'));
-
-        $response = $this->getTemplate()->renderTemplate($this->getTemplatePath().'profile.tpl');
-        return new Response($response, 200, array());
-    }
 
     /**
      * My files

@@ -124,7 +124,7 @@ services:
             - { name: sonata.breadcrumb }
 
     chamilo_core.encoder:
-        class: Application\Sonata\UserBundle\Security\Encoder
+        class: Chamilo\UserBundle\Security\Encoder
 
     # Settings
     chamilo_core.settings_schema.platform:

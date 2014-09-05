@@ -62,7 +62,7 @@ class CourseAdmin extends Admin
                     'admin_code'        => 'sonata.admin.course_rel_user'
                 )
             )
-            //->add('users', 'entity', array('class' => 'Application\Sonata\UserBundle\Entity\User', 'label' => 'Cliente'))
+            //->add('users', 'entity', array('class' => 'Chamilo\UserBundle\Entity\User', 'label' => 'Cliente'))
         ;
     }
 

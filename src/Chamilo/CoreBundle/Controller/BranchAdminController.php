@@ -108,7 +108,7 @@ class BranchAdminController extends Controller
 
                 $userIdList = $item->getUserId();
                 $userId = ($userIdList[0]);
-                $user = $this->getManager()->getRepository('Application\Sonata\UserBundle\Entity\User')->find($userId);
+                $user = $this->getManager()->getRepository('Chamilo\UserBundle\Entity\User')->find($userId);
                 if (!$user) {
                     throw new \Exception('Unable to found User');
                 }

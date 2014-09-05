@@ -10,7 +10,7 @@
 
 use \ChamiloSession as Session;
 use Symfony\Component\Validator\Constraints as Assert;
-use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Container;
 
@@ -6784,13 +6784,22 @@ function api_get_language_interface()
  */
 function api_get_user_roles()
 {
-    $em = Database::getManager();
-    //var_dump(Session::getSecurity()->getToken()->getRoles());
-    $roles = $em->getRepository('ChamiloCoreBundle:Role')->findBy(array(), array('name'=>'asc'));
+    //$em = Database::getManager();
+    $roles = Container::getRoles();
+
+    var_dump($roles );
+
+    //$roles = $roleHierarchy->getReachableRoles();
+
+    //var_dump(Container::getSecurity()->getToken()->getRoles());
+    //$roles = $em->getRepository('ChamiloCoreBundle:Role')->findBy(array(), array('name'=>'asc'));
     $userRoles = array();
     foreach ($roles as $role) {
+
+        var_dump($role);
         $userRoles[$role->getId()] = $role->getName();
     }
+    var_dump($userRoles);
     return $userRoles;
 
     // Status

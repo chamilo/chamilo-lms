@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Application\Sonata\UserBundle\Entity;
+namespace Chamilo\UserBundle\Entity;
 
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,7 +23,7 @@ use Avanzu\AdminThemeBundle\Model\UserInterface as ThemeUser;
 /**
  *
  * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass = "Application\Sonata\UserBundle\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass = "Chamilo\UserBundle\Repository\UserRepository")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="email",
  *         column=@ORM\Column(

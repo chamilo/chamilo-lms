@@ -96,7 +96,7 @@ class JuryController
 
         $role = $request->get('role');
         /** @var \Chamilo\CoreBundle\Entity\Repository\UserRepository $repo */
-        $repo = $this->getManager()->getRepository('Application\Sonata\UserBundle\Entity\User');
+        $repo = $this->getManager()->getRepository('Chamilo\UserBundle\Entity\User');
 
         if (empty($role)) {
             $entities = $repo->searchUserByKeyword($keyword);

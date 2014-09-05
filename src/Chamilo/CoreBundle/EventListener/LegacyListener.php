@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 class LegacyListener
 {
+    /** @var ContainerInterface */
     protected $container;
 
     /**
@@ -36,6 +37,7 @@ class LegacyListener
         $kernel = $event->getKernel();
         $request = $event->getRequest();
         $session = $request->getSession();
+        /** @var ContainerInterface $container */
         $container = $this->container;
 
         // Setting session.
@@ -45,13 +47,13 @@ class LegacyListener
         $dbConnection = $container->get('database_connection');
 
         // Setting DB connection and Doctrine Manager.
-        $database  = new \Database();
+        $database = new \Database();
         $database->setConnection($dbConnection);
         $database->setManager($container->get('doctrine')->getManager());
 
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
-        //\CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
+        \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
 
         // Setting legacy properties.
         Container::$urlGenerator = $container->get('router');
@@ -66,6 +68,7 @@ class LegacyListener
         Container::$courseDir = $container->get('kernel')->getDataDir();
         //Container::$configDir = $container->get('kernel')->getConfigDir();
         Container::$assets = $container->get('templating.helper.assets');
+        Container::$roles = $container->get('security.role_hierarchy');
 
         // Setting editor
         Container::$htmlEditor = $container->get('chamilo_core.html_editor');

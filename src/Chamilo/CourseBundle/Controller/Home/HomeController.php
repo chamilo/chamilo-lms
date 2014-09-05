@@ -93,13 +93,16 @@ class HomeController extends ToolBaseController
             }
         }
 
-        if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_view') == 'activity_big') {
+        $homeView = api_get_setting('homepage_view');
+        $homeView = 'activity_big';
+
+        if ($homeView == 'activity' || $homeView == 'activity_big') {
             $result = $this->renderActivityView();
-        } elseif (api_get_setting('homepage_view') == '2column') {
+        } elseif ($homeView == '2column') {
             $result = $this->render2ColumnView();
-        } elseif (api_get_setting('homepage_view') == '3column') {
+        } elseif ($homeView == '3column') {
             $result = $this->render3ColumnView();
-        } elseif (api_get_setting('homepage_view') == 'vertical_activity') {
+        } elseif ($homeView == 'vertical_activity') {
             $result = $this->renderVerticalActivityView();
         }
 
@@ -110,6 +113,7 @@ class HomeController extends ToolBaseController
             TOOL_COURSE_HOMEPAGE,
             $toolList
         );
+
         $sessionInfo = null;
         if (api_get_setting('show_session_data') == 'true' && $sessionId) {
             $sessionInfo = CourseHome::show_session_data($sessionId);
@@ -132,6 +136,7 @@ class HomeController extends ToolBaseController
         return $this->render(
             'ChamiloCourseBundle:Home:index.html.twig',
             array(
+                'course' => $course,
                 'session_info' => $sessionInfo,
                 'icons' => $result['content'],
                 'edit_icons' => $editIcons,
@@ -151,6 +156,9 @@ class HomeController extends ToolBaseController
         return $html;
     }
 
+    /**
+     * @return array
+     */
     private function renderActivityView()
     {
         $session_id = api_get_session_id();

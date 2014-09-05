@@ -47,3 +47,7 @@ web_profiler_extra:
     twig:
         enabled:        true
         display_in_wdt: true
+
+jns_xhprof:
+    location_web: http://localhost/xhprof/xhprof_html
+    enabled: false

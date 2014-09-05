@@ -280,10 +280,10 @@ class InstallCommand extends ContainerAwareCommand
     protected function setupAdmin(OutputInterface $output)
     {
         $dialog = $this->getHelperSet()->get('dialog');
-        //$user = new \Application\Sonata\UserBundle\Entity\User();
+        //$user = new \Chamilo\UserBundle\Entity\User();
         $em = $this->getApplication()->getKernel()->getContainer()->get('doctrine')->getManager();
-        /** @var \Application\Sonata\UserBundle\Entity\User $user */
-        $user = $em->getRepository('ApplicationSonataUserBundle:User')->findOneById(1);
+        /** @var \Chamilo\UserBundle\Entity\User $user */
+        $user = $em->getRepository('ChamiloUserBundle:User')->findOneById(1);
 
         $user->setUsername($dialog->ask($output, '<question>Username</question>(admin):', 'admin'));
         $user->setPlainPassword($dialog->ask($output, '<question>Password</question>(admin):', 'admin'));

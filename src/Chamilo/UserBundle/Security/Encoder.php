@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Application\Sonata\UserBundle\Security;
+namespace Chamilo\UserBundle\Security;
 
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 /**
  * Class Encoder
- * @package Application\Sonata\UserBundle\Security
+ * @package Chamilo\UserBundle\Security
  */
 class Encoder implements PasswordEncoderInterface
 {

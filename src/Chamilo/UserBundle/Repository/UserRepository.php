@@ -1,12 +1,12 @@
 <?php
 
-namespace Application\Sonata\UserBundle\Repository;
+namespace Chamilo\UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Application\Sonata\UserBundle\Entity\User as User;
+use Chamilo\UserBundle\Entity\User as User;
 
 /**
  * Class UserRepository
@@ -25,7 +25,7 @@ class UserRepository extends EntityRepository
         // Selecting user info
         $qb->select('DISTINCT b');
 
-        $qb->from('Application\Sonata\UserBundle\Entity\User', 'b');
+        $qb->from('Chamilo\UserBundle\Entity\User', 'b');
 
         // Selecting courses for users
         //$qb->innerJoin('u.courses', 'c');

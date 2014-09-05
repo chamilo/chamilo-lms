@@ -3,13 +3,11 @@
 
 namespace Chamilo\CoreBundle\Controller\User;
 
-use Silex\Application;
-
 use Symfony\Component\HttpFoundation\Response;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * Class UserController
@@ -32,6 +30,23 @@ class UserController extends BaseController
     }
 
     /**
+     * @Route("/{username}")
+     * @Method({"GET"})
+     * @Template("ChamiloCoreBundle:User:profile.html.twig")
+     */
+    public function profileAction($username)
+    {
+        $userId = \UserManager::get_user_id_from_username($username);
+        $userInfo = api_get_user_info($userId);
+
+        return array(
+            'user' =>  $userInfo,
+            'form_send_message' => \MessageManager::generate_message_form('send_message'),
+            'form_send_invitation' => \MessageManager::generate_invitation_form('send_invitation')
+        );
+    }
+
+    /**
      * @Route("/online")
      * @Method({"GET"})
      */
@@ -44,7 +59,7 @@ class UserController extends BaseController
     /**
      * {@inheritdoc}
      */
-    protected function getTemplatePath()
+    public function getTemplatePath()
     {
         return 'user/';
     }

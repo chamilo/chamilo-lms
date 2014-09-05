@@ -118,7 +118,7 @@ class MainMenuBuilder extends ContainerAware
                     'class' => 'dropdown'*/
                 ))
             ;
-            //$logoutLink->addChild($this->templating->render('ApplicationSonataUserBundle:Security:login_options.html.twig'));
+            //$logoutLink->addChild($this->templating->render('ChamiloUserBundle:Security:login_options.html.twig'));
 
         }
 

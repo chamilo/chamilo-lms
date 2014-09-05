@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\Course;
 
 use Sonata\CoreBundle\Model\BaseEntityManager;
 use Chamilo\CourseBundle\Tool\BaseTool;
-use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class CourseManager

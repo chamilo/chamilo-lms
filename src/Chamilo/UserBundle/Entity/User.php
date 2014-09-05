@@ -5,17 +5,12 @@ namespace Chamilo\UserBundle\Entity;
 
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints\DateTime;
 use Chamilo\CoreBundle\Component\Auth;
-use FOS\AdvancedEncoderBundle\Security\Encoder\EncoderAwareInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use FOS\MessageBundle\Model\ParticipantInterface;
 use Avanzu\AdminThemeBundle\Model\UserInterface as ThemeUser;
@@ -23,7 +18,7 @@ use Avanzu\AdminThemeBundle\Model\UserInterface as ThemeUser;
 /**
  *
  * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass = "Chamilo\UserBundle\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="email",
  *         column=@ORM\Column(
@@ -89,13 +84,6 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
      * @ORM\Column(name="auth_source", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
      */
     private $authSource;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=100, precision=0, scale=0, nullable=true, unique=false)
-     */
-    //protected $emailCanonical;
 
     /**
      * @var boolean
@@ -302,11 +290,6 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
      **/
     protected $sessionAsGeneralCoach;
 
-    public function __toString()
-    {
-        return $this->getUsername();
-    }
-
     /**
      *
      */
@@ -330,6 +313,14 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
         //$this->userId = 0;
         //$this->createdAt = new \DateTime();
         //$this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getUsername();
     }
 
     /**

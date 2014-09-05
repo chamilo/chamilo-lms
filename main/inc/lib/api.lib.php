@@ -6779,27 +6779,19 @@ function api_get_language_interface()
 }
 
 /**
- * Get user roles
+ * Get user roles (groups)
  * @return array
  */
 function api_get_user_roles()
 {
-    //$em = Database::getManager();
-    $roles = Container::getRoles();
-
-    var_dump($roles );
-
-    //$roles = $roleHierarchy->getReachableRoles();
-
-    //var_dump(Container::getSecurity()->getToken()->getRoles());
-    //$roles = $em->getRepository('ChamiloCoreBundle:Role')->findBy(array(), array('name'=>'asc'));
+    $em = Database::getManager();
+    $roles = $em->getRepository('ChamiloUserBundle:Group')->findBy(array(), array('name'=>'asc'));
     $userRoles = array();
+    /** @var Chamilo\UserBundle\Entity\Group $role */
     foreach ($roles as $role) {
-
-        var_dump($role);
         $userRoles[$role->getId()] = $role->getName();
     }
-    var_dump($userRoles);
+    $userRoles = array_unique($userRoles);
     return $userRoles;
 
     // Status

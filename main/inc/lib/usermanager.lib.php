@@ -208,23 +208,23 @@ class UserManager
      * Creates a new user for the platform
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
      * @author Roan Embrechts <roan_embrechts@yahoo.com>
-     * @param    string    Firstname
-     * @param    string    Lastname
-     * @param    int       Status (1 for course tutor, 5 for student, 6 for anonymous)
-     * @param    string    e-mail address
-     * @param    string    Login
-     * @param    string    Password
-     * @param    string    Any official code (optional)
-     * @param    string    User language    (optional)
-     * @param    string    Phone number    (optional)
-     * @param    string    Picture URI        (optional)
-     * @param    string    Authentication source    (optional, defaults to 'platform', dependind on constant)
-     * @param    string    Account expiration date (optional, defaults to '0000-00-00 00:00:00')
-     * @param    int        Whether the account is enabled or disabled by default
-     * @param    int        The department of HR in which the user is registered (optional, defaults to 0)
-     * @param     array    Extra fields
-     * @param    string    Encrypt method used if password is given encrypted. Set to an empty string by default
-     * @return mixed   new user id - if the new user creation succeeds, false otherwise
+     * @param   string    Firstname
+     * @param   string    Lastname
+     * @param   int       Status (1 for course tutor, 5 for student, 6 for anonymous)
+     * @param   string    e-mail address
+     * @param   string    Login
+     * @param   string    Password
+     * @param   string    Any official code (optional)
+     * @param   string    User language    (optional)
+     * @param   string    Phone number    (optional)
+     * @param   string    Picture URI        (optional)
+     * @param   string    Authentication source    (optional, defaults to 'platform', dependind on constant)
+     * @param   string    Account expiration date (optional, defaults to '0000-00-00 00:00:00')
+     * @param   int        Whether the account is enabled or disabled by default
+     * @param   int        The department of HR in which the user is registered (optional, defaults to 0)
+     * @param   array    Extra fields
+     * @param   string    Encrypt method used if password is given encrypted. Set to an empty string by default
+     * @return  mixed   new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve $_user['user_id'] from the global space. If it exists, $_user['user_id'] is the creator id. If a problem arises, it stores the error message in global $api_failureList
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
      * @assert ('Pippin','Took',null,null,'jo','jo') === false
@@ -304,10 +304,32 @@ class UserManager
             }
         }
 
-
         //@todo replace this date with the api_get_utc_date function big problem with users that are already registered
         $current_date = api_get_utc_datetime();
-        $sql = "INSERT INTO $table_user ".
+
+        $em = Database::getManager();
+
+        $expirationDate = new \DateTime($expiration_date);
+
+        $user = new \Chamilo\UserBundle\Entity\User();
+        $user->setLastname($lastName)
+            ->setFirstname($firstName)
+            ->setUsername($loginName)
+            ->setPassword($password)
+            ->setEmail($email)
+            ->setOfficialCode($official_code)
+            ->setPictureUri($picture_uri)
+            ->setCreatorId($creator_id)
+            ->setAuthSource($auth_source)
+            ->setPhone($phone)
+            ->setLanguage($language)
+            //->setRegistrationDate($current_date)
+            ->setExpirationDate($expirationDate)
+            ->setHrDeptId($hr_dept_id)
+            ->setActive($active)
+        ;
+
+        /*$sql = "INSERT INTO $table_user ".
                "SET lastname =         '".Database::escape_string(trim($lastName))."',".
                "firstname =         '".Database::escape_string(trim($firstName))."',".
                "username =            '".Database::escape_string(trim($loginName))."',".
@@ -324,26 +346,23 @@ class UserManager
                "expiration_date =     '".Database::escape_string($expiration_date)."',".
                "hr_dept_id =         '".Database::escape_string($hr_dept_id)."',".
                "active =             '".Database::escape_string($active)."'";
-        $result = Database::query($sql);
+        $result = Database::query($sql);*/
+        $em->persist($user);
+        $em->flush();
 
-        if ($result) {
-            //echo "id returned";
-            $return = Database::insert_id();
+        if ($user) {
+            $userId = $user->getId();
+
             if (api_get_multiple_access_url()) {
-                UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+                UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
             } else {
                 //we are adding by default the access_url_user table with access_url_id = 1
-                UrlManager::add_user_to_url($return, 1);
+                UrlManager::add_user_to_url($userId, 1);
             }
 
-            // Adding user
-            /** @var Chamilo\UserBundle\Entity\User $user */
-            $em = Database::getManager();
-
-            $user = $em->getRepository('ChamiloCoreBundle:User')->find($return);
-
-            $roleName = api_get_role_name_from_status($status);
-            $user->addRole($roleName);
+            $group = $em->getRepository('ChamiloUserBundle:Group')->find($status);
+            $user->addGroup($group);
+            //$user->addRole($roleName);
             $em->persist($user);
             $em->flush();
 
@@ -365,7 +384,7 @@ class UserManager
                 }
 
                 /* MANAGE EVENT WITH MAIL */
-                if (EventsMail::check_if_using_class('user_registration')) {
+                /*if (EventsMail::check_if_using_class('user_registration')) {
                     $values["about_user"] = $return;
                     $values["password"] = $original_password;
                     $values["send_to"] = array($return);
@@ -373,13 +392,13 @@ class UserManager
                     EventsDispatcher::events('user_registration', $values);
                 } else {
                     @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
-                }
+                }*/
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
             // Add event to system log
             $user_id_manager = api_get_user_id();
-            $user_info = api_get_user_info($return);
-            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
+            $user_info = api_get_user_info($userId);
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, api_get_utc_datetime(), $user_id_manager);
             Event::addEvent(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
         } else {
             return api_set_failure('error inserting in Database');
@@ -388,10 +407,10 @@ class UserManager
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
             foreach ($extra as $fname => $fvalue) {
-                $res = $res && self::update_extra_field_value($return, $fname, $fvalue);
+                $res = $res && self::update_extra_field_value($userId, $fname, $fvalue);
             }
         }
-        self::update_extra_field_value($return, 'already_logged_in', 'false');
+        self::update_extra_field_value($userId, 'already_logged_in', 'false');
         return $return;
     }
 

@@ -3,6 +3,11 @@ index:
     type:     annotation
     prefix:   /
 
+user:
+    resource: "@ChamiloCoreBundle/Controller/User/UserController.php"
+    type:     annotation
+    prefix:   /user
+
 # legacy routes
 main:
     path:     /main/{name}

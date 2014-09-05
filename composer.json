@@ -151,7 +151,9 @@
     "require-dev": {
         "akeneo/crowdin-api": "1.0.*@dev",
         "elao/web-profiler-extra-bundle" : "~2.3@dev",
-        "lexik/maintenance-bundle": "dev-master"
+        "lexik/maintenance-bundle": "dev-master",
+        "jns/xhprof-bundle": "1.0.*@dev",
+        "facebook/xhprof": "dev-master@dev"
     },
     "scripts": {
         "post-install-cmd": [

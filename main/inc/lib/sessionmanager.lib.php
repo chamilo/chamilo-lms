@@ -3774,6 +3774,7 @@ class SessionManager
                         }
 
                         // Adding Students, updating relationship "Session - Course - User".
+                        $course_users = array_filter($course_users);
                         if (!empty($course_users)) {
                             foreach ($course_users as $user) {
                                 $user_id = UserManager::get_user_id_from_username($user);

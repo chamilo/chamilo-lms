@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -55,20 +54,23 @@ class LoadGroupData extends AbstractFixture implements
         $groupManager = $this->getGroupManager();
 
         // Creating groups
-        $group = $groupManager->createGroup('admin');
+        $group = $groupManager->createGroup('admins');
         $group->addRole('ROLE_ADMIN');
+        $manager->persist($group);
         $groupManager->updateGroup($group);
+        $this->setReference('group_admin', $group);
 
         $group = $groupManager->createGroup('students');
         $group->addRole('ROLE_STUDENT');
         $groupManager->updateGroup($group);
+        $this->setReference('group_student', $group);
 
         $group = $groupManager->createGroup('teachers');
         $group->addRole('ROLE_TEACHER');
         $groupManager->updateGroup($group);
+        $this->setReference('group_teacher', $group);
 
-
-
+        $manager->flush();
     }
 
     /**

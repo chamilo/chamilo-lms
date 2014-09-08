@@ -31,6 +31,12 @@ class UserFieldValues extends ExtraFieldValues
     private $fieldValue;
 
     /**
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\UserField")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
+     */
+    protected $field;
+
+    /**
      * Set fieldValue
      *
      * @param string $fieldValue

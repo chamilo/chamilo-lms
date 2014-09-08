@@ -22,6 +22,7 @@ define('REQUIRED_PHP_VERSION', '5.3.3');
 define('REQUIRED_MIN_MEMORY_LIMIT',         '32');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
 define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
+define('IMAGE_PROCESSOR', 'gd');
 
 // USER STATUS CONSTANTS
 /** global status of a user: course manager */
@@ -2302,23 +2303,39 @@ function api_is_teacher() {
  */
 function api_is_platform_admin_by_id($user_id = null, $url = null) {
     $user_id = intval($user_id);
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
+
+    if (!Container::getSecurity()->isGranted('IS_AUTHENTICATED_FULLY')) {
+        return false;
     }
+
+    if (empty($user_id)) {
+        $user = Container::getSecurity()->getToken()->getUser();
+    } else {
+        $user = Container::getEntityManager()->getRepository('ChamiloUserBundle:User')->find($user_id);
+    }
+
+    $admin = Container::getEntityManager()->getRepository('ChamiloUserBundle:Group')->findOneBy(array('name' => 'admins'));
+    $is_admin = $user->getGroups()->contains($admin);
+
+    /*
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
     $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
     $res = Database::query($sql);
-    $is_admin = Database::num_rows($res) === 1;
+    $is_admin = Database::num_rows($res) === 1;*/
     if (!$is_admin or !isset($url)) {
         return $is_admin;
     }
+
+    $portal = Container::getEntityManager()->getRepository('ChamiloCoreBundle:AccessUrl')->find($url);
+    return $user->getPortals()->contains($portal);
+    /*
     // We get here only if $url is set
     $url = intval($url);
     $url_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELCT * FROM $url_user_table WHERE access_url_id = $url AND user_id = $user_id";
     $res = Database::query($sql);
     $is_on_url = Database::num_rows($res) === 1;
-    return $is_on_url;
+    return $is_on_url;*/
 }
 
 /**
@@ -5378,6 +5395,7 @@ function api_is_global_platform_admin($user_id = null) {
     if (empty($user_id)) {
         $user_id = api_get_user_id();
     }
+
     if (api_is_platform_admin_by_id($user_id)) {
         $my_url_list = api_get_access_url_from_user($user_id);
         // The admin is registered in the first "main" site with access_url_id = 1
@@ -5395,8 +5413,8 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
         $my_user_id = api_get_user_id();
     }
 
-    $iam_a_global_admin     = api_is_global_platform_admin($my_user_id);
-    $user_is_global_admin   = api_is_global_platform_admin($admin_id_to_check);
+    $user_is_global_admin = api_is_global_platform_admin($admin_id_to_check);
+    $iam_a_global_admin = api_is_global_platform_admin($my_user_id);
 
     if ($iam_a_global_admin) {
         //global admin can edit everything
@@ -5404,6 +5422,7 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
     } else {
         //If i'm a simple admin
         $is_platform_admin = api_is_platform_admin_by_id($my_user_id);
+        //var_dump($is_platform_admin);
 
         if ($allow_session_admin) {
             $is_platform_admin = api_is_platform_admin_by_id($my_user_id) || (api_get_user_status($my_user_id) == SESSIONADMIN);

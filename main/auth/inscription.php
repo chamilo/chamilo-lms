@@ -448,7 +448,7 @@ if ($form->validate()) {
     }
 
     // Symfony way to login as a user
-    $user = Database::getManager()->getRepository('ChamiloCoreBundle:User')->find($user_id);
+    $user = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user_id);
 
     // Here, "secured" is the name of the firewall in your security.yml
     $token = new UsernamePasswordToken(

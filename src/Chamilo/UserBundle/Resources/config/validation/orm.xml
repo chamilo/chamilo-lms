@@ -10,7 +10,7 @@
             <option name="errorPath">username</option>
             <option name="message">fos_user.username.already_used</option>
             <option name="groups">
-                <value>ProfileCustom</value>
+                <value>Registration</value>
             </option>
         </constraint>
     </class>

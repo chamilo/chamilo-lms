@@ -35,7 +35,6 @@ class ExtraFieldValues
      */
     private $tms;
 
-
     /**
      * @var integer
      *
@@ -50,6 +49,34 @@ class ExtraFieldValues
      * @ORM\Column(name="comment", type="string", precision=0, scale=0, nullable=true, unique=false)
      */
     private $comment;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
+
+    /**
+     * @param $user
+     * @return $this
+     */
+    public function setUser($user)
+    {
+        $this->user  = $user;
+
+        return $this;
+    }
+
+    /**
+     * @param $field
+     * @return $this
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+
+        return $this;
+    }
 
      /**
      * Set comment
@@ -74,7 +101,6 @@ class ExtraFieldValues
         return $this->comment;
     }
 
-
     /**
      * Get id
      *
@@ -83,29 +109,6 @@ class ExtraFieldValues
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set questionId
-     *
-     * @param integer $questionId
-     * @return ExtraFieldValues
-     */
-    public function setQuestionId($questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId
-     *
-     * @return integer
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
     }
 
     /**
@@ -131,8 +134,6 @@ class ExtraFieldValues
         return $this->fieldId;
     }
 
-
-
     /**
      * Set tms
      *
@@ -157,9 +158,9 @@ class ExtraFieldValues
     }
 
      /**
-     * Set questionId
+     * Set setUserId
      *
-     * @param integer $questionId
+     * @param integer $id
      * @return QuestionFieldValues
      */
     public function setUserId($id)
@@ -169,7 +170,7 @@ class ExtraFieldValues
     }
 
     /**
-     * Get questionId
+     * Get userId
      *
      * @return integer
      */

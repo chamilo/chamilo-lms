@@ -15,6 +15,12 @@ use Chamilo\UserBundle\Entity\User as User;
  */
 class UserRepository extends EntityRepository
 {
+    public function getGroupsByUser($userId)
+    {
+        $user = $this->find($userId);
+
+    }
+
     /**
     * @param string $keyword
     * @return mixed

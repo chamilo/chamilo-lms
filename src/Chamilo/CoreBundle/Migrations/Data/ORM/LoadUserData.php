@@ -71,7 +71,7 @@ class LoadUserData extends AbstractFixture implements
         $manager->updateUser($user);
 
         // Creating random student users.
-        foreach (range(2, 100) as $id) {
+        foreach (range(3, 100) as $id) {
             $user = $manager->createUser();
             $user->setUserId($id);
             $user->setFirstname($faker->firstName);

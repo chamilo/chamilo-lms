@@ -181,6 +181,7 @@ class Container
      */
     public static function getUserManager()
     {
+        //return self::$container->get('sonata.user.user_manager');
         return self::$container->get('fos_user.user_manager');
     }
 }

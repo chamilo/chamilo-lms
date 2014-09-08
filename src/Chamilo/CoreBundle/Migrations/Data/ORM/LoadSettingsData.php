@@ -60,6 +60,7 @@ class LoadSettingsData extends AbstractFixture implements
     private function generateCode($manager, $entity, $variableName, $variables)
     {
         $data = $manager->getRepository('ChamiloCoreBundle:'.$entity)->findAll();
+
         if (!empty($data)) {
             $code = null;
             /** @var SettingsCurrent $setting */

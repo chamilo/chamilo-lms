@@ -16,8 +16,9 @@ use FOS\MessageBundle\Model\ParticipantInterface;
 use Avanzu\AdminThemeBundle\Model\UserInterface as ThemeUser;
 
 /**
- *
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user")
+ * @UniqueEntity("username")
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="email",
@@ -291,6 +292,11 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     protected $sessionAsGeneralCoach;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user")
+     **/
+    protected $extraFields;
+
+    /**
      *
      */
     public function __construct()
@@ -324,23 +330,31 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * Updates the id with the user_id
      *  @ORM\PostPersist()
      */
     public function postPersist(LifecycleEventArgs $args)
     {
         //parent::postPersist();
         // Updates the user_id field
-        $this->setUserId($this->getId());
-        $em = $args->getEntityManager();
-        $em->persist($this);
-        $em->flush();
+        $user = $args->getEntity();
+        $this->setUserId($user->getId());
+        /*$em = $args->getEntityManager();
+        $em->persist($user);
+        $em->flush();*/
     }
 
+    /**
+     * @param int $userId
+     */
     public function setId($userId)
     {
         $this->id = $userId;
     }
 
+    /**
+     * @param int $userId
+     */
     public function setUserId($userId)
     {
         if (!empty($userId)) {
@@ -348,11 +362,17 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
         }
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getEncoderName()
     {
         return "legacy_encoder";
@@ -1131,7 +1151,9 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
      */
     public function setExpirationDate($expirationDate)
     {
-        $this->expirationDate = $expirationDate;
+        if (!empty($expirationDate)) {
+            $this->expirationDate = $expirationDate;
+        }
 
         return $this;
     }

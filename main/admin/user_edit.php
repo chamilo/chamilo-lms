@@ -3,11 +3,11 @@
 /**
  * @package chamilo.admin
  */
+use Chamilo\CoreBundle\Framework\Container;
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
 
 api_protect_super_admin($user_id, null, true);
-
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $htmlHeadXtra[] = '<script>
@@ -56,21 +56,13 @@ $tool_name = get_lang('ModifyUserInfo');
 $interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => "user_list.php", "name" => get_lang('UserList'));
 
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-$sql = "SELECT u.*, a.user_id AS is_admin FROM $table_user u LEFT JOIN $table_admin a ON a.user_id = u.user_id WHERE u.user_id = '".$user_id."'";
-$res = Database::query($sql);
-if (Database::num_rows($res) != 1) {
-    header('Location: user_list.php');
-    exit;
-}
+//$user = Container::getEntityManager()->getRepository('ChamiloUserBundle:User')->find($user_id);
+$user_data = api_get_user_info($user_id, false, true);
 
-$user_data = Database::fetch_array($res, 'ASSOC');
-$user_data['platform_admin'] = is_null($user_data['is_admin']) ? 0 : 1;
+$user_data['platform_admin'] = api_is_platform_admin_by_id($user_id);
 $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 //Convert the registration date of the user
-
 //@todo remove the date_default_timezone_get() see UserManager::create_user function
 $user_data['registration_date'] = api_get_local_time(
     $user_data['registration_date'],
@@ -82,12 +74,12 @@ $extra_data = UserManager :: get_extra_user_data($user_id, true);
 $user_data = array_merge($user_data, $extra_data);
 
 // Create the form
-$form = new FormValidator('user_edit', 'post', '', '', array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
+$form = new FormValidator('user_edit', 'post', api_get_self().'?user_id='.$user_id);
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'user_id', $user_id);
 
 if (api_is_western_name_order()) {
-    // Firstname
+    // First name
     $form->addElement('text', 'firstname', get_lang('FirstName'));
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
@@ -237,7 +229,7 @@ $form->addElement('html', '</div>');
 */
 
 //Language
-if (api_is_platform_admin()) {
+/*if (api_is_platform_admin()) {
 	$group = array();
 	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
 	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
@@ -247,7 +239,7 @@ if (api_is_platform_admin()) {
 	$form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
 	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
 	$form->addElement('html', '</div>');
-}
+}*/
 
 //Language
 $form->addElement('select_language', 'language', get_lang('Language'));
@@ -316,9 +308,8 @@ if ($expiration_date == '0000-00-00 00:00:00') {
     $user_data['expiration_date']['i'] = substr($expiration_date, 14, 2);
 }
 
-$user = Database::getManager()->getRepository('ChamiloCoreBundle:User')->find($user_data['user_id']);
-
-$roles = $user->getRoles();
+$user = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user_data['user_id']);
+/*$roles = $user->getGroups();
 
 $role  = array();
 if (!empty($roles)) {
@@ -326,7 +317,7 @@ if (!empty($roles)) {
     $role = $role->getId();
 }
 
-$user_data['status'] = $role;
+$user_data['status'] = $role;*/
 $form->setDefaults($user_data);
 
 $error_drh = false;
@@ -343,7 +334,7 @@ if ($form->validate()) {
         $picture = $picture_element->getValue();
 
         $picture_uri = $user_data['picture_uri'];
-        if ($user['delete_picture']) {
+        if (isset($user['delete_picture']) && $user['delete_picture']) {
             $picture_uri = UserManager::delete_user_picture($user_id);
         } elseif (!empty($picture['name'])) {
             $picture_uri = UserManager::update_user_picture(
@@ -356,7 +347,7 @@ if ($form->validate()) {
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
         $password = $user['password'];
-        $auth_source = $user['auth_source'];
+        $auth_source = null;
         $official_code = $user['official_code'];
         $email = $user['email'];
         $phone = $user['phone'];
@@ -364,16 +355,16 @@ if ($form->validate()) {
         $status = intval($user['status']);
         $send_mail = intval($user['send_mail']);
         $reset_password = intval($user['reset_password']);
-        $hr_dept_id = intval($user['hr_dept_id']);
+        $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
         $language = $user['language'];
 
-        if ($user['radio_expiration_date'] == '1') {
-            $expiration_date = Text::return_datetime_from_array($user['expiration_date']);
+        if (isset($user['radio_expiration_date']) && $user['radio_expiration_date'] == '1') {
+            $expiration_date = new \DateTime(Text::return_datetime_from_array($user['expiration_date']));
         } else {
             $expiration_date = null;
         }
 
-        $active = intval($user['active']);
+        $active = isset($user['active']) ? intval($user['active']) : 0;
 
         if (api_get_setting('login_is_email') == 'true') {
             $username = $email;
@@ -432,14 +423,6 @@ $image = $image_path['file'];
 $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_IMG_PATH).'unknown.jpg');
 $image_size = api_getimagesize($image_file);
 
-$img_attributes = 'src="'.$image_file.'?rand='.time().'" '
-    .'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
-    .'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
-
-if ($image_size['width'] > 300) { //limit display width to 300px
-    $img_attributes .= 'width="300" ';
-}
-
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
 $big_image_size = api_getimagesize($big_image);
@@ -447,18 +430,16 @@ $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
-$content = null;
+/*$content = null;
 if ($image == '') {
     $content .= '<img '.$img_attributes.' />';
 } else {
     $content .= '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-}
+}*/
 
 // Display form
-$content .= $form->return_form();
+$content = $form->return_form();
 
 $app['title'] = $tool_name;
-$tpl = $app['template'];
-$tpl->assign('message', $message);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+echo $message;
+echo $content;

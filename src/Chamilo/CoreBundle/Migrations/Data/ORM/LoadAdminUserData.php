@@ -53,7 +53,6 @@ class LoadAdminUserData extends AbstractFixture implements
     {
         $manager = $this->getUserManager();
         $groupManager = $this->getGroupManager();
-
         $faker = $this->getFaker();
 
         // Creating admin user.
@@ -70,8 +69,9 @@ class LoadAdminUserData extends AbstractFixture implements
         $admin->setSuperAdmin(true);
         $admin->setLocked(false);
 
-        $adminGroup = $groupManager->findGroupByName('admins');
-        $admin->setGroups(array($adminGroup));
+        // Reference added in LoadGroupData.php
+        $group = $this->getReference('group_admin');
+        $admin->setGroups(array($group));
 
         $manager->updateUser($admin);
     }

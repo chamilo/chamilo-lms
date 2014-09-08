@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
-* This library provides functions for user management.
-* Include/require it in your code to use its functionality.
-* @package chamilo.library
-* @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
-*/
-/**
- * Class
- * @package chamilo.include.user
+ * Class UserManager
+ * This library provides functions for user management.
+ * Include/require it in your code to use its functionality.
+ * @package chamilo.library
+ * @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
  */
 class UserManager
 {
@@ -411,7 +411,7 @@ class UserManager
             }
         }
         self::update_extra_field_value($userId, 'already_logged_in', 'false');
-        return $return;
+        return $userId;
     }
 
     /**
@@ -751,19 +751,11 @@ class UserManager
         if ($user_id != strval(intval($user_id))) return false;
         if ($user_id === false) return false;
 
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-
         //Checking the user language
         $languages = api_get_languages();
         if (!in_array($language, $languages['folder'])) {
             $language = api_get_setting('platformLanguage');
         }
-
-        $sql = "UPDATE $table_user SET
-                lastname='".Database::escape_string($lastname)."',
-                firstname='".Database::escape_string($firstname)."',
-                username='".Database::escape_string($username)."',
-                language='".Database::escape_string($language)."',";
 
         if (!is_null($password)) {
             if ($encrypt_method == '') {
@@ -779,43 +771,43 @@ class UserManager
                     return api_set_failure('encrypt_method invalid');
                 }
             }
-            $sql .= " password='".Database::escape_string($password)."',";
         }
-        if (!is_null($auth_source)) {
-            $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
-        }
-        $sql .=    "
-                email='".Database::escape_string($email)."',
-                status='".Database::escape_string($status)."',
-                official_code='".Database::escape_string($official_code)."',
-                phone='".Database::escape_string($phone)."',
-                picture_uri='".Database::escape_string($picture_uri)."',
-                expiration_date='".Database::escape_string($expiration_date)."',
-                active='".Database::escape_string($active)."',
-                hr_dept_id=".intval($hr_dept_id);
-        if (!is_null($creator_id)) {
-            $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
-        }
-        $sql .=    " WHERE user_id = '$user_id' ";
-        $return = Database::query($sql);
+
+        $em = Database::getManager();
+        /** @var Chamilo\UserBundle\Entity\User $user */
+
+        $user = $em->getRepository('ChamiloUserBundle:User')->find($user_id);
+
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
-            foreach($extra as $fname => $fvalue) {
-                $res = $res && self::update_extra_field_value($user_id,$fname,$fvalue);
+            foreach ($extra as $name => $value) {
+                //$userField = $em->getRepository('ChamiloUserBundle:UserField')->findOneByName($name);
+                $res = $res && self::update_extra_field_value($user_id, $name, $value);
             }
         }
 
         if ($user_info['active'] != $active) {
             self::change_active_state($user_id, $active);
         }
-
         // Adding user
-        /** @var Chamilo\UserBundle\Entity\User $user */
-        $em = Database::getManager();
-        $user = $em->getRepository('ChamiloCoreBundle:User')->find($user_id);
-        $user->addRole(api_get_role_name_from_status($status));
-        $em->persist($user);
-        $em->flush();
+        $user->setLastname($lastname)
+            ->setFirstname($firstname)
+            ->setPassword($password)
+            ->setUsername($username)
+            ->setAuthSource($auth_source)
+            ->setLanguage($language)
+            ->setEmail($email)
+            ->setOfficialCode($official_code)
+            ->setPhone($phone)
+            ->setPictureUri($picture_uri)
+            ->setExpirationDate($expiration_date)
+            ->setActive($active)
+            ->setHrDeptId($hr_dept_id)
+        ;
+
+        $group = $em->getRepository('ChamiloUserBundle:Group')->find($status);
+        $user->addGroup($group);
+        Container::getUserManager()->updateUser($user, true);
 
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
@@ -832,13 +824,13 @@ class UserManager
             } else {
                 $emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($original_password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". api_get_path(WEB_PUBLIC_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
             }
-            @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+            api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
         }
 
         $user_info = api_get_user_info($user_id);
         Event::addEvent(LOG_USER_UPDATED, LOG_USER_ID, $user_id, api_get_utc_datetime(), api_get_user_id());
         Event::addEvent(LOG_USER_UPDATED, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
-        return $return;
+        return $user_id;
     }
 
     /**

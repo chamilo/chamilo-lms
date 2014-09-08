@@ -297,12 +297,25 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
 	$sql .= " LIMIT $from,$number_of_items";
     $res = Database::query($sql);
 
-	$users = array ();
+	$users = array();
     $t = time();
+
+    $adminList = Container::getEntityManager()->getRepository('ChamiloUserBundle:Group')->getAdmins();
+    $adminListArray = array();
+    foreach ($adminList as $admin) {
+        $adminListArray[] = $admin->getId();
+    }
+
+    $statusName = api_get_status_langvars();
+
 	while ($user = Database::fetch_row($res)) {
-        $userInfo = api_get_user_info($user[0]);
-		$image_path 	= UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
-		$user_profile 	= UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
+        $userId = $user[0];
+        $userInfo = api_get_user_info($userId);
+
+        $userEntity = Container::getEntityManager()->getRepository('ChamiloUserBundle:User')->find($userId);
+
+		$image_path 	= UserManager::get_user_picture_path_by_id($userId, 'web', false, true);
+		$user_profile 	= UserManager::get_picture_user($userId, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 		if (!api_is_anonymous()) {
 			$photo = '<center><a href="'.$userInfo['profile_url'].'" title="'.get_lang('Info').'">
                             <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.$userInfo['complete_name'].'" title="'.$userInfo['complete_name'].'" /></a></center>';
@@ -317,9 +330,18 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
         	   $user[7] = '-1';
             }
         }
+
+        $current_user_status_label = $user[7];
+        $user_is_anonymous = false;
+        if ($current_user_status_label == $statusName[ANONYMOUS]) {
+            $user_is_anonymous =true;
+        }
+        //$userEntity->getGroups()->containsKey()
+
+
         // forget about the expiration date field
         $users[] = array(
-            $user[0],
+            $userId,
             $photo,
             $user[1],
             Display::url($user[2], $userInfo['profile_url']),
@@ -329,8 +351,13 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
             $user[6],
             $user[7],
             api_get_local_time($user[9]),
-            $user[0]);
+            $userId,
+            'is_admin' => in_array($userId, $adminListArray),
+            'is_anonymous' => $user_is_anonymous,
+            'groups' => $userEntity->getGroups()
+        );
 	}
+
 	return $users;
 }
 
@@ -351,21 +378,10 @@ function email_filter($email) {
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row) {
-	global $_admins_list, $delete_user_available;
-    $is_admin = false;
-
+	global $delete_user_available;
     $userId = api_get_user_id();
-
-    if (is_array($_admins_list)) {
-	    $is_admin   = in_array($user_id,$_admins_list);
-    }
-	$statusname = api_get_status_langvars();
-	$user_is_anonymous = false;
-    $current_user_status_label = $row['7'];
-
-	if ($current_user_status_label == $statusname[ANONYMOUS]) {
-		$user_is_anonymous =true;
-	}
+    $is_admin = $row['is_admin'];
+	$user_is_anonymous = $row['is_anonymous'];
 	$result = '';
 	if (!$user_is_anonymous) {
         $icon = Display::return_icon('course.png', get_lang('Courses'), array('onmouseout' => 'clear_course_list (\'div_'.$user_id.'\')'));
@@ -431,11 +447,11 @@ function modify_filter($user_id, $url_params, $row) {
 
     //$result .= Display::url('<i class="icon-key icon-large"></i>', 'roles');
 
-	if ($current_user_status_label != $statusname[STUDENT]) {
+	/*if ($current_user_status_label != $statusname[STUDENT]) {
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
 	} else {
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';
-	}
+	}*/
 
 	if (api_is_platform_admin(true)) {
 
@@ -446,13 +462,11 @@ function modify_filter($user_id, $url_params, $row) {
 		}
 	}
 
-
 	if ($is_admin) {
 		$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> ICON_SIZE_SMALL, 'heigth'=> ICON_SIZE_SMALL));
 	} else {
 		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));
 	}
-
 
 	// actions for assigning sessions, courses or users
 	if (api_is_session_admin()) {
@@ -460,12 +474,14 @@ function modify_filter($user_id, $url_params, $row) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}*/
 	}
+    //var_dump($row['groups']);
+
     if (api_is_platform_admin()) {
-		if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
+		if ($row['groups']->containsKey('drh') || $is_admin) {
 			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'),'',ICON_SIZE_SMALL).'</a>';
 			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		} else if ($current_user_status_label == $statusname[SESSIONADMIN]) {
+		} else if ($row['groups']->containsKey('session_admin')) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}
 	}
@@ -481,6 +497,7 @@ function modify_filter($user_id, $url_params, $row) {
             }
         }
     }
+
 	return $result;
 }
 
@@ -652,15 +669,6 @@ if (isset ($_GET['keyword'])) {
 // Create a sortable table with user-data
 $parameters['sec_token'] = Security::get_token();
 
-// get the list of all admins to mark them in the users list
-$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-$sql_admin = "SELECT user_id FROM $admin_table";
-$res_admin = Database::query($sql_admin);
-$_admins_list = array();
-while ($row_admin = Database::fetch_row($res_admin)) {
-	$_admins_list[] = $row_admin[0];
-}
-
 // display advanced search form
 $form = new FormValidator('advanced_search','get');
 
@@ -735,7 +743,6 @@ $table->set_header(7, get_lang('Profile'));
 $table->set_header(8, get_lang('Active'), true);
 $table->set_header(9, get_lang('RegistrationDate'), true);
 $table->set_header(10, get_lang('Action'), false);
-
 
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');

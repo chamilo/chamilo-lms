@@ -2716,7 +2716,8 @@ function string2binary($variable) {
  * @todo use an array called $params instead of lots of params
  * @assert (null) === false
  */
-function register_course($params) {
+function register_course($params)
+{
     global $error_msg, $firstExpirationDelay;
 
     $title              = $params['title'];
@@ -2825,25 +2826,32 @@ function register_course($params) {
                     unsubscribe     = '".intval($unsubscribe) . "',
                     visual_code     = '".Database :: escape_string($visual_code) . "'";
         Database::query($sql);
-
-		$course_id  = Database::get_last_insert_id();
+		$course_id  = Database::insert_id();
 
         if ($course_id) {
-
             $sort = api_max_sort_value('0', api_get_user_id());
+            // Default true
+            $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
+            if ($addTeacher) {
 
-            $i_course_sort = CourseManager :: userCourseSort($user_id, $code);
-            if (!empty($user_id)) {
-                $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                            course_code     = '".Database :: escape_string($code). "',
-                            user_id         = '".intval($user_id) . "',
-                            status          = '1',
-                            role            = '".lang2db(get_lang('Professor')) . "',
-                            tutor_id        = '0',
-                            sort            = '". ($i_course_sort) . "',
-                            user_course_cat = '0'";
-                Database::query($sql);
+                $i_course_sort = CourseManager:: userCourseSort(
+                    $user_id,
+                    $code
+                );
+
+                if (!empty($user_id)) {
+                    $sql = "INSERT INTO " . $TABLECOURSUSER . " SET
+                                course_code     = '" . Database:: escape_string($code) . "',
+                                user_id         = '" . intval($user_id) . "',
+                                status          = '1',
+                                role            = '" . lang2db(get_lang('Professor')) . "',
+                                tutor_id        = '0',
+                                sort            = '" . ($i_course_sort) . "',
+                                user_course_cat = '0'";
+                    Database::query($sql);
+                }
             }
+
             if (!empty($teachers)) {
                 if (!is_array($teachers)) {
                     $teachers = array($teachers);

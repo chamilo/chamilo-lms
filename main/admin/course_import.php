@@ -213,7 +213,7 @@ $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('AddMeAsTeacherInCourses'));
 $form->addElement('button', 'save', get_lang('Import'));
 $form->addElement('hidden', 'formSent', 1);
-$form->setDefaults(array('add_me_as_teacher' => 1));
+//$form->setDefaults(array('add_me_as_teacher' => 0));
 $form->display();
 
 ?>

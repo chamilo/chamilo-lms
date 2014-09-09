@@ -134,33 +134,18 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 $survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20', 'maxlength' => '20', 'id' => 'surveycode_title'));
 
 if ($_GET['action'] == 'edit') {
-    $survey_code->freeze();
+    //$survey_code->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
 
 $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200'));
 $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '100', 'ToolbarStartExpanded' => false));
 
-/*
-  //Language selection has been disabled. If you want to re-enable, please
-  //disable the following line (hidden language field).
-  $lang_array = api_get_languages();
-  foreach ($lang_array['name'] as $key => $value) {
-  $languages[$lang_array['folder'][$key]] = $value;
-  }
-  $form->addElement('select', 'survey_language', get_lang('Language'), $languages);
- */
-
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
 $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
 $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
 
-//$group = '';
-//$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('Yes'), $form_share_value);
-/** TODO Maybe it is better to change this into false instead see line 95 in survey.lib.php */
-//$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('No'), 0);
-//$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
@@ -294,11 +279,14 @@ if ($form->validate()) {
         // Display the form
         $form->display();
     } else {
-        $gradebook_option = $values['survey_qualify_gradebook'] > 0;
+        $gradebook_option = false;
+        if (isset($values['survey_qualify_gradebook'])) {
+            $gradebook_option = $values['survey_qualify_gradebook'] > 0;
+        }
+
         if ($gradebook_option) {
             $survey_id = intval($return['id']);
             if ($survey_id > 0) {
-
                 $title_gradebook = ''; // Not needed here.
                 $description_gradebook = ''; // Not needed here.
                 $survey_weight = floatval($_POST['survey_weight']);
@@ -306,10 +294,25 @@ if ($form->validate()) {
                 $date = time(); // TODO: Maybe time zones implementation is needed here.
                 $visible = 1; // 1 = visible
 
-                $link_info = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
+                $link_info = is_resource_in_course_gradebook(
+                    $course_id,
+                    $gradebook_link_type,
+                    $survey_id,
+                    $session_id
+                );
                 $gradebook_link_id = $link_info['id'];
                 if (!$gradebook_link_id) {
-                    add_resource_to_course_gradebook($course_id, $gradebook_link_type, $survey_id, $title_gradebook, $survey_weight, $max_score, $description_gradebook, 1, $session_id);
+                    add_resource_to_course_gradebook(
+                        $course_id,
+                        $gradebook_link_type,
+                        $survey_id,
+                        $title_gradebook,
+                        $survey_weight,
+                        $max_score,
+                        $description_gradebook,
+                        1,
+                        $session_id
+                    );
                 } else {
                     Database::query('UPDATE '.$table_gradebook_link.' SET weight='.$survey_weight.' WHERE id='.$gradebook_link_id);
                 }

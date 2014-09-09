@@ -63,7 +63,6 @@ if (empty($survey_data)) {
 	exit;
 }
 
-
 $urlname = api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40);
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
@@ -75,7 +74,7 @@ if ($survey_data['survey_type'] == 1) {
                 c_id = '.$course_id.' AND
                 survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
 	$rs = Database::query($sql);
-	if(Database::num_rows($rs)===0) {
+	if (Database::num_rows($rs)===0) {
 		header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');
 		exit;
 	}
@@ -94,7 +93,18 @@ if ($_GET['action'] == 'edit') {
 }
 
 // The possible question types
-$possible_types = array('personality', 'yesno', 'multiplechoice', 'multipleresponse', 'open', 'dropdown', 'comment', 'pagebreak', 'percentage', 'score');
+$possible_types = array(
+    'personality',
+    'yesno',
+    'multiplechoice',
+    'multipleresponse',
+    'open',
+    'dropdown',
+    'comment',
+    'pagebreak',
+    'percentage',
+    'score'
+);
 
 // Actions
 $actions = '<div class="actions">';
@@ -108,16 +118,17 @@ if (!in_array($_GET['type'], $possible_types)) {
 	Display :: display_footer();
 }
 
+$error_message = '';
+
 // Displaying the form for adding or editing the question
 if (empty($_POST['save_question']) && in_array($_GET['type'], $possible_types)) {
 	if (!isset($_POST['save_question'])) {
 		// Displaying the header
 		Display::display_header($tool_name, 'Survey');
 		echo $actions;
-		$error_message = '';
 		// Displys message if exists
 		if (isset($_SESSION['temp_sys_message'])) {
-			$error_message=$_SESSION['temp_sys_message'];
+			$error_message = $_SESSION['temp_sys_message'];
 			unset($_SESSION['temp_sys_message']);
 			if ($error_message == 'PleaseEnterAQuestion' ||
                 $error_message == 'PleasFillAllAnswer'||

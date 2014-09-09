@@ -34,7 +34,7 @@ event_access_tool(TOOL_SURVEY);
 /** @todo This has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) { // Coach can see this
     Display::display_header(get_lang('SurveyList'));
-    SurveyUtil::survey_list_user($_user['user_id']);
+    SurveyUtil::survey_list_user(api_get_user_id());
     Display::display_footer();
     exit;
 }

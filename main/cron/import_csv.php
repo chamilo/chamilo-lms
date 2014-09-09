@@ -655,12 +655,97 @@ class ImportCsv
      */
     private function importSessionsStatic($file)
     {
-        $this->importSessions($file, false);
+        //$this->importSessions($file, false);
+        $content = file($file);
+        $sessions = array();
+
+        if (!api_strstr($content[0], ';')) {
+            $error_message = get_lang('NotCSV');
+        } else {
+            $tag_names = array();
+
+            foreach ($content as $key => $enreg) {
+                $enreg = explode(';', trim($enreg));
+                if ($key) {
+                    foreach ($tag_names as $tag_key => $tag_name) {
+                        $sessions[$key - 1][$tag_name] = $enreg[$tag_key];
+                    }
+                } else {
+                    foreach ($enreg as $tag_name) {
+                        $tag_names[] = api_preg_replace(
+                            '/[^a-zA-Z0-9_\-]/',
+                            '',
+                            $tag_name
+                        );
+                    }
+                    if (!in_array('SessionName', $tag_names) || !in_array(
+                            'DateStart',
+                            $tag_names
+                        ) || !in_array('DateEnd', $tag_names)
+                    ) {
+                        $error_message = get_lang('NoNeededData');
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!empty($sessions)) {
+            // Looping the sessions.
+            foreach ($sessions as $session) {
+                if (!empty($session['SessionID'])) {
+                    $sessionId = SessionManager::get_session_id_from_original_id(
+                        $session['SessionID'],
+                        $this->extraFieldIdNameList['session']
+                    );
+
+                    if (!empty($sessionId)) {
+                        $courses = explode('|', $session['Courses']);
+                        foreach ($courses as $course) {
+                            $courseArray = bracketsToArray($course);
+                            $courseCode = $courseArray[0];
+                            if (CourseManager::course_exists($courseCode)) {
+                                $courseUsers = isset($courseArray[2]) ? $courseArray[2] : null;
+                                $courseUsers = explode(',', $courseUsers);
+                                if (!empty($courseUsers)) {
+                                    $userList = array();
+                                    foreach ($courseUsers as $username) {
+                                        $userInfo = api_get_user_info_from_username(trim($username));
+                                        if (!empty($userInfo)) {
+                                            $userList[] = $userInfo['user_id'];
+                                        }
+                                    }
+                                    if (!empty($userList)) {
+                                        SessionManager::subscribe_users_to_session_course(
+                                            $userList,
+                                            $sessionId,
+                                            $courseCode
+                                        );
+                                    } else {
+                                        $this->logger->addInfo("No users to register.");
+                                    }
+                                } else {
+                                    $this->logger->addInfo("No users to register.");
+                                }
+                            } else {
+                                $this->logger->addInfo("Course does not exists $courseCode");
+                            }
+                        }
+                    } else {
+                        $this->logger->addInfo('SessionID not found in system.');
+                    }
+                } else {
+                    $this->logger->addInfo('SessionID does not exists');
+                }
+            }
+        } else {
+            $this->logger->addInfo($error_message);
+        }
     }
 
     /**
      * @param string $file
-     * @param bool $moveFile
+     * @param bool   $moveFile
      */
     private function importSessions($file, $moveFile = true)
     {

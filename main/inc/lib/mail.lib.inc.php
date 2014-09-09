@@ -30,8 +30,10 @@ require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
  * @see                     class.phpmailer.php
  * @deprecated use api_mail_html()
  */
-function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = '') {
-	api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name, $sender_email, $extra_headers);
+function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '', 
+    $sender_email = '', $extra_headers = '', $additional_parameters = array()) {
+	api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name, 
+        $sender_email, $extra_headers, null, null, $additional_parameters);
 }
 
 /**
@@ -55,7 +57,8 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @return          returns true if mail was sent
  * @see             class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = array(), $data_file = array(), $embedded_image = false)
+function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', 
+    $extra_headers = array(), $data_file = array(), $embedded_image = false, $additional_parameters = array())
 {
     global $platform_email;
 
@@ -196,9 +199,19 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 
     // Send the mail message.
     if (!$mail->Send()) {
+
         //echo 'ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />';
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
         return 0;
+    }
+
+    $plugin = new AppPlugin();
+    $installedPluginsList = $plugin->getInstalledPluginListObject();
+    foreach ($installedPluginsList as $installedPlugin) {
+        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additional_parameters)) {
+            $clockworksmsObject = new Clockworksms();            
+            $clockworksmsObject->send($additional_parameters);
+        }
     }
 
     // Clear all the addresses.

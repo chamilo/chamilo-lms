@@ -2331,7 +2331,18 @@ function send_email_on_homework_creation($course_id)
 				$emailbody = get_lang('Dear')." ".$name_user.",\n\n";
 				$emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
 				$emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
-				@api_mail($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name($currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), $currentUser["mail"]);
+				
+                $additional_parameters = array(
+                    'smsType' => ASSIGNMENT_BEEN_CREATED_COURSE,
+                    'userId' => $student["user_id"],
+                    'courseTitle' => $course_id
+                );
+
+                api_mail_html($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name(
+                    $currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), 
+                    $currentUser["mail"], null, null, null, $additional_parameters);
+
+                //@api_mail($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name($currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), $currentUser["mail"]);
 			}
 		}
 	}

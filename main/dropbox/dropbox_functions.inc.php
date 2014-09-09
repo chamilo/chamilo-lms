@@ -878,10 +878,16 @@ function store_add_dropbox()
 
 	if ($b_send_mail) {
 		foreach ($new_work_recipients as $recipient_id) {
-			$recipent_temp = UserManager :: get_user_info_by_id($recipient_id);
-			@api_mail(api_get_person_name($recipent_temp['firstname'].' '.$recipent_temp['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $recipent_temp['email'],
-				get_lang('NewDropboxFileUploaded'),
-				get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)."\n".  get_lang('Email') ." : ".$_user['mail'], api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_user['mail']);
+			$recipent_temp = UserManager :: get_user_info_by_id($recipient_id);			
+            $additional_parameters = array(
+	            'smsType' => NEW_FILE_SHARED_COURSE_BY,
+	            'userId' => $recipient_id,
+	            'courseTitle' => $_course['title'],
+	            'userUsername' => $recipent_temp['username']
+	        );
+	        api_mail_html(api_get_person_name($recipent_temp['firstname'].' '.$recipent_temp['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), 
+				$recipent_temp['email'], get_lang('NewDropboxFileUploaded'), get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)."\n".  get_lang('Email') ." : ".$_user['mail'], 
+				api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_user['mail'], null, null, null, $additional_parameters);
 		}
 	}
 

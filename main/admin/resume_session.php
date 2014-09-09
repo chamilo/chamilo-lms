@@ -96,11 +96,12 @@ switch ($action) {
         }
         break;
     case 'delete':
-        $idChecked = $_GET['idChecked'];
+        $idChecked = isset($_GET['idChecked']) ? $_GET['idChecked'] : null;
         if (is_array($idChecked)) {
             $my_temp = array();
-            foreach ($idChecked as $id){
-                $my_temp[]= Database::escape_string($id);// forcing the escape_string
+            foreach ($idChecked as $id) {
+                // forcing the escape_string
+                $my_temp[]= Database::escape_string($id);
             }
             $idChecked = $my_temp;
 

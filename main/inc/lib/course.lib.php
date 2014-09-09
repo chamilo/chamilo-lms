@@ -36,8 +36,9 @@ class CourseManager
 
     /**
      * Creates a course
-     * @param   array   with the columns in the main.course table
-     * @return   mixed   false if the course was not created, array with the course info
+     * @param   array   $params columns in the main.course table
+     *
+     * @return  mixed  false if the course was not created, array with the course info
      */
     public static function create_course($params)
     {

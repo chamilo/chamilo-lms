@@ -34,8 +34,8 @@ $interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmi
 $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
-list($year_start,$month_start,$day_start)   = explode('-', $infos['date_start']);
-list($year_end,$month_end,$day_end)         = explode('-', $infos['date_end']);
+list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
+list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
 
 // Default value
 $showDescriptionChecked = 'checked';

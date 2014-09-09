@@ -1,11 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@package chamilo.admin
 */
-/**
- * Code
- */
 $language_file = array('admin', 'registration');
 $cidReset = true;
 
@@ -26,22 +24,24 @@ if (empty($id_session )) {
 }
 
 $course_code    = Database::escape_string(trim($_GET['course_code']));
-$page           = intval($_GET['page']);
-$action         = $_REQUEST['action'];
+$page           = isset($_GET['page']) ? intval($_GET['page']) : null;
+$action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $default_sort   = api_sort_by_first_name() ? 'firstname':'lastname';
-$sort           = in_array($_GET['sort'], array('lastname','firstname','username')) ? $_GET['sort'] : $default_sort;
-$idChecked      = (is_array($_GET['idChecked']) ? $_GET['idChecked'] : (is_array($_POST['idChecked']) ? $_POST['idChecked'] : null));
+$sort           = isset($_GET['sort']) && in_array($_GET['sort'], array('lastname','firstname','username')) ? $_GET['sort'] : $default_sort;
+$idChecked      = isset($_GET['idChecked']) && is_array($_GET['idChecked']) ? $_GET['idChecked'] : (isset($_POST['idChecked']) && is_array($_POST['idChecked']) ? $_POST['idChecked'] : null);
 $direction      = isset($_GET['direction']) && in_array($_GET['direction'], array('desc','asc')) ? $_GET['direction'] : 'desc';
 
 if (is_array($idChecked)) {
     $my_temp = array();
     foreach ($idChecked as $id) {
-        $my_temp[]= intval($id);// forcing the intval
+        // forcing the intval
+        $my_temp[]= intval($id);
     }
     $idChecked = $my_temp;
 }
 
-$sql = "SELECT s.name, c.title  FROM $tbl_session_rel_course src
+$sql = "SELECT s.name, c.title
+        FROM $tbl_session_rel_course src
 		INNER JOIN $tbl_session s ON s.id = src.id_session
 		INNER JOIN $tbl_course c ON c.code = src.course_code
 		WHERE src.id_session='$id_session' AND src.course_code='".Database::escape_string($course_code)."' ";
@@ -52,7 +52,7 @@ if (!list($session_name,$course_title) = Database::fetch_row($result)) {
 	exit();
 }
 
-switch($action) {
+switch ($action) {
     case 'delete':
         if (is_array($idChecked) && count($idChecked)>0) {
             array_map('intval', $idChecked);
@@ -77,17 +77,6 @@ switch($action) {
 $limit  = 20;
 $from   = $page * $limit;
 $is_western_name_order = api_is_western_name_order();
-
-//scru.status<>2  scru.course_code='".$course_code."'
-/*$sql = "SELECT DISTINCT
-         u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.id_user as is_subscribed
-         FROM $tbl_session_rel_user s
-         INNER JOIN $tbl_user u ON (u.user_id=s.id_user)
-         LEFT JOIN $tbl_session_rel_course_rel_user scru ON (u.user_id=scru.id_user AND  scru.course_code = '".$course_code."' )
-         WHERE s.id_session='$id_session'
-         ORDER BY $sort $direction
-         LIMIT $from,".($limit+1);*/
-
 $sql = "SELECT DISTINCT
          u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.id_user as is_subscribed
          FROM $tbl_session_rel_user s

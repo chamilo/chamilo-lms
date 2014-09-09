@@ -2556,7 +2556,7 @@ class learnpath
                     ' '
                 );
                 $prereq_mod = str_replace($find, $replace, $prereq);
-                $ids = split(' ', $prereq_mod);
+                $ids = explode(' ', $prereq_mod);
                 foreach ($ids as $id) {
                     $id = trim($id);
                     if (isset ($this->refs_list[$id])) {

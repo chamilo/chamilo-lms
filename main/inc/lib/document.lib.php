@@ -2635,18 +2635,18 @@ class DocumentManager
                 );
 
                 if ($new_path) {
-                    $docid = DocumentManager::get_document_id($course_info, $new_path);
+                    $documentId = DocumentManager::get_document_id($course_info, $new_path);
 
-                    if (!empty($docid)) {
+                    if (!empty($documentId)) {
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
                         $params = array();
 
-                        if (!empty($title)) {
-                            $params['title'] = get_document_title($title);
+                        if ($if_exists == 'rename') {
+                            $new_path = basename($new_path);
+                            $params['title'] = get_document_title($new_path);
                         } else {
-                            if ($if_exists == 'rename') {
-                                $new_path = basename($new_path);
-                                $params['title'] = get_document_title($new_path);
+                            if (!empty($title)) {
+                                $params['title'] = get_document_title($title);
                             } else {
                                 $params['title'] = get_document_title($files['file']['name']);
                             }
@@ -2655,7 +2655,16 @@ class DocumentManager
                         if (!empty($comment)) {
                             $params['comment'] = trim($comment);
                         }
-                        Database::update($table_document, $params, array('id = ? AND c_id = ? ' => array($docid, $course_info['real_id'])));
+                        Database::update(
+                            $table_document,
+                            $params,
+                            array(
+                                'id = ? AND c_id = ? ' => array(
+                                    $documentId,
+                                    $course_info['real_id']
+                                )
+                            )
+                        );
                     }
 
                     // Showing message when sending zip files
@@ -2664,10 +2673,11 @@ class DocumentManager
                     }
 
                     if ($index_document) {
-                        self::index_document($docid, $course_info['code'], null, $_POST['language'], $_REQUEST, $if_exists);
+                        self::index_document($documentId, $course_info['code'], null, $_POST['language'], $_REQUEST, $if_exists);
                     }
-                    if (!empty($docid) && is_numeric($docid)) {
-                        $document_data = self::get_document_data_by_id($docid, $course_info['code']);
+
+                    if (!empty($documentId) && is_numeric($documentId)) {
+                        $document_data = self::get_document_data_by_id($documentId, $course_info['code']);
                         return $document_data;
                     }
                 }

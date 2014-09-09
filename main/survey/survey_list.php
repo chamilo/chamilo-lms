@@ -13,7 +13,8 @@
 
 // Language file that needs to be included
 $language_file = 'survey';
-if (!isset ($_GET['cidReq'])){
+
+if (!isset($_GET['cidReq'])) {
     $_GET['cidReq'] = 'none'; // Prevent sql errors
     $cidReset = true;
 }
@@ -21,9 +22,10 @@ if (!isset ($_GET['cidReq'])){
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-$current_course_tool  = TOOL_SURVEY;
+$current_course_tool = TOOL_SURVEY;
 
 api_protect_course_script(true);
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
 // Including additional libraries
 require_once 'survey.lib.php';
@@ -31,10 +33,14 @@ require_once 'survey.lib.php';
 // Tracking
 event_access_tool(TOOL_SURVEY);
 
-/** @todo This has to be moved to a more appropriate place (after the display_header of the code)*/
-if (!api_is_allowed_to_edit(false, true)) { // Coach can see this
+/** @todo
+ * This has to be moved to a more appropriate place (after the display_header
+ * of the code)
+ */
+if (!api_is_allowed_to_edit(false, true)) {
+    // Coach can see this
     Display::display_header(get_lang('SurveyList'));
-    SurveyUtil::survey_list_user($_user['user_id']);
+    SurveyUtil::survey_list_user(api_get_user_id());
     Display::display_footer();
     exit;
 }
@@ -55,6 +61,15 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $tool_name = get_lang('SurveyList');
 }
 
+if ($action == 'copy_survey') {
+    if (api_is_allowed_to_edit()) {
+        survey_manager::copy_survey($_GET['survey_id']);
+        $message = get_lang('Copied');
+        header('Location: ' . api_get_path(WEB_CODE_PATH) . 'survey/survey_list.php?' . api_get_cidreq());
+        exit;
+    }
+}
+
 // Header
 Display::display_header($tool_name, 'Survey');
 
@@ -62,11 +77,11 @@ Display::display_header($tool_name, 'Survey');
 Display::display_introduction_section('survey', 'left');
 
 // Action handling: searching
-if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
+if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     SurveyUtil::display_survey_search_form();
 }
 // Action handling: deleting a survey
-if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['survey_id'])) {
+if ($action == 'delete' && isset($_GET['survey_id'])) {
     // Getting the information of the survey (used for when the survey is shared)
     $survey_data = survey_manager::get_survey($_GET['survey_id']);
     if (api_is_course_coach() && intval($_SESSION['id_session']) != $survey_data['session_id']) {
@@ -79,7 +94,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['survey
         survey_manager::delete_survey($survey_data['survey_share'], true);
     }
 
-    $return = survey_manager :: delete_survey($_GET['survey_id']);
+    $return = survey_manager::delete_survey($_GET['survey_id']);
+
     if ($return) {
         Display::display_confirmation_message(get_lang('SurveyDeleted'), false);
     } else {
@@ -87,7 +103,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['survey
     }
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'empty') {
+if ($action == 'empty') {
     $mysession = api_get_session_id();
     if ($mysession != 0) {
         if (!((api_is_course_coach() || api_is_platform_admin()) &&

@@ -493,6 +493,7 @@ if (isset($list_ordered) && !empty($list_ordered)) {
 }
 
 echo '<table class="'.Display::return_default_table_class().'">';
+$_user = api_get_user_info();
 
 /*  Listing exercises  */
 if (!empty($exercise_list)) {

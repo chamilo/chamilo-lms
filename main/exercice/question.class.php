@@ -905,36 +905,36 @@ abstract class Question
 
             }
         }
-
     }
 
-	/**
-	 * adds an exercise into the exercise list
-	 *
-	 * @author Olivier Brouckaert
+    /**
+     * adds an exercise into the exercise list
+     *
+     * @author Olivier Brouckaert
      * @param integer $exerciseId - exercise ID
      * @param boolean $fromSave - comming from $this->save() or not
-	 */
-	function addToList($exerciseId, $fromSave = false) {
-		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-		$id = $this->id;
-		// checks if the exercise ID is not in the list
-		if (!in_array($exerciseId,$this->exerciseList)) {
-			$this->exerciseList[]=$exerciseId;
+     */
+    function addToList($exerciseId, $fromSave = false)
+    {
+	    $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+	    $id = $this->id;
+	    // checks if the exercise ID is not in the list
+	    if (!in_array($exerciseId,$this->exerciseList)) {
+		    $this->exerciseList[]=$exerciseId;
             $new_exercise = new Exercise();
             $new_exercise->read($exerciseId);
             $count = $new_exercise->selectNbrQuestions();
             $count++;
-			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (c_id, question_id, exercice_id, question_order) VALUES
-				 ({$this->course['real_id']}, '".Database::escape_string($id)."','".Database::escape_string($exerciseId)."', '$count' )";
-			Database::query($sql);
+		    $sql="INSERT INTO $TBL_EXERCICE_QUESTION (c_id, question_id, exercice_id, question_order) VALUES
+			     ({$this->course['real_id']}, '".Database::escape_string($id)."','".Database::escape_string($exerciseId)."', '$count' )";
+		    Database::query($sql);
 
             // we do not want to reindex if we had just saved adnd indexed the question
             if (!$fromSave) {
             	$this->search_engine_edit($exerciseId, TRUE);
             }
-		}
-	}
+        }
+    }
 
 	/**
 	 * removes an exercise from the exercise list
@@ -943,7 +943,8 @@ abstract class Question
 	 * @param integer $exerciseId - exercise ID
 	 * @return boolean - true if removed, otherwise false
 	 */
-	function removeFromList($exerciseId) {
+	function removeFromList($exerciseId)
+    {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
 		$id = $this->id;
@@ -986,7 +987,8 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @param integer $deleteFromEx - exercise ID if the question is only removed from one exercise
 	 */
-	function delete($deleteFromEx = 0) {
+	function delete($deleteFromEx = 0)
+    {
         $course_id = api_get_course_int_id();
 
 		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -1050,7 +1052,8 @@ abstract class Question
 	 * @return int     ID of the new question
     */
 
-	function duplicate($course_info = null) {
+	function duplicate($course_info = null)
+    {
         if (empty($course_info)) {
         	$course_info = $this->course;
         } else {

@@ -79,6 +79,8 @@ if ($is_allowedToEdit) {
         //Reading the source question
 		$old_question_obj = Question::read($old_question_id, $origin_course_id);
 
+        $courseId = $current_course['real_id'];
+
 		if ($old_question_obj) {
 			$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
             //Duplicating the source question, in the current course
@@ -94,10 +96,9 @@ if ($is_allowedToEdit) {
 			// destruction of the Question object
 			unset($new_question_obj);
 			unset($old_question_obj);
-            if (!$objExercise instanceOf Exercise) {
-                $objExercise = new Exercise();
-                $objExercise->read($fromExercise);
-            }
+
+            $objExercise = new Exercise($courseId);
+            $objExercise->read($fromExercise);
 			Session::write('objExercise', $objExercise);
 		}
 		$displayMessage = get_lang('ItemAdded');
@@ -663,7 +664,12 @@ if (is_array($main_question_list)) {
         $data[] = $row;
     }
 }
-Display :: display_sortable_table($header, $data, '', array('per_page_default'=>999,'per_page'=>999,'page_nr'=>1));
+Display :: display_sortable_table(
+    $header,
+    $data,
+    '',
+    array('per_page_default' => 999, 'per_page' => 999, 'page_nr' => 1)
+);
 
 if (!$nbrQuestions) {
 	echo get_lang('NoQuestion');
@@ -811,9 +817,11 @@ function get_action_icon_for_question(
 			unset($myObjEx);
 			break;
 		case "clone":
-			$res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&copy_question=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercice'>";
-			$res .= Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
-			$res .= "</a>";
+            $url = api_get_self()."?".api_get_cidreq().$getParams."&amp;copy_question=$in_questionid&amp;course_id=$in_selected_course&amp;fromExercise=$from_exercice";
+            $res = Display::url(
+                Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest')),
+                $url
+            );
 			break;
 		default :
 			$res = $in_action;

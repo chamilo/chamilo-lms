@@ -79,9 +79,9 @@ class learnpath
     /**
     * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
     * Also builds the list of items into $this->items.
-    * @param	string		Course code
-    * @param	integer		Learnpath ID
-    * @param	integer		User ID
+    * @param	string		$course Course code
+    * @param	integer		$lp_id
+    * @param	integer		$user_id
     * @return	boolean		True on success, false on error
     */
     public function __construct($course, $lp_id, $user_id)
@@ -2306,14 +2306,14 @@ class learnpath
         return $output;
     }
 
-
     /**
      * Gets the progress bar info to display inside the progress bar. Also used by scorm_api.php
      * @param	string	Mode of display (can be '%' or 'abs').abs means we display a number of completed elements per total elements
      * @param	integer	Additional steps to fake as completed
      * @return	list	Percentage or number and symbol (% or /xx)
      */
-    public function get_progress_bar_text($mode = '', $add = 0) {
+    public function get_progress_bar_text($mode = '', $add = 0)
+    {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_progress_bar_text()', 0);
         }
@@ -2346,12 +2346,11 @@ class learnpath
             }
             $percentage = number_format($percentage, 0);
             $text = '%';
-        }
-        elseif ($mode == 'abs') {
+        } elseif ($mode == 'abs') {
             $percentage = $i;
             $text = '/' . $total_items;
         }
-        return array (
+        return array(
             $percentage,
             $text
         );
@@ -2557,7 +2556,7 @@ class learnpath
                     ' '
                 );
                 $prereq_mod = str_replace($find, $replace, $prereq);
-                $ids = split(' ', $prereq_mod);
+                $ids = explode(' ', $prereq_mod);
                 foreach ($ids as $id) {
                     $id = trim($id);
                     if (isset ($this->refs_list[$id])) {
@@ -4019,11 +4018,12 @@ class learnpath
 
     /**
      * Saves the given item
-     * @param	integer	Item ID. Optional (will take from $_REQUEST if null)
-     * @param	boolean	Save from url params (true) or from current attributes (false). Optional. Defaults to true
+     * @param	integer	$item_id. Optional (will take from $_REQUEST if null)
+     * @param	boolean	$from_outside Save from url params (true) or from current attributes (false). Optional. Defaults to true
      * @return	boolean
      */
-    public function save_item($item_id = null, $from_outside = true) {
+    public function save_item($item_id = null, $from_outside = true)
+    {
         $debug = $this->debug;
         if ($debug) {
             error_log('In learnpath::save_item(' . $item_id . ',' . intval($from_outside). ')', 0);

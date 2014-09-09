@@ -98,7 +98,6 @@ if (isset($exercise_stat_info['exe_id'])) {
 }
 
 //1. Check if this is a new attempt or a previous
-//$countNotFinished = isset($exercise_stat_info['num_exe']) ? $exercise_stat_info['num_exe'] : null;
 $label = get_lang('StartTest');
 if ($time_control && !empty($clock_expired_time) || !empty($attempt_list)) {
 	$label = get_lang('ContinueTest');

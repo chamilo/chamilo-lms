@@ -47,8 +47,8 @@ global $_configuration;
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (isset($_FILES['import_file']['tmp_name']) && !empty($_FILES['import_file']['tmp_name'])) {
         $form_sent = $_POST['formSent'];
-        $file_type = $_POST['file_type'];
-        $send_mail = $_POST['sendMail'] ? 1 : 0;
+        $file_type = isset($_POST['file_type']) ? $_POST['file_type'] : null;
+        $send_mail = isset($_POST['sendMail']) && $_POST['sendMail'] ? 1 : 0;
         $isOverwrite = $_POST['overwrite'] ? true: false;
         $deleteUsersNotInList = isset($_POST['delete_users_not_in_list']) ? true : false;
         $sessions = array();
@@ -551,8 +551,8 @@ $form->display();
 <blockquote>
 <pre>
 <strong>SessionName</strong>;Coach;<strong>DateStart</strong>;<strong>DateEnd</strong>;Users;Courses
-<strong>xxx1</strong>;xxx;<strong>xxx;xxx</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...]
-<strong>xxx2</strong>;xxx;<strong>xxx;xxx</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...]
+<strong>xxx1</strong>;xxx;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...]
+<strong>xxx2</strong>;xxx;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...]
 </pre>
 </blockquote>
 
@@ -586,8 +586,8 @@ $form->display();
     &lt;Session&gt;
         <strong>&lt;SessionName&gt;xxx&lt;/SessionName&gt;</strong>
         &lt;Coach&gt;xxx&lt;/Coach&gt;
-        <strong>&lt;DateStart&gt;xxx&lt;/DateStart&gt;</strong>
-        <strong>&lt;DateEnd&gt;xxx&lt;/DateEnd&gt;</strong>
+        <strong>&lt;DateStart&gt;yyyy/mm/dd&lt;/DateStart&gt;</strong>
+        <strong>&lt;DateEnd&gt;yyyy/mm/dd&lt;/DateEnd&gt;</strong>
         &lt;User&gt;xxx&lt;/User&gt;
         &lt;User&gt;xxx&lt;/User&gt;
         &lt;Course&gt;

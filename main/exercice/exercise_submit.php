@@ -792,10 +792,9 @@ if (!empty($error)) {
     }
 
     echo '<script>
-
             $(function() {
-    			//$(".exercise_save_now_button").hide();
-    		    $(".main_question").mouseover(function() {
+		        //$(".exercise_save_now_button").hide();
+                $(".main_question").mouseover(function() {
     		    	//$(this).find(".exercise_save_now_button").show();
     		    	//$(this).addClass("question_highlight");
                 });
@@ -807,17 +806,17 @@ if (!empty($error)) {
 
                 $(".no_remind_highlight").hide();
 
-				// if the users validates the form using return key, prevent form action and simulates click on validation button
-				$("#exercise_form").submit(function(){
-					$(".question-validate-btn").first().trigger("click");
-					return false;
-				});
+                // if the users validates the form using return key, prevent form action and simulates click on validation button
+                /*$("#exercise_form").submit(function(){
+                    $(".question-validate-btn").first().trigger("click");
+                    return false;
+                });*/
     		});
 
-			function previous_question(question_num) {
-				url = "exercise_submit.php?'.$params.'&num="+question_num;
-				window.location = url;
-			}
+		function previous_question(question_num) {
+			url = "exercise_submit.php?'.$params.'&num="+question_num;
+			window.location = url;
+		}
 
             function previous_question_and_save(previous_question_id, question_id_to_save) {
                 url = "exercise_submit.php?'.$params.'&num="+previous_question_id;
@@ -1048,7 +1047,7 @@ if (!empty($error)) {
 
             //BUtton save and continue
             switch ($objExercise->type) {
-				case ONE_PER_PAGE:
+	        case ONE_PER_PAGE:
                     $exercise_actions .= $objExercise->show_button($questionId, $current_question);
                     break;
                 case ALL_ON_ONE_PAGE :

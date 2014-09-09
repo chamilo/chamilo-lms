@@ -4,27 +4,31 @@
  * Edition script for sessions categories
  * @package chamilo.admin
  */
-/**
- * Code
- */
 
 // name of the language file that needs to be included
 $language_file ='admin';
-$cidReset=true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 
 // setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
-$id=intval($_GET['id']);
-$formSent=0;
-$errorMsg='';
+$id = intval($_GET['id']);
+$formSent = 0;
+$errorMsg = '';
 
 // Database Table Definitions
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tool_name = get_lang('EditSessionCategory');
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "session_category_list.php","name" => get_lang('ListSessionCategory'));
+$interbreadcrumb[] = array(
+    'url' => 'index.php',
+    "name" => get_lang('PlatformAdmin')
+);
+$interbreadcrumb[] = array(
+    'url' => "session_category_list.php",
+    "name" => get_lang('ListSessionCategory')
+);
+
 $sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY name";
 $result=Database::query($sql);
 if (!$infos=Database::fetch_array($result)) {
@@ -38,24 +42,38 @@ if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id'] &&
 	api_not_allowed(true);
 }
 
-if ($_POST['formSent']) {
-	$formSent=1;
-	$name= $_POST['name'];
-	$year_start= $_POST['year_start'];
-	$month_start=$_POST['month_start'];
-	$day_start=$_POST['day_start'];
-	$year_end=$_POST['year_end'];
-	$month_end=$_POST['month_end'];
-	$day_end=$_POST['day_end'];
-	$return = SessionManager::edit_category_session($id, $name, $year_start, $month_start, $day_start, $year_end, $month_end, $day_end);
-	if ($return == strval(intval($return))) {
-		header('Location: session_category_list.php?action=show_message&message='.urlencode(get_lang('SessionCategoryUpdate')));
-		exit();
-	}
+if (isset($_POST['formSent']) && $_POST['formSent']) {
+    $formSent = 1;
+    $name = $_POST['name'];
+    $year_start = $_POST['year_start'];
+    $month_start = $_POST['month_start'];
+    $day_start = $_POST['day_start'];
+    $year_end = $_POST['year_end'];
+    $month_end = $_POST['month_end'];
+    $day_end = $_POST['day_end'];
+    $return = SessionManager::edit_category_session(
+        $id,
+        $name,
+        $year_start,
+        $month_start,
+        $day_start,
+        $year_end,
+        $month_end,
+        $day_end
+    );
+    if ($return == strval(intval($return))) {
+        header(
+            'Location: session_category_list.php?action=show_message&message=' . urlencode(
+                get_lang('SessionCategoryUpdate')
+            )
+        );
+        exit();
+    }
 }
-$thisYear=date('Y');
-$thisMonth=date('m');
-$thisDay=date('d');
+
+$thisYear = date('Y');
+$thisMonth = date('m');
+$thisDay = date('d');
 
 // display the header
 Display::display_header($tool_name);
@@ -63,7 +81,7 @@ if (!empty($return)) {
 	Display::display_error_message($return,false);
 }
 ?>
-<form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']) ?>&id=<?php echo $id; ?>" style="margin:0px;">
+<form method="post" name="form" action="<?php echo api_get_self(); ?>?id=<?php echo $id; ?>">
 <input type="hidden" name="formSent" value="1">
 <legend><?php echo $tool_name;?> </legend>
 <table border="0" cellpadding="5" cellspacing="0" width="550">
@@ -216,7 +234,8 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 <tr>
   <td>&nbsp;</td>
   <td>
-<button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
+<button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>">
+    <?php echo get_lang('ModifyThisSession') ?></button>
 
   </td>
 </tr>

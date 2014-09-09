@@ -72,6 +72,7 @@ function validate_data($courses)
             }
         }
     }
+
     return $errors;
 }
 
@@ -80,12 +81,13 @@ function getTeacherListInArray($teachers)
     if (!empty($teachers)) {
         return explode('|', $teachers);
     }
+
     return array();
 }
 
 /**
  * Saves imported data.
- * @param array   List of courses
+ * @param array $courses List of courses
  */
 function save_data($courses)
 {
@@ -113,16 +115,23 @@ function save_data($courses)
         $params['course_language']  = $course_language;
         $params['user_id']          = $creatorId;
 
-        $course_info = CourseManager::create_course($params);
+        $addMeAsTeacher = isset($_POST['add_me_as_teacher']) ? $_POST['add_me_as_teacher'] : false;
+        $params['add_user_as_teacher'] = $addMeAsTeacher;
 
-        if (!empty($course_info)) {
+        $courseInfo = CourseManager::create_course($params);
+
+        if (!empty($courseInfo)) {
             if (!empty($teacherList)) {
                 foreach ($teacherList as $teacher) {
-                    CourseManager::add_user_to_course($teacher['user_id'], $course_info['code'], COURSEMANAGER);
+                    CourseManager::add_user_to_course(
+                        $teacher['user_id'],
+                        $courseInfo['code'],
+                        COURSEMANAGER
+                    );
                 }
             }
-            $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/">
-                    '.$course_info['title'].'</a> '.get_lang('Created').'<br />';
+            $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/">
+                    '.$courseInfo['title'].'</a> '.get_lang('Created').'<br />';
         }
     }
 
@@ -197,22 +206,17 @@ if (isset($errors) && count($errors) != 0) {
     $error_message .= '</ul>';
     Display :: display_error_message($error_message, false);
 }
+
+$form = new FormValidator('import', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
+$form->add_header($tool_name);
+$form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
+$form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('AddMeAsTeacherInCourses'));
+$form->addElement('button', 'save', get_lang('Import'));
+$form->addElement('hidden', 'formSent', 1);
+//$form->setDefaults(array('add_me_as_teacher' => 0));
+$form->display();
+
 ?>
-<form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin: 0px;">
-<legend><?php echo $tool_name; ?></legend>
-<div class="control-group">
-    <label><?php echo get_lang('ImportCSVFileLocation'); ?></label>
-    <div class="control">
-        <input type="file" name="import_file"/>
-    </div>
-</div>
-<div class="control-group">
-    <div class="control">
-        <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
-    </div>
-</div>
-<input type="hidden" name="formSent" value="1"/>
-</form>
 <div style="clear: both;"></div>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 

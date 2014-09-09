@@ -312,10 +312,14 @@ function update_event_exercice(
     if ($debug) error_log('duration:' . $duration);
 
     if ($exeid != '') {
-        // Validation in case of fraud with actived control time
+        /*
+         * Code commented due BT#8423 do not change the score to 0.
+         *
+         * Validation in case of fraud with actived control time
         if (!exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {
         	$score = 0;
         }
+        */
 
         if (!isset($status) || empty($status)) {
         	$status = '';
@@ -874,7 +878,7 @@ function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_
     $exerciseId 	= intval($exerciseId);
     $lp_id 			= intval($lp_id);
     $lp_item_id 	= intval($lp_item_id);
-    $lp_item_view_id= intval($lp_item_view_id);
+    //$lp_item_view_id= intval($lp_item_view_id);
 
     $sql = "SELECT count(*) as count FROM $stat_table WHERE
         		exe_exo_id 			= $exerciseId AND

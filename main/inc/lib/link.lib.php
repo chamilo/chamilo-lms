@@ -235,6 +235,11 @@ function addlinkcategory($type)
 			        VALUES (".$course_id.", '" .Database::escape_string($category_title) . "', '" . Database::escape_string($description) . "', '$order', '$session_id')";
 			Database :: query($sql);
 
+            $link_id = Database :: insert_id();
+            if ($link_id) {
+                api_set_default_visibility($link_id, TOOL_LINK_CATEGORY); // add link_category
+            }
+
 			$catlinkstatus = get_lang('CategoryAdded');
 			unset ($category_title, $description);
 			Display :: display_confirmation_message(get_lang('CategoryAdded'));
@@ -605,6 +610,34 @@ function change_visibility($id, $scope) {
 		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);
 		Display :: display_confirmation_message(get_lang('VisibilityChanged'));
 	}
+}
+
+/**
+ * Generate SQL for select all the category of link
+ *
+ */
+function getSqlFromLinkCategory()
+{
+    $tbl_linkCategory = Database :: get_course_table(TABLE_LINK_CATEGORY);
+    $tbl_itemProperty   = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+
+    // Condition for the session.
+    $session_id = api_get_session_id();
+    $condition_session = api_get_session_condition($session_id, true, true);
+
+    $course_id = api_get_course_int_id();
+
+    $sql = "SELECT *, linkcat.id FROM " . $tbl_linkCategory . " linkcat, " . $tbl_itemProperty . " itemproperties
+             WHERE  itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
+                    linkcat.id = itemproperties.ref AND
+
+                    (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
+                    $condition_session AND
+                    linkcat.c_id = ".$course_id." AND
+                    itemproperties.c_id = ".$course_id."
+                    ORDER BY linkcat.display_order DESC";
+    return  $sql;
+
 }
 
 /**

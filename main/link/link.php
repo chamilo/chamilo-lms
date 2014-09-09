@@ -255,7 +255,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					</div>
 				</div>';
 
-		$sqlcategories = "SELECT * FROM ".$tbl_categories." WHERE c_id = $course_id $condition_session ORDER BY display_order DESC";
+		$sqlcategories = getSqlFromLinkCategory(); echo $sqlcategories; exit;
 		$resultcategories = Database::query($sqlcategories);
 
 		if (Database::num_rows($resultcategories)) {
@@ -421,7 +421,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 	}
 	// Making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
 	// number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-	$sqlcategories = "SELECT * FROM ".$tbl_categories." WHERE c_id = $course_id $condition_session ORDER BY display_order DESC";
+    $sqlcategories = getSqlFromLinkCategory();
 	$resultcategories = Database::query($sqlcategories);
 	$aantalcategories = Database::num_rows($resultcategories);
 	if ($aantalcategories > 0) {

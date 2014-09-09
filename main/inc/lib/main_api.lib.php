@@ -81,6 +81,7 @@ define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
 define('TOOL_LINK', 'link');
+define('TOOL_LINK_CATEGORY', 'link_category');
 define('TOOL_COURSE_DESCRIPTION', 'course_description');
 define('TOOL_SEARCH', 'search');
 define('TOOL_LEARNPATH', 'learnpath');
@@ -6562,6 +6563,7 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
 
     switch ($tool_id) {
         case TOOL_LINK:
+        case TOOL_LINK_CATEGORY:
             $tool_id = 'links';
             break;
         case TOOL_DOCUMENT:

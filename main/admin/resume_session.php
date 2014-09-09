@@ -98,38 +98,24 @@ switch ($action) {
     case 'delete':
         $idChecked = isset($_GET['idChecked']) ? $_GET['idChecked'] : null;
         if (is_array($idChecked)) {
-            $my_temp = array();
+            $usersToDelete = array();
             foreach ($idChecked as $id) {
                 // forcing the escape_string
-                $my_temp[]= Database::escape_string($id);
+                SessionManager::unsubscribe_user_from_session($id_session, $id);
             }
-            $idChecked = $my_temp;
-
-            $idChecked="'".implode("','",$idChecked)."'";
-
-            Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
-            $nbr_affected_rows=Database::affected_rows();
-
-            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
-            Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
         }
 
-        if (!empty($_GET['class'])){
+        if (!empty($_GET['class'])) {
             Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
             $nbr_affected_rows=Database::affected_rows();
             Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
         }
 
         if (!empty($_GET['user'])) {
-            Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND id_session='$id_session' AND id_user=".intval($_GET['user']));
-            $nbr_affected_rows=Database::affected_rows();
-
-            Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
-
-            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
-            $nbr_affected_rows=Database::affected_rows();
-
-            Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'");
+            SessionManager::unsubscribe_user_from_session(
+                $id_session,
+                $_GET['user']
+            );
         }
         break;
 }

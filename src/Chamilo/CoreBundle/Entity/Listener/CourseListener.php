@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Class CourseListener
+ * Course entity listener, when a course is created the tool chain is loaded.
  * @package Chamilo\CoreBundle\EventListener
  */
 class CourseListener
@@ -28,14 +29,12 @@ class CourseListener
      */
     public function prePersist(Course $course, LifecycleEventArgs $args)
     {
-
         foreach ($this->toolChain as $tool) {
             $tool->getName();
         }
         $course->setDescription( ' dq sdqs dqs dqs ');
         $args->getEntityManager()->persist($course);
         $args->getEntityManager()->flush();
-        var_dump($this->toolChain);
 
     }
 }

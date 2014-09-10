@@ -37,6 +37,9 @@ class Group extends BaseGroup
         return $this->id;
     }
 
+    /**
+     * @return mixed
+     */
     public function getUsers()
     {
         return $this->users;

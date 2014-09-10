@@ -6,16 +6,13 @@ namespace Chamilo\CourseBundle\Controller\Home;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Response;
-use Chamilo\CoreBundle\Controller\CrudController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Chamilo\CoreBundle\Entity\CTool;
-use Chamilo\CoreBundle\Form\CourseHomeToolType;
-use Doctrine\Common\Collections\Criteria;
 use Display;
 use CourseHome;
 use Chamilo\CoreBundle\Entity\Course;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class HomeController
@@ -92,6 +89,7 @@ class HomeController extends ToolBaseController
                 }
             }
         }
+
 
         $homeView = api_get_setting('homepage_view');
         $homeView = 'activity_big';

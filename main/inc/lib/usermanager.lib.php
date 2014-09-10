@@ -808,13 +808,18 @@ class UserManager
         $group = $em->getRepository('ChamiloUserBundle:Group')->find($status);
         $user->addGroup($group);
         Container::getUserManager()->updateUser($user, true);
-
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
             $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-            $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+            $sender_name = api_get_person_name(
+                api_get_setting('administratorName'),
+                api_get_setting('administratorSurname'),
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
             $email_admin = api_get_setting('emailAdministrator');
 
+            $emailbody = null;
             if ($_configuration['multiple_access_urls']) {
                 $access_url_id = api_get_current_access_url_id();
                 if ($access_url_id != -1) {

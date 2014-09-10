@@ -28,6 +28,8 @@ class Container
     public static $urlGenerator;
     public static $security;
     public static $translator;
+    public static $mailer;
+    public static $template;
 
     public static $rootDir;
     public static $logDir;
@@ -169,6 +171,36 @@ class Container
     }
 
     /**
+     * @return \Swift_Mailer
+     */
+    public static function getMailer()
+    {
+       return self::$mailer;
+    }
+
+    /**  */
+    public static function getTemplate()
+    {
+        return self::$template;
+    }
+
+    /**
+     * @return \Chamilo\SettingsBundle\Manager\SettingsManager
+     */
+    public static function getSettingsManager()
+    {
+        return self::$container->get('chamilo.settings.manager');
+    }
+
+    /**
+     * @return \Chamilo\CourseBundle\Manager\SettingsManager
+     */
+    public static function getCourseSettingsManager()
+    {
+        return self::$container->get('chamilo_course.settings.manager');
+    }
+
+    /**
      * @return \Doctrine\ORM\EntityManager
      */
     public static function getEntityManager()
@@ -183,5 +215,13 @@ class Container
     {
         //return self::$container->get('sonata.user.user_manager');
         return self::$container->get('fos_user.user_manager');
+    }
+
+    /**
+     * @return \Sonata\UserBundle\Entity\GroupManager
+     */
+    public static function getGroupManager()
+    {
+        return self::$container->get('fos_user.group_manager');
     }
 }

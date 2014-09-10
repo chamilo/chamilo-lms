@@ -52,11 +52,16 @@ class LegacyListener
         // Setting DB connection and Doctrine Manager.
         $database = new \Database();
         $database->setConnection($dbConnection);
-        $database->setManager($container->get('doctrine')->getManager());
+        $entityManager = $container->get('doctrine')->getManager();
+        $database->setManager($entityManager);
 
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
+        \CourseManager::setEntityManager($entityManager);
+        \CourseManager::setCourseManager($container->get('chamilo_core.manager.course'));
         \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
+        Container::$mailer = $container->get('mailer');
+        Container::$template = $container->get('templating');
 
         // Setting legacy properties.
         Container::$urlGenerator = $container->get('router');

@@ -39,20 +39,20 @@ set_time_limit(0);
 
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
-
 $inserted_in_course = array();
 
 global $_configuration;
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-    if (isset($_FILES['import_file']['tmp_name']) && !empty($_FILES['import_file']['tmp_name'])) {
+    if (isset($_FILES['import_file']['tmp_name']) &&
+        !empty($_FILES['import_file']['tmp_name'])
+    ) {
         $form_sent = $_POST['formSent'];
         $file_type = isset($_POST['file_type']) ? $_POST['file_type'] : null;
         $send_mail = isset($_POST['sendMail']) && $_POST['sendMail'] ? 1 : 0;
-        $isOverwrite = $_POST['overwrite'] ? true: false;
+        $isOverwrite = isset($_POST['overwrite']) && $_POST['overwrite'] ? true: false;
         $deleteUsersNotInList = isset($_POST['delete_users_not_in_list']) ? true : false;
         $sessions = array();
-
         $session_counter = 0;
 
         if ($file_type == 'xml') {
@@ -74,7 +74,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
             if (is_object($root)) {
                 if (count($root->Users->User) > 0) {
-
                     // Creating/updating users from <Sessions> <Users> base node.
                     foreach ($root->Users->User as $node_user) {
                         $username = $username_old = trim(api_utf8_decode($node_user->Username));
@@ -96,24 +95,24 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             }
 
                             $result = UserManager::create_user(
-                                    api_utf8_decode($node_user->Firstname),
-                                    api_utf8_decode($node_user->Lastname),
-                                    $status,
-                                    api_utf8_decode($node_user->Email),
-                                    $username,
-                                    $password,
-                                    api_utf8_decode($node_user->OfficialCode),
-                                    null,
-                                    api_utf8_decode($node_user->Phone),
-                                    null,
-                                    PLATFORM_AUTH_SOURCE,
-                                    null,
-                                    1,
-                                    0,
-                                    null,
-                                    null,
-                                    $send_mail
-                                    );
+                                api_utf8_decode($node_user->Firstname),
+                                api_utf8_decode($node_user->Lastname),
+                                $status,
+                                api_utf8_decode($node_user->Email),
+                                $username,
+                                $password,
+                                api_utf8_decode($node_user->OfficialCode),
+                                null,
+                                api_utf8_decode($node_user->Phone),
+                                null,
+                                PLATFORM_AUTH_SOURCE,
+                                null,
+                                1,
+                                0,
+                                null,
+                                null,
+                                $send_mail
+                            );
                         } else {
                             $lastname = trim(api_utf8_decode($node_user->Lastname));
                             $firstname = trim(api_utf8_decode($node_user->Firstname));
@@ -144,10 +143,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 }
 
                 // Creating  courses from <Sessions> <Courses> base node.
-
                 if (count($root->Courses->Course) > 0) {
                     foreach ($root->Courses->Course as $courseNode) {
-
                         $params = array();
                         if (empty($courseNode->CourseTitle)) {
                             $params['title']            = api_utf8_decode($courseNode->CourseCode);
@@ -161,12 +158,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         $params['user_id']          = api_get_user_id();
 
                         // Looking up for the teacher.
-                        $username       = trim(api_utf8_decode($courseNode->CourseTeacher));
+                        $username = trim(api_utf8_decode($courseNode->CourseTeacher));
                         $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
                         $rs = Database::query($sql);
                         list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
 
-                        $params['teachers']  = $user_id;
+                        $params['teachers'] = $user_id;
                         CourseManager::create_course($params);
                     }
                 }
@@ -178,7 +175,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         $user_counter = 0;
 
                         $session_name = trim(api_utf8_decode($node_session->SessionName));
-                        $coach = UserManager::purify_username(api_utf8_decode($node_session->Coach), $purification_option_for_usernames);
+                        $coach = UserManager::purify_username(
+                            api_utf8_decode($node_session->Coach),
+                            $purification_option_for_usernames
+                        );
 
                         if (!empty($coach)) {
                             $coach_id = UserManager::get_user_id_from_username($coach);
@@ -192,11 +192,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             $coach_id = api_get_user_id();
                         }
 
-                        $date_start = trim(api_utf8_decode($node_session->DateStart)); // Just in case - encoding conversion.
+                        // Just in case - encoding conversion.
+                        $date_start = trim(api_utf8_decode($node_session->DateStart));
 
                         if (!empty($date_start)) {
                             list($year_start, $month_start, $day_start) = explode('/', $date_start);
-                            if(empty($year_start) || empty($month_start) || empty($day_start)) {
+                            if (empty($year_start) || empty($month_start) || empty($day_start)) {
                                 $error_message .= get_lang('WrongDate').' : '.$date_start.'<br />';
                                 break;
                             } else {
@@ -230,7 +231,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 if ($i > 1) {
                                     $suffix = ' - '.$i;
                                 }
-                                $sql = 'SELECT 1 FROM '.$tbl_session.' WHERE name="'.Database::escape_string($session_name.$suffix).'"';
+                                $sql = 'SELECT 1 FROM '.$tbl_session.'
+                                        WHERE name="'.Database::escape_string($session_name.$suffix).'"';
                                 $rs = Database::query($sql);
                                 if (Database::result($rs, 0, 0)) {
                                     $i++;
@@ -476,7 +478,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             );
             $sessionList = $result['session_list'];
             $error_message = $result['error_message'];
-
             $session_counter = $result['session_counter'];
         }
 
@@ -535,7 +536,9 @@ $form->addElement('radio', 'file_type', array(null, '<a href="example_session.xm
 $form->addElement('checkbox', 'overwrite', null, get_lang('IfSessionExistsUpdate'));
 $form->addElement('checkbox', 'delete_users_not_in_list', null, get_lang('DeleteUsersNotInList'));
 $form->addElement('checkbox', 'update_course_coaches', null, get_lang('CleanAndUpdateCourseCoaches'));
+///$form->addElement('checkbox', 'add_me_as_coach', null, get_lang('AddMeAsCoach'));
 $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
+
 $form->addElement('button', 'submit', get_lang('ImportSession'));
 
 $defaults = array('sendMail' => 'true','file_type' => 'csv');
@@ -545,19 +548,16 @@ Display::display_normal_message(get_lang('TheXMLImportLetYouAddMoreInfoAndCreate
 $form->display();
 
 ?>
-<font color="gray">
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-
 <blockquote>
 <pre>
 <strong>SessionName</strong>;Coach;<strong>DateStart</strong>;<strong>DateEnd</strong>;Users;Courses
-<strong>xxx1</strong>;xxx;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...]
-<strong>xxx2</strong>;xxx;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...]
+<strong>Example 1</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];read_only
+<strong>Example 2</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];accessible
+<strong>Example 3</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];not_accesible
 </pre>
 </blockquote>
-
 <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-
 <blockquote>
 <pre>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
@@ -615,8 +615,7 @@ $form->display();
 &lt;/Sessions&gt;
 </pre>
 </blockquote>
-</font>
+
 <?php
 
-/* FOOTER */
 Display::display_footer();

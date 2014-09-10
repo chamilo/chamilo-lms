@@ -42,7 +42,7 @@ $purification_option_for_usernames = false;
 $inserted_in_course = array();
 
 global $_configuration;
-
+$warn = null;
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (isset($_FILES['import_file']['tmp_name']) &&
         !empty($_FILES['import_file']['tmp_name'])
@@ -462,6 +462,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         } else {
             // CSV
             $updateCourseCoaches = isset($_POST['update_course_coaches']) ? true : false;
+            $addOriginalCourseTeachersAsCourseSessionCoaches = isset($_POST['add_me_as_coach']) ? true : false;
+
             $result = SessionManager::importCSV(
                 $_FILES['import_file']['tmp_name'],
                 $isOverwrite,
@@ -474,7 +476,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 1,
                 array(),
                 $deleteUsersNotInList,
-                $updateCourseCoaches
+                $updateCourseCoaches,
+                false,
+                $addOriginalCourseTeachersAsCourseSessionCoaches
             );
             $sessionList = $result['session_list'];
             $error_message = $result['error_message'];
@@ -536,9 +540,8 @@ $form->addElement('radio', 'file_type', array(null, '<a href="example_session.xm
 $form->addElement('checkbox', 'overwrite', null, get_lang('IfSessionExistsUpdate'));
 $form->addElement('checkbox', 'delete_users_not_in_list', null, get_lang('DeleteUsersNotInList'));
 $form->addElement('checkbox', 'update_course_coaches', null, get_lang('CleanAndUpdateCourseCoaches'));
-///$form->addElement('checkbox', 'add_me_as_coach', null, get_lang('AddMeAsCoach'));
+$form->addElement('checkbox', 'add_me_as_coach', null, get_lang('AddMeAsCoach'));
 $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
-
 $form->addElement('button', 'submit', get_lang('ImportSession'));
 
 $defaults = array('sendMail' => 'true','file_type' => 'csv');
@@ -551,10 +554,10 @@ $form->display();
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 <blockquote>
 <pre>
-<strong>SessionName</strong>;Coach;<strong>DateStart</strong>;<strong>DateEnd</strong>;Users;Courses
+<strong>SessionName</strong>;Coach;<strong>DateStart</strong>;<strong>DateEnd</strong>;Users;Courses;VisibilityAfterExpiration
 <strong>Example 1</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];read_only
 <strong>Example 2</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];accessible
-<strong>Example 3</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];not_accesible
+<strong>Example 3</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,username2,...]|course2[coach1][username1,username2,...];not_accessible
 </pre>
 </blockquote>
 <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>

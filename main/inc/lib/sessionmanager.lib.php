@@ -1705,7 +1705,6 @@ class SessionManager
         $session_visibility = intval($session_visibility);
 
         $nbr_users = 0;
-
         foreach ($user_list as $enreg_user) {
             $enreg_user = intval($enreg_user);
             // Checking if user exists in session - course - user table.
@@ -3352,7 +3351,8 @@ class SessionManager
         $fieldsToAvoidUpdate = array(),
         $deleteUsersNotInList = false,
         $updateCourseCoaches = false,
-        $sessionWithCoursesModifier = false
+        $sessionWithCoursesModifier = false,
+        $addOriginalCourseTeachersAsCourseSessionCoaches = true
     ) {
         $content = file($file);
 
@@ -3402,7 +3402,10 @@ class SessionManager
                     foreach ($enreg as $tag_name) {
                         $tag_names[] = api_preg_replace('/[^a-zA-Z0-9_\-]/', '', $tag_name);
                     }
-                    if (!in_array('SessionName', $tag_names) || !in_array('DateStart', $tag_names) || !in_array('DateEnd', $tag_names)) {
+                    if (!in_array('SessionName', $tag_names) ||
+                        !in_array('DateStart', $tag_names) ||
+                        !in_array('DateEnd', $tag_names)
+                    ) {
                         $error_message = get_lang('NoNeededData');
                         break;
                     }
@@ -3422,6 +3425,23 @@ class SessionManager
                 }
 
                 $session_name = Database::escape_string($enreg['SessionName']);
+                // Default visibility
+                $visibilityAfterExpirationPerSession = $sessionVisibility;
+
+                if (isset($enreg['VisibilityAfterExpiration'])) {
+                    $visibility = $enreg['VisibilityAfterExpiration'];
+                    switch ($visibility) {
+                        case 'read_only':
+                            $visibilityAfterExpirationPerSession = SESSION_VISIBLE_READ_ONLY;
+                            break;
+                        case 'accessible':
+                            $visibilityAfterExpirationPerSession = SESSION_VISIBLE;
+                            break;
+                        case 'not_accessible':
+                            $visibilityAfterExpirationPerSession = SESSION_INVISIBLE;
+                            break;
+                    }
+                }
 
                 if (empty($session_name)) {
                     continue;
@@ -3429,7 +3449,6 @@ class SessionManager
 
                 $date_start             = $enreg['DateStart'];
                 $date_end               = $enreg['DateEnd'];
-                $visibility             = isset($enreg['Visibility']) ? $enreg['Visibility'] : $sessionVisibility;
                 $session_category_id    = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
                 $sessionDescription     = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
 
@@ -3476,7 +3495,7 @@ class SessionManager
                             id_coach = '$coach_id',
                             date_start = '$date_start',
                             date_end = '$date_end',
-                            visibility = '$visibility',
+                            visibility = '$visibilityAfterExpirationPerSession',
                             session_category_id = '$session_category_id',
                             session_admin_id = " . intval($defaultUserId) . $extraParameters . $extraSessionParameters;
                     Database::query($sql);
@@ -3527,19 +3546,14 @@ class SessionManager
                         $session_id = $my_session_result['id'];
 
                         if ($session_id) {
-                            if ($session_id) {
-                                foreach ($enreg as $key => $value) {
-                                    if (substr($key, 0, 6) == 'extra_') { //an extra field
-                                        self::update_session_extra_field_value($session_id, substr($key, 6), $value);
-                                    }
+
+                            foreach ($enreg as $key => $value) {
+                                if (substr($key, 0, 6) == 'extra_') { //an extra field
+                                    self::update_session_extra_field_value($session_id, substr($key, 6), $value);
                                 }
-                                if ($debug) {
-                                    $logger->addInfo("Sessions - #$session_id created: $session_name");
-                                }
-                            } else {
-                                if ($debug) {
-                                    $logger->addError("Sessions - Session NOT created: $session_name");
-                                }
+                            }
+                            if ($debug) {
+                                $logger->addInfo("Sessions - #$session_id created: $session_name");
                             }
 
                             // Delete session-user relation only for students
@@ -3561,6 +3575,9 @@ class SessionManager
                             }
                         }
                     } else {
+                        if ($debug) {
+                            $logger->addError("Sessions - Session to be updated: $session_name");
+                        }
 
                         // Updating the session.
                         $params = array(
@@ -3592,7 +3609,6 @@ class SessionManager
                         }
 
                         if ($session_id) {
-
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
@@ -3627,6 +3643,7 @@ class SessionManager
 
                 // Adding the relationship "Session - User" for students
                 $userList = array();
+
                 if (is_array($users)) {
                     foreach ($users as $user) {
                         $user_id = UserManager::get_user_id_from_username($user);
@@ -3671,7 +3688,6 @@ class SessionManager
                 $removeAllTeachersFromCourse = false;
 
                 if ($sessionWithCoursesModifier) {
-
                     if (count($courses) >= 2) {
                         // Only first teacher in course session;
                         $onlyAddFirstCoachOrTeacher = true;
@@ -3719,7 +3735,11 @@ class SessionManager
                         // If any user provided for a course, use the users array.
                         if (empty($course_users)) {
                             if (!empty($userList)) {
-                                SessionManager::subscribe_users_to_session_course($userList, $session_id, $course_code);
+                                SessionManager::subscribe_users_to_session_course(
+                                    $userList,
+                                    $session_id,
+                                    $course_code
+                                );
                                 if ($debug) {
                                     $msg = "Sessions - Adding student list ".implode(', #', $userList)." to course: '$course_code' and session #$session_id";
                                     $logger->addInfo($msg);
@@ -3732,16 +3752,25 @@ class SessionManager
                             $savedCoaches = array();
                             // only edit if add_teachers_to_sessions_courses is set.
                             if ($addTeachersToSession) {
-                                // Adding course teachers as course session teachers.
-                                $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
 
-                                if (!empty($alreadyAddedTeachers)) {
-                                    $teachersToAdd = array();
-                                    foreach ($alreadyAddedTeachers as $user) {
-                                        $teachersToAdd[] = $user['username'];
+                                if ($addOriginalCourseTeachersAsCourseSessionCoaches) {
+                                    // Adding course teachers as course session teachers.
+                                    $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code(
+                                        $course_code
+                                    );
+
+                                    if (!empty($alreadyAddedTeachers)) {
+                                        $teachersToAdd = array();
+                                        foreach ($alreadyAddedTeachers as $user) {
+                                            $teachersToAdd[] = $user['username'];
+                                        }
+                                        $course_coaches = array_merge(
+                                            $course_coaches,
+                                            $teachersToAdd
+                                        );
                                     }
-                                    $course_coaches = array_merge($course_coaches, $teachersToAdd);
                                 }
+
                                 foreach ($course_coaches as $course_coach) {
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {

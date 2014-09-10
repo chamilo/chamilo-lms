@@ -11,9 +11,9 @@ class ClockworksmsPlugin extends Plugin
     const NEW_USER_SUBSCRIBED_COURSE = 4;
     const NEW_COURSE_SUGGESTED_TEACHER = 5;
     const COURSE_OPENING_REQUEST_CODE_REGISTERED = 6;
-    const COURSE_OPENING_REQUEST_COURSE_CODE_APPROVED = 7;
-    const REQUEST_OPEN_COURSE_CODE_REJECTED = 8;
-    const COURSE_OPENING_REQUEST_COURSE_CODE = 9;
+    const COURSE_OPENING_REQUEST_CODE_APPROVED = 7;
+    const COURSE_OPENING_REQUEST_CODE_REJECTED = 8;
+    const COURSE_OPENING_REQUEST_CODE = 9;
     const BEEN_SUBSCRIBED_COURSE = 10;
     const ASSIGNMENT_BEEN_CREATED_COURSE = 11;
     const ACCOUNT_CREATED_UPDATED_LOGIN_PASSWORD = 12;
@@ -88,66 +88,61 @@ class ClockworksmsPlugin extends Plugin
     private function getSmsTypeOptions()
     {   
         return array(
-            'messageWelcomeXLoginXPasswordX',
-            'messageXNewFileSharedCourseXByX',
-            'messageXAccountApprovedConnectX',
-            'messageXNewCourseXBeenCreatedX',
-            'messageXNewUserXSubscribedCourseX',
-            'messageXNewCourseSuggestedTeacherX',
-            'messageXCourseOpeningRequestCodeXRegistered',
-            'messageXCourseOpeningRequestCourseCodeXApproved',
-            'messageXRequestOpenCourseCodeXReject',
-            'messageXCourseOpeningRequestCourseCodeX',
-            'messageXBeenSubscribedCourseX',
-            'messageXAssignmentBeenCreatedCourseX',
-            'messageXAccountCreatedUpdatedLoginXPasswordX',
-            'messageXPasswordUpdatedLoginXPasswordX',
-            'messageXRequestedPasswordChange',
-            'messageXReceivedNewPersonalMessages',
-            'messageXNewUserXPendingApproval',
-            'messageXXPostedForumXCourseX',
-            'messageXXXCheckEmailConnectMoreInfo',            
-            'messageXXStudentXAnsweredTestX',
-            'messageXXStudentXAnsweredTestXOpenQuestion',
-            'messageXXStudentXAnsweredTestXVoiceQuestion',
-            'messageXXAnswerOpenQuestionTestXReviewed',
-            'messageXXNewThreadXStartedForumX',
-            'messageXXNewAnswerPostedXForumX',
-            'messageXXNewSystemAnnouncementAdded',
-            'messageXTestXNewSystemAnnouncementAdded',
-            'messageXXSystemAnnouncementUpdate',
-            'messageXTestXSystemAnnouncementUpdate',
-            'messageXUserXUploadedAssignmentXCourseXStudentSubmitsPaper',
-            'messageXUserXUploadedAssignmentXCheckXStudentSubmitsPaper',
-            'messageXUserXUploadedAssignmentXCourseX',
-            'messageXUserXUploadedAssignmentXCheckX',
-            'messageXSubscribedSessionX',
-            'messageXSubscribedSessionXCSV',            
-            'messageXUserXSuggestedBeFriends',
-            'messageXUserXAnsweredInboxMessage',
-            'messageXBeenInvitedJoinGroupX',
-            'messageXMessagesSentEditedGroupXEdited',
-            'messageXMessagesSentEditedGroupXAdded',
-            'messageXBeenInvitedCompleteSurveyXCourseX',
-            'messageXReminderAssignmentXCourseXDue',
-            'messageXUserDetailsModified'
+            'MessageWelcomeXLoginXPasswordX',
+            'MessageXNewFileSharedCourseXByX',
+            'MessageXAccountApprovedConnectX',
+            'MessageXNewCourseXBeenCreatedX',
+            'MessageXNewUserXSubscribedCourseX',
+            'MessageXNewCourseSuggestedTeacherX',
+            'MessageXCourseOpeningRequestCodeXRegistered',
+            'MessageXCourseOpeningRequestCourseCodeXApproved',
+            'MessageXRequestOpenCourseCodeXReject',
+            'MessageXCourseOpeningRequestCourseCodeX',
+            'MessageXBeenSubscribedCourseX',
+            'MessageXAssignmentBeenCreatedCourseX',
+            'MessageXAccountCreatedUpdatedLoginXPasswordX',
+            'MessageXPasswordUpdatedLoginXPasswordX',
+            'MessageXRequestedPasswordChange',
+            'MessageXReceivedNewPersonalMessages',
+            'MessageXNewUserXPendingApproval',
+            'MessageXXPostedForumXCourseX',
+            'MessageXXXCheckEmailConnectMoreInfo',            
+            'MessageXXStudentXAnsweredTestX',
+            'MessageXXStudentXAnsweredTestXOpenQuestion',
+            'MessageXXStudentXAnsweredTestXVoiceQuestion',
+            'MessageXXAnswerOpenQuestionTestXReviewed',
+            'MessageXXNewThreadXStartedForumX',
+            'MessageXXNewAnswerPostedXForumX',
+            'MessageXXNewSystemAnnouncementAdded',
+            'MessageXTestXNewSystemAnnouncementAdded',
+            'MessageXXSystemAnnouncementUpdate',
+            'MessageXTestXSystemAnnouncementUpdate',
+            'MessageXUserXUploadedAssignmentXCourseXStudentSubmitsPaper',
+            'MessageXUserXUploadedAssignmentXCheckXStudentSubmitsPaper',
+            'MessageXUserXUploadedAssignmentXCourseX',
+            'MessageXUserXUploadedAssignmentXCheckX',
+            'MessageXSubscribedSessionX',
+            'MessageXSubscribedSessionXCSV',            
+            'MessageXUserXSuggestedBeFriends',
+            'MessageXUserXAnsweredInboxMessage',
+            'MessageXBeenInvitedJoinGroupX',
+            'MessageXMessagesSentEditedGroupXEdited',
+            'MessageXMessagesSentEditedGroupXAdded',
+            'MessageXBeenInvitedCompleteSurveyXCourseX',
+            'MessageXReminderAssignmentXCourseXDue',
+            'MessageXUserDetailsModified'
         );
     }    
 
     public function install()
     {
         $this->addMobilePhoneNumberField();
-        
-        //Installing course settings
-        //$this->install_course_fields_in_all_courses();
     }
 
     public function uninstall()
     {
-        $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $sql = "DELETE FROM $t_settings WHERE subkey = 'clockworksms'";
+        $tSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $sql = "DELETE FROM $tSettings WHERE subkey = 'clockworksms'";
         Database::query($sql);
-        //Deleting course settings
-        //$this->uninstall_course_fields_in_all_courses($this->course_settings);
     }
 }

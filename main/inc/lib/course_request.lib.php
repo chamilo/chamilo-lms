@@ -432,7 +432,7 @@ class CourseRequestManager {
             $extra_headers = 'Bcc: '.$sender_email;
 
             $additional_parameters = array(
-                'smsType' => COURSE_OPENING_REQUEST_COURSE_CODE_APPROVED,
+                'smsType' => COURSE_OPENING_REQUEST_CODE_APPROVED,
                 'userId' => $user_id,
                 'courseCode' => $course_info['code']
             );
@@ -504,7 +504,7 @@ class CourseRequestManager {
         $extra_headers = 'Bcc: '.$sender_email;
 
         $additional_parameters = array(
-            'smsType' => REQUEST_OPEN_COURSE_CODE_REJECTED,
+            'smsType' => COURSE_OPENING_REQUEST_CODE_REJECTED,
             'userId' => $user_id,
             'courseCode' => $code
         );
@@ -574,7 +574,7 @@ class CourseRequestManager {
         $extra_headers = 'Bcc: '.$sender_email;
 
         $additional_parameters = array(
-            'smsType' => COURSE_OPENING_REQUEST_COURSE_CODE,
+            'smsType' => COURSE_OPENING_REQUEST_CODE,
             'userId' => $user_id,
             'courseCode' => $code
         );

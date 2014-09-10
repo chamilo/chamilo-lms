@@ -17,7 +17,6 @@ class Clockworksms
     public $plugin_enabled = false;
 
     /**
-     *
      * Constructor (generates a connection to the API)
      * @param string $apiKey
      */
@@ -37,11 +36,14 @@ class Clockworksms
             define('CONFIG_SECURITY_API_KEY', $this->apiKey);
             if (!empty(trim(CONFIG_SECURITY_API_KEY))) {                
                 $this->api = new Clockwork(CONFIG_SECURITY_API_KEY);
-            }
-            else {
+            } else {
                 $this->api = new Clockwork(' ');
-                $recipient_name = api_get_person_name(api_get_setting('administratorName'),
-                    api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+                $recipient_name = api_get_person_name(
+                    api_get_setting('administratorName'),
+                    api_get_setting('administratorSurname'), 
+                    null, 
+                    PERSON_NAME_EMAIL_ADDRESS
+                );
                 $email_form = get_setting('emailAdministrator');
                 $emailsubject = 'Clockworksms error';
                 $emailbody = 'Key cannot be blank';
@@ -75,7 +77,7 @@ class Clockworksms
             if (!empty($message['message'])) {                
                 $result = $this->api->send($message); 
 
-                // Check if the send was successful
+                // Commented for future message logging / tracking purposes
                 /*if( $result["success"] ) {
                     echo "Message sent - ID: " . $result["id"];            
                 } else {
@@ -200,7 +202,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::COURSE_OPENING_REQUEST_COURSE_CODE_APPROVED:
+            case ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -212,7 +214,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::REQUEST_OPEN_COURSE_CODE_REJECTED:
+            case ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -224,7 +226,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::COURSE_OPENING_REQUEST_COURSE_CODE:
+            case ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -260,6 +262,7 @@ class Clockworksms
                     )
                 );
                 break;
+            // Message types to be implemented. Fill the array parameter with arguments.
             /*case ClockworksmsPlugin::ACCOUNT_CREATED_UPDATED_LOGIN_PASSWORD:
                 return $this->buildSms(
                     $plugin,

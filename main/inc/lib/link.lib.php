@@ -264,6 +264,7 @@ function deletelinkcategory($type)
 {
 	global $catlinkstatus;
 	global $_course;
+    $session_id = api_get_session_id();
 	$tbl_link              = Database :: get_course_table(TABLE_LINK);
 	$tbl_categories        = Database :: get_course_table(TABLE_LINK_CATEGORY);
 	$TABLE_ITEM_PROPERTY   = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -295,6 +296,11 @@ function deletelinkcategory($type)
 			$catlinkstatus = get_lang('CategoryDeleted');
 			unset ($id);
 			Database :: query($sql);
+            // Delete relation link_category : item_property : link_category not exist delete Logic.
+            $sqlP = "DELETE FROM $TABLE_ITEM_PROPERTY WHERE c_id = $course_id AND tool = '". TOOL_LINK_CATEGORY ."' "
+                . "AND ref = '" . intval($_GET['id']) . "' AND id_session = '$session_id' ";
+            Database :: query($sqlP);
+
 			Display :: display_confirmation_message(get_lang('CategoryDeleted'));
 		}
 	}
@@ -609,7 +615,10 @@ function change_visibility($id, $scope) {
 	if ($scope == 'link') {
 		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);
 		Display :: display_confirmation_message(get_lang('VisibilityChanged'));
-	}
+	} elseif ($scope == TOOL_LINK_CATEGORY) {
+        api_item_property_update($_course, TOOL_LINK_CATEGORY, $id, $_GET['action'], $_user['user_id']);
+        Display :: display_confirmation_message(get_lang('VisibilityChanged'));
+    }
 }
 
 /**

@@ -5,6 +5,8 @@
  *	@package chamilo.admin
  */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /* INITIALIZATION SECTION */
 
 // Language files that need to be included.
@@ -25,7 +27,9 @@ global $_configuration;
 
 // Get all possible teachers.
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+
+$group = Container::getGroupManager()->findGroupByName('teachers');
+/*$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1".$order_clause;
 // Filtering teachers when creating a course.
 if (api_is_multiple_url_enabled()) {
@@ -35,10 +39,12 @@ if (api_is_multiple_url_enabled()) {
             ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 }
 
-$res = Database::query($sql);
+$res = Database::query($sql);*/
 $teachers = array();
-while ($obj = Database::fetch_object($res)) {
-    $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+$users = $group->getUsers();
+/** @var Chamilo\UserBundle\Entity\User $user */
+foreach ($users as $user) {
+    $teachers[$user->getId()] = $user->getCompleteName();
 }
 
 // Build the form.

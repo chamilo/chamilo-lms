@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+use Chamilo\CoreBundle\Framework\Container;
 /**
  * This script shows a list of courses and allows searching for courses codes
  * and names

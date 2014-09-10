@@ -4591,8 +4591,8 @@ function api_get_status_langvars() {
 */
 function api_get_settings_options($var) {
 	$table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
-    $var = Database::escape_string($var);
-	$sql = "SELECT * FROM $table_settings_options WHERE variable = '$var' ORDER BY id";
+    $var = Database::escape_string($var);	
+	$sql = "SELECT * FROM $table_settings_options WHERE variable = '$var' ORDER BY id";	
 	$result = Database::query($sql);
     $settings_options_array = array();
 	while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -5742,7 +5742,7 @@ function api_sql_query($query, $file = '', $line = 0) {
  * @author Ivan Tcholakov, 04-OCT-2009, a reworked version of this function.
  * @link http://www.dokeos.com/forum/viewtopic.php?t=15557
  */
-function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null) {
+function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = array()) {
 
     require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
 
@@ -5828,6 +5828,15 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     // Send mail.
     if (!$mail->Send()) {
         return 0;
+    }
+
+    $plugin = new AppPlugin();
+    $installedPluginsList = $plugin->getInstalledPluginListObject();
+    foreach ($installedPluginsList as $installedPlugin) {
+        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additional_parameters)) {
+            $clockworksmsObject = new Clockworksms();
+            $clockworksmsObject->send($additional_parameters);
+        }
     }
 
     // Clear all the addresses.

@@ -1139,6 +1139,7 @@ class Database {
         foreach($attributes as $key => $value) {
             $filtred_attributes[$key] = "'".self::escape_string($value)."'";
         }
+
         //@todo check if the field exists in the table we should use a describe of that table
         $params = array_keys($filtred_attributes);
         $values = array_values($filtred_attributes);
@@ -1149,7 +1150,7 @@ class Database {
             	var_dump($sql);
             }
             return self::insert_id();
-        }
+        }        
         return false;
     }
 

@@ -24,6 +24,7 @@ class Plugin
     // Translation strings.
     private $strings = null;
     public $isCoursePlugin = false;
+    public $isMailPlugin = false;
 
     /**
      * When creating a new course, these settings are added to the course, in
@@ -75,15 +76,18 @@ class Plugin
         $result['author']           = $this->get_author();
         $result['plugin_class']     = get_class($this);
         $result['is_course_plugin'] = $this->isCoursePlugin;
+        $result['is_mail_plugin']   = $this->isMailPlugin;
 
         if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;
             foreach ($this->fields as $name => $type) {
                 $value = $this->get($name);
+                if (is_array($type)) {
+                    $value = $type['options'];
+                }
                 $result[$name] = $value;
-            }
+            }            
         }
-
         return $result;
     }
 
@@ -163,7 +167,20 @@ class Plugin
         $result = new FormValidator($this->get_name());
 
         $defaults = array();
-        foreach ($this->fields as $name => $type) {
+        $checkboxGroup = array();
+        $checkboxCollection = array();
+
+        if ($checkboxNames = array_keys($this->fields, 'checkbox')) {        
+            $pluginInfoCollection = api_get_settings('Plugins');
+            foreach ($pluginInfoCollection as $pluginInfo) {
+                if (array_search($pluginInfo['title'], $checkboxNames) !== false) {
+                    $checkboxCollection[$pluginInfo['title']] = $pluginInfo;
+                }
+            }
+        }
+        
+        foreach ($this->fields as $name => $type) {            
+
             $value = $this->get($name);
 
             $defaults[$name] = $value;
@@ -190,11 +207,25 @@ class Plugin
                     $group[] = $result->createElement('radio', $name, '', get_lang('No'), 'false');
                     $result->addGroup($group, null, array($this->get_lang($name), $help));
                     break;
+                case 'checkbox':
+                    $element = $result->createElement(
+                        $type, 
+                        $name, 
+                        '',
+                        $this->get_lang($name),
+                        $checkboxCollection[$name]['selected_value'] === 'true' ? 'checked' : ''
+                    );
+                    $element->_attributes['value'] = 'true';
+                    $checkboxGroup[] = $element;
+                    break;
             }
+        }
+        
+        if (!empty($checkboxGroup)) {
+            $result->addGroup($checkboxGroup, null, array($this->get_lang('sms_types'), $help));
         }
         $result->setDefaults($defaults);
         $result->addElement('style_submit_button', 'submit_button', $this->get_lang('Save'));
-
         return $result;
     }
 

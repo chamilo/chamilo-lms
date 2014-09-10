@@ -145,7 +145,15 @@ class CourseRequestManager {
         $recipient_name_admin = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
         $recipient_email_admin = get_setting('emailAdministrator');
 
-        @api_mail($recipient_name_admin, $recipient_email_admin, $email_subject, $email_body_admin, $sender_name_teacher, $sender_email_teacher);
+        $userInfo = api_get_user_info($user_id);
+        $additional_parameters = array(
+            'smsType' => NEW_COURSE_SUGGESTED_TEACHER,
+            'userId' => $user_id,
+            'userUsername' => $userInfo['username']
+        );
+
+        api_mail_html($recipient_name_admin, $recipient_email_admin, $email_subject, $email_body_admin, 
+            $sender_name_teacher, $sender_email_teacher, null, null, null, $additional_parameters);
 
         // Sending an e-mail to the requestor.
 
@@ -165,7 +173,14 @@ class CourseRequestManager {
         $recipient_name_teacher = $sender_name_teacher;
         $recipient_email_teacher = $sender_email_teacher;
 
-        @api_mail($recipient_name_teacher, $recipient_email_teacher, $email_subject, $email_body_teacher, $sender_name_admin, $sender_email_admin);
+        $additional_parameters = array(
+            'smsType' => COURSE_OPENING_REQUEST_CODE_REGISTERED,
+            'userId' => $user_info['user_id'],
+            'courseCode' => $wanted_code
+        );
+
+        api_mail_html($recipient_name_teacher, $recipient_email_teacher, $email_subject, $email_body_teacher, 
+            $sender_name_admin, $sender_email_admin, null, null, null, $additional_parameters);
 
         return $last_insert_id;
 
@@ -416,7 +431,15 @@ class CourseRequestManager {
             $recipient_email = $user_info['mail'];
             $extra_headers = 'Bcc: '.$sender_email;
 
-            @api_mail($recipient_name, $recipient_email, $email_subject, $email_body, $sender_name, $sender_email);
+            $additional_parameters = array(
+                'smsType' => COURSE_OPENING_REQUEST_CODE_APPROVED,
+                'userId' => $user_id,
+                'courseCode' => $course_info['code']
+            );
+
+            api_mail_html($recipient_name, $recipient_email, $email_subject, $email_body, 
+                $sender_name, $sender_email, null, null, null, $additional_parameters);
+
             return $course_info['code'];
         }
         return false;
@@ -480,7 +503,14 @@ class CourseRequestManager {
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;
 
-        @api_mail($recipient_name, $recipient_email, $email_subject, $email_body, $sender_name, $sender_email);
+        $additional_parameters = array(
+            'smsType' => COURSE_OPENING_REQUEST_CODE_REJECTED,
+            'userId' => $user_id,
+            'courseCode' => $code
+        );
+
+        api_mail_html($recipient_name, $recipient_email, $email_subject, $email_body, 
+            $sender_name, $sender_email, null, null, null, $additional_parameters);
 
         return true;
     }
@@ -543,7 +573,15 @@ class CourseRequestManager {
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;
 
-        $result = @api_mail($recipient_name, $recipient_email, $email_subject, $email_body, $sender_name, $sender_email);
+        $additional_parameters = array(
+            'smsType' => COURSE_OPENING_REQUEST_CODE,
+            'userId' => $user_id,
+            'courseCode' => $code
+        );
+
+        $result = api_mail_html($recipient_name, $recipient_email, $email_subject, $email_body, 
+            $sender_name, $sender_email, null, null, null, $additional_parameters);
+
         if (!$result) {
             return false;
         }

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
 
@@ -23,7 +24,7 @@ class ChatSettingsSchema implements SchemaInterface
                 'allow_global_chat' => '',
             ))
             ->setAllowedTypes(array(
-                'allow_personal_agenda' => array('string')
+                'show_chat_folder' => array('string')
             ))
         ;
     }

@@ -127,13 +127,128 @@ services:
         class: Chamilo\UserBundle\Security\Encoder
 
     # Settings
-    chamilo_core.settings_schema.platform:
-        class: Chamilo\CoreBundle\Settings\PlatformSettingsSchema
+
+    chamilo_core.settings_schema.admin:
+        class: Chamilo\CoreBundle\Settings\AdminSettingsSchema
         tags:
-            - { name: sylius.settings_schema, namespace: platform }
+            - { name: sylius.settings_schema, namespace: admin }
+
+    chamilo_core.settings_schema.agenda:
+        class: Chamilo\CoreBundle\Settings\AgendaSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: agenda }
+
+    chamilo_core.settings_schema.chat:
+        class: Chamilo\CoreBundle\Settings\ChatSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: chat }
 
     chamilo_core.settings_schema.course:
         class: Chamilo\CoreBundle\Settings\CourseSettingsSchema
         tags:
             - { name: sylius.settings_schema, namespace: course }
 
+    chamilo_core.settings_schema.display:
+        class: Chamilo\CoreBundle\Settings\DisplaySettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: display }
+
+    chamilo_core.settings_schema.document:
+        class: Chamilo\CoreBundle\Settings\DocumentSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: document }
+
+    chamilo_core.settings_schema.dropbox:
+        class: Chamilo\CoreBundle\Settings\DropboxSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: dropbox }
+
+    chamilo_core.settings_schema.editor:
+            class: Chamilo\CoreBundle\Settings\EditorSettingsSchema
+            tags:
+                - { name: sylius.settings_schema, namespace: editor }
+
+    chamilo_core.settings_schema.exercise:
+        class: Chamilo\CoreBundle\Settings\ExerciseSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: exercise }
+
+    chamilo_core.settings_schema.forum:
+        class: Chamilo\CoreBundle\Settings\ForumSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: forum }
+
+    chamilo_core.settings_schema.glossary:
+        class: Chamilo\CoreBundle\Settings\GlossarySettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: glossary }
+
+    chamilo_core.settings_schema.gradebook:
+        class: Chamilo\CoreBundle\Settings\GradebookSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: gradebook }
+
+    chamilo_core.settings_schema.group:
+        class: Chamilo\CoreBundle\Settings\GroupSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: group }
+
+    chamilo_core.settings_schema.mail:
+        class: Chamilo\CoreBundle\Settings\MailSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: mail }
+
+    chamilo_core.settings_schema.message:
+        class: Chamilo\CoreBundle\Settings\MessageSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: message }
+
+    chamilo_core.settings_schema.platform:
+        class: Chamilo\CoreBundle\Settings\PlatformSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: platform }
+
+    chamilo_core.settings_schema.profile:
+        class: Chamilo\CoreBundle\Settings\ProfileSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: profile }
+
+    chamilo_core.settings_schema.registration:
+        class: Chamilo\CoreBundle\Settings\RegistrationSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: registration }
+
+    chamilo_core.settings_schema.search:
+        class: Chamilo\CoreBundle\Settings\SearchSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: search }
+
+    chamilo_core.settings_schema.security:
+        class: Chamilo\CoreBundle\Settings\SecuritySettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: security }
+
+    chamilo_core.settings_schema.session:
+        class: Chamilo\CoreBundle\Settings\SessionSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: session }
+
+    chamilo_core.settings_schema.skill:
+        class: Chamilo\CoreBundle\Settings\SkillSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: skill }
+
+    chamilo_core.settings_schema.social:
+        class: Chamilo\CoreBundle\Settings\SocialSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: social }
+
+    chamilo_core.settings_schema.survey:
+        class: Chamilo\CoreBundle\Settings\SurveySettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: survey }
+
+    chamilo_core.settings_schema.tracking:
+        class: Chamilo\CoreBundle\Settings\TrackingSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: tracking }

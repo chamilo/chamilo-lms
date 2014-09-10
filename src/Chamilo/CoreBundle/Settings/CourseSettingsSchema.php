@@ -22,7 +22,7 @@ class CourseSettingsSchema implements SchemaInterface
             ->setDefaults(array(
                 'homepage_view' => 'activity_big',
                 'show_tool_shortcuts' => '',
-                'course_create_active_tools' => array('course_progress'),
+                'course_create_active_tools' => '',
                 'display_coursecode_in_courselist' => '',
                 'display_teacher_in_courselist' => '',
                 'student_view_enabled' => '',
@@ -38,7 +38,7 @@ class CourseSettingsSchema implements SchemaInterface
                 'allow_user_course_subscription_by_course_admin' => '',
                 'course_validation' => '',
                 'course_validation_terms_and_conditions_url' => '',
-                'course_hide_tools' => array(),
+                'course_hide_tools' => '',
                 'scorm_cumulative_session_time' => '',
                 'courses_default_creation_visibility' => '',
                 'allow_public_certificates' => '',
@@ -46,7 +46,7 @@ class CourseSettingsSchema implements SchemaInterface
             ->setAllowedTypes(array(
                 'homepage_view' => array('string'),
                 'show_tool_shortcuts' => array('string'),
-                'course_create_active_tools' => array('array'),
+                'course_create_active_tools' => array('string'),
                 'display_coursecode_in_courselist' => array('string'),
                 'display_teacher_in_courselist' => array('string'),
                 'student_view_enabled' => array('string'),

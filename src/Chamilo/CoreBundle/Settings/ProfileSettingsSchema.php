@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
 
@@ -19,9 +20,9 @@ class ProfileSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'profile' => '',  //
+                'profile' => '',
                 'extended_profile' => '',
-                'account_valid_duration' => '',
+                'account_valid_duration' => 3660,
                 'split_users_upload_directory' => '',
                 'user_selected_theme' => '',
                 'use_users_timezone' => '',

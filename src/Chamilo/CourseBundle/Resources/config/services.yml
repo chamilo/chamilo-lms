@@ -45,7 +45,7 @@ services:
         class: %tool_chain.class%
 
     # Course tool list
-    chamilo_course.tool.agenda.class:
+    chamilo_course.tool.agenda:
         class: Chamilo\CourseBundle\Tool\Agenda
         arguments:
             - calendar_event
@@ -62,7 +62,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: calendar_event }
 
-    chamilo_course.tool.announcement.class:
+    chamilo_course.tool.announcement:
         class: Chamilo\CourseBundle\Tool\Announcement
         arguments:
             - announcement
@@ -79,7 +79,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: announcement }
 
-    chamilo_course.tool.assignment.class:
+    chamilo_course.tool.assignment:
         class: Chamilo\CourseBundle\Tool\Assignment
         arguments:
             - assignment
@@ -96,7 +96,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: assignment }
 
-    chamilo_course.tool.attendance.class:
+    chamilo_course.tool.attendance:
         class: Chamilo\CourseBundle\Tool\Attendance
         arguments:
             - attendance
@@ -113,7 +113,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: attendance }
 
-    chamilo_course.tool.blog.class:
+    chamilo_course.tool.blog:
         class: Chamilo\CourseBundle\Tool\Blog
         arguments:
             - blog_management
@@ -130,7 +130,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: blog_management }
 
-    chamilo_course.tool.course_description.class:
+    chamilo_course.tool.course_description:
         class: Chamilo\CourseBundle\Tool\CourseDescription
         arguments:
             - course_description
@@ -147,7 +147,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: course_description }
 
-    chamilo_course.tool.chat.class:
+    chamilo_course.tool.chat:
         class: Chamilo\CourseBundle\Tool\Chat
         arguments:
             - chat
@@ -164,7 +164,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: chat }
 
-    chamilo_course.tool.course_progress.class:
+    chamilo_course.tool.course_progress:
         class: Chamilo\CourseBundle\Tool\CourseProgress
         arguments:
             - course_progress
@@ -182,7 +182,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: course_progress }
 
-    chamilo_course.tool.document.class:
+    chamilo_course.tool.document:
         class: Chamilo\CourseBundle\Tool\Document
         arguments:
             - document
@@ -200,7 +200,7 @@ services:
             - { name: chamilo_course.settings_schema, namespace: document }
 
 
-    chamilo_course.tool.dropbox.class:
+    chamilo_course.tool.dropbox:
         class: Chamilo\CourseBundle\Tool\Dropbox
         arguments:
             - dropbox
@@ -218,7 +218,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: dropbox }
 
-    chamilo_course.tool.exercise.class:
+    chamilo_course.tool.exercise:
         class: Chamilo\CourseBundle\Tool\Exercise
         arguments:
             - quiz
@@ -236,7 +236,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: quiz }
 
-    chamilo_course.tool.forum.class:
+    chamilo_course.tool.forum:
         class: Chamilo\CourseBundle\Tool\Forum
         arguments:
             - forum
@@ -255,7 +255,7 @@ services:
             - { name: chamilo_course.settings_schema, namespace: forum }
 
 
-    chamilo_course.tool.glossary.class:
+    chamilo_course.tool.glossary:
         class: Chamilo\CourseBundle\Tool\Glossary
         arguments:
             - glossary
@@ -273,7 +273,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: glossary }
 
-    chamilo_course.tool.gradebook.class:
+    chamilo_course.tool.gradebook:
         class: Chamilo\CourseBundle\Tool\Gradebook
         arguments:
             - gradebook
@@ -291,7 +291,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: gradebook }
 
-    chamilo_course.tool.group.class:
+    chamilo_course.tool.group:
         class: Chamilo\CourseBundle\Tool\Group
         arguments:
             - group
@@ -309,7 +309,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: group }
 
-    chamilo_course.tool.learning_path.class:
+    chamilo_course.tool.learning_path:
         class: Chamilo\CourseBundle\Tool\LearningPath
         arguments:
             - learnpath
@@ -326,7 +326,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: learnpath }
 
-    chamilo_course.tool.link.class:
+    chamilo_course.tool.link:
         class: Chamilo\CourseBundle\Tool\Link
         arguments:
             - link
@@ -344,7 +344,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: link }
 
-    chamilo_course.tool.maintenance.class:
+    chamilo_course.tool.maintenance:
         class: Chamilo\CourseBundle\Tool\Maintenance
         arguments:
             - course_maintenance
@@ -361,7 +361,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: course_maintenance }
 
-    chamilo_course.tool.settings.class:
+    chamilo_course.tool.settings:
         class: Chamilo\CourseBundle\Tool\Settings
         arguments:
             - course_setting
@@ -379,7 +379,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: course_setting }
 
-    chamilo_course.tool.survey.class:
+    chamilo_course.tool.survey:
         class: Chamilo\CourseBundle\Tool\Survey
         arguments:
             - survey
@@ -397,7 +397,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: survey }
 
-    chamilo_course.tool.tracking.class:
+    chamilo_course.tool.tracking:
         class: Chamilo\CourseBundle\Tool\Tracking
         arguments:
             - tracking
@@ -415,7 +415,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: tracking }
 
-    chamilo_course.tool.user.class:
+    chamilo_course.tool.user:
         class: Chamilo\CourseBundle\Tool\User
         arguments:
             - user
@@ -433,7 +433,7 @@ services:
         tags:
             - { name: chamilo_course.settings_schema, namespace: user }
 
-    chamilo_course.tool.wiki.class:
+    chamilo_course.tool.wiki:
         class: Chamilo\CourseBundle\Tool\Wiki
         arguments:
             - wiki

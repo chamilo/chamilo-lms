@@ -1,6 +1,6 @@
 services:
     # Tool definition
-    chamilo_notebook.tool.notebook.class:
+    chamilo_notebook.tool.notebook:
         class: Chamilo\NotebookBundle\Tool\Notebook
         arguments:
             - notebook

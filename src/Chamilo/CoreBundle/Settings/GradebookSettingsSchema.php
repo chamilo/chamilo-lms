@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
 
@@ -24,12 +25,12 @@ class GradebookSettingsSchema implements SchemaInterface
                 'gradebook_score_display_custom' => '',
                 'gradebook_score_display_colorspl' => '',
                 'gradebook_score_display_upperlim' => '',
-                'gradebook_number_decimals' => '',
+                'gradebook_number_decimals' => 0,
                 'allow_hr_skills_management' => '',
                 'teachers_can_change_score_settin' => '',
                 'gradebook_enable_grade_model' => '',
                 'teachers_can_change_grade_model_' => '',
-                'gradebook_default_weight' => '',
+                'gradebook_default_weight' => 100,
                 'gradebook_locking_enabled' => '',
                 'gradebook_default_grade_model_id' => '',
                 'gradebook_show_percentage_in_rep' => '' // ?

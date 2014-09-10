@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
 
@@ -22,11 +23,11 @@ class SearchSettingsSchema implements SchemaInterface
                 'search_enabled' => '',
                 'search_prefilter_prefix' => '',
                 'search_show_unlinked_results' => '',
-                'number_of_upcoming_events' => '',
+                'number_of_upcoming_events' => 0,
 
             ))
             ->setAllowedTypes(array(
-                'allow_personal_agenda' => array('string'),
+                //'allow_personal_agenda' => array('string'),
                 'number_of_upcoming_events' => array('integer')
             ))
         ;

@@ -2392,7 +2392,7 @@ class LoadSettingsData extends AbstractFixture implements
         $manager->persist($setting);
 
 
-        $setting = new SettingsCurrent();
+        /*$setting = new SettingsCurrent();
         $setting->setVariable('show_glossary_in_extra_tools');
         $setting->setSubkey('');
         $setting->setType('radio');
@@ -2404,7 +2404,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
         $manager->persist($setting);
-
+*/
 
         $setting = new SettingsCurrent();
         $setting->setVariable('send_email_to_admin_when_create_course');
@@ -5602,18 +5602,18 @@ class LoadSettingsData extends AbstractFixture implements
         $manager->persist($option);
 
 
-        $option = new SettingsOptions();
+        /*$option = new SettingsOptions();
         $option->setVariable('show_glossary_in_extra_tools');
         $option->setValue('true');
         $option->setDisplayText('Yes');
-        $manager->persist($option);
+        $manager->persist($option);*/
 
 
-        $option = new SettingsOptions();
+        /*$option = new SettingsOptions();
         $option->setVariable('show_glossary_in_extra_tools');
         $option->setValue('false');
         $option->setDisplayText('No');
-        $manager->persist($option);
+        $manager->persist($option);*/
 
 
         $option = new SettingsOptions();

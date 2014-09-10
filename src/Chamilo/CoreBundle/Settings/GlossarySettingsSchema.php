@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Settings;
 
@@ -19,12 +20,10 @@ class GlossarySettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'show_glossary_in_extra_tools'
-
+                'show_glossary_in_extra_tools' => ''
             ))
             ->setAllowedTypes(array(
                 'show_glossary_in_extra_tools' => array('string'),
-
             ))
         ;
     }
@@ -37,6 +36,5 @@ class GlossarySettingsSchema implements SchemaInterface
         $builder
             ->add('show_glossary_in_extra_tools', 'yes_no')
         ;
-
     }
 }

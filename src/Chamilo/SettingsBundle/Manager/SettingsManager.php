@@ -22,6 +22,14 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 class SettingsManager extends SyliusSettingsManager
 {
     /**
+     * @return array
+     */
+    public function getSchemas()
+    {
+        return $this->schemaRegistry->getSchemas();
+    }
+
+    /**
      * @param $name
      * @return mixed
      * @throws \InvalidArgumentException

@@ -19,6 +19,9 @@ use Chamilo\InstallerBundle\ScriptExecutor;
  */
 class InstallCommand extends ContainerAwareCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         $this
@@ -220,15 +223,21 @@ class InstallCommand extends ContainerAwareCommand
                     '--no-interaction' => true,
                 )
             );
-
-        /*$output->writeln('');
-        $output->writeln('<info>Administration setup.</info>');*/
-
-        //$this->setupDatabase($input, $output);
-
         //if ($this->getHelperSet()->get('dialog')->askConfirmation($output, '<question>Load fixtures (Y/N)?</question>', false)) {
         $this->setupFixtures($input, $output);
-        //}
+
+        // Installing platform settings
+        $settingsManager = $this->getContainer()->get('chamilo.settings.manager');
+        $schemas = $settingsManager->getSchemas();
+        $schemas = array_keys($schemas);
+        /**
+         * @var string $key
+         * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
+         */
+        foreach ($schemas as $schema) {
+            $settings = $settingsManager->loadSettings($schema);
+            $settingsManager->saveSettings($schema, $settings);
+        }
 
         $output->writeln('');
         $output->writeln('<info>Administration setup.</info>');

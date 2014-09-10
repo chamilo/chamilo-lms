@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -6,6 +7,7 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Course
@@ -27,12 +29,15 @@ class Course
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(name="title", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
      */
     private $title;
 
     /**
      * @var string
+     * @Assert\NotBlank()
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(name="code", type="string", length=40, precision=0, scale=0, nullable=false, unique=true)
      */
@@ -68,7 +73,7 @@ class Course
 
     /**
      * @var boolean
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="visibility", type="boolean", precision=0, scale=0, nullable=true, unique=false)
      */
     private $visibility;
@@ -103,7 +108,7 @@ class Course
 
     /**
      * @var string
-     *
+     * @Assert\Url()
      * @ORM\Column(name="department_url", type="string", length=180, precision=0, scale=0, nullable=true, unique=false)
      */
     private $departmentUrl;
@@ -680,7 +685,7 @@ class Course
      */
     public function setDiskQuota($diskQuota)
     {
-        $this->diskQuota = $diskQuota;
+        $this->diskQuota = intval($diskQuota);
 
         return $this;
     }
@@ -818,7 +823,7 @@ class Course
      */
     public function setSubscribe($subscribe)
     {
-        $this->subscribe = $subscribe;
+        $this->subscribe = intval($subscribe);
 
         return $this;
     }
@@ -841,7 +846,7 @@ class Course
      */
     public function setUnsubscribe($unsubscribe)
     {
-        $this->unsubscribe = $unsubscribe;
+        $this->unsubscribe = intval($unsubscribe);
 
         return $this;
     }

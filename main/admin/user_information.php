@@ -5,9 +5,7 @@
  * @author Bart Mollet
  * @package chamilo.admin
  */
-/**
- * INIT SECTION
- */
+
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
@@ -84,7 +82,7 @@ $onclick = $window_name."=window.open('".$fullurl."','".$window_name
     ."resizable=no,width=".$width.",height=".$height.",left=200,top=20');"
     ." return false;";
 echo '<a href="javascript: void(0);" onclick="'.$onclick.'" >'
-    .'<img src="'.$fullurl.'" '.$resizing.' alt="'.$alt.'"/></a><br />';
+    .'<img src="'.$fullurl.'" '.$resizing.' /></a><br />';
 echo '<p>'.($user['status'] == 1 ? get_lang('Teacher') : get_lang('Student'))
     .'</p>';
 echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>';
@@ -166,16 +164,17 @@ if (count($sessions) > 0) {
             array($session_item['date_start'], $session_item['date_end'])
         );
         echo Display::page_subheader(
-            '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session.'">'.$session_item['session_name'].'</a>',
+            '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session.'">'.
+            $session_item['session_name'].'</a>',
             ' '.implode(' - ', $dates)
         );
 
         Display :: display_sortable_table(
             $header,
             $data,
-            array (),
             array(),
-            array ('user_id' => intval($_GET['user_id']))
+            array(),
+            array('user_id' => intval($_GET['user_id']))
         );
     }
 } else {
@@ -191,11 +190,11 @@ $sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c'.
     ' AND cu.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
 $res = Database::query($sql);
 if (Database::num_rows($res) > 0) {
-    $header=array();
-    $header[] = array (get_lang('Code'), true);
-    $header[] = array (get_lang('Title'), true);
-    $header[] = array (get_lang('Status'), true);
-    $header[] = array ('', false);
+    $header = array();
+    $header[] = array(get_lang('Code'), true);
+    $header[] = array(get_lang('Title'), true);
+    $header[] = array(get_lang('Status'), true);
+    $header[] = array('', false);
     $data = array ();
     while ($course = Database::fetch_object($res)) {
         $row = array ();
@@ -229,7 +228,7 @@ if (api_is_multiple_url_enabled()) {
     $url_list= UrlManager::get_access_url_from_user($user['user_id']);
     if (count($url_list) > 0) {
         $header = array();
-        $header[] = array ('URL', true);
+        $header[] = array('URL', true);
         $data = array ();
         foreach ($url_list as $url) {
             $row = array();
@@ -240,9 +239,9 @@ if (api_is_multiple_url_enabled()) {
         Display :: display_sortable_table(
             $header,
             $data,
-            array (),
-            array (),
-            array ('user_id' => intval($_GET['user_id']))
+            array(),
+            array(),
+            array('user_id' => intval($_GET['user_id']))
         );
     } else {
         echo '<p>'.get_lang('NoUrlForThisUser').'</p>';

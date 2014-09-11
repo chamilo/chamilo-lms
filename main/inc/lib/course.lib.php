@@ -2433,7 +2433,17 @@ class CourseManager
             $recipient_name = api_get_person_name($tutor['firstname'], $tutor['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
             $email_admin = api_get_setting('emailAdministrator');
-            @api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
+
+            $additional_parameters = array(
+                'smsType' => NEW_USER_SUBSCRIBED_COURSE,
+                'userId' => $tutor['user_id'],
+                'userUsername' => $student['username'],
+                'courseCode' => $course_code
+            );
+
+            //@api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
+            api_mail_html($recipient_name, $emailto, $emailsubject, $emailbody, 
+                $sender_name, $email_admin, null, null, null, $additional_parameters);
         }
     }
 

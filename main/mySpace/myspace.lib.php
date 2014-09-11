@@ -2249,14 +2249,23 @@ class MySpace
 		// Sending emails.
 		$addedto = '';
 		if ($sendMail) {
-			$i = 0;
+			$i = 0; 
 			foreach ($users as $index => $user) {
 				$emailto = api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$user['Email'].'>';
 				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
 				$emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
 				$emailheaders = 'From: '.api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS).' <'.api_get_setting('emailAdministrator').">\n";
 				$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
-				@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+
+				/*$extra = get_user_overview_export_extra_fields($user['user_id']);
+				$additional_parameters = array(
+                    'smsType' => WELCOME_LOGIN_PASSWORD,
+                    'userId' => $user['user_id'],
+                    'mobilePhoneNumber' => $extra['mobile_phone_number'],
+                    'password' => "$user[Password]"
+                );*/
+
+				@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders/*, $additional_parameters*/);
 
 				if (($user['added_at_platform'] == 1  && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
 					if ($user['added_at_platform'] == 1) {

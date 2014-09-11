@@ -358,6 +358,23 @@ if ($form->validate()) {
         $is_admin = UserManager::is_admin($user_id);
         Session::write('is_platformAdmin', $is_admin);
     } else {
+        // Moved here to include extra fields when creating a user. Formerly placed after user creation
+        // Register extra fields
+        $extras = array();
+        foreach ($values as $key => $value) {
+            if (substr($key, 0, 6) == 'extra_') {
+                //an extra field
+                $extras[substr($key, 6)] = $value;
+            } elseif (strpos($key, 'remove_extra_') !== false) {
+                $extra_value = Security::filter_filename(urldecode(key($value)));
+                // To remove from user_field_value and folder
+                UserManager::update_extra_field_value(
+                    $user_id,
+                    substr($key,13),
+                    $extra_value
+                );
+            }
+        }
 
         // Creates a new user
         $user_id = UserManager::create_user(
@@ -375,27 +392,10 @@ if ($form->validate()) {
             null,
             1,
             0,
-            null,
+            $extras,
             null,
             true
         );
-
-        // Register extra fields
-        $extras = array();
-        foreach ($values as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') {
-                //an extra field
-                $extras[substr($key, 6)] = $value;
-            } elseif (strpos($key, 'remove_extra_') !== false) {
-                $extra_value = Security::filter_filename(urldecode(key($value)));
-                // To remove from user_field_value and folder
-                UserManager::update_extra_field_value(
-                    $user_id,
-                    substr($key,13),
-                    $extra_value
-                );
-            }
-        }
 
         //update the extra fields
         $count_extra_field = count($extras);
@@ -521,7 +521,7 @@ if ($form->validate()) {
                         $user_id
                     );
                 }
-
+                
                 // 3. exit the page
                 unset($user_id);
 

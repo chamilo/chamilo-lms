@@ -942,23 +942,15 @@ class SessionManager
                 isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id] ++ : $survey_user_list[$user_id] = 1;
             }
         }
+
         /**
          * Forums
          */
-        //total
-        if ($getAllSessions) {
-            $sql = "SELECT count(*) as count
-            FROM $forum f
-            where f.c_id = %s";
-        } else {
-            $sql = "SELECT count(*) as count
-            FROM $forum f
-            where f.c_id = %s and f.session_id = %s";
-        }
-        $sql_query = sprintf($sql, $course['real_id'], $sessionId);
-        $result = Database::query($sql_query);
-        $row = Database::fetch_array($result);
-        $forums_total = $row['count'];
+        $forums_total = CourseManager::getCountForum(
+            $course['real_id'],
+            $sessionId,
+            $getAllSessions
+        );
 
         //process table info
         foreach ($users as $user) {
@@ -1042,16 +1034,11 @@ class SessionManager
             }
 
             //Forums
-            #$forums_done = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
-            $sql = "SELECT count(distinct f.forum_id) as count FROM $forum_post p
-            INNER JOIN $forum f ON f.forum_id = p.forum_id
-            WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
-            $sql_query = sprintf($sql, $user['user_id'], $user['id_session'], $course['real_id']);
-
-            $result = Database::query($sql_query);
-            $row = Database::fetch_array($result);
-
-            $forums_done = $row['count'];
+            $forums_done = CourseManager::getCountForumPerUser(
+                $user['user_id'],
+                $course['real_id'],
+                $user['id_session']
+            );
             $forums_left = $forums_total - $forums_done;
             if (!empty($forums_total)) {
                 $forums_progress = round((( $forums_done * 100 ) / $forums_total), 2);

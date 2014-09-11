@@ -235,6 +235,30 @@ class Display
         }
     }
 
+    public static function return_sortable_table(
+        $header,
+        $content,
+        $sorting_options = array(),
+        $paging_options = array(),
+        $query_vars = null,
+        $form_actions = array(),
+        $style = 'table'
+    ) {
+        ob_start();
+        self::display_sortable_table(
+            $header,
+            $content,
+            $sorting_options,
+            $paging_options,
+            $query_vars,
+            $form_actions,
+            $style
+        );
+        $content = ob_get_contents();
+        ob_end_clean();
+        return $content;
+    }
+
     /**
      * Shows a nice grid
      * @param string grid name (important to create css)

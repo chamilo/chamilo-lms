@@ -2442,7 +2442,7 @@ class CourseManager
             );
 
             //@api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
-            api_mail_html($recipient_name, $emailto, $emailsubject, $emailbody, 
+            api_mail_html($recipient_name, $emailto, $emailsubject, $emailbody,
                 $sender_name, $email_admin, null, null, null, $additional_parameters);
         }
     }
@@ -4734,6 +4734,97 @@ class CourseManager
             $courseAccess = Database::fetch_array($result, 'ASSOC');
         }
         return $courseAccess;
+    }
+
+    /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @param bool $getAllSessions
+     * @return mixed
+     */
+    public static function getCountForum(
+        $courseId,
+        $sessionId = 0,
+        $getAllSessions = false
+    ) {
+        $forum = Database::get_course_table(TABLE_FORUM);
+        if ($getAllSessions) {
+            $sql = "SELECT count(*) as count
+            FROM $forum f
+            where f.c_id = %s";
+        } else {
+            $sql = "SELECT count(*) as count
+            FROM $forum f
+            where f.c_id = %s and f.session_id = %s";
+        }
+        $sql_query = sprintf($sql, $courseId, $sessionId);
+        $result = Database::query($sql_query);
+        $row = Database::fetch_array($result);
+        return $row['count'];
+    }
+
+    /**
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     * @return mixed
+     */
+    public static function getCountPostInForumPerUser(
+        $userId,
+        $courseId,
+        $sessionId = 0
+    ) {
+        $forum = Database::get_course_table(TABLE_FORUM);
+        $forum_post = Database::get_course_table(TABLE_FORUM_POST);
+
+        $sql = "SELECT count(distinct post_id) as count
+                FROM $forum_post p
+                INNER JOIN $forum f
+                ON f.forum_id = p.forum_id AND f.c_id = p.c_id
+                WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
+
+        $sql = sprintf(
+            $sql,
+            intval($userId),
+            intval($sessionId),
+            intval($courseId)
+        );
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        return $row['count'];
+    }
+
+    /**
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     * @return mixed
+     */
+    public static function getCountForumPerUser(
+        $userId,
+        $courseId,
+        $sessionId = 0
+    ) {
+        $forum = Database::get_course_table(TABLE_FORUM);
+        $forum_post = Database::get_course_table(TABLE_FORUM_POST);
+
+        $sql = "SELECT count(distinct f.forum_id) as count
+                FROM $forum_post p
+                INNER JOIN $forum f
+                ON f.forum_id = p.forum_id AND f.c_id = p.c_id
+                WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
+
+        $sql = sprintf(
+            $sql,
+            intval($userId),
+            intval($sessionId),
+            intval($courseId)
+        );
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        return $row['count'];
     }
 
 }

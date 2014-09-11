@@ -363,7 +363,9 @@ class SessionManager
 
         $extraJoin = null;
 
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
+        if (api_is_session_admin() &&
+            api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false'
+        ) {
             $where .= " AND (
                             s.session_admin_id = $user_id  OR
                             sru.id_user = '$user_id' AND
@@ -386,7 +388,8 @@ class SessionManager
         }
 
         $options['where'] = str_replace(
-            array("AND session_active = '1'  )", " AND (  session_active = '1'  )"), array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 ")
+            array("AND session_active = '1'  )", " AND (  session_active = '1'  )"),
+            array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 ")
             , $options['where']
         );
 

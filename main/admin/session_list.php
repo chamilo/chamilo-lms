@@ -4,9 +4,6 @@
  * List sessions in an efficient and usable way
  * @package chamilo.admin
  */
-/**
- * Code
- */
 $language_file = array('admin', 'courses');
 $cidReset = true;
 
@@ -36,7 +33,8 @@ $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
 
-$error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
+$error_message = '';
+// Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
 if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
     $error_message = Security::remove_XSS($_GET['message']);
 }
@@ -111,7 +109,8 @@ $column_model   = array(
     array('name'=>'date_start',     'index'=>'s.date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
     array('name'=>'date_end',       'index'=>'s.date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
     array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),
-    array('name'=>'status',         'index'=>'session_active','width'=>'50',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
+    array('name'=>'status',         'index'=>'session_active','width'=>'45',
+        'align'=>'left', 'search' => 'true', 'stype'=>'select',
         //for the bottom bar
         'searchoptions' => array(
             'defaultValue'  => ':',
@@ -122,9 +121,11 @@ $column_model   = array(
             'value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')
         )
     ),
-    array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
-    array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
+    array('name'=>'visibility',     'index'=>'visibility', 'width'=>'45', 'align'=>'left', 'search' => 'false'),
+    array('name'=>'actions',        'index'=>'actions', 'width'=>'90',
+        'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
 );
+
 //Autowidth
 $extra_params['autowidth'] = 'true';
 

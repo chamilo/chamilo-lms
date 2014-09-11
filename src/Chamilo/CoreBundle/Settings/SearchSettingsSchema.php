@@ -23,8 +23,7 @@ class SearchSettingsSchema implements SchemaInterface
                 'search_enabled' => '',
                 'search_prefilter_prefix' => '',
                 'search_show_unlinked_results' => '',
-                'number_of_upcoming_events' => 0,
-
+                'number_of_upcoming_events' => '0'
             ))
             ->setAllowedTypes(array(
                 //'allow_personal_agenda' => array('string'),

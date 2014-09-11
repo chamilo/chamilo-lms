@@ -25,7 +25,7 @@ class DisplaySettingsSchema implements SchemaInterface
                 'show_teacher_data' => '',
                 'showonline' => '',
                 'allow_user_headings' => '',
-                'time_limit_whosonline' => 30,
+                'time_limit_whosonline' => '30',
                 'show_email_addresses' => '',
                 'show_number_of_courses' => '',
                 'show_empty_course_categories' => '',

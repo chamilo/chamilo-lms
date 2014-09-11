@@ -20,8 +20,8 @@ class ExerciseSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'exercise_min_score' => 0,
-                'exercise_max_score' => 0,
+                'exercise_min_score' => '0',
+                'exercise_max_score' => '0',
                 'enable_quiz_scenario' => '',
             ))
             ->setAllowedTypes(array(

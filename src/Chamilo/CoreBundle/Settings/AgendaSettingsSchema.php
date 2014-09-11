@@ -23,7 +23,7 @@ class AgendaSettingsSchema implements SchemaInterface
                 'allow_personal_agenda' => '',
                 'display_mini_month_calendar' => '',
                 'display_upcoming_events' => '',
-                'number_of_upcoming_events' => 0,
+                'number_of_upcoming_events' => '0',
                 //'default_calendar_view' => '',
             ))
             ->setAllowedTypes(array(

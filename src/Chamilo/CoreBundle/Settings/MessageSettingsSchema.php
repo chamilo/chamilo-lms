@@ -22,7 +22,7 @@ class MessageSettingsSchema implements SchemaInterface
             ->setDefaults(array(
                 'allow_message_tool' => '',
                 'allow_send_message_to_all_platform_users' => '',
-                'message_max_upload_filesize' => 20971520,
+                'message_max_upload_filesize' => '20971520',
 
             ))
             ->setAllowedTypes(array(

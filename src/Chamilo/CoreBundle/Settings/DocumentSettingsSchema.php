@@ -20,8 +20,8 @@ class DocumentSettingsSchema implements SchemaInterface
     {
         $builder
             ->setDefaults(array(
-                'default_document_quotum' => 100000000,
-                'default_group_quotum' => 100000000,
+                'default_document_quotum' => '100000000',
+                'default_group_quotum' => '100000000',
                 'permanently_remove_deleted_files' => '',
                 'upload_extensions_list_type' => '',
                 'upload_extensions_blacklist' => '',

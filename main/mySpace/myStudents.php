@@ -613,9 +613,7 @@ if (empty($_GET['details'])) {
 		}
 
 		// Courses
-
 		echo '<h3>'.$title.'</h3>';
-
 		echo '<table class="data_table">';
 		echo '<tr>
 				<th>'.get_lang('Course').'</th>
@@ -647,8 +645,7 @@ if (empty($_GET['details'])) {
     					$attendances_faults_avg = '0/0 (0%)';
     				}
 
-    				// get evaluatios by student
-
+    				// Get evaluations by student
     				$cats = Category::load(null, null, $course_code, null, null, $session_id);
 
     				$scoretotal = array();
@@ -702,14 +699,13 @@ if (empty($_GET['details'])) {
 		echo '</table>';
 	}
 } else {
-	$csv_content[] = array ();
-    $csv_content[] = array (str_replace('&nbsp;', '', $table_title));
-
+	$csv_content[] = array();
+    $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
     $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
 
     // csv export headers
-    $csv_content[] = array ();
-    $csv_content[] = array (
+    $csv_content[] = array();
+    $csv_content[] = array(
     	get_lang('Learnpath'),
     	get_lang('Time'),
     	get_lang('AverageScore'),
@@ -719,15 +715,17 @@ if (empty($_GET['details'])) {
     );
 
     if (empty($session_id)) {
-        $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE session_id = 0 AND c_id = {$info_course['real_id']} ORDER BY lp.display_order";
+        $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp
+                    WHERE session_id = 0 AND c_id = {$info_course['real_id']}
+                    ORDER BY lp.display_order";
     } else {
-    	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = {$info_course['real_id']}  ORDER BY lp.display_order";
+    	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp
+    	            WHERE c_id = {$info_course['real_id']}
+                    ORDER BY lp.display_order";
     }
     $rs_lp = Database::query($sql_lp);
-
     if (Database :: num_rows($rs_lp) > 0) {
     ?>
-
         <!-- LPs-->
         <table class="data_table">
             <tr>
@@ -855,8 +853,7 @@ if (empty($_GET['details'])) {
     }
     ?>
     </table>
-
-	<!-- line about exercises -->
+	    <!-- line about exercises -->
 		<table class="data_table">
 			<tr>
 				<th><?php echo get_lang('Exercices'); ?></th>
@@ -887,7 +884,6 @@ if (empty($_GET['details'])) {
 		if (Database :: num_rows($result_exercices) > 0) {
 			while ($exercices = Database :: fetch_array($result_exercices)) {
 				$exercise_id = intval($exercices['id']);
-
 				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id, 2);
 				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id, 1, 0);
 
@@ -953,7 +949,7 @@ if (empty($_GET['details'])) {
 				$data_exercices[$i][] = $score_percentage . '%';
 				$data_exercices[$i][] = $count_attempts;
 
-                $csv_content[] = array (
+                $csv_content[] = array(
                     $exercices['title'],
                     $lp_name,
                     $score_percentage,
@@ -967,7 +963,6 @@ if (empty($_GET['details'])) {
 			echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
 		}
 		echo '</table>';
-
 
         //@when using sessions we do not show the survey list
         if (empty($session_id)) {
@@ -985,7 +980,6 @@ if (empty($_GET['details'])) {
             }
 
             if (!empty($survey_list)) {
-
                 $table = new HTML_Table(array('class' => 'data_table'));
                 $header_names = array(get_lang('Survey'), get_lang('Answered'));
                 $row = 0;
@@ -999,7 +993,6 @@ if (empty($_GET['details'])) {
                     foreach ($survey_data as $data) {
                         $column = 0;
                         $table->setCellContents($row, $column, $data);
-                        //$table->setRowAttributes($row, 'style="text-align:center"');
                         $class = 'class="row_odd"';
                         if($row % 2) {
                             $class = 'class="row_even"';
@@ -1093,5 +1086,5 @@ if ($export_csv) {
 	Export :: export_table_csv($csv_content, 'reporting_student');
 	exit;
 }
-/*		FOOTER  */
+
 Display :: display_footer();

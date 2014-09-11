@@ -2118,7 +2118,11 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
  * @author René Haentjens
  * @author Bart Mollet
  */
-function api_get_setting($variable, $key = null) {
+function api_get_setting($variable, $key = null)
+{
+    return Container::getSettingsManager()->getSetting($variable);
+
+    //chamilo_core.settings_schema.platform
 
     $_setting = Session::read('_setting');
     if ($variable == 'header_extra_content') {
@@ -3487,23 +3491,22 @@ function api_display_language_form($hide_if_no_choice = false) {
  *  array['name'] = An array with the name of every language
  *  array['folder'] = An array with the corresponding names of the language-folders in the filesystem
  */
-function api_get_languages() {
-    $language_list = Session::read('_setting.api_get_languages');
-    if (isset($language_list) && !empty($language_list)) {
-        return $language_list;
+function api_get_languages()
+{
+    $languageList = Session::read('_setting.api_get_languages');
+    if (isset($languageList) && !empty($languageList)) {
+        return $languageList;
     }
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $sql = "SELECT * FROM $tbl_language WHERE available = '1' ORDER BY original_name ASC";
 
     $result = Database::query($sql);
-    $language_list = array();
-    while ($row = Database::fetch_array($result)) {
-        $language_list['name'][] = $row['original_name'];
-        //$language_list['folder'][] = $row['dokeos_folder'];
-        $language_list['folder'][] = $row['original_name'];
+    $languageList = array();
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $languageList[] = $row;
     }
-    Session::write('_setting.api_get_languages', $language_list);
-    return $language_list;
+    Session::write('_setting.api_get_languages', $languageList);
+    return $languageList;
 }
 
 /**
@@ -3581,7 +3584,10 @@ function api_get_language_info($language_id) {
  * The returned name depends on the platform, course or user -wide settings.
  * @return string   The visual theme's name, it is the name of a folder inside .../chamilo/main/css/
  */
-function api_get_visual_theme() {
+function api_get_visual_theme()
+{
+    return 'chamilo';
+
     static $visual_theme;
 
     if (!isset($visual_theme)) {
@@ -6475,9 +6481,7 @@ function api_mail_html(
     $data_file = array(),
     $embedded_image = false,
     $text_body = null
-    ) {
-    global $app;
-
+) {
     $reply_to_mail = $sender_email;
     $reply_to_name = $sender_name;
 
@@ -6506,178 +6510,45 @@ function api_mail_html(
             ->setFrom(array($sender_email => $sender_name))
             ->setTo(array($recipient_email => $recipient_name))
             ->setReplyTo(array($reply_to_mail => $reply_to_name))
-            ->setBody($htmlBody, 'text/html')
-            ->addPart($textBody, 'text/plain')
+            ->setBody(
+                Container::getTemplate()->render(
+                    'ChamiloCoreBundle:Mailer:Default/default.html.twig',
+                    array(
+                        'content' => $htmlBody
+                    )
+                ),
+                'text/html'
+            )
+            ->addPart(
+                Container::getTemplate()->render(
+                    'ChamiloCoreBundle:Mailer:Default/default.text.twig',
+                    array(
+                        'content' => $textBody
+                    )
+                ),
+                'text/plain'
+            )
             ->setEncoder(Swift_Encoding::get8BitEncoding());
+
         if (!empty($data_file)) {
             // Attach it to the message
-            $message->attach(Swift_Attachment::fromPath($data_file['path']))->setFilename($data_file['filename']);
+            $message->attach(
+                Swift_Attachment::fromPath($data_file['path'])
+            )->setFilename($data_file['filename']);
         }
 
         $type = $message->getHeaders()->get('Content-Type');
         $type->setValue('text/html');
         $type->setParameter('charset', 'utf-8');
+        Container::getMailer()->send($message);
 
-        $app['monolog']->addDebug($message);
-        $result = $app['mailer']->send($message);
+        return true;
 
-        return $result;
     } catch (Exception $e) {
-        //$app['monolog']->addDebug('Email address not valid:' . $e->getMessage());
+        error_log($e->getMessage());
     }
 
     return false;
-
-    /*
-    $mail = new PHPMailer();
-    $mail->Mailer  = $platform_email['SMTP_MAILER'];
-    $mail->Host    = $platform_email['SMTP_HOST'];
-    $mail->Port    = $platform_email['SMTP_PORT'];
-    $mail->CharSet = $platform_email['SMTP_CHARSET'];
-    $mail->WordWrap = 200; // Stay far below SMTP protocol 980 chars limit.
-
-    if ($platform_email['SMTP_AUTH']) {
-        $mail->SMTPAuth = 1;
-        $mail->Username = $platform_email['SMTP_USER'];
-        $mail->Password = $platform_email['SMTP_PASS'];
-    }
-
-    $mail->Priority = 3; // 5 = low, 1 = high
-    $mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
-
-    $mail->SMTPKeepAlive = true;
-
-    if (($sender_email != '') && ($sender_name != '')) {
-        $mail->AddReplyTo($sender_email, $sender_name);
-    }
-
-    if (isset($extra_headers['reply_to'])) {
-        $mail->AddReplyTo($extra_headers['reply_to']['mail'], $extra_headers['reply_to']['name']);
-    }
-
-    // Attachments
-    // $mail->AddAttachment($path);
-    // $mail->AddAttachment($path, $filename);
-
-    if ($sender_email != '') {
-        $mail->From         = $sender_email;
-        $mail->Sender       = $sender_email;
-        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
-    } else {
-        $mail->From         = $platform_email['SMTP_FROM_EMAIL'];
-        $mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
-        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
-    }
-
-    if ($sender_name != '') {
-        $mail->FromName = $sender_name;
-    } else {
-        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
-    }
-    $mail->Subject = $subject;
-
-    $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
-
-    // Send embedded image.
-    if ($embedded_image) {
-    	// Get all images html inside content.
-        preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
-        // Prepare new tag images.
-        $new_images_html = array();
-        $i = 1;
-        if (!empty($m[1])) {
-        	foreach ($m[1] as $image_path) {
-            	$real_path = realpath($image_path);
-                $filename  = basename($image_path);
-                $image_cid = $filename.'_'.$i;
-                $encoding = 'base64';
-                $image_type = mime_content_type($real_path);
-                $mail->AddEmbeddedImage($real_path, $image_cid, $filename, $encoding, $image_type);
-                $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
-                $i++;
-			}
-		}
-
-	    // Replace origin image for new embedded image html.
-	    $x = 0;
-	    if (!empty($m[0])) {
-	    	foreach ($m[0] as $orig_img) {
-	        	$message = str_replace($orig_img, $new_images_html[$x], $message);
-	            $x++;
-	         }
-	    }
-    }
-
-    $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
-    $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
-
-    // Attachment ...
-    if (!empty($data_file)) {
-        $mail->AddAttachment($data_file['path'], $data_file['filename']);
-    }
-
-    // Only valid addresses are accepted.
-    if (is_array($recipient_email)) {
-        foreach ($recipient_email as $dest) {
-            if (api_valid_email($dest)) {
-                $mail->AddAddress($dest, $recipient_name);
-                //$mail->AddAddress($dest, ($i > 1 ? '' : $recipient_name));
-            }
-        }
-    } else {
-        if (api_valid_email($recipient_email)) {
-            $mail->AddAddress($recipient_email, $recipient_name);
-        } else {
-            return 0;
-        }
-    }
-
-    if (is_array($extra_headers) && count($extra_headers) > 0) {
-        foreach ($extra_headers as $key => $value) {
-            switch (strtolower($key)) {
-                case 'reply-to':
-                    //the value here is the result of api_get_user_info()
-                    $sender_email = $value['email'];
-                    $sender_name  = $value['complete_name'];
-                    $mail->AddReplyTo($sender_email, $sender_name);
-                    break;
-                case 'encoding':
-                case 'content-transfer-encoding':
-                    $mail->Encoding = $value;
-                    break;
-                case 'charset':
-                    $mail->Charset = $value;
-                    break;
-                case 'contenttype':
-                case 'content-type':
-                    $mail->ContentType = $value;
-                    break;
-                default:
-                    $mail->AddCustomHeader($key.':'.$value);
-                    break;
-            }
-        }
-    } else {
-        if (!empty($extra_headers)) {
-            $mail->AddCustomHeader($extra_headers);
-        }
-    }
-
-    // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
-    $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
-
-    // Send the mail message.
-    if (!$mail->Send()) {
-        //echo 'ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />';
-        error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
-        return 0;
-    }
-
-    // Clear all the addresses.
-    $mail->ClearAddresses();
-
-    return 1;
-    */
 }
 
 function api_set_login_language($lang) {

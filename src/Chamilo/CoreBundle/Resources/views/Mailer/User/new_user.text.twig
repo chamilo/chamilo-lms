@@ -1,0 +1,22 @@
+{% set site_name = chamilo_settings_get('platform.site_name') %}
+
+{{ 'Dear' | trans }} {{ complete_user_name }},
+
+{{ 'YouAreReg' | trans  }} {{ site_name }}
+
+{{ 'WithTheFollowingSettings' | trans  }}
+
+{{ 'Username' | trans }}: {{ login_name }}
+{{ 'Password' | trans }}: {{ password }}
+{{ 'Address' | trans }}: {{ site_name }}
+{{ 'Is' | trans }} {{ url.url }}
+
+{{ 'Problem' | trans }}
+{{ 'Formula' | trans }},
+
+{{ chamilo_settings_get('platform.administrator_name') }}
+{{ chamilo_settings_get('platform.administrator_surname') }}
+
+{{ 'Manager' | trans }} {{ site_name }}
+{{ chamilo_settings_get('platform.administrator_phone') }}
+{{ chamilo_settings_get('platform.administrator_email') }}

@@ -111,11 +111,11 @@ $form->applyFilter('official_code', 'trim');
 // Email
 $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
-if (api_get_setting('registration', 'email') == 'true') {
+/*if (api_get_setting('registration', 'email') == 'true') {
     $form->addRule('email', get_lang('EmailWrong'), 'required');
-}
+}*/
 
-if (api_get_setting('login_is_email') == 'true') {
+if (api_get_setting('profile.login_is_email') == 'true') {
     $form->addRule(
         'email',
         sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH),
@@ -134,7 +134,7 @@ $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
 // Username
-if (api_get_setting('login_is_email') != 'true') {
+if (api_get_setting('profile.login_is_email') != 'true') {
     $form->addElement('text', 'username', get_lang('LoginName'), array('id'=> 'username', 'maxlength' => USERNAME_MAX_LENGTH));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
@@ -146,6 +146,7 @@ if (api_get_setting('login_is_email') != 'true') {
 $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 $nb_ext_auth_source_added = 0;
+/*
 if (isset($extAuthSource) && count($extAuthSource) > 0) {
 	$auth_sources = array();
 	foreach ($extAuthSource as $key => $info) {
@@ -163,7 +164,7 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
     	$group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
     	$group[] = $form->createElement('static', '', '', '<br />');
     }
-}
+}*/
 
 $group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] = $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
@@ -199,7 +200,7 @@ if (isset($drh_list) && is_array($drh_list)) {
 	}
 }
 $form->addElement('html', '</div>');
-
+/*
 if (api_is_platform_admin()) {
     // Platform admin
     $group = array();
@@ -209,7 +210,7 @@ if (api_is_platform_admin()) {
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
     $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
     $form->addElement('html', '</div>');
-}
+}*/
 
 $form->addElement('select_language', 'language', get_lang('Language'), null);
 
@@ -252,7 +253,7 @@ $defaults['mail']['send_mail'] = 1;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
 $defaults['expiration_date'] = array();
-$days = api_get_setting('account_valid_duration');
+$days = api_get_setting('profile.account_valid_duration');
 $time = strtotime('+'.$days.' day');
 $defaults['expiration_date']['d'] = date('d', $time);
 $defaults['expiration_date']['F'] = date('m', $time);
@@ -281,7 +282,7 @@ if( $form->validate()) {
 		$status         = intval($user['status']);
 		$language       = $user['language'];
 		$picture        = $_FILES['picture'];
-		$platform_admin = intval($user['admin']['platform_admin']);
+		//$platform_admin = intval($user['admin']['platform_admin']);
 		$send_mail      = intval($user['mail']['send_mail']);
 		$hr_dept_id     = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
 
@@ -301,7 +302,7 @@ if( $form->validate()) {
 
 		$active = intval($user['active']);
 
-        if (api_get_setting('login_is_email') == 'true') {
+        if (api_get_setting('profile.login_is_email') == 'true') {
             $username = $email;
         }
 
@@ -368,9 +369,9 @@ if( $form->validate()) {
 					UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
 				}
 			}
-			if ($platform_admin) {
+			/*if ($platform_admin) {
                 UserManager::add_user_as_admin($user_id);
-			}
+			}*/
 			$message = get_lang('UserAdded');
 		}
 		if (isset($user['submit_plus'])) {

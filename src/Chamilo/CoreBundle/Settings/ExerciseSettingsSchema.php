@@ -25,8 +25,8 @@ class ExerciseSettingsSchema implements SchemaInterface
                 'enable_quiz_scenario' => '',
             ))
             ->setAllowedTypes(array(
-                'exercise_min_score' => array('integer'),
-                'exercise_max_score' => array('integer'),
+                'exercise_min_score' => array('string'),
+                'exercise_max_score' => array('string'),
                 'enable_quiz_scenario' => array('string'),
             ))
         ;

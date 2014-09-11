@@ -110,11 +110,11 @@ $form->applyFilter('official_code', 'trim');
 // Email
 $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
-if (api_get_setting('registration', 'email') == 'true') {
+/*if (api_get_setting('registration', 'email') == 'true') {
     $form->addRule('email', get_lang('EmailWrong'), 'required');
-}
+}*/
 
-if (api_get_setting('login_is_email') == 'true') {
+if (api_get_setting('profile.login_is_email') == 'true') {
     $form->addRule(
         'email',
         sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH),
@@ -125,9 +125,9 @@ if (api_get_setting('login_is_email') == 'true') {
 }
 
 // OpenID
-if (api_get_setting('openid_authentication') == 'true') {
+/*if (api_get_setting('openid_authentication') == 'true') {
     $form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => '40'));
-}
+}*/
 
 // Phone
 $form->addElement('text', 'phone', get_lang('PhoneNumber'));
@@ -147,7 +147,7 @@ if (strlen($user_data['picture_uri']) > 0) {
 
 // Username
 
-if (api_get_setting('login_is_email') != 'true') {
+if (api_get_setting('profile.login_is_email') != 'true') {
     $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(
@@ -402,11 +402,11 @@ if ($form->validate()) {
         $extraFieldValues->save_field_values($user);
 
         $tok = Security::get_token();
-
+/*
         header(
             'Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok
         );
-        exit();
+        exit();*/
     }
 }
 
@@ -429,13 +429,6 @@ $big_image_size = api_getimagesize($big_image);
 $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
-
-/*$content = null;
-if ($image == '') {
-    $content .= '<img '.$img_attributes.' />';
-} else {
-    $content .= '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-}*/
 
 // Display form
 $content = $form->return_form();

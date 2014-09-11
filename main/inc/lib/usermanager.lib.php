@@ -83,7 +83,7 @@ class UserManager
         // Hosting verifications
         $status = isset($params['status']) ? $params['status'] : STUDENT;
 
-        if (api_get_setting('login_is_email') == 'true') {
+        if (api_get_setting('profile.login_is_email') == 'true') {
             $params['username'] = $params['email'];
         }
 
@@ -125,11 +125,11 @@ class UserManager
 
         unset($params['return_item_if_already_exists']);
 
-        //Checking the user language
+        // Checking the user language
         $languages = api_get_languages();
 
         if (!isset($params['language']) || !in_array($params['language'], $languages['folder'])) {
-            $params['language'] = api_get_setting('platformLanguage');
+            $params['language'] = Container::getTranslator()->getLocale();
         }
 
         if (!isset($params['creator_id'])) {
@@ -279,8 +279,9 @@ class UserManager
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         //Checking the user language
         $languages = api_get_languages();
-        if (!in_array($language, $languages['folder'])) {
-            $language = api_get_setting('platformLanguage');
+
+        if (!in_array($language, $languages)) {
+            $language = Container::getTranslator()->getLocale();
         }
 
         $creator_id = api_get_user_id();
@@ -368,20 +369,48 @@ class UserManager
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
-                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+                $emailsubject = '['.api_get_setting('platform.site_name').'] '.get_lang('YourReg').' '.api_get_setting('platform.site_name');
 
-                $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-                $email_admin = api_get_setting('emailAdministrator');
+                $sender_name = api_get_person_name(
+                    api_get_setting('platform.administrator_name'),
+                    api_get_setting('platform.administrator_surname'),
+                    null,
+                    PERSON_NAME_EMAIL_ADDRESS
+                );
+                $email_admin = api_get_setting('platform.administrator_email');
+                $url = api_get_current_access_url_info();
 
-                if (api_is_multiple_url_enabled()) {
-                    $access_url_id = api_get_current_access_url_id();
-                    if ($access_url_id != -1) {
-                        $url = api_get_current_access_url_info();
-                        $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-                    }
-                } else {
-                    $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". api_get_path(WEB_PUBLIC_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-                }
+                $params = array(
+                    'complete_user_name' => api_get_person_name($firstName, $lastName),
+                    'login_name' => $loginName,
+                    'password' => stripslashes($original_password),
+                    'url' => $url,
+                );
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($emailsubject)
+                    ->setFrom(array($email_admin => $sender_name))
+                    ->setTo(array($email => $recipient_name))
+                    ->setBody(
+                        Container::getTemplate()->render(
+                            'ChamiloCoreBundle:Mailer:User/new_user.html.twig',
+                            $params
+                        ),
+                        'text/html'
+                    )
+                    ->addPart(
+                        Container::getTemplate()->render(
+                            'ChamiloCoreBundle:Mailer:User/new_user.text.twig',
+                            $params
+                        ),
+                        'text/plain'
+                    )
+                    ->setEncoder(Swift_Encoding::get8BitEncoding());
+
+                $type = $message->getHeaders()->get('Content-Type');
+                $type->setValue('text/html');
+                $type->setParameter('charset', 'utf-8');
+                Container::getMailer()->send($message);
 
                 /* MANAGE EVENT WITH MAIL */
                 /*if (EventsMail::check_if_using_class('user_registration')) {
@@ -1029,7 +1058,8 @@ class UserManager
             // 1. Conversion of unacceptable letters (latinian letters with accents for example) into ASCII letters in order they not to be totally removed.
             // 2. Applying the strict purifier.
             // 3. Length limitation.
-            $toreturn = api_get_setting('login_is_email') == 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH): substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
+            $toreturn = api_get_setting('profile.login_is_email') == 'true' ?
+                substr(preg_replace(USERNAME_PURIFIER_MAIL, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH): substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
             return $toreturn;
         }
         // 1. Applying the shallow purifier.
@@ -1324,7 +1354,8 @@ class UserManager
         $user = Database::fetch_array($res);
         $picture_filename = trim($user['picture_uri']);
 
-        if (api_get_setting('split_users_upload_directory') === 'true') {
+        if (api_get_setting('profile.split_users_upload_directory') ===
+            'true') {
             if ($type == 'system') {
                 $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
             } else {

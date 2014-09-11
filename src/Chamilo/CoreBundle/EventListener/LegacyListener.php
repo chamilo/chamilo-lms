@@ -82,7 +82,7 @@ class LegacyListener
         Container::$htmlEditor = $container->get('chamilo_core.html_editor');
 
         if (!defined('DEFAULT_DOCUMENT_QUOTA')) {
-            $default_quota = api_get_setting('default_document_quotum');
+            $default_quota = api_get_setting('document.default_document_quotum');
 
             // Just in case the setting is not correctly set
             if (empty($default_quota)) {

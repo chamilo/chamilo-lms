@@ -8,6 +8,8 @@
         <parameter key="chamilo_settings.settings.manager.class">Chamilo\SettingsBundle\Manager\SettingsManager</parameter>
         <parameter key="chamilo_settings.repository.parameter.class">Chamilo\CoreBundle\Entity\Repository\SettingsCurrentRepository</parameter>
         <parameter key="chamilo_settings.repository.parameter.entity.class">Chamilo\CoreBundle\Entity\SettingsCurrent</parameter>
+        <parameter key="chamilo_settings.twig.extension.settings.class">Chamilo\SettingsBundle\Twig\SettingsExtension</parameter>
+        <parameter key="chamilo_settings.templating.helper.settings.class">Chamilo\SettingsBundle\Templating\Helper\SettingsHelper</parameter>
     </parameters>
 
     <services>
@@ -21,6 +23,17 @@
             <argument type="service" id="chamilo_settings.repository.parameter" />
             <argument type="service" id="sylius.settings.cache" />
             <argument type="service" id="validator" />
+        </service>
+
+        <service id="chamilo_settings.templating.helper.settings" class
+                ="%chamilo_settings.templating.helper.settings.class%">
+            <argument type="service" id="chamilo.settings.manager" />
+            <tag name="templating.helper" alias="chamilo_settings" />
+        </service>
+
+        <service id="chamilo.twig.extension.settings" class ="%chamilo_settings.twig.extension.settings.class%" public="false">
+            <argument type="service" id="chamilo_settings.templating.helper.settings" />
+            <tag name="twig.extension" />
         </service>
     </services>
 

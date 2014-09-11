@@ -37,8 +37,8 @@ class GradebookSettingsSchema implements SchemaInterface
             ))
             ->setAllowedTypes(array(
                 'gradebook_enable' => array('string'),
-                'gradebook_number_decimals' => array('integer'),
-                'gradebook_default_weight' => array('integer'),
+                'gradebook_number_decimals' => array('string'),
+                'gradebook_default_weight' => array('string'),
 
             ))
         ;

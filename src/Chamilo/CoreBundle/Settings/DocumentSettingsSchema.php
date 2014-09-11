@@ -49,8 +49,8 @@ class DocumentSettingsSchema implements SchemaInterface
                 'allow_personal_user_files' => '', // ?
             ))
             ->setAllowedTypes(array(
-                'default_document_quotum' => array('integer'),
-                'default_group_quotum' => array('integer'),
+                'default_document_quotum' => array('string'),
+                'default_group_quotum' => array('string'),
                 'permanently_remove_deleted_files' => array('string'),
             ))
         ;

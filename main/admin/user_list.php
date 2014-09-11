@@ -817,4 +817,11 @@ echo $message;
 echo $actions;
 echo $form.$table_result.$extra_search_options;
 
-
+/*var_dump(Container::getSettingsManager()->getSetting('platform
+.administrator_name'));
+$sender_name = api_get_person_name(
+    api_get_setting('administratorName'),
+    api_get_setting('administratorSurname'),
+    null,
+    PERSON_NAME_EMAIL_ADDRESS
+); var_dump($sender_name);*/

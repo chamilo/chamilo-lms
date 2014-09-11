@@ -27,7 +27,7 @@ class MessageSettingsSchema implements SchemaInterface
             ))
             ->setAllowedTypes(array(
                 'allow_message_tool' => array('string'),
-                'message_max_upload_filesize' => array('integer')
+                'message_max_upload_filesize' => array('string')
             ))
         ;
     }

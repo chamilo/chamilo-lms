@@ -28,7 +28,7 @@ class SearchSettingsSchema implements SchemaInterface
             ))
             ->setAllowedTypes(array(
                 //'allow_personal_agenda' => array('string'),
-                'number_of_upcoming_events' => array('integer')
+                'number_of_upcoming_events' => array('string')
             ))
         ;
     }

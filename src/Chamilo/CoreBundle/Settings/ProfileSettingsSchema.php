@@ -31,7 +31,7 @@ class ProfileSettingsSchema implements SchemaInterface
             ))
             ->setAllowedTypes(array(
                 'profile' => array('string'),
-                'account_valid_duration' => array('integer')
+                'account_valid_duration' => array('string')
             ))
         ;
     }

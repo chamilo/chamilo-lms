@@ -46,7 +46,7 @@ class DisplaySettingsSchema implements SchemaInterface
                 'bug_report_link' => ''
             ))
             ->setAllowedTypes(array(
-                'time_limit_whosonline' => array('integer')
+                'time_limit_whosonline' => array('string')
             ))
         ;
     }

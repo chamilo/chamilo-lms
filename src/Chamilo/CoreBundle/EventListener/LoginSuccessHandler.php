@@ -64,7 +64,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
         $response = null;
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = api_get_setting('page_after_login');
+        $pageAfterLogin = api_get_setting('registration.page_after_login');
 
         $url = null;
         if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
@@ -82,8 +82,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         }
 
         // Redirecting to a course or a session
-
-        if (api_get_setting('go_to_course_after_login') == 'true') {
+        if (api_get_setting('course.go_to_course_after_login') == 'true') {
 
             // Get the courses list
             $personal_course_list = \UserManager::get_personal_session_course_list($userId);

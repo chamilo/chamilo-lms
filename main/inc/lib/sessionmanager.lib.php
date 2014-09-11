@@ -499,13 +499,13 @@ class SessionManager
 
                 switch ($session['visibility']) {
                     case SESSION_VISIBLE_READ_ONLY: //1
-                        $session['visibility'] = get_lang('ReadOnly');
+                        $session['visibility'] = get_lang('SessionReadOnly');
                         break;
                     case SESSION_VISIBLE:           //2
-                        $session['visibility'] = get_lang('Visible');
+                        $session['visibility'] = get_lang('SessionAccessible');
                         break;
                     case SESSION_INVISIBLE:         //3
-                        $session['visibility'] = api_ucfirst(get_lang('Invisible'));
+                        $session['visibility'] = api_ucfirst(get_lang('SessionNotAccessible'));
                         break;
                 }
                 $formatted_sessions[] = $session;

@@ -153,7 +153,7 @@ class IndexController extends BaseController
         /*var_dump($settingManager->getSetting('platform.institution'));
         $settings = $settingManager->loadSettings('platform');
         var_dump($settings->get('institution'));
-        var_dump(api_get_setting('institution'));*/
+        var_dump(api_get_setting('platform.institution'));*/
 
         $pageController->returnSkillsLinks();
 

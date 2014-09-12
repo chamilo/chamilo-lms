@@ -119,7 +119,7 @@ class Display
         $courseInfo = api_get_course_info();
         $introduction_section = null;
 
-        if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
+        if (api_get_setting('course.enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
             $introduction_section = null;
             $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
             $session_id = api_get_session_id();
@@ -650,7 +650,7 @@ class Display
     public static function get_platform_home_link_html($name = '')
     {
         if ($name == '') {
-            $name = api_get_setting('siteName');
+            $name = api_get_setting('platform.site_name');
         }
         return '<a href="'.api_get_path(WEB_PATH).'index.php">'.$name.'</a>';
     }

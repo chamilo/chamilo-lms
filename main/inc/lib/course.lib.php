@@ -174,7 +174,8 @@ class CourseManager
                             $eval->add();
                         }
                     }
-                    if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+
+                    if (api_get_setting('gradebook.gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
                         if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
                             require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
@@ -2010,8 +2011,8 @@ class CourseManager
             }
             $emailbody        .= get_lang('Email').': '.$student['email']."\n\n";
             $recipient_name = api_get_person_name($tutor['firstname'], $tutor['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-            $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-            $email_admin = api_get_setting('emailAdministrator');
+            $sender_name = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS);
+            $email_admin = api_get_setting('platform.administrator_email');
             @api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
         }
     }
@@ -2818,10 +2819,11 @@ class CourseManager
                     $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
                 }
 
-                if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                if (api_get_setting('course.display_coursecode_in_courselist')
+                    == 'true') {
                     $course_title .= ' ('.$course_info['visual_code'].') ';
                 }
-                if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
                     $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['real_id'], self::USER_SEPARATOR, true);
                 }
                 $course_title .= '&nbsp;';
@@ -2972,10 +2974,10 @@ class CourseManager
                     }
 
                     // Start displaying the course block itself
-                    if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                    if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
                         $course_title .= ' ('.$course_info['visual_code'].') ';
                     }
-                    if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                    if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
                         $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['real_id'], self::USER_SEPARATOR, true);
                     }
 
@@ -3141,11 +3143,11 @@ class CourseManager
 
 
             // Start displaying the course block itself
-            if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+            if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
                 $course_title .= ' ('.$course_info['visual_code'].') ';
             }
             $teachers = null;
-            if (api_get_setting('display_teacher_in_courselist') == 'true') {
+            if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
                 $teachers = $course_info['teacher_list_formatted'];
             }
 
@@ -3316,10 +3318,10 @@ class CourseManager
             }
 
             // Start displaying the course block itself
-            if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+            if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
                 $course_title .= ' ('.$course_info['visual_code'].') ';
             }
-            if (api_get_setting('display_teacher_in_courselist') == 'true') {
+            if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
                 $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['real_id'], self::USER_SEPARATOR, true);
             }
 
@@ -3434,11 +3436,11 @@ class CourseManager
             }
         }
 
-        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+        if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
             $session_title .= ' ('.$course_info['visual_code'].') ';
         }
 
-        if (api_get_setting('display_teacher_in_courselist') == 'true') {
+        if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
             $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['real_id'], self::USER_SEPARATOR, true);
             $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course_info['real_id'], self::USER_SEPARATOR, true);
             $params['teachers'] = $teacher_list;
@@ -4382,7 +4384,8 @@ class CourseManager
         $settingsManager->setCourse($course);
 
         foreach ($toolList as $tool) {
-            $visibility = Text::string2binary(api_get_setting('course_create_active_tools', $tool->getName()));
+            $visibility = Text::string2binary(api_get_setting
+                ('course.course_create_active_tools', $tool->getName()));
             $toolObject = new CTool();
             $toolObject->setName($tool->getName())
                 ->setCategory($tool->getCategory())
@@ -4403,17 +4406,17 @@ class CourseManager
 
         /*    Course tools  */
 
-        if (api_get_setting('service_visio', 'active') == 'true') {
+        /*if (api_get_setting('service_visio', 'active') == 'true') {
             $mycheck = api_get_setting('service_visio', 'visio_host');
             if (!empty($mycheck)) {
                 //Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
                 //Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
             }
-        }
+        }*/
 
-        if (api_get_setting('search_enabled') == 'true') {
+        /*if (api_get_setting('search_enabled') == 'true') {
             //Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_SEARCH. "','search/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring','0', '', '')");
-        }
+        }*/
 
         // Blogs (Kevin Van Den Haute :: kevin@develop-it.be)
         /*$sql = "INSERT INTO $toolTable VALUES ($course_id, NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . Text::string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0', '', '')";
@@ -4454,7 +4457,7 @@ class CourseManager
                 VALUES ($course_id, '2', '".Database::escape_string(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');");
 
         /*    Example Material  */
-        $language_interface = api_get_setting('platformLanguage');
+        $language_interface = Container::getTranslator()->getLocale();
 
         // Example material should be in the same language as the course is.
         $language_interface_original = $language_interface;
@@ -4773,14 +4776,15 @@ class CourseManager
         $directory          = isset($params['directory']) ? $params['directory'] : null;
         $tutor_name         = isset($params['tutor_name']) ? $params['tutor_name'] : null;
         $category_code      = isset($params['category_code']) ? $params['category_code'] : null;
-        $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');
+        $defaultLanguage = Container::getTranslator()->getLocale();
+        $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : $defaultLanguage;
         $user_id            = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
         $department_name    = isset($params['department_name']) ? $params['department_name'] : null;
         $department_url     = isset($params['department_url']) ? $params['department_url'] : null;
         $disk_quota         = isset($params['disk_quota']) ? $params['disk_quota'] : null;
 
         if (!isset($params['visibility'])) {
-            $default_course_visibility = api_get_setting('courses_default_creation_visibility');
+            $default_course_visibility = api_get_setting('course.courses_default_creation_visibility');
             if (isset($default_course_visibility)) {
                 $visibility = $default_course_visibility;
             } else {
@@ -4832,7 +4836,7 @@ class CourseManager
         }
 
         if (empty($disk_quota)) {
-            $disk_quota = api_get_setting('default_document_quotum');
+            $disk_quota = api_get_setting('document.default_document_quotum');
         }
 
         $time = api_get_utc_datetime();
@@ -4902,12 +4906,14 @@ class CourseManager
                 $settingsManager = Container::getCourseSettingsManager();
                 $schemas = $settingsManager->getSchemas();
                 $schemas = array_keys($schemas);
+
                 /**
                  * @var string $key
                  * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
                  */
                 foreach ($schemas as $schema) {
                     $settings = $settingsManager->loadSettings($schema);
+                    $settingsManager->setCourse($course);
                     $settingsManager->saveSettings($schema, $settings);
                 }
 
@@ -4964,13 +4970,13 @@ class CourseManager
                 $user_id = api_get_user_id();
                 Event::addEvent(LOG_COURSE_CREATE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
 
-                $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
+                $send_mail_to_admin = api_get_setting('course.send_email_to_admin_when_create_course');
                 // @todo Improve code to send to all current portal administrators.
                 if ($send_mail_to_admin == 'true') {
-                    $siteName = api_get_setting('siteName');
-                    $recipient_email = api_get_setting('emailAdministrator');
-                    $recipient_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'));
-                    $iname = api_get_setting('Institution');
+                    $siteName = api_get_setting('platform.site_name');
+                    $recipient_email = api_get_setting('platform.administrator_email');
+                    $recipient_name = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'));
+                    $iname = api_get_setting('platform.institution');
                     $subject = get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
 
                     $body =  get_lang('Dear').' '.$recipient_name.",\n\n".get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";

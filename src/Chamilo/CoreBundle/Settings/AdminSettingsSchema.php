@@ -29,8 +29,7 @@ class AdminSettingsSchema implements SchemaInterface
                 'administrator_email' => array('string'),
                 'administrator_name' => array('string'),
                 'administrator_surname' => array('string'),
-                'administrator_phone' => array('string'),
-                //'default_calendar_view' => array('string'),
+                'administrator_phone' => array('string')
             ))
         ;
     }

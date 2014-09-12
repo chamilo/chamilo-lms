@@ -365,7 +365,7 @@ class Plugin
         $result = Database::query($sql);
         if (!Database::num_rows($result)) {
             $tool_link = "$plugin_name/start.php";
-            $visibility = string2binary(api_get_setting('course_create_active_tools', $plugin_name));
+            $visibility = string2binary(api_get_setting('course.course_create_active_tools', $plugin_name));
             $sql = "INSERT INTO $t_tool VALUES
             ($courseId, NULL, '$plugin_name', '$tool_link', '$plugin_name.png',' ".$visibility."','0', 'squaregrey.gif','NO','_self','plugin','0')";
             Database::query($sql);

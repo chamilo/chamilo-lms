@@ -47,7 +47,7 @@ class PageController
         }
         $img_array       = UserManager::get_picture_user($user_id, $img_array['file'], 100, USER_IMAGE_SIZE_ORIGINAL);
         $profile_content = null;
-        if (api_get_setting('allow_social_tool') == 'true') {
+        if (api_get_setting('social.allow_social_tool') == 'true') {
             if (!$no_image) {
                 $profile_content .= '<a style="text-align:center" href="'.api_get_path(WEB_CODE_PATH).'social/home.php">
                                     <img src="'.$img_array['file'].'"></a>';
@@ -73,7 +73,8 @@ class PageController
         $show_course_link = false;
         $display_add_course_link = false;
 
-        if ((api_get_setting('allow_users_to_create_courses') == 'true' && api_is_allowed_to_create_course() ||
+        if ((api_get_setting('course.allow_users_to_create_courses') == 'true'
+            && api_is_allowed_to_create_course() ||
             api_is_platform_admin())
         ) {
             $display_add_course_link = true;
@@ -82,7 +83,8 @@ class PageController
         if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
             $show_course_link = true;
         } else {
-            if (api_get_setting('allow_students_to_browse_courses') == 'true') {
+            if (api_get_setting('display.allow_students_to_browse_courses') ==
+                'true') {
                 $show_course_link = true;
             }
         }
@@ -93,7 +95,8 @@ class PageController
         if ($display_add_course_link) {
             $my_account_content[] = array(
                 'href'  => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
-                'title' => api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang(
+                'title' => api_get_setting('course.course_validation') ==
+                'true' ? get_lang('CreateCourseRequest') : get_lang(
                     'CourseCreate'
                 )
             );
@@ -147,7 +150,8 @@ class PageController
             $showSessionBlock = true;
         }
 
-        if (api_get_setting('allow_teachers_to_create_sessions') == 'true' && api_is_allowed_to_create_course()) {
+        if (api_get_setting('session.allow_teachers_to_create_sessions') ==
+            'true' && api_is_allowed_to_create_course()) {
             $showSessionBlock = true;
         }
 
@@ -170,8 +174,8 @@ class PageController
      */
     public function setProfileBlock()
     {
-        if (api_get_setting('allow_message_tool') == 'true') {
-            if (api_get_setting('allow_social_tool') == 'true') {
+        if (api_get_setting('message.allow_message_tool') == 'true') {
+            if (api_get_setting('social.allow_social_tool') == 'true') {
                 $this->show_right_block(get_lang('Profile'), array(), 'profile_social_block');
             } else {
                 $this->show_right_block(get_lang('Profile'), array(), 'profile_block');
@@ -247,14 +251,15 @@ class PageController
      */
     public function returnSkillsLinks()
     {
-        if (api_get_setting('allow_skills_tool') == 'true') {
+        if (api_get_setting('skill.allow_skills_tool') == 'true') {
             $content   = array();
             $content[] = array(
                 'title' => get_lang('MySkills'),
                 'href'  => api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'
             );
 
-            if (api_get_setting('allow_hr_skills_management') == 'true' || api_is_platform_admin()) {
+            if (api_get_setting('skill.allow_hr_skills_management') == 'true'
+                || api_is_platform_admin()) {
                 $content[] = array(
                     'title' => get_lang('ManageSkills'),
                     'href'  => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'
@@ -327,7 +332,7 @@ class PageController
     public function return_search_block()
     {
         $html = '';
-        if (api_get_setting('search_enabled') == 'true') {
+        if (api_get_setting('search.search_enabled') == 'true') {
             $html .= '<div class="searchbox">';
             $search_btn     = get_lang('Search');
             $search_content = '<br />
@@ -763,15 +768,16 @@ class PageController
                         $courses_list_string .= "<li>\n";
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
                         $course_details = array();
-                        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                        if (api_get_setting('course.display_coursecode_in_courselist') ==
+                            'true') {
                             $course_details[] = $course['visual_code'];
                         }
-                        if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                        if (api_get_setting('course.display_teacher_in_courselist') ==
+                            'true') {
                             $course_details[] = $course['tutor_name'];
                         }
-                        if (api_get_setting(
-                            'show_different_course_language'
-                        ) == 'true' && $course['course_language'] != api_get_setting('platformLanguage')
+                        if (api_get_setting('display.show_different_course_language') ==
+                            'true' && $course['course_language'] != api_get_setting('platformLanguage')
                         ) {
                             $course_details[] = $course['course_language'];
                         }
@@ -813,18 +819,13 @@ class PageController
                         $courses_list_string .= '</a><br />';
                     }
                     $course_details = array();
-                    if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                    if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
                         $course_details[] = $course['visual_code'];
                     }
-//                        if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
-//                        $courses_list_string .= ' - ';
-//                }
-                    if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                    if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
                         $course_details[] = $course['tutor_name'];
                     }
-                    if (api_get_setting(
-                        'show_different_course_language'
-                    ) == 'true' && $course['course_language'] != api_get_setting('platformLanguage')
+                    if (api_get_setting('display.show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')
                     ) {
                         $course_details[] = $course['course_language'];
                     }
@@ -874,7 +875,7 @@ class PageController
         if (empty($user_id)) {
             return false;
         }
-        $loadDirs = api_get_setting('show_documents_preview') == 'true' ? true : false;
+        $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
         $start    = ($page - 1) * $this->maxPerPage;
 
         $nbResults = (int)CourseManager::displayPersonalCourseCategories($user_id, $filter, $loadDirs, true);
@@ -911,7 +912,7 @@ class PageController
             return false;
         }
 
-        $loadDirs = api_get_setting('show_documents_preview') == 'true' ? true : false;
+        $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
         $start    = ($page - 1) * $this->maxPerPage;
 
         $nbResults = CourseManager::displaySpecialCourses($user_id, $filter, $loadDirs, true);
@@ -951,7 +952,7 @@ class PageController
             return false;
         }
 
-        $loadDirs = api_get_setting('show_documents_preview') == 'true' ? true : false;
+        $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
         $start    = ($page - 1) * $this->maxPerPage;
 
         $nbResults = CourseManager::displayCourses($user_id, $filter, $loadDirs, true);
@@ -1013,7 +1014,7 @@ class PageController
             }
         }
 
-        $load_directories_preview = api_get_setting('show_documents_preview') == 'true' ? true : false;
+        $load_directories_preview = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
         $sessions_with_category   = $html;
 
         if (isset($session_categories) && !empty($session_categories)) {
@@ -1270,7 +1271,7 @@ class PageController
             }
         }
 
-        $load_directories_preview = api_get_setting('show_documents_preview') == 'true' ? true : false;
+        $load_directories_preview = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
 
         $sessions_with_no_category = $html;
 

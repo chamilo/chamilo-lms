@@ -2492,8 +2492,8 @@ function WSCreateCourseByTitle($params)
         $title = $course_param['title'];
         $category_code = 'LANG'; // TODO: A hard-coded value.
         $wanted_code = '';
-        $tutor_firstname = api_get_setting('administratorName');
-        $tutor_lastname = api_get_setting('administratorSurname');
+        $tutor_firstname = api_get_setting('platform.administrator_name');
+        $tutor_lastname = api_get_setting('platform.administrator_surname');
         $course_language = 'spanish'; // TODO: Incorrect default value, it should 'english'.
         if (!empty($course_param['course_language'])) {
             $course_language = $course_param['course_language'];

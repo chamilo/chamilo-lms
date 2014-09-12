@@ -52,7 +52,7 @@ $cidreq = Security::remove_XSS($_GET['cidReq']);
 <meta charset="<?php echo api_get_system_encoding(); ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
 <?php
-echo'<title>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</title>';
+echo'<title>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('platform.site_name').'</title>';
 
 $groupId = api_get_group_id();
 

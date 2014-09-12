@@ -155,7 +155,7 @@ if ($type == 'course' && !empty($group_id)) {
     $type_label = get_lang('GroupCalendar');
 }
 
-$defaultView = api_get_setting('default_calendar_view');
+$defaultView = api_get_setting('agenda.default_calendar_view');
 
 if (empty($defaultView)) {
     $defaultView = 'month';

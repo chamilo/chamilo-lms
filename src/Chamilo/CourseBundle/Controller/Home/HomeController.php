@@ -91,7 +91,7 @@ class HomeController extends ToolBaseController
         }
 
 
-        $homeView = api_get_setting('homepage_view');
+        $homeView = api_get_setting('course.homepage_view');
         $homeView = 'activity_big';
 
         if ($homeView == 'activity' || $homeView == 'activity_big') {
@@ -113,7 +113,7 @@ class HomeController extends ToolBaseController
         );
 
         $sessionInfo = null;
-        if (api_get_setting('show_session_data') == 'true' && $sessionId) {
+        if (api_get_setting('session.show_session_data') == 'true' && $sessionId) {
             $sessionInfo = CourseHome::show_session_data($sessionId);
         }
 

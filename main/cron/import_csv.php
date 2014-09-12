@@ -817,7 +817,7 @@ if (!is_array($emails)) {
     $emails = array($emails);
 }
 $subject = "Cron main/cron/import_csv.php ".date('Y-m-d h:i:s');
-$from = api_get_setting('emailAdministrator');
+$from = api_get_setting('platform.administrator_email');
 /*
 if (!empty($emails)) {
     foreach ($emails as $email) {

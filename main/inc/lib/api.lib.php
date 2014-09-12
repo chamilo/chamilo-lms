@@ -3854,7 +3854,7 @@ function api_time_to_hms($seconds) {
 function api_get_permissions_for_new_directories() {
     static $permissions;
     if (!isset($permissions)) {
-        $permissions = trim(api_get_setting('permissions_for_new_directories'));
+        $permissions = trim(api_get_setting('document.permissions_for_new_directories'));
         // The default value 0777 is according to that in the platform administration panel after fresh system installation.
         $permissions = octdec(!empty($permissions) ? $permissions : '0777');
     }
@@ -3869,7 +3869,7 @@ function api_get_permissions_for_new_directories() {
 function api_get_permissions_for_new_files() {
     static $permissions;
     if (!isset($permissions)) {
-        $permissions = trim(api_get_setting('permissions_for_new_files'));
+        $permissions = trim(api_get_setting('document.permissions_for_new_files'));
         // The default value 0666 is according to that in the platform administration panel after fresh system installation.
         $permissions = octdec(!empty($permissions) ? $permissions : '0666');
     }

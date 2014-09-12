@@ -416,7 +416,6 @@ class CourseHome
         // Condition for the session
         $session_id 			= api_get_session_id();
         $course_id              = api_get_course_int_id();
-        var_dump($course_id);
         $condition_session = api_get_session_condition($session_id, true, true);
 
         //$studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
@@ -595,7 +594,7 @@ class CourseHome
     public static function show_tools_category($urlGenerator, $toolList, $rows = false)
     {
         $rowDiv =  '<div class="row">';
-        $theme = api_get_setting('homepage_view');
+        $theme = api_get_setting('course.homepage_view');
 
         if ($theme == 'vertical_activity') {
             //ordering by get_lang name

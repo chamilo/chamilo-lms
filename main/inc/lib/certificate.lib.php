@@ -25,7 +25,7 @@ class Certificate extends Model
     public $qr_file     = null;
     public $sys_qr_file     = null;
     public $user_id;
-   
+
     /* If true every time we enter to the certificate URL
     we would generate a new certificate (good thing because we can edit the
     certificate and all users will have the latest certificate bad because we
@@ -159,8 +159,8 @@ class Certificate extends Model
             $scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
 
             //Prepare all necessary variables:
-            $organization_name     = api_get_setting('Institution');
-            //$portal_name         = api_get_setting('siteName');
+            $organization_name     = api_get_setting('platform.institution');
+            //$portal_name         = api_get_setting('platform.site_name');
             $stud_fn             = $user['firstname'];
             $stud_ln             = $user['lastname'];
 

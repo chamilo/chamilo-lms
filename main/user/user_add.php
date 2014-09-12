@@ -167,18 +167,18 @@ if($register) {
 
         $emailto       = "$lastname_form $firstname_form <$email_form>";
         $emailfromaddr = $administratorEmail;
-        $emailfromname = api_get_setting('siteName');
-        $emailsubject  = get_lang('YourReg').' '.api_get_setting('siteName');
+        $emailfromname = api_get_setting('platform.site_name');
+        $emailsubject  = get_lang('YourReg').' '.api_get_setting('platform.site_name');
 
-        $emailheaders  = "From: ".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS)." <".$administratorEmail.">\n";
+        $emailheaders  = "From: ".api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS)." <".$administratorEmail.">\n";
         $emailheaders .= "Reply-To: ".$administratorEmail."\n";
         $emailheaders .= "Return-Path: ".$administratorEmail."\n";
         $emailheaders .= "charset: ".api_get_system_encoding()."\n";
         $emailheaders .= "X-Mailer: PHP/" . phpversion() . "\n";
         $emailheaders .= "X-Sender-IP: $REMOTE_ADDR"; // (small security precaution...)
         $recipient_name = api_get_person_name($firstname_form, $lastname_form, null, PERSON_NAME_EMAIL_ADDRESS);
-        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $email_admin = api_get_setting('emailAdministrator');
+        $sender_name = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $email_admin = api_get_setting('platform.administrator_email');
 
         $portal_url = api_get_path(WEB_PUBLIC_PATH);
         if ($_configuration['multiple_access_urls']) {
@@ -191,12 +191,12 @@ if($register) {
 
         if ($courseRegSucceed)
         {
-            $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form)).",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
+            $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form)).",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".api_get_setting('platform.site_name')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('platform.site_name')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'))."\n".get_lang('Manager')." ".api_get_setting('platform.site_name')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('platform.administrator_email')."\n";
             $message = get_lang('TheU')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedToCourse')."<a href=\"user.php\">".get_lang('BackUser')."</a>\n";
         }
         else
         {
-            $emailbody = get_lang('Dear')." ".api_get_person_name($firstname_form, $lastname_form).",\n ".get_lang('YouAreReg')."  ".api_get_setting('siteName')."  ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
+            $emailbody = get_lang('Dear')." ".api_get_person_name($firstname_form, $lastname_form).",\n ".get_lang('YouAreReg')."  ".api_get_setting('platform.site_name')."  ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('platform.site_name')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'))."\n".get_lang('Manager')." ".api_get_setting('platform.site_name')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('platform.administrator_email')."\n";
 
             $message = stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedU');
         }

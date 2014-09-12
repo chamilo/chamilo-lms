@@ -299,7 +299,7 @@ if ($form->validate()) {
                 $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), $session_id, null, null, 2);
             }
 
-            $subject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."  ";
+            $subject = "[" . api_get_setting('platform.site_name') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."  ";
 
             foreach ($user_list as $user_data) {
                 $to_user_id = $user_data['user_id'];

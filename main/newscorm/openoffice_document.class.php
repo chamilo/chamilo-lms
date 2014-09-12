@@ -82,7 +82,7 @@ abstract class OpenofficeDocument extends learnpath
         if ($ppt2lp_host == 'localhost') {
             move_uploaded_file($file['tmp_name'], $this->base_work_dir.'/'.$this->file_path);
             //var_dump( $this->base_work_dir.$this->created_dir.$this->file_path);
-            $perm = api_get_setting('permissions_for_new_files');
+            $perm = api_get_setting('document.permissions_for_new_files');
 
             if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in api.lib.php
                 $converter_path = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');

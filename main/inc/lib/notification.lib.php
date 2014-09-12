@@ -66,14 +66,14 @@ class Notification extends Model
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
 
         $this->sender_email = api_get_setting('noreply_email_address');
-        $this->sender_name  = api_get_setting('siteName');
+        $this->sender_name  = api_get_setting('platform.site_name');
 
         // If no-reply  email doesn't exist use the admin email
         if (empty($this->sender_email)) {
-            $this->sender_email = api_get_setting('emailAdministrator');
+            $this->sender_email = api_get_setting('platform.administrator_email');
             $this->sender_name  = api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
+                api_get_setting('platform.administrator_name'),
+                api_get_setting('platform.administrator_surname'),
                 null,
                 PERSON_NAME_EMAIL_ADDRESS
             );

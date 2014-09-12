@@ -18,7 +18,7 @@ switch ($action) {
             $tool_visibility = $tool_info['visibility'];
             $tool_image = $tool_info['image'];
 
-            if (api_get_setting('homepage_view') != 'activity_big') {
+            if (api_get_setting('course.homepage_view') != 'activity_big') {
                 $new_image = Display::return_icon(str_replace('.gif','_na.gif', $tool_image), null, null, null, null, true);
                 $tool_image = Display::return_icon($tool_image, null, null, null, null, true);
             } else {

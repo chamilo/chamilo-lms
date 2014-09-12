@@ -820,8 +820,8 @@ echo $form.$table_result.$extra_search_options;
 /*var_dump(Container::getSettingsManager()->getSetting('platform
 .administrator_name'));
 $sender_name = api_get_person_name(
-    api_get_setting('administratorName'),
-    api_get_setting('administratorSurname'),
+    api_get_setting('platform.administrator_name'),
+    api_get_setting('platform.administrator_surname'),
     null,
     PERSON_NAME_EMAIL_ADDRESS
 ); var_dump($sender_name);*/

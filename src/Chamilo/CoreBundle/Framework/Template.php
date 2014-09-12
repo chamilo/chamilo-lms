@@ -398,8 +398,8 @@ class Template
         $_s = array(
             'software_name' => api_get_software_name(),
             'system_version' => $version,
-            'site_name' => api_get_setting('siteName'),
-            'institution' => api_get_setting('Institution')
+            'site_name' => api_get_setting('platform.site_name'),
+            'institution' => api_get_setting('platform.institution')
         );
         $this->assign('_s', $_s);
     }
@@ -612,8 +612,8 @@ class Template
 
         $title_list = array();
 
-        $title_list[] = api_get_setting('Institution');
-        $title_list[] = api_get_setting('siteName');
+        $title_list[] = api_get_setting('platform.institution');
+        $title_list[] = api_get_setting('platform.site_name');
 
         if (!empty($course_title)) {
             $title_list[] = $course_title;
@@ -707,8 +707,8 @@ class Template
         }
         $this->assign('message_link', $messageUrl);
 
-        $institution = api_get_setting('Institution');
-        $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
+        $institution = api_get_setting('platform.institution');
+        $portal_name = empty($institution) ? api_get_setting('platform.site_name') : $institution;
 
         $this->assign('portal_name', $portal_name);
 
@@ -755,8 +755,8 @@ class Template
         if (api_get_setting('show_administrator_data') == 'true') {
             //Administrator name
             $administrator_data = get_lang('Manager').' : '.Display::encrypted_mailto_link(
-                api_get_setting('emailAdministrator'),
-                api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))
+                api_get_setting('platform.administrator_email'),
+                api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'))
             );
             $this->assign('administrator_name', $administrator_data);
         }
@@ -1116,9 +1116,9 @@ class Template
         $html = '';
         $logo = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
 
-        $site_name = api_get_setting('siteName');
+        $site_name = api_get_setting('platform.site_name');
         if (file_exists($logo)) {
-            $site_name = api_get_setting('Institution').' - '.$site_name;
+            $site_name = api_get_setting('platform.institution').' - '.$site_name;
             $html .= '<div id="logo">';
             $image_url = api_get_path(WEB_CSS_PATH).$theme.'/images/header-logo.png';
             $logo = Display::img($image_url, $site_name, array('title' => $site_name));
@@ -1127,7 +1127,7 @@ class Template
         } else {
             $html .= '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$site_name.'</a>';
             $iurl = api_get_setting('InstitutionUrl');
-            $iname = api_get_setting('Institution');
+            $iname = api_get_setting('platform.institution');
 
             if (!empty($iname)) {
                 $html .= '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';

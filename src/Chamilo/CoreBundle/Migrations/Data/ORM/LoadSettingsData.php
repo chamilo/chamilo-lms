@@ -3946,18 +3946,6 @@ class LoadSettingsData extends AbstractFixture implements
         $manager->persist($setting);
 
 
-        $setting = new SettingsCurrent();
-        $setting->setVariable('teachers_can_change_grade_model_settings');
-        $setting->setSubkey('');
-        $setting->setType('radio');
-        $setting->setCategory('Gradebook');
-        $setting->setSelectedValue('true');
-        $setting->setTitle('TeachersCanChangeGradeModelSettingsTitle');
-        $setting->setComment('TeachersCanChangeGradeModelSettingsComment');
-        $setting->setScope('');
-        $setting->setSubkeytext('');
-        $setting->setAccessUrlChangeable('1');
-        $manager->persist($setting);
 
 
         $setting = new SettingsCurrent();
@@ -6566,21 +6554,6 @@ class LoadSettingsData extends AbstractFixture implements
         $option->setValue('false');
         $option->setDisplayText('No');
         $manager->persist($option);
-
-
-        $option = new SettingsOptions();
-        $option->setVariable('teachers_can_change_grade_model_settings');
-        $option->setValue('true');
-        $option->setDisplayText('Yes');
-        $manager->persist($option);
-
-
-        $option = new SettingsOptions();
-        $option->setVariable('teachers_can_change_grade_model_settings');
-        $option->setValue('false');
-        $option->setDisplayText('No');
-        $manager->persist($option);
-
 
         $option = new SettingsOptions();
         $option->setVariable('gradebook_locking_enabled');

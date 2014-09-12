@@ -1558,8 +1558,8 @@ class Wiki
                 $userinfo = api_get_user_info($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
                 $name_to = $userinfo['complete_name'];
                 $email_to = $userinfo['email'];
-                $sender_name = api_get_setting('emailAdministrator');
-                $sender_email = api_get_setting('emailAdministrator');
+                $sender_name = api_get_setting('platform.administrator_email');
+                $sender_email = api_get_setting('platform.administrator_email');
                 $email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
                 $email_body = get_lang('DearUser').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).',<br /><br />';
                 if($session_id==0){

@@ -1872,12 +1872,12 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 function send_reminder_users_without_publication($task_data)
 {
 	global $_course;
-    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+    $sender_name = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS);
 
 	$task_id = $task_data['id'];
 	$task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);
 
-	$subject = '[' . api_get_setting('siteName') . '] ';
+	$subject = '[' . api_get_setting('platform.site_name') . '] ';
 
 	// The body can be as long as you wish, and any combination of text and variables
 
@@ -1914,7 +1914,7 @@ function send_email_on_homework_creation($course_id) {
 	} else {
 		$students = CourseManager::get_student_list_from_course_code($course_id, true, $session_id);
 	}
-	$emailsubject = '[' . api_get_setting('siteName') . '] '.get_lang('HomeworkCreated');
+	$emailsubject = '[' . api_get_setting('platform.site_name') . '] '.get_lang('HomeworkCreated');
 	$currentUser = api_get_user_info(api_get_user_id());
 	if (!empty($students)) {
 		foreach($students as $student) {

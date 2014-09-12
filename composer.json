@@ -53,7 +53,12 @@
 
         "ext-intl": "*",
         "ext-gd": "*",
+        "ext-mysql": "*",
         "ext-curl": "*",
+        "ext-zlib": "*",
+        "ext-xml": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
 
         "twig/twig": "~1.12",
         "twig/extensions": "~1.0",
@@ -82,8 +87,7 @@
         "symfony-cmf/routing-bundle": "~1.1",
 
         "knplabs/gaufrette": "0.1.4",
-        "knplabs/knp-paginator-bundle": "dev-master",
-        "knplabs/knp-menu-bundle": "dev-master as 1.1",
+        "knplabs/knp-menu-bundle": "~2.0",
 
         "sonata-project/easy-extends-bundle": "~2.1@dev",
         "sonata-project/seo-bundle": "~1@dev",
@@ -106,6 +110,7 @@
 
         "sonata-project/timeline-bundle": "~2.2@dev",
         "sonata-project/classification-bundle": "~2.2@dev",
+        "sonata-project/ecommerce": "dev-develop",
         "sonata-project/comment-bundle": "~2.2@dev",
 
         "friendsofsymfony/comment-bundle": "~2.0@dev",

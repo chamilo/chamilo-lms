@@ -81,6 +81,22 @@ class ChamiloRequirements extends SymfonyRequirements
             'Install and enable the <strong>icu</strong> library at least ' . self::REQUIRED_ICU_VERSION . ' version'
         );
 
+        $extensions = $this->getExtensions();
+        foreach ($extensions as $type) {
+            $isOptional = $type == 'optional' ? true : false;
+            foreach ($type as $extension => $url) {
+                if (extension_loaded($extension)) {
+                    $this->addChamiloRequirement(
+                        extension_loaded($extension),
+                        "$extension extension should be available",
+                        "Install and enable the <strong>$extension</strong>
+                        extension.",
+                        $isOptional
+                    );
+                }
+            }
+        }
+
         $this->addRecommendation(
             class_exists('SoapClient'),
             'SOAP extension should be installed (API calls)',
@@ -151,17 +167,19 @@ class ChamiloRequirements extends SymfonyRequirements
             'Change the permissions of the "<strong>web/uploads/</strong>" directory so that the web server can write into it.'
         );
 
+        $this->addChamiloRequirement(
+            is_writable($baseDir . '/web/bundles'),
+            'web/bundles/ directory must be writable',
+            'Change the permissions of the "<strong>web/bundles/</strong>" directory so that the web server can write into it.'
+        );
+
         /*$this->addChamiloRequirement(
             is_writable($baseDir . '/web/media'),
             'web/media/ directory must be writable',
             'Change the permissions of the "<strong>web/media/</strong>" directory so that the web server can write into it.'
         );
 
-        $this->addChamiloRequirement(
-            is_writable($baseDir . '/web/bundles'),
-            'web/bundles/ directory must be writable',
-            'Change the permissions of the "<strong>web/bundles/</strong>" directory so that the web server can write into it.'
-        );*/
+
 
         /*$this->addChamiloRequirement(
             is_writable($baseDir . '/app/attachment'),
@@ -200,7 +218,30 @@ class ChamiloRequirements extends SymfonyRequirements
                 'Change the permissions of the "<strong>app/config/parameters.yml</strong>" file so that the web server can write into it.'
             );
         }
+    }
 
+    private function getExtensions()
+    {
+        return
+            array(
+                'required' => array(
+                    'mysql' => array('url' => 'http://php.net/manual/en/book.mysql.php'),
+                    'curl' => array('url' => 'http://php.net/manual/fr/book.curl.php'),
+                    'zlib' => array('url' => 'http://php.net/manual/en/book.zlib.php'),
+                    'pcre' => array('url' => 'http://php.net/manual/en/book.pcre.php'),
+                    'xml' => array('url' => 'http://php.net/manual/en/book.xml.php'),
+                    'mbstring' => array('url' => 'http://php.net/manual/en/book.mbstring.php'),
+                    'iconv' => array('url' => 'http://php.net/manual/en/book.iconv.php'),
+                    'intl' => array('url' => 'http://php.net/manual/en/book.intl.php'),
+                    'gd' => array('url' => 'http://php.net/manual/en/book.image.php'),
+                    'json' => array('url' => 'http://php.net/manual/en/book.json.php')
+                ),
+                'optional' =>  array(
+                    'imagick' => array('url' => 'http://php.net/manual/en/book.imagick.php'),
+                    'ldap' => array('url' => 'http://php.net/manual/en/book.ldap.php'),
+                    'xapian' => array('url' => 'http://php.net/manual/en/book.xapian.php')
+                )
+            );
     }
 
     /**
@@ -211,9 +252,14 @@ class ChamiloRequirements extends SymfonyRequirements
      * @param string      $helpHtml The help text formatted in HTML for resolving the problem
      * @param string|null $helpText The help text (when null, it will be inferred from $helpHtml, i.e. stripped from HTML tags)
      */
-    public function addChamiloRequirement($fulfilled, $testMessage, $helpHtml, $helpText = null)
-    {
-        $this->add(new ChamiloRequirement($fulfilled, $testMessage, $helpHtml, $helpText, false));
+    public function addChamiloRequirement(
+        $fulfilled,
+        $testMessage,
+        $helpHtml,
+        $helpText = null,
+        $optional = false
+    ) {
+        $this->add(new ChamiloRequirement($fulfilled, $testMessage, $helpHtml, $helpText, $optional));
     }
 
     /**

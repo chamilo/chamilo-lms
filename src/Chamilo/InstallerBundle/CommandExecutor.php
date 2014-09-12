@@ -76,12 +76,11 @@ class CommandExecutor
      * @return CommandExecutor
      * @throws \RuntimeException if command failed and '--ignore-errors' parameter is not specified
      */
-    public function runCommand($command, $params = [])
+    public function runCommand($command, $params = array())
     {
-        $params = array_merge(
-            [
+        $params = array_merge(array(
                 'command' => $command
-            ],
+            ),
             $params
         );
         if ($this->env && $this->env !== 'dev') {

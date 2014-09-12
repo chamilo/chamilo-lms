@@ -216,7 +216,7 @@ class UserManager
                         'mobilePhoneNumber' => $extra['mobile_phone_number'],
                         'password' => $original_password
                     );
-                    api_mail_html($recipient_name, $email, $emailsubject, $emailbody, 
+                    api_mail_html($recipient_name, $email, $emailsubject, $emailbody,
                         $sender_name, $email_admin, null, null, null, $additional_parameters);
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
@@ -4315,7 +4315,7 @@ class UserManager
     }
 
     /**
-     * @param $form
+     * @param FormValidator $form
      * @param $extra_data
      * @param $form_name
      * @param bool $admin_permissions
@@ -4370,7 +4370,7 @@ class UserManager
                     $group = array();
                     foreach ($field_details[9] as $option_id => $option_details) {
                         $options[$option_details[1]] = $option_details[2];
-                        $group[] = & HTML_QuickForm::createElement(
+                        $group[] = $form->createElement(
                             'radio',
                             'extra_'.$field_details[1],
                             $option_details[1],
@@ -4566,7 +4566,7 @@ EOF;
                     break;
 
                 case self::USER_FIELD_TYPE_TELEPHONE:
-                    $form->addElement('text', 'extra_'.$field_details[1], $field_details[3]." (".get_lang('TelephonePrefix').")", 
+                    $form->addElement('text', 'extra_'.$field_details[1], $field_details[3]." (".get_lang('TelephonePrefix').")",
                         array('size' => 40, 'placeholder'  => '(xx)xxxxxxxxx'));
                     $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
@@ -4576,7 +4576,7 @@ EOF;
                         if ($field_details[7] == 0) {
                             $form->freeze('extra_'.$field_details[1]);
                         }
-                    }                 
+                    }
                     break;
             }
         }

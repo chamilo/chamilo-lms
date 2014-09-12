@@ -228,16 +228,7 @@ class InstallCommand extends ContainerAwareCommand
 
         // Installing platform settings
         $settingsManager = $this->getContainer()->get('chamilo.settings.manager');
-        $schemas = $settingsManager->getSchemas();
-        $schemas = array_keys($schemas);
-        /**
-         * @var string $key
-         * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
-         */
-        foreach ($schemas as $schema) {
-            $settings = $settingsManager->loadSettings($schema);
-            $settingsManager->saveSettings($schema, $settings);
-        }
+        $settingsManager->installSchemas();
 
         $output->writeln('');
         $output->writeln('<info>Administration setup.</info>');
@@ -317,9 +308,7 @@ class InstallCommand extends ContainerAwareCommand
     protected function finalStep(CommandExecutor $commandExecutor, InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<info>Preparing application.</info>');
-
         $input->setInteractive(false);
-
         $commandExecutor
             /*->runCommand(
                 'oro:navigation:init',
@@ -360,7 +349,6 @@ class InstallCommand extends ContainerAwareCommand
 
         // run installer scripts
         $this->processInstallerScripts($output, $commandExecutor);
-
         $this->updateInstalledFlag(date('c'));
 
         // clear the cache set installed flag in DI container
@@ -440,5 +428,4 @@ class InstallCommand extends ContainerAwareCommand
 
         $table->render($output);
     }
-
 }

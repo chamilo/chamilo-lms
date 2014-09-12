@@ -21,6 +21,20 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
  */
 class SettingsManager extends SyliusSettingsManager
 {
+    public function installSchemas()
+    {
+        $schemas = $this->getSchemas();
+        $schemas = array_keys($schemas);
+        /**
+         * @var string $key
+         * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
+         */
+        foreach ($schemas as $schema) {
+            $settings = $this->loadSettings($schema);
+            $this->saveSettings($schema, $settings);
+        }
+    }
+
     /**
      * @return array
      */

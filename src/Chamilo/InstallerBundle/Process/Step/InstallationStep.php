@@ -40,6 +40,9 @@ class InstallationStep extends AbstractStep
                     'oro:assets:install',
                     array('target' => './', '--exclude' => ['OroInstallerBundle'])
                 );*/
+                $settingsManager = $this->container->get('chamilo.settings.manager');
+                $settingsManager->installSchemas();
+
                 return $this->handleAjaxAction(
                   'assets:install',
                   array('target' => '../web')

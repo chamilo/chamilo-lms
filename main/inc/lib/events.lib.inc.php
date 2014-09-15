@@ -1513,7 +1513,7 @@ function delete_attempt_hotspot($exe_id, $user_id, $course_code, $session_id = 0
  */
 function event_course_login($course_code, $user_id, $session_id)
 {
-    global $course_tracking_table;
+    $course_tracking_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
     //@todo use api_get_utc_datetime
     $time = api_get_utc_datetime();

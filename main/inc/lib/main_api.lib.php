@@ -3563,6 +3563,45 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
 }
 
 /**
+ * Gets item property by tool and user
+ * @param int $userId
+ * @param int $tool
+ * @param int $courseId
+ * @param int $session_id
+ * @return array
+ */
+function api_get_item_property_list_by_tool_by_user(
+    $userId,
+    $tool,
+    $courseId,
+    $session_id = 0
+) {
+    $userId = intval($userId);
+    $tool = Database::escape_string($tool);
+    $session_id = intval($session_id);
+    $courseId = intval($courseId);
+
+    // Definition of tables.
+    $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $session_condition = ' AND id_session = '.$session_id;
+    $sql = "SELECT * FROM $item_property_table
+            WHERE
+                insert_user_id = $userId AND
+                c_id = $courseId AND
+                tool = '$tool'
+                $session_condition ";
+
+    $rs = Database::query($sql);
+    $list = array();
+    if (Database::num_rows($rs) > 0) {
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            $list[] = $row;
+        }
+    }
+    return $list;
+}
+
+/**
  * Gets item property id from tool of a course
  * @param string    course code
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
@@ -4591,8 +4630,8 @@ function api_get_status_langvars() {
 */
 function api_get_settings_options($var) {
 	$table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
-    $var = Database::escape_string($var);	
-	$sql = "SELECT * FROM $table_settings_options WHERE variable = '$var' ORDER BY id";	
+    $var = Database::escape_string($var);
+	$sql = "SELECT * FROM $table_settings_options WHERE variable = '$var' ORDER BY id";
 	$result = Database::query($sql);
     $settings_options_array = array();
 	while ($row = Database::fetch_array($result, 'ASSOC')) {

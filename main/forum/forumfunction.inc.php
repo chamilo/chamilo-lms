@@ -1249,8 +1249,12 @@ function get_forums_in_category($cat_id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
-{
+function get_forums(
+    $id = '',
+    $course_code = '',
+    $includeGroupsForum = true,
+    $sessionId = 0
+) {
     $course_info = api_get_course_info($course_code);
 
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1262,7 +1266,12 @@ function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
     // GETTING ALL THE FORUMS
 
     // Condition for the session
-    $session_id = api_get_session_id();
+    if (empty($sessionId)) {
+        $session_id = api_get_session_id();
+    } else {
+        $session_id = $sessionId;
+    }
+
     $condition_session = api_get_session_condition($session_id, true, true);
     $course_id = $course_info['real_id'];
 
@@ -1427,7 +1436,7 @@ function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
             $forum_list['number_of_posts'] = $row3['number_of_posts'];
         }
     }
-   
+
     /* Finding the last post information
     (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)*/
     if ($id == '') {
@@ -4519,7 +4528,7 @@ function get_all_post_from_user($user_id, $course_code)
  * @param int
  * @param int
  * @param int
- * @return void
+ * @return array
  */
 function get_thread_user_post_limit($course_code, $thread_id, $user_id, $limit = 10)
 {
@@ -4538,13 +4547,52 @@ function get_thread_user_post_limit($course_code, $thread_id, $user_id, $limit =
                 AND posts.poster_id='".Database::escape_string($user_id)."'
             ORDER BY posts.post_id DESC LIMIT $limit ";
     $result = Database::query($sql);
-
+    $post_list = array();
     while ($row = Database::fetch_array($result)) {
         $row['status'] = '1';
         $post_list[] = $row;
     }
 
     return $post_list;
+}
+
+/**
+ * @param string
+ * @param int
+ * @param int
+ * @param int
+ * @return array
+ */
+function getForumCreatedByUser($user_id, $courseId, $sessionId)
+{
+    $items = api_get_item_property_list_by_tool_by_user(
+        $user_id,
+        'forum',
+        $courseId,
+        $sessionId
+    );
+
+    $courseInfo = api_get_course_info_by_id($courseId);
+
+    $forumList = array();
+    if (!empty($items)) {
+        foreach ($items as $forum) {
+            $forumInfo = get_forums(
+                $forum['ref'],
+                $courseInfo['code'],
+                true,
+                $sessionId
+            );
+
+            $forumList[] = array(
+                $forumInfo['forum_title'],
+                api_get_local_time($forum['insert_date']),
+                api_get_local_time($forum['lastedit_date'])
+            );
+        }
+    }
+
+    return $forumList;
 }
 
 /**

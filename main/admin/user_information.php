@@ -12,6 +12,8 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
 api_protect_admin_script();
 
@@ -128,8 +130,8 @@ $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
 $user_id = $user['user_id'];
 $sessions = SessionManager::get_sessions_by_user($user_id, true);
-
 $personal_course_list = array();
+$courseToolInformationTotal = null;
 if (count($sessions) > 0) {
     $sessionInformation = null;
     $header = array(
@@ -158,7 +160,7 @@ if (count($sessions) > 0) {
         $csvContent[] = $headerList;
 
         foreach ($session_item['courses'] as $my_course) {
-            $course_info = api_get_course_info($my_course['code']);
+            $courseInfo = api_get_course_info($my_course['code']);
             $sessionStatus = SessionManager::get_user_status_in_session(
                 $user['user_id'],
                 $my_course['code'],
@@ -174,36 +176,36 @@ if (count($sessions) > 0) {
                     $status = get_lang('CourseCoach');
                     break;
             }
-            $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.
+            $tools = '<a href="course_information.php?code='.$courseInfo['code'].'&id_session='.$id_session.'">'.
                 Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
-                '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.
+                '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'?id_session='.$id_session.'">'.
                 Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
             if ($my_course['status'] == STUDENT) {
-                $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course_info['code'].'&user_id='.$user['user_id'].'">'.
+                $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$courseInfo['code'].'&user_id='.$user['user_id'].'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
 
             $timeSpent = api_time_to_hms(
                 Tracking :: get_time_spent_on_the_course(
                     $user['user_id'],
-                    $course_info['code'],
+                    $courseInfo['code'],
                     $id_session
                 )
             );
 
             $totalForumMessages = CourseManager::getCountPostInForumPerUser(
                 $user['user_id'],
-                $course_info['real_id'],
+                $courseInfo['real_id'],
                 $id_session
             );
 
             $row = array(
                 Display::url(
                     $my_course['code'],
-                    $course_info['course_public_url'].'?id_session='.$id_session
+                    $courseInfo['course_public_url'].'?id_session='.$id_session
                 ),
-                $course_info['title'],
+                $courseInfo['title'],
                 $status,
                 $timeSpent,
                 $totalForumMessages,
@@ -212,6 +214,17 @@ if (count($sessions) > 0) {
 
             $csvContent[] = array_map('strip_tags', $row);
             $data[] = $row;
+
+            $result = TrackingUserLogCSV::getToolInformation(
+                $user['user_id'],
+                $courseInfo,
+                $id_session
+            );
+
+            if (!empty($result['html'])) {
+                $courseToolInformationTotal .= $result['html'];
+                $csvContent = array_merge($csvContent, $result['array']);
+            }
         }
 
         if ($session_item['date_start'] == '0000-00-00') {
@@ -239,10 +252,12 @@ if (count($sessions) > 0) {
             array(),
             array('user_id' => intval($_GET['user_id']))
         );
+        $sessionInformation .= $courseToolInformationTotal;
     }
 } else {
     $sessionInformation = '<p>'.get_lang('NoSessionsForThisUser').'</p>';
 }
+$courseToolInformationTotal = null;
 
 /**
  * Show the courses in which this user is subscribed
@@ -261,7 +276,6 @@ if (Database::num_rows($res) > 0) {
         array('', false)
     );
 
-
     $headerList = array();
     foreach ($header as $item) {
         $headerList[] = $item[0];
@@ -271,7 +285,9 @@ if (Database::num_rows($res) > 0) {
     $csvContent[] = $headerList;
 
     $data = array();
+    $courseToolInformationTotal = null;
     while ($course = Database::fetch_object($res)) {
+        $courseToolInformation = null;
 
         $tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
             '<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
@@ -294,7 +310,7 @@ if (Database::num_rows($res) > 0) {
             0
         );
         $courseInfo = api_get_course_info($course->code);
-        $row = array (
+        $row = array(
             Display::url($course->code, $courseInfo['course_public_url']),
             $course->title,
             $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher'),
@@ -305,7 +321,16 @@ if (Database::num_rows($res) > 0) {
 
         $csvContent[] = array_map('strip_tags', $row);
         $data[] = $row;
+
+        $result = TrackingUserLogCSV::getToolInformation(
+            $user['user_id'],
+            $courseInfo,
+            0
+        );
+        $courseToolInformationTotal .= $result['html'];
+        $csvContent = array_merge($csvContent, $result['array']);
     }
+
     $courseInformation = Display::page_subheader(get_lang('Courses'));
     $courseInformation .= Display::return_sortable_table(
         $header,
@@ -314,6 +339,8 @@ if (Database::num_rows($res) > 0) {
         array(),
         array('user_id' => intval($_GET['user_id']))
     );
+    $courseInformation .=  $courseToolInformationTotal;
+
 } else {
     $courseInformation = '<p>'.get_lang('NoCoursesForThisUser').'</p>';
 }
@@ -323,15 +350,15 @@ if (Database::num_rows($res) > 0) {
  */
 $urlInformation = null;
 if (api_is_multiple_url_enabled()) {
-    $url_list= UrlManager::get_access_url_from_user($user['user_id']);
-    if (count($url_list) > 0) {
+    $urlList= UrlManager::get_access_url_from_user($user['user_id']);
+    if (count($urlList) > 0) {
         $header = array();
         $header[] = array('URL', true);
         $data = array();
 
         $csvContent[] = array();
         $csvContent[] = array('Url');
-        foreach ($url_list as $url) {
+        foreach ($urlList as $url) {
             $row = array();
             $row[] = Display::url($url['url'], $url['url']);
             $csvContent[] = array_map('strip_tags', $row);
@@ -350,7 +377,6 @@ if (api_is_multiple_url_enabled()) {
         $urlInformation = '<p>'.get_lang('NoUrlForThisUser').'</p>';
     }
 }
-
 $message = null;
 
 if (isset($_GET['action'])) {

@@ -5453,4 +5453,95 @@ class TrackingUserLogCSV
     	return array($title_line, $line);
     }
 
+    /**
+     * @param $userId
+     * @param $courseInfo
+     * @param int $sessionId
+     * @return array
+     */
+    public static function getToolInformation(
+        $userId,
+        $courseInfo,
+        $sessionId = 0
+    ) {
+        $csvContent = array();
+        $courseToolInformation = null;
+        $headerTool = array(
+            array(get_lang('Title')),
+            array(get_lang('CreatedAt')),
+            array(get_lang('UpdatedAt')),
+        );
+
+        $headerListForCSV = array();
+        foreach ($headerTool as $item) {
+            $headerListForCSV[] = $item[0];
+        }
+
+        $courseForumInformationArray = getForumCreatedByUser(
+            $userId,
+            $courseInfo['real_id'],
+            $sessionId
+        );
+
+        if (!empty($courseForumInformationArray)) {
+            $csvContent[] = array();
+            $csvContent[] = get_lang('Forums');
+            $csvContent[] = $headerListForCSV;
+            foreach ($courseForumInformationArray as $row) {
+                $csvContent[] = $row;
+            }
+
+            $courseToolInformation .= Display::page_subheader2(
+                get_lang('Forums')
+            );
+            $courseToolInformation .= Display::return_sortable_table(
+                $headerTool,
+                $courseForumInformationArray
+            );
+        }
+
+        $courseWorkInformationArray = getWorkCreatedByUser(
+            $userId,
+            $courseInfo['real_id'],
+            $sessionId
+        );
+
+        if (!empty($courseWorkInformationArray)) {
+            $csvContent[] = null;
+            $csvContent[] = get_lang('Works');
+            $csvContent[] = $headerListForCSV;
+
+            foreach ($courseWorkInformationArray as $row) {
+                $csvContent[] = $row;
+            }
+            $csvContent[] = null;
+
+            $courseToolInformation .= Display::page_subheader2(
+                get_lang('Works')
+            );
+            $courseToolInformation .= Display::return_sortable_table(
+                $headerTool,
+                $courseWorkInformationArray
+            );
+        }
+        $courseToolInformationTotal = null;
+
+        if (!empty($courseToolInformation)) {
+            $sessionTitle = null;
+            if (!empty($sessionId)) {
+                $sessionTitle = ' ('.api_get_session_name($sessionId).')';
+            }
+
+            $courseToolInformationTotal .= Display::page_subheader(
+                $courseInfo['title'].$sessionTitle
+            );
+            $courseToolInformationTotal .= $courseToolInformation;
+        }
+
+        return array(
+            'array' => $csvContent,
+            'html' => $courseToolInformationTotal
+        );
+    }
+
 }

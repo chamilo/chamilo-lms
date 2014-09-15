@@ -949,7 +949,7 @@ if (isset($cidReset) && $cidReset) {
                             WHERE   user_id     = ".intval($_user ['user_id'])." AND
                                     course_code = '$course_code' AND
                                     session_id  = ".api_get_session_id()." AND
-                                    login_course_date > now() - INTERVAL $session_lifetime SECOND
+                                    login_course_date > '$time' - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {

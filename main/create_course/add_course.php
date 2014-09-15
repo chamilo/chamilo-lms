@@ -11,9 +11,7 @@
  * "Course validation" feature, technical adaptation for Chamilo 1.8.8:
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>
  */
-/**
- * Code
- */
+use \ChamiloSession as Session;
 
 // Name of the language file that needs to be included.
 $language_file = array('create_course', 'registration','admin','exercice', 'course_description', 'course_info');
@@ -223,7 +221,7 @@ if ($form->validate()) {
             $course_info = CourseManager::create_course($params);
 
             if (!empty($course_info)) {
-
+                /*
                 $directory  = $course_info['directory'];
                 $title      = $course_info['title'];
 
@@ -235,7 +233,11 @@ if ($form->validate()) {
                 $tpl->assign('course_id', $course_info['code']);
 
                 $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
-                $message = $tpl->fetch($add_course_tpl);
+                $message = $tpl->fetch($add_course_tpl);*/
+
+                $url = api_get_path(WEB_CODE_PATH).'course_info/start.php?cidReq='.$course_info['code'].'&first=1';
+                header('Location: '.$url);
+                exit;
 
             } else {
                 $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);

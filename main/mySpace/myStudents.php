@@ -8,7 +8,16 @@
  * Code
  */
 // name of the language file that needs to be included
-$language_file = array('registration', 'index', 'tracking', 'exercice', 'admin', 'gradebook', 'survey');
+$language_file = array(
+    'registration',
+    'index',
+    'tracking',
+    'exercice',
+    'admin',
+    'gradebook',
+    'survey',
+    'forum'
+);
 
 require_once '../inc/global.inc.php';
 
@@ -1054,7 +1063,7 @@ if (empty($_GET['details'])) {
 			<td><?php echo $nb_assignments ?></td>
 		</tr>
 		<tr><!-- messages -->
-			<td><?php echo get_lang('Messages') ?></td>
+			<td><?php echo get_lang('Forum').' - '.get_lang('NumberOfPostsForThisUser') ?></td>
 			<td><?php echo $messages ?></td>
 		</tr>
 		<tr><!-- links -->

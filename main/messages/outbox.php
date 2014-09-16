@@ -3,9 +3,7 @@
 /**
 *	@package chamilo.messages
 */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = array('registration','messages','userInfo');
 $cidReset=true;
@@ -55,14 +53,9 @@ function deselect_all(formita)
 //-->
 </script>';
 
-
 /*
 		MAIN CODE
 */
-
-//$nameTools = get_lang('Messages');
-
-//api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));

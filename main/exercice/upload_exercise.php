@@ -295,6 +295,9 @@ function lp_upload_quiz_action_handling() {
 
                 /** @var Question $answer */
                 switch ($detectQuestionType) {
+                    case FREE_ANSWER:
+                        $answer = new FreeAnswer();
+                        break;
                     case GLOBAL_MULTIPLE_ANSWER:
                         $answer = new GlobalMultipleAnswer();
                         break;
@@ -325,7 +328,8 @@ function lp_upload_quiz_action_handling() {
                     $objAnswer = new Answer($question_id, $courseId);
                     $globalScore = $score_list[$i][3];
                     
-                    // Calculate the number of correct answers to divide the score between them when importing from CSV
+                    // Calculate the number of correct answers to divide the 
+                    // score between them when importing from CSV
                     $numberRightAnswers = 0;
                     foreach ($answers_data as $answer_data) {
                         if (strtolower($answer_data[3]) == 'x') {
@@ -404,6 +408,11 @@ function lp_upload_quiz_action_handling() {
                     //var_dump($total);
 
                     $questionObj->save();
+                } else if ($detectQuestionType === FREE_ANSWER) {
+                    $questionObj = Question::read($question_id, $courseId);
+                    $globalScore = $score_list[$i][3];
+                    $questionObj->updateWeighting($globalScore);
+                    $questionObj->save();
                 }
             }
         }
@@ -462,7 +471,15 @@ function detectQuestionType($answers_data) {
         }
     }
 
-    $type =  $correct == 1 ? UNIQUE_ANSWER : MULTIPLE_ANSWER;
+    $type = '';
+
+    if ($correct == 1) {
+        $type = UNIQUE_ANSWER;
+    } else if ($correct > 1) {
+        $type = MULTIPLE_ANSWER;
+    } else {
+        $type = FREE_ANSWER;
+    }
 
     if ($type == MULTIPLE_ANSWER) {
         if ($isNumeric) {

@@ -172,7 +172,7 @@ class MultipleAnswer extends Question
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
 
-			if($goodAnswer){
+			if ($goodAnswer) {
     			$weighting = abs($weighting);
 			} else {
 				$weighting = abs($weighting);
@@ -192,7 +192,8 @@ class MultipleAnswer extends Question
         $this->save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null) {
+	function return_header($feedback_type = null, $counter = null, $score = null)
+    {
 	    $header = parent::return_header($feedback_type, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>
@@ -203,4 +204,6 @@ class MultipleAnswer extends Question
         $header .= '</tr>';
         return $header;
 	}
+
+
 }

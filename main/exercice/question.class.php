@@ -1485,7 +1485,14 @@ abstract class Question
      * @param   int     Type of question (see constants at beginning of question.class.php)
      * @param   int     Question level/category
      */
-    function create_question ($quiz_id, $question_name, $question_description = "" , $max_score = 0, $type = 1, $level = 1) {
+    function create_question (
+        $quiz_id,
+        $question_name,
+        $question_description = "" ,
+        $max_score = 0,
+        $type = 1,
+        $level = 1
+    ) {
         $course_id = api_get_course_int_id();
 
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -1501,7 +1508,7 @@ abstract class Question
             ." FROM $tbl_quiz_question q INNER JOIN $tbl_quiz_rel_question r"
             ." ON q.id = r.question_id"
             ." AND exercice_id = $quiz_id AND q.c_id = $course_id AND r.c_id = $course_id";
-        $rs_max = Database::query($sql, __FILE__, __LINE__);
+        $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
         $max_position = $row_max->max_position +1;
 

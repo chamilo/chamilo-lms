@@ -324,7 +324,14 @@ function lp_upload_quiz_action_handling() {
                     $globalScore = null;
                     $objAnswer = new Answer($question_id, $courseId);
                     $globalScore = $score_list[$i][3];
-                    var_dump('global -> '.$globalScore);
+                    
+                    // Calculate the number of correct answers to divide the score between them when importing from CSV
+                    $numberRightAnswers = 0;
+                    foreach ($answers_data as $answer_data) {
+                        if (strtolower($answer_data[3]) == 'x') {
+                            $numberRightAnswers++;
+                        }
+                    }                    
                     foreach ($answers_data as $answer_data) {
                         $answerValue = $answer_data[2];
                         $correct = 0;
@@ -341,7 +348,7 @@ function lp_upload_quiz_action_handling() {
                             }
                         }
 
-                        var_dump($answerValue);
+                        //var_dump($answerValue);
 
 
                         if ($useCustomScore) {
@@ -355,6 +362,7 @@ function lp_upload_quiz_action_handling() {
                         // Fixing scores:
                         switch ($detectQuestionType) {
                             case GLOBAL_MULTIPLE_ANSWER:
+                                $score /= $numberRightAnswers;
                                 break;
                             case UNIQUE_ANSWER:
                                 break;

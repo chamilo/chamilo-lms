@@ -2323,6 +2323,11 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             if (empty($result)) {
                 continue;
             }
+            
+            // In case of global score, make sure the calculated total score is integer
+            if (!is_int($result['score'])) {
+                $result['score'] = round($result['score']);
+            }
 
             $total_score += $result['score'];
             $total_weight += $result['weight'];

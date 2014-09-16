@@ -1145,7 +1145,7 @@ function get_forum_categories($id = '')
     $session_id = api_get_session_id();
     $course_id = api_get_course_int_id();
 
-    $condition_session = api_get_session_condition($session_id, true, true);
+    $condition_session = api_get_session_condition($session_id, true, false);
     $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if (empty($id)) {

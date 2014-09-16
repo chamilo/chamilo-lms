@@ -3808,7 +3808,13 @@ class SessionManager
                                             CourseManager::unsubscribe_user($teacher['user_id'], $course_code);
                                         }
                                     }
-                                    CourseManager::subscribe_user($teacherToAdd, $course_code, COURSEMANAGER);
+                                    foreach ($teacherToAdd as $teacherId) {
+                                        CourseManager::subscribe_user(
+                                            $teacherId,
+                                            $course_code,
+                                            COURSEMANAGER
+                                        );
+                                    }
                                 }
                             }
 

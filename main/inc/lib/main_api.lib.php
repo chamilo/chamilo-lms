@@ -1985,10 +1985,17 @@ function api_get_session_info($session_id) {
  * @param int $session_id
  * @param string $course_code
  * @param bool $ignore_visibility_for_admins
- * @return int  0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
+ * @return int
+ *  0 = session still available,
+ *  SESSION_VISIBLE_READ_ONLY = 1,
+ *  SESSION_VISIBLE = 2,
+ *  SESSION_INVISIBLE = 3
  */
-function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true)
-{
+function api_get_session_visibility(
+    $session_id,
+    $course_code = null,
+    $ignore_visibility_for_admins = true
+) {
     // Means that the session is still available.
     $visibility = 0;
 

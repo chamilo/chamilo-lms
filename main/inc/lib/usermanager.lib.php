@@ -2335,8 +2335,11 @@ class UserManager
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
-    public static function get_sessions_by_category($user_id, $is_time_over = false, $ignore_visibility_for_admins = false)
-    {
+    public static function get_sessions_by_category(
+        $user_id,
+        $is_time_over = false,
+        $ignore_visibility_for_admins = false
+    ) {
         // Database Table Definitions
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2395,8 +2398,35 @@ class UserManager
 
                 $session_id = $row['id'];
 
-                // Checking session visibility
-                $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
+                $courseList = UserManager::get_courses_list_by_session(
+                    $user_id,
+                    $row['id']
+                );
+
+                // General coach session visibility.
+                $visibility = api_get_session_visibility(
+                    $session_id,
+                    null,
+                    $ignore_visibility_for_admins
+                );
+
+                // Course Coach session visibility.
+                $atLeastOneCourseIsVisible = false;
+                foreach ($courseList as $course) {
+                    // Checking session visibility
+                    $visibility = api_get_session_visibility(
+                        $session_id,
+                        $course['code'],
+                        $ignore_visibility_for_admins
+                    );
+                    if ($visibility != SESSION_INVISIBLE) {
+                        $atLeastOneCourseIsVisible = true;
+                    }
+                }
+
+                if ($atLeastOneCourseIsVisible) {
+                    $visibility = $atLeastOneCourseIsVisible;
+                }
 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
@@ -2413,9 +2443,10 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['date_end'] = $row['date_end'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_before_beginning'] = $row['nb_days_access_before_beginning'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_after_end'] = $row['nb_days_access_after_end'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = UserManager::get_courses_list_by_session($user_id, $row['id']);
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = $courseList;
             }
         }
+
         return $categories;
 
     }

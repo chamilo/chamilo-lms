@@ -3776,7 +3776,16 @@ class SessionManager
 
                             // Custom courses/session coaches
                             $teacherToAdd = null;
+                            // Only one coach is added.
                             if ($onlyAddFirstCoachOrTeacher == true) {
+                                // Un subscribe everyone.
+                                $teacherList = CourseManager::get_teacher_list_from_course_code($course_code);
+                                if (!empty($teacherList)) {
+                                    foreach ($teacherList as $teacher) {
+                                        CourseManager::unsubscribe_user($teacher['user_id'], $course_code);
+                                    }
+                                }
+
                                 foreach ($course_coaches as $course_coach) {
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {
@@ -3784,11 +3793,19 @@ class SessionManager
                                         break;
                                     }
                                 }
+
                                 if (!empty($teacherToAdd)) {
                                     SessionManager::updateCoaches($session_id, $course_code, array($teacherToAdd), true);
+                                    CourseManager::subscribe_user(
+                                        $teacherToAdd,
+                                        $course_code,
+                                        COURSEMANAGER
+                                    );
                                 }
                             }
+
                             // See BT#6449#note-195
+                            // All coaches are added.
                             if ($removeAllTeachersFromCourse) {
                                 $teacherToAdd = null;
                                 foreach ($course_coaches as $course_coach) {

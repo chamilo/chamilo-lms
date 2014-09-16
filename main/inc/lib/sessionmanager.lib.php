@@ -3742,7 +3742,6 @@ class SessionManager
                             $savedCoaches = array();
                             // only edit if add_teachers_to_sessions_courses is set.
                             if ($addTeachersToSession) {
-
                                 if ($addOriginalCourseTeachersAsCourseSessionCoaches) {
                                     // Adding course teachers as course session teachers.
                                     $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code(
@@ -3807,8 +3806,8 @@ class SessionManager
                             if ($onlyAddFirstCoachOrTeacher == false) {
                                 // Checking one more time see BT#6449#note-149
                                 $coaches = SessionManager::getCoachesByCourseSession($session_id, $course_code);
-
-                                if (empty($coaches)) {
+                                // Update coaches if only there's 1 course see BT#6449#note-189
+                                if (empty($coaches) || count($courses) == 1) {
                                     foreach ($course_coaches as $course_coach) {
                                         $course_coach = trim($course_coach);
                                         $coach_id = UserManager::get_user_id_from_username($course_coach);

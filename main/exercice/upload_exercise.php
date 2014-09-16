@@ -6,10 +6,6 @@
  *  Encoding fixes Julio Montoya
  * 	@package chamilo.exercise
  */
-/**
- * Language files that should be included
- */
-
 use \ChamiloSession as Session;
 
 $language_file[] = 'learnpath';
@@ -82,7 +78,7 @@ function lp_upload_quiz_secondary_actions() {
 function lp_upload_quiz_main() {
 
     // variable initialisation
-    $lp_id = Security::remove_XSS($_GET['lp_id']);
+    $lp_id = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
 
     $form = new FormValidator('upload', 'POST', api_get_self() . '?' . api_get_cidreq() . '&lp_id='.$lp_id, '', array('enctype' => 'multipart/form-data'));
     $form->addElement('header', get_lang('ImportExcelQuiz'));
@@ -91,9 +87,7 @@ function lp_upload_quiz_main() {
     $link = '<a href="../exercice/quiz_template.xls">'.
              Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
     $form->addElement('advanced_settings', $link);
-
     $form->addElement('checkbox', 'user_custom_score', null, get_lang('UseCustomScoreForAllQuestions'), array('id'=> 'user_custom_score'));
-
     $form->addElement('html', '<div id="options" style="display:none">');
     $form->addElement('text', 'correct_score', get_lang('CorrectScore'));
     $form->addElement('text', 'incorrect_score', get_lang('IncorrectScore'));
@@ -114,6 +108,7 @@ function lp_upload_quiz_main() {
 function lp_upload_quiz_action_handling() {
     global $debug;
     $_course = api_get_course_info();
+    $courseId = $_course['real_id'];
 
     if (!isset($_POST['submit_upload_quiz'])) {
         return;
@@ -290,31 +285,64 @@ function lp_upload_quiz_action_handling() {
 
                 // Unique answers are the only question types available for now
                 // through xls-format import
-                $uniqueAnswer = new UniqueAnswer();
+
+                $question_id = null;
+
+                $detectQuestionType = detectQuestionType(
+                    $new_answer[$i],
+                    $score_list
+                );
+
+                /** @var Question $answer */
+                switch ($detectQuestionType) {
+                    case GLOBAL_MULTIPLE_ANSWER:
+                        $answer = new GlobalMultipleAnswer();
+                        break;
+                    case MULTIPLE_ANSWER:
+                        $answer = new MultipleAnswer();
+                        break;
+                    case UNIQUE_ANSWER:
+                    default:
+                        $answer = new UniqueAnswer();
+                        break;
+                }
+
                 if ($question_title != '') {
-                    $question_id = $uniqueAnswer->create_question(
+                    $question_id = $answer->create_question(
                         $quiz_id,
                         $question_title,
-                        $question_description_text
+                        $question_description_text,
+                        0, // max score
+                        $answer->type
                     );
                 }
 
-                if (is_array($new_answer[$i])) {
+                $total = 0;
+                if (is_array($new_answer[$i]) && !empty($question_id)) {
                     $id = 1;
                     $answers_data = $new_answer[$i];
-
+                    $globalScore = null;
+                    $objAnswer = new Answer($question_id, $courseId);
+                    $globalScore = $score_list[$i][3];
+                    var_dump('global -> '.$globalScore);
                     foreach ($answers_data as $answer_data) {
-                        $answer = $answer_data[2];
+                        $answerValue = $answer_data[2];
                         $correct = 0;
                         $score = 0;
-
                         if (strtolower($answer_data[3]) == 'x') {
                             $correct = 1;
                             $score = $score_list[$i][3];
                             $comment = $feedback_true_list[$i][2];
                         } else {
                             $comment = $feedback_false_list[$i][2];
+                            $floatVal = (float)$answer_data[3];
+                            if (is_numeric($floatVal)) {
+                                $score = $answer_data[3];
+                            }
                         }
+
+                        var_dump($answerValue);
+
 
                         if ($useCustomScore) {
                             if ($correct) {
@@ -324,22 +352,54 @@ function lp_upload_quiz_action_handling() {
                             }
                         }
 
-                        // Add answer.
-                        $uniqueAnswer->addAnswer(
-                            $id,
-                            $question_id,
-                            $answer,
+                        // Fixing scores:
+                        switch ($detectQuestionType) {
+                            case GLOBAL_MULTIPLE_ANSWER:
+                                break;
+                            case UNIQUE_ANSWER:
+                                break;
+                            case MULTIPLE_ANSWER:
+                                if (!$correct) {
+                                    //$total = $total - $score;
+                                }
+                                break;
+                        }
+
+                        $objAnswer->createAnswer(
+                            $answerValue,
+                            $correct,
                             $comment,
                             $score,
-                            $correct
+                            $id
                         );
 
+                        $total += $score;
                         $id++;
+
+                        //var_dump($score);
                     }
+
+                    $objAnswer->save();
+
+                    $questionObj = Question::read($question_id, $courseId);
+
+                    switch ($detectQuestionType) {
+                        case GLOBAL_MULTIPLE_ANSWER:
+                            $questionObj->updateWeighting($globalScore);
+                            break;
+                        case UNIQUE_ANSWER:
+                        case MULTIPLE_ANSWER:
+                        default:
+                            $questionObj->updateWeighting($total);
+                            break;
+                    }
+                    //var_dump($total);
+
+                    $questionObj->save();
                 }
             }
         }
-
+    // exit;
         if (isset($_SESSION['lpobject'])) {
             if ($debug > 0) {
                 error_log('New LP - SESSION[lpobject] is defined', 0);
@@ -377,8 +437,37 @@ function lp_upload_quiz_action_handling() {
     }
 }
 
+/**
+ * @param array $answers_data
+ * @return int
+ */
+function detectQuestionType($answers_data) {
+    $correct = 0;
+    $isNumeric = false;
+    foreach ($answers_data as $answer_data) {
+        if (strtolower($answer_data[3]) == 'x') {
+            $correct++;
+        } else {
+            if (is_numeric($answer_data[3])) {
+                $isNumeric = true;
+            }
+        }
+    }
 
-if ($origin != 'learnpath') {
+    $type =  $correct == 1 ? UNIQUE_ANSWER : MULTIPLE_ANSWER;
+
+    if ($type == MULTIPLE_ANSWER) {
+        if ($isNumeric) {
+            $type = MULTIPLE_ANSWER;
+        } else {
+            $type = GLOBAL_MULTIPLE_ANSWER;
+        }
+    }
+
+    return $type;
+}
+
+if (!isset($origin) || isset($origin) && $origin != 'learnpath') {
     //so we are not in learnpath tool
     Display :: display_footer();
 }

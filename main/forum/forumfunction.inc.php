@@ -1272,7 +1272,7 @@ function get_forums(
         $session_id = $sessionId;
     }
 
-    $condition_session = api_get_session_condition($session_id, true, true);
+    $condition_session = api_get_session_condition($session_id, true, false);
     $course_id = $course_info['real_id'];
 
     $forum_list = array();

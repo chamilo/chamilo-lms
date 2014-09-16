@@ -717,6 +717,11 @@ switch ($action) {
         if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id())) {
             api_not_allowed();
         }
+        global $_configuration;
+        if (isset($_configuration['hide_scorm_pdf_link']) && $_configuration['hide_scorm_pdf_link']) {
+            api_not_allowed(true);
+        }
+
         if ($debug > 0) error_log('New LP - export action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for export_to_pdf', 0); require 'lp_list.php';
         } else {

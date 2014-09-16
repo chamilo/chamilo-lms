@@ -199,3 +199,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['hide_scorm_export_link'] = false;
 // If true the copy link is blocked.
 //$_configuration['hide_scorm_copy_link'] = false;
+// If true the pdf export link is blocked.
+//$_configuration['hide_scorm_pdf_link'] = false;

@@ -764,9 +764,9 @@ class ImportCsv
             $this->daysCoachAccessAfterBeginning,
             $this->defaultSessionVisibility,
             $avoid,
-            false,
-            false,
-            true
+            false, // deleteUsersNotInList
+            false, // updateCourseCoaches
+            true // sessionWithCoursesModifier
         );
 
         if (!empty($result['error_message'])) {

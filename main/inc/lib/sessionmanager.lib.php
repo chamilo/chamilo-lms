@@ -3536,7 +3536,6 @@ class SessionManager
                         $session_id = $my_session_result['id'];
 
                         if ($session_id) {
-
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
@@ -3628,7 +3627,6 @@ class SessionManager
                 }
 
                 $sessionList[] = $session_id;
-
                 $users = explode('|', $enreg['Users']);
 
                 // Adding the relationship "Session - User" for students
@@ -3675,7 +3673,7 @@ class SessionManager
 
                 // See BT#6449
                 $onlyAddFirstCoachOrTeacher = false;
-                $removeAllTeachersFromCourse = false;
+                $removeAllTeachersFromCourse = true;
 
                 if ($sessionWithCoursesModifier) {
                     if (count($courses) >= 2) {
@@ -3683,7 +3681,7 @@ class SessionManager
                         $onlyAddFirstCoachOrTeacher = true;
 
                         // Remove all teachers from course.
-                        $removeAllTeachersFromCourse = true;
+                        $removeAllTeachersFromCourse = false;
                     }
                 }
 
@@ -3790,16 +3788,28 @@ class SessionManager
                                     SessionManager::updateCoaches($session_id, $course_code, array($teacherToAdd), true);
                                 }
                             }
-
-                            if ($removeAllTeachersFromCourse && !empty($teacherToAdd)) {
-                                // Deleting all course teachers and adding the only coach as teacher.
-                                $teacherList = CourseManager::get_teacher_list_from_course_code($course_code);
-                                if (!empty($teacherList)) {
-                                    foreach ($teacherList as $teacher) {
-                                        CourseManager::unsubscribe_user($teacher['user_id'], $course_code);
+                            // See BT#6449#note-195
+                            if ($removeAllTeachersFromCourse) {
+                                $teacherToAdd = null;
+                                foreach ($course_coaches as $course_coach) {
+                                    $coach_id = UserManager::get_user_id_from_username(
+                                        $course_coach
+                                    );
+                                    if ($coach_id !== false) {
+                                        $teacherToAdd[] = $coach_id;
                                     }
                                 }
-                                CourseManager::subscribe_user($teacherToAdd, $course_code, COURSEMANAGER);
+
+                                if (!empty($teacherToAdd)) {
+                                    // Deleting all course teachers and adding the only coach as teacher.
+                                    $teacherList = CourseManager::get_teacher_list_from_course_code($course_code);
+                                    if (!empty($teacherList)) {
+                                        foreach ($teacherList as $teacher) {
+                                            CourseManager::unsubscribe_user($teacher['user_id'], $course_code);
+                                        }
+                                    }
+                                    CourseManager::subscribe_user($teacherToAdd, $course_code, COURSEMANAGER);
+                                }
                             }
 
                             // Continue default behaviour.

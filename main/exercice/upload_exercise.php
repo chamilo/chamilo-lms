@@ -324,7 +324,8 @@ function lp_upload_quiz_action_handling() {
                     $globalScore = null;
                     $objAnswer = new Answer($question_id, $courseId);
                     $globalScore = $score_list[$i][3];
-                    //var_dump('global -> '.$globalScore);
+                    
+                    // Calculate the number of correct answers to divide the score between them when importing from CSV
                     $numberRightAnswers = 0;
                     foreach ($answers_data as $answer_data) {
                         if (strtolower($answer_data[3]) == 'x') {

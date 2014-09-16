@@ -295,6 +295,9 @@ function lp_upload_quiz_action_handling() {
 
                 /** @var Question $answer */
                 switch ($detectQuestionType) {
+                    case FREE_ANSWER:
+                        $answer = new FreeAnswer();
+                        break;
                     case GLOBAL_MULTIPLE_ANSWER:
                         $answer = new GlobalMultipleAnswer();
                         break;
@@ -324,7 +327,7 @@ function lp_upload_quiz_action_handling() {
                     $globalScore = null;
                     $objAnswer = new Answer($question_id, $courseId);
                     $globalScore = $score_list[$i][3];
-                    var_dump('global -> '.$globalScore);
+                    //var_dump('global -> '.$globalScore);
                     foreach ($answers_data as $answer_data) {
                         $answerValue = $answer_data[2];
                         $correct = 0;
@@ -341,7 +344,7 @@ function lp_upload_quiz_action_handling() {
                             }
                         }
 
-                        var_dump($answerValue);
+                        //var_dump($answerValue);
 
 
                         if ($useCustomScore) {
@@ -395,6 +398,11 @@ function lp_upload_quiz_action_handling() {
                     }
                     //var_dump($total);
 
+                    $questionObj->save();
+                } else if ($detectQuestionType === FREE_ANSWER) {
+                    $questionObj = Question::read($question_id, $courseId);
+                    $globalScore = $score_list[$i][3];
+                    $questionObj->updateWeighting($globalScore);
                     $questionObj->save();
                 }
             }
@@ -454,7 +462,15 @@ function detectQuestionType($answers_data) {
         }
     }
 
-    $type =  $correct == 1 ? UNIQUE_ANSWER : MULTIPLE_ANSWER;
+    $type = '';
+
+    if ($correct == 1) {
+        $type = UNIQUE_ANSWER;
+    } else if ($correct > 1) {
+        $type = MULTIPLE_ANSWER;
+    } else {
+        $type = FREE_ANSWER;
+    }
 
     if ($type == MULTIPLE_ANSWER) {
         if ($isNumeric) {

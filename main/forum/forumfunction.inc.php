@@ -55,13 +55,8 @@ function handle_forum_and_forumcategories($lp_id = null)
     $get_content = isset($_GET['content']) ? $_GET['content'] : '';
     $post_submit_cat = isset($_POST['SubmitForumCategory']) ? true : false;
     $post_submit_forum = isset($_POST['SubmitForum']) ? true : false;
-    $get_id = isset($_GET['id']) ? $_GET['id'] : '';
+    $get_id = isset($_GET['id']) ? intval($_GET['id']) : '';
     $forum_categories_list = get_forum_categories();
-
-    // Verify if exist content and action
-    if ((($action_forum_cat == '' || $get_content == '') && !$post_submit_cat) && !$post_submit_forum) {
-        return null;
-    }
 
     //Verify if forum category exists
     if (empty($forum_categories_list)) {
@@ -82,10 +77,6 @@ function handle_forum_and_forumcategories($lp_id = null)
         show_add_forum_form($inputvalues, $lp_id);
     }
 
-    //Verify if id is set
-    if ($get_id == '') {
-        return null;
-    }
     // Edit a forum category
     if (($action_forum_cat == 'edit' && $get_content == 'forumcategory') || (isset($_POST['SubmitEditForumCategory'])) ? true : false) {
         $forum_category = get_forum_categories($get_id);

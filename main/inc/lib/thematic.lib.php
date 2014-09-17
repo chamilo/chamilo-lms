@@ -910,7 +910,7 @@ class Thematic
         $error = null;
 		$a_thematic_advance_ids = array();
         $course_id = api_get_course_int_id();
-
+        $sessionId = api_get_session_id();
 
 		if (!empty($thematic_data)) {
 			foreach ($thematic_data as $thematic) {
@@ -919,9 +919,9 @@ class Thematic
 				if (!empty($thematic_advance_data[$thematic['id']])) {
 					foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
 
-						$item_info = api_get_item_property_info(api_get_course_int_id(), 'thematic_advance', $thematic_advance['id']);
+						$item_info = api_get_item_property_info(api_get_course_int_id(), 'thematic_advance', $thematic_advance['id'], $sessionId);
 
-						if ($item_info['id_session'] == api_get_session_id()) {
+						if ($item_info['id_session'] == $sessionId) {
 
     						$a_thematic_advance_ids[] = $thematic_advance['id'];
 
@@ -953,17 +953,16 @@ class Thematic
 
             // update item_property
             $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-            $session_id = api_get_session_id();
 
             // get all thematic advance done
             $rs_thematic_done = Database::query("SELECT ref FROM $tbl_item_property
-                                WHERE c_id = $course_id AND tool='thematic_advance' AND lastedit_type='ThematicAdvanceDone' AND id_session = $session_id ");
+                                WHERE c_id = $course_id AND tool='thematic_advance' AND lastedit_type='ThematicAdvanceDone' AND id_session = $sessionId ");
             if (Database::num_rows($rs_thematic_done) > 0) {
                 while ($row_thematic_done = Database::fetch_array($rs_thematic_done)) {
                     $ref = $row_thematic_done['ref'];
                     if (in_array($ref, $a_thematic_advance_ids)) { continue; }
                     // update items
-                    Database::query("UPDATE $tbl_item_property SET lastedit_date='".api_get_utc_datetime()."', lastedit_type='ThematicAdvanceUpdated', lastedit_user_id = $user_id WHERE c_id = $course_id AND tool='thematic_advance' AND ref=$ref AND id_session = $session_id  ");
+                    Database::query("UPDATE $tbl_item_property SET lastedit_date='".api_get_utc_datetime()."', lastedit_type='ThematicAdvanceUpdated', lastedit_user_id = $user_id WHERE c_id = $course_id AND tool='thematic_advance' AND ref=$ref AND id_session = $sessionId  ");
                 }
             }
 		}

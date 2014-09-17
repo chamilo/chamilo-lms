@@ -3342,7 +3342,8 @@ class SessionManager
         $deleteUsersNotInList = false,
         $updateCourseCoaches = false,
         $sessionWithCoursesModifier = false,
-        $addOriginalCourseTeachersAsCourseSessionCoaches = true
+        $addOriginalCourseTeachersAsCourseSessionCoaches = true,
+        $removeAllTeachersFromCourse = true
     ) {
         $content = file($file);
 
@@ -3673,7 +3674,6 @@ class SessionManager
 
                 // See BT#6449
                 $onlyAddFirstCoachOrTeacher = false;
-                $removeAllTeachersFromCourse = true;
 
                 if ($sessionWithCoursesModifier) {
                     if (count($courses) >= 2) {

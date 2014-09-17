@@ -478,7 +478,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 $deleteUsersNotInList,
                 $updateCourseCoaches,
                 false,
-                $addOriginalCourseTeachersAsCourseSessionCoaches
+                $addOriginalCourseTeachersAsCourseSessionCoaches,
+                false
             );
             $sessionList = $result['session_list'];
             $error_message = $result['error_message'];

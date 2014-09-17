@@ -1108,7 +1108,12 @@ class DocumentManager
             return false;
         }
 
-        $itemInfo = api_get_item_property_info($_course['real_id'], TOOL_DOCUMENT, $documentId, 0);
+        $itemInfo = api_get_item_property_info(
+            $_course['real_id'],
+            TOOL_DOCUMENT,
+            $documentId,
+            $sessionId
+        );
 
         if (empty($itemInfo)) {
             return false;

@@ -234,7 +234,9 @@ class Thematic
 	        $condition_session = '';
 	        if (empty($session_id)) {
                 $condition_session = api_get_session_condition(0);
-	        }
+	        } else {
+                $condition_session = api_get_session_condition($session_id, true, true);
+            }
 	    	$condition = " WHERE active = 1 $condition_session ";
 	    }
 		$sql = "SELECT * FROM $tbl_thematic $condition AND c_id = $course_id ORDER BY display_order ";

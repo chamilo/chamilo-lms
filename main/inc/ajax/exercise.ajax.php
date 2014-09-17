@@ -262,7 +262,7 @@ switch ($action) {
             $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
 
             // Question info.
-            $question_id = intval($_REQUEST['question_id']);
+            $question_id = isset($_REQUEST['question_id']) ? intval($_REQUEST['question_id']) : null;
             $question_list = $_SESSION['questionList'];
 
             // If exercise or question is not set then exit.
@@ -353,7 +353,8 @@ switch ($action) {
                     continue;
                 }
 
-                $my_choice = $choice[$my_question_id];
+                $my_choice = isset($choice[$my_question_id]) ?
+                    $choice[$my_question_id] : null;
 
                 if ($debug) {
                     error_log("my_choice = ".print_r($my_choice, 1)."");

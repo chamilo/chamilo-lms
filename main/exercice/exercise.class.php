@@ -2041,13 +2041,13 @@ class Exercise
 
         $extra_data = array();
         $final_overlap = 0;
-        $final_missing =0;
-        $final_excess =0;
-        $overlap_color =0;
-        $missing_color =0;
-        $excess_color =0;
-        $threadhold1 =0;
-        $threadhold2 =0;
+        $final_missing = 0;
+        $final_excess = 0;
+        $overlap_color = 0;
+        $missing_color = 0;
+        $excess_color = 0;
+        $threadhold1 = 0;
+        $threadhold2 = 0;
         $threadhold3 = 0;
 
         $arrques = null;
@@ -2407,6 +2407,7 @@ class Exercise
                             $answer .= $temp;
                             break;
                         }
+
                         if ($from_database) {
                             $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                           WHERE
@@ -2434,11 +2435,9 @@ class Exercise
 							$choice[$j] = api_htmlentities(trim($choice[$j]));
                         }
 
-                        //No idea why we api_strtolower user reponses
-                        //$user_tags[] = api_strtolower($choice[$j]);
+
                         $user_tags[] = $choice[$j];
                         //put the contents of the [] answer tag into correct_tags[]
-                        //$correct_tags[] = api_strtolower(api_substr($temp, 0, $pos));
                         $correct_tags[] = api_substr($temp, 0, $pos);
                         $j++;
                         $temp = api_substr($temp, $pos +1);

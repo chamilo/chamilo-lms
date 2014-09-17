@@ -165,8 +165,6 @@ $_configuration['deny_delete_users'] = false;
 $_configuration['system_version']    = '{NEW_VERSION}';
 $_configuration['system_stable']     = NEW_VERSION_STABLE;
 
-// Hide private courses from course catalog
-//$_configuration['course_catalog_hide_private'] = false;
 /**
  * Settings to be included as settings_current in future versions
  */
@@ -201,3 +199,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['hide_scorm_export_link'] = false;
 // If true the copy link is blocked.
 //$_configuration['hide_scorm_copy_link'] = false;
+// Hide private courses from course catalog
+//$_configuration['course_catalog_hide_private'] = false;

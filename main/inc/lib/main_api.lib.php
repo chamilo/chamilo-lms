@@ -1276,6 +1276,26 @@ function api_get_user_info_from_username($username = '')
 }
 
 /**
+ * Get first user with an email
+ * @param string $email
+ * @return array|bool
+ */
+function api_get_user_info_from_email($email = '')
+{
+    if (empty($email)) {
+        return false;
+    }
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
+            WHERE email ='".Database::escape_string($email)."' LIMIT 1";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+        return _api_format_user($result_array);
+    }
+    return false;
+}
+
+/**
  * @return string
  */
 function api_get_course_id() {

@@ -201,3 +201,7 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['hide_scorm_copy_link'] = false;
 // If true the pdf export link is blocked.
 //$_configuration['hide_scorm_pdf_link'] = false;
+// Default session days before coach access
+//$_configuration['session_days_before_coach_access'] = 0;
+// Default session days after coach access
+//$_configuration['session_days_after_coach_access'] = 0;

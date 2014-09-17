@@ -145,8 +145,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	}
 }
 
-$nb_days_acess_before = 0;
-$nb_days_acess_after = 0;
+global $_configuration;
+$defaultBeforeDays = isset($_configuration['session_days_before_coach_access']) ?
+    $_configuration['session_days_before_coach_access'] : 0;
+$defaultAfterDays = isset($_configuration['session_days_after_coach_access'])
+    ? $_configuration['session_days_after_coach_access'] : 0;
+
+$nb_days_acess_before = $defaultBeforeDays;
+$nb_days_acess_after = $defaultAfterDays;
 
 $thisYear=date('Y');
 $thisMonth=date('m');

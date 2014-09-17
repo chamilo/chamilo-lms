@@ -40,8 +40,8 @@ class ImportCsv
      * @var int number of years
      */
     public $expirationDateInUserUpdate = 1;
-    public $daysCoachAccessBeforeBeginning = 30;
-    public $daysCoachAccessAfterBeginning = 60;
+    public $daysCoachAccessBeforeBeginning = 14;
+    public $daysCoachAccessAfterBeginning = 14;
     public $conditions;
 
     /**

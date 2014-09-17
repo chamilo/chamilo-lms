@@ -18,6 +18,7 @@ if (api_get_setting('allow_social_tool') !='true') {
 }
 
 $user_id = api_get_user_id();
+$isAdmin = api_is_platform_admin($user_id);
 
 $show_full_profile = true;
 //social tab
@@ -64,6 +65,12 @@ if (isset($_GET['u'])) {
     }
 } else {
     $user_info    = UserManager::get_user_info_by_id($user_id);
+}
+
+if ($user_info['user_id'] == api_get_user_id()) {
+    $isSelfUser = true;
+} else {
+    $isSelfUser = false;
 }
 $libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
@@ -314,7 +321,9 @@ if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 
 if ($show_full_profile) {
     $personal_info .=  '<dl class="dl-horizontal">';
-    $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'    </dd>';
+    if ($isAdmin || $isSelfUser) {
+        $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'    </dd>';
+    }
     if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
         $personal_info .=  '<dt>'.get_lang('Name')
             .'</dt><dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
@@ -334,7 +343,9 @@ if ($show_full_profile) {
 } else {
     $personal_info .=  '<dl class="dl-horizontal">';
     if (!empty($user_info['username'])) {
-        $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
+        if ($isAdmin || $isSelfUser) {
+            $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
+        }
     }
     $personal_info .=  '</dl>';
 }

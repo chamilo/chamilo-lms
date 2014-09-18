@@ -27,8 +27,19 @@ class InstallationStep extends AbstractStep
 
         $action = $this->getRequest()->query->get('action');
         switch ($action) {
+            case 'pages':
+                $this->handleAjaxAction(
+                    'sonata:page:update-core-routes', array('--site' => 'all')
+                );
+                return $this->handleAjaxAction(
+                    'sonata:page:create-snapshots',
+                    array('--site' => 'all')
+                );
             case 'fixtures':
-                return $this->handleAjaxAction('oro:migration:data:load', array('--fixtures-type' => 'demo'));
+                return $this->handleAjaxAction(
+                    'oro:migration:data:load',
+                    array('--fixtures-type' => 'demo')
+                );
             case 'navigation':
                 return $this->handleAjaxAction('oro:navigation:init');
 //            case 'js-routing':
@@ -40,6 +51,7 @@ class InstallationStep extends AbstractStep
                     'oro:assets:install',
                     array('target' => './', '--exclude' => ['OroInstallerBundle'])
                 );*/
+
                 $settingsManager = $this->container->get('chamilo.settings.manager');
                 $settingsManager->installSchemas();
 

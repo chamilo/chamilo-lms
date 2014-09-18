@@ -132,5 +132,3 @@ sonata_admin:
             - assetic/sonata_jqueryui_js.js
             - assetic/sonata_formatter_js.js
             - bundles/sonataformatter/vendor/ckeditor/ckeditor.js
-                    #- sonata.demo.admin.car
-                    #- sonata.demo.admin.engine

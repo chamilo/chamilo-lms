@@ -83,7 +83,7 @@ class MailerType extends AbstractType
                 'chamilo_installer_mailer_password',
                 'password',
                 array(
-                    'label'         => 'configuration.mailer.password',
+                    'label'         => 'form.configuration.mailer.password',
                     'required'      => false,
                 )
             );

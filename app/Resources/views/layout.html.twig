@@ -1,21 +1,14 @@
 {% extends "AvanzuAdminThemeBundle:layout:base-layout.html.twig" %}
 
-{#{% block stylesheets %}#}
-    {#<link rel="stylesheet" href="{{ asset_url }}" />#}
-{#{% endblock %}#}
-
-{#{% javascripts#}
-{#"@bootstrap_js" %}#}
-{#<script src="{{ asset_url }}"></script>#}
-{#{% endjavascripts %}#}
-
 {% block title %}
     {#{{ parent() }}#}
-    {{ 'site_name' | get_setting -}}
+    {#{{ 'site_name' | get_setting -}}#}
+    {{ chamilo_settings_get('platform.site_name') }}
 {% endblock %}
 
 {% block avanzu_logo %}
-    {{- 'institution' | get_setting -}}
+    {#{{- 'institution' | get_setting -}}#}
+    {{- chamilo_settings_get('platform.institution') -}}
 {% endblock %}
 
 {% block page_title %}

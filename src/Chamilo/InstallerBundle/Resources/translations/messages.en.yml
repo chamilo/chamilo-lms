@@ -34,6 +34,8 @@ form:
                 sendmail: Sendmail
                 smtp: SMTP
             user: User
+            port: Port
+            encryption: Encryption
         system:
             header:       System settings
             secret:       Secret
@@ -50,8 +52,11 @@ form:
             phone:            Phone
         portal:
             header: Portal information
+            institution: Institution
+            institution_url: Institution URL
+            site_name: Site name
             portal_name: Portal name
-            company_title:    Company name
+            company_title: Company name
             company_url: Company URL
             allow_self_registration_as_trainer: Allow self-registration as a trainer
             allow_self_registration: Allow self-registration

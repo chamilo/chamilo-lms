@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CheckUniqueEmail = "Verificar que los correos sean únicos.";
+$EmailUsedTwice = "El correo electrónico ya esta registrado en el sistema.";
+$UserXSessionY = "Usuario: %s - Sesión: %s";
 $NextTopic = "Próximo tema";
 $CurrentTopic = "Tema actual";
 $ShowFullCourseAdvance = "Ver programación";

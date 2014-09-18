@@ -2366,10 +2366,11 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $form->setConstants(array('sec_token' => $token));
 
         $iframe = null;
-
-        if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread') {
-            $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($my_thread)."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
+        $my_thread = Security::remove_XSS($my_thread);
+        if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($my_thread)) {
+            $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".$my_thread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
         }
+
         if (!empty($iframe)) {
             $form->addElement('label', get_lang('Thread'), $iframe);
         }

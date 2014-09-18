@@ -1603,5 +1603,4 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
-$SessionDurationXDaysLeft = "%s days left";
 ?>

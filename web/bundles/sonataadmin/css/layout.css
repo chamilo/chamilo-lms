@@ -242,6 +242,17 @@ div.sonata-medium-date div {
     background-color: #f5f5f5;
 }
 
+.sonata-ba-view-container.history-audit-compare th {
+     width: 10%;
+}
+
+.sonata-ba-view-container.history-audit-compare td {
+     width: 40%;
+}
+.sonata-ba-view-container.history-audit-compare th.diff {
+     background: pink;
+}
+
 .container-fluid > .sidebar {
     top: auto;
 }
@@ -254,6 +265,10 @@ div.sonata-medium-date div {
 
 .sonata-collection-delete {
     float: left;
+}
+
+.sonata-collection-add, .sonata-collection-delete {
+    box-shadow: none;
 }
 
 .no-js .sonata-collection-add, .no-js .sonata-collection-delete {
@@ -325,4 +340,14 @@ legend.sonata-ba-fieldset-collapsed-description + .sonata-ba-collapsed-fields {
 
 .form-horizontal .control-group {
     margin-bottom: 10px;
+}
+
+.noscript-warning {
+    background-color: #C70A0A;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 4px 0;
+    text-align: center;
+    width: 100%;
 }

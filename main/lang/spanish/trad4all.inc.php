@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FieldTypeMobilePhoneNumber = "Número de móvil";
+$CheckUniqueEmail = "Verificar que los correos sean únicos.";
+$EmailUsedTwice = "El correo electrónico ya esta registrado en el sistema.";
+$UserXSessionY = "Usuario: %s - Sesión: %s";
+$SessionDurationXDaysLeft = "Esta sesión tiene una duración máxima. Solo quedan %s días.";
 $NextTopic = "Próximo tema";
 $CurrentTopic = "Tema actual";
 $ShowFullCourseAdvance = "Ver programación";

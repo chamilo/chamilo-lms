@@ -204,42 +204,12 @@ $form->addElement(
     $status,
     array(
         'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();',
-        'class' => 'chzn-select'
+        'class' => 'chzn-select',
+        'multiple' => 'multiple'
     )
 );
 
 $display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
-
-/*
-$form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
-$drh_select = $form->addElement('select', 'hr_dept_id', get_lang('Drh'), array(), 'id="drh_select"');
-$drh_list = UserManager :: get_user_list(array('status' => DRH), api_sort_by_first_name() ? array('firstname', 'lastname') : array('lastname', 'firstname'));
-
-if (count($drh_list) == 0) {
-	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible', '').' -', 0);
-} else {
-	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -', 0);
-}
-
-foreach($drh_list as $drh) {
-	$drh_select->addOption(api_get_person_name($drh['firstname'], $drh['lastname']), $drh['user_id']);
-}
-$form->addElement('html', '</div>');
-*/
-
-//Language
-/*if (api_is_platform_admin()) {
-	$group = array();
-	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
-	$group[] =$form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
-
-	$user_data['status'] == 1 ? $display = 'block':$display = 'none';
-
-	$form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
-	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
-	$form->addElement('html', '</div>');
-}*/
 
 //Language
 $form->addElement('select_language', 'language', get_lang('Language'));
@@ -252,8 +222,17 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
 
 // Registration Date
 $creatorInfo = api_get_user_info($user_data['creator_id']);
-$date = sprintf(get_lang('CreatedByXYOnZ'), 'user_information.php?user_id='.$user_data['creator_id'], $creatorInfo['username'], $user_data['registration_date']);
-$form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('RegistrationDate').'</label><div class="controls">'.$date.'</div></div>');
+$date = sprintf(
+    get_lang('CreatedByXYOnZ'),
+    'user_information.php?user_id='.$user_data['creator_id'],
+    $creatorInfo['username'],
+    $user_data['registration_date']
+);
+$form->addElement(
+    'label',
+    get_lang('RegistrationDate'),
+    $date
+);
 
 // Expiration Date
 if (!$user_data['platform_admin']) {
@@ -309,15 +288,17 @@ if ($expiration_date == '0000-00-00 00:00:00') {
 }
 
 $user = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user_data['user_id']);
-/*$roles = $user->getGroups();
+$roles = $user->getGroups();
 
-$role  = array();
+$roleToArray  = array();
 if (!empty($roles)) {
-    $role = current($roles);
-    $role = $role->getId();
+    foreach($roles as $role) {
+        $roleId = $role->getId();
+        $roleToArray[] = $roleId;
+    }
 }
 
-$user_data['status'] = $role;*/
+$user_data['status'] = $roleToArray;
 $form->setDefaults($user_data);
 
 $error_drh = false;
@@ -352,7 +333,7 @@ if ($form->validate()) {
         $email = $user['email'];
         $phone = $user['phone'];
         $username = $user['username'];
-        $status = intval($user['status']);
+        $status = $user['status'];
         $send_mail = intval($user['send_mail']);
         $reset_password = intval($user['reset_password']);
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
@@ -366,7 +347,7 @@ if ($form->validate()) {
 
         $active = isset($user['active']) ? intval($user['active']) : 0;
 
-        if (api_get_setting('login_is_email') == 'true') {
+        if (api_get_setting('profile.login_is_email') == 'true') {
             $username = $email;
         }
 
@@ -393,9 +374,10 @@ if ($form->validate()) {
             $reset_password
         );
 
-        if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
+        /*if (api_get_setting('openid_authentication') == 'true' && !empty
+            ($user['openid'])) {
             $up = UserManager::update_openid($user_id, $user['openid']);
-        }
+        }*/
 
         // Using the extra field value obj
         $extraFieldValues = new ExtraFieldValue('user');

@@ -777,13 +777,18 @@ class UserManager
             $auth_source = $auth_source;
         }
 
-        if ($user_id != strval(intval($user_id))) return false;
-        if ($user_id === false) return false;
+        if ($user_id != strval(intval($user_id))) {
+            return false;
+        }
 
-        //Checking the user language
-        $languages = api_get_languages();
-        if (!in_array($language, $languages['folder'])) {
-            $language = api_get_setting('platformLanguage');
+        if ($user_id === false) {
+            return false;
+        }
+
+        // Checking the user language.
+        $languages = api_get_platform_isocodes();
+        if (!in_array($language, $languages)) {
+            $language = Container::getTranslator()->getLocale();
         }
 
         if (!is_null($password)) {
@@ -802,6 +807,8 @@ class UserManager
             }
         }
 
+
+
         $em = Database::getManager();
         /** @var Chamilo\UserBundle\Entity\User $user */
 
@@ -818,10 +825,13 @@ class UserManager
         if ($user_info['active'] != $active) {
             self::change_active_state($user_id, $active);
         }
-        // Adding user
-        $user->setLastname($lastname)
+
+        // Updating user
+
+        $user
+            ->setLastname($lastname)
             ->setFirstname($firstname)
-            ->setPassword($password)
+            //->setPassword($password)
             ->setUsername($username)
             ->setAuthSource($auth_source)
             ->setLanguage($language)
@@ -834,10 +844,26 @@ class UserManager
             ->setHrDeptId($hr_dept_id)
         ;
 
-        $group = $em->getRepository('ChamiloUserBundle:Group')->find($status);
-        $user->addGroup($group);
+        if (!empty($original_password)) {
+            $user->setPlainPassword($original_password);
+        }
+
+        if (is_array($status)) {
+            foreach ($status as $groupId) {
+                $group = $em->getRepository('ChamiloUserBundle:Group')->find($groupId);
+                $user->addGroup($group);
+            }
+        } else {
+            $group = $em->getRepository('ChamiloUserBundle:Group')->find(
+                $status
+            );
+            $user->addGroup($group);
+        }
+
         Container::getUserManager()->updateUser($user, true);
+
         if (!empty($email) && $send_email) {
+            //Container::getMailer()->send()
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
             $emailsubject = '['.api_get_setting('platform.site_name').'] '.get_lang('YourReg').' '.api_get_setting('platform.site_name');
             $sender_name = api_get_person_name(

@@ -125,9 +125,9 @@ services:
 
     chamilo_core.encoder:
         class: Chamilo\UserBundle\Security\Encoder
+        arguments: ['%password_encryption%']
 
     # Settings
-
     chamilo_core.settings_schema.admin:
         class: Chamilo\CoreBundle\Settings\AdminSettingsSchema
         tags:

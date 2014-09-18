@@ -199,11 +199,11 @@ doctrine_migrations:
     table_name: chamilo_migration_versions
     name: Chamilo Migrations
 
-fos_advanced_encoder:
-    encoders:
-        FOS\UserBundle\Model\UserInterface: sha512
-        legacy_encoder:
-            id: chamilo_core.encoder
+#fos_advanced_encoder:
+#    encoders:
+#        FOS\UserBundle\Model\UserInterface: sha512
+#        legacy_encoder:
+#            id: chamilo_core.encoder
 
 sonata_admin:
     title:      Chamilo

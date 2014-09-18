@@ -30,10 +30,10 @@ class Login
     {
         $portal_url = api_get_path(WEB_PATH);
 
-        if (api_is_multiple_url_enabled()) {
+        /*if (api_is_multiple_url_enabled()) {
             $url = api_get_current_access_url_info();
             $portal_url = $url['url'];
-        }
+        }*/
 
         if ($reset) {
             if ($by_username) {

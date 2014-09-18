@@ -224,4 +224,12 @@ class Container
     {
         return self::$container->get('fos_user.group_manager');
     }
+
+    /**
+     * @return \Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
+     */
+    public static function getEventDispatcher()
+    {
+        return self::$container->get('event_dispatcher');
+    }
 }

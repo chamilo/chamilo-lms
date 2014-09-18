@@ -115,6 +115,17 @@ class LegacyListener
             }
         }
 
+        /** @var \Sonata\PageBundle\Model\SnapshotPageProxy $page */
+        $page = $request->get('page');
+        if (isset($page)) {
+            $siteId = $page->getSite()->getId();
+            $request->getSession()->set('url_info', $page->getSite());
+        } else {
+            $siteId = 1;
+        }
+
+        $request->getSession()->set('url_id', $siteId);
+
         // Loading portal settings from DB.
         $settingsRefreshInfo = $em->getRepository('ChamiloCoreBundle:SettingsCurrent')->findOneByVariable('settings_latest_update');
         $settingsLatestUpdate = !empty($settingsRefreshInfo) ? $settingsRefreshInfo->getSelectedValue() : null;

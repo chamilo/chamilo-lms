@@ -655,7 +655,8 @@ class Template
 
         $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
 
-        if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+        /*if (isset($_configuration['multiple_access_urls']) &&
+        $_configuration['multiple_access_urls']) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $url_info = api_get_current_access_url_info();
@@ -671,9 +672,9 @@ class Template
                     $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
                 }
             }
-        }
+        }*/
 
-        $this->assign('favico', $favico);
+        //$this->assign('favico', $favico);
 
         $this->setHelp();
 
@@ -869,6 +870,8 @@ class Template
      */
     public function returnMenu()
     {
+        return null;
+
         $navigation = $this->navigation_array;
         $navigation = $navigation['navigation'];
 

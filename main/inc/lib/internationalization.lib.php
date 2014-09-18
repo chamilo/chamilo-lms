@@ -125,32 +125,7 @@ function api_purify_language_id($language)
 function api_get_language_isocode($language = null, $default_code = 'en')
 {
     return Container::getTranslator()->getLocale();
-
-    static $iso_code = array();
-    if (empty($language)) {
-        $language = api_get_interface_language(false, true);
-    }
-
-    if (!isset($iso_code[$language])) {
-        $sql = "SELECT isocode
-                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
-                WHERE dokeos_folder = '$language'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $result = Database::fetch_array($result);
-            $iso_code[$language] = trim($result['isocode']);
-        } else {
-            $language_purified_id = api_purify_language_id($language);
-            $iso_code[$language] = isset($iso_code[$language_purified_id]) ? $iso_code[$language_purified_id] : null;
-        }
-        if (empty($iso_code[$language])) {
-            $iso_code[$language] = $default_code;
-        }
-    }
-
-    return $iso_code[$language];
 }
-
 
 /**
  * Gets language iso code column from the language table

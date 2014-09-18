@@ -378,13 +378,11 @@ class UserManager
                     PERSON_NAME_EMAIL_ADDRESS
                 );
                 $email_admin = api_get_setting('platform.administrator_email');
-                $url = api_get_current_access_url_info();
 
                 $params = array(
                     'complete_user_name' => api_get_person_name($firstName, $lastName),
                     'login_name' => $loginName,
-                    'password' => stripslashes($original_password),
-                    'url' => $url,
+                    'password' => stripslashes($original_password)
                 );
 
                 $message = \Swift_Message::newInstance()
@@ -807,8 +805,6 @@ class UserManager
             }
         }
 
-
-
         $em = Database::getManager();
         /** @var Chamilo\UserBundle\Entity\User $user */
 
@@ -863,7 +859,6 @@ class UserManager
         Container::getUserManager()->updateUser($user, true);
 
         if (!empty($email) && $send_email) {
-            //Container::getMailer()->send()
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
             $emailsubject = '['.api_get_setting('platform.site_name').'] '.get_lang('YourReg').' '.api_get_setting('platform.site_name');
             $sender_name = api_get_person_name(
@@ -873,18 +868,9 @@ class UserManager
                 PERSON_NAME_EMAIL_ADDRESS
             );
             $email_admin = api_get_setting('platform.administrator_email');
-
             $emailbody = null;
-            if ($_configuration['multiple_access_urls']) {
-                $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1) {
-                    $url = api_get_current_access_url_info();
-                    $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('platform.site_name') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($original_password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('platform.site_name') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'))."\n". get_lang('Manager'). " ".api_get_setting('platform.site_name')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('platform.administrator_email');
-                }
-            } else {
-                $emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('platform.site_name') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($original_password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('platform.site_name') ." ". get_lang('Is') ." : ". api_get_path(WEB_PUBLIC_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'))."\n". get_lang('Manager'). " ".api_get_setting('platform.site_name')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('platform.administrator_email');
-            }
-            api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+            /*api_mail_html($recipient_name, $email, $emailsubject,
+                $emailbody, $sender_name, $email_admin);*/
         }
 
         $user_info = api_get_user_info($user_id);
@@ -4140,8 +4126,9 @@ class UserManager
         if (empty($url1)) {
             $url = $url2;
             if (empty($url)) {
-                $url = api_get_current_access_url_info();
-                $url = $url[0];
+                $url = api_get_path(WEB_PATH);
+                //$url = api_get_current_access_url_info();
+                //$url = $url[0];
             }
         }
         if (!empty($url)) {

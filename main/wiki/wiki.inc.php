@@ -1625,7 +1625,7 @@ class Wiki
         $css = str_replace('../../img/', $root_rel.'main/img/', $css);
 
         $asciimathmal_script = (api_contains_asciimathml($wikiContents) || api_contains_asciisvg($wikiContents))
-           ? '<script src="'.api_get_path(TO_REL, SCRIPT_ASCIIMATHML).'" type="text/javascript"></script>'."\n" : '';
+           ? '<script src="'.api_get_path(TO_REL, 'inc/lib/javascript/asciimath/ASCIIMathML.js').'" type="text/javascript"></script>'."\n" : '';
 
         $template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TEXT_DIRECTION}', '{TITLE}', '{CSS}', '{ASCIIMATHML_SCRIPT}'),
             array(api_get_language_isocode(), api_get_system_encoding(), api_get_text_direction(), $wikiTitle, $css, $asciimathmal_script),

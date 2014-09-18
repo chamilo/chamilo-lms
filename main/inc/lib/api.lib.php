@@ -227,16 +227,6 @@ define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
 define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 
-// Constants for detection some important PHP5 subversions.
-$php_version = (float) PHP_VERSION;
-
-define('IS_PHP_52', !((float)$php_version < 5.2));
-define('IS_PHP_53', !((float)$php_version < 5.3));
-
-define('IS_PHP_SUP_OR_EQ_53', ($php_version >= 5.3));
-define('IS_PHP_SUP_OR_EQ_52', ($php_version >= 5.2 && !IS_PHP_53));
-define('IS_PHP_SUP_OR_EQ_51', ($php_version >= 5.1 && !IS_PHP_52 && !IS_PHP_53));
-
 // This constant is a result of Windows OS detection, it has a boolean value:
 // true whether the server runs on Windows OS, false otherwise.
 define('IS_WINDOWS_OS', api_is_windows_os());
@@ -305,13 +295,6 @@ define('WEB_DEFAULT_COURSE_DOCUMENT_PATH', 'WEB_DEFAULT_COURSE_DOCUMENT_PATH');
 define('TO_WEB', 'TO_WEB');
 define('TO_SYS', 'TO_SYS');
 define('TO_REL', 'TO_REL');
-
-// Paths to regidtered specific resource files (scripts, players, etc.)
-define('FLASH_PLAYER_AUDIO', '{FLASH_PLAYER_AUDIO}');
-define('FLASH_PLAYER_VIDEO', '{FLASH_PLAYER_VIDEO}');
-define('SCRIPT_SWFOBJECT', '{SCRIPT_SWFOBJECT}');
-define('SCRIPT_ASCIIMATHML', '{SCRIPT_ASCIIMATHML}');
-define('DRAWING_ASCIISVG', '{DRAWING_ASCIISVG}');
 
 // Relations type with Human resources manager
 define('COURSE_RELATION_TYPE_RRHH', 1);
@@ -553,13 +536,6 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(WEB_TEMPLATE_PATH)              http://www.mychamilo.org/chamilo/main/template/
  *
  *
- * This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
- * api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)     http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
- * api_get_path(TO_WEB, FLASH_PLAYER_VIDEO)     http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
- * api_get_path(TO_SYS, SCRIPT_SWFOBJECT)       /var/www/chamilo/main/inc/lib/swfobject/swfobject.js
- * api_get_path(TO_REL, SCRIPT_ASCIIMATHML)     /chamilo/main/inc/lib/asciimath/ASCIIMathML.js
- * ...
- *
  * We can convert arbitrary paths, that are not registered (no defined constant).
  * For guaranteed result, these paths should point inside the system Chamilo.
  * Some random examples:
@@ -568,9 +544,9 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(TO_REL, __FILE__)
  * ...
  */
-function api_get_path($path_type, $path = null) {
-
-    static $paths = array(
+function api_get_path($path_type, $path = null)
+{
+    $paths = array(
         SYS_DATA_PATH           => 'data/',
         SYS_WEB_PATH            => 'web/',
         SYS_CONFIG_PATH         => 'config/',
@@ -588,264 +564,93 @@ function api_get_path($path_type, $path = null) {
         WEB_ARCHIVE_PATH        => 'temp/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
-        SYS_LIBRARY_JS_PATH     => 'bundles/chamilocore//js/',
+        SYS_LIBRARY_JS_PATH     => 'bundles/chamilocore/js/',
         CONFIGURATION_PATH      => 'inc/conf/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
-        WEB_LIBRARY_JS_PATH     => 'bundles/chamilocore//js/',
+        WEB_LIBRARY_JS_PATH     => 'bundles/chamilocore/js/',
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
         SYS_TEMPLATE_PATH       => 'template/'
     );
 
-    static $resource_paths = array(
-        FLASH_PLAYER_AUDIO      => 'inc/lib/mediaplayer/player.swf',
-        FLASH_PLAYER_VIDEO      => 'inc/lib/mediaplayer/player.swf',
-        SCRIPT_SWFOBJECT        => 'inc/lib/swfobject/swfobject.js',
-        SCRIPT_ASCIIMATHML      => 'inc/lib/javascript/asciimath/ASCIIMathML.js',
-        DRAWING_ASCIISVG        => 'inc/lib/javascript/asciimath/d.svg'
-    );
-
-    static $is_this_function_initialized;
-    static $server_base_web; // No trailing slash.
-    static $server_base_sys; // No trailing slash.
-    static $root_rel;
-    static $code_folder;
-    static $course_folder;
-
-    global $_configuration;
-    // Always load root_web modifications for multiple url features.
-
-    // Default $_configuration['root_web'] configuration
-    //$root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : $app['url_generator'];
-
-    $root_web = Container::getUrlGenerator()->generate('home'); //$_configuration['root_web'];
+    $root_web = Container::getUrlGenerator()->generate('home');
     $rootDir = Container::getRootDir();
 
     // Configuration data for already installed system.
     $root_sys = $rootDir;
 
-    $load_new_config = false;
+    $code_folder    = 'main/';
+    //$course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;
+    $course_folder  = "courses/";
 
-    if ($path_type == WEB_PATH) {
-        $urlId = api_get_current_access_url_id();
-        if (isset($urlId) &&  $urlId != 1) {
-            //we look into the DB the function api_get_access_url
-            $url_info = api_get_current_access_url_info();
-            $root_web = $url_info['active'] == 1 ? $url_info['url'] : $_configuration['root_web'];
-            $load_new_config = true;
-        }
-    }
+    // Dealing with trailing slashes.
+    $root_web       = api_add_trailing_slash($root_web);
+    $root_sys       = api_add_trailing_slash($root_sys);
+    //$root_rel       = api_add_trailing_slash($root_rel);
+    $code_folder    = api_add_trailing_slash($code_folder);
+    $course_folder  = api_add_trailing_slash($course_folder);
+    $root_rel = null;
 
-    if (!$is_this_function_initialized) {
-        //$root_rel = $_configuration['url_append'];
+    // Initialization of a table that contains common-purpose paths.
+    $paths[WEB_PATH]                = $root_web;
+    $paths[WEB_PUBLIC_PATH]         = $root_web;
+    $paths[SYS_PATH]                = $root_sys;
 
-        $code_folder    = 'main/';
-        //$course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;
-        $course_folder  = "courses/";
+    // Update data path to get it from config file if defined
+    $paths[SYS_DATA_PATH]           = Container::getDataDir();
+    $paths[SYS_LOG_PATH]            = Container::getLogDir();
+    $paths[SYS_CONFIG_PATH]         = Container::getConfigDir();
+    $paths[SYS_COURSE_PATH]         = Container::getCourseDir();
 
-        // Dealing with trailing slashes.
-        $root_web       = api_add_trailing_slash($root_web);
-        $root_sys       = api_add_trailing_slash($root_sys);
-        //$root_rel       = api_add_trailing_slash($root_rel);
-        $code_folder    = api_add_trailing_slash($code_folder);
-        $course_folder  = api_add_trailing_slash($course_folder);
+    $paths[SYS_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[SYS_DATA_PATH].'default_course_document/';
 
-        // Web server base and system server base.
-        //$server_base_web = preg_replace('@'.$root_rel.'$@', '', $root_web); // No trailing slash.
-        //$server_base_sys = preg_replace('@'.$root_rel.'$@', '', $root_sys); // No trailing slash.
+    $paths[SYS_WEB_PATH]            = $root_sys.'web/';
+    $paths[REL_PATH]                = $root_rel;
+    $paths[WEB_DATA_PATH]           = $paths[WEB_PUBLIC_PATH].'data/';
+    $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
+    $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_DATA_PATH].$course_folder;
 
-        // Initialization of a table that contains common-purpose paths.
-        $paths[WEB_PATH]                = $root_web;
-        $paths[WEB_PUBLIC_PATH]         = $root_web;
-        $paths[SYS_PATH]                = $root_sys;
+    $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
+    $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
+    $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
+    $paths[REL_DATA_PATH]           = $root_rel.'data/';
 
-        // Update data path to get it from config file if defined
-        $paths[SYS_DATA_PATH]           = Container::getDataDir();
-        $paths[SYS_LOG_PATH]            = Container::getLogDir();
-        $paths[SYS_CONFIG_PATH]         = Container::getConfigDir();
-        $paths[SYS_COURSE_PATH]         = Container::getCourseDir();
+    $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_DATA_PATH].'default_course_document/';
+    $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_DATA_PATH].'default_course_document/';
 
-        $paths[SYS_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[SYS_DATA_PATH].'default_course_document/';
+    $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
 
-        $paths[SYS_WEB_PATH]            = $root_sys.'web/';
+    // Now we can switch into api_get_path() "terminology".
+    $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
+    $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
+    $paths[SYS_ARCHIVE_PATH]        = Container::getTempDir();
+    $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
+    $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
+    $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
+    $paths[WEB_CSS_PATH]            = $paths[WEB_PATH].$paths[WEB_CSS_PATH];
+    $paths[WEB_IMG_PATH]            = $paths[WEB_PATH].$paths[WEB_IMG_PATH];
+    $paths[SYS_IMG_PATH]            = $paths[SYS_PATH].$paths[SYS_IMG_PATH];
 
-        $paths[REL_PATH]                = $root_rel;
-        //$paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
-        //$paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
+    $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
+    $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_PATH].$paths[WEB_LIBRARY_JS_PATH];
+    $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
+    $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
+    $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
+    $paths[WEB_TEMPLATE_PATH]       = $paths[WEB_CODE_PATH].$paths[WEB_TEMPLATE_PATH];
+    $paths[INCLUDE_PATH]            = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
+    $paths[LIBRARY_PATH]            = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
+    $paths[SYS_LIBRARY_JS_PATH]     = $paths[SYS_PATH].$paths[SYS_LIBRARY_JS_PATH];
+    $paths[CONFIGURATION_PATH]      = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
 
-        $paths[WEB_DATA_PATH]           = $paths[WEB_PUBLIC_PATH].'data/';
-        $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
-        $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_DATA_PATH].$course_folder;
-
-        $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
-        $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
-        $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
-        $paths[REL_DATA_PATH]           = $root_rel.'data/';
-
-        $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_DATA_PATH].'default_course_document/';
-        $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_DATA_PATH].'default_course_document/';
-
-        $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
-
-        // Now we can switch into api_get_path() "terminology".
-        $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
-        $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
-        $paths[SYS_ARCHIVE_PATH]        = Container::getTempDir();
-        $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
-        $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
-        $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
-        $paths[WEB_CSS_PATH]            = $paths[WEB_PATH].$paths[WEB_CSS_PATH];
-        $paths[WEB_IMG_PATH]            = $paths[WEB_PATH].$paths[WEB_IMG_PATH];
-        $paths[SYS_IMG_PATH]            = $paths[SYS_PATH].$paths[SYS_IMG_PATH];
-
-        $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-        $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_PATH].$paths[WEB_LIBRARY_JS_PATH];
-        $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
-        $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
-        $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
-        $paths[WEB_TEMPLATE_PATH]       = $paths[WEB_CODE_PATH].$paths[WEB_TEMPLATE_PATH];
-        $paths[INCLUDE_PATH]            = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
-        $paths[LIBRARY_PATH]            = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
-        $paths[SYS_LIBRARY_JS_PATH]     = $paths[SYS_PATH].$paths[SYS_LIBRARY_JS_PATH];
-        $paths[CONFIGURATION_PATH]      = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
-
-        $is_this_function_initialized = true;
-
-    } else {
-        if ($load_new_config) {
-            //  Redefining variables to work well with the "multiple url" feature
-
-            // All web paths need to be here
-            $web_paths = array(
-                WEB_PATH                => '',
-                WEB_SERVER_ROOT_PATH    => '',
-                WEB_COURSE_PATH         => '',
-                WEB_CODE_PATH           => '',
-                WEB_IMG_PATH            => 'img/',
-                WEB_CSS_PATH            => 'css/',
-                WEB_PLUGIN_PATH         => 'plugin/',
-                WEB_ARCHIVE_PATH        => 'archive/',
-                WEB_LIBRARY_PATH        => 'inc/lib/',
-                WEB_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
-                WEB_AJAX_PATH           => 'inc/ajax/',
-                WEB_PUBLIC_PATH         => 'web/',
-            );
-
-            $root_web = api_add_trailing_slash($root_web);
-            // Web server base and system server base.
-            $server_base_web = preg_replace('@'.$root_rel.'$@', '', $root_web); // No trailing slash.
-
-            // Redefine root webs
-            $paths[WEB_PATH]                = $root_web;
-            $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
-            $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
-            $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
-            $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_IMG_PATH];
-
-            $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_CSS_PATH];
-            $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$web_paths[WEB_PLUGIN_PATH];
-            $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
-            $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];
-            $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_JS_PATH];
-            $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];
-            $paths[WEB_PUBLIC_PATH]         = $paths[WEB_PATH].$web_paths[WEB_PUBLIC_PATH];
-        }
-    }
-
-    // Shallow purification and validation of input parameters.
-
-    $path_type = trim($path_type);
-    $path = trim($path);
-
+    // Path conversion to the requested type.
     if (empty($path_type)) {
         return null;
     }
 
-    // Retrieving a common-purpose path.
     if (isset($paths[$path_type])) {
         return $paths[$path_type];
     }
-
-    // Retrieving a specific resource path.
-
-    if (isset($resource_paths[$path])) {
-        switch ($path_type) {
-            case TO_WEB:
-                return $paths[WEB_CODE_PATH].$resource_paths[$path];
-            case TO_SYS:
-                return $paths[SYS_CODE_PATH].$resource_paths[$path];
-            case TO_REL:
-                return $paths[REL_CODE_PATH].$resource_paths[$path];
-            default:
-                return null;
-        }
-    }
-
-    // Common-purpose paths as a second parameter - recognition.
-
-    if (isset($paths[$path])) {
-        $path = $paths[$path];
-    }
-
-    // Second purification.
-
-    // Replacing Windows back slashes.
-    $path = str_replace('\\', '/', $path);
-    // Query strings sometimes mighth wrongly appear in non-URLs.
-    // Let us check remove them from all types of paths.
-    if (($pos = strpos($path, '?')) !== false) {
-        $path = substr($path, 0, $pos);
-    }
-
-    // Detection of the input path type. Conversion to semi-absolute type ( /chamilo/main/inc/.... ).
-
-    if (preg_match(VALID_WEB_PATH, $path)) {
-
-        // A special case: When a URL points to the document download script directly, without
-        // mod-rewrite translation, we have to translate it into an "ordinary" web path.
-        // For example:
-        // http://localhost/chamilo/main/document/download.php?doc_url=/image.png&cDir=/
-        // becomes
-        // http://localhost/chamilo/courses/TEST/document/image.png
-        // TEST is a course directory name, so called "system course code".
-        if (strpos($path, 'download.php') !== false) { // Fast detection first.
-            $path = urldecode($path);
-            if (preg_match('/(.*)main\/document\/download.php\?doc_url=\/(.*)&cDir=\/(.*)?/', $path, $matches)) {
-                $sys_course_code =
-                    isset($_SESSION['_course']['sysCode'])  // User is inside a course?
-                        ? $_SESSION['_course']['sysCode']   // Yes, then use course's directory name.
-                        : '{SYS_COURSE_CODE}';              // No, then use a fake code, it may be processed later.
-                $path = $matches[1].'courses/'.$sys_course_code.'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
-            }
-        }
-
-        // Replacement of the present web server base with a slash '/'.
-        $path = preg_replace(VALID_WEB_SERVER_BASE, '/', $path);
-
-    } elseif (strpos($path, $server_base_sys) === 0) {
-        $path = preg_replace('@^'.$server_base_sys.'@', '', $path);
-    } elseif (strpos($path, '/') === 0) {
-        // Leading slash - we assume that this path is semi-absolute (REL),
-        // then path is left without further modifications.
-    } else {
-        return null; // Probably implementation of this case won't be needed.
-    }
-
-    // Path now is semi-absolute. It is convenient at this moment repeated slashes to be removed.
-    $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
-
-    // Path conversion to the requested type.
-
-    switch ($path_type) {
-        case TO_WEB:
-            return $server_base_web.$path;
-        case TO_SYS:
-            return $server_base_sys.$path;
-        case TO_REL:
-            return $path;
-    }
-
     return null;
 }
 
@@ -1050,9 +855,6 @@ function api_block_anonymous_users($print_headers = true)
     }
     return true;
 }
-
-/* ACCESSOR FUNCTIONS
-   Don't access kernel variables directly, use these functions instead. */
 
 /**
  * @return an array with the navigator name and version
@@ -5845,6 +5647,7 @@ function api_get_unique_id() {
 }
 
 function api_get_home_path() {
+    return null;
 	$home = 'home/';
     $access_url_id = api_get_current_access_url_id();
 	if (api_get_multiple_access_url() && $access_url_id != -1) {
@@ -6286,7 +6089,7 @@ function api_get_js_simple($file)
 
 function api_set_settings_and_plugins()
 {
-    global $_configuration;
+    //global $_configuration;
     $_setting = array();
     $_plugins = array();
 
@@ -6294,21 +6097,18 @@ function api_set_settings_and_plugins()
     $settings_by_access_list = array();
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != 1) {
-        $url_info = api_get_current_access_url_info();
-        if ($url_info['active'] == 1) {
-            $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
-            foreach ($settings_by_access as $row) {
-                if (empty($row['variable'])) {
-                    $row['variable'] = 0;
-                }
-                if (empty($row['subkey'])) {
-                    $row['subkey'] = 0;
-                }
-                if (empty($row['category'])) {
-                    $row['category'] = 0;
-                }
-                $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
+        $settings_by_access = api_get_settings(null, 'list', $access_url_id, 1);
+        foreach ($settings_by_access as $row) {
+            if (empty($row['variable'])) {
+                $row['variable'] = 0;
             }
+            if (empty($row['subkey'])) {
+                $row['subkey'] = 0;
+            }
+            if (empty($row['category'])) {
+                $row['category'] = 0;
+            }
+            $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
         }
     }
 
@@ -6316,13 +6116,13 @@ function api_set_settings_and_plugins()
 
     foreach ($result as & $row) {
         if ($access_url_id != 1) {
-            if ($url_info['active'] == 1) {
+            //if ($url_info['active'] == 1) {
                 $var = empty($row['variable']) ? 0 : $row['variable'];
                 $subkey = empty($row['subkey']) ? 0 : $row['subkey'];
                 $category = empty($row['category']) ? 0 : $row['category'];
-            }
+            //}
 
-            if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
+            if ($row['access_url_changeable'] == 1) {
                 if (isset($settings_by_access_list[$var]) &&
                     $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
                     if ($row['subkey'] == null) {

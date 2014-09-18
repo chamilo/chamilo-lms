@@ -15,7 +15,7 @@ use Symfony\Component\Finder\Finder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Class IndexController
@@ -72,20 +72,22 @@ class IndexController extends BaseController
         );
     }
 
-
-    //@Security("has_role('ROLE_USER')")
     /**
      * @Route("/userportal", name="userportal")
      * @Method({"GET"})
-     *
+     * @Security("has_role('ROLE_USER')")
      *
      * @param string $type courses|sessions|mycoursecategories
      * @param string $filter for the userportal courses page. Only works when setting 'history'
      * @param int $page
+     *
      * @return Response
      */
-    public function userPortalAction($type = 'courses', $filter = 'current', $page = 1)
-    {
+    public function userPortalAction(
+        $type = 'courses',
+        $filter = 'current',
+        $coursePage = 1
+    ) {
         /** @var \Chamilo\CoreBundle\Entity\CourseManager $courseManager */
         $courseManager = $this->get('chamilo_core.manager.course');
 
@@ -96,6 +98,7 @@ class IndexController extends BaseController
         $user = $this->getUser();
         $pageController = new \Chamilo\CoreBundle\Framework\PageController();
         $items = null;
+        $page = $coursePage;
 
         if (!empty($user)) {
             $userId = $user->getId();
@@ -299,14 +302,11 @@ class IndexController extends BaseController
         }
     }
 
-
-
-    //* @Security("has_role('ROLE_TEACHER')")
     /**
      * Toggle the student view action
      *
      * @Route("/toggle_student_view")
-
+     * @Security("has_role('ROLE_TEACHER')")
      * @Method({"GET"})
      *
      * @return Response

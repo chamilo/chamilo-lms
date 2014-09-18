@@ -286,6 +286,12 @@ class ThematicController
                             }
                             unset($_SESSION['thematic_plan_token']);
                             $data['message'] = 'ok';
+                            
+                            $saveRedirect = api_get_path(WEB_PATH) . 'main/course_progress/index.php?';
+                            $saveRedirect.= api_get_cidreq() . '&';
+                            $saveRedirect.= 'thematic_plan_save_message=ok';
+
+                            header("Location: $saveRedirect");
                         }
                         $data['action'] = 'thematic_plan_list';
                     }

@@ -53,6 +53,10 @@ if ($action == 'thematic_list') {
 	$table->display();
 	
 } elseif ($action == 'thematic_details') {
+    
+    if (isset($_GET['thematic_plan_save_message']) && $_GET['thematic_plan_save_message'] == 'ok') {
+        Display::display_confirmation_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));
+    }
 
 	if (isset($last_id) && $last_id) {
 		$link_to_thematic_plan = '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$last_id.'">'.Display::return_icon('lesson_plan.png', get_lang('ThematicPlan'), array('style'=>'vertical-align:middle;float:none;'),ICON_SIZE_SMALL).'</a>';

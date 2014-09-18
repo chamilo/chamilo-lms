@@ -95,15 +95,13 @@ function save_data($users_courses)
         if ($_POST['subscribe']) {
             foreach ($to_subscribe as $course_code) {
                 if (CourseManager :: course_exists($course_code)) {
-                    CourseManager::add_user_to_course($user_id, $course_code, $csv_subscriptions[$course_code]);
-                    $course_info = CourseManager::get_course_information($course_code);
-                    $inserted_in_course[$course_code] = $course_info['title'];
-
-                    CourseManager::add_user_to_course(
+                    CourseManager::subscribe_user(
                         $user_id,
                         $course_code,
                         $csv_subscriptions[$course_code]
                     );
+                    $course_info = CourseManager::get_course_information($course_code);
+                    $inserted_in_course[$course_code] = $course_info['title'];
                     $inserted_in_course[$course_info['code']] = $course_info['title'];
                 }
             }

@@ -67,8 +67,10 @@ function validate_data($users, $checkUniqueEmail = false)
                 $user['error'] = get_lang('UserNameNotAvailable');
                 $errors[] = $user;
             }
+        }
 
-            if ($checkUniqueEmail) {
+        if ($checkUniqueEmail) {
+            if (isset($user['Email'])) {
                 $userFromEmail = api_get_user_info_from_email($user['Email']);
                 if (!empty($userFromEmail)) {
                     $user['error'] = get_lang('EmailUsedTwice');

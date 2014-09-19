@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Settings;
 
@@ -7,7 +8,7 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class AgendaCourseSettingsSchema
+ * Class BlogCourseSettingsSchema
  * @package Chamilo\CourseBundle\Settings
  */
 class BlogCourseSettingsSchema implements SchemaInterface

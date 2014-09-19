@@ -95,20 +95,7 @@ class DocumentSettingsSchema implements SchemaInterface
             ->add('show_documents_preview', 'yes_no')
             ->add('enable_wami_record', 'yes_no')
             ->add('enable_webcam_clip', 'yes_no')
-            ->add('tool_visible_by_default_at_creation', 'yes_no') // ?
-
-
-
-
-
-
-
-
-
-
-
-
-
+            ->add('tool_visible_by_default_at_creation', 'yes_no')
         ;
     }
 }

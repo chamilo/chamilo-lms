@@ -8,14 +8,14 @@ user:
     type:     annotation
     prefix:   /user
 
-# legacy routes
+# Legacy routes
 main:
     path:     /main/{name}
     defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
     requirements:
       name: .+
 
-# web url shortcuts
+# web url shortcuts for legacy templates
 web.ajax:
     path: main/inc/ajax/
 
@@ -25,7 +25,7 @@ web.main:
 web.img:
     path: bundles/chamilocore/img/
 
-# core controllers
+# Core controllers
 
 core_admin:
     resource: "@ChamiloCoreBundle/Controller/Admin"
@@ -59,10 +59,11 @@ chamilo_platform_settings:
         namespace: platform
         template: ChamiloSettingsBundle:Settings:default.html.twig
 
+# Course settings
 chamilo_course_settings:
-    pattern: /settings/course
+    pattern: /courses/{course}/settings/{namespace}
     defaults:
-        _controller: ChamiloSettingsBundle:Settings:update
+        _controller: ChamiloCourseBundle:Settings:update
         namespace: course
-        template: ChamiloSettingsBundle:Settings:default.html.twig
+        template: ChamiloCourseBundle:Settings:default.html.twig
 

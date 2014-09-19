@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block page_subtitle %}
-    {{ 'Settings' | trans }}
+{{ 'Settings' | trans }}
 {% endblock %}
 
 {% block page_content %}
@@ -17,7 +17,10 @@
             <div class="box box-primary">
                 <div class="box-body">
                     {{ form_errors(form) }}
-                    <form action="{{ path('chamilo_course_%s_settings' | format(namespace), {'course': course }) }}" method="post" novalidate>
+                    <form action="{{ path('chamilo_course_settings',
+                    {'course': course, 'namespace': namespace}) }}"
+                          method="post"
+                          novalidate>
                         {{ form_rest(form) }}
                         {{ update() }}
                     </form>

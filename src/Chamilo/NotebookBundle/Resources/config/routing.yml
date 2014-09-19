@@ -56,11 +56,3 @@ chamilo_notebook_delete_many:
     methods: [GET, POST]
     defaults:
         _controller: chamilo.controller.notebook:deleteMassAction
-
-chamilo_notebook_settings:
-    pattern: courses/{course}/notebook/settings
-    defaults:
-        _controller: sylius.controller.settings:updateAction
-        namespace: notebook
-        template: ChamiloCoreBundle:Settings:default.html.twig
-

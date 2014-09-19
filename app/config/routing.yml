@@ -1,4 +1,4 @@
-chamilo_course:
+hamilo_course:
     resource: "@ChamiloCourseBundle/Resources/config/routing.yml"
     prefix:   /
 
@@ -42,6 +42,10 @@ avanzu_admin_show_task:
     path: /tasks/{taskid}
 avanzu_admin_logout:
     path: /logout
+
+liip_theme:
+    resource: "@LiipThemeBundle/Resources/config/routing.xml"
+    prefix: /theme
 
 home:
     path: /

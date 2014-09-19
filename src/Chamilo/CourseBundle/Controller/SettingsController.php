@@ -57,10 +57,16 @@ class SettingsController extends Controller
             }
         }
 
-        return $this->render($request->attributes->get('template', 'ChamiloCourseSettingsBundle:Settings:update.html.twig'), array(
-            'settings' => $settings,
-            'form'     => $form->createView()
-        ));
+        return $this->render(
+            $request->attributes->get(
+                'template',
+                'ChamiloCourseBundle:Settings:update.html.twig'
+            ),
+            array(
+                'settings' => $settings,
+                'form'     => $form->createView()
+            )
+        );
     }
 
     /**

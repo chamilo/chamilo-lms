@@ -29,56 +29,37 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 global $_configuration;
 
 if (CustomPages::enabled()) {
-    //Reset Password when user goes to the link
-    if ($_GET['reset'] && $_GET['id']) {
+    // Reset Password when user goes to the link
+    if (isset($_GET['reset']) && $_GET['reset'] &&
+        isset($_GET['id']) && $_GET['id']
+    ) {
         $mesg = Login::reset_password($_GET["reset"], $_GET["id"], true);
         CustomPages::display(CustomPages::INDEX_UNLOGGED, array('info' => $mesg));
     }
 
-    //Check email/username and do the right thing
-    if (isset($_POST['user']) && isset ($_POST['email'])) {
-        $user = $_POST['user'];
-        $email = $_POST['email'];
+    // Check email/username and do the right thing
+    if (isset($_POST['user'])) {
+        $usersRelatedToUsername = Login::get_user_accounts_by_username($_POST['user']);
 
-        $condition = '';
-        if (!empty($email)) {
-            $condition = " AND LOWER(email) = '".Database::escape_string($email)."' ";
-        }
-
-        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $query = " SELECT user_id AS uid, lastname AS lastName, firstname AS firstName,
-                    username AS loginName, password, email, status AS status,
-                    official_code, phone, picture_uri, creator_id
-                    FROM ".$tbl_user."
-                    WHERE ( username = '".Database::escape_string($user)."' $condition ) ";
-
-        $result 	= Database::query($query);
-        $num_rows 	= Database::num_rows($result);
-
-        if ($result && $num_rows > 0) {
-            if ($num_rows > 1) {
-                // more than one user
-                $by_username = false;
-                while ($data = Database::fetch_array($result)) {
-                    $user[] = $data;
+        if ($usersRelatedToUsername) {
+            $by_username = true;
+            foreach ($usersRelatedToUsername as $user) {
+                if ($_configuration['password_encryption'] != 'none') {
+                    Login::handle_encrypted_password($user, $by_username);
+                } else {
+                    Login::send_password_to_user($user, $by_username);
                 }
-            } else {
-                // single user (valid user + email)
-                $by_username = true;
-                $user = Database::fetch_array($result);
-            }
-            if ($_configuration['password_encryption'] != 'none') {
-                // Send email with secret link to user
-                Login::handle_encrypted_password($user, $by_username);
-            } else {
-                Login::send_password_to_user($user, $by_username);
             }
         } else {
-            CustomPages::display(CustomPages::LOST_PASSWORD, array('error' => get_lang('NoUserAccountWithThisEmailAddress')));
+            CustomPages::display(
+                CustomPages::LOST_PASSWORD,
+                array('error' => get_lang('NoUserAccountWithThisEmailAddress'))
+            );
         }
     } else {
         CustomPages::display(CustomPages::LOST_PASSWORD);
     }
+
     CustomPages::display(
         CustomPages::INDEX_UNLOGGED,
         array('info' => get_lang('YourPasswordHasBeenEmailed'))
@@ -104,16 +85,16 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
 	$form = new FormValidator('lost_password');
     $form->addElement('header', $tool_name);
 	$form->addElement('text', 'user', array(get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')), array('size'=>'40'));
-
 	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="btn"');
 
-	// setting the rules
+	// Setting the rules
 	$form->addRule('user', get_lang('ThisFieldIsRequired'), 'required');
 
 	if ($form->validate()) {
 		$values = $form->exportValues();
-
-        $users_related_to_username = Login::get_user_accounts_by_username($values['user']);
+        $users_related_to_username = Login::get_user_accounts_by_username(
+            $values['user']
+        );
 
 		if ($users_related_to_username) {
             $by_username = true;

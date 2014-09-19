@@ -1,4 +1,4 @@
-hamilo_course:
+chamilo_course:
     resource: "@ChamiloCourseBundle/Resources/config/routing.yml"
     prefix:   /
 

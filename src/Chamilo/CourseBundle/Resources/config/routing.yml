@@ -1,7 +1,0 @@
-#chamilo_course_notebook_settings:
-#    pattern: /courses/{course}/settings/notebook
-#    defaults:
-#        _controller: chamilo_course.controller.settings:updateAction
-#        namespace: notebook
-#        template: ChamiloCourseBundle:Settings:default.html.twig
-#

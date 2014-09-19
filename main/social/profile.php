@@ -72,6 +72,7 @@ if ($user_info['user_id'] == api_get_user_id()) {
 } else {
     $isSelfUser = false;
 }
+$userIsOnline = user_is_online($user_id);
 $libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
@@ -328,7 +329,7 @@ if ($show_full_profile) {
         $personal_info .=  '<dt>'.get_lang('Name')
             .'</dt><dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
     }
-    if (!empty($user_info['official_code'])) {
+    if (($isAdmin || $isSelfUser) && !empty($user_info['official_code'])) {
         $personal_info .=  '<dt>'.get_lang('OfficialCode').'</dt><dd>'.$user_info['official_code'].'</dd>';
     }
     if (!empty($user_info['email'])) {

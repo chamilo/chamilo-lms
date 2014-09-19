@@ -601,6 +601,7 @@ class SocialManager extends UserManager
         $group_pending_invitations = count($group_pending_invitations);
         $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
+        $showUserImage = user_is_online($user_id) || api_is_platform_admin();
 
         $html = '<div class="social-menu">';
         if (in_array($show, $show_groups) && !empty($group_id)) {
@@ -619,7 +620,11 @@ class SocialManager extends UserManager
             $html .= '</div>';
             $html .= '</div>';
         } else {
-            $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
+            if ($showUserImage) {
+                $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
+            } else {
+                $img_array = UserManager::get_user_picture_path_by_id(null, 'web', true, true);
+            }
             $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
             $big_image = $big_image['file'].'?'.uniqid();
             $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();

@@ -125,7 +125,7 @@ class LegacyListener
         }
 
         $request->getSession()->set('url_id', $siteId);
-
+/*
         // Loading portal settings from DB.
         $settingsRefreshInfo = $em->getRepository('ChamiloCoreBundle:SettingsCurrent')->findOneByVariable('settings_latest_update');
         $settingsLatestUpdate = !empty($settingsRefreshInfo) ? $settingsRefreshInfo->getSelectedValue() : null;
@@ -140,7 +140,7 @@ class LegacyListener
             ) {
                 api_set_settings_and_plugins();
             }
-        }
+        }*/
     }
 
     /**

@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -131,7 +131,7 @@ class Container
     }
 
     /**
-     * @return SessionInterface;
+     * @return Session;
      */
     public static function getSession()
     {
@@ -231,5 +231,15 @@ class Container
     public static function getEventDispatcher()
     {
         return self::$container->get('event_dispatcher');
+    }
+
+    /**
+     * @param string $message
+     * @param string $type
+     */
+    public static function addMessage($message, $type)
+    {
+        $session = self::getSession();
+        $session->getFlashBag()->add($type, $message);
     }
 }

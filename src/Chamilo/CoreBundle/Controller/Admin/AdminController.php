@@ -75,7 +75,8 @@ class AdminController extends BaseController
                 $items[] = array('url' => $adminUrl.'ldap_users_list.php', 'label' => get_lang('ImportLDAPUsersIntoPlatform'));
             }
             $items[] = array('url' => $adminUrl.'extra_fields.php?type=user', 'label' => get_lang('ManageUserFields'));
-            $items[] = array('url'=> api_get_path(WEB_PUBLIC_PATH).'admin/administrator/roles', 'label' => get_lang('Roles'));
+            /*$items[] = array('url'=> api_get_path(WEB_PUBLIC_PATH)
+                .'admin/administrator/roles', 'label' => get_lang('Roles'));*/
         } else {
             $items = array(
                 array('url' => $adminUrl.'user_list.php', 	'label' => get_lang('UserList')),
@@ -100,7 +101,7 @@ class AdminController extends BaseController
             $items = array();
             $items[] = array('url' => $adminUrl.'course_list.php', 	'label' => get_lang('CourseList'));
 
-            if (api_get_setting('course_validation') != 'true') {
+            if (api_get_setting('course.course_validation') != 'true') {
                 $items[] = array('url' => $adminUrl.'course_add.php', 	'label' => get_lang('AddCourse'));
             } else {
                 $items[] = array('url' => $adminUrl.'course_request_review.php', 	'label' => get_lang('ReviewCourseRequests'));
@@ -116,7 +117,8 @@ class AdminController extends BaseController
             $items[] = array('url' => $adminUrl.'extra_fields.php?type=course', 	'label' => get_lang('ManageCourseFields'));
             $items[] = array('url' => $adminUrl.'extra_fields.php?type=question', 	'label' => get_lang('ManageQuestionFields'));
 
-            if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+            if (api_get_setting('gradebook.gradebook_enable_grade_model') ==
+                'true') {
                 $items[] = array('url' => $adminUrl.'grade_models.php',             'label' => get_lang('GradeModel'));
             }
 
@@ -148,7 +150,7 @@ class AdminController extends BaseController
 
             /* Event settings */
 
-            if (api_get_setting('activate_email_template') == 'true') {
+            if (api_get_setting('mail.activate_email_template') == 'true') {
                 $items[] = array('url' => $adminUrl.'event_controller.php?action=listing', 		'label' => get_lang('EventMessageManagement'));
             }
 
@@ -158,10 +160,8 @@ class AdminController extends BaseController
                 }
             }
 
-            if (api_get_setting('allow_reservation') == 'true') {
-                //$items[] = array('url' => $adminUrl.'../reservation/m_category.php', 	'label' => get_lang('BookingSystem'));
-            }
-            if (api_get_setting('allow_terms_conditions') == 'true') {
+            if (api_get_setting('registration.allow_terms_conditions') ==
+                'true') {
                 $items[] = array('url' => $adminUrl.'legal_add.php', 	'label' => get_lang('TermsAndConditions'));
             }
             $blocks['platform']['items'] = $items;
@@ -176,7 +176,7 @@ class AdminController extends BaseController
         $items = array();
         $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_list.php', 'label' => get_lang('ListSession'));
         $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_add.php', 	'label' => get_lang('AddSession'));
-        $items[] = array('url'=> 'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
+        $items[] = array('url'=> $adminUrl.'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
         $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
         if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
             $items[] = array('url' => $adminUrl.'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
@@ -221,7 +221,7 @@ class AdminController extends BaseController
             $blocks['settings']['search_form'] = null;
 
             //Skills
-            if (api_get_setting('allow_skills_tool') == 'true') {
+            if (api_get_setting('skill.allow_skills_tool') == 'true') {
                 $blocks['skills']['icon']  = \Display::return_icon('logo.png', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
                 $blocks['skills']['label'] = get_lang('Skills');
 

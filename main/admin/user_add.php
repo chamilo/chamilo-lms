@@ -146,25 +146,6 @@ if (api_get_setting('profile.login_is_email') != 'true') {
 $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 $nb_ext_auth_source_added = 0;
-/*
-if (isset($extAuthSource) && count($extAuthSource) > 0) {
-	$auth_sources = array();
-	foreach ($extAuthSource as $key => $info) {
-	    // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
-	    // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
-	    // extAuthSource always on for CAS even if not activated
-	    // same action for file user_edit.php
-	    if (($key == CAS_AUTH_SOURCE && api_get_setting('cas_activate') === 'true') || ($key != CAS_AUTH_SOURCE)) {
-		    $auth_sources[$key] = $key;
-    		$nb_ext_auth_source_added++;
-		}
-	}
-	if ($nb_ext_auth_source_added > 0) {
-    	$group[] = $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
-    	$group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
-    	$group[] = $form->createElement('static', '', '', '<br />');
-    }
-}*/
 
 $group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] = $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
@@ -185,7 +166,12 @@ $form->addElement(
     'status',
     get_lang('Profile'),
     $status,
-    array('id' => 'status_select', 'class' => 'chzn-select', 'onchange' => 'javascript: display_drh_list();')
+    array(
+        'id' => 'status_select',
+        'class' => 'chzn-select',
+        'onchange' => 'javascript: display_drh_list();',
+        'multiple' => 'multiple'
+    )
 );
 
 //drh list (display only if student)
@@ -200,17 +186,6 @@ if (isset($drh_list) && is_array($drh_list)) {
 	}
 }
 $form->addElement('html', '</div>');
-/*
-if (api_is_platform_admin()) {
-    // Platform admin
-    $group = array();
-    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
-    $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
-    //$display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
-    $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
-    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
-    $form->addElement('html', '</div>');
-}*/
 
 $form->addElement('select_language', 'language', get_lang('Language'), null);
 
@@ -224,10 +199,9 @@ $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), 
 $group = array ();
 $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
 $group[] = $form->createElement(
-    'datepicker',
+    'date_time_picker',
     'expiration_date',
-    null,
-    array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();')
+    array('onchange' => 'javascript: enable_expiration_date();')
 );
 $form->addGroup($group, 'max_member_group', null, '', false);
 // Active account or inactive account
@@ -252,12 +226,8 @@ $defaults['admin']['platform_admin'] = 0;
 $defaults['mail']['send_mail'] = 1;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
-$defaults['expiration_date'] = array();
 $days = api_get_setting('profile.account_valid_duration');
 $time = strtotime('+'.$days.' day');
-$defaults['expiration_date']['d'] = date('d', $time);
-$defaults['expiration_date']['F'] = date('m', $time);
-$defaults['expiration_date']['Y'] = date('Y', $time);
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;
 $defaults = array_merge($defaults, $extra_data);

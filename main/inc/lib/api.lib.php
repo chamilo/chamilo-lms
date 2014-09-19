@@ -6399,7 +6399,7 @@ function api_get_user_language()
 
     // Last chance we get the platform language
     if (empty($user_language)) {
-        $user_language = api_get_setting('platformLanguage');
+        $user_language = Container::getTranslator()->getLocale();
     }
     return $user_language;
 }

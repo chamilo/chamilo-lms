@@ -240,7 +240,7 @@ if (!$user_data['platform_admin']) {
 	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 	$group = array ();
 	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-	$group[] = $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
+	$group[] = $form->createElement('date_time_picker', 'expiration_date', array('onchange' => 'javascript: enable_expiration_date();'));
 	$form->addGroup($group, 'max_member_group', null, '', false);
 
 	// Active account or inactive account
@@ -271,20 +271,8 @@ $expiration_date = $user_data['expiration_date'];
 
 if ($expiration_date == '0000-00-00 00:00:00') {
     $user_data['radio_expiration_date'] = 0;
-    $user_data['expiration_date'] = array();
-    $user_data['expiration_date']['d'] = date('d');
-    $user_data['expiration_date']['F'] = date('m');
-    $user_data['expiration_date']['Y'] = date('Y');
 } else {
     $user_data['radio_expiration_date'] = 1;
-
-    $user_data['expiration_date'] = array();
-    $user_data['expiration_date']['d'] = substr($expiration_date, 8, 2);
-    $user_data['expiration_date']['F'] = substr($expiration_date, 5, 2);
-    $user_data['expiration_date']['Y'] = substr($expiration_date, 0, 4);
-
-    $user_data['expiration_date']['H'] = substr($expiration_date, 11, 2);
-    $user_data['expiration_date']['i'] = substr($expiration_date, 14, 2);
 }
 
 $user = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user_data['user_id']);
@@ -340,7 +328,7 @@ if ($form->validate()) {
         $language = $user['language'];
 
         if (isset($user['radio_expiration_date']) && $user['radio_expiration_date'] == '1') {
-            $expiration_date = new \DateTime(Text::return_datetime_from_array($user['expiration_date']));
+            $expiration_date = new \DateTime($user['expiration_date']);
         } else {
             $expiration_date = null;
         }

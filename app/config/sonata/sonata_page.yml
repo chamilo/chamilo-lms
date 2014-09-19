@@ -61,7 +61,7 @@ sonata_page:
     templates:
         default:
             #path: 'ApplicationSonataPageBundle::demo_layout.html.twig'
-            path: 'ChamiloCoreBundle::main_layout.html.twig'
+            path: '::layout.html.twig'
             name: 'default'
             containers:
                  header:
@@ -91,7 +91,7 @@ sonata_page:
 
         2columns:
             #path: 'ApplicationSonataPageBundle::default_2columns_layout.html.twig'
-            path: 'ChamiloCoreBundle::main_layout.html.twig'
+            path: '::layout.html.twig'
             name: '2 columns layout'
             containers:
                  header:

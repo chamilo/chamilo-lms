@@ -69,7 +69,7 @@
         "symfony/monolog-bundle": "~2.3",
 
         "sensio/distribution-bundle": "~2.3",
-        "sensio/framework-extra-bundle": "~2.3",
+        "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
 
         "jms/security-extra-bundle": "~1.5",
@@ -141,7 +141,7 @@
 
         "jbroadway/urlify": "1.0.0-stable",
         "composer/composer": "1.0.0-alpha8",
-        "liip/theme-bundle": "1.1.0",
+        "liip/theme-bundle": "dev-master",
         "chamilo/chash" : "dev-master",
         "white-october/pagerfanta-bundle": "dev-master",
         "sylius/resource-bundle": "dev-master",

@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-// Fixes error that shows the header and footer.
-$app['default_layout'] = $app['template_style'].'/layout/blank.tpl';
+
 ?>
 var day;
 var month;
@@ -28,13 +27,13 @@ function openCalendar(form, field) {
 		if (regex.test(forminputs[i].getAttribute('name'))) {
 			datevalues[dateindex++] = forminputs[i].value;
 		}
-	}	 
+	}
     window.open("<?php echo api_get_path(WEB_LIBRARY_PATH); ?>formvalidator/Element/calendar_popup.php", "calendar", "width=260,height=230,status=no");
 	day = datevalues[0];
 	month = datevalues[1];
 	year = datevalues[2];
-	
-	
+
+
 	month--;
 	formName = form;
 	fieldName =field;
@@ -165,7 +164,7 @@ function initCalendar() {
  * @param   string     date text
  */
 function returnDate(d,m,y) {
-	
+
  	formblock= window.opener.document.getElementById(window.opener.formName);
 	forminputs = formblock.getElementsByTagName('select');
 	var datevalues = new Array();
@@ -173,25 +172,25 @@ function returnDate(d,m,y) {
 	for (i = 0; i < forminputs.length; i++) {
 		// regex here to check name attribute
 		var regex = new RegExp(window.opener.fieldName, "i");
-		if (regex.test(forminputs[i].getAttribute('name'))) {		
+		if (regex.test(forminputs[i].getAttribute('name'))) {
 			datevalues[dateindex] = forminputs[i];
 			dateindex++;
 			window.close();
 		}
 	}
-	datevalues[0].selectedIndex = (d-1) ;	
+	datevalues[0].selectedIndex = (d-1) ;
 	datevalues[1].selectedIndex = m;
-		
+
 	date = new Date();
-	
+
 	//Selecting the first option of the year
-	year = datevalues[2].options[0].value;	
-	
+	year = datevalues[2].options[0].value;
+
 	datevalues[2].selectedIndex = y - year;
 	for(i = 0; i<= 3; i++) {
 		attributes = datevalues[i].attributes;
 		for (attr=0; attr<attributes.length; attr++)
-  			if(attributes[attr].nodeName == 'onchange') {  				 
+  			if(attributes[attr].nodeName == 'onchange') {
   				datevalues[i].onchange();
   			}
 	}

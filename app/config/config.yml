@@ -272,3 +272,7 @@ sp_bower:
 # Grid default template
 apy_data_grid:
     theme: ChamiloCoreBundle::grid.html.twig
+
+liip_theme:
+    themes: ['web', 'tablet', 'phone']
+    active_theme: 'phone'

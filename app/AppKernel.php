@@ -146,6 +146,7 @@ class AppKernel extends Kernel
 
             new APY\DataGridBundle\APYDataGridBundle(),
             new JMS\TranslationBundle\JMSTranslationBundle(),
+            new Liip\ThemeBundle\LiipThemeBundle(),
 
             //new FOS\RestBundle\FOSRestBundle(),
             //new JMS\SerializerBundle\JMSSerializerBundle($this),

@@ -150,7 +150,7 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('filetype', null, 'HTML_QuickForm_Rule_Filetype', $dir . 'Rule/Filetype.php');
         $this->registerRule('multiple_required', 'required', 'HTML_QuickForm_Rule_MultipleRequired', $dir . 'Rule/MultipleRequired.php');
         $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');
-        $this->registerRule('telephone', null, 'HTML_QuickForm_Rule_Telephone', $dir . 'Rule/Telephone.php');
+        $this->registerRule('mobile_phone_number', null, 'HTML_QuickForm_Rule_Mobile_Phone_Number', $dir . 'Rule/MobilePhoneNumber.php');
         $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');
         $this->registerRule('CAPTCHA', 'rule', 'HTML_QuickForm_Rule_CAPTCHA', 'HTML/QuickForm/Rule/CAPTCHA.php');
 
@@ -641,15 +641,12 @@ function html_filter_student_fullpage($html)
 }
 
 /**
- * Cleans telephone text
- * @param string $telephone     Telephone number to clean
- * @return string               The cleaned telephone number
+ * Cleans mobile phone number text
+ * @param string $mobilePhoneNumber     Mobile phone number to clean
+ * @return string                       The cleaned mobile phone number
  */
-function telephone_filter($telephone)
-{
-    $telephone= trim ($telephone,'(');
-    $telephone= trim ($telephone,')');
-    $telephone= ltrim ($telephone,'+');    
-    $telephone= ltrim ($telephone,'0');
-    return $telephone;
+function mobile_phone_number_filter($mobilePhoneNumber)
+{    
+    $mobilePhoneNumber = str_replace(array('+', '(', ')'), '', $mobilePhoneNumber);
+    return ltrim($mobilePhoneNumber,'0');
 }

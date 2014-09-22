@@ -16,7 +16,7 @@ Inside this Chamilo LMS project itself, there are two main "branches":
 
 If you are in search of the latest patches to your production installation, you should choose 1.9.x. If you are adventurous and look forward to contribute to something that *mostly* works but is still under heavy development, you should stick with the default HEAD branch.
 
-Chamilo LMS v10 should be out around January 2014, so not too far away, and comes with an improved files structure and a lot of new dependencies/packages coming from Symfony and Composer. If you have time on your hands and are looking for long term contributions, that's where we'd like you to help.
+Chamilo LMS v10 should be available in beta version around early 2015, so not too far away, and comes with an improved files structure and a lot of new dependencies/packages coming from Symfony and Composer. If you have time on your hands and are looking for long term contributions, that's where we'd like you to help.
 
 Installation
 ------------
@@ -25,7 +25,7 @@ You need a working web server + PHP + MySQL setup.
 
 To install from Git (which means installing an unstable, development version of this application), do the following:
 
-* Create a directory where you will store the Chamilo LMS files (beware, the Git repo is about 600MB in size now)
+* Create a directory where you will store the Chamilo LMS files (beware, the Git repo is about 1GB in size now)
 * Install git (if that's not already the case)
 * Clone the Chamilo LMS repo from Github:
 ```

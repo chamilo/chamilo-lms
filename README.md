@@ -57,6 +57,10 @@ Contributing
 
 When contributing patches (which we always welcome, as long as you agree to do that under the GNU/GPLv3 license), please ensure you respect our coding conventions: https://support.chamilo.org/projects/1/wiki/Coding_conventions (mostly PSR-2 with a few additional rules and hints).
 
+Before you contribute, you should consider carefully the branch to which you want to contribute. The "master" branch (the default) is the continuously experimental branch of Chamilo, so by nature it is unstable and it is *not* used in production. The "1.9.x" branch (or the highest number ending with an ".x") is the currently stable branch. New releases are *tags* that are set on the stable branch when a new version is released. So, if you are looking to contribute on a bug of 1.9.8 in prevision for 1.9.9, you should use branch 1.9.x.
+
+We gladly welcome Pull Requests on GitHub, so if you feel like you have 30 minutes and can contribute a patch, fork our repo, create a branch and send a PR (probably against branch 1.9.x). We will review it before the next release. Although we are generally fast enough at reviewing PRs, sometimes we might be more busy than others, so please be patient with us. Ultimately, we *will* review your PR and include it if it's useful and it follows our coding conventions (see link above).
+
 Manual testing
 --------------
 
@@ -64,6 +68,13 @@ You can always check the impact of your changes and confirm with other users on 
 * https://stable.chamilo.org for versions 1.9.x
 * https://unstable.chamilo.org for development version (currently 1.10) - this one doesn't automatically apply database changes, so it is more likely to break often
 These are *NOT* production portals. Your content *WILL* be deleted once every now and then. It is completely public and anyone can enter and delete your content if they want to. DO NOT put important content there.
+
+Automated testing
+-----------------
+
+We have a few automated tests written in SimpleTest but, after a series of unsuccessful attempts at developing the right set of tests covering 100% of the code, we decided to give up and rewrite an important part of Chamilo's legacy code. This is what v10, our current master branch, is about (between other things).
+
+You can find the existing tests in the tests/ directory in any clone generated from GitHub (you won't find it in the downloadable archive on our website, though).
 
 Learn more
 ----------

@@ -113,6 +113,48 @@ class Extra implements Migration, OrderedMigrationInterface
         $queries->addQuery("ALTER TABLE acl_entries ADD CONSTRAINT FK_46C8B806EA000B10 FOREIGN KEY (class_id) REFERENCES acl_classes (id) ON UPDATE CASCADE ON DELETE CASCADE");
         $queries->addQuery("ALTER TABLE acl_entries ADD CONSTRAINT FK_46C8B8063D9AB4A6 FOREIGN KEY (object_identity_id) REFERENCES acl_object_identities (id) ON UPDATE CASCADE ON DELETE CASCADE");
         $queries->addQuery("ALTER TABLE acl_entries ADD CONSTRAINT FK_46C8B806DF9183C9 FOREIGN KEY (security_identity_id) REFERENCES acl_security_identities (id) ON UPDATE CASCADE ON DELETE CASCADE");
+
+        $queries->addQuery("ALTER TABLE news__post DROP FOREIGN KEY FK_7D109BC83DA5256D");
+        $queries->addQuery("ALTER TABLE news__post DROP FOREIGN KEY FK_7D109BC8514956FD");
+        $queries->addQuery("ALTER TABLE news__post DROP FOREIGN KEY FK_7D109BC8F675F31B");
+        $queries->addQuery("DROP INDEX IDX_7D109BC83DA5256D ON news__post");
+        $queries->addQuery("DROP INDEX IDX_7D109BC8F675F31B ON news__post");
+        $queries->addQuery("DROP INDEX IDX_7D109BC8514956FD ON news__post");
+        $queries->addQuery("ALTER TABLE news__post DROP image_id, DROP collection_id, DROP author_id");
+        $queries->addQuery("ALTER TABLE news__post_audit DROP image_id, DROP author_id, DROP collection_id");
+        $queries->addQuery("ALTER TABLE news__comment DROP FOREIGN KEY FK_A90210404B89032C");
+        $queries->addQuery("DROP INDEX IDX_A90210404B89032C ON news__comment");
+        $queries->addQuery("ALTER TABLE news__comment DROP post_id");
+        $queries->addQuery("ALTER TABLE news__comment_audit DROP post_id");
+        $queries->addQuery("ALTER TABLE classification__collection DROP FOREIGN KEY FK_A406B56AEA9FDD75");
+        $queries->addQuery("DROP INDEX IDX_A406B56AEA9FDD75 ON classification__collection");
+        $queries->addQuery("ALTER TABLE classification__collection DROP media_id");
+        $queries->addQuery("ALTER TABLE classification__collection_audit DROP media_id");
+        $queries->addQuery("ALTER TABLE classification__category DROP FOREIGN KEY FK_43629B36727ACA70");
+        $queries->addQuery("ALTER TABLE classification__category DROP FOREIGN KEY FK_43629B36EA9FDD75");
+        $queries->addQuery("DROP INDEX IDX_43629B36727ACA70 ON classification__category");
+        $queries->addQuery("DROP INDEX IDX_43629B36EA9FDD75 ON classification__category");
+        $queries->addQuery("ALTER TABLE classification__category DROP parent_id, DROP media_id");
+        $queries->addQuery("ALTER TABLE classification__category_audit DROP parent_id, DROP media_id");
+        $queries->addQuery("ALTER TABLE fos_user_user_group DROP FOREIGN KEY FK_B3C77447A76ED395");
+        $queries->addQuery("ALTER TABLE fos_user_user_group DROP FOREIGN KEY FK_B3C77447FE54D947");
+        $queries->addQuery("ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)");
+        $queries->addQuery("ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447FE54D947 FOREIGN KEY (group_id) REFERENCES fos_group (id);");
+
+        $queries->addQuery("ALTER TABLE news__post ADD image_id INT DEFAULT NULL, ADD author_id INT DEFAULT NULL, ADD collection_id INT DEFAULT NULL");
+        $queries->addQuery("ALTER TABLE news__post ADD CONSTRAINT FK_7D109BC83DA5256D FOREIGN KEY (image_id) REFERENCES media__media (id)");
+        $queries->addQuery("ALTER TABLE news__post ADD CONSTRAINT FK_7D109BC8F675F31B FOREIGN KEY (author_id) REFERENCES user (id)");
+        $queries->addQuery("ALTER TABLE news__post ADD CONSTRAINT FK_7D109BC8514956FD FOREIGN KEY (collection_id) REFERENCES classification__collection (id)");
+        $queries->addQuery("CREATE INDEX IDX_7D109BC83DA5256D ON news__post (image_id)");
+        $queries->addQuery("CREATE INDEX IDX_7D109BC8F675F31B ON news__post (author_id)");
+        $queries->addQuery("CREATE INDEX IDX_7D109BC8514956FD ON news__post (collection_id)");
+        $queries->addQuery("ALTER TABLE news__post_audit ADD image_id INT DEFAULT NULL, ADD author_id INT DEFAULT NULL, ADD collection_id INT DEFAULT NULL");
+        $queries->addQuery("ALTER TABLE news__comment ADD post_id INT NOT NULL");
+        $queries->addQuery("ALTER TABLE news__comment ADD CONSTRAINT FK_A90210404B89032C FOREIGN KEY (post_id) REFERENCES news__post (id)");
+        $queries->addQuery("CREATE INDEX IDX_A90210404B89032C ON news__comment (post_id)");
+        $queries->addQuery("ALTER TABLE news__comment_audit ADD post_id INT DEFAULT NULL");
+
+
     }
 
     public function down(Schema $schema, QueryBag $queries)

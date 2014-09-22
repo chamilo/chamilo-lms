@@ -1,0 +1,57 @@
+{% block sonata_page_breadcrumb %}
+    <div class="row-fluid clearfix">
+        {{ sonata_block_render_event('breadcrumb', { 'context': 'news_post', 'post': post, 'current_uri': app.request.requestUri }) }}
+    </div>
+{% endblock %}
+
+<article class="sonata-blog-post-container">
+    <header>
+        <div class="sonata-blog-post-date-container">
+            <h5>
+                <i class="icon-calendar"></i>
+                {{ post.publicationDateStart | format_date }}
+            </h5>
+        </div>
+
+        <h1 class="sonata-blog-post-title">
+            <a href="{{ url('sonata_news_view', { 'permalink': sonata_news_permalink(post) }) }}">{{ post.title }}</a>
+            <span class="sonata-blog-post-author">{{ 'archive_author'|trans({'%author%': post.author }, 'SonataNewsBundle') }}</span>
+        </h1>
+
+        <div class="sonata-blog-post-information">
+            <div class="sonata-blog-post-tag-container">
+                <div class="sonata-blog-post-tag-title">
+                    {% if post.tags|length > 1 %}
+                        <i class="icon-tags"></i>
+                    {% else %}
+                        <i class="icon-tag"></i>
+                    {% endif %}
+                    {{ 'published_under'|transchoice(post.tags|length, {}, 'SonataNewsBundle') }}
+                </div>
+                <div class="sonata-blog-post-tag-list">
+                    {% for tag in post.tags %}
+                        <a href="{{ url('sonata_news_tag', { 'tag': tag.slug } ) }}">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="sonata-blog-post-content">
+        {% media post.image, 'wide' %}
+        {{ post.content|raw }}
+    </div>
+
+    {% render(controller('SonataNewsBundle:Post:comments', {'postId': post.id})) %}
+
+    {% if post.iscommentable %}
+        {% render(controller('SonataNewsBundle:Post:addCommentForm', {
+            'postId': post.id,
+            'form': form
+        })) %}
+    {% else %}
+        <div>
+            {{ 'message_comments_are_closed'|trans({}, 'SonataNewsBundle') }}
+        </div>
+    {% endif %}
+</article>

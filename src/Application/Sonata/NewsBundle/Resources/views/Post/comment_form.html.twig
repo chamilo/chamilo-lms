@@ -1,0 +1,26 @@
+{#
+
+/*
+ * This file is part of the Sonata package.
+ *
+ * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+#}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>{{'title_leave_comment'|trans({}, 'SonataNewsBundle') }}</h3>
+    </div>
+    <div class="panel-body">
+        <form action="{{ url('sonata_news_add_comment', {'id': post_id}) }}" method="POST" class="form-horizontal" role="form">
+            {{ form_widget(form) }}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i>&nbsp;{{'btn_add_comment'|trans({}, 'SonataNewsBundle') }}</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -30,7 +30,7 @@ file that was distributed with this source code.
     {% block stylesheets %}
 
         {% for stylesheet in admin_pool.getOption('stylesheets', []) %}
-            <link rel="stylesheet" type="text/css"  href="{{ asset(stylesheet) }}"  />
+            <link rel="stylesheet" href="{{ asset(stylesheet) }}">
         {% endfor %}
 
     {% endblock %}
@@ -48,35 +48,55 @@ file that was distributed with this source code.
         </script>
 
         {% for javascript in admin_pool.getOption('javascripts', []) %}
-        <script src="{{ asset(javascript) }}" type="text/javascript"></script>
+        <script src="{{ asset(javascript) }}"></script>
         {% endfor %}
+
+        {# localize select2 #}
+        {% if admin_pool is defined and admin_pool.getOption('use_select2') %}
+        {% set locale = app.request.locale %}
+        {% if locale == 'pt' %}{% set locale = 'pt_PT' %}{% endif %}
+
+        {# omit default EN locale #}
+        {% if locale[:2] != 'en' %}
+        <script src="{{ asset('bundles/sonataadmin/vendor/select2/select2_locale_' ~ locale|replace({'_':'-'}) ~ '.js') }}"></script>
+        {% endif %}
+        {% endif %}
 
     {% endblock %}
 
     <title>
-        {{ 'Admin'|trans({}, 'SonataAdminBundle') }}
+        {% block sonata_head_title %}
+            {{ 'Admin'|trans({}, 'SonataAdminBundle') }}
 
-        {% if _title is not empty %}
-            {{ _title|raw }}
-        {% else %}
-            {% if action is defined %}
-                -
-                {% for menu in admin.breadcrumbs(action) %}
-                    {% if not loop.first %}
-                        {%  if loop.index != 2 %}
-                            &gt;
+            {% if _title is not empty %}
+                {{ _title|raw }}
+            {% else %}
+                {% if action is defined %}
+                    -
+                    {% for menu in admin.breadcrumbs(action) %}
+                        {% if not loop.first %}
+                            {%  if loop.index != 2 %}
+                                &gt;
+                            {% endif %}
+
+                            {{ menu.label }}
                         {% endif %}
-
-                        {{ menu.label }}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endif%}
+                    {% endfor %}
+                {% endif %}
+            {% endif%}
+        {% endblock %}
     </title>
 </head>
 <body {% block body_attributes %}class="sonata-bc skin-black fixed"{% endblock %}>
 {% block sonata_header %}
     <header class="header">
+        {% block sonata_header_noscript_warning %}
+            <noscript>
+                <div class="noscript-warning">
+                    {{ 'noscript_warning'|trans({}, 'SonataAdminBundle') }}
+                </div>
+            </noscript>
+        {% endblock %}
         {% block logo %}
             {% spaceless %}
                 <a class="logo" href="{{ url('sonata_admin_dashboard') }}">
@@ -235,11 +255,13 @@ file that was distributed with this source code.
                         {% block sonata_page_content_nav %}
                             {% if _tab_menu is not empty or _actions is not empty %}
                                 <nav class="navbar navbar-default" role="navigation">
-                                    {% if _navbar_title is not empty %}
-                                        <div class="navbar-header">
-                                            <span class="navbar-brand">{{ _navbar_title|raw }}</span>
-                                        </div>
-                                    {% endif %}
+                                    {% block tab_menu_navbar_header %}
+                                        {% if _navbar_title is not empty %}
+                                            <div class="navbar-header">
+                                                <span class="navbar-brand">{{ _navbar_title|raw }}</span>
+                                            </div>
+                                        {% endif %}
+                                    {% endblock %}
                                     <div class="container-fluid">
                                         <div class="navbar-left">
                                             {% if _tab_menu is not empty %}
@@ -247,7 +269,7 @@ file that was distributed with this source code.
                                             {% endif %}
                                         </div>
 
-                                        {% if _actions is not empty %}
+                                        {% if _actions|replace({ '<li>': '', '</li>': '' })|trim is not empty %}
                                             <ul class="nav navbar-nav navbar-right">
                                                 <li class="dropdown sonata-actions">
                                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ 'link_actions'|trans({}, 'SonataAdminBundle') }} <b class="caret"></b></a>

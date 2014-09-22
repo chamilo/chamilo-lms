@@ -749,15 +749,20 @@ class UserGroup extends Model
     /**
      * @param $params
      * @param bool $show_query
-     * @return bool|void
+     * @return bool|int
      */
     public function save($params, $show_query = false)
     {
-        $id = parent::save($params, $show_query);
-        if ($this->useMultipleUrl) {
-            $this->subscribeToUrl($id, api_get_current_access_url_id());
+        $groupExists = $this->usergroup_exists(trim($params['name']));
+        if ($groupExists == false) {
+            $id = parent::save($params, $show_query);
+            if ($this->useMultipleUrl) {
+                $this->subscribeToUrl($id, api_get_current_access_url_id());
+            }
+            return $id;
         }
-        return $id;
+
+        return false;
     }
 
     /**

@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+ *  This tool allows platform admins to add classes by uploading a CSV file
+ *  @todo Add some langvars to DLTT
  * 	@package chamilo.admin
- */
-/**
- * Code
- *   This     tool allows platform admins to add classes by uploading a CSV file
- * @todo Add some langvars to DLTT
  */
 
 /**
@@ -21,23 +18,29 @@ function validate_data($classes) {
             $class['line'] = $index + 2;
             $class['error'] = get_lang('MissingClassName');
             $errors[] = $class;
-        }
-        // 2. Check whether class doesn't exist yet.
-        else {
+        } else {
+            // 2. Check whether class doesn't exist yet.
             if ($usergroup->usergroup_exists($class['name'])) {
                 $class['line'] = $index + 2;
-                $class['error'] = get_lang('ClassNameExists') . ' <strong>' . $class['ClassName'] . '</strong>';
+                $class['error'] = get_lang('ClassNameExists') .
+                    ': <strong>' .$class['name'] . '</strong>';
                 $errors[] = $class;
             }
         }
     }
+
     return $errors;
 }
 
 /**
  * Save imported class data to database
+ *
+ * @param $classes
+ *
+ * @return int
  */
-function save_data($classes) {
+function save_data($classes)
+{
     $number_of_added_classes = 0;
     $usergroup = new UserGroup();
     foreach ($classes as $index => $class) {

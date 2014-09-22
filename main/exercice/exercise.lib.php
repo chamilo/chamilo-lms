@@ -475,25 +475,56 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     				$student_answer_list = $correct_answer_list[0];
                 }
 
-                // Split the response by bracket
-                // tab_comments is an array with text surrounding the text to find
-                // we add a space before and after the answer_question to be sure to have a block of text before and after [xxx] patterns
-                // so we have n text to find ([xxx]) and n+1 blockc of texts before, beteween and after the text to find
+                /*
+                Split the response by bracket
+                tab_comments is an array with text surrounding the text to find
+                we add a space before and after the answer_question to be sure to
+                have a block of text before and after [xxx] patterns
+                so we have n text to find ([xxx]) and n+1 block of texts before,
+                between and after the text to find
+                */
                 $tab_comments = api_preg_split('/\[[^]]+\]/', ' '.$answer.' ');
 
                 if (!empty($correct_answer_list) && !empty($student_answer_list)) {
                     $answer = "";
                     $i = 0;
                     foreach ($student_answer_list as $student_item) {
-                        $student_response = api_substr($student_item, 1, api_strlen($student_item) - 2);  // remove surronding brackets
-                        $answer .= $tab_comments[$i].Display::input('text', "choice[$questionId][]", $student_response);
+                        // remove surronding brackets
+                        $student_response = api_substr($student_item, 1, api_strlen($student_item) - 2);
+
+                        $size = strlen($student_item);
+                        $attributes['class'] = detectInputAppropriateClass($size);
+
+                        $answer .= $tab_comments[$i].
+                            Display::input(
+                                'text',
+                                "choice[$questionId][]",
+                                $student_response,
+                                $attributes
+                            );
                         $i++;
                     }
                     $answer .= $tab_comments[$i];
                 } else {
-                    // display exercice with empty input fields
+                    // display exercise with empty input fields
                     // every [xxx] are replaced with an empty input field
-                    $answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+                    foreach ($correct_answer_list[0] as $item) {
+                        $size = strlen($item);
+                        $attributes['class'] = detectInputAppropriateClass($size);
+                        $answer = str_replace(
+                            $item,
+                            Display::input('text', "choice[$questionId][]", '', $attributes),
+                            $answer
+                        );
+                    }
+                    /*$answer = api_preg_replace(
+                        '/\[[^]]+\]/',
+                        Display::input(
+                            'text',
+                            "choice[$questionId][]",
+                            '',
+                            $attributes
+                        ), $answer);*/
                 }
     			$s .= $answer;
 
@@ -2323,7 +2354,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             if (empty($result)) {
                 continue;
             }
-            
+
             // In case of global score, make sure the calculated total score is integer
             if (!is_int($result['score'])) {
                 $result['score'] = round($result['score']);

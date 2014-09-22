@@ -117,7 +117,7 @@ class LegacyListener
 
         /** @var \Sonata\PageBundle\Model\SnapshotPageProxy $page */
         $page = $request->get('page');
-        if (isset($page)) {
+        if (isset($page) && !is_numeric($page)) {
             $siteId = $page->getSite()->getId();
             $request->getSession()->set('url_info', $page->getSite());
         } else {

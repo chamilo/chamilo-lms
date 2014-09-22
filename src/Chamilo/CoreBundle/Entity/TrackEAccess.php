@@ -56,6 +56,11 @@ class TrackEAccess
      */
     private $accessSessionId;
 
+    public function __construct()
+    {
+        $this->accessDate = new \DateTime();
+    }
+
 
     /**
      * Get accessId

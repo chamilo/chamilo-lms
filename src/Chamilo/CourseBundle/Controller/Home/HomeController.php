@@ -13,6 +13,10 @@ use Chamilo\CoreBundle\Entity\CTool;
 use Display;
 use CourseHome;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+
+use Chamilo\CourseBundle\Event\CourseAccess;
+use Chamilo\CourseBundle\Event\SessionAccess;
 
 /**
  * Class HomeController
@@ -26,11 +30,20 @@ class HomeController extends ToolBaseController
      * @Route("/", name="course_home")
      * @Route("/index.php")
      * @Method({"GET"})
-     * @ParamConverter("course", class="ChamiloCoreBundle:Course", options={"repository_method" = "findOneByCode"})
+     * @ParamConverter(
+     *  "course",
+     *  class="ChamiloCoreBundle:Course",
+     *  options={"repository_method" = "findOneByCode"}
+     * )
+     * @ParamConverter(
+     *  "id_session",
+     *  class="ChamiloCoreBundle:Session",
+     *  options={"repository_method" = "findOneById"}
+     * )
      *
      * @return Response
      */
-    public function indexAction(Course $course)
+    public function indexAction(Course $course, Session $id_session)
     {
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
@@ -64,8 +77,26 @@ class HomeController extends ToolBaseController
             );
         }
 
+        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher->dispatch('chamilo_course.course.access',
+            new CourseAccess($this->getUser(), $course)
+        );
+
+
         if (!isset($coursesAlreadyVisited[$courseCode])) {
-            \Event::accessCourse();
+            $dispatcher = $this->container->get('event_dispatcher');
+            if (empty($sessionId)) {
+                $dispatcher->dispatch(
+                    'chamilo_course.course.access',
+                    new CourseAccess($this->getUser(), $course)
+                );
+            } else {
+                $dispatcher->dispatch(
+                    'chamilo_course.course.access',
+                    new SessionAccess($this->getUser(), $course, $session)
+                );
+            }
+
             $coursesAlreadyVisited[$courseCode] = 1;
             $this->getSessionHandler()->set('coursesAlreadyVisited', $coursesAlreadyVisited);
         }

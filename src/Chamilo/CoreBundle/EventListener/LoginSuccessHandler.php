@@ -42,7 +42,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $userId = $user->getId();
 
         $session = $request->getSession();
-        //event_login($user);
 
         $userInfo = api_get_user_info($user->getId());
         $userInfo['is_anonymous'] = false;

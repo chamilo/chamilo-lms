@@ -413,45 +413,18 @@ function modify_filter($user_id, $url_params, $row) {
     // match to say this user has the permission to do so
     // $_configuration['login_as_forbidden_globally'], defined in
     // configuration.php, is the master key to these conditions
-    global $_configuration;
 
-    if (empty($_configuration['login_as_forbidden_globally']) &&
-        (api_is_global_platform_admin() ||
-            (api_get_setting('login_as_allowed') === 'true' &&
-                (api_is_platform_admin() ||
-                    (api_is_session_admin() &&
-                        $current_user_status_label == $statusname[STUDENT]
-                    )
-                )
-            )
-        )
-    ) {
-        if (!$user_is_anonymous) {
-            if (Container::getSecurity()->isGranted('ROLE_GLOBAL_ADMIN')) {
-                // everything looks good, show "login as" link
-                if ($user_id != $userId) {
-                    $result .= '<a href="'.api_get_path(WEB_PUBLIC_PATH).'?_switch_user='.$row[5].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
-                } else {
-                    $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
-                }
-            } else {
-                // if this user in particular can't be edited, show disabled
-                $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
-            }
+    if (Container::getSecurity()->isGranted('ROLE_GLOBAL_ADMIN')) {
+        // everything looks good, show "login as" link
+        if ($user_id != $userId) {
+            $result .= '<a href="'.api_get_path(WEB_PUBLIC_PATH).'?_switch_user='.$row[5].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
         } else {
-            // if anonymous user but other users show the option, show disabled
             $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
         }
-    } // Else don't show anything, because the option is not available at all
-
-
-    //$result .= Display::url('<i class="icon-key icon-large"></i>', 'roles');
-
-	/*if ($current_user_status_label != $statusname[STUDENT]) {
-		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
-	} else {
-		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';
-	}*/
+    } else {
+        // if this user in particular can't be edited, show disabled
+        $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
+    }
 
 	if (api_is_platform_admin(true)) {
 

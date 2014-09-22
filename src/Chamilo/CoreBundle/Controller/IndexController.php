@@ -95,6 +95,21 @@ class IndexController extends BaseController
         $site = $this->get('sonata.page.site.selector')->retrieve();
         $site->getId();
 
+        $settingsManager = $this->get('chamilo.settings.manager');
+        $setting = $settingsManager->getSetting('platform.institution');
+        error_log($setting);
+
+        $settingsManagerCourse = $this->get('chamilo_course.settings.manager');
+        $course = $this->getDoctrine()->getRepository
+            ('ChamiloCoreBundle:Course')->find(1);
+        if ($course) {
+            $settingsManagerCourse->setCourse($course);
+            $agenda = $settingsManagerCourse->getSetting(
+                'calendar_event.enabled'
+            );
+            error_log($agenda);
+        }
+
         $user = $this->getUser();
         $pageController = new \Chamilo\CoreBundle\Framework\PageController();
         $items = null;

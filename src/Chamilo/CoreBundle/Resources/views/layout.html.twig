@@ -71,10 +71,8 @@
     <script type="text/javascript" src="{{ asset(asset_url) }}"></script>
     {% endjavascripts %}
 
-
     <script type="text/javascript" src="{{ asset('bundles/chamilocore/js/chosen/chosen.jquery.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/chamilocore/js/tag/jquery.fcbkcomplete.js') }}"></script>
-
 
     {% javascripts 'bundles/chamilocore/js/app.js'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -87,6 +85,7 @@
             {% endfor %}
         {% endblock %}
     {% endblock %}
+
     {{ sonata_seo_title() }}
     {{ sonata_seo_metadatas() }}
 {% endblock %}
@@ -101,12 +100,13 @@
 {% endblock %}
 
 {% block page_content %}
+
+    {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
+
     {% if page is defined %}
         {% block sonata_page_container %}
             <div class="row">
-
                 <div class="col-xs-12">
-                    {#{{ sonata_page_render_container('header', page) }}#}
                     {{ sonata_page_render_container('header', page) }}
                 </div>
 

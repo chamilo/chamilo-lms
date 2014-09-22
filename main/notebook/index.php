@@ -12,7 +12,7 @@
 $language_file = array('notebook');
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $current_course_tool  = TOOL_NOTEBOOK;
 
@@ -37,7 +37,7 @@ $(document).ready(function () {
 $tool = TOOL_NOTEBOOK;
 
 // Tracking
-event_access_tool(TOOL_NOTEBOOK);
+Event::event_access_tool(TOOL_NOTEBOOK);
 
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'addnote') {

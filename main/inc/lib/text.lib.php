@@ -629,4 +629,22 @@ class Text
         $number = (int)$number;
         return ($number < 10) ? '0'.$number : $number;
     }
+
+    /**
+     * Converts an string CLEANYO[admin][amann,acostea]
+     * into an array:
+     *
+     * array(
+     *  CLEANYO
+     *  admin
+     *  amann,acostea
+     * )
+     *
+     * @param $array
+     * @return array
+     */
+    function bracketsToArray($array)
+    {
+        return preg_split('/[\[\]]+/', $array, -1, PREG_SPLIT_NO_EMPTY);
+    }
 }

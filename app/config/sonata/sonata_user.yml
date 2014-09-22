@@ -5,16 +5,16 @@ doctrine:
             default:
                 mappings:
                     FOSUserBundle: ~
-                    ApplicationSonataUserBundle: ~
+                    ChamiloUserBundle: ~
                     SonataUserBundle: ~
 sonata_user:
     #admin:
       #user:
-        #class:      Application\Sonata\UserBundle\Admin\UserAdmin
+        #class:      Chamilo\UserBundle\Admin\UserAdmin
 
     class:                  # Entity Classes
-        user:               Application\Sonata\UserBundle\Entity\User
-        group:              Application\Sonata\UserBundle\Entity\Group
+        user:               Chamilo\UserBundle\Entity\User
+        group:              Chamilo\UserBundle\Entity\Group
 
     security_acl:             false
     table:

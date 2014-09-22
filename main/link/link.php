@@ -25,7 +25,7 @@
 $language_file = array('link', 'admin');
 
 // Including libraries
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LINK;
 
 require_once api_get_path(LIBRARY_PATH).'link.lib.php';
@@ -102,7 +102,7 @@ $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 $course_id = api_get_course_int_id();
 
 // Statistics
-event_access_tool(TOOL_LINK);
+Event::event_access_tool(TOOL_LINK);
 
 Display::display_header($nameTools, 'Links');
 

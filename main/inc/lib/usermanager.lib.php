@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
-* This library provides functions for user management.
-* Include/require it in your code to use its functionality.
-* @package chamilo.library
-* @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
-*/
-/**
- * Class
- * @package chamilo.include.user
+ * Class UserManager
+ * This library provides functions for user management.
+ * Include/require it in your code to use its functionality.
+ * @package chamilo.library
+ * @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
  */
 class UserManager
 {
@@ -83,7 +83,7 @@ class UserManager
         // Hosting verifications
         $status = isset($params['status']) ? $params['status'] : STUDENT;
 
-        if (api_get_setting('login_is_email') == 'true') {
+        if (api_get_setting('profile.login_is_email') == 'true') {
             $params['username'] = $params['email'];
         }
 
@@ -125,11 +125,11 @@ class UserManager
 
         unset($params['return_item_if_already_exists']);
 
-        //Checking the user language
+        // Checking the user language
         $languages = api_get_languages();
 
         if (!isset($params['language']) || !in_array($params['language'], $languages['folder'])) {
-            $params['language'] = api_get_setting('platformLanguage');
+            $params['language'] = Container::getTranslator()->getLocale();
         }
 
         if (!isset($params['creator_id'])) {
@@ -208,23 +208,23 @@ class UserManager
      * Creates a new user for the platform
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
      * @author Roan Embrechts <roan_embrechts@yahoo.com>
-     * @param    string    Firstname
-     * @param    string    Lastname
-     * @param    int       Status (1 for course tutor, 5 for student, 6 for anonymous)
-     * @param    string    e-mail address
-     * @param    string    Login
-     * @param    string    Password
-     * @param    string    Any official code (optional)
-     * @param    string    User language    (optional)
-     * @param    string    Phone number    (optional)
-     * @param    string    Picture URI        (optional)
-     * @param    string    Authentication source    (optional, defaults to 'platform', dependind on constant)
-     * @param    string    Account expiration date (optional, defaults to '0000-00-00 00:00:00')
-     * @param    int        Whether the account is enabled or disabled by default
-     * @param    int        The department of HR in which the user is registered (optional, defaults to 0)
-     * @param     array    Extra fields
-     * @param    string    Encrypt method used if password is given encrypted. Set to an empty string by default
-     * @return mixed   new user id - if the new user creation succeeds, false otherwise
+     * @param   string    Firstname
+     * @param   string    Lastname
+     * @param   int       Status (1 for course tutor, 5 for student, 6 for anonymous)
+     * @param   string    e-mail address
+     * @param   string    Login
+     * @param   string    Password
+     * @param   string    Any official code (optional)
+     * @param   string    User language    (optional)
+     * @param   string    Phone number    (optional)
+     * @param   string    Picture URI        (optional)
+     * @param   string    Authentication source    (optional, defaults to 'platform', dependind on constant)
+     * @param   string    Account expiration date (optional, defaults to '0000-00-00 00:00:00')
+     * @param   int        Whether the account is enabled or disabled by default
+     * @param   int        The department of HR in which the user is registered (optional, defaults to 0)
+     * @param   array    Extra fields
+     * @param   string    Encrypt method used if password is given encrypted. Set to an empty string by default
+     * @return  mixed   new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve $_user['user_id'] from the global space. If it exists, $_user['user_id'] is the creator id. If a problem arises, it stores the error message in global $api_failureList
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
      * @assert ('Pippin','Took',null,null,'jo','jo') === false
@@ -279,8 +279,9 @@ class UserManager
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         //Checking the user language
         $languages = api_get_languages();
-        if (!in_array($language, $languages['folder'])) {
-            $language = api_get_setting('platformLanguage');
+
+        if (!in_array($language, $languages)) {
+            $language = Container::getTranslator()->getLocale();
         }
 
         $creator_id = api_get_user_id();
@@ -304,10 +305,32 @@ class UserManager
             }
         }
 
-
         //@todo replace this date with the api_get_utc_date function big problem with users that are already registered
         $current_date = api_get_utc_datetime();
-        $sql = "INSERT INTO $table_user ".
+
+        $em = Database::getManager();
+
+        $expirationDate = new \DateTime($expiration_date);
+
+        $user = new \Chamilo\UserBundle\Entity\User();
+        $user->setLastname($lastName)
+            ->setFirstname($firstName)
+            ->setUsername($loginName)
+            ->setPassword($password)
+            ->setEmail($email)
+            ->setOfficialCode($official_code)
+            ->setPictureUri($picture_uri)
+            ->setCreatorId($creator_id)
+            ->setAuthSource($auth_source)
+            ->setPhone($phone)
+            ->setLanguage($language)
+            //->setRegistrationDate($current_date)
+            ->setExpirationDate($expirationDate)
+            ->setHrDeptId($hr_dept_id)
+            ->setActive($active)
+        ;
+
+        /*$sql = "INSERT INTO $table_user ".
                "SET lastname =         '".Database::escape_string(trim($lastName))."',".
                "firstname =         '".Database::escape_string(trim($firstName))."',".
                "username =            '".Database::escape_string(trim($loginName))."',".
@@ -324,48 +347,71 @@ class UserManager
                "expiration_date =     '".Database::escape_string($expiration_date)."',".
                "hr_dept_id =         '".Database::escape_string($hr_dept_id)."',".
                "active =             '".Database::escape_string($active)."'";
-        $result = Database::query($sql);
+        $result = Database::query($sql);*/
+        $em->persist($user);
+        $em->flush();
 
-        if ($result) {
-            //echo "id returned";
-            $return = Database::insert_id();
+        if ($user) {
+            $userId = $user->getId();
+
             if (api_get_multiple_access_url()) {
-                UrlManager::add_user_to_url($return, api_get_current_access_url_id());
+                UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
             } else {
                 //we are adding by default the access_url_user table with access_url_id = 1
-                UrlManager::add_user_to_url($return, 1);
+                UrlManager::add_user_to_url($userId, 1);
             }
 
-            // Adding user
-            /** @var ChamiloLMS\UserBundle\Entity\User $user */
-            $em = Database::getManager();
-
-            $user = $em->getRepository('ChamiloLMSCoreBundle:User')->find($return);
-
-            $roleName = api_get_role_name_from_status($status);
-            $user->addRole($roleName);
+            $group = $em->getRepository('ChamiloUserBundle:Group')->find($status);
+            $user->addGroup($group);
+            //$user->addRole($roleName);
             $em->persist($user);
             $em->flush();
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
-                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+                $emailsubject = '['.api_get_setting('platform.site_name').'] '.get_lang('YourReg').' '.api_get_setting('platform.site_name');
 
-                $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-                $email_admin = api_get_setting('emailAdministrator');
+                $sender_name = api_get_person_name(
+                    api_get_setting('platform.administrator_name'),
+                    api_get_setting('platform.administrator_surname'),
+                    null,
+                    PERSON_NAME_EMAIL_ADDRESS
+                );
+                $email_admin = api_get_setting('platform.administrator_email');
 
-                if (api_is_multiple_url_enabled()) {
-                    $access_url_id = api_get_current_access_url_id();
-                    if ($access_url_id != -1) {
-                        $url = api_get_current_access_url_info();
-                        $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-                    }
-                } else {
-                    $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". api_get_path(WEB_PUBLIC_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-                }
+                $params = array(
+                    'complete_user_name' => api_get_person_name($firstName, $lastName),
+                    'login_name' => $loginName,
+                    'password' => stripslashes($original_password)
+                );
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($emailsubject)
+                    ->setFrom(array($email_admin => $sender_name))
+                    ->setTo(array($email => $recipient_name))
+                    ->setBody(
+                        Container::getTemplate()->render(
+                            'ChamiloCoreBundle:Mailer:User/new_user.html.twig',
+                            $params
+                        ),
+                        'text/html'
+                    )
+                    ->addPart(
+                        Container::getTemplate()->render(
+                            'ChamiloCoreBundle:Mailer:User/new_user.text.twig',
+                            $params
+                        ),
+                        'text/plain'
+                    )
+                    ->setEncoder(Swift_Encoding::get8BitEncoding());
+
+                $type = $message->getHeaders()->get('Content-Type');
+                $type->setValue('text/html');
+                $type->setParameter('charset', 'utf-8');
+                Container::getMailer()->send($message);
 
                 /* MANAGE EVENT WITH MAIL */
-                if (EventsMail::check_if_using_class('user_registration')) {
+                /*if (EventsMail::check_if_using_class('user_registration')) {
                     $values["about_user"] = $return;
                     $values["password"] = $original_password;
                     $values["send_to"] = array($return);
@@ -373,13 +419,13 @@ class UserManager
                     EventsDispatcher::events('user_registration', $values);
                 } else {
                     @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
-                }
+                }*/
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
             // Add event to system log
             $user_id_manager = api_get_user_id();
-            $user_info = api_get_user_info($return);
-            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
+            $user_info = api_get_user_info($userId);
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, api_get_utc_datetime(), $user_id_manager);
             Event::addEvent(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
         } else {
             return api_set_failure('error inserting in Database');
@@ -388,11 +434,11 @@ class UserManager
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
             foreach ($extra as $fname => $fvalue) {
-                $res = $res && self::update_extra_field_value($return, $fname, $fvalue);
+                $res = $res && self::update_extra_field_value($userId, $fname, $fvalue);
             }
         }
-        self::update_extra_field_value($return, 'already_logged_in', 'false');
-        return $return;
+        self::update_extra_field_value($userId, 'already_logged_in', 'false');
+        return $userId;
     }
 
     /**
@@ -729,22 +775,19 @@ class UserManager
             $auth_source = $auth_source;
         }
 
-        if ($user_id != strval(intval($user_id))) return false;
-        if ($user_id === false) return false;
-
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-
-        //Checking the user language
-        $languages = api_get_languages();
-        if (!in_array($language, $languages['folder'])) {
-            $language = api_get_setting('platformLanguage');
+        if ($user_id != strval(intval($user_id))) {
+            return false;
         }
 
-        $sql = "UPDATE $table_user SET
-                lastname='".Database::escape_string($lastname)."',
-                firstname='".Database::escape_string($firstname)."',
-                username='".Database::escape_string($username)."',
-                language='".Database::escape_string($language)."',";
+        if ($user_id === false) {
+            return false;
+        }
+
+        // Checking the user language.
+        $languages = api_get_platform_isocodes();
+        if (!in_array($language, $languages)) {
+            $language = Container::getTranslator()->getLocale();
+        }
 
         if (!is_null($password)) {
             if ($encrypt_method == '') {
@@ -760,29 +803,18 @@ class UserManager
                     return api_set_failure('encrypt_method invalid');
                 }
             }
-            $sql .= " password='".Database::escape_string($password)."',";
         }
-        if (!is_null($auth_source)) {
-            $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
-        }
-        $sql .=    "
-                email='".Database::escape_string($email)."',
-                status='".Database::escape_string($status)."',
-                official_code='".Database::escape_string($official_code)."',
-                phone='".Database::escape_string($phone)."',
-                picture_uri='".Database::escape_string($picture_uri)."',
-                expiration_date='".Database::escape_string($expiration_date)."',
-                active='".Database::escape_string($active)."',
-                hr_dept_id=".intval($hr_dept_id);
-        if (!is_null($creator_id)) {
-            $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
-        }
-        $sql .=    " WHERE user_id = '$user_id' ";
-        $return = Database::query($sql);
+
+        $em = Database::getManager();
+        /** @var Chamilo\UserBundle\Entity\User $user */
+
+        $user = $em->getRepository('ChamiloUserBundle:User')->find($user_id);
+
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
-            foreach($extra as $fname => $fvalue) {
-                $res = $res && self::update_extra_field_value($user_id,$fname,$fvalue);
+            foreach ($extra as $name => $value) {
+                //$userField = $em->getRepository('ChamiloUserBundle:UserField')->findOneByName($name);
+                $res = $res && self::update_extra_field_value($user_id, $name, $value);
             }
         }
 
@@ -790,36 +822,61 @@ class UserManager
             self::change_active_state($user_id, $active);
         }
 
-        // Adding user
-        /** @var ChamiloLMS\UserBundle\Entity\User $user */
-        $em = Database::getManager();
-        $user = $em->getRepository('ChamiloLMSCoreBundle:User')->find($user_id);
-        $user->addRole(api_get_role_name_from_status($status));
-        $em->persist($user);
-        $em->flush();
+        // Updating user
+
+        $user
+            ->setLastname($lastname)
+            ->setFirstname($firstname)
+            //->setPassword($password)
+            ->setUsername($username)
+            ->setAuthSource($auth_source)
+            ->setLanguage($language)
+            ->setEmail($email)
+            ->setOfficialCode($official_code)
+            ->setPhone($phone)
+            ->setPictureUri($picture_uri)
+            ->setExpirationDate($expiration_date)
+            ->setActive($active)
+            ->setHrDeptId($hr_dept_id)
+        ;
+
+        if (!empty($original_password)) {
+            $user->setPlainPassword($original_password);
+        }
+
+        if (is_array($status)) {
+            foreach ($status as $groupId) {
+                $group = $em->getRepository('ChamiloUserBundle:Group')->find($groupId);
+                $user->addGroup($group);
+            }
+        } else {
+            $group = $em->getRepository('ChamiloUserBundle:Group')->find(
+                $status
+            );
+            $user->addGroup($group);
+        }
+
+        Container::getUserManager()->updateUser($user, true);
 
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-            $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-            $email_admin = api_get_setting('emailAdministrator');
-
-            if ($_configuration['multiple_access_urls']) {
-                $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1) {
-                    $url = api_get_current_access_url_info();
-                    $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($original_password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-                }
-            } else {
-                $emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($original_password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". api_get_path(WEB_PUBLIC_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-            }
-            @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+            $emailsubject = '['.api_get_setting('platform.site_name').'] '.get_lang('YourReg').' '.api_get_setting('platform.site_name');
+            $sender_name = api_get_person_name(
+                api_get_setting('platform.administrator_name'),
+                api_get_setting('platform.administrator_surname'),
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
+            $email_admin = api_get_setting('platform.administrator_email');
+            $emailbody = null;
+            /*api_mail_html($recipient_name, $email, $emailsubject,
+                $emailbody, $sender_name, $email_admin);*/
         }
 
         $user_info = api_get_user_info($user_id);
         Event::addEvent(LOG_USER_UPDATED, LOG_USER_ID, $user_id, api_get_utc_datetime(), api_get_user_id());
         Event::addEvent(LOG_USER_UPDATED, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
-        return $return;
+        return $user_id;
     }
 
     /**
@@ -847,13 +904,13 @@ class UserManager
             if ($send_email_if_activated) {
                 $user_info = api_get_user_info($user_id);
                 $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+                $emailsubject = '['.api_get_setting('platform.site_name').'] '.get_lang('YourReg').' '.api_get_setting('platform.site_name');
                 $emailbody=get_lang('Dear')." ".stripslashes($recipient_name).",\n\n";
-                $emailbody.=sprintf(get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'), api_get_setting('siteName'))."\n";
+                $emailbody.=sprintf(get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'), api_get_setting('platform.site_name'))."\n";
                 $emailbody.=sprintf(get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'), api_get_path(WEB_PATH)).",\n\n";
                 $emailbody.=get_lang('HaveFun')."\n\n";
                 $emailbody.=get_lang('Problem'). "\n\n". get_lang('Formula');
-                $emailbody.= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+                $emailbody.= api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'))."\n". get_lang('Manager'). " ".api_get_setting('platform.site_name')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('platform.administrator_email');
 
                 MessageManager::send_message_simple($user_id, $emailsubject, $emailbody);
             }
@@ -1013,7 +1070,8 @@ class UserManager
             // 1. Conversion of unacceptable letters (latinian letters with accents for example) into ASCII letters in order they not to be totally removed.
             // 2. Applying the strict purifier.
             // 3. Length limitation.
-            $toreturn = api_get_setting('login_is_email') == 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH): substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
+            $toreturn = api_get_setting('profile.login_is_email') == 'true' ?
+                substr(preg_replace(USERNAME_PURIFIER_MAIL, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH): substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
             return $toreturn;
         }
         // 1. Applying the shallow purifier.
@@ -1308,7 +1366,8 @@ class UserManager
         $user = Database::fetch_array($res);
         $picture_filename = trim($user['picture_uri']);
 
-        if (api_get_setting('split_users_upload_directory') === 'true') {
+        if (api_get_setting('profile.split_users_upload_directory') ===
+            'true') {
             if ($type == 'system') {
                 $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
             } else {
@@ -3678,7 +3737,7 @@ class UserManager
         $course_list_sql = '';
         $course_list = array();
         if(!empty($code_special_courses)) {
-            $course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+            $course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
                                 FROM    ".$tbl_course_user." course_rel_user
                                 LEFT JOIN ".$tbl_course." course
                                 ON course.id = course_rel_user.c_id
@@ -4067,8 +4126,9 @@ class UserManager
         if (empty($url1)) {
             $url = $url2;
             if (empty($url)) {
-                $url = api_get_current_access_url_info();
-                $url = $url[0];
+                $url = api_get_path(WEB_PATH);
+                //$url = api_get_current_access_url_info();
+                //$url = $url[0];
             }
         }
         if (!empty($url)) {

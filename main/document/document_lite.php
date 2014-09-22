@@ -14,7 +14,7 @@ exit;
 // Language files that need to be included
 $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 require_once 'document.inc.php';
@@ -326,7 +326,7 @@ $(document).ready( function() {
 
 
 // Lib for event log, stats & tracking & record of the access
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 /*	DISPLAY */
 if ($to_group_id != 0) { // Add group name after for group documents

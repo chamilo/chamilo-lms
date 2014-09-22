@@ -1,4 +1,0 @@
-MopaComposerBridge
-==================
-
-Mopa Composer Bridge

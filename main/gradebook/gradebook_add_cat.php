@@ -8,7 +8,7 @@
  * Init
  */
 $language_file = 'gradebook';
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $_in_course = true;
 $course_code = api_get_course_id();
 if ( empty ($course_code ) ) {

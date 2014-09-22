@@ -9,6 +9,10 @@
  * @package chamilo.library
  */
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Driver\Statement;
+
 /**
  * Database class definition
  * @package chamilo.database
@@ -18,42 +22,50 @@ class Database
     /**
      * The main connection
      *
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private static $db;
 
     /**
      * Read connection
      *
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private static $connectionRead;
 
     /**
      * Write connection
      *
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private static $connectionWrite;
 
+    /**
+     * @var EntityManager
+     */
     private static $em;
 
     /**
      * Constructor
-     *
-     * @param $db \Doctrine\DBAL\Connection
-     * @param array $dbs
      */
-    public function __construct($db, $dbs)
+    public function __construct()
     {
-        self::setDatabase($db, $dbs);
+    }
+
+    /**
+     * Return current connection
+     * @return Connection
+     */
+    public function getConnection()
+    {
+        return self::$db;
     }
 
     /**
      * @param $db
      * @param $dbs
      */
-    public function setDatabase($db, $dbs)
+    public function setConnection($db, $dbs = array())
     {
         self::$db = $db;
 
@@ -62,27 +74,21 @@ class Database
         self::$connectionWrite = isset($dbs['db_write']) ? $dbs['db_write'] : $db;
     }
 
-    public static function setManager($em)
+    /**
+     * @param EntityManager $em
+     */
+    public function setManager($em)
     {
         self::$em = $em;
     }
 
+    /**
+     * @return EntityManager
+     */
     public static function getManager()
     {
         return self::$em;
     }
-
-    /**
-     * Return current connection
-     * @return \Doctrine\DBAL\Connection
-     */
-    public function getConnection()
-    {
-        return self::$db;
-    }
-
-    /* Variable use only in the installation process to log errors. See the Database::query function */
-    // static $log_queries = false;
 
     /**
      * Returns the name of the main database.
@@ -156,7 +162,7 @@ class Database
      * @param \Doctrine\DBAL\Driver\Statement $result
      * @return int
      */
-    public static function affected_rows(\Doctrine\DBAL\Driver\Statement $result = null)
+    public static function affected_rows(Statement $result = null)
     {
         return $result->rowCount();
         //return self::use_default_connection($connection) ? mysql_affected_rows() : mysql_affected_rows($connection);
@@ -169,7 +175,7 @@ class Database
      * @return array        Array of results as returned by php
      * @author Yannick Warnier <yannick.warnier@beeznest.com>
      */
-    public static function fetch_array(\Doctrine\DBAL\Driver\Statement $result, $option = 'BOTH')
+    public static function fetch_array(Statement $result, $option = 'BOTH')
     {
         if ($result === false) {
             return array();
@@ -188,7 +194,7 @@ class Database
      * @param resource $result    The result from a call to sql_query (e.g. Database::query).
      * @return array            Returns an associative array that corresponds to the fetched row and moves the internal data pointer ahead.
      */
-    public static function fetch_assoc(\Doctrine\DBAL\Driver\Statement $result)
+    public static function fetch_assoc(Statement $result)
     {
         return $result->fetch(PDO::FETCH_ASSOC);
         //return mysql_fetch_assoc($result);
@@ -202,7 +208,7 @@ class Database
      * @return    object        Object of class StdClass or the required class, containing the query result row
      * @author    Yannick Warnier <yannick.warnier@dokeos.com>
      */
-    public static function fetch_object(\Doctrine\DBAL\Driver\Statement $result)
+    public static function fetch_object(Statement $result)
     {
         // Waiting for http://www.doctrine-project.org/jira/browse/DBAL-544 in order to know which constant use.
         //return $result->fetch(\Doctrine\ORM\Query::HYDRATE_OBJECT);
@@ -219,7 +225,7 @@ class Database
      * @param  \Doctrine\DBAL\Driver\Statement    The result from a call to Database::query())
      * @return array        Array of results as returned by php
      */
-    public static function fetch_row(\Doctrine\DBAL\Driver\Statement $result)
+    public static function fetch_row(Statement $result)
     {
         return $result->fetch(PDO::FETCH_NUM);
         //return mysql_fetch_row($result);
@@ -236,10 +242,10 @@ class Database
 
     /**
      * Gets the number of rows from the last query result - help achieving database independence
-     * @param \Doctrine\DBAL\Driver\Statement
+     * @param Statement $result
      * @return integer The number of rows contained in this result
      **/
-    public static function num_rows(\Doctrine\DBAL\Driver\Statement $result)
+    public static function num_rows(Statement $result)
     {
         return $result->rowCount();
     }
@@ -247,12 +253,12 @@ class Database
     /**
      * Acts as the relative *_result() function of most DB drivers and fetches a
      * specific line and a field
-     * @param    \Doctrine\DBAL\Driver\Statement     The database resource to get data from
+     * @param    Statement     The database resource to get data from
      * @param    integer        The row number
      * @param    string        Optional field name or number
      * @return    mixed        One cell of the result, or FALSE on error
      */
-    public static function result(\Doctrine\DBAL\Driver\Statement $resource, $row, $field = 0)
+    public static function result(Statement $resource, $row, $field = 0)
     {
         if ($resource->rowCount() > 0) {
             $result = $resource->fetchAll(PDO::FETCH_BOTH);
@@ -268,7 +274,7 @@ class Database
      * Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
      * Anyway, all associated result memory is automatically freed at the end of the script's execution.
      */
-    public static function free_result(\Doctrine\DBAL\Driver\Statement $result)
+    public static function free_result(Statement $result)
     {
         $result->closeCursor();
         //return mysql_free_result($result);
@@ -313,7 +319,7 @@ class Database
      * Executes a query in the database
      * @author Julio Montoya
      * @param string $query The SQL query
-     * @return \Doctrine\DBAL\Driver\Statement
+     * @return Statement
      */
     public static function query($query)
     {
@@ -368,11 +374,11 @@ class Database
 
     /**
      * Stores a query result into an array.
-     * @param  \Doctrine\DBAL\Driver\Statement $result - the return value of the query
+     * @param  Statement $result - the return value of the query
      * @param  option BOTH, ASSOC, or NUM
      * @return array - the value returned by the query
      */
-    public static function store_result(\Doctrine\DBAL\Driver\Statement $result, $option = 'BOTH')
+    public static function store_result(Statement $result, $option = 'BOTH')
     {
         return $result->fetchAll(self::customOptionToDoctrineOption($option));
         /*

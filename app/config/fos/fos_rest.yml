@@ -3,7 +3,7 @@ fos_rest:
     body_listener:          true
     format_listener:        true
     view:
-        view_response_listener: force
+        view_response_listener: 'force'
     body_converter:
         enabled: false
         validate: true

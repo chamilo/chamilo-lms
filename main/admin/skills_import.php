@@ -11,7 +11,7 @@
 $language_file = array ('admin', 'registration');
 
 $cidReset = true;
-require '../inc/global.inc.php';
+//require '../inc/global.inc.php';
 
 function validate_data($skills) {
     $errors = array();

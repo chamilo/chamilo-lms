@@ -707,44 +707,44 @@ function create_default_course_gradebook($course_code = null, $gradebook_model_i
         if (empty($session_id)) {
             $session_id = api_get_session_id();
 
-        $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
-        if (!empty($session_id)) {
-            $sql .= " AND session_id = ".(int)$session_id;
-        } else {
-            $sql .= " AND (session_id IS NULL OR session_id = 0) ";
-        }
-        $sql .= " ORDER BY id";
-        $res = Database::query($sql);
-        if (Database::num_rows($res)<1){
-            //there is no unique category for this course+session combination,
-            $cat = new Category();
+            $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+            $sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
             if (!empty($session_id)) {
-                $my_session_id = api_get_session_id();
-                $s_name = api_get_session_name($my_session_id);
-                $cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
-                $cat->set_session_id($session_id);
+                $sql .= " AND session_id = ".(int)$session_id;
             } else {
-                $cat->set_name($course_code);
+                $sql .= " AND (session_id IS NULL OR session_id = 0) ";
             }
-            $cat->set_course_code($course_code);
-            $cat->set_description(null);
-            $cat->set_user_id(api_get_user_id());
-            $cat->set_parent_id(0);
-            $default_weight_setting = api_get_setting('gradebook_default_weight');
-            $default_weight = isset($default_weight_setting) && !empty($default_weight_setting) ? $default_weight_setting : 100;
-            $cat->set_weight($default_weight);
-            $cat->set_grade_model_id($gradebook_model_id);
-            $cat->set_certificate_min_score(75);
-            $cat->set_visible(0);
-            $cat->add();
-            $category_id = $cat->get_id();
-            unset ($cat);
-        } else {
-            $row = Database::fetch_array($res);
-            $category_id = $row['id'];
+            $sql .= " ORDER BY id";
+            $res = Database::query($sql);
+            if (Database::num_rows($res)<1){
+                //there is no unique category for this course+session combination,
+                $cat = new Category();
+                if (!empty($session_id)) {
+                    $my_session_id = api_get_session_id();
+                    $s_name = api_get_session_name($my_session_id);
+                    $cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
+                    $cat->set_session_id($session_id);
+                } else {
+                    $cat->set_name($course_code);
+                }
+                $cat->set_course_code($course_code);
+                $cat->set_description(null);
+                $cat->set_user_id(api_get_user_id());
+                $cat->set_parent_id(0);
+                $default_weight_setting = api_get_setting('gradebook_default_weight');
+                $default_weight = isset($default_weight_setting) && !empty($default_weight_setting) ? $default_weight_setting : 100;
+                $cat->set_weight($default_weight);
+                $cat->set_grade_model_id($gradebook_model_id);
+                $cat->set_certificate_min_score(75);
+                $cat->set_visible(0);
+                $cat->add();
+                $category_id = $cat->get_id();
+                unset ($cat);
+            } else {
+                $row = Database::fetch_array($res);
+                $category_id = $row['id'];
+            }
         }
-    //}
     }
     return $category_id;
 }

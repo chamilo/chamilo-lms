@@ -10,7 +10,7 @@
 $language_file = array('glossary', 'admin');
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $current_course_tool  = TOOL_GLOSSARY;
 
@@ -34,7 +34,7 @@ $(document).ready(function () {
 $tool = TOOL_GLOSSARY;
 
 // Tracking
-event_access_tool(TOOL_GLOSSARY);
+Event::event_access_tool(TOOL_GLOSSARY);
 
 function sorter($item1, $item2) {
 	if ($item1[2] == $item2[2])

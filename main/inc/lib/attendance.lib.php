@@ -35,13 +35,16 @@ class Attendance
 	 * Get the total number of attendance inside current course and current session
 	 * @see SortableTable#get_total_number_of_items()
 	 */
-	static function get_number_of_attendances() {
+	static function get_number_of_attendances($active = -1) {
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
 		$sql = "SELECT COUNT(att.id) AS total_number_of_items FROM $tbl_attendance att
-		        WHERE c_id = $course_id AND att.active = 1 $condition_session ";
+		        WHERE c_id = $course_id $condition_session ";
+        if ($active == 1 || $active == 0) {
+            $sql .= "AND att.active = $active";
+        }
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
@@ -57,14 +60,14 @@ class Attendance
 		// Initializing database table and variables
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
 		$data = array();
-        //@todo user seters/gettrs
+
 		if (empty($course_id)) {
 			$course_id = api_get_course_int_id();
 		} else {
 		    $course_id = intval($course_id);
 		}
 
-        $session_id = isset($session_id) ? intval($session_id):api_get_session_id();
+        $session_id = isset($session_id)?intval($session_id):api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
 		// Get attendance data
@@ -247,7 +250,7 @@ class Attendance
 
 	/**
 	 * Add attendaces sheet inside table. This is the *list of* dates, not
-         * a specific date in itself.
+     * a specific date in itself.
 	 * @param  bool   true for adding link in gradebook or false otherwise (optional)
 	 * @return int    last attendance id
 	 */
@@ -332,7 +335,6 @@ class Attendance
             api_item_property_update($_course, TOOL_ATTENDANCE, $attendance_id,"AttendanceUpdated", $user_id);
 
             // add link to gradebook
-
             if ($link_to_gradebook && !empty($this->category_id)) {
                 $description = '';
                 $link_id = is_resource_in_course_gradebook($course_code, 7, $attendance_id, $session_id);

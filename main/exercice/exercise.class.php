@@ -959,7 +959,7 @@ class Exercise
         if (!empty($questions_by_category)) {
 
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
+            $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
 
             $newCategoryList = array();
 
@@ -974,7 +974,7 @@ class Exercise
 
                 if (!empty($cat['parent_id'])) {
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
-                        $categoryEntity = $em->find('ChamiloLMSCoreBundle:CQuizCategory', $cat['parent_id']);
+                        $categoryEntity = $em->find('ChamiloCoreBundle:CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
@@ -984,7 +984,7 @@ class Exercise
                     if ($this->categoryMinusOne) {
                         //$index = 1;
                     }
-                    /** @var \ChamiloLMS\Entity\CQuizCategory $categoryParent*/
+                    /** @var \Chamilo\Entity\CQuizCategory $categoryParent*/
 
                     foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
@@ -1747,7 +1747,7 @@ class Exercise
         // QuestionScoreType
 
         $em = Database::getManager();
-        $types = $em->getRepository('ChamiloLMSCoreBundle:QuestionScore')->findAll();
+        $types = $em->getRepository('ChamiloCoreBundle:QuestionScore')->findAll();
         $options = array(
             '0' => get_lang('SelectAnOption')
         );
@@ -2332,8 +2332,8 @@ class Exercise
         if ($type == 'full') {
             // rules
             $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
-            $form->addRule('start_time', get_lang('InvalidDate'), 'date');
-            $form->addRule('end_time', get_lang('InvalidDate'), 'date');
+            $form->addRule('start_time', get_lang('InvalidDate'), 'datetime');
+            $form->addRule('end_time', get_lang('InvalidDate'), 'datetime');
         }
 
         // defaults

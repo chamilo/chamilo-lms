@@ -1680,15 +1680,13 @@ class MySpace {
 		// Sending emails
 		if ($sendMail) {
 			$i = 0;
-            $from = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-            $fromEmail = api_get_setting('emailAdministrator');
+            $from = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS);
+            $fromEmail = api_get_setting('platform.administrator_email');
 
 			foreach ($users as $user) {
                 $emailto = api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$user['Email'].'>';
-                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-                $emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
-                //$emailheaders = 'From: '.api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS).' <'.api_get_setting('emailAdministrator').">\n";
-                //$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
+                $emailsubject = '['.api_get_setting('platform.site_name').'] '.get_lang('YourReg').' '.api_get_setting('platform.site_name');
+                $emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('platform.site_name')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('platform.site_name')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'))."\n".get_lang('Manager')." ".api_get_setting('platform.site_name')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('platform.administrator_email');
 
                 api_mail_html($emailto, $recipient_email, $emailsubject, $emailbody, $from, $fromEmail);
 

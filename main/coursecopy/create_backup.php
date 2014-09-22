@@ -13,7 +13,7 @@
 $language_file = array('exercice', 'admin', 'coursebackup');
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_course_script(true);
@@ -62,7 +62,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     }
     $zip_file = CourseArchiver::write_course($course);
     Display::display_confirmation_message(get_lang('BackupCreated'));
-    echo '<br /><a class="btn btn-primary btn-large" href="../course_info/download.php?archive='.$zip_file.'">'.get_lang(
+    echo '<br /><a class="btn btn-primary btn-large" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$zip_file.'">'.get_lang(
         'Download'
     ).'</a>';
 

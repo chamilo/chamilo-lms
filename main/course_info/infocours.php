@@ -17,7 +17,6 @@ use \ChamiloSession as Session;
 
 // Language files that need to be included
 $language_file = array('create_course', 'course_info', 'admin', 'gradebook', 'document');
-require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;
 
@@ -57,17 +56,10 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
         $show_delete_watermark_text_message = true;
     }
 }
-$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $tbl_user              = Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_admin             = Database :: get_main_table(TABLE_MAIN_ADMIN);
 $tbl_course_user       = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course            = Database :: get_main_table(TABLE_MAIN_COURSE);
-
-// Get all course categories
-$sql = "SELECT code,name FROM ".$table_course_category."
-        WHERE auth_course_child ='TRUE'  OR code = '".Database::escape_string($_course['categoryCode'])."'
-        ORDER BY tree_pos";
-$res = Database::query($sql);
 
 $s_select_course_tutor_name = "SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
 $q_tutor = Database::query($s_select_course_tutor_name);
@@ -103,11 +95,7 @@ while ($a_titulars = Database::fetch_array($q_result_titulars)) {
     $a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
 }
 
-$categories[''] = '-';
-while ($cat = Database::fetch_array($res)) {
-    $categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
-    ksort($categories);
-}
+$categories = getCategoriesCanBeAddedInCourse($_course['categoryCode']);
 
 $linebreak = '<div class="row"><div class="label"></div><div class="formw" style="border-bottom:1px dashed grey"></div></div>';
 
@@ -132,7 +120,7 @@ if ($form->validate() && is_settings_editable()) {
 $course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository;   // course path
 if (file_exists($course_path.'/course-pic85x85.png')) {
     $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository;   // course web path
-    $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1,1000); // redimensioned image 85x85
+    $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1, 1000); // redimensioned image 85x85
     $image_html =  '<div class="row"><div class="formw"><img src="'.$course_medium_image.'" /></div></div>';
 }
 $form->addElement('html', $image_html);
@@ -140,19 +128,6 @@ $form->addElement('html', $image_html);
 $form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
-
-//$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
-
-//the teacher doesn't need to change the trainer only the admin can do that
-/*
-$prof = &$form->addElement('select', 'tutor_name', get_lang('Teacher'), $a_profs, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_name'));
-$form->applyFilter('tutor_name', 'html_filter');
-$prof -> setSelected($s_selected_tutor);
- * /
-
-/*$visual_code=$form->addElement('text', 'visual_code', get_lang('Code'));
-$visual_code->freeze();
-$form->applyFilter('visual_code', 'strtoupper');*/
 
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
@@ -163,7 +138,6 @@ $form->applyFilter('department_name', 'trim');
 
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('class' => 'span5'));
 $form->applyFilter('department_url', 'html_filter');
-//$form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Picture
 $form->addElement('file', 'picture', get_lang('AddPicture'));
@@ -299,7 +273,6 @@ $form->addGroup($group, '', array(get_lang("AllowUserViewUserList")), '');
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
 
-
 // CHAT SETTINGS
 $form->addElement('html', '<div><h3>'.Display::return_icon('chat.png', Security::remove_XSS(get_lang('ConfigChat')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('ConfigChat')).'</h3><div>');
 
@@ -310,7 +283,6 @@ $form->addGroup($group, '', array(get_lang("AllowOpenchatWindow")), '');
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
-
 
 // LEARNING PATH
 $form->addElement('html', '<div><h3>'.Display::return_icon('scorms.png', get_lang('ConfigLearnpath'),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('ConfigLearnpath')).'</h3><div>');
@@ -372,6 +344,16 @@ $group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse',
 $group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DoNotDisplayAnyAdvance'), 0);
 $form->addGroup($group, '', array(get_lang("InfoAboutAdvanceInsideHomeCourse")), '');
 
+// Document settings
+$form->addElement('html', '<div><h3>'.Display::return_icon('folder.png', Security::remove_XSS(get_lang('Documents')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Documents')).'</h3><div>');
+
+$group = array(
+    $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
+
+);
+$form->addGroup($group, '', array(get_lang("ShowSystemFolders")), '');
+
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
 
@@ -389,12 +371,11 @@ if (api_get_setting('allow_public_certificates')=='true') {
 
 
 // Plugin course settings
+$appPlugin = new AppPlugin();
+$appPlugin->add_course_settings_form($form);
 
-$app_plugin = new AppPlugin();
-$app_plugin->add_course_settings_form($form);
 
-// Get all the course information
-$all_course_information =  CourseManager::get_course_information($_course['sysCode']);
+$all_course_information = CourseManager::get_course_information($_course['sysCode']);
 
 // Set the default values of the form
 $values = array();
@@ -411,108 +392,84 @@ $values['course_registration_password'] = $all_course_information['registration_
 $values['legal']                        = $all_course_information['legal'];
 $values['activate_legal']               = $all_course_information['activate_legal'];
 // Get send_mail_setting (auth)from table
-$values['email_alert_to_teacher_on_new_user_in_course'] = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course');
+$courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
+foreach ($courseSettings as $setting) {
+    $result = api_get_course_setting($setting);
+    if ($result != '-1') {
+        $values[$setting] = $result;
+    }
+}
 // Get send_mail_setting (work)from table
-$values['email_alert_manager_on_new_doc']           = api_get_course_setting('email_alert_manager_on_new_doc');
-// Get send_mail_setting (dropbox) from table
-$values['email_alert_on_new_doc_dropbox']           = api_get_course_setting('email_alert_on_new_doc_dropbox');
-// Get send_mail_setting (work)from table
-$values['email_alert_manager_on_new_quiz']          = api_get_course_setting('email_alert_manager_on_new_quiz');
-// Get allow_user_edit_agenda from table
-$values['allow_user_edit_agenda']                   = api_get_course_setting('allow_user_edit_agenda');
-// Get allow_user_edit_announcement from table
-$values['allow_user_edit_announcement']             = api_get_course_setting('allow_user_edit_announcement');
-// Get allow_user_image_forum from table
-$values['allow_user_image_forum']                   = api_get_course_setting('allow_user_image_forum');
-// Get allow_open_chat_window from table
-$values['allow_open_chat_window']                   = api_get_course_setting('allow_open_chat_window');
-// Get course_theme from table
-$values['course_theme']                             = api_get_course_setting('course_theme');
-// Get allow_learning_path_theme from table
-$values['allow_learning_path_theme']                = api_get_course_setting('allow_learning_path_theme');
-//Get allow show user list
-$values['allow_user_view_user_list']                = api_get_course_setting('allow_user_view_user_list');
-//Get allow show user list
-$values['display_info_advance_inside_homecourse']   = api_get_course_setting('display_info_advance_inside_homecourse');
-$values['email_alert_students_on_new_homework']     = api_get_course_setting('email_alert_students_on_new_homework');
-$values['enable_lp_auto_launch']                    = api_get_course_setting('enable_lp_auto_launch');
-$values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
-$values['allow_public_certificates']                = api_get_course_setting('allow_public_certificates');
-$values['allow_fast_exercise_edition']              = api_get_course_setting('allow_fast_exercise_edition') == 1 ? 1 : 0;
-$values['enable_exercise_auto_launch']              = api_get_course_setting('enable_exercise_auto_launch') == -1 ? 0 : api_get_course_setting('enable_exercise_auto_launch') ;
-
-$app_plugin->set_course_settings_defaults($values);
 $form->setDefaults($values);
 
 // Validate form
 if ($form->validate() && is_settings_editable()) {
-    $update_values = $form->exportValues();
+    $updateValues = $form->exportValues();
 
     $pdf_export_watermark_path = isset($_FILES['pdf_export_watermark_path']) ? $_FILES['pdf_export_watermark_path'] : null;
 
     if (!empty($pdf_export_watermark_path['name'])) {
-        $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name'], $course_code);
-        unset($update_values['pdf_export_watermark_path']);
+        $pdf_export_watermark_path_result = PDF::upload_watermark(
+            $pdf_export_watermark_path['name'],
+            $pdf_export_watermark_path['tmp_name'],
+            $course_code
+        );
+        unset($updateValues['pdf_export_watermark_path']);
     }
 
     //Variables that will be saved in the TABLE_MAIN_COURSE table
     $update_in_course_table = array(
-        'title', 'course_language','category_code','department_name', 'department_url','visibility',
-        'subscribe', 'unsubscribe','tutor_name','course_registration_password', 'legal', 'activate_legal'
+        'title',
+        'course_language',
+        'category_code',
+        'department_name',
+        'department_url',
+        'visibility',
+        'subscribe',
+        'unsubscribe',
+        'tutor_name',
+        'course_registration_password',
+        'legal',
+        'activate_legal'
     );
 
-    foreach ($update_values as $index => $value) {
-        $update_values[$index] = Database::escape_string($value);
+    foreach ($updateValues as $index =>$value) {
+        $updateValues[$index] = Database::escape_string($value);
     }
+
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-
     $sql = "UPDATE $table_course SET
-        title 				    = '".$update_values['title']."',
-        course_language 	    = '".$update_values['course_language']."',
-        category_code 		    = '".$update_values['category_code']."',
-        department_name  	    = '".$update_values['department_name']."',
-        department_url  	    = '".$update_values['department_url']."',
-        visibility  		    = '".$update_values['visibility']."',
-        subscribe  			    = '".$update_values['subscribe']."',
-        unsubscribe  		    = '".$update_values['unsubscribe']."',
-        legal                   = '".$update_values['legal']."',
-        activate_legal          = '".$update_values['activate_legal']."',
-        registration_code 	    = '".$update_values['course_registration_password']."'
+        title 				    = '".$updateValues['title']."',
+        course_language 	    = '".$updateValues['course_language']."',
+        category_code 		    = '".$updateValues['category_code']."',
+        department_name  	    = '".$updateValues['department_name']."',
+        department_url  	    = '".$updateValues['department_url']."',
+        visibility  		    = '".$updateValues['visibility']."',
+        subscribe  			    = '".$updateValues['subscribe']."',
+        unsubscribe  		    = '".$updateValues['unsubscribe']."',
+        legal                   = '".$updateValues['legal']."',
+        activate_legal          = '".$updateValues['activate_legal']."',
+        registration_code 	    = '".$updateValues['course_registration_password']."'
         WHERE code = '".$course_code."'";
-
     Database::query($sql);
 
     // Update course_settings table - this assumes those records exist, otherwise triggers an error
-    $table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
-
-    foreach ($update_values as $key => $value) {
-        //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
-        if (!in_array($key, $update_in_course_table)) {
-            $data = api_get_course_setting($key);
-            //Setting does not exist we create one!
-            if ($data == -1 && isset($values[$key])) {
-                // @todo create a api_set_course_setting
-                //api_set_course_setting()
-                //api_set_setting($key, $update_values[$key], null, null, api_get_current_access_url_id());
-                $params = array(
-                    'c_id' => api_get_course_int_id(),
-                    'variable' => $key,
-                    'value' => $update_values[$key]
-                );
-                Database::insert($table_course_setting, $params);
-            } else {
-                Database::update(
-                    $table_course_setting,
-                    array('value' => $update_values[$key]),
-                    array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id()))
-                );
-            }
-        }
+    foreach ($courseSettings as $setting) {
+        $value = isset($updateValues[$setting]) ? $updateValues[$setting] : null;
+        CourseManager::saveCourseConfigurationSetting(
+            $appPlugin,
+            $setting,
+            $value,
+            api_get_course_int_id()
+        );
     }
-    $app_plugin->save_course_settings($update_values);
-    $courseInfo = api_get_course_info($course_code);
-    Session::write('_course', $courseInfo);
-    header('Location: infocours.php?action=show_message&cidReq='.$course_code);
+
+    $appPlugin->saveCourseSettingsHook($updateValues);
+    $cidReset = true;
+    $cidReq = $course_code;
+    require '../inc/local.inc.php';
+    $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=show_message&cidReq='.$course_code;
+    header("Location: $url");
     exit;
 }
 

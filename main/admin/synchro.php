@@ -12,7 +12,7 @@
  */
 $language_file = 'admin';
 $cidReset = true;
-require_once '../main/inc/global.inc.php';
+//require_once '../main/inc/global.inc.php';
 $this_section = SECTION_GLOBAL;
 
 //api_protect_admin_script();
@@ -138,9 +138,6 @@ $form->addElement('textarea','description',get_lang('Note'));
 
 //$defaults['url']='http://';
 $defaults['url'] = $_SERVER['REMOTE_ADDR'];
-//$defaults['admin_mail'] = api_get_setting('emailAdministrator');
-//$defaults['admin_name'] = api_get_setting('administratorSurname').', '.api_get_setting('administratorName');
-//$defaults['admin_phone'] = api_get_setting('administratorTelephone');
 $form->setDefaults($defaults);
 
 $submit_name = get_lang('SentSincroClientData');

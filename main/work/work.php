@@ -45,7 +45,7 @@ use ChamiloSession as Session;
 
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
 /*	Configuration settings */
@@ -228,7 +228,7 @@ if (!empty($group_id)) {
 }
 
 //stats
-event_access_tool(TOOL_STUDENTPUBLICATION);
+Event::event_access_tool(TOOL_STUDENTPUBLICATION);
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 

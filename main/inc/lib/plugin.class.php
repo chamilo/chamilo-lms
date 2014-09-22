@@ -2,16 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Class Plugin
  * Base class for plugins
  *
  * This class has to be extended by every plugin. It defines basic methods
  * to install/uninstall and get information about a plugin
  *
- * @copyright (c) 2012 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht <laurent@opprecht.info>
- * @author Julio Montoya <gugli100@gmail.com> added course settings support + lang variable fixes
- * @author Yannick Warnier <ywarnier@beeznest.org> added documentation
+ * @author    Julio Montoya <gugli100@gmail.com>
+ * @author    Yannick Warnier <ywarnier@beeznest.org>
+ * @author    Laurent Opprecht    <laurent@opprecht.info>
+ * @copyright 2012 University of Geneva
+ * @license   GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  *
  */
 class Plugin
@@ -19,10 +20,10 @@ class Plugin
     protected $version = '';
     protected $author = '';
     protected $fields = array();
-
     private $settings = null;
-    private $strings = null; //translation strings
-    public $is_course_plugin = false;
+    // Translation strings.
+    private $strings = null;
+    public $isCoursePlugin = false;
 
     /**
      * When creating a new course, these settings are added to the course, in
@@ -33,9 +34,9 @@ class Plugin
      * main/img/icons/64/plugin_name_na.png
      * @example
      * $course_settings = array(
-     * array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
-     * array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
-     * );
+          array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
+          array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
+       );
      */
     public $course_settings = array();
     /**
@@ -47,9 +48,9 @@ class Plugin
     /**
      * Default constructor for the plugin class. By default, it only sets
      * a few attributes of the object
-     * @param  string  $version Version of this plugin
-     * @param  string  $author Author of this plugin
-     * @param  array   $settings Array of global settings to be proposed to configure the plugin
+     * @param string $version   of this plugin
+     * @param string $author    of this plugin
+     * @param array  $settings  settings to be proposed to configure the plugin
      */
     protected function __construct($version, $author, $settings = array())
     {
@@ -65,16 +66,15 @@ class Plugin
      * Gets an array of information about this plugin (name, version, ...)
      * @return  array Array of information elements about this plugin
      */
-    function get_info()
+    public function get_info()
     {
         $result = array();
-
-        $result['title'] = $this->get_title();
-        $result['comment'] = $this->get_comment();
-        $result['version'] = $this->get_version();
-        $result['author'] = $this->get_author();
-        $result['plugin_class'] = get_class($this);
-        $result['is_course_plugin'] = $this->is_course_plugin;
+        $result['title']            = $this->get_title();
+        $result['comment']          = $this->get_comment();
+        $result['version']          = $this->get_version();
+        $result['author']           = $this->get_author();
+        $result['plugin_class']     = get_class($this);
+        $result['is_course_plugin'] = $this->isCoursePlugin;
 
         if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;
@@ -83,77 +83,74 @@ class Plugin
                 $result[$name] = $value;
             }
         }
+
         return $result;
     }
 
     /**
      * Returns the "system" name of the plugin in lowercase letters
-     * @param string Name of the plugin
      * @return string
      */
-    function get_name()
+    public function get_name()
     {
         $result = get_class($this);
         $result = str_replace('Plugin', '', $result);
         $result = strtolower($result);
+
         return $result;
     }
 
     /**
      * Returns the title of the plugin
-     * @param string Title of the plugin
      * @return string
      */
-    function get_title()
+    public function get_title()
     {
         return $this->get_lang('plugin_title');
     }
 
     /**
      * Returns the description of the plugin
-     * @param string Description of the plugin
      * @return string
      */
-    function get_comment()
+    public function get_comment()
     {
         return $this->get_lang('plugin_comment');
     }
 
     /**
      * Returns the version of the plugin
-     * @param string Version of the plugin
      * @return string
      */
-    function get_version()
+    public function get_version()
     {
         return $this->version;
     }
 
     /**
      * Returns the author of the plugin
-     * @param string Author(s) of the plugin
      * @return string
      */
-    function get_author()
+    public function get_author()
     {
         return $this->author;
     }
 
     /**
      * Returns the contents of the CSS defined by the plugin
-     * @param string The CSS string
      * @return array
      */
-    function get_css()
+    public function get_css()
     {
         $name = $this->get_name();
-        $path = api_get_path(SYS_PLUGIN_PATH) . "$name/resources/$name.css";
+        $path = api_get_path(SYS_PLUGIN_PATH)."$name/resources/$name.css";
         if (!is_readable($path)) {
             return '';
         }
         $css = array();
         $css[] = file_get_contents($path);
         $result = implode($css);
+
         return $result;
     }
 
@@ -161,7 +158,7 @@ class Plugin
      * Returns an HTML form (generated by FormValidator) of the plugin settings
      * @return string FormValidator-generated form
      */
-    function get_settings_form()
+    public function get_settings_form()
     {
         $result = new FormValidator($this->get_name());
 
@@ -173,8 +170,8 @@ class Plugin
             $type = isset($type) ? $type : 'text';
 
             $help = null;
-            if ($this->get_lang_plugin_exists($name . '_help')) {
-                $help = $this->get_lang($name . '_help');
+            if ($this->get_lang_plugin_exists($name.'_help')) {
+                $help = $this->get_lang($name.'_help');
             }
 
             switch ($type) {
@@ -185,51 +182,29 @@ class Plugin
                     $result->add_html_editor($name, $this->get_lang($name));
                     break;
                 case 'text':
-                    $result->addElement(
-                        $type,
-                        $name,
-                        array($this->get_lang($name), $help)
-                    );
+                    $result->addElement($type, $name, array($this->get_lang($name), $help));
                     break;
                 case 'boolean':
                     $group = array();
-                    $group[] = $result->createElement(
-                        'radio',
-                        $name,
-                        '',
-                        get_lang('Yes'),
-                        'true'
-                    );
-                    $group[] = $result->createElement(
-                        'radio',
-                        $name,
-                        '',
-                        get_lang('No'),
-                        'false'
-                    );
-                    $result->addGroup(
-                        $group,
-                        null,
-                        array($this->get_lang($name), $help)
-                    );
+                    $group[] = $result->createElement('radio', $name, '', get_lang('Yes'), 'true');
+                    $group[] = $result->createElement('radio', $name, '', get_lang('No'), 'false');
+                    $result->addGroup($group, null, array($this->get_lang($name), $help));
                     break;
             }
         }
         $result->setDefaults($defaults);
-        $result->addElement(
-            'style_submit_button',
-            'submit_button',
-            $this->get_lang('Save')
-        );
+        $result->addElement('style_submit_button', 'submit_button', $this->get_lang('Save'));
+
         return $result;
     }
 
     /**
      * Returns the value of a given plugin global setting
-     * @param string Name of the plugin
+     * @param string $name of the plugin
+     *
      * @return string Value of the plugin
      */
-    function get($name)
+    public function get($name)
     {
         $settings = $this->get_settings();
         foreach ($settings as $setting) {
@@ -237,6 +212,7 @@ class Plugin
                 return $setting['selected_value'];
             }
         }
+
         return false;
     }
 
@@ -249,23 +225,20 @@ class Plugin
         if (is_null($this->settings)) {
             $settings = api_get_settings_params(
                 array(
-                    "subkey = ? AND category = ? AND type = ? " => array(
-                        $this->get_name(),
-                        'Plugins',
-                        'setting'
-                    )
+                    "subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')
                 )
             );
             $this->settings = $settings;
         }
+
         return $this->settings;
     }
 
     /**
      * Tells whether language variables are defined for this plugin or not
-     * @param string System name of the plugin
-     * @return boolean True if the plugin has language variables defined,
-     * false otherwise
+     * @param string $name System name of the plugin
+     *
+     * @return bool True if the plugin has language variables defined, false otherwise
      */
     public function get_lang_plugin_exists($name)
     {
@@ -274,7 +247,8 @@ class Plugin
 
     /**
      * Hook for the get_lang() function to check for plugin-defined language terms
-     * @param string Name of the language variable we are looking for
+     * @param string $name of the language variable we are looking for
+     *
      * @return string The translated language term of the plugin
      */
     public function get_lang($name)
@@ -287,13 +261,13 @@ class Plugin
             $plugin_name = $this->get_name();
 
             //1. Loading english if exists
-            $english_path = $root . $plugin_name . "/lang/english.php";
+            $english_path = $root.$plugin_name."/lang/english.php";
             if (is_readable($english_path)) {
                 include $english_path;
                 $this->strings = $strings;
             }
 
-            $path = $root . $plugin_name . "/lang/$language_interface.php";
+            $path = $root.$plugin_name."/lang/$language_interface.php";
             //2. Loading the system language
             if (is_readable($path)) {
                 include $path;
@@ -308,94 +282,106 @@ class Plugin
         if (isset($this->strings[$name])) {
             return $this->strings[$name];
         }
+
         return get_lang($name);
     }
 
     /**
      * Caller for the install_course_fields() function
-     * @param int The course's integer ID
-     * @param boolean Whether to add a tool link on the course homepage
+     * @param int $courseId
+     * @param boolean $addToolLink Whether to add a tool link on the course homepage
+     *
      * @return void
      */
-    function course_install($course_id, $add_tool_link = true)
+    public function course_install($courseId, $addToolLink = true)
     {
-        $this->install_course_fields($course_id, $add_tool_link);
+        $this->install_course_fields($courseId, $addToolLink);
     }
-
 
     /**
      * Add course settings and, if not asked otherwise, add a tool link on the course homepage
-     * @param int Course integer ID
-     * @param boolean Whether to add a tool link or not (some tools might just offer a configuration section and act on the backend)
+     * @param int $courseId Course integer ID
+     * @param boolean $add_tool_link Whether to add a tool link or not
+     * (some tools might just offer a configuration section and act on the backend)
      * @return boolean  False on error, null otherwise
      */
-    public function install_course_fields($course_id, $add_tool_link = true)
+    public function install_course_fields($courseId, $add_tool_link = true)
     {
         $plugin_name = $this->get_name();
         $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
+        $courseId = intval($courseId);
 
-        $course_id = intval($course_id);
-        if (empty($course_id)) {
+        if (empty($courseId)) {
             return false;
         }
-        //Ads course settings
+
+        // Adding course settings.
         if (!empty($this->course_settings)) {
             foreach ($this->course_settings as $setting) {
                 $variable = Database::escape_string($setting['name']);
-                $value = '';
+                $value ='';
+
                 if (isset($setting['init_value'])) {
                     $value = Database::escape_string($setting['init_value']);
                 }
+
                 $type = 'textfield';
                 if (isset($setting['type'])) {
                     $type = Database::escape_string($setting['type']);
                 }
+
                 if (isset($setting['group'])) {
                     $group = Database::escape_string($setting['group']);
-                    $sql = "SELECT value FROM $t_course WHERE c_id = $course_id AND variable = '$group' AND subkey = '$variable' ";
+                    $sql = "SELECT value FROM $t_course
+                            WHERE c_id = $courseId AND variable = '$group' AND subkey = '$variable' ";
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
-                        $sql_course = "INSERT INTO $t_course (c_id, variable, subkey, value, category, type) VALUES ($course_id, '$group', '$variable', '$value', 'plugins', '$type')";
-                        $r = Database::query($sql_course);
+                        $sql = "INSERT INTO $t_course (c_id, variable, subkey, value, category, type) VALUES
+                                ($courseId, '$group', '$variable', '$value', 'plugins', '$type')";
+                        Database::query($sql);
                     }
                 } else {
-                    $sql = "SELECT value FROM $t_course WHERE c_id = $course_id AND variable = '$variable' ";
+                    $sql = "SELECT value FROM $t_course
+                            WHERE c_id = $courseId AND variable = '$variable' ";
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
-                        $sql_course = "INSERT INTO $t_course (c_id, variable, value, category, subkey, type) VALUES ($course_id, '$variable','$value', 'plugins', '$plugin_name', '$type')";
-                        $r = Database::query($sql_course);
+                        $sql = "INSERT INTO $t_course (c_id, variable, value, category, subkey, type) VALUES
+                                ($courseId, '$variable','$value', 'plugins', '$plugin_name', '$type')";
+                        Database::query($sql);
                     }
                 }
             }
         }
+
         // Stop here if we don't want a tool link on the course homepage
         if (!$add_tool_link) {
             return true;
         }
+
         //Add an icon in the table tool list
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-        $sql = "SELECT name FROM $t_tool WHERE c_id = $course_id AND name = '$plugin_name' ";
+        $sql = "SELECT name FROM $t_tool
+                WHERE c_id = $courseId AND name = '$plugin_name' ";
         $result = Database::query($sql);
         if (!Database::num_rows($result)) {
             $tool_link = "$plugin_name/start.php";
-            $visibility = Text::string2binary(
-                api_get_setting('course_create_active_tools', $plugin_name)
-            );
-            $sql_course = "INSERT INTO $t_tool VALUES ($course_id, NULL, '$plugin_name', '$tool_link', '$plugin_name.png',' " . $visibility . "','0', 'squaregrey.gif','NO','_self','plugin','0')";
-            Database::query($sql_course);
+            $visibility = string2binary(api_get_setting('course.course_create_active_tools', $plugin_name));
+            $sql = "INSERT INTO $t_tool VALUES
+            ($courseId, NULL, '$plugin_name', '$tool_link', '$plugin_name.png',' ".$visibility."','0', 'squaregrey.gif','NO','_self','plugin','0')";
+            Database::query($sql);
         }
     }
 
     /**
      * Delete the fields added to the course settings page and the link to the
      * tool on the course's homepage
-     * @param int The integer course ID
+     * @param int $courseId
      * @return void
      */
-    public function uninstall_course_fields($course_id)
+    public function uninstall_course_fields($courseId)
     {
-        $course_id = intval($course_id);
-        if (empty($course_id)) {
+        $courseId = intval($courseId);
+        if (empty($courseId)) {
             return false;
         }
         $plugin_name = $this->get_name();
@@ -409,25 +395,32 @@ class Plugin
                 if (!empty($setting['group'])) {
                     $variable = Database::escape_string($setting['group']);
                 }
-                $sql = "DELETE FROM $t_course WHERE c_id = $course_id AND variable = '$variable'";
+                if (empty($variable)) {
+                    continue;
+                }
+                $sql = "DELETE FROM $t_course
+                        WHERE c_id = $courseId AND variable = '$variable'";
                 Database::query($sql);
             }
         }
 
-        $sql = "DELETE FROM $t_tool WHERE c_id = $course_id AND name = '$plugin_name'";
+        $plugin_name = Database::escape_string($plugin_name);
+        $sql = "DELETE FROM $t_tool
+                WHERE c_id = $courseId AND name = '$plugin_name'";
         Database::query($sql);
     }
 
     /**
      * Install the course fields and tool link of this plugin in all courses
      * @param boolean Whether we want to add a plugin link on the course homepage
+     *
      * @return void
      */
-    function install_course_fields_in_all_courses($add_tool_link = true)
+    public function install_course_fields_in_all_courses($add_tool_link = true)
     {
         // Update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id, code FROM $t_courses ORDER BY id";
+        $sql = "SELECT id FROM $t_courses ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->install_course_fields($row['id'], $add_tool_link);
@@ -438,11 +431,11 @@ class Plugin
      * Uninstall the plugin settings fields from all courses
      * @return void
      */
-    function uninstall_course_fields_in_all_courses()
+    public function uninstall_course_fields_in_all_courses()
     {
         // Update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id, code FROM $t_courses ORDER BY id";
+        $sql = "SELECT id FROM $t_courses ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->uninstall_course_fields($row['id']);
@@ -450,12 +443,158 @@ class Plugin
     }
 
     /**
+     * @return array
+     */
+    public function getCourseSettings()
+    {
+        $settings = array();
+        if (is_array($this->course_settings)) {
+            foreach ($this->course_settings as $item) {
+                if (isset($item['group'])) {
+                    if (!in_array($item['group'], $settings)) {
+                        $settings[] = $item['group'];
+                    }
+                } else {
+                    $settings[] = $item['name'];
+                }
+            }
+        }
+
+        return $settings;
+    }
+
+    /**
      * Method to be extended when changing the setting in the course
      * configuration should trigger the use of a callback method
-     * @param array Values sent back from the course configuration script
+     * @param array $values sent back from the course configuration script
+     *
      * @return void
      */
     public function course_settings_updated($values = array())
     {
+
+    }
+
+   /**
+    * Add a tab to platform
+    * @param string   $tabName
+    * @param string   $url
+    *
+    * @return boolean
+    */
+    public function addTab($tabName, $url)
+    {
+        $sql = "SELECT * FROM settings_current
+            WHERE
+            variable = 'show_tabs' AND
+            subkey like 'custom_tab_%'";
+        $result = Database::query($sql);
+        $customTabsNum = Database::num_rows($result);
+
+        $tabNum = $customTabsNum + 1;
+
+        //Avoid Tab Name Spaces
+        $tabNameNoSpaces = preg_replace('/\s+/', '', $tabName);
+        $subkeytext = "Tabs" . $tabNameNoSpaces;
+
+
+        //Check if it is already added
+        $checkCondition = array(
+            'where' =>
+                array(
+                    "variable = 'show_tabs' AND subkeytext = ?" => array(
+                        $subkeytext
+                    )
+                )
+        );
+        $checkDuplicate = Database::select('*', 'settings_current', $checkCondition);
+        if (!empty($checkDuplicate)) {
+            return false;
+        }
+        //End Check
+        $subkey = 'custom_tab_' . $tabNum;
+        $attributes = array(
+            'variable' => 'show_tabs',
+            'subkey' => $subkey,
+            'type' => 'checkbox',
+            'category' => 'Platform',
+            'selected_value' => 'true',
+            'title' => $tabName,
+            'comment' => $url,
+            'subkeytext' => $subkeytext,
+            'access_url' => 1,
+            'access_url_changeable' => 0,
+            'access_url_locked' => 0
+        );
+        $resp = Database::insert('settings_current', $attributes);
+
+        //Save the id
+        $settings = $this->get_settings();
+        $setData = array (
+            'comment' => $subkey
+        );
+        $whereCondition = array(
+            'id = ?' => key($settings)
+        );
+        Database::update('settings_current', $setData, $whereCondition);
+
+        return $resp;
+    }
+
+    /**
+     * Delete a tab to chamilo's platform
+     * @param string $key
+     * @return boolean $resp Transaction response
+     */
+    public function deleteTab($key)
+    {
+        $sql = "SELECT *
+                FROM settings_current
+                WHERE variable = 'show_tabs'
+                AND subkey <> '$key'
+                AND subkey like 'custom_tab_%'
+                ";
+        $resp = $result = Database::query($sql);
+        $customTabsNum = Database::num_rows($result);
+
+        if (!empty($key)) {
+            $whereCondition = array(
+                'variable = ? AND subkey = ?' => array('show_tabs', $key)
+            );
+            $resp = Database::delete('settings_current', $whereCondition);
+
+            //if there is more than one tab
+            //re enumerate them
+            if (!empty($customTabsNum) && $customTabsNum > 0) {
+                $tabs = Database::store_result($result, 'ASSOC');
+                $i = 1;
+                foreach ($tabs as $row) {
+                    $attributes = array(
+                        'subkey' => 'custom_tab_' . $i
+                    );
+                    $this->updateTab($row['subkey'], $attributes);
+                    $i++;
+                }
+            }
+        }
+
+        return $resp;
+    }
+
+    /**
+     * Update the tabs attributes
+     * @param string $key
+     * @param array  $attributes
+     *
+     * @return boolean
+     */
+    public function updateTab($key, $attributes)
+    {
+        $whereCondition = array(
+            'variable = ? AND subkey = ?' => array('show_tabs', $key)
+        );
+        $resp = Database::update('settings_current', $attributes, $whereCondition);
+
+        return $resp;
     }
 }

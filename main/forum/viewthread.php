@@ -10,7 +10,7 @@
 $language_file = array ('forum', 'group');
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_FORUM;
 
 // The section (tabs.)
@@ -35,16 +35,16 @@ $gradebook = null;
 
 /* MAIN DISPLAY SECTION */
 
-/* Retrieving forum and forum categorie information */
+/* Retrieving forum and forum category information */
 
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$current_thread	= get_thread_information($_GET['thread']); // Nnote: This has to be validated that it is an existing thread
-
-$current_forum	= get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
+// Note: This has to be validated that it is an existing thread
+$current_thread	= get_thread_information($_GET['thread']);
+// Note: This has to be validated that it is an existing forum.
+$current_forum	= get_forum_information($current_thread['forum_id']);
 $current_forum_category	= get_forumcategory_information($current_forum['forum_category']);
-
 $whatsnew_post_info	= isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null; // This variable should be deprecated?
 
 /* Header and Breadcrumbs */
@@ -69,12 +69,12 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url'=>'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum['forum_title']));
     $interbreadcrumb[] = array('url'=>'viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']), 'name' => Security::remove_XSS($current_thread['thread_title']));
 
-    Display :: display_header('');    
+    Display :: display_header('');
 } else {
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
     if ($origin == 'learnpath') {
         Display::display_reduced_header();
-    } else {    	
+    } else {
         $interbreadcrumb[] = array('url' => 'index.php?'.(isset($gradebook)?'gradebook='.$gradebook.'&amp;':'').'search='.Security::remove_XSS(urlencode($my_search)), 'name' => $nameTools);
         $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum_category['cat_title']));
         $interbreadcrumb[] = array('url' => 'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum['forum_title']));
@@ -82,7 +82,7 @@ if ($origin == 'group') {
 
         $message = isset($message) ? $message : '';
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
-        Display :: display_header('');        
+        Display :: display_header('');
     }
 }
 
@@ -91,22 +91,20 @@ if ($origin == 'group') {
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 OR $current_thread['visibility'] == 0)) {
-    $forum_allow = forum_not_allowed_here();    
+    $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;
     }
 }
 
 /* Actions */
-
 $group_id = api_get_group_id();
-
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AND (api_is_allowed_to_edit(false, true) OR GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))) {
-    $message = delete_post($_GET['id']); // Note: This has to be cleaned first.    
+    $message = delete_post($_GET['id']);
 }
 if (($my_action == 'invisible' OR $my_action == 'visible') AND isset($_GET['id']) AND (api_is_allowed_to_edit(false, true) OR GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))) {
-    $message = approve_post($_GET['id'], $_GET['action']); // Note: This has to be cleaned first.
+    $message = approve_post($_GET['id'], $_GET['action']);
 }
 if ($my_action == 'move' AND isset($_GET['post'])) {
     $message = move_post_form();
@@ -132,7 +130,6 @@ if ($my_message != 'PostDeletedSpecial') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
     if ($origin != 'learnpath') {
-
         echo '<a href="'.$forumUrl.'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
 
@@ -186,13 +183,6 @@ if ($my_message != 'PostDeletedSpecial') {
         $viewmode = 'flat';
     }
 
-    /* Display Forum Category and the Forum information */
-
-    // We are getting all the information about the current forum and forum category.
-    // Note pcool: I tried to use only one sql statement (and function) for this,
-    // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-
-    
     if (isset($_GET['msg']) && isset($_GET['type'])) {
     	switch($_GET['type']) {
     		case 'error':
@@ -201,7 +191,7 @@ if ($my_message != 'PostDeletedSpecial') {
     		case 'confirmation':
     			Display::display_confirmation_message($_GET['msg']);
     			break;
-    	}    	
+    	}
     }
     switch ($viewmode) {
         case 'flat':
@@ -217,7 +207,7 @@ if ($my_message != 'PostDeletedSpecial') {
             include_once 'viewthread_flat.inc.php';
             break;
     }
-} // if ($message != 'PostDeletedSpecial') // in this case the first and only post of the thread is removed.
+}
 
 /* FOOTER */
 

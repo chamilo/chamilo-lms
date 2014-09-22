@@ -23,7 +23,7 @@ $language_file = 'admin';
 $cidReset = true;
 
 // include global script
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once 'sub_language.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -121,23 +121,19 @@ $htmlHeadXtra[] = '<script>
 $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $tbl_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
-/*
-  ==============================================================================
-  STORING THE CHANGES
-  ==============================================================================
- */
-
 // we change the availability
 if ($action == 'makeunavailable') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::make_unavailable_language($_GET['id']);
     }
 }
+
 if ($action == 'makeavailable') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::make_available_language($_GET['id']);
     }
 }
+
 if ($action == 'setplatformlanguage') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::set_platform_language($_GET['id']);
@@ -180,11 +176,6 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
 }
 
 
-/*
-  ==============================================================================
-  MAIN CODE
-  ==============================================================================
- */
 // setting the name of the tool
 $tool_name = get_lang('PlatformLanguages');
 
@@ -194,7 +185,7 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 // including the header file (which includes the banner itself)
 Display :: display_header($tool_name);
 
-if ($action == 'make_unavailable_confirmed') {
+if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
     $language_info = SubLanguageManager::get_all_information_of_language($_GET['id']);
     if ($language_info['available'] == 1) {
         SubLanguageManager::make_unavailable_language($_GET['id']);
@@ -215,16 +206,9 @@ $sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE  category='Languag
 $result_select_lang = Database::query($sql_select_lang);
 $row_lang = Database::fetch_array($result_select_lang);
 
-/*
-  --------------------------------------
-  DISPLAY THE TABLE
-  --------------------------------------
- */
-
 // the table data
 $language_data = array();
 while ($row = Database::fetch_array($result_select)) {
-
     $row_td = array();
     $row_td[] = $row['id'];
     // the first column is the original name of the language OR a form containing the original name
@@ -252,7 +236,10 @@ while ($row = Database::fetch_array($result_select)) {
     }
 
     $allow_delete_sub_language = null;
+    $allow_add_term_sub_language = null;
+
     if (api_get_setting('allow_use_sub_language') == 'true') {
+
         $verified_if_is_sub_language = SubLanguageManager::check_if_language_is_sub_language($row['id']);
 
         if ($verified_if_is_sub_language === false) {
@@ -301,10 +288,4 @@ $table->set_form_actions($form_actions);
 echo '<div id="id_content_message">&nbsp;</div>';
 $table->display();
 
-/*
-  ==============================================================================
-  FOOTER
-  ==============================================================================
- */
 Display :: display_footer();
-?>

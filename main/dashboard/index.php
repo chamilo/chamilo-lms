@@ -13,7 +13,7 @@ $language_file = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
 $cidReset = true;
 
 // including files
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once 'dashboard_controller.php';
 require_once 'block.class.php';
 

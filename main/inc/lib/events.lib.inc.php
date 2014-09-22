@@ -12,7 +12,7 @@
  *
  * @package chamilo.library
  */
-use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 
 class Event
 {
@@ -119,7 +119,7 @@ class Event
      *
      * 	Functionality for "what's new" notification is added by Toon Van Hoecke
      */
-    function event_access_tool($tool, $id_session = 0)
+    public static function event_access_tool($tool, $id_session = 0)
     {
         global $_configuration;
         $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);

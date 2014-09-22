@@ -10,7 +10,7 @@
 // name of the language file that needs to be included
 $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin', 'gradebook', 'survey');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';

@@ -17,7 +17,7 @@ use \ChamiloSession as Session;
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 if (!api_is_allowed_to_edit(null,true)) {

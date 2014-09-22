@@ -1,0 +1,12 @@
+services:
+    sonata.admin.notebook:
+        class: Chamilo\NotebookBundle\Admin\CNotebookAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Course" }
+        arguments:
+            - ~
+            - Chamilo\NotebookBundle\Entity\CNotebook
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+

@@ -1,9 +1,9 @@
 assetic:
-    debug:          false # %kernel.debug%
+    debug:          true # %kernel.debug%
     use_controller: false
     read_from:      %kernel.root_dir%/../web
     write_to:       %kernel.root_dir%/../web
-    bundles:        [] # disable bundles parsing
+    bundles:        [ChamiloCoreBundle, ChamiloInstallerBundle] # disable bundles parsing
 
     filters:
         cssrewrite: ~
@@ -125,10 +125,10 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jquery/dist/jquery.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/bootstrap/dist/js/bootstrap.js
-                - %kernel.root_dir%/../web/bundles/sonataproduct/js/product.js
+#                - %kernel.root_dir%/../web/bundles/sonataproduct/js/product.js
                 - %kernel.root_dir%/../web/bundles/sonatacore/js/base.js
                 - %kernel.root_dir%/../web/bundles/sonatacore/select2/select2.min.js
-                - %kernel.root_dir%/../web/bundles/sonatademo/js/demo.js
+#                - %kernel.root_dir%/../web/bundles/sonatademo/js/demo.js
 
             filters:
                 - yui_js
@@ -138,7 +138,7 @@ assetic:
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css
                 - %kernel.root_dir%/../web/bundles/sonatacore/select2/select2.css
                 - %kernel.root_dir%/../web/bundles/mopabootstrap/css/datepicker.css
-                - %kernel.root_dir%/../web/bundles/sonatademo/css/demo.css
+                #- %kernel.root_dir%/../web/bundles/sonatademo/css/demo.css
 
             filters:
                 - cssrewrite

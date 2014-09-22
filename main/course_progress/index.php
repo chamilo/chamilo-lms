@@ -13,7 +13,7 @@
 $language_file = array ('course_description', 'userInfo', 'admin');
 
 // including files
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'thematic_controller.php';
 
@@ -291,40 +291,40 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
 // Distpacher actions to controller
 switch ($action) {
-	case 'thematic_add'				:
-	case 'thematic_edit'			:
-	case 'thematic_delete'			:
-	case 'thematic_delete_select'	:
-    case 'thematic_copy'            :
-    case 'thematic_import_select'   :
-    case 'thematic_import'          :
-	case 'moveup'					:
-	case 'movedown'					:
+    case 'thematic_add':
+    case 'thematic_edit':
+    case 'thematic_delete':
+    case 'thematic_delete_select':
+    case 'thematic_copy':
+    case 'thematic_import_select':
+    case 'thematic_import':
+    case 'moveup':
+    case 'movedown':
         if (!api_is_allowed_to_edit(null,true)) {
-        	api_not_allowed();
+                api_not_allowed();
         }
-	case 'thematic_list'			:
-    case 'thematic_export'          :
-    case 'thematic_export_pdf'      :
-    case 'thematic_details'         :
+    case 'thematic_list':
+    case 'thematic_export':
+    case 'thematic_export_pdf':
+    case 'thematic_details':
         $thematic_controller->thematic($action);
-		break;
-	case 'thematic_plan_add'		:
-	case 'thematic_plan_edit'		:
-	case 'thematic_plan_delete'		:
+        break;
+    case 'thematic_plan_add':
+    case 'thematic_plan_edit':
+    case 'thematic_plan_delete':
         if (!api_is_allowed_to_edit(null,true)) {
             api_not_allowed();
         }
-    case 'thematic_plan_list'       :
+    case 'thematic_plan_list':
         $thematic_controller->thematic_plan($action);
         break;
-	case 'thematic_advance_add'		:
-	case 'thematic_advance_edit'	:
-	case 'thematic_advance_delete'	:
+    case 'thematic_advance_add':
+    case 'thematic_advance_edit':
+    case 'thematic_advance_delete':
         if (!api_is_allowed_to_edit(null,true)) {
             api_not_allowed();
         }
-    case 'thematic_advance_list'    :
+    case 'thematic_advance_list':
         $thematic_controller->thematic_advance($action);
         break;
 }

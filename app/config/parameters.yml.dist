@@ -11,6 +11,7 @@ parameters:
     mailer_password: null
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
+    installed: ~
     path.data: null
     path.temp: null
     path.courses: null

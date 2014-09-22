@@ -10,7 +10,7 @@
 $language_file = array ('admin', 'registration','create_course', 'document');
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
@@ -25,9 +25,10 @@ $archivePath = api_get_path(SYS_ARCHIVE_PATH);
 $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
 $course_list = CourseManager::get_courses_list();
+$formSent = null;
 
-if ($_POST['formSent']) {
-	$formSent	=$_POST['formSent'];
+if (isset($_POST['formSent']) && $_POST['formSent']) {
+	$formSent = $_POST['formSent'];
 	$select_type=intval($_POST['select_type']);
 	$file_type = 'csv';
 	$courses = $selected_courses = array();
@@ -53,15 +54,27 @@ if ($_POST['formSent']) {
 		$archiveFile = 'export_courses_list_'.date('Y-m-d_H-i-s').'.'.$file_type;
 		$fp = fopen($archivePath.$archiveFile,'w');
 		if ($file_type == 'csv') {
-			$add = "Code;Title;CourseCategory;Teacher;Language;".PHP_EOL;
+			$add = "Code;Title;CourseCategory;Teacher;Language;OtherTeachers;Users;".PHP_EOL;
 			foreach($courses as $course) {
 				$course['code'] = str_replace(';',',',$course['code']);
 				$course['title'] = str_replace(';',',',$course['title']);
 				$course['category_code'] = str_replace(';',',',$course['category_code']);
 				$course['tutor_name'] = str_replace(';',',',$course['tutor_name']);
 				$course['course_language'] = str_replace(';',',',$course['course_language']);
+                $course['course_users'] = CourseManager::get_user_list_from_course_code($course['code']);
+                $course['students'] = '';
+                $course['teachers'] = '';
+                foreach ($course['course_users'] as $user) {
+                    if ($user['status_rel'] == 1) {
+                        $course['teachers'] .= $user['username'].'|';
+                    } else {
+                        $course['students'] .= $user['username'].'|';
+                    }
+                }
+                $course['students'] = substr($course['students'],0,-1);
+                $course['teachers'] = substr($course['teachers'],0,-1);
 
-				$add.= $course['code'].';'.$course['title'].';'.$course['category_code'].';'.$course['tutor_name'].';'.$course['course_language'].';'.PHP_EOL;
+				$add.= $course['code'].';'.$course['title'].';'.$course['category_code'].';'.$course['tutor_name'].';'.$course['course_language'].';'.$course['teachers'].';'.$course['students'].';'.PHP_EOL;
 			}
 			fputs($fp, $add);
 		}
@@ -80,20 +93,20 @@ if (!empty($msg)) {
 
 <form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
     <input type="hidden" name="formSent" value="1">
-    <legend><?php echo $tool_name; ?></legend>    
+    <legend><?php echo $tool_name; ?></legend>
 <?php if (!empty($course_list)) { ?>
-<div class="control-group">    
-    
+<div class="control-group">
+
     <div class="controls">
-        <label class="radio" for="all-courses">            
+        <label class="radio" for="all-courses">
         <input id="all-courses" class="checkbox" type="radio" value="1" name="select_type" <?php if(!$formSent || ($formSent && $select_type == 1)) echo 'checked="checked"'; ?> onclick="javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"/>
             <?php echo get_lang('ExportAllCoursesList')?>
-        </label>        
-        
+        </label>
+
         <label class="radio" for="select-courses">
             <input id="select-courses" class="checkbox" type="radio" value="2" name="select_type" <?php if($formSent && $select_type == 2) echo 'checked="checked"'; ?> onclick="javascript: if(this.checked){document.getElementById('div-course-list').style.display='block';}"/>
             <?php echo get_lang('ExportSelectedCoursesFromCoursesList')?>
-        </label>        
+        </label>
     </div>
 </div>
 <div id="div-course-list" style="<?php echo (!$formSent || ($formSent && $select_type == 1))?'display:none':'display:block';?>">

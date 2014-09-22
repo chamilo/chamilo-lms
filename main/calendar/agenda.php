@@ -9,12 +9,9 @@
  */
 use \ChamiloSession as Session;
 
-// name of the language file that needs to be included
-$language_file = array('agenda', 'group');
-
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
-require_once '../inc/global.inc.php';
+
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $course_info = api_get_course_info();
 
@@ -66,7 +63,7 @@ function plus_repeated_event() {
 // setting the name of the tool
 $nameTools = get_lang('Agenda');
 
-event_access_tool(TOOL_CALENDAR_EVENT);
+Event::event_access_tool(TOOL_CALENDAR_EVENT);
 
 // permission stuff - also used by loading from global in agenda.inc.php
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());

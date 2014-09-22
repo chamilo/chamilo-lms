@@ -10,7 +10,7 @@
 // Name of the language file that needs to be included
 $language_file = 'group';
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -19,7 +19,7 @@ api_protect_course_script(true);
 
 /*	Create the groups */
 
-if (isset ($_POST['action'])) {
+if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'create_groups':
             $groups = array();

@@ -33,7 +33,7 @@ $language_file = array('document', 'gradebook');
 
 /*	Included libraries */
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // Template's javascript
 $htmlHeadXtra[] = '
@@ -180,7 +180,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 //TODO:check the below code and his functionality
 if (!api_is_allowed_to_edit()) {

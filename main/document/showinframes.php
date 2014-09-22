@@ -25,7 +25,7 @@
  * INITIALIZATION
  */
 $language_file[] = 'document';
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 api_protect_course_script();
 

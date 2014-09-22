@@ -16,6 +16,8 @@ sonata_news:
             emails:   %sonata_news.comment.emails%
             from:     %sonata_news.comment.email_from%
             template: 'SonataNewsBundle:Mail:comment_notification.txt.twig'
+    class:
+        user:       Chamilo\UserBundle\Entity\User
 
 
 # Enable Doctrine to map the provided entities

@@ -1,0 +1,37 @@
+{
+  "name": "Nivo Gallery",
+  "description": "The world's most awesome jQuery Image Gallery",
+  "version": "0.7",
+  "keywords": [
+    "jquery",
+    "image",
+    "gallery",
+    "nivo"
+  ],
+  "maintainers": [
+    {
+      "name": "Gilbert Pellegrom",
+      "email": "gilbert@dev7studios.com",
+      "web": "http://gilbert.pellegrom.me"
+    }
+  ],
+  "demos": [
+    "http://nivogallery.dev7studios.com"
+  ],
+  "bugs": {
+    "web": "https://github.com/gilbitron/Nivo-Gallery/issues"
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git://github.com/gilbitron/Nivo-Gallery.git/Nivo-Gallery.git"
+    }
+  ],
+  "licenses": [
+    {
+      "name": "MIT",
+      "url": "https://github.com/gilbitron/Nivo-Gallery/blob/master/license.txt"
+    }
+  ],
+  "homepage": "http://nivogallery.dev7studios.com"
+}

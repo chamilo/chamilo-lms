@@ -13,7 +13,7 @@ $language_file= 'gradebook';
 $cidReset= true;
 $_in_course = false;
 //make sure the destination for scripts is index.php instead of gradebook.php
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 if (!empty($_GET['course'])) {
 	$_SESSION['gradebook_dest'] = 'index.php';
 	$this_section = SECTION_COURSES;
@@ -535,8 +535,8 @@ if (!empty($keyword)) {
 		$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
 
 		//prepare all necessary variables:
-		$organization_name = api_get_setting('Institution');
-		$portal_name = api_get_setting('siteName');
+		$organization_name = api_get_setting('platform.institution');
+		$portal_name = api_get_setting('platform.site_name');
 		$stud_fn = $user['firstname'];
 		$stud_ln = $user['lastname'];
 		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),$organization_name,$stud_fn.' '.$stud_ln,$category[0]->get_name(),$scorecourse_display);

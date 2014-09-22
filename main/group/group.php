@@ -58,12 +58,12 @@ Display::display_introduction_section(TOOL_GROUP);
 /*
  * Self-registration and un-registration
  */
- $my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
- $my_msg	  = isset($_GET['msg']) ? Security::remove_XSS($_GET['msg']) : null;
- $my_group    = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
- $my_get_id1  = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
- $my_get_id2  = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
- $my_get_id   = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
+$my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
+$my_msg	= isset($_GET['msg']) ? Security::remove_XSS($_GET['msg']) : null;
+$my_group = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
+$my_get_id1 = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
+$my_get_id2 = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
+$my_get_id  = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
 if (isset($_GET['action']) && $is_allowed_in_course) {
     switch ($_GET['action']) {
@@ -80,13 +80,13 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
             }
             break;
         case 'show_msg':
-            Display :: display_confirmation_message($my_msg);
+            Display::display_confirmation_message($my_msg);
             break;
         case 'warning_message':
-            Display :: display_warning_message($my_msg);
+            Display::display_warning_message($my_msg);
             break;
         case 'success_message':
-            Display :: display_confirmation_message($my_msg);
+            Display::display_confirmation_message($my_msg);
             break;
     }
 }
@@ -102,7 +102,7 @@ if (api_is_allowed_to_edit(false, true)) {
         switch ($_POST['action']) {
             case 'delete_selected':
                 if (is_array($_POST['group'])) {
-                    GroupManager :: delete_groups($my_group);
+                    GroupManager::delete_groups($my_group);
                     Display :: display_confirmation_message(get_lang('SelectedGroupsDeleted'));
                 }
                 break;
@@ -183,7 +183,6 @@ if (api_is_allowed_to_edit(false, true)) {
 
 $group_cats = GroupManager::get_categories(api_get_course_id());
 echo '</div>';
-
 
 /*  List all categories */
 if (api_get_setting('allow_group_categories') == 'true') {

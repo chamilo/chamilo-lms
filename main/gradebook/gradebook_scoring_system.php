@@ -9,7 +9,7 @@
  */
 $language_file= 'gradebook';
 //$cidReset= true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/scoredisplayform.class.php';
@@ -57,7 +57,7 @@ $nr_items = (count($customdisplays) != '0' )? count($customdisplays) : '1';
 
 //Insert defaults
 if (empty($customdisplays)) {
-    //$displayscore->insert_defaults($select_cat);    
+    //$displayscore->insert_defaults($select_cat);
 }
 
 $scoreform= new ScoreDisplayForm('scoring_system_form', api_get_self() . '?selectcat=' . $select_cat);
@@ -94,11 +94,11 @@ if ($scoreform->validate()) {
 	}
 
 	$scorecolpercent = 0;
-    
+
     if ($displayscore->is_coloring_enabled()) {
         $scorecolpercent = $values['scorecolpercent'];
 	}
-    	    
+
 	if ($displayscore->is_custom() && !empty($scoringdisplay)) {
 		$displayscore->update_custom_score_display_settings($scoringdisplay, $scorecolpercent);
 	}
@@ -116,8 +116,8 @@ if (((isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') || (isse
 
     if (isset ($_GET['nouniqueranges'])) {
     	Display :: display_error_message(get_lang('NoUniqueScoreRanges'),false);
-    }    
+    }
     $scoreform->display();
-    
+
 }
 Display :: display_footer();

@@ -28,7 +28,7 @@ use \ChamiloSession as Session;
 $language_file = array ('forum', 'group');
 
 // Including the global initialiation file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
@@ -94,7 +94,7 @@ if ($origin == 'learnpath') {
 Display::display_introduction_section(TOOL_FORUM);
 
 // Tracking
-event_access_tool(TOOL_FORUM);
+Event::event_access_tool(TOOL_FORUM);
 
 // Forum search
 forum_search();

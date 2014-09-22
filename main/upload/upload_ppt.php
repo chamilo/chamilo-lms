@@ -16,7 +16,7 @@ $language_file[] = "learnpath";
 $language_file[] = "scormdocument";
 
 // global settings initialisation
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
 	var myUpload = new upload(0);
@@ -67,7 +67,7 @@ if (isset($_POST['convert'])) {
     }
 }
 
-event_access_tool(TOOL_UPLOAD);
+Event::event_access_tool(TOOL_UPLOAD);
 
 // check access permissions (edit permission is needed to add a document or a LP)
 $is_allowed_to_edit = api_is_allowed_to_edit();

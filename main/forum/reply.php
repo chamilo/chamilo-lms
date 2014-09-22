@@ -22,7 +22,7 @@
 $language_file = array('forum', 'document');
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
@@ -76,7 +76,6 @@ if ($current_forum['forum_of_group'] != 0) {
         api_not_allowed();
     }
 }
-
 
 /* Breadcrumbs */
 

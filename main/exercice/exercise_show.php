@@ -23,7 +23,7 @@ $language_file = array('exercice');
 require_once 'exercise.class.php';
 require_once 'question.class.php'; //also defines answer type constants
 require_once 'answer.class.php';
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
 if (empty($origin)) {

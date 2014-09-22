@@ -22,7 +22,7 @@ use \ChamiloSession as Session;
 
 $use_anonymous = true;
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 if (!empty($_course['language'])) {
     if (isset($resource_linker_file) && file_exists($resource_linker_file)) {
         require_once $resource_linker_file;

@@ -17,7 +17,7 @@ $language_file[] = 'scormdocument';
 $language_file[] = 'scorm';
 $language_file[] = 'learnpath';
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $app['template.show_footer'] = false;
 $app['template.show_header'] = false;

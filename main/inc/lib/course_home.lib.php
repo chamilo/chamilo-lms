@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class CourseHome
@@ -417,7 +418,9 @@ class CourseHome
         $course_id              = api_get_course_int_id();
         $condition_session = api_get_session_condition($session_id, true, true);
 
-        $studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
+        //$studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
+        $studentView = Container::getSession()->get('studentview');
+        //var_dump($studentView);
 
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
@@ -436,7 +439,6 @@ class CourseHome
                             c_id = $course_id
                             $condition_session
                         ORDER BY id";
-
                 $result = Database::query($sql);
                 $col_link ="##003399";
                 break;
@@ -592,7 +594,7 @@ class CourseHome
     public static function show_tools_category($urlGenerator, $toolList, $rows = false)
     {
         $rowDiv =  '<div class="row">';
-        $theme = api_get_setting('homepage_view');
+        $theme = api_get_setting('course.homepage_view');
 
         if ($theme == 'vertical_activity') {
             //ordering by get_lang name
@@ -681,7 +683,7 @@ class CourseHome
                             );
                             if (!empty($tool['id'])) {
                                 $link['cmd'] = $urlGenerator->generate(
-                                    'chamilolms_core_tool_coursehome_coursehome_hideicon',
+                                    'chamilo_core_tool_coursehome_coursehome_hideicon',
                                     array(
                                         'courseCode' => api_get_course_id(),
                                         'iconId' => $tool['id']
@@ -694,7 +696,7 @@ class CourseHome
                             $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
                             if (!empty($tool['id'])) {
                                 $link['cmd'] = $urlGenerator->generate(
-                                    'chamilolms_core_tool_coursehome_coursehome_showicon',
+                                    'chamilo_core_tool_coursehome_coursehome_showicon',
                                     array(
                                         'courseCode' => api_get_course_id(),
                                         'iconId' => $tool['id']

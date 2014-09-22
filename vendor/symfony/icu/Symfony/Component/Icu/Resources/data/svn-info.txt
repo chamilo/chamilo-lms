@@ -1,7 +1,0 @@
-SVN information
-===============
-
-URL: http://source.icu-project.org/repos/icu/icu/tags/release-51-2/source
-Revision: 33741
-Author: srl
-Date: 2013-05-23T19:58:03.749979Z

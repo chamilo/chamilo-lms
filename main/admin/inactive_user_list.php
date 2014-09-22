@@ -12,7 +12,7 @@
 // name of the language file that needs to be included
 $language_file = array ('registration','admin');
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
@@ -32,5 +32,4 @@ while($row = Database::fetch_array($result)) {
     //$last_connection_date = UserManager:: delete_inactive_student($user_id, 2, true);
 }
 
-/*  		FOOTER    */
 Display :: display_footer();

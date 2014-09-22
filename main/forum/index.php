@@ -31,10 +31,8 @@ $language_file = array('forum', 'link');
 
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_FORUM;
-$htmlHeadXtra[] = '<script>
-
 $htmlHeadXtra[] = '<script>
     $(document).ready(function(){ $(\'.hide-me\').slideUp() });
     function hidecontent(content){ $(content).slideToggle(\'normal\'); }
@@ -116,11 +114,12 @@ if ($actions == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
 }
 
 get_whats_new();
+
 $whatsnew_post_info = Session::read('whatsnew_post_info');
 
 /* TRACKING */
 
-event_access_tool(TOOL_FORUM);
+Event::event_access_tool(TOOL_FORUM);
 
 /*
     RETRIEVING ALL THE FORUM CATEGORIES AND FORUMS
@@ -141,6 +140,7 @@ $user_id = api_get_user_id();
 // The groups of the user.
 $groups_of_user = array();
 $groups_of_user = GroupManager::get_group_ids($_course['real_id'], $user_id);
+
 // All groups in the course (and sorting them as the id of the group = the key of the array).
 if (!api_is_anonymous()) {
     $all_groups = GroupManager::get_group_list();
@@ -271,20 +271,12 @@ if (is_array($forumCategories)) {
 
                 // Note: This can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
                 if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
-                    // The forum has to be showed if
-                    // 1.v it is a not a group forum (teacher and student)
-                    // 2.v it is a group forum and it is public (teacher and student)
-                    // 3. it is a group forum and it is private (always for teachers only if the user is member of the forum
-                    // if the forum is private and it is a group forum and the user is not a member of the group forum then it cannot be displayed
-                    //if (!($forum['forum_group_public_private']=='private' AND !is_null($forum['forum_of_group']) AND !in_array($forum['forum_of_group'], $groups_of_user)))
-                    //{
                     $show_forum = false;
 
                     // SHOULD WE SHOW THIS PARTICULAR FORUM
                     // you are teacher => show forum
 
                     if (api_is_allowed_to_edit(false, true)) {
-                        //echo 'teacher';
                         $show_forum = true;
                     } else {
                         // you are not a teacher
@@ -301,7 +293,6 @@ if (is_array($forumCategories)) {
                         $mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']] : null;
 
                         $forum_image = '';
-
 
                         // Showing the image
                         if (!empty($forum['forum_image'])) {

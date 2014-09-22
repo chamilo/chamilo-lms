@@ -125,9 +125,6 @@ $language_file = array ('admin', 'registration');
 
 $cidReset = true;
 
-// Including the global Dokeos file.
-include '../inc/global.inc.php';
-
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -174,9 +171,6 @@ if ($form->validate()) {
 
 // Displaying the header.
 Display :: display_header($tool_name);
-
-// Displaying the tool title.
-// api_display_tool_title($tool_name);
 
 if (isset($errors) && count($errors) != 0) {
 	$error_message = '<ul>';

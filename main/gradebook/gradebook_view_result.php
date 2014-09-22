@@ -10,7 +10,7 @@
 
 $language_file[] = 'gradebook';
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';

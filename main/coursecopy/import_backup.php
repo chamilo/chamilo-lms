@@ -15,7 +15,7 @@
 $language_file = array('exercice', 'coursebackup', 'admin');
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
@@ -251,5 +251,4 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     $form->display();
 }
 
-/*	FOOTER */
 Display::display_footer();

@@ -10,8 +10,9 @@
 
 use \ChamiloSession as Session;
 use Symfony\Component\Validator\Constraints as Assert;
-use ChamiloLMS\UserBundle\Entity\User;
-use ChamiloLMS\CoreBundle\Entity\Course;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Constants declaration
@@ -21,6 +22,7 @@ define('REQUIRED_PHP_VERSION', '5.3.3');
 define('REQUIRED_MIN_MEMORY_LIMIT',         '32');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
 define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
+define('IMAGE_PROCESSOR', 'gd');
 
 // USER STATUS CONSTANTS
 /** global status of a user: course manager */
@@ -225,16 +227,6 @@ define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
 define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 
-// Constants for detection some important PHP5 subversions.
-$php_version = (float) PHP_VERSION;
-
-define('IS_PHP_52', !((float)$php_version < 5.2));
-define('IS_PHP_53', !((float)$php_version < 5.3));
-
-define('IS_PHP_SUP_OR_EQ_53', ($php_version >= 5.3));
-define('IS_PHP_SUP_OR_EQ_52', ($php_version >= 5.2 && !IS_PHP_53));
-define('IS_PHP_SUP_OR_EQ_51', ($php_version >= 5.1 && !IS_PHP_52 && !IS_PHP_53));
-
 // This constant is a result of Windows OS detection, it has a boolean value:
 // true whether the server runs on Windows OS, false otherwise.
 define('IS_WINDOWS_OS', api_is_windows_os());
@@ -303,13 +295,6 @@ define('WEB_DEFAULT_COURSE_DOCUMENT_PATH', 'WEB_DEFAULT_COURSE_DOCUMENT_PATH');
 define('TO_WEB', 'TO_WEB');
 define('TO_SYS', 'TO_SYS');
 define('TO_REL', 'TO_REL');
-
-// Paths to regidtered specific resource files (scripts, players, etc.)
-define('FLASH_PLAYER_AUDIO', '{FLASH_PLAYER_AUDIO}');
-define('FLASH_PLAYER_VIDEO', '{FLASH_PLAYER_VIDEO}');
-define('SCRIPT_SWFOBJECT', '{SCRIPT_SWFOBJECT}');
-define('SCRIPT_ASCIIMATHML', '{SCRIPT_ASCIIMATHML}');
-define('DRAWING_ASCIISVG', '{DRAWING_ASCIISVG}');
 
 // Relations type with Human resources manager
 define('COURSE_RELATION_TYPE_RRHH', 1);
@@ -527,7 +512,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
  * api_get_path(LIBRARY_PATH)                   /var/www/chamilo/main/inc/lib/
- * api_get_path(SYS_LIBRARY_JS_PATH)            /var/www/chamilo/web/ChamiloLMS/js
+ * api_get_path(SYS_LIBRARY_JS_PATH)            /var/www/chamilo/web/Chamilo/js
  * api_get_path(CONFIGURATION_PATH)             /var/www/chamilo/main/inc/conf/
  * api_get_path(SYS_LANG_PATH)                  /var/www/chamilo/main/lang/
  * api_get_path(SYS_PLUGIN_PATH)                /var/www/chamilo/plugin/
@@ -542,21 +527,14 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
  * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/archive/
- * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/web/chamiloLMS/img/
- * api_get_path(SYS_IMG_PATH)                   /var/www/chamilo/web/ChamiloLMS/img/
+ * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/web/chamilo/img/
+ * api_get_path(SYS_IMG_PATH)                   /var/www/chamilo/web/bundles/chamilocore/img/
  *
  * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
- * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/ChamiloLMS/javascript
+ * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/Chamilo/javascript
  * api_get_path(WEB_TEMPLATE_PATH)              http://www.mychamilo.org/chamilo/main/template/
  *
- *
- * This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
- * api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)     http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
- * api_get_path(TO_WEB, FLASH_PLAYER_VIDEO)     http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
- * api_get_path(TO_SYS, SCRIPT_SWFOBJECT)       /var/www/chamilo/main/inc/lib/swfobject/swfobject.js
- * api_get_path(TO_REL, SCRIPT_ASCIIMATHML)     /chamilo/main/inc/lib/asciimath/ASCIIMathML.js
- * ...
  *
  * We can convert arbitrary paths, that are not registered (no defined constant).
  * For guaranteed result, these paths should point inside the system Chamilo.
@@ -566,9 +544,9 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(TO_REL, __FILE__)
  * ...
  */
-function api_get_path($path_type, $path = null) {
-
-    static $paths = array(
+function api_get_path($path_type, $path = null)
+{
+    $paths = array(
         SYS_DATA_PATH           => 'data/',
         SYS_WEB_PATH            => 'web/',
         SYS_CONFIG_PATH         => 'config/',
@@ -576,274 +554,103 @@ function api_get_path($path_type, $path = null) {
         WEB_DATA_COURSE_PATH    => 'courses/',
         WEB_DATA_PATH           => '/',
         SYS_COURSE_PATH         => 'data/',
-        SYS_CSS_PATH            => 'ChamiloLMS/css/',
+        SYS_CSS_PATH            => 'bundles/chamilocore/css/',
         SYS_LANG_PATH           => 'lang/',
-        WEB_IMG_PATH            => 'ChamiloLMS/img/',
-        SYS_IMG_PATH            => 'web/ChamiloLMS/img/',
-        WEB_CSS_PATH            => 'ChamiloLMS/css/',
+        WEB_IMG_PATH            => 'bundles/chamilocore/img/',
+        SYS_IMG_PATH            => 'web/bundles/chamilocore/img/',
+        WEB_CSS_PATH            => 'bundles/chamilocore/css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
         WEB_ARCHIVE_PATH        => 'temp/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
-        SYS_LIBRARY_JS_PATH     => 'ChamiloLMS/js/',
+        SYS_LIBRARY_JS_PATH     => 'bundles/chamilocore/js/',
         CONFIGURATION_PATH      => 'inc/conf/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
-        WEB_LIBRARY_JS_PATH     => 'ChamiloLMS/js/',
+        WEB_LIBRARY_JS_PATH     => 'bundles/chamilocore/js/',
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
         SYS_TEMPLATE_PATH       => 'template/'
     );
 
-    static $resource_paths = array(
-        FLASH_PLAYER_AUDIO      => 'inc/lib/mediaplayer/player.swf',
-        FLASH_PLAYER_VIDEO      => 'inc/lib/mediaplayer/player.swf',
-        SCRIPT_SWFOBJECT        => 'inc/lib/swfobject/swfobject.js',
-        SCRIPT_ASCIIMATHML      => 'inc/lib/javascript/asciimath/ASCIIMathML.js',
-        DRAWING_ASCIISVG        => 'inc/lib/javascript/asciimath/d.svg'
-    );
-
-    static $is_this_function_initialized;
-    static $server_base_web; // No trailing slash.
-    static $server_base_sys; // No trailing slash.
-    static $root_rel;
-    static $code_folder;
-    static $course_folder;
-
-    global $_configuration;
-    // Always load root_web modifications for multiple url features.
-
-    // Default $_configuration['root_web'] configuration
-    //$root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : $app['url_generator'];
-
-    $root_web = Session::getUrlGenerator()->generate('home'); //$_configuration['root_web'];
-    $rootDir = Session::getRootDir();
+    $root_web = Container::getUrlGenerator()->generate('home');
+    $rootDir = Container::getRootDir();
 
     // Configuration data for already installed system.
     $root_sys = $rootDir;
 
-    $load_new_config = false;
+    $code_folder    = 'main/';
+    //$course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;
+    $course_folder  = "courses/";
 
-    if ($path_type == WEB_PATH) {
-        $urlId = api_get_current_access_url_id();
-        if (isset($urlId) &&  $urlId != 1) {
-            //we look into the DB the function api_get_access_url
-            $url_info = api_get_current_access_url_info();
-            $root_web = $url_info['active'] == 1 ? $url_info['url'] : $_configuration['root_web'];
-            $load_new_config = true;
-        }
-    }
+    // Dealing with trailing slashes.
+    $root_web       = api_add_trailing_slash($root_web);
+    $root_sys       = api_add_trailing_slash($root_sys);
+    //$root_rel       = api_add_trailing_slash($root_rel);
+    $code_folder    = api_add_trailing_slash($code_folder);
+    $course_folder  = api_add_trailing_slash($course_folder);
+    $root_rel = null;
 
-    if (!$is_this_function_initialized) {
-        //$root_rel = $_configuration['url_append'];
+    // Initialization of a table that contains common-purpose paths.
+    $paths[WEB_PATH]                = $root_web;
+    $paths[WEB_PUBLIC_PATH]         = $root_web;
+    $paths[SYS_PATH]                = $root_sys;
 
-        $code_folder    = 'main/';
-        //$course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;
-        $course_folder  = "courses/";
+    // Update data path to get it from config file if defined
+    $paths[SYS_DATA_PATH]           = Container::getDataDir();
+    $paths[SYS_LOG_PATH]            = Container::getLogDir();
+    $paths[SYS_CONFIG_PATH]         = Container::getConfigDir();
+    $paths[SYS_COURSE_PATH]         = Container::getCourseDir();
 
-        // Dealing with trailing slashes.
-        $root_web       = api_add_trailing_slash($root_web);
-        $root_sys       = api_add_trailing_slash($root_sys);
-        //$root_rel       = api_add_trailing_slash($root_rel);
-        $code_folder    = api_add_trailing_slash($code_folder);
-        $course_folder  = api_add_trailing_slash($course_folder);
+    $paths[SYS_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[SYS_DATA_PATH].'default_course_document/';
 
-        // Web server base and system server base.
-        //$server_base_web = preg_replace('@'.$root_rel.'$@', '', $root_web); // No trailing slash.
-        //$server_base_sys = preg_replace('@'.$root_rel.'$@', '', $root_sys); // No trailing slash.
+    $paths[SYS_WEB_PATH]            = $root_sys.'web/';
+    $paths[REL_PATH]                = $root_rel;
+    $paths[WEB_DATA_PATH]           = $paths[WEB_PUBLIC_PATH].'data/';
+    $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
+    $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_DATA_PATH].$course_folder;
 
-        // Initialization of a table that contains common-purpose paths.
-        $paths[WEB_PATH]                = $root_web;
-        $paths[WEB_PUBLIC_PATH]         = $root_web.'web/';
-        $paths[SYS_PATH]                = $root_sys;
+    $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
+    $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
+    $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
+    $paths[REL_DATA_PATH]           = $root_rel.'data/';
 
-        // Update data path to get it from config file if defined
-        $paths[SYS_DATA_PATH]           = Session::getDataDir();
-        $paths[SYS_LOG_PATH]            = Session::getLogDir();
-        $paths[SYS_CONFIG_PATH]         = Session::getConfigDir();
-        $paths[SYS_COURSE_PATH]         = Session::getCourseDir();
+    $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_DATA_PATH].'default_course_document/';
+    $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_DATA_PATH].'default_course_document/';
 
-        $paths[SYS_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[SYS_DATA_PATH].'default_course_document/';
+    $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
 
-        $paths[SYS_WEB_PATH]            = $root_sys.'web/';
+    // Now we can switch into api_get_path() "terminology".
+    $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
+    $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
+    $paths[SYS_ARCHIVE_PATH]        = Container::getTempDir();
+    $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
+    $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
+    $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
+    $paths[WEB_CSS_PATH]            = $paths[WEB_PATH].$paths[WEB_CSS_PATH];
+    $paths[WEB_IMG_PATH]            = $paths[WEB_PATH].$paths[WEB_IMG_PATH];
+    $paths[SYS_IMG_PATH]            = $paths[SYS_PATH].$paths[SYS_IMG_PATH];
 
-        $paths[REL_PATH]                = $root_rel;
-        //$paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
-        //$paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
+    $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
+    $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_PATH].$paths[WEB_LIBRARY_JS_PATH];
+    $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
+    $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
+    $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
+    $paths[WEB_TEMPLATE_PATH]       = $paths[WEB_CODE_PATH].$paths[WEB_TEMPLATE_PATH];
+    $paths[INCLUDE_PATH]            = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
+    $paths[LIBRARY_PATH]            = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
+    $paths[SYS_LIBRARY_JS_PATH]     = $paths[SYS_PATH].$paths[SYS_LIBRARY_JS_PATH];
+    $paths[CONFIGURATION_PATH]      = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
 
-        $paths[WEB_DATA_PATH]           = $paths[WEB_PUBLIC_PATH].'data/';
-        $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
-        $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_DATA_PATH].$course_folder;
-
-        $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
-        $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
-        $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
-        $paths[REL_DATA_PATH]           = $root_rel.'data/';
-
-        $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_DATA_PATH].'default_course_document/';
-        $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_DATA_PATH].'default_course_document/';
-
-        $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
-
-        // Now we can switch into api_get_path() "terminology".
-        $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
-        $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
-        $paths[SYS_ARCHIVE_PATH]        = Session::getTempDir();
-        $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
-        $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
-        $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
-        $paths[WEB_CSS_PATH]            = $paths[WEB_PATH].$paths[WEB_CSS_PATH];
-        $paths[WEB_IMG_PATH]            = $paths[WEB_PATH].$paths[WEB_IMG_PATH];
-        $paths[SYS_IMG_PATH]            = $paths[SYS_PATH].$paths[SYS_IMG_PATH];
-
-        $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-        $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_PATH].$paths[WEB_LIBRARY_JS_PATH];
-        $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
-        $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
-        $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
-        $paths[WEB_TEMPLATE_PATH]       = $paths[WEB_CODE_PATH].$paths[WEB_TEMPLATE_PATH];
-        $paths[INCLUDE_PATH]            = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
-        $paths[LIBRARY_PATH]            = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
-        $paths[SYS_LIBRARY_JS_PATH]     = $paths[SYS_PATH].$paths[SYS_LIBRARY_JS_PATH];
-        $paths[CONFIGURATION_PATH]      = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
-
-        $is_this_function_initialized = true;
-
-    } else {
-        if ($load_new_config) {
-            //  Redefining variables to work well with the "multiple url" feature
-
-            // All web paths need to be here
-            $web_paths = array(
-                WEB_PATH                => '',
-                WEB_SERVER_ROOT_PATH    => '',
-                WEB_COURSE_PATH         => '',
-                WEB_CODE_PATH           => '',
-                WEB_IMG_PATH            => 'img/',
-                WEB_CSS_PATH            => 'css/',
-                WEB_PLUGIN_PATH         => 'plugin/',
-                WEB_ARCHIVE_PATH        => 'archive/',
-                WEB_LIBRARY_PATH        => 'inc/lib/',
-                WEB_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
-                WEB_AJAX_PATH           => 'inc/ajax/',
-                WEB_PUBLIC_PATH         => 'web/',
-            );
-
-            $root_web = api_add_trailing_slash($root_web);
-            // Web server base and system server base.
-            $server_base_web = preg_replace('@'.$root_rel.'$@', '', $root_web); // No trailing slash.
-
-            // Redefine root webs
-            $paths[WEB_PATH]                = $root_web;
-            $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
-            $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
-            $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
-            $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_IMG_PATH];
-
-            $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_CSS_PATH];
-            $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$web_paths[WEB_PLUGIN_PATH];
-            $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
-            $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];
-            $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_JS_PATH];
-            $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];
-            $paths[WEB_PUBLIC_PATH]         = $paths[WEB_PATH].$web_paths[WEB_PUBLIC_PATH];
-        }
-    }
-
-    // Shallow purification and validation of input parameters.
-
-    $path_type = trim($path_type);
-    $path = trim($path);
-
+    // Path conversion to the requested type.
     if (empty($path_type)) {
         return null;
     }
 
-    // Retrieving a common-purpose path.
     if (isset($paths[$path_type])) {
         return $paths[$path_type];
     }
-
-    // Retrieving a specific resource path.
-
-    if (isset($resource_paths[$path])) {
-        switch ($path_type) {
-            case TO_WEB:
-                return $paths[WEB_CODE_PATH].$resource_paths[$path];
-            case TO_SYS:
-                return $paths[SYS_CODE_PATH].$resource_paths[$path];
-            case TO_REL:
-                return $paths[REL_CODE_PATH].$resource_paths[$path];
-            default:
-                return null;
-        }
-    }
-
-    // Common-purpose paths as a second parameter - recognition.
-
-    if (isset($paths[$path])) {
-        $path = $paths[$path];
-    }
-
-    // Second purification.
-
-    // Replacing Windows back slashes.
-    $path = str_replace('\\', '/', $path);
-    // Query strings sometimes mighth wrongly appear in non-URLs.
-    // Let us check remove them from all types of paths.
-    if (($pos = strpos($path, '?')) !== false) {
-        $path = substr($path, 0, $pos);
-    }
-
-    // Detection of the input path type. Conversion to semi-absolute type ( /chamilo/main/inc/.... ).
-
-    if (preg_match(VALID_WEB_PATH, $path)) {
-
-        // A special case: When a URL points to the document download script directly, without
-        // mod-rewrite translation, we have to translate it into an "ordinary" web path.
-        // For example:
-        // http://localhost/chamilo/main/document/download.php?doc_url=/image.png&cDir=/
-        // becomes
-        // http://localhost/chamilo/courses/TEST/document/image.png
-        // TEST is a course directory name, so called "system course code".
-        if (strpos($path, 'download.php') !== false) { // Fast detection first.
-            $path = urldecode($path);
-            if (preg_match('/(.*)main\/document\/download.php\?doc_url=\/(.*)&cDir=\/(.*)?/', $path, $matches)) {
-                $sys_course_code =
-                    isset($_SESSION['_course']['sysCode'])  // User is inside a course?
-                        ? $_SESSION['_course']['sysCode']   // Yes, then use course's directory name.
-                        : '{SYS_COURSE_CODE}';              // No, then use a fake code, it may be processed later.
-                $path = $matches[1].'courses/'.$sys_course_code.'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
-            }
-        }
-
-        // Replacement of the present web server base with a slash '/'.
-        $path = preg_replace(VALID_WEB_SERVER_BASE, '/', $path);
-
-    } elseif (strpos($path, $server_base_sys) === 0) {
-        $path = preg_replace('@^'.$server_base_sys.'@', '', $path);
-    } elseif (strpos($path, '/') === 0) {
-        // Leading slash - we assume that this path is semi-absolute (REL),
-        // then path is left without further modifications.
-    } else {
-        return null; // Probably implementation of this case won't be needed.
-    }
-
-    // Path now is semi-absolute. It is convenient at this moment repeated slashes to be removed.
-    $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
-
-    // Path conversion to the requested type.
-
-    switch ($path_type) {
-        case TO_WEB:
-            return $server_base_web.$path;
-        case TO_SYS:
-            return $server_base_sys.$path;
-        case TO_REL:
-            return $path;
-    }
-
     return null;
 }
 
@@ -1048,9 +855,6 @@ function api_block_anonymous_users($print_headers = true)
     }
     return true;
 }
-
-/* ACCESSOR FUNCTIONS
-   Don't access kernel variables directly, use these functions instead. */
 
 /**
  * @return an array with the navigator name and version
@@ -2116,7 +1920,12 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
  * @author René Haentjens
  * @author Bart Mollet
  */
-function api_get_setting($variable, $key = null) {
+function api_get_setting($variable, $key = null)
+{
+    return Container::getSettingsManager()->getSetting($variable);
+
+    //chamilo_core.settings_schema.platform
+
     $_setting = Session::read('_setting');
     if ($variable == 'header_extra_content') {
         $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
@@ -2197,7 +2006,7 @@ function api_get_self() {
  */
 function api_is_platform_admin($allow_sessions_admins = false)
 {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     if ($security) {
         $token = $security->getToken();
 
@@ -2220,7 +2029,7 @@ function api_is_platform_admin($allow_sessions_admins = false)
  */
 function api_is_question_manager()
 {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_QUESTION_MANAGER')) {
@@ -2237,7 +2046,7 @@ function api_is_question_manager()
  */
 function api_is_session_admin()
 {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_SESSION_MANAGER')) {
@@ -2252,7 +2061,7 @@ function api_is_session_admin()
  * @return boolean True if current user is a human resources manager
  */
 function api_is_drh() {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_RRHH')) {
@@ -2267,7 +2076,7 @@ function api_is_drh() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_student() {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_STUDENT')) {
@@ -2282,7 +2091,7 @@ function api_is_student() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_teacher() {
-    $security = Session::getSecurity();
+    $security = Container::getSecurity();
     $token = $security->getToken();
     if (!empty($token)) {
         if ($security->isGranted('ROLE_TEACHER')) {
@@ -2300,23 +2109,39 @@ function api_is_teacher() {
  */
 function api_is_platform_admin_by_id($user_id = null, $url = null) {
     $user_id = intval($user_id);
-    if (empty($user_id)) {
-        $user_id = api_get_user_id();
+
+    if (!Container::getSecurity()->isGranted('IS_AUTHENTICATED_FULLY')) {
+        return false;
     }
+
+    if (empty($user_id)) {
+        $user = Container::getSecurity()->getToken()->getUser();
+    } else {
+        $user = Container::getEntityManager()->getRepository('ChamiloUserBundle:User')->find($user_id);
+    }
+
+    $admin = Container::getEntityManager()->getRepository('ChamiloUserBundle:Group')->findOneBy(array('name' => 'admins'));
+    $is_admin = $user->getGroups()->contains($admin);
+
+    /*
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
     $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
     $res = Database::query($sql);
-    $is_admin = Database::num_rows($res) === 1;
+    $is_admin = Database::num_rows($res) === 1;*/
     if (!$is_admin or !isset($url)) {
         return $is_admin;
     }
+
+    $portal = Container::getEntityManager()->getRepository('ChamiloCoreBundle:AccessUrl')->find($url);
+    return $user->getPortals()->contains($portal);
+    /*
     // We get here only if $url is set
     $url = intval($url);
     $url_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELCT * FROM $url_user_table WHERE access_url_id = $url AND user_id = $user_id";
     $res = Database::query($sql);
     $is_on_url = Database::num_rows($res) === 1;
-    return $is_on_url;
+    return $is_on_url;*/
 }
 
 /**
@@ -3468,23 +3293,22 @@ function api_display_language_form($hide_if_no_choice = false) {
  *  array['name'] = An array with the name of every language
  *  array['folder'] = An array with the corresponding names of the language-folders in the filesystem
  */
-function api_get_languages() {
-    $language_list = Session::read('_setting.api_get_languages');
-    if (isset($language_list) && !empty($language_list)) {
-        return $language_list;
+function api_get_languages()
+{
+    $languageList = Session::read('_setting.api_get_languages');
+    if (isset($languageList) && !empty($languageList)) {
+        return $languageList;
     }
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $sql = "SELECT * FROM $tbl_language WHERE available = '1' ORDER BY original_name ASC";
 
     $result = Database::query($sql);
-    $language_list = array();
-    while ($row = Database::fetch_array($result)) {
-        $language_list['name'][] = $row['original_name'];
-        //$language_list['folder'][] = $row['dokeos_folder'];
-        $language_list['folder'][] = $row['original_name'];
+    $languageList = array();
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $languageList[] = $row;
     }
-    Session::write('_setting.api_get_languages', $language_list);
-    return $language_list;
+    Session::write('_setting.api_get_languages', $languageList);
+    return $languageList;
 }
 
 /**
@@ -3562,7 +3386,10 @@ function api_get_language_info($language_id) {
  * The returned name depends on the platform, course or user -wide settings.
  * @return string   The visual theme's name, it is the name of a folder inside .../chamilo/main/css/
  */
-function api_get_visual_theme() {
+function api_get_visual_theme()
+{
+    return 'chamilo';
+
     static $visual_theme;
 
     if (!isset($visual_theme)) {
@@ -3829,7 +3656,7 @@ function api_time_to_hms($seconds) {
 function api_get_permissions_for_new_directories() {
     static $permissions;
     if (!isset($permissions)) {
-        $permissions = trim(api_get_setting('permissions_for_new_directories'));
+        $permissions = trim(api_get_setting('document.permissions_for_new_directories'));
         // The default value 0777 is according to that in the platform administration panel after fresh system installation.
         $permissions = octdec(!empty($permissions) ? $permissions : '0777');
     }
@@ -3844,7 +3671,7 @@ function api_get_permissions_for_new_directories() {
 function api_get_permissions_for_new_files() {
     static $permissions;
     if (!isset($permissions)) {
-        $permissions = trim(api_get_setting('permissions_for_new_files'));
+        $permissions = trim(api_get_setting('document.permissions_for_new_files'));
         // The default value 0666 is according to that in the platform administration panel after fresh system installation.
         $permissions = octdec(!empty($permissions) ? $permissions : '0666');
     }
@@ -5376,6 +5203,7 @@ function api_is_global_platform_admin($user_id = null) {
     if (empty($user_id)) {
         $user_id = api_get_user_id();
     }
+
     if (api_is_platform_admin_by_id($user_id)) {
         $my_url_list = api_get_access_url_from_user($user_id);
         // The admin is registered in the first "main" site with access_url_id = 1
@@ -5393,8 +5221,8 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
         $my_user_id = api_get_user_id();
     }
 
-    $iam_a_global_admin     = api_is_global_platform_admin($my_user_id);
-    $user_is_global_admin   = api_is_global_platform_admin($admin_id_to_check);
+    $user_is_global_admin = api_is_global_platform_admin($admin_id_to_check);
+    $iam_a_global_admin = api_is_global_platform_admin($my_user_id);
 
     if ($iam_a_global_admin) {
         //global admin can edit everything
@@ -5402,6 +5230,7 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
     } else {
         //If i'm a simple admin
         $is_platform_admin = api_is_platform_admin_by_id($my_user_id);
+        //var_dump($is_platform_admin);
 
         if ($allow_session_admin) {
             $is_platform_admin = api_is_platform_admin_by_id($my_user_id) || (api_get_user_status($my_user_id) == SESSIONADMIN);
@@ -5818,6 +5647,7 @@ function api_get_unique_id() {
 }
 
 function api_get_home_path() {
+    return null;
 	$home = 'home/';
     $access_url_id = api_get_current_access_url_id();
 	if (api_get_multiple_access_url() && $access_url_id != -1) {
@@ -6259,7 +6089,7 @@ function api_get_js_simple($file)
 
 function api_set_settings_and_plugins()
 {
-    global $_configuration;
+    //global $_configuration;
     $_setting = array();
     $_plugins = array();
 
@@ -6267,21 +6097,18 @@ function api_set_settings_and_plugins()
     $settings_by_access_list = array();
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != 1) {
-        $url_info = api_get_current_access_url_info();
-        if ($url_info['active'] == 1) {
-            $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
-            foreach ($settings_by_access as $row) {
-                if (empty($row['variable'])) {
-                    $row['variable'] = 0;
-                }
-                if (empty($row['subkey'])) {
-                    $row['subkey'] = 0;
-                }
-                if (empty($row['category'])) {
-                    $row['category'] = 0;
-                }
-                $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
+        $settings_by_access = api_get_settings(null, 'list', $access_url_id, 1);
+        foreach ($settings_by_access as $row) {
+            if (empty($row['variable'])) {
+                $row['variable'] = 0;
             }
+            if (empty($row['subkey'])) {
+                $row['subkey'] = 0;
+            }
+            if (empty($row['category'])) {
+                $row['category'] = 0;
+            }
+            $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
         }
     }
 
@@ -6289,13 +6116,13 @@ function api_set_settings_and_plugins()
 
     foreach ($result as & $row) {
         if ($access_url_id != 1) {
-            if ($url_info['active'] == 1) {
+            //if ($url_info['active'] == 1) {
                 $var = empty($row['variable']) ? 0 : $row['variable'];
                 $subkey = empty($row['subkey']) ? 0 : $row['subkey'];
                 $category = empty($row['category']) ? 0 : $row['category'];
-            }
+            //}
 
-            if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
+            if ($row['access_url_changeable'] == 1) {
                 if (isset($settings_by_access_list[$var]) &&
                     $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
                     if ($row['subkey'] == null) {
@@ -6454,9 +6281,7 @@ function api_mail_html(
     $data_file = array(),
     $embedded_image = false,
     $text_body = null
-    ) {
-    global $app;
-
+) {
     $reply_to_mail = $sender_email;
     $reply_to_name = $sender_name;
 
@@ -6485,178 +6310,45 @@ function api_mail_html(
             ->setFrom(array($sender_email => $sender_name))
             ->setTo(array($recipient_email => $recipient_name))
             ->setReplyTo(array($reply_to_mail => $reply_to_name))
-            ->setBody($htmlBody, 'text/html')
-            ->addPart($textBody, 'text/plain')
+            ->setBody(
+                Container::getTemplate()->render(
+                    'ChamiloCoreBundle:Mailer:Default/default.html.twig',
+                    array(
+                        'content' => $htmlBody
+                    )
+                ),
+                'text/html'
+            )
+            ->addPart(
+                Container::getTemplate()->render(
+                    'ChamiloCoreBundle:Mailer:Default/default.text.twig',
+                    array(
+                        'content' => $textBody
+                    )
+                ),
+                'text/plain'
+            )
             ->setEncoder(Swift_Encoding::get8BitEncoding());
+
         if (!empty($data_file)) {
             // Attach it to the message
-            $message->attach(Swift_Attachment::fromPath($data_file['path']))->setFilename($data_file['filename']);
+            $message->attach(
+                Swift_Attachment::fromPath($data_file['path'])
+            )->setFilename($data_file['filename']);
         }
 
         $type = $message->getHeaders()->get('Content-Type');
         $type->setValue('text/html');
         $type->setParameter('charset', 'utf-8');
+        Container::getMailer()->send($message);
 
-        $app['monolog']->addDebug($message);
-        $result = $app['mailer']->send($message);
+        return true;
 
-        return $result;
     } catch (Exception $e) {
-        //$app['monolog']->addDebug('Email address not valid:' . $e->getMessage());
+        error_log($e->getMessage());
     }
 
     return false;
-
-    /*
-    $mail = new PHPMailer();
-    $mail->Mailer  = $platform_email['SMTP_MAILER'];
-    $mail->Host    = $platform_email['SMTP_HOST'];
-    $mail->Port    = $platform_email['SMTP_PORT'];
-    $mail->CharSet = $platform_email['SMTP_CHARSET'];
-    $mail->WordWrap = 200; // Stay far below SMTP protocol 980 chars limit.
-
-    if ($platform_email['SMTP_AUTH']) {
-        $mail->SMTPAuth = 1;
-        $mail->Username = $platform_email['SMTP_USER'];
-        $mail->Password = $platform_email['SMTP_PASS'];
-    }
-
-    $mail->Priority = 3; // 5 = low, 1 = high
-    $mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
-
-    $mail->SMTPKeepAlive = true;
-
-    if (($sender_email != '') && ($sender_name != '')) {
-        $mail->AddReplyTo($sender_email, $sender_name);
-    }
-
-    if (isset($extra_headers['reply_to'])) {
-        $mail->AddReplyTo($extra_headers['reply_to']['mail'], $extra_headers['reply_to']['name']);
-    }
-
-    // Attachments
-    // $mail->AddAttachment($path);
-    // $mail->AddAttachment($path, $filename);
-
-    if ($sender_email != '') {
-        $mail->From         = $sender_email;
-        $mail->Sender       = $sender_email;
-        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
-    } else {
-        $mail->From         = $platform_email['SMTP_FROM_EMAIL'];
-        $mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
-        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
-    }
-
-    if ($sender_name != '') {
-        $mail->FromName = $sender_name;
-    } else {
-        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
-    }
-    $mail->Subject = $subject;
-
-    $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
-
-    // Send embedded image.
-    if ($embedded_image) {
-    	// Get all images html inside content.
-        preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
-        // Prepare new tag images.
-        $new_images_html = array();
-        $i = 1;
-        if (!empty($m[1])) {
-        	foreach ($m[1] as $image_path) {
-            	$real_path = realpath($image_path);
-                $filename  = basename($image_path);
-                $image_cid = $filename.'_'.$i;
-                $encoding = 'base64';
-                $image_type = mime_content_type($real_path);
-                $mail->AddEmbeddedImage($real_path, $image_cid, $filename, $encoding, $image_type);
-                $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
-                $i++;
-			}
-		}
-
-	    // Replace origin image for new embedded image html.
-	    $x = 0;
-	    if (!empty($m[0])) {
-	    	foreach ($m[0] as $orig_img) {
-	        	$message = str_replace($orig_img, $new_images_html[$x], $message);
-	            $x++;
-	         }
-	    }
-    }
-
-    $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
-    $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
-
-    // Attachment ...
-    if (!empty($data_file)) {
-        $mail->AddAttachment($data_file['path'], $data_file['filename']);
-    }
-
-    // Only valid addresses are accepted.
-    if (is_array($recipient_email)) {
-        foreach ($recipient_email as $dest) {
-            if (api_valid_email($dest)) {
-                $mail->AddAddress($dest, $recipient_name);
-                //$mail->AddAddress($dest, ($i > 1 ? '' : $recipient_name));
-            }
-        }
-    } else {
-        if (api_valid_email($recipient_email)) {
-            $mail->AddAddress($recipient_email, $recipient_name);
-        } else {
-            return 0;
-        }
-    }
-
-    if (is_array($extra_headers) && count($extra_headers) > 0) {
-        foreach ($extra_headers as $key => $value) {
-            switch (strtolower($key)) {
-                case 'reply-to':
-                    //the value here is the result of api_get_user_info()
-                    $sender_email = $value['email'];
-                    $sender_name  = $value['complete_name'];
-                    $mail->AddReplyTo($sender_email, $sender_name);
-                    break;
-                case 'encoding':
-                case 'content-transfer-encoding':
-                    $mail->Encoding = $value;
-                    break;
-                case 'charset':
-                    $mail->Charset = $value;
-                    break;
-                case 'contenttype':
-                case 'content-type':
-                    $mail->ContentType = $value;
-                    break;
-                default:
-                    $mail->AddCustomHeader($key.':'.$value);
-                    break;
-            }
-        }
-    } else {
-        if (!empty($extra_headers)) {
-            $mail->AddCustomHeader($extra_headers);
-        }
-    }
-
-    // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
-    $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
-
-    // Send the mail message.
-    if (!$mail->Send()) {
-        //echo 'ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />';
-        error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
-        return 0;
-    }
-
-    // Clear all the addresses.
-    $mail->ClearAddresses();
-
-    return 1;
-    */
 }
 
 function api_set_login_language($lang) {
@@ -6707,7 +6399,7 @@ function api_get_user_language()
 
     // Last chance we get the platform language
     if (empty($user_language)) {
-        $user_language = api_get_setting('platformLanguage');
+        $user_language = Container::getTranslator()->getLocale();
     }
     return $user_language;
 }
@@ -6777,17 +6469,19 @@ function api_get_language_interface()
 }
 
 /**
- * Get user roles
+ * Get user roles (groups)
  * @return array
  */
 function api_get_user_roles()
 {
     $em = Database::getManager();
-    $roles = $em->getRepository('ChamiloLMSCoreBundle:Role')->findBy(array(), array('name'=>'asc'));
+    $roles = $em->getRepository('ChamiloUserBundle:Group')->findBy(array(), array('name'=>'asc'));
     $userRoles = array();
+    /** @var Chamilo\UserBundle\Entity\Group $role */
     foreach ($roles as $role) {
         $userRoles[$role->getId()] = $role->getName();
     }
+    $userRoles = array_unique($userRoles);
     return $userRoles;
 
     // Status

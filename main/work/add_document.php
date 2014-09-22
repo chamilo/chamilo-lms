@@ -5,7 +5,7 @@ use ChamiloSession as Session;
 
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 // Including necessary files
 require_once 'work.lib.php';
 

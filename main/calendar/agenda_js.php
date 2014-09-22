@@ -3,10 +3,8 @@
 /**
  * @package chamilo.calendar
  */
-/**
- * INIT SECTION
- */
-use \ChamiloSession as Session;
+
+use Chamilo\CoreBundle\Framework\Container;
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -26,12 +24,12 @@ $current_course_tool  = TOOL_CALENDAR_EVENT;
 
 $this_section = SECTION_MYAGENDA;
 
-$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui','jquery-ui-i18n'));
+/*$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui','jquery-ui-i18n'));
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
 $htmlHeadXtra[] = api_get_js('fullcalendar/gcal.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'fullcalendar/fullcalendar.css');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'qtip2/jquery.qtip.min.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'qtip2/jquery.qtip.min.css');*/
 
 if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
     $type = 'admin';
@@ -62,7 +60,7 @@ if (!empty($group_id)) {
 }
 
 $app['title'] = get_lang('Agenda');
-$tpl = Session::getTwig();
+$tpl = Container::getTwig();
 $tpl->addGlobal('use_google_calendar', 0);
 
 $can_add_events = 0;
@@ -117,10 +115,10 @@ $tpl->addGlobal('day_names', json_encode($days));
 $tpl->addGlobal('day_names_short', json_encode($day_short));
 $tpl->addGlobal('button_text',
     json_encode(array(
-            'today' => get_lang('Today'),
-            'month'	=> get_lang('Month'),
-            'week'	=> get_lang('Week'),
-            'day' => get_lang('Day')
+        'today' => get_lang('Today'),
+        'month'	=> get_lang('Month'),
+        'week'	=> get_lang('Week'),
+        'day' => get_lang('Day')
     ))
 );
 
@@ -157,7 +155,7 @@ if ($type == 'course' && !empty($group_id)) {
     $type_label = get_lang('GroupCalendar');
 }
 
-$defaultView = api_get_setting('default_calendar_view');
+$defaultView = api_get_setting('agenda.default_calendar_view');
 
 if (empty($defaultView)) {
     $defaultView = 'month';
@@ -216,5 +214,6 @@ if (!empty($userId)) {
     $form->addElement('html', '</div>');
 }
 $tpl->addGlobal('form_add', $form->return_form());
-$tpl->render('ChamiloLMSCoreBundle:Calendar:month.html.twig');
+
+echo $tpl->render('ChamiloCoreBundle:Calendar:month.html.twig');
 

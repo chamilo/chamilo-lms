@@ -1,0 +1,37 @@
+{% block _chamilo_installer_configuration_mailer_chamilo_installer_mailer_transport_row %}
+
+<script type="text/javascript">
+    $(function () {
+        var con = $('#chamilo_installer_configuration_mailer');
+
+        checkTransport();
+
+        con.find('.form-group:first select').change(checkTransport);
+
+        function checkTransport() {
+            if (con.find('.form-group:first select').val() != 'smtp') {
+                con.find('.form-group:not(:first)').hide()
+                   .find('input').attr('disabled', 'disabled');
+            } else {
+                con.find('.form-group:not(:first)').show()
+                    .find('input').attr('disabled', null);
+            }
+        }
+    });
+</script>
+{{ block('form_row') }}
+{% endblock %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <div class="alert alert-warning" role="alert">
+                <ul>
+                    {% for error in errors %}
+                        <li>{{ error.message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}

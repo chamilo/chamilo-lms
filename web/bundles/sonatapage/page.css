@@ -1,0 +1,81 @@
+/* sonata top bar style */
+.sonata-page-top-bar {
+    height: 45px;
+}
+.sonata-page-top-bar label {
+    color: #BFBFBF;
+}
+
+.cms-edit-mode-only {
+    visibility: hidden;
+}
+
+.cms-edit-mode .cms-edit-mode-only {
+    visibility: visible;
+}
+
+/* original block display */
+.cms-edit-mode .cms-block {
+    position: relative;
+    min-height: 40px;
+}
+
+/* block layer display */
+.cms-edit-mode .cms-layout-role-block {
+    background-color: rgba(255, 150, 0, 0.3);
+}
+
+/* container layer display */
+.cms-edit-mode .cms-layout-role-container {
+}
+
+/* layer title display */
+.cms-edit-mode .cms-layout-title span {
+    display: inline-block;
+    padding: 2px;
+    font-size: 12pt;
+    color: #ffffff;
+}
+.cms-edit-mode .cms-layout-role-container > .cms-layout-title {
+    display: block;
+    width: 100%;
+    background-color: rgba(50, 50, 50, 1);
+}
+.cms-edit-mode .cms-layout-role-block > .cms-layout-title {
+    display: block;
+    background-color: rgba(75, 50, 0, 1);
+}
+/* layer title display (when dragging) */
+.cms-edit-mode .cms-container-drop-zone .cms-layout-role-block > .cms-layout-title {
+    display: block;
+}
+.cms-edit-mode .cms-container-drop-zone > .cms-layout-layer .cms-layout-title {
+    display: block;
+}
+
+/* container drag drop zone*/
+.cms-edit-mode .cms-container {
+    padding-top: 24px;
+    border: 2px dotted rgba(100, 100, 100, 1);
+}
+
+/*.cms-edit-mode .cms-container > .cms-layout-layer {*/
+    /*border: 2px dotted rgba(100, 100, 100, 1);*/
+/*}*/
+
+/* placeholder class used to simulate a dropped item while dragging */
+.cms-edit-mode .cms-block-placeholder {
+    background-color: rgba(100, 100, 100, 0.2);
+    min-height: 40px;
+}
+
+/* hover attributes */
+.cms-edit-mode div.cms-block-hand-over {
+    cursor: move;
+}
+
+/* block's layer when hover */
+.cms-edit-mode div.cms-block-hand-over > .cms-layout-role-block {
+    /*border: 1px solid #000000;*/
+    background-color: rgba(255, 150, 0, 0.5);
+}

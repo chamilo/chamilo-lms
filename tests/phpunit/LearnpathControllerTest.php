@@ -6,7 +6,7 @@
 class LearnpathControllerTest extends BaseWebTestCase
 {
     /**
-     * @covers ChamiloLMS\Controller\LearnpathController::indexAction
+     * @covers Chamilo\Controller\LearnpathController::indexAction
      * @todo   Implement testIndexAction().
      */
     public function testIndexAction()

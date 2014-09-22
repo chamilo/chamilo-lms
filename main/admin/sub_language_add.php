@@ -10,7 +10,7 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once 'sub_language.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
@@ -41,7 +41,7 @@ function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_av
     $isocode                = Database::escape_string($isocode);
     $sublanguage_available  = Database::escape_string($sublanguage_available);
     $parent_id              = Database::escape_string($parent_id);
-    
+
     $sql='INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id) VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
     $res = Database::query($sql);
     if ($res === false) {
@@ -86,14 +86,14 @@ function check_if_language_exist ($original_name, $english_name, $isocode, $subl
 		$has_error=true;
 		$message_information['english_name']=true;
 	}
-	
-	$iso_list = api_get_platform_isocodes();	
+
+	$iso_list = api_get_platform_isocodes();
 	$iso_list = array_values($iso_list);
-	
+
 	if (!in_array($isocode, $iso_list)) {
 		$has_error=true;
 		$message_information['isocode']=true;
-	}	
+	}
 	if ($has_error===true) {
 		$message_information['execute_add']=false;
 	}
@@ -217,7 +217,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 			$english_name=str_replace(' ','_',$english_name);
                         //Fixes BT#1636
                         $english_name=api_strtolower($english_name);
-            
+
 			$isocode=str_replace(' ','_',$isocode);
 			$str_info='<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('PlatformCharsetTitle').' : '.$isocode;
 

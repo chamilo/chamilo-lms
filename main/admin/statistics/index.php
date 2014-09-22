@@ -48,7 +48,6 @@ $tools[$strSocial]['report=messagesent'] = get_lang('MessagesSent');
 $tools[$strSocial]['report=messagereceived'] = get_lang('MessagesReceived');
 $tools[$strSocial]['report=friends'] = get_lang('CountFriends');
 
-
 echo '<table><tr>';
 foreach ($tools as $section => $items) {
     echo '<td style="vertical-align:top;">';
@@ -64,10 +63,7 @@ echo '</tr></table>';
 
 $course_categories = Statistics::get_course_categories();
 echo '<br/><br/>';
-//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
-$report = isset($_GET['report']) ? $_GET['report'] : null;
-
-switch ($report) {
+switch ($_REQUEST['report']) {
     case 'courses':
         // total amount of courses
         foreach ($course_categories as $code => $name) {
@@ -88,9 +84,10 @@ switch ($report) {
     case 'users':
         // total amount of users
         Statistics::print_stats(
-            get_lang('NumberOfUsers'), array(
-            get_lang('Teachers') => Statistics::count_users(1, null, $_GET['count_invisible_courses']),
-            get_lang('Students') => Statistics::count_users(5, null, $_GET['count_invisible_courses'])
+            get_lang('NumberOfUsers'),
+            array(
+                get_lang('Teachers') => Statistics::count_users(1, null, $_GET['count_invisible_courses']),
+                get_lang('Students') => Statistics::count_users(5, null, $_GET['count_invisible_courses'])
             )
         );
         $teachers = $students = array();
@@ -136,4 +133,5 @@ switch ($report) {
         Statistics::print_stats(get_lang('CountFriends'), $friends);
         break;
 }
+
 Display::display_footer();

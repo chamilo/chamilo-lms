@@ -35,8 +35,7 @@ class ScormAssessmentItem
      {
         $this->question = $question;
         //$this->answer = new Answer($question->id);
-        $this->question->setAnswer();
-
+        $this->question->setAnswer();        
         $this->questionIdent = "QST_" . $question->id ;
         $this->standalone = $standalone;
         //echo "<pre>".print_r($this,1)."</pre>";
@@ -68,7 +67,7 @@ class ScormAssessmentItem
      	if($this->standalone){return '</html>';}
      	return '';
      }
-
+     
 	/**
 	 * Start document header
 	 */
@@ -76,7 +75,7 @@ class ScormAssessmentItem
 		if($this->standalone){return '<head>'. "\n";}
 		return '';
 	}
-
+    
 	/**
 	 * Print CSS inclusion
 	 */

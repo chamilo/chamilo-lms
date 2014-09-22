@@ -15,7 +15,7 @@
 
 session_cache_limiter('nocache');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');

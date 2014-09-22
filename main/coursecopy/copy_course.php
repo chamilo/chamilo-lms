@@ -10,7 +10,7 @@
 $language_file = array('exercice', 'coursebackup', 'admin');
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 // Including additional libraries
 require_once 'classes/CourseBuilder.class.php';
@@ -121,14 +121,11 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
             FILE_OVERWRITE
         );
         $form->addGroup($group, '', get_lang('SameFilename'));
-
+        $form->add_progress_bar();
         $form->addElement('style_submit_button', 'submit', get_lang('CopyCourse'), 'class="save"');
-
         $form->setDefaults(array('copy_option' => 'select_items', 'same_file_name_option' => FILE_OVERWRITE));
         $form->display();
-
     }
 }
 
-/*	FOOTER	*/
 Display::display_footer();

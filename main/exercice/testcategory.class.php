@@ -3,7 +3,7 @@
 /**
  * @author hubert.borderiou & jmontoya
  */
-use ChamiloLMS\CoreBundle\CQuizCategory;
+use Chamilo\CoreBundle\CQuizCategory;
 
 class Testcategory
 {
@@ -206,7 +206,7 @@ class Testcategory
      */
     public function removeCategory()
     {
-        $category = Database::getManager()->find('ChamiloLMS\CoreBundle\CQuizCategory', $this->id);
+        $category = Database::getManager()->find('Chamilo\CoreBundle\CQuizCategory', $this->id);
         if (!$category) {
             return false;
         }
@@ -218,7 +218,7 @@ class Testcategory
             return false;
         }
 
-        $repo = Database::getManager()->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
+        $repo = Database::getManager()->getRepository('ChamiloCoreBundle:CQuizCategory');
         $repo->removeFromTree($category);
         // clear cached nodes
         Database::getManager()->clear();
@@ -953,7 +953,7 @@ class Testcategory
             unset($category_list['total']);
         }
         $em = Database::getManager();
-        $repo = $em->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
+        $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
 
         $redefineCategoryList = array();
 
@@ -961,7 +961,7 @@ class Testcategory
             $globalCategoryScore = array();
 
             foreach ($category_list as $category_id => $category_item) {
-                $cat = $em->find('ChamiloLMSCoreBundle:CQuizCategory', $category_id);
+                $cat = $em->find('ChamiloCoreBundle:CQuizCategory', $category_id);
                 $path = $repo->getPath($cat);
 
                 $categoryName = $category_name_list[$category_id];

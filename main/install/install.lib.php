@@ -1,29 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Chamilo LMS
- * This file contains functions used by the install and upgrade scripts.
- */
-
-/**
- * Check if current system is allowed to install
- * @return bool
- */
-function checkRequiredSettings()
-{
-    $requirements = getRequirements();
-    $requiredSettings = $requirements['required'];
-
-    foreach ($requiredSettings as $extension => $options) {
-        if (!extension_loaded($extension)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 
 /**
  * @param Symfony\Component\Translation\Translator $translator
@@ -108,31 +85,6 @@ function drawOptions($translator)
 }
 
 
-
-function getRequirements()
-{
-    return
-        array(
-            'required' => array(
-                //'session' => array('url' => 'http://php.net/manual/en/book.session.php', 'recommend' => Display::label('OFF', 'success')),
-                'mysql' => array('url' => 'http://php.net/manual/en/book.mysql.php'),
-                'curl' => array('url' => 'http://php.net/manual/fr/book.curl.php'),
-                'zlib' => array('url' => 'http://php.net/manual/en/book.zlib.php'),
-                'pcre' => array('url' => 'http://php.net/manual/en/book.pcre.php'),
-                'xml' => array('url' => 'http://php.net/manual/en/book.xml.php'),
-                'mbstring' => array('url' => 'http://php.net/manual/en/book.mbstring.php'),
-                'iconv' => array('url' => 'http://php.net/manual/en/book.iconv.php'),
-                'intl' => array('url' => 'http://php.net/manual/en/book.intl.php'),
-                'gd' => array('url' => 'http://php.net/manual/en/book.image.php'),
-                'json' => array('url' => 'http://php.net/manual/en/book.json.php')
-            ),
-            'optional' =>  array(
-                'imagick' => array('url' => 'http://php.net/manual/en/book.imagick.php'),
-                'ldap' => array('url' => 'http://php.net/manual/en/book.ldap.php'),
-                'xapian' => array('url' => 'http://php.net/manual/en/book.xapian.php')
-            )
-        );
-}
 
 /**
  * @param Symfony\Component\Translation\Translator $translator

@@ -11,16 +11,16 @@ use Header;
 
 /**
  * Ajax controller. Dispatch request and perform required action.
- * 
+ *
  *      - delete one note
  *      - delete all notes in a course/session
  *      - returns a note from its id
- * 
+ *
  * Usage:
- * 
+ *
  *      $controller = AjaxController::instance();
  *      $controller->run();
- * 
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license /license.txt
  */
@@ -33,7 +33,7 @@ class AjaxController extends \AjaxController
 
     /**
      * Return the instance of the controller.
-     * 
+     *
      * @return  \Notebook\AjaxController
      */
     public static function instance()
@@ -46,12 +46,12 @@ class AjaxController extends \AjaxController
     }
 
     /**
-     * Prepare the environment. Set up breadcrumps and raise tracking event. 
+     * Prepare the environment. Set up breadcrumps and raise tracking event.
      */
     protected function prolog()
     {
-        event_access_tool(TOOL_NOTEBOOK);
-    }        
+        Event::event_access_tool(TOOL_NOTEBOOK);
+    }
 
     public function is_allowed_to_edit()
     {

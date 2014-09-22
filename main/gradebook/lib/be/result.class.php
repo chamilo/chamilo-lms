@@ -11,23 +11,16 @@
  */
 class Result
 {
-
-// PROPERTIES
-
-	private $id;
-	private $user_id;
-	private $evaluation;
-	private $created_at;
-	private $score;
-
-// CONSTRUCTORS
+    private $id;
+    private $user_id;
+    private $evaluation;
+    private $created_at;
+    private $score;
 
     function Result()
     {
 		$this->created_at = api_get_utc_datetime();
     }
-
-// GETTERS AND SETTERS
 
     public function get_id()
     {

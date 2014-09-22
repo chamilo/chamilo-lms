@@ -119,9 +119,8 @@ function save_data($courses) {
                 $teacherInfo = api_get_user_info_from_username($teacher);
                 if (!empty($teacherInfo)) {
                     $teacherList[] = $teacherInfo;
+                }
             }
-        }
-
         }
 
         $params = array();
@@ -139,7 +138,6 @@ function save_data($courses) {
                     CourseManager::add_user_to_course($teacher['user_id'], $course_info['code'], COURSEMANAGER);
                 }
             }
-
             $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/">
                     '.$course_info['title'].'</a> '.get_lang('Created').'<br />';
         }
@@ -220,7 +218,7 @@ if (isset($errors) && count($errors) != 0) {
         <input type="file" name="import_file"/>
     </div>
 </div>
-<div class="control-group ">
+<div class="control-group">
     <div class="control">
         <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
     </div>

@@ -13,7 +13,7 @@ $language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
 
@@ -75,8 +75,6 @@ if (!empty($event)) {
 
     $event['start_date'] = api_get_local_time($event['start_date']);
     $event['end_date'] = api_get_local_time($event['end_date']);
-
-
 
     switch($type) {
         case 'personal':

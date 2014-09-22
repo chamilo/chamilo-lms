@@ -1,14 +1,16 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 if (PHP_SAPI !='cli') {
     die('Run this script through the command line or comment this line in the code');
 }
 
-//$_SERVER['SERVER_NAME'] = '';
-//$_SERVER['HTTP_HOST'] = '';
+if (file_exists('multiple_url_fix.php')) {
+    require 'multiple_url_fix.php';
+}
 
-require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'log.class.php';
+//require_once __DIR__.'/../inc/global.inc.php';
+//require_once api_get_path(LIBRARY_PATH).'log.class.php';
 
 /**
  * Class ImportCsv
@@ -44,6 +46,7 @@ class ImportCsv
 
     /**
      * @param Logger $logger
+     * @param array
      */
     public function __construct($logger, $conditions)
     {
@@ -54,7 +57,7 @@ class ImportCsv
     /**
      * @param bool $dump
      */
-    function setDumpValues($dump)
+    public function setDumpValues($dump)
     {
         $this->dumpValues = $dump;
     }
@@ -62,7 +65,7 @@ class ImportCsv
     /**
      * @return mixed
      */
-    function getDumpValues()
+    public function getDumpValues()
     {
         return $this->dumpValues;
     }
@@ -75,34 +78,47 @@ class ImportCsv
         $path = api_get_path(SYS_CODE_PATH).'cron/incoming/';
         if (!is_dir($path)) {
             echo "The folder! $path does not exits";
-            exit;
+            return 0;
         }
 
         if ($this->getDumpValues()) {
             $this->dumpDatabaseTables();
         }
 
-        echo "Starting with reading the files: ".PHP_EOL.PHP_EOL;
+        echo "Reading files: ".PHP_EOL.PHP_EOL;
 
         $files = scandir($path);
         $fileToProcess = array();
+        $fileToProcessStatic = array();
 
         if (!empty($files)) {
             foreach ($files as $file) {
                 $fileInfo = pathinfo($file);
                 if ($fileInfo['extension'] == 'csv') {
-                    // teachers_yyyymmdd.csv, courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
+                    // Checking teachers_yyyymmdd.csv, courses_yyyymmdd.csv, students_yyyymmdd.csv and sessions_yyyymmdd.csv
                     $parts = explode('_', $fileInfo['filename']);
-                    $method = 'import'.ucwords($parts[1]);
+                    $preMethod = ucwords($parts[1]);
+                    $preMethod = str_replace('-static', 'Static', $preMethod);
+                    $method = 'import'.$preMethod;
+
+                    $isStatic = strpos($method, 'Static');
 
                     if (method_exists($this, $method)) {
-                         $fileToProcess[$parts[1]][] = array(
-                            'method' => $method,
-                            'file' => $path.$fileInfo['basename']
-                        );
-                        //$this->$method($path.$fileInfo['basename']);
+                        if ($method == 'importUnsubscribeStatic' || empty($isStatic)) {
+                            $fileToProcess[$parts[1]][] = array(
+                                'method' => $method,
+                                'file' => $path.$fileInfo['basename']
+                            );
+                        } else {
+                            $fileToProcessStatic[$parts[1]][] = array(
+                                'method' => $method,
+                                'file' => $path.$fileInfo['basename']
+                            );
+                        }
                     } else {
                         echo "Error - This file '$file' can't be processed.".PHP_EOL;
+                        echo "Trying to call $method".PHP_EOL;
+
                         echo "The file have to has this format:".PHP_EOL;
                         echo "prefix_students_ddmmyyyy.csv, prefix_teachers_ddmmyyyy.csv, prefix_courses_ddmmyyyy.csv, prefix_sessions_ddmmyyyy.csv ".PHP_EOL;
                         exit;
@@ -112,13 +128,12 @@ class ImportCsv
 
             if (empty($fileToProcess)) {
                 echo 'Error - no files to process.';
-                exit;
+                return 0;
             }
-
-            $sections = array('students', 'teachers', 'courses', 'sessions');
 
             $this->prepareImport();
 
+            $sections = array('students', 'teachers', 'courses', 'sessions', 'unsubscribe-static');
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import $section --");
 
@@ -128,22 +143,38 @@ class ImportCsv
                         $method = $fileInfo['method'];
                         $file = $fileInfo['file'];
 
-                        echo 'Reading file: '.$file.PHP_EOL;
+                        echo 'File: '.$file.PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
-
-                        $this->$method($file);
+                        $this->$method($file, true);
                     }
+                }
+            }
 
+            $sections = array('students-static', 'teachers-static', 'courses-static', 'sessions-static');
+            foreach ($sections as $section) {
+                $this->logger->addInfo("-- Import static files $section --");
+
+                if (isset($fileToProcessStatic[$section]) && !empty($fileToProcessStatic[$section])) {
+                    $files = $fileToProcessStatic[$section];
+                    foreach ($files as $fileInfo) {
+                        $method = $fileInfo['method'];
+                        $file = $fileInfo['file'];
+                        echo 'Static file: '.$file.PHP_EOL;
+                        $this->logger->addInfo("Reading static file: $file");
+                        $this->$method($file, true);
+                    }
                 }
             }
         }
     }
 
+    /**
+     * Prepares extra fields before the import
+     */
     private function prepareImport()
     {
         // Create user extra field: extra_external_user_id
         UserManager::create_extra_field($this->extraFieldIdNameList['user'], 1, 'External user id', null);
-
         // Create course extra field: extra_external_course_id
         CourseManager::create_course_extra_field($this->extraFieldIdNameList['course'], 1, 'External course id');
         // Create session extra field extra_external_session_id
@@ -153,7 +184,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    function moveFile($file)
+    private function moveFile($file)
     {
         $moved = str_replace('incoming', 'treated', $file);
 
@@ -194,7 +225,6 @@ class ImportCsv
             $row['extra_'.$this->extraFieldIdNameList['user']] = $row['TeacherID'];
         }
 
-        //$row['lastname'] =  Status
         return $row;
     }
 
@@ -212,9 +242,15 @@ class ImportCsv
 
         $row['teachers'] = array();
         if (isset($row['Teacher']) && !empty($row['Teacher'])) {
-            $userInfo = api_get_user_info_from_username($row['Teacher']);
-            if (!empty($userInfo)) {
-                $row['teachers'] = $userInfo['user_id'];
+            $teachers = explode(',', $row['Teacher']);
+            if (!empty($teachers)) {
+                foreach ($teachers as $teacherUserName) {
+                    $teacherUserName = trim($teacherUserName);
+                    $userInfo = api_get_user_info_from_username($teacherUserName);
+                    if (!empty($userInfo)) {
+                        $row['teachers'][] = $userInfo['user_id'];
+                    }
+                }
             }
         }
 
@@ -228,7 +264,17 @@ class ImportCsv
      * File to import
      * @param string $file
      */
-    private function importTeachers($file)
+    private function importTeachersStatic($file)
+    {
+        $this->importTeachers($file, false);
+    }
+
+    /**
+     * File to import
+     * @param string $file
+     * @param bool $moveFile
+     */
+    private function importTeachers($file, $moveFile = true)
     {
         $data = Import::csv_to_array($file);
 
@@ -306,7 +352,7 @@ class ImportCsv
                         $row['lastname'],  // <<-- changed
                         $userInfo['username'],
                         null, //$password = null,
-                        $auth_source = null,
+                        PLATFORM_AUTH_SOURCE,
                         $userInfo['email'],
                         COURSEMANAGER,
                         $userInfo['official_code'],
@@ -336,13 +382,26 @@ class ImportCsv
                 }
             }
         }
-        $this->moveFile($file);
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
+
 
     /**
      * @param string $file
      */
-    private function importStudents($file)
+    private function importStudentsStatic($file)
+    {
+        $this->importStudents($file, false);
+    }
+
+    /**
+     * @param string $file
+     * @param bool $moveFile
+     */
+    private function importStudents($file, $moveFile = true)
     {
         $data = Import::csv_to_array($file);
 
@@ -361,8 +420,10 @@ class ImportCsv
             $this->logger->addInfo(count($data)." records found.");
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
-                //$userInfo = api_get_user_info_from_username($row['username']);
-                $user_id = UserManager::get_user_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['user']], $this->extraFieldIdNameList['user']);
+                $user_id = UserManager::get_user_id_from_original_id(
+                    $row['extra_'.$this->extraFieldIdNameList['user']],
+                    $this->extraFieldIdNameList['user']
+                );
 
                 $userInfo = array();
                 $userInfoByOfficialCode = null;
@@ -406,29 +467,51 @@ class ImportCsv
                         $this->logger->addError("Students - User NOT created: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
                     }
                 } else {
+
                     if (empty($userInfo)) {
                         $this->logger->addError("Students - Can't update user :".$row['username']);
                         continue;
                     }
 
                     if ($row['action'] == 'delete') {
-                        // INactive one year later
+                        // Inactive one year later
                         $userInfo['expiration_date'] = api_get_utc_datetime(api_strtotime(time() + 365*24*60*60));
                     }
 
+                    $password = $row['password']; // change password
+                    $email = $row['email']; // change email
+                    $resetPassword = 2; // allow password change
+
+                    // Conditions that disables the update of password and email:
+
                     if (isset($this->conditions['importStudents'])) {
                         if (isset($this->conditions['importStudents']['update']) && isset($this->conditions['importStudents']['update']['avoid'])) {
+                            // Blocking email update -
+                            // 1. Condition
                             $avoidUsersWithEmail = $this->conditions['importStudents']['update']['avoid']['email'];
                             if ($userInfo['email'] != $row['email'] && in_array($row['email'], $avoidUsersWithEmail)) {
-                                $this->logger->addInfo("Students - User skipped: ".$row['username']." because the avoid conditions (email).");
-                                continue;
+                                $this->logger->addInfo("Students - User email is not updated : ".$row['username']." because the avoid conditions (email).");
+                                // Do not change email keep the old email.
+                                $email = $userInfo['email'];
                             }
 
+                            // 2. Condition
+                            if (!in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                                $email = $userInfo['email'];
+                            }
+
+                            // 3. Condition
+                            if (in_array($userInfo['email'], $avoidUsersWithEmail) && !in_array($row['email'], $avoidUsersWithEmail)) {
+                                $email = $row['email'];
+                            }
+
+                            // Blocking password update
                             $avoidUsersWithPassword = $this->conditions['importStudents']['update']['avoid']['password'];
 
                             if ($userInfo['password'] != api_get_encrypted_password($row['password']) && in_array($row['password'], $avoidUsersWithPassword)) {
-                                $this->logger->addInfo("Students - User skipped: ".$row['username']." because the avoid conditions (password).");
-                                continue;
+                                $this->logger->addInfo("Students - User password is not updated: ".$row['username']." because the avoid conditions (password).");
+                                $password = null;
+                                $resetPassword = 0; // disallow password change
                             }
                         }
                     }
@@ -441,9 +524,9 @@ class ImportCsv
                         $row['firstname'], // <<-- changed
                         $row['lastname'],  // <<-- changed
                         $row['username'],  // <<-- changed
-                        null, //$password = null,
-                        $auth_source = null,
-                        $userInfo['email'],
+                        $password, //$password = null,
+                        PLATFORM_AUTH_SOURCE,
+                        $email,
                         STUDENT,
                         $userInfo['official_code'],
                         $userInfo['phone'],
@@ -456,7 +539,7 @@ class ImportCsv
                         null, //$language = 'english',
                         null, //$encrypt_method = '',
                         false, //$send_email = false,
-                        0 //$reset_password = 0
+                        $resetPassword //$reset_password = 0
                     );
 
                     if ($result) {
@@ -477,13 +560,24 @@ class ImportCsv
             }
         }
 
-        $this->moveFile($file);
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**
      * @param string $file
      */
-    private function importCourses($file)
+    private function importCoursesStatic($file)
+    {
+        $this->importCourses($file, false);
+    }
+
+    /**
+     * @param string $file
+     * @param bool $moveFile
+     */
+    private function importCourses($file, $moveFile = true)
     {
         $data = Import::csv_to_array($file);
 
@@ -495,8 +589,6 @@ class ImportCsv
             foreach ($data as $row) {
                 $row = $this->cleanCourseRow($row);
                 $courseCode = CourseManager::get_course_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['course']], $this->extraFieldIdNameList['course']);
-
-                //$courseInfo = api_get_course_info($row['course_code']);
                 $courseInfo = api_get_course_info($courseCode);
                 if (empty($courseInfo)) {
                     // Create
@@ -521,9 +613,15 @@ class ImportCsv
                     $params = array(
                         'title' => $row['title'],
                     );
+
                     $result = CourseManager::update_attributes($courseInfo['real_id'], $params);
 
-                    //CourseManager::updateTeachers($courseInfo['id'], $row['teachers']);
+                    $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
+                    if ($addTeacherToSession) {
+                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false);
+                    } else {
+                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, false);
+                    }
 
                     if ($result) {
                         $this->logger->addInfo("Courses - Course updated ".$courseInfo['code']);
@@ -533,13 +631,26 @@ class ImportCsv
                 }
             }
         }
-        $this->moveFile($file);
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
+
 
     /**
      * @param string $file
      */
-    private function importSessions($file)
+    private function importSessionsStatic($file)
+    {
+        $this->importSessions($file, false);
+    }
+
+    /**
+     * @param string $file
+     * @param bool $moveFile
+     */
+    private function importSessions($file, $moveFile = true)
     {
         $avoid =  null;
         if (isset($this->conditions['importSessions']) && isset($this->conditions['importSessions']['update'])) {
@@ -555,16 +666,65 @@ class ImportCsv
             $this->daysCoachAccessBeforeBeginning,
             $this->daysCoachAccessAfterBeginning,
             $this->defaultSessionVisibility,
-            $avoid
+            $avoid,
+            false,
+            false,
+            true
         );
 
         if (!empty($result['error_message'])) {
             $this->logger->addError($result['error_message']);
         }
         $this->logger->addInfo("Sessions - Sessions parsed: ".$result['session_counter']);
-        $this->moveFile($file);
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
+    /**
+     * @param string $file
+     */
+    private function importUnsubscribeStatic($file)
+    {
+        $data = Import::csv_reader($file);
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data)." records found.");
+            foreach ($data as $row) {
+                $chamiloUserName = $row['UserName'];
+                $chamiloCourseCode = $row['CourseCode'];
+                $chamiloSessionId = $row['SessionID'];
+
+                $sessionInfo = api_get_session_info($chamiloSessionId);
+
+                if (empty($sessionInfo)) {
+                    $this->logger->addError('Session does not exists: '.$chamiloSessionId);
+                    continue;
+                }
+
+                $courseInfo = api_get_course_info($chamiloCourseCode);
+                if (empty($courseInfo)) {
+                    $this->logger->addError('Course does not exists: '.$courseInfo);
+                    continue;
+                }
+
+                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+
+                if (empty($userId)) {
+                    $this->logger->addError('User does not exists: '.$chamiloUserName);
+                    continue;
+                }
+
+                CourseManager::unsubscribe_user($userId, $courseInfo['code'], $chamiloSessionId);
+                $this->logger->addError("User '$chamiloUserName' was removed from session: #$chamiloSessionId, Course: ".$courseInfo['code']);
+            }
+        }
+    }
+
+    /**
+     *  Dump database tables
+     */
     private function dumpDatabaseTables()
     {
         echo 'Dumping tables'.PHP_EOL;
@@ -657,20 +817,22 @@ if (!is_array($emails)) {
     $emails = array($emails);
 }
 $subject = "Cron main/cron/import_csv.php ".date('Y-m-d h:i:s');
-$from = api_get_setting('emailAdministrator');
-
+$from = api_get_setting('platform.administrator_email');
+/*
 if (!empty($emails)) {
     foreach ($emails as $email) {
         $stream = new NativeMailerHandler($email, $subject, $from, $minLevel);
         $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
     }
-}
+}*/
 
 $stream = new StreamHandler(api_get_path(SYS_ARCHIVE_PATH).'import_csv.log', $minLevel);
 $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
-$import = new ImportCsv($logger, $_configuration['cron_import_csv_conditions']);
+$cronImportCSVConditions = isset($_configuration['cron_import_csv_conditions']) ? $_configuration['cron_import_csv_conditions'] : null;
+
+$import = new ImportCsv($logger, $cronImportCSVConditions);
 
 if (isset($_configuration['default_admin_user_id_for_cron'])) {
     $import->defaultAdminId = $_configuration['default_admin_user_id_for_cron'];
@@ -682,7 +844,27 @@ if (isset($argv[1]) && $argv[1] = '--dump') {
     $dump = true;
 }
 
-$import->setDumpValues($dump);
+if (isset($_configuration['import_csv_disable_dump']) && $_configuration['import_csv_disable_dump'] == true) {
+    $import->setDumpValues(false);
+} else {
+    $import->setDumpValues($dump);
+}
+
 // Do not moves the files to treated
-$import->test = true;
+if (isset($_configuration['import_csv_test'])) {
+    $import->test = $_configuration['import_csv_test'];
+} else {
+    $import->test = true;
+}
+
 $import->run();
+
+if (isset($_configuration['import_csv_fix_permissions']) && $_configuration['import_csv_fix_permissions'] == true) {
+    $command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
+    echo "Executing: ".$command.PHP_EOL;
+    system($command);
+
+    $command = "sudo find ".api_get_path(SYS_CODE_PATH)."upload/users  -type d -exec chmod 777 {} \;";
+    echo "Executing: ".$command.PHP_EOL;
+    system($command);
+}

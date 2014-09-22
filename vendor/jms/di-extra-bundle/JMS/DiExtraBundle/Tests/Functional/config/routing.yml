@@ -1,8 +1,0 @@
-TestBundle:
-    type: annotation
-    resource: "@JMSDiExtraTestBundle/Controller/"
-
-hello:
-    pattern: /hello
-    defaults:
-        _controller: controller.extended_hello:helloAction

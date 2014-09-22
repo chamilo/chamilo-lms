@@ -10,7 +10,7 @@
  */
 // name of the language file that needs to be included
 $language_file = "blog";
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $blog_id = intval($_GET['blog_id']);
 
@@ -360,12 +360,9 @@ switch ($current_page) {
 				}
                 Blog :: display_form_edit_post($blog_id, Database::escape_string((int)$_GET['post_id']));
 			} else {
-				if (isset ($_GET['filter']) && !empty ($_GET['filter']))
-				{
+				if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
 					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
-				}
-				else
-				{
+				} else {
 					Blog :: display_blog_posts($blog_id);
 				}
 			}

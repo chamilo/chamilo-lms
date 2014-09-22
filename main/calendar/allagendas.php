@@ -15,7 +15,7 @@ $language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 
 require_once 'agenda.inc.php';
@@ -155,16 +155,13 @@ function get_agenda_items_by_course_list($course_list, $month, $year, $session_i
 						ORDER BY start_date ";
 		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result,'ASSOC')) {
-
 			//taking the day
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
 			//taking the time
 			$time = date("H:i",strtotime($item['start_date']));
-
 			$end_time= date("H:i",strtotime($item['end_date']));
 			$URL = api_get_path(WEB_PATH)."main/calendar/allagendas.php?cidReq=".urlencode($code)."&amp;sort=asc&amp;view=list&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-
 			if ($setting_agenda_link == 'coursecode') {
 				//$title=$array_course_info['title'];
 				$agenda_link = api_substr($title, 0, 14);

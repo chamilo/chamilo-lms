@@ -138,10 +138,10 @@ $form->add_textfield('name', get_lang('GroupName'));
 $form->addElement('textarea', 'description', get_lang('Description'), array('class' => 'span6', 'rows' => 6));
 
 // Getting course info
-$course = Database::getManager()->getRepository('ChamiloLMSCoreBundle:Course')->find(api_get_course_int_id());
+$course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->find(api_get_course_int_id());
 
 //Getting subscribed students
-$subscribedUsers = Database::getManager()->getRepository('ChamiloLMSCoreBundle:Course')->getSubscribedStudents($course);
+$subscribedUsers = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->getSubscribedStudents($course);
 $subscribedUsers = $subscribedUsers->getQuery();
 $subscribedUsers = $subscribedUsers->execute();
 

@@ -16,7 +16,7 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	static function display_form($course, $hidden_fields = null, $avoid_serialize=false)
+	static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
     {
         global $charset;
 		$resource_titles[RESOURCE_EVENT]                = get_lang('Events');
@@ -27,6 +27,7 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_FORUM]                = get_lang('Forums');
         $resource_titles[RESOURCE_FORUMCATEGORY]        = get_lang('ForumCategory');
 		$resource_titles[RESOURCE_QUIZ] 				= get_lang('Tests');
+        $resource_titles[RESOURCE_TEST_CATEGORY] 		= get_lang('QuestionCategory');
 		$resource_titles[RESOURCE_LEARNPATH]            = get_lang('ToolLearnpath');
 		$resource_titles[RESOURCE_SCORM]                = 'SCORM';
 		$resource_titles[RESOURCE_TOOL_INTRO]           = get_lang('ToolIntro');
@@ -144,7 +145,12 @@ class CourseSelectForm
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\', \'\' ,\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
-		if (!empty($hidden_fields['destination_course']) && !empty($hidden_fields['origin_course']) && !empty($hidden_fields['destination_session']) && !empty($hidden_fields['origin_session']) ) {
+
+		if (!empty($hidden_fields['destination_course']) &&
+            !empty($hidden_fields['origin_course']) &&
+            !empty($hidden_fields['destination_session']) &&
+            !empty($hidden_fields['origin_session'])
+        ) {
 			echo '<input type="hidden" name="destination_course" 	value="'.$hidden_fields['destination_course'].'"/>';
 			echo '<input type="hidden" name="origin_course" 		value="'.$hidden_fields['origin_course'].'"/>';
 			echo '<input type="hidden" name="destination_session" 	value="'.$hidden_fields['destination_session'].'"/>';
@@ -296,13 +302,22 @@ class CourseSelectForm
 			}
 		}
 
+        $recycleOption = isset($_POST['recycle_option']) ? true : false;
+
 		if (empty($element_count)) {
 		    Display::display_warning_message(get_lang('NoDataAvailable'));
 		} else {
     		if (!empty($hidden_fields['destination_session'])) {
-    			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES, $charset))."'".')) return false;" >'.get_lang('Ok').'</button>';
+    			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES, $charset))."'".')) return false;" >'.
+                    get_lang('Ok').'</button>';
     		} else {
-    			echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
+                if ($recycleOption) {
+                    echo '<br /><button class="save" type="submit">'.
+                        get_lang('Ok').'</button>';
+                } else {
+    			    echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
+                    get_lang('Ok').'</button>';
+                }
     		}
 		}
 
@@ -312,8 +327,11 @@ class CourseSelectForm
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 	}
 
-
-    static function display_hidden_quiz_questions($course) {
+    /**
+     * @param $course
+     */
+    static function display_hidden_quiz_questions($course)
+    {
 		if(is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
@@ -329,7 +347,11 @@ class CourseSelectForm
 		}
 	}
 
-	static function display_hidden_scorm_directories($course) {
+    /**
+     * @param $course
+     */
+    static function display_hidden_scorm_directories($course)
+    {
         if (is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
@@ -347,11 +369,15 @@ class CourseSelectForm
 
 	/**
 	 * Get the posted course
-	 * @param string who calls the function? It can be copy_course, create_backup, import_backup or recycle_course
+	 * @param string $from who calls the function?
+     * It can be copy_course, create_backup, import_backup or recycle_course
+     * @param int $session_id
+     * @param string $course_code
 	 * @return course The course-object with all resources selected by the user
 	 * in the form given by display_form(...)
 	 */
-	static function get_posted_course($from = '', $session_id = 0, $course_code = '') {
+	public static function get_posted_course($from = '', $session_id = 0, $course_code = '')
+    {
         $course = null;
 
         if (isset($_POST['course'])) {
@@ -362,7 +388,7 @@ class CourseSelectForm
 
 		//Create the resource DOCUMENT objects
 		//Loading the results from the checkboxes of ethe javascript
-		$resource       = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
+		$resource = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
 
 		$course_info 	= api_get_course_info($course_code);
 		$table_doc 		= Database::get_course_table(TABLE_DOCUMENT);
@@ -370,11 +396,13 @@ class CourseSelectForm
 
 		$course_id 		= $course_info['real_id'];
 
-		// Searching the documents resource that have been set to null because $avoid_serialize is true in the display_form() function
+		/* Searching the documents resource that have been set to null because
+        $avoid_serialize is true in the display_form() function*/
 
 		if ($from == 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
+
 				foreach	($resource as $resource_item) {
 
 					$condition_session = '';
@@ -385,11 +413,12 @@ class CourseSelectForm
 
 					$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
 							FROM '.$table_doc.' d, '.$table_prop.' p
-							WHERE 	d.c_id = '.$course_id.' AND
-									p.c_id = '.$course_id.' AND
-									tool 	= \''.TOOL_DOCUMENT.'\' AND
-									p.ref 	= d.id AND p.visibility != 2 AND
-									d.id 	= '.$resource_item.$condition_session.'
+							WHERE
+							    d.c_id = '.$course_id.' AND
+                                p.c_id = '.$course_id.' AND
+                                tool 	= \''.TOOL_DOCUMENT.'\' AND
+                                p.ref 	= d.id AND p.visibility != 2 AND
+                                d.id 	= '.$resource_item.$condition_session.'
 							ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
@@ -397,7 +426,11 @@ class CourseSelectForm
                         if ($doc) {
                             $course->add_resource($doc);
                             // adding item property
-                            $sql = "SELECT * FROM $table_prop WHERE c_id = $course_id AND tool = '".RESOURCE_DOCUMENT."' AND ref = $resource_item ";
+                            $sql = "SELECT * FROM $table_prop
+                                    WHERE
+                                        c_id = $course_id AND
+                                        tool = '".RESOURCE_DOCUMENT."' AND
+                                        ref = $resource_item ";
                             $res = Database::query($sql);
                             $all_properties = array ();
                             while ($item_property = Database::fetch_array($res,'ASSOC')) {
@@ -415,7 +448,10 @@ class CourseSelectForm
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
 						foreach($resources as $id => $obj) {
-						    if (is_array($_POST['resource'][RESOURCE_SURVEY]) && !in_array($obj->survey_id, array_keys($_POST['resource'][RESOURCE_SURVEY]))) {
+						    if (isset($_POST['resource'][RESOURCE_SURVEY]) &&
+                                is_array($_POST['resource'][RESOURCE_SURVEY]) &&
+                                !in_array($obj->survey_id, array_keys($_POST['resource'][RESOURCE_SURVEY]))
+                            ) {
 								unset($course->resources[$type][$id]);
 							}
 						}
@@ -450,10 +486,12 @@ class CourseSelectForm
                         }
                         break;
                     case RESOURCE_LEARNPATH:
-                        $lps = $_POST['resource'][RESOURCE_LEARNPATH];
+                        $lps = isset($_POST['resource'][RESOURCE_LEARNPATH]) ? $_POST['resource'][RESOURCE_LEARNPATH] : null;
+
                         if (!empty($lps)) {
                             foreach ($lps as $id => $obj) {
                                 $lp_resource = $course->resources[RESOURCE_LEARNPATH][$id];
+
                                 if (isset($lp_resource) && !empty($lp_resource) && isset($lp_resource->items)) {
                                     foreach ($lp_resource->items as $item) {
                                         switch ($item['item_type']) {
@@ -474,9 +512,12 @@ class CourseSelectForm
 						// but in which a document was selected.
 						$documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
 						if (!empty($resources) && is_array($resources))
-							foreach($resources as $id => $obj) {
-								if (isset($obj->file_type) && $obj->file_type == 'folder' && !isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) && is_array($documents)) {
-									foreach($documents as $id_to_check => $post_value) {
+							foreach ($resources as $id => $obj) {
+								if (isset($obj->file_type) && $obj->file_type == 'folder' &&
+                                    !isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) &&
+                                    is_array($documents)
+                                ) {
+									foreach ($documents as $id_to_check => $post_value) {
 										$obj_to_check = $resources[$id_to_check];
 										$shared_path_part = substr($obj_to_check->path,0,strlen($obj->path));
 										if ($id_to_check != $id && $obj->path == $shared_path_part) {
@@ -490,12 +531,11 @@ class CourseSelectForm
 						if (!empty($resources) && is_array($resources)) {
 							foreach ($resources as $id => $obj) {
 								$resource_is_used_elsewhere = $course->is_linked_resource($obj);
-                                //var_dump($obj, $resource_is_used_elsewhere);
 								// check if document is in a quiz (audio/video)
 								if ($type == RESOURCE_DOCUMENT && $course->has_resources(RESOURCE_QUIZ)) {
-									foreach($course->resources[RESOURCE_QUIZ] as $qid => $quiz) {
+									foreach($course->resources[RESOURCE_QUIZ] as $quiz) {
                                         $quiz = $quiz->obj;
-										if ($quiz->media == $id) {
+										if (isset($quiz->media) && $quiz->media == $id) {
 											$resource_is_used_elsewhere = true;
 										}
 									}
@@ -508,6 +548,7 @@ class CourseSelectForm
 				}
 			}
 		}
+
 		return $course;
 	}
 

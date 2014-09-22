@@ -12,7 +12,7 @@ $language_file = 'admin';
 $cidReset = true;
 
 // including the global Chamilo file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;

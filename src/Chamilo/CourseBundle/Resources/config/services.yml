@@ -1,0 +1,468 @@
+parameters:
+    tool_chain.class: Chamilo\CourseBundle\ToolChain
+
+    chamilo_course.controller.settings.class: Chamilo\CourseBundle\Controller\SettingsController
+    chamilo_course.settings.form_factory.class: Chamilo\CourseBundle\Form\Factory\SettingsFormFactory
+    chamilo_course.settings.manager.class: Chamilo\CourseBundle\Manager\SettingsManager
+    chamilo_course.settings.schema_registry.class: Sylius\Bundle\SettingsBundle\Schema\SchemaRegistry
+
+services:
+    # EventListeners
+    chamilo_course.listener.course_access:
+        class: Chamilo\CourseBundle\EventListener\CourseListener
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: kernel.event_listener, event: chamilo_course.course.access, method: onCourseAccessEvent }
+
+    chamilo_course.listener.session_access:
+        class: Chamilo\CourseBundle\EventListener\SessionListener
+        arguments:
+          - @doctrine.orm.entity_manager
+        tags:
+            - { name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent }
+
+
+    # Course settings
+    chamilo_course.controller.settings:
+        class: "%chamilo_course.controller.settings.class%"
+        calls:
+          - [setContainer, [@service_container]]
+
+    chamilo_course.settings.schema_registry:
+        class: %chamilo_course.settings.schema_registry.class%
+
+    chamilo_course.settings.form_factory:
+        class: %chamilo_course.settings.form_factory.class%
+        arguments:
+            - @chamilo_course.settings.schema_registry
+            - @form.factory
+
+    chamilo_course.settings.cache:
+        alias: doctrine_cache.providers.chamilo_settings
+
+    chamilo_course.repository.parameter:
+        class: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
+        factory_service: doctrine.orm.entity_manager
+        factory_method: getRepository
+        arguments: [ Chamilo\CourseBundle\Entity\CCourseSetting ]
+
+    chamilo_course.settings.manager:
+        class: %chamilo_course.settings.manager.class%
+        arguments:
+            - @chamilo_course.settings.schema_registry
+            - @sylius.manager.parameter
+            - @chamilo_course.repository.parameter
+            - @doctrine_cache.providers.chamilo_settings
+            - @validator
+
+    # Course tool container
+    chamilo_course.tool_chain:
+        class: %tool_chain.class%
+
+    # Course tool list
+    chamilo_course.tool.agenda:
+        class: Chamilo\CourseBundle\Tool\Agenda
+        arguments:
+            - calendar_event
+            - authoring
+            - calendar/agenda.php
+            - agenda.gif
+            - @chamilo_course.course_settings_schema.agenda
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.agenda:
+        class: Chamilo\CourseBundle\Settings\AgendaCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: calendar_event }
+
+    chamilo_course.tool.announcement:
+        class: Chamilo\CourseBundle\Tool\Announcement
+        arguments:
+            - announcement
+            - authoring
+            - announcements/announcements.php
+            - valves.gif
+            - @chamilo_course.course_settings_schema.announcement
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.announcement:
+        class: Chamilo\CourseBundle\Settings\AnnouncementCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: announcement }
+
+    chamilo_course.tool.assignment:
+        class: Chamilo\CourseBundle\Tool\Assignment
+        arguments:
+            - assignment
+            - interaction
+            - work/work.php
+            - works.gif
+            - @chamilo_course.course_settings_schema.assignment
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.assignment:
+        class: Chamilo\CourseBundle\Settings\AssignmentCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: assignment }
+
+    chamilo_course.tool.attendance:
+        class: Chamilo\CourseBundle\Tool\Attendance
+        arguments:
+            - attendance
+            - authoring
+            - attendance/index.php
+            - attendance.gif
+            - @chamilo_course.course_settings_schema.attendance
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.attendance:
+        class: Chamilo\CourseBundle\Settings\AttendanceCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: attendance }
+
+    chamilo_course.tool.blog:
+        class: Chamilo\CourseBundle\Tool\Blog
+        arguments:
+            - blog_management
+            - admin
+            - blog/blog_admin.php
+            - blog_admin.gif
+            - @chamilo_course.course_settings_schema.blog
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.blog:
+        class: Chamilo\CourseBundle\Settings\BlogCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: blog_management }
+
+    chamilo_course.tool.course_description:
+        class: Chamilo\CourseBundle\Tool\CourseDescription
+        arguments:
+            - course_description
+            - authoring
+            - course_description/index.php
+            - info.gif
+            - @chamilo_course.course_settings_schema.course_description
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.course_description:
+        class: Chamilo\CourseBundle\Settings\CourseDescriptionCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: course_description }
+
+    chamilo_course.tool.chat:
+        class: Chamilo\CourseBundle\Tool\Chat
+        arguments:
+            - chat
+            - interaction
+            - chat/chat.php
+            - chat.gif
+            - @chamilo_course.course_settings_schema.chat
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.chat:
+        class: Chamilo\CourseBundle\Settings\ChatCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: chat }
+
+    chamilo_course.tool.course_progress:
+        class: Chamilo\CourseBundle\Tool\CourseProgress
+        arguments:
+            - course_progress
+            - authoring
+            - course_progress/index.php
+            - course_progress.gif
+            - @chamilo_course.course_settings_schema.course_progress
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.course_progress:
+        class: Chamilo\CourseBundle\Settings\CourseProgressCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: course_progress }
+
+    chamilo_course.tool.document:
+        class: Chamilo\CourseBundle\Tool\Document
+        arguments:
+            - document
+            - authoring
+            - document/document.php
+            - folder_document.gif
+            - @chamilo_course.course_settings_schema.document
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.document:
+        class: Chamilo\CourseBundle\Settings\DocumentCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: document }
+
+
+    chamilo_course.tool.dropbox:
+        class: Chamilo\CourseBundle\Tool\Dropbox
+        arguments:
+            - dropbox
+            - interaction
+            - dropbox/index.php
+            - dropbox.gif
+            - @chamilo_course.course_settings_schema.dropbox
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.dropbox:
+        class: Chamilo\CourseBundle\Settings\DropboxCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: dropbox }
+
+    chamilo_course.tool.exercise:
+        class: Chamilo\CourseBundle\Tool\Exercise
+        arguments:
+            - quiz
+            - authoring
+            - exercice/exercice.php
+            - quiz.gif
+            - @chamilo_course.course_settings_schema.exercise
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.exercise:
+        class: Chamilo\CourseBundle\Settings\ExerciseCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: quiz }
+
+    chamilo_course.tool.forum:
+        class: Chamilo\CourseBundle\Tool\Forum
+        arguments:
+            - forum
+            - interaction
+            - forum/index.php
+            - forum.gif
+            - @chamilo_course.course_settings_schema.forum
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.forum:
+        class: Chamilo\CourseBundle\Settings\ForumCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: forum }
+
+
+    chamilo_course.tool.glossary:
+        class: Chamilo\CourseBundle\Tool\Glossary
+        arguments:
+            - glossary
+            - authoring
+            - glossary/index.php
+            - glossary.gif
+            - @chamilo_course.course_settings_schema.glossary
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.glossary:
+        class: Chamilo\CourseBundle\Settings\GlossaryCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: glossary }
+
+    chamilo_course.tool.gradebook:
+        class: Chamilo\CourseBundle\Tool\Gradebook
+        arguments:
+            - gradebook
+            - authoring
+            - gradebook/index.php
+            - gradebook.gif
+            - @chamilo_course.course_settings_schema.gradebook
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.gradebook:
+        class: Chamilo\CourseBundle\Settings\GradebookCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: gradebook }
+
+    chamilo_course.tool.group:
+        class: Chamilo\CourseBundle\Tool\Group
+        arguments:
+            - group
+            - interaction
+            - group/group.php
+            - group.gif
+            - @chamilo_course.course_settings_schema.group
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.group:
+        class: Chamilo\CourseBundle\Settings\GroupCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: group }
+
+    chamilo_course.tool.learning_path:
+        class: Chamilo\CourseBundle\Tool\LearningPath
+        arguments:
+            - learnpath
+            - authoring
+            - newscorm/lp_controller.php
+            - scorms.gif
+            - @chamilo_course.course_settings_schema.learning_path
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.learning_path:
+        class: Chamilo\CourseBundle\Settings\LearningPathCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: learnpath }
+
+    chamilo_course.tool.link:
+        class: Chamilo\CourseBundle\Tool\Link
+        arguments:
+            - link
+            - authoring
+            - link/link.php
+            - links.gif
+            - @chamilo_course.course_settings_schema.link
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.link:
+        class: Chamilo\CourseBundle\Settings\LinkCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: link }
+
+    chamilo_course.tool.maintenance:
+        class: Chamilo\CourseBundle\Tool\Maintenance
+        arguments:
+            - course_maintenance
+            - admin
+            - course_info/maintenance.php
+            - backup.gif
+            - @chamilo_course.course_settings_schema.maintenance
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.maintenance:
+        class: Chamilo\CourseBundle\Settings\MaintenanceCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: course_maintenance }
+
+    chamilo_course.tool.settings:
+        class: Chamilo\CourseBundle\Tool\Settings
+        arguments:
+            - course_setting
+            - admin
+            - course_info/infocours.php
+            - reference.gif
+            - @chamilo_course.course_settings_schema.settings
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.settings:
+        class: Chamilo\CourseBundle\Settings\SettingsCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: course_setting }
+
+    chamilo_course.tool.survey:
+        class: Chamilo\CourseBundle\Tool\Survey
+        arguments:
+            - survey
+            - interaction
+            - survey/survey_list.php
+            - survey.gif
+            - @chamilo_course.course_settings_schema.survey
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.survey:
+        class: Chamilo\CourseBundle\Settings\SurveyCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: survey }
+
+    chamilo_course.tool.tracking:
+        class: Chamilo\CourseBundle\Tool\Tracking
+        arguments:
+            - tracking
+            - admin
+            - tracking/courseLog.php
+            - statistics.gif
+            - @chamilo_course.course_settings_schema.tracking
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.tracking:
+        class: Chamilo\CourseBundle\Settings\TrackingCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: tracking }
+
+    chamilo_course.tool.user:
+        class: Chamilo\CourseBundle\Tool\User
+        arguments:
+            - user
+            - interaction
+            - user/user.php
+            - members.gif
+            - @chamilo_course.course_settings_schema.user
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.user:
+        class: Chamilo\CourseBundle\Settings\UserCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: user }
+
+    chamilo_course.tool.wiki:
+        class: Chamilo\CourseBundle\Tool\Wiki
+        arguments:
+            - wiki
+            - interaction
+            - wiki/index.php
+            - wiki.gif
+            - @chamilo_course.course_settings_schema.wiki
+
+        tags:
+            - { name: chamilo_course.tool }
+
+    # Course settings
+    chamilo_course.course_settings_schema.wiki:
+        class: Chamilo\CourseBundle\Settings\WikiCourseSettingsSchema
+        tags:
+            - { name: chamilo_course.settings_schema, namespace: wiki }

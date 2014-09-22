@@ -7,7 +7,7 @@
 /**
  * Init
  */
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 exit;
 $document_id = $_GET['id'];
 

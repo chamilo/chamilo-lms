@@ -1,0 +1,15 @@
+<div class="actions">
+<a class="btn btn-default" href="{{ url('chamilo_notebook_new', { 'course': course }) }}">
+    {{ 'Add' | trans }}
+</a>
+
+</div>
+
+{{ grid_search(grid) }}
+
+{{ grid(grid, 'ChamiloNotebookBundle:Notebook:grid.html.twig') }}
+
+{# ajax #}
+{#{{ grid_search(grid, 'APYDataGridBundle::blocks.html.twig') }}#}
+
+{#{{ grid(grid, 'APYDataGridBundle::blocks_js.jquery.html.twig') }}#}

@@ -1,5 +1,6 @@
 {
     "name": "chamilo/chamilo-lms",
+    "description": "E-learning and collaboration software",
     "type": "project",
     "homepage": "http://www.chamilo.org",
     "license": "GPL-3.0",
@@ -7,10 +8,10 @@
         "forum": "http://www.chamilo.org/forum",
         "irc": "irc://irc.freenode.org/chamilo"
     },
-
     "autoload": {
         "psr-0": {
-            "": "src/"
+            "": "src/",
+            "Oro\\Bundle": "src/"
         },
         "classmap": [
             "main/auth",
@@ -26,8 +27,6 @@
             "main/survey"
         ]
     },
-
-    "minimum-stability": "stable",
     "repositories": [
         {
             "type": "package",
@@ -39,40 +38,56 @@
                     "type": "file"
                 }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/jmontoyaa/AdminThemeBundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/jmontoyaa/MigrationBundle.git"
         }
     ],
-
     "require": {
         "php": ">=5.3.3",
+
+        "ext-intl": "*",
+        "ext-gd": "*",
+        "ext-mysql": "*",
+        "ext-curl": "*",
+        "ext-zlib": "*",
+        "ext-xml": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
 
         "twig/twig": "~1.12",
         "twig/extensions": "~1.0",
 
-        "symfony/symfony": "~2.5",
-
+        "symfony/symfony": "~2.3",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.3",
 
         "sensio/distribution-bundle": "~2.3",
-        "sensio/framework-extra-bundle": "~3.0.0",
+        "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
 
         "jms/security-extra-bundle": "~1.5",
         "jms/di-extra-bundle": "~1.4",
-        "jms/serializer-bundle": "~0.11",
+        "jms/serializer-bundle": "~0.12",
 
-        "doctrine/orm": "2.4.2",
-        "doctrine/doctrine-bundle": "~1.3@dev",
-        "doctrine/doctrine-migrations-bundle": "dev-master",
-        "doctrine/migrations": "dev-master",
+        "doctrine/orm": "2.5.*@dev",
+        "doctrine/doctrine-bundle": "1.3.*@dev",
+        "doctrine/dbal": "2.5.*@dev",
+        "doctrine/doctrine-migrations-bundle": "~2.0@dev",
+        "doctrine/migrations": "~1.0@dev",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
-        "doctrine/data-fixtures": "1.0.*@dev",
+        "doctrine/data-fixtures": "~1.0@dev",
 
         "symfony-cmf/routing-bundle": "~1.1",
 
         "knplabs/gaufrette": "0.1.4",
-        "knplabs/knp-menu-bundle": "1.1.x-dev",
+        "knplabs/knp-menu-bundle": "~2.0",
 
         "sonata-project/easy-extends-bundle": "~2.1@dev",
         "sonata-project/seo-bundle": "~1@dev",
@@ -86,18 +101,19 @@
         "sonata-project/user-bundle": "~2.2@dev",
         "sonata-project/cache-bundle": "~2.1@dev",
         "sonata-project/cache": "~1.0@dev",
-        "sonata-project/page-bundle": "dev-master",
+        "sonata-project/page-bundle": "~2.3@dev",
         "sonata-project/core-bundle": "~2.2@dev",
         "sonata-project/formatter-bundle": "~2.3@dev",
         "sonata-project/news-bundle": "~2.3@dev",
         "sonata-project/datagrid-bundle": "~2.2@dev",
         "sonata-project/exporter": "~1.3@dev",
+
         "sonata-project/timeline-bundle": "~2.2@dev",
         "sonata-project/classification-bundle": "~2.2@dev",
         "sonata-project/ecommerce": "dev-develop",
         "sonata-project/comment-bundle": "~2.2@dev",
 
-        "friendsofsymfony/comment-bundle": "dev-master",
+        "friendsofsymfony/comment-bundle": "~2.0@dev",
 
         "dflydev/markdown": "~1.0",
         "simplethings/entity-audit-bundle": "~0.5",
@@ -112,28 +128,38 @@
 
         "incenteev/composer-parameter-handler": "~2.0",
 
-        "gedmo/doctrine-extensions": "~2.3",
+        "friendsofsymfony/advanced-encoder-bundle": "~1.0",
+        "avanzu/admin-theme-bundle": "dev-master",
+        "friendsofsymfony/message-bundle": "~1.2",
         "jquery/jquery":  "1.10.*",
         "oyejorge/less.php": "~1.5",
-        "white-october/pagerfanta-bundle": "dev-master",
-        "jbroadway/urlify": "1.0.0-stable",
 
-        "composer/composer": "1.0.*@dev",
-        "friendsofsymfony/advanced-encoder-bundle": "~1.0",
         "hwi/oauth-bundle": "0.4.*@dev",
-        "friendsofsymfony/message-bundle": "~1.2",
-        "stof/doctrine-extensions-bundle": "~1.1@dev",
-        "avanzu/admin-theme-bundle": "dev-master",
+        "gedmo/doctrine-extensions": "~2.3",
 
-        "sylius/flow-bundle": "0.10.*@dev",
-        "liip/theme-bundle": "1.0.*@dev",
-        "chamilo/chash" : "dev-master"
+        "zendframework/zend-filter": "2.3.*@dev",
+
+        "jbroadway/urlify": "1.0.0-stable",
+        "composer/composer": "1.0.0-alpha8",
+        "liip/theme-bundle": "dev-master",
+        "chamilo/chash" : "dev-master",
+        "white-october/pagerfanta-bundle": "dev-master",
+        "sylius/resource-bundle": "dev-master",
+        "sylius/resource": "dev-master",
+        "apy/datagrid-bundle": "dev-master",
+        "jms/translation-bundle": "dev-master",
+        "sylius/flow-bundle": "0.11.*@dev",
+        "sylius/settings-bundle": "dev-master",
+        "sp/bower-bundle": "dev-master",
+        "jmontoyaa/migration-bundle":"dev-master"
     },
     "require-dev": {
+        "akeneo/crowdin-api": "1.0.*@dev",
         "elao/web-profiler-extra-bundle" : "~2.3@dev",
-        "lexik/maintenance-bundle": "dev-master"
+        "lexik/maintenance-bundle": "dev-master",
+        "jns/xhprof-bundle": "1.0.*@dev",
+        "facebook/xhprof": "dev-master@dev"
     },
-
     "scripts": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
@@ -152,11 +178,9 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ]
     },
-
     "config": {
         "bin-dir": "bin"
     },
-
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web",
@@ -164,7 +188,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "2.4-dev"
+            "dev-master": "10.0.x-dev"
         }
     }
 }

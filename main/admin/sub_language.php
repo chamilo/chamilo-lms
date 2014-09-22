@@ -11,7 +11,7 @@
 $language_file = 'admin';
 $cidReset = true;
 $this_script = 'sub_language';
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once 'sub_language.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 

@@ -11,7 +11,7 @@
 // Language files that should be included.
 $language_file = array('courses', 'index', 'admin');
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';

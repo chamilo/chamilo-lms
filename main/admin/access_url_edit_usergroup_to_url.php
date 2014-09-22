@@ -11,7 +11,7 @@ $language_file = 'admin';
 // resetting the course id
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';

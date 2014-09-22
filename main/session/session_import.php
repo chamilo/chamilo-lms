@@ -8,7 +8,7 @@
 $language_file = array('admin', 'registration');
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
@@ -506,7 +506,7 @@ $form->display();
 
 <blockquote>
 <pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_get_system_encoding(); ?>&quot;?&gt;
 &lt;Sessions&gt;
     &lt;Users&gt;
         &lt;User&gt;

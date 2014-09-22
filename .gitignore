@@ -1,12 +1,5 @@
 # Chamilo
 
-config/auth.conf.php
-config/configuration.php
-config/events.conf.php
-config/mail.conf.php
-config/portfolio.conf.php
-config/profile.conf.php
-
 tests/unittests/db.conf.php
 tests/logs/*
 
@@ -23,10 +16,8 @@ data/*
 
 # IDE settings
 .idea
-
 *.orig
 nbproject/*
-vendor/.git
 .*.swp
 
 vendor/ezyang/htmlpurifier/docs/*
@@ -44,16 +35,18 @@ tests/doctrine_console/Proxies
 # OS stuff
 .DS_Store
 
+/.htaccess
+
 # Symfony
 
 behat.yml
 app/cache/*
 app/logs/*
 app/*.cache
-web/bundles
-web/uploads
+web/uploads/*
 web/sitemap*.xml
 app/config/parameters*.yml
-vendor
+vendor/*
+
 build
 composer.lock

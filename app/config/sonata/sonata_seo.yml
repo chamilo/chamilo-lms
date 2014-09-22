@@ -5,11 +5,11 @@ sonata_seo:
     encoding:             UTF-8
     page:
         default:          sonata.seo.page.default
-        title:            Sonata Project
+        title:            %sonata_admin.title%
         metas:
             name:
-                keywords:             foo bar
-                description:          The description
+                keywords:
+                description:
                 robots:               index, follow
 
             property:
@@ -19,8 +19,8 @@ sonata_seo:
 
                 # Open Graph information
                 # see http://developers.facebook.com/docs/opengraphprotocol/#types or http://ogp.me/
-                'og:site_name':       Sonata Project Sandbox
-                'og:description':     A demo of the some rich bundles for your Symfony2 projects
+                'og:site_name':        %sonata_admin.title%
+                'og:description':      %sonata_admin.title%
 
             http-equiv:
                 'Content-Type':         text/html; charset=utf-8

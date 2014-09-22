@@ -5,7 +5,8 @@ sonata_block:
     http_cache:
             listener: true
     menus:
-        "ChamiloLMSCoreBundle:MainMenuBuilder:mainMenu": "Main Menu"
+        "ChamiloCoreBundle:MainMenuBuilder:mainMenu": "Main Menu"
+        #"SonataDemoBundle:Builder:mainMenu": "Main Menu"
 
     blocks:
         sonata.admin.block.admin_list:
@@ -19,9 +20,9 @@ sonata_block:
         #    contexts:   [admin]
 
         # Chamilo blocks
-        chamilolms.corebundle.block.course:
-        chamilolms.corebundle.block.breadcrumb:
-        chamilolms.corebundle.block.main_menu:
+        chamilo.corebundle.block.course:
+        chamilo.corebundle.block.breadcrumb:
+        chamilo.corebundle.block.main_menu:
 
         # Builtin Block
         sonata.block.service.text:

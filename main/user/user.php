@@ -21,7 +21,7 @@
 // name of the language file that needs to be included
 $language_file = array('registration', 'admin', 'userInfo', 'registration');
 $use_anonymous = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_USER;
 $this_section = SECTION_COURSES;
 
@@ -373,7 +373,7 @@ if (isset($origin) && $origin == 'learnpath') {
 }
 
 //statistics
-event_access_tool(TOOL_USER);
+Event::event_access_tool(TOOL_USER);
 
 /*	Setting the permissions for this page */
 $is_allowed_to_track = (api_is_course_admin() || $is_courseTutor);

@@ -11,7 +11,7 @@
 $language_file = 'agenda';
 
 // including the global
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // the variables for the days and the months
 // Defining the shorts for the days

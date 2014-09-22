@@ -45,10 +45,10 @@ $cli->addCommands(array(
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
 
     // Chamilo commands
-    /*new ChamiloLMS\Command\Database\UpgradeCommand(),
-    new ChamiloLMS\Command\Database\InstallCommand(),
-    new ChamiloLMS\Command\Database\StatusCommand(),
-    new ChamiloLMS\Command\Database\SetupCommand(),*/
+    /*new Chamilo\Command\Database\UpgradeCommand(),
+    new Chamilo\Command\Database\InstallCommand(),
+    new Chamilo\Command\Database\StatusCommand(),
+    new Chamilo\Command\Database\SetupCommand(),*/
 
     // Chash commands
     /*new Chash\Command\Database\RunSQLCommand(),

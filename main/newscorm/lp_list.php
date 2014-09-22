@@ -17,7 +17,7 @@ if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
     exit;
 }
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
 
@@ -38,7 +38,7 @@ function confirmation(name) {
 </script>";
 $nameTools = get_lang('LearningPaths');
 
-event_access_tool(TOOL_LEARNPATH);
+Event::event_access_tool(TOOL_LEARNPATH);
 
 api_protect_course_script();
 
@@ -106,7 +106,7 @@ $token = Security::get_token();
 /* DISPLAY SCORM LIST */
 
 $categories_temp = learnpath::get_categories(api_get_course_int_id());
-$category_test = new ChamiloLMS\Entity\CLpCategory();
+$category_test = new Chamilo\Entity\CLpCategory();
 $category_test->setId(0);
 $category_test->setName(get_lang('WithOutCategory'));
 $category_test->setPosition(0);

@@ -27,7 +27,7 @@
 $language_file = array('forum', 'group', 'gradebook');
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
@@ -53,7 +53,7 @@ if (isset($_GET['origin'])) {
 
 /* MAIN DISPLAY SECTION */
 
-/* Retrieving forum and forum categorie information */
+/* Retrieving forum and forum category information */
 
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,

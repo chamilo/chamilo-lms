@@ -287,3 +287,4 @@ if ($form->validate()) {
 
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
+

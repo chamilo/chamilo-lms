@@ -1,0 +1,58 @@
+chamilo_notebook_index:
+    pattern: courses/{course}/notebook
+    methods: [GET, POST, HEAD, DELETE]
+    defaults:
+        _controller: chamilo.controller.notebook:indexAction
+
+chamilo_notebook_new:
+    pattern: courses/{course}/notebook/new
+    methods: [GET, POST]
+    defaults:
+        _controller: chamilo.controller.notebook:createAction
+        _sylius:
+            redirect:
+                route: chamilo_notebook_index
+                parameters: { course: $course }
+            factory:
+                method: createNewWithCourse
+                arguments: [$course]
+
+chamilo_notebook_show:
+    pattern: courses/{course}/notebook/{id}
+    methods: [GET]
+    requirements:
+            id:  \d+
+    defaults:
+        _controller: chamilo.controller.notebook:showAction
+        _sylius:
+            criteria: { id: $id }
+
+chamilo_notebook_edit:
+    pattern: courses/{course}/notebook/{id}/edit
+    methods: [GET, PUT]
+    requirements:
+        id:  \d+
+    defaults:
+        _controller: chamilo.controller.notebook:updateAction
+        _sylius:
+            redirect:
+                route: chamilo_notebook_show
+                parameters: { course: $course, id: resource.id }
+
+chamilo_notebook_delete:
+    pattern: courses/{course}/notebook/{id}
+    methods: [DELETE]
+    requirements:
+        id:  \d+
+    defaults:
+        _controller: chamilo.controller.notebook:deleteAction
+        _sylius:
+            redirect:
+                route: chamilo_notebook_index
+                parameters: { course: $course }
+
+chamilo_notebook_delete_many:
+    pattern: courses/{course}/notebook/delete_many
+    methods: [GET, POST]
+    defaults:
+        _controller: chamilo.controller.notebook:deleteMassAction

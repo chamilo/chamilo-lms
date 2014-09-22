@@ -11,7 +11,7 @@
  */
 session_cache_limiter('none');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 // Protection
@@ -62,11 +62,11 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 		$document_explorer = api_get_path(WEB_CODE_PATH).'document/document.php?curdirpath='.urlencode($doc_url).'&cidReq='.Security::remove_XSS($_GET['cidReq']).$gid_req;
 		// Redirect
 		header('Location: '.$document_explorer);
-	}	
+	}
 }
 
-        
-//Fixes swf upload problem in chamilo 1.8.x. When uploading a file with 
+
+//Fixes swf upload problem in chamilo 1.8.x. When uploading a file with
 //the character "-" the filename was changed from "-" to "_" in the DB for no reason
 $path_info = pathinfo($doc_url);
 
@@ -81,20 +81,20 @@ if (isset($path_info['extension']) && $path_info['extension'] == 'swf') {
 
 
 if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
-    $full_file_name = $sys_course_path.$doc_url;    
+    $full_file_name = $sys_course_path.$doc_url;
     if ($fix_file_name) {
         $doc_url = $fixed_url;
     }
     // Check visibility of document and paths
     $is_visible = DocumentManager::is_visible($doc_url, $_course, api_get_session_id());
-    
+
     //Document's slideshow thumbnails
 	//correct $is_visible used in below and ??. Now the students can view the thumbnails too
-	if ( preg_match('/\.thumbs\/\./',  $doc_url)){ 
+	if ( preg_match('/\.thumbs\/\./',  $doc_url)){
 		$doc_url_thumbs = str_replace('.thumbs/.', '', $doc_url);
 		$is_visible = DocumentManager::is_visible($doc_url_thumbs, $_course, api_get_session_id());
 	}
-	
+
     if (!api_is_allowed_to_edit() && !$is_visible) {
     	Display::display_error_message(get_lang('ProtectedDocument'));//api_not_allowed backbutton won't work.
     	exit; // You shouldn't be here anyway.

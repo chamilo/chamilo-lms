@@ -7,7 +7,7 @@
 $language_file = 'forum';
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
@@ -23,9 +23,9 @@ require_once 'forumfunction.inc.php';
 
 $htmlHeadXtra[] = '<script language="javascript">
 $(document).ready(function(){ $(\'.hide-me\').slideUp() });
-	function hidecontent(content){
-	$(content).slideToggle(\'normal\');
-	}
+    function hidecontent(content){
+        $(content).slideToggle(\'normal\');
+    }
 </script>';
 
 // Are we in a lp ?
@@ -54,9 +54,9 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 if ($origin == 'learnpath') {
@@ -85,10 +85,10 @@ if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 
 /* Actions */
 
 if ($_GET['action'] == 'delete' && isset($_GET['content']) && isset($_GET['id']) && api_is_allowed_to_edit(false, true)) {
-    $message = delete_post($_GET['id']); // Note: This has to be cleaned first.
+    $message = delete_post($_GET['id']);
 }
 if (($_GET['action'] == 'invisible' || $_GET['action'] == 'visible') && isset($_GET['id']) && api_is_allowed_to_edit(false, true)) {
-    $message = approve_post($_GET['id'], $_GET['action']); // Note: This has to be cleaned first.
+    $message = approve_post($_GET['id'], $_GET['action']);
 }
 if ($_GET['action'] == 'move' && isset($_GET['post'])) {
     $message = move_post_form();
@@ -100,7 +100,8 @@ if (!empty($message)) {
     Display :: display_confirmation_message(get_lang($message));
 }
 
-if ($message != 'PostDeletedSpecial') { // In this case the first and only post of the thread is removed.
+// In this case the first and only post of the thread is removed.
+if ($message != 'PostDeletedSpecial') {
     // This increases the number of times the thread has been viewed.
     increase_thread_view($_GET['thread']);
 
@@ -174,9 +175,7 @@ if ($message != 'PostDeletedSpecial') { // In this case the first and only post 
     echo "</table>";
 
     include_once('viewpost.inc.php');
-} // if ($message != 'PostDeletedSpecial') // In this case the first and only post of the thread is removed.
-
-/* FOOTER */
+}
 
 if ($origin != 'learnpath') {
     Display :: display_footer();

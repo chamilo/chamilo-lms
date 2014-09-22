@@ -10,7 +10,7 @@
  */
 set_time_limit(0);
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 api_protect_course_script();
 
@@ -18,7 +18,7 @@ $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_c
 $path          = $document_data['path'];
 
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
- 
+
 if (empty($path)) {
 	$path = '/';
 }
@@ -27,7 +27,7 @@ if (empty($document_data)) {
 }
 
 //a student should not be able to download a root shared directory
-if (($path == '/shared_folder' || $path=='/shared_folder_session_'.api_get_session_id()) && (!api_is_allowed_to_edit() || !api_is_platform_admin())){		
+if (($path == '/shared_folder' || $path=='/shared_folder_session_'.api_get_session_id()) && (!api_is_allowed_to_edit() || !api_is_platform_admin())){
 	echo '<div align="center">';
 	Display::display_error_message(get_lang('NotAllowedClickBack'));
 	echo '</div>';
@@ -68,23 +68,23 @@ if (api_is_allowed_to_edit()) {
 	}
 	$querypath = Database::escape_string($querypath);
 	// Search for all files that are not deleted => visibility != 2
-	$sql = "SELECT path FROM $doc_table AS docs, $prop_table AS props  
-			WHERE 	props.tool          ='".TOOL_DOCUMENT."' AND 
-					docs.id				= props.ref 	AND 
-					docs.path 			LIKE '".$querypath."/%' AND 
-					docs.filetype		= 'file' AND props.visibility<>'2' AND 
-					props.to_group_id	= ".$to_group_id." AND 
+	$sql = "SELECT path FROM $doc_table AS docs, $prop_table AS props
+			WHERE 	props.tool          ='".TOOL_DOCUMENT."' AND
+					docs.id				= props.ref 	AND
+					docs.path 			LIKE '".$querypath."/%' AND
+					docs.filetype		= 'file' AND props.visibility<>'2' AND
+					props.to_group_id	= ".$to_group_id." AND
 					props.c_id          = ".$course_id." AND
                     props.id_session    IN ('0', '$session_id') AND
 					docs.c_id 			= ".$course_id." ";
 	$query = Database::query($sql);
 	// Add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
-		$zip_folder->add($sys_course_path.$_course['path'].'/document'.$not_deleted_file['path'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/document'.$remove_dir);		
-	}	
+		$zip_folder->add($sys_course_path.$_course['path'].'/document'.$not_deleted_file['path'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/document'.$remove_dir);
+	}
 } else {
     // For other users, we need to create a zipfile with only visible files and folders
-    
+
 	if ($path == '/') {
 		$querypath = ''; // To prevent ...path LIKE '//%'... in query
 	} else {
@@ -94,14 +94,14 @@ if (api_is_allowed_to_edit()) {
 	// So... I do it in a couple of steps:
 	// 1st: Get all files that are visible in the given path
 	$querypath = Database::escape_string($querypath);
-	$query = Database::query("SELECT path FROM $doc_table AS docs, $prop_table AS props 
-						      WHERE docs.c_id               = $course_id AND 
-                                    props.c_id              = $course_id AND 
-                                    props.tool              = '".TOOL_DOCUMENT."' AND 
-                                    docs.id                 = props.ref AND 
-                                    docs.path               LIKE '".$querypath."/%' AND 
-                                    props.visibility        = '1' AND 
-                                    docs.filetype           = 'file' AND 
+	$query = Database::query("SELECT path FROM $doc_table AS docs, $prop_table AS props
+						      WHERE docs.c_id               = $course_id AND
+                                    props.c_id              = $course_id AND
+                                    props.tool              = '".TOOL_DOCUMENT."' AND
+                                    docs.id                 = props.ref AND
+                                    docs.path               LIKE '".$querypath."/%' AND
+                                    props.visibility        = '1' AND
+                                    docs.filetype           = 'file' AND
                                     props.id_session        IN ('0', '$session_id') AND
                                     props.to_group_id       = ".$to_group_id);
 	// Add them to an array
@@ -110,13 +110,13 @@ if (api_is_allowed_to_edit()) {
 	}
 
 	// 2nd: Get all folders that are invisible in the given path
-	$query2 = Database::query("SELECT path FROM $doc_table AS docs, $prop_table AS props 
-							   WHERE    docs.c_id           = $course_id AND 
-                                        props.c_id          = $course_id AND 
-                                        props.tool          = '".TOOL_DOCUMENT."' AND 
-                                        docs.id             = props.ref AND 
-                                        docs.path             LIKE '".$querypath."/%' AND 
-                                        props.visibility    <> '1' AND 
+	$query2 = Database::query("SELECT path FROM $doc_table AS docs, $prop_table AS props
+							   WHERE    docs.c_id           = $course_id AND
+                                        props.c_id          = $course_id AND
+                                        props.tool          = '".TOOL_DOCUMENT."' AND
+                                        docs.id             = props.ref AND
+                                        docs.path             LIKE '".$querypath."/%' AND
+                                        props.visibility    <> '1' AND
                                         props.id_session    IN ('0', '$session_id') AND
                                         docs.filetype       = 'folder'");
 	// If we get invisible folders, we have to filter out these results from all visible files we found
@@ -125,13 +125,13 @@ if (api_is_allowed_to_edit()) {
 		while ($invisible_folders = Database::fetch_assoc($query2)) {
 		//3rd: Get all files that are in the found invisible folder (these are "invisible" too)
 			//echo "<br /><br />invisible folders: ".$sys_course_path.$_course['path'].'/document'.$invisible_folders['path'].'<br />';
-			$query3 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  
-			                           WHERE    docs.c_id           = $course_id AND 
-                                                props.c_id          = $course_id AND 
-                                                props.tool          ='".TOOL_DOCUMENT."' AND 
-                                                docs.id             = props.ref AND 
-                                                docs.path           LIKE '".$invisible_folders['path']."/%' AND 
-                                                docs.filetype       ='file' AND 
+			$query3 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props
+			                           WHERE    docs.c_id           = $course_id AND
+                                                props.c_id          = $course_id AND
+                                                props.tool          ='".TOOL_DOCUMENT."' AND
+                                                docs.id             = props.ref AND
+                                                docs.path           LIKE '".$invisible_folders['path']."/%' AND
+                                                docs.filetype       ='file' AND
                                                 props.id_session    IN ('0', '$session_id') AND
                                                 props.visibility    ='1'");
 			// Add tem to an array
@@ -163,7 +163,7 @@ $name = ($path == '/') ? 'documents.zip' : $document_data['title'].'.zip';
 
 if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
    DocumentManager::file_send_for_download($temp_zip_file, true, $name);
-   @unlink($temp_zip_file);    
+   @unlink($temp_zip_file);
    exit;
 }
 

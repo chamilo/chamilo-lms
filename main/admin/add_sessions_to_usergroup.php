@@ -11,7 +11,7 @@ $language_file=array('admin','registration');
 $cidReset=true;
 
 // including some necessary files
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $xajax = new xajax();
 
@@ -132,6 +132,8 @@ function search_sessions($needle,$type) {
                 OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''.
                 $order_clause.
                 ' LIMIT 11';*/
+        } else if ($type == 'searchbox') {
+            $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "%$needle%"));
         } else {
             $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "$needle%"));
         }
@@ -167,24 +169,28 @@ $xajax -> processRequests();
 Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+    $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 echo '<div class="actions">';
 echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="javascript://" class="advanced_parameters" style="margin-top: 8px" onclick="display_advanced_search();"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>';
 echo '</div>';
 
 ?>
+
+<?php echo '<div id="advancedSearch" style="display: none">'. get_lang('SearchSessions'); ?> :
+     <input name="SearchSession" onchange = "xajax_search_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
+     </div>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <?php
 echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
 
 if ($add_type=='multiple') {
-    /*
     if (is_array($extra_field_list)) {
         if (is_array($new_field_list) && count($new_field_list)>0 ) {
             echo '<h3>'.get_lang('FilterUsers').'</h3>';
@@ -208,7 +214,7 @@ if ($add_type=='multiple') {
             echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
             echo '<br /><br />';
         }
-    }*/
+    }
 }
 echo Display::input('hidden','id',$id);
 echo Display::input('hidden','form_sent','1');
@@ -236,6 +242,7 @@ if(!empty($errorMsg)) {
         echo Display :: get_alphabet_options();
       ?>
      </select>
+<?php echo '<br />'; ?>
 </td>
 <td align="center">&nbsp;</td>
 </tr>
@@ -310,7 +317,7 @@ function loadUsersInSelect(select){
     else if(window.ActiveXObject) // Internet Explorer
         xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
     else  // XMLHttpRequest non supporté par le navigateur
-        alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
+    alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
 

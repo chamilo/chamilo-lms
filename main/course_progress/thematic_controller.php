@@ -15,7 +15,7 @@
 /**
  * Thematic Controller script. Prepares the common background variables to give to the scripts corresponding to
  * the requested action
- * @todo use a proper controller in src/ChamiloLMS
+ * @todo use a proper controller in src/Chamilo
  * @package chamilo.course_progress
  */
 class ThematicController
@@ -41,9 +41,11 @@ class ThematicController
         $thematic = new Thematic($courseInfo);
         $data = array();
         $error = false;
+        $msg_add = false;
 
         $check = Security::check_token('request');
         $thematic_id = isset($_REQUEST['thematic_id']) ? intval($_REQUEST['thematic_id']) : null;
+        $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
 
         if ($check) {
             switch ($action) {
@@ -227,7 +229,7 @@ class ThematicController
                 }
                 $data['total_average_of_advances'] = $thematic->get_average_of_advances_by_thematic($thematic_id);
             } else {
-                $thematic_data = $thematic->get_thematic_list(null, null, api_get_session_id());
+                $thematic_data = $thematic->get_thematic_list(null, api_get_course_id(), api_get_session_id());
                 $data['max_thematic_item'] = $thematic->get_max_thematic_item();
                 $data['last_done_thematic_advance'] = $thematic->get_last_done_thematic_advance();
                 $data['total_average_of_advances'] = $thematic->get_total_average_of_thematic_advances();
@@ -240,9 +242,7 @@ class ThematicController
             $thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);
 
             $data['thematic_plan_div'] = $thematic->get_thematic_plan_div($thematic_plan_data);
-
             $data['thematic_advance_div'] = $thematic->get_thematic_advance_div($thematic_advance_data);
-
             $data['thematic_plan_data'] = $thematic_plan_data;
             $data['thematic_advance_data'] = $thematic_advance_data;
             $data['thematic_data'] = $thematic_data;
@@ -251,9 +251,11 @@ class ThematicController
         $data['default_thematic_plan_title'] = $thematic->get_default_thematic_plan_title();
 
         $data['action'] = $action;
+        $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
+
         // render to the view
         $this->view->set_data($data);
-        $this->view->set_layout('layout');
+        $this->view->set_layout($layoutName);
         $this->view->set_template('thematic');
         $this->view->render();
     }
@@ -375,6 +377,8 @@ class ThematicController
         $attendance = new Attendance();
         $data = array();
 
+        $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
+
         // get data for attendance input select
         $attendance_list = $attendance->get_attendances_list();
         $attendance_select = array();
@@ -476,10 +480,11 @@ class ThematicController
         $data['attendance_select'] = $attendance_select;
         $data['thematic_advance_data'] = $thematic_advance_data;
         $data['calendar_select'] = $calendar_select;
+        $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
 
         // render to the view
         $this->view->set_data($data);
-        $this->view->set_layout('layout');
+        $this->view->set_layout($layoutName);
         $this->view->set_template('thematic_advance');
         $this->view->render();
     }

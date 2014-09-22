@@ -11,7 +11,7 @@
 $language_file = 'dropbox';
 
 // including the basic Chamilo initialisation file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // the dropbox configuration parameters
 require_once 'dropbox_config.inc.php';
@@ -63,7 +63,6 @@ if (isset($_GET['cat_id']) AND
                     post.cat_id = ".intval($_GET['cat_id'])." AND
                     post.dest_user_id = $user_id" ;
     }
-
     $files_to_download = array();
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
@@ -73,7 +72,6 @@ if (isset($_GET['cat_id']) AND
         header('location: index.php?view='.Security::remove_XSS($_GET['sent_received']).'&error=ErrorNoFilesInFolder');
         exit;
     }
-
     zip_download($files_to_download);
     exit;
 }
@@ -107,12 +105,11 @@ if (!$allowed_to_download) {
     $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][] = intval($_GET['id']);
 
     $work = new Dropbox_work($_GET['id']);
-    $path = dropbox_cnf('sysPath').'/'.$work -> filename; //path to file as stored on server
+    $path = dropbox_cnf('sysPath') . '/' . $work -> filename; //path to file as stored on server
 
     if (!Security::check_abs_path($path, dropbox_cnf('sysPath').'/')) {
         exit;
     }
-
     $file = $work->title;
     $mimetype = DocumentManager::file_get_mime_type(true);
     $fileinfo = pathinfo($file);

@@ -16,7 +16,7 @@
 /*	INIT SECTION */
 $language_file = array('document');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/createpaint';
 $this_section = SECTION_COURSES;
 
@@ -92,13 +92,17 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
 
 $interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
 
+if (!$is_allowed_in_course) {
+	api_not_allowed(true);
+}
+
 if (!($is_allowed_to_edit || GroupManager::groupMemberWithUploadRights() || is_my_shared_folder($_user['user_id'], Security::remove_XSS($dir),api_get_session_id()))) {
 	api_not_allowed(true);
 }
 
 
 /*	Header */
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
 if (isset ($group)) {
 	$display_dir = explode('/', $dir);
@@ -158,7 +162,7 @@ else {
 	$credentials="false";
 }
 
-$pixlr_url = 'http://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials;
+$pixlr_url = api_get_protocol().'://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials;
 
 
 ?>

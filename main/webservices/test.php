@@ -1,7 +1,7 @@
 <?php
 exit;
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once '../inc/lib/nusoap/nusoap.php';
 require_once '../inc/conf/configuration.php';
 
@@ -45,11 +45,11 @@ foreach ($list as $item) {
 }
 ?>
 </div>
-    
+
 <form method="POST" action="">
 <label for="script">Script</label>
 <select name="script">
-<?php 
+<?php
 foreach ($scripts as $script) {
     echo '<option value="'.$script.'">'.$script.'</script>';
 }

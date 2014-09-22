@@ -15,7 +15,7 @@ use \ChamiloSession as Session;
 
 $language_file = array('index', 'admin', 'registration');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 if (empty($_user['user_id'])) {
 	api_not_allowed(true);

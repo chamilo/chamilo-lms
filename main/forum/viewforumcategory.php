@@ -26,7 +26,7 @@
 $language_file = 'forum';
 
 // Including the global initialization file.
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>
     $(document).ready(function(){
@@ -88,11 +88,10 @@ if (isset($_GET['origin'])) {
 if ($origin=='learnpath') {
     Display::display_reduced_header();
 } else {
-    Display :: display_header(null);
+    Display::display_header(null);
 }
 
 /* ACTIONS */
-
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 /* Is the user allowed here? */
@@ -104,7 +103,6 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category && $current
 }
 
 /* Action Links */
-
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
 echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -170,7 +168,6 @@ if ($action_forums != 'add') {
         $session_displayed = '';
     }
 
-
     $forum_categories_list = '';
     echo '<thead>';
     echo '<tr><th class="forum_head" '.(api_is_allowed_to_edit(null, true) ? 'colspan="5"' : 'colspan="6"').'>';
@@ -198,9 +195,7 @@ if ($action_forums != 'add') {
     echo '<td>'.get_lang('LastPosts').'</td>';
     echo '<td>'.get_lang('Actions').'</td>';
     echo '</tr>';
-
     echo '</thead>';
-
 
     // The forums in this category.
     $forums_in_category = get_forums_in_category($forum_category['cat_id']);

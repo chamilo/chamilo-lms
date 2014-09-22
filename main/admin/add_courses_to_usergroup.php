@@ -4,44 +4,43 @@
 *   @package chamilo.admin
 */
 
-// name of the language file that needs to be included
-$language_file = array('admin','registration');
+// Name of the language file that needs to be included.
+$language_file = array('admin', 'registration');
 
-// resetting the course id
+// Resetting the course id.
 $cidReset = true;
 
-// including some necessary files
-require_once '../inc/global.inc.php';
+// Including some necessary files.
+////require_once '../inc/global.inc.php';
+require_once '../inc/lib/xajax/xajax.inc.php';
+require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 
 $xajax = new xajax();
-
-//$xajax->debugOn();
 $xajax->registerFunction('search');
 
-// setting the section (for the tabs)
+// Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
+// Access restrictions.
 api_protect_admin_script(true);
 
-// setting breadcrumbs
+// Setting breadcrumbs.
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
 
-// Database Table Definitions
-
-// setting the name of the tool
-$tool_name=get_lang('SubscribeClassToCourses');
+// Setting the name of the tool.
+$tool_name = get_lang('SubscribeClassToCourses');
 
 $add_type = 'multiple';
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
+
+$add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
 function add_user_to_session (code, content) {
-
     document.getElementById("user_to_add").value = "";
     document.getElementById("ajax_list_users_single").innerHTML = "";
 
@@ -67,23 +66,23 @@ function remove_item(origin) {
 }
 
 function validate_filter() {
-        document.formulaire.add_type.value = \''.$add_type.'\';
-        document.formulaire.form_sent.value=0;
-        document.formulaire.submit();
+    document.formulaire.add_type.value = \''.$add_type.'\';
+    document.formulaire.form_sent.value=0;
+    document.formulaire.submit();
 }
 </script>';
 
-
 $form_sent  = 0;
 $errorMsg   = '';
-$sessions=array();
+$sessions = array();
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
+
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-    $form_sent              = $_POST['form_sent'];
-    $elements_posted        = $_POST['elements_in_name'];
+    $form_sent = $_POST['form_sent'];
+    $elements_posted = $_POST['elements_in_name'];
     if (!is_array($elements_posted)) {
-        $elements_posted=array();
+        $elements_posted = array();
     }
     if ($form_sent == 1) {
         $usergroup->subscribe_courses_to_usergroup($id, $elements_posted);
@@ -91,28 +90,66 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         exit;
     }
 }
-$data               = $usergroup->get($id);
-$course_list_in     = $usergroup->get_courses_by_usergroup($id);
-$course_list        = CourseManager::get_courses_list(0,0,'title');
 
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
-$elements_not_in = $elements_in= array();
 
-if (!empty($course_list)) {
-    foreach($course_list as $item) {
-        if (in_array($item['id'], $course_list_in)) {
-            $elements_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
-        } else {
-            $elements_not_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
+// Filters
+$filters = array(
+    array('type' => 'text', 'name' => 'code', 'label' => get_lang('CourseCode')),
+    array('type' => 'text', 'name' => 'title', 'label' => get_lang('Title')),
+    /*array('type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')),
+    array('type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')),
+    array('type' => 'text', 'name' => 'email', 'label' => get_lang('Email'))*/
+);
+
+$searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
+$searchForm->add_header(get_lang('AdvancedSearch'));
+$renderer =& $searchForm->defaultRenderer();
+$searchForm->addElement('hidden', 'id', $id);
+foreach ($filters as $param) {
+    $searchForm->addElement($param['type'], $param['name'], $param['label']);
+}
+$searchForm->addElement('button', 'submit', get_lang('Search'));
+
+$filterData = array();
+if ($searchForm->validate()) {
+    $filterData = $searchForm->getSubmitValues();
+}
+
+$conditions = array();
+if (!empty($filters) && !empty($filterData)) {
+    foreach ($filters as $filter) {
+        if (isset($filter['name']) && isset($filterData[$filter['name']])) {
+            $value = $filterData[$filter['name']];
+            if (!empty($value)) {
+                $conditions[$filter['name']] = $value;
+            }
         }
     }
 }
+
+$data = $usergroup->get($id);
+$course_list_in = $usergroup->get_courses_by_usergroup($id, true);
+$course_list = CourseManager::get_courses_list(0, 0, 'title', 'asc', -1, null, api_get_current_access_url_id(), false, $conditions);
+
+$elements_not_in = $elements_in = array();
+
+foreach ($course_list_in as $course) {
+    $elements_in[$course['id']] = $course['title']." (".$course['visual_code'].")";
+}
+
+if (!empty($course_list)) {
+    foreach ($course_list as $item) {
+        $elements_not_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
+    }
+}
+
 $ajax_search = $add_type == 'unique' ? true : false;
 
 //checking for extra field with filter on
 
-function search($needle,$type) {
-    global $tbl_user,$elements_in;
+function search($needle,$type)
+{
+    global $elements_in;
     $xajax_response = new XajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
@@ -133,7 +170,6 @@ function search($needle,$type) {
         } else {
             $list = CourseManager::get_courses_list(0, 0, 2, 'ASC', -1, $needle);
         }
-        $i=0;
         if ($type=='single') {
             /*
             while ($user = Database :: fetch_array($rs)) {
@@ -149,68 +185,50 @@ function search($needle,$type) {
         } else {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
 
-            foreach ($list as $row ) {
+            foreach ($list as $row) {
                 if (!in_array($row['id'], array_keys($elements_in))) {
                     $return .= '<option value="'.$row['id'].'">'.$row['title'].' ('.$row['visual_code'].')</option>';
                 }
             }
             $return .= '</select>';
-            $xajax_response -> addAssign('ajax_list_multiple','innerHTML',api_utf8_encode($return));
+            $xajax_response->addAssign('ajax_list_multiple', 'innerHTML', api_utf8_encode($return));
         }
     }
     return $xajax_response;
 }
-$xajax -> processRequests();
+
+$xajax->processRequests();
 
 Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+    $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
+        Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add='.$add.'&add_type=multiple">'.
+        Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 echo '<div class="actions">';
 echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
+echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
 echo '</div>';
+
+echo '<div id="advanced_search_options" style="display:none">';
+$searchForm->display();
+echo '</div>';
+
 ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
 <?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
-/*
-if ($add_type=='multiple') {
-    if (is_array($extra_field_list)) {
-        if (is_array($new_field_list) && count($new_field_list)>0 ) {
-            echo '<h3>'.get_lang('FilterUsers').'</h3>';
-            foreach ($new_field_list as $new_field) {
-                echo $new_field['name'];
-                $varname = 'field_'.$new_field['variable'];
-                echo '&nbsp;<select name="'.$varname.'">';
-                echo '<option value="0">--'.get_lang('Select').'--</option>';
-                foreach ($new_field['data'] as $option) {
-                    $checked='';
-                    if (isset($_POST[$varname])) {
-                        if ($_POST[$varname]==$option[1]) {
-                            $checked = 'selected="true"';
-                        }
-                    }
-                    echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
-                }
-                echo '</select>';
-                echo '&nbsp;&nbsp;';
-            }
-            echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
-            echo '<br /><br />';
-        }
-    }
-}*/
-echo Display::input('hidden','id',$id);
-echo Display::input('hidden','form_sent','1');
-echo Display::input('hidden','add_type',null);
-if(!empty($errorMsg)) {
+echo Display::input('hidden', 'id', $id);
+echo Display::input('hidden', 'form_sent', '1');
+echo Display::input('hidden', 'add_type', null);
+if (!empty($errorMsg)) {
     Display::display_normal_message($errorMsg); //main API
 }
 ?>
@@ -227,12 +245,12 @@ if(!empty($errorMsg)) {
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterCourseTitle'); ?> :
-     <select name="firstLetterUser" onchange = "xajax_search(this.value,'multiple')" >
-      <option value = "%">--</option>
-      <?php
-        echo Display :: get_alphabet_options();
-      ?>
-     </select>
+    <select name="firstLetterUser" onchange = "xajax_search(this.value,'multiple')" >
+    <option value = "%">--</option>
+    <?php
+    echo Display :: get_alphabet_options();
+    ?>
+    </select>
 </td>
 <td align="center">&nbsp;</td>
 </tr>
@@ -249,7 +267,7 @@ if(!empty($errorMsg)) {
       } else {
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name',$elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
+        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
       </div>
     <?php
       }
@@ -290,7 +308,44 @@ if(!empty($errorMsg)) {
 </table>
 </form>
 
-<script>
+<script type="text/javascript">
+function moveItem(origin , destination) {
+
+    for(var i = 0 ; i<origin.options.length ; i++) {
+        if(origin.options[i].selected) {
+            destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
+            origin.options[i]=null;
+            i = i-1;
+        }
+    }
+    destination.selectedIndex = -1;
+    sortOptions(destination.options);
+
+}
+
+function sortOptions(options) {
+
+    newOptions = new Array();
+    for (i = 0 ; i<options.length ; i++)
+        newOptions[i] = options[i];
+
+    newOptions = newOptions.sort(mysort);
+    options.length = 0;
+    for(i = 0 ; i < newOptions.length ; i++)
+        options[i] = newOptions[i];
+
+}
+
+function mysort(a, b){
+    if(a.text.toLowerCase() > b.text.toLowerCase()){
+        return 1;
+    }
+    if(a.text.toLowerCase() < b.text.toLowerCase()){
+        return -1;
+    }
+    return 0;
+}
+
 function valide(){
     var options = document.getElementById('elements_in').options;
     for (i = 0 ; i<options.length ; i++)
@@ -298,9 +353,7 @@ function valide(){
     document.forms.formulaire.submit();
 }
 
-
-function loadUsersInSelect(select){
-
+function loadUsersInSelect(select) {
     var xhr_object = null;
 
     if(window.XMLHttpRequest) // Firefox
@@ -308,12 +361,10 @@ function loadUsersInSelect(select){
     else if(window.ActiveXObject) // Internet Explorer
         xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
     else  // XMLHttpRequest non supporté par le navigateur
-        alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
+    alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-
     xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
 
     nosessionUsers = makepost(document.getElementById('elements_not_in'));
     sessionUsers = makepost(document.getElementById('elements_in'));
@@ -324,7 +375,6 @@ function loadUsersInSelect(select){
     xhr_object.onreadystatechange = function() {
         if(xhr_object.readyState == 4) {
             document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
-            //alert(xhr_object.responseText);
         }
     }
 }
@@ -334,7 +384,6 @@ function makepost(select){
     var ret = "";
     for (i = 0 ; i<options.length ; i++)
         ret = ret + options[i].value +'::'+options[i].text+";;";
-
     return ret;
 }
 </script>

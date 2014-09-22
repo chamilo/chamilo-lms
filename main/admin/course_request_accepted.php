@@ -18,7 +18,7 @@ $language_file = array('admin', 'create_course');
 
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -89,7 +89,7 @@ function get_number_of_requests() {
  * Get course data to display
  */
 function get_request_data($from, $number_of_items, $column, $direction) {
-    global $keyword;
+    $keyword = Database::escape_string(trim($_GET['keyword']));
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
     $sql = "SELECT id AS col0,
@@ -99,8 +99,7 @@ function get_request_data($from, $number_of_items, $column, $direction) {
                    tutor_name AS col4,
                    request_date AS col5,
                    id  AS col6
-                   FROM $course_request_table
-           WHERE status = ".COURSE_REQUEST_ACCEPTED;
+                   FROM $course_request_table WHERE status = ".COURSE_REQUEST_ACCEPTED;
 
     if ($keyword != '') {
         $sql .= " AND (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";

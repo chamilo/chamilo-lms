@@ -23,7 +23,7 @@ if (!isset($_GET['cidReq'])) {
 }
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // Including additional libraries
 //require_once api_get_path(LIBRARY_PATH).'survey.lib.php';

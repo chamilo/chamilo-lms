@@ -6,10 +6,10 @@
  * fields for any datatype
  * @package chamilo.library
  */
-use ChamiloLMS\CoreBundle\QuestionFieldValues;
-use ChamiloLMS\CoreBundle\CourseFieldValues;
-use ChamiloLMS\CoreBundle\UserFieldValues;
-use ChamiloLMS\CoreBundle\SessionFieldValues;
+use Chamilo\CoreBundle\QuestionFieldValues;
+use Chamilo\CoreBundle\CourseFieldValues;
+use Chamilo\CoreBundle\UserFieldValues;
+use Chamilo\CoreBundle\SessionFieldValues;
 
 /**
  * Class managing the values in extra fields for any datatype
@@ -40,31 +40,31 @@ class ExtraFieldValue extends Model
                 $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
                 $this->author_id = 'user_id';
-                $this->entityName = 'ChamiloLMSCoreBundle:CourseFieldValues';
+                $this->entityName = 'ChamiloCoreBundle:CourseFieldValues';
                 break;
             case 'user':
                 $this->table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
                 $this->author_id = 'author_id';
-                $this->entityName = 'ChamiloLMSCoreBundle:UserFieldValues';
+                $this->entityName = 'ChamiloCoreBundle:UserFieldValues';
                 break;
             case 'session':
                 $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
                 $this->author_id = 'user_id';
-                $this->entityName = 'ChamiloLMSCoreBundle:SessionFieldValues';
+                $this->entityName = 'ChamiloCoreBundle:SessionFieldValues';
                 break;
             case 'question':
                 $this->table = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
                 $this->author_id = 'user_id';
-                $this->entityName = 'ChamiloLMSCoreBundle:QuestionFieldValues';
+                $this->entityName = 'ChamiloCoreBundle:QuestionFieldValues';
                 break;
             case 'lp':
                 $this->table = Database::get_main_table(TABLE_MAIN_LP_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_LP_FIELD);
                 $this->author_id = 'lp_id';
-                //$this->entityName = 'ChamiloLMSCoreBundle:QuestionFieldValues';
+                //$this->entityName = 'ChamiloCoreBundle:QuestionFieldValues';
                 break;
             default:
                 //unmanaged datatype, return false to let the caller know it
@@ -321,22 +321,22 @@ class ExtraFieldValue extends Model
                 if ($extra_field_info['field_loggeable'] == 1) {
                     switch($this->type) {
                         case 'question':
-                            $extraFieldValue = Database::getManager()->getRepository('ChamiloLMSCoreBundle:QuestionFieldValues')->find($field_values['id']);
+                            $extraFieldValue = Database::getManager()->getRepository('ChamiloCoreBundle:QuestionFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setQuestionId($params[$this->handler_id]);
                             break;
                         case 'course':
-                            $extraFieldValue = Database::getManager()->getRepository('ChamiloLMSCoreBundle:CourseFieldValues')->find($field_values['id']);
+                            $extraFieldValue = Database::getManager()->getRepository('ChamiloCoreBundle:CourseFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setCourseCode($params[$this->handler_id]);
                             break;
                         case 'user':
-                            $extraFieldValue = Database::getManager()->getRepository('ChamiloLMSCoreBundle:UserFieldValues')->find($field_values['id']);
+                            $extraFieldValue = Database::getManager()->getRepository('ChamiloCoreBundle:UserFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setAuthorId(api_get_user_id());
                             break;
                         case 'session':
-                            $extraFieldValue = Database::getManager()->getRepository('ChamiloLMSCoreBundle:SessionFieldValues')->find($field_values['id']);
+                            $extraFieldValue = Database::getManager()->getRepository('ChamiloCoreBundle:SessionFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setSessionId($params[$this->handler_id]);
                             break;

@@ -38,7 +38,7 @@
 $language_file = array('document','gradebook');
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // Including additional libraries
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';

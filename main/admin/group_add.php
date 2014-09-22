@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
 /**
- * @package chamilo.admin
- */
+*	@package chamilo.admin
+*/
 
 // Language files that should be included
 $language_file = array('admin', 'registration', 'userInfo');
@@ -10,7 +10,7 @@ $language_file = array('admin', 'registration', 'userInfo');
 $cidReset = true;
 
 // Including necessary libraries.
-require '../inc/global.inc.php';
+//require '../inc/global.inc.php';
 
 // Section for the tabs
 $this_section = SECTION_PLATFORM_ADMIN;

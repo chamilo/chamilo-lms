@@ -1,6 +1,0 @@
-cmf_routing:
-    dynamic:
-        persistence:
-            phpcr:
-                enabled: true
-                route_basepath: /test/routing

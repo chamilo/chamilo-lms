@@ -8,7 +8,7 @@
 $language_file = array('admin', 'tracking', 'scorm', 'exercice');
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 
 $from_myspace = false;

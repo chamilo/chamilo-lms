@@ -1,7 +1,0 @@
-.foo h2,
-.foo h3 {
-  font-size: 15px;
-}
-:nth-child(3) {
-  selector: interpolated;
-}

@@ -7,7 +7,7 @@
 /**
  * Code
  */
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $my_style = api_get_visual_theme();
 

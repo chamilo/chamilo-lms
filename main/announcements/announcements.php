@@ -27,7 +27,7 @@ $language_file = array('announcements', 'group', 'survey', 'document');
 $use_anonymous = true;
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $ctok = Security::getCurrentToken();
 $stok = Security::get_token();
@@ -56,7 +56,7 @@ $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $course_id = api_get_course_int_id();
 
 /* 	Tracking	 */
-event_access_tool(TOOL_ANNOUNCEMENT);
+Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
 if (!empty($_POST['To'])) {
     if (api_get_session_id() != 0 && api_is_allowed_to_session_edit(false, true) == false) {
@@ -523,8 +523,8 @@ if ($display_form) {
         if (isset($_GET['remind_inactive'])) {
             $email_ann = '1';
             $_SESSION['select_groupusers'] = "show";
-            $content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'), api_get_setting('siteName'), 7);
-            $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
+            $content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'), api_get_setting('platform.site_name'), 7);
+            $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('platform.site_name'));
         } elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives'] == 'true') {
             // we want to remind inactive users. The $_GET['since'] parameter determines which users have to be warned (i.e the users who have been inactive for x days or more
             $since = isset($_GET['since']) ? intval($_GET['since']) : 6;
@@ -537,16 +537,16 @@ if ($display_form) {
             // setting the variables for the form elements: the message has to be sent by email
             $email_ann = '1';
             // setting the variables for the form elements: the title of the email
-            $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
+            $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('platform.site_name'));
             // setting the variables for the form elements: the message of the email
             $content_to_modify = sprintf(
                 get_lang('RemindInactiveLearnersMailContent'),
-                api_get_setting('siteName'),
+                api_get_setting('platform.site_name'),
                 $since
             );
             // when we want to remind the users who have never been active then we have a different subject and content for the announcement
             if ($_GET['since'] == 'never') {
-                $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
+                $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('platform.site_name'));
                 $content_to_modify = get_lang('YourAccountIsActiveYouCanLoginAndCheckYourCourses');
             }
         }

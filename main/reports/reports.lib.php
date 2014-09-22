@@ -1,6 +1,6 @@
 <?php
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 
 define ('REPORTS_PROGRESS_COMPLETED', 1);
@@ -12,7 +12,7 @@ $reports_enabled_modules = array('quiz','course','scorm');
 $reports_enabled_templates = array('exercicesMultiCourses', 'courseTime', 'courseArticulate');
 
 
-// load templates 
+// load templates
 function reports_loadTemplates() {
 	global $reports_enabled_templates, $reports_template;
 	foreach ($reports_enabled_templates as $t)
@@ -78,22 +78,22 @@ function reports_build() {
 	foreach($reports_enabled_modules as $module) {
 		require_once('modules/'.$module.'.php');
 		$initFunc = 'reports_modules_'.$module.'_init';
-		
+
 		$initFunc();
 	}
-	
+
 	// init For Each Courses
 	foreach($reports_enabled_modules as $module) {
 		$initFuncFEC = 'reports_modules_'.$module.'_init_forEachCourses';
 		foreach(CourseManager::get_courses_list() as $course)
-			$initFuncFEC($course['code'], $course['id'], 
+			$initFuncFEC($course['code'], $course['id'],
 				$course['db_name']);
-	}			
+	}
 
 	// fetch data
-	foreach($reports_enabled_modules as $module) 
+	foreach($reports_enabled_modules as $module)
 		foreach ($reports_modules[$module] as $keys)
-			reports_automaticAdd($keys['keys_query'], 
+			reports_automaticAdd($keys['keys_query'],
 				$keys['values_query_function']);
 }
 
@@ -123,12 +123,12 @@ function reports_addKey($course_id, $tool_id,
 }
 
 // add a value
-function reports_addValue($key, $session, $uid, $attempt, $score, 
+function reports_addValue($key, $session, $uid, $attempt, $score,
 			  $progress, $time, $ts) {
 	Database::query('INSERT into '.
 		Database::get_main_table(TABLE_MAIN_REPORTS_VALUES).
 		' (key_id, user_id, session_id, attempt, score, '.
-		'progress, report_time) values ('.$key.', '. 
+		'progress, report_time) values ('.$key.', '.
 		$uid.', '.
 // -1 instead of null because of primary key limitation with null column
 		($session == '' ? '-1' : $session).', '.
@@ -150,7 +150,7 @@ function reports_addValueQuery($query) {
 // return tools ID (parametre is a constant from main_api
 function reports_getToolId($tool) {
 	$tools = array_flip(api_get_tools_lists());
-	if (array_key_exists($tool, $tools)) 
+	if (array_key_exists($tool, $tools))
 		return $tools[$tool];
 	else
 		return null;
@@ -164,7 +164,7 @@ function reports_getVisibilitySQL () {
 }
 
 // this function execute keys_query (SQL statement)
-// each rows may returns following fields course_id, tool_id, child_id, 
+// each rows may returns following fields course_id, tool_id, child_id,
 //  child_name, subchild_id, subchild_name, subsubchild_id, subsubchild_name,
 //  link
 // row may contains other fields.
@@ -177,7 +177,7 @@ function reports_getVisibilitySQL () {
 //  time.
 // return["sql"] (when type==sql) an sql query returning the same fields.
 //  this sql stateuement MUST include a field key_id with the value given
-//  to the function as parametre. This statement will be passed to 
+//  to the function as parametre. This statement will be passed to
 //  reports_addValueQuery
 /*
 function reports_automaticAdd($keys_query, $values_query_function) {
@@ -187,7 +187,7 @@ function reports_automaticAdd($keys_query, $values_query_function) {
 		return;
 	}
 	$num = Database::num_rows($keys_result);
-	for ($i = 0; $i < $num; $i++) { 
+	for ($i = 0; $i < $num; $i++) {
 		$keys = Database::fetch_assoc($keys_result);
 		$key_id = reports_addKey(
 		  array_key_exists('course_id', $keys) ? $keys['course_id'] : '',

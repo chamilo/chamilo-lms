@@ -1,0 +1,439 @@
+/**
+ *
+ * CSS dedicated to 'page composer' component.
+ *
+ * composer.js rely heavily on these style
+ * to handle forms show/hide and micro template preview.
+ *
+ */
+
+/*******************************************\
+
+    Layout structure preview
+
+\*******************************************/
+.page-composer__page-preview {
+    padding: 3px;
+    border-radius: 3px;
+    background-color: #f9f9f9;
+    border: 1px solid #dcdcdc;
+    margin-bottom: 20px;
+}
+.page-composer__page-preview__containers {
+    position: relative;
+    min-height: 400px;
+}
+.page-composer__page-preview__container,
+.page-composer__page-preview__container--no-block {
+    display: block;
+    position: absolute;
+    padding: 3px;
+    color: #404040 !important;
+    text-decoration: none !important;
+}
+.page-composer__page-preview__container__content {
+    width: 100%;
+    height: 100%;
+    border: 3px solid #fff;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 0 1px rgba(0,0,0,0.35);
+    height: 100%;
+    padding: 5px 7px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    color: #888;
+}
+.page-composer__page-preview__container__content .drop-indicator {
+    font-size: 36px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width:       46px;
+    height:      46px;
+    line-height: 46px;
+    margin-top:  -23px;
+    margin-left: -23px;
+    background: #8dd8c3;
+    color:      #fff;
+    border-radius: 2px;
+    text-align: center;
+    display: none;
+}
+.page-composer__page-preview__container.hover .page-composer__page-preview__container__content {
+    border-color: #5cc4a7 !important;
+    border-style: dotted;
+}
+.page-composer__page-preview__container.hover .drop-indicator {
+    display: block;
+}
+
+@-webkit-keyframes droppedin {
+    0% {
+        background-color: #fff;
+        border-color: #fff;
+    }
+    50% {
+        background-color: #abf8d9;
+        border-color: #5cc4a7;
+    }
+    100% {
+        background-color: #fff;
+        border-color: #fff;
+    }
+}
+
+/* When we drop a block in a container */
+.page-composer__page-preview__container.dropped .page-composer__page-preview__container__content {
+    -webkit-animation-duration: 600ms;
+    -webkit-animation-name: droppedin;
+}
+.page-composer__page-preview__container__content:hover {
+    box-shadow: 0 0 1px rgba(0,0,0,0.7);
+    color: #404040;
+}
+.page-composer__page-preview__container.active .page-composer__page-preview__container__content {
+    border-color: #00a65a;
+    box-shadow: none;
+    color: #404040;
+}
+.page-composer__page-preview__container--no-block .page-composer__page-preview__container__content {
+    box-shadow: none;
+    background: transparent;
+    border: 1px dotted #ccc;
+    color: #999;
+    cursor: auto;
+}
+.page-composer__page-preview__add-block {
+    position: absolute;
+    top:   6px;
+    right: 10px;
+}
+.page-composer__page-preview__add-block .fa-dot-circle-o {
+    display: none;
+}
+.page-composer__page-preview__container:hover .page-composer__page-preview__add-block .fa-dot-circle-o,
+.page-composer__page-preview__container.active .page-composer__page-preview__add-block .fa-dot-circle-o {
+    display: inline-block;
+}
+.page-composer__page-preview__container:hover .page-composer__page-preview__add-block .fa-circle-o,
+.page-composer__page-preview__container.active .page-composer__page-preview__add-block .fa-circle-o {
+    display: none;
+}
+.page-composer__page-preview__add-block:hover {
+    background: #fff;
+    text-decoration: none;
+    color: #000;
+}
+
+
+
+/*******************************************\
+
+    Block type selector
+
+\*******************************************/
+.page-composer__block-type-selector {
+    padding: 7px 15px;
+    background: #fff;
+    border-top:    1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+.page-composer__block-type-selector label {
+    display: inline-block;
+    margin: 0;
+}
+.page-composer__block-type-selector select {
+    font-size: 12px;
+    margin-bottom: 0;
+    height:      26px;
+    line-height: 26px;
+}
+
+
+/*******************************************\
+
+    Container detailed view
+
+\*******************************************/
+.page-composer__container__view {
+    border-radius: 2px;
+    background-color: #f9f9f9;
+    border: 1px solid #dcdcdc;
+    border-radius: 2px;
+    /*overflow: hidden;*/
+    position: relative;
+}
+.page-composer__container__view__notice {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: #cfc4a7;
+    color: #fff;
+    border-radius: 2px;
+    padding: 3px 9px;
+    font-size: 11px;
+}
+.page-composer__container__view__notice.persist {
+    padding-right: 3px;
+}
+.page-composer__container__view__notice.success {
+    background: #5cc4a7;
+}
+.page-composer__container__view__notice.error {
+    background: #f56954;
+}
+.page-composer__container__view__notice .close-notice {
+    display: inline-block;
+    margin-left: 10px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.35);
+    padding: 0 5px;
+    border-radius: 2px;
+}
+.page-composer__container__view .nav-tabs {
+    background-color: #f9f9f9;
+    border-bottom: none;
+}
+.page-composer__container__view .nav-tabs > li > a {
+    color: #5cc4a7;
+    border: none !important;
+    margin: 0;
+    border-radius: 0;
+}
+.page-composer__container__view .tabbable {
+    background: #fff;
+}
+.page-composer__container__view .well {
+    margin: 0;
+    box-shadow: none;
+    background: #ededed;
+    border-radius: 0;
+    border: none;
+}
+.page-composer__container__view__header {
+    padding: 10px 15px;
+    margin: 0 !important;
+    font-size: 24px !important;
+    line-height: 1em !important;
+    color: #00a65a !important;
+}
+.page-composer__container__child-count {
+    margin-top: 4px;
+    color: #999;
+    font-size: 12px !important;
+}
+.page-composer__container__child-count .badge,
+.page-composer__container__child .badge {
+    background-color: #00a65a;
+    text-shadow: none;
+}
+.page-composer__container__child > .badge {
+    position: absolute;
+    top:    8px;
+    right: 15px;
+}
+
+
+.page-composer__container__main-edition-area {
+    background: #fff;
+    border-top:    1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    display: none;
+}
+.page-composer__container__main-edition-area form {
+    margin: 0;
+}
+
+
+/*******************************************\
+
+    Container children (detailed view)
+
+\*******************************************/
+.page-composer__container__children {
+    margin: 0 0 10px 0 !important;
+    list-style: none;
+    padding: 0;
+}
+.page-composer__container__child {
+    border-top: 1px solid #ddd;
+    position: relative;
+    min-height: 40px;
+}
+.page-composer__container__child__helper,
+.page-composer__container__child__content {
+    border-left: 3px solid #00a65a;
+}
+
+.page-composer__container__child__helper {
+    position: absolute;
+    background: rgba(255,255,255,0.85);
+    padding: 0 10px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.35);
+}
+.page-composer__container__child__helper h4 {
+    font-size: 14px !important;
+}
+.page-composer__container__child:first-child {
+    border-top: none;
+}
+.page-composer__container__child__content {
+    display: none;
+}
+.page-composer__container__child__content form {
+    margin: 0 !important;
+}
+.page-composer__container__child .box {
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+.page-composer__container__child--expanded .page-composer__container__child__content {
+    display: block;
+}
+.page-composer__container__child__loader {
+    position: absolute;
+    top:    0;
+    right:  0;
+    bottom: 0;
+    left:   0;
+    background: rgba(255,255,255,0.75);
+    text-align: center;
+    display: none;
+}
+.page-composer__block-type-selector__loader,
+.page-composer__container__child__loader span {
+    display: inline-block;
+    padding: 0 9px;
+    background: #aaa;
+    color: #fff;
+    border-radius: 12px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 10px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+.page-composer__block-type-selector__loader {
+    display: none;
+}
+.page-composer__container__child__loader span {
+    margin-top: 11px;
+}
+.page-composer__container__child__edit {
+    display: block;
+    padding: 10px 15px 10px 27px;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: #404040 !important;
+    border-left: 3px solid #f9f9f9;
+}
+.page-composer__container__child__remove {
+    position: absolute;
+    top:   10px;
+    right: 15px;
+    display: none;
+}
+.page-composer__container__child:hover .page-composer__container__child__remove,
+.page-composer__container__child--expanded .page-composer__container__child__remove {
+    display: block;
+}
+.page-composer__container__child__remove .badge {
+    background-color: #f56954;
+    cursor: pointer;
+}
+.page-composer__container__child__remove__confirm {
+    display: none;
+}
+.page-composer__container__child__remove__confirm span {
+    border-radius: 2px;
+    background: #eee;
+    display: inline-block;
+    padding: 0 7px;
+    color: #fff;
+    cursor: pointer;
+}
+.page-composer__container__child__remove__confirm span.yes {
+    background-color: #00a65a;
+}
+.page-composer__container__child__remove__confirm span.cancel {
+    background-color: #f56954;
+}
+.page-composer__container__child__toggle {
+    display: none;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.page-composer__container__child__toggle .fa-chevron-up {
+    display: none;
+}
+.page-composer__container__child--expanded .page-composer__container__child__toggle .fa-chevron-up {
+    display: inline-block;
+}
+.page-composer__container__child--expanded .page-composer__container__child__toggle .fa-chevron-down {
+    display: none;
+}
+.page-composer__container__child__edit:hover {
+    background: #fff;
+    border-left-color: #00a65a;
+}
+.page-composer__container__child--expanded .page-composer__container__child__edit {
+    border-left-color: #00a65a;
+    box-shadow: 0 0 2px rgba(0,0,0,0.35) inset;
+}
+.page-composer__container__child__edit:hover .page-composer__container__child__toggle {
+    display: inline-block;
+}
+.page-composer__container__child h4 {
+    margin: 0 !important;
+    font-size: 14px !important;
+}
+
+
+
+/*******************************************\
+
+    Orphan containers
+
+\*******************************************/
+.page-composer__orphan-containers {
+    background-color: #f9f9f9;
+    border: 1px solid #dcdcdc;
+    border-radius: 2px;
+}
+.page-composer__orphan-containers ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.page-composer__orphan-container {
+    padding: 5px 15px 5px 12px;
+    border-top: 1px solid #dcdcdc;
+    cursor: pointer;
+    border-left: 3px solid #f9f9f9;
+}
+.page-composer__orphan-container.active {
+    border-left-color: #00a65a;
+}
+.page-composer__orphan-container:hover {
+    background: #fff;
+    border-left-color: #00a65a;
+}
+.page-composer__orphan-container:first-child {
+    border-top: none;
+}
+.page-composer__orphan-containers__header {
+    border-bottom: 1px solid #dcdcdc;
+    margin: 0 !important;
+    padding: 10px 15px;
+    font-size: 20px !important;
+    line-height: 1em !important;
+}

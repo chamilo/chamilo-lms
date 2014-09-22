@@ -6,19 +6,14 @@
 *	@package chamilo.admin
 */
 
-// name of the language file that needs to be included
-$language_file='admin';
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
-require_once '../inc/global.inc.php';
-
 global $_configuration;
-
+$ajax_search = false;
 // create an ajax object
 $xajax = new xajax();
-$xajax -> registerFunction ('search_users');
+$xajax->registerFunction('search_users');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -41,22 +36,24 @@ $user_info = api_get_user_info($user_id);
 $user_anonymous  = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
 
+$firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
+
 // setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-	$tool_name= get_lang('AssignUsersToPlatformAdministrator');
+    $tool_name= get_lang('AssignUsersToPlatformAdministrator');
 } else if ($user_info['status'] == SESSIONADMIN) {
-	$tool_name= get_lang('AssignUsersToSessionsAdministrator');
+    $tool_name= get_lang('AssignUsersToSessionsAdministrator');
 } else {
-	$tool_name= get_lang('AssignUsersToHumanResourcesManager');
+    $tool_name= get_lang('AssignUsersToHumanResourcesManager');
 }
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
+if(isset($_GET['add_type']) && $_GET['add_type']!='') {
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 if (!api_is_platform_admin()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 function search_users($needle,$type) {

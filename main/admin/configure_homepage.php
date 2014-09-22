@@ -9,7 +9,7 @@
  */
 $language_file = array('index', 'admin', 'accessibility');
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section'] = $this_section;
@@ -17,7 +17,6 @@ $this_page = '';
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -129,11 +128,7 @@ if (api_is_multiple_url_enabled()) {
     $homePath = $homep_new;
 }
 
-// Check WCAG settings and prepare edition using WCAG
 $errorMsg = '';
-if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-    $errorMsg = WCAG_Rendering::request_validation();
-}
 
 // Filter link param
 $link = '';
@@ -155,12 +150,7 @@ if (!empty($action)) {
         switch ($action) {
             case 'edit_top':
                 // Filter
-                $home_top = '';
-                if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-                    $home_top = WCAG_Rendering::prepareXHTML();
-                } else {
-                    $home_top = trim(stripslashes($_POST['home_top']));
-                }
+                $home_top = trim(stripslashes($_POST['home_top']));
 
                 // Write
                 if (file_exists($homePath.$topf.'_'.$lang.$ext)) {
@@ -231,12 +221,7 @@ if (!empty($action)) {
                 break;
             case 'edit_news':
                 //Filter
-                //$s_languages_news=$_POST["news_languages"]; // TODO: Why this line has been disabled?
-                if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-                    $home_news = WCAG_rendering::prepareXHTML();
-                } else {
-                    $home_news = trim(stripslashes($_POST['home_news']));
-                }
+                $home_news = trim(stripslashes($_POST['home_news']));
                 //Write
                 if ($s_languages_news != 'all') {
                     if (file_exists($homePath.$newsf.'_'.$s_languages_news.$ext)) {

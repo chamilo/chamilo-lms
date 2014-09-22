@@ -11,7 +11,7 @@ $language_file = 'admin';
 // resetting the course id
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
@@ -187,7 +187,7 @@ if (!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('CourseCategoryInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('CourseCategoryListIn').' '.$url_selected; ?></b></td>
+  <td align="center"><b><?php printf(get_lang('CourseCategoryListInX'),$url_selected); ?></b></td>
 </tr>
 
 <tr>

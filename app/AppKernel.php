@@ -1,8 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
+/**
+ * Class AppKernel
+ */
 class AppKernel extends Kernel
 {
     /**
@@ -11,6 +15,17 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
+            new FOS\RestBundle\FOSRestBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
+            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+
+            // Sylius
+            new Sylius\Bundle\SettingsBundle\SyliusSettingsBundle(),
+            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
+            new Sylius\Bundle\FlowBundle\SyliusFlowBundle(),
+
             // Symfony standard edition
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -26,7 +41,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
 
-            // KNP bundles
+            // KNP HELPER BUNDLES
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
@@ -34,7 +49,7 @@ class AppKernel extends Kernel
             // User
             new FOS\UserBundle\FOSUserBundle(),
             new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
-            new Application\Sonata\UserBundle\ApplicationSonataUserBundle(),
+            new Chamilo\UserBundle\ChamiloUserBundle(),
 
             // Page
             new Sonata\PageBundle\SonataPageBundle(),
@@ -59,7 +74,6 @@ class AppKernel extends Kernel
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
 
             // API
-            new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
 
             // E-COMMERCE
@@ -80,7 +94,6 @@ class AppKernel extends Kernel
             new Sonata\PriceBundle\SonataPriceBundle(),
 
             */
-            new JMS\SerializerBundle\JMSSerializerBundle($this),
             new FOS\CommentBundle\FOSCommentBundle(),
             new Sonata\CommentBundle\SonataCommentBundle(),
             new Application\Sonata\CommentBundle\ApplicationSonataCommentBundle(),
@@ -124,19 +137,33 @@ class AppKernel extends Kernel
             new FOS\MessageBundle\FOSMessageBundle(),
 
             // Chamilo
-            new ChamiloLMS\CoreBundle\ChamiloLMSCoreBundle(),
-            new ChamiloLMS\CourseBundle\ChamiloLMSCourseBundle(),
-            new ChamiloLMS\InstallerBundle\ChamiloLMSInstallerBundle(),
-            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle()
+            new Chamilo\InstallerBundle\ChamiloInstallerBundle(),
+            new Chamilo\CoreBundle\ChamiloCoreBundle(),
+            new Chamilo\CourseBundle\ChamiloCourseBundle(),
+            new Chamilo\MessageBundle\ChamiloMessageBundle(),
+            new Chamilo\NotebookBundle\ChamiloNotebookBundle(),
+            new Chamilo\SettingsBundle\ChamiloSettingsBundle(),
+
+            new APY\DataGridBundle\APYDataGridBundle(),
+            new JMS\TranslationBundle\JMSTranslationBundle(),
+            new Liip\ThemeBundle\LiipThemeBundle(),
+
+            //new FOS\RestBundle\FOSRestBundle(),
+            //new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new Sp\BowerBundle\SpBowerBundle(),
+            new Oro\Bundle\MigrationBundle\OroMigrationBundle(),
+
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+            //$bundles[] = new Jjanvier\Bundle\CrowdinBundle\JjanvierCrowdinBundle(),
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Bazinga\Bundle\FakerBundle\BazingaFakerBundle();
             $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
             $bundles[] = new Elao\WebProfilerExtraBundle\WebProfilerExtraBundle();
+            $bundles[] = new Jns\Bundle\XhprofBundle\JnsXhprofBundle();
         }
 
         return $bundles;

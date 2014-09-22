@@ -18,7 +18,7 @@
 // Name of the language file that needs to be included
 $language_file = array('document');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/voicerecord';
 $this_section = SECTION_COURSES;
@@ -98,7 +98,7 @@ if (!($is_allowed_to_edit || GroupManager::groupMemberWithUploadRights() || is_m
 
 
 /*	Header */
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
 if (isset ($group)) {

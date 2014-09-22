@@ -15,7 +15,7 @@ exit;
 
 
 $language_file = 'gradebook';
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_MYGRADEBOOK;
 require_once 'lib/be.inc.php';
 require_once 'lib/fe/displaygradebook.php';

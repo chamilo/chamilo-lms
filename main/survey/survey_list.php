@@ -19,7 +19,7 @@ if (!isset ($_GET['cidReq'])){
 }
 
 // Including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_SURVEY;
 
@@ -29,7 +29,7 @@ api_protect_course_script(true);
 require_once 'survey.lib.php';
 
 // Tracking
-event_access_tool(TOOL_SURVEY);
+Event::event_access_tool(TOOL_SURVEY);
 
 /** @todo This has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) { // Coach can see this

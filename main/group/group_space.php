@@ -14,7 +14,7 @@
 // Name of the language file that needs to be included
 $language_file = 'group';
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GROUP;
 
 // Notice for unauthorized people.

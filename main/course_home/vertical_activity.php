@@ -63,7 +63,8 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         <div class="confirmation-message" id="id_confirmation_message" style="display:none"></div></div>';
     $content .= '<div id="activity-3col">';
 
-    if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
+    if (api_get_setting('session.show_session_data') == 'true' && $session_id >
+        0) {
         $content .= '<div class="courseadminview-activity-3col"><span class="viewcaption">'.get_lang('SessionData').'</span>
             <table width="100%">'.CourseHome::show_session_data($session_id).'</table>
         </div>';
@@ -85,7 +86,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
     $content .= '</div>';
 
 } elseif (api_is_coach()) {
-    if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
+    if (api_get_setting('session.show_session_data') == 'true' && $session_id > 0) {
         $content .= '<div class="courseadminview-activity-3col"><span class="viewcaption">'.get_lang('SessionData').'</span>
 			<table width="100%">';
         $content .= CourseHome::show_session_data($session_id);

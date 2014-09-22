@@ -10,7 +10,8 @@
  * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package chamilo.library
  */
-use \ChamiloSession as Session;
+use Patchwork\Utf8 as u;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 
 // Predefined date formats in Chamilo provided by the language sub-system.
@@ -50,11 +51,19 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER); // Contextual: for
 function get_lang($variable)
 {
     $defaultDomain = 'all';
-    $translated = Session::getTranslator()->trans($variable, array(), $defaultDomain);
+    $translated = Container::getTranslator()->trans(
+        $variable,
+        array(),
+        $defaultDomain
+    );
 
     if ($translated == $variable) {
         // Check the langVariable for BC
-        $translated = Session::getTranslator()->trans("lang$variable", array(), $defaultDomain);
+        $translated = Container::getTranslator()->trans(
+            "lang$variable",
+            array(),
+            $defaultDomain
+        );
         if ($translated == "lang$variable") {
             return $variable;
         }
@@ -64,7 +73,9 @@ function get_lang($variable)
 
 /**
  * Gets the current interface language.
-  * @return string  The current language of the interface.
+ * @deprecated use translator
+ * @return string  The current language of the interface.
+ *
  */
 function api_get_interface_language($purified = false, $check_sub_language = false)
 {
@@ -123,33 +134,8 @@ function api_purify_language_id($language)
  */
 function api_get_language_isocode($language = null, $default_code = 'en')
 {
-    return Session::getTranslator()->getLocale();
-
-    static $iso_code = array();
-    if (empty($language)) {
-        $language = api_get_interface_language(false, true);
-    }
-
-    if (!isset($iso_code[$language])) {
-        $sql = "SELECT isocode
-                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
-                WHERE dokeos_folder = '$language'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $result = Database::fetch_array($result);
-            $iso_code[$language] = trim($result['isocode']);
-        } else {
-            $language_purified_id = api_purify_language_id($language);
-            $iso_code[$language] = isset($iso_code[$language_purified_id]) ? $iso_code[$language_purified_id] : null;
-        }
-        if (empty($iso_code[$language])) {
-            $iso_code[$language] = $default_code;
-        }
-    }
-
-    return $iso_code[$language];
+    return Container::getTranslator()->getLocale();
 }
-
 
 /**
  * Gets language iso code column from the language table
@@ -236,15 +222,17 @@ function api_get_timezones()
  */
 function _api_get_timezone()
 {
+    return date_default_timezone_get();
     $userId = api_get_user_id();
 
     // First, get the default timezone of the server
     $to_timezone = date_default_timezone_get();
+
     // Second, see if a timezone has been chosen for the platform
-    $timezone_value = api_get_setting('timezone_value', 'timezones');
+    /*$timezone_value = api_get_setting('timezone_value', 'timezones');
     if ($timezone_value != null) {
         $to_timezone = $timezone_value;
-    }
+    }*/
 
     // If allowed by the administrator
     $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
@@ -708,7 +696,7 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
             switch ($format) {
                 case PERSON_NAME_COMMON_CONVENTION:
                     $valid[$format][$language] = _api_get_person_name_convention($language, 'format');
-                    $usernameOrderFromDatabase = api_get_setting('user_name_order');
+                    $usernameOrderFromDatabase = api_get_setting('display.user_name_order');
                     if (isset($usernameOrderFromDatabase) && !empty($usernameOrderFromDatabase)) {
                         $valid[$format][$language] = $usernameOrderFromDatabase;
                     }
@@ -786,7 +774,7 @@ function api_is_western_name_order($format = null, $language = null)
  */
 function api_sort_by_first_name($language = null)
 {
-    $userNameSortBy = api_get_setting('user_name_sort_by');
+    $userNameSortBy = api_get_setting('display.user_name_sort_by');
     if (!empty($userNameSortBy) && in_array($userNameSortBy, array('firstname', 'lastname'))) {
         return $userNameSortBy == 'firstname' ? true : false;
     }
@@ -970,9 +958,8 @@ function _api_mb_internal_encoding()
 
  */
 function api_transliterate($string, $unknown = '?', $from_encoding = null)
-{ return $string;
+{
     return URLify::transliterate($string);
-    //return u::toAscii($string, $unknown);
 }
 
 /**

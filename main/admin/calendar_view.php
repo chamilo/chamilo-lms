@@ -8,7 +8,7 @@
 // name of the language file that needs to be included
 $language_file = 'agenda';
 // including the claroline global
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 //session
 if (isset($_GET['id_session'])) {

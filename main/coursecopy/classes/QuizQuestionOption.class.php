@@ -1,17 +1,10 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * Exercises questions backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
 
 /**
- * An QuizQuestion
+ * Class QuizQuestionOption
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
@@ -27,7 +20,8 @@ class QuizQuestionOption extends Resource
      * @param int $type
      * @param int $position
      */
-    function QuizQuestionOption($obj) {
+    public function QuizQuestionOption($obj) 
+{
         parent::Resource($obj->iid, RESOURCE_QUIZQUESTION);
         $this->obj = $obj;
     }

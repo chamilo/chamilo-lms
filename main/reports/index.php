@@ -12,7 +12,7 @@ $language_file = array('reportlib');
 $cidReset = true;
 
 // including files
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'reports.lib.php';
 
 // protect script

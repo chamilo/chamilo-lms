@@ -16,10 +16,10 @@
 
 use \ChamiloSession as Session;
 
-$language_file = array('exercice', 'tracking');
+//$language_file = array('exercice', 'tracking');
 
 // including the global library
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
@@ -185,7 +185,7 @@ if ($origin != 'learnpath') {
     Display :: display_reduced_header();
 }
 
-event_access_tool(TOOL_QUIZ);
+Event::event_access_tool(TOOL_QUIZ);
 
 // Tool introduction
 Display :: display_introduction_section(TOOL_QUIZ);

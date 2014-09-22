@@ -92,13 +92,17 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
 
 $interbreadcrumb[] = array ("url" => "./document.php?id=".$parent_id.$req_gid, "name" => get_lang('Documents'));
 
+if (!$is_allowed_in_course) {
+	api_not_allowed(true);
+}
+
 if (!($is_allowed_to_edit || GroupManager::groupMemberWithUploadRights() || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir), api_get_session_id()))) {
 	api_not_allowed(true);
 }
 
 
 /*	Header */
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
 if (isset ($group)) {
 	$display_dir = explode('/', $dir);
@@ -137,27 +141,25 @@ echo '<div class="actions">';
 		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-if (api_browser_support('svg')){
+if (api_browser_support('svg')) {
 
 	//automatic loading the course language
 	$svgedit_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
 	$langsvgedit  = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'svg-edit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
-	$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?lang='.$langsvgedit ;
+	$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?lang='.$langsvgedit;
 	?>
-
-	<script type="text/javascript">
-
+	<script>
 		document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
-	function resizeIframe() {
-    	var height = window.innerHeight -50;
-		//max lower size
-		if (height<550) {
-			height=550;
-		}
-    	document.getElementById('frame').style.height = height +"px";
-	};
+        function resizeIframe() {
+            var height = window.innerHeight -50;
+            //max lower size
+            if (height<550) {
+                height=550;
+            }
+            document.getElementById('frame').style.height = height +"px";
+        }
 	document.getElementById('frame').onload = resizeIframe;
 	window.onresize = resizeIframe;
 

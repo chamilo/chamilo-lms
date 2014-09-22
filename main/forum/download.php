@@ -15,7 +15,7 @@
 
 session_cache_limiter('public');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
 require_once 'forumconfig.inc.php';
@@ -62,7 +62,7 @@ $course_id = api_get_course_int_id();
 event_download($doc_url);
 
 $sql='SELECT thread_id, forum_id,filename FROM '.$tbl_forum_post.'  f  INNER JOIN '.$tbl_forum_attachment.' a
-        ON a.post_id=f.post_id 
+        ON a.post_id=f.post_id
       WHERE f.c_id = '.$course_id.' AND a.c_id = '.$course_id.' AND path LIKE BINARY "'.$doc_url.'"';
 
 $result = Database::query($sql);

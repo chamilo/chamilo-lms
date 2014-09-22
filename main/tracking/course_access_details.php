@@ -22,7 +22,7 @@ $period         = $_REQUEST['period'];
 $displayType    = $_REQUEST['displayType'];
 // name of the language file that needs to be included
 $language_file = "tracking";
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $interbreadcrumb[]= array ("url"=>"courseLog.php", "name"=> get_lang('ToolName'));
 

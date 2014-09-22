@@ -9,7 +9,7 @@ use \ChamiloSession as Session;
 $language_file = array('admin');
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -122,7 +122,7 @@ $options[0] = get_lang('SelectAnOption');
 ksort($options);
 $form->addElement('select', 'status', get_lang('SelectRole'), $options, array('onclick' => 'changeStatus(this)'));
 
-$checks = Database::getManager()->getRepository('ChamiloLMSCoreBundle:ExtraFieldOptionRelFieldOption')->findBy(array('fieldId' => $field_id, 'roleId' => $roleId));
+$checks = Database::getManager()->getRepository('ChamiloCoreBundle:ExtraFieldOptionRelFieldOption')->findBy(array('fieldId' => $field_id, 'roleId' => $roleId));
 $includedFields = array();
 if (!empty($checks)) {
     foreach ($checks as $availableField) {
@@ -177,7 +177,7 @@ if ($form->validate()) {
     if (!empty($result)) {
         foreach ($result as $id => $items) {
             foreach ($items as $subItemId => $value) {
-                $extraFieldOptionRelFieldOption = $em->getRepository('ChamiloLMSCoreBundle:ExtraFieldOptionRelFieldOption')->findOneBy(
+                $extraFieldOptionRelFieldOption = $em->getRepository('ChamiloCoreBundle:ExtraFieldOptionRelFieldOption')->findOneBy(
                     array(
                     'fieldId' => $field_id,
                     'fieldOptionId' => $subItemId,
@@ -188,7 +188,7 @@ if ($form->validate()) {
 
                 if ($value == 1) {
                     if (empty($extraFieldOptionRelFieldOption)) {
-                        $extraFieldOptionRelFieldOption = new \ChamiloLMSCoreBundle:ExtraFieldOptionRelFieldOption();
+                        $extraFieldOptionRelFieldOption = new Chamilo\ExtraFieldOptionRelFieldOption();
                         $extraFieldOptionRelFieldOption->setFieldId($field_id);
                         $extraFieldOptionRelFieldOption->setFieldOptionId($subItemId);
                         $extraFieldOptionRelFieldOption->setRelatedFieldOptionId($id);

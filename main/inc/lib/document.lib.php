@@ -9,7 +9,7 @@
  *
  * 	@package chamilo.library
  */
-use ChamiloLMS\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Code
@@ -1565,8 +1565,8 @@ class DocumentManager
         $course_info = api_get_course_info($course_id);
 
         //info portal
-        $organization_name = api_get_setting('Institution');
-        $portal_name = api_get_setting('siteName');
+        $organization_name = api_get_setting('platform.institution');
+        $portal_name = api_get_setting('platform.site_name');
 
         //Extra user data information
         $extra_user_info_data = UserManager::get_extra_user_data($user_id, false, false, false, true);

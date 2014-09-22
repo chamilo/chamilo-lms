@@ -10,7 +10,7 @@
 if (PHP_SAPI!='cli') { die('Run this script through the command line or comment this line in the code'); }
 $language_file = array('userInfo');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 /**
  * Notification sending
  */

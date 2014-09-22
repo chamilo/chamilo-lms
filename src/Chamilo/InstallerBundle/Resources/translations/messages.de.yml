@@ -1,0 +1,60 @@
+# This file is part of the Sylius package.
+# (c) Paweł Jędrzejewski
+
+flashes:
+  installed: Chamilo wurde erfolgreich installiert.
+form:
+  configuration:
+    database:
+      0: Datenbankverbindung
+      driver:
+        0: Datenbanktreiber
+        microsoft_sql_server: Microsoft SQL Server
+        mysql: MySQL
+        oracle: Oracle
+        postgresql: PostgreSQL
+        sqlite: SQLite
+      host: Datenbankserver
+      name: Datenbankname
+      password: Datenbank Passwort
+      port: Datenbank Port
+      user: Datenbankbenutzer
+    locale:
+      0: Lokale Einstellungen
+      currency: Währung
+      locale: Gebietsschema
+    mailer:
+      0: E-Mail Einstellungen
+      host: E-Mail Host
+      password: E-Mail Passwort
+      transport:
+        0: Transport
+        gmail: Google Mail
+        mail: E-Mail
+        sendmail: Sendmail
+        smtp: SMTP
+      user: E-Mail Benutzer
+  setup:
+    email: E-Mail
+    load_fixtures: Testdaten laden
+    plain_password: Passwort
+    username: Benutzername
+process:
+  step:
+    check:
+      button:
+        back: Zurück
+        install: Installieren
+        next: Weiter
+      header: 'Überprüfen der Systemvoraussetzungen <small>Chamilo installer</small>'
+      table:
+        current: Aktuell
+        required: Benötigt
+        status: Status
+    configure:
+      header: 'Einstellungen <small>Chamilo installer</small>'
+    setup:
+      header: 'Administration Einstellungen <small>Chamilo installer</small>'
+    welcome:
+      content: '<p>Willkommen beim Chamilo installer.</p>'
+      header: 'Willkommen <small>Chamilo installer</small>'

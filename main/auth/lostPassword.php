@@ -20,7 +20,7 @@
 // name of the language file that needs to be included
 $language_file = array('registration', 'index');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // Custom pages
 // Had to move the form handling in here, because otherwise there would

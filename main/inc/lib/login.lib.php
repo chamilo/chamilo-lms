@@ -30,10 +30,10 @@ class Login
     {
         $portal_url = api_get_path(WEB_PATH);
 
-        if (api_is_multiple_url_enabled()) {
+        /*if (api_is_multiple_url_enabled()) {
             $url = api_get_current_access_url_info();
             $portal_url = $url['url'];
-        }
+        }*/
 
         if ($reset) {
             if ($by_username) {
@@ -80,7 +80,7 @@ class Login
      */
     public static function send_password_to_user($user, $by_username = false) {
         global $_configuration;
-        $email_subject = "[" . api_get_setting('siteName') . "] " . get_lang('LoginRequest'); // SUBJECT
+        $email_subject = "[" . api_get_setting('platform.site_name') . "] " . get_lang('LoginRequest'); // SUBJECT
 
         if ($by_username) { // Show only for lost password
             $user_account_list = self::get_user_account_list($user, false, $by_username); // BODY
@@ -101,13 +101,13 @@ class Login
 
         $email_body = get_lang('YourAccountParam') . " " . $portal_url . "\n\n$user_account_list";
         // SEND MESSAGE
-        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $email_admin = api_get_setting('emailAdministrator');
+        $sender_name = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $email_admin = api_get_setting('platform.administrator_email');
 
         if (api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
             return get_lang('YourPasswordHasBeenReset');
         } else {
-            $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
+            $admin_email = Display :: encrypted_mailto_link(api_get_setting('platform.administrator_email'), api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname')));
             return sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
         }
     }
@@ -122,7 +122,7 @@ class Login
      */
     public static function handle_encrypted_password($user, $by_username = false) {
         global $_configuration;
-        $email_subject = "[" . api_get_setting('siteName') . "] " . get_lang('LoginRequest'); // SUBJECT
+        $email_subject = "[" . api_get_setting('platform.site_name') . "] " . get_lang('LoginRequest'); // SUBJECT
 
         if ($by_username) { // Show only for lost password
             $user_account_list = self::get_user_account_list($user, true, $by_username); // BODY
@@ -137,10 +137,10 @@ class Login
         $email_body .= $user_account_list . "\n-----------------------------------------------\n\n";
         $email_body .= get_lang('PasswordEncryptedForSecurity');
 
-        $email_body .= "\n\n" . get_lang('Formula') . ",\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('PlataformAdmin') . " - " . api_get_setting('siteName');
+        $email_body .= "\n\n" . get_lang('Formula') . ",\n" . api_get_setting('platform.administrator_name') . " " . api_get_setting('platform.administrator_surname') . "\n" . get_lang('PlataformAdmin') . " - " . api_get_setting('platform.site_name');
 
-        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $email_admin = api_get_setting('emailAdministrator');
+        $sender_name = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $email_admin = api_get_setting('platform.administrator_email');
 
         if (@api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
 
@@ -150,7 +150,7 @@ class Login
                 Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
             }
         } else {
-            $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
+            $admin_email = Display :: encrypted_mailto_link(api_get_setting('platform.administrator_email'), api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname')));
             $message = sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
 
             if (CustomPages::enabled()) {

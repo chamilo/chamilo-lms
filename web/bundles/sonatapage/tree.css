@@ -1,0 +1,50 @@
+
+/********************************************************************\
+   Page tree
+\********************************************************************/
+.page-tree {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+.page-tree ul {
+    list-style: none;
+    padding-left: 30px;
+}
+.page-tree__item {
+    display: block;
+    padding: 7px 15px 7px 7px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    position: relative;
+    margin-bottom: 5px;
+    color: #444;
+}
+.page-tree__item .label {
+    font-size: 12px;
+    margin-top: 2px;
+    border-radius: 2px;
+}
+.page-tree__item .label-warning {
+    margin-right: 5px;
+}
+.page-tree__item .fa-caret-right {
+    position: absolute;
+    top: 9px;
+    left: -22px;
+    color: #3c8dbc;
+}
+.page-tree__item:hover {
+    background: #eee;
+    color: #000;
+}
+.page-tree__item__is-hybrid {
+    margin-right: 5px;
+}
+.page-tree__item__edit {
+    font-weight: bold;
+}
+.page-tree__item__edit:hover {
+    text-decoration: underline;
+}

@@ -12,7 +12,7 @@ ob_start();
 // names of the language file that needs to be included
 $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin');
 $cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'myspace.lib.php';
 
 $this_section = SECTION_TRACKING;
@@ -29,27 +29,27 @@ if (api_is_drh() || api_is_platform_admin()) {
 	// followed teachers by drh
 	$formateurs = UserManager::get_users_followed_by_drh($_user['user_id'], COURSEMANAGER);
     $menu_items = array();
-	$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );	 
+	$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 	$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");
 	$menu_items[] = Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), 32);
 	$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), 32), 'course.php');
-	$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');	
-		
+	$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');
+
 	echo '<div class="actions">';
 	$nb_menu_items = count($menu_items);
 	if ($nb_menu_items > 1) {
 		foreach ($menu_items as $key => $item) {
-			echo $item;		
+			echo $item;
 		}
-	}	
+	}
 	if (count($formateurs) > 0) {
 		echo '<span style="float:right">';
 		echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), 32), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
 		echo Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32), api_get_self().'?export=xls');
-		echo '</span>';			
+		echo '</span>';
 	}
 	echo '</div>';
-	echo Display::page_subheader(get_lang('YourTeachers'));	
+	echo Display::page_subheader(get_lang('YourTeachers'));
 }
 
 if (!api_is_drh()) {
@@ -79,11 +79,11 @@ if (!api_is_drh() && !api_is_platform_admin()) {
 			FROM $tbl_user
 			WHERE status = 1".$order_clause;
 	}
-	
+
 	$result_formateurs = Database::query($sql_formateurs);
 	if (Database::num_rows($result_formateurs) > 0) {
 		while ($row_formateurs = Database::fetch_array($result_formateurs)) {
-			$formateurs[] = $row_formateurs;	
+			$formateurs[] = $row_formateurs;
 		}
 	}
 }
@@ -107,7 +107,7 @@ if ($form->validate()) {
     $start_date = $defaults['start_date'] =  $values['start_date'];
     $end_date = $defaults['end_date']   =  $values['end_date'];
     $time_filter = 'custom';
-    $time_label = sprintf(get_lang('TimeSpentBetweenXAndY'), $start_date, $end_date);        
+    $time_label = sprintf(get_lang('TimeSpentBetweenXAndY'), $start_date, $end_date);
 }
 $form->setDefaults($defaults);
 $form->addelement('style_submit_button', 'submit', get_lang('Filter'));
@@ -164,7 +164,7 @@ if (count($formateurs) > 0) {
 			$data[$user_id]["lastname"] = $lastname;
 			$data[$user_id]["firstname"] = $firstname;
 		}
-		
+
 		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id, $time_filter, $start_date, $end_date));
 		$data[$user_id]["timespentlastweek"] = $time_on_platform;
 		$data[$user_id]["email"] = $email;

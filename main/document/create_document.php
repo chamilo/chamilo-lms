@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *    This file allows creating new html documents with an online WYSIWYG html editor.
+ *	This file allows creating new html documents with an online WYSIWYG html editor.
  *
- * @package chamilo.document
+ *	@package chamilo.document
  */
 /**
  * Code
@@ -13,7 +13,7 @@
 // Name of the language file that needs to be included
 $language_file = array('document', 'gradebook');
 
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 api_protect_course_script();
 
@@ -199,7 +199,7 @@ if (!($is_allowed_to_edit || GroupManager::groupMemberWithUploadRights() || is_m
     api_not_allowed(true);
 }
 
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
 if (isset ($group_properties)) {

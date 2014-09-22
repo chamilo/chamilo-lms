@@ -1,0 +1,110 @@
+title: Chamilo Application installation
+
+flashes:
+    installed: Chamilo has been successfully installed.
+form:
+    configuration:
+        database:
+            header: Database connection
+            driver:
+                0: Driver
+                microsoft_sql_server: Microsoft SQL Server
+                mysql: MySQL
+                oracle: Oracle
+                postgresql: PostgreSQL
+                sqlite: SQLite
+            host: Host
+            name: Name
+            password: Password
+            port: Port
+            user: User
+            drop_full:    Drop Full Database
+        locale:
+            header: Locale settings
+            currency: Currency
+            locale: Locale
+        mailer:
+            header: Mailer settings
+            host: Host
+            password: Password
+            transport:
+                header: Transport
+                gmail: Gmail
+                mail: Mail
+                sendmail: Sendmail
+                smtp: SMTP
+            user: User
+            port: Port
+            encryption: Encryption
+        system:
+            header:       System settings
+            secret:       Secret
+            locale:       Locale
+    setup:
+        admin:
+            header: Admin information
+            username:         Username
+            firstname:        First name
+            lastname:         Last name
+            password:         Password
+            password_re:      Re-enter password
+            email:            Email
+            phone:            Phone
+        portal:
+            header: Portal information
+            institution: Institution
+            institution_url: Institution URL
+            site_name: Site name
+            portal_name: Portal name
+            company_title: Company name
+            company_url: Company URL
+            allow_self_registration_as_trainer: Allow self-registration as a trainer
+            allow_self_registration: Allow self-registration
+            timezone: Timezone
+
+        load_fixtures:    Load Sample Data
+
+process:
+    step:
+        welcome:
+            header: Welcome!
+            content: <p>Welcome to the installer.</p>
+        check:
+            header: System requirements
+        configure:
+            header: Configuration
+        schema:
+            header:        Database initialization
+            cache:         Clear cache before database initialization
+            clear-config:  Clear entities cache
+            clear-extend:  Clear extended entities data
+            schema-drop:   Drop current schema
+            schema-update: Schema update
+            fixtures:      Load fixtures
+            workflows:     Load workflow definitions
+            processes:     Load processes configuration
+        setup:
+            header: Administration setup
+        installation:
+            header:        Installation
+            fixtures:      Load sample data
+            navigation:    Init navigation
+            js-routing:    Dump JS routing
+            localization:  Dump localization
+            assets:        Install assets
+            assetic:       Dump assetic
+            translation:   Prepare translations
+            requirejs:     Optimize JS resources (optional)
+            finish:        Clear cache to finalize installation
+        final:
+            header:        Finish
+            greeting:      Success!!!
+            content:       You are now ready to start using Chamilo.<br>For help please join our community <a href="http://www.chamilo.org/forums">forums</a>.
+
+    button:
+        back:              Back
+        next:              Next
+        install:           Install
+        finish:            Launch application
+    operation:             Operation
+    status:                Status

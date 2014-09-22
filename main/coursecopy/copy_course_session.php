@@ -16,7 +16,7 @@
 $language_file = array('coursebackup', 'admin');
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true, true);
 
@@ -51,7 +51,8 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 /* FUNCTIONS */
 
-function make_select_session_list($name, $sessions, $attr = array()) {
+function make_select_session_list($name, $sessions, $attr = array())
+{
     $attrs = '';
     if (count($attr) > 0) {
         foreach ($attr as $key => $value) {
@@ -68,12 +69,14 @@ function make_select_session_list($name, $sessions, $attr = array()) {
 
     if (is_array($sessions)) {
         foreach ($sessions as $session) {
-            $category_name = '';
+            $categoryName = '';
             if (!empty($session['category_name'])) {
-                $category_name = ' ('.$session['category_name'].')';
+                $categoryName = ' ('.$session['category_name'].')';
             }
 
-            $output .= '<option value="'.$session['id'].'">'.$session['name'].' '.$category_name.'</option>';
+            $output .= '<option value="'.$session['id'].'">'.
+                $session['name'].' '.$categoryName.
+            '</option>';
         }
     }
     $output .= '</select>';
@@ -81,9 +84,11 @@ function make_select_session_list($name, $sessions, $attr = array()) {
     return $output;
 }
 
-function display_form() {
-    $html = '';
+function display_form()
+{
+    $html  = '';
     $sessions = SessionManager::get_sessions_list(null, array('name ASC'));
+
     // Actions
     $html .= '<div class="actions">';
     // Link back to the documents overview
@@ -138,18 +143,15 @@ function display_form() {
     echo $html;
 }
 
-function search_courses($id_session, $type) {
+function search_courses($id_session, $type)
+{
     global $tbl_course, $tbl_session_rel_course, $course_list;
     $xajax_response = new XajaxResponse();
     $select_destination = '';
     if (!empty($type)) {
-
         $id_session = intval($id_session);
-
         if ($type == 'origin') {
-
             $course_list = SessionManager::get_course_list_by_session_id($id_session);
-
             $temp_course_list = array();
             $return = '<select id="origin" name="SessionCoursesListOrigin[]" style="width:380px;" onclick="javascript: checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\');">';
 

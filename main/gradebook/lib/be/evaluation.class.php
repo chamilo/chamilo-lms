@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Class Evaluation
  * @package chamilo.gradebook
  */
 class Evaluation implements GradebookItem
 {
-    // PROPERTIES
 	private $id;
 	private $name;
 	private $description;
@@ -22,8 +22,6 @@ class Evaluation implements GradebookItem
     public function __construct()
     {
     }
-
-    // GETTERS AND SETTERS
 
     public function get_id()
     {
@@ -154,11 +152,10 @@ class Evaluation implements GradebookItem
         return isset($this->evaluation_type_id) ? $this->evaluation_type_id : 0;
     }
 
-    public function set_evaluation_type_id($id) {
+    public function set_evaluation_type_id($id) 
+    {
         $this->evaluation_type_id = intval($id);
     }
-
-    // CRUD FUNCTIONS
 
 	/**
 	 * Retrieve evaluations and return them as an array of Evaluation objects
@@ -213,6 +210,7 @@ class Evaluation implements GradebookItem
 			$sql .= ' locked = '.intval($locked);
 			$paramcount ++;
 		}
+
         if (isset($name)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
@@ -221,6 +219,7 @@ class Evaluation implements GradebookItem
 		}
 		$result = Database::query($sql);
 		$alleval = Evaluation::create_evaluation_objects_from_sql_result($result);
+
 		return $alleval;
 	}
 
@@ -321,6 +320,7 @@ class Evaluation implements GradebookItem
 			}
 		}
 	}
+
 	/**
 	 * Update the properties of this evaluation in the database
 	 */
@@ -435,7 +435,6 @@ class Evaluation implements GradebookItem
 		Database::query($sql);
     }
 
-
     /**
      * Delete this evaluation and all underlying results.
      */
@@ -444,14 +443,12 @@ class Evaluation implements GradebookItem
     	$this->delete();
     }
 
-
     /**
      * Check if the given score is possible for this evaluation
      */
     public function is_valid_score ($score) {
     	return (is_numeric($score) && $score >= 0 && $score <= $this->eval_max);
     }
-
 
 	/**
 	 * Calculate the score of this evaluation
@@ -463,7 +460,6 @@ class Evaluation implements GradebookItem
     public function calc_score($stud_id = null)
     {
 		$results = Result::load(null,$stud_id,$this->id);
-
 		$rescount = 0;
 		$sum = 0;
 		foreach ($results as $res) {
@@ -482,7 +478,6 @@ class Evaluation implements GradebookItem
 		} else {
 			return array ($sum, $rescount);
 		}
-
     }
 
     /**
@@ -618,7 +613,6 @@ class Evaluation implements GradebookItem
 		return $foundevals;
     }
 
-    // Other methods implementing GradebookItem
     public function get_item_type()
     {
 		return 'E';

@@ -10,7 +10,7 @@
 
 $language_file= array('gradebook','tracking');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/dataform.class.php';
@@ -20,7 +20,7 @@ require_once 'lib/fe/displaygradebook.php';
 api_block_anonymous_users();
 
 $eval= Evaluation :: load($_GET['selecteval']);
-if ($eval[0]->get_category_id() < 0) { 
+if ($eval[0]->get_category_id() < 0) {
 	// if category id is negative, then the evaluation's origin is a link
 	$link= LinkFactory :: get_evaluation_link($eval[0]->get_id());
 	$currentcat = Category :: load($link->get_category_id());
@@ -44,23 +44,23 @@ DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 0, '
 
 //Bad, Regular, Good  - User definitions
 $displays = $displayscore->get_custom_score_display_settings();
-    
+
 if (!$displayscore->is_custom() || empty($displays)) {
     if (api_is_platform_admin() || api_is_course_admin()) {
 	   Display :: display_error_message(get_lang('PleaseEnableScoringSystem'),false);
     }
-} else {    	
-	$allresults = Result::load(null,null,$eval[0]->get_id());	
+} else {
+	$allresults = Result::load(null,null,$eval[0]->get_id());
 	$nr_items = array();
 	foreach ($displays as $itemsdisplay) {
 		$nr_items[$itemsdisplay['display']] = 0;
 	}
-	
+
 	$resultcount = 0;
 	foreach ($allresults as $result) {
-		$score = $result->get_score();		
-		if (isset($score)) {		    
-			$display = $displayscore->display_score(array($score, $eval[0]->get_max()), SCORE_CUSTOM, SCORE_ONLY_CUSTOM, true);			
+		$score = $result->get_score();
+		if (isset($score)) {
+			$display = $displayscore->display_score(array($score, $eval[0]->get_max()), SCORE_CUSTOM, SCORE_ONLY_CUSTOM, true);
 			$nr_items[$display]++;
 			$resultcount++;
 		}
@@ -83,14 +83,14 @@ if (!$displayscore->is_custom() || empty($displays)) {
     $stattable .= '<th>' . get_lang('Percentage') . '</th>';
     $stattable .= '<th>' . get_lang('CountUsers') . '</th>';
     //$stattable .= '<th>' . get_lang('Statistics') . '</th></tr>';
-	$counter=0;    
+	$counter=0;
 	foreach ($keys as $key) {
 		$bar = ($highest_ratio > 0?($nr_items[$key] / $highest_ratio) * 100:0);
 		$stattable .= '<tr class="row_' . ($counter % 2 == 0 ? 'odd' : 'even') . '">';
 		$stattable .= '<td width="150">' . $key . '</td>';
-        
+
 		$stattable .= '<td width="550">'.Display::bar_progress($bar).'</td>';
-		$stattable .= '<td align="right">' . $nr_items[$key] . '</td>';		
+		$stattable .= '<td align="right">' . $nr_items[$key] . '</td>';
 		$counter++;
 	}
 	$stattable .= '</tr></table>';

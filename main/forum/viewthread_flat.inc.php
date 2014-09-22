@@ -9,11 +9,9 @@
 if ((isset($_GET['action']) && $_GET['action']=='delete_attach') && isset($_GET['id_attach'])) {
     delete_attachment(0,$_GET['id_attach']);
 }
-if (isset($current_thread['thread_id'])){
-
+if (isset($current_thread['thread_id'])) {
     $rows = get_posts($current_thread['thread_id']);
-    $increment=0;
-
+    $increment = 0;
     $clean_forum_id  = intval($_GET['forum']);
     $clean_thread_id = intval($_GET['thread']);
     $locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREAD);
@@ -157,9 +155,6 @@ if (isset($current_thread['thread_id'])){
                 echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
                 echo '</td></tr>';
             }
-
-
-
 
             // The post has been displayed => it can be removed from the what's new array
             unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);

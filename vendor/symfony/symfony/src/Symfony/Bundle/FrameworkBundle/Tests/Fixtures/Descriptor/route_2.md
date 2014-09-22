@@ -1,7 +1,0 @@
-- Path: /name/add
-- Host: localhost
-- Scheme: http|https
-- Method: PUT|POST
-- Class: Symfony\Component\Routing\Route
-- Defaults: NONE
-- Requirements: NONE

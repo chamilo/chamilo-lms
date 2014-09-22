@@ -9,6 +9,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/answer.class.php';
 
 use \ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 api_protect_course_script(true);
 
@@ -109,19 +110,19 @@ switch ($action) {
         $courseId = api_get_course_int_id();
 
         $em = Database::getManager();
-        $repo = $em->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
+        $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
 
         $json_items = array();
         if (!empty($items)) {
             foreach ($items as $item) {
                 if ($item['c_id'] == 0) {
                     if ($filterByGlobal) {
-                        $cat = $em->find('ChamiloLMSCoreBundle:CQuizCategory', $item['iid']);
+                        $cat = $em->find('ChamiloCoreBundle:CQuizCategory', $item['iid']);
                         $idList = array();
                         if ($cat) {
                             $path = $repo->getPath($cat);
                             if (!empty($path)) {
-                                /** @var \ChamiloLMS\Entity\CQuizCategory $cat */
+                                /** @var \Chamilo\Entity\CQuizCategory $cat */
                                 foreach ($path as $cat) {
                                     $idList[] = $cat->getIid();
                                 }

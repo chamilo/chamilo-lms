@@ -1,53 +1,50 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *     Exercise administration
- *     This script allows to manage (create, modify) an exercise and its questions
- *
- *      Following scripts are includes for a best code understanding :
- *
- *     - exercise.class.php : for the creation of an Exercise object
- *     - question.class.php : for the creation of a Question object
- *     - answer.class.php : for the creation of an Answer object
- *     - exercise.lib.php : functions used in the exercise tool
- *     - exercise_admin.inc.php : management of the exercise
- *     - question_admin.inc.php : management of a question (statement & answers)
- *     - statement_admin.inc.php : management of a statement
- *     - answer_admin.inc.php : management of answers
- *     - question_list_admin.inc.php : management of the question list
- *
- *     Main variables used in this script :
- *
- *     - $is_allowedToEdit : set to 1 if the user is allowed to manage the exercise
- *     - $objExercise : exercise object
- *     - $objQuestion : question object
- *     - $objAnswer : answer object
- *     - $aType : array with answer types
- *     - $exerciseId : the exercise ID
- *     - $picturePath : the path of question pictures
- *     - $newQuestion : ask to create a new question
- *     - $modifyQuestion : ID of the question to modify
- *     - $editQuestion : ID of the question to edit
- *     - $submitQuestion : ask to save question modifications
- *     - $cancelQuestion : ask to cancel question modifications
- *     - $deleteQuestion : ID of the question to delete
- *     - $moveUp : ID of the question to move up
- *     - $moveDown : ID of the question to move down
- *     - $modifyExercise : ID of the exercise to modify
- *     - $submitExercise : ask to save exercise modifications
- *     - $cancelExercise : ask to cancel exercise modifications
- *     - $modifyAnswers : ID of the question which we want to modify answers for
- *     - $cancelAnswers : ask to cancel answer modifications
- *     - $buttonBack : ask to go back to the previous page in answers of type "Fill in blanks"
- *
- * @package chamilo.exercise
- * @author Olivier Brouckaert
- * Modified by Hubert Borderiou 21-10-2011 Question by category
- */
+*	Exercise administration
+* 	This script allows to manage (create, modify) an exercise and its questions
+*
+*	 Following scripts are includes for a best code understanding :
+*
+* 	- exercise.class.php : for the creation of an Exercise object
+* 	- question.class.php : for the creation of a Question object
+* 	- answer.class.php : for the creation of an Answer object
+* 	- exercise.lib.php : functions used in the exercise tool
+* 	- exercise_admin.inc.php : management of the exercise
+* 	- question_admin.inc.php : management of a question (statement & answers)
+* 	- statement_admin.inc.php : management of a statement
+* 	- answer_admin.inc.php : management of answers
+* 	- question_list_admin.inc.php : management of the question list
+*
+* 	Main variables used in this script :
+*
+* 	- $is_allowedToEdit : set to 1 if the user is allowed to manage the exercise
+* 	- $objExercise : exercise object
+* 	- $objQuestion : question object
+* 	- $objAnswer : answer object
+* 	- $aType : array with answer types
+* 	- $exerciseId : the exercise ID
+* 	- $picturePath : the path of question pictures
+* 	- $newQuestion : ask to create a new question
+* 	- $modifyQuestion : ID of the question to modify
+* 	- $editQuestion : ID of the question to edit
+* 	- $submitQuestion : ask to save question modifications
+* 	- $cancelQuestion : ask to cancel question modifications
+* 	- $deleteQuestion : ID of the question to delete
+* 	- $moveUp : ID of the question to move up
+* 	- $moveDown : ID of the question to move down
+* 	- $modifyExercise : ID of the exercise to modify
+* 	- $submitExercise : ask to save exercise modifications
+* 	- $cancelExercise : ask to cancel exercise modifications
+* 	- $modifyAnswers : ID of the question which we want to modify answers for
+* 	- $cancelAnswers : ask to cancel answer modifications
+* 	- $buttonBack : ask to go back to the previous page in answers of type "Fill in blanks"
+*
+*	@package chamilo.exercise
+* 	@author Olivier Brouckaert
+* Modified by Hubert Borderiou 21-10-2011 Question by category
+*/
 
-/**
- * Code
- */
 use \ChamiloSession as Session;
 
 require_once 'exercise.class.php';
@@ -57,7 +54,7 @@ require_once 'answer.class.php';
 // Name of the language file that needs to be included
 $language_file = 'exercice';
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 $urlMainExercise = api_get_path(WEB_CODE_PATH).'exercice/';
 
 $current_course_tool = TOOL_QUIZ;
@@ -109,6 +106,15 @@ $clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question
 if (empty($questionId)) {
     $questionId = isset($_SESSION['questionId']) ? $_SESSION['questionId'] : 0;
 }
+if (empty($modifyExercise)) {
+    $modifyExercise = isset($_GET['modifyExercise']) ? $_GET['modifyExercise'] : null;
+}
+
+$fromExercise = isset($fromExercise) ? $fromExercise : null;
+$cancelExercise = isset($cancelExercise) ? $cancelExercise : null;
+$cancelAnswers = isset($cancelAnswers) ? $cancelAnswers : null;
+$modifyIn = isset($modifyIn) ? $modifyIn : null;
+$cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
 
 /* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
     when changing the exercise settings, number of questions, etc */

@@ -80,7 +80,7 @@ sonata_media:
 
     pixlr:
         enabled:  true
-        referrer: Demo - Sonata Project
+        referrer: App
 
     resizer:
         simple:

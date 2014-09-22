@@ -13,7 +13,7 @@
 $language_file = array('admin', 'registration');
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
@@ -183,6 +183,8 @@ function parse_csv_data($file) {
 }
 /**
  * XML-parser: handle start of element
+ * @param   string  $parser Deprecated?
+ * @param   string  $data The data to be parsed
  */
 function element_start($parser, $data) {
 	$data = api_utf8_decode($data);
@@ -199,6 +201,8 @@ function element_start($parser, $data) {
 
 /**
  * XML-parser: handle end of element
+ * @param   string  $parser Deprecated?
+ * @param   string  $data   The data to be parsed
  */
 function element_end($parser, $data) {
 	$data = api_utf8_decode($data);
@@ -223,6 +227,9 @@ function element_end($parser, $data) {
 
 /**
  * XML-parser: handle character data
+ * @param   string  $parser Parser (deprecated?)
+ * @param   string  $data The data to be parsed
+ * @return  void
  */
 function character_data($parser, $data) {
 	$data = trim(api_utf8_decode($data));
@@ -255,9 +262,9 @@ api_protect_admin_script(true);
 
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
-if (is_array($extAuthSource)) {
+/*if (is_array($extAuthSource)) {
 	$defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
-}
+}*/
 
 $tool_name = get_lang('ImportUserListXMLCSV');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
@@ -267,7 +274,7 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
+if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
 	Security::clear_token();
 	$tok = Security::get_token();
@@ -417,7 +424,7 @@ if ($count_fields > 0) {
 
 <blockquote>
 <pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_get_system_encoding(); ?>&quot;?&gt;
 &lt;Contacts&gt;
     &lt;Contact&gt;
         <b>&lt;LastName&gt;xxx&lt;/LastName&gt;</b>

@@ -8,7 +8,7 @@
  */
 $language_file = array('registration','messages','userInfo');
 $cidReset= true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 if (api_get_setting('allow_message_tool')!='true') {
 	api_not_allowed();

@@ -367,12 +367,12 @@ $authorizationHeader = $this->parameters['HTTP_AUTHORIZATION'];
 $authorizationHeader = $this->parameters['REDIRECT_HTTP_AUTHORIZATION'];
 }
 if (null !== $authorizationHeader) {
-if (0 === stripos($authorizationHeader,'basic')) {
-$exploded = explode(':', base64_decode(substr($authorizationHeader, 6)));
+if (0 === stripos($authorizationHeader,'basic ')) {
+$exploded = explode(':', base64_decode(substr($authorizationHeader, 6)), 2);
 if (count($exploded) == 2) {
 list($headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']) = $exploded;
 }
-} elseif (empty($this->parameters['PHP_AUTH_DIGEST']) && (0 === stripos($authorizationHeader,'digest'))) {
+} elseif (empty($this->parameters['PHP_AUTH_DIGEST']) && (0 === stripos($authorizationHeader,'digest '))) {
 $headers['PHP_AUTH_DIGEST'] = $authorizationHeader;
 $this->parameters['PHP_AUTH_DIGEST'] = $authorizationHeader;
 }
@@ -594,6 +594,7 @@ $this->getContent();
 }
 public function overrideGlobals()
 {
+$this->server->set('QUERY_STRING', static::normalizeQueryString(http_build_query($this->query->all(), null,'&')));
 $_GET = $this->query->all();
 $_POST = $this->request->all();
 $_SERVER = $this->server->all();
@@ -759,7 +760,12 @@ return 443;
 }
 }
 if ($host = $this->headers->get('HOST')) {
-if (false !== $pos = strrpos($host,':')) {
+if ($host[0] ==='[') {
+$pos = strpos($host,':', strrpos($host,']'));
+} else {
+$pos = strrpos($host,':');
+}
+if (false !== $pos) {
 return intval(substr($host, $pos + 1));
 }
 return'https'=== $this->getScheme() ? 443 : 80;
@@ -768,11 +774,11 @@ return $this->server->get('SERVER_PORT');
 }
 public function getUser()
 {
-return $this->server->get('PHP_AUTH_USER');
+return $this->headers->get('PHP_AUTH_USER');
 }
 public function getPassword()
 {
-return $this->server->get('PHP_AUTH_PW');
+return $this->headers->get('PHP_AUTH_PW');
 }
 public function getUserInfo()
 {
@@ -824,7 +830,8 @@ public function isSecure()
 if (self::$trustedProxies && self::$trustedHeaders[self::HEADER_CLIENT_PROTO] && $proto = $this->headers->get(self::$trustedHeaders[self::HEADER_CLIENT_PROTO])) {
 return in_array(strtolower(current(explode(',', $proto))), array('https','on','ssl','1'));
 }
-return'on'== strtolower($this->server->get('HTTPS')) || 1 == $this->server->get('HTTPS');
+$https = $this->server->get('HTTPS');
+return !empty($https) &&'off'!== strtolower($https);
 }
 public function getHost()
 {
@@ -837,7 +844,7 @@ $host = $this->server->get('SERVER_ADDR','');
 }
 }
 $host = strtolower(preg_replace('/:\d+$/','', trim($host)));
-if ($host && !preg_match('/^\[?(?:[a-zA-Z0-9-:\]_]+\.?)+$/', $host)) {
+if ($host &&''!== preg_replace('/(?:^\[)?[a-zA-Z0-9-:\]_]+\.?/','', $host)) {
 throw new \UnexpectedValueException(sprintf('Invalid Host "%s"', $host));
 }
 if (count(self::$trustedHostPatterns) > 0) {
@@ -926,6 +933,10 @@ $this->defaultLocale = $locale;
 if (null === $this->locale) {
 $this->setPhpDefaultLocale($locale);
 }
+}
+public function getDefaultLocale()
+{
+return $this->defaultLocale;
 }
 public function setLocale($locale)
 {
@@ -1311,7 +1322,9 @@ public function prepare(Request $request)
 $headers = $this->headers;
 if ($this->isInformational() || in_array($this->statusCode, array(204, 304))) {
 $this->setContent(null);
-}
+$headers->remove('Content-Type');
+$headers->remove('Content-Length');
+} else {
 if (!$headers->has('Content-Type')) {
 $format = $request->getRequestFormat();
 if (null !== $format && $mimeType = $request->getMimeType($format)) {
@@ -1320,9 +1333,9 @@ $headers->set('Content-Type', $mimeType);
 }
 $charset = $this->charset ?:'UTF-8';
 if (!$headers->has('Content-Type')) {
-$headers->set('Content-Type','text/html; charset='.$charset);
+$headers->set('Content-Type','text/html; charset='. $charset);
 } elseif (0 === stripos($headers->get('Content-Type'),'text/') && false === stripos($headers->get('Content-Type'),'charset')) {
-$headers->set('Content-Type', $headers->get('Content-Type').'; charset='.$charset);
+$headers->set('Content-Type', $headers->get('Content-Type') .'; charset='. $charset);
 }
 if ($headers->has('Transfer-Encoding')) {
 $headers->remove('Content-Length');
@@ -1332,6 +1345,7 @@ $length = $headers->get('Content-Length');
 $this->setContent(null);
 if ($length) {
 $headers->set('Content-Length', $length);
+}
 }
 }
 if ('HTTP/1.0'!= $request->server->get('SERVER_PROTOCOL')) {
@@ -1972,6 +1986,9 @@ if (self::SCOPE_PROTOTYPE === $scope) {
 throw new InvalidArgumentException(sprintf('You cannot set service "%s" of scope "prototype".', $id));
 }
 $id = strtolower($id);
+if ('service_container'=== $id) {
+return;
+}
 if (self::SCOPE_CONTAINER !== $scope) {
 if (!isset($this->scopedServices[$scope])) {
 throw new RuntimeException(sprintf('You cannot set service "%s" of inactive scope.', $id));
@@ -1992,6 +2009,9 @@ unset($this->services[$id]);
 public function has($id)
 {
 $id = strtolower($id);
+if ('service_container'=== $id) {
+return true;
+}
 return isset($this->services[$id])
 || array_key_exists($id, $this->services)
 || isset($this->aliases[$id])
@@ -2003,6 +2023,9 @@ public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE
 foreach (array(false, true) as $strtolower) {
 if ($strtolower) {
 $id = strtolower($id);
+}
+if ('service_container'=== $id) {
+return $this;
 }
 if (isset($this->aliases[$id])) {
 $id = $this->aliases[$id];
@@ -2052,6 +2075,9 @@ return $service;
 public function initialized($id)
 {
 $id = strtolower($id);
+if ('service_container'=== $id) {
+return true;
+}
 return isset($this->services[$id]) || array_key_exists($id, $this->services);
 }
 public function getServiceIds()
@@ -2063,6 +2089,7 @@ if (preg_match('/^get(.+)Service$/', $method->name, $match)) {
 $ids[] = self::underscore($match[1]);
 }
 }
+$ids[] ='service_container';
 return array_unique(array_merge($ids, array_keys($this->services)));
 }
 public function enterScope($name)
@@ -2235,11 +2262,11 @@ protected $booted = false;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.5.0';
-const VERSION_ID ='20500';
+const VERSION ='2.5.4';
+const VERSION_ID ='20504';
 const MAJOR_VERSION ='2';
 const MINOR_VERSION ='5';
-const RELEASE_VERSION ='0';
+const RELEASE_VERSION ='4';
 const EXTRA_VERSION ='';
 public function __construct($environment, $debug)
 {

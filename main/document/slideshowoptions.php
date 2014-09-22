@@ -27,7 +27,7 @@
 // Language files that need to be included
 $language_file = array('slideshow', 'document');
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 
 api_protect_course_script();
@@ -107,14 +107,14 @@ echo '</div>';
 	}
 			?>>
 		<?php echo get_lang('NoResizing');?>
-            
+
 		</div>
 		<div><?php echo get_lang('NoResizingComment');?>
 		</div>
 	</div>
-    
-    
-    
+
+
+
    <div>
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="autoresizing" <?php
@@ -123,17 +123,17 @@ echo '</div>';
 	}
 			?>>
 		<?php echo get_lang('ResizingAuto');?>
-            
+
 		</div>
 		<div><?php echo get_lang('ResizingAutoComment');?>
 		</div>
-	</div> 
- 
-    
+	</div>
+
+
 	<div>
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="javascript: enableresizing();" value="resizing" <?php
-	
+
 	if ($image_resizing == 'resizing') {
 		echo ' checked';
 		$width = $_SESSION['image_resizing_width'];

@@ -1558,8 +1558,8 @@ class Wiki
                 $userinfo = api_get_user_info($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
                 $name_to = $userinfo['complete_name'];
                 $email_to = $userinfo['email'];
-                $sender_name = api_get_setting('emailAdministrator');
-                $sender_email = api_get_setting('emailAdministrator');
+                $sender_name = api_get_setting('platform.administrator_email');
+                $sender_email = api_get_setting('platform.administrator_email');
                 $email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
                 $email_body = get_lang('DearUser').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).',<br /><br />';
                 if($session_id==0){
@@ -1625,7 +1625,7 @@ class Wiki
         $css = str_replace('../../img/', $root_rel.'main/img/', $css);
 
         $asciimathmal_script = (api_contains_asciimathml($wikiContents) || api_contains_asciisvg($wikiContents))
-           ? '<script src="'.api_get_path(TO_REL, SCRIPT_ASCIIMATHML).'" type="text/javascript"></script>'."\n" : '';
+           ? '<script src="'.api_get_path(TO_REL, 'inc/lib/javascript/asciimath/ASCIIMathML.js').'" type="text/javascript"></script>'."\n" : '';
 
         $template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TEXT_DIRECTION}', '{TITLE}', '{CSS}', '{ASCIIMATHML_SCRIPT}'),
             array(api_get_language_isocode(), api_get_system_encoding(), api_get_text_direction(), $wikiTitle, $css, $asciimathmal_script),

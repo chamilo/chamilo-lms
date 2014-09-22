@@ -19,7 +19,6 @@
 
  class AttendanceController
  {
-
  	/**
 	 * Constructor
 	 */
@@ -325,20 +324,21 @@
 				if (!isset($_POST['cancel'])) {
                     if (isset($_POST['repeat'])) {
                         //@todo  check this error_logs
-                        $start_datetime = api_strtotime(api_get_utc_datetime($attendance->build_datetime_from_array($_POST['date_time'])),'UTC');
-                        //error_log('$start_datetime '.$start_datetime);
+                        $start_datetime = api_strtotime(
+                            api_get_utc_datetime($_POST['date_time']), 'UTC'
+                        );
 
-                        $_POST['end_date_time']['H'] = $_POST['date_time']['H'];
-                        $_POST['end_date_time']['i'] = $_POST['date_time']['i'];
-                        //error_log($attendance->build_datetime_from_array($_POST['end_date_time']));
-
-                        $end_datetime = api_strtotime(api_get_utc_datetime($attendance->build_datetime_from_array($_POST['end_date_time'])),'UTC');
-                        //error_log('$end_datetime '.$end_datetime);
-                        $checkdate = checkdate($_POST['end_date_time']['F'], $_POST['end_date_time']['d'], $_POST['end_date_time']['Y']);
+                        $end_datetime = api_strtotime(api_get_utc_datetime($_POST['end_date_time'].' 23:59:59'), 'UTC');
+                        $checkdate = api_is_valid_date(api_get_utc_datetime($_POST['end_date_time'].' 23:59:59'));
 
                         $repeat_type = $_POST['repeat_type'];
                         if (($end_datetime > $start_datetime) && $checkdate) {
-                            $affected_rows = $attendance->attendance_repeat_calendar_add($attendance_id, $start_datetime, $end_datetime, $repeat_type);
+                            $affected_rows = $attendance->attendance_repeat_calendar_add(
+                                $attendance_id,
+                                $start_datetime,
+                                $end_datetime,
+                                $repeat_type
+                            );
                             $action = 'calendar_list';
                         } else {
                             if (!$checkdate) {
@@ -350,7 +350,7 @@
                             $action = 'calendar_add';
                         }
                     } else {
-                        $datetime = $attendance->build_datetime_from_array($_POST['date_time']);
+                        $datetime = $_POST['date_time'];
                         $datetimezone = api_get_utc_datetime($datetime);
                         if (!empty($datetime)) {
 	                       $attendance->set_date_time($datetimezone);
@@ -496,7 +496,6 @@
         }
         $max_cols_per_page = 12; //10 dates + 2 name and number
         $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2;//10
-
         $rows = count($data_table);
 
         if ($cols > $max_cols_per_page) {

@@ -14,7 +14,7 @@
  * @package chamilo.learnpath
  */
 
-use ChamiloLMS\CoreBundle\Entity\CLpCategory;
+use Chamilo\CoreBundle\Entity\CLpCategory;
 use \ChamiloSession as Session;
 
 class learnpath
@@ -10556,7 +10556,7 @@ EOD;
     static function update_category($params)
     {
         $em = Database::getManager();
-        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $params['id']);
+        $item = $em->find('ChamiloCoreBundle:CLpCategory', $params['id']);
         if ($item) {
             $item->setName($params['name']);
             $item->setCId($params['c_id']);
@@ -10568,7 +10568,7 @@ EOD;
     static function move_up_category($id)
     {
         $em = Database::getManager();
-        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $id);
+        $item = $em->find('ChamiloCoreBundle:CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() - 1;
             $item->setPosition($position);
@@ -10580,7 +10580,7 @@ EOD;
     static function move_down_category($id)
     {
         $em = Database::getManager();
-        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $id);
+        $item = $em->find('ChamiloCoreBundle:CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() + 1;
             $item->setPosition($position);
@@ -10595,7 +10595,7 @@ EOD;
             return 0;
         }
         $em = Database::getManager();
-        $query = $em->createQuery('SELECT COUNT(u.id) FROM ChamiloLMSCoreBundle:CLpCategory u WHERE u.cId = :id');
+        $query = $em->createQuery('SELECT COUNT(u.id) FROM ChamiloCoreBundle:CLpCategory u WHERE u.cId = :id');
         $query->setParameter('id', $course_id);
         return $query->getSingleScalarResult();
     }
@@ -10605,13 +10605,13 @@ EOD;
     {
         $em = Database::getManager();
         //Default behaviour
-        /*$items = $em->getRepository('ChamiloLMSCoreBundle:CLpCategory')->findBy(
+        /*$items = $em->getRepository('ChamiloCoreBundle:CLpCategory')->findBy(
             array('cId' => $course_id),
             array('name' => 'ASC')
         );*/
 
         //Using doctrine extensions
-        $items = $em->getRepository('ChamiloLMSCoreBundle:CLpCategory')->getBySortableGroupsQuery(
+        $items = $em->getRepository('ChamiloCoreBundle:CLpCategory')->getBySortableGroupsQuery(
             array('cId' => $course_id)
         )->getResult();
 
@@ -10621,7 +10621,7 @@ EOD;
     static function get_category($id)
     {
         $em = Database::getManager();
-        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $id);
+        $item = $em->find('ChamiloCoreBundle:CLpCategory', $id);
 
         return $item;
     }
@@ -10629,7 +10629,7 @@ EOD;
     static function get_category_by_course($course_id)
     {
         $em = Database::getManager();
-        $items = $em->getRepository('ChamiloLMSCoreBundle:CLpCategory')->findBy(array('cId' => $course_id));
+        $items = $em->getRepository('ChamiloCoreBundle:CLpCategory')->findBy(array('cId' => $course_id));
 
         return $items;
     }
@@ -10637,11 +10637,11 @@ EOD;
     static function delete_category($id)
     {
         $em = Database::getManager();
-        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $id);
+        $item = $em->find('ChamiloCoreBundle:CLpCategory', $id);
         if ($item) {
 
             $courseId = $item->getCId();
-            $query = $em->createQuery('SELECT u FROM ChamiloLMSCoreBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');
+            $query = $em->createQuery('SELECT u FROM ChamiloCoreBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');
             $query->setParameter('id', $courseId);
             $query->setParameter('catId', $item->getId());
             $lps = $query->getResult();

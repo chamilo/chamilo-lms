@@ -1,0 +1,54 @@
+parameters:
+    chamilo_installer.form.type.configuration.class:          Chamilo\InstallerBundle\Form\Type\ConfigurationType
+    chamilo_installer.form.type.configuration.database.class: Chamilo\InstallerBundle\Form\Type\Configuration\DatabaseType
+    chamilo_installer.form.type.configuration.mailer.class:   Chamilo\InstallerBundle\Form\Type\Configuration\MailerType
+    chamilo_installer.form.type.configuration.system.class:   Chamilo\InstallerBundle\Form\Type\Configuration\SystemType
+#    chamilo_installer.form.type.configuration.ws.class:       Chamilo\InstallerBundle\Form\Type\Configuration\WebsocketType
+    chamilo_installer.form.type.setup.admin.class:            Chamilo\InstallerBundle\Form\Type\Setup\AdminType
+    chamilo_installer.form.type.setup.portal.class:           Chamilo\InstallerBundle\Form\Type\Setup\PortalType
+    chamilo_installer.form.type.setup.class:                  Chamilo\InstallerBundle\Form\Type\SetupType
+
+
+services:
+    chamilo_installer.form.type.configuration:
+        class:                                            %chamilo_installer.form.type.configuration.class%
+        tags:
+            - { name: form.type, alias: chamilo_installer_configuration }
+
+    chamilo_installer.form.type.configuration.database:
+        class:                                            %chamilo_installer.form.type.configuration.database.class%
+        tags:
+            - { name: form.type, alias: chamilo_installer_configuration_database }
+
+    chamilo_installer.form.type.configuration.mailer:
+        class:                                            %chamilo_installer.form.type.configuration.mailer.class%
+        tags:
+            - { name: form.type, alias: chamilo_installer_configuration_mailer }
+
+    chamilo_installer.form.type.configuration.system:
+        class:                                            %chamilo_installer.form.type.configuration.system.class%
+        tags:
+            - { name: form.type, alias: chamilo_installer_configuration_system }
+
+    chamilo_installer.form.type.setup:
+        class:                                            %chamilo_installer.form.type.setup.class%
+        tags:
+            - { name: form.type, alias: chamilo_installer_setup }
+
+    chamilo_installer.form.type.setup.admin:
+        class:                                            %chamilo_installer.form.type.setup.admin.class%
+        arguments:
+            - Chamilo\UserBundle\Entity\User
+        tags:
+            - { name: form.type, alias: chamilo_installer_setup_admin }
+
+    chamilo_installer.form.type.setup.portal:
+        class:                                            %chamilo_installer.form.type.setup.portal.class%
+        tags:
+            - { name: form.type, alias: chamilo_installer_setup_portal }
+
+#    chamilo_installer.form.type.configuration.websocket:
+#        class:                                            %chamilo_installer.form.type.configuration.ws.class%
+#        tags:
+#            - { name: form.type, alias: chamilo_installer_configuration_websocket }
+

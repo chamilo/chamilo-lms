@@ -9,7 +9,7 @@
 /**
  *	including the global file
  */
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 /*
 	Including necessary files
@@ -92,7 +92,7 @@ Display::display_header($nameTools,"Exercise");
 /*
 	Action handling
 */
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 if (isset($_POST['ok'])) {
 	$message = get_lang('TestLimitsAdded');
 	Display::display_normal_message($message);

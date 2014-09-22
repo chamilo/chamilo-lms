@@ -21,11 +21,11 @@ class Link
 {
 
     /**
-     * @return \ChamiloLMS\Entity\Repository\LinkRepository
+     * @return \Chamilo\Entity\Repository\LinkRepository
      */
     public static function repository()
     {
-        return \ChamiloLMS\Entity\Repository\LinkRepository::instance();
+        return \Chamilo\Entity\Repository\LinkRepository::instance();
     }
 
     /**

@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt*/
 
+use Chamilo\CourseBundle\ToolChain;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Class CourseManager
  *
@@ -24,6 +30,75 @@ class CourseManager
 
     public $columns = array();
 
+    public static $toolList;
+    public static $courseSettingsManager;
+    public static $em;
+    private static $manager;
+
+    /**
+     * @param ToolChain $toolList
+     */
+    public static function setToolList($toolList)
+    {
+        self::$toolList = $toolList;
+    }
+
+    /**
+     * @return ToolChain
+     */
+    public static function getToolList()
+    {
+        return self::$toolList;
+    }
+
+    /**
+     * @return SettingsManager
+     */
+    public static function getCourseSettingsManager()
+    {
+        return self::$courseSettingsManager;
+    }
+
+    /**
+     * @param SettingsManager $courseSettingsManager
+     */
+    public static function setCourseSettingsManager($courseSettingsManager)
+    {
+        self::$courseSettingsManager = $courseSettingsManager;
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityManager
+     */
+    public static function setEntityManager($em)
+    {
+        self::$em = $em;
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public static function getEntityManager()
+    {
+        return self::$em;
+    }
+
+    /**
+     * @return Chamilo\CoreBundle\Entity\CourseManager
+     */
+    public static function setCourseManager($manager)
+    {
+        self::$manager = $manager;
+    }
+
+    /**
+     * @return Chamilo\CoreBundle\Entity\CourseManager
+     */
+    public static function getCourseManager()
+    {
+        return self::$manager;
+    }
+
     /**
      * Creates a course
      * @param   array   with the columns in the main.course table
@@ -42,7 +117,10 @@ class CourseManager
             $access_url_id = api_get_current_access_url_id();
         }
 
-        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_courses']) && $_configuration[$access_url_id]['hosting_limit_courses'] > 0) {
+        if (is_array($_configuration[$access_url_id]) &&
+            isset($_configuration[$access_url_id]['hosting_limit_courses']) &&
+            $_configuration[$access_url_id]['hosting_limit_courses'] > 0
+        ) {
             $num = self::count_courses();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
                 return api_set_failure('PortalCoursesLimitReached');
@@ -96,7 +174,8 @@ class CourseManager
                             $eval->add();
                         }
                     }
-                    if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+
+                    if (api_get_setting('gradebook.gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
                         if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
                             require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
@@ -491,13 +570,14 @@ class CourseManager
      * @param   int     Status (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
      * @return  bool    True on success, false on failure
      * @see add_user_to_course
+     * @assert ('', '') === false
      */
     public static function subscribe_user($user_id, $course_code, $status = STUDENT, $session_id = 0)
     {
-
         if ($user_id != strval(intval($user_id))) {
             return false; //detected possible SQL injection
         }
+
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
@@ -601,9 +681,9 @@ class CourseManager
     public static function get_course_code_from_original_id($original_course_id_value, $original_course_id_name) {
         $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $sql_course = "SELECT course_code FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
-                       WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res = Database::query($sql_course);
+        $sql = "SELECT course_code FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
+                WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $res = Database::query($sql);
         $row = Database::fetch_object($res);
         if ($row) {
             return $row->course_code;
@@ -619,7 +699,8 @@ class CourseManager
      * @return string Course code
      * @assert ('') === false
      */
-    public static function get_course_code_from_course_id($id) {
+    public static function get_course_code_from_course_id($id)
+    {
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $id = intval($id);
         $sql = "SELECT code FROM $table WHERE id = '$id' ";
@@ -744,10 +825,16 @@ class CourseManager
         return $courses_as_admin;
     }
 
-    public static function get_user_list_from_courses_as_coach($user_id, $include_sessions = true) {
+    /**
+     * @param int $user_id
+     * @param bool $include_sessions
+     * @return array
+     */
+    public static function get_user_list_from_courses_as_coach($user_id, $include_sessions = true)
+    {
         $students_in_courses = array();
-
         $sessions = CourseManager::get_course_list_as_coach($user_id, true);
+
         if (!empty($sessions)) {
             foreach($sessions as $session_id => $courses) {
                 if (!$include_sessions) {
@@ -794,9 +881,12 @@ class CourseManager
     }
 
     /**
-     *    @return an array with the course info of all the courses of whichthe current user is course admin
+     * @param int $user_id
+     * @return an array with the course info of all the courses (real and virtual)
+     * of which the current user is course admin.
      */
-    public static function get_course_list_of_user_as_course_admin($user_id) {
+    public static function get_course_list_of_user_as_course_admin($user_id)
+    {
         if ($user_id != strval(intval($user_id))) {
             return array();
         }
@@ -809,7 +899,6 @@ class CourseManager
 
         $sql_nb_cours = "SELECT course_rel_user.c_id,
                                 course.title, course.id,
-                                course.db_name,
                                 course.id as real_id
                         FROM $tbl_course_user as course_rel_user
                         INNER JOIN $tbl_course as course
@@ -821,7 +910,7 @@ class CourseManager
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql_nb_cours = "    SELECT course_rel_user.c_id, course.title, course.id, course.db_name, course.id as real_id
+                $sql_nb_cours = "    SELECT course_rel_user.c_id, course.title, course.id, course.id as real_id
                     FROM $tbl_course_user as course_rel_user
                     INNER JOIN $tbl_course as course
                         ON course.id = course_rel_user.c_id
@@ -891,6 +980,7 @@ class CourseManager
                 ' WHERE id='.$session_id.' AND id_coach='.$user_id)) > 0) {
             return true;
         }
+
         return false;
     }
 
@@ -1558,7 +1648,6 @@ class CourseManager
     {
         $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
 
         $table_session_course               = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session_course_user          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1585,7 +1674,7 @@ class CourseManager
             return false;
         }
 
-        self::create_database_dump($courseInfo);
+        //self::create_database_dump($courseInfo);
 
         $code = Database::escape_string($code);
         $courseId = $courseInfo['real_id'];
@@ -1610,8 +1699,8 @@ class CourseManager
         }
 
         // Unsubscribe all classes from the course
-        $sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
-        Database::query($sql);
+        /*$sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
+        Database::query($sql);*/
         // Unsubscribe all users from the course
         $sql = "DELETE FROM $table_course_user WHERE c_id ='".$courseId."'";
         Database::query($sql);
@@ -1621,7 +1710,7 @@ class CourseManager
         $sql = "DELETE FROM $table_session_course_user WHERE c_id='".$courseId."'";
         Database::query($sql);
         // Delete from Course - URL
-        $sql = "DELETE FROM $table_course_rel_url WHERE c_id = '".$code."'";
+        $sql = "DELETE FROM $table_course_rel_url WHERE c_id = '".$courseId."'";
         Database::query($sql);
 
         $sql = 'SELECT survey_id FROM '.$table_course_survey.' WHERE course_code="'.$code.'"';
@@ -1669,28 +1758,25 @@ class CourseManager
             UrlManager::delete_url_rel_course($courseId, $url_id);
         }
 
-        // Delete the course from the database
-        $sql = "DELETE FROM $table_course WHERE id = '".$courseId."'";
-        Database::query($sql);
 
         // delete extra course fields
         $t_cf         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $t_cfv        = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         $sql = "SELECT distinct field_id FROM $t_cfv WHERE course_code = '$code'";
-        $res_field_ids = @Database::query($sql);
+        $res_field_ids = Database::query($sql);
         $field_ids = array();
-        while($row_field_id = Database::fetch_row($res_field_ids)){
+        while($row_field_id = Database::fetch_row($res_field_ids)) {
             $field_ids[] = $row_field_id[0];
         }
 
         // Delete from table_course_field_value from a given course_code
 
         $sql_course_field_value = "DELETE FROM $t_cfv WHERE course_code = '$code'";
-        @Database::query($sql_course_field_value);
+        Database::query($sql_course_field_value);
 
         $sql = "SELECT distinct field_id FROM $t_cfv";
-        $res_field_all_ids = @Database::query($sql);
+        $res_field_all_ids = Database::query($sql);
 
         $field_all_ids = array();
         while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
@@ -1710,6 +1796,14 @@ class CourseManager
                 }
             }
         }
+
+        // Delete the course from the database
+        /*$sql = "DELETE FROM $table_course WHERE id = '".$courseId."'";
+        Database::query($sql);*/
+        $em = self::getEntityManager();
+        $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+        $em->remove($course);
+        $em->flush();
 
         // Add event to system log
         $user_id = api_get_user_id();
@@ -1917,8 +2011,8 @@ class CourseManager
             }
             $emailbody        .= get_lang('Email').': '.$student['email']."\n\n";
             $recipient_name = api_get_person_name($tutor['firstname'], $tutor['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-            $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-            $email_admin = api_get_setting('emailAdministrator');
+            $sender_name = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS);
+            $email_admin = api_get_setting('platform.administrator_email');
             @api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
         }
     }
@@ -2725,10 +2819,11 @@ class CourseManager
                     $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
                 }
 
-                if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                if (api_get_setting('course.display_coursecode_in_courselist')
+                    == 'true') {
                     $course_title .= ' ('.$course_info['visual_code'].') ';
                 }
-                if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
                     $params['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course['real_id'], self::USER_SEPARATOR, true);
                 }
                 $course_title .= '&nbsp;';
@@ -2879,10 +2974,10 @@ class CourseManager
                     }
 
                     // Start displaying the course block itself
-                    if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                    if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
                         $course_title .= ' ('.$course_info['visual_code'].') ';
                     }
-                    if (api_get_setting('display_teacher_in_courselist') == 'true') {
+                    if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
                         $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['real_id'], self::USER_SEPARATOR, true);
                     }
 
@@ -3048,10 +3143,11 @@ class CourseManager
 
 
             // Start displaying the course block itself
-            if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+            if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
                 $course_title .= ' ('.$course_info['visual_code'].') ';
             }
-            if (api_get_setting('display_teacher_in_courselist') == 'true') {
+            $teachers = null;
+            if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
                 $teachers = $course_info['teacher_list_formatted'];
             }
 
@@ -3222,10 +3318,10 @@ class CourseManager
             }
 
             // Start displaying the course block itself
-            if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+            if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
                 $course_title .= ' ('.$course_info['visual_code'].') ';
             }
-            if (api_get_setting('display_teacher_in_courselist') == 'true') {
+            if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
                 $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['real_id'], self::USER_SEPARATOR, true);
             }
 
@@ -3340,11 +3436,11 @@ class CourseManager
             }
         }
 
-        if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+        if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
             $session_title .= ' ('.$course_info['visual_code'].') ';
         }
 
-        if (api_get_setting('display_teacher_in_courselist') == 'true') {
+        if (api_get_setting('course.display_teacher_in_courselist') == 'true') {
             $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['real_id'], self::USER_SEPARATOR, true);
             $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course_info['real_id'], self::USER_SEPARATOR, true);
             $params['teachers'] = $teacher_list;
@@ -4106,8 +4202,6 @@ class CourseManager
         $tables[]= 'group_rel_user';
         $tables[]= 'group_rel_tutor';
         $tables[]= 'item_property';
-        $tables[]= 'userinfo_content';
-        $tables[]= 'userinfo_def';
         $tables[]= 'course_description';
         $tables[]= 'calendar_event';
         $tables[]= 'calendar_event_repeat';
@@ -4115,7 +4209,6 @@ class CourseManager
         $tables[]= 'calendar_event_attachment';
         $tables[]= 'announcement';
         $tables[]= 'announcement_attachment';
-        $tables[]= 'resource';
         $tables[]= 'student_publication';
         $tables[]= 'student_publication_assignment';
         $tables[]= 'document';
@@ -4162,10 +4255,6 @@ class CourseManager
         $tables[]= 'permission_group';
         $tables[]= 'permission_user';
         $tables[]= 'permission_task';
-        $tables[]= 'role';
-        $tables[]= 'role_group';
-        $tables[]= 'role_permissions';
-        $tables[]= 'role_user';
         $tables[]= 'survey';
         $tables[]= 'survey_question';
         $tables[]= 'survey_question_option';
@@ -4178,7 +4267,7 @@ class CourseManager
         $tables[]= 'wiki_mailcue';
         $tables[]= 'course_setting';
         $tables[]= 'glossary';
-        $tables[]= 'notebook';
+        //$tables[]= 'notebook';
         $tables[]= 'attendance';
         $tables[]= 'attendance_sheet';
         $tables[]= 'attendance_calendar';
@@ -4187,7 +4276,6 @@ class CourseManager
         $tables[]= 'thematic';
         $tables[]= 'thematic_plan';
         $tables[]= 'thematic_advance';
-        //$tables[]= 'metadata';
         return $tables;
     }
 
@@ -4243,9 +4331,8 @@ class CourseManager
 
     /**
      * Fills the course database with some required content and example content.
-     * @version 1.2
      */
-    static function fill_db_course($course_id, $course_repository, $language, $fill_with_exemplary_content = null)
+    public static function fill_db_course($course_id, $course_repository, $language, $fill_with_exemplary_content = null)
     {
         if (is_null($fill_with_exemplary_content)) {
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
@@ -4257,7 +4344,7 @@ class CourseManager
         }
         $now = api_get_utc_datetime(time());
 
-        $tbl_course_homepage 	= Database::get_course_table(TABLE_TOOL_LIST);
+        $toolTable 	= Database::get_course_table(TABLE_TOOL_LIST);
         $TABLEINTROS 			= Database::get_course_table(TABLE_TOOL_INTRO);
         $TABLEGROUPCATEGORIES 	= Database::get_course_table(TABLE_GROUP_CATEGORY);
         $TABLEITEMPROPERTY 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4277,68 +4364,73 @@ class CourseManager
         $TABLEFORUMPOSTS 		= Database::get_course_table(TABLE_FORUM_POST);
         $TABLEGRADEBOOK 		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $TABLEGRADEBOOKCERT		= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-
-        /*include api_get_path(SYS_CODE_PATH).'lang/english/create_course.inc.php';
-        $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$language.'/create_course.inc.php';
-
-        if (file_exists($file_to_include)) {
-            include $file_to_include;
-        }*/
 
         $visible_for_all = 1;
         $visible_for_course_admin = 0;
         $visible_for_platform_admin = 2;
 
+        // Move this in a doctrine listener
+        $toolList = self::getToolList();
+        $toolList = $toolList->getTools();
+
+        /** @var Course $course */
+        $entityManager = Database::getManager();
+        $course = $entityManager->getRepository('ChamiloCoreBundle:Course')->find($course_id);
+
+        // @todo move in a manager.
+        /** @var Chamilo\CourseBundle\Tool\BaseTool $tool */
+        $tools = array();
+        $settingsManager = self::getCourseSettingsManager();
+        $settingsManager->setCourse($course);
+
+        foreach ($toolList as $tool) {
+            $visibility = Text::string2binary(api_get_setting
+                ('course.course_create_active_tools', $tool->getName()));
+            $toolObject = new CTool();
+            $toolObject->setName($tool->getName())
+                ->setCategory($tool->getCategory())
+                ->setLink($tool->getLink())
+                ->setImage($tool->getImage())
+                ->setVisibility($visibility)
+                ->setAdmin(0)
+                ->setTarget($tool->getTarget())
+            ;
+            $tools[] = $toolObject;
+            $settings = $settingsManager->loadSettings($tool->getName());
+            $settingsManager->saveSettings($tool->getName(), $settings);
+        }
+
+        $course->setTools($tools);
+        $entityManager->persist($course);
+        $entityManager->flush($course);
+
         /*    Course tools  */
 
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'course_description')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_CALENDAR_EVENT . "','calendar/agenda.php','agenda.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'agenda')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_DOCUMENT . "','document/document.php','folder_document.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'documents')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_LEARNPATH . "','newscorm/lp_controller.php','scorms.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'learning_path')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_LINK . "','link/link.php','links.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'links')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_QUIZ . "','exercice/exercice.php','quiz.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'quiz')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_ANNOUNCEMENT . "','announcements/announcements.php','valves.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'announcements')) . "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_FORUM . "','forum/index.php','forum.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'forums')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_DROPBOX . "','dropbox/index.php','dropbox.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'dropbox')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_USER . "','user/user.php','members.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'users')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_GROUP . "','group/group.php','group.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_GRADEBOOK."','gradebook/index.php','gradebook.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'gradebook')). "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_GLOSSARY."','glossary/index.php','glossary.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'glossary')). "','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_NOTEBOOK."','notebook/index.php','notebook.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'notebook'))."','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_ATTENDANCE."','attendance/index.php','attendance.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'attendances'))."','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_COURSE_PROGRESS."','course_progress/index.php','course_progress.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'course_progress'))."','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_CURRICULUM."','curriculum','cv.png','".Text::string2binary(api_get_setting('course_create_active_tools', 'curriculum'))."','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
-
-        if (api_get_setting('service_visio', 'active') == 'true') {
+        /*if (api_get_setting('service_visio', 'active') == 'true') {
             $mycheck = api_get_setting('service_visio', 'visio_host');
             if (!empty($mycheck)) {
-                Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
-                Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
+                //Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0', '', '')");
+                //Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0', '', '')");
             }
-        }
+        }*/
 
-        if (api_get_setting('search_enabled') == 'true') {
-            Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_SEARCH. "','search/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring','0', '', '')");
-        }
+        /*if (api_get_setting('search_enabled') == 'true') {
+            //Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '" . TOOL_SEARCH. "','search/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring','0', '', '')");
+        }*/
 
         // Blogs (Kevin Van Den Haute :: kevin@develop-it.be)
-        $sql = "INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . Text::string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0', '', '')";
-        Database::query($sql);
+        /*$sql = "INSERT INTO $toolTable VALUES ($course_id, NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . Text::string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0', '', '')";
+        Database::query($sql);*/
 
         /*  Course homepage tools for course admin only    */
 
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
-        Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0', '', '')");
+/*        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0', '', '')");
+        Database::query("INSERT INTO $toolTable VALUES ($course_id, NULL, '".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0', '', '')");*/
 
         /* Course_setting table (courseinfo tool)   */
 
-        Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_doc',0,'work')");
+        /*Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_doc',0,'work')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_on_new_doc_dropbox',0,'dropbox')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_agenda',0,'agenda')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_announcement',0,'announcement')");
@@ -4355,7 +4447,7 @@ class CourseManager
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'pdf_export_watermark_text','','learning_path')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_public_certificates','','certificates')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_fast_exercise_edition', 0 ,'exercise')");
-        Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_exercise_auto_launch', 0 ,'exercise')");
+        Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_exercise_auto_launch', 0 ,'exercise')");*/
 
         /* Course homepage tools for platform admin only */
 
@@ -4365,8 +4457,7 @@ class CourseManager
                 VALUES ($course_id, '2', '".Database::escape_string(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');");
 
         /*    Example Material  */
-        global $language_interface;
-        $language_interface = !empty($language_interface) ? $language_interface : api_get_setting('platformLanguage');
+        $language_interface = Container::getTranslator()->getLocale();
 
         // Example material should be in the same language as the course is.
         $language_interface_original = $language_interface;
@@ -4375,7 +4466,9 @@ class CourseManager
         //Share folder
         Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/shared_folder','".get_lang('UserFolders')."','folder','0')");
         $example_doc_id = Database :: insert_id();
-        Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
+
+        Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+                         VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
         //Chat folder
         Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/chat_files','".get_lang('ChatFiles')."','folder','0')");
@@ -4682,24 +4775,23 @@ class CourseManager
         $visual_code        = $params['visual_code'];
         $directory          = isset($params['directory']) ? $params['directory'] : null;
         $tutor_name         = isset($params['tutor_name']) ? $params['tutor_name'] : null;
-        //$description        = $params['description'];
-
         $category_code      = isset($params['category_code']) ? $params['category_code'] : null;
-        $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');
+        $defaultLanguage = Container::getTranslator()->getLocale();
+        $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : $defaultLanguage;
         $user_id            = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
         $department_name    = isset($params['department_name']) ? $params['department_name'] : null;
         $department_url     = isset($params['department_url']) ? $params['department_url'] : null;
         $disk_quota         = isset($params['disk_quota']) ? $params['disk_quota'] : null;
 
         if (!isset($params['visibility'])) {
-            $default_course_visibility = api_get_setting('courses_default_creation_visibility');
+            $default_course_visibility = api_get_setting('course.courses_default_creation_visibility');
             if (isset($default_course_visibility)) {
-                $visibility         = $default_course_visibility;
+                $visibility = $default_course_visibility;
             } else {
-                $visibility         = COURSE_VISIBILITY_OPEN_PLATFORM;
+                $visibility = COURSE_VISIBILITY_OPEN_PLATFORM;
             }
         } else {
-            $visibility         = $params['visibility'];
+            $visibility = $params['visibility'];
         }
 
         $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : ($visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0);
@@ -4744,7 +4836,7 @@ class CourseManager
         }
 
         if (empty($disk_quota)) {
-            $disk_quota = api_get_setting('default_document_quotum');
+            $disk_quota = api_get_setting('document.default_document_quotum');
         }
 
         $time = api_get_utc_datetime();
@@ -4759,8 +4851,30 @@ class CourseManager
         $course_id = 0;
 
         if ($ok_to_register_course) {
+            /** @var Course $course */
+            $course = self::getCourseManager()->create();
+            $course->setCode($code)
+                ->setDirectory($directory)
+                ->setCourseLanguage($course_language)
+                ->setTitle($title)
+                ->setDescription(get_lang('CourseDescription'))
+                ->setCategoryCode($category_code)
+                ->setVisibility($visibility)
+                ->setShowScore(1)
+                ->setDiskQuota($disk_quota)
+                ->setCreationDate(new \DateTime())
+                ->setExpirationDate(new \DateTime($expiration_date))
+                //->setLastEdit()
+                ->setDepartmentName($department_name)
+                ->setDepartmentUrl($department_url)
+                ->setSubscribe($subscribe)
+                ->setUnsubscribe($unsubscribe)
+                ->setVisualCode($visual_code)
+            ;
+            self::getCourseManager()->save($course, true);
+            $course_id = $course->getId();
 
-           // Here we must add 2 fields.
+           /*// Here we must add 2 fields.
           $sql = "INSERT INTO ".$TABLECOURSE . " SET
                 code            = '".Database :: escape_string($code) . "',
                 directory       = '".Database :: escape_string($directory) . "',
@@ -4783,9 +4897,25 @@ class CourseManager
                 visual_code     = '".Database :: escape_string($visual_code) . "'";
 
             Database::query($sql);
-            $course_id  = Database::insert_id();
+            $course_id  = Database::insert_id();*/
+
+            //$course->addUsers()
 
             if ($course_id) {
+
+                $settingsManager = Container::getCourseSettingsManager();
+                $schemas = $settingsManager->getSchemas();
+                $schemas = array_keys($schemas);
+
+                /**
+                 * @var string $key
+                 * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
+                 */
+                foreach ($schemas as $schema) {
+                    $settings = $settingsManager->loadSettings($schema);
+                    $settingsManager->setCourse($course);
+                    $settingsManager->saveSettings($schema, $settings);
+                }
 
                 $sort = api_max_sort_value('0', api_get_user_id());
 
@@ -4795,7 +4925,6 @@ class CourseManager
                             c_id     = '".Database :: escape_string($course_id). "',
                             user_id         = '".intval($user_id) . "',
                             status          = '1',
-                            role            = '".Database::escape_string(get_lang('Professor')) . "',
                             tutor_id        = '0',
                             sort            = '". ($i_course_sort) . "',
                             user_course_cat = '0'";
@@ -4815,7 +4944,7 @@ class CourseManager
                             continue;
                         }
                         $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                            course_code     = '".Database::escape_string($code) . "',
+                            c_id     = '".Database::escape_string($course_id) . "',
                             user_id         = '".Database::escape_string($key) . "',
                             status          = '1',
                             role            = '',
@@ -4841,22 +4970,43 @@ class CourseManager
                 $user_id = api_get_user_id();
                 Event::addEvent(LOG_COURSE_CREATE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
 
-                $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
-
+                $send_mail_to_admin = api_get_setting('course.send_email_to_admin_when_create_course');
                 // @todo Improve code to send to all current portal administrators.
                 if ($send_mail_to_admin == 'true') {
-                    $siteName = api_get_setting('siteName');
-                    $recipient_email = api_get_setting('emailAdministrator');
-                    $recipient_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'));
-                    $iname = api_get_setting('Institution');
+                    $siteName = api_get_setting('platform.site_name');
+                    $recipient_email = api_get_setting('platform.administrator_email');
+                    $recipient_name = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'));
+                    $iname = api_get_setting('platform.institution');
                     $subject = get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
-                    $message =  get_lang('Dear').' '.$recipient_name.",\n\n".get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";
-                    $message .= get_lang('CourseName').' '.$title."\n";
-                    $message .= get_lang('Category').' '.$category_code."\n";
-                    $message .= get_lang('Tutor').' '.$tutor_name."\n";
-                    $message .= get_lang('Language').' '.$course_language;
 
-                    @api_mail_html($recipient_name, $recipient_email, $subject, $message, $siteName, $recipient_email);
+                    $body =  get_lang('Dear').' '.$recipient_name.",\n\n".get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";
+                    $body .= get_lang('CourseName').' '.$title."\n";
+                    $body .= get_lang('Category').' '.$category_code."\n";
+                    $body .= get_lang('Tutor').' '.$tutor_name."\n";
+                    $body .= get_lang('Language').' '.$course_language;
+
+                    //api_mail_html($recipient_name, $recipient_email, $subject, $message, $siteName, $recipient_email);
+
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject($subject)
+                        ->setFrom($recipient_email)
+                        ->setTo($recipient_email)
+                        ->setBody(
+                            Container::getTemplate()->render(
+                                'ChamiloCoreBundle:Mailer:Course/new_course.html.twig',
+                                array(
+                                    'recipient_name' => $recipient_name,
+                                    'sitename' => $siteName,
+                                    'institution' => $iname,
+                                    'course_name' => $title,
+                                    'category' => $category_code,
+                                    'tutor' => $tutor_name,
+                                    'language' => $course_language
+                                )
+                            )
+                        )
+                    ;
+                    Container::getMailer()->send($message);
                 }
             }
         }

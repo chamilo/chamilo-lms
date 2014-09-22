@@ -9,7 +9,7 @@
 $language_file = array('admin');
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -54,22 +54,22 @@ $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_promotions';
 //The order is important you need to check the model.ajax.php the $column variable
 $columns        = array(get_lang('Name'),get_lang('Career'),get_lang('Description'),get_lang('Actions'));
 $column_model   = array(
-                        array('name'=>'name',           'index'=>'name',        'width'=>'180',   'align'=>'left'),
-                        array('name'=>'career',         'index'=>'career',      'width'=>'100',  'align'=>'left'),
-                        array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false'),
-                       );
+    array('name'=>'name',           'index'=>'name',        'width'=>'180',   'align'=>'left'),
+    array('name'=>'career',         'index'=>'career',      'width'=>'100',  'align'=>'left'),
+    array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
+    array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false'),
+);
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['editurl'] = $url; //use the width of the parent
 
 $extra_params['height'] = 'auto'; //use the width of the parent
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
-                    return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'">'.Display::return_icon('session_to_promotion.png',get_lang('SubscribeSessionsToPromotions'),'',ICON_SIZE_SMALL).'</a>'.
-                    '&nbsp;<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-					'&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
-                    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a> \';
-                 }';
+    return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'">'.Display::return_icon('session_to_promotion.png',get_lang('SubscribeSessionsToPromotions'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a> \';
+}';
 
 ?>
 <script>

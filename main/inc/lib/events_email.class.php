@@ -36,14 +36,14 @@ class EventsMail
         global $event_config;
 
         // common variable for every mail sent
-        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $email_admin = api_get_setting('emailAdministrator');
+        $sender_name = api_get_person_name(api_get_setting('platform.administrator_name'), api_get_setting('platform.administrator_surname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $email_admin = api_get_setting('platform.administrator_email');
         // basic  keys
-        $event_data["sitename"] = api_get_setting('siteName');
-        $event_data["administrator_name"] = api_get_setting('administratorName');
-        $event_data["administrator_surname"] = api_get_setting('administratorSurname');
+        $event_data["sitename"] = api_get_setting('platform.site_name');
+        $event_data["administrator_name"] = api_get_setting('platform.administrator_name');
+        $event_data["administrator_surname"] = api_get_setting('platform.administrator_surname');
         $event_data["administrator_phone"] = api_get_setting('administratorTelephone');
-        $event_data["administrator_email"] = api_get_setting('emailAdministrator');
+        $event_data["administrator_email"] = api_get_setting('platform.administrator_email');
         $event_data["portal"] = api_get_path(WEB_PATH);
 
         // Fill the array's cells with info regarding the user that fired the event

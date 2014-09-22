@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class Display
@@ -106,7 +108,7 @@ class Display
     }
 
     /**
-     * @param \Symfony\Component\Routing\RouterInterface $urlGenerator
+     * @param RouterInterface $urlGenerator
      * @param string $tool
      * @param array $toolList
      * @return null|string
@@ -117,7 +119,7 @@ class Display
         $courseInfo = api_get_course_info();
         $introduction_section = null;
 
-        if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
+        if (api_get_setting('course.enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
             $introduction_section = null;
             $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
             $session_id = api_get_session_id();
@@ -213,7 +215,7 @@ class Display
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
 
                     $url = $urlGenerator->generate(
-                        'chamilolms_course_introduction_introduction_edit',
+                        'chamilo_course_introduction_introduction_edit',
                         array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
@@ -227,7 +229,7 @@ class Display
                     // Displays "edit intro && delete intro" commands
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
                     $url = $urlGenerator->generate(
-                        'chamilolms_course_introduction_introduction_edit',
+                        'chamilo_course_introduction_introduction_edit',
                         array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
@@ -236,7 +238,7 @@ class Display
                     $introduction_section .=  "</a>";
 
                     $url = $urlGenerator->generate(
-                        'chamilolms_course_introduction_introduction_delete',
+                        'chamilo_course_introduction_introduction_delete',
                         array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
@@ -648,7 +650,7 @@ class Display
     public static function get_platform_home_link_html($name = '')
     {
         if ($name == '') {
-            $name = api_get_setting('siteName');
+            $name = api_get_setting('platform.site_name');
         }
         return '<a href="'.api_get_path(WEB_PATH).'index.php">'.$name.'</a>';
     }
@@ -814,9 +816,9 @@ class Display
             $icon = $image;
         }
 
-        $icon = 'ChamiloLMS/img/'.$icon;
+        $icon = 'bundles/chamilocore/img/'.$icon;
 
-        $icon = Session::getAsset()->getUrl($icon);
+        $icon = Container::getAsset()->getUrl($icon);
         //$icon = api_get_cdn_path($icon);
         if ($return_only_path) {
             return $icon;

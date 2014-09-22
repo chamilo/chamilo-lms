@@ -6,14 +6,14 @@ framework:
     profiler: { only_exceptions: false }
 
 web_profiler:
-    toolbar: true
+    toolbar:             true
     intercept_redirects: false
 
 monolog:
     handlers:
         main:
             type:   stream
-            path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            path:  %kernel.logs_dir%/%kernel.name%_%kernel.environment%.log
             level:  debug
 #        console:
 #            type:   console
@@ -28,7 +28,7 @@ monolog:
         #    level:  info
 
 assetic:
-    use_controller: true
+    use_controller: false
 
 #swiftmailer:
 #    delivery_address: me@example.com
@@ -48,8 +48,6 @@ web_profiler_extra:
         enabled:        true
         display_in_wdt: true
 
-services:
-    twig.extension.debug:
-        class: Twig_Extensions_Extension_Debug
-        tags:
-            - { name: twig.extension }
+jns_xhprof:
+    location_web: http://localhost/xhprof/xhprof_html
+    enabled: false

@@ -5,6 +5,8 @@
  *	@package chamilo.admin
  */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /* INITIALIZATION SECTION */
 
 // Language files that need to be included.
@@ -25,7 +27,9 @@ global $_configuration;
 
 // Get all possible teachers.
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+
+$group = Container::getGroupManager()->findGroupByName('teachers');
+/*$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1".$order_clause;
 // Filtering teachers when creating a course.
 if (api_is_multiple_url_enabled()) {
@@ -35,16 +39,17 @@ if (api_is_multiple_url_enabled()) {
             ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 }
 
-$res = Database::query($sql);
+$res = Database::query($sql);*/
 $teachers = array();
-//$teachers[0] = '-- '.get_lang('NoManager').' --';
-while($obj = Database::fetch_object($res)) {
-    $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+$users = $group->getUsers();
+/** @var Chamilo\UserBundle\Entity\User $user */
+foreach ($users as $user) {
+    $teachers[$user->getId()] = $user->getCompleteName();
 }
 
 // Build the form.
 $form = new FormValidator('update_course');
-$form->addElement('header', '', $tool_name);
+$form->addElement('header', $tool_name);
 
 // Title
 $form->add_textfield('title', get_lang('Title'), true, array ('class' => 'span6'));
@@ -52,23 +57,28 @@ $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')), false, array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
+$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 $form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
 
-//$form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'tutor_id'));
-//$form->applyFilter('tutor_id', 'html_filter');
-
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" ');
 $form->applyFilter('course_teachers', 'html_filter');
 
-$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), array(), array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
-$categories_select->addOption('-','');
-$form->applyFilter('category_code', 'html_filter');
 //This function fills the category_code select ...
-CourseManager::select_and_sort_categories($categories_select);
+$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+
+$form->addElement(
+    'select_ajax',
+    'category_code',
+    get_lang('CourseFaculty'),
+    null,
+    array(
+        'url' => $url
+    //    'formatResult' => 'function(item) { return item.name + "'" +item.code; }'
+    )
+);
 
 // Course department
 $form->add_textfield('department_name', get_lang('CourseDepartment'), false, array ('size' => '60'));
@@ -113,35 +123,41 @@ $form->add_progress_bar();
 $form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');
 
 // Set some default values.
-$values['course_language']  = api_get_setting('platformLanguage');
-$values['disk_quota']       = round(api_get_setting('default_document_quotum')/1024/1024, 1);
+$values['course_language']  = Container::getTranslator()->getLocale();
 
-$default_course_visibility = api_get_setting('courses_default_creation_visibility');
+//    api_get_setting('platformLanguage');
+$values['disk_quota']       = round(api_get_setting('document.default_document_quotum')/1024/1024, 1);
+
+$default_course_visibility = api_get_setting('course.courses_default_creation_visibility');
 
 if (isset($default_course_visibility)) {
-    $values['visibility']       = api_get_setting('courses_default_creation_visibility');
+    $values['visibility'] = api_get_setting('course.courses_default_creation_visibility');
 } else {
-    $values['visibility']       = COURSE_VISIBILITY_OPEN_PLATFORM;
+    $values['visibility'] = COURSE_VISIBILITY_OPEN_PLATFORM;
 }
-$values['subscribe']        = 1;
-$values['unsubscribe']      = 0;
-reset($teachers);
-//$values['course_teachers'] = key($teachers);
+
+$values['subscribe'] = 1;
+$values['unsubscribe'] = 0;
 
 $form->setDefaults($values);
 
 // Validate the form
 if ($form->validate()) {
     $course          = $form->exportValues();
-    //$tutor_name      = $teachers[$course['tutor_id']];
-    $course['user_id']      = isset($course['tutor_id']) ? $course['tutor_id'] : null;
-    $course['teachers']  = isset($course['course_teachers']) ? $course['course_teachers'] : null;
+    //$teacher_id      = $course['tutor_id'];
+    $course_teachers = isset($course['course_teachers']) ? $course['course_teachers'] : array();
+
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
+
     $course['exemplary_content']    = empty($course['exemplary_content']) ? false : true;
-    //$course['tutor_name']           = $tutor_name;
+    $course['teachers']             = $course_teachers;
+    //$course['user_id']              = $teacher_id;
     $course['wanted_code']          = $course['visual_code'];
     $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
+    // Fixing category code
+    $course['course_category'] = $course['category_code'];
     $course_info = CourseManager::create_course($course);
+
     header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));
     exit;
 }

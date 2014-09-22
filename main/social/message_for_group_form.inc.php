@@ -9,7 +9,7 @@
  */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset = true;
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 $app['template.show_footer'] = false;
 $app['template.show_header'] = false;

@@ -15,7 +15,7 @@ use \ChamiloSession as Session;
 $language_file = 'wiki';
 
 // including the global initialization file
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'wiki.inc.php';
 
 global $charset;
@@ -73,7 +73,7 @@ api_protect_course_script();
 api_block_anonymous_users();
 
 /* TRACKING */
-event_access_tool(TOOL_WIKI);
+Event::event_access_tool(TOOL_WIKI);
 
 if ($groupId) {
     $group_properties = GroupManager::get_group_properties($groupId);

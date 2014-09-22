@@ -16,7 +16,7 @@
 $language_file = 'exercice';
 
 // name of the language file that needs to be included
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 // including additional libraries
 require_once 'exercise.class.php';

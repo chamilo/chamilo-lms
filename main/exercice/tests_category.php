@@ -10,7 +10,7 @@
 $language_file = 'exercice';
 $nameTools = "";
 
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 require_once 'question.class.php';
 
 $this_section = SECTION_COURSES;
@@ -277,14 +277,14 @@ function display_categories($type = 'simple')
     );
 
     // @todo put this in a function
-    $repo = Database::getManager()->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
+    $repo = Database::getManager()->getRepository('ChamiloCoreBundle:CQuizCategory');
 
     $query = null;
     if ($type == 'global') {
         $query = Database::getManager()
             ->createQueryBuilder()
             ->select('node')
-            ->from('ChamiloLMSCoreBundle:CQuizCategory', 'node')
+            ->from('ChamiloCoreBundle:CQuizCategory', 'node')
             ->where('node.cId = 0')
             ->orderBy('node.root, node.lft', 'ASC')
             ->getQuery();
@@ -292,7 +292,7 @@ function display_categories($type = 'simple')
         $query = Database::getManager()
             ->createQueryBuilder()
             ->select('node')
-            ->from('ChamiloLMSCoreBundle:CQuizCategory', 'node')
+            ->from('ChamiloCoreBundle:CQuizCategory', 'node')
             ->where('node.cId = :courseId')
             //->add('orderBy', 'node.title ASC')
             ->orderBy('node.root, node.lft', 'ASC')

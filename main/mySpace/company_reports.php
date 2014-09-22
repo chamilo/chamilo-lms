@@ -10,7 +10,7 @@
 $language_file = array('admin', 'gradebook', 'tracking');
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 api_protect_admin_script();
 
@@ -78,4 +78,4 @@ $app['title'] = $tool_name;
 $tpl = $app['template'];
 
 $tpl->assign('content', $content);
-$tpl->display_one_col_template();
+

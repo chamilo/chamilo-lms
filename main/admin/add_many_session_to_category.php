@@ -5,7 +5,7 @@
  * @todo use formvalidator
  */
 
-require_once '../inc/global.inc.php';
+////require_once '../inc/global.inc.php';
 
 $xajax = new xajax();
 $xajax->registerFunction('search_courses');
@@ -107,7 +107,7 @@ if (isset($_GET['msg']) && $_GET['msg'] == 'ok') {
     $OkMsg = get_lang('SessionCategoryUpdate');
 }
 
-$page = isset($_GET['page']) ? $_GET['page'] : null;
+$page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
 Display::display_header($tool_name);
 
@@ -124,10 +124,18 @@ if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_G
 $rows_session_category = SessionManager::get_all_session_category();
 if (empty($rows_session_category)) {
     Display::display_warning_message(get_lang('YouNeedToAddASessionCategoryFirst'));
+    Display::display_footer();
+    exit;
 }
 
-$sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
-$result = Database::query($sql);
+if (api_get_multiple_access_url()) {
+    $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+    $access_url_id = api_get_current_access_url_id();
+    $sql = "SELECT s.id, s.name  FROM $tbl_session s INNER JOIN $table_access_url_rel_session u ON s.id = u.session_id $where AND u.access_url_id = $access_url_id ORDER BY name";
+} else {
+    $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
+}
+$result=Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>
 <form name="formulaire" method="post"

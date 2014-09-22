@@ -1,0 +1,69 @@
+index:
+    resource: "@ChamiloCoreBundle/Controller/IndexController.php"
+    type:     annotation
+    prefix:   /
+
+user:
+    resource: "@ChamiloCoreBundle/Controller/User/UserController.php"
+    type:     annotation
+    prefix:   /user
+
+# Legacy routes
+main:
+    path:     /main/{name}
+    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
+    requirements:
+      name: .+
+
+# web url shortcuts for legacy templates
+web.ajax:
+    path: main/inc/ajax/
+
+web.main:
+    path: main/
+
+web.img:
+    path: bundles/chamilocore/img/
+
+# Core controllers
+
+core_admin:
+    resource: "@ChamiloCoreBundle/Controller/Admin"
+    type: annotation
+    prefix:   /admin
+
+core_app:
+    resource: "@ChamiloCoreBundle/Controller/App"
+    type: annotation
+    prefix:   /app
+
+core_tool:
+    resource: "@ChamiloCourseBundle/Controller"
+    type: annotation
+    prefix: /courses/{course}/
+
+# redirects /url/ to /url
+
+remove_trailing_slash:
+    path: /{url}
+    defaults: { _controller: ChamiloCoreBundle:Redirecting:removeTrailingSlash }
+    requirements:
+        url: .*/$
+        _method: GET
+
+# Portal settings
+chamilo_platform_settings:
+    pattern: /settings/platform
+    defaults:
+        _controller: ChamiloSettingsBundle:Settings:update
+        namespace: platform
+        template: ChamiloSettingsBundle:Settings:default.html.twig
+
+# Course settings
+chamilo_course_settings:
+    pattern: /courses/{course}/settings/{namespace}
+    defaults:
+        _controller: ChamiloCourseBundle:Settings:update
+        namespace: course
+        template: ChamiloCourseBundle:Settings:default.html.twig
+

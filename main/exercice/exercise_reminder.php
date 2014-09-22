@@ -14,7 +14,7 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 
 $language_file = 'exercice';
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 
 if ($_GET['origin'] == 'learnpath') {
     require_once '../newscorm/learnpath.class.php';
@@ -204,7 +204,7 @@ foreach ($question_list as $questionId) {
     }
 
     $rootCategories = null;
-    $repo = Database::getManager()->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
+    $repo = Database::getManager()->getRepository('ChamiloCoreBundle:CQuizCategory');
     foreach ($objQuestionTmp->category_list as $categoryId) {
         $cat = $repo->find($categoryId);
         $parentCat = $repo->getPath($cat);

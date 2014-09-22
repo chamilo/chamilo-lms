@@ -10,8 +10,6 @@ $nameTools= 'Sessions';
 $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin');
 $cidReset = true;
 
-require_once '../inc/global.inc.php';
-
 api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
@@ -69,7 +67,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     if (!empty($a_sessions_drh)) {
         $a_sessions = array_merge($a_sessions, $a_sessions_drh);
     }
-
+    $menu_items = array();
 	if (!api_is_session_admin()) {
 		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 		$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");

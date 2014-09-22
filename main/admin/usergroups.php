@@ -165,6 +165,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
             $res = $usergroup->update($values);
             if ($res) {
                 Display::display_confirmation_message(get_lang('Updated'));
+            } else {
+                Display::display_warning_message(
+                    Security::remove_XSS($values['name']).': '.
+                    get_lang('AlreadyExists')
+                );
             }
         }
         Security::clear_token();

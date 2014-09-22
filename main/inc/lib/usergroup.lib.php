@@ -766,6 +766,18 @@ class UserGroup extends Model
     }
 
     /**
+     * @inheritdoc
+     */
+    public function update($params)
+    {
+        $groupExists = $this->usergroup_exists(trim($params['name']));
+        if ($groupExists == false) {
+            return parent::update($params);
+        }
+        return false;
+    }
+
+    /**
      * @param int $id
      * @return bool|void
      */

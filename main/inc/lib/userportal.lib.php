@@ -194,14 +194,14 @@ class IndexManager
         if ($show_menu) {
             $html .= '<ul class="nav nav-list">';
             if ($show_create_link) {
-                $html .= '<li><a href="main/create_course/add_course.php" class="add course">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+                $html .= '<li class="add-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
             }
 
             if ($show_course_link) {
                 if (!api_is_drh() && !api_is_session_admin()) {
-                    $html .=  '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseCatalog').'</a></li>';
+                    $html .=  '<li class="list-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'auth/courses.php">'.get_lang('CourseCatalog').'</a></li>';
                 } else {
-                    $html .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+                    $html .= '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
                 }
             }
             $html .= '</ul>';

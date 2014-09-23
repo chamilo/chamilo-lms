@@ -138,7 +138,6 @@ class ChamiloSession extends System\Session
         // If the session time has expired, refresh the starttime value,
         //  so we're starting to count down from a later time
         if ( $session->has('starttime') && $session->is_expired()) {
-            error_log(microtime().' -- '.__LINE__);
             $session->destroy();
         } else {
             //error_log('Time not expired, extend session for a bit more');

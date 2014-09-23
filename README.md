@@ -48,11 +48,10 @@ Finally, if you are really looking into contributing back to Chamilo, you should
 Installation Chamilo v10
 ------------
 
-This version is *not* stable, is not even alpha is only for developers and
+This version is *not* stable. It is not even alpha yet. Only for developers and
 testing.
 
-Via Command Line:
-
+Command-line install:
 ```
 git clone https://github.com/chamilo/chamilo-lms.git chamilo
 cd chamilo
@@ -60,14 +59,14 @@ composer update
 php app/console chamilo:install --force --drop-database
 ```
 
-Via web:
+Browser install:
 ```
 git clone https://github.com/chamilo/chamilo-lms.git chamilo
 cd chamilo
 composer update
 ```
 
-Go in your browser to localhost/chamilo/install.php and follow the instructions.
+Load localhost/chamilo/install.php in your browser and follow the instructions.
 
 
 Reporting bugs

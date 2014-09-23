@@ -18,7 +18,7 @@ If you are in search of the latest patches to your production installation, you 
 
 Chamilo LMS v10 should be available in beta version around early 2015, so not too far away, and comes with an improved files structure and a lot of new dependencies/packages coming from Symfony and Composer. If you have time on your hands and are looking for long term contributions, that's where we'd like you to help.
 
-Installation
+Installation Chamilo v1.9.x
 ------------
 
 You need a working web server + PHP + MySQL setup.
@@ -44,6 +44,31 @@ git config --global push.default current
 This way, you'll stick to the 1.9.x branch only in this directory (your installation will be 1.9.x only), and when sending commits, they will automatically be sent to the 1.9.x branch.
 
 Finally, if you are really looking into contributing back to Chamilo, you should (really) create yourself a Github account and "fork this project". You would then download Chamilo from your own Github repository first, then send changes to your repository and finally (once you're sure they're matching our coding conventions), submit a "Pull request" to Chamilo. This is the cleanest, more time-saving way to do it!
+
+Installation Chamilo v10
+------------
+
+This version is *not* stable, is not even alpha is only for developers and
+testing.
+
+Via Command Line:
+
+```
+git clone https://github.com/chamilo/chamilo-lms.git chamilo
+cd chamilo
+composer update
+php app/console chamilo:install --force --drop-database
+```
+
+Via web:
+```
+git clone https://github.com/chamilo/chamilo-lms.git chamilo
+cd chamilo
+composer update
+```
+
+Go in your browser to localhost/chamilo/install.php and follow the instructions.
+
 
 Reporting bugs
 --------------

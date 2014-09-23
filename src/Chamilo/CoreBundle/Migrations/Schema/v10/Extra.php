@@ -154,7 +154,10 @@ class Extra implements Migration, OrderedMigrationInterface
         $queries->addQuery("CREATE INDEX IDX_A90210404B89032C ON news__comment (post_id)");
         $queries->addQuery("ALTER TABLE news__comment_audit ADD post_id INT DEFAULT NULL");
 
-
+        $queries->addQuery("ALTER TABLE media__media ADD category_id INT DEFAULT NULL");
+        $queries->addQuery("ALTER TABLE media__media ADD CONSTRAINT FK_5C6DD74E12469DE2 FOREIGN KEY (category_id) REFERENCES classification__category (id) ON DELETE SET NULL");
+        $queries->addQuery("CREATE INDEX IDX_5C6DD74E12469DE2 ON media__media (category_id)");
+        $queries->addQuery("ALTER TABLE media__media_audit ADD category_id INT DEFAULT NULL");
     }
 
     public function down(Schema $schema, QueryBag $queries)

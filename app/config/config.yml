@@ -269,6 +269,8 @@ sp_bower:
     bundles:
         ChamiloCoreBundle: ~
 
+# Run to update js dependencies: app/console sp:bower:install
+
 # Grid default template
 apy_data_grid:
     theme: ChamiloCoreBundle::grid.html.twig

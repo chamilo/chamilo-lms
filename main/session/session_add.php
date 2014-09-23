@@ -1,13 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
-*	@package chamilo.admin
-* 	@todo use formvalidator for the form, remove all the select harcoded values
-*/
-
-// name of the language file that needs to be included
-$language_file = 'admin';
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Form\SessionType;
 
 $cidReset = true;
 
@@ -287,4 +283,37 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">'.
      '</a>';
 echo '</div>';
 
-$form->display();
+//$form->display();
+$session = new Session();
+
+$builder = Container::getFormFactory()->createBuilder(
+    new SessionType(),
+    $session
+);
+
+$form = $builder->getForm();
+$form->handleRequest($request);
+
+if ($form->isValid()) {
+    $em = Container::getEntityManager();
+    $session = $form->getData();
+    $em->persist($session);
+    $em->flush();
+
+    Container::addMessage(get_lang('Updated'));
+    $url = Container::getRouter()->generate(
+        'main',
+        array('name' => 'session/session_list.php')
+    );
+    header('Location: '.$url);
+    exit;
+}
+
+$url = api_get_self();
+echo Container::getTemplate()->render(
+    'ChamiloCoreBundle:Legacy:form.html.twig',
+    array(
+        'form' => $form->createView(),
+        'url' => $url
+    )
+);

@@ -24,7 +24,7 @@ class SessionAdmin extends Admin
         $formMapper
             ->add('id', 'text', array('label' => 'Session'))
             ->add('name') //if no type is specified, SonataAdminBundle tries to guess it
-            ->add('display_start_date', 'sonata_type_date_picker')
+            ->add('display_start_date', 'sonata_type_datetime_picker')
             ->add('generalCoach')
             ->add('visibility')
             //->add('courses')

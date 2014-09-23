@@ -8,6 +8,8 @@ use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Knp\Menu\Renderer\ListRenderer;
 use Symfony\Component\HttpFoundation\Request;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * Each entity controller must extends this class.
@@ -16,6 +18,43 @@ use Symfony\Component\HttpFoundation\Request;
  */
 abstract class ToolBaseController extends BaseController
 {
+    protected $course;
+    protected $session;
+
+    /**
+     * This function is set in the CourseListener.php
+     * @param Course $course
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * This function is set in the CourseListener.php
+     * @param Session $session
+     */
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
+    }
+
+    /**
+     * @return Session
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
     /**
      * @param $action
      * @param MenuItemInterface $menu
@@ -83,6 +122,8 @@ abstract class ToolBaseController extends BaseController
 
     /**
      * Before middleware for the ToolBaseController
+     *
+     * @param Request $request
      */
     public function before(Request $request)
     {
@@ -95,6 +136,7 @@ abstract class ToolBaseController extends BaseController
         }
 
         $sessionId = $request->get('id_session');
+        var_dump($sessionId);
         $groupId   = $request->get('gidReq');
 
         $tempCourseId  = api_get_course_id();
@@ -121,13 +163,6 @@ abstract class ToolBaseController extends BaseController
         if ($tempSessionId != $sessionId || empty($tempSessionId)) {
             $sessionReset = true;
         }
-        /*
-            $app['monolog']->addDebug('Start');
-            $app['monolog']->addDebug($courseReset);
-            $app['monolog']->addDebug($cidReq);
-            $app['monolog']->addDebug($tempCourseId);
-            $app['monolog']->addDebug('End');
-        */
 
         if ($courseReset) {
 
@@ -182,4 +217,5 @@ abstract class ToolBaseController extends BaseController
             }
         }
     }
+
 }

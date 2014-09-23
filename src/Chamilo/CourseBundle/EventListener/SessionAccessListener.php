@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\EventListener;
 
@@ -6,15 +7,21 @@ use Chamilo\CourseBundle\Event\SessionAccess;
 use Doctrine\ORM\EntityManager;
 use Chamilo\CoreBundle\Entity\TrackEAccess;
 
-class SessionListener
+class SessionAccessListener
 {
     protected $em;
 
+    /**
+     * @param EntityManager $em
+     */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
 
+    /**
+     * @param SessionAccess $event
+     */
     public function onSessionAccessEvent(SessionAccess $event)
     {
         $user = $event->getUser();

@@ -30,21 +30,15 @@ class HomeController extends ToolBaseController
      * @Route("/", name="course_home")
      * @Route("/index.php")
      * @Method({"GET"})
-     * @ParamConverter(
-     *  "course",
-     *  class="ChamiloCoreBundle:Course",
-     *  options={"repository_method" = "findOneByCode"}
-     * )
-     * @ParamConverter(
-     *  "id_session",
-     *  class="ChamiloCoreBundle:Session",
-     *  options={"repository_method" = "findOneById"}
-     * )
-     *
+
      * @return Response
      */
-    public function indexAction(Course $course, Session $id_session)
+    public function indexAction()
     {
+        $course = $this->getCourse();
+        $session= $this->getSession();
+        var_dump($session);
+
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
 

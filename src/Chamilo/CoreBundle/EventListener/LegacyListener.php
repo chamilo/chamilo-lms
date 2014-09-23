@@ -92,29 +92,8 @@ class LegacyListener
             define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
         }
 
-        // 'course' variable example "123" for this URL: courses/123/index.php
-        $courseCode = $request->get('course');
 
-        // Detect if the course was set with a cidReq:
-        if (empty($courseCode)) {
-            $courseCodeFromRequest = $request->get('cidReq');
-            $courseCode = $courseCodeFromRequest;
-        }
-
-        /** @var EntityManager $em */
-        $em = $container->get('doctrine')->getManager();
-
-        if (!empty($courseCode)) {
-            $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
-            if ($course) {
-                $courseInfo = api_get_course_info($course->getCode());
-                $container->get('twig')->addGlobal('course', $course);
-                $request->getSession()->set('_real_cid', $course->getId());
-                $request->getSession()->set('_cid', $course->getCode());
-                $request->getSession()->set('_course', $courseInfo);
-            }
-        }
-
+        // Access URL (multiple URL)
         /** @var \Sonata\PageBundle\Model\SnapshotPageProxy $page */
         $page = $request->get('page');
         if (isset($page) && !is_numeric($page)) {
@@ -125,6 +104,7 @@ class LegacyListener
         }
 
         $request->getSession()->set('url_id', $siteId);
+
 /*
         // Loading portal settings from DB.
         $settingsRefreshInfo = $em->getRepository('ChamiloCoreBundle:SettingsCurrent')->findOneByVariable('settings_latest_update');

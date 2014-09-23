@@ -258,7 +258,7 @@ class Course
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getSessions()
     {
@@ -266,7 +266,7 @@ class Course
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getNotebooks()
     {

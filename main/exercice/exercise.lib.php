@@ -1555,7 +1555,7 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
         if ($session_id == 0) {
             $conditions = array('where'=>array($active_sql . ' session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
         } else {
-            $conditions = array('where'=>array($active_sql . ' (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
+            $conditions = array('where'=>array($active_sql . ' (session_id = 0 OR session_id = ? ) AND active <> 0 AND c_id = ? ' . $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
         }
     }
 

@@ -7,21 +7,28 @@ parameters:
     chamilo_course.settings.schema_registry.class: Sylius\Bundle\SettingsBundle\Schema\SchemaRegistry
 
 services:
-    # EventListeners
-    chamilo_course.listener.course_access:
+    # Event Listeners
+    chamilo_course.listener.course:
         class: Chamilo\CourseBundle\EventListener\CourseListener
+        arguments: [@service_container]
+        tags:
+          - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 9  }
+          - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    chamilo_course.listener.course_access:
+        class: Chamilo\CourseBundle\EventListener\CourseAccessListener
         arguments:
             - @doctrine.orm.entity_manager
         tags:
             - { name: kernel.event_listener, event: chamilo_course.course.access, method: onCourseAccessEvent }
 
     chamilo_course.listener.session_access:
-        class: Chamilo\CourseBundle\EventListener\SessionListener
+        class: Chamilo\CourseBundle\EventListener\SessionAccessListener
         arguments:
           - @doctrine.orm.entity_manager
         tags:
             - { name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent }
-
 
     # Course settings
     chamilo_course.controller.settings:

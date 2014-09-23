@@ -61,7 +61,7 @@ class LegacyListener
         \CourseManager::setCourseManager($container->get('chamilo_core.manager.course'));
         \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
         Container::$mailer = $container->get('mailer');
-        Container::$template = $container->get('templating');
+
 
         // Setting legacy properties.
         Container::$urlGenerator = $container->get('router');

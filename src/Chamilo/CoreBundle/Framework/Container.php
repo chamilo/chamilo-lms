@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Framework;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -131,7 +132,15 @@ class Container
     }
 
     /**
-     * @return Session;
+     * @return Request
+     */
+    public static function getRequest()
+    {
+        return self::$container->get('request_stack');
+    }
+
+    /**
+     * @return Session
      */
     public static function getSession()
     {
@@ -178,10 +187,12 @@ class Container
        return self::$mailer;
     }
 
-    /**  */
+    /**
+     * @return \Elao\WebProfilerExtraBundle\TwigProfilerEngine
+     */
     public static function getTemplate()
     {
-        return self::$template;
+        return self::$container->get('templating');
     }
 
     /**
@@ -234,12 +245,29 @@ class Container
     }
 
     /**
-     * @param string $message
-     * @param string $type
+     * @return \Symfony\Component\Form\FormFactory
      */
-    public static function addMessage($message, $type)
+    public static function getFormFactory()
+    {
+        return self::$container->get('form.factory');
+    }
+
+
+    /**
+     * @param string $message
+     * @param string $type error|success|warning|danger
+     */
+    public static function addMessage($message, $type = 'success')
     {
         $session = self::getSession();
         $session->getFlashBag()->add($type, $message);
+    }
+
+    /**
+     * @return \Symfony\Cmf\Component\Routing\ChainRouter
+     */
+    public static function getRouter()
+    {
+        return self::$container->get('router');
     }
 }

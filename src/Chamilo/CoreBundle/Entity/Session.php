@@ -14,6 +14,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Session
 {
+    const VISIBLE = 1;
+    const READ_ONLY = 2;
+    const INVISIBLE = 3;
+    const AVAILABLE = 4;
+
     /**
      * @var integer
      *
@@ -150,6 +155,10 @@ class Session
     public function __construct()
     {
         $this->items = new ArrayCollection();
+
+        $this->nbrClasses = 0;
+        $this->nbrUsers = 0;
+        $this->nbrUsers = 0;
 
         $this->displayStartDate = new \DateTime();
         $this->displayEndDate = new \DateTime();
@@ -580,8 +589,24 @@ class Session
         return $this->generalCoach;
     }
 
+    /**
+     * @param $coach
+     */
     public function setGeneralCoach($coach)
     {
         $this->generalCoach = $coach;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatusList()
+    {
+        return array(
+            self::VISIBLE => 'status_visible',
+            self::READ_ONLY => 'status_read_only',
+            self::INVISIBLE => 'status_invisible',
+            self::AVAILABLE => 'status_available',
+        );
     }
 }

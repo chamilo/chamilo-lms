@@ -17,6 +17,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Course
 {
+    const CLOSED = 0;
+    const REGISTERED = 1;
+    const OPEN_PLATFORM = 2;
+    const OPEN_WORLD = 3;
+    const HIDDEN = 4;
+
     /**
      * @var integer
      *
@@ -959,5 +965,19 @@ class Course
     public function getAbsoluteSysCoursePath()
     {
         return realpath(__DIR__.'/../../../data/courses/'.$this->getDirectory()).'/';
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatusList()
+    {
+        return array(
+            self::CLOSED      => 'status_closed',
+            self::REGISTERED   => 'status_registered',
+            self::OPEN_PLATFORM => 'status_open_platform',
+            self::OPEN_WORLD => 'status_open_world',
+            self::HIDDEN     => 'status_hidden',
+        );
     }
 }

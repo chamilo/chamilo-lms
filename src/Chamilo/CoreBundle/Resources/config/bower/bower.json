@@ -19,6 +19,7 @@
         "pickadate"                 : "*",
         "holderjs"                  : "*",
         "bootflat"                  : "*",
+        "jqgrid"                    : "*",
 
         "bootstrap": "latest",
         "admin-lte": "latest",

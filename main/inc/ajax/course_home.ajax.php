@@ -5,7 +5,6 @@
  * Responses to AJAX calls
 */
 $action = $_GET['a'];
-$now = time();
 
 switch ($action) {
 	case 'set_visibility':
@@ -108,10 +107,11 @@ switch ($action) {
 
         require_once '../global.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-
+        $now = time();
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
-        $sidx  = $_REQUEST['sidx'];    //index to filter
+        //index to filter
+        $sidx  = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
         $sord  = $_REQUEST['sord'];    //asc or desc
         if (!in_array($sord, array('asc','desc'))) {
         	$sord = 'desc';
@@ -133,9 +133,6 @@ switch ($action) {
             }
         }
 
-        if (!$sidx) {
-            $sidx = 1;
-        }
         $start = $limit*$page - $limit;
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
         $count = 0;
@@ -232,16 +229,16 @@ switch ($action) {
         $response->records = $count;
         echo json_encode($response);
         break;
-
     case 'session_courses_lp_by_week':
-
         require_once '../global.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+        $now = time();
 
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
-        $sidx  = $_REQUEST['sidx'];    //index to filter
-        if (empty($sidx)) $sidx = 'course';
+        $sidx  = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'course';
+        $sidx = str_replace(array('week desc,', ' '), '', $sidx);
+
         $sord  = $_REQUEST['sord'];    //asc or desc
         if (!in_array($sord, array('asc','desc'))) {
             $sord = 'desc';
@@ -280,7 +277,7 @@ switch ($action) {
             $lps[$item['code']] = $flat_list;
             $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>SESSION_LINK_TARGET));
 
-            foreach($flat_list as $lp_id => $lp_item) {
+            foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
 
@@ -327,8 +324,9 @@ switch ($action) {
                 $count++;
             }
         }
-
-        $temp = msort($temp, $sidx, $sord);
+        if (!empty($sidx)) {
+            $temp = msort($temp, $sidx, $sord);
+        }
 
         $response = new stdClass();
         $i =0;
@@ -360,10 +358,12 @@ switch ($action) {
     case 'session_courses_lp_by_course':
         require_once '../global.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-
+        $now = time();
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
-        $sidx  = $_REQUEST['sidx'];    //index to filter
+        $sidx = isset($_REQUEST['sidx']) && !empty($_REQUEST['sidx']) ? $_REQUEST['sidx'] : 'id';
+        $sidx = str_replace(array('course asc,', ' '), '', $sidx);
+
         $sord  = $_REQUEST['sord'];    //asc or desc
         if (!in_array($sord, array('asc','desc'))) {
             $sord = 'desc';
@@ -384,13 +384,8 @@ switch ($action) {
             }
         }
 
-        if (!$sidx) {
-            $sidx = 1;
-        }
-
         $start = $limit*$page - $limit;
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
-
         $count = 0;
 
         foreach ($course_list as $item) {
@@ -457,12 +452,12 @@ switch ($action) {
 
         $response = new stdClass();
         $i =0;
-        foreach($temp as $key=>$row) {
+        foreach ($temp as $key=>$row) {
             $row = $row['cell'];
             if (!empty($row)) {
                 if ($key >= $start  && $key < ($start + $limit)) {
                     $response->rows[$i]['id']= $key;
-                    $response->rows[$i]['cell']=array($row[0], $row[1], $row[2],$row[3]);
+                    $response->rows[$i]['cell']=array($row[0], $row[1], $row[2]);
                     $i++;
                 }
             }

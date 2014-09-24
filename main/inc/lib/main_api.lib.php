@@ -69,6 +69,8 @@ define('SESSION_VISIBLE', 2);
 define('SESSION_INVISIBLE', 3); // not available
 define('SESSION_AVAILABLE', 4);
 
+define('SESSION_LINK_TARGET','_self');
+
 define('SUBSCRIBE_ALLOWED', 1);
 define('SUBSCRIBE_NOT_ALLOWED', 0);
 define('UNSUBSCRIBE_ALLOWED', 1);

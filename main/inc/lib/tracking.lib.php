@@ -7,10 +7,6 @@
  *    @package chamilo.library
  *    @author Julio Montoya <gugli100@gmail.com> (Score average fixes)
  */
-/**
- * Code
- */
-define('SESSION_LINK_TARGET','_self');
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';

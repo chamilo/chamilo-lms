@@ -3358,7 +3358,14 @@ class Tracking
 
             //$exercise_list = get_all_exercises($course_info, $session_id, true);
             // Show exercise results of invisible exercises? see BT#4091
-            $exercise_list = get_all_exercises($course_info, $session_id, false);
+            $exercise_list = get_all_exercises(
+                $course_info,
+                $session_id,
+                false,
+                null,
+                false,
+                1
+            );
 
             $to_graph_exercise_result = array();
 

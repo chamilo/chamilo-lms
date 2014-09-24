@@ -68,8 +68,15 @@ if (!empty($new_session_list)) {
 
                 $course_info   = api_get_course_info($my_course['code']);
 
-                //Getting all exercises from the current course
-                $exercise_list = get_all_exercises($course_info, $my_session_id, true);
+                // Getting all visible exercises from the current course
+                $exercise_list = get_all_exercises(
+                    $course_info,
+                    $my_session_id,
+                    true,
+                    null,
+                    false,
+                    1
+                );
 
                 $course['name'] = $course_info['name'];
                 $course['id']   = $course_info['real_id'];

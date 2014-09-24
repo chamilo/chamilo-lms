@@ -119,6 +119,7 @@ switch ($action) {
         $session_id  = intval($_REQUEST['session_id']);
         $course_id   = intval($_REQUEST['course_id']);
 
+
         //Filter users that does not belong to the session
         if (!api_is_platform_admin()) {
             $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
@@ -135,22 +136,28 @@ switch ($action) {
         if (!$sidx) {
             $sidx = 1;
         }
-
         $start = $limit*$page - $limit;
-        $course_list    = SessionManager::get_course_list_by_session_id($session_id);
+        $course_list = SessionManager::get_course_list_by_session_id($session_id);
         $count = 0;
-
+        $temp = array();
         foreach ($course_list as $item) {
-            $list               = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
+            $list = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
             $flat_list          = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
-            $item['title']      = Display::url($item['title'], $course_url, array('target'=>SESSION_LINK_TARGET));
+            $item['title']      = Display::url($item['title'], $course_url, array('target' => SESSION_LINK_TARGET));
 
-            foreach($flat_list as $lp_id => $lp_item) {
+            foreach ($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
-                $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['code'], $session_id, false);
+
+                $last_date = Tracking::get_last_connection_date_on_the_course(
+                    api_get_user_id(),
+                    $item['code'],
+                    $session_id,
+                    false
+                );
+
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
@@ -160,6 +167,7 @@ switch ($action) {
                     $image      = 'moderator_star.png';
                     $label      = get_lang('LearnpathUpdated');
                 }
+
                 if (strtotime($last_date) < strtotime($lp_date)) {
                     $icons = Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date);
                 }
@@ -170,7 +178,7 @@ switch ($action) {
                     $date = '-';
                 }
 
-                //Checking LP publicated and expired_on dates
+                // Checking LP publicated and expired_on dates
                 if (!empty($lp_item['publicated_on']) && $lp_item['publicated_on'] != '0000-00-00 00:00:00') {
                     if ($now < api_strtotime($lp_item['publicated_on'], 'UTC')) {
                         continue;
@@ -183,7 +191,11 @@ switch ($action) {
                     }
                 }
 
-                $temp[$count]['cell']=array($date, $item['title'], Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET)));
+                $temp[$count]['cell'] = array(
+                    $date,
+                    $item['title'],
+                    Display::url($icons.' '.$lp_item['lp_name'], $lp_url, array('target'=>SESSION_LINK_TARGET))
+                );
                 $temp[$count]['course'] = strip_tags($item['title']);
                 $temp[$count]['lp']     = $lp_item['lp_name'];
                 $temp[$count]['date']   = $lp_item['publicated_on'];

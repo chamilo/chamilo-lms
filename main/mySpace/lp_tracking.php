@@ -41,12 +41,12 @@ if (isset($_GET['course'])) {
 $user_infos = UserManager :: get_user_info_by_id($user_id);
 $name = api_get_person_name($user_infos['firstname'], $user_infos['lastname']);
 
-if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher(api_get_user_id(), $cidReq) && !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {	
-	api_not_allowed();	
+if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher(api_get_user_id(), $cidReq) && !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {
+	api_not_allowed();
 }
 $course_exits = CourseManager::course_exists($cidReq);
 
-if (!empty($course_exits)) {	
+if (!empty($course_exits)) {
 	$course_info = api_get_course_info($cidReq);
 } else {
 	api_not_allowed();
@@ -96,7 +96,6 @@ $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $course_info['real_i
 $origin = 'tracking';
 if ($export_csv) {
 	require_once api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
-	//Export :: export_table_csv($csv_content, 'reporting_student');
 } else {
 	ob_start();
 	require_once  api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';

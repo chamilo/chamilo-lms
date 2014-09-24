@@ -124,7 +124,6 @@ if (!empty($course_list)) {
             'publicated_on ASC',
             true
         );
-
         $lp_list = $list->get_flat_list();
 
         $lp_count = 0;
@@ -138,7 +137,16 @@ if (!empty($course_list)) {
         }
 
         $course_info    = api_get_course_info($course_data['code']);
-        $exercise_count = count(get_all_exercises($course_info, $session_id, true));
+        $exercise_count = count(
+            get_all_exercises(
+                $course_info,
+                $session_id,
+                true,
+                null,
+                false,
+                1
+            )
+        );
         $max_mutation_date = '';
 
         $last_date = Tracking::get_last_connection_date_on_the_course(

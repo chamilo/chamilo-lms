@@ -3019,8 +3019,14 @@ class Tracking
                 $exercise_graph_list = array();
 
                 foreach ($course_list as $course_data) {
-
-                    $exercise_list = get_all_exercises($course_data, $my_session_id);
+                    $exercise_list = get_all_exercises(
+                        $course_data,
+                        $my_session_id,
+                        false,
+                        null,
+                        false,
+                        1
+                    );
                     foreach ($exercise_list as $exercise_data) {
                         $exercise_obj = new Exercise($course_data['id']);
                         $exercise_obj->read($exercise_data['id']);

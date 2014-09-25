@@ -809,10 +809,10 @@ class xajax
 	 */
 	function getJavascriptInclude($sJsURI="", $sJsFile=NULL)
 	{
-		if ($sJsFile == NULL) $sJsFile = "xajax_js/xajax.js";
+		if ($sJsFile == NULL) $sJsFile = "xajax.js";
 
 		if ($sJsURI != "" && substr($sJsURI, -1) != "/") $sJsURI .= "/";
-        $sJsURI = api_get_path(WEB_LIBRARY_PATH).'xajax/';
+        $sJsURI = api_get_path(WEB_LIBRARY_JS_PATH).'xajax/';
 
 		$html = "\t<script type=\"text/javascript\" src=\"" . $sJsURI . $sJsFile . "\"></script>\n";
 		$html .= "\t<script type=\"text/javascript\">\n";

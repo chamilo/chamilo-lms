@@ -20,14 +20,14 @@ class HTML_QuickForm_Select_Ajax extends HTML_QuickForm_select
      */
     function toHtml()
     {
-        $html = api_get_js('select2/select2.js');
-
-        $iso = api_get_language_isocode(api_get_interface_language());
+        //$html = api_get_js('select2/select2.js');
+        $html = null;
+        /*$iso = api_get_language_isocode(api_get_interface_language());
         $localeFile = 'select2_locale_'.$iso.'.js';
         if (file_exists(api_get_path(LIBRARY_PATH).'javascript/select2/'.$localeFile)) {
             $html .= api_get_js('select2/'.$localeFile);
         }
-        $html .= api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/select2/select2.css');
+        $html .= api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/select2/select2.css');*/
 
         $formatResult = $this->getAttribute('formatResult');
 

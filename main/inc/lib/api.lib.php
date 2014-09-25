@@ -594,6 +594,9 @@ function api_get_path($path_type, $path = null)
 
     // Initialization of a table that contains common-purpose paths.
     $paths[WEB_PATH]                = $root_web;
+
+    $webPathNoDev = str_replace('app_dev.php/', '', $paths[WEB_PATH]);
+
     $paths[WEB_PUBLIC_PATH]         = $root_web;
     $paths[SYS_PATH]                = $root_sys;
 
@@ -633,7 +636,8 @@ function api_get_path($path_type, $path = null)
     $paths[SYS_IMG_PATH]            = $paths[SYS_PATH].$paths[SYS_IMG_PATH];
 
     $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-    $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_PATH].$paths[WEB_LIBRARY_JS_PATH];
+
+    $paths[WEB_LIBRARY_JS_PATH]     = $webPathNoDev.$paths[WEB_LIBRARY_JS_PATH];
     $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
     $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
     $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
@@ -1059,9 +1063,9 @@ function api_format_user($user, $add_password = false) {
 	$dir                = 'upload/users/'.$user_id.'/';
 
     if (!empty($picture_filename)) {
-		if (api_get_setting('split_users_upload_directory') === 'true') {
+		/*if (api_get_setting('split_users_upload_directory') === 'true') {
 			$dir = 'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
-		}
+		}*/
 	}
 	$image_sys_path = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
 
@@ -5230,7 +5234,6 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
     } else {
         //If i'm a simple admin
         $is_platform_admin = api_is_platform_admin_by_id($my_user_id);
-        //var_dump($is_platform_admin);
 
         if ($allow_session_admin) {
             $is_platform_admin = api_is_platform_admin_by_id($my_user_id) || (api_get_user_status($my_user_id) == SESSIONADMIN);
@@ -6379,7 +6382,6 @@ function api_get_user_language()
 
     if (!api_is_anonymous()) {
         $userInfo = api_get_user_info();
-        //var_dump($userInfo);exit;
         if (isset($userInfo['language'])) {
             $user_language = $userInfo['language'];
         }

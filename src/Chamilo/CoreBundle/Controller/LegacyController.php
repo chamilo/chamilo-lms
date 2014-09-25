@@ -83,10 +83,8 @@ class LegacyController extends BaseController
                     'cache-control' => 'no-store, no-cache, must-revalidate'
                 );
             }
+            $js = isset($htmlHeadXtra) ? $htmlHeadXtra : array();
 
-            if (isset($htmlHeadXtra)) {
-                //$this->getTemplate()->addResource($htmlHeadXtra, 'string');
-            }
             // $interbreadcrumb is loaded in the require_once file.
             $interbreadcrumb = isset($interbreadcrumb) ? $interbreadcrumb : null;
             //$this->getTemplate()->setBreadcrumb($interbreadcrumb);
@@ -104,7 +102,10 @@ class LegacyController extends BaseController
 
             return $this->render(
                 'ChamiloCoreBundle:Legacy:index.html.twig',
-                array('content' => $out)
+                array(
+                    'content' => $out,
+                    'js' => $js
+                )
             );
         } else {
             throw new NotFoundHttpException();

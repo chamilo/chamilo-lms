@@ -20,7 +20,7 @@
         "holderjs"                  : "*",
         "bootflat"                  : "*",
         "jqgrid"                    : "*",
-
+        "select2": "*",
         "bootstrap": "latest",
         "admin-lte": "latest",
         "modernizr": "latest",

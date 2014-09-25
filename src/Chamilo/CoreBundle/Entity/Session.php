@@ -5,10 +5,11 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Session
- *
+ * @UniqueEntity("name")
  * @ORM\Table(name="session", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})}, indexes={@ORM\Index(name="idx_id_coach", columns={"id_coach"}), @ORM\Index(name="idx_id_session_admin_id", columns={"session_admin_id"})})
  * @ORM\Entity
  */

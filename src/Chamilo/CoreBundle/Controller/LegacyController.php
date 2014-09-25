@@ -22,12 +22,11 @@ class LegacyController extends BaseController
 
     /**
      * @param $name
+     * @param Request $request
      * @return Response
      */
-    public function classicAction($name)
+    public function classicAction($name, Request $request)
     {
-        $request = $this->getRequest();
-
         // get.
         $_GET = $request->query->all();
         // post.
@@ -41,6 +40,7 @@ class LegacyController extends BaseController
 
         // Legacy inclusions
         Container::setSession($request->getSession());
+
         $dbConnection = $this->container->get('database_connection');
         $database  = new \Database($dbConnection, array());
         Container::$urlGenerator = $this->container->get('router');

@@ -25,6 +25,7 @@ class Container
      */
     public static $container;
     public static $session;
+    public static $request;
     public static $configuration;
     public static $urlGenerator;
     public static $security;
@@ -136,8 +137,13 @@ class Container
      */
     public static function getRequest()
     {
-        return self::$container->get('request_stack');
+        return self::$container->get('request');
     }
+
+    /*public static function setRequest($request)
+    {
+        self::$request = $request;
+    }*/
 
     /**
      * @return Session
@@ -257,7 +263,7 @@ class Container
      * @param string $message
      * @param string $type error|success|warning|danger
      */
-    public static function addMessage($message, $type = 'success')
+    public static function addFlash($message, $type = 'success')
     {
         $session = self::getSession();
         $session->getFlashBag()->add($type, $message);

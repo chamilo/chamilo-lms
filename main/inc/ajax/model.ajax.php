@@ -4,10 +4,6 @@
 // @todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
 // @todo this file was rewrote in the model ajax controller
 
-$language_file = array('admin', 'exercice', 'gradebook', 'tracking');
-
-require_once '../global.inc.php';
-
 $libpath = api_get_path(LIBRARY_PATH);
 
 // 1. Setting variables needed by jqgrid

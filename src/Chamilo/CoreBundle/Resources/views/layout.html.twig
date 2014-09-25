@@ -78,8 +78,7 @@
 
 {% block javascripts_head %}
     {% javascripts
-    '@jqgrid_js'
-    "@admin_lte_all"
+        "@admin_lte_all"
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -89,6 +88,7 @@
     {% endjavascripts %}
 
     {# Chamilo #}
+    <script type="text/javascript" src="{{ asset('bundles/chamilocore/js/jqgrid/js/jquery.jqGrid.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/chamilocore/js/chosen/chosen.jquery.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/chamilocore/js/tag/jquery.fcbkcomplete.js') }}"></script>
 

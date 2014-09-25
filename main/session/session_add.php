@@ -20,10 +20,10 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui-i18n'));
 $htmlHeadXtra = api_get_datetime_picker_js($htmlHeadXtra);
 
 $id = null;
-$url_action = api_get_self();
+$urlAction = api_get_self();
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $url_action = '?id='.$id;
+    $urlAction = '?id='.$id;
 }
 
 $add_coach = null;
@@ -282,7 +282,13 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">'.
 echo '</div>';
 
 //$form->display();
+$em = Container::getEntityManager();
+$request = Container::getRequest();
+
 $session = new Session();
+if (!empty($id)) {
+    $session = $em->getRepository('ChamiloCoreBundle:Session')->find($id);
+}
 
 $builder = Container::getFormFactory()->createBuilder(
     new SessionType(),
@@ -293,12 +299,8 @@ $form = $builder->getForm();
 $form->handleRequest($request);
 
 if ($form->isValid()) {
-    $em = Container::getEntityManager();
-    $session = $form->getData();
-    $em->persist($session);
     $em->flush();
-
-    Container::addMessage(get_lang('Updated'));
+    Container::addFlash(get_lang('Updated'));
     $url = Container::getRouter()->generate(
         'main',
         array('name' => 'session/session_list.php')
@@ -307,11 +309,10 @@ if ($form->isValid()) {
     exit;
 }
 
-$url = api_get_self();
 echo Container::getTemplate()->render(
     'ChamiloCoreBundle:Legacy:form.html.twig',
     array(
         'form' => $form->createView(),
-        'url' => $url
+        'url' => $urlAction
     )
 );

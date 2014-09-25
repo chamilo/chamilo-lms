@@ -4,6 +4,8 @@
  * @package chamilo.admin
  */
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Form\UserType;
 
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
 
@@ -404,5 +406,41 @@ $url_big_image = $big_image.'?rnd='.time();
 $content = $form->return_form();
 
 $app['title'] = $tool_name;
-echo $message;
-echo $content;
+//echo $message;
+//echo $content;
+
+$em = Container::getEntityManager();
+$request = Container::getRequest();
+
+$user = new User();
+if (!empty($user_id)) {
+    $user = $em->getRepository('ChamiloUserBundle:User')->find($user_id);
+}
+
+$builder = Container::getFormFactory()->createBuilder(
+    new UserType(),
+    $user
+);
+
+$form = $builder->getForm();
+$form->handleRequest($request);
+
+if ($form->isValid()) {
+    $em->flush();
+    Container::addFlash(get_lang('Updated'));
+    $url = Container::getRouter()->generate(
+        'main',
+        array('name' => 'admin/user_list.php')
+    );
+    header('Location: '.$url);
+    exit;
+}
+$urlAction = api_get_self().'?user_id='.$user_id;
+
+echo Container::getTemplate()->render(
+    'ChamiloCoreBundle:Legacy:form.html.twig',
+    array(
+        'form' => $form->createView(),
+        'url' => $urlAction
+    )
+);

@@ -14,10 +14,14 @@ use Chamilo\CoreBundle\Component\Auth;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use FOS\MessageBundle\Model\ParticipantInterface;
 use Avanzu\AdminThemeBundle\Model\UserInterface as ThemeUser;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+use Application\Sonata\MediaBundle\Entity\Media;
 
 /**
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user")
+ * @Vich\Uploadable
  * @UniqueEntity("username")
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
  * @ORM\AttributeOverrides({
@@ -108,11 +112,25 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     //protected $phone;
 
     /**
-     * @var string
+     * Vich\UploadableField(mapping="user_image", fileNameProperty="picture_uri")
      *
+     * note This is not a mapped field of entity metadata, just a simple property.
+     *
+     * @var File $imageFile
+     */
+    protected $imageFile;
+
+    /**
+     * @var string
      * @ORM\Column(name="picture_uri", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
      */
-    private $pictureUri;
+    //private $pictureUri;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"} )
+     * @ORM\JoinColumn(name="picture_uri", referencedColumnName="id")
+     */
+    protected $pictureUri;
 
     /**
      * @var integer
@@ -1290,5 +1308,49 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     public function getIdentifier()
     {
         return $this->getId();
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     */
+    public function setImageFile(File $image)
+    {
+        $this->imageFile = $image;
+
+        if ($image) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    /**
+     * @return File
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param string $imageName
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
     }
 }

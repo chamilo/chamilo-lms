@@ -45,6 +45,14 @@ sonata_media:
                 preview: { width: 100, quality: 100}
                 wide:    { width: 820, quality: 100}
 
+        user_image:
+            providers:
+              - sonata.media.provider.image
+
+            formats:
+                small: { width: 100, quality: 100}
+                big:   { width: 970 , quality: 100}
+
     cdn:
         # define the public base url for the uploaded media
         server:

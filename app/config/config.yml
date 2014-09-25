@@ -277,4 +277,4 @@ apy_data_grid:
 
 liip_theme:
     themes: ['web', 'tablet', 'phone']
-    active_theme: 'phone'
+    active_theme: 'web'

@@ -97,10 +97,6 @@ sonata_admin:
                     - sonata.admin.session
                     - sonata.admin.access_url
 
-
-
-
-
     assets:
         stylesheets:
             # The sandbox includes default pre-optimized version of some css and js

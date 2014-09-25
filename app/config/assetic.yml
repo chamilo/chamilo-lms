@@ -11,6 +11,7 @@ assetic:
         yui_css: { jar: "%kernel.root_dir%/../bin/yuicompressor.jar" }
 
     assets:
+
         # see http://sonata-project.org/blog/2012/5/15/assetic-package-configuration
         #
         sonata_jqueryui_js:

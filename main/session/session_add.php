@@ -11,8 +11,6 @@ $cidReset = true;
 //require_once '../inc/global.inc.php';
 
 // setting the section (for the tabs)
-$this_section = SECTION_PLATFORM_ADMIN;
-
 SessionManager::protect_session_edit();
 
 $interbreadcrumb[] = array('url' => 'index.php',       'name' => get_lang('Sessions'));

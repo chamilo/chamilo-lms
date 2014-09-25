@@ -7,10 +7,6 @@
  *    @package chamilo.library
  *    @author Julio Montoya <gugli100@gmail.com> (Score average fixes)
  */
-/**
- * Code
- */
-define('SESSION_LINK_TARGET','_self');
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
@@ -3019,8 +3015,14 @@ class Tracking
                 $exercise_graph_list = array();
 
                 foreach ($course_list as $course_data) {
-
-                    $exercise_list = get_all_exercises($course_data, $my_session_id);
+                    $exercise_list = get_all_exercises(
+                        $course_data,
+                        $my_session_id,
+                        false,
+                        null,
+                        false,
+                        1
+                    );
                     foreach ($exercise_list as $exercise_data) {
                         $exercise_obj = new Exercise($course_data['id']);
                         $exercise_obj->read($exercise_data['id']);
@@ -3352,7 +3354,14 @@ class Tracking
 
             //$exercise_list = get_all_exercises($course_info, $session_id, true);
             // Show exercise results of invisible exercises? see BT#4091
-            $exercise_list = get_all_exercises($course_info, $session_id, false);
+            $exercise_list = get_all_exercises(
+                $course_info,
+                $session_id,
+                false,
+                null,
+                false,
+                1
+            );
 
             $to_graph_exercise_result = array();
 

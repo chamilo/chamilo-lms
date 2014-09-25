@@ -170,12 +170,14 @@ class Model
     			return $id;
     		}
         }
+
         return false;
 	}
 
     /**
      * Updates the obj in the database. The $params['id'] must exist in order to update a record
      * @param array $values
+     *
      * @return bool
      *
      */

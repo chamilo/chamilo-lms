@@ -216,12 +216,27 @@ function get_work_data_by_path($path, $courseId = null)
  * @param int $id
  * @return array
  */
-function get_work_data_by_id($id)
+function get_work_data_by_id($id, $courseId = null, $sessionId = null)
 {
 	$id = intval($id);
-	$course_id 	= api_get_course_int_id();
+
+    if (!empty($courseId)) {
+        $courseId = intval($courseId);
+    } else {
+        $courseId 	= api_get_course_int_id();
+    }
+
 	$work_table	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT * FROM $work_table WHERE id = $id AND c_id = $course_id";
+
+    $sessionCondition = null;
+    if (!empty($sessionId)) {
+        $sessionCondition = api_get_session_condition($sessionId, true);
+    }
+
+	$sql = "SELECT * FROM $work_table
+	        WHERE
+	            id = $id AND c_id = $courseId
+	            $sessionCondition";
 	$result = Database::query($sql);
     $work = array();
 	if (Database::num_rows($result)) {
@@ -2331,7 +2346,18 @@ function send_email_on_homework_creation($course_id)
 				$emailbody = get_lang('Dear')." ".$name_user.",\n\n";
 				$emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
 				$emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
-				@api_mail($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name($currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), $currentUser["mail"]);
+
+                $additional_parameters = array(
+                    'smsType' => ASSIGNMENT_BEEN_CREATED_COURSE,
+                    'userId' => $student["user_id"],
+                    'courseTitle' => $course_id
+                );
+
+                api_mail_html($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name(
+                    $currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS),
+                    $currentUser["mail"], null, null, null, $additional_parameters);
+
+                //@api_mail($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name($currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), $currentUser["mail"]);
 			}
 		}
 	}
@@ -2834,7 +2860,7 @@ function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessio
             $sessionId,
             null,
             null,
-            STUDENT,
+            null,
             $getCount
         );
     } else {
@@ -4198,15 +4224,20 @@ function downloadFile($id, $course_info)
 }
 
 /**
+ * Get the file contents for an assigment
  * @param int $id
  * @param array $course_info
+ * @param int Session ID
  * @return array|bool
  */
-function getFileContents($id, $course_info)
+function getFileContents($id, $course_info, $sessionId = 0)
 {
     $id = intval($id);
     if (empty($course_info) || empty($id)) {
         return false;
+    }
+    if (empty($sessionId)) {
+        $sessionId = api_get_session_id();
     }
 
     $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -4219,7 +4250,7 @@ function getFileContents($id, $course_info)
             $row = Database::fetch_array($result, 'ASSOC');
             $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$row['url'];
 
-            $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id']);
+            $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id'], $sessionId);
             allowOnlySubscribedUser(api_get_user_id(), $row['parent_id'], $course_info['real_id']);
 
             if (empty($item_info)) {
@@ -4404,4 +4435,33 @@ function preAddAllWorkStudentCallback($p_event, &$p_header)
         return 1;
     }
     return 0;
+}
+
+function getWorkCreatedByUser($user_id, $courseId, $sessionId)
+{
+    $items = api_get_item_property_list_by_tool_by_user(
+        $user_id,
+        'work',
+        $courseId,
+        $sessionId
+    );
+
+    $forumList = array();
+    if (!empty($items)) {
+        foreach ($items as $forum) {
+            $item = get_work_data_by_id(
+                $forum['ref'],
+                $courseId,
+                $sessionId
+            );
+
+            $forumList[] = array(
+                $item['title'],
+                api_get_local_time($forum['insert_date']),
+                api_get_local_time($forum['lastedit_date'])
+            );
+        }
+    }
+
+    return $forumList;
 }

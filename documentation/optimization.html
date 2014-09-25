@@ -245,6 +245,38 @@ If you use php5-memcached (different set of functions than php5-memcache!), then
             ...
         }
 </pre>
+Finally, the Free Campus of Chamilo has a very specific case of slow query: the courses catalog! Because there might be more than 30,000 courses in there, getting the number of "Connections last month" can be a desastrous query in terms of performances. This is why you should try to cache the results as well.<br />
+Obviously, as we are speaking about showing the number of visits this month, it doesn't really matter if the number doesn't refresh for an hour or so...<br />
+Locate the main/inc/lib/course_category.lib.php file, open it and go to the browseCoursesInCategory() function.<br />
+Locate the $count_connections_last_month = Tracking::get_course_connections_count(...) call, and wrap in into something like this:
+<pre>
+    $xc = method_exists('Memcached', 'add');
+    if ($xc) {
+        // Make sure the server is available
+        $xm = new Memcached;
+        $xm->addServer('localhost', 11211);
+        // The following concatenates the name of the database + the id of the
+        // access url to make it a unique variable prefix for the variables to
+        // be stored
+        $xs = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
+    $result = Database::query($sql);
+    $courses = array();
+    while ($row = Database::fetch_array($result)) {
+        $row['registration_code'] = !empty($row['registration_code']);
+        $count_users = CourseManager::get_users_count_in_course($row['code']);
+        if ($xc) {
+            if ($xm->get($xs.'cccount_'.$row['code'])) {
+                $number = $xm->get($xs.'cccount_'.$row['code']);
+            } else {
+                $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+                $xm->set($xs.'cccount_'.$row['code'], $count_connections_last_month, 3600);
+            }
+        } else {
+            $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+        }
+   ...
+</pre>
 <hr />
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log
@@ -254,6 +286,7 @@ To solve this performance issue, you can execute the following queries manually 
 <pre>
 ALTER TABLE lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
 ALTER TABLE lp_item_view ADD INDEX  idx_c_lp_item_view_cid_lp_view_id_lp_item_id (c_id, lp_view_id, lp_item_id);
+ALTER TABLE user_rel_tag ADD INDEX idx_user_rel_tag_user (user_id);
 </pre>
 In Chamilo 1.9.8, we use the c_item_property table more actively. This causes issues with the reporting pages for the assignments. You can reduce the impact by adding the following index:
 <pre>

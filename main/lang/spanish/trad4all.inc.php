@@ -2,6 +2,17 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FieldTypeMobilePhoneNumber = "Número de móvil";
+$CheckUniqueEmail = "Verificar que los correos sean únicos.";
+$EmailUsedTwice = "El correo electrónico ya esta registrado en el sistema.";
+$UserXSessionY = "Usuario: %s - Sesión: %s";
+$SessionDurationXDaysLeft = "Esta sesión tiene una duración máxima. Solo quedan %s días.";
+$NextTopic = "Próximo tema";
+$CurrentTopic = "Tema actual";
+$ShowFullCourseAdvance = "Ver programación";
+$RedirectToCourseHome = "Redirigir al inicio de Curso.";
+$LpReturnLink = "Enlace de retorno en las Lecciones";
+$LearningPathList = "Lista de lecciones";
 $UsersWithoutTask = "Estudiantes que no enviaron su tarea";
 $UsersWithTask = "Estudiantes que enviaron su tarea";
 $UploadFromTemplate = "Subir desde plantilla";
@@ -1602,4 +1613,7 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
+$FieldTypeMobilePhoneNumber = "Número de móvil"; 
+$CountryDialCode = "Incluya el prefijo de llamada del país";
+$MobilePhoneNumberWrong = "El número de móvil que ha escrito está incompleto o contiene caracteres no válidos.";
 ?>

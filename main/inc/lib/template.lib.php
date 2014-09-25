@@ -706,7 +706,7 @@ class Template
         //Preparing values for the menu
 
         //Logout link
-        $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&&uid='.api_get_user_id());
+        $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id());
 
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {

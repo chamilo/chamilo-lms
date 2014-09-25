@@ -34,12 +34,18 @@ $interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmi
 $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
-list($year_start,$month_start,$day_start)   = explode('-', $infos['date_start']);
-list($year_end,$month_end,$day_end)         = explode('-', $infos['date_end']);
+list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
+list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
 
-$showDescriptionChecked = null;
-if (isset($infos['show_description']) && !empty($infos['show_description'])) {
-    $showDescriptionChecked = 'checked';
+// Default value
+$showDescriptionChecked = 'checked';
+
+if (isset($infos['show_description'])) {
+    if (!empty($infos['show_description'])) {
+        $showDescriptionChecked = 'checked';
+    } else {
+        $showDescriptionChecked = null;
+    }
 }
 
 $end_year_disabled = $end_month_disabled = $end_day_disabled = '';
@@ -60,7 +66,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$id_coach              = $_POST['id_coach'];
 	$id_session_category   = $_POST['session_category'];
 	$id_visibility         = $_POST['session_visibility'];
-
+    $duration = isset($_POST['duration']) ? $_POST['duration'] : null;
     $description = isset($_POST['description']) ? $_POST['description'] : null;
     $showDescription = isset($_POST['show_description']) ? 1 : 0;
 
@@ -91,7 +97,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $start_limit,
         $end_limit,
         $description,
-        $showDescription
+        $showDescription,
+        $duration
     );
 
 	if ($return == strval(intval($return))) {
@@ -347,7 +354,11 @@ if (!empty($return)) {
             <?php echo get_lang('SessionVisibility') ?> <br />
             <select name="session_visibility" style="width:250px;">
                 <?php
-                $visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
+                $visibility_list = array(
+                    SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
+                    SESSION_VISIBLE => get_lang('SessionAccessible'),
+                    SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible'))
+                );
                 foreach($visibility_list as $key=>$item): ?>
                 <option value="<?php echo $key; ?>" <?php if($key == $infos['visibility']) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
                 <?php endforeach; ?>
@@ -376,6 +387,29 @@ if (!empty($return)) {
 
     <?php } ?>
 
+    <?php
+        if (SessionManager::durationPerUserIsEnabled()) {
+            if (empty($infos['duration'])) {
+                $duration = null;
+            } else {
+                $duration = $infos['duration'];
+            }
+            ?>
+            <div class="control-group">
+                <label class="control-label">
+                    <?php echo get_lang('SessionDurationTitle') ?> <br />
+                </label>
+                <div class="controls">
+                    <input id="duration" type="text" name="duration" class="span1" maxlength="50" value="<?php if($formSent) echo Security::remove_XSS($duration); else echo $duration; ?>">
+                    <br />
+                    <?php echo get_lang('SessionDurationDescription') ?>
+                </div>
+            </div>
+
+        <?php
+        }
+    ?>
+
     <div class="control-group">
         <div class="controls">
             <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
@@ -386,9 +420,11 @@ if (!empty($return)) {
 
 <script type="text/javascript">
 
-<?php if($year_start=="0000") echo "setDisable(document.form.nolimit);\r\n"; ?>
+<?php
+//if($year_start=="0000") echo "setDisable(document.form.nolimit);\r\n";
+?>
 
-function setDisable(select){
+function setDisable(select) {
 
 	document.form.day_start.disabled = (select.checked) ? true : false;
 	document.form.month_start.disabled = (select.checked) ? true : false;
@@ -419,6 +455,7 @@ function disable_endtime(select) {
         end_div.style.display = 'block';
      else
         end_div.style.display = 'none';
+    emptyDuration();
 }
 
 function disable_starttime(select) {
@@ -427,6 +464,13 @@ function disable_starttime(select) {
         start_div.style.display = 'block';
      else
         start_div.style.display = 'none';
+    emptyDuration();
+}
+
+function emptyDuration() {
+    if ($('#duration').val()) {
+        $('#duration').val('');
+    }
 }
 
 </script>

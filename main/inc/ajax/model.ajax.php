@@ -725,7 +725,15 @@ switch ($action) {
         break;
     case 'get_sessions':
         $columns = array(
-            'name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility'
+            'name',
+            'nbr_courses',
+            'nbr_users',
+            'category_name',
+            'date_start',
+            'date_end',
+            'coach_name',
+            'session_active',
+            'visibility'
         );
 
         // Rename Category_name

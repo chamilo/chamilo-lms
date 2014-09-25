@@ -40,8 +40,8 @@ class ImportCsv
      * @var int number of years
      */
     public $expirationDateInUserUpdate = 1;
-    public $daysCoachAccessBeforeBeginning = 30;
-    public $daysCoachAccessAfterBeginning = 60;
+    public $daysCoachAccessBeforeBeginning = 14;
+    public $daysCoachAccessAfterBeginning = 14;
     public $conditions;
 
     /**
@@ -78,6 +78,7 @@ class ImportCsv
         $path = api_get_path(SYS_CODE_PATH).'cron/incoming/';
         if (!is_dir($path)) {
             echo "The folder! $path does not exits";
+
             return 0;
         }
 
@@ -128,6 +129,7 @@ class ImportCsv
 
             if (empty($fileToProcess)) {
                 echo 'Error - no files to process.';
+
                 return 0;
             }
 
@@ -581,15 +583,19 @@ class ImportCsv
     {
         $data = Import::csv_to_array($file);
 
-        //$language = $this->defaultLanguage;
-
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
 
             foreach ($data as $row) {
                 $row = $this->cleanCourseRow($row);
-                $courseCode = CourseManager::get_course_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['course']], $this->extraFieldIdNameList['course']);
+
+                $courseCode = CourseManager::get_course_id_from_original_id(
+                    $row['extra_' . $this->extraFieldIdNameList['course']],
+                    $this->extraFieldIdNameList['course']
+                );
+
                 $courseInfo = api_get_course_info($courseCode);
+
                 if (empty($courseInfo)) {
                     // Create
                     $params = array();
@@ -603,7 +609,12 @@ class ImportCsv
                     $courseInfo = CourseManager::create_course($params);
 
                     if (!empty($courseInfo)) {
-                        CourseManager::update_course_extra_field_value($courseInfo['code'], 'external_course_id', $row['extra_'.$this->extraFieldIdNameList['course']]);
+                        CourseManager::update_course_extra_field_value(
+                            $courseInfo['code'],
+                            'external_course_id',
+                            $row['extra_'.$this->extraFieldIdNameList['course']]
+                        );
+
                         $this->logger->addInfo("Courses - Course created ".$courseInfo['code']);
                     } else {
                         $this->logger->addError("Courses - Can't create course:".$row['title']);
@@ -617,6 +628,7 @@ class ImportCsv
                     $result = CourseManager::update_attributes($courseInfo['real_id'], $params);
 
                     $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
+
                     if ($addTeacherToSession) {
                         CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false);
                     } else {
@@ -643,12 +655,97 @@ class ImportCsv
      */
     private function importSessionsStatic($file)
     {
-        $this->importSessions($file, false);
+        //$this->importSessions($file, false);
+        $content = file($file);
+        $sessions = array();
+
+        if (!api_strstr($content[0], ';')) {
+            $error_message = get_lang('NotCSV');
+        } else {
+            $tag_names = array();
+
+            foreach ($content as $key => $enreg) {
+                $enreg = explode(';', trim($enreg));
+                if ($key) {
+                    foreach ($tag_names as $tag_key => $tag_name) {
+                        $sessions[$key - 1][$tag_name] = $enreg[$tag_key];
+                    }
+                } else {
+                    foreach ($enreg as $tag_name) {
+                        $tag_names[] = api_preg_replace(
+                            '/[^a-zA-Z0-9_\-]/',
+                            '',
+                            $tag_name
+                        );
+                    }
+                    if (!in_array('SessionName', $tag_names) || !in_array(
+                            'DateStart',
+                            $tag_names
+                        ) || !in_array('DateEnd', $tag_names)
+                    ) {
+                        $error_message = get_lang('NoNeededData');
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!empty($sessions)) {
+            // Looping the sessions.
+            foreach ($sessions as $session) {
+                if (!empty($session['SessionID'])) {
+                    $sessionId = SessionManager::get_session_id_from_original_id(
+                        $session['SessionID'],
+                        $this->extraFieldIdNameList['session']
+                    );
+
+                    if (!empty($sessionId)) {
+                        $courses = explode('|', $session['Courses']);
+                        foreach ($courses as $course) {
+                            $courseArray = bracketsToArray($course);
+                            $courseCode = $courseArray[0];
+                            if (CourseManager::course_exists($courseCode)) {
+                                $courseUsers = isset($courseArray[2]) ? $courseArray[2] : null;
+                                $courseUsers = explode(',', $courseUsers);
+                                if (!empty($courseUsers)) {
+                                    $userList = array();
+                                    foreach ($courseUsers as $username) {
+                                        $userInfo = api_get_user_info_from_username(trim($username));
+                                        if (!empty($userInfo)) {
+                                            $userList[] = $userInfo['user_id'];
+                                        }
+                                    }
+                                    if (!empty($userList)) {
+                                        SessionManager::subscribe_users_to_session_course(
+                                            $userList,
+                                            $sessionId,
+                                            $courseCode
+                                        );
+                                    } else {
+                                        $this->logger->addInfo("No users to register.");
+                                    }
+                                } else {
+                                    $this->logger->addInfo("No users to register.");
+                                }
+                            } else {
+                                $this->logger->addInfo("Course does not exists $courseCode");
+                            }
+                        }
+                    } else {
+                        $this->logger->addInfo('SessionID not found in system.');
+                    }
+                } else {
+                    $this->logger->addInfo('SessionID does not exists');
+                }
+            }
+        } else {
+            $this->logger->addInfo($error_message);
+        }
     }
 
     /**
      * @param string $file
-     * @param bool $moveFile
+     * @param bool   $moveFile
      */
     private function importSessions($file, $moveFile = true)
     {
@@ -667,9 +764,9 @@ class ImportCsv
             $this->daysCoachAccessAfterBeginning,
             $this->defaultSessionVisibility,
             $avoid,
-            false,
-            false,
-            true
+            false, // deleteUsersNotInList
+            false, // updateCourseCoaches
+            true // sessionWithCoursesModifier
         );
 
         if (!empty($result['error_message'])) {
@@ -844,7 +941,9 @@ if (isset($argv[1]) && $argv[1] = '--dump') {
     $dump = true;
 }
 
-if (isset($_configuration['import_csv_disable_dump']) && $_configuration['import_csv_disable_dump'] == true) {
+if (isset($_configuration['import_csv_disable_dump']) &&
+    $_configuration['import_csv_disable_dump'] == true
+) {
     $import->setDumpValues(false);
 } else {
     $import->setDumpValues($dump);
@@ -859,7 +958,9 @@ if (isset($_configuration['import_csv_test'])) {
 
 $import->run();
 
-if (isset($_configuration['import_csv_fix_permissions']) && $_configuration['import_csv_fix_permissions'] == true) {
+if (isset($_configuration['import_csv_fix_permissions']) &&
+    $_configuration['import_csv_fix_permissions'] == true
+) {
     $command = "sudo find ".api_get_path(SYS_COURSE_PATH)." -type d -exec chmod 777 {} \; ";
     echo "Executing: ".$command.PHP_EOL;
     system($command);

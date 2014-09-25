@@ -81,7 +81,6 @@ switch ($_REQUEST['report']) {
     case 'courselastvisit':
         Statistics::print_course_last_visit();
         break;
-    //---
     case 'users':
         // total amount of users
         Statistics::print_stats(

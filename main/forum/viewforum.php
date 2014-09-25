@@ -70,10 +70,8 @@ $is_group_tutor = false;
 if (!empty($groupId)) {
     //Group info & group category info
     $group_properties = GroupManager::get_group_properties($groupId);
-
     //User has access in the group?
-    $user_has_access_in_group   = GroupManager::user_has_access($userid, $groupId, GroupManager::GROUP_TOOL_FORUM);
-
+    $user_has_access_in_group = GroupManager::user_has_access($userid, $groupId, GroupManager::GROUP_TOOL_FORUM);
     $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupId);
 
     //Course
@@ -98,6 +96,7 @@ if (!empty($groupId)) {
 
 $my_search = isset($_GET['search']) ? $_GET['search'] : '';
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
+
 $gradebook = null;
 if (isset($_SESSION['gradebook'])){
     $gradebook = $_SESSION['gradebook'];
@@ -277,9 +276,9 @@ if (!empty($message)) {
 echo '<div class="actions">';
 
 if ($origin != 'learnpath') {
-
     if ($origin=='group') {
-        echo '<a href='.api_get_path(WEB_CODE_PATH).'"group/group_space.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href"='.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'">'.
+            Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<span style="float:right;">'.search_link().'</span>';
         echo '<a href="'.$forumUrl.'index.php">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -416,7 +415,6 @@ if (is_array($threads)) {
 
             echo '<td>'.$last_post.'</td>';
             echo '<td class="td_actions">';
-
             // Get attachment id.
             if (isset($row['post_id'])) {
                 $attachment_list = get_attachment($row['post_id']);

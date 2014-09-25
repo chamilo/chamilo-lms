@@ -48,9 +48,9 @@ $keyword = Database::escape_string(trim($_GET['keyword']));
 
 if ($course_validation_feature) {
 
-/**
- * Acceptance and creation of the requested course.
- */
+    /**
+     * Acceptance and creation of the requested course.
+     */
     if (!empty($accept_course_request)) {
         $course_request_code = CourseRequestManager::get_course_request_code($accept_course_request);
         $course_id = CourseRequestManager::accept_course_request($accept_course_request);

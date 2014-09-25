@@ -51,6 +51,7 @@ class ExtraField extends Model
     const FIELD_TYPE_TIMEZONE        = 11;
     const FIELD_TYPE_SOCIAL_PROFILE  = 12;
     const FIELD_TYPE_CHECKBOX        = 13;
+    const FIELD_TYPE_MOBILE_PHONE_NUMBER       = 14;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
@@ -204,6 +205,7 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_TAG]             = get_lang('FieldTypeTag');
         $types[self::FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
         $types[self::FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
+        $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
 
         switch ($handler) {
             case 'course':
@@ -1032,6 +1034,25 @@ EOF;
                         );
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+                        if ($field_details['field_visible'] == 0) {
+                            $form->freeze('extra_'.$field_details['field_variable']);
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_MOBILE_PHONE_NUMBER:
+                        $form->addElement(
+                            'text', 
+                            'extra_'.$field_details[1],
+                            $field_details[3]." (".get_lang('CountryDialCode').")", 
+                            array('size' => 40, 'placeholder' => '(xx)xxxxxxxxx')
+                        );
+                        $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details[1], 'trim');
+                        $form->applyFilter('extra_'.$field_details[1], 'mobile_phone_number_filter');
+                        $form->addRule(
+                            'extra_'.$field_details[1],
+                            get_lang('MobilePhoneNumberWrong'),
+                            'mobile_phone_number'
+                        );
                         if ($field_details['field_visible'] == 0) {
                             $form->freeze('extra_'.$field_details['field_variable']);
                         }

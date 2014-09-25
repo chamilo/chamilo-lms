@@ -79,6 +79,8 @@ if ($is_allowedToEdit) {
         //Reading the source question
 		$old_question_obj = Question::read($old_question_id, $origin_course_id);
 
+        $courseId = $current_course['real_id'];
+
 		if ($old_question_obj) {
 			$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
             //Duplicating the source question, in the current course
@@ -94,10 +96,9 @@ if ($is_allowedToEdit) {
 			// destruction of the Question object
 			unset($new_question_obj);
 			unset($old_question_obj);
-            if (!$objExercise instanceOf Exercise) {
-                $objExercise = new Exercise();
-                $objExercise->read($fromExercise);
-            }
+
+            $objExercise = new Exercise($courseId);
+            $objExercise->read($fromExercise);
 			Session::write('objExercise', $objExercise);
 		}
 		$displayMessage = get_lang('ItemAdded');
@@ -403,7 +404,8 @@ if ($exerciseId > 0) {
 		$where .= ' AND type='.$answerType;
 	}
 	$sql = "SELECT DISTINCT
-	            id,question,
+	            id,
+	            question,
 	            type,
 	            level
 	        FROM
@@ -531,14 +533,19 @@ if ($exerciseId > 0) {
                 }
             }
     } else {
+
+        if ($session_id == -1 or empty($session_id)) {
+            $session_id = 0;
+        }
         // All tests for the course selected, not in session
         $sql = "SELECT DISTINCT qu.id, question, qu.type, level, q.session_id
                 FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q $from
                 WHERE
-                  qu.c_id = $selected_course AND
+                    qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND
                     q.c_id = $selected_course AND
                     qu.id = qt.question_id AND
+                    q.session_id = $session_id AND
                     q.id = qt.exercice_id $filter
                 ORDER BY session_id ASC";
         $result = Database::query($sql);
@@ -608,14 +615,22 @@ if (is_array($main_question_list)) {
     foreach ($main_question_list as $tabQuestion) {
         $row = array();
 
-        //This function checks if the question can be read
+        // This function checks if the question can be read
         $question_type = get_question_type_for_question($selected_course, $tabQuestion['id']);
 
         if (empty($question_type)) {
             continue;
         }
 
-        $row[] = get_a_tag_for_question($questionTagA, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], $tabQuestion['question']);
+        $sessionId = isset($tabQuestion['session_id']) ? $tabQuestion['session_id'] : null;
+        $row[] = get_a_tag_for_question(
+            $questionTagA,
+            $fromExercise,
+            $tabQuestion['id'],
+            $tabQuestion['type'],
+            $tabQuestion['question'],
+            $sessionId
+        );
         $row[] = $question_type;
         $row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
         $row[] = $tabQuestion['level'];
@@ -649,7 +664,12 @@ if (is_array($main_question_list)) {
         $data[] = $row;
     }
 }
-Display :: display_sortable_table($header, $data, '', array('per_page_default'=>999,'per_page'=>999,'page_nr'=>1));
+Display :: display_sortable_table(
+    $header,
+    $data,
+    '',
+    array('per_page_default' => 999, 'per_page' => 999, 'page_nr' => 1)
+);
 
 if (!$nbrQuestions) {
 	echo get_lang('NoQuestion');
@@ -687,13 +707,33 @@ function reset_menu_exo_lvl_type() {
 	$courseCategoryId = 0;
 }
 
-// return the <a> link to admin question, if needed
-// hubert.borderiou 13-10-2011
-function get_a_tag_for_question($in_addA, $in_fromex, $in_questionid, $in_questiontype, $in_questionname)
-{
+/**
+ * return the <a> link to admin question, if needed
+ * @param int $in_addA
+ * @param int $in_fromex
+ * @param int $in_questionid
+ * @param int $in_questiontype
+ * @param string $in_questionname
+ * @param int $sessionId
+ * @return string
+ * @author hubert.borderiou
+ */
+function get_a_tag_for_question(
+    $in_addA,
+    $in_fromex,
+    $in_questionid,
+    $in_questiontype,
+    $in_questionname,
+    $sessionId
+) {
 	$res = $in_questionname;
 	if ($in_addA) {
-		$res = "<a href='admin.php?".api_get_cidreq()."&editQuestion=$in_questionid&type=$in_questiontype&fromExercise=$in_fromex'>".$res."</a>";
+        if (!empty($sessionId)) {
+            $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
+        }
+		$res = "<a href='admin.php?".api_get_cidreq()."&editQuestion=$in_questionid&type=$in_questiontype&fromExercise=$in_fromex'>".
+            $res.$sessionIcon.
+            "</a>";
 	}
 	return $res;
 }
@@ -777,9 +817,11 @@ function get_action_icon_for_question(
 			unset($myObjEx);
 			break;
 		case "clone":
-			$res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&copy_question=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercice'>";
-			$res .= Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
-			$res .= "</a>";
+            $url = api_get_self()."?".api_get_cidreq().$getParams."&amp;copy_question=$in_questionid&amp;course_id=$in_selected_course&amp;fromExercise=$from_exercice";
+            $res = Display::url(
+                Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest')),
+                $url
+            );
 			break;
 		default :
 			$res = $in_action;

@@ -48,7 +48,7 @@ class LinkFactory
             $category_id,
             $visible
         );
-    }
+	}
 
 	/**
 	 * Get the link object referring to an evaluation

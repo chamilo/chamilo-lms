@@ -158,17 +158,13 @@ function get_agenda_items_by_course_list($course_list, $month, $year, $session_i
 						ORDER BY start_date ";		
 		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result,'ASSOC')) {
-			//var_dump($item);
 			//taking the day
 			$agendaday = date("j",strtotime($item['start_date']));				
 			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
 			//taking the time
 			$time = date("H:i",strtotime($item['start_date']));
-			//var_dump($time );
 			$end_time= date("H:i",strtotime($item['end_date']));
 			$URL = api_get_path(WEB_PATH)."main/calendar/allagendas.php?cidReq=".urlencode($code)."&amp;sort=asc&amp;view=list&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-			//var_dump($URL);
-			
 			if ($setting_agenda_link == 'coursecode') {
 				//$title=$array_course_info['title'];
 				$agenda_link = api_substr($title, 0, 14);
@@ -260,14 +256,8 @@ if(!empty($my_session_id)) {
 	$_SESSION['my_course_list'] = array();	
 	$my_course_list = array();
 } else {
-	//echo 'here';
-	$my_course_list = $_SESSION['my_course_list'];
-	 
-	//var_dump($_SESSION['my_course_list'], $my_course_list);	
-	
+	$my_course_list = $_SESSION['my_course_list'];	
 	$my_course_list_keys = array_keys($my_course_list);
-	
-	//var_dump($my_course_list, $my_course_list_keys);
 	if (!in_array($my_course_id, $my_course_list_keys)) {	
 		$course_info = api_get_course_info_by_id($my_course_id);
 		$_SESSION['my_course_list'][$my_course_id] = $course_info;	

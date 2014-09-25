@@ -30,6 +30,7 @@ class UserManager
     const USER_FIELD_TYPE_TIMEZONE = 11;
     const USER_FIELD_TYPE_SOCIAL_PROFILE = 12;
     const USER_FIELD_TYPE_FILE = 13;
+    const USER_FIELD_TYPE_MOBILE_PHONE_NUMBER  = 14;
 
     /**
      * The default constructor only instanciates an empty user object
@@ -209,7 +210,14 @@ class UserManager
                     $values["prior_lang"] = null;
                     EventsDispatcher::events('user_registration', $values);
                 } else {
-                    api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+                    $additional_parameters = array(
+                        'smsType' => WELCOME_LOGIN_PASSWORD,
+                        'userId' => $return,
+                        'mobilePhoneNumber' => $extra['mobile_phone_number'],
+                        'password' => $original_password
+                    );
+                    api_mail_html($recipient_name, $email, $emailsubject, $emailbody,
+                        $sender_name, $email_admin, null, null, null, $additional_parameters);
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
@@ -2327,8 +2335,11 @@ class UserManager
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
-    public static function get_sessions_by_category($user_id, $is_time_over = false, $ignore_visibility_for_admins = false)
-    {
+    public static function get_sessions_by_category(
+        $user_id,
+        $is_time_over = false,
+        $ignore_visibility_for_admins = false
+    ) {
         // Database Table Definitions
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2387,8 +2398,35 @@ class UserManager
 
                 $session_id = $row['id'];
 
-                // Checking session visibility
-                $visibility = api_get_session_visibility($session_id, null, $ignore_visibility_for_admins);
+                $courseList = UserManager::get_courses_list_by_session(
+                    $user_id,
+                    $row['id']
+                );
+
+                // General coach session visibility.
+                $visibility = api_get_session_visibility(
+                    $session_id,
+                    null,
+                    $ignore_visibility_for_admins
+                );
+
+                // Course Coach session visibility.
+                $atLeastOneCourseIsVisible = false;
+                foreach ($courseList as $course) {
+                    // Checking session visibility
+                    $visibility = api_get_session_visibility(
+                        $session_id,
+                        $course['code'],
+                        $ignore_visibility_for_admins
+                    );
+                    if ($visibility != SESSION_INVISIBLE) {
+                        $atLeastOneCourseIsVisible = true;
+                    }
+                }
+
+                if ($atLeastOneCourseIsVisible) {
+                    $visibility = $atLeastOneCourseIsVisible;
+                }
 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
@@ -2405,9 +2443,10 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['date_end'] = $row['date_end'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_before_beginning'] = $row['nb_days_access_before_beginning'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_after_end'] = $row['nb_days_access_after_end'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = UserManager::get_courses_list_by_session($user_id, $row['id']);
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = $courseList;
             }
         }
+
         return $categories;
 
     }
@@ -2481,6 +2520,11 @@ class UserManager
             $sessionListFromCourseCoach = array();
             $sql =" SELECT DISTINCT id_session FROM $tbl_session_course_user
                     WHERE id_user = $user_id AND status = 2 ";
+
+            if (SessionManager::orderCourseIsEnabled()) {
+                //$sql .= "ORDER BY position";
+            }
+
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $result = Database::store_result($result);
@@ -2656,8 +2700,13 @@ class UserManager
                 INNER JOIN $tbl_session_course sc
                 ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
                 $join_access_url
-                WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
-                ORDER BY code";
+                WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url";
+
+        $orderBy = " ORDER BY code ";
+        if (SessionManager::orderCourseIsEnabled()) {
+            $orderBy =  ' ORDER BY position';
+        }
+        $sql .= $orderBy;
 
         $result = Database::query($sql);
 
@@ -2686,7 +2735,7 @@ class UserManager
                         s.id_coach = $user_id
                       )
                     $where_access_url
-                    ORDER BY code";
+                    $orderBy";
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
@@ -3814,7 +3863,7 @@ class UserManager
 
         $userConditions = '';
         if (!empty($userStatus)) {
-            $userConditions .= ' AND u.status = '.$userStatus;
+            $userConditions .= ' AND u.status = '.intval($userStatus);
         }
 
         $select = " SELECT DISTINCT u.user_id, u.username, u.lastname, u.firstname, u.email ";
@@ -4297,7 +4346,7 @@ class UserManager
     }
 
     /**
-     * @param $form
+     * @param FormValidator $form
      * @param $extra_data
      * @param $form_name
      * @param bool $admin_permissions
@@ -4352,7 +4401,7 @@ class UserManager
                     $group = array();
                     foreach ($field_details[9] as $option_id => $option_details) {
                         $options[$option_details[1]] = $option_details[2];
-                        $group[] = & HTML_QuickForm::createElement(
+                        $group[] = $form->createElement(
                             'radio',
                             'extra_'.$field_details[1],
                             $option_details[1],
@@ -4546,6 +4595,28 @@ EOF;
                         $form->freeze($extra_field);
                     }
                     break;
+
+                case self::USER_FIELD_TYPE_MOBILE_PHONE_NUMBER:
+                    $form->addElement(
+                        'text', 
+                        'extra_'.$field_details[1], 
+                        $field_details[3]." (".get_lang('CountryDialCode').")",
+                        array('size' => 40, 'placeholder'  => '(xx)xxxxxxxxx')
+                    );
+                    $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+                    $form->applyFilter('extra_'.$field_details[1], 'trim');
+                    $form->applyFilter('extra_'.$field_details[1], 'mobile_phone_number_filter');
+                    $form->addRule(
+                        'extra_'.$field_details[1], 
+                        get_lang('MobilePhoneNumberWrong'), 
+                        'mobile_phone_number'
+                    );
+                    if (!$admin_permissions) {
+                        if ($field_details[7] == 0) {
+                            $form->freeze('extra_'.$field_details[1]);
+                        }
+                    }
+                    break;
             }
         }
         $return = array();
@@ -4572,6 +4643,7 @@ EOF;
         $types[self::USER_FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
         $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
         $types[self::USER_FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
+        $types[self::USER_FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
 
         return $types;
     }

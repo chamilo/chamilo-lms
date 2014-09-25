@@ -20,7 +20,7 @@ $add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 SessionManager::protect_session_edit($id_session);
 
 $xajax = new xajax();
-$xajax->registerFunction (array('search_courses', 'AddCourseToSession', 'search_courses'));
+$xajax->registerFunction(array('search_courses', 'AddCourseToSession', 'search_courses'));
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -47,29 +47,25 @@ if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
-$xajax -> processRequests();
+$xajax->processRequests();
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
-function add_course_to_session (code, content) {
-
+$htmlHeadXtra[] = '<script>
+function add_course_to_session(code, content) {
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses_single").innerHTML = "";
-
 	destination = document.getElementById("destination");
-
 	for (i=0;i<destination.length;i++) {
-		if(destination.options[i].text == content) {
-				return false;
+		if (destination.options[i].text == content) {
+            return false;
 		}
 	}
 
 	destination.options[destination.length] = new Option(content,code);
-
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
 }
+
 function remove_item(origin)
 {
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -81,17 +77,17 @@ function remove_item(origin)
 }
 </script>';
 
-$formSent=0;
-$errorMsg=$firstLetterCourse=$firstLetterSession='';
-$CourseList=$SessionList=array();
-$courses=$sessions=array();
-$noPHP_SELF=true;
+$formSent = 0;
+$errorMsg = $firstLetterCourse = $firstLetterSession = '';
+$CourseList = $SessionList = array();
+$courses = $sessions = array();
+$noPHP_SELF = true;
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-	$formSent              = $_POST['formSent'];
-	$firstLetterCourse     = $_POST['firstLetterCourse'];
-	$firstLetterSession    = $_POST['firstLetterSession'];
-	$CourseList            = $_POST['SessionCoursesList'];
+    $formSent = $_POST['formSent'];
+    $firstLetterCourse = $_POST['firstLetterCourse'];
+    $firstLetterSession = $_POST['firstLetterSession'];
+    $CourseList = $_POST['SessionCoursesList'];
 	if (!is_array($CourseList)) {
 		$CourseList = array();
 	}
@@ -105,21 +101,20 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$existingCourses = Database::store_result($rs);
 
     // Updating only the RRHH users?? why?
-	//$sql="SELECT id_user FROM $tbl_session_rel_user WHERE id_session = $id_session AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
-    $sql        = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session = $id_session ";
-	$result     = Database::query($sql);
-	$UserList   = Database::store_result($result);
+    $sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session = $id_session ";
+    $result = Database::query($sql);
+    $UserList = Database::store_result($result);
 
-
-	foreach($CourseList as $enreg_course) {
+	foreach ($CourseList as $enreg_course) {
 		$enreg_course = Database::escape_string($enreg_course);
 		$exists = false;
-		foreach($existingCourses as $existingCourse) {
-			if($enreg_course == $existingCourse['course_code']) {
-				$exists=true;
-			}
-		}
-		if(!$exists) {
+        foreach ($existingCourses as $existingCourse) {
+            if ($enreg_course == $existingCourse['course_code']) {
+                $exists = true;
+            }
+        }
+
+		if (!$exists) {
 			$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code) VALUES('$id_session','$enreg_course')";
 			Database::query($sql_insert_rel_course);
 
@@ -131,7 +126,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 			$nbr_users=0;
 			foreach ($UserList as $enreg_user) {
 				$enreg_user = Database::escape_string($enreg_user['id_user']);
-				$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
+				$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user)
+                               VALUES('$id_session','$enreg_course','$enreg_user')";
 				Database::query($sql_insert);
 				if(Database::affected_rows()) {
 					$nbr_users++;
@@ -149,7 +145,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 			Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
             SessionManager::unInstallCourse($id_session, $course_info['real_id']);
-
 		}
 	}
 	$nbr_courses=count($CourseList);
@@ -168,12 +163,12 @@ Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$add.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+    Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').' ';
 } else {
 	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'&nbsp;&nbsp;&nbsp;';
 	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$add.'&add_type=multiple">'.
-        Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+    Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 // the form header
@@ -205,7 +200,6 @@ if ($ajax_search) {
 				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.course_code=course.code)
 				WHERE access_url_id = $access_url_id
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
-
 		}
 	}
 
@@ -239,7 +233,7 @@ if ($ajax_search) {
 	}
 	$result = Database::query($sql);
 	$Courses = Database::store_result($result);
-	foreach($Courses as $course) {
+	foreach ($Courses as $course) {
 		if ($course['id_session'] == $id_session) {
 			$sessionCourses[$course['code']] = $course ;
 		} else {
@@ -254,8 +248,7 @@ unset($Courses);
 <input type="hidden" name="formSent" value="1" />
 
 <?php
-if(!empty($errorMsg))
-{
+if (!empty($errorMsg)) {
 	Display::display_normal_message($errorMsg); //main API
 }
 ?>
@@ -295,10 +288,11 @@ if (!($add_type == 'multiple')) {
 	?>
 	<div id="ajax_list_courses_multiple">
 	<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:360px;"> <?php
-	foreach($nosessionCourses as $enreg)
-	{
+	foreach($nosessionCourses as $enreg) {
 		?>
-		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>>
+            <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
+        </option>
 		<?php
 	}
 	?></select>
@@ -324,7 +318,7 @@ unset($nosessionCourses);
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
-	if(isset($_GET['add'])) {
+	if (isset($_GET['add'])) {
 		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
 	} else {
 		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
@@ -334,11 +328,11 @@ unset($nosessionCourses);
   <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:360px;">
 
 <?php
-foreach($sessionCourses as $enreg)
-{
+foreach($sessionCourses as $enreg) {
 ?>
-	<option value="<?php echo $enreg['code']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
-
+	<option value="<?php echo $enreg['code']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>">
+        <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
+    </option>
 <?php
 }
 unset($sessionCourses);
@@ -347,7 +341,7 @@ unset($sessionCourses);
 </tr>
 </table>
 </form>
-<script type="text/javascript">
+<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -374,7 +368,7 @@ function sortOptions(options) {
 	}
 }
 
-function mysort(a, b){
+function mysort(a, b) {
 	if(a.text.toLowerCase() > b.text.toLowerCase()){
 		return 1;
 	}
@@ -384,7 +378,7 @@ function mysort(a, b){
 	return 0;
 }
 
-function valide(){
+function valide() {
 	var options = document.getElementById('destination').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;

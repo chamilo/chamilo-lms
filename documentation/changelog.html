@@ -44,6 +44,46 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
+<h1>Chamilo 1.9.8.3 - 21st of July, 2014</h1>
+<h3>Release notes - summary</h3>
+<p>Chamilo 1.9.8.3 is a small patch version with a few minor bugfixes and a new packaging. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.8.3, with a few changes to this changelog file and a few fixes throughout the code (as such, you can just overwrite previous files to upgrade from 1.9.8, 1.9.8.1 or 1.9.8.2 to 1.9.8.3).</p>
+<h3>Release name</h3>
+<p><a href="http://es.wikipedia.org/wiki/Departamento_de_Huánuco">Huánuco</a> is a small city in the Peruvian Andes, Northeast of Lima. This is a special version in memory of our cherished development team member César Perales, who passed away on July 22nd, 2014, at age 27. César contributed mostly "in the shadow" to Chamilo LMS, allowing the rest of the team to contribute more actively. He was a vibrant young man. He will be missed. César lived in calle Huánuco, in La Molina, Lima, Peru, where other team members bid him their last farewell for his last, eternal trip.</p>
+
+<h3>New Features</h3>
+<ul>
+  <li>(eadeaf8 - BT#8317) Add sessions duration feature</li>
+  <li>(019987d - BT#8316) Allow courses to be sorted inside a session (requires manual database change)</li>
+</ul>
+
+<h3>Improvements (minor features)</h3>
+<ul>
+  <li>(4d15a0f - BT#8417) Fix hide buttons in users report<li>
+  <li>(5213de2) Fix 1800 seconds flaw in learning paths availability</li>
+  <li>(5660b37) Fix download link in install doc</li>
+  <li>(09dc3f3) Update install doc for full-text indexing</li>
+  <li>(333319b) Fix deadlock condition in documents download</li>
+  <li>(bc94d5c - BT#8392) Allow ExtraFieldValue method to get the last value instead of the first in case of duplicates</li>
+  <li>(bbe627b - BT#8268) Add sso_challenge method as a second alternative to SSO authentication</li>
+  <li>(5ed701e) Add optimization documentation for user_rel_tag table index</li>
+  <li>(1204e13) Fix who is online user preview</li>
+  <li>(a98ab8c - BT#8157) Fix error loading wav files using LP</li>
+  <li>(cfac025 - BT#7780) Fix QTI import response</li>
+  <li>(c830878 - BT#7780, BT#6819) Fix condition showing deleted exercises</li>
+  <li>(c98d190 - BT#7803) Show events for "everyone" when showing user events</li>
+  <li>(f01b3b5 - BT#7780) Fix Aiken exercise import redirect display</li>
+  <li>(595fafb - BT#8231) Add setting to decode UTF-8 in registration web services</li>
+  <li>(39f5916 - BT#8295) Add Spanish to available languages in custom pages</li>
+  <li>(3995283 - BT#8295) Fix lost password page in custom pages</li>
+  <li>(528102f - BT#8289) Fix Chrome error when loading page HTML source</li>
+  <li>(9c0c73a - BT#8157) Fix issue in documents edition in multiple open courses context</li>
+  <li>(fbda6e2 - BT#8157) Add export users-class to CSV</li>
+  <li>(fd61c0f) Add missing icons</li>
+  <li>(a55776c - BT#8189) Fix for users inscription with approval setting</li>
+  <li></li>
+</ul>
+
+
 <h1>Chamilo 1.9.8.2 - 21st of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8.2 is a very little patch version with one bugfix regarding the learning paths tool. Considering the fact that 1.9.8 is planned for the long term, we'd hate to have such a minor patch left on the side for a year or so. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.8.2, with a change to this changelog file and a one-line change to main/newscorm/learnpathItem.class.php (as such, you can update just this file to upgrade from 1.9.8.1 to 1.9.8.2. See <a href="https://github.com/chamilo/chamilo-lms/commit/642a80e9e838f98f25135fbb64795e4f3df86260">the code change</a> for detais.</p>

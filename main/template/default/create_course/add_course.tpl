@@ -1,6 +1,9 @@
+{% if just_created == 1%}
 {{ just_created_link }}
 <h3>{{ 'JustCreated'|get_lang }} {{ course_title }}</h3>
 <hr />
+{% endif %}
+
 <h3>{{ 'ThingsToDo'|get_lang }}</h3>
 <br />
 
@@ -21,7 +24,7 @@
             <div class="caption">
                 <a href="{{ _p.web_main }}document/document.php?cidReq={{ course_id }}" class="btn">
                     {{'UploadADocument'|get_lang}}
-                </a>    
+                </a>
             </div>
         </div>
     </div>
@@ -42,13 +45,13 @@
             <div class="caption">
             <a href="{{ _p.web_main }}user/subscribe_user.php?cidReq={{ course_id }}" class="btn">
                 {{ 'SubscribeUserToCourse'|get_lang }}
-            </a>    
+            </a>
             </div>
         </div>
     </div>
     {% endif %}
-        
+
 
 </div>
-    
+
 <div class="clear"></div>

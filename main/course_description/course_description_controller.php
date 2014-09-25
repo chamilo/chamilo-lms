@@ -41,8 +41,13 @@ class CourseDescriptionController
         $data['messages'] = $messages;
         $browser = api_get_navigator();
 
-        if (strpos($data['descriptions'], '<iframe') !== false && $browser['name'] == 'Chrome') {
-            header("X-XSS-Protection: 0");
+        if (!is_array($data['descriptions'])) {
+            $data['descriptions'] = array($data['descriptions']);
+        }
+        foreach ($data['descriptions'] as $description) {
+            if (strpos($description, '<iframe') !== false && $browser['name'] == 'Chrome') {
+                header("X-XSS-Protection: 0");
+            }
         }
 
         // render to the view

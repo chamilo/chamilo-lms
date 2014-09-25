@@ -35,8 +35,7 @@ class ScormAssessmentItem
      {
         $this->question = $question;
         //$this->answer = new Answer($question->id);
-        $this->question->setAnswer();
-        
+        $this->question->setAnswer();        
         $this->questionIdent = "QST_" . $question->id ;
         $this->standalone = $standalone;
         //echo "<pre>".print_r($this,1)."</pre>";
@@ -85,14 +84,12 @@ class ScormAssessmentItem
 		if ($this->standalone) {
 			$css = '<style type="text/css" media="screen, projection">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";			
 			$css .= '/*]]>*/'."\n";
 			$css .= '</style>'."\n";
 			$css .= '<style type="text/css" media="print">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/print.css";'."\n";
 			$css .= '/*]]>*/'."\n";
-			$css .= '</style>'."\n";            
+			$css .= '</style>'."\n";
 		}
 		return $css;
 	}

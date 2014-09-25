@@ -45,6 +45,7 @@ $current_thread = get_thread_information($_GET['thread']); // Note: This has to 
 $current_forum = get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $whatsnew_post_info = $_SESSION['whatsnew_post_info'];
+
 /* Header and Breadcrumbs */
 
 if (isset($_SESSION['gradebook'])){

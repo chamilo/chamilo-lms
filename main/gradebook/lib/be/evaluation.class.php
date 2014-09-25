@@ -270,9 +270,7 @@ class Evaluation implements GradebookItem
 				$this->type = 'evaluation';
 			}
 			$sql .= ", '".api_get_utc_datetime()."'";
-
 			$sql .= ',\''.Database::escape_string($this->type).'\'';
-
 			$sql .= ")";
 
 			Database::query($sql);
@@ -417,7 +415,6 @@ class Evaluation implements GradebookItem
 		Database::query($sql);
     }
 
-
     /**
      * Delete this evaluation and all underlying results.
      */
@@ -425,7 +422,6 @@ class Evaluation implements GradebookItem
     	$this->delete_results();
     	$this->delete();
     }
-
 
     /**
      * Check if the given score is possible for this evaluation
@@ -444,7 +440,6 @@ class Evaluation implements GradebookItem
     public function calc_score($stud_id = null)
     {
 		$results = Result::load(null, $stud_id, $this->id);
-
 		$rescount = 0;
 		$sum = 0;
 		foreach ($results as $res) {
@@ -463,7 +458,6 @@ class Evaluation implements GradebookItem
 		} else {
 			return array ($sum, $rescount);
 		}
-
     }
 
     /**
@@ -528,8 +522,6 @@ class Evaluation implements GradebookItem
 		}
 		$this->save();
 	}
-
-
 
 	/**
 	 * Retrieve evaluations where a student has results for

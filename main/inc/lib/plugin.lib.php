@@ -482,7 +482,7 @@ class AppPlugin
 
                 if (file_exists($plugin_path)) {
                     require $plugin_path;
-                    if (isset($plugin_info) && isset($plugin_info['plugin_class'])) {
+                    if (isset($plugin_info) && isset($plugin_info['plugin_class']) && $obj->isCoursePlugin) {
                         $obj->course_install($courseId);
                     }
                 }

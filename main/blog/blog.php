@@ -128,24 +128,21 @@ if (!empty($_GET['unregister']))
 	Blog :: set_user_unsubscribed((int)$_GET['blog_id'], (int)$_GET['user_id']);
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks')
-{
+if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
 	if (isset($_GET['do']) && $_GET['do'] == 'delete')
 	{
 		Blog :: delete_task($blog_id, (int)$_GET['task_id']);
 		$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskDeleted'));
 	}
 
-	if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment')
-	{
+	if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment') {
 		Blog :: delete_assigned_task($blog_id, Database::escape_string((int)$_GET['task_id']), Database::escape_string((int)$_GET['user_id']));
 		$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskAssignmentDeleted'));
 	}
 
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'view_post')
-{
+if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 	$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
 	if (isset($_GET['do']) && $_GET['do'] == 'delete_comment')
@@ -202,8 +199,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post')
 $htmlHeadXtra[] = '<script src="tbl_change.js" type="text/javascript"></script>';
 
 // Set bredcrumb
-switch ($current_page)
-{
+switch ($current_page) {
 	case 'new_post' :
 		$nameTools = get_lang('NewPost');
 		$interbreadcrumb[] = array ('url' => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));
@@ -240,14 +236,11 @@ switch ($current_page)
 }
 
 // feedback messages
-if (!empty($return_message))
-{
-	if ($return_message['type'] == 'confirmation')
-	{
+if (!empty($return_message)) {
+	if ($return_message['type'] == 'confirmation') {
 		Display::display_confirmation_message($return_message['message']);
 	}
-	if ($return_message['type'] == 'error')
-	{
+	if ($return_message['type'] == 'error') {
 		Display::display_error_message($return_message['message']);
 	}
 }
@@ -276,12 +269,12 @@ Display::display_introduction_section(TOOL_BLOG);
 	<td width="10%" style="float;left;" class="blog_left" valign="top">
 		<?php
 
-$month = (int)$_GET['month'] ? (int)$_GET['month'] : (int) date('m');
-$year = (int)$_GET['year'] ? (int)$_GET['year'] : date('Y');
-Blog :: display_minimonthcalendar($month, $year, $blog_id);
+$month = isset($_GET['month']) ? (int)$_GET['month'] : (int) date('m');
+$year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+
+Blog::display_minimonthcalendar($month, $year, $blog_id);
 ?>
 		<br />
-
 		<br />
 		<table width="100%">
 			<tr>
@@ -312,11 +305,11 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 	<td valign="top" class="blog_right">
 		<?php
 
-if ($error)
+if (isset($error)) {
 	Display :: display_error_message($message);
+}
 
-if ($flag == '1')
-{
+if (isset($flag) && $flag == '1') {
 	$current_page = "manage_tasks";
 	Blog :: display_assign_task_form($blog_id);
 }
@@ -358,21 +351,14 @@ switch ($current_page) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
 			Blog :: display_form_new_post($blog_id);
-		}
-		else
-		{
-				if (isset ($_GET['filter']) && !empty ($_GET['filter']))
-				{
+		} else {
+				if (isset($_GET['filter']) && !empty($_GET['filter'])) {
 					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
-				}
-				else
-				{
+				} else {
 					Blog :: display_blog_posts($blog_id);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			api_not_allowed();
 		}
 		break;
@@ -382,55 +368,43 @@ switch ($current_page) {
 	case 'edit_post' :
 		$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
 
-		if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id))
-		{
+		if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id)) {
 			// we show the form if
 			// 1. no post data
 			// 2. there is post data and the required field is empty
-			if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title'])))
-			{
+			if (!$_POST OR (!empty($_POST) AND empty($_POST['post_title']))) {
 				// if there is post data there is certainly an error in the form
-				if ($_POST)
-				{
+				if ($_POST) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
                 Blog :: display_form_edit_post($blog_id, Database::escape_string((int)$_GET['post_id']));
-			}
-			else
-			{
-				if (isset ($_GET['filter']) && !empty ($_GET['filter']))
-				{
+			} else {
+				if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
 					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
-				}
-				else
-				{
+				} else {
 					Blog :: display_blog_posts($blog_id);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			api_not_allowed();
 		}
 
 		break;
 	case 'manage_members' :
-		if (api_is_allowed('BLOG_'.$blog_id, 'member_management'))
-		{
+		if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
 			Blog :: display_form_user_subscribe($blog_id);
 			echo '<br /><br />';
 			Blog :: display_form_user_unsubscribe($blog_id);
-		}
-		else
+		} else {
 			api_not_allowed();
+        }
 
 		break;
 	case 'manage_rights' :
 		Blog :: display_form_user_rights($blog_id);
 		break;
 	case 'manage_tasks' :
-		if (api_is_allowed('BLOG_'.$blog_id, 'task_management'))
-		{
+		if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
 			if (isset($_GET['do']) && $_GET['do'] == 'add')
 			{
 				Blog :: display_new_task_form($blog_id);
@@ -468,12 +442,9 @@ switch ($current_page) {
 		break;
 	case '' :
 	default :
-		if (isset ($_GET['filter']) && !empty ($_GET['filter']))
-		{
+		if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
 			Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
-		}
-		else
-		{
+		} else {
 			Blog :: display_blog_posts($blog_id);
 		}
 }

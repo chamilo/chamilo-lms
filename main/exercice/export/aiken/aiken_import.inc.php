@@ -288,13 +288,10 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
             $answers_array = array();
             $new_question = true;
         } else {
-            if (empty($exercise_info['question'][$question_index]['title']))
-            {
-                if (strlen($info) < 40)
-                {
+            if (empty($exercise_info['question'][$question_index]['title'])) {
+                if (strlen($info) < 40) {
                     $exercise_info['question'][$question_index]['title'] = $info;
-                } else
-                {
+                } else {
                     //Question itself (use a 40-chars long title and a larger description)
                     $exercise_info['question'][$question_index]['title'] = trim(substr($info,0,40)).'...';
                     $exercise_info['question'][$question_index]['description'] = $info;

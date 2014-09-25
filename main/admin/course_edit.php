@@ -251,8 +251,6 @@ $form->setDefaults($course);
 // Validate form
 if ($form->validate()) {
     $course = $form->getSubmitValues();
-
-    $dbName = $_POST['dbName'];
     $course_code = $course['code'];
     $visual_code = $course['visual_code'];
     $visual_code = generate_course_code($visual_code);
@@ -286,8 +284,8 @@ if ($form->validate()) {
         }
     }
 
-	$tutor_id = $course['tutor_name'];
-	$tutor_name = $platform_teachers[$tutor_id];
+	$tutor_id = isset($course['tutor_name']) ? $course['tutor_name'] : null;
+	$tutor_name = isset($platform_teachers[$tutor_id]) ? $platform_teachers[$tutor_id] : null;
 	$teachers = $course['group']['course_teachers'];
 
 	$title = $course['title'];
@@ -350,9 +348,15 @@ if ($form->validate()) {
         $sessionCoaches = $course['session_coaches'];
         if (!empty($sessionCoaches)) {
             foreach ($sessionCoaches as $sessionId => $teacherInfo) {
-                $coachesToSubscribe = $teacherInfo['coaches_by_session'];
-                SessionManager::updateCoaches($sessionId, $course['code'], $coachesToSubscribe, true);
-
+                $coachesToSubscribe = isset($teacherInfo['coaches_by_session']) ? $teacherInfo['coaches_by_session'] : null;
+                if (!empty($coachesToSubscribe)) {
+                    SessionManager::updateCoaches(
+                        $sessionId,
+                        $course['code'],
+                        $coachesToSubscribe,
+                        true
+                    );
+                }
             }
         }
     }
@@ -366,7 +370,6 @@ if ($form->validate()) {
 				sort='0',
 				user_course_cat='0'";
 	Database::query($sql);
-
 
     if (array_key_exists('add_teachers_to_sessions_courses', $course_info)) {
         $sql = "UPDATE $course_table SET add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'

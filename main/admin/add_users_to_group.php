@@ -182,10 +182,6 @@ $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script>
 function add_user (code, content) {
-
-	// document.getElementById("user_to_add").value = "";
-	//document.getElementById("ajax_list_users_single").innerHTML = "";
-
 	destination = document.getElementById("destination_users");
 	for (i=0;i<destination.length;i++) {
 		if (destination.options[i].text == content) {

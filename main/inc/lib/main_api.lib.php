@@ -69,6 +69,8 @@ define('SESSION_VISIBLE', 2);
 define('SESSION_INVISIBLE', 3); // not available
 define('SESSION_AVAILABLE', 4);
 
+define('SESSION_LINK_TARGET','_self');
+
 define('SUBSCRIBE_ALLOWED', 1);
 define('SUBSCRIBE_NOT_ALLOWED', 0);
 define('UNSUBSCRIBE_ALLOWED', 1);
@@ -1276,6 +1278,26 @@ function api_get_user_info_from_username($username = '')
 }
 
 /**
+ * Get first user with an email
+ * @param string $email
+ * @return array|bool
+ */
+function api_get_user_info_from_email($email = '')
+{
+    if (empty($email)) {
+        return false;
+    }
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
+            WHERE email ='".Database::escape_string($email)."' LIMIT 1";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+        return _api_format_user($result_array);
+    }
+    return false;
+}
+
+/**
  * @return string
  */
 function api_get_course_id() {
@@ -1985,10 +2007,17 @@ function api_get_session_info($session_id) {
  * @param int $session_id
  * @param string $course_code
  * @param bool $ignore_visibility_for_admins
- * @return int  0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
+ * @return int
+ *  0 = session still available,
+ *  SESSION_VISIBLE_READ_ONLY = 1,
+ *  SESSION_VISIBLE = 2,
+ *  SESSION_INVISIBLE = 3
  */
-function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true)
-{
+function api_get_session_visibility(
+    $session_id,
+    $course_code = null,
+    $ignore_visibility_for_admins = true
+) {
     // Means that the session is still available.
     $visibility = 0;
 
@@ -2003,23 +2032,58 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sql = "SELECT
-                      visibility,
-                      date_start,
-                      date_end,
-                      nb_days_access_after_end,
-                      nb_days_access_before_beginning
-                FROM $tbl_session
+        $sql = "SELECT * FROM $tbl_session
                 WHERE id = $session_id ";
 
         $result = Database::query($sql);
 
-        if (Database::num_rows($result) > 0 ) {
+        if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result, 'ASSOC');
             $visibility = $original_visibility = $row['visibility'];
 
             // I don't care the session visibility.
             if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
+
+                // Session duration per student.
+                if (SessionManager::durationPerUserIsEnabled()) {
+                    if (isset($row['duration']) && !empty($row['duration'])) {
+                        $duration = $row['duration']*24*60*60;
+
+                        $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
+                            $session_id,
+                            api_get_user_id()
+                        );
+                        // If there is a session duration but there is no previous
+                        // access by the user, then the session is still available
+                        if (count($courseAccess) == 0) {
+                            return SESSION_AVAILABLE;
+                        }
+                        $currentTime = time();
+                        $firstAccess = 0;
+                        if (isset($courseAccess['login_course_date'])) {
+                            $firstAccess = api_strtotime(
+                                $courseAccess['login_course_date'],
+                                'UTC'
+                            );
+                        }
+                        $userDurationData = SessionManager::getUserSession(
+                            api_get_user_id(),
+                            $session_id
+                        );
+                        $userDuration = 0;
+                        if (isset($userDurationData['duration'])) {
+                            $userDuration = intval($userDurationData['duration']) * 24 * 60 * 60;
+                        }
+
+                        $totalDuration = $firstAccess + $duration + $userDuration;
+                        if ($totalDuration > $currentTime) {
+                            return SESSION_AVAILABLE;
+                        } else {
+                            return SESSION_INVISIBLE;
+                        }
+                    }
+                }
+
                 return SESSION_AVAILABLE;
             } else {
                 // If start date was set.
@@ -2494,7 +2558,7 @@ function api_is_course_session_coach($user_id, $course_code, $session_id)
  * @param string - optional, course code
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $course_code = null) {
+function api_is_coach($session_id = 0, $course_code = null, $check_student_view = true) {
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
@@ -2502,7 +2566,9 @@ function api_is_coach($session_id = 0, $course_code = null) {
     }
 
     // The student preview was on
-    if (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
+    if ($check_student_view &&
+        isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview"
+    ) {
         return false;
     }
 
@@ -2537,6 +2603,7 @@ function api_is_coach($session_id = 0, $course_code = null) {
 	    } else {
 	    	$sessionIsCoach = Database::store_result($result);
 	    }
+
 	}
     return (count($sessionIsCoach) > 0);
 }
@@ -2786,10 +2853,10 @@ function api_display_debug_info($debug_info) {
 function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true)
 {
     $my_session_id 				= api_get_session_id();
-    $is_allowed_coach_to_edit 	= api_is_coach();
+    $is_allowed_coach_to_edit 	= api_is_coach(null, null, $check_student_view);
     $session_visibility 		= api_get_session_visibility($my_session_id);
 
-    //Admins can edit anything
+    // Admins can edit anything.
     if (api_is_platform_admin(false)) {
         //The student preview was on
         if ($check_student_view && isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
@@ -2822,16 +2889,17 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
     }
 
     if (!$is_courseAdmin && $session_coach) {
-        $is_courseAdmin = $is_courseAdmin || api_is_coach();
+        $is_courseAdmin = $is_courseAdmin || $is_allowed_coach_to_edit;
     }
 
     // Check if the student_view is enabled, and if so, if it is activated.
     if (api_get_setting('student_view_enabled') == 'true') {
         if (!empty($my_session_id)) {
-            // Check if session visibility is read only for coachs
+            // Check if session visibility is read only for coaches.
             if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
                 $is_allowed_coach_to_edit = false;
             }
+
             if (api_get_setting('allow_coach_to_edit_course_session') == 'true') {
                 // Check if coach is allowed to edit a course.
                 $is_allowed = $is_allowed_coach_to_edit;
@@ -3234,6 +3302,7 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0)
     if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) {
         return -1;
     }
+
     $tool = Database::escape_string($tool);
     $id = intval($id);
     $session = (int) $session;
@@ -3523,6 +3592,45 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
 }
 
 /**
+ * Gets item property by tool and user
+ * @param int $userId
+ * @param int $tool
+ * @param int $courseId
+ * @param int $session_id
+ * @return array
+ */
+function api_get_item_property_list_by_tool_by_user(
+    $userId,
+    $tool,
+    $courseId,
+    $session_id = 0
+) {
+    $userId = intval($userId);
+    $tool = Database::escape_string($tool);
+    $session_id = intval($session_id);
+    $courseId = intval($courseId);
+
+    // Definition of tables.
+    $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $session_condition = ' AND id_session = '.$session_id;
+    $sql = "SELECT * FROM $item_property_table
+            WHERE
+                insert_user_id = $userId AND
+                c_id = $courseId AND
+                tool = '$tool'
+                $session_condition ";
+
+    $rs = Database::query($sql);
+    $list = array();
+    if (Database::num_rows($rs) > 0) {
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            $list[] = $row;
+        }
+    }
+    return $list;
+}
+
+/**
  * Gets item property id from tool of a course
  * @param string    course code
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
@@ -3595,28 +3703,30 @@ function api_get_track_item_property_history($tool, $ref)
  * @param int    	course id
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param int $session_id
  */
 function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
 {
     $course_info = api_get_course_info_by_id($course_id);
+
     if (empty($course_info)) {
         return false;
     }
 
-    $tool           = Database::escape_string($tool);
-    $ref            = intval($ref);
-    $course_id      = intval($course_id);
+    $tool = Database::escape_string($tool);
+    $ref = intval($ref);
+    $course_id	 = $course_info['real_id'];
+    $session_id = intval($session_id);
 
     // Definition of tables.
-    $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $course_id	 = $course_info['real_id'];
+    $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-   	$sql = "SELECT * FROM $TABLE_ITEMPROPERTY
-   	        WHERE c_id = $course_id AND tool = '$tool' AND ref = $ref ";
-   	if (!empty($session_id)) {
-   		$session_id = intval($session_id);
-   		$sql .= "AND id_session = $session_id ";
-   	}
+   	$sql = "SELECT * FROM $table
+   	        WHERE
+   	            c_id = $course_id AND
+   	            tool = '$tool' AND
+   	            ref = $ref AND
+   	            id_session = $session_id ";
 
     $rs  = Database::query($sql);
     $row = array();
@@ -3686,6 +3796,7 @@ function api_display_language_form($hide_if_no_choice = false) {
     if (isset($_SESSION['user_language_choice'])) {
         $user_selected_language = $_SESSION['user_language_choice'];
     }
+
     if (empty($user_selected_language)) {
         $user_selected_language = api_get_setting('platformLanguage');
     }
@@ -3701,10 +3812,12 @@ function api_display_language_form($hide_if_no_choice = false) {
     }
     //-->
     </script>';
-
+//    var_dump($user_selected_language);
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
     $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
     $html .=  '<select id="language_list" class="chzn-select" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';
+
+
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {
             $option_end = ' selected="selected" >';
@@ -5697,7 +5810,7 @@ function api_sql_query($query, $file = '', $line = 0) {
  * @author Ivan Tcholakov, 04-OCT-2009, a reworked version of this function.
  * @link http://www.dokeos.com/forum/viewtopic.php?t=15557
  */
-function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null) {
+function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = array()) {
 
     require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
 
@@ -5783,6 +5896,15 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     // Send mail.
     if (!$mail->Send()) {
         return 0;
+    }
+
+    $plugin = new AppPlugin();
+    $installedPluginsList = $plugin->getInstalledPluginListObject();
+    foreach ($installedPluginsList as $installedPlugin) {
+        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additional_parameters)) {
+            $clockworksmsObject = new Clockworksms();
+            $clockworksmsObject->send($additional_parameters);
+        }
     }
 
     // Clear all the addresses.

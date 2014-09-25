@@ -69,12 +69,15 @@ We recommend using HTML5-compatible technology.
 <h2>Dependencies - server-side</h2>
 <ul>
   <li>Apache 2+</li>
-  <li>PHP 5.3 or higher with recent MySQL bindings and php-gd extension to allow Chamilo to resize pictures. The
-  new components we have included from the Symfony framework highly depend on namespaces, a feature that appeared in PHP 5.3.0+</li>
+  <li> PHP 5.3 or higher with MySQL bindings (mysqlnd is recommended) and php-gd extension to allow Chamilo to resize pictures. The 
   <li>MySQL 5.1+ or any version of MariaDB database server</li>
+  new components we have included from the Symfony framework highly depend on namespaces, a feature that appeared in PHP 5.3.0</li>
   <li>php5-intl package (for international behaviour support)</li>
+  <li>php5-imagick</li>
   <li>php5-curl (only required for a feature in the links tool and an optional installer check)</li>
   <li>php5-mcrypt (only required for a feature in the survey tool)</li>
+  <li>php5-ldap (only required for connection to a LDAP server)</li>
+  <li>php5-xapian (only required for full-text indexing and search)</li>
 </ul><br />
 <a name="included_dependencies"></a>
 <h2>Included Dependencies</h2>

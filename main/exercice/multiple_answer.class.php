@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Code
- */
-/**
 	CLASS MultipleAnswer
  *
  *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
@@ -12,16 +9,16 @@
  *	@author Eric Marguin
  *	@package chamilo.exercise
  **/
-
-class MultipleAnswer extends Question {
-
+class MultipleAnswer extends Question
+{
 	static $typePicture = 'mcma.gif';
 	static $explanationLangVar = 'MultipleSelect';
 
 	/**
 	 * Constructor
 	 */
-	function MultipleAnswer() {
+	function MultipleAnswer()
+    {
 		parent::question();
 		$this -> type = MULTIPLE_ANSWER;
 		$this -> isContent = $this-> getIsContent();
@@ -32,7 +29,8 @@ class MultipleAnswer extends Question {
 	 * @param the formvalidator instance
 	 * @param the answers number to display
 	 */
-	function createAnswersForm ($form) {
+	function createAnswersForm ($form)
+    {
 
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;  // The previous default value was 2. See task #1759.
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -174,7 +172,7 @@ class MultipleAnswer extends Question {
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
 
-			if($goodAnswer){
+			if ($goodAnswer) {
     			$weighting = abs($weighting);
 			} else {
 				$weighting = abs($weighting);
@@ -194,7 +192,8 @@ class MultipleAnswer extends Question {
         $this->save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null) {
+	function return_header($feedback_type = null, $counter = null, $score = null)
+    {
 	    $header = parent::return_header($feedback_type, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>
@@ -205,4 +204,6 @@ class MultipleAnswer extends Question {
         $header .= '</tr>';
         return $header;
 	}
+
+
 }

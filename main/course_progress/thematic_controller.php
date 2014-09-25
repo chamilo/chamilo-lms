@@ -17,12 +17,14 @@
  * the requested action
  * @package chamilo.course_progress 
  */
-class ThematicController {
+class ThematicController
+{
 
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->toolname = 'course_progress';
         $this->view = new View($this->toolname);
     }
@@ -30,9 +32,10 @@ class ThematicController {
     /**
      * This method is used for thematic control (update, insert or listing)
      * @param 	string	Action
-     * render to thematic.php 
+     * render to thematic.php
      */
-    public function thematic($action) {
+    public function thematic($action) 
+    {
         $thematic = new Thematic();
         $data = array();
         $error = false;
@@ -180,7 +183,7 @@ class ThematicController {
                         $data = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
                         $advance_html = null;
                         if (!empty($data)) {
-                            foreach ($data as $advance) {                                
+                            foreach ($data as $advance) {
                                 $advance_html .= api_convert_and_format_date($advance['start_date'], DATE_FORMAT_LONG) . ' ('.$advance['duration'].' '.get_lang('HourShort').')<br />'.$advance['content'].'<br />';
                             }
                         }
@@ -192,7 +195,7 @@ class ThematicController {
                         'add_signatures' => true,
                         'format' => 'A4-L',
                         'orientation' => 'L'
-                    );                    
+                    );
                     Export::export_table_pdf($table, $params);
                     break;
                 case 'moveup':
@@ -237,10 +240,7 @@ class ThematicController {
             $thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);
 
             $data['thematic_plan_div'] = $thematic->get_thematic_plan_div($thematic_plan_data);
-
             $data['thematic_advance_div'] = $thematic->get_thematic_advance_div($thematic_advance_data);
-
-
             $data['thematic_plan_data'] = $thematic_plan_data;
             $data['thematic_advance_data'] = $thematic_advance_data;
             $data['thematic_data'] = $thematic_data;
@@ -261,9 +261,10 @@ class ThematicController {
     /**
      * This method is used for thematic plan control (update, insert or listing)
      * @param 	string	Action
-     * render to thematic_plan.php 
+     * render to thematic_plan.php
      */
-    public function thematic_plan($action) {
+    public function thematic_plan($action)
+    {
         $thematic = new Thematic();
 
         $data = array();
@@ -310,11 +311,12 @@ class ThematicController {
             }
         }
 
+        $thematic_id = intval($_GET['thematic_id']);
 
         if ($action == 'thematic_plan_list') {
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
         }
-        $thematic_id = intval($_GET['thematic_id']);
+
         $description_type = intval($_GET['description_type']);
 
         if (!empty($thematic_id) && !empty($description_type)) {
@@ -353,10 +355,10 @@ class ThematicController {
     /**
      * This method is used for thematic advance control (update, insert or listing)
      * @param 	string	Action
-     * render to thematic_advance.php 
+     * render to thematic_advance.php
      */
-    public function thematic_advance($action) {
-
+    public function thematic_advance($action)
+     {
         $thematic = new Thematic();
         $attendance = new Attendance();
         $data = array();

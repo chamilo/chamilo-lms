@@ -475,25 +475,56 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     				$student_answer_list = $correct_answer_list[0];
                 }
 
-                // Split the response by bracket
-                // tab_comments is an array with text surrounding the text to find
-                // we add a space before and after the answer_question to be sure to have a block of text before and after [xxx] patterns
-                // so we have n text to find ([xxx]) and n+1 blockc of texts before, beteween and after the text to find
+                /*
+                Split the response by bracket
+                tab_comments is an array with text surrounding the text to find
+                we add a space before and after the answer_question to be sure to
+                have a block of text before and after [xxx] patterns
+                so we have n text to find ([xxx]) and n+1 block of texts before,
+                between and after the text to find
+                */
                 $tab_comments = api_preg_split('/\[[^]]+\]/', ' '.$answer.' ');
 
                 if (!empty($correct_answer_list) && !empty($student_answer_list)) {
                     $answer = "";
                     $i = 0;
                     foreach ($student_answer_list as $student_item) {
-                        $student_response = api_substr($student_item, 1, api_strlen($student_item) - 2);  // remove surronding brackets
-                        $answer .= $tab_comments[$i].Display::input('text', "choice[$questionId][]", $student_response);
+                        // remove surronding brackets
+                        $student_response = api_substr($student_item, 1, api_strlen($student_item) - 2);
+
+                        $size = strlen($student_item);
+                        $attributes['class'] = detectInputAppropriateClass($size);
+
+                        $answer .= $tab_comments[$i].
+                            Display::input(
+                                'text',
+                                "choice[$questionId][]",
+                                $student_response,
+                                $attributes
+                            );
                         $i++;
                     }
                     $answer .= $tab_comments[$i];
                 } else {
-                    // display exercice with empty input fields
+                    // display exercise with empty input fields
                     // every [xxx] are replaced with an empty input field
-                    $answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+                    foreach ($correct_answer_list[0] as $item) {
+                        $size = strlen($item);
+                        $attributes['class'] = detectInputAppropriateClass($size);
+                        $answer = str_replace(
+                            $item,
+                            Display::input('text', "choice[$questionId][]", '', $attributes),
+                            $answer
+                        );
+                    }
+                    /*$answer = api_preg_replace(
+                        '/\[[^]]+\]/',
+                        Display::input(
+                            'text',
+                            "choice[$questionId][]",
+                            '',
+                            $attributes
+                        ), $answer);*/
                 }
     			$s .= $answer;
 
@@ -831,7 +862,7 @@ function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id =
     $sql 	= "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $exercise_id";
     $result = Database::query($sql);
     $row	= Database::fetch_array($result, 'ASSOC');
-    if (!empty($row['expired_time']) ) {
+    if (!empty($row['expired_time'])) {
     	$current_expired_time_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
     	if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
             $current_time = time();
@@ -1473,7 +1504,9 @@ function convert_score($score, $weight) {
 }
 
 /**
- * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
+ * Getting all active exercises from a course from a session
+ * (if a session_id is provided we will show all the exercises in the course +
+ * all exercises in the session)
  * @param   array   course data
  * @param   int     session id
  * @param   boolean Check publications dates
@@ -1485,7 +1518,14 @@ function convert_score($score, $weight) {
  *                  3 = active <> -1
  * @return  array   array with exercise data
  */
-function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false, $search_exercise = '', $search_all_sessions = false, $active = 2) {
+function get_all_exercises(
+    $course_info = null,
+    $session_id = 0,
+    $check_publication_dates = false,
+    $search_exercise = '',
+    $search_all_sessions = false,
+    $active = 2
+) {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
     $course_id = api_get_course_int_id();
 
@@ -1519,12 +1559,21 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
     }
 
     if ($search_all_sessions == true) {
-        $conditions = array('where'=>array($active_sql . ' c_id = ? '. $needle_where . $time_conditions => array($course_id, $needle)), 'order'=>'title');
+        $conditions = array(
+            'where' => array($active_sql . ' c_id = ? '. $needle_where . $time_conditions => array($course_id, $needle)),
+            'order' => 'title'
+        );
     } else {
         if ($session_id == 0) {
-            $conditions = array('where'=>array($active_sql . ' session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
+            $conditions = array(
+                'where' => array($active_sql . ' session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array($session_id, $course_id, $needle)),
+                'order' =>'title'
+            );
         } else {
-            $conditions = array('where'=>array($active_sql . ' (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
+            $conditions = array(
+                'where' => array($active_sql . ' (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array($session_id, $course_id, $needle)),
+                'order' => 'title'
+            );
         }
     }
 
@@ -2322,6 +2371,11 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
             if (empty($result)) {
                 continue;
+            }
+
+            // In case of global score, make sure the calculated total score is integer
+            if (!is_int($result['score'])) {
+                $result['score'] = round($result['score']);
             }
 
             $total_score += $result['score'];

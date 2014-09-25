@@ -70,7 +70,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
     $form->addElement('html', '</div>');
 
-    $form->add_textfield('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3','id'=>'duration_in_hours_element'));
+    $form->add_textfield('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3','id'=>'duration_in_hours_element', 'autofocus' => 'autofocus'));
 
     $form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
     //$form->addElement('textarea', 'content', get_lang('Content'));
@@ -105,6 +105,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
     $default['start_date_type'] = 1;
     $default['custom_start_date'] = date('d-F-Y H:i', api_strtotime(api_get_local_time()));
+    $default['duration_in_hours'] = 1;
 
     if (!empty($thematic_advance_data)) {
 

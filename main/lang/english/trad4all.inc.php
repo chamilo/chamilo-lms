@@ -2,6 +2,30 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FieldTypeMobilePhoneNumber = "Mobile phone number";
+$CheckUniqueEmail = "Check unique email";
+$EmailUsedTwice = "This email is not available";
+$TotalPostsInAllForums = "Total posts in all forums.";
+$AddMeAsCoach = "Add me as coach";
+$AddMeAsTeacherInCourses = "Add me as teacher in the imported courses.";
+$ExerciseProgressInfo = "Progress of exercises taken by the student";
+$CourseTimeInfo = "Time spent in the course";
+$ExerciseAverageInfo = "Average of best grades of each exercise attempt";
+$ExtraDurationForUser = "Additional access days for this user";
+$UserXSessionY = "User: %s - Session: %s";
+$DurationIsSameAsDefault = "The given session duration is the same as the default for the session. Ignoring.";
+$FirstAccessWasXSessionDurationYEndDateWasZ = "This user's first access to the session was on %s. With a session duration of %s days, the access to this session already expired on %s";
+$FirstAccessWasXSessionDurationYEndDateInZDays = "This user's first access to the session was on %s. With a session duration of %s days, the end date is scheduled in %s days";
+$UserNeverAccessedSessionDefaultDurationIsX = "This user never accessed this session before. The duration is currently set to %s days (from the first access date)";
+$SessionDurationEdit = "Edit session duration";
+$EditUserSessionDuration = "User's session duration edition";
+$SessionDurationXDaysLeft = "This session has a maximum duration. Only %s days to go.";
+$NextTopic = "Next topic";
+$CurrentTopic = "Current topic";
+$ShowFullCourseAdvance = "Show course planning";
+$RedirectToCourseHome = "Redirect to Course home";
+$LpReturnLink = "Learning path return link";
+$LearningPathList = "Learning path list";
 $UsersWithoutTask = "Learners who didn't send their work";
 $UsersWithTask = "Learners who sent their work";
 $UploadFromTemplate = "Upload from template";
@@ -1597,4 +1621,7 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
+$FieldTypeMobilePhoneNumber = "Mobile phone";
+$CountryDialCode = "Include the country dial code";
+$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains not valid characters";
 ?>

@@ -74,14 +74,12 @@ if (!empty($event)) {
             $vevent->setClass('PRIVATE');
             break;
     }
-    
+
     $event['start_date'] = api_get_local_time($event['start_date']);
     $event['end_date'] = api_get_local_time($event['end_date']);
-    
-    
-    
+
     switch($type) {
-        case 'personal':        
+        case 'personal':
         case 'platform':
             $vevent->setProperty( 'summary', api_convert_encoding($event['title'],'UTF-8', $charset));
             if(empty($event['start_date'])){header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));}
@@ -105,7 +103,7 @@ if (!empty($event)) {
             $ical->setComponent ($vevent); // add event to calendar
             $ical->returnCalendar();
             break;
-        case 'course':            
+        case 'course':
             $vevent->setProperty( 'summary', api_convert_encoding($event['title'],'UTF-8',$charset));
             if(empty($event['start_date'])){header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));}
             list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$event['start_date']);

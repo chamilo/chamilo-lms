@@ -25,9 +25,10 @@ $archivePath = api_get_path(SYS_ARCHIVE_PATH);
 $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
 $course_list = CourseManager::get_courses_list();
+$formSent = null;
 
-if ($_POST['formSent']) {
-	$formSent	=$_POST['formSent'];
+if (isset($_POST['formSent']) && $_POST['formSent']) {
+	$formSent = $_POST['formSent'];
 	$select_type=intval($_POST['select_type']);
 	$file_type = 'csv';
 	$courses = $selected_courses = array();
@@ -92,20 +93,20 @@ if (!empty($msg)) {
 
 <form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
     <input type="hidden" name="formSent" value="1">
-    <legend><?php echo $tool_name; ?></legend>    
+    <legend><?php echo $tool_name; ?></legend>
 <?php if (!empty($course_list)) { ?>
-<div class="control-group">    
-    
+<div class="control-group">
+
     <div class="controls">
-        <label class="radio" for="all-courses">            
+        <label class="radio" for="all-courses">
         <input id="all-courses" class="checkbox" type="radio" value="1" name="select_type" <?php if(!$formSent || ($formSent && $select_type == 1)) echo 'checked="checked"'; ?> onclick="javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"/>
             <?php echo get_lang('ExportAllCoursesList')?>
-        </label>        
-        
+        </label>
+
         <label class="radio" for="select-courses">
             <input id="select-courses" class="checkbox" type="radio" value="2" name="select_type" <?php if($formSent && $select_type == 2) echo 'checked="checked"'; ?> onclick="javascript: if(this.checked){document.getElementById('div-course-list').style.display='block';}"/>
             <?php echo get_lang('ExportSelectedCoursesFromCoursesList')?>
-        </label>        
+        </label>
     </div>
 </div>
 <div id="div-course-list" style="<?php echo (!$formSent || ($formSent && $select_type == 1))?'display:none':'display:block';?>">

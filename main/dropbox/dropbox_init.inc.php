@@ -128,6 +128,7 @@ require_once '../inc/global.inc.php';
 $is_allowed_in_course = api_is_allowed_in_course();
 $is_courseTutor = api_is_course_tutor();
 $is_courseAdmin = api_is_course_admin();
+
 $current_course_tool  = TOOL_DROPBOX;
 
 // the dropbox configuration parameters

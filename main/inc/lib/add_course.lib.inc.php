@@ -77,7 +77,7 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
         $query = "SELECT 1 FROM ".$course_table." WHERE code='".$keys_course_id."' LIMIT 0,1";
         $result = Database::query($query);
 
-        if ($keys_course_id == DEFAULT_COURSE || Database::num_rows($result)) {
+        if (Database::num_rows($result)) {
             $keys_are_unique = false;
             $try_new_fsc_id ++;
             $final_suffix['CourseId'] = substr(md5(uniqid(rand())), 0, 4);
@@ -2716,29 +2716,33 @@ function string2binary($variable) {
  * @todo use an array called $params instead of lots of params
  * @assert (null) === false
  */
-function register_course($params) {
+function register_course($params)
+{
     global $error_msg, $firstExpirationDelay;
 
     $title              = $params['title'];
     $code               = $params['code'];
     $visual_code        = $params['visual_code'];
     $directory          = $params['directory'];
-    $tutor_name         = $params['tutor_name'];
+    $tutor_name         = isset($params['tutor_name']) ? $params['tutor_name'] : null;
     //$description        = $params['description'];
 
     $category_code      = $params['course_category'];
-    $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');
-    $user_id            = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
-    $department_name    = $params['department_name'];
-    $department_url     = $params['department_url'];
-    $disk_quota         = $params['disk_quota'];
+    $course_language = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');
+    $user_id = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
+    $department_name = isset($params['department_name']) ?
+        $params['department_name'] : null;
+    $department_url = isset($params['department_url']) ?
+        $params['department_url'] : null;
+    $disk_quota = isset($params['disk_quota']) ?
+        $params['disk_quota'] : null;
 
     if (!isset($params['visibility'])) {
         $default_course_visibility = api_get_setting('courses_default_creation_visibility');
         if (isset($default_course_visibility)) {
-            $visibility         = $default_course_visibility;
+            $visibility = $default_course_visibility;
         } else {
-            $visibility         = COURSE_VISIBILITY_OPEN_PLATFORM;
+            $visibility = COURSE_VISIBILITY_OPEN_PLATFORM;
         }
     } else {
         $visibility         = $params['visibility'];
@@ -2746,10 +2750,9 @@ function register_course($params) {
 
     $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : ($visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0);
     $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
-
-    $expiration_date    = $params['expiration_date'];
-    $teachers           = $params['teachers'];
-    $status             = $params['status'];
+    $expiration_date    = isset($params['expiration_date']) ? $params['expiration_date'] : null;
+    $teachers           = isset($params['teachers']) ? $params['teachers'] : null;
+    $status             = isset($params['status']) ? $params['status'] : null;
 
     $TABLECOURSE		 	= Database :: get_main_table(TABLE_MAIN_COURSE);
     $TABLECOURSUSER 		= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2825,25 +2828,32 @@ function register_course($params) {
                     unsubscribe     = '".intval($unsubscribe) . "',
                     visual_code     = '".Database :: escape_string($visual_code) . "'";
         Database::query($sql);
-
-		$course_id  = Database::get_last_insert_id();
+		$course_id  = Database::insert_id();
 
         if ($course_id) {
-
             $sort = api_max_sort_value('0', api_get_user_id());
+            // Default true
+            $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
+            if ($addTeacher) {
 
-            $i_course_sort = CourseManager :: userCourseSort($user_id, $code);
-            if (!empty($user_id)) {
-                $sql = "INSERT INTO ".$TABLECOURSUSER . " SET
-                            course_code     = '".Database :: escape_string($code). "',
-                            user_id         = '".intval($user_id) . "',
-                            status          = '1',
-                            role            = '".lang2db(get_lang('Professor')) . "',
-                            tutor_id        = '0',
-                            sort            = '". ($i_course_sort) . "',
-                            user_course_cat = '0'";
-                Database::query($sql);
+                $i_course_sort = CourseManager:: userCourseSort(
+                    $user_id,
+                    $code
+                );
+
+                if (!empty($user_id)) {
+                    $sql = "INSERT INTO " . $TABLECOURSUSER . " SET
+                                course_code     = '" . Database:: escape_string($code) . "',
+                                user_id         = '" . intval($user_id) . "',
+                                status          = '1',
+                                role            = '" . lang2db(get_lang('Professor')) . "',
+                                tutor_id        = '0',
+                                sort            = '" . ($i_course_sort) . "',
+                                user_course_cat = '0'";
+                    Database::query($sql);
+                }
             }
+
             if (!empty($teachers)) {
                 if (!is_array($teachers)) {
                     $teachers = array($teachers);
@@ -2899,7 +2909,17 @@ function register_course($params) {
                 $message .= get_lang('Tutor').' '.$tutor_name."\n";
                 $message .= get_lang('Language').' '.$course_language;
 
-                @api_mail($recipient_name, $recipient_email, $subject, $message, $siteName, $recipient_email);
+                $userInfo = api_get_user_info($user_id);
+                $additional_parameters = array(
+                    'smsType' => NEW_COURSE_BEEN_CREATED,
+                    'userId' => $user_id,
+                    'courseName' => $title,
+                    'creatorUsername' => $userInfo['username']
+                );
+
+                //@api_mail($recipient_name, $recipient_email, $subject, $message, $siteName, $recipient_email);
+                api_mail_html($recipient_name, $recipient_email, $subject, $message,
+                    $siteName, $recipient_email, null, null, null, $additional_parameters);
             }
         }
     }

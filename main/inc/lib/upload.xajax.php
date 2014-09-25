@@ -32,5 +32,3 @@ function updateProgress($div_id, $upload_id, $waitAfterupload = false) {
 
 	return $objResponse;
 }
-
-?>

@@ -41,8 +41,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 }
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_user_to_session (code, content) {
 
     document.getElementById("user_to_add").value = "";
@@ -80,9 +79,9 @@ function display_advanced_search () {
 }
 
 function validate_filter() {
-        document.formulaire.add_type.value = \''.$add_type.'\';
-        document.formulaire.form_sent.value=0;
-        document.formulaire.submit();
+    document.formulaire.add_type.value = \''.$add_type.'\';
+    document.formulaire.form_sent.value=0;
+    document.formulaire.submit();
 }
 </script>';
 
@@ -92,9 +91,9 @@ $errorMsg   = '';
 $sessions=array();
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
-if($_POST['form_sent']) {
-    $form_sent          = $_POST['form_sent'];    
-    $elements_posted    = $_POST['elements_in_name'];     
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+    $form_sent          = $_POST['form_sent'];
+    $elements_posted    = $_POST['elements_in_name'];
     if (!is_array($elements_posted)) {
         $elements_posted = array();
     }
@@ -102,7 +101,7 @@ if($_POST['form_sent']) {
         //added a parameter to send emails when registering a user        
         $usergroup->subscribe_sessions_to_usergroup($id, $elements_posted);
         header('Location: usergroups.php');
-        exit;        
+        exit;
     }
 }
 $data               = $usergroup->get($id);
@@ -113,9 +112,9 @@ $session_list       = SessionManager::get_sessions_list(array(), array('name'));
 $elements_not_in = $elements_in= array();
 
 if (!empty($session_list)) {
-    foreach($session_list as $session) {        
-        if (in_array($session['id'], $session_list_in)) {            
-            $elements_in[$session['id']] = $session['name'];             
+    foreach($session_list as $session) {
+        if (in_array($session['id'], $session_list_in)) {
+            $elements_in[$session['id']] = $session['name'];
         } else {
             $elements_not_in[$session['id']] = $session['name'];
         }
@@ -130,7 +129,7 @@ function search_sessions($needle,$type) {
     global $tbl_user,$elements_in;
     $xajax_response = new XajaxResponse();
     $return = '';
-    if (isset($needle) && !empty($type)) {
+    if (!empty($needle) && !empty($type)) {
 
         // xajax send utf8 datas... datas in db can be non-utf8 datas
         $charset = api_get_system_encoding();
@@ -147,11 +146,10 @@ function search_sessions($needle,$type) {
                 ' LIMIT 11';*/
         } else if ($type == 'searchbox') {
             $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "%$needle%"));
-        }
-        else {
+        } else {
             $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "$needle%"));
         }
-        $i=0;        
+        $i=0;
         if ($type=='single') {
             /*
             while ($user = Database :: fetch_array($rs)) {
@@ -166,9 +164,9 @@ function search_sessions($needle,$type) {
             $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));*/
         } else {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
-            
-            foreach ($session_list as $row ) {         
-                if (!in_array($row['id'], array_keys($elements_in))) {       
+
+            foreach ($session_list as $row ) {
+                if (!in_array($row['id'], array_keys($elements_in))) {
                     $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
                 }
             }
@@ -270,10 +268,10 @@ if(!empty($errorMsg)) {
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
         <?php
-      } else {               
+      } else {
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name',$elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?> 
+        <?php echo Display::select('elements_not_in_name',$elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
       </div>
     <?php
       }
@@ -360,7 +358,6 @@ function valide(){
     document.forms.formulaire.submit();
 }
 
-
 function loadUsersInSelect(select){
 
     var xhr_object = null;
@@ -372,7 +369,6 @@ function loadUsersInSelect(select){
     else  // XMLHttpRequest non supporté par le navigateur
     alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
-    //xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
 
     xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -400,7 +396,6 @@ function makepost(select){
 
     return ret;
 }
--->
 </script>
 <?php
 Display::display_footer();

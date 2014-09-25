@@ -17,16 +17,14 @@ api_protect_admin_script(true);
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-$htmlHeadXtra[] =
-'<script>
-    function selectAll(idCheck,numRows,action) {
-        for(i=0;i<numRows;i++) {
-            idcheck = document.getElementById(idCheck+"_"+i);
-            if (action == "true"){
-                idcheck.checked = true;
-            } else {
-                idcheck.checked = false;
-            }
+$htmlHeadXtra[] = '<script>
+function selectAll(idCheck,numRows,action) {
+    for(i=0;i<numRows;i++) {
+        idcheck = document.getElementById(idCheck+"_"+i);
+        if (action == "true"){
+            idcheck.checked = true;
+        } else {
+            idcheck.checked = false;
         }
     }
 </script>';
@@ -75,9 +73,6 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     } else {
         $where .= (empty($_REQUEST['keyword']) ? "" : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
     }
-
-
-
     if (empty($where)) {
         $where = " WHERE access_url_id = ".api_get_current_access_url_id()." ";
     } else {
@@ -206,9 +201,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             ?>
         </table>
         <br />
-
         <div align="left">
-
             <?php
             if ($num > $limit) {
                 if ($page) {
@@ -221,9 +214,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 echo get_lang('Previous');
             }
             ?>
-
                 |
-
                 <?php
                 if ($nbr_results > $limit) {
                     ?>

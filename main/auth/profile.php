@@ -8,9 +8,6 @@
 *
 * @package chamilo.auth
 */
-/**
- * Code
- */
 
 // Language files that should be included.
 $language_file = array('registration', 'messages', 'userInfo');
@@ -24,7 +21,6 @@ if (api_get_setting('allow_social_tool') == 'true') {
 } else {
     $this_section = SECTION_MYPROFILE;
 }
-
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
 
@@ -301,7 +297,6 @@ if (is_profile_editable()) {
 } else {
     $form->freeze();
 }
-
 $user_data = array_merge($user_data, $extra_data);
 $form->setDefaults($user_data);
 
@@ -478,8 +473,10 @@ if ($form->validate()) {
         $user_data['picture_uri'] = '';
     }
 
-    //Remove production
-    if (is_array($user_data['remove_production'])) {
+    // Remove production.
+    if (isset($user_data['remove_production']) &&
+        is_array($user_data['remove_production'])
+    ) {
         foreach (array_keys($user_data['remove_production']) as $production) {
             UserManager::remove_user_production(api_get_user_id(), urldecode($production));
         }
@@ -659,8 +656,6 @@ if ($form->validate()) {
     exit;
 }
 
-
-/*          MAIN DISPLAY SECTION  */
 // the header
 Display::display_header(get_lang('ModifyProfile'));
 
@@ -701,7 +696,6 @@ if (!empty($file_deleted)) {
     Display :: display_confirmation_message($message, false);
 }
 
-
 if (!empty($msg_fail_changue_email)){
     $errormail=get_lang('ToChangeYourEmailMustTypeYourPassword');
     Display :: display_error_message($errormail, false);
@@ -712,7 +706,7 @@ if (!empty($msg_is_not_password)){
     Display :: display_warning_message($warning_msg, false);
 }
 
-//User picture size is calculated from SYSTEM path
+// User picture size is calculated from SYSTEM path
 $image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', false, true);
 $image_syspath['dir'].$image_syspath['file'];
 

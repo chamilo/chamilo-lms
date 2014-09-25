@@ -50,7 +50,6 @@ if ($debug) {
 }
 
 // general parameters passed via POST/GET
-// general parameters passed via POST/GET
 if (empty($origin)) {
     $origin = Security::remove_XSS($_REQUEST['origin']);
 }

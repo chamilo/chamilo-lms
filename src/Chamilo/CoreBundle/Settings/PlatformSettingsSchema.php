@@ -28,6 +28,7 @@ class PlatformSettingsSchema implements SchemaInterface
                 'administrator_surname' => 'Doe',
                 'administrator_phone' => '123456',
                 'timezone' => 'Europe/Paris',
+                'theme' => 'chamilo'
             ))
             ->setAllowedTypes(array(
                 'institution' => array('string'),
@@ -56,6 +57,7 @@ class PlatformSettingsSchema implements SchemaInterface
             ->add('administrator_surname')
             ->add('administrator_phone')
             ->add('timezone', 'timezone')
+            ->add('theme')
         ;
     }
 }

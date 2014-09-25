@@ -41,13 +41,12 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/jmontoyaa/AdminThemeBundle"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/jmontoyaa/MigrationBundle.git"
         }
     ],
+
+    "minimum-stability": "stable",
+
     "require": {
         "php": ">=5.3.3",
 
@@ -63,7 +62,7 @@
         "twig/twig": "~1.12",
         "twig/extensions": "~1.0",
 
-        "symfony/symfony": "~2.3",
+        "symfony/symfony": "~2.5",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.3",
@@ -151,7 +150,8 @@
         "sylius/flow-bundle": "0.11.*@dev",
         "sylius/settings-bundle": "dev-master",
         "sp/bower-bundle": "dev-master",
-        "jmontoyaa/migration-bundle":"dev-master"
+        "jmontoyaa/migration-bundle":"dev-master",
+        "thrace/datagrid-bundle":"dev-master"
     },
     "require-dev": {
         "akeneo/crowdin-api": "1.0.*@dev",

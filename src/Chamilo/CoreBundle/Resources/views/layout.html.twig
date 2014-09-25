@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block avanzu_logo %}
+<a href="#" class="logo">
 {{- chamilo_settings_get('platform.institution') -}}
+</a>
 {% endblock %}
 
 {% block page_title %}
@@ -22,7 +24,6 @@
         {{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:mainMenu', {'automenu': 'pills', 'stacked':true}) }}
     {% endif %}
     {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
-
         <div class="user-panel">
         </div>
         <form action="{{ path("fos_user_security_check") }}" method="post" role="form" class="sidebar-form">
@@ -37,18 +38,35 @@
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
-
         {{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:loginMenu', {'automenu': 'pills', 'stacked':true}) }}
     {% endif %}
     {#{{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:helpMenu', {'automenu': 'pills', 'stacked':true}) }}#}
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
+    {# Chamilo base #}
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/base.css') }}"/>
+    {# Base theme #}
+    {% stylesheets '@admin_lte_all_css' filter="cssrewrite" %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 
+    {% set theme = chamilo_settings_get('platform.theme') %}
+    <link rel="stylesheet" media="print" href="{{ asset('bundles/chamilocore/css/print.css') }}"/>
+    {#<link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/dataTable.css') }}"/>#}
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/default.css') }}"/>
+    {#<link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/frames.css') }}"/>#}
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/learnpath.css') }}"/>
+    <link rel="stylesheet" media="print" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/print.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/scorm.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/scormfs.css') }}"/>
+
+    {# Chamilo #}
     <link rel="stylesheet" href="{{ asset('bundles/chamilocore/js/chosen/chosen.css') }}"/>
     <link rel="stylesheet" href="{{ asset('bundles/chamilocore/js/tag/style.css') }}"/>
 
+    {# Sonata #}
+    <link rel="stylesheet" href="{{ asset('bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css')}}" />
     {% block sonata_page_stylesheets %}
         {% block page_stylesheets %} {# Deprecated block #}
             {% for stylesheet in sonata_page.assets.stylesheets %}
@@ -58,12 +76,11 @@
     {% endblock %}
 {% endblock %}
 
-{% block javascripts %}
-{% endblock %}
-
 {% block javascripts_head %}
-
-    {% javascripts '@admin_lte_all' %}
+    {% javascripts
+    '@jqgrid_js'
+    "@admin_lte_all"
+    %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
@@ -71,12 +88,17 @@
     <script type="text/javascript" src="{{ asset(asset_url) }}"></script>
     {% endjavascripts %}
 
+    {# Chamilo #}
     <script type="text/javascript" src="{{ asset('bundles/chamilocore/js/chosen/chosen.jquery.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/chamilocore/js/tag/jquery.fcbkcomplete.js') }}"></script>
 
     {% javascripts 'bundles/chamilocore/js/app.js'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    {# Sonata #}
+    <script type="text/javascript" src="{{ asset('bundles/sonatacore/vendor/moment/min/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')}}"></script>
 
     {% block sonata_page_javascripts %}
         {% block page_javascripts %} {# Deprecated block #}
@@ -85,9 +107,12 @@
             {% endfor %}
         {% endblock %}
     {% endblock %}
-
     {{ sonata_seo_title() }}
     {{ sonata_seo_metadatas() }}
+{% endblock %}
+
+{#Blocking extra javascript calls#}
+{% block javascripts %}
 {% endblock %}
 
 {% block page_breadcrumb %}
@@ -100,7 +125,7 @@
 {% endblock %}
 
 {% block page_content %}
-
+    {# Flash messages #}
     {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
 
     {% if page is defined %}

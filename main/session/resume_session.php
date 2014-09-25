@@ -65,7 +65,7 @@ if (!empty($message)) {
 $dates = SessionManager::parse_session_dates($session);
 echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']." <small>$dates</small>");
 
-$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "session_add.php?page=resume_session.php&id=$id_session");
+$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "session_add.php?id=$id_session");
 echo Display::page_subheader(get_lang('GeneralProperties').$url);
 
 $coach_info = api_get_user_info($session['id_coach']);
@@ -169,7 +169,7 @@ if ($multiple_url_is_on) {
 
 <?php
 
-$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_courses_to_session.php?page=resume_session.php&id_session=$id_session");
+$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_courses_to_session.php?id_session=$id_session");
 echo Display::page_subheader(get_lang('CourseList').$url);
 
 ?>
@@ -205,7 +205,7 @@ if ($session['nbr_courses'] == 0){
                 <a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$course['code'].'">'.Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
                 <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course['code'].'&id_session='.$id_session.'">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
 				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
-				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
+				<a href="session_course_edit.php?id_session='.$id_session.'&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
 				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&course_code_to_delete='.$course['id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
 			</td>
 		</tr>';
@@ -217,7 +217,7 @@ if ($session['nbr_courses'] == 0){
 
 <?php
 
-$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_users_to_session.php?page=resume_session.php&id_session=$id_session");
+$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_users_to_session.php?id_session=$id_session");
 $url .= Display::url(Display::return_icon('import_csv.png', get_lang('ImportUsers'), array(), ICON_SIZE_SMALL), "session_user_import.php?id_session=$id_session");
 echo Display::page_subheader(get_lang('StudentList').$url);
 
@@ -252,7 +252,8 @@ if ($session['nbr_users'] == 0) {
 
 } else {
 */
-	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
+	$orig_param = '&origin=resume_session&id_session='.$id_session;
+	// change breadcrumb in destination page
 
     $users = SessionManager::get_users_by_session($id_session, 0);
     //$reasons = SessionManager::get_session_change_user_reasons();

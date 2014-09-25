@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Form\SessionType;
 
 $cidReset = true;
 
-// including the global Chamilo file
+// including the global Chamilo fileurl_action
 //require_once '../inc/global.inc.php';
 
 // setting the section (for the tabs)
@@ -170,7 +170,7 @@ $(function() {
 });
 </script>';
 
-$form = new FormValidator('add_session', 'post', $url_action);
+$form = new FormValidator('add_session', 'post');
 $form->addElement('header', $tool_name);
 
 //Name

@@ -526,7 +526,7 @@ $link_add_group = '<a href="usergroups.php">'.Display::return_icon(
     ?>
 
     <div class="row">
-        <div class="span5">
+        <div class="col-md-5">
             <div class="multiple_select_header">
                 <b><?php echo get_lang('UserListInPlatform') ?> :</b>
 
@@ -582,23 +582,29 @@ $link_add_group = '<a href="usergroups.php">'.Display::return_icon(
             </div>
         </div>
 
-        <div class="span2">
+        <div class="col-md-2">
             <div style="padding-top:54px;width:auto;text-align: center;">
                 <?php
                 if ($ajax_search) {
                     ?>
                     <button class="arrowl" type="button"
-                            onclick="remove_item(document.getElementById('destination_users'))"></button>
+                            onclick="remove_item(document.getElementById('destination_users'))">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
                     <?php
                 } else {
                     ?>
                     <button class="arrowr" type="button"
                             onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"
-                            onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"></button>
+                            onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
+                        <i class="fa fa-arrow-right"></i>
+                            </button>
                     <br/><br/>
                     <button class="arrowl" type="button"
                             onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"
-                            onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"></button>
+                            onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
+                        <i class="fa fa-arrow-left"></i>
+                            </button>
 
                     <?php
                 }
@@ -621,7 +627,7 @@ $link_add_group = '<a href="usergroups.php">'.Display::return_icon(
             ?>
         </div>
 
-        <div class="span5">
+        <div class="col-md-5">
             <div class="multiple_select_header">
                 <b><?php echo get_lang('UserListInSession') ?> :</b>
             </div>
@@ -649,7 +655,6 @@ $link_add_group = '<a href="usergroups.php">'.Display::return_icon(
             options[i].selected = true;
         document.forms.formulaire.submit();
     }
-
 
     function loadUsersInSelect(select) {
         var xhr_object = null;

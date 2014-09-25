@@ -137,23 +137,27 @@ if (isset($current_thread['thread_id'])) {
             // see comments inside forumfunction.inc.php to lower filtering and allow more visual changes
             echo "<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>";
             echo "</tr>";
+            echo "</tr>";
 
             // The check if there is an attachment
 
             $attachment_list = get_attachment($row['post_id']);
-            if (!empty($attachment_list)) {
-                echo '<tr><td colspan="2" height="50%">';
-                $realname=$attachment_list['path'];
-                $user_filename=$attachment_list['filename'];
+            $attachment_list = getAllAttachment($row['post_id']);
+            if (!empty($attachment_list) && is_array($attachment_list)) {
+                foreach ($attachment_list as $attachment) {
+                    echo '<tr><td colspan="2" height="50%">';
+                    $realname=$attachment['path'];
+                    $user_filename=$attachment['filename'];
 
-                echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-                echo '<a href="download.php?file='.$realname.'"> '.$user_filename.' </a>';
+                    echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+                    echo '<a href="download.php?file='.$realname.'"> '.$user_filename.' </a>';
 
-                if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
-                    echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a><br />';
+                    if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
+                        echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a><br />';
+                    }
+                    echo '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';
+                    echo '</td></tr>';
                 }
-                echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
-                echo '</td></tr>';
             }
 
             // The post has been displayed => it can be removed from the what's new array

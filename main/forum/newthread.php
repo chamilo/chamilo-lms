@@ -57,6 +57,7 @@ $htmlHeadXtra[] = '<script>
         if(document.getElementById(\'id_qualify\').style.display == \'none\') {
             document.getElementById(\'id_qualify\').style.display = \'block\';
             document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+            enableDeleteFile();
         } else {
             document.getElementById(\'id_qualify\').style.display = \'none\';
             document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
@@ -149,7 +150,6 @@ if ($origin == 'learnpath') {
 } else {
     Display :: display_header(null);
 }
-
 handle_forum_and_forumcategories();
 
 // Action links
@@ -159,10 +159,12 @@ echo '<a href="viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_G
 echo '</div>';
 
 $values = show_add_post_form($current_forum, $forum_setting, 'newthread', '', isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null);
-
 if (!empty($values) && isset($values['SubmitPost'])) {
     // Add new thread in table forum_thread.
     store_thread($current_forum, $values);
+} else {
+    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], -1);
+    echo $attachmentAjaxForm;
 }
 
 /* FOOTER */

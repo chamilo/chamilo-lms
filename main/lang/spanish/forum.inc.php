@@ -147,4 +147,5 @@ $ThreadMoved = "Tema movido";
 $MigrateForum = "Migrar foro";
 $YouWillBeNotified = "Ud. será notificado";
 $ForumCategories = "Categorías de foro";
+$AttachmentFilesList = "Lista de archivos adjuntos"
 ?>

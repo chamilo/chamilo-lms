@@ -28,6 +28,7 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.
 
 get_notifications_of_user();
 
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#forum_title").focus();
@@ -37,6 +38,70 @@ function setFocus(){
 $(document).ready(function () {
     setFocus();
 });
+</script>';
+$htmlHeadXtra[] = '<script>
+
+function check_unzip() {
+    if(document.upload.unzip.checked){
+        document.upload.if_exists[0].disabled=true;
+        document.upload.if_exists[1].checked=true;
+        document.upload.if_exists[2].disabled=true;
+    } else {
+        document.upload.if_exists[0].checked=true;
+        document.upload.if_exists[0].disabled=false;
+        document.upload.if_exists[2].disabled=false;
+    }
+}
+function setFocus() {
+    $("#title_file").focus();
+}
+</script>';
+
+$htmlHeadXtra[] = "
+<script>
+$(function () {
+    setFocus();
+    $('#file_upload').fileUploadUI({
+        uploadTable:   $('.files'),
+        downloadTable: $('.files'),
+        buildUploadRow: function (files, index) {
+            return $('<tr><td>' + files[index].name + '<\/td>' +
+                    '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
+                    '<td class=\"file_upload_cancel\">' +
+                    '<button class=\"ui-state-default ui-corner-all\" title=\"".get_lang('Cancel')."\">' + '<span class=\"ui-icon ui-icon-cancel\">".get_lang('Cancel')."<\/span>' +'<\/button>'+
+                    '<\/td><\/tr>');
+        },
+        buildDownloadRow: function (file) {
+            if (!file.error) {
+                return $('<tr id=' + file.id + ' ><td>' + file.name + '<\/td><td>' + file.size + '<\/td><td>&nbsp;' + file.result +
+                    ' <\/td><td> <input type=\"text\" value=\"' + file.comment + '\" name=\"file_comments[]\"> <\/td><td>' +
+                    file.delete + '<\/td>' +
+                    '<input type=\"hidden\" value=\"' + file.id +'\" name=\"file_ids[]\">' + '<\/tr>');
+            } else {
+                alert(file.errorMessage);
+            }
+        }
+    });
+});
+</script>";
+
+$htmlHeadXtra[] = '
+<script>
+function enableDeleteFile() {
+        $(".deleteLink").click(function(e) {
+            e.preventDefault();
+            var l = $(this);
+            var id = l.closest("tr").attr("id");
+            $.ajax({
+                url: "' . api_get_path(WEB_AJAX_PATH). 'forum.ajax.php?a=delete_file&attach_id=" + id
+            })
+            .done(function(data) {
+                if (data.error == false) {
+                    l.closest("tr").remove();
+                }
+            });
+        });
+}
 </script>';
 
 /**
@@ -2139,6 +2204,13 @@ function store_thread($current_forum, $values)
         Database::query($sql);
         $last_post_id = Database::insert_id();
 
+        // Update attached files
+        if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
+            foreach ($_POST['file_ids'] as $key => $id) {
+                editAttachedFile(array('comment' => $_POST['file_comments'][$key], 'post_id' => $last_post_id), $id);
+            }
+        }
+
         // Now we have to update the thread table to fill the thread_last_post field (so that we know when the thread has been updated for the last time).
         $sql = "UPDATE $table_threads SET thread_last_post='".Database::escape_string($last_post_id)."'
                 WHERE c_id = $course_id AND thread_id='".Database::escape_string($last_thread_id)."'";
@@ -2206,6 +2278,7 @@ function store_thread($current_forum, $values)
 function show_add_post_form($current_forum, $forum_setting, $action = '', $id = '', $form_values = '')
 {
     $_user = api_get_user_info();
+    $courseId = api_get_course_int_id();
     $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
     $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
@@ -2297,11 +2370,9 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $values = $form->exportValues();
     }
 
-    // User upload
-    $form->addElement('static', null, null, get_lang('AddAnAttachment'));
-    $form->addElement('file', 'user_upload', get_lang('FileName'), '');
-    $form->addElement('textarea', 'file_comment', get_lang('FileComment'), array('rows' => 4, 'cols' => 34));
-    $form->applyFilter('file_comment', 'html_filter');
+    clearAttachedFiles(-1);
+    $fileData = getAttachmentAjaxTable(-1, $current_forum['forum_id']);
+    $form->addElement('html', $fileData);
     $form->addElement('html', '</div>');
 
     $form->addElement('style_submit_button', 'SubmitPost', $text, 'class="'.$class.'"');
@@ -2586,11 +2657,7 @@ function store_reply($current_forum, $values)
     }
 
     $upload_ok = 1;
-    $has_attachment = false;
-    if (!empty($_FILES['user_upload']['name'])) {
-        $upload_ok = process_uploaded_file($_FILES['user_upload']);
-        $has_attachment = true;
-    }
+
     $return = array();
 
     if ($upload_ok) {
@@ -2612,35 +2679,9 @@ function store_reply($current_forum, $values)
         $values['new_post_id'] = $new_post_id;
         $message = get_lang('ReplyAdded');
 
-        if ($has_attachment) {
-            $course_dir = $_course['path'].'/upload/forum';
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $updir = $sys_course_path.$course_dir;
-
-            // Try to add an extension to the file if it hasn't one.
-            $new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
-
-            // User's file name
-            $file_name = $_FILES['user_upload']['name'];
-
-            if (!filter_extension($new_file_name)) {
-                $return['msg'] = get_lang('UplUnableToSaveFileFilteredExtension');
-                $return['type'] = 'error';
-            } else {
-                $new_file_name = uniqid('');
-                $new_path = $updir.'/'.$new_file_name;
-                $result = @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-                $comment = $values['file_comment'];
-
-                // Storing the attachments if any.
-                if ($result) {
-                    $sql = 'INSERT INTO '.$forum_table_attachment.'(c_id, filename,comment, path, post_id,size) '.
-                        "VALUES (".api_get_course_int_id().", '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$new_post_id."', '".intval($_FILES['user_upload']['size'])."' )";
-                    Database::query($sql);
-                    $message .= ' / '.get_lang('FileUploadSucces');
-                    $last_id = Database::insert_id();
-                    api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id, 'ForumAttachmentAdded', api_get_user_id());
-                }
+        if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
+            foreach ($_POST['file_ids'] as $key => $id) {
+                editAttachedFile(array('comment' => $_POST['file_comments'][$key], 'post_id' => $new_post_id), $id);
             }
         }
 
@@ -2769,19 +2810,9 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         }
     }
 
-    $attachment_list = get_attachment($current_post['post_id']);
-    $message = get_lang('AddAnAttachment');
-    if (!empty($attachment_list)) {
-        //$message = ;
-        $form->addElement('label', get_lang('EditAnAttachment'), Display::return_icon('attachment.gif', get_lang('Attachment')).'&nbsp;'.$attachment_list['filename'].(!empty($attachment_list['comment']) ? '('.$attachment_list['comment'].')' : ''));
-        $form->addElement('checkbox', 'remove_attach', null, get_lang('DeleteAttachmentFile'));
-    } else {
-        // User upload
-        $form->addElement('label', $message);
-        $form->addElement('file', 'user_upload', get_lang('FileName'), '');
-        $form->addElement('textarea', 'file_comment', get_lang('FileComment'), array('rows' => 4, 'cols' => 34));
-        $form->applyFilter('file_comment', 'html_filter');
-    }
+    clearAttachedFiles($current_post['post_id']);
+    $fileData = getAttachmentAjaxTable($current_post['post_id'], $current_forum['forum_id']);
+    $form->addElement('html', $fileData);
 
     if ($current_forum['allow_attachments'] == '1' || api_is_allowed_to_edit(null, true)) {
         if (empty($form_values) && !isset($_POST['SubmitPost'])) {
@@ -2870,6 +2901,13 @@ function store_edit_post($values)
                 WHERE c_id = $course_id AND post_id = '".intval($values['post_id'])."'";
 
     Database::query($sql);
+
+    // Update attached files
+    if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
+        foreach ($_POST['file_ids'] as $key => $id) {
+            editAttachedFile(array('comment' => $_POST['file_comments'][$key], 'post_id' => $values['post_id']), $id);
+        }
+    }
 
     if (!empty($values['remove_attach'])) {
         delete_attachment($values['post_id']);
@@ -3819,6 +3857,7 @@ function search_link()
  */
 function add_forum_attachment_file($file_comment, $last_id)
 {
+    require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
     $_course = api_get_course_info();
     $agenda_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 
@@ -3856,9 +3895,13 @@ function add_forum_attachment_file($file_comment, $last_id)
 
                 $last_id_file = Database::insert_id();
                 api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id_file, 'ForumAttachmentAdded', api_get_user_id());
+
+                return $last_id_file;
             }
         }
     }
+
+    return false;
 }
 
 /**
@@ -3934,6 +3977,24 @@ function get_attachment($post_id)
     return $row;
 }
 
+function getAllAttachment($postId)
+{
+    $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
+    $course_id = api_get_course_int_id();
+    $array = array();
+    $postId = intval($postId);
+    $sql = "SELECT id, path, filename, comment FROM $forum_table_attachment
+            WHERE c_id = $course_id AND post_id = $postId";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        while($row = Database::fetch_array($result)) {
+            $array[] = $row;
+        }
+    }
+
+    return $array;
+}
+
 /**
  * Delete the all the attachments from the DB and the file according to the post's id or attach id(optional)
  * @param post id
@@ -3942,7 +4003,7 @@ function get_attachment($post_id)
  * @author Julio Montoya Dokeos
  * @version avril 2008, dokeos 1.8.5
  */
-function delete_attachment($post_id, $id_attach = 0)
+function delete_attachment($post_id, $id_attach = 0, $display = true)
 {
     $_course = api_get_course_info();
 
@@ -3971,7 +4032,7 @@ function delete_attachment($post_id, $id_attach = 0)
     // Update item_property.
     api_item_property_update($_course, TOOL_FORUM_ATTACH, $id_attach, 'ForumAttachmentDelete', api_get_user_id());
 
-    if (!empty($result) && !empty($id_attach)) {
+    if (!empty($result) && !empty($id_attach) && $display) {
         $message = get_lang(get_lang('AttachmentFileDeleteSuccess'));
         Display::display_confirmation_message($message);
     }
@@ -4624,4 +4685,247 @@ function _phorum_recursive_sort($rows, &$threads, $seed = 0, $indent = 0)
             _phorum_recursive_sort($rows, $threads, $child, $indent);
         }
     }
+}
+
+/**
+ * @param $array
+ * @param $id
+ * @param null $courseId
+ * @return int
+ */
+function editAttachedFile($array, $id, $courseId = null) {
+    $setString = '';
+    if (empty($courseId)) {
+        $courseId= api_get_course_int_id();
+    }
+    $id = intval($id);
+    if ($id > 0) {
+        foreach($array as $key => &$item) {
+            $item = Database::escape_string($item);
+            $setString .= $key . ' = "' .$item . '", ';
+        }
+        $setString = substr($setString, 0, strlen($setString) - 2);
+        $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+        $sql = "UPDATE $forumAttachmentTable SET $setString WHERE c_id = $courseId AND id = $id";
+        $result = Database::query($sql);
+        if ($result !== false) {
+            $affectedRows = Database::affected_rows($result);
+            if ($affectedRows > 0) {
+                if (!empty($_SESSION['forum']['upload_file'][$courseId][$id])) {
+                    unset($_SESSION['forum']['upload_file'][$courseId][$id]);
+                }
+            }
+            return $affectedRows;
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * @param $id
+ * @param null $path
+ * @return string
+ */
+function getAttachmentAjaxForm($forumId, $threadId, $postId, $path = null)
+{
+    $forumId = intval($forumId);
+    $postId = intval($postId);
+    $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
+    if ($postId === 0 || $forumId === 0) {
+        return '';
+    }
+    $url = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?forum=' . $forumId . '&thread=' . $threadId . '&post_id=' . $postId . '&a=upload_file';
+    if (empty($path)) {
+        $path = '/../upload/forum';
+    } else {
+        $testPath = api_get_path(SYS_COURSE_PATH).'/'.api_get_course_id().'/document'.$path;
+        if (!file_exists($testPath)) {
+            return '';
+        }
+    }
+    $formFileUpload = '
+        <center>
+        <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="curdirpath" value="'.$path.'" />
+            <input type="file" name="user_upload" multiple>
+            <button type="submit">Upload</button>
+            '.get_lang('UploadFiles').'
+        </form>
+        </center>
+        ';
+
+    return $formFileUpload;
+}
+
+function getAttachmentAjaxTable($postId = null)
+{
+    $postId = intval($postId);
+    $courseId = api_get_course_int_id();
+    $attachIds = getAttachmentIdsByPostId($postId, $courseId);
+    // Update comment to show if form did not pass validation
+    if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
+        foreach ($_POST['file_ids'] as $key => $attachId) {
+            if (!empty($_SESSION['forum']['upload_file'][$courseId][$attachId]) && is_array($_SESSION['forum']['upload_file'][$courseId][$attachId])) {
+                $_SESSION['forum']['upload_file'][$courseId][$attachId]['comment'] = $_POST['file_comments'][$key];
+            }
+        }
+    }
+
+    // Get data to fill into attachment files table
+    $fileDataContent = '';
+    if (!empty($_SESSION['forum']['upload_file'][$courseId]) && is_array($_SESSION['forum']['upload_file'][$courseId])) {
+        $uploadedFiles = $_SESSION['forum']['upload_file'][$courseId];
+        foreach ($uploadedFiles as $k => $uploadedFile) {
+            if (!empty($uploadedFile) && in_array($uploadedFile['id'], $attachIds)) {
+                $fileDataContent .= '<tr id=' . $uploadedFile['id'] . ' ><td>' . $uploadedFile['name'] . '</td><td>' . $uploadedFile['size'] . '</td><td>&nbsp;' . $uploadedFile['result'] .
+                    ' </td><td> <input type="text" value="' . $uploadedFile['comment'] . '" name="file_comments[]"> </td><td>' .
+                    $uploadedFile['delete'] . '</td>' .
+                    '<input type="hidden" value="' . $uploadedFile['id'] .'" name="file_ids[]">' . '</tr>';
+            } else {
+                unset($_SESSION['forum']['upload_file'][$courseId][$k]);
+            }
+        }
+    }
+    // User upload data
+    $fileData = '
+    <div class="control-group ">
+        <label class="control-label">'.get_lang('AttachmentFilesList').'</label>
+        <div class="controls">
+            <table id="attachmentFileList" class="files data_table span6">
+                <tr>
+                    <th>'.get_lang('FileName').'</th>
+                    <th>'.get_lang('Size').'</th>
+                    <th>'.get_lang('Status').'</th>
+                    <th>'.get_lang('Comment').'</th>
+                    <th>'.get_lang('Delete').'</th>
+                </tr>
+                '.$fileDataContent.'
+            </table>
+        </div>
+    </div>';
+
+    return $fileData;
+}
+
+/**
+ * @param $forumId
+ * @param null $postId
+ * @param null $attachId
+ * @param null $courseId
+ * @return array
+ */
+function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null, $courseId = null) {
+    $forumId = intval($forumId);
+    $courseId = intval($courseId);
+    $attachId = intval($attachId);
+    $postId = intval($postId);
+    $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    }
+    if (empty($forumId)) {
+        if (!empty($_REQUEST['forum'])) {
+            $forumId = intval($_REQUEST['forum']);
+        } else {
+
+            return array();
+        }
+    }
+    if (empty($postId) && empty($attachId)) {
+
+        return array();
+    } elseif (empty($postId)) {
+        $filter = "AND id = $attachId";
+    } elseif (empty($attachId)) {
+        $filter = "AND post_id = $postId";
+    } else {
+        $filter = "AND post_id = $postId AND id = $attachId";
+    }
+    $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+    $sql = "SELECT id, comment, filename, path, size FROM $forumAttachmentTable WHERE c_id = $courseId $filter";
+    $result = Database::query($sql);
+    $json = array();
+    if ($result !== false && Database::num_rows($result) > 0) {
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $json['name'] = Display::url(
+                api_htmlentities($row['filename']),
+                api_get_path(WEB_CODE_PATH) . 'forum/download.php?file='.$row['path'],
+                array('target'=>'_blank')
+            );
+            $json['id'] = $row['id'];
+            $json['comment'] = $row['comment'];
+            $json['size'] = format_file_size($row['size']);
+            if (!empty($row) && is_array($row)) {
+                $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded'));
+                $json['delete'] = '<a class="deleteLink" href="'.api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php' .
+                    '?' . api_get_cidreq() . '&amp;origin=' . Security::remove_XSS($_GET['origin']) .
+                    '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId .
+                    '&amp;id_attach=' . $row['id'] . '">' .
+                    Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+            } else {
+                $json['result'] = Display::return_icon('exclamation.png', get_lang('Error'));
+            }
+
+            $_SESSION['forum']['upload_file'][$courseId][$json['id']] = $json;
+        }
+    }
+    return $json;
+}
+
+/**
+ * @param null $postId
+ * @param null $courseId
+ */
+function clearAttachedFiles($postId = null, $courseId = null) {
+    $courseId = intval($courseId);
+    $postId = intval($postId);
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    }
+    if (empty($postId)) {
+        if (!empty($_SESSION['forum']['upload_file'][$courseId]))
+        unset($_SESSION['forum']['upload_file'][$courseId]);
+    } else {
+        $attachIds = getAttachmentIdsByPostId($postId, $courseId);
+        if (!empty($_SESSION['forum']['upload_file'][$courseId]) &&
+            is_array($_SESSION['forum']['upload_file'][$courseId])) {
+            foreach ($_SESSION['forum']['upload_file'][$courseId] as $attachId => $attach) {
+                if (!in_array($attachId, $attachIds)) {
+                    if ($postId !== -1) {
+                        delete_attachment(-1, $attachId, false);
+                    }
+                    unset($_SESSION['forum']['upload_file'][$courseId][$attachId]);
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @param $postId
+ * @param null $courseId
+ * @return array
+ */
+function getAttachmentIdsByPostId($postId, $courseId = null) {
+    $array = array();
+    $courseId = intval($courseId);
+    $postId = intval($postId);
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    }
+    if (empty($postId)) {
+
+        return $array;
+    }
+    $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+    $sql = "SELECT id FROM $forumAttachmentTable WHERE c_id = $courseId AND post_id = $postId";
+    $result = Database::query($sql);
+
+    if ($result !== false && Database::num_rows($result) > 0) {
+        while ($row = Database::fetch_array($result,'ASSOC')) {
+            $array[] = $row['id'];
+        }
+    }
+    return $array;
 }

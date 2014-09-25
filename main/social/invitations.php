@@ -154,9 +154,9 @@ if (count($list_get_invitation_sent) > 0) {
         $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
         $user_info	= api_get_user_info($sender_user_id);
 
-        $title		= Security::remove_XSS($invitation['title'], STUDENT, true);
-        $content	= Security::remove_XSS($invitation['content'], STUDENT, true);
-        $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
+        $title      = Security::remove_XSS($invitation['title'], STUDENT, true);
+        $content    = Security::remove_XSS($invitation['content'], STUDENT, true);
+        $date       = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
         $social_right_content .= '
                         <div class="span2">
                             <a class="thumbnail" href="profile.php?u='.$sender_user_id.'">

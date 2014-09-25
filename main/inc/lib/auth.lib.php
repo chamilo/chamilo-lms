@@ -521,4 +521,29 @@ class Auth
             return array('message' => $message, 'content' => $content);
         }
     }
+    
+    public function browseSessions()
+    {
+        require_once api_get_path(LIBRARY_PATH) . 'sessionmanager.lib.php';
+
+        $sessions = SessionManager::get_sessions_list();
+        $sessionsToBrowse = array();
+        $userId = api_get_user_id();
+
+        foreach ($sessions as $session) {
+            if ($session['nbr_courses'] > 0) {
+                $sessionToBrowse = array(
+                    'id' => $session['id'],
+                    'name' => $session['name'],
+                    'coach_name' => api_get_person_name($session['firstname'], $session['lastname']),
+                    'is_subscribed' => SessionManager::isUserSusbcribedAsStudent($session['id'], $userId)
+                );
+
+                $sessionsToBrowse[] = $sessionToBrowse;
+            }
+        }
+
+        return $sessionsToBrowse;
+    }
+
 }

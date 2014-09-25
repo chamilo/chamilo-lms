@@ -327,6 +327,11 @@ define('ICON_SIZE_HUGE',    128);
 
 define('SHOW_TEXT_NEAR_ICONS', false);
 
+//Session catalog
+define('CATALOG_COURSES', 0);
+define('CATALOG_SESSIONS', 1);
+define('CATALOG_COURSES_SESSIONS', 2);
+
 /**
  * Inclusion of internationalization libraries
  */

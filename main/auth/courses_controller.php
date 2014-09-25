@@ -82,6 +82,8 @@ class CoursesController { // extends Controller {
     public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null) {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();
+        
+        global $_configuration;
 
         if ($action == 'display_random_courses') {
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 10);
@@ -119,6 +121,12 @@ class CoursesController { // extends Controller {
         $data['message']          = $message;
         $data['content']          = $content;
         $data['error']            = $error;
+        
+        $data['catalogShowCoursesSessions'] = 0;
+        
+        if (isset($_configuration['catalog_show_courses_sessions'])) {
+            $data['catalogShowCoursesSessions'] = $_configuration['catalog_show_courses_sessions'];
+        }
 
         // render to the view
         $this->view->set_data($data);
@@ -299,4 +307,32 @@ class CoursesController { // extends Controller {
             $this->courses_categories('subcribe', $category_code, $message, $error);
         }
     }
+    
+    /**
+     * It's used for listing sessions, render to sessions view in course catalog
+     * @param string $action
+     */
+    public function sessions($action)
+    {
+        $data = array();
+        $browse_course_categories = $this->model->browse_course_categories();
+
+        global $_configuration;
+
+        $data['browse_course_categories'] = $browse_course_categories;
+        $data['action'] = Security::remove_XSS($action);
+        $data['browseSessions'] = $this->model->browseSessions();
+
+        $data['catalogShowCoursesSessions'] = 0;
+
+        if (isset($_configuration['catalog_show_courses_sessions'])) {
+            $data['catalogShowCoursesSessions'] = $_configuration['catalog_show_courses_sessions'];
+        }
+
+        $this->view->set_data($data);
+        $this->view->set_layout('layout');
+        $this->view->set_template('courses_categories');
+        $this->view->render();
+    }
+
 }

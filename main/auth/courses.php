@@ -76,7 +76,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 }
 
 // filter actions
-$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses', 'display_random_courses', 'subscribe_user_with_password');
+$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses', 'display_random_courses', 'subscribe_user_with_password', 'display_sessions');
 $action = 'display_random_courses';
 $nameTools = get_lang('SortMyCourses');
 
@@ -97,6 +97,10 @@ if ($action == 'subscribe_user_with_password') {
 
 if ($action == 'display_random_courses' || $action == 'display_courses' ) {
 	$nameTools = get_lang('CourseManagement');
+}
+
+if ($action == 'display_sessions') {
+    $nameTools = get_lang('CourseManagement');
 }
 
 // Breadcrumbs.
@@ -214,5 +218,8 @@ switch ($action) {
         break;
     case 'display_courses':
         $courses_controller->courses_categories($action, $_GET['category_code']);
+        break;
+    case 'display_sessions':
+        $courses_controller->sessions($action);
         break;
 }

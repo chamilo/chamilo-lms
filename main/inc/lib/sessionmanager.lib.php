@@ -4857,4 +4857,29 @@ class SessionManager
 
         return $values;
     }
+
+    /**
+     * Check if user is subscribed inside a session as student
+     * @param int $sessionId The session id
+     * @param int $userId The user id
+     * @return boolean Whether is subscribed
+     */
+    public static function isUserSusbcribedAsStudent($sessionId, $userId) {
+        $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $sessionId = Database::escape_string($sessionId);
+        $userId = Database::escape_string($userId);
+
+        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable "
+                . "WHERE id_session = $sessionId AND id_user = $userId AND relation_type = 0";
+
+        $result = Database::fetch_assoc(Database::query($sql));
+
+        if (!empty($result) && $result['qty'] > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
 }

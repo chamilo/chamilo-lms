@@ -7,6 +7,17 @@
 * @package chamilo.auth
 */
 $stok = Security::get_token();
+
+$showCourses = false;
+$showSessions = false;
+
+if ($catalogShowCoursesSessions == CATALOG_COURSES || $catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS) {
+    $showCourses = true;
+}
+
+if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCoursesSessions == CATALOG_SESSIONS) {
+    $showSessions = true;
+}
 ?>
 <script>
     $(document).ready( function() {
@@ -26,6 +37,52 @@ $stok = Security::get_token();
                 }
             });
         });
+    
+        $('.courses-list-btn').toggle(function (e) {
+            e.preventDefault();
+
+            var $el = $(this);
+            var sessionId = getSessionId(this);
+
+            $el.children('img').remove();
+            $el.prepend('<?php echo Display::display_icon('nolines_minus.gif'); ?>');
+
+            $.ajax({
+                url: '<?php echo api_get_path(WEB_AJAX_PATH) . 'course.ajax.php' ?>',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    a: 'display_sessions_courses',
+                    session: sessionId
+                },
+                success: function (response){
+                    var $container = $el.prev('.course-list');
+
+                    var $courseList = $('<ul>');
+
+                    $.each(response, function (index, course){
+                        $courseList.append('<li><div><strong>' + course.name + '</strong><br>' + course.coachName + '</div></li>');
+                    });
+
+                    $container.append($courseList).show(250);
+                }
+            });
+        }, function (e) {
+            e.preventDefault();
+
+            var $el = $(this);
+            var $container = $el.prev('.course-list');
+            $container.hide(250).empty();
+            
+            $el.children('img').remove();
+            $el.prepend('<?php echo Display::display_icon('nolines_plus.gif'); ?>');
+        });
+        
+        var getSessionId = function (el){
+            var parts = el.id.split('_');
+            
+            return parseInt(parts[1], 10);
+        };
     });
 </script>
 
@@ -33,6 +90,7 @@ $stok = Security::get_token();
     <div class="span3">
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
+                <?php if ($showCourses) { ?>
                 <?php if (intval($_GET['hidden_links']) != 1) { ?>
                 <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
                     <fieldset>
@@ -127,11 +185,66 @@ $stok = Security::get_token();
                 }
             }
             ?>
+                <?php } ?>
+                <?php if ($showSessions) { ?>
+                    <li class="nav-header"><?php echo get_lang('Sessions'); ?></li>
+                    <li>
+                        <?php if ($action == 'display_sessions') { ?>
+                            <strong><?php echo get_lang('SessionList'); ?></strong>
+                        <?php } else { ?>
+                            <a href="<?php echo api_get_self() ?>?action=display_sessions&hidden_links=<?php echo $hidden_links ?>"><?php echo get_lang('SessionList'); ?></a>
+                        <?php } ?>
+                    </li>
+                    <form>
+                        <div class="control-group">
+                            <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
+                        </div>
+                    </form>
+                <?php } ?>
         </div>
     </div>
 
     <div class="span9">
         <?php
+        switch ($action) {
+            case 'display_sessions':
+                if (!empty($browseSessions)) {
+                    foreach ($browseSessions as $session) {
+                        $sessionId = $session['id'];
+                        ?>
+                        <div class="well_border">
+                            <div class="row">
+                                <div class="span1">
+                                    <span class="thumbnail"><?php
+                                        $sessionIconParams = array(
+                                            'id' => 'session_img_' . $sessionId
+                                        );
+
+                                        echo Display::return_icon('window_list.png', $session['name'], $sessionIconParams, ICON_SIZE_LARGE);
+                                        ?></span>
+                                </div>
+                                <div class="span7 categories-course-description">
+                                    <h3><?php echo $session['name'] ?></h3>
+                                    <p><?php echo $session['coach_name'] ?></p>
+                                    <div>
+                                        <div class="course-list"></div>
+                                        <a class="btn btn-link courses-list-btn" id="showsesion_<?php echo $sessionId ?>" href="#"><?php echo Display::display_icon('nolines_plus.gif'); ?> <?php echo get_lang('Courses') ?></a>
+                                        <?php if ($session['is_subscribed']) { ?>
+                                            <?php echo display_already_registered_in_session_label(); ?>
+                                        <?php } else { ?>
+                                            <a class="btn btn-primary" href=""><?php echo get_lang('Subscribe'); ?></a>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                } else {
+                    Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
+                }
+                break;
+            default:
         if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }
 
@@ -223,6 +336,8 @@ $stok = Security::get_token();
             if (!isset($_REQUEST['subscribe_user_with_password']) && !isset($_REQUEST['subscribe_course'])) {
                 Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
             }
+        }
+                break;
         }
         ?>
     </div>
@@ -335,4 +450,15 @@ function display_register_button($course, $stok, $code, $search_term)
 function display_unregister_button($course, $stok, $search_term, $code)
 {
     echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&amp;sec_token='.$stok.'&amp;unsubscribe='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
+}
+
+/**
+ * Generate a label if the user has been  registered in session
+ * @return string The label
+ */
+function display_already_registered_in_session_label()
+{
+    $icon = Display::return_icon('students.gif', get_lang('Student'));
+
+    return Display::label($icon . ' ' . get_lang("AlreadyRegisteredToSession"), "info");
 }

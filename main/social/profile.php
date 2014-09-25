@@ -302,7 +302,8 @@ if (is_array($personal_course_list)) {
     $course_list_code = array_unique_dimensional($course_list_code);
 }
 
-$social_left_content = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
+$social_avatar_block = SocialManager::show_social_avatar_block('shared_profile', null, $user_id);
+$social_menu_block = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
 
 $personal_info = null;
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
@@ -763,7 +764,8 @@ $social_right_content .= MessageManager::generate_invitation_form('send_invitati
 
 
 $tpl = new Template(get_lang('Social'));
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('layout/social_layout.tpl');

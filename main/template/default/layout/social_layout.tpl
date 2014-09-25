@@ -3,8 +3,10 @@
 {% block content %}
     <div class="row">
         <div class="span3">
-            {{ social_left_content }}
-            {{ social_left_menu }}
+            <div class="social-menu">
+            {{ social_avatar_block }}
+            {{ social_menu_block }}
+            </div>
         </div>
         <div class="span9">
             <div class="row">

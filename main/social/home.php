@@ -58,7 +58,8 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
-$social_left_content = SocialManager::show_social_menu('home');
+$social_avatar_block = SocialManager::show_social_avatar_block('home');
+$social_menu_block = SocialManager::show_social_menu('home');
 
 $social_right_content = '<div class="span5">';
 $social_right_content .= '<div class="well_border">';
@@ -163,7 +164,8 @@ $social_right_content .= '
 $social_right_content .= '</div>';
 
 $tpl = new Template(get_lang('SocialNetwork'));
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

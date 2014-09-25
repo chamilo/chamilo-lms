@@ -94,7 +94,8 @@ if (is_array($_GET) && count($_GET)>0) {
 	}
 }
 
-$social_left_content = SocialManager::show_social_menu('myfiles');
+$social_avatar_block = SocialManager::show_social_avatar_block('myfiles');
+$social_menu_block = SocialManager::show_social_menu('myfiles');
 $actions = null;
 
 if (isset($_GET['cidReq'])) {
@@ -105,7 +106,8 @@ $social_right_content .= '<iframe name="fileManager" id="fileManager" src="'.api
 $social_right_content .= '</div>';
 
 $tpl = new Template();
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 
 $tpl->assign('actions', $actions);

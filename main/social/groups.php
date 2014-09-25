@@ -188,13 +188,15 @@ if ($group_id != 0) {
 $create_thread_link = '';
 
 if ($group_id != 0 ) {
-    $social_left_content = SocialManager::show_social_menu('groups',$group_id);
+    $social_avatar_block = SocialManager::show_social_avatar_block('groups', $group_id);
+    $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
 } else {
     $show_menu = 'browse_groups';
     if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
         $show_menu = $_GET['view'];
     }
-    $social_left_content = SocialManager::show_social_menu($show_menu);
+    $social_avatar_block = SocialManager::show_social_avatar_block($show_menu, $group_id);
+    $social_menu_block = SocialManager::show_social_menu($show_menu, $group_id);
 }
 
 $social_right_content = null;
@@ -531,7 +533,8 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && $_REQ
 
 $tpl = new Template();
 $tpl->set_help('Groups');
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 
 $tpl->assign('message', $show_message);

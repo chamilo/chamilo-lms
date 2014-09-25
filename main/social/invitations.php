@@ -91,7 +91,9 @@ if (is_array($_GET) && count($_GET)>0) {
         }
     }
 }
-$social_left_content = SocialManager::show_social_menu('invitations');
+
+$social_avatar_block = SocialManager::show_social_avatar_block('invitations');
+$social_menu_block = SocialManager::show_social_menu('invitations');
 $social_right_content =  '<div id="id_response" align="center"></div>';
 
 $user_id = api_get_user_id();
@@ -200,7 +202,8 @@ if (count($pending_invitations) > 0) {
 }
 
 $tpl = new Template(null);
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 
 $tpl->assign('message', $show_message);

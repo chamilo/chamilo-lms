@@ -306,7 +306,8 @@ if ($add_type == 'multiple') {
 	$link_add_type_multiple = '<a href="'.api_get_self().'?id='.$group_id.'&add='.$add.'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
-$social_left_content = SocialManager::show_social_menu('invite_friends',$group_id);
+$social_avatar_block = SocialManager::show_social_avatar_block('invite_friends',$group_id);
+$social_menu_block = SocialManager::show_social_menu('invite_friends',$group_id);
 $social_right_content =  '<h2>'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h2>';
 
 if (count($nosessionUsersList) == 0) {
@@ -542,8 +543,8 @@ $social_right_content = Display::div($social_right_content, array('class' => 'sp
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
-$tpl->assign('social_left_content', $social_left_content);
-//$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 //$tpl->assign('actions', $actions);
 //$tpl->assign('content', $content);

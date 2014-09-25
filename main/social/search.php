@@ -139,7 +139,8 @@ $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNet
 $query      = isset($_GET['q']) ? $_GET['q'] : null;
 $query_vars = array('q' => $query);
 
-$social_left_content = SocialManager::show_social_menu('search');
+$social_avatar_block = SocialManager::show_social_avatar_block('search');
+$social_menu_block = SocialManager::show_social_menu('search');
 
 $social_right_content = '<div class="span9">'.UserManager::get_search_form($query).'</div>';
 
@@ -314,7 +315,8 @@ $social_right_content .= MessageManager::generate_message_form('send_message');
 $social_right_content .= MessageManager::generate_invitation_form('send_invitation');
 
 $tpl = new Template($tool_name);
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('layout/social_layout.tpl');

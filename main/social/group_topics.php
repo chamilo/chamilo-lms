@@ -177,7 +177,9 @@ $social_right_content = '<div class="breadcrumb">
                            <span class="divider">/</span>
                            <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a>
                          </div> ';
-$social_left_content .= SocialManager::show_social_menu('member_list', $group_id);
+
+$social_avatar_block = SocialManager::show_social_avatar_block('member_list', $group_id);
+$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
 
 if (!empty($show_message)) {
     $social_right_content .= Display::return_message($show_message, 'confirmation');
@@ -189,8 +191,8 @@ $social_right_content = '<div class="span9">'.$social_right_content.'</div>';
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
-$tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_left_menu', $social_left_menu);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);

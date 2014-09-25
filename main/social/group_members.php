@@ -90,7 +90,8 @@ $users	= GroupPortalManager::get_users_by_group(
 );
 $new_member_list = array();
 
-$social_left_content = SocialManager::show_social_menu('member_list',$group_id);
+$social_avatar_block = SocialManager::show_social_avatar_block('member_list', $group_id);
+$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
 $social_right_content = '<h2>'.$group_info['name'].'</h2>';
 $social_right_content .= '<div style="width:90%">';
 
@@ -138,7 +139,8 @@ $social_right_content .= '</div>';
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('layout/social_layout.tpl');

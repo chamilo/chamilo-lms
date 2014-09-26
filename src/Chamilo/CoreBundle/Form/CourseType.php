@@ -6,19 +6,33 @@ namespace Chamilo\CoreBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Course;
 
-class SessionType extends AbstractType
+class CourseType extends AbstractType
 {
     /**
      * @inheritdoc
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builderData = $builder->getData();
         $builder
-            ->add('name', 'text')
-            ->add('general_coach', 'entity', array(
+            ->add('title', 'text')
+            ->add('code', 'text')
+            ->add('course_language', 'locale')
+            ->add('visibility', 'choice',
+                array('choices' => Course::getStatusList())
+            )
+            ->add('department_name', 'text')
+            ->add('department_url', 'url')
+            ->add('disk_quota', 'text')
+            ->add('expiration_date', 'sonata_type_datetime_picker')
+
+
+
+
+
+
+           /* ->add('general_coach', 'entity', array(
                 'class' => 'ChamiloUserBundle:User',
                 'property' => 'username',
             ))
@@ -36,13 +50,9 @@ class SessionType extends AbstractType
             ->add('promotion_id', 'entity', array(
                 'class' => 'ChamiloCoreBundle:Promotion',
                 'property' => 'name',
-            ))
-            ->add('display_start_date', 'sonata_type_datetime_picker')
-            ->add('display_end_date', 'sonata_type_datetime_picker')
-            ->add('access_start_date', 'sonata_type_datetime_picker')
-            ->add('access_end_date', 'sonata_type_datetime_picker')
-            ->add('coach_access_start_date', 'sonata_type_datetime_picker')
-            ->add('coach_access_end_date', 'sonata_type_datetime_picker')
+            ))*/
+            /*
+            ->add('coach_access_end_date', 'sonata_type_datetime_picker')*/
 
             ->add('save', 'submit', array('label' => 'Update'))
         ;
@@ -55,7 +65,7 @@ class SessionType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Chamilo\CoreBundle\Entity\Session'
+                'data_class' => 'Chamilo\CoreBundle\Entity\Course'
             )
         );
     }
@@ -65,7 +75,7 @@ class SessionType extends AbstractType
      */
     public function getName()
     {
-        return 'session';
+        return 'course';
     }
 }
 

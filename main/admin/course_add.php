@@ -6,11 +6,8 @@
  */
 
 use Chamilo\CoreBundle\Framework\Container;
-
-/* INITIALIZATION SECTION */
-
-// Language files that need to be included.
-$language_file = array('admin', 'create_course');
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Form\CourseType;
 
 $cidReset = true;
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -25,21 +22,8 @@ $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('Cours
 
 global $_configuration;
 
-// Get all possible teachers.
-$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-
 $group = Container::getGroupManager()->findGroupByName('teachers');
-/*$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1".$order_clause;
-// Filtering teachers when creating a course.
-if (api_is_multiple_url_enabled()) {
-    $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
-            INNER JOIN $access_url_rel_user_table url_rel_user
-            ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
-}
 
-$res = Database::query($sql);*/
 $teachers = array();
 $users = $group->getUsers();
 /** @var Chamilo\UserBundle\Entity\User $user */
@@ -140,7 +124,7 @@ $values['subscribe'] = 1;
 $values['unsubscribe'] = 0;
 
 $form->setDefaults($values);
-
+/*
 // Validate the form
 if ($form->validate()) {
     $course          = $form->exportValues();
@@ -160,9 +144,42 @@ if ($form->validate()) {
 
     header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));
     exit;
-}
+}*/
 
 // Display the form.
 $content = $form->return_form();
 
-echo $content;
+//echo $content;
+
+$em = Container::getEntityManager();
+$request = Container::getRequest();
+
+$course = new Course();
+$builder = Container::getFormFactory()->createBuilder(
+    new CourseType(),
+    $course
+);
+
+$form = $builder->getForm();
+$form->handleRequest($request);
+
+if ($form->isValid()) {
+    $course = $form->getData();
+    $em->persist($course);
+    $em->flush();
+    Container::addFlash(get_lang('Updated'));
+    $url = Container::getRouter()->generate(
+        'main',
+        array('name' => 'admin/course_list.php')
+    );
+    header('Location: '.$url);
+    exit;
+}
+
+echo Container::getTemplate()->render(
+    'ChamiloCoreBundle:Legacy:form.html.twig',
+    array(
+        'form' => $form->createView(),
+        'url' => api_get_self()
+    )
+);

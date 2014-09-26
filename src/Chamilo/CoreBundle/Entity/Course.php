@@ -8,11 +8,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Course
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="course")
+ * @UniqueEntity("code")
+ * @UniqueEntity("visualCode")
+ * @UniqueEntity("directory")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\CourseRepository")
  */
 class Course
@@ -253,6 +257,7 @@ class Course
      */
     public function __construct()
     {
+        $this->creationDate = new \DateTime();
     }
 
     /**
@@ -415,6 +420,8 @@ class Course
     public function setCode($code)
     {
         $this->code = $code;
+        $this->visualCode = $code;
+        $this->directory = $code;
 
         return $this;
     }

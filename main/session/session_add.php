@@ -7,9 +7,6 @@ use Chamilo\CoreBundle\Form\SessionType;
 
 $cidReset = true;
 
-// including the global Chamilo fileurl_action
-//require_once '../inc/global.inc.php';
-
 // setting the section (for the tabs)
 SessionManager::protect_session_edit();
 

@@ -13,17 +13,23 @@
  * DashboardManager can be used to manage dashboard
  * @package chamilo.dashboard
  */
-class DashboardManager {
+class DashboardManager
+{
 	/**
 	 * contructor
 	 */
-	private function __construct() {}
+	public function __construct()
+    {
+    }
 
     /**
 	 * This function allows easy activating and inactivating of dashboard plugins
 	 * @return void
 	*/
-	public static function handle_dashboard_plugins() {
+	public static function handle_dashboard_plugins()
+    {
+        $token = Security::get_existing_token();
+        $tokenCondition = '&amp;sec_token='.$token;
 
 		/* We scan the plugin directory. Each folder is a potential plugin. */
 		$dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
@@ -31,7 +37,7 @@ class DashboardManager {
 
 		$table_cols = array('name', 'version', 'description');
         echo Display::page_subheader(get_lang('DashboardPlugins'));
-		echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
+		echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).$tokenCondition.'">';
 		echo '<table class="data_table">';
 		echo '<tr>';
 		echo '<th width="50px">'.get_lang('Enabled').'</th>';

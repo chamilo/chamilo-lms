@@ -10,6 +10,13 @@
 </a>
 {% endblock %}
 
+{% block avanzu_navbar %}
+    {{ render(controller('AvanzuAdminThemeBundle:Navbar:messages')) }}
+    {{ render(controller('AvanzuAdminThemeBundle:Navbar:notifications')) }}
+    {{ render(controller('AvanzuAdminThemeBundle:Navbar:tasks')) }}
+    {{ render(controller('ChamiloCoreBundle:Navbar:user')) }}
+{% endblock %}
+
 {% block page_title %}
     {% if page is defined %}
         {{ page.name }}

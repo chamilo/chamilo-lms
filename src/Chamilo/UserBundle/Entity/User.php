@@ -901,7 +901,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * Get pictureUri
      *
-     * @return string
+     * @return Media
      */
     public function getPictureUri()
     {
@@ -1279,11 +1279,11 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @return string
+     * @return Media
      */
     public function getAvatar()
     {
-        return '';
+        return $this->getPictureUri();
     }
 
     /**

@@ -1537,7 +1537,7 @@ function api_format_course_array($course_data) {
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
     } else {
-        $url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
+        $url_image = api_get_path(WEB_IMG_PATH).'icons/64/course.png';
     }
     $_course['course_image'] = $url_image;
     return $_course;

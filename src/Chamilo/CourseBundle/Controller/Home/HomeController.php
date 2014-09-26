@@ -37,7 +37,6 @@ class HomeController extends ToolBaseController
     {
         $course = $this->getCourse();
         $session= $this->getSession();
-        var_dump($session);
 
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
@@ -71,11 +70,11 @@ class HomeController extends ToolBaseController
             );
         }
 
+        // Course access events
         $dispatcher = $this->container->get('event_dispatcher');
         $dispatcher->dispatch('chamilo_course.course.access',
             new CourseAccess($this->getUser(), $course)
         );
-
 
         if (!isset($coursesAlreadyVisited[$courseCode])) {
             $dispatcher = $this->container->get('event_dispatcher');

@@ -24,8 +24,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class IndexController extends BaseController
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+
         /** @var \PageController $pageController */
         //$pageController = $this->get('page_controller');
         $pageController = new PageController();
@@ -86,8 +87,10 @@ class IndexController extends BaseController
     public function userPortalAction(
         $type = 'courses',
         $filter = 'current',
-        $coursePage = 1
+        $coursePage = 1,
+        Request $request
     ) {
+
         /** @var \Chamilo\CoreBundle\Entity\CourseManager $courseManager */
         $courseManager = $this->get('chamilo_core.manager.course');
 

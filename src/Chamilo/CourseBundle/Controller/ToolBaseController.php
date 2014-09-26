@@ -136,7 +136,6 @@ abstract class ToolBaseController extends BaseController
         }
 
         $sessionId = $request->get('id_session');
-        var_dump($sessionId);
         $groupId   = $request->get('gidReq');
 
         $tempCourseId  = api_get_course_id();

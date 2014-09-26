@@ -89,7 +89,7 @@ class CourseListener
                     $sessionId = $request->get('id_session');
 
                     $contains = $course->getSessions()->containsKey($sessionId);
-                    var_dump($contains);
+                    //var_dump($contains);
                     if (!empty($sessionId)) {
                         $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
                         if (!empty($session)) {

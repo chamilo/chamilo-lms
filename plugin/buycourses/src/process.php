@@ -18,25 +18,51 @@ $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('Cou
 $tpl = new Template($templateName);
 
 if (!empty($_GET['code'])) {
+    $codeType = "COURSE";
     $code = (int)$_GET['code'];
+} else if (!empty($_GET['scode'])) {
+    $codeType = "SESSION";
+    $code = (int)$_GET['scode'];
 } else {
-    $code = $_SESSION['bc_course_code'];
+    $code = $_SESSION['bc_code'];
 }
 
-$tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-$tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
+$result = array_shift(
+    Database::select(
+        'selected_value', 
+        Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT), 
+        array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
+    )
+);
 
-$sql = "SELECT a.price, a.title, b.code
+if ($codeType === 'SESSION' && $result['selected_value'] === 'true') {    
+    $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tableBuySession = Database::get_main_table(TABLE_BUY_SESSION);
+    $sql = "SELECT a.session_id, a.name, a.date_start, a.date_end, a.price
+    FROM $tableBuySession a, $tableSession b
+    WHERE a.session_id = " . $code . "
+    AND a.session_id = b.id;";
+    $res = Database::query($sql);
+    $row = Database::fetch_assoc($res);    
+    $_SESSION['bc_title'] = $row['name'];
+    $_SESSION['bc_codetext'] = 'THIS_IS_A_SESSION';
+    $tpl->assign('session', sessionInfo($code));
+    $tpl->assign('isSession', 'YES');
+} else {
+    $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+    $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
+    $sql = "SELECT a.price, a.title, b.code
     FROM $tableBuyCourse a, $tableCourse b
     WHERE a.course_id = " . $code . "
     AND a.course_id = b.id;";
-$res = Database::query($sql);
-$row = Database::fetch_assoc($res);
-
+    $res = Database::query($sql);
+    $row = Database::fetch_assoc($res);
+    $_SESSION['bc_title'] = $row['title'];
+    $_SESSION['bc_codetext'] = $row['code'];
+    $tpl->assign('course', courseInfo($code));
+}
 $_SESSION['Payment_Amount'] = number_format($row['price'], 2, '.', '');
-$_SESSION['bc_course_code'] = $code;
-$_SESSION['bc_course_title'] = $row['title'];
-$_SESSION['bc_course_codetext'] = $row['code'];
+$_SESSION['bc_code'] = $code;
 
 if (!isset($_SESSION['_user'])) {
     //Needs to be Registered
@@ -57,30 +83,28 @@ if (!isset($_SESSION['_user'])) {
     $tpl->assign('user', $_SESSION['bc_user']['username']);
 }
 
-if (checkUserCourse($_SESSION['bc_course_codetext'], $_SESSION['bc_user_id'])) {
-    $_SESSION['bc_success'] = false;
-    $_SESSION['bc_message'] = 'AlreadyBuy';
-    header('Location: list.php');
-}
-
-if (checkUserCourseTransfer($_SESSION['bc_course_codetext'], $_SESSION['bc_user_id'])) {
-    $_SESSION['bc_success'] = false;
-    $_SESSION['bc_message'] = 'bc_tmp_registered';
-    header('Location: list.php');
-}
-
 $currencyType = findCurrency();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $transferEnable = $plugin->get('transfer_enable');
 
-$courseInfo = courseInfo($code);
 
-$tpl->assign('course', $courseInfo);
+if (checkUserBuy($_SESSION['bc_codetext'], $_SESSION['bc_user_id'], $codeType)) {
+    $_SESSION['bc_success'] = false;
+    $_SESSION['bc_message'] = 'AlreadyBuy';
+    header('Location: list.php');
+}
+
+if (checkUserBuyTransfer($_SESSION['bc_codetext'], $_SESSION['bc_user_id'], $codeType)) {
+    $_SESSION['bc_success'] = false;
+    $_SESSION['bc_message'] = 'bc_tmp_registered';
+    header('Location: list.php');
+}
+
 $tpl->assign('server', $_configuration['root_web']);
 $tpl->assign('paypal_enable', $paypalEnable);
 $tpl->assign('transfer_enable', $transferEnable);
-$tpl->assign('title', $_SESSION['bc_course_title']);
+$tpl->assign('title', $_SESSION['bc_title']);
 $tpl->assign('price', $_SESSION['Payment_Amount']);
 $tpl->assign('currency', $currencyType);
 

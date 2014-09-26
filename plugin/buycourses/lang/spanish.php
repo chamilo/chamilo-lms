@@ -17,6 +17,7 @@ $strings['Description'] = "Descripci&oacute;n";
 $strings['Buy'] = "Comprar";
 $strings['Mostrar_disponibles'] = "Mostrar cursos disponibles";
 
+$strings['include_sessions'] = "Incluir sesiones";
 $strings['paypal_enable'] = "Habilitar PayPal";
 $strings['transfer_enable'] = "Habilitar transferencia";
 $strings['unregistered_users_enable'] = "Permitir usuarios sin registro en la plataforma";
@@ -37,6 +38,7 @@ $strings['ProblemToSubscribeTheUser'] = 'Problema para suscribir el usuario';
 $strings['TheSubscriptionAndActivationWereDoneSuccessfully'] = 'La suscripción y la activación se realizaron con éxito.';
 $strings['TheUserIsAlreadyRegisteredInTheCourse'] = 'El usuario ya está registrado en el curso.';
 $strings['CourseListOnSale'] = 'Lista de cursos a la venta';
+$strings['BuySessions'] = "Comprar sesiones";
 $strings['BuyCourses'] = 'Comprar cursos';
 $strings['ConfigurationOfCoursesAndPrices'] = 'Configuración de cursos y precios';
 $strings['ConfigurationOfPayments'] = 'Configuración de pagos';

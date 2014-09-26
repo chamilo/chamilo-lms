@@ -106,12 +106,11 @@ if (!isset($_POST['paymentOption'])) {
 
     $tpl = new Template($templateName);
 
-    $code = $_SESSION['bc_course_code'];
-    $courseInfo = courseInfo($code);
-
-    $tpl->assign('course', $courseInfo);
+    $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
+        $tpl->assign('session', sessionInfo($_SESSION['bc_code'])) :
+        $tpl->assign('course', courseInfo($_SESSION['bc_code']));
     $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('title', $_SESSION['bc_course_title']);
+    $tpl->assign('title', $_SESSION['bc_title']);
     $tpl->assign('price', $_SESSION['Payment_Amount']);
     $tpl->assign('currency', $_SESSION['bc_currency_type']);
     if (!isset($_SESSION['_user'])) {
@@ -211,29 +210,49 @@ if (!isset($_POST['paymentOption'])) {
              *  refund: A reversal has occurred on this transaction because you have given the customer a refund.
              *  other: A reversal has occurred on this transaction due to a reason not listed above.
              */
-
+//api_get_session_info($session_id)
             $reasonCode = $resArray["PAYMENTINFO_0_REASONCODE"];
 
             // Insert the user information to activate the user
             if ($paymentStatus == "Completed") {
                 $user_id = $_SESSION['bc_user_id'];
-                $course_code = $_SESSION['bc_course_codetext'];
-                $all_course_information = CourseManager::get_course_information($course_code);
-
-                if (CourseManager::subscribe_user($user_id, $course_code)) {
-                    $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course_code);
-                    if ($send == 1) {
-                        CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = false);
-                    } else if ($send == 2) {
-                        CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = true);
+                if ($_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION') {
+                    $session_id = $_SESSION['bc_code'];
+                    $all_session_information = Session::api_get_session_info($session_id);
+                    if (SessionManager::suscribe_users_to_session($session_id, array($user_id),
+                    api_get_session_visibility($session_id), false)) {
+                        //$send = api_get_session_setting('email_alert_to_teacher_on_new_user_in_session', $session_id);
+                        //if ($send == 1) {
+                            //SessionManager::email_to_tutor($user_id, $session_id, $send_to_tutor_also = false);
+                        /*} else if ($send == 2) {
+                            CourseManager::email_to_tutor($user_id, $session_id, $send_to_tutor_also = true);
+                        }*/
+                        //$url = Display::url($all_session_information['name'], api_get_session_url($session_id));
+                        $_SESSION['bc_message'] = 'EnrollToSessionXSuccessful';
+                        $_SESSION['bc_url'] = '';//$url;
+                        $_SESSION['bc_success'] = true;
+                    } else {
+                        $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
+                        $_SESSION['bc_success'] = false;
                     }
-                    $url = Display::url($all_course_information['title'], api_get_course_url($course_code));
-                    $_SESSION['bc_message'] = 'EnrollToCourseXSuccessful';
-                    $_SESSION['bc_url'] = $url;
-                    $_SESSION['bc_success'] = true;
                 } else {
-                    $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
-                    $_SESSION['bc_success'] = false;
+                    $course_code = $_SESSION['bc_codetext'];
+                    $all_course_information = CourseManager::get_course_information($course_code);
+                    if (CourseManager::subscribe_user($user_id, $course_code)) {
+                        $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course_code);
+                        if ($send == 1) {
+                            CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = false);
+                        } else if ($send == 2) {
+                            CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = true);
+                        }
+                        $url = Display::url($all_course_information['title'], api_get_course_url($course_code));
+                        $_SESSION['bc_message'] = 'EnrollToCourseXSuccessful';
+                        $_SESSION['bc_url'] = $url;
+                        $_SESSION['bc_success'] = true;
+                    } else {
+                        $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
+                        $_SESSION['bc_success'] = false;
+                    }
                 }
                 // Activate the use
                 $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
@@ -263,23 +282,27 @@ if (!isset($_POST['paymentOption'])) {
                     $_user['lastLogin'] = api_strtotime($uData['login_date'], 'UTC');
 
                     $is_platformAdmin = (bool)(!is_null($uData['is_admin']));
+                    
                     $is_allowedCreateCourse = (bool)(($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
+                    
                     ConditionalLogin::check_conditions($uData);
 
                     Session::write('_user', $_user);
 
                     UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
                     Session::write('is_platformAdmin', $is_platformAdmin);
+                    
                     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
+                
                 } else {
                     header('location:' . api_get_path(WEB_PATH));
                 }
 
                 // Delete variables
                 unset($_SESSION['bc_user_id']);
-                unset($_SESSION['bc_course_code']);
-                unset($_SESSION['bc_course_codetext']);
-                unset($_SESSION['bc_course_title']);
+                unset($_SESSION['bc_code']);
+                unset($_SESSION['bc_codetext']);
+                unset($_SESSION['bc_title']);
                 unset($_SESSION['bc_user']);
                 unset($_SESSION["Payment_Amount"]);
                 unset($_SESSION["sec_token"]);
@@ -290,8 +313,8 @@ if (!isset($_POST['paymentOption'])) {
                 header('Location:list.php');
             } else {
                 $_SESSION['bc_message'] = 'CancelOrder';
-                unset($_SESSION['bc_course_code']);
-                unset($_SESSION['bc_course_title']);
+                unset($_SESSION['bc_code']);
+                unset($_SESSION['bc_title']);
                 unset($_SESSION["Payment_Amount"]);
                 unset($_SESSION["currencyCodeType"]);
                 unset($_SESSION["PaymentType"]);
@@ -306,9 +329,9 @@ if (!isset($_POST['paymentOption'])) {
             $ErrorLongMsg = urldecode($resArray["L_LONGMESSAGE0"]);
             $ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
             $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
-            unset($_SESSION['bc_course_code']);
-            unset($_SESSION['bc_course_codetext']);
-            unset($_SESSION['bc_course_title']);
+            unset($_SESSION['bc_code']);
+            unset($_SESSION['bc_codetext']);
+            unset($_SESSION['bc_title']);
             unset($_SESSION["Payment_Amount"]);
             unset($_SESSION["currencyCodeType"]);
             unset($_SESSION["PaymentType"]);

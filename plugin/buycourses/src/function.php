@@ -12,11 +12,13 @@ require_once 'buy_course.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
+$tableBuySession = Database::get_main_table(TABLE_BUY_SESSION);
 $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
 $tableBuyCourseCountry = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
 $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
 $tableBuyCourseTransfer = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
 $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
+$tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
@@ -25,12 +27,22 @@ $plugin = BuyCoursesPlugin::create();
 $buy_name = $plugin->get_lang('Buy');
 
 if ($_REQUEST['tab'] == 'sync') {
+    
     $sql = "SELECT code, title FROM $tableCourse;";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
         $aux_code .= $row['code'];
         $aux_title .= $row['title'];
     }
+    
+    $sql = "SELECT name, date_start, date_end FROM $tableSession;";
+    $res = Database::query($sql);
+    while ($row = Database::fetch_assoc($res)) {
+        $aux_name .= $row['name'];
+        $aux_date_start .= $row['date_start'];
+        $aux_date_end .= $row['date_end'];
+    }
+    
     echo json_encode(array("status" => "true", "content" => $content));
 }
 
@@ -232,29 +244,39 @@ if ($_REQUEST['tab'] == 'delete_account') {
 
 if ($_REQUEST['tab'] == 'save_mod') {
     $_REQUEST['id'] = Database::escape_string($_REQUEST['id']);
-    $idCourse = intval($_REQUEST['course_id']);
+    
+    $id = intval($_REQUEST['course_id']);
+    $tableBuy = $tableBuyCourse;
+    $tableField = 'course_id';
+    
+    if (isset($_REQUEST['session_id'])) {
+        $id = intval($_REQUEST['session_id']);
+        $tableBuy = $tableBuySession;
+        $tableField = 'session_id';
+    }
+
     $visible = ($_REQUEST['visible'] == "checked") ? 1 : 0;
     $price = Database::escape_string($_REQUEST['price']);
 
-    $sql = "UPDATE $tableBuyCourse
+    $sql = "UPDATE $tableBuy
         SET visible = " . $visible . ",
         price = '" . $price . "'
-        WHERE course_id = '" . $idCourse . "';";
+        WHERE " . $tableField . " = '" . $id . "';";
 
     $res = Database::query($sql);
     if (!res) {
         $content = $plugin->get_lang('ProblemToSaveTheMessage') . Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
-        echo json_encode(array("status" => "true", "course_id" => $idCourse));
+        echo json_encode(array("status" => "true", "course_id" => $id));
     }
 }
 
 if ($_REQUEST['tab'] == 'unset_variables') {
     unset($_SESSION['bc_user_id']);
     unset($_SESSION['bc_registered']);
-    unset($_SESSION['bc_course_code']);
-    unset($_SESSION['bc_course_title']);
+    unset($_SESSION['bc_code']);
+    unset($_SESSION['bc_title']);
     unset($_SESSION["Payment_Amount"]);
     unset($_SESSION["currencyCodeType"]);
     unset($_SESSION["PaymentType"]);

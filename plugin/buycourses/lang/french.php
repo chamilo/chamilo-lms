@@ -17,6 +17,7 @@ $strings['Description'] = "Description";
 $strings['Buy'] = "Acheter";
 $strings['Mostrar_disponibles'] = "Montrer les cours disponibles";
 
+$strings['include_sessions'] = "Inclure les sessions";
 $strings['paypal_enable'] = "Activer PayPal";
 $strings['transfer_enable'] = "Activer les transferts bancaires";
 $strings['unregistered_users_enable'] = "Permettre l'accès aux utilisateurs non enregistrés sur la plateforme";
@@ -37,6 +38,7 @@ $strings['ProblemToSubscribeTheUser'] = "Problème d'inscription de l'utilisateu
 $strings['TheSubscriptionAndActivationWereDoneSuccessfully'] = "L'inscription et l'activation se sont déroulés sans problème.";
 $strings['TheUserIsAlreadyRegisteredInTheCourse'] = "L'utilisateur est déjà inscrit au cours";
 $strings['CourseListOnSale'] = "Liste de cours en vente";
+$strings['BuySessions'] = "Acheter des sessions";
 $strings['BuyCourses'] = "Acheter des cours";
 $strings['ConfigurationOfCoursesAndPrices'] = "Configuration des cours et prix";
 $strings['ConfigurationOfPayments'] = "Configuration des paiements";

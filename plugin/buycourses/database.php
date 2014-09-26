@@ -16,9 +16,31 @@ if (!function_exists('api_get_path')) {
  */
 $objPlugin = BuyCoursesPlugin::create();
 
+$table = Database::get_main_table(TABLE_BUY_SESSION);
+$sql = "CREATE TABLE IF NOT EXISTS $table (
+    id INT unsigned NOT NULL auto_increment PRIMARY KEY,
+    session_id INT unsigned NOT NULL DEFAULT '0',
+    name VARCHAR(250),
+    date_start VARCHAR(40),
+    date_end VARCHAR(40),
+    visible int,
+    price FLOAT(11,2) NOT NULL DEFAULT '0',
+    sync int)";
+Database::query($sql);
+
+$tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
+$sql = "SELECT id, name, date_start, date_end FROM $tableSession";
+$res = Database::query($sql);
+while ($row = Database::fetch_assoc($res)) {
+    $presql = "INSERT INTO $table (session_id, name, date_start, date_end, visible) 
+    VALUES ('" . $row['id'] . "','" . $row['name'] . "','" . $row['date_start'] . "','" . $row['date_end'] . "','NO')";
+    Database::query($presql);
+}
+
 $table = Database::get_main_table(TABLE_BUY_COURSE);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
     id INT unsigned NOT NULL auto_increment PRIMARY KEY,
+    session_id INT unsigned NOT NULL DEFAULT '0',
     course_id INT unsigned NOT NULL DEFAULT '0',
     code VARCHAR(40),
     title VARCHAR(250),
@@ -26,11 +48,30 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
     price FLOAT(11,2) NOT NULL DEFAULT '0',
     sync int)";
 Database::query($sql);
+
 $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $sql = "SELECT id, code, title FROM $tableCourse";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
     $presql = "INSERT INTO $table (course_id, code, title, visible) VALUES ('" . $row['id'] . "','" . $row['code'] . "','" . $row['title'] . "','NO')";
+    Database::query($presql);
+}
+
+$table = Database::get_main_table(TABLE_BUY_SESSION_COURSE);
+$sql = "CREATE TABLE IF NOT EXISTS $table (
+	id INT unsigned NOT NULL auto_increment PRIMARY KEY,
+    id_session SMALLINT(5) unsigned DEFAULT '0',
+    course_code VARCHAR(40),
+    nbr_users SMALLINT(5) unsigned DEFAULT '0',
+    sync int)";
+Database::query($sql);
+
+$tableSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$sql = "SELECT * FROM $tableSessionCourse";
+$res = Database::query($sql);
+while ($row = Database::fetch_assoc($res)) {
+    $presql = "INSERT INTO $table (id_session, course_code, nbr_users)
+    VALUES ('" . $row['id_session'] . "','" . $row['course_code'] . "','" . $row['nbr_users'] . "')";
     Database::query($presql);
 }
 
@@ -321,6 +362,18 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
     swift VARCHAR(100) NOT NULL DEFAULT '')";
 Database::query($sql);
 
+$table = Database::get_main_table(TABLE_BUY_SESSION_TEMPORAL);
+$sql = "CREATE TABLE IF NOT EXISTS $table (
+    cod INT unsigned NOT NULL auto_increment PRIMARY KEY,
+    user_id INT unsigned NOT NULL,
+    name VARCHAR(255) NOT NULL DEFAULT '',
+    session_id INT unsigned NOT NULL DEFAULT '0',
+    title VARCHAR(200) NOT NULL DEFAULT '',
+    reference VARCHAR(20) NOT NULL DEFAULT '',
+    price FLOAT(11,2) NOT NULL DEFAULT '0',
+    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
+Database::query($sql);
+
 $table = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
     cod INT unsigned NOT NULL auto_increment PRIMARY KEY,
@@ -330,6 +383,17 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
     title VARCHAR(200) NOT NULL DEFAULT '',
     reference VARCHAR(20) NOT NULL DEFAULT '',
     price FLOAT(11,2) NOT NULL DEFAULT '0',
+    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
+Database::query($sql);
+
+$table = Database::get_main_table(TABLE_BUY_SESSION_SALE);
+$sql = "CREATE TABLE IF NOT EXISTS $table (
+    cod INT unsigned NOT NULL auto_increment PRIMARY KEY,
+    user_id INT unsigned NOT NULL,
+    session_id INT unsigned NOT NULL DEFAULT '0',
+    price FLOAT(11,2) NOT NULL DEFAULT '0',
+    payment_type VARCHAR(100) NOT NULL DEFAULT '',
+    status VARCHAR(20) NOT NULL DEFAULT '',
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
 Database::query($sql);
 
@@ -345,7 +409,7 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
 Database::query($sql);
 
 //Menu main tabs
-$rsTab = $objPlugin->addTab('Buy Courses', 'plugin/buycourses/index.php');
+$rsTab = $objPlugin->addTab($objPlugin->get_lang('BuyCourses'), 'plugin/buycourses/index.php');
 
 if ($rsTab) {
     echo "<script>location.href = '" . Security::remove_XSS($_SERVER['REQUEST_URI']) . "';</script>";

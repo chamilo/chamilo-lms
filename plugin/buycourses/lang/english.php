@@ -1,3 +1,4 @@
+
 <?php
 $strings['plugin_title'] = "Sell courses";
 $strings['plugin_comment'] = "Sell courses directly through your Chamilo portal, using a PayPal account to receive funds. This plugin is in beta version. Neither the Chamilo association nor the developers involved could be considered responsible of any issue you might suffer using this plugin.";
@@ -12,6 +13,7 @@ $strings['OpenToTheWorld'] = "Public - access open to anybody";
 $strings['Description'] = "Description";
 $strings['Buy'] = "Buy";
 $strings['Mostrar_disponibles'] = "Show available courses";
+$strings['include_sessions'] = "Include sessions";
 $strings['paypal_enable'] = "Enable PayPal";
 $strings['transfer_enable'] = "Enable bank transfer";
 $strings['unregistered_users_enable'] = "Allow anonymous users";
@@ -30,6 +32,7 @@ $strings['ProblemToSubscribeTheUser'] = 'Problem subscribing the user';
 $strings['TheSubscriptionAndActivationWereDoneSuccessfully'] = 'The subscription and activation were successful';
 $strings['TheUserIsAlreadyRegisteredInTheCourse'] = 'The user is already registered in the course.';
 $strings['CourseListOnSale'] = 'List of courses on sale';
+$strings['BuySessions'] = "Buy sessions";
 $strings['BuyCourses'] = 'Buy courses';
 $strings['ConfigurationOfCoursesAndPrices'] = 'Courses and prices configuration';
 $strings['ConfigurationOfPayments'] = 'Payments configuration';

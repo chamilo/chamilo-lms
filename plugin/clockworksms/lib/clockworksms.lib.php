@@ -34,14 +34,15 @@ class Clockworksms
             $this->apiKey = $clockworksmsApiKey;
             // Setting Clockworksms api
             define('CONFIG_SECURITY_API_KEY', $this->apiKey);
-            if (!empty(trim(CONFIG_SECURITY_API_KEY))) {                
+            $trimmedApiKey = trim(CONFIG_SECURITY_API_KEY);
+            if (!empty($trimmedApiKey)) {
                 $this->api = new Clockwork(CONFIG_SECURITY_API_KEY);
             } else {
                 $this->api = new Clockwork(' ');
                 $recipient_name = api_get_person_name(
                     api_get_setting('administratorName'),
-                    api_get_setting('administratorSurname'), 
-                    null, 
+                    api_get_setting('administratorSurname'),
+                    null,
                     PERSON_NAME_EMAIL_ADDRESS
                 );
                 $email_form = get_setting('emailAdministrator');
@@ -52,12 +53,12 @@ class Clockworksms
                 api_mail_html($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name, $email_admin);
             }
             $this->plugin_enabled = true;
-        }       
+        }
     }
 
     private function getMobilePhoneNumberById($userId)
     {
-        require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';        
+        require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
         $mobilePhoneNumberExtraField = (new ExtraField('user'))->get_handler_field_info_by_field_variable('mobile_phone_number');
         require_once api_get_path(LIBRARY_PATH).'extra_field_value.lib.php';
         $mobilePhoneNumberExtraFieldValue = (new ExtraFieldValue('user'))->get_values_by_handler_and_field_id($userId, $mobilePhoneNumberExtraField['id']);
@@ -66,43 +67,51 @@ class Clockworksms
 
     public function send($additionalParameters)
     {
-        if (!empty(trim(CONFIG_SECURITY_API_KEY))) {
+        $trimmedKey = trim(CONFIG_SECURITY_API_KEY);
+        if (!empty($trimmedKey)) {
             $message = array(
-                "to" => array_key_exists("mobilePhoneNumber",$additionalParameters) ? 
-                    $additionalParameters['mobilePhoneNumber'] : 
-                    $this->getMobilePhoneNumberById($additionalParameters['userId']), 
+                "to" => array_key_exists("mobilePhoneNumber",$additionalParameters) ?
+                    $additionalParameters['mobilePhoneNumber'] :
+                    $this->getMobilePhoneNumberById($additionalParameters['userId']),
                 "message" => $this->getSms($additionalParameters)
             );
 
-            if (!empty($message['message'])) {                
-                $result = $this->api->send($message); 
+            if (!empty($message['message'])) {
+                $result = $this->api->send($message);
 
                 // Commented for future message logging / tracking purposes
                 /*if( $result["success"] ) {
-                    echo "Message sent - ID: " . $result["id"];            
+                    echo "Message sent - ID: " . $result["id"];
                 } else {
                     echo "Message failed - Error: " . $result["error_message"];
                 }*/
             }
-            
+
         }
     }
 
     public function buildSms($plugin, $tpl, $templateName, $messageKey, $parameters = null)
-    {   
-        if (empty(Database::select('selected_value', 'settings_current', array(
-        'where'=> array('variable = ?' => array('clockworksms_message'.$messageKey)))))) {
+    {
+        $result = Database::select(
+            'selected_value',
+            'settings_current',
+            array(
+                'where'=> array('variable = ?' => array('clockworksms_message'.$messageKey))
+            )
+        );
+
+        if (empty($result)) {
             $tpl->assign('message', '');
-        }
-        else {
+        } else {
             $templatePath = 'clockworksms/sms_templates/';
             $content = $tpl->fetch($templatePath.$templateName);
             $message = $plugin->get_lang($messageKey);
             if ($parameters !== null) {
                 $message = vsprintf($message, $parameters);
             }
-            $tpl->assign('message', $message);            
+            $tpl->assign('message', $message);
         }
+
         return $tpl->params['message'];
     }
 
@@ -126,7 +135,7 @@ class Clockworksms
                         $additionalParameters['password']
                     )
                 );
-                break;            
+                break;
             case ClockworksmsPlugin::NEW_FILE_SHARED_COURSE_BY:
                 return $this->buildSms(
                     $plugin,
@@ -607,5 +616,5 @@ class Clockworksms
             default:
                 return '';
         }
-    }    
+    }
 }

@@ -47,7 +47,7 @@ class ClockworksmsPlugin extends Plugin
     const BEEN_INVITED_COMPLETE_SURVEY_COURSE = 40;
     const REMINDER_ASSIGNMENT_COURSE_DUE = 41;
     const USER_DETAILS_MODIFIED = 42;
-    
+
     public $isCoursePlugin = true;
     public $isMailPlugin = true;
 
@@ -69,24 +69,25 @@ class ClockworksmsPlugin extends Plugin
 
     private function addMobilePhoneNumberField()
     {
-        if (empty(Database::select('mobile_phone_number', 'user_field'))) {
+        $result = Database::select('mobile_phone_number', 'user_field');
+        if (empty($result)) {
             require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
             $extraField = new Extrafield('user');
             $extraField->save(array(
-                'field_type' => 1, 
-                'field_variable' => 'mobile_phone_number', 
-                'field_display_text' => $this->get_lang('mobile_phone_number'), 
-                'field_default_value' => null, 
-                'field_order' => 2, 
-                'field_visible' => 1, 
-                'field_changeable' => 1, 
+                'field_type' => 1,
+                'field_variable' => 'mobile_phone_number',
+                'field_display_text' => $this->get_lang('mobile_phone_number'),
+                'field_default_value' => null,
+                'field_order' => 2,
+                'field_visible' => 1,
+                'field_changeable' => 1,
                 'field_filter' => null
             ));
         }
     }
 
     private function getSmsTypeOptions()
-    {   
+    {
         return array(
             'MessageWelcomeXLoginXPasswordX',
             'MessageXNewFileSharedCourseXByX',
@@ -106,7 +107,7 @@ class ClockworksmsPlugin extends Plugin
             'MessageXReceivedNewPersonalMessages',
             'MessageXNewUserXPendingApproval',
             'MessageXXPostedForumXCourseX',
-            'MessageXXXCheckEmailConnectMoreInfo',            
+            'MessageXXXCheckEmailConnectMoreInfo',
             'MessageXXStudentXAnsweredTestX',
             'MessageXXStudentXAnsweredTestXOpenQuestion',
             'MessageXXStudentXAnsweredTestXVoiceQuestion',
@@ -122,7 +123,7 @@ class ClockworksmsPlugin extends Plugin
             'MessageXUserXUploadedAssignmentXCourseX',
             'MessageXUserXUploadedAssignmentXCheckX',
             'MessageXSubscribedSessionX',
-            'MessageXSubscribedSessionXCSV',            
+            'MessageXSubscribedSessionXCSV',
             'MessageXUserXSuggestedBeFriends',
             'MessageXUserXAnsweredInboxMessage',
             'MessageXBeenInvitedJoinGroupX',
@@ -132,7 +133,7 @@ class ClockworksmsPlugin extends Plugin
             'MessageXReminderAssignmentXCourseXDue',
             'MessageXUserDetailsModified'
         );
-    }    
+    }
 
     public function install()
     {

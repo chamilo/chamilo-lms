@@ -243,7 +243,7 @@ function display_thumbnail($course, $icon_title)
     if (file_exists($course_path.'/course-pic85x85.png')) {
         $course_medium_image = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic85x85.png'; // redimensioned image 85x85
     } else {
-        $course_medium_image = api_get_path(WEB_IMG_PATH).'icons/64/course.png'; // without picture
+        $course_medium_image = api_get_path(WEB_IMG_PATH).'icons/'.ICON_SIZE_BIG.'/course.png'; // without picture
     }
 
     // course image

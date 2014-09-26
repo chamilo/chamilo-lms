@@ -21,6 +21,9 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
  */
 class SettingsManager extends SyliusSettingsManager
 {
+    /**
+     *
+     */
     public function installSchemas()
     {
         $schemas = $this->getSchemas();

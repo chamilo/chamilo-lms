@@ -17,7 +17,7 @@
             <div class="box box-primary">
                 <div class="box-body">
                     {{ form_errors(form) }}
-                    <form action="{{ path('chamilo_%s_settings' | format(namespace) ) }}" method="post" novalidate>
+                        <form action="{{ path('chamilo_platform_settings', { 'namespace': namespace}) }}" method="post" novalidate>
                         {{ form_rest(form) }}
                         {{ update() }}
                     </form>

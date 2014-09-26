@@ -52,11 +52,16 @@ remove_trailing_slash:
         _method: GET
 
 # Portal settings
+chamilo_platform_settings_list:
+    pattern: /settings
+    defaults:
+        _controller: ChamiloSettingsBundle:Settings:index
+        template: ChamiloSettingsBundle:Settings:index.html.twig
+
 chamilo_platform_settings:
-    pattern: /settings/platform
+    pattern: /settings/{namespace}
     defaults:
         _controller: ChamiloSettingsBundle:Settings:update
-        namespace: platform
         template: ChamiloSettingsBundle:Settings:default.html.twig
 
 # Course settings
@@ -64,6 +69,5 @@ chamilo_course_settings:
     pattern: /courses/{course}/settings/{namespace}
     defaults:
         _controller: ChamiloCourseBundle:Settings:update
-        namespace: course
         template: ChamiloCourseBundle:Settings:default.html.twig
 

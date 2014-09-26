@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\SettingsBundle\Controller;
@@ -9,7 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * Class SettingsController
@@ -17,6 +19,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class SettingsController extends SyliusSettingsController
 {
+
+    /**
+     * @Security("has_role('ROLE_ADMIN')")
+     * @Template
+     * @return array
+     */
+    public function indexAction()
+    {
+        $manager = $this->getSettingsManager();
+        $schemas = $manager->getSchemas();
+        return array('schemas' => $schemas);
+    }
+
     /**
      * Edit configuration with given namespace.
      * @Security("has_role('ROLE_ADMIN')")
@@ -58,5 +73,13 @@ class SettingsController extends SyliusSettingsController
                 'form'     => $form->createView()
             )
         );
+    }
+
+    /**
+     * @return SettingsManager
+     */
+    protected function getSettingsManager()
+    {
+        return $this->get('chamilo.settings.manager');
     }
 }

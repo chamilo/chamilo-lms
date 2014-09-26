@@ -1,0 +1,20 @@
+{% extends "::layout.html.twig" %}
+
+{% block page_title %}
+    {{ 'Settings' | trans }}
+{% endblock %}
+
+{% block page_subtitle %}
+{% endblock %}
+
+{% block content %}
+    <ul>
+    {% for namespace in schemas|keys %}
+        <li>
+            <a href="{{ path('chamilo_platform_settings', { 'namespace': namespace}) }}">
+            {{ namespace }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock%}

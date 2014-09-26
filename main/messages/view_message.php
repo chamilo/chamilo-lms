@@ -54,7 +54,8 @@ $message  = '';
 
 //LEFT COLUMN
 if (api_get_setting('allow_social_tool') == 'true') {
-    $social_left_content = SocialManager::show_social_menu($show_menu);
+    $social_avatar_block = SocialManager::show_social_avatar_block($show_menu);
+    $social_menu_block = SocialManager::show_social_menu($show_menu);
     $message .='<div class="span9">';
 }
 //MAIN CONTENT
@@ -71,7 +72,8 @@ if (!empty($message)) {
 }
 $tpl = new Template(get_lang('View'));
 if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_left_content', $social_left_content);
+    $tpl->assign('social_avatar_block', $social_avatar_block);
+    $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
     $tpl->display($social_layout);

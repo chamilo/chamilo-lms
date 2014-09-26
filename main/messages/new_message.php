@@ -305,7 +305,8 @@ if ($group_id != 0) {
 // LEFT COLUMN
 $social_left_content = null;
 if (api_get_setting('allow_social_tool') == 'true') {
-    $social_left_content = SocialManager::show_social_menu('messages');
+    $social_avatar_block = SocialManager::show_social_avatar_block('messages');
+    $social_menu_block = SocialManager::show_social_menu('messages');
     $social_right_content .= '<div class="span9">';
     $social_right_content .= '<div class="actions">';
     $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
@@ -362,7 +363,8 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
 $tpl = new Template(get_lang('ComposeMessage'));
 if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_left_content', $social_left_content);
+    $tpl->assign('social_avatar_block', $social_avatar_block);
+    $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
     $tpl->display($social_layout);

@@ -566,6 +566,61 @@ class SocialManager extends UserManager
     }
 
     /**
+     * Shows the avatar block in social pages
+     *
+     * @param string highlight link possible values: group_add, home, messages, messages_inbox, messages_compose ,messages_outbox ,invitations, shared_profile, friends, groups search
+     * @param int group id
+     * @param int user id
+     *
+     */
+    public static function show_social_avatar_block($show = '', $group_id = 0, $user_id = 0)
+    {
+        if (empty($user_id)) {
+            $user_id = api_get_user_id();
+        }
+
+        $show_groups = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
+
+        $html = '';
+        if (in_array($show, $show_groups) && !empty($group_id)) {
+            //--- Group image
+            $group_info = GroupPortalManager::get_group_data($group_id);
+            $big = GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'], 160, GROUP_IMAGE_SIZE_BIG);
+
+            $html .= '<div class="social-content-image">';
+            $html .= '<div class="well social-background-content">';
+            $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id);
+            if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
+                $html .= '<div id="edit_image" class="hidden_message" style="display:none">
+                            <a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.
+                    get_lang('EditGroup').'</a></div>';
+            }
+            $html .= '</div>';
+            $html .= '</div>';
+        } else {
+            $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
+            $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
+            $big_image = $big_image['file'].'?'.uniqid();
+            $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
+
+            //--- User image
+
+            $html .= '<div class="well social-background-content">';
+            if ($img_array['file'] != 'unknown.jpg') {
+                $html .= '<a class="thumbnail thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
+            } else {
+                $html .= '<img src='.$normal_image.' width="110px" />';
+            }
+            if (api_get_user_id() == $user_id) {
+                $html .= '<div id="edit_image" class="hidden_message" style="display:none">';
+                $html .= '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
+            }
+            $html .= '</div>';
+        }
+        return $html;
+    }
+
+    /**
      * Shows the right menu of the Social Network tool
      *
      * @param string highlight link possible values: group_add, home, messages, messages_inbox, messages_compose ,messages_outbox ,invitations, shared_profile, friends, groups search
@@ -602,42 +657,7 @@ class SocialManager extends UserManager
         $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
 
-        $html = '<div class="social-menu">';
-        if (in_array($show, $show_groups) && !empty($group_id)) {
-            //--- Group image
-            $group_info = GroupPortalManager::get_group_data($group_id);
-            $big = GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'], 160, GROUP_IMAGE_SIZE_BIG);
-
-            $html .= '<div class="social-content-image">';
-            $html .= '<div class="well social-background-content">';
-            $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id);
-            if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
-                $html .= '<div id="edit_image" class="hidden_message" style="display:none">
-                            <a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.
-                    get_lang('EditGroup').'</a></div>';
-            }
-            $html .= '</div>';
-            $html .= '</div>';
-        } else {
-            $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
-            $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
-            $big_image = $big_image['file'].'?'.uniqid();
-            $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
-
-            //--- User image
-
-            $html .= '<div class="well social-background-content">';
-            if ($img_array['file'] != 'unknown.jpg') {
-                $html .= '<a class="thumbnail thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
-            } else {
-                $html .= '<img src='.$normal_image.' width="110px" />';
-            }
-            if (api_get_user_id() == $user_id) {
-                $html .= '<div id="edit_image" class="hidden_message" style="display:none">';
-                $html .= '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
-            }
-            $html .= '</div>';
-        }
+        $html = '';
 
         if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends'))) {
 
@@ -788,7 +808,7 @@ class SocialManager extends UserManager
             $html .= Display::url(Display::return_icon('delete.png', get_lang('Unsubscribe'), array(), ICON_SIZE_TINY).get_lang('Unsubscribe'), $url);
             $html .= '</li></ul></div>';
         }
-        $html .= '</div>';
+        $html .= '';
         return $html;
     }
 

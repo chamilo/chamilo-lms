@@ -102,12 +102,14 @@ $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
-$social_left_content = SocialManager::show_social_menu('group_edit', $group_id);
+$social_avatar_block = SocialManager::show_social_avatar_block('group_edit', $group_id);
+$social_menu_block = SocialManager::show_social_menu('group_edit', $group_id);
 $social_right_content = $form->return_form();
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

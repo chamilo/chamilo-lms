@@ -83,6 +83,12 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
             
             return parseInt(parts[1], 10);
         };
+        
+        <?php if ($showSessions) { ?>
+        $('#date').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        <?php } ?>
     });
 </script>
 
@@ -189,14 +195,20 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
                 <?php if ($showSessions) { ?>
                     <li class="nav-header"><?php echo get_lang('Sessions'); ?></li>
                     <li>
-                        <?php if ($action == 'display_sessions') { ?>
+                        <?php if ($action == 'display_sessions' && $_SERVER['REQUEST_METHOD'] != 'POST') { ?>
                             <strong><?php echo get_lang('SessionList'); ?></strong>
                         <?php } else { ?>
                             <a href="<?php echo api_get_self() ?>?action=display_sessions&hidden_links=<?php echo $hidden_links ?>"><?php echo get_lang('SessionList'); ?></a>
                         <?php } ?>
                     </li>
-                    <form>
-                        <div class="control-group">
+                    <li class="nav-header"><?php echo get_lang('SearchActiveSessions') ?></li>
+                    <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=display_sessions">
+                        <div class="input-append">
+                            <?php echo Display::input('date', 'date', $date, array(
+                                'class' => 'span2',
+                                'id' => 'date',
+                                'readonly' => ''
+                            )); ?>
                             <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
                         </div>
                     </form>
@@ -232,7 +244,9 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
                                         <?php if ($session['is_subscribed']) { ?>
                                             <?php echo display_already_registered_in_session_label(); ?>
                                         <?php } else { ?>
-                                            <a class="btn btn-primary" href=""><?php echo get_lang('Subscribe'); ?></a>
+                                            <?php if ($session['visibility'] == SESSION_AVAILABLE) { ?>
+                                                <a class="btn btn-primary" href=""><?php echo get_lang('Subscribe'); ?></a>
+                                            <?php } ?>
                                         <?php } ?>
                                     </div>
                                 </div>

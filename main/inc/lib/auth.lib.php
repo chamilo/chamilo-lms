@@ -522,24 +522,44 @@ class Auth
         }
     }
     
-    public function browseSessions()
+    /**
+     * List the sessions 
+     * @param date $date (optional) The date of sessions
+     * @return array The session list
+     */
+    public function browseSessions($date = null)
     {
         require_once api_get_path(LIBRARY_PATH) . 'sessionmanager.lib.php';
 
-        $sessions = SessionManager::get_sessions_list();
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+
         $sessionsToBrowse = array();
         $userId = api_get_user_id();
 
-        foreach ($sessions as $session) {
-            if ($session['nbr_courses'] > 0) {
-                $sessionToBrowse = array(
-                    'id' => $session['id'],
-                    'name' => $session['name'],
-                    'coach_name' => api_get_person_name($session['firstname'], $session['lastname']),
-                    'is_subscribed' => SessionManager::isUserSusbcribedAsStudent($session['id'], $userId)
-                );
+        $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username "
+                . "FROM $sessionTable AS s "
+                . "INNER JOIN $userTable AS u "
+                . "ON s.id_coach = u.user_id ";
 
-                $sessionsToBrowse[] = $sessionToBrowse;
+        if (!is_null($date)) {
+            $date = Database::escape_string($date);
+            
+            $sql .= "WHERE ('$date' BETWEEN s.date_start AND s.date_end) "
+                    . "OR (s.date_start = '0000-00-00' OR s.date_end = '0000-00-00')";
+        }
+
+        $sessionResult = Database::query($sql);
+
+        if ($sessionResult != false) {
+            while ($session = Database::fetch_assoc($sessionResult)) {
+                if ($session['nbr_courses'] > 0) {
+                    $session['coach_name'] = api_get_person_name($session['firstname'], $session['lastname']);
+                    $session['coach_name'] .= " ({$session['username']})";
+                    $session['is_subscribed'] = SessionManager::isUserSusbcribedAsStudent($session['id'], $userId);
+
+                    $sessionsToBrowse[] = $session;
+                }
             }
         }
 

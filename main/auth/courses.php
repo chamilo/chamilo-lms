@@ -220,6 +220,8 @@ switch ($action) {
         $courses_controller->courses_categories($action, $_GET['category_code']);
         break;
     case 'display_sessions':
-        $courses_controller->sessions($action);
+        $date = isset($_POST['date']) ? $_POST['date'] : null;
+        
+        $courses_controller->sessions($action, $date);
         break;
 }

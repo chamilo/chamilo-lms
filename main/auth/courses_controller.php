@@ -311,8 +311,9 @@ class CoursesController { // extends Controller {
     /**
      * It's used for listing sessions, render to sessions view in course catalog
      * @param string $action
+     * @param date $date (Optional) The date for search
      */
-    public function sessions($action)
+    public function sessions($action, $date = null)
     {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();
@@ -321,7 +322,8 @@ class CoursesController { // extends Controller {
 
         $data['browse_course_categories'] = $browse_course_categories;
         $data['action'] = Security::remove_XSS($action);
-        $data['browseSessions'] = $this->model->browseSessions();
+        $data['date'] = Security::remove_XSS($date);
+        $data['browseSessions'] = $this->model->browseSessions($date);
 
         $data['catalogShowCoursesSessions'] = 0;
 

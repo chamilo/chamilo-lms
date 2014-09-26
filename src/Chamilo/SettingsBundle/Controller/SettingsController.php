@@ -1,13 +1,6 @@
 <?php
 
-/*
- * This file is part of the Sylius package.
- *
- * (c) Paweł Jędrzejewski
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\SettingsBundle\Controller;
 
@@ -15,17 +8,18 @@ use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettings
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 /**
- * Settings controller.
- *
- * @author Paweł Jędrzejewski <pawel@sylius.org>
+ * Class SettingsController
+ * @package Chamilo\SettingsBundle\Controller
  */
 class SettingsController extends SyliusSettingsController
 {
     /**
      * Edit configuration with given namespace.
-     *
+     * @Security("has_role('ROLE_ADMIN')")
      * @param Request $request
      * @param string  $namespace
      *
@@ -42,7 +36,6 @@ class SettingsController extends SyliusSettingsController
         ;
 
         $form->setData($settings);
-
         if ($form->handleRequest($request)->isValid()) {
             $messageType = 'success';
             try {
@@ -58,11 +51,12 @@ class SettingsController extends SyliusSettingsController
                 return $this->redirect($request->headers->get('referer'));
             }
         }
-
         return $this->render(
-            $request->attributes->get('template', 'SyliusSettingsBundle:Settings:update.html.twig'), array(
-            'settings' => $settings,
-            'form'     => $form->createView()
-            ));
+            'ChamiloSettingsBundle:Settings:default.html.twig',
+            array(
+                'settings' => $settings,
+                'form'     => $form->createView()
+            )
+        );
     }
 }

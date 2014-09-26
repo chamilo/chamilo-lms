@@ -137,9 +137,12 @@
     {# Flash messages #}
     {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
 
+    {% block content %}
+
     {% if page is defined %}
         {% block sonata_page_container %}
             <div class="row">
+
                 <div class="col-xs-12">
                     {{ sonata_page_render_container('header', page) }}
                 </div>
@@ -183,4 +186,6 @@
             </div>
         {% endblock %}
     {% endif %}
+
+    {% endblock %}
 {% endblock %}

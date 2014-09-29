@@ -198,7 +198,7 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
                         <?php if ($action == 'display_sessions' && $_SERVER['REQUEST_METHOD'] != 'POST') { ?>
                             <strong><?php echo get_lang('SessionList'); ?></strong>
                         <?php } else { ?>
-                            <a href="<?php echo api_get_self() ?>?action=display_sessions&hidden_links=<?php echo $hidden_links ?>"><?php echo get_lang('SessionList'); ?></a>
+                            <a href="<?php echo api_get_self() ?>?action=display_sessions"><?php echo get_lang('SessionList'); ?></a>
                         <?php } ?>
                     </li>
                     <li class="nav-header"><?php echo get_lang('SearchActiveSessions') ?></li>

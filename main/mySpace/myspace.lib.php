@@ -2249,7 +2249,7 @@ class MySpace
 		// Sending emails.
 		$addedto = '';
 		if ($sendMail) {
-			$i = 0; 
+			$i = 0;
 			foreach ($users as $index => $user) {
 				$emailto = api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$user['Email'].'>';
 				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
@@ -2258,14 +2258,20 @@ class MySpace
 				$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
 
 				/*$extra = get_user_overview_export_extra_fields($user['user_id']);
-				$additional_parameters = array(
+				$additionalParameters = array(
                     'smsType' => WELCOME_LOGIN_PASSWORD,
                     'userId' => $user['user_id'],
                     'mobilePhoneNumber' => $extra['mobile_phone_number'],
                     'password' => "$user[Password]"
                 );*/
 
-				@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders/*, $additional_parameters*/);
+				@api_send_mail(
+                    $emailto,
+                    $emailsubject,
+                    $emailbody,
+                    $emailheaders/*,
+                    $additionalParameters*/
+                );
 
 				if (($user['added_at_platform'] == 1  && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
 					if ($user['added_at_platform'] == 1) {

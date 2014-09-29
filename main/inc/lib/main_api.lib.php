@@ -5806,11 +5806,11 @@ function api_sql_query($query, $file = '', $line = 0) {
  * @param string $subject
  * @param string $message
  * @param string $additional_headers
- * @param string $additional_parameters
+ * @param string $additionalParameters
  * @author Ivan Tcholakov, 04-OCT-2009, a reworked version of this function.
  * @link http://www.dokeos.com/forum/viewtopic.php?t=15557
  */
-function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = array()) {
+function api_send_mail($to, $subject, $message, $additional_headers = null, $additionalParameters = array()) {
 
     require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
 
@@ -5901,9 +5901,9 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     $plugin = new AppPlugin();
     $installedPluginsList = $plugin->getInstalledPluginListObject();
     foreach ($installedPluginsList as $installedPlugin) {
-        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additional_parameters)) {
+        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additionalParameters)) {
             $clockworksmsObject = new Clockworksms();
-            $clockworksmsObject->send($additional_parameters);
+            $clockworksmsObject->send($additionalParameters);
         }
     }
 

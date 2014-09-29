@@ -521,7 +521,7 @@ if ($form->validate()) {
                         $user_id
                     );
                 }
-                
+
                 // 3. exit the page
                 unset($user_id);
 

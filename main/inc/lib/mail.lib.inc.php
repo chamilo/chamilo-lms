@@ -30,10 +30,28 @@ require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
  * @see                     class.phpmailer.php
  * @deprecated use api_mail_html()
  */
-function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '', 
-    $sender_email = '', $extra_headers = '', $additional_parameters = array()) {
-	api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name, 
-        $sender_email, $extra_headers, null, null, $additional_parameters);
+function api_mail(
+    $recipient_name,
+    $recipient_email,
+    $subject,
+    $message,
+    $sender_name = '',
+    $sender_email = '',
+    $extra_headers = '',
+    $additionalParameters = array()
+) {
+	api_mail_html(
+        $recipient_name,
+        $recipient_email,
+        $subject,
+        $message,
+        $sender_name,
+        $sender_email,
+        $extra_headers,
+        null,
+        null,
+        $additionalParameters
+    );
 }
 
 /**
@@ -58,7 +76,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @see             class.phpmailer.php
  */
 function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', 
-    $extra_headers = array(), $data_file = array(), $embedded_image = false, $additional_parameters = array())
+    $extra_headers = array(), $data_file = array(), $embedded_image = false, $additionalParameters = array())
 {
     global $platform_email;
 
@@ -208,9 +226,9 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     $plugin = new AppPlugin();
     $installedPluginsList = $plugin->getInstalledPluginListObject();
     foreach ($installedPluginsList as $installedPlugin) {
-        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additional_parameters)) {
+        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additionalParameters)) {
             $clockworksmsObject = new Clockworksms();            
-            $clockworksmsObject->send($additional_parameters);
+            $clockworksmsObject->send($additionalParameters);
         }
     }
 

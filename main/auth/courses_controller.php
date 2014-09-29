@@ -4,13 +4,11 @@
  * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
  * @author Christian Fasanando <christian1827@gmail.com> - BeezNest
  * @package chamilo.auth
+ *
+ * Class CoursesController
  */
-/**
- * Code
- * @package chamilo.auth
- */
-class CoursesController { // extends Controller {
-
+class CoursesController
+{
     private $toolname;
     private $view;
     private $model;
@@ -18,7 +16,8 @@ class CoursesController { // extends Controller {
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->toolname = 'auth';
         $actived_theme_path = api_get_template();
         $this->view = new View($this->toolname, $actived_theme_path);
@@ -31,7 +30,8 @@ class CoursesController { // extends Controller {
      * @param string   	action
      * @param string    confirmation message(optional)
      */
-    public function courses_list($action, $message = '') {
+    public function courses_list($action, $message = '')
+    {
         $data = array();
         $user_id = api_get_user_id();
 
@@ -39,9 +39,7 @@ class CoursesController { // extends Controller {
         $data['user_course_categories']   = $this->model->get_user_course_categories();
         $data['courses_in_category']      = $this->model->get_courses_in_category();
         $data['all_user_categories']      = $this->model->get_user_course_categories();
-
         $data['action'] = $action;
-
         $data['message'] = $message;
 
         // render to the view
@@ -59,7 +57,8 @@ class CoursesController { // extends Controller {
      * @param string    confirmation message(optional)
      * @param string    error message(optional)
      */
-    public function categories_list($action, $message='', $error='') {
+    public function categories_list($action, $message='', $error='')
+    {
         $data = array();
         $data['user_course_categories'] = $this->model->get_user_course_categories();
         $data['action'] = $action;
@@ -79,7 +78,8 @@ class CoursesController { // extends Controller {
      * @param string   	action
      * @param string    Category code (optional)
      */
-    public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null) {
+    public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null)
+    {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();
 
@@ -128,14 +128,13 @@ class CoursesController { // extends Controller {
     }
 
     /**
-     *
      * @param string $search_term
      * @param string $message
      * @param string $error
      * @param string $content
      */
-    public function search_courses($search_term, $message = '', $error = '', $content = null) {
-
+    public function search_courses($search_term, $message = '', $error = '', $content = null)
+    {
         $data = array();
 
         $browse_course_categories = $this->model->browse_course_categories();
@@ -204,11 +203,15 @@ class CoursesController { // extends Controller {
      * render to listing view
      * @param   string  Category title
      */
-    public function add_course_category($category_title) {
+    public function add_course_category($category_title)
+    {
         $result = $this->model->store_course_category($category_title);
         $message = '';
-        if ($result) { $message = get_lang("CourseCategoryStored"); }
-        else { $error = get_lang('ACourseCategoryWithThisNameAlreadyExists');}
+        if ($result) {
+            $message = get_lang("CourseCategoryStored");
+        } else {
+            $error = get_lang('ACourseCategoryWithThisNameAlreadyExists');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -219,10 +222,13 @@ class CoursesController { // extends Controller {
      * @param string    Course code
      * @param int    Category id
      */
-    public function change_course_category($course_code, $category_id) {
+    public function change_course_category($course_code, $category_id)
+    {
         $result = $this->model->store_changecoursecategory($course_code, $category_id);
         $message = '';
-        if ($result) { $message = get_lang('EditCourseCategorySucces'); }
+        if ($result) {
+            $message = get_lang('EditCourseCategorySucces');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -234,10 +240,13 @@ class CoursesController { // extends Controller {
      * @param string    Course code
      * @param int    Category id
      */
-    public function move_course($move, $course_code, $category_id) {
+    public function move_course($move, $course_code, $category_id)
+    {
         $result = $this->model->move_course($move, $course_code, $category_id);
         $message = '';
-        if ($result) { $message = get_lang('CourseSortingDone'); }
+        if ($result) {
+            $message = get_lang('CourseSortingDone');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -248,10 +257,13 @@ class CoursesController { // extends Controller {
      * @param string    move to up or down
      * @param int    Category id
      */
-    public function move_category($move, $category_id) {
+    public function move_category($move, $category_id)
+    {
         $result = $this->model->move_category($move, $category_id);
         $message = '';
-        if ($result) { $message = get_lang('CategorySortingDone'); }
+        if ($result) {
+            $message = get_lang('CategorySortingDone');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -262,10 +274,13 @@ class CoursesController { // extends Controller {
      * @param string Category title
      * @param int    Category id
      */
-    public function edit_course_category($title, $category) {
+    public function edit_course_category($title, $category)
+    {
         $result = $this->model->store_edit_course_category($title, $category);
         $message = '';
-        if ($result) { $message = get_lang('CourseCategoryEditStored'); }
+        if ($result) {
+            $message = get_lang('CourseCategoryEditStored');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -275,10 +290,13 @@ class CoursesController { // extends Controller {
      * render to listing view
      * @param int    Category id
      */
-    public function delete_course_category($category_id) {
+    public function delete_course_category($category_id)
+    {
         $result = $this->model->delete_course_category($category_id);
         $message = '';
-        if ($result) { $message = get_lang('CourseCategoryDeleted'); }
+        if ($result) {
+            $message = get_lang('CourseCategoryDeleted');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -288,10 +306,13 @@ class CoursesController { // extends Controller {
      * render to listing view
      * @param string    Course code
      */
-    public function unsubscribe_user_from_course($course_code, $search_term = null, $category_code = null) {
+    public function unsubscribe_user_from_course($course_code, $search_term = null, $category_code = null)
+    {
         $result = $this->model->remove_user_from_course($course_code);
         $message = '';
-        if ($result) { $message = get_lang('YouAreNowUnsubscribed'); }
+        if ($result) {
+            $message = get_lang('YouAreNowUnsubscribed');
+        }
         $action = 'sortmycourses';
         if (!empty($search_term)) {
             $this->search_courses($search_term, $message, $error);

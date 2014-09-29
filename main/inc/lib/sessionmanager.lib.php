@@ -3778,19 +3778,25 @@ class SessionManager
                             $teacherToAdd = null;
                             // Only one coach is added.
                             if ($onlyAddFirstCoachOrTeacher == true) {
-                                // Un subscribe everyone.
-                                $teacherList = CourseManager::get_teacher_list_from_course_code($course_code);
-                                if (!empty($teacherList)) {
-                                    foreach ($teacherList as $teacher) {
-                                        CourseManager::unsubscribe_user($teacher['user_id'], $course_code);
-                                    }
-                                }
 
                                 foreach ($course_coaches as $course_coach) {
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {
                                         $teacherToAdd = $coach_id;
                                         break;
+                                    }
+                                }
+
+                                // Un subscribe everyone that's not in the list.
+                                $teacherList = CourseManager::get_teacher_list_from_course_code($course_code);
+                                if (!empty($teacherList)) {
+                                    foreach ($teacherList as $teacher) {
+                                        if ($teacherToAdd != $teacher['user_id']) {
+                                            CourseManager::unsubscribe_user(
+                                                $teacher['user_id'],
+                                                $course_code
+                                            );
+                                        }
                                     }
                                 }
 
@@ -3820,11 +3826,18 @@ class SessionManager
                                 if (!empty($teacherToAdd)) {
                                     // Deleting all course teachers and adding the only coach as teacher.
                                     $teacherList = CourseManager::get_teacher_list_from_course_code($course_code);
+
                                     if (!empty($teacherList)) {
                                         foreach ($teacherList as $teacher) {
-                                            CourseManager::unsubscribe_user($teacher['user_id'], $course_code);
+                                            if (!in_array($teacher['user_id'], $teacherToAdd)) {
+                                                CourseManager::unsubscribe_user(
+                                                    $teacher['user_id'],
+                                                    $course_code
+                                                );
+                                            }
                                         }
                                     }
+
                                     foreach ($teacherToAdd as $teacherId) {
                                         CourseManager::subscribe_user(
                                             $teacherId,

@@ -46,12 +46,24 @@ class PDF
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
         $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;
 
-        $this->pdf = new mPDF('UTF-8', $page_format, '', '', $params['left'], $params['right'], $params['top'], $params['bottom'], 8, 8, $orientation);
+        $this->pdf = new mPDF(
+            'UTF-8',
+            $page_format,
+            '',
+            '',
+            $params['left'],
+            $params['right'],
+            $params['top'],
+            $params['bottom'],
+            8,
+            8,
+            $orientation
+        );
     }
 
     /**
      * Export the given HTML to PDF, using a global template
-     * @param string the HTML content
+     * @param string $content the HTML content
      * @uses export/table_pdf.tpl
      */
     public function html_to_pdf_with_template($content)

@@ -406,7 +406,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 u.user_id              AS col5";
     }
 
-
 	if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'teacher') {
 		// adding a teacher through a session
 		if (!empty($session_id)) {

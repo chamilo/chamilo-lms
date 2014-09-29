@@ -17,7 +17,6 @@
  */
 function handle_regions()
 {
-
     if (isset($_POST['submit_plugins'])) {
         store_regions();
         // Add event to the system log.

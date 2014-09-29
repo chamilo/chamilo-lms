@@ -166,6 +166,8 @@ $stok = Security::get_token();
                 $count_connections = $course['count_connections'];
                 $creation_date = substr($course['creation_date'],0,10);
 
+                $icon_title = null;
+
                 // display the course bloc
                 echo '<div class="well_border"><div class="row">';
 

@@ -1,6 +1,12 @@
 <?php
+/* For licensing terms, see /vendor/license.txt */
+
 /**
  * Class ClockworksmsPlugin
+ * This script contains SMS type constants and basic plugin functions
+ * 
+ * @package chamilo.plugin.clockworksms.lib
+ * @author  Imanol Losada <imanol.losada@beeznest.com>
  */
 class ClockworksmsPlugin extends Plugin
 {
@@ -51,12 +57,21 @@ class ClockworksmsPlugin extends Plugin
     public $isCoursePlugin = true;
     public $isMailPlugin = true;
 
-    static function create()
+    /**
+     * create (a singleton function that ensures ClockworksmsPlugin instance is
+     * created only once. If it is already created, it returns the instance)
+     * @return  object  ClockworksmsPlugin instance
+     */
+    public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * Constructor
+     * @return  void
+     */
     protected function __construct()
     {
         $fields = array('tool_enable' => 'boolean', 'api_key' => 'text');
@@ -67,6 +82,11 @@ class ClockworksmsPlugin extends Plugin
         parent::__construct('0.1', 'Imanol Losada', $fields);
     }
 
+    /**
+     * addMobilePhoneNumberField (adds a mobile phone number field if it is not
+     * already created)
+     * @return  void
+     */
     private function addMobilePhoneNumberField()
     {
         $result = Database::select('mobile_phone_number', 'user_field');
@@ -86,6 +106,10 @@ class ClockworksmsPlugin extends Plugin
         }
     }
 
+    /**
+     * getSmsTypeOptions (returns all SMS types)
+     * @return  array   SMS types
+     */
     private function getSmsTypeOptions()
     {
         return array(
@@ -135,11 +159,18 @@ class ClockworksmsPlugin extends Plugin
         );
     }
 
+    /**
+     * install (installs the plugin)
+     * @return  void
+     */
     public function install()
     {
         $this->addMobilePhoneNumberField();
     }
-
+    /**
+     * install (uninstalls the plugin and removes all plugin's tables and/or rows)
+     * @return  void
+     */
     public function uninstall()
     {
         $tSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);

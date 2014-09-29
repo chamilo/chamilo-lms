@@ -1,11 +1,12 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* For licensing terms, see /vendor/license.txt */
 
 /**
- * Class clockworksms
- * This script initiates a video conference session, calling the Clockworksms
- * API
- * @package chamilo.plugin.clockworksms
+ * Class Clockworksms
+ * This script handles incoming SMS information, process it and sends an SMS if everything is right
+ * 
+ * @package chamilo.plugin.clockworksms.lib
+ * @author  Imanol Losada <imanol.losada@beeznest.com>
  *
  * Clockworksms-Chamilo connector class
  */
@@ -18,20 +19,21 @@ class Clockworksms
 
     /**
      * Constructor (generates a connection to the API)
-     * @param string $apiKey
+     * @param   string  Clockworksms API key required to use the plugin
+     * @return  void
      */
     public function __construct($apiKey = null)
     {
         $plugin = ClockworksmsPlugin::create();
-        $clockworksms_plugin = $plugin->get('tool_enable');
+        $clockWorkSMSPlugin = $plugin->get('tool_enable');
         if (empty($apiKey)) {
-            $clockworksmsApiKey = $plugin->get('api_key');
+            $clockWorkSMSApiKey = $plugin->get('api_key');
         } else {
-            $clockworksmsApiKey = $apiKey;
+            $clockWorkSMSApiKey = $apiKey;
         }
         $this->table = Database::get_main_table('user_field_values');
-        if ($clockworksms_plugin == true) {
-            $this->apiKey = $clockworksmsApiKey;
+        if ($clockWorkSMSPlugin == true) {
+            $this->apiKey = $clockWorkSMSApiKey;
             // Setting Clockworksms api
             define('CONFIG_SECURITY_API_KEY', $this->apiKey);
             $trimmedApiKey = trim(CONFIG_SECURITY_API_KEY);
@@ -56,15 +58,36 @@ class Clockworksms
         }
     }
 
+    /**
+     * getMobilePhoneNumberById (retrieves a user mobile phone number by user id)
+     * @param   int User id
+     * @return  int User's mobile phone number
+     */
     private function getMobilePhoneNumberById($userId)
     {
         require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
-        $mobilePhoneNumberExtraField = (new ExtraField('user'))->get_handler_field_info_by_field_variable('mobile_phone_number');
+        $mobilePhoneNumberExtraField = 
+        (new ExtraField('user'))->get_handler_field_info_by_field_variable('mobile_phone_number');
+        
         require_once api_get_path(LIBRARY_PATH).'extra_field_value.lib.php';
-        $mobilePhoneNumberExtraFieldValue = (new ExtraFieldValue('user'))->get_values_by_handler_and_field_id($userId, $mobilePhoneNumberExtraField['id']);
+        $mobilePhoneNumberExtraFieldValue = 
+        (new ExtraFieldValue('user'))->get_values_by_handler_and_field_id($userId, $mobilePhoneNumberExtraField['id']);
+        
         return $mobilePhoneNumberExtraFieldValue['field_value'];
     }
 
+    /**
+     * send (sends an SMS to the user)
+     * @param   array   Data needed to send the SMS. It is mandatory to include the
+     *                  'smsType' and 'userId' (or 'mobilePhoneNumber') fields at least.
+     *                  More data may be neccesary depending on the message type
+     * Example: $additional_parameters = array(
+     *              'smsType' => EXAMPLE_SMS_TYPE,
+     *              'userId' => $userId,
+     *              'moreData' => $moreData
+     *          );
+     * @return  void
+     */
     public function send($additionalParameters)
     {
         $trimmedKey = trim(CONFIG_SECURITY_API_KEY);
@@ -90,6 +113,15 @@ class Clockworksms
         }
     }
 
+    /**
+     * buildSms (builds an SMS from a template and data)
+     * @param   object  ClockworksmsPlugin object
+     * @param   object  Template object
+     * @param   string  Template file name
+     * @param   string  Text key from lang file
+     * @param   array   Data to fill message variables (if any)
+     * @return  object  Template object with message property updated
+     */
     public function buildSms($plugin, $tpl, $templateName, $messageKey, $parameters = null)
     {
         $result = Database::select(
@@ -115,6 +147,18 @@ class Clockworksms
         return $tpl->params['message'];
     }
 
+    /**
+     * getSms (returns an SMS message depending of its type)
+     * @param   array   Data needed to send the SMS. It is mandatory to include the
+     *                  'smsType' and 'userId' (or 'mobilePhoneNumber') fields at least.
+     *                  More data may be neccesary depending on the message type
+     * Example: $additional_parameters = array(
+     *              'smsType' => EXAMPLE_SMS_TYPE,
+     *              'userId' => $userId,
+     *              'moreData' => $moreData
+     *          );
+     * @return  string  A ready to be sent SMS
+     */
     public function getSms($additionalParameters)
     {
         $plugin = ClockworksmsPlugin::create();

@@ -41,7 +41,7 @@ switch ($action) {
             }
         }
         break;
-	case 'search_tags':
+    case 'search_tags':
         if (api_is_anonymous()) {
             echo '';
         } else {
@@ -50,7 +50,7 @@ switch ($action) {
             }
         }
         break;
-	case 'generate_api_key':
+    case 'generate_api_key':
         if (api_is_anonymous()) {
             echo '';
         } else {
@@ -69,7 +69,7 @@ switch ($action) {
             <?php
         }
         break;
-	case 'active_user':
+    case 'active_user':
         if (api_is_platform_admin() && api_global_admin_can_edit_admin($_GET['user_id'])) {
 
             $user_id = intval($_GET['user_id']);

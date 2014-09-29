@@ -460,13 +460,19 @@ class CourseManager
      * @see add_user_to_course
      * @assert ('', '') === false
      */
-    public static function subscribe_user($user_id, $course_code, $status = STUDENT, $session_id = 0)
-    {
+    public static function subscribe_user(
+        $user_id,
+        $course_code,
+        $status = STUDENT,
+        $session_id = 0,
+        $userCourseCategoryId = 0
+    ) {
         if ($user_id != strval(intval($user_id))) {
             return false; //detected possible SQL injection
         }
 
         $course_code = Database::escape_string($course_code);
+        $userCourseCategoryId = intval($userCourseCategoryId);
 
         if (empty($user_id) || empty ($course_code)) {
             return false;
@@ -540,11 +546,14 @@ class CourseManager
 
         } else {
             $course_sort = self::userCourseSort($user_id, $course_code);
-            $result = @Database::query("INSERT INTO ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+            $sql = "INSERT INTO ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                     SET course_code = '$course_code',
                         user_id     = '$user_id',
                         status      = '".$status."',
-                        sort        = '". ($course_sort)."'");
+                        sort        = '". ($course_sort)."',
+                        user_course_cat = $userCourseCategoryId
+                    ";
+            $result = @Database::query($sql);
 
             // Add event to the system log
             event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), api_get_user_id());

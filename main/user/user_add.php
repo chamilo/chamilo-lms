@@ -203,14 +203,24 @@ if($register) {
             $message = stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedU');
         }
 
-        $additional_parameters = array(
+        $additionalParameters = array(
             'smsType' => BEEN_SUBSCRIBED_COURSE,
             'userId' => $user_id,
             'courseTitle' => $currentCourseName
         );
 
-        api_mail_html($recipient_name, $email_form, $emailsubject, $emailbody, 
-          $sender_name,$email_admin, null, null, null, $additional_parameters);
+        api_mail_html(
+          $recipient_name,
+          $email_form,
+          $emailsubject,
+          $emailbody,
+          $sender_name,
+          $email_admin,
+          null,
+          null,
+          null,
+          $additionalParameters
+        );
 
         //@api_mail($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name,$email_admin);
 

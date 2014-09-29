@@ -86,7 +86,7 @@ class Plugin
                     $value = $type['options'];
                 }
                 $result[$name] = $value;
-            }            
+            }
         }
         return $result;
     }
@@ -170,7 +170,7 @@ class Plugin
         $checkboxGroup = array();
         $checkboxCollection = array();
 
-        if ($checkboxNames = array_keys($this->fields, 'checkbox')) {        
+        if ($checkboxNames = array_keys($this->fields, 'checkbox')) {
             $pluginInfoCollection = api_get_settings('Plugins');
             foreach ($pluginInfoCollection as $pluginInfo) {
                 if (array_search($pluginInfo['title'], $checkboxNames) !== false) {
@@ -179,7 +179,7 @@ class Plugin
             }
         }
         
-        foreach ($this->fields as $name => $type) {            
+        foreach ($this->fields as $name => $type) {
 
             $value = $this->get($name);
 

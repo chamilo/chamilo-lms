@@ -96,13 +96,21 @@ switch ($action) {
                     //$emailbody.=get_lang('Problem'). "\n\n". get_lang('Formula');
                     $emailbody.=api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 
-                     $additional_parameters = array(
+                     $additionalParameters = array(
                         'smsType' => ACCOUNT_APPROVED_CONNECT,
                         'userId' => $user_id
                     );
 
-                    //$result = api_mail($recipient_name, $user_info['mail'], $emailsubject, $emailbody, $sender_name, $email_admin);
-                    $result = api_mail($recipient_name, $user_info['mail'], $emailsubject, $emailbody, $sender_name, $email_admin, '', $additional_parameters);
+                    $result = api_mail(
+                        $recipient_name,
+                        $user_info['mail'],
+                        $emailsubject,
+                        $emailbody,
+                        $sender_name,
+                        $email_admin,
+                        '',
+                        $additionalParameters
+                    );
                     event_system(LOG_USER_ENABLE, LOG_USER_ID, $user_id);
                 } else {
                     event_system(LOG_USER_DISABLE, LOG_USER_ID, $user_id);

@@ -1150,7 +1150,7 @@ class Database {
                 var_dump($sql);
             }
             return self::insert_id();
-        }        
+        }
         return false;
     }
 

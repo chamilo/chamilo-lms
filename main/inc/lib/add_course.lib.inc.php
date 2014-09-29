@@ -2910,16 +2910,25 @@ function register_course($params)
                 $message .= get_lang('Language').' '.$course_language;
 
                 $userInfo = api_get_user_info($user_id);
-                $additional_parameters = array(
+                $additionalParameters = array(
                     'smsType' => NEW_COURSE_BEEN_CREATED,
                     'userId' => $user_id,
                     'courseName' => $title,
                     'creatorUsername' => $userInfo['username']
                 );
 
-                //@api_mail($recipient_name, $recipient_email, $subject, $message, $siteName, $recipient_email);
-                api_mail_html($recipient_name, $recipient_email, $subject, $message,
-                    $siteName, $recipient_email, null, null, null, $additional_parameters);
+                api_mail_html(
+                    $recipient_name,
+                    $recipient_email,
+                    $subject,
+                    $message,
+                    $siteName,
+                    $recipient_email,
+                    null,
+                    null,
+                    null,
+                    $additionalParameters
+                );
             }
         }
     }

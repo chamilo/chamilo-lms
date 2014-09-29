@@ -86,7 +86,7 @@ class Plugin
                     $value = $type['options'];
                 }
                 $result[$name] = $value;
-            }            
+            }
         }
         return $result;
     }
@@ -170,7 +170,7 @@ class Plugin
         $checkboxGroup = array();
         $checkboxCollection = array();
 
-        if ($checkboxNames = array_keys($this->fields, 'checkbox')) {        
+        if ($checkboxNames = array_keys($this->fields, 'checkbox')) {
             $pluginInfoCollection = api_get_settings('Plugins');
             foreach ($pluginInfoCollection as $pluginInfo) {
                 if (array_search($pluginInfo['title'], $checkboxNames) !== false) {
@@ -178,8 +178,8 @@ class Plugin
                 }
             }
         }
-        
-        foreach ($this->fields as $name => $type) {            
+
+        foreach ($this->fields as $name => $type) {
 
             $value = $this->get($name);
 
@@ -208,19 +208,25 @@ class Plugin
                     $result->addGroup($group, null, array($this->get_lang($name), $help));
                     break;
                 case 'checkbox':
+                    $selectedValue = null;
+                    if (isset($checkboxCollection[$name])) {
+                        if ($checkboxCollection[$name]['selected_value'] === 'true') {
+                            $selectedValue = 'checked';
+                        }
+                    }
                     $element = $result->createElement(
-                        $type, 
-                        $name, 
+                        $type,
+                        $name,
                         '',
                         $this->get_lang($name),
-                        $checkboxCollection[$name]['selected_value'] === 'true' ? 'checked' : ''
+                        $selectedValue
                     );
                     $element->_attributes['value'] = 'true';
                     $checkboxGroup[] = $element;
                     break;
             }
         }
-        
+
         if (!empty($checkboxGroup)) {
             $result->addGroup($checkboxGroup, null, array($this->get_lang('sms_types'), $help));
         }

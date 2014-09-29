@@ -1,24 +1,19 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * This file contains a class used like library provides functions for auth tool. It's also used like model to courses_controller (MVC pattern)
- * @author Christian Fasanando <christian1827@gmail.com>
- * @package chamilo.auth
- */
-/**
- * Code
- */
+
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 /**
- * Auth can be used to instanciate objects or as a library to manage courses
+ * Auth can be used to instantiate objects or as a library to manage courses
+ * This file contains a class used like library provides functions for auth tool.
+ * It's also used like model to courses_controller (MVC pattern)
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @package chamilo.auth
  */
 class Auth
 {
-
     /**
      * Constructor
      */
@@ -57,18 +52,30 @@ class Auth
 
         // Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
         $user_id = intval($user_id);
-        $sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
-                                      course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
-                                      course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                                FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
-                                WHERE course.code = course_rel_user.course_code
-                                AND   course_rel_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
-                                AND   course_rel_user.user_id = '" . $user_id . "' $without_special_courses
-                                ORDER BY course_rel_user.sort ASC";
-        $result = Database::query($sql_select_courses);
+        $sql = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
+                      course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
+                      course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+                FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
+                WHERE course.code = course_rel_user.course_code
+                AND   course_rel_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
+                AND   course_rel_user.user_id = '" . $user_id . "' $without_special_courses
+                ORDER BY course_rel_user.sort ASC";
+        $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             //we only need the database name of the course
-            $courses[] = array('db' => $row['db'], 'code' => $row['k'], 'visual_code' => $row['vc'], 'title' => $row['i'], 'directory' => $row['dir'], 'status' => $row['status'], 'tutor' => $row['t'], 'subscribe' => $row['subscr'], 'unsubscribe' => $row['unsubscr'], 'sort' => $row['sort'], 'user_course_category' => $row['user_course_cat']);
+            $courses[] = array(
+                'db' => $row['db'],
+                'code' => $row['k'],
+                'visual_code' => $row['vc'],
+                'title' => $row['i'],
+                'directory' => $row['dir'],
+                'status' => $row['status'],
+                'tutor' => $row['t'],
+                'subscribe' => $row['subscr'],
+                'unsubscribe' => $row['unsubscr'],
+                'sort' => $row['sort'],
+                'user_course_category' => $row['user_course_cat']
+            );
         }
         return $courses;
     }
@@ -77,7 +84,8 @@ class Auth
      * retrieves the user defined course categories
      * @return array containing all the IDs of the user defined courses categories, sorted by the "sort" field
      */
-    public function get_user_course_categories() {
+    public function get_user_course_categories()
+    {
         $user_id = api_get_user_id();
         $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM " . $table_category . " WHERE user_id=$user_id ORDER BY sort ASC";
@@ -94,8 +102,8 @@ class Auth
      * @param  int   User category id
      * @return string: the name of the user defined course category
      */
-    public function get_courses_in_category() {
-
+    public function get_courses_in_category()
+    {
         $user_id = api_get_user_id();
 
         // table definitions
@@ -121,17 +129,18 @@ class Auth
             $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
         }
 
-        $sql_select_courses = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
-                                                                course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
-                                                                course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                                        FROM    $TABLECOURS       course,
-                                                                                $TABLECOURSUSER  course_rel_user
-                                        WHERE course.code = course_rel_user.course_code
-                                        AND  course_rel_user.user_id = '" . $user_id . "'
-                                        AND  course_rel_user.relation_type <> " . COURSE_RELATION_TYPE_RRHH . "
-                                            $without_special_courses
-                                        ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
-        $result = Database::query($sql_select_courses);
+        $sql = "SELECT
+                    course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
+                    course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
+                    course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+                FROM    $TABLECOURS       course,
+                                                        $TABLECOURSUSER  course_rel_user
+                WHERE course.code = course_rel_user.course_code
+                AND  course_rel_user.user_id = '" . $user_id . "'
+                AND  course_rel_user.relation_type <> " . COURSE_RELATION_TYPE_RRHH . "
+                    $without_special_courses
+                ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+        $result = Database::query($sql);
         $number_of_courses = Database::num_rows($result);
         $data = array();
         while ($course = Database::fetch_array($result)) {
@@ -146,7 +155,8 @@ class Auth
      * @param  int       Category id
      * @return bool      True if it success
      */
-    public function store_changecoursecategory($course_code, $newcategory) {
+    public function store_changecoursecategory($course_code, $newcategory)
+    {
         $course_code = Database::escape_string($course_code);
         $newcategory = intval($newcategory);
         $current_user = api_get_user_id();
@@ -170,8 +180,8 @@ class Auth
      * @param   int       Category id
      * @return  bool      True if it success
      */
-    public function move_course($direction, $course2move, $category) {
-
+    public function move_course($direction, $course2move, $category)
+    {
         // definition of tables
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -220,8 +230,8 @@ class Auth
      * @param string    Category id
      * @return bool     True If it success
      */
-    public function move_category($direction, $category2move) {
-
+    public function move_category($direction, $category2move)
+    {
         // the database definition of the table that stores the user defined course categories
         $table_user_defined_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
@@ -260,7 +270,8 @@ class Auth
      * Retrieves the user defined course categories and all the info that goes with it
      * @return array containing all the info of the user defined courses categories with the id as key of the array
      */
-    public function get_user_course_categories_info() {
+    public function get_user_course_categories_info()
+    {
         $current_user_id = api_get_user_id();
         $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM " . $table_category . " WHERE user_id='" . $current_user_id . "' ORDER BY sort ASC";
@@ -277,14 +288,15 @@ class Auth
      * @param   int     Category id
      * @return  bool    True if it success
      */
-    public function store_edit_course_category($title, $category_id) {
+    public function store_edit_course_category($title, $category_id)
+    {
         // protect data
         $title = Database::escape_string($title);
         $category_id = intval($category_id);
         $result = false;
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-        $sql_update = "UPDATE $tucc SET title='" . api_htmlentities($title, ENT_QUOTES, api_get_system_encoding()) . "' WHERE id='" . $category_id . "'";
-        Database::query($sql_update);
+        $sql = "UPDATE $tucc SET title='" . api_htmlentities($title, ENT_QUOTES, api_get_system_encoding()) . "' WHERE id='" . $category_id . "'";
+        Database::query($sql);
         if (Database::affected_rows()) {
             $result = true;
         }
@@ -296,7 +308,8 @@ class Auth
      * @param   int     Category id
      * @return  bool    True if it success
      */
-    public function delete_course_category($category_id) {
+    public function delete_course_category($category_id)
+    {
         $current_user_id = api_get_user_id();
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -317,8 +330,8 @@ class Auth
      * @param   string  Course code
      * @return  bool    True if it success
      */
-    public function remove_user_from_course($course_code) {
-
+    public function remove_user_from_course($course_code)
+    {
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         // protect variables
@@ -329,8 +342,9 @@ class Auth
         // we check (once again) if the user is not course administrator
         // because the course administrator cannot unsubscribe himself
         // (s)he can only delete the course
-        $sql_check = "SELECT * FROM $tbl_course_user WHERE user_id='" . $current_user_id . "' AND course_code='" . $course_code . "' AND status='1' ";
-        $result_check = Database::query($sql_check);
+        $sql = "SELECT * FROM $tbl_course_user
+                WHERE user_id='" . $current_user_id . "' AND course_code='" . $course_code . "' AND status='1' ";
+        $result_check = Database::query($sql);
         $number_of_rows = Database::num_rows($result_check);
         if ($number_of_rows > 0) {
             $result = false;
@@ -345,8 +359,8 @@ class Auth
      * @param   string  Category title
      * @return  bool    True if it success
      */
-    public function store_course_category($category_title) {
-
+    public function store_course_category($category_title)
+    {
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
         // protect data

@@ -68,6 +68,7 @@ class PDF
      */
     public function html_to_pdf_with_template($content)
     {
+        global $_configuration;
         Display :: display_no_header();
 
         //Assignments
@@ -81,6 +82,16 @@ class PDF
         } else {
             if (!empty($organization)) {
                 $organization = '<h2 align="left">'.$organization.'</h2>';
+            }
+        }
+
+        if (isset($_configuration['pdf_logo_header']) &&
+            $_configuration['pdf_logo_header']
+        ) {
+            $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/pdf_logo_header.png';
+            if (file_exists($img)) {
+                $img = api_get_path(WEB_CODE_PATH) . 'css/' . api_get_visual_theme() . '/images/pdf_logo_header.png';
+                $organization = "<img src='$img'>";
             }
         }
 

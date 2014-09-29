@@ -205,3 +205,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['session_days_before_coach_access'] = 0;
 // Default session days after coach access
 //$_configuration['session_days_after_coach_access'] = 0;
+// PDF Logo header located in main/css/xxx/images/pdf_logo_header.png
+//$_configuration['pdf_logo_header'] = false;

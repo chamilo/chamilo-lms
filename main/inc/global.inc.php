@@ -114,13 +114,15 @@ if (empty($_configuration['statistics_database']) && $already_installed) {
 }
 global $database_connection;
 // Connect to the server database and select the main chamilo database.
+// When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
 if (!($conn_return = @Database::connect(
     array(
         'server'        => $_configuration['db_host'],
         'username'      => $_configuration['db_user'],
         'password'      => $_configuration['db_password'],
-        'persistent'    => $_configuration['db_persistent_connection'] // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
-    )))) {
+        'persistent'    => $_configuration['db_persistent_connection']
+    )))
+) {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.
     require $includePath.'/global_error_message.inc.php';
@@ -180,7 +182,7 @@ if (!Database::select_db($_configuration['main_database'], $database_connection)
     die();
 }
 
-/*   Initialization of the default encodings */
+/* Initialization of the default encodings */
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
 $result = Database::query($sql);
@@ -317,8 +319,6 @@ if (file_exists($mail_conf)) {
 
 // ===== "who is logged in?" module section =====
 
-
-
 // check and modify the date of user in the track.e.online table
 if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
@@ -327,9 +327,9 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 // ===== end "who is logged in?" module section =====
 
 if (api_get_setting('server_type') == 'test') {
-    //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-    ini_set('display_errors', '1');
-    error_reporting(-1);
+    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+    /*ini_set('display_errors', '1');
+    error_reporting(-1);*/
 } else {
     /*
     Server type is not test

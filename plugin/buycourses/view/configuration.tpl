@@ -15,7 +15,7 @@ $(function() {
 </script>
 
 {% if sessionsAreIncluded == "YES" %}
-    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs"> <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"> <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"> <a href="#tabs-1"> Cursos</a></li><li class="ui-state-default ui-corner-top"> <a href="#tabs-2"> Sesiones</a></li></ul>
+    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs"> <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"> <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"> <a href="#tabs-1">{{ 'Courses'|get_lang }}</a></li><li class="ui-state-default ui-corner-top"> <a href="#tabs-2">{{ 'Sessions'|get_lang }}</a></li></ul>
 {% endif %}
 
 <div id="tabs-1" class="row">

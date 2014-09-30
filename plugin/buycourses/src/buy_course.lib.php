@@ -31,7 +31,7 @@ function sync()
             $sql = "UPDATE $tableBuySessionRelCourse SET sync = 1 WHERE id_session='" . $row['id'] . "';";
             Database::query($sql);
         } else {
-            $sql = "INSERT INTO $tableBuySessionRelCourse (id_session, course_code, nbr_users, sync) 
+            $sql = "INSERT INTO $tableBuySessionRelCourse (id_session, course_code, nbr_users, sync)
             VALUES ('" . $row['id_session'] . "', '" . $row['course_code'] . "', '" . $row['nbr_users'] . "', 1);";
             Database::query($sql);
         }
@@ -39,10 +39,8 @@ function sync()
     $sql = "DELETE FROM $tableBuySessionRelCourse WHERE sync = 0;";
     Database::query($sql);
 
-
-
     $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
-    $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);    
+    $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $sql = "UPDATE $tableBuyCourse SET sync = 0";
     Database::query($sql);
@@ -50,7 +48,7 @@ function sync()
     $sql = "SELECT id, code, title FROM $tableCourse";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
-        $sql = "SELECT id_session FROM $tableBuySessionRelCourse 
+        $sql = "SELECT id_session FROM $tableBuySessionRelCourse
         WHERE course_code = '" . $row['code'] . "' LIMIT 1";
         $courseIdSession = Database::fetch_assoc(Database::query($sql))['id_session'];
         if (!is_numeric($courseIdSession)) {
@@ -63,8 +61,8 @@ function sync()
             $sql = "UPDATE $tableBuyCourse SET sync = 1, session_id = $courseIdSession WHERE course_id='" . $row['id'] . "';";
             Database::query($sql);
         } else {
-            $sql = "INSERT INTO $tableBuyCourse (session_id, course_id, code, title, visible, sync) 
-            VALUES ('" . $courseIdSession . "', '" . $row['id'] . "', '" . 
+            $sql = "INSERT INTO $tableBuyCourse (session_id, course_id, code, title, visible, sync)
+            VALUES ('" . $courseIdSession . "', '" . $row['id'] . "', '" .
             $row['code'] . "', '" . $row['title'] . "', 0, 1);";
             Database::query($sql);
         }
@@ -87,8 +85,8 @@ function sync()
             $sql = "UPDATE $tableBuySession SET sync = 1 WHERE session_id='" . $row['id'] . "';";
             Database::query($sql);
         } else {
-            $sql = "INSERT INTO $tableBuySession (session_id, name, date_start, date_end, visible, sync) 
-            VALUES ('" . $row['id'] . "', '" . $row['name'] . "', '" . 
+            $sql = "INSERT INTO $tableBuySession (session_id, name, date_start, date_end, visible, sync)
+            VALUES ('" . $row['id'] . "', '" . $row['name'] . "', '" .
                 $row['date_start'] .  "', '" . $row['date_end'] . "', 0, 1);";
             Database::query($sql);
         }
@@ -129,13 +127,11 @@ function listCourses()
     $sql = "SELECT a.course_id, a.visible, a.price, b.*
         FROM $tableBuyCourse a, $tableCourse b
         WHERE a.course_id = b.id;";
-
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
-
     return $aux;
 }
 
@@ -175,7 +171,7 @@ function userSessionList()
             WHERE a.code = b.code AND a.code = '" . $rowSessionCourse['course_code'] . "' AND a.visible = 1;";
             $res = Database::query($sql);
             // loop inside a course of current session
-            while ($row = Database::fetch_assoc($res)) {                
+            while ($row = Database::fetch_assoc($res)) {
                 //check teacher
                 $sql = "SELECT lastname, firstname
                 FROM course_rel_user a, user b
@@ -198,13 +194,15 @@ function userSessionList()
         //check if the user is enrolled in the current session
         if (isset($_SESSION['_user']) || $_SESSION['_user']['user_id'] != '') {
             $sql = "SELECT 1 FROM $tableSessionRelUser
-                WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+                WHERE id_session='".$rowSession['session_id']."' AND
+                id_user='" . $_SESSION['_user']['user_id'] . "';";
             Database::query($sql);
             if (Database::affected_rows() > 0) {
                 $rowSession['enrolled'] = "YES";
             } else {
                 $sql = "SELECT 1 FROM $tableBuySessionTemporal
-                    WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+                    WHERE id_session='".$rowSession['session_id']."' AND
+                    id_user='" . $_SESSION['_user']['user_id'] . "';";
                 Database::query($sql);
                 if (Database::affected_rows() > 0) {
                     $rowSession['enrolled'] = "TMP";
@@ -214,7 +212,8 @@ function userSessionList()
             }
         } else {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
-                WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+                WHERE id_session='".$rowSession['session_id']."' AND
+                id_user='" . $_SESSION['_user']['user_id'] . "';";
             Database::query($sql);
             if (Database::affected_rows() > 0) {
                 $rowSession['enrolled'] = "TMP";
@@ -252,7 +251,6 @@ function userCourseList()
         WHERE a.course_code='" . $row['code'] . "'
         AND a.role<>'' AND a.role<>'NULL'
         AND a.user_id=b.user_id;";
-
         $tmp = Database::query($sql);
         $rowTmp = Database::fetch_assoc($tmp);
         $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
@@ -295,7 +293,6 @@ function userCourseList()
         $row['price'] = number_format($row['price'], 2, '.', ' ');
         $aux[] = $row;
     }
-
     return $aux;
 }
 
@@ -305,7 +302,7 @@ function userCourseList()
 function checkUserBuy($parameter, $user, $type = 'COURSE')
 {
     $sql = "SELECT 1 FROM %s WHERE %s ='" . $parameter . "' AND id_user='" . $user . "';";
-    $sql = $type === 'SESSION' ? 
+    $sql = $type === 'SESSION' ?
         sprintf($sql, Database::get_main_table(TABLE_MAIN_SESSION_USER), 'id_session') :
         sprintf($sql, Database::get_main_table(TABLE_MAIN_COURSE_USER), 'course_code');
     Database::query($sql);
@@ -319,27 +316,10 @@ function checkUserBuy($parameter, $user, $type = 'COURSE')
 /**
  *
  */
-/*function checkUserCourse($course, $user)
-{
-    $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = "SELECT 1 FROM $tableCourseRelUser
-        WHERE course_code='" . $course . "'
-        AND user_id='" . $user . "';";
-    Database::query($sql);
-    if (Database::affected_rows() > 0) {
-        return true;
-    } else {
-        return false;
-    }
-}*/
-
-/**
- * 
- */
 function checkUserBuyTransfer($parameter, $user, $type = 'COURSE')
 {
     $sql = "SELECT 1 FROM %s WHERE %s ='" . $parameter . "' AND id_user='" . $user . "';";
-    $sql = $type === 'SESSION' ? 
+    $sql = $type === 'SESSION' ?
         sprintf($sql, Database::get_main_table(TABLE_BUY_SESSION_TEMPORAL), 'session_id') :
         sprintf($sql, Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL), 'course_code');
     Database::query($sql);
@@ -349,23 +329,6 @@ function checkUserBuyTransfer($parameter, $user, $type = 'COURSE')
         return false;
     }
 }
-
-/**
- * 
- */
-/*function checkUserCourseTransfer($course, $user)
-{
-    $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
-    $sql = "SELECT 1 FROM $tableBuyCourseTemporal
-        WHERE course_code='" . $course . "'
-        AND user_id='" . $user . "';";
-    Database::query($sql);
-    if (Database::affected_rows() > 0) {
-        return true;
-    } else {
-        return false;
-    }
-}*/
 
 /**
  *
@@ -489,7 +452,7 @@ function findCurrency()
  * @param string $code The session code
  * @return array Info about the session
  */
-function sessionInfo($code) //TODO
+function sessionInfo($code)
 {
     $tableBuySession = Database::get_main_table(TABLE_BUY_SESSION);
     $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -498,7 +461,6 @@ function sessionInfo($code) //TODO
     $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
     $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
     $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    //$tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
     $tableBuySessionTemporal = Database::get_main_table(TABLE_BUY_SESSION_TEMPORAL);
 
     $code = Database::escape_string($code);
@@ -506,7 +468,7 @@ function sessionInfo($code) //TODO
         FROM $tableBuySession a, $tableSession b
         WHERE a.session_id=b.id
         AND a.visible = 1
-        AND b.id = '" . $code . "';";
+        AND b.id = '".$code."';";
     $res = Database::query($sql);
     $rowSession = Database::fetch_assoc($res);
     $sqlSessionCourse = "SELECT DISTINCT a.id_session, a.course_code, a.nbr_users
@@ -519,22 +481,22 @@ function sessionInfo($code) //TODO
         // get course of current session
         $sql = "SELECT a.course_id, a.session_id, a.visible, a.price, b.*
         FROM $tableBuyCourse a, $tableCourse b
-        WHERE a.code = b.code AND a.code = '" . $rowSessionCourse['course_code'] . "' AND a.visible = 1;";
+        WHERE a.code = b.code AND a.code = '".$rowSessionCourse['course_code']."' AND a.visible = 1;";
         $res = Database::query($sql);
         // loop inside a course of current session
-        while ($row = Database::fetch_assoc($res)) {                
+        while ($row = Database::fetch_assoc($res)) {
             //check teacher
             $sql = "SELECT lastname, firstname
             FROM course_rel_user a, user b
-            WHERE a.course_code='" . $row['code'] . "'
+            WHERE a.course_code='".$row['code']."'
             AND a.role<>'' AND a.role<>'NULL'
             AND a.user_id=b.user_id;";
             $tmp = Database::query($sql);
             $rowTmp = Database::fetch_assoc($tmp);
-            $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
+            $row['teacher'] = $rowTmp['firstname'].' '.$rowTmp['lastname'];
             //check images
-            if (file_exists("../../courses/" . $row['code'] . "/course-pic85x85.png")) {
-                $row['course_img'] = "courses/" . $row['code'] . "/course-pic85x85.png";
+            if (file_exists("../../courses/".$row['code']."/course-pic85x85.png")) {
+                $row['course_img'] = "courses/".$row['code']."/course-pic85x85.png";
             } else {
                 $row['course_img'] = "main/img/without_picture.png";
             }
@@ -545,13 +507,13 @@ function sessionInfo($code) //TODO
     //check if the user is enrolled in the current session
     if (isset($_SESSION['_user']) || $_SESSION['_user']['user_id'] != '') {
         $sql = "SELECT 1 FROM $tableSessionRelUser
-            WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+            WHERE user_id='".$_SESSION['_user']['user_id']."';";
         Database::query($sql);
         if (Database::affected_rows() > 0) {
             $rowSession['enrolled'] = "YES";
         } else {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
-                WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+                WHERE user_id='".$_SESSION['_user']['user_id']."';";
             Database::query($sql);
             if (Database::affected_rows() > 0) {
                 $rowSession['enrolled'] = "TMP";
@@ -561,7 +523,7 @@ function sessionInfo($code) //TODO
         }
     } else {
         $sql = "SELECT 1 FROM $tableBuySessionTemporal
-            WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+            WHERE user_id='".$_SESSION['_user']['user_id']."';";
         Database::query($sql);
         if (Database::affected_rows() > 0) {
             $rowSession['enrolled'] = "TMP";
@@ -668,11 +630,7 @@ function calculateReference($bc_codetext)
     $sql = "SELECT MAX(cod) as cod FROM $tableBuyTemporal";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
-    if ($row['cod'] != '') {
-        $reference = $row['cod'];
-    } else {
-        $reference = '1';
-    }
+    $reference = ($row['cod'] != '') ? $row['cod'] : '1';
     $randomText = randomText();
     $reference .= $randomText;
     return $reference;
@@ -693,6 +651,5 @@ function pendingList($bc_codetext)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
-
     return $aux;
 }

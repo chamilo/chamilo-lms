@@ -13,6 +13,8 @@ require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
 $tableBuySession = Database::get_main_table(TABLE_BUY_SESSION);
+$tableBuySessionRelCourse = Database::get_main_table(TABLE_BUY_SESSION_COURSE);
+$tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
 $tableBuyCourseCountry = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
 $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
@@ -20,6 +22,7 @@ $tableBuyCourseTransfer = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
 $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
 $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+$tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -27,14 +30,14 @@ $plugin = BuyCoursesPlugin::create();
 $buy_name = $plugin->get_lang('Buy');
 
 if ($_REQUEST['tab'] == 'sync') {
-    
+
     $sql = "SELECT code, title FROM $tableCourse;";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
         $aux_code .= $row['code'];
         $aux_title .= $row['title'];
     }
-    
+
     $sql = "SELECT name, date_start, date_end FROM $tableSession;";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
@@ -42,7 +45,189 @@ if ($_REQUEST['tab'] == 'sync') {
         $aux_date_start .= $row['date_start'];
         $aux_date_end .= $row['date_end'];
     }
-    
+
+    echo json_encode(array("status" => "true", "content" => $content));
+}
+
+if ($_REQUEST['tab'] == 'sessions_filter') {
+    $session = Database::escape_string($_REQUEST['session']);
+    $priceMin = Database::escape_string($_REQUEST['pricemin']);
+    $priceMax = Database::escape_string($_REQUEST['pricemax']);
+    $show = Database::escape_string($_REQUEST['show']);
+    $category = Database::escape_string($_REQUEST['category']);
+    $server = api_get_path(WEB_PATH);
+
+    $filter = '';
+    if ($session != '') {
+        $filter .= "b.name LIKE '%" . $session . "%'";
+    }
+    if ($priceMin != '') {
+        if ($filter == '') {
+            $filter .= "a.price >= '" . $priceMin . "'";
+        } else {
+            $filter .= " AND a.price >= '" . $priceMin . "'";
+        }
+    }
+
+    if ($priceMax != '') {
+        if ($filter == '') {
+            $filter .= "a.price <= '" . $priceMax . "'";
+        } else {
+            $filter .= " AND a.price <= '" . $priceMax . "'";
+        }
+    }
+
+    if ($category != '') {
+        if ($filter == '') {
+            $filter .= "b.category_code='" . $category . "'";
+        } else {
+            $filter .= " AND b.category_code='" . $category . "'";
+        }
+    }
+
+    if ($filter == '') {
+        $sql = "SELECT a.session_id, a.visible, a.price, b.*
+            FROM $tableBuySession a, $tableSession b
+            WHERE a.session_id = b.id AND a.visible = 1;";
+    } else {
+        $sql = "SELECT a.session_id, a.visible, a.price, b.*
+            FROM $tableBuySession a, $tableSession b
+            WHERE a.session_id = b.id AND a.visible = 1 AND " . $filter . ";";
+    }
+
+    $resSessions = Database::query($sql);
+    $auxSessions = array();
+
+    // loop through all sessions
+    while ($rowSession = Database::fetch_assoc($resSessions)) {
+        // get courses of current session
+        $sqlSessionCourse = "SELECT DISTINCT a.id_session, a.course_code, a.nbr_users
+        FROM $tableBuySessionRelCourse a, $tableSessionRelCourse b
+        WHERE a.id_session = b.id_session AND a.id_session = " . $rowSession['session_id'] . ";";
+        $resSessionCourse = Database::query($sqlSessionCourse);
+        $aux = array();
+        // loop through courses of current session
+        while ($rowSessionCourse = Database::fetch_assoc($resSessionCourse)) {
+            // get course of current session
+            $sql = "SELECT a.course_id, a.session_id, a.visible, a.price, b.*
+            FROM $tableBuyCourse a, $tableCourse b
+            WHERE a.code = b.code AND a.code = '" . $rowSessionCourse['course_code'] . "' AND a.visible = 1;";
+            $res = Database::query($sql);
+            // loop inside a course of current session
+            while ($row = Database::fetch_assoc($res)) {
+                //check teacher
+                $sql = "SELECT lastname, firstname
+                FROM course_rel_user a, user b
+                WHERE a.course_code='" . $row['code'] . "'
+                AND a.role<>'' AND a.role<>'NULL'
+                AND a.user_id=b.user_id;";
+                $tmp = Database::query($sql);
+                $rowTmp = Database::fetch_assoc($tmp);
+                $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
+                //check images
+                if (file_exists("../../courses/" . $row['code'] . "/course-pic85x85.png")) {
+                    $row['course_img'] = "courses/" . $row['code'] . "/course-pic85x85.png";
+                } else {
+                    $row['course_img'] = "main/img/without_picture.png";
+                }
+                $row['price'] = number_format($row['price'], 2, '.', ' ');
+                $aux[] = $row;
+            }
+        }
+        //check if the user is enrolled in the current session
+        if (isset($_SESSION['_user']) || $_SESSION['_user']['user_id'] != '') {
+            $sql = "SELECT 1 FROM $tableSessionRelUser
+                WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+            Database::query($sql);
+            if (Database::affected_rows() > 0) {
+                $rowSession['enrolled'] = "YES";
+            } else {
+                $sql = "SELECT 1 FROM $tableBuySessionTemporal
+                    WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+                Database::query($sql);
+                if (Database::affected_rows() > 0) {
+                    $rowSession['enrolled'] = "TMP";
+                } else {
+                    $rowSession['enrolled'] = "NO";
+                }
+            }
+        } else {
+            $sql = "SELECT 1 FROM $tableBuySessionTemporal
+                WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+            Database::query($sql);
+            if (Database::affected_rows() > 0) {
+                $rowSession['enrolled'] = "TMP";
+            } else {
+                $rowSession['enrolled'] = "NO";
+            }
+        }
+        // add courses to current session
+        $rowSession['courses'] = $aux;
+        // add the current whole session
+        $auxSessions[] = $rowSession;
+    }
+
+    $currencyType = findCurrency();
+
+    foreach ($auxSessions as $session) {
+        $content .= '<div class="well_border span8">';
+        $content .= '<div class="row">';
+        $content .= '<div class="span4 ">';
+        $content .= '<div class="categories-course-description">';
+        $content .= '<h3>'.$session['name'].'</h3>';
+        $content .= '<h5>'.get_lang('From').' '.$session['date_start'];
+        $content .= ' '.get_lang('Until').' '.$session['date_end'].'</h5>';
+        $content .= '</div>';
+        $content .= '</div>';
+        $content .= '<div class="span right">';
+        $content .= '<div class="sprice right">';
+        $content .= $session['price'].' '.$currencyType;
+        $content .= '</div>';
+        $content .= '<div class="cleared"></div>';
+        $content .= '<div class="btn-toolbar right">';
+        if ($session['enrolled'] == "NO") {
+            $content .= '<a class="btn btn-success" title=""';
+            $content .= 'href="'.$server.'plugin/buycourses/src/process.php?scode='.$session['session_id'].'">';
+            $content .= $buy_name;
+            $content .= '</a>';
+        }
+        $content .= '</div>';
+        $content .= '</div>';
+        $content .= '</div>';
+        $courses = $session['courses'];
+        foreach ($courses as $course) {
+            $content .= '<div class="row">';
+            $content .= '<div class="span">';
+            $content .= '<div class="thumbnail">';
+            $content .= '<a class="ajax" rel="gb_page_center[778]" title=""';
+            $content .= 'href="'.$server.'main/inc/src/course_home.ajax.php?';
+            $content .= 'a=show_course_information&code='.$course['code'].'">';
+            $content .= '<img alt="" src="' . $server . $course['course_img'] . '">';
+            $content .= '</a>';
+            $content .= '</div>';
+            $content .= '</div>';
+            $content .= '<div class="span4">';
+            $content .= '<div class="categories-course-description">';
+            $content .= '<h3>' . $course['title'] . '</h3>';
+            $content .= '<h5>' . get_lang('Teacher') . ': ' . $course['teacher'] . '</h5>';
+            $content .= '</div>';
+            if ($course['enrolled'] == "YES") {
+                $content .= '<span class="label label-info">'.$plugin->get_lang('TheUserIsAlreadyRegistered').'</span>';
+            }
+            $content .= '</div>';
+            $content .= '<div class="span right">';
+            $content .= '<div class="cleared"></div>';
+            $content .= '<div class="btn-toolbar right">';
+            $content .= '<a class="ajax btn btn-primary" title=""';
+            $content .= 'href="'.$server.'main/inc/src/course_home.ajax.php?';
+            $content .= 'a=show_course_information&code='.$course['code'].'">'.get_lang('Description').'</a>';
+            $content .= '</div>';
+            $content .= '</div>';
+            $content .= '</div>';
+        }
+        $content .= '</div>';
+    }
+
     echo json_encode(array("status" => "true", "content" => $content));
 }
 
@@ -85,12 +270,12 @@ if ($_REQUEST['tab'] == 'courses_filter') {
     if ($filter == '') {
         $sql = "SELECT a.course_id, a.visible, a.price, b.*
             FROM $tableBuyCourse a, $tableCourse b
-            WHERE a.course_id = b.id
+            WHERE a.course_id = b.id AND a.session_id = 0
             AND a.visible = 1;";
     } else {
         $sql = "SELECT a.course_id, a.visible, a.price, b.*
             FROM $tableBuyCourse a, $tableCourse b
-            WHERE a.course_id = b.id
+            WHERE a.course_id = b.id AND a.session_id = 0
             AND a.visible = 1 AND " . $filter . ";";
     }
 
@@ -143,27 +328,32 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         $content .= '<div class="row">';
         $content .= '<div class="span">';
         $content .= '<div class="thumbnail">';
-        $content .= '<a class="ajax" rel="gb_page_center[778]" title="" href="' . $server . 'main/inc/ajax/course_home.ajax.php?a=show_course_information&code=' . $course['code'] . '">';
-        $content .= '<img alt="" src="' . $server . $course['course_img'] . '">';
+        $content .= '<a class="ajax" rel="gb_page_center[778]" title=""';
+        $content .= 'href="'.$server.'main/inc/src/course_home.ajax.php?';
+        $content .= 'a=show_course_information&code='.$course['code'].'">';
+        $content .= '<img alt="" src="'.$server.$course['course_img'].'">';
         $content .= '</a>';
         $content .= '</div>';
         $content .= '</div>';
         $content .= '<div class="span4">';
         $content .= '<div class="categories-course-description">';
-        $content .= '<h3>' . $course['title'] . '</h3>';
-        $content .= '<h5>' . get_lang('Teacher') . ': ' . $course['teacher'] . '</h5>';
+        $content .= '<h3>'.$course['title'].'</h3>';
+        $content .= '<h5>'.get_lang('Teacher').': '.$course['teacher'].'</h5>';
         $content .= '</div>';
         if ($course['enrolled'] == "YES") {
-            $content .= '<span class="label label-info">' .  $plugin->get_lang('TheUserIsAlreadyRegistered') . '</span>';
+            $content .= '<span class="label label-info">'.$plugin->get_lang('TheUserIsAlreadyRegistered').'</span>';
         }
         $content .= '</div>';
         $content .= '<div class="span right">';
-        $content .= '<div class="sprice right">' . $course['price'] . ' ' . $currencyType . ' </div>';
+        $content .= '<div class="sprice right">'.$course['price'].' '.$currencyType.'</div>';
         $content .= '<div class="cleared"></div>';
         $content .= '<div class="btn-toolbar right">';
-        $content .= '<a class="ajax btn btn-primary" title="" href="' . $server . 'main/inc/ajax/course_home.ajax.php?a=show_course_information&code=' . $course['code'] . '">' . get_lang('Description') . '</a>&nbsp;';
+        $content .= '<a class="ajax btn btn-primary" title=""';
+        $content .= 'href="'.$server.'main/inc/src/course_home.ajax.php?';
+        $content .= 'a=show_course_information&code='.$course['code'].'">'.get_lang('Description').'</a>&nbsp;';
         if ($course['enrolled'] != "YES") {
-            $content .= '<a class="btn btn-success" title="" href="' . $server . 'plugin/buycourses/src/process.php?code=' . $course['id'] . '">' . $buy_name . '</a>';
+            $content .= '<a class="btn btn-success" title=""';
+            $content .= 'href="'.$server.'plugin/buycourses/src/process.php?code='.$course['id'].'">'.$buy_name.'</a>';
         }
         $content .= '</div>';
         $content .= '</div>';
@@ -244,11 +434,11 @@ if ($_REQUEST['tab'] == 'delete_account') {
 
 if ($_REQUEST['tab'] == 'save_mod') {
     $_REQUEST['id'] = Database::escape_string($_REQUEST['id']);
-    
+
     $id = intval($_REQUEST['course_id']);
     $tableBuy = $tableBuyCourse;
     $tableField = 'course_id';
-    
+
     if (isset($_REQUEST['session_id'])) {
         $id = intval($_REQUEST['session_id']);
         $tableBuy = $tableBuySession;

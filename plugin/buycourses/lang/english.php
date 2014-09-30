@@ -1,4 +1,3 @@
-
 <?php
 $strings['plugin_title'] = "Sell courses";
 $strings['plugin_comment'] = "Sell courses directly through your Chamilo portal, using a PayPal account to receive funds. This plugin is in beta version. Neither the Chamilo association nor the developers involved could be considered responsible of any issue you might suffer using this plugin.";
@@ -66,3 +65,5 @@ $strings['ErrorContactPlatformAdmin'] = "Unknown error. Please contact the platf
 $strings['PayPalConfig'] = "PayPal configuration:";
 $strings['TransfersConfig'] = "Bank transfers configuration:";
 $strings['PayPalPaymentOKPleaseConfirm'] = "PayPal reports the transaction is ready to be executed. To acknowledge that you are OK to proceed, please click the confirmation button below. Once clicked, you will be registered to the course and the funds will be transferred from your PayPal account to our shop. You can always access your courses through the 'My courses' tab. Thank you for your custom!";
+$strings['EnrollToSessionXSuccessful'] = "Your subscription to the session is complete";
+$strings['TheUserIsAlreadyRegisteredInTheSession'] = 'The user is already registered in the session.';

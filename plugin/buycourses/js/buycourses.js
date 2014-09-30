@@ -35,7 +35,7 @@ $(document).ready(function () {
         var visible = $(this).parent().parent().prev().prev().children().attr("checked");
         var price = $(this).parent().parent().prev().children().attr("value");
         var course_id = $(this).attr('id');
-        var courseOrSession = $(this).parent().parent()[0].attributes[0].value;        
+        var courseOrSession = $(this).parent().parent()[0].attributes[0].value;
         if (courseOrSession.indexOf("session") > -1) {
             courseOrSession = "session_id";
         } else {
@@ -55,7 +55,7 @@ $(document).ready(function () {
                     $("#" + courseOrSession + data.course_id).parent().children().each(function () {
                         $(this).removeClass("btop");
                     });
-                }                
+                }
             }, "json");
     });
 
@@ -73,6 +73,30 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
+    $('#confirm_session_filter').click(function (e) {
+        var vsession = $("#session_name").attr("value");
+        var sessionpmin = $("#session_price_min").attr("value");
+        var sessionpmax = $("#session_price_max").attr("value");
+        if ($("#mostrar_disponibles").attr("checked") == "checked") {
+            var vshow = "YES";
+        } else {
+            var vshow = "NO";
+        }
+        var vsessioncategory = $("#sessions_category").attr("value");
+        $.post("function.php", {tab: "sessions_filter", session: vsession, pricemin: sessionpmin, pricemax: sessionpmax, mostrar: vshow, category: vsessioncategory},
+            function (data) {
+                if (data.status == "false") {
+                    alert(data.content);
+                    $("#session_results").html('');
+                } else {
+                    $("#session_results").html(data.content);
+                }
+                $(document).ready(acciones_ajax);
+            }, "json");
+
+        e.preventDefault();
+        e.stopPropagation();
+    });
 
     $('#confirm_filter').click(function (e) {
         var vcourse = $("#course_name").attr("value");
@@ -229,4 +253,4 @@ function acciones_ajax() {
 
 
 }
-		
+

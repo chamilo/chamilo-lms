@@ -15,13 +15,13 @@ $(function() {
 </script>
 
 {% if sessionsAreIncluded == "YES" %}
-    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs"> <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"> <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"> <a href="#tabs-1"> Cursos</a></li><li class="ui-state-default ui-corner-top"> <a href="#tabs-2"> Sesiones</a></li></ul>
+    <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs"> <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"> <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"> <a href="#tabs-1">{{ 'Courses'|get_lang }}</a></li><li class="ui-state-default ui-corner-top"> <a href="#tabs-2">{{ 'Sessions'|get_lang }}</a></li></ul>
 {% endif %}
 
 <div id="tabs-1" class="row">
     <div class="span3">
         <div id="course_category_well" class="well">
-            <ul class="nav nav-list">                
+            <ul class="nav nav-list">
                 <li class="nav-header"><h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4></li>
                 <li class="nav-header">{{ 'CourseName'|get_lang }}:</li>
                 <li><input type="text" id="course_name" style="width:95%"/></li>
@@ -42,7 +42,7 @@ $(function() {
                 </li>
                 <br />
                 <li class="ta-center">
-                    <input type="button" class="btn btn-primary" value="Search Courses" id="confirm_filter" />
+                    <input type="button" class="btn btn-primary" value="{{ 'Search'|get_lang }}" id="confirm_filter" />
                 </li>
             </ul>
         </div>
@@ -100,19 +100,19 @@ $(function() {
 <div id="tabs-2" class="row">
     <div class="span3">
         <div id="course_category_well" class="well">
-            <ul class="nav nav-list">                
+            <ul class="nav nav-list">
                 <li class="nav-header"><h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4></li>
-                <li class="nav-header">{{ 'Nombre de la sesión'|get_lang }}:</li>
-                <li><input type="text" id="course_name" style="width:95%"/></li>
+                <li class="nav-header">{{ 'SessionName'|get_lang }}:</li>
+                <li><input type="text" id="session_name" style="width:95%"/></li>
                 <li class="nav-header">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:
-                    <input type="text" id="price_min" class="span1"/>
+                    <input type="text" id="session_price_min" class="span1"/>
                 </li>
                 <li class="nav-header">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:
-                    <input type="text" id="price_max" class="span1"/>
+                    <input type="text" id="session_price_max" class="span1"/>
                 </li>
                 <li class="nav-header">{{ 'Categories'|get_lang }}:</li>
                 <li>
-                    <select id="courses_category">
+                    <select id="sessions_category">
                         <option value="" selected="selected"></option>
                         {% for category in categories %}
                             <option value="{{ category.code }}">{{ category.name }}</option>
@@ -121,7 +121,7 @@ $(function() {
                 </li>
                 <br />
                 <li class="ta-center">
-                    <input type="button" class="btn btn-primary" value="Search Courses" id="confirm_filter" />
+                    <input type="button" class="btn btn-primary" value="{{ 'Search'|get_lang }}" id="confirm_session_filter" />
                 </li>
             </ul>
         </div>
@@ -137,8 +137,14 @@ $(function() {
                 <div class="row">
                     <div class="span4 ">
                         <div class="categories-course-description">
-                            <h3>{{ session.name }}</h3>                                
-                            <h5>{{ 'From'|get_lang }} {{ session.date_start }} {{ 'To'|get_lang }} {{ session.date_end }}</h5>
+                            <h3>{{ session.name }}</h3>
+                            <h5>{{ 'From'|get_lang }} {{ session.date_start }} {{ 'Until'|get_lang }} {{ session.date_end }}</h5>
+                            {% if session.enrolled == "YES" %}
+                                <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                            {% endif %}
+                            {% if session.enrolled == "TMP" %}
+                                <span class="label label-warning">{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="span right">

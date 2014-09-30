@@ -52,8 +52,8 @@ $tpl->assign('currency', $currencyType);
 
 $result = array_shift(
     Database::select(
-        'selected_value', 
-        Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT), 
+        'selected_value',
+        Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT),
         array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
     )
 );

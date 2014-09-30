@@ -29,21 +29,21 @@ if (!empty($_GET['code'])) {
 
 $result = array_shift(
     Database::select(
-        'selected_value', 
-        Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT), 
+        'selected_value',
+        Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT),
         array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
     )
 );
 
-if ($codeType === 'SESSION' && $result['selected_value'] === 'true') {    
+if ($codeType === 'SESSION' && $result['selected_value'] === 'true') {
     $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
     $tableBuySession = Database::get_main_table(TABLE_BUY_SESSION);
     $sql = "SELECT a.session_id, a.name, a.date_start, a.date_end, a.price
     FROM $tableBuySession a, $tableSession b
-    WHERE a.session_id = " . $code . "
+    WHERE a.session_id = ".$code."
     AND a.session_id = b.id;";
     $res = Database::query($sql);
-    $row = Database::fetch_assoc($res);    
+    $row = Database::fetch_assoc($res);
     $_SESSION['bc_title'] = $row['name'];
     $_SESSION['bc_codetext'] = 'THIS_IS_A_SESSION';
     $tpl->assign('session', sessionInfo($code));

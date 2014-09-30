@@ -1616,4 +1616,5 @@ $LegalAgreementAccepted = "Condiciones legales aceptadas";
 $FieldTypeMobilePhoneNumber = "Número de móvil"; 
 $CountryDialCode = "Incluya el prefijo de llamada del país";
 $MobilePhoneNumberWrong = "El número de móvil que ha escrito está incompleto o contiene caracteres no válidos.";
+$SessionName = "Nombre de la sesión";
 ?>

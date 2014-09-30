@@ -196,7 +196,7 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
-    $(".confirm_order").click(function (e) {console.log('hey');
+    $(".confirm_order").click(function (e) {
         var vid = $(this).parent().attr("id");
         $.post("function.php", {tab: "confirm_order", id: vid},
             function (data) {

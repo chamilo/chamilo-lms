@@ -34,24 +34,26 @@ class LegalManager
 		if ($last['content'] != $content) {
 			$version = intval(LegalManager::get_last_condition_version($language));
 			$version++;
-			 $sql = "INSERT INTO $legal_table
-						SET language_id = '".Database::escape_string($language)."',
-							content = '".$content."',
-							changes= '".$changes."',
-							type = '".$type."',
-							version = '".Database::escape_string($version)."',
-							date = '".$time."'";
-			$result = Database::query($sql);
+			 $sql = "INSERT INTO $legal_table SET
+			            language_id = '".Database::escape_string($language)."',
+                        content = '".$content."',
+                        changes= '".$changes."',
+                        type = '".$type."',
+                        version = '".Database::escape_string($version)."',
+                        date = '".$time."'";
+			Database::query($sql);
+
 			return true;
 		} elseif($last['type'] != $type && $language==$last['language_id']) {
 			//update
 			$id = $last['legal_id'];
-			$sql = "UPDATE $legal_table
-					SET  changes= '".$changes."',
-					type = '".$type."',
-					date = '".$time."'
+			$sql = "UPDATE $legal_table SET
+                        changes= '".$changes."',
+                        type = '".$type."',
+                        date = '".$time."'
 					WHERE legal_id= $id  ";
-			$result = Database::query($sql);
+			Database::query($sql);
+
 			return true;
 		} else {
 			return false;
@@ -72,8 +74,7 @@ class LegalManager
 	 * @param int $language language id
 	 * @return array all the info of a Term and condition
 	 */
-
-	public static function get_last_condition_version ($language)
+	public static function get_last_condition_version($language)
     {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$language= Database::escape_string($language);
@@ -113,17 +114,21 @@ class LegalManager
 	 * @param int $language language id
 	 * @return boolean | int the version or false if does not exist
 	 */
-	public static function get_last_version ($language)
+	public static function get_last_version($language)
     {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$language= Database::escape_string($language);
-		$sql = "SELECT version FROM $legal_conditions_table WHERE language_id = '".$language."' ORDER BY version DESC LIMIT 1 ";
+		$sql = "SELECT version FROM $legal_conditions_table
+		        WHERE language_id = '".$language."'
+		        ORDER BY version DESC LIMIT 1 ";
 		$result = Database::query($sql);
 		if (Database::num_rows($result)>0){
 			$version = Database::fetch_array($result);
 			$version = explode(':',$version[0]);
+
 			return $version[0];
 		} else {
+
 			return false;
 		}
 	}
@@ -131,6 +136,7 @@ class LegalManager
 	/**
 	 * Show the last condition
 	 * @param array with type and content i.e array('type'=>'1', 'content'=>'hola');
+     *
 	 * @return string html preview
 	 */
 	public static function show_last_condition($term_preview)
@@ -247,7 +253,7 @@ class LegalManager
 	 * @param int The language id
 	 * @return int The current type of terms and conditions
 	 */
-	public static function get_type_of_terms_and_conditions ($legal_id,$language_id)
+	public static function get_type_of_terms_and_conditions($legal_id,$language_id)
     {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$legal_id=Database::escape_string($legal_id);

@@ -1263,11 +1263,15 @@ class CourseRestorer
 		}
 	}
 
-	/**
-	 * Restore Quiz
-	 */
-    public function restore_quizzes($session_id = 0, $respect_base_content = false)
-    {
+    /**
+     * Restore Quiz
+     * @param int $session_id
+     * @param bool $respect_base_content
+     */
+    public function restore_quizzes(
+        $session_id = 0,
+        $respect_base_content = false
+    ) {
 		if ($this->course->has_resources(RESOURCE_QUIZ)) {
 			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -1309,7 +1313,9 @@ class CourseRestorer
                     );
 
 					global $_custom;
-					if (isset($_custom['exercises_clean_dates_when_restoring']) && $_custom['exercises_clean_dates_when_restoring']) {
+					if (isset($_custom['exercises_clean_dates_when_restoring']) &&
+                        $_custom['exercises_clean_dates_when_restoring']
+                    ) {
 						$quiz->start_time = null;
 						$quiz->end_time   = null;
 					}
@@ -1418,7 +1424,10 @@ class CourseRestorer
 
             if ($new_id) {
                 if (!empty($question->picture)) {
-                    $question_temp = Question::read($new_id, $this->destination_course_info['real_id']);
+                    $question_temp = Question::read(
+                        $new_id,
+                        $this->destination_course_info['real_id']
+                    );
 
                     $documentPath = api_get_path(SYS_COURSE_PATH).$this->destination_course_info['path'].'/document';
                     // picture path
@@ -1452,7 +1461,7 @@ class CourseRestorer
                             c_id = ".$this->destination_course_id." ,
                             id = '".$index."',
                             question_id = '".$new_id."',
-                            answer = '".self::DBUTF8escapestring($answer['answer'])."',
+                            answer = '".api_htmlentities(self::DBUTF8escapestring($answer['answer']))."',
                             correct = '".$answer['correct']."',
                             comment = '".self::DBUTF8escapestring($answer['comment'])."',
                             ponderation = '".$answer['ponderation']."',
@@ -1550,8 +1559,7 @@ class CourseRestorer
                 } else {
                     $new_options = array();
                     if (isset($question->question_options)) {
-                        foreach($question->question_options as $obj) {
-
+                        foreach ($question->question_options as $obj) {
                             $item = array();
                             $item['question_id'] = $new_id;
                             $item['c_id'] = $this->destination_course_id;
@@ -1561,6 +1569,7 @@ class CourseRestorer
                             $question_option_id = Database::insert($table_options, $item);
                             $new_options[$obj->obj->id] = $question_option_id;
                         }
+
                         foreach($correct_answers as $answer_id => $correct_answer) {
                             $params = array();
                             $params['correct'] = $new_options[$correct_answer];

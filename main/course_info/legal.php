@@ -22,10 +22,48 @@ if (empty($course_code)) {
 $course_info = CourseManager::get_course_information($course_code);
 $course_legal = $course_info['legal'];
 
+$enabled = api_get_plugin_setting('courselegal', 'tool_enable');
+$pluginExtra = null;
+$pluginLegal = false;
+if ($enabled == 'true') {
+    $pluginLegal = true;
+    require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
+    $plugin = CourseLegalPlugin::create();
+    $data = $plugin->getData($course_info['real_id'], $session_id);
+
+    $userData = $plugin->getUserAcceptedLegal(
+        $user_id,
+        $course_info['real_id'],
+        $session_id
+    );
+
+    if (!empty($data)) {
+        $course_legal = $data['content'];
+    }
+
+    if (isset($_GET['web_agreement_link'])) {
+        $plugin->saveUserMailLegal(
+            $_GET['web_agreement_link'],
+            $user_id,
+            $course_info['real_id'],
+            $session_id
+        );
+    }
+}
+
 // Build the form
 $form = new FormValidator('legal', 'GET', api_get_self().'?course_code='.$course_code.'&session_id='.$session_id);
+$pluginMessage = null;
+if ($pluginLegal && isset($userData)) {
+    if ($userData['web_agreement'] == 1 && empty($userData['mail_agreement'])) {
+        $pluginMessage = Display::return_message(get_lang('YouNeedToConfirmYourAgreementCheckYourEmail'));
+    }
+}
 $form->addElement('header', get_lang('CourseLegalAgreement'));
 $form->addElement('label', null, $course_legal);
+if ($pluginLegal && !empty($plugin)) {
+    $form->addElement('label', null, $plugin->getCurrentFile($course_info['real_id'], $session_id));
+}
 $form->addElement('hidden', 'course_code', $course_code);
 $form->addElement('hidden', 'session_id', $session_id);
 $form->addElement('checkbox', 'accept_legal', null, get_lang('AcceptLegal'));
@@ -52,8 +90,13 @@ if (api_check_user_access_to_legal($course_info['visibility']) && Session::read(
 $url = api_get_course_url($course_code, $session_id);
 
 if (empty($session_id)) {
-    if (CourseManager::is_user_subscribed_in_course($user_id, $course_code) || api_check_user_access_to_legal($course_info['visibility'])) {
-        $user_accepted_legal = CourseManager::is_user_accepted_legal($user_id, $course_code);
+    if (CourseManager::is_user_subscribed_in_course($user_id, $course_code) ||
+        api_check_user_access_to_legal($course_info['visibility'])
+    ) {
+        $user_accepted_legal = CourseManager::is_user_accepted_legal(
+            $user_id,
+            $course_code
+        );
         if ($user_accepted_legal || $user_pass_open_course) {
             //Redirect to course home
             header('Location: '.$url);
@@ -73,7 +116,7 @@ if (empty($session_id)) {
     if (isset($user_session_status) || api_check_user_access_to_legal($course_info['visibility'])) {
         $user_accepted_legal = CourseManager::is_user_accepted_legal($user_id, $course_code, $session_id);
         if ($user_accepted_legal || $user_pass_open_course) {
-            //Redirect to course session home
+            // Redirect to course session home.
             header('Location: '.$url);
             exit;
         }
@@ -82,6 +125,7 @@ if (empty($session_id)) {
     }
 }
 
-Display :: display_header($nameTools);
+Display :: display_header();
+echo $pluginMessage;
 $form->display();
 Display :: display_footer();

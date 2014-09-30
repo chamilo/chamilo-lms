@@ -3993,17 +3993,27 @@ class CourseManager
      */
     public static function is_user_accepted_legal($user_id, $course_code, $session_id = null)
     {
-        $user_id    = intval($user_id);
+        $user_id = intval($user_id);
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
+
+        // Course legal
+        $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
+
+        if ($enabled == 'true') {
+            require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
+            $plugin = CourseLegalPlugin::create();
+            return $plugin->isUserAcceptedLegal($user_id, $course_code, $session_id);
+        }
+
         if (empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
             $sql = "SELECT legal_agreement FROM $table
-                    WHERE user_id =  $user_id AND course_code  ='$course_code' ";
+                    WHERE user_id = $user_id AND course_code ='$course_code' ";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0 ) {
                 $result = Database::fetch_array($result);
-                if ($result['legal_agreement'] == 1 ) {
+                if ($result['legal_agreement'] == 1) {
                     return true;
                 }
             }
@@ -4011,11 +4021,11 @@ class CourseManager
         } else {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $sql = "SELECT legal_agreement FROM $table
-                    WHERE id_user =  $user_id AND course_code  ='$course_code' AND id_session = $session_id";
+                    WHERE id_user = $user_id AND course_code ='$course_code' AND id_session = $session_id";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0 ) {
                 $result = Database::fetch_array($result);
-                if ($result['legal_agreement'] == 1 ) {
+                if ($result['legal_agreement'] == 1) {
                     return true;
                 }
             }
@@ -4030,11 +4040,21 @@ class CourseManager
      * @param   string course code
      * @param   int session id
      */
-    function save_user_legal($user_id, $course_code, $session_id = null) {
+    public static function save_user_legal($user_id, $course_code, $session_id = null)
+    {
+        // Course plugin legal
+        $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 
-        $user_id    = intval($user_id);
+        if ($enabled == 'true') {
+            require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
+            $plugin = CourseLegalPlugin::create();
+            return $plugin->saveUserLegal($user_id, $course_code, $session_id);
+        }
+
+        $user_id = intval($user_id);
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
+
         if (empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
             $sql = "UPDATE $table SET legal_agreement = '1'

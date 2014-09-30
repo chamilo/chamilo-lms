@@ -244,9 +244,7 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
                                         <?php if ($session['is_subscribed']) { ?>
                                             <?php echo displayAlreadyRegisterInSessionLabel(); ?>
                                         <?php } else { ?>
-                                            <?php if ($session['visibility'] == SESSION_AVAILABLE) { ?>
-                                                <a class="btn btn-primary" href=""><?php echo get_lang('Subscribe'); ?></a>
-                                            <?php } ?>
+                                            <?php echo displayRegisterInSessionButton($session['name']); ?>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -475,4 +473,22 @@ function displayAlreadyRegisterInSessionLabel()
     $icon = Display::return_icon('students.gif', get_lang('Student'));
 
     return Display::label($icon . ' ' . get_lang("AlreadyRegisteredToSession"), "info");
+}
+
+function displayRegisterInSessionButton($sessionName)
+{
+    $mailSubject = get_lang('SubscribeToSession') . " '$sessionName'";
+    
+    $mailMessage = get_lang('PleaseSubscribemeToSession') . " '$sessionName'" . PHP_EOL;
+    $mailMessage.= get_lang('TheInformationOfMyAccountIs') . ':' . PHP_EOL;
+
+    $mailParams = http_build_query(array(
+        'subject' => $mailSubject,
+        'message' => $mailMessage
+    ));
+
+    return Display::tag('a', get_lang('Subscribe'), array(
+                'class' => 'btn btn-primary clickable_email_link',
+                'href' => "mailto:angelfqc.18@gmail.com&$mailParams"
+    ));
 }

@@ -185,7 +185,8 @@ function handle_uploaded_document(
     $to_user_id = null,
     $unzip = 0,
     $what_if_file_exists = '',
-    $output = true
+    $output = true,
+    $onlyUploadFile = false
 ) {
 	if (!$user_id) {
         die('Not a valid user.');
@@ -263,9 +264,17 @@ function handle_uploaded_document(
 			$document_name = get_document_title($uploaded_file['name']);
 			// Size of the uploaded file (in bytes)
 			$file_size = $uploaded_file['size'];
-
 			$files_perm = api_get_permissions_for_new_files();
-            //$doc_path = '/'.$clean_name;
+
+            if ($onlyUploadFile) {
+                $errorResult = moveUploadedFile($uploaded_file, $store_path);
+                if ($errorResult) {
+                    return $store_path;
+                } else {
+                    return $errorResult;
+                }
+            }
+
             $docId = DocumentManager::get_document_id($_course, $file_path, $current_session_id);
 
             // What to do if the target file exists

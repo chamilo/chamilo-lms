@@ -6,10 +6,6 @@
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-/**
- * Code
- */
-/*	INIT SECTION */
 
 // Language files that need to be included
 $language_file = array('exercice', 'coursebackup', 'admin');
@@ -131,7 +127,9 @@ if ((isset($_POST['action']) &&
 	}
 } else {
 	$user = api_get_user_info();
-	$backups = CourseArchiver::get_available_backups($is_platformAdmin ?null:$user['user_id']);
+	$backups = CourseArchiver::get_available_backups(
+        $is_platformAdmin ? null : $user['user_id']
+    );
 	$backups_available = count($backups) > 0;
 
 	$form = new FormValidator('import_backup_form', 'post', api_get_path(WEB_CODE_PATH).'coursecopy/import_backup.php?'.api_get_cidreq(), '', 'multipart/form-data');

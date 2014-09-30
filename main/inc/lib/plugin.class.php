@@ -292,6 +292,7 @@ class Plugin
     {
         // Check whether the language strings for the plugin have already been
         // loaded. If so, no need to load them again.
+
         if (is_null($this->strings)) {
             global $language_interface;
             $root = api_get_path(SYS_PLUGIN_PATH);
@@ -455,7 +456,7 @@ class Plugin
      */
     public function install_course_fields_in_all_courses($add_tool_link = true)
     {
-        // Update existing courses to add conference settings
+        // Update existing courses to add plugin settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT id FROM $t_courses ORDER BY id";
         $res = Database::query($sql);

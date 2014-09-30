@@ -242,7 +242,7 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
                                         <div class="course-list"></div>
                                         <a class="btn btn-link courses-list-btn" id="showsesion_<?php echo $sessionId ?>" href="#"><?php echo Display::display_icon('nolines_plus.gif'); ?> <?php echo get_lang('Courses') ?></a>
                                         <?php if ($session['is_subscribed']) { ?>
-                                            <?php echo display_already_registered_in_session_label(); ?>
+                                            <?php echo displayAlreadyRegisterInSessionLabel(); ?>
                                         <?php } else { ?>
                                             <?php if ($session['visibility'] == SESSION_AVAILABLE) { ?>
                                                 <a class="btn btn-primary" href=""><?php echo get_lang('Subscribe'); ?></a>
@@ -470,7 +470,7 @@ function display_unregister_button($course, $stok, $search_term, $code)
  * Generate a label if the user has been  registered in session
  * @return string The label
  */
-function display_already_registered_in_session_label()
+function displayAlreadyRegisterInSessionLabel()
 {
     $icon = Display::return_icon('students.gif', get_lang('Student'));
 

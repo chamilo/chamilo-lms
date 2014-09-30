@@ -175,7 +175,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         unset($_user['user_id']);
     }
 
-    //Platform legal terms and conditions
+    // Platform legal terms and conditions
     if (api_get_setting('allow_terms_conditions') == 'true') {
         if (isset($_POST['login']) && isset($_POST['password']) &&
             isset($_SESSION['term_and_condition']['user_id'])

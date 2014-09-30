@@ -3972,16 +3972,16 @@ class CourseManager
         return $wanted_code;
     }
 
-
     /**
      * Gets the status of the users agreement in a course course-session
      *
-     * @param int user id
-     * @param string course code
-     * @param int session id
+     * @param int $user_id
+     * @param string $course_code
+     * @param int $session_id
      * @return boolean
      */
-    public static function is_user_accepted_legal($user_id, $course_code, $session_id = null) {
+    public static function is_user_accepted_legal($user_id, $course_code, $session_id = null)
+    {
         $user_id    = intval($user_id);
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);

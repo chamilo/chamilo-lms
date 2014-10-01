@@ -1461,7 +1461,7 @@ class CourseRestorer
                             c_id = ".$this->destination_course_id." ,
                             id = '".$index."',
                             question_id = '".$new_id."',
-                            answer = '".api_htmlentities(self::DBUTF8escapestring($answer['answer']))."',
+                            answer = '".self::DBUTF8escapestring($answer['answer'])."',
                             correct = '".$answer['correct']."',
                             comment = '".self::DBUTF8escapestring($answer['comment'])."',
                             ponderation = '".$answer['ponderation']."',

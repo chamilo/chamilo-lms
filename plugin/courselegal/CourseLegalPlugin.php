@@ -448,7 +448,8 @@ class CourseLegalPlugin extends Plugin
             if (file_exists($file)) {
                 return Display::url(
                     $data['filename'],
-                    api_get_path(WEB_COURSE_PATH).$course['directory'].'/courselegal/'.$data['filename']
+                    api_get_path(WEB_COURSE_PATH).$course['directory'].'/courselegal/'.$data['filename'],
+                    array('_target' => '_blank')
                 );
             }
         }

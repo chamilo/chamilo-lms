@@ -11,6 +11,8 @@ $stok = Security::get_token();
 $showCourses = false;
 $showSessions = false;
 
+$userInfo = api_get_user_info();
+
 if ($catalogShowCoursesSessions == CATALOG_COURSES || $catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS) {
     $showCourses = true;
 }
@@ -244,7 +246,7 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
                                         <?php if ($session['is_subscribed']) { ?>
                                             <?php echo displayAlreadyRegisterInSessionLabel(); ?>
                                         <?php } else { ?>
-                                            <?php echo displayRegisterInSessionButton($session['name']); ?>
+                                            <?php echo displayRegisterInSessionButton($session['name'], $userInfo); ?>
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -475,12 +477,16 @@ function displayAlreadyRegisterInSessionLabel()
     return Display::label($icon . ' ' . get_lang("AlreadyRegisteredToSession"), "info");
 }
 
-function displayRegisterInSessionButton($sessionName)
+function displayRegisterInSessionButton($sessionName, $userInfo)
 {
     $mailSubject = get_lang('SubscribeToSession') . " '$sessionName'";
     
-    $mailMessage = get_lang('PleaseSubscribemeToSession') . " '$sessionName'" . PHP_EOL;
-    $mailMessage.= get_lang('TheInformationOfMyAccountIs') . ':' . PHP_EOL;
+    $mailMessage = get_lang('PleaseSubscribeToSession') . PHP_EOL . PHP_EOL;
+    $mailMessage = get_lang('Session') . ": $sessionName" . PHP_EOL . PHP_EOL;
+    $mailMessage.= get_lang('ContactInformation') . ':' . PHP_EOL;
+    $mailMessage.= get_lang('Name') . ": {$userInfo['complete_name']}" . PHP_EOL;
+    $mailMessage.= get_lang('Username') . ": {$userInfo['username']}" . PHP_EOL;
+    $mailMessage.= get_lang('Email') . ": {$userInfo['email']}" . PHP_EOL;
 
     $mailParams = http_build_query(array(
         'email_title' => $mailSubject,

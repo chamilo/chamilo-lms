@@ -43,8 +43,8 @@ $form->addElement('button', 'submit', get_lang('SendMail'));
         
 $defaults = array(  'dest' => Security::remove_XSS($_REQUEST['dest']),
                     'email_address' => Security::remove_XSS($_REQUEST['dest']),
-                    'email_title' => Security::remove_XSS($_POST['email_title']),
-                    'email_text' => Security::remove_XSS($_POST['email_text'])
+                    'email_title' => Security::remove_XSS($_REQUEST['email_title']),
+                    'email_text' => Security::remove_XSS($_REQUEST['email_text'])
     
 );
 $form->setDefaults($defaults);

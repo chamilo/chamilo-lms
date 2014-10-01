@@ -483,8 +483,8 @@ function displayRegisterInSessionButton($sessionName)
     $mailMessage.= get_lang('TheInformationOfMyAccountIs') . ':' . PHP_EOL;
 
     $mailParams = http_build_query(array(
-        'subject' => $mailSubject,
-        'message' => $mailMessage
+        'email_title' => $mailSubject,
+        'email_text' => $mailMessage
     ));
 
     return Display::tag('a', get_lang('Subscribe'), array(

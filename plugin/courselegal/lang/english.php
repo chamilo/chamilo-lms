@@ -1,7 +1,7 @@
 <?php
 
-$strings['plugin_title'] = "Course agreements";
-$strings['plugin_comment'] = "Course agreements";
+$strings['plugin_title'] = "Course legal agreement";
+$strings['plugin_comment'] = "Add a legal agreement per course and even course in a session";
 
 $strings['CourseLegal'] = 'Course legal agreement';
 $strings['WebAgreement'] = 'Web agreement';

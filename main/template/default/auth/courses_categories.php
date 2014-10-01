@@ -8,18 +8,10 @@
 */
 $stok = Security::get_token();
 
-$showCourses = false;
-$showSessions = false;
+$showCourses = CoursesAndSessionsCatalog::showCourses();
+$showSessions = CoursesAndSessionsCatalog::showSessions();
 
 $userInfo = api_get_user_info();
-
-if ($catalogShowCoursesSessions == CATALOG_COURSES || $catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS) {
-    $showCourses = true;
-}
-
-if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCoursesSessions == CATALOG_SESSIONS) {
-    $showSessions = true;
-}
 ?>
 <script>
     $(document).ready( function() {
@@ -219,9 +211,8 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
     </div>
 
     <div class="span9">
-        <?php
-        switch ($action) {
-            case 'display_sessions':
+        <?php if ($showSessions && $action == 'display_sessions') { ?>
+            <?php
                 if (!empty($browseSessions)) {
                     foreach ($browseSessions as $session) {
                         $sessionId = $session['id'];
@@ -257,9 +248,10 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
                 } else {
                     Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
                 }
-                break;
-            default:
-        if (!empty($message)) { Display::display_confirmation_message($message, false); }
+            ?>
+        <?php } ?>
+        <?php if ($showCourses && $action != 'display_sessions') { ?>
+        <?php if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }
 
         if (!empty($content)) { echo $content; }
@@ -350,10 +342,8 @@ if ($catalogShowCoursesSessions == CATALOG_COURSES_SESSIONS || $catalogShowCours
             if (!isset($_REQUEST['subscribe_user_with_password']) && !isset($_REQUEST['subscribe_course'])) {
                 Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
             }
-        }
-                break;
-        }
-        ?>
+        } ?>
+        <?php } ?>
     </div>
 </div>
 

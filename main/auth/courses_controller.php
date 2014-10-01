@@ -318,18 +318,10 @@ class CoursesController { // extends Controller {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();
 
-        global $_configuration;
-
         $data['browse_course_categories'] = $browse_course_categories;
         $data['action'] = Security::remove_XSS($action);
         $data['date'] = Security::remove_XSS($date);
         $data['browseSessions'] = $this->model->browseSessions($date);
-
-        $data['catalogShowCoursesSessions'] = 0;
-
-        if (isset($_configuration['catalog_show_courses_sessions'])) {
-            $data['catalogShowCoursesSessions'] = $_configuration['catalog_show_courses_sessions'];
-        }
 
         $this->view->set_data($data);
         $this->view->set_layout('layout');

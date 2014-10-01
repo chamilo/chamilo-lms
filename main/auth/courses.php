@@ -77,7 +77,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 
 // filter actions
 $actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses', 'display_random_courses', 'subscribe_user_with_password', 'display_sessions');
-$action = 'display_random_courses';
+$action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
 $nameTools = get_lang('SortMyCourses');
 
 if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {

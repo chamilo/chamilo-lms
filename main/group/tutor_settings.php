@@ -60,6 +60,23 @@ function search_members_keyword($firstname, $lastname, $username, $official_code
  */
 function sort_users($user_a, $user_b)
 {
+    global $_configuration;
+    if (isset($_configuration['order_user_list_by_official_code']) &&
+        $_configuration['order_user_list_by_official_code']
+    ) {
+        $cmp = api_strcmp($user_a['official_code'], $user_b['official_code']);
+        if ($cmp !== 0) {
+            return $cmp;
+        } else {
+            $cmp = api_strcmp($user_a['lastname'], $user_b['lastname']);
+            if ($cmp !== 0) {
+                return $cmp;
+            } else {
+                return api_strcmp($user_a['username'], $user_b['username']);
+            }
+        }
+    }
+
     if (api_sort_by_first_name()) {
         $cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
         if ($cmp !== 0) {
@@ -115,7 +132,23 @@ if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
 
     foreach ($complete_user_list as $index => $user) {
-        $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+        $officialCode = !empty($user['official_code']) ? ' - '.$user['official_code'] : null;
+        $name = api_get_person_name(
+                $user['firstname'],
+                $user['lastname']
+            ).' ('.$user['username'].')'.$officialCode;
+
+        global $_configuration;
+        if (isset($_configuration['order_user_list_by_official_code']) &&
+            $_configuration['order_user_list_by_official_code']
+        ) {
+            $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
+            $name = $officialCode." ".api_get_person_name(
+                    $user['firstname'],
+                    $user['lastname']
+                ).' ('.$user['username'].')';
+        }
+        $possible_users[$user['user_id']] = $name;
     }
 }
 

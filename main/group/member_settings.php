@@ -27,16 +27,14 @@ $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
-$interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidReq(), 'name' => $current_group['name']);
+$interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'group_space.php?'.api_get_cidReq(), 'name' => $current_group['name']);
 
 $is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
 }
-
-/*	FUNCTIONS */
 
 /**
  *  List all users registered to the course
@@ -60,6 +58,23 @@ function search_members_keyword($firstname, $lastname, $username, $official_code
  */
 function sort_users($user_a, $user_b)
 {
+    global $_configuration;
+    if (isset($_configuration['order_user_list_by_official_code']) &&
+        $_configuration['order_user_list_by_official_code']
+    ) {
+        $cmp = api_strcmp($user_a['official_code'], $user_b['official_code']);
+        if ($cmp !== 0) {
+            return $cmp;
+        } else {
+            $cmp = api_strcmp($user_a['lastname'], $user_b['lastname']);
+            if ($cmp !== 0) {
+                return $cmp;
+            } else {
+                return api_strcmp($user_a['username'], $user_b['username']);
+            }
+        }
+    }
+
     if (api_sort_by_first_name()) {
         $cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
         if ($cmp !== 0) {
@@ -98,6 +113,7 @@ function check_group_members($value)
     if (isset($value['max_student']) && isset($value['group_members']) && $value['max_student'] < count($value['group_members'])) {
         return array('group_members' => get_lang('GroupTooMuchMembers'));
     }
+
     return true;
 }
 
@@ -121,7 +137,24 @@ $possible_users = array();
 if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
     foreach ($complete_user_list as $index => $user) {
-        $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+        $officialCode = !empty($user['official_code']) ? ' - '.$user['official_code'] : null;
+
+        $name = api_get_person_name(
+                $user['firstname'],
+                $user['lastname']
+                ).' ('.$user['username'].')'.$officialCode;
+
+        global $_configuration;
+        if (isset($_configuration['order_user_list_by_official_code']) &&
+            $_configuration['order_user_list_by_official_code']
+        ) {
+            $officialCode = !empty($user['official_code']) ? $user['official_code']." - " : '? - ';
+            $name = $officialCode." ".api_get_person_name(
+                $user['firstname'],
+                $user['lastname']
+            ).' ('.$user['username'].')';
+        }
+        $possible_users[$user['user_id']] = $name;
     }
 }
 
@@ -134,7 +167,13 @@ if (!empty($group_member_list)) {
         $selected_users[] = $user['user_id'];
     }
 }
-$group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 280px;"');
+$group_members_element = $form->addElement(
+    'advmultiselect',
+    'group_members',
+    get_lang('GroupMembers'),
+    $possible_users,
+    'style="width: 280px;"'
+);
 
 $group_members_element->setElementTemplate('
 {javascript}

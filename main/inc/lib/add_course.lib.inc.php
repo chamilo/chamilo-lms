@@ -2374,10 +2374,8 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
     Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0')");
 
     $defaultEmailExerciseAlert = 1;
-    if (isset($_configuration['email_alert_manager_on_new_quiz']) &&
-        !empty($_configuration['email_alert_manager_on_new_quiz'])
-    ) {
-        $defaultEmailExerciseAlert = $_configuration['email_alert_manager_on_new_quiz'];
+    if (isset($_configuration['email_alert_manager_on_new_quiz'])) {
+        $defaultEmailExerciseAlert = intval($_configuration['email_alert_manager_on_new_quiz']);
     }
 
     /* course_setting table (courseinfo tool)   */

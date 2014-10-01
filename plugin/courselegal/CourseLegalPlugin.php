@@ -449,7 +449,7 @@ class CourseLegalPlugin extends Plugin
                 return Display::url(
                     $data['filename'],
                     api_get_path(WEB_COURSE_PATH).$course['directory'].'/courselegal/'.$data['filename'],
-                    array('_target' => '_blank')
+                    array('target' => '_blank')
                 );
             }
         }

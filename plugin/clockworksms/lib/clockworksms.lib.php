@@ -56,13 +56,21 @@ class Clockworksms
         }
     }
 
+    /**
+     * @param int $userId
+     * @return mixed
+     */
     private function getMobilePhoneNumberById($userId)
     {
         require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
+        require_once api_get_path(LIBRARY_PATH).'extra_field_value.lib.php';
+
         $mobilePhoneNumberExtraField = new ExtraField('user');
         $mobilePhoneNumberExtraField = $mobilePhoneNumberExtraField->get_handler_field_info_by_field_variable('mobile_phone_number');
-        require_once api_get_path(LIBRARY_PATH).'extra_field_value.lib.php';
-        $mobilePhoneNumberExtraFieldValue = (new ExtraFieldValue('user'))->get_values_by_handler_and_field_id($userId, $mobilePhoneNumberExtraField['id']);
+
+        $mobilePhoneNumberExtraFieldValue = new ExtraFieldValue('user');
+        $mobilePhoneNumberExtraFieldValue = $mobilePhoneNumberExtraFieldValue->get_values_by_handler_and_field_id($userId, $mobilePhoneNumberExtraField['id']);
+
         return $mobilePhoneNumberExtraFieldValue['field_value'];
     }
 

@@ -21,7 +21,7 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 $form = new FormValidator('plugin', 'post', $url );
-$form->addElement('header', get_lang('CourseLegal'));
+$form->addElement('header', $legal->get_lang('CourseLegal'));
 $form->addElement('hidden', 'session_id', $sessionId);
 $form->addElement('hidden', 'c_id', $courseId);
 $form->addElement('textarea', 'content', get_lang('Text'));
@@ -32,9 +32,9 @@ if (!empty($file)) {
     $form->addElement('label', get_lang('File'), $file);
 }
 
-$form->addElement('checkbox', 'delete_file', null, get_lang('DeleteFile'));
-$form->addElement('checkbox', 'remove_previous_agreements', null, get_lang('RemoveAllUserAgreements'));
-$form->addElement('checkbox', 'warn_users_by_email', null, get_lang('WarnAllUsersByEmail'));
+$form->addElement('checkbox', 'delete_file', null, $legal->get_lang('DeleteFile'));
+$form->addElement('checkbox', 'remove_previous_agreements', null, $legal->get_lang('RemoveAllUserAgreements'));
+$form->addElement('checkbox', 'warn_users_by_email', null, $legal->get_lang('WarnAllUsersByEmail'));
 $form->addElement('button', 'submit', get_lang('Send'));
 
 $form->setDefaults($legal->getData($courseId, $sessionId));
@@ -47,5 +47,10 @@ if ($form->validate()) {
     header('Location: '.$url);
     exit;
 }
-Display::display_header(get_lang('CourseLegal'));
+Display::display_header($legal->get_lang('CourseLegal'));
+$url = api_get_path(WEB_PLUGIN_PATH).'courselegal/user_list.php?'.api_get_cidreq();
+$link = Display::url(Display::return_icon('user.png', get_lang('UserList')), $url);
+echo '<div class="actions">'.$link.'</div>';
 $form->display();
+
+Display::display_footer();

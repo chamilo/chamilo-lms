@@ -48,7 +48,7 @@ class CourseLegalPlugin extends Plugin
         if (api_is_allowed_to_edit()) {
             $url = api_get_path(WEB_PLUGIN_PATH).'courselegal/start.php?'.api_get_cidreq();
             $link = Display::url(
-                get_lang('Legal'),
+                $this->get_lang('CourseLegal'),
                 $url,
                 array('class' => 'btn')
             );
@@ -108,12 +108,12 @@ class CourseLegalPlugin extends Plugin
     }
 
     /**
- * @param int $userId
- * @param int $courseCode
- * @param int $sessionId
- *
- * @return bool
- */
+    * @param int $userId
+    * @param int $courseCode
+    * @param int $sessionId
+    *
+    * @return bool
+    */
     public function saveUserLegal($userId, $courseCode, $sessionId)
     {
         $courseInfo = api_get_course_info($courseCode);
@@ -136,15 +136,78 @@ class CourseLegalPlugin extends Plugin
             );
             $id = Database::insert($table, $values);
 
-            $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?web_agreement_link='.$uniqueId.'&course_code='.Security::remove_XSS($courseCode).'&session_id='.$sessionId;
-            $courseUrl = Display::url($url, $url);
-
-            $subject = get_lang("MailAgreement");
-            $message = sprintf(get_lang("MailAgreementWasSentWithClickX"), $courseUrl);
-            MessageManager::send_message_simple($userId, $subject, $message);
+            $this->sendMailLink($uniqueId, $userId, $courseId, $sessionId);
         }
 
         return $id;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     */
+    public function updateMailAgreementLink($userId, $courseId, $sessionId)
+    {
+        $data = $this->getUserAcceptedLegal($userId, $courseId, $sessionId);
+        if (!empty($data)) {
+            $table = Database::get_main_table(
+                'session_rel_course_rel_user_legal'
+            );
+            $uniqueId = api_get_unique_id();
+            Database::update(
+                $table,
+                array('mail_agreement_link' => $uniqueId),
+                array('id = ? ' => array($data['id']))
+            );
+            $this->sendMailLink($uniqueId, $userId, $courseId, $sessionId);
+        }
+    }
+
+    /**
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     */
+    public function deleteUserAgreement($userId, $courseId, $sessionId)
+    {
+        $data = $this->getUserAcceptedLegal($userId, $courseId, $sessionId);
+        if (!empty($data)) {
+            $table = Database::get_main_table(
+                'session_rel_course_rel_user_legal'
+            );
+            Database::delete(
+                $table,
+                array('id = ? ' => array($data['id']))
+            );
+        }
+    }
+
+    /**
+     * @param string $uniqueId
+     * @param int    $userId
+     * @param int    $courseId
+     * @param int    $sessionId
+     */
+    public function sendMailLink($uniqueId, $userId, $courseId, $sessionId)
+    {
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $courseCode = $courseInfo['code'];
+
+        $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?web_agreement_link='.$uniqueId.'&course_code='.Security::remove_XSS($courseCode).'&session_id='.$sessionId;
+        $courseUrl = Display::url($url, $url);
+        $sessionInfo = api_get_session_info($sessionId);
+        $sesstionTitle = null;
+
+        if (!empty($sessionInfo)) {
+            $sesstionTitle = ' ('.$sessionInfo['name'].')';
+        }
+
+        $courseTitle = $courseInfo['title'].$sesstionTitle;
+
+        $subject = $this->get_lang("MailAgreement");
+        $message = sprintf($this->get_lang("MailAgreementWasSentWithClickX"), $courseTitle, $courseUrl);
+        MessageManager::send_message_simple($userId, $subject, $message);
     }
 
     /**
@@ -192,8 +255,8 @@ class CourseLegalPlugin extends Plugin
         $url = api_get_course_url($courseCode, $sessionId);
         $url = Display::url($url, $url);
 
-        $subject = get_lang("AgreementUpdated");
-        $message = sprintf(get_lang("AgreementWasUpdatedClickHere"), $url);
+        $subject = $this->get_lang("AgreementUpdated");
+        $message = sprintf($this->get_lang("AgreementWasUpdatedClickHere"), $url);
 
         if (!empty($students)) {
             foreach ($students as $student) {
@@ -201,6 +264,35 @@ class CourseLegalPlugin extends Plugin
                 MessageManager::send_message_simple($userId, $subject, $message);
             }
         }
+    }
+
+    /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @return array
+     */
+    public function getUserAgreementList($courseId, $sessionId, $order = null)
+    {
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $table = Database::get_main_table('session_rel_course_rel_user_legal');
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT *
+                FROM $table s INNER JOIN $userTable u
+                ON u.user_id = s.user_id
+                WHERE c_id = $courseId AND session_id = $sessionId ";
+
+        if (!empty($order)) {
+            $sql .= $order;
+        }
+        $result = Database::query($sql);
+        $data = array();
+        if (Database::num_rows($result) > 0 ) {
+            $data = Database::store_result($result, 'ASSOC');
+        }
+
+        return $data;
     }
 
     /**
@@ -318,6 +410,7 @@ class CourseLegalPlugin extends Plugin
     /**
      * @param int $courseId
      * @param int $sessionId
+     *
      * @return array|mixed
      */
     public function getData($courseId, $sessionId)

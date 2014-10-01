@@ -2373,13 +2373,20 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
     Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')");
     Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0')");
 
-    /*    course_setting table (courseinfo tool)   */
+    $defaultEmailExerciseAlert = 1;
+    if (isset($_configuration['email_alert_manager_on_new_quiz']) &&
+        !empty($_configuration['email_alert_manager_on_new_quiz'])
+    ) {
+        $defaultEmailExerciseAlert = $_configuration['email_alert_manager_on_new_quiz'];
+    }
+
+    /* course_setting table (courseinfo tool)   */
 
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_doc',0,'work')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_on_new_doc_dropbox',0,'dropbox')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_agenda',0,'agenda')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_announcement',0,'announcement')");
-    Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_quiz',1,'quiz')");
+    Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_quiz', $defaultEmailExerciseAlert,'quiz')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_image_forum',1,'forum')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'course_theme','','theme')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_learning_path_theme','1','theme')");

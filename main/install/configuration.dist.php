@@ -209,3 +209,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['pdf_logo_header'] = false;
 // Order inscription user list by official_code
 //$_configuration['order_user_list_by_official_code'] = false;
+// Default course setting "email_alert_manager_on_new_quiz"
+//$_configuration['email_alert_manager_on_new_quiz'] = 1;

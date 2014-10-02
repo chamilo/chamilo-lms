@@ -193,8 +193,9 @@ echo "</th>";
 echo "</tr>";
 echo '</table>';
 
-// The form for the reply
+// Set forum attachment data into $_SESSION
 getAttachedFiles($current_forum['forum_id'], $current_thread['thread_id'], $current_post['post_id']);
+// The form for the reply
 $values = show_edit_post_form($forum_setting, $current_post, $current_thread, $current_forum, isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '');
 
 if (!empty($values) and isset($_POST['SubmitPost'])) {
@@ -217,6 +218,7 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
         }
     }
 } else {
+    // Only show Forum attachment ajax form when do not pass form submit
     $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], $current_post['post_id']);
     echo $attachmentAjaxForm;
 }

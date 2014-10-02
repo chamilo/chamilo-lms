@@ -1,7 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
+/** For licensing terms, see /license.txt */
 /**
  * Responses to AJAX calls for forum attachments
+ * @package chamilo/forum
+ * @author Daniel Barreto Alva <daniel.barreto@beeznest.com>
  */
 
 /**
@@ -13,16 +15,19 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /**
  * Main code
  */
+// Create a default error response
+$json = array(
+    'error' => true,
+    'errorMessage' => 'ERROR',
+);
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+// Check if exist action
 if (!empty($action)) {
     require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
-    $json = array(
-        'error' => true,
-        'errorMessage' => 'ERROR',
-    );
     switch($action) {
         case 'upload_file':
-            api_protect_course_script(true);
+            // First, protect this script
+            api_protect_course_script(false);
             if (!empty($_FILES) && !empty($_REQUEST['forum'])) {
                 // The user is not allowed here if
                 // 1. the forum category, forum or thread is invisible (visibility==0)
@@ -52,18 +57,25 @@ if (!empty($action)) {
                 $postId = isset($_REQUEST['postId'])? intval($_REQUEST['postId']) : null;
                 $json['postId'] = $postId;
                 if (!empty($courseId) && !is_null($forumId) && !is_null($threadId) && !is_null($postId)) {
-
+                    // Save forum attachment
                     $attachId = add_forum_attachment_file('', $postId);
                     if ($attachId !== false) {
-                        $json = getAttachedFiles($forumId, $threadId, $postId, $attachId, $courseId);
-                        $json['error'] = false;
-                        $json['errorMessage'] = 'Success';
-
+                        // Get prepared array of attachment data
+                        $array = getAttachedFiles($forumId, $threadId, $postId, $attachId, $courseId);
+                        // Check if array data is consistent
+                        if (isset($array['name'])) {
+                            $json['error'] = false;
+                            $json['errorMessage'] = 'Success';
+                            $json = array_merge($json, $array);
+                        }
                     }
                 }
             }
             break;
         case 'delete_file':
+            // First, protect this script
+            api_protect_course_script(false);
+            // Check if set attachment ID and thread ID
             if (isset($_REQUEST['attachId']) && isset($_REQUEST['thread'])) {
                 api_block_course_item_locked_by_gradebook($_REQUEST['thread'], LINK_FORUM_THREAD);
                 // The user is not allowed here if
@@ -93,6 +105,7 @@ if (!empty($action)) {
                 // If pass all previous control, user can edit post
                 $attachId = $_REQUEST['attachId'];
                 $threadId = $_REQUEST['thread'];
+                // Delete forum attachment from database and file system
                 $affectedRows = delete_attachment(0, $attachId, false);
                 if ($affectedRows > 0) {
                     $json['error'] = false;

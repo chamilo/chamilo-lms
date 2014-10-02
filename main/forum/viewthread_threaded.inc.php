@@ -288,7 +288,6 @@ echo "</tr>";
 
 // The check if there is an attachment
 $attachment_list = getAllAttachment($display_post_id);
-
 if (!empty($attachment_list) && is_array($attachment_list)) {
     foreach ($attachment_list as $attachment) {
         echo '<tr><td height="50%">';

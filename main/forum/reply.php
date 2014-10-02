@@ -167,6 +167,7 @@ if (!empty($values) AND isset($_POST['SubmitPost'])) {
     window.location = "'.$url.'";
     </script>';
 } else {
+    // Only show Forum attachment ajax form when do not pass form submit
     $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], 0);
     echo $attachmentAjaxForm;
 }

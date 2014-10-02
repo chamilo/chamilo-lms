@@ -56,7 +56,7 @@ function setFocus() {
     $("#title_file").focus();
 }
 </script>';
-
+// The next javascript script is to manage ajax upload file
 $htmlHeadXtra[] = "
 <script>
 $(function () {
@@ -84,8 +84,9 @@ $(function () {
     });
 });
 </script>";
+// Recover Thread ID, will be used to generate delete attachment URL to do ajax
 $threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
-
+// The next javascript script is to delete file by ajax
 $htmlHeadXtra[] =
     '<script>
         function enableDeleteFile() {
@@ -2378,7 +2379,9 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $values = $form->exportValues();
     }
 
+    // Delete from $_SESSION forum attachment from other posts
     clearAttachedFiles(0);
+    // Get forum attachment ajax table to add it to form
     $fileData = getAttachmentAjaxTable(0, $current_forum['forum_id']);
     $form->addElement('html', $fileData);
     $form->addElement('html', '</div>');
@@ -4007,7 +4010,7 @@ function getAllAttachment($postId)
  * Delete the all the attachments from the DB and the file according to the post's id or attach id(optional)
  * @param post id
  * @param int $id_attach
- * @param bool $display
+ * @param bool $display to show or not result message
  * @return void
  * @author Julio Montoya Dokeos
  * @version october 2014, chamilo 1.9.8
@@ -4703,22 +4706,31 @@ function _phorum_recursive_sort($rows, &$threads, $seed = 0, $indent = 0)
 }
 
 /**
- * @param $array
- * @param $id
- * @param null $courseId
- * @return int
+ * Update forum attachment data, used to update comment and post ID.
+ * @param $array Array (field => value) to update forum attachment row.
+ * @param $id Attach ID to find row to update.
+ * @param null $courseId Course ID to find row to update.
+ * @return int Number of affected rows.
  */
 function editAttachedFile($array, $id, $courseId = null) {
+    // Init variables
     $setString = '';
+    $id = intval($id);
+    $courseId = intval($courseId);
     if (empty($courseId)) {
+        // $courseId can be null, use api method
         $courseId= api_get_course_int_id();
     }
-    $id = intval($id);
-    if ($id > 0) {
+    /*
+     * Check if Attachment ID and Course ID are greater than zero
+     * and array of field values is not empty
+     */
+    if ($id > 0 && $courseId > 0 && !empty($array) && is_array($array)) {
         foreach($array as $key => &$item) {
             $item = Database::escape_string($item);
             $setString .= $key . ' = "' .$item . '", ';
         }
+        // Delete last comma
         $setString = substr($setString, 0, strlen($setString) - 2);
         $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
         $sql = "UPDATE $forumAttachmentTable SET $setString WHERE c_id = $courseId AND id = $id";
@@ -4726,10 +4738,15 @@ function editAttachedFile($array, $id, $courseId = null) {
         if ($result !== false) {
             $affectedRows = Database::affected_rows($result);
             if ($affectedRows > 0) {
+                /*
+                 * If exist in $_SESSION variable, then delete them from it
+                 * because they would be deprecated
+                 */
                 if (!empty($_SESSION['forum']['upload_file'][$courseId][$id])) {
                     unset($_SESSION['forum']['upload_file'][$courseId][$id]);
                 }
             }
+
             return $affectedRows;
         }
     }
@@ -4738,73 +4755,91 @@ function editAttachedFile($array, $id, $courseId = null) {
 }
 
 /**
- * @param $forumId
- * @param $threadId
- * @param $postId
- * @param null $path
- * @return string
+ * Return a form to upload asynchronously attachments to forum post.
+ * @param $forumId Forum ID from where the post is
+ * @param $threadId Thread ID where forum post is
+ * @param $postId Post ID to identify Post
+ * @param null $path Path where are forum attachment files
+ * @return string The Forum Attachment Ajax Form
  */
 function getAttachmentAjaxForm($forumId, $threadId, $postId, $path = null)
 {
+    // Init variables
     $forumId = intval($forumId);
     $postId = intval($postId);
     $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
     if ($forumId === 0) {
+        // Forum ID must be defined
+
         return '';
     }
     $url = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?forum=' . $forumId . '&thread=' . $threadId . '&postId=' . $postId . '&a=upload_file';
     if (empty($path)) {
+        // If there is not path, use
         $path = '/../upload/forum';
     } else {
         $testPath = api_get_path(SYS_COURSE_PATH).'/'.api_get_course_id().'/document'.$path;
+        // Check if path exists
         if (!file_exists($testPath)) {
+
             return '';
         }
     }
+    // Form
     $formFileUpload = '
-        <center>
         <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="curdirpath" value="'.$path.'" />
             <input type="file" name="user_upload" multiple>
             <button type="submit">Upload</button>
             '.get_lang('UploadFiles').'
         </form>
-        </center>
         ';
 
     return $formFileUpload;
 }
 
+/**
+ * Return a table where the attachments will be set
+ * @param null $postId Forum Post ID
+ * @return string The Forum Attachment Ajax Table
+ */
 function getAttachmentAjaxTable($postId = null)
 {
+    // Init variables
     $postId = intval($postId);
     $courseId = api_get_course_int_id();
     $attachIds = getAttachmentIdsByPostId($postId, $courseId);
+    $fileDataContent = '';
     // Update comment to show if form did not pass validation
-    if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
-        foreach ($_POST['file_ids'] as $key => $attachId) {
+    if (!empty($_REQUEST['file_ids']) && is_array($_REQUEST['file_ids'])) {
+        // 'file_ids is the name from forum attachment ajax form
+        foreach ($_REQUEST['file_ids'] as $key => $attachId) {
             if (!empty($_SESSION['forum']['upload_file'][$courseId][$attachId]) && is_array($_SESSION['forum']['upload_file'][$courseId][$attachId])) {
+                // If exist forum attachment then update into $_SESSION data
                 $_SESSION['forum']['upload_file'][$courseId][$attachId]['comment'] = $_POST['file_comments'][$key];
             }
         }
     }
-
     // Get data to fill into attachment files table
-    $fileDataContent = '';
     if (!empty($_SESSION['forum']['upload_file'][$courseId]) && is_array($_SESSION['forum']['upload_file'][$courseId])) {
         $uploadedFiles = $_SESSION['forum']['upload_file'][$courseId];
         foreach ($uploadedFiles as $k => $uploadedFile) {
             if (!empty($uploadedFile) && in_array($uploadedFile['id'], $attachIds)) {
+                // Buil html table including an input with attachmentID
                 $fileDataContent .= '<tr id=' . $uploadedFile['id'] . ' ><td>' . $uploadedFile['name'] . '</td><td>' . $uploadedFile['size'] . '</td><td>&nbsp;' . $uploadedFile['result'] .
                     ' </td><td> <input type="text" value="' . $uploadedFile['comment'] . '" name="file_comments[]"> </td><td>' .
                     $uploadedFile['delete'] . '</td>' .
                     '<input type="hidden" value="' . $uploadedFile['id'] .'" name="file_ids[]">' . '</tr>';
             } else {
+                /*
+                 * If attachment data is empty, then delete it from $_SESSION
+                 * because could generate and empty row into html table
+                 */
                 unset($_SESSION['forum']['upload_file'][$courseId][$k]);
             }
         }
     }
-    // User upload data
+    // Forum attachment Ajax table
     $fileData = '
     <div class="control-group ">
         <label class="control-label">'.get_lang('AttachmentFilesList').'</label>
@@ -4826,6 +4861,8 @@ function getAttachmentAjaxTable($postId = null)
 }
 
 /**
+ * Return an array of prepared attachment data to build forum attachment table
+ * Also, save this array into $_SESSION to do available the attachment data
  * @param $forumId
  * @param $threadId
  * @param null $postId
@@ -4834,22 +4871,26 @@ function getAttachmentAjaxTable($postId = null)
  * @return array
  */
 function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null, $courseId = null) {
+    // Init values
     $forumId = intval($forumId);
     $courseId = intval($courseId);
     $attachId = intval($attachId);
     $postId = intval($postId);
     $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
     if (empty($courseId)) {
+        // $courseId can be null, use api method
         $courseId = api_get_course_int_id();
     }
     if (empty($forumId)) {
         if (!empty($_REQUEST['forum'])) {
             $forumId = intval($_REQUEST['forum']);
         } else {
+            // if forum ID is empty, cannot generate delete url
 
             return array();
         }
     }
+    // Check if exist at least one of them to filter forum attachment select query
     if (empty($postId) && empty($attachId)) {
 
         return array();
@@ -4865,6 +4906,7 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
     $result = Database::query($sql);
     if ($result !== false && Database::num_rows($result) > 0) {
         while ($row = Database::fetch_array($result, 'ASSOC')) {
+            // name contains an URL to download attachment file and its filename
             $json['name'] = Display::url(
                 api_htmlentities($row['filename']),
                 api_get_path(WEB_CODE_PATH) . 'forum/download.php?file='.$row['path'],
@@ -4872,8 +4914,11 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
             );
             $json['id'] = $row['id'];
             $json['comment'] = $row['comment'];
+            // Format file size
             $json['size'] = format_file_size($row['size']);
+            // Check if $row is consistent
             if (!empty($row) && is_array($row)) {
+                // Set result as succes and bring delete URL
                 $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded'));
                 $json['delete'] = '<a class="deleteLink" href="'.api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php' .
                     '?' . api_get_cidreq() . '&amp;origin=' . Security::remove_XSS($_GET['origin']) .
@@ -4881,9 +4926,10 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
                     '&amp;id_attach=' . $row['id'] . '">' .
                     Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
             } else {
+                // If not, set an exclamation result
                 $json['result'] = Display::return_icon('exclamation.png', get_lang('Error'));
             }
-
+            // Store array data into $_SESSION
             $_SESSION['forum']['upload_file'][$courseId][$json['id']] = $json;
         }
     }
@@ -4892,54 +4938,77 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
 }
 
 /**
+ * Clear forum attachment data stored in $_SESSION,
+ * If is not defined post, it will clear all forum attachment data from course
  * @param null $postId -1 : Clear all attachments from course stored in $_SESSION
- * @param null $courseId
+ *                      0 : Clear attachments from course, except from temporal post "0"
+ *                          but without delete them from file system and database
+ *                     Other values : Clear attachments from course except specified post
+ *                          and delete them from file system and database
+ * @param null $courseId : Course ID, if it is null, will use api_get_course_int_id()
+ * @return array
  */
 function clearAttachedFiles($postId = null, $courseId = null) {
+    // Init variables
     $courseId = intval($courseId);
     $postId = intval($postId);
+    $array = array();
     if (empty($courseId)) {
+        // $courseId can be null, use api method
         $courseId = api_get_course_int_id();
     }
     if ($postId === -1) {
-        if (!empty($_SESSION['forum']['upload_file'][$courseId]))
-        unset($_SESSION['forum']['upload_file'][$courseId]);
+        // If post ID is -1 then delete course's attachment data from $_SESSION
+        if (!empty($_SESSION['forum']['upload_file'][$courseId])) {
+            $array = array_keys($_SESSION['forum']['upload_file'][$courseId]);
+            unset($_SESSION['forum']['upload_file'][$courseId]);
+        }
     } else {
         $attachIds = getAttachmentIdsByPostId($postId, $courseId);
         if (!empty($_SESSION['forum']['upload_file'][$courseId]) &&
             is_array($_SESSION['forum']['upload_file'][$courseId])) {
             foreach ($_SESSION['forum']['upload_file'][$courseId] as $attachId => $attach) {
                 if (!in_array($attachId, $attachIds)) {
-
+                    // If attach ID is not into specified post, delete attachment
+                    // Save deleted attachment ID
+                    $array[] = $attachId;
                     if ($postId !== 0) {
+                        // Post 0 is temporal, delete them from file system and DB
                         delete_attachment(0, $attachId, false);
                     }
+                    // Delete attachment data from $_SESSION
                     unset($_SESSION['forum']['upload_file'][$courseId][$attachId]);
                 }
             }
         }
     }
+
+    return $array;
 }
 
 /**
+ * Returns an array of forum attachment ids into a course and forum post
  * @param $postId
  * @param null $courseId
  * @return array
  */
 function getAttachmentIdsByPostId($postId, $courseId = null) {
+    // Init variables
     $array = array();
     $courseId = intval($courseId);
     $postId = intval($postId);
     if (empty($courseId)) {
+        // $courseId can be null, use api method
         $courseId = api_get_course_int_id();
     }
-    $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-    $sql = "SELECT id FROM $forumAttachmentTable WHERE c_id = $courseId AND post_id = $postId";
-    $result = Database::query($sql);
-
-    if ($result !== false && Database::num_rows($result) > 0) {
-        while ($row = Database::fetch_array($result,'ASSOC')) {
-            $array[] = $row['id'];
+    if ($courseId > 0) {
+        $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+        $sql = "SELECT id FROM $forumAttachmentTable WHERE c_id = $courseId AND post_id = $postId";
+        $result = Database::query($sql);
+        if ($result !== false && Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result,'ASSOC')) {
+                $array[] = $row['id'];
+            }
         }
     }
     return $array;

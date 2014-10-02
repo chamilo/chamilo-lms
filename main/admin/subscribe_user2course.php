@@ -48,14 +48,9 @@ Display :: display_header($tool_name);
 $link_add_group = '<a href="usergroups.php">'.Display::return_icon('multiple.gif',get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
 echo '<div class="actions">'.$link_add_group.'</div>';
 
-// displaying the tool title
-// api_display_tool_title($tool_name);
-
 $form = new FormValidator('subscribe_user2course');
 $form->addElement('header', '', $tool_name);
 $form->display();
-
-/* MAIN CODE */
 
 //checking for extra field with filter on
 $extra_field_list= UserManager::get_extra_fields();
@@ -70,7 +65,7 @@ if (is_array($extra_field_list)) {
 }
 
 /* React on POSTed request */
-if ($_POST['form_sent']) {
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $users = is_array($_POST['UserList']) ? $_POST['UserList'] : array() ;
     $courses = is_array($_POST['CourseList']) ? $_POST['CourseList'] : array() ;
@@ -82,7 +77,7 @@ if ($_POST['form_sent']) {
     }
 
     if ($form_sent == 1) {
-        if ( count($users) == 0 || count($courses) == 0) {
+        if (count($users) == 0 || count($courses) == 0) {
             Display :: display_error_message(get_lang('AtLeastOneUserAndOneCourse'));
         } else {
             $errorDrh = 0;
@@ -90,12 +85,13 @@ if ($_POST['form_sent']) {
                 foreach ($users as $user_id) {
                     $user = api_get_user_info($user_id);
                     if ($user['status'] <> DRH) {
-                        CourseManager::subscribe_user($user_id,$course_code);
+                        CourseManager::subscribe_user($user_id, $course_code);
                     } else {
                         $errorDrh = 1;
                     }
                 }
             }
+
             if ($errorDrh == 0) {
                 Display :: display_confirmation_message(get_lang('UsersAreSubscibedToCourse'));
             } else {
@@ -106,17 +102,20 @@ if ($_POST['form_sent']) {
 }
 
 /* Display GUI */
-if(empty($first_letter_user)) {
+if (empty($first_letter_user)) {
     $sql = "SELECT count(*) as nb_users FROM $tbl_user";
     $result = Database::query($sql);
     $num_row = Database::fetch_array($result);
-    if($num_row['nb_users']>1000)
-    {//if there are too much users to gracefully handle with the HTML select list,
-     // assign a default filter on users names
+    if  ($num_row['nb_users']>1000) {
+        //if there are too much users to gracefully handle with the HTML select list,
+        // assign a default filter on users names
         $first_letter_user = 'A';
     }
     unset($result);
 }
+
+
+$where_filter = null;
 
 //Filter by Extra Fields
 $use_extra_fields = false;
@@ -128,7 +127,10 @@ if (is_array($extra_field_list)) {
             if (UserManager::is_extra_field_available($new_field['variable'])) {
                 if (isset($_POST[$varname]) && $_POST[$varname]!='0') {
                     $use_extra_fields = true;
-                    $extra_field_result[]= UserManager::get_extra_user_data_by_value($new_field['variable'], $_POST[$varname]);
+                    $extra_field_result[]= UserManager::get_extra_user_data_by_value(
+                        $new_field['variable'],
+                        $_POST[$varname]
+                    );
                 }
             }
         }
@@ -147,8 +149,7 @@ if ($use_extra_fields) {
         $final_result = $extra_field_result[0];
     }
 
-    $where_filter ='';
-    if ($_configuration['multiple_access_urls']) {
+    if (api_is_multiple_url_enabled()) {
         if (is_array($final_result) && count($final_result)>0) {
             $where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
         } else {
@@ -166,21 +167,35 @@ if ($use_extra_fields) {
 }
 
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
-$sql = "SELECT user_id,lastname,firstname,username
+$orderBy = $target_name;
+$showOfficialCode = false;
+global $_configuration;
+if (isset($_configuration['order_user_list_by_official_code']) &&
+     $_configuration['order_user_list_by_official_code']
+) {
+    $showOfficialCode = true;
+    $orderBy = " official_code, firstname, lastname";
+}
+
+$sql = "SELECT user_id, lastname, firstname, username, official_code
         FROM $tbl_user
         WHERE user_id<>2 AND ".$target_name." LIKE '".$first_letter_user."%' $where_filter
-        ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
+        ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
 
-global $_configuration;
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
     $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1){
-        $sql = "SELECT u.user_id,lastname,firstname,username  FROM ".$tbl_user ." u
-        INNER JOIN $tbl_user_rel_access_url user_rel_url
-        ON (user_rel_url.user_id = u.user_id)
-        WHERE u.user_id<>2 AND access_url_id =  $access_url_id AND (".$target_name." LIKE '".$first_letter_user."%' ) $where_filter
-        ORDER BY ". (count($users) > 0 ? "(u.user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
+        $sql = "SELECT u.user_id,lastname,firstname,username, official_code
+                FROM ".$tbl_user ." u
+                INNER JOIN $tbl_user_rel_access_url user_rel_url
+                ON (user_rel_url.user_id = u.user_id)
+                WHERE
+                    u.user_id<>2 AND
+                    access_url_id =  $access_url_id AND
+                    (".$target_name." LIKE '".$first_letter_user."%' )
+                    $where_filter
+                ORDER BY ". (count($users) > 0 ? "(u.user_id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
     }
 }
 
@@ -188,17 +203,23 @@ $result = Database::query($sql);
 $db_users = Database::store_result($result);
 unset($result);
 
-$sql = "SELECT code,visual_code,title FROM $tbl_course WHERE visual_code LIKE '".$first_letter_course."%' ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+$sql = "SELECT code,visual_code,title
+        FROM $tbl_course
+        WHERE visual_code LIKE '".$first_letter_course."%'
+        ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1){
         $sql = "SELECT code, visual_code, title
                 FROM $tbl_course as course
-                  INNER JOIN $tbl_course_rel_access_url course_rel_url
+                INNER JOIN $tbl_course_rel_access_url course_rel_url
                 ON (course_rel_url.course_code= course.code)
-                  WHERE access_url_id =  $access_url_id  AND (visual_code LIKE '".$first_letter_course."%' ) ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+                WHERE
+                    access_url_id =  $access_url_id  AND
+                    (visual_code LIKE '".$first_letter_course."%' )
+                ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
     }
 }
 
@@ -206,22 +227,25 @@ $result = Database::query($sql);
 $db_courses = Database::store_result($result);
 unset($result);
 
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+    $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1){
         $sqlNbCours = "	SELECT course_rel_user.course_code, course.title
             FROM $tbl_course_user as course_rel_user
             INNER JOIN $tbl_course as course
             ON course.code = course_rel_user.course_code
-              INNER JOIN $tbl_course_rel_access_url course_rel_url
+            INNER JOIN $tbl_course_rel_access_url course_rel_url
             ON (course_rel_url.course_code= course.code)
-              WHERE access_url_id =  $access_url_id  AND course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-              ORDER BY course.title";
+            WHERE
+                access_url_id =  $access_url_id  AND
+                course_rel_user.user_id='".$_user['user_id']."' AND
+                course_rel_user.status='1'
+            ORDER BY course.title";
     }
 }
 ?>
-
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <?php
 if (is_array($extra_field_list)) {
@@ -280,23 +304,38 @@ if (is_array($extra_field_list)) {
     <td width="40%" align="center">
      <select name="UserList[]" multiple="multiple" size="20" style="width:300px;">
 <?php
-        foreach ($db_users as $user) {
+    foreach ($db_users as $user) {
 ?>
-      <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?></option>
+      <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>>
+      <?php
+        $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+        if ($showOfficialCode) {
+
+            $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
+            $userName = $officialCode.$userName;
+        }
+
+        echo $userName;
+      ?>
+      </option>
 <?php
 }
 ?>
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <button type="submit" class="add" value="<?php echo get_lang('AddToThatCourse'); ?> &gt;&gt;"><?php echo get_lang('AddToThatCourse'); ?></button>
+    <button type="submit" class="add" value="<?php echo get_lang('AddToThatCourse'); ?> &gt;&gt;">
+        <?php echo get_lang('AddToThatCourse'); ?>
+    </button>
    </td>
    <td width="40%" align="center">
     <select name="CourseList[]" multiple="multiple" size="20" style="width:300px;">
 <?php
-        foreach ($db_courses as $course) {
+    foreach ($db_courses as $course) {
 ?>
-     <option value="<?php echo $course['code']; ?>" <?php if(in_array($course['code'],$courses)) echo 'selected="selected"'; ?>><?php echo '('.$course['visual_code'].') '.$course['title']; ?></option>
+     <option value="<?php echo $course['code']; ?>" <?php if(in_array($course['code'],$courses)) echo 'selected="selected"'; ?>>
+         <?php echo '('.$course['visual_code'].') '.$course['title']; ?>
+     </option>
 <?php
 }
 ?>
@@ -306,5 +345,5 @@ if (is_array($extra_field_list)) {
  </table>
 </form>
 <?php
-/* FOOTER */
+
 Display :: display_footer();

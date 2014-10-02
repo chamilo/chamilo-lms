@@ -109,6 +109,7 @@ class UserManager
         ) {
             $num = self::get_number_of_users(1);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
+                api_warn_hosting_contact('hosting_limit_teachers');
                 return api_set_failure('portal teachers limit reached');
             }
         }

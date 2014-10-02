@@ -123,6 +123,8 @@ $_configuration[1]['hosting_limit_sessions'] = 0;
 // Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB).
 // Default (0) = no limit
 $_configuration[1]['hosting_limit_disk_space'] = 0;
+// Email to warn if limit was reached.
+//$_configuration[1]['hosting_contact_mail'] = 'example@example.org';
 
 /**
  * Content Delivery Network (CDN) settings. Only use if you need a separate

@@ -97,6 +97,7 @@ class UserManager
             $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
+                api_warn_hosting_contact('hosting_limit_users');
                 return api_set_failure('portal users limit reached');
             }
         }
@@ -4598,8 +4599,8 @@ EOF;
 
                 case self::USER_FIELD_TYPE_MOBILE_PHONE_NUMBER:
                     $form->addElement(
-                        'text', 
-                        'extra_'.$field_details[1], 
+                        'text',
+                        'extra_'.$field_details[1],
                         $field_details[3]." (".get_lang('CountryDialCode').")",
                         array('size' => 40, 'placeholder'  => '(xx)xxxxxxxxx')
                     );
@@ -4607,8 +4608,8 @@ EOF;
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
                     $form->applyFilter('extra_'.$field_details[1], 'mobile_phone_number_filter');
                     $form->addRule(
-                        'extra_'.$field_details[1], 
-                        get_lang('MobilePhoneNumberWrong'), 
+                        'extra_'.$field_details[1],
+                        get_lang('MobilePhoneNumberWrong'),
                         'mobile_phone_number'
                     );
                     if (!$admin_permissions) {

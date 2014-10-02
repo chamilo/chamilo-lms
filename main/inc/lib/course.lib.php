@@ -49,6 +49,7 @@ class CourseManager
         ) {
             $num = self::count_courses();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
+                api_warn_hosting_contact('hosting_limit_courses');
                 return api_set_failure('PortalCoursesLimitReached');
             }
         }

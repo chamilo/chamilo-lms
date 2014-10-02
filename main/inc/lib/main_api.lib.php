@@ -7386,3 +7386,39 @@ function api_get_full_setting($variable, $key = null) {
 
     return $setting;
 }
+
+/**
+ * Warns an user that the portal reach certain limit.
+ * @param string $limitName
+ */
+function api_warn_hosting_contact($limitName)
+{
+    $hostingParams = api_get_configuration_value(1);
+    $email = null;
+
+    if (!empty($hostingParams)) {
+        if (isset($hostingParams['hosting_contact_mail'])) {
+            $email = $hostingParams['hosting_contact_mail'];
+        }
+    }
+
+    if (!empty($email)) {
+        $subject = get_lang('HostingWarningReached');
+        $body = get_lang('Portal').': '.api_get_path(WEB_PATH)." \n ";
+        $body .= get_lang('Limit').': '.$limitName;
+        api_mail_html(null, $email, $subject, $body);
+    }
+}
+
+/**
+ * @param string $variable
+ * @return bool|mixed
+ */
+function api_get_configuration_value($variable)
+{
+    global $_configuration;
+    if (isset($_configuration[$variable])) {
+        return $_configuration[$variable];
+    }
+    return false;
+}

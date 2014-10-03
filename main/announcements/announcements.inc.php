@@ -710,7 +710,7 @@ class AnnouncementManager
      */
     public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
     {
-        echo '<select name="not_selected_form[]" size="7" class="span4" multiple>';
+        echo '<select id="not_selected_form" name="not_selected_form[]" size="7" class="span4" multiple>';
         // adding the groups to the select form
         if ($group_list) {
             foreach ($group_list as $this_group) {

@@ -943,7 +943,7 @@ class IndexManager
      * The most important function here, prints the session and course list (user_portal.php)
      *
      * */
-    function return_courses_and_sessions($user_id)
+    public function return_courses_and_sessions($user_id)
     {
         global $_configuration;
 

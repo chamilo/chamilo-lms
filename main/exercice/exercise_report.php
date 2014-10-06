@@ -378,9 +378,12 @@ if (!empty($group_parameters)) {
     $group_parameters = implode(';', $group_parameters);
 }
 
+$officialCodeInList = api_get_configuration_value('show_official_code_exercise_result_list');
+
 if ($is_allowedToEdit || $is_tutor) {
 
     //The order is important you need to check the the $column variable in the model.ajax.php file
+
     $columns = array(
         get_lang('FirstName'),
         get_lang('LastName'),
@@ -394,6 +397,10 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('ToolLearnpath'),
         get_lang('Actions')
     );
+
+    if ($officialCodeInList == true) {
+        $columns = array_merge(array(get_lang('OfficialCode')), $columns);
+    }
 
     //Column config
     $column_model = array(
@@ -421,6 +428,11 @@ if ($is_allowedToEdit || $is_tutor) {
         array('name' => 'lp', 'index' => 'lp', 'width' => '60', 'align' => 'left', 'search' => 'false'),
         array('name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false')
     );
+
+    if ($officialCodeInList == true) {
+        $officialCodeRow = array('name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true');
+        $column_model = array_merge(array($officialCodeRow), $column_model);
+    }
 
     $action_links = '
     // add username as title in lastname filed - ref 4226

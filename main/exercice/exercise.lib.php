@@ -999,8 +999,8 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
  * Gets the exam'data results
  * @todo this function should be moved in a library  + no global calls
  */
-function get_exam_results_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
-
+function get_exam_results_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false)
+{
     //@todo replace all this globals
     global $documentPath, $filter;
 
@@ -1099,11 +1099,10 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             $is_empty_sql_inner_join_tbl_user = true;
              $sql_inner_join_tbl_user = "
             (
-                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id
+                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
                 FROM $TBL_USER u
             )";
         }
-
 
         $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
         $sqlWhereOption = "  AND gru.c_id = ".api_get_course_int_id()." AND gru.user_id = user.user_id ";
@@ -1116,6 +1115,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             $sql_select = "SELECT DISTINCT
                     user_id,
                     $first_and_last_name,
+                    official_code,
                     ce.title,
                     username,
                     te.exe_result,
@@ -1154,6 +1154,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             $hpsql_select = "SELECT
                     $first_and_last_name ,
                     username,
+                    official_code,
                     tth.exe_name,
                     tth.exe_result ,
                     tth.exe_weighting,
@@ -1348,7 +1349,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             }
         }
     } else {
-        //echo $hpsql; var_dump($hpsql);
         $hpresults = getManyResultsXCol($hpsql, 6);
 
         // Print HotPotatoes test results.
@@ -2325,10 +2325,10 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     }
 
     if ($show_results || $show_only_score) {
-        $user_info   = api_get_user_info($exercise_stat_info['exe_user_id']);
+        $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
         //Shows exercise header
         echo $objExercise->show_exercise_result_header(
-            $user_info['complete_name'],
+            $user_info,
             api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG),
             $exercise_stat_info['duration']
         );

@@ -3659,11 +3659,25 @@ class Exercise
         }
     }
 
-    function show_exercise_result_header($user_data, $start_date = null, $duration = null) {
+    /**
+     * @param array $user_data result of api_get_user_info()
+     * @param null $start_date
+     * @param null $duration
+     * @return string
+     */
+    public function show_exercise_result_header($user_data, $start_date = null, $duration = null)
+    {
         $array = array();
 
         if (!empty($user_data)) {
-            $array[] = array('title' => get_lang("User"), 'content' => $user_data);
+            $array[] = array('title' => get_lang("Name"), 'content' => $user_data['complete_name']);
+            $array[] = array('title' => get_lang("Username"), 'content' => $user_data['username']);
+            if (!empty($user_data['official_code'])) {
+                $array[] = array(
+                    'title' => get_lang("OfficialCode"),
+                    'content' => $user_data['official_code']
+                );
+            }
         }
         // Description can be very long and is generally meant to explain
         //   rules *before* the exam. Leaving here to make display easier if
@@ -3681,7 +3695,9 @@ class Exercise
             $array[] = array('title' => get_lang("Duration"), 'content' => $duration);
         }
 
-        $html  = Display::page_header(Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result'));
+        $html  = Display::page_header(
+            Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result')
+        );
         $html .= Display::description($array);
         return $html;
     }

@@ -232,3 +232,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //);
 // Define the frequency to which the data must be stored in the database
 //$_configuration['session_stored_after_n_times'] = 10;
+// Show official code in exercise report list.
+//$_configuration['show_official_code_exercise_result_list'] = false;

@@ -2097,6 +2097,7 @@ function api_get_session_visibility(
                     }
                 }
 
+
                 // If the end date was set.
                 if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
                     // End date finish at midnight.

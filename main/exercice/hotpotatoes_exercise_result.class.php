@@ -1,16 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * HotpotatoesExerciseResult class: This class allows to instantiate an object
  * of type HotpotatoesExerciseResult
  * which allows you to export exercises results in multiple presentation forms
- * @package chamilo.exercise
- */
-/**
- * Code
- */
-/**
- * Exercise results class
  * @package chamilo.exercise
  */
 class HotpotatoesExerciseResult
@@ -24,7 +18,7 @@ class HotpotatoesExerciseResult
     /**
      * constructor of the class
      */
-    public function ExerciseResult($get_questions=false,$get_answers=false)
+    public function ExerciseResult($get_questions = false, $get_answers = false)
     {
     }
 

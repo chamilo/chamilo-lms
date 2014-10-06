@@ -9,9 +9,7 @@
  *  @todo fix excel export
  *
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = array('exercice');
 
@@ -89,13 +87,27 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
         switch ($_GET['export_format']) {
             case 'xls' :
                 $export = new ExerciseResult();
-                $export->exportCompleteReportXLS($documentPath, null, $load_extra_data, null, $_GET['exerciseId'], $_GET['hotpotato_name']);
+                $export->exportCompleteReportXLS(
+                    $documentPath,
+                    null,
+                    $load_extra_data,
+                    null,
+                    $_GET['exerciseId'],
+                    $_GET['hotpotato_name']
+                );
                 exit;
                 break;
             case 'csv' :
             default :
                 $export = new ExerciseResult();
-                $export->exportCompleteReportCSV($documentPath, null, $load_extra_data, null, $_GET['exerciseId'], $_GET['hotpotato_name']);
+                $export->exportCompleteReportCSV(
+                    $documentPath,
+                    null,
+                    $load_extra_data,
+                    null,
+                    $_GET['exerciseId'],
+                    $_GET['hotpotato_name']
+                );
                 exit;
                 break;
         }
@@ -124,7 +136,12 @@ if (isset($_REQUEST['comments']) &&
 
     // Teacher data
     $teacher_info = api_get_user_info(api_get_user_id());
-    $from_name = api_get_person_name($teacher_info['firstname'], $teacher_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+    $from_name = api_get_person_name(
+        $teacher_info['firstname'],
+        $teacher_info['lastname'],
+        null,
+        PERSON_NAME_EMAIL_ADDRESS
+    );
     $url = api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
     $my_post_info = array();
@@ -163,13 +180,14 @@ if (isset($_REQUEST['comments']) &&
         $result = Database::query($sql);
         Database::result($result, 0, "question");
 
-        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments' WHERE question_id = ".$my_questionid." AND exe_id=".$id;
+        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments'
+                  WHERE question_id = ".$my_questionid." AND exe_id=".$id;
         Database::query($query);
 
         //Saving results in the track recording table
-        $recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment)
-                              VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
-        Database::query($recording_changes);
+        $sql = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment)
+                VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
+        Database::query($sql);
     }
 
     $qry = 'SELECT DISTINCT question_id, marks FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id.' GROUP BY question_id';
@@ -204,8 +222,9 @@ if (isset($_REQUEST['comments']) &&
 
     //Updating LP score here
     if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
-        $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '".floatval($tot)."' WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
-        Database::query($sql_update_score);
+        $sql = "UPDATE $TBL_LP_ITEM_VIEW SET score = '".floatval($tot)."'
+                WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
+        Database::query($sql);
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
             header('location: exercice.php?course='.Security :: remove_XSS($_GET['course']));
@@ -248,7 +267,10 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 }
 
 //Deleting an attempt
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete']) && $_GET['delete'] == 'delete' && !empty($_GET['did']) && $locked == false) {
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
+    isset($_GET['delete']) && $_GET['delete'] == 'delete' &&
+    !empty($_GET['did']) && $locked == false
+) {
     $exe_id = intval($_GET['did']);
     if (!empty($exe_id)) {
         $sql = 'DELETE FROM '.$TBL_TRACK_EXERCICES.' WHERE exe_id = '.$exe_id;
@@ -293,14 +315,11 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete_be
 
 // Security token to protect deletion
 $token = Security::get_token();
-
 $actions = Display::div($actions, array('class' => 'actions'));
 
 $extra = '<script>
     $(document).ready(function() {
-
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
-
         $( "#dialog-confirm" ).dialog({
                 autoOpen: false,
                 show: "blind",
@@ -421,9 +440,7 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 ?>
-
 <script>
-
     function setSearchSelect(columnName) {
         $("#results").jqGrid('setColProp', columnName,
         {
@@ -469,7 +486,6 @@ $extra_params['height'] = 'auto';
 
         if ($is_allowedToEdit || $is_tutor) {
             ?>
-
                 //setSearchSelect("status");
                 //
                 //view:true, del:false, add:false, edit:false, excel:true}
@@ -563,15 +579,12 @@ $extra_params['height'] = 'auto';
         * initiate datepicker
         */
         $(function() {
-
             $( "#datepicker_start" ).datepicker({
                 defaultDate: "",
                 changeMonth: false,
                 numberOfMonths: 1
             });
-
         });
-
 </script>
 <form id="export_report_form" method="post" action="exercise_report.php">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />

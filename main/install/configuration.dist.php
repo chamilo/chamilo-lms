@@ -213,3 +213,22 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['order_user_list_by_official_code'] = false;
 // Default course setting "email_alert_manager_on_new_quiz"
 //$_configuration['email_alert_manager_on_new_quiz'] = 1;
+// If session_stored_in_db is false, an alternative session storage mechanism
+// can be used, which allows for a volatile storage in Memcache, and a more
+// permanent "backup" storage in the database, every once in a while (see
+// frequency). This is generally used in HA clusters configurations
+// This requires memcache or memcached and the php5-memcache module to be setup
+//$_configuration['session_stored_in_db_as_backup'] = true;
+// Define the different memcache servers available
+//$_configuration['memcache_server'] = array(
+//    0 => array(
+//        'host' => 'chamilo8',
+//        'port' => '11211',
+//    ),
+//    1 => array(
+//        'host' => 'chamilo9',
+//        'port' => '11211',
+//    ),
+//);
+// Define the frequency to which the data must be stored in the database
+//$_configuration['session_stored_after_n_times'] = 10;

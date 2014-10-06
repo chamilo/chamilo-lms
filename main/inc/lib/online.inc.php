@@ -102,7 +102,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
 
     require_once api_get_path(SYS_PATH) . 'main/chat/chat_functions.lib.php';
     exit_of_chat($user_id);
-
+    session_regenerate_id();
     Session::destroy();
     if ($logout_redirect) {
         header("Location: index.php");

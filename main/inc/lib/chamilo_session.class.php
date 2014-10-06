@@ -84,7 +84,7 @@ class ChamiloSession extends System\Session
           }
          */
 
-        if ($_configuration['session_stored_in_db'] && function_exists('session_set_save_handler')) {
+        if (isset($_configuration['session_stored_in_db']) && $_configuration['session_stored_in_db'] && function_exists('session_set_save_handler')) {
             $handler = new SessionHandlerDatabase();
             @session_set_save_handler(
                 array($handler, 'open'),

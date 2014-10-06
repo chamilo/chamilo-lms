@@ -105,6 +105,7 @@ if (!empty($new_session_list)) {
         $my_session_list[] =  $my_session_id;
     }
 }
+$new_course_list = array();
 
 if (!empty($course_list)) {
     foreach ($course_list as $course_data) {

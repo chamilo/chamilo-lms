@@ -329,4 +329,145 @@ class CoursesController { // extends Controller {
         $this->view->render();
     }
 
+    /**
+     * Get the html block for courses categories
+     * @param string $code Current category code
+     * @param boolean $hiddenLinks Whether hidden links
+     * @return string The HTML block
+     */
+    public function getCoursesCategoriesBlock($code = null, $hiddenLinks = false)
+    {
+        $categories = $this->model->browse_course_categories();
+
+        $html = '';
+
+        if (!empty($categories)) {
+
+            foreach ($categories[0] as $category) {
+                $categoryName = $category['name'];
+                $categoryCode = $category['code'];
+                $categoryCourses = $category['count_courses'];
+
+                if ($code == $categoryCode) {
+                    $html .= '<li><strong>';
+                    $html .= "$categoryName ($categoryCourses)";
+                    $html .= '</strong><li>';
+                } else {
+                    if (!empty($categoryCourses)) {
+                        $html .= '<li><a href="' . api_get_self() . '"?action=display_courses&category_code=' . $categoryCode . '&hidden_links=' . $hiddenLinks . '">';
+                        $html .= "$categoryName ($categoryCourses)";
+                        $html .= '</a></li>';
+                    } else {
+                        $html .= "<li>$categoryName ($categoryCourses)</li>";
+                    }
+                }
+
+                if (!empty($categories[$categoryCode])) {
+                    foreach ($categories[$categoryCode] as $subCategory1) {
+                        $subCategory1Name = $subCategory1['name'];
+                        $subCategory1Code = $subCategory1['code'];
+                        $subCategory1Courses = $subCategory1['count_courses'];
+
+                        if ($code == $subCategory1Code) {
+                            $html .= '<li style="margin-left: 20px">';
+                            $html .= "<strong>$subCategory1Name ($subCategory1Courses)</strong>";
+                            $html .= '</li>';
+                        } else {
+                            $html .= '<li style="margin-left: 20px"><a href="' . api_get_self() . '?action=display_courses&category_code=' . $subCategory1Code . '&hidden_links=' . $hiddenLinks . '">';
+                            $html .= "$subCategory1Name ($subCategory1Courses)";
+                            $html .= '</a></li>';
+                        }
+
+                        if (!empty($categories[$subCategory1Code])) {
+                            foreach ($categories[$subCategory1Code] as $subCategory2) {
+                                $subCategory2Name = $subCategory2['name'];
+                                $subCategory2Code = $subCategory2['code'];
+                                $subCategory2Courses = $subCategory2['count_courses'];
+
+                                if ($code == $subCategory2Code) {
+                                    $html .= '<li style="margin-left: 40px">';
+                                    $html .= "<strong>$subCategory2Name ($subCategory2Courses)</strong>";
+                                    $html .= '</li>';
+                                } else {
+                                    $html .= '<li style="margin-left: 40px"><a href="' . api_get_self() . '?action=display_courses&category_code=' . $subCategory2Code . '&hidden_links=' . $hiddenLinks . '">';
+                                    $html .= "$subCategory2Name ($subCategory2Courses)";
+                                    $html .= '</a></li>';
+                                }
+
+                                if (!empty($categories[$subCategory2Code])) {
+                                    foreach ($categories[$subCategory2Code] as $subCategory3) {
+                                        $subCategory3Name = $subCategory3['name'];
+                                        $subCategory3Code = $subCategory3['code'];
+                                        $subCategory3Courses = $subCategory3['count_courses'];
+
+                                        if ($code == $subCategory3Code) {
+                                            $html .= '<li style="margin-left: 40px">';
+                                            $html .= "<strong>$subCategory3Name ($subCategory3Courses)</strong>";
+                                            $html .= '</li>';
+                                        } else {
+                                            $html .= '<li style="margin-left: 40px"><a href="' . api_get_self() . '?action=display_courses&category_code=' . $subCategory3Code . '&hidden_links=' . $hiddenLinks . '">';
+                                            $html .= "$subCategory3Name ($subCategory3Courses)";
+                                            $html .= '</a></li>';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * Get a HTML button for subscribe to session
+     * @param string $sessionName The session name
+     * @param array $userInfo The user information
+     * @return string The button
+     */
+    public function getRegisterInSessionButton($sessionName, $userInfo)
+    {
+        $mailSubject = get_lang('SubscribeToSession') . " '$sessionName'";
+
+        $mailMessage = get_lang('PleaseSubscribeToSession') . PHP_EOL . PHP_EOL;
+        $mailMessage = get_lang('Session') . ": $sessionName" . PHP_EOL . PHP_EOL;
+        $mailMessage.= get_lang('ContactInformation') . ':' . PHP_EOL;
+        $mailMessage.= get_lang('Name') . ": {$userInfo['complete_name']}" . PHP_EOL;
+        $mailMessage.= get_lang('Username') . ": {$userInfo['username']}" . PHP_EOL;
+        $mailMessage.= get_lang('Email') . ": {$userInfo['email']}" . PHP_EOL;
+
+        $mailParams = http_build_query(array(
+            'email_title' => $mailSubject,
+            'email_text' => $mailMessage
+        ));
+
+        return Display::tag('a', get_lang('Subscribe'), array(
+                    'class' => 'btn btn-primary clickable_email_link',
+                    'href' => "mailto:angelfqc.18@gmail.com&$mailParams"
+        ));
+    }
+
+    /**
+     * Generate a label if the user has been  registered in session
+     * @return string The label
+     */
+    public function getAlreadyRegisterInSessionLabel()
+    {
+        $icon = Display::return_icon('students.gif', get_lang('Student'));
+
+        return Display::label($icon . ' ' . get_lang("AlreadyRegisteredToSession"), "info");
+    }
+
+    /**
+     * Get a icon for a session
+     * @param string $sessionName The session name
+     * @return string The icon
+     */
+    public function getSessionIcon($sessionName)
+    {
+        return Display::return_icon('window_list.png', $sessionName, null, ICON_SIZE_LARGE);
+    }
+
 }

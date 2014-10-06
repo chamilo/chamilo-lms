@@ -100,7 +100,7 @@ if ($action == 'display_random_courses' || $action == 'display_courses' ) {
 }
 
 if ($action == 'display_sessions') {
-    $nameTools = get_lang('CourseManagement');
+    $nameTools = get_lang('Sessions');
 }
 
 // Breadcrumbs.
@@ -221,7 +221,59 @@ switch ($action) {
         break;
     case 'display_sessions':
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
+        $hiddenLinks = intval($_GET['hidden_links']) == 1;
 
-        $courses_controller->sessions($action, $date);
+        $userInfo = api_get_user_info();
+
+        $authModel = new Auth();
+        $sessions = $authModel->browseSessions($date);
+        $courseCategories = $authModel->browse_course_categories();
+
+        $sessionsBlocks = array();
+
+        foreach ($sessions as $session) {
+            $sessionsBlocks[] = array(
+                'id' => $session['id'],
+                'name' => $session['name'],
+                'nbr_courses' => $session['nbr_courses'],
+                'nbr_users' => $session['nbr_users'],
+                'coach_name' => $session['coach_name'],
+                'is_subscribed' => $session['is_subscribed'],
+                'icon' => $courses_controller->getSessionIcon($session['name']),
+                'date' => SessionManager::getSessionFormattedDate($session),
+                'subscribe_button' => $courses_controller->getRegisterInSessionButton($session['name'], $userInfo)
+            );
+        }
+
+        $tpl = new Template();
+        $tpl->assign('action', $action);
+        $tpl->assign('showCourses', CoursesAndSessionsCatalog::showCourses());
+        $tpl->assign('showSessions', CoursesAndSessionsCatalog::showSessions());
+        
+        $tpl->assign('coursesCategoriesList', $courses_controller->getCoursesCategoriesBlock());
+        
+        $tpl->assign('texts', array(
+            'search' => get_lang('Search'),
+            'randomPick' => get_lang('RandomPick'),
+            'courseCategories' => get_lang('CourseCategories'),
+            'courseList' => get_lang('CourseList'),
+            'sessions' => get_lang('Sessions'),
+            'sessionList' => $nameTools,
+            'searchSessions' => get_lang('SearchSessions')
+        ));
+
+        $tpl->assign('api_get_self', api_get_self());
+        $tpl->assign('hiddenLinks', $hiddenLinks);
+        $tpl->assign('searchToken', Security::get_token());
+        $tpl->assign('searchTerm', empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term'])));
+
+        $tpl->assign('searchDate', $date);
+        $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');
+        $tpl->assign('sessions_blocks', $sessionsBlocks);
+        $tpl->assign('already_subscribed_label', $courses_controller->getAlreadyRegisterInSessionLabel());
+
+        $conentTemplate = $tpl->get_template('auth/sessions_catalog.tpl');
+
+        $tpl->display($conentTemplate);
         break;
 }

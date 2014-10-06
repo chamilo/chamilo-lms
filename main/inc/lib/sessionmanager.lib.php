@@ -4882,4 +4882,33 @@ class SessionManager
         return false;
     }
 
+    /**
+     * Get the formatted date of a session by its start and end date
+     * @param array $sessionInfo The session information containing the start and end date
+     * @return string The formatted date
+     */
+    public static function getSessionFormattedDate($sessionInfo)
+    {
+        if ($sessionInfo['date_start'] == '0000-00-00' && $sessionInfo['date_end'] == '0000-00-00') {
+            return get_lang('NoTimeLimits');
+        } else {
+            $startDate = '';
+            $endDate = '';
+
+            if ($sessionInfo['date_start'] != '0000-00-00') {
+                $startDate = get_lang('From') . ' ' . api_format_date($sessionInfo['date_start'], DATE_FORMAT_LONG_NO_DAY);
+            } else {
+                $startDate = '';
+            }
+
+            if ($sessionInfo['date_end'] == '0000-00-00') {
+                $endDate = '';
+            } else {
+                $endDate = get_lang('Until') . ' ' . api_format_date($sessionInfo['date_end'], DATE_FORMAT_LONG_NO_DAY);
+            }
+
+            return "$startDate $endDate";
+        }
+    }
+
 }

@@ -211,45 +211,6 @@ $userInfo = api_get_user_info();
     </div>
 
     <div class="span9">
-        <?php if ($showSessions && $action == 'display_sessions') { ?>
-            <?php
-                if (!empty($browseSessions)) {
-                    foreach ($browseSessions as $session) {
-                        $sessionId = $session['id'];
-                        ?>
-                        <div class="well_border">
-                            <div class="row">
-                                <div class="span1">
-                                    <span class="thumbnail"><?php
-                                        $sessionIconParams = array(
-                                            'id' => 'session_img_' . $sessionId
-                                        );
-
-                                        echo Display::return_icon('window_list.png', $session['name'], $sessionIconParams, ICON_SIZE_LARGE);
-                                        ?></span>
-                                </div>
-                                <div class="span7 categories-course-description">
-                                    <h3><?php echo $session['name'] ?></h3>
-                                    <p><?php echo $session['coach_name'] ?></p>
-                                    <div>
-                                        <div class="course-list"></div>
-                                        <a class="btn btn-link courses-list-btn" id="showsesion_<?php echo $sessionId ?>" href="#"><?php echo Display::display_icon('nolines_plus.gif'); ?> <?php echo get_lang('Courses') ?></a>
-                                        <?php if ($session['is_subscribed']) { ?>
-                                            <?php echo displayAlreadyRegisterInSessionLabel(); ?>
-                                        <?php } else { ?>
-                                            <?php echo displayRegisterInSessionButton($session['name'], $userInfo); ?>
-                                        <?php } ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php
-                    }
-                } else {
-                    Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
-                }
-            ?>
-        <?php } ?>
         <?php if ($showCourses && $action != 'display_sessions') { ?>
         <?php if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }
@@ -456,35 +417,4 @@ function display_unregister_button($course, $stok, $search_term, $code)
     echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&amp;sec_token='.$stok.'&amp;unsubscribe='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
 }
 
-/**
- * Generate a label if the user has been  registered in session
- * @return string The label
- */
-function displayAlreadyRegisterInSessionLabel()
-{
-    $icon = Display::return_icon('students.gif', get_lang('Student'));
 
-    return Display::label($icon . ' ' . get_lang("AlreadyRegisteredToSession"), "info");
-}
-
-function displayRegisterInSessionButton($sessionName, $userInfo)
-{
-    $mailSubject = get_lang('SubscribeToSession') . " '$sessionName'";
-    
-    $mailMessage = get_lang('PleaseSubscribeToSession') . PHP_EOL . PHP_EOL;
-    $mailMessage = get_lang('Session') . ": $sessionName" . PHP_EOL . PHP_EOL;
-    $mailMessage.= get_lang('ContactInformation') . ':' . PHP_EOL;
-    $mailMessage.= get_lang('Name') . ": {$userInfo['complete_name']}" . PHP_EOL;
-    $mailMessage.= get_lang('Username') . ": {$userInfo['username']}" . PHP_EOL;
-    $mailMessage.= get_lang('Email') . ": {$userInfo['email']}" . PHP_EOL;
-
-    $mailParams = http_build_query(array(
-        'email_title' => $mailSubject,
-        'email_text' => $mailMessage
-    ));
-
-    return Display::tag('a', get_lang('Subscribe'), array(
-                'class' => 'btn btn-primary clickable_email_link',
-                'href' => "mailto:angelfqc.18@gmail.com&$mailParams"
-    ));
-}

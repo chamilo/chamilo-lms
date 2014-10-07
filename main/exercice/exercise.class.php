@@ -939,9 +939,11 @@ class Exercise
     public function delete()
     {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($this->id)."'";
+        $sql = "UPDATE $TBL_EXERCICES SET active='-1'
+                WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($this->id)."'";
         Database::query($sql);
-        api_item_property_update($this->course, TOOL_QUIZ, $this->id,'QuizDeleted',api_get_user_id());
+        api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizDeleted', api_get_user_id());
+        api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'delete', api_get_user_id());
 
         if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian') ) {
             $this->search_engine_delete();
@@ -3837,10 +3839,18 @@ class Exercise
             }
         }
 
+        // Deleted exercise.
+        if ($this->active == -1) {
+            return array(
+                'value' => false,
+                'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false)
+            );
+        }
+
         // Checking visibility in the item_property table.
         $visibility = api_get_item_visibility(api_get_course_info(), TOOL_QUIZ, $this->id, api_get_session_id());
 
-        if ($visibility == 0) {
+        if ($visibility == 0 || $visibility == 2) {
             $this->active = 0;
         }
 

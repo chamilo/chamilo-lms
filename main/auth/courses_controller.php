@@ -404,9 +404,11 @@ class CoursesController { // extends Controller {
      * Get a HTML button for subscribe to session
      * @param string $sessionName The session name
      * @param array $userInfo The user information
+     * @param string $administratorEmail The administrator email
+     * @param boolean $allowEmailEditor (Optional) Whether the email editor online is enabled
      * @return string The button
      */
-    public function getRegisterInSessionButton($sessionName, $userInfo)
+    public function getRegisterInSessionButton($sessionName, $userInfo, $administratorEmail, $allowEmailEditor = false)
     {
         $mailSubject = get_lang('SubscribeToSession') . " '$sessionName'";
 
@@ -417,14 +419,24 @@ class CoursesController { // extends Controller {
         $mailMessage.= get_lang('Username') . ": {$userInfo['username']}" . PHP_EOL;
         $mailMessage.= get_lang('Email') . ": {$userInfo['email']}" . PHP_EOL;
 
-        $mailParams = http_build_query(array(
-            'email_title' => $mailSubject,
-            'email_text' => $mailMessage
-        ));
+        if ($allowEmailEditor) {
+            $mailParams = http_build_query(array(
+                'email_title' => $mailSubject,
+                'email_text' => $mailMessage
+            ));
 
-        return Display::tag('a', get_lang('Subscribe'), array(
+            $url = "mailto:$administratorEmail&$mailParams";
+        } else {
+            $mailParams = http_build_query(array(
+                'subject' => $mailSubject,
+                'body' => $mailMessage
+            ));
+
+            $url = "mailto:$administratorEmail?$mailParams";
+        }
+
+        return Display::url(get_lang('Subscribe'), $url, array(
                     'class' => 'btn btn-primary clickable_email_link',
-                    'href' => "mailto:angelfqc.18@gmail.com&$mailParams"
         ));
     }
 

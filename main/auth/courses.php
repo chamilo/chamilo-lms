@@ -224,6 +224,8 @@ switch ($action) {
         $hiddenLinks = intval($_GET['hidden_links']) == 1;
 
         $userInfo = api_get_user_info();
+        $allowEmailEditor = api_get_setting('allow_email_editor') == 'true';
+        $administratorEmail = api_get_setting('emailAdministrator');
 
         $authModel = new Auth();
         $sessions = $authModel->browseSessions($date);
@@ -241,7 +243,7 @@ switch ($action) {
                 'is_subscribed' => $session['is_subscribed'],
                 'icon' => $courses_controller->getSessionIcon($session['name']),
                 'date' => SessionManager::getSessionFormattedDate($session),
-                'subscribe_button' => $courses_controller->getRegisterInSessionButton($session['name'], $userInfo)
+                'subscribe_button' => $courses_controller->getRegisterInSessionButton($session['name'], $userInfo, $administratorEmail, $allowEmailEditor)
             );
         }
 

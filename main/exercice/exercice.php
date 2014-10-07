@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * 	Exercise list: This script shows the list of exercises for administrators and students.
  * 	@package chamilo.exercise
@@ -10,9 +11,6 @@
  * Modified by hubert.borderiou (question category)
  */
 
-/**
- * Code
- */
 // name of the language file that needs to be included
 
 use \ChamiloSession as Session;
@@ -56,7 +54,6 @@ $TBL_EXERCICE_QUESTION = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
 $TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
-
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 // picture path
@@ -64,7 +61,7 @@ $picturePath = $documentPath.'/images';
 // audio path
 $audioPath = $documentPath.'/audio';
 
-// hotpotatoes
+// hot potatoes
 $uploadPath = DIR_HOTPOTATOES; //defined in main_api
 $exercicePath = api_get_self();
 $exfile = explode('/', $exercicePath);
@@ -221,7 +218,6 @@ if ($is_allowedToEdit) {
                 // list des exercices dans un test
                 // we got variable $course_id $course_info session api_get_session_id()
                 $tab_exercise_list = get_all_exercises_for_course_id($course_info, api_get_session_id(), $course_id, false);
-
                 $quantity_results_deleted = 0;
                 foreach ($tab_exercise_list as $exeItem) {
                     // delete result for test, if not in a gradebook
@@ -239,7 +235,6 @@ if ($is_allowedToEdit) {
 
         // single exercise choice
         // construction of Exercise
-
         $objExerciseTmp = new Exercise();
         $check = Security::check_token('get');
         $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
@@ -247,7 +242,8 @@ if ($is_allowedToEdit) {
         if ($objExerciseTmp->read($exerciseId)) {
             if ($check) {
                 switch ($choice) {
-                    case 'delete' : // deletes an exercise
+                    case 'delete' :
+                        // deletes an exercise
                         if ($exercise_action_locked == false) {
                             $objExerciseTmp->delete();
                             require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
@@ -258,30 +254,35 @@ if ($is_allowedToEdit) {
                             Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
                         }
                         break;
-                    case 'enable' : // enables an exercise
+                    case 'enable' :
+                        // enables an exercise
                         $objExerciseTmp->enable();
                         $objExerciseTmp->save();
                         api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id, 'visible', api_get_user_id());
                         // "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
-                    case 'disable' : // disables an exercise
+                    case 'disable' :
+                        // disables an exercise
                         $objExerciseTmp->disable();
                         $objExerciseTmp->save();
                         api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id, 'invisible', api_get_user_id());
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
-                    case 'disable_results' : //disable the results for the learners
+                    case 'disable_results' :
+                        //disable the results for the learners
                         $objExerciseTmp->disable_results();
                         $objExerciseTmp->save();
                         Display :: display_confirmation_message(get_lang('ResultsDisabled'));
                         break;
-                    case 'enable_results' : //disable the results for the learners
+                    case 'enable_results' :
+                        //disable the results for the learners
                         $objExerciseTmp->enable_results();
                         $objExerciseTmp->save();
                         Display :: display_confirmation_message(get_lang('ResultsEnabled'));
                         break;
-                    case 'clean_results' : //clean student results
+                    case 'clean_results' :
+                        //clean student results
                         if ($exercise_action_locked == false) {
                             $quantity_results_deleted = $objExerciseTmp->clean_results(true);
                             Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $quantity_results_deleted));
@@ -322,7 +323,10 @@ if ($is_allowedToEdit) {
                     }
                 }
 
-                // hotpotatoes folder may contains several tests so don't delete folder if not empty : http://support.chamilo.org/issues/2165
+                /* hotpotatoes folder may contains several tests so
+                   don't delete folder if not empty :
+                    http://support.chamilo.org/issues/2165
+                */
 
                 if (!(strstr($uploadPath, DIR_HOTPOTATOES) && !folder_is_empty($documentPath.$uploadPath."/".$fld."/"))) {
                     my_delete($documentPath.$uploadPath."/".$fld."/");
@@ -330,7 +334,8 @@ if ($is_allowedToEdit) {
                 break;
             case 'enable' : // enables an exercise
                 $newVisibilityStatus = "1"; //"visible"
-                $query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";
+                $query = "SELECT id FROM $TBL_DOCUMENT
+                          WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_user['user_id']);
@@ -339,7 +344,8 @@ if ($is_allowedToEdit) {
                 break;
             case 'disable' : // disables an exercise
                 $newVisibilityStatus = "0"; //"invisible"
-                $query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";
+                $query = "SELECT id FROM $TBL_DOCUMENT
+                          WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
                 api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_user['user_id']);
@@ -368,14 +374,17 @@ $course_code = api_get_course_id();
 $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id, true, true);
 
-
 // Only for administrators
 if ($is_allowedToEdit) {
-    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE c_id = $course_id AND active<>'-1' $condition_session ";
-    $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND active<>'-1' $condition_session ORDER BY title LIMIT ".$from.",".$limit;
+    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES
+                  WHERE c_id = $course_id AND active<>'-1' $condition_session ";
+    $sql = "SELECT * FROM $TBL_EXERCICES
+            WHERE c_id = $course_id AND active<>'-1' $condition_session
+            ORDER BY title LIMIT ".$from.",".$limit;
 } else {
     // Only for students
-    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE c_id = $course_id AND active = '1' $condition_session ";
+    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES
+                  WHERE c_id = $course_id AND active = '1' $condition_session ";
     $sql = "SELECT * FROM $TBL_EXERCICES
             WHERE c_id = $course_id AND
                   active='1' $condition_session
@@ -395,17 +404,19 @@ if (Database :: num_rows($result_total)) {
 
 //get HotPotatoes files (active and inactive)
 if ($is_allowedToEdit) {
-    $sql = "SELECT * FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path LIKE '".Database :: escape_string($uploadPath)."/%/%'";
+    $sql = "SELECT * FROM $TBL_DOCUMENT
+            WHERE c_id = $course_id AND path LIKE '".Database :: escape_string($uploadPath)."/%/%'";
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 } else {
     $sql = "SELECT * FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-            WHERE   d.id = ip.ref AND
-                    ip.tool = '".TOOL_DOCUMENT."' AND
-                    d.path LIKE '".Database :: escape_string($uploadPath)."/%/%' AND
-                    ip.visibility ='1' AND
-                    d.c_id      = ".$course_id." AND
-                    ip.c_id     = ".$course_id;
+            WHERE
+                d.id = ip.ref AND
+                ip.tool = '".TOOL_DOCUMENT."' AND
+                d.path LIKE '".Database :: escape_string($uploadPath)."/%/%' AND
+                ip.visibility ='1' AND
+                d.c_id      = ".$course_id." AND
+                ip.c_id     = ".$course_id;
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 }
@@ -731,7 +742,6 @@ if (!empty($exercise_list)) {
                 $item .= Display::tag('td', $number_of_questions);
             } else {
                 // Student only
-
                 $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
 
                 if ($visibility == 0) {
@@ -775,7 +785,7 @@ if (!empty($exercise_list)) {
 
                 //Time limits are on
                 if ($time_limits) {
-                    // Examn is ready to be taken
+                    // Exam is ready to be taken
                     if ($is_actived_time) {
                         //Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
                         if ($my_result_disabled == 0 || $my_result_disabled == 2) {
@@ -865,6 +875,7 @@ if (!empty($exercise_list)) {
         } // end foreach()
     }
 }
+
 // end exercise list
 //Hotpotatoes results
 $hotpotatoes_exist = false;

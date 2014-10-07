@@ -417,7 +417,7 @@ class ExerciseResult
 			}
 		}
 
-
+        $officialCodeInList = api_get_configuration_value('show_official_code_exercise_result_list');
 
 		if ($with_column_user) {
             if (api_is_western_name_order()) {
@@ -431,6 +431,12 @@ class ExerciseResult
                 $worksheet->write($line,$column,get_lang('FirstName'));
                 $column++;
             }
+
+            if ($officialCodeInList) {
+                $worksheet->write($line, $column, get_lang('OfficialCode'));
+                $column++;
+            }
+
 		    $worksheet->write($line,$column,get_lang('Email'));
 		    $column++;
 		}
@@ -480,6 +486,12 @@ class ExerciseResult
                     $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
                     $column++;
                 }
+
+                if ($officialCodeInList) {
+                    $worksheet->write($line, $column,api_html_entity_decode(strip_tags($row['official_code']), ENT_QUOTES, $charset));
+                    $column++;
+                }
+
                 $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset));
                 $column++;
 			}

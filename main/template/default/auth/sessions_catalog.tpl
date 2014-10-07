@@ -27,10 +27,10 @@
                         var coursesUL = '';
 
                         $.each(response, function(index, course) {
-                            coursesUL += '<li><strong>' + course.name + '</strong> ';
+                            coursesUL += '<li><strong>' + course.name + '</strong>';
 
                             if (course.coachName != '') {
-                                coursesUL += '(' + course.coachName + ')';
+                                coursesUL += ' (' + course.coachName + ')';
                             }
 
                             coursesUL += '</li>';
@@ -54,7 +54,7 @@
                             <div class="control-group">
                                 <div class="controls">
                                     <div class="input-append">
-                                        <input class="span2" type="text" name="search_term" value="{{ searchTerm }}" />
+                                        <input class="span2" type="text" name="search_term" />
                                         <button class="btn" type="submit">{{ texts.search }}</button>
                                     </div>
                                 </div>

@@ -249,9 +249,10 @@ switch ($action) {
         $tpl->assign('action', $action);
         $tpl->assign('showCourses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('showSessions', CoursesAndSessionsCatalog::showSessions());
-        
+        $tpl->assign('api_get_self', api_get_self());
+
         $tpl->assign('coursesCategoriesList', $courses_controller->getCoursesCategoriesBlock());
-        
+
         $tpl->assign('texts', array(
             'search' => get_lang('Search'),
             'randomPick' => get_lang('RandomPick'),
@@ -262,10 +263,8 @@ switch ($action) {
             'searchSessions' => get_lang('SearchSessions')
         ));
 
-        $tpl->assign('api_get_self', api_get_self());
         $tpl->assign('hiddenLinks', $hiddenLinks);
         $tpl->assign('searchToken', Security::get_token());
-        $tpl->assign('searchTerm', empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term'])));
 
         $tpl->assign('searchDate', $date);
         $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');

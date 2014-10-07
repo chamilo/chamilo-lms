@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * UNIQUE_ANSWER class
+ * Class UniqueAnswer
  *
  * This class allows to instantiate an object of type UNIQUE_ANSWER
  * (MULTIPLE CHOICE, UNIQUE ANSWER),

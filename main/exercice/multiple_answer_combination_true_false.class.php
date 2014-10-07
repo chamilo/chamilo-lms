@@ -1,10 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Code
- */
-/**
-	CLASS MultipleAnswer
+ * 	Class MultipleAnswer
  *
  *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
  *	extending the class question

@@ -1,15 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Exercise class: This class allows to instantiate an object of type Exercise
- * @package chamilo.exercise
- * @author Olivier Brouckaert
- * @author Julio Montoya Cleaning exercises
- * Modified by Hubert Borderiou #294
- */
-/**
- * Code
- */
+
 define('ALL_ON_ONE_PAGE',                   1);
 define('ONE_PER_PAGE',                      2);
 
@@ -28,6 +19,15 @@ $debug = false; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 
+/**
+ * Class Exercise
+ *
+ * Allows to instantiate an object of type Exercise
+ * @package chamilo.exercise
+ * @author Olivier Brouckaert
+ * @author Julio Montoya Cleaning exercises
+ * Modified by Hubert Borderiou #294
+ */
 class Exercise
 {
     public $id;

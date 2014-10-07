@@ -16,7 +16,8 @@ class ExerciseResult
 	/**
 	 * constructor of the class
 	 */
-	public function ExerciseResult($get_questions=false,$get_answers=false) {
+    public function ExerciseResult($get_questions = false, $get_answers = false)
+    {
 	}
 
 	/**
@@ -264,6 +265,7 @@ class ExerciseResult
 		$this->results = $return;
 		return true;
 	}
+
 	/**
 	 * Exports the complete report as a CSV file
 	 * @param	string		Document path inside the document tool
@@ -391,7 +393,14 @@ class ExerciseResult
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportXLS($document_path='',$user_id = null, $export_user_fields= false, $export_filter = 0, $exercise_id=0, $hotpotato_name = null) {
+    public function exportCompleteReportXLS(
+        $document_path = '',
+        $user_id = null,
+        $export_user_fields = false,
+        $export_filter = 0,
+        $exercise_id = 0,
+        $hotpotato_name = null
+    ) {
 		global $charset;
 		$this->_getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
 		$filename = 'exercise_results_'.date('YmdGis').'.xls';

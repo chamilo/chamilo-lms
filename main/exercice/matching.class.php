@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
  *  Class Matching
  *  Matching questions type class
  *

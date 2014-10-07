@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-/** @author hubert.borderiou  **/
 
 /**
  * Class Testcategory
+ * @author hubert.borderiou
  * @todo rename to ExerciseCategory
  */
 class Testcategory

@@ -10,9 +10,7 @@
  * @version $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
  * Modified by Hubert Borderiou 2011-10-21 Question Category
  */
-/**
- * Code
- */
+
 // The initialization class for the online editor is needed here.
 require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
 
@@ -25,7 +23,18 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * @param int   current item from the list of questions
  * @param int   number of total questions
  * */
-function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null, $show_answers = false) {
+function showQuestion(
+    $questionId,
+    $only_questions = false,
+    $origin = false,
+    $current_item = '',
+    $show_title = true,
+    $freeze = false,
+    $user_choice = array(),
+    $show_comment = false,
+    $exercise_feedback = null,
+    $show_answers = false
+) {
 
     // Text direction for the current language
     $is_ltr_text_direction = api_get_text_direction() != 'rtl';
@@ -213,7 +222,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         		$user_choice_array[] = $item['answer'];
         	}
         }
-
 
     	for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
     		$answer          = $objAnswerTmp->selectAnswer($answerId);
@@ -829,7 +837,12 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     return $nbrAnswers;
 }
 
-function get_exercise_track_exercise_info($exe_id) {
+/**
+ * @param int $exe_id
+ * @return array
+ */
+function get_exercise_track_exercise_info($exe_id)
+{
     $TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
     $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_COURSE             = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -855,7 +868,8 @@ function get_exercise_track_exercise_info($exe_id) {
 /**
  * Validates the time control key
  */
-function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id = 0) {
+function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id = 0)
+{
     $course_id = api_get_course_int_id();
     $exercise_id = intval($exercise_id);
     $TBL_EXERCICES =  Database::get_course_table(TABLE_QUIZ_TEST);
@@ -937,8 +951,15 @@ function get_count_exam_hotpotatoes_results($in_hotpot_path) {
  * @param null $where_condition
  * @return array|int
  */
-function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null)
-{
+function get_exam_results_hotpotatoes_data(
+    $in_from,
+    $in_number_of_items,
+    $in_column,
+    $in_direction,
+    $in_hotpot_path,
+    $in_get_count = false,
+    $where_condition = null
+) {
     $course_code = api_get_course_id();
     // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
     if ($in_column == 1) {
@@ -999,8 +1020,15 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
  * Gets the exam'data results
  * @todo this function should be moved in a library  + no global calls
  */
-function get_exam_results_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false)
-{
+function get_exam_results_data(
+    $from,
+    $number_of_items,
+    $column,
+    $direction,
+    $exercise_id,
+    $extra_where_conditions = null,
+    $get_count = false
+) {
     //@todo replace all this globals
     global $documentPath, $filter;
 
@@ -1228,8 +1256,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             }
             $sizeof = count($results);
 
-            $user_list_id = array ();
-
+            $user_list_id = array();
             $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
             //Looping results

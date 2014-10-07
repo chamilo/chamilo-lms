@@ -3442,7 +3442,7 @@ function api_item_property_update(
     // Update if possible
     $set_type = '';
     switch ($lastedit_type) {
-        case 'delete' :
+        case 'delete':
             // delete = make item only visible for the platform admin.
             $visibility = '2';
             if (!empty($session_id)) {
@@ -7067,8 +7067,8 @@ function api_get_easy_password_list()
 }
 
 /**
- *
-* create an user extra field called 'captcha_blocked_until_date'
+ * @param string $username
+ * create an user extra field called 'captcha_blocked_until_date'
  */
 function api_block_account_captcha($username)
 {
@@ -7082,6 +7082,9 @@ function api_block_account_captcha($username)
     Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', api_get_utc_datetime($time));
 }
 
+/**
+ * @param string $username
+ */
 function api_clean_account_captcha($username)
 {
     $userInfo = api_get_user_info_from_username($username);
@@ -7092,6 +7095,10 @@ function api_clean_account_captcha($username)
     Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', null);
 }
 
+/**
+ * @param string $username
+ * @return bool
+ */
 function api_get_user_blocked_by_captcha($username)
 {
     $userInfo = api_get_user_info_from_username($username);

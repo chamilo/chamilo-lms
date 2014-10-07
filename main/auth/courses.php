@@ -224,7 +224,7 @@ switch ($action) {
         $hiddenLinks = intval($_GET['hidden_links']) == 1;
 
         $userInfo = api_get_user_info();
-        $allowEmailEditor = api_get_setting('allow_email_editor') == 'true';
+        $allowEmailEditor = api_get_setting('allow_email_editor') === 'true';
         $administratorEmail = api_get_setting('emailAdministrator');
 
         $authModel = new Auth();

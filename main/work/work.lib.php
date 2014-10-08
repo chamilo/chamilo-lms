@@ -3782,8 +3782,14 @@ function deleteWorkItem($item_id, $courseInfo)
     $course_id = $courseInfo['real_id'];
 
     if (($is_allowed_to_edit && $locked == false) ||
-        ($locked == false AND $is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
-        //we found the current user is the author
+        (
+            $locked == false &&
+            $is_author &&
+            api_get_course_setting('student_delete_own_publication') == 1 &&
+            $work_data['qualificator_id'] == 0
+        )
+    ) {
+        // We found the current user is the author
         $sql = "SELECT url, contains_file FROM ".$work_table." WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);

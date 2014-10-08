@@ -9,7 +9,6 @@
  */
 require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
 
-
 // A regular expression for testing against valid email addresses.
 // It should actually be revised for using the complete RFC3696 description:
 // http://tools.ietf.org/html/rfc3696#section-3
@@ -30,9 +29,9 @@ require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
  * @see                     class.phpmailer.php
  * @deprecated use api_mail_html()
  */
-function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '', 
+function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '',
     $sender_email = '', $extra_headers = '', $additional_parameters = array()) {
-	api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name, 
+	api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name,
         $sender_email, $extra_headers, null, null, $additional_parameters);
 }
 
@@ -57,9 +56,18 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @return          returns true if mail was sent
  * @see             class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', 
-    $extra_headers = array(), $data_file = array(), $embedded_image = false, $additional_parameters = array())
-{
+function api_mail_html(
+    $recipient_name,
+    $recipient_email,
+    $subject,
+    $message,
+    $sender_name = '',
+    $sender_email = '',
+    $extra_headers = array(),
+    $data_file = array(),
+    $embedded_image = false,
+    $additional_parameters = array()
+) {
     global $platform_email;
 
     $mail = new PHPMailer();
@@ -73,6 +81,9 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
         $mail->SMTPAuth = 1;
         $mail->Username = $platform_email['SMTP_USER'];
         $mail->Password = $platform_email['SMTP_PASS'];
+        $mail->From = $platform_email['SMTP_FROM_EMAIL'];
+        $mail->Sender = $platform_email['SMTP_FROM_EMAIL'];
+        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
     }
 
     $mail->Priority = 3; // 5 = low, 1 = high
@@ -92,23 +103,21 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     // $mail->AddAttachment($path);
     // $mail->AddAttachment($path, $filename);
 
-    if ($sender_email != '') {
-        $mail->From         = $sender_email;
-        $mail->Sender       = $sender_email;
-        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
-    } else {
-        $mail->From         = $platform_email['SMTP_FROM_EMAIL'];
-        $mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
-        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
+    if (!$platform_email['SMTP_AUTH']) {
+        if ($sender_email != '') {
+            $mail->From = $sender_email;
+            $mail->Sender = $sender_email;
+            $mail->FromName = $sender_name;
+            //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
+        } else {
+            $mail->From = api_get_setting('emailAdministrator');
+            $mail->Sender = api_get_setting('emailAdministrator');
+            $mail->FromName = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+            //$noReply = api_get_setting('noreply_email_address');
+        }
     }
 
-    if ($sender_name != '') {
-        $mail->FromName = $sender_name;
-    } else {
-        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
-    }
     $mail->Subject = $subject;
-
     $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
 
     // Send embedded image.
@@ -196,7 +205,6 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
     $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
-
     // Send the mail message.
     if (!$mail->Send()) {
 
@@ -209,7 +217,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     $installedPluginsList = $plugin->getInstalledPluginListObject();
     foreach ($installedPluginsList as $installedPlugin) {
         if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additional_parameters)) {
-            $clockworksmsObject = new Clockworksms();            
+            $clockworksmsObject = new Clockworksms();
             $clockworksmsObject->send($additional_parameters);
         }
     }

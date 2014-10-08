@@ -13,6 +13,11 @@ $strings['YouNeedToConfirmYourAgreementCheckYourEmail'] = 'You need to confirm y
 $strings['DeleteFile'] = 'Delete file';
 $strings['RemoveAllUserAgreements'] = 'Remove all user agreements';
 $strings['WarnAllUsersByEmail'] = 'Warn all users by email';
+$strings['WarnAllUsersByEmailAndSendAttachment'] = 'Warn all users by email and send the attachment.';
 $strings['ReSendMailAgreementLink'] = 'Re send mail agreement link';
+$strings['SendOnlyWarning'] = 'Send only warning';
+$strings['SendAgreementFile'] = 'Send warning and attach the agreement';
+$strings['NoSendWarning'] = 'No send warning';
+
 
 

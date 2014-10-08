@@ -12,87 +12,50 @@ class ExerciseResult
 {
 	private $exercises_list = array(); //stores the list of exercises
 	private $results = array(); //stores the results
+    public $includeAllUsers = false;
 
-	/**
-	 * constructor of the class
-	 */
-    public function ExerciseResult($get_questions = false, $get_answers = false)
+    /**
+     * @param bool $includeAllUsers
+     */
+    public function setIncludeAllUsers($includeAllUsers)
     {
-	}
+        $this->includeAllUsers = $includeAllUsers;
+    }
 
-	/**
-	 * Reads exercises information (minimal) from the data base
-	 * @param	boolean		Whether to get only visible exercises (true) or all of them (false). Defaults to false.
-	 * @return	array		A list of exercises available
-	 */
-	private function _readExercisesList($only_visible = false)
-	{
-		$return = array();
-    	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
-
-		$sql="SELECT id,title,type,random,active FROM $TBL_EXERCISES";
-		if($only_visible)
-		{
-			$sql.= ' WHERE active=1';
-		}
-		$sql .= ' ORDER BY title';
-		$result=Database::query($sql);
-
-		// if the exercise has been found
-		while($row=Database::fetch_array($result,'ASSOC'))
-		{
-			$return[] = $row;
-		}
-		// exercise not found
-		return $return;
-	}
-
-	/**
-	 * Gets the questions related to one exercise
-	 * @param	integer		Exercise ID
-	 */
-	private function _readExerciseQuestionsList($e_id)
-	{
-		$return = array();
-    	$TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-    	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-		$sql="SELECT q.id, q.question, q.ponderation, eq.question_order, q.type, q.picture " .
-			" FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
-			" WHERE eq.question_id=q.id AND eq.exercice_id='".Database::escape_string($e_id)."' " .
-			" ORDER BY eq.question_order";
-		$result=Database::query($sql);
-
-		// fills the array with the question ID for this exercise
-		// the key of the array is the question position
-		while($row=Database::fetch_array($result,'ASSOC'))
-		{
-			$return[] = $row;
-		}
-		return true;
-	}
-
-	/**
-	 * Gets the results of all students (or just one student if access is limited)
-	 * @param	string		The document path (for HotPotatoes retrieval)
-	 * @param	integer		User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
-	 */
-	public function _getExercisesReporting($document_path, $user_id = null, $filter=0, $exercise_id = 0, $hotpotato_name = null)
-    {
+    /**
+     * Gets the results of all students (or just one student if access is limited)
+     *
+     * @param string $document_path The document path (for HotPotatoes retrieval)
+     * @param int $user_id User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
+     * @param int $filter
+     * @param int $exercise_id
+     * @param null $hotpotato_name
+     * @return bool
+     */
+    public function getExercisesReporting(
+        $document_path,
+        $user_id = null,
+        $filter = 0,
+        $exercise_id = 0,
+        $hotpotato_name = null
+    ) {
 		$return = array();
 
-    	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
-		$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
-		$TBL_TRACK_EXERCISES    	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-        $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
 
-    	$cid             = api_get_course_id();
-        $course_id       = api_get_course_int_id();
-    	$user_id         = intval($user_id);
-    	$session_id_and  = ' AND te.session_id = ' . api_get_session_id() . ' ';
-        $exercise_id     = intval($exercise_id);
-        $hotpotato_name  = Database::escape_string($hotpotato_name);
+        $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
+        $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $TBL_TRACK_ATTEMPT_RECORDING = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+
+        $cid = api_get_course_id();
+        $course_id = api_get_course_int_id();
+        $user_id = intval($user_id);
+        $sessionId = api_get_session_id();
+        $session_id_and = ' AND te.session_id = ' . $sessionId . ' ';
+        $exercise_id = intval($exercise_id);
+        $hotpotato_name = Database::escape_string($hotpotato_name);
 
         if (!empty($exercise_id)) {
             $session_id_and .= " AND exe_exo_id = $exercise_id ";
@@ -128,7 +91,8 @@ class ExerciseResult
                     tth.exe_name,
                     tth.exe_result,
                     tth.exe_weighting,
-                    tth.exe_date
+                    tth.exe_date,
+                    tth.exe_user_id as excruid
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
                     WHERE   tu.user_id=tth.exe_user_id AND
                             tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND
@@ -164,7 +128,7 @@ class ExerciseResult
                         ce.active <>-1 AND
                     ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
-            $hpsql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
+            $hpsql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date, exe_user_id as excruid
                         FROM $TBL_TRACK_HOTPOTATOES
                         WHERE
                             exe_user_id = '" . $user_id . "' AND
@@ -174,7 +138,6 @@ class ExerciseResult
 		}
 
 		$results = array();
-
 		$resx = Database::query($sql);
 		while ($rowx = Database::fetch_array($resx,'ASSOC')) {
             $results[] = $rowx;
@@ -203,6 +166,7 @@ class ExerciseResult
 		}
 
 		//Print the results of tests
+        $userWithResults = array();
 		if (is_array($results) && empty($hotpotato_name)) {
 			for ($i = 0; $i < sizeof($results); $i++) {
 				$revised = false;
@@ -215,8 +179,13 @@ class ExerciseResult
 				if (Database :: num_rows($query) > 0)
                     $revised = true;
 
-				if ($filter_by_not_revised && $revised) continue;
-				if ($filter_by_revised && !$revised) continue;
+                if ($filter_by_not_revised && $revised) {
+                    continue;
+                }
+
+                if ($filter_by_revised && !$revised) {
+                    continue;
+                }
 
 				$return[$i] = array();
 
@@ -227,28 +196,33 @@ class ExerciseResult
 					$return[$i]['user_id']      = $results[$i]['excruid'];
 					$return[$i]['email']        = $results[$i]['exemail'];
 				}
-				$return[$i]['title']   = $results[$i]['extitle'];
-				$return[$i]['start_date']  = api_get_local_time($results[$i]['exstart']);
-                $return[$i]['end_date']    = api_get_local_time($results[$i]['exdate']);
-                $return[$i]['duration']    = $results[$i]['duration'];
-				$return[$i]['result']  = $results[$i]['exresult'];
-				$return[$i]['max']     = $results[$i]['exweight'];
-                $return[$i]['status']  = $revised ? get_lang('Validated') : get_lang('NotValidated');
+				$return[$i]['title'] = $results[$i]['extitle'];
+				$return[$i]['start_date'] = api_get_local_time($results[$i]['exstart']);
+                $return[$i]['end_date'] = api_get_local_time($results[$i]['exdate']);
+                $return[$i]['duration'] = $results[$i]['duration'];
+				$return[$i]['result'] = $results[$i]['exresult'];
+				$return[$i]['max'] = $results[$i]['exweight'];
+                $return[$i]['status'] = $revised ? get_lang('Validated') : get_lang('NotValidated');
                 $return[$i]['lp_id'] = $results[$i]['orig_lp_id'];
                 $return[$i]['lp_name'] = $results[$i]['lp_name'];
 
+                $userWithResults[$results[$i]['excruid']] = 1;
 			}
 		}
 
+        $isHotPotato = false;
+
 		// Print the Result of Hotpotatoes Tests
-		if (is_array($hpresults)) {
-			for($i = 0; $i < sizeof($hpresults); $i++) {
+		if (is_array($hpresults) && !empty($hpresults)) {
+            $isHotPotato = true;
+
+			for ($i = 0; $i < sizeof($hpresults); $i++) {
 				$return[$i] = array();
 				$title = GetQuizName($hpresults[$i]['exe_name'], $document_path);
 				if ($title =='') {
 					$title = basename($hpresults[$i]['exe_name']);
 				}
-				if(empty($user_id)) {
+				if (empty($user_id)) {
 				    $return[$i]['email'] = $hpresults[$i]['email'];
 					$return[$i]['first_name'] = $hpresults[$i]['userpart1'];
 					$return[$i]['last_name'] = $hpresults[$i]['userpart2'];
@@ -260,9 +234,77 @@ class ExerciseResult
 
 				$return[$i]['result'] = $hpresults[$i]['exe_result'];
 				$return[$i]['max'] = $hpresults[$i]['exe_weighting'];
+
+                $userWithResults[$results[$i]['excruid']] = 1;
 			}
 		}
+
+        if ($this->includeAllUsers) {
+            $latestId = count($return);
+            $userWithResults = array_keys($userWithResults);
+            if (empty($sessionId)) {
+                $students = CourseManager::get_user_list_from_course_code($cid);
+            } else {
+                $students = CourseManager::get_user_list_from_course_code($cid, $sessionId);
+            }
+
+            if (!empty($students)) {
+                foreach ($students as $student) {
+                    if (!in_array($student['user_id'], $userWithResults)) {
+                        $i = $latestId;
+                        $isWestern = api_is_western_name_order();
+                        if ($isHotPotato) {
+                            $return[$i] = array();
+
+                            if (empty($user_id)) {
+                                $return[$i]['email'] = $student['email'];
+                                if ($isWestern) {
+                                    $return[$i]['first_name'] = $student['firstname'];
+                                    $return[$i]['last_name'] = $student['lastname'];
+                                } else {
+                                    $return[$i]['first_name'] = $student['lastname'];
+                                    $return[$i]['last_name'] = $student['firstname'];
+                                }
+                            }
+                            $return[$i]['title'] = null;
+                            $return[$i]['start_date'] = null;
+                            $return[$i]['end_date'] = null;
+                            $return[$i]['duration'] = null;
+                            $return[$i]['result'] = null;
+                            $return[$i]['max'] = null;
+
+                        } else {
+                            if (empty($user_id)) {
+                                $return[$i]['official_code']   = $student['official_code'];
+                                if ($isWestern) {
+                                    $return[$i]['first_name']   = $student['firstname'];
+                                    $return[$i]['last_name']    = $student['lastname'];
+                                } else {
+                                    $return[$i]['first_name']   = $student['lastname'];
+                                    $return[$i]['last_name']    = $student['firstname'];
+                                }
+
+                                $return[$i]['user_id']      = $student['user_id'];
+                                $return[$i]['email']        = $student['email'];
+                            }
+                            $return[$i]['title'] = null;
+                            $return[$i]['start_date'] = null;
+                            $return[$i]['end_date'] = null;
+                            $return[$i]['duration'] = null;
+                            $return[$i]['result'] = null;
+                            $return[$i]['max'] = null;
+                            $return[$i]['status'] = get_lang('NotAttempted');
+                            $return[$i]['lp_id'] = null;
+                            $return[$i]['lp_name'] = null;
+                        }
+                        $latestId++;
+                    }
+                }
+            }
+        }
+
 		$this->results = $return;
+
 		return true;
 	}
 
@@ -282,7 +324,7 @@ class ExerciseResult
         $hotpotato_name = null
     ) {
 		global $charset;
-		$this->_getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
+		$this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
 
 		$filename = 'exercise_results_'.date('YmdGis').'.csv';
 		if(!empty($user_id)) {
@@ -402,7 +444,7 @@ class ExerciseResult
         $hotpotato_name = null
     ) {
 		global $charset;
-		$this->_getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
+		$this->getExercisesReporting($document_path, $user_id, $export_filter, $exercise_id, $hotpotato_name);
 		$filename = 'exercise_results_'.date('YmdGis').'.xls';
 		if (!empty($user_id)) {
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.xls';

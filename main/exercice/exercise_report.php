@@ -83,10 +83,19 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
             $load_extra_data = true;
         }
 
+        $includeAllUsers = false;
+        if (isset($_REQUEST['include_all_users']) &&
+            $_REQUEST['include_all_users'] == 1
+        ) {
+            $includeAllUsers = true;
+        }
+
         require_once 'exercise_result.class.php';
+        $export = new ExerciseResult();
+        $export->setIncludeAllUsers($includeAllUsers);
+
         switch ($_GET['export_format']) {
             case 'xls' :
-                $export = new ExerciseResult();
                 $export->exportCompleteReportXLS(
                     $documentPath,
                     null,
@@ -99,7 +108,6 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
                 break;
             case 'csv' :
             default :
-                $export = new ExerciseResult();
                 $export->exportCompleteReportCSV(
                     $documentPath,
                     null,
@@ -190,15 +198,18 @@ if (isset($_REQUEST['comments']) &&
         Database::query($sql);
     }
 
-    $qry = 'SELECT DISTINCT question_id, marks FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id.' GROUP BY question_id';
+    $qry = 'SELECT DISTINCT question_id, marks
+            FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id.'
+            GROUP BY question_id';
     $res = Database::query($qry);
     $tot = 0;
     while ($row = Database :: fetch_array($res, 'ASSOC')) {
         $tot += $row['marks'];
     }
 
-    $totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."' WHERE exe_id = ".$id;
-    Database::query($totquery);
+    $sql = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."'
+            WHERE exe_id = ".$id;
+    Database::query($sql);
 
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
@@ -337,7 +348,8 @@ $extra = '<script>
                     "'.addslashes(get_lang('Download')).'": function() {
                         var export_format = $("input[name=export_format]:checked").val();
                         var extra_data  = $("input[name=load_extra_data]:checked").val();
-                        location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data;
+                        var includeAllUsers  = $("input[name=include_all_users]:checked").val();
+                        location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data+"&include_all_users="+includeAllUsers;
                         $( this ).dialog( "close" );
                     },
                 }
@@ -353,6 +365,7 @@ $form = new FormValidator('report', 'post', null, null, array('class' => 'form-v
 $form->addElement('radio', 'export_format', null, get_lang('ExportAsCSV'), 'csv', array('id' => 'export_format_csv_label'));
 $form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
 $form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
+$form->addElement('checkbox', 'include_all_users', null, get_lang('IncludeAllUsers'), '0');
 $form->setDefaults(array('export_format' => 'csv'));
 $extra .= $form->return_form();
 $extra .= '</div>';
@@ -382,7 +395,7 @@ $officialCodeInList = api_get_configuration_value('show_official_code_exercise_r
 
 if ($is_allowedToEdit || $is_tutor) {
 
-    //The order is important you need to check the the $column variable in the model.ajax.php file
+    // The order is important you need to check the the $column variable in the model.ajax.php file
 
     $columns = array(
         get_lang('FirstName'),
@@ -454,17 +467,19 @@ $extra_params['height'] = 'auto';
 ?>
 <script>
     function setSearchSelect(columnName) {
-        $("#results").jqGrid('setColProp', columnName,
-        {
-            searchoptions:{
-                dataInit:function(el){
-                    $("option[value='1']",el).attr("selected", "selected");
-                    setTimeout(function(){
-                        $(el).trigger('change');
-                    },1000);
+        $("#results").jqGrid(
+            'setColProp',
+            columnName, {
+                searchoptions:{
+                    dataInit:function(el) {
+                        $("option[value='1']",el).attr("selected", "selected");
+                        setTimeout(function(){
+                            $(el).trigger('change');
+                        },1000);
+                    }
                 }
             }
-        });
+        );
     }
 
     function exportExcel() {

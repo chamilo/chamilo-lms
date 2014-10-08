@@ -1,22 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * 	This class provides methods for messages management.
- * 	Include/require it in your code to use its features.
- *
- * 	@package chamilo.library
- */
-/**
- * Code
- */
+
 require_once api_get_path(LIBRARY_PATH).'online.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
-/*
- * @todo use constants!
- */
 define('MESSAGE_STATUS_NEW', '0');
 define('MESSAGE_STATUS_UNREAD', '1');
 //2 ??
@@ -27,8 +16,13 @@ define('MESSAGE_STATUS_INVITATION_ACCEPTED', '6');
 define('MESSAGE_STATUS_INVITATION_DENIED', '7');
 
 /**
- * Class
- * @package chamilo.library
+ * Class MessageManager
+ *
+ * 	This class provides methods for messages management.
+ * 	Include/require it in your code to use its features.
+ *
+ * 	@package chamilo.library
+ *
  */
 class MessageManager
 {
@@ -341,7 +335,13 @@ class MessageManager
                     $new_user_list[] = $user_data['user_id'];
                 }
                 $group_info = array('group_info' => $group_info, 'user_info' => $sender_info);
-                $notification->save_notification(Notification::NOTIFICATION_TYPE_GROUP, $new_user_list, $subject, $content, $group_info);
+                $notification->save_notification(
+                    Notification::NOTIFICATION_TYPE_GROUP,
+                    $new_user_list,
+                    $subject,
+                    $content,
+                    $group_info
+                );
             }
             return $inbox_last_id;
         }
@@ -351,17 +351,32 @@ class MessageManager
     /**
      * A handy way to send message
      */
-    public static function send_message_simple($receiver_user_id, $subject, $message, $sender_id = null)
-    {
-        return MessageManager::send_message($receiver_user_id, $subject, $message, null, null, null, null, null, null, $sender_id);
+    public static function send_message_simple(
+        $receiver_user_id,
+        $subject,
+        $message,
+        $sender_id = null
+    ) {
+        return MessageManager::send_message(
+            $receiver_user_id,
+            $subject,
+            $message,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $sender_id
+        );
     }
 
     /**
      * Update parent ids for other receiver user from current message in groups
      * @author Christian Fasanando Flores
-     * @param  int	parent id
-     * @param  int	receiver user id
-     * @param  int	message id
+     * @param  int	$parent_id
+     * @param  int	$receiver_user_id
+     * @param  int	$message_id
      * @return void
      */
     public static function update_parent_ids_from_reply($parent_id, $receiver_user_id, $message_id)
@@ -513,7 +528,7 @@ class MessageManager
             $safe_new_file_name = Database::escape_string($new_file_name);
             // Storing the attachments if any
             $sql = "INSERT INTO $tbl_message_attach(filename,comment, path,message_id,size)
-				  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$message_id', '".$file_attach['size']."' )";
+				    VALUES ('$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$message_id', '".$file_attach['size']."' )";
             Database::query($sql);
         }
     }
@@ -602,7 +617,8 @@ class MessageManager
         if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id)))
             return false;
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $query = "SELECT * FROM $table_message WHERE user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
+        $query = "SELECT * FROM $table_message
+                  WHERE user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
         $result = Database::query($query);
         return $row = Database::fetch_array($result);
     }
@@ -616,9 +632,12 @@ class MessageManager
     {
         if ($group_id != strval(intval($group_id)))
             return false;
+
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
-        $query = "SELECT * FROM $table_message WHERE group_id= $group_id AND msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')  ORDER BY id";
+        $query = "SELECT * FROM $table_message
+                  WHERE group_id= $group_id AND msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
+                  ORDER BY id";
         $rs = Database::query($query);
         $data = array();
         if (Database::num_rows($rs) > 0) {
@@ -713,7 +732,9 @@ class MessageManager
             return false;
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $query = "SELECT id FROM $table_message
-                  WHERE user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
+                  WHERE
+                    user_receiver_id=".Database::escape_string($user_id)." AND
+                    id='".Database::escape_string($id)."'";
         $result = Database::query($query);
         $num = Database::num_rows($result);
         if ($num > 0)
@@ -799,8 +820,9 @@ class MessageManager
     public static function get_number_of_messages_sent()
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE msg_status=".MESSAGE_STATUS_OUTBOX." AND user_sender_id=".api_get_user_id();
-        $sql_result = Database::query($sql_query);
+        $sql = "SELECT COUNT(*) as number_messages FROM $table_message
+                WHERE msg_status=".MESSAGE_STATUS_OUTBOX." AND user_sender_id=".api_get_user_id();
+        $sql_result = Database::query($sql);
         $result = Database::fetch_array($sql_result);
         return $result['number_messages'];
     }
@@ -819,16 +841,19 @@ class MessageManager
 
         if ($source == 'outbox') {
             if (isset($message_id) && is_numeric($message_id)) {
-                $query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$message_id." AND msg_status=4;";
+                $query = "SELECT * FROM $table_message
+                          WHERE user_sender_id=".api_get_user_id()." AND id=".$message_id." AND msg_status=4;";
                 $result = Database::query($query);
                 $path = 'outbox.php';
             }
         } else {
             if (is_numeric($message_id) && !empty($message_id)) {
-                $query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."' WHERE user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
-                $result = Database::query($query);
+                $query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."'
+                          WHERE user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
+                Database::query($query);
 
-                $query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
+                $query = "SELECT * FROM $table_message
+                          WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
                 $result = Database::query($query);
             }
             $path = 'inbox.php';
@@ -915,7 +940,11 @@ class MessageManager
 
         $message_id = '';
         if (is_numeric($_GET['id_send'])) {
-            $query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".intval(Database::escape_string($_GET['id_send']))." AND msg_status=4;";
+            $query = "SELECT * FROM $table_message
+                      WHERE
+                            user_sender_id=".api_get_user_id()." AND
+                            id=".intval(Database::escape_string($_GET['id_send']))." AND
+                            msg_status=4;";
             $result = Database::query($query);
             $message_id = intval($_GET['id_send']);
         }
@@ -976,7 +1005,8 @@ class MessageManager
     public static function get_user_id_by_email($user_email)
     {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT user_id FROM '.$tbl_user.' WHERE email="'.Database::escape_string($user_email).'";';
+        $sql = 'SELECT user_id FROM '.$tbl_user.'
+                WHERE email="'.Database::escape_string($user_email).'";';
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs, 'ASSOC');
         if (isset($row['user_id'])) {
@@ -988,6 +1018,7 @@ class MessageManager
 
     /**
      * Displays messages of a group with nested view
+     *
      * @param int $group_id
      */
     public static function display_messages_for_group($group_id)
@@ -1079,23 +1110,35 @@ class MessageManager
                 $html .= '<div class="span2">';
                 $html .= $user_info;
                 $html .= '</div>';
-                //group_topics.php?action=delete&id=3&topic_id=6
-                //$date.
-                //$html .= Display::div($title.Security::remove_XSS(cut($topic['content'], 150), STUDENT, true).$user_info, array('class'=>'group_discussions_info')).' </tr> '.$actions.'</table>';
-
-                $html .= '</div>'; //rounded_div
+                $html .= '</div>';
 
                 $array_html[] = array($html);
             }
             // grids for items and topics  with paginations
-            $html_messages .= Display::return_sortable_grid('topics', array(), $array_html, array('hide_navigation' => false, 'per_page' => $topics_per_page), $query_vars, false, array(true, true, true, false), false);
+            $html_messages .= Display::return_sortable_grid(
+                'topics',
+                array(),
+                $array_html,
+                array(
+                    'hide_navigation' => false,
+                    'per_page' => $topics_per_page
+                ),
+                $query_vars,
+                false,
+                array(true, true, true, false),
+                false
+            );
         }
         return $html_messages;
     }
 
     /**
      * Displays messages of a group with nested view
-     * @param int group id
+     * @param $group_id
+     * @param $topic_id
+     * @param $is_member
+     * @param $message_id
+     * @return string
      */
     public static function display_message_for_group($group_id, $topic_id, $is_member, $message_id)
     {

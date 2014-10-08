@@ -1,19 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- *   This class provides methods for the notebook management.
- *   Include/require it in your code to use its features.
- * @package chamilo.library
- */
-/**
- * Code
- */
+
 define ('SKILL_TYPE_REQUIREMENT', 'required');
 define ('SKILL_TYPE_ACQUIRED', 'acquired');
 define ('SKILL_TYPE_BOTH', 'both');
 
 require_once api_get_path(LIBRARY_PATH).'model.lib.php';
 
+/**
+ * Class SkillProfile
+ * @package chamilo.library
+ */
 class SkillProfile extends Model
 {
     public $columns = array('id', 'name', 'description');

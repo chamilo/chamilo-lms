@@ -1,32 +1,25 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *    This class provides methods for the social network management.
- *    Include/require it in your code to use its features.
- *
- *    @package chamilo.social
- */
-/**
- * Code
- */
-//PLUGIN PLACES
+// PLUGIN PLACES
 define('SOCIAL_LEFT_PLUGIN', 1);
 define('SOCIAL_CENTER_PLUGIN', 2);
 define('SOCIAL_RIGHT_PLUGIN', 3);
-
 define('CUT_GROUP_NAME', 50);
 
 //This require is necessary because we use constants that need to be loaded before the SocialManager class
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 /**
+ * Class SocialManager
  *
- *    @package chamilo.social
+ * This class provides methods for the social network management.
+ * Include/require it in your code to use its features.
+ *
+ * @package chamilo.social
  */
 class SocialManager extends UserManager
 {
-
     public function __construct()
     {
 

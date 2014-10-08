@@ -18,6 +18,8 @@ $strings['ReSendMailAgreementLink'] = 'Re send mail agreement link';
 $strings['SendOnlyWarning'] = 'Send only warning';
 $strings['SendAgreementFile'] = 'Send warning and attach the agreement';
 $strings['NoSendWarning'] = 'No send warning';
+$strings['TheAgreementIsAttachedInThisEmail'] = 'A copy of the agreement is attached in this email';
+
 
 
 

@@ -258,10 +258,17 @@ class CourseLegalPlugin extends Plugin
 
         $subject = $this->get_lang("AgreementUpdated");
         $message = sprintf($this->get_lang("AgreementWasUpdatedClickHere"), $url);
-        $dataFile = array(
-            'path' => $filePath,
-            'filename' => basename($filePath),
-        );
+
+        $dataFile = array();
+        if (!empty($filePath)) {
+            $dataFile = array(
+                'path' => $filePath,
+                'filename' => basename($filePath),
+            );
+            $message = sprintf($this->get_lang("AgreementWasUpdatedClickHere"), $url)." \n";
+            $message .= $this->get_lang("TheAgreementIsAttachedInThisEmail");
+        }
+
         if (!empty($students)) {
             foreach ($students as $student) {
                 $userInfo = api_get_user_info($student['user_id']);

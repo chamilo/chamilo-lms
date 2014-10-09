@@ -59,57 +59,57 @@ class HotpotatoesExerciseResult
                         exe_cours_id = '" . Database :: escape_string($cid) . "' AND
                         tth.exe_name = '$hotpotato_name'
                     ORDER BY exe_cours_id ASC, exe_date ASC";
+        }
+
+        $results = array();
+
+        $resx = Database::query($sql);
+        while ($rowx = Database::fetch_array($resx,'ASSOC')) {
+            $results[] = $rowx;
+        }
+
+        $hpresults = array();
+        $resx = Database::query($sql);
+        while ($rowx = Database::fetch_array($resx,'ASSOC')) {
+            $hpresults[] = $rowx;
+        }
+
+        /*if ($filter) {
+            switch ($filter) {
+                case 1 :
+                    $filter_by_not_revised = true;
+                    break;
+                case 2 :
+                    $filter_by_revised = true;
+                    break;
+                default :
+                    null;
             }
+        }*/
 
-            $results = array();
-
-            $resx = Database::query($sql);
-            while ($rowx = Database::fetch_array($resx,'ASSOC')) {
-                $results[] = $rowx;
-            }
-
-            $hpresults = array();
-            $resx = Database::query($sql);
-            while ($rowx = Database::fetch_array($resx,'ASSOC')) {
-                $hpresults[] = $rowx;
-            }
-
-            /*if ($filter) {
-                switch ($filter) {
-                    case 1 :
-                        $filter_by_not_revised = true;
-                        break;
-                    case 2 :
-                        $filter_by_revised = true;
-                        break;
-                    default :
-                        null;
+        // Print the Result of Hotpotatoes Tests
+        if (is_array($hpresults)) {
+            for($i = 0; $i < sizeof($hpresults); $i++) {
+                $return[$i] = array();
+                $title = GetQuizName($hpresults[$i]['exe_name'], $document_path);
+                if ($title =='') {
+                    $title = basename($hpresults[$i]['exe_name']);
                 }
-            }*/
-
-            // Print the Result of Hotpotatoes Tests
-            if (is_array($hpresults)) {
-                for($i = 0; $i < sizeof($hpresults); $i++) {
-                    $return[$i] = array();
-                    $title = GetQuizName($hpresults[$i]['exe_name'], $document_path);
-                    if ($title =='') {
-                        $title = basename($hpresults[$i]['exe_name']);
-                    }
-                    if(empty($user_id)) {
-                    $return[$i]['email'] = $hpresults[$i]['email'];
-                        $return[$i]['first_name'] = $hpresults[$i]['userpart1'];
-                        $return[$i]['last_name'] = $hpresults[$i]['userpart2'];
-                    }
-                    $return[$i]['title'] = $title;
-                    $return[$i]['exe_date']  = $hpresults[$i]['exe_date'];
-
-                    $return[$i]['result'] = $hpresults[$i]['exe_result'];
-                    $return[$i]['max'] = $hpresults[$i]['exe_weighting'];
+                if(empty($user_id)) {
+                $return[$i]['email'] = $hpresults[$i]['email'];
+                    $return[$i]['first_name'] = $hpresults[$i]['userpart1'];
+                    $return[$i]['last_name'] = $hpresults[$i]['userpart2'];
                 }
-            }
-            $this->results = $return;
+                $return[$i]['title'] = $title;
+                $return[$i]['exe_date']  = $hpresults[$i]['exe_date'];
 
-            return true;
+                $return[$i]['result'] = $hpresults[$i]['exe_result'];
+                $return[$i]['max'] = $hpresults[$i]['exe_weighting'];
+            }
+        }
+        $this->results = $return;
+
+        return true;
 	}
 
 

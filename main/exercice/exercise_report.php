@@ -69,18 +69,21 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-if (!empty($exercise_id))
+if (!empty($exercise_id)) {
     $parameters['exerciseId'] = $exercise_id;
+}
+
 if (!empty($_GET['path'])) {
     $parameters['path'] = Security::remove_XSS($_GET['path']);
 }
 
 if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-
-        $load_extra_data = false;
+    if (api_is_platform_admin() || api_is_course_admin() ||
+        api_is_course_tutor() || api_is_course_coach()
+    ) {
+        $loadExtraData = false;
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
-            $load_extra_data = true;
+            $loadExtraData = true;
         }
 
         $includeAllUsers = false;
@@ -90,19 +93,26 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
             $includeAllUsers = true;
         }
 
+        $onlyBestAttempts = false;
+        if (isset($_REQUEST['only_best_attempts']) &&
+            $_REQUEST['only_best_attempts'] == 1
+        ) {
+            $onlyBestAttempts = true;
+        }
+
         require_once 'exercise_result.class.php';
         $export = new ExerciseResult();
         $export->setIncludeAllUsers($includeAllUsers);
+        $export->setOnlyBestAttempts($onlyBestAttempts);
 
         switch ($_GET['export_format']) {
             case 'xls' :
                 $export->exportCompleteReportXLS(
                     $documentPath,
                     null,
-                    $load_extra_data,
+                    $loadExtraData,
                     null,
-                    $_GET['exerciseId'],
-                    $_GET['hotpotato_name']
+                    $_GET['exerciseId']
                 );
                 exit;
                 break;
@@ -111,10 +121,9 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
                 $export->exportCompleteReportCSV(
                     $documentPath,
                     null,
-                    $load_extra_data,
+                    $loadExtraData,
                     null,
-                    $_GET['exerciseId'],
-                    $_GET['hotpotato_name']
+                    $_GET['exerciseId']
                 );
                 exit;
                 break;
@@ -251,11 +260,14 @@ if (isset($_REQUEST['comments']) &&
 $actions = null;
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
+    if (api_is_platform_admin() || api_is_course_admin() ||
+        api_is_course_tutor() || api_is_course_coach()
+    ) {
         $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .='<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .='<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.$path.'&exerciseId='.intval($_GET['exerciseId']).'" >'.
+
+        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.intval($_GET['exerciseId']).'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         // clean result before a selected date icon
         $actions .= Display::url(
@@ -349,7 +361,9 @@ $extra = '<script>
                         var export_format = $("input[name=export_format]:checked").val();
                         var extra_data  = $("input[name=load_extra_data]:checked").val();
                         var includeAllUsers  = $("input[name=include_all_users]:checked").val();
-                        location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data+"&include_all_users="+includeAllUsers;
+                        var attempts = $("input[name=only_best_attempts]:checked").val();
+
+                        location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data+"&include_all_users="+includeAllUsers+"&only_best_attempts="+attempts;
                         $( this ).dialog( "close" );
                     },
                 }
@@ -366,6 +380,8 @@ $form->addElement('radio', 'export_format', null, get_lang('ExportAsCSV'), 'csv'
 $form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
 $form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
 $form->addElement('checkbox', 'include_all_users', null, get_lang('IncludeAllUsers'), '0');
+$form->addElement('checkbox', 'only_best_attempts', null, get_lang('OnlyBestAttempts'), '0');
+
 $form->setDefaults(array('export_format' => 'csv'));
 $extra .= $form->return_form();
 $extra .= '</div>';

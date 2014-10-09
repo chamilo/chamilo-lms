@@ -2,17 +2,16 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * ExerciseResult class: This class allows to instantiate an object
- * of type ExerciseResult
+ * Class ExerciseResult
  * which allows you to export exercises results in multiple presentation forms
  * @package chamilo.exercise
  * @author Yannick Warnier
 */
 class ExerciseResult
 {
-	private $exercises_list = array(); //stores the list of exercises
-	private $results = array(); //stores the results
+	private $results = array();
     public $includeAllUsers = false;
+    public $onlyBestAttempts = false;
 
     /**
      * @param bool $includeAllUsers
@@ -20,6 +19,14 @@ class ExerciseResult
     public function setIncludeAllUsers($includeAllUsers)
     {
         $this->includeAllUsers = $includeAllUsers;
+    }
+
+    /**
+     * @param bool $value
+     */
+    public function setOnlyBestAttempts($value)
+    {
+        $this->onlyBestAttempts = $value;
     }
 
     /**
@@ -81,23 +88,11 @@ class ExerciseResult
                 INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id)
                 INNER JOIN $TBL_USER  AS user ON (user.user_id = exe_user_id)
                 LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm ON tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id
-                WHERE   ce.c_id = $course_id AND
-                        te.status != 'incomplete' AND
-                        te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and  $session_id_and AND
-                        ce.active <>-1";
-            $hpsql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
-                    official_code,
-                    email,
-                    tth.exe_name,
-                    tth.exe_result,
-                    tth.exe_weighting,
-                    tth.exe_date,
-                    tth.exe_user_id as excruid
-                    FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-                    WHERE   tu.user_id=tth.exe_user_id AND
-                            tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND
-                            tth.exe_name = '$hotpotato_name'
-                    ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
+                WHERE
+                    ce.c_id = $course_id AND
+                    te.status != 'incomplete' AND
+                    te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and  $session_id_and AND
+                    ce.active <>-1";
 
 		} else {
             $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
@@ -127,27 +122,28 @@ class ExerciseResult
                         te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and $session_id_and AND
                         ce.active <>-1 AND
                     ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
-
-            $hpsql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date, exe_user_id as excruid
-                        FROM $TBL_TRACK_HOTPOTATOES
-                        WHERE
-                            exe_user_id = '" . $user_id . "' AND
-                            exe_cours_id = '" . Database :: escape_string($cid) . "' AND
-                            tth.exe_name = '$hotpotato_name'
-                        ORDER BY exe_cours_id ASC, exe_date DESC";
 		}
 
 		$results = array();
 		$resx = Database::query($sql);
+        $bestAttemptPerUser = array();
 		while ($rowx = Database::fetch_array($resx,'ASSOC')) {
-            $results[] = $rowx;
+            if ($this->onlyBestAttempts) {
+                if (!isset($bestAttemptPerUser[$rowx['excruid']])) {
+                    $bestAttemptPerUser[$rowx['excruid']] = $rowx;
+                } else {
+                    if ($rowx['exresult'] > $bestAttemptPerUser[$rowx['excruid']]['exresult']) {
+                        $bestAttemptPerUser[$rowx['excruid']] = $rowx;
+                    }
+                }
+            } else {
+                $results[] = $rowx;
+            }
 		}
 
-		$hpresults = array();
-		$resx = Database::query($hpsql);
-	    while ($rowx = Database::fetch_array($resx,'ASSOC')) {
-            $hpresults[] = $rowx;
-		}
+        if ($this->onlyBestAttempts) {
+            $results = $bestAttemptPerUser;
+        }
 
         $filter_by_not_revised = false;
         $filter_by_revised = false;
@@ -165,19 +161,22 @@ class ExerciseResult
 			}
 		}
 
-		//Print the results of tests
+		// Print the results of tests
         $userWithResults = array();
-		if (is_array($results) && empty($hotpotato_name)) {
-			for ($i = 0; $i < sizeof($results); $i++) {
+		if (is_array($results)) {
+            $i = 0;
+			foreach ($results as $result) {
 				$revised = false;
 
 				//revised or not
 				$sql_exe = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT_RECORDING
-							WHERE author != '' AND exe_id = ".Database :: escape_string($results[$i]['exid'])." LIMIT 1";
+							WHERE author != '' AND exe_id = ".Database :: escape_string($result['exid'])."
+							LIMIT 1";
 				$query = Database::query($sql_exe);
 
-				if (Database :: num_rows($query) > 0)
+                if (Database:: num_rows($query) > 0) {
                     $revised = true;
+                }
 
                 if ($filter_by_not_revised && $revised) {
                     continue;
@@ -188,54 +187,25 @@ class ExerciseResult
                 }
 
 				$return[$i] = array();
-
 				if (empty($user_id)) {
-                    $return[$i]['official_code']   = $results[$i]['official_code'];
-					$return[$i]['first_name']   = $results[$i]['userpart1'];
-					$return[$i]['last_name']    = $results[$i]['userpart2'];
-					$return[$i]['user_id']      = $results[$i]['excruid'];
-					$return[$i]['email']        = $results[$i]['exemail'];
+                    $return[$i]['official_code']   = $result['official_code'];
+					$return[$i]['first_name']   = $result['userpart1'];
+					$return[$i]['last_name']    = $result['userpart2'];
+					$return[$i]['user_id']      = $result['excruid'];
+					$return[$i]['email']        = $result['exemail'];
 				}
-				$return[$i]['title'] = $results[$i]['extitle'];
-				$return[$i]['start_date'] = api_get_local_time($results[$i]['exstart']);
-                $return[$i]['end_date'] = api_get_local_time($results[$i]['exdate']);
-                $return[$i]['duration'] = $results[$i]['duration'];
-				$return[$i]['result'] = $results[$i]['exresult'];
-				$return[$i]['max'] = $results[$i]['exweight'];
+				$return[$i]['title'] = $result['extitle'];
+				$return[$i]['start_date'] = api_get_local_time($result['exstart']);
+                $return[$i]['end_date'] = api_get_local_time($result['exdate']);
+                $return[$i]['duration'] = $result['duration'];
+				$return[$i]['result'] = $result['exresult'];
+				$return[$i]['max'] = $result['exweight'];
                 $return[$i]['status'] = $revised ? get_lang('Validated') : get_lang('NotValidated');
-                $return[$i]['lp_id'] = $results[$i]['orig_lp_id'];
-                $return[$i]['lp_name'] = $results[$i]['lp_name'];
+                $return[$i]['lp_id'] = $result['orig_lp_id'];
+                $return[$i]['lp_name'] = $result['lp_name'];
 
-                $userWithResults[$results[$i]['excruid']] = 1;
-			}
-		}
-
-        $isHotPotato = false;
-
-		// Print the Result of Hotpotatoes Tests
-		if (is_array($hpresults) && !empty($hpresults)) {
-            $isHotPotato = true;
-
-			for ($i = 0; $i < sizeof($hpresults); $i++) {
-				$return[$i] = array();
-				$title = GetQuizName($hpresults[$i]['exe_name'], $document_path);
-				if ($title =='') {
-					$title = basename($hpresults[$i]['exe_name']);
-				}
-				if (empty($user_id)) {
-				    $return[$i]['email'] = $hpresults[$i]['email'];
-					$return[$i]['first_name'] = $hpresults[$i]['userpart1'];
-					$return[$i]['last_name'] = $hpresults[$i]['userpart2'];
-				}
-				$return[$i]['title'] = $title;
-				$return[$i]['start_date']  = api_get_local_time($results[$i]['exstart']);
-                $return[$i]['end_date']    = api_get_local_time($results[$i]['exdate']);
-                $return[$i]['duration']    = $results[$i]['duration'];
-
-				$return[$i]['result'] = $hpresults[$i]['exe_result'];
-				$return[$i]['max'] = $hpresults[$i]['exe_weighting'];
-
-                $userWithResults[$results[$i]['excruid']] = 1;
+                $userWithResults[$result['excruid']] = 1;
+                $i++;
 			}
 		}
 
@@ -253,50 +223,30 @@ class ExerciseResult
                     if (!in_array($student['user_id'], $userWithResults)) {
                         $i = $latestId;
                         $isWestern = api_is_western_name_order();
-                        if ($isHotPotato) {
-                            $return[$i] = array();
 
-                            if (empty($user_id)) {
-                                $return[$i]['email'] = $student['email'];
-                                if ($isWestern) {
-                                    $return[$i]['first_name'] = $student['firstname'];
-                                    $return[$i]['last_name'] = $student['lastname'];
-                                } else {
-                                    $return[$i]['first_name'] = $student['lastname'];
-                                    $return[$i]['last_name'] = $student['firstname'];
-                                }
+                        if (empty($user_id)) {
+                            $return[$i]['official_code']   = $student['official_code'];
+                            if ($isWestern) {
+                                $return[$i]['first_name']   = $student['firstname'];
+                                $return[$i]['last_name']    = $student['lastname'];
+                            } else {
+                                $return[$i]['first_name']   = $student['lastname'];
+                                $return[$i]['last_name']    = $student['firstname'];
                             }
-                            $return[$i]['title'] = null;
-                            $return[$i]['start_date'] = null;
-                            $return[$i]['end_date'] = null;
-                            $return[$i]['duration'] = null;
-                            $return[$i]['result'] = null;
-                            $return[$i]['max'] = null;
 
-                        } else {
-                            if (empty($user_id)) {
-                                $return[$i]['official_code']   = $student['official_code'];
-                                if ($isWestern) {
-                                    $return[$i]['first_name']   = $student['firstname'];
-                                    $return[$i]['last_name']    = $student['lastname'];
-                                } else {
-                                    $return[$i]['first_name']   = $student['lastname'];
-                                    $return[$i]['last_name']    = $student['firstname'];
-                                }
-
-                                $return[$i]['user_id']      = $student['user_id'];
-                                $return[$i]['email']        = $student['email'];
-                            }
-                            $return[$i]['title'] = null;
-                            $return[$i]['start_date'] = null;
-                            $return[$i]['end_date'] = null;
-                            $return[$i]['duration'] = null;
-                            $return[$i]['result'] = null;
-                            $return[$i]['max'] = null;
-                            $return[$i]['status'] = get_lang('NotAttempted');
-                            $return[$i]['lp_id'] = null;
-                            $return[$i]['lp_name'] = null;
+                            $return[$i]['user_id']      = $student['user_id'];
+                            $return[$i]['email']        = $student['email'];
                         }
+                        $return[$i]['title'] = null;
+                        $return[$i]['start_date'] = null;
+                        $return[$i]['end_date'] = null;
+                        $return[$i]['duration'] = null;
+                        $return[$i]['result'] = null;
+                        $return[$i]['max'] = null;
+                        $return[$i]['status'] = get_lang('NotAttempted');
+                        $return[$i]['lp_id'] = null;
+                        $return[$i]['lp_name'] = null;
+
                         $latestId++;
                     }
                 }

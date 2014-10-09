@@ -1,14 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
+require_once api_get_path(SYS_PATH).'vendor/twig/twig/lib/Twig/Autoloader.php';
+
 /**
+ * Class Template
  * @author Julio Montoya <gugli100@gmail.com>
  * @todo better organization of the class, methods and variables
  *
- * */
-
-require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
-require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
-
+ */
 class Template
 {
     public $style = 'default'; //see the template folder
@@ -52,7 +53,7 @@ class Template
         $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins     = $load_plugins;
 
-        //Twig settings
+        // Twig settings
         Twig_Autoloader::register();
 
         $template_paths = array(

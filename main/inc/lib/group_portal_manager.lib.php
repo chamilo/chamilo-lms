@@ -1,15 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * 	This library provides functions for the group management.
- * 	Include/require it in your code to use its functionality.
- * 	@author Julio Montoya <gugli100@gmail.com>
- * 	@package chamilo.library
- */
-/**
- * Code
- */
 // Group permissions
 define('GROUP_PERMISSION_OPEN', '1');
 define('GROUP_PERMISSION_CLOSED', '2');
@@ -31,12 +22,14 @@ define('GROUP_IMAGE_SIZE_SMALL', 4);
 define('GROUP_TITLE_LENGTH', 50);
 
 /**
- * Class
- * @package chamilo.library
+ * Class GroupPortalManager
+ *  This library provides functions for the group management.
+ * 	Include/require it in your code to use its functionality.
+ * 	@author Julio Montoya <gugli100@gmail.com>
+ * 	@package chamilo.library
  */
 class GroupPortalManager
 {
-
     /**
      * Creates a new group
      *
@@ -64,8 +57,10 @@ class GroupPortalManager
         $id = Database::insert_id();
         if ($id) {
             event_system(LOG_GROUP_PORTAL_CREATED, LOG_GROUP_PORTAL_ID, $id);
+
             return $id;
         }
+
         return false;
     }
 
@@ -120,6 +115,7 @@ class GroupPortalManager
         // Delete group image
         self::delete_group_picture($id);
         event_system(LOG_GROUP_PORTAL_DELETED, LOG_GROUP_PORTAL_ID, $id);
+
         return $result;
     }
 
@@ -314,13 +310,14 @@ class GroupPortalManager
                 }
             }
         }
+
         return $toreturn;
     }
 
     /**
      * Gets the tags from a given group
-     * @param int group id
-     * @param bool show group links or not
+     * @param int $group_id
+     * @param bool $show_tag_links show group links or not
      *
      */
     public static function get_group_tags($group_id, $show_tag_links = true)
@@ -410,7 +407,7 @@ class GroupPortalManager
             $num = intval($num);
         }
         // only show admins and readers
-        $where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
+        $where_relation_condition = " WHERE gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
         $sql = "SELECT DISTINCT count(user_id) as count, g.picture_uri, g.name, g.description, g.id
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
@@ -624,8 +621,9 @@ class GroupPortalManager
     /**
      * Add a group of users into a group of URLs
      * @author Julio Montoya
-     * @param  array of user_ids
-     * @param  array of url_ids
+     * @param  array $user_list of user_ids
+     * @param  array $group_list of url_ids
+     * @param string $relation_type
      **/
     public static function add_users_to_groups($user_list, $group_list, $relation_type = GROUP_USER_PERMISSION_READER)
     {
@@ -650,8 +648,8 @@ class GroupPortalManager
     /**
      * Deletes a group and user relationship
      * @author Julio Montoya
-     * @param int user id
-     * @param int relation type (optional)
+     * @param int $group_id
+     * @param int $relation_type (optional)
      * @return boolean true if success
      * */
     public static function delete_users($group_id, $relation_type = null)
@@ -702,6 +700,7 @@ class GroupPortalManager
      * @param int  $user_id
      * @param int $group_id
      * @param int $relation_type
+     *
      * @return bool
      **/
     public static function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)

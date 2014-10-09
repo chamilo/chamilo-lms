@@ -1526,6 +1526,165 @@ function WSEditUser($params) {
     return  $return;
 }
 
+/* Register WSEditUserWithPicture function */
+// Register the data structures used by the service
+$server->wsdl->addComplexType(
+    'editUserWithPicture',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+        'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
+        'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
+        'username' => array('name' => 'username', 'type' => 'xsd:string'),
+        'password' => array('name' => 'password', 'type' => 'xsd:string'),
+        'email' => array('name' => 'email', 'type' => 'xsd:string'),
+        'status' => array('name' => 'status', 'type' => 'xsd:string'),
+        'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
+        'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+        'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
+        'picture_url' => array('name' => 'picture_url', 'type' => 'xsd:string')
+    )
+);
+
+// Register the method to expose
+$server->register('WSEditUserWithPicture',              // method name
+    array('editUserWithPicture' => 'tns:editUserWithPicture'),     // input parameters
+    array('return' => 'xsd:string'),                    // output parameters
+    'urn:WSRegistration',                               // namespace
+    'urn:WSRegistration#WSEditUserWithPicture',         // soapaction
+    'rpc',                                              // style
+    'encoded',                                          // use
+    'This service edits a user from wiener'             // documentation
+);
+
+// Define the method WSEditUserWithPicture
+function WSEditUserWithPicture($params) {
+    global $_configuration;
+
+    if(!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+    $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+
+    $original_user_id_value = $params['original_user_id_value'];
+    $original_user_id_name = $params['original_user_id_name'];
+    $firstname = $params['firstname'];
+    $lastname = $params['lastname'];
+    $username = $params['username'];
+    $password = null;
+    $auth_source = null;
+    $email = $params['email'];
+    $status = $params['status'];
+    $official_code = '';
+    $phone = $params['phone'];
+    $picture_url = $params['picture_url'];
+    $picture_uri = '';
+    $expiration_date = $params['expiration_date'];
+    $active = 1;
+    $creator_id = null;
+    $hr_dept_id = 0;
+    $extra = null;
+    $extra_list = $params['extra'];
+
+    if (!empty($params['password'])) { $password = $params['password']; }
+
+
+    // Get user id from id wiener
+
+    $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
+    
+    // Get picture and generate uri.
+    $filename = basename($picture_url);
+    $tempdir = sys_get_temp_dir();
+    file_put_contents($tempdir."/".$filename, file_get_contents($picture_url));
+    $picture_uri = UserManager::update_user_picture($user_id, $filename, $tempdir."/".$filename);
+
+    if ($user_id == 0) {
+        return 0;
+    } else {
+        $sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+        $resu = Database::query($sql);
+        $r_check_user = Database::fetch_row($resu);
+        if (!empty($r_check_user[0])) {
+            return 0;
+        }
+    }
+
+    // Check whether username already exits.
+    $sql = "SELECT username FROM $table_user WHERE username = '$username' AND user_id <> '$user_id'";
+    $res_un = Database::query($sql);
+    $r_username = Database::fetch_row($res_un);
+
+    if (!empty($r_username[0])) {
+        return 0;
+    }
+    // Edit lastname an firstname only if not empty
+    $sql = "UPDATE $table_user SET ";
+    if (!empty($lastname)) {
+        $sql .= " lastname='".Database::escape_string($lastname)."', ";
+    }
+    if (!empty($firstname)) {
+        $sql .= " firstname='".Database::escape_string($firstname)."', ";
+    }
+    $sql .= " username='".Database::escape_string($username)."',";
+    if (!is_null($password)) {
+        $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
+        $sql .= " password='".Database::escape_string($password)."',";
+    }
+    if (!is_null($auth_source)) {
+        $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
+    }
+
+    // Exception for admins in case no status is provided in WS call...
+    $t_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+    $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+    $resadmin = Database::query($sqladmin);
+    $is_admin = Database::num_rows($resadmin);
+
+    if (empty($status)) {
+        $status = 5;
+    }
+
+    if ($is_admin) {
+        $status = 1;
+    }
+
+    $sql .=    "
+            email='".Database::escape_string($email)."',
+            status='".Database::escape_string($status)."',
+            official_code='".Database::escape_string($official_code)."',
+            phone='".Database::escape_string($phone)."',
+            picture_uri='".Database::escape_string($picture_uri)."',
+            expiration_date='".Database::escape_string($expiration_date)."',
+            active='".Database::escape_string($active)."',
+            hr_dept_id=".intval($hr_dept_id);
+
+    if (!is_null($creator_id)) {
+        $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
+    }
+    $sql .=    " WHERE user_id='$user_id'";
+    $return = @Database::query($sql);
+
+    if (is_array($extra_list) && count($extra_list) > 0) {
+        foreach ($extra_list as $extra) {
+            $extra_field_name = $extra['field_name'];
+            $extra_field_value = $extra['field_value'];
+            // Save the external system's id into user_field_value table.
+            $res = UserManager::update_extra_field_value($user_id, $extra_field_name, $extra_field_value);
+        }
+    }
+
+    return  $return;
+}
+
 /* Register WSEditUsersPasswordCrypted function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(

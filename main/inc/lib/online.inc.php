@@ -47,6 +47,44 @@ function LoginCheck($uid) {
 }
 
 /**
+ * @param int $userId
+ */
+function preventMultipleLogin($userId)
+{
+    global $_configuration;
+    $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $userId = intval($userId);
+
+    if (isset($_configuration['prevent_multiple_simultaneous_login']) &&
+        $_configuration['prevent_multiple_simultaneous_login']
+    ) {
+        if (!empty($userId) && !api_is_anonymous()) {
+
+            $isFirstLogin = Session::read('first_user_login');
+            if (empty($isFirstLogin)) {
+                $sql = "SELECT login_id FROM $table
+                     WHERE login_user_id = " . $userId . " LIMIT 1";
+
+                $result = Database::query($sql);
+                $loginData = array();
+                if (Database::num_rows($result)) {
+                    $loginData = Database::fetch_array($result);
+                }
+
+                // Trying double login
+                if (!empty($loginData)) {
+                    api_not_allowed(true, get_lang('MultipleConnectionsAreNotAllow'));
+                    exit;
+                } else {
+                    // First time
+                    Session::write('first_user_login', 1);
+                }
+            }
+        }
+    }
+}
+
+/**
  * This function handles the logout and is called whenever there is a $_GET['logout']
  * @return void  Directly redirects the user or leaves him where he is, but doesn't return anything
  * @author Fernando P. García <fernando@develcuy.com>

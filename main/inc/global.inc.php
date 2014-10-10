@@ -317,19 +317,8 @@ if (file_exists($mail_conf)) {
 	require_once $mail_conf;
 }
 
-// ===== "who is logged in?" module section =====
-
-// check and modify the date of user in the track.e.online table
-if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
-    LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
-}
-
-// ===== end "who is logged in?" module section =====
-
 if (api_get_setting('server_type') == 'test') {
     error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-    /*ini_set('display_errors', '1');
-    error_reporting(-1);*/
 } else {
     /*
     Server type is not test
@@ -467,7 +456,9 @@ if (!empty($valid_languages)) {
     $language_priority3 = api_get_setting('languagePriority3');
     $language_priority4 = api_get_setting('languagePriority4');
 
-    if (in_array($user_language, $valid_languages['folder']) && (isset($_GET['language']) || isset($_POST['language_list']) || !empty($browser_language))) {
+    if (in_array($user_language, $valid_languages['folder']) &&
+        (isset($_GET['language']) || isset($_POST['language_list']) || !empty($browser_language))
+    ) {
         $user_selected_language = $user_language; // $_GET['language']; or HTTP_ACCEPT_LANGUAGE
         $_SESSION['user_language_choice'] = $user_selected_language;
         $platformLanguage = $user_selected_language;
@@ -570,6 +561,17 @@ $charset = $charset_initial_value;
 // The global variable $text_dir has been defined in the language file trad4all.inc.php.
 // For determing text direction correspondent to the current language we use now information from the internationalization library.
 $text_dir = api_get_text_direction();
+
+// ===== "who is logged in?" module section =====
+
+// check and modify the date of user in the track.e.online table
+if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
+    preventMultipleLogin($_user["user_id"]);
+    LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
+}
+
+// ===== end "who is logged in?" module section =====
+
 
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 

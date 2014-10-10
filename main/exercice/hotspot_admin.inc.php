@@ -69,6 +69,10 @@ if ($modifyIn) {
 $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_get_cidreq() . '&exerciseId=' . $exerciseId;
 
 // the answer form has been submitted
+
+$submitAnswers = isset($submitAnswers) ? $submitAnswers : false;
+$buttonBack = isset($buttonBack) ? $buttonBack : false;
+$nbrAnswers = isset($nbrAnswers) ? $nbrAnswers : 0;
 if ($submitAnswers || $buttonBack) {
 
     if ($answerType == HOT_SPOT) {
@@ -231,7 +235,7 @@ if ($submitAnswers || $buttonBack) {
         }  // end for()
 
         //now the noerror section
-        $select_question_noerror = $_POST['select_question_noerror'];
+        $selectQuestionNoError = $_POST['select_question_noerror'];
         $lp_noerror = $_POST['lp_noerror'];
         $try_noerror = $_POST['try_noerror'];
         $url_noerror = $_POST['url_noerror'];
@@ -256,10 +260,10 @@ if ($submitAnswers || $buttonBack) {
             $url_str = $url_noerror;
         }
 
-        if ($select_question_noerror == '') {
+        if ($selectQuestionNoError == '') {
             $question_str = 0;
         } else {
-            $question_str = $select_question_noerror;
+            $question_str = $selectQuestionNoError;
         }
 
         $destination_noerror = $threadhold_total . '@@' . $try_str . '@@' . $lp_str . '@@' . $question_str . '@@' . $url_str;
@@ -380,7 +384,7 @@ if ($modifyAnswers) {
 
         $try_noerror = $destination_items[1];
         $lp_noerror = $destination_items[2];
-        $select_question_noerror = $destination_items[3];
+        $selectQuestionNoError = $destination_items[3];
         $url_noerror = $destination_items[4];
     }
 
@@ -396,6 +400,7 @@ if ($modifyAnswers) {
         $_SESSION['tmp_answers']['destination'] = $destination;
     }
 
+    $lessAnswers = isset($lessAnswers) ? $lessAnswers : false;
     if ($lessAnswers) {
         if ($answerType == HOT_SPOT_DELINEATION) {
             $lest_answer = 1;
@@ -433,6 +438,7 @@ if ($modifyAnswers) {
         }
     }
 
+    $moreAnswers = isset($moreAnswers) ? $moreAnswers : false;
     if ($moreAnswers) {
         if ($nbrAnswers < 12) {
             $nbrAnswers++;
@@ -451,6 +457,7 @@ if ($modifyAnswers) {
         }
     }
 
+    $moreOARAnswers = isset($moreOARAnswers) ? $moreOARAnswers : false;
     if ($moreOARAnswers) {
         if ($nbrAnswers < 12) {
             // Add a new answer
@@ -571,17 +578,17 @@ if ($modifyAnswers) {
                                 $option_lp = '';
 
                                 // setting the LP
-                                $is_selected = false;
+                                $isSelected = false;
                                 foreach ($flat_list as $id => $details) {
                                     $select_lp_id[$id] = $details['lp_name'];
                                     $selected = '';
                                     if ($id == $lp[$i]) {
-                                        $is_selected = true;
+                                        $isSelected = true;
                                         $selected = 'selected="selected"';
                                     }
                                     $option_lp.='<option value="' . $id . '" ' . $selected . '>' . $details['lp_name'] . '</option>';
                                 }
-                                if ($is_selected) {
+                                if ($isSelected) {
                                     $option_lp = '<option value="0">' . get_lang('SelectTargetLP') . '</option>' . $option_lp;
                                 } else {
                                     $option_lp = '<option value="0" selected="selected" >' . get_lang('SelectTargetLP') . '</option>' . $option_lp;
@@ -871,18 +878,18 @@ if ($modifyAnswers) {
                         $flat_list = $list->get_flat_list();
                         $select_lp_id = array();
                         $option_lp = '';
-                        //$option_lp.='<option value="0">'.get_lang('SelectTargetLP').'</option>';
+                        $isSelected = false;
                         foreach ($flat_list as $id => $details) {
                             $selected = '';
                             $select_lp_id[$id] = $details['lp_name'];
                             if ($id == $lp_noerror) {
                                 $selected = 'selected="selected"';
-                                $is_selected = true;
+                                $isSelected = true;
                             }
                             $option_lp.='<option value="' . $id . '" ' . $selected . '>' . $details['lp_name'] . '</option>';
                         }
 
-                        if ($is_selected) {
+                        if ($isSelected) {
                             $option_lp = '<option value="0">' . get_lang('SelectTargetLP') . '</option>' . $option_lp;
                         } else {
                             $option_lp = '<option value="0" selected="selected" >' . get_lang('SelectTargetLP') . '</option>' . $option_lp;
@@ -893,17 +900,20 @@ if ($modifyAnswers) {
                         $question_list = $objExercise->selectQuestionList();
                         $option_feed = '';
                         $option_feed.='<option value="0">' . get_lang('SelectTargetQuestion') . '</option>';
+                        $details = isset($details) ? $details : null;
+                        $id = isset($id) ? $id : 0;
+                        $selectQuestionNoError = isset($selectQuestionNoError) ? $selectQuestionNoError : null;
                         foreach ($question_list as $key => $questionid) {
                             $selected = '';
                             $question = Question::read($questionid);
                             $val = 'Q' . $key . ' :' . substrwords($question->selectTitle(), ICON_SIZE_SMALL);
                             $select_lp_id[$id] = $details['lp_name'];
-                            if ($questionid == $select_question_noerror) {
+                            if ($questionid == $selectQuestionNoError) {
                                 $selected = 'selected="selected"';
                             }
                             $option_feed.='<option value="' . $questionid . '" ' . $selected . ' >' . $val . '</option>';
                         }
-                        if ($select_question_noerror == -1)
+                        if ($selectQuestionNoError == -1)
                             $option_feed.='<option value="-1" selected="selected" >' . get_lang('ExitTest') . '</option>';
                         else
                             $option_feed.='<option value="-1">' . get_lang('ExitTest') . '</option>';

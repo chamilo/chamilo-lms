@@ -359,6 +359,9 @@ class IndexManager
                 case 'blocked_by_captcha':
                     $message = get_lang('AccountBlockedByCaptcha');
                     break;
+                case 'multiple_connection_not_allowed':
+                    $message = get_lang('MultipleConnectionsAreNotAllow');
+                    break;
                 case 'unrecognize_sso_origin':
                     //$message = get_lang('SSOError');
                     break;

@@ -234,3 +234,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['session_stored_after_n_times'] = 10;
 // Show official code in exercise report list.
 //$_configuration['show_official_code_exercise_result_list'] = false;
+// One connection per user
+//$_configuration['prevent_multiple_simultaneous_login'] = false;

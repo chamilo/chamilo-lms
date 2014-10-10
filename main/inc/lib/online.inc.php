@@ -73,7 +73,9 @@ function preventMultipleLogin($userId)
 
                 // Trying double login
                 if (!empty($loginData)) {
-                    api_not_allowed(true, get_lang('MultipleConnectionsAreNotAllow'));
+                    session_regenerate_id();
+                    Session::destroy();
+                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=multiple_connection_not_allowed');
                     exit;
                 } else {
                     // First time

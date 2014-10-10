@@ -26,7 +26,11 @@
                     'page_class': pageClassName
                 }, function(response) {
                     intro.setOptions({
-                        steps: response
+                        steps: response,
+                        nextLabel: '{{ tour.text.next }}',
+                        prevLabel: '{{ tour.text.prev }}',
+                        skipLabel: '{{ tour.text.skip }}',
+                        doneLabel: '{{ tour.text.done }}'
                     });
                 });
             }

@@ -12,6 +12,8 @@ require_once dirname(__FILE__) . '/config.php';
 $pluginPath = api_get_path(PLUGIN_PATH) . 'tour/';
 $pluginWebPath = api_get_path(WEB_PLUGIN_PATH) . 'tour/';
 
+$tourPlugin = Tour::create();
+
 $jsonContent = file_get_contents($pluginPath . 'config/tour.json');
 
 $json = json_decode($jsonContent, true);
@@ -32,6 +34,9 @@ $_template['web_path'] = array(
 );
 
 $_template['text'] = array(
-    'start_button' => get_lang('StartTheTour'),
-    'start_tour' => get_lang('HelloChamiloLMS'),
+    'start_button' => $tourPlugin->get_lang('StartButtonText'),
+    'next' => $tourPlugin->get_lang('Next'),
+    'prev' => $tourPlugin->get_lang('Prev'),
+    'skip' => $tourPlugin->get_lang('Skip'),
+    'done' => $tourPlugin->get_lang('Done')
 );

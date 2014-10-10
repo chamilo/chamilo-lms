@@ -10,9 +10,17 @@
 $strings['plugin_title'] = 'Tour';
 $strings['plugin_comment'] = 'This plugin shows people how to use your Chamilo LMS';
 
+/* Strings for settings */
 $strings['show_tour'] = 'Show the tour';
 
 $showTourHelpLine01 = 'The necessary configuration to show the help blocks, in JSON format, is located in the %splugin/tour/config/tour.json%s file.';
-$showTourHelpLine02 = '%sSee README file for more information.';
+$showTourHelpLine02 = 'See README file for more information.';
 
-$strings['show_tour_help'] = sprintf("$showTourHelpLine01 a $showTourHelpLine02", "<strong>", "</strong>", "<br>");
+$strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", "<strong>", "</strong>", "<br>");
+
+/* Strings for plugin UI */
+$strings['Skip'] = 'Skip';
+$strings['Next'] = 'Next';
+$strings['Prev'] = 'Prev';
+$strings['Done'] = 'Done';
+$strings['StartButtonText'] = 'Start the tour';

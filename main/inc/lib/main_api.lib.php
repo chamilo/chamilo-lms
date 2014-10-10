@@ -2359,7 +2359,7 @@ function api_get_self() {
  */
 function api_is_platform_admin($allow_sessions_admins = false, $allow_drh = false)
 {
-    if ($_SESSION['is_platformAdmin']) {
+    if (isset($_SESSION['is_platformAdmin']) && $_SESSION['is_platformAdmin']) {
         return true;
     }
     global $_user;
@@ -2419,7 +2419,7 @@ function api_get_user_status($user_id = null) {
  * false otherwise.
  */
 function api_is_allowed_to_create_course() {
-    return $_SESSION['is_allowedCreateCourse'];
+    return Session::read('is_allowedCreateCourse');
 }
 
 /**
@@ -2430,7 +2430,7 @@ function api_is_course_admin() {
     if (api_is_platform_admin()) {
         return true;
     }
-    return $_SESSION['is_courseAdmin'];
+    return Session::read('is_courseAdmin');
 }
 
 /**
@@ -2438,7 +2438,7 @@ function api_is_course_admin() {
  * @return bool     True if current user is a course coach
  */
 function api_is_course_coach() {
-    return $_SESSION['is_courseCoach'];
+    return Session::read('is_courseCoach');
 }
 
 /**
@@ -2446,7 +2446,7 @@ function api_is_course_coach() {
  * @return bool     True if current user is a course tutor
  */
 function api_is_course_tutor() {
-    return $_SESSION['is_courseTutor'];
+    return Session::read('is_courseTutor');
 }
 
 function api_get_user_platform_status($user_id = false) {

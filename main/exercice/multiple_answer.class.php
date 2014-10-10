@@ -61,6 +61,7 @@ class MultipleAnswer extends Question
 
 		$defaults = array();
 		$correct = 0;
+        $answer = false;
 		if(!empty($this -> id))	{
 			$answer = new Answer($this -> id);
 			$answer -> read();

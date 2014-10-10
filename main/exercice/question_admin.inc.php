@@ -27,7 +27,7 @@ if (is_object($objQuestion)) {
 	if (isset($_GET['editQuestion'])) {
 		$class="btn save";
 		$text=get_lang('ModifyQuestion');
-		$type = Security::remove_XSS($_GET['type']);
+		$type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
 	} else {
 		$class="btn add";
 		$text=get_lang('AddQuestionToExercise');
@@ -35,7 +35,7 @@ if (is_object($objQuestion)) {
 	}
 
 	$types_information = Question::get_question_type_list();
-	$form_title_extra = get_lang($types_information[$type][1]);
+	$form_title_extra = isset($types_information[$type][1]) ? get_lang($types_information[$type][1]) : null;
 
 	// form title
 	$form->addElement('header', $text.': '.$form_title_extra);
@@ -59,6 +59,7 @@ if (is_object($objQuestion)) {
 	    $objQuestion->processCreation($form, $objExercise);
 
 	    // answers
+	    $nb_answers = isset($nb_answers) ? $nb_answers : 0;
 	    $objQuestion->processAnswersCreation($form, $nb_answers);
 
         // TODO: maybe here is the better place to index this tool, including answers text

@@ -1125,7 +1125,7 @@ abstract class Question
         return get_lang($key[1]);
     }
 
-    static function get_question_type($type) {
+    static function get_question_type($type) {error_log('TYPE --> '.$type);
         if ($type == ORAL_EXPRESSION && api_get_setting('enable_nanogong') != 'true') {
             return null;
         }
@@ -1470,6 +1470,7 @@ abstract class Question
         }
 
         if ($this->type == FREE_ANSWER || $this->type == ORAL_EXPRESSION) {
+            $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
             if ($score['revised'] == true) {
                 $score_label = get_lang('Revised');
                 $class = '';

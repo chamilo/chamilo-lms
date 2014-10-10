@@ -83,7 +83,7 @@ class UniqueAnswerNoOption extends Question
 
 		$defaults = array();
 		$correct = 0;
-
+        $answer = false;
 		if (!empty($this -> id)) {
 			$answer = new Answer($this -> id);
 			$answer -> read();
@@ -98,8 +98,8 @@ class UniqueAnswerNoOption extends Question
 			$nb_answers = 1;
 			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
 		}
+        $_GET['editQuestion'] = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : false;
         if ($_GET['editQuestion']) {
-
             //fixing $nb_answers
             $new_list = array();
             $count = 1;

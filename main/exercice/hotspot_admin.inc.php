@@ -69,6 +69,10 @@ if ($modifyIn) {
 $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_get_cidreq() . '&exerciseId=' . $exerciseId;
 
 // the answer form has been submitted
+
+$submitAnswers = isset($submitAnswers) ? $submitAnswers : false;
+$buttonBack = isset($buttonBack) ? $buttonBack : false;
+$nbrAnswers = isset($nbrAnswers) ? $nbrAnswers : 0;
 if ($submitAnswers || $buttonBack) {
 
     if ($answerType == HOT_SPOT) {
@@ -396,6 +400,7 @@ if ($modifyAnswers) {
         $_SESSION['tmp_answers']['destination'] = $destination;
     }
 
+    $lessAnswers = isset($lessAnswers) ? $lessAnswers : false;
     if ($lessAnswers) {
         if ($answerType == HOT_SPOT_DELINEATION) {
             $lest_answer = 1;
@@ -433,6 +438,7 @@ if ($modifyAnswers) {
         }
     }
 
+    $moreAnswers = isset($moreAnswers) ? $moreAnswers : false;
     if ($moreAnswers) {
         if ($nbrAnswers < 12) {
             $nbrAnswers++;
@@ -451,6 +457,7 @@ if ($modifyAnswers) {
         }
     }
 
+    $moreOARAnswers = isset($moreOARAnswers) ? $moreOARAnswers : false;
     if ($moreOARAnswers) {
         if ($nbrAnswers < 12) {
             // Add a new answer
@@ -871,7 +878,7 @@ if ($modifyAnswers) {
                         $flat_list = $list->get_flat_list();
                         $select_lp_id = array();
                         $option_lp = '';
-                        //$option_lp.='<option value="0">'.get_lang('SelectTargetLP').'</option>';
+                        $is_selected = false;
                         foreach ($flat_list as $id => $details) {
                             $selected = '';
                             $select_lp_id[$id] = $details['lp_name'];
@@ -893,6 +900,9 @@ if ($modifyAnswers) {
                         $question_list = $objExercise->selectQuestionList();
                         $option_feed = '';
                         $option_feed.='<option value="0">' . get_lang('SelectTargetQuestion') . '</option>';
+                        $details = isset($details) ? $details : null;
+                        $id = isset($id) ? $id : 0;
+                        $select_question_noerror = isset($select_question_noerror) ? $select_question_noerror : null;
                         foreach ($question_list as $key => $questionid) {
                             $selected = '';
                             $question = Question::read($questionid);

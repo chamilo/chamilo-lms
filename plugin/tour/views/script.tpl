@@ -1,19 +1,30 @@
 <script type="text/javascript">
     var chamiloTour = (function() {
         var intro = null;
+        var currentPageClass = '';
+        var $btnStart = null;
 
         return {
-            init: function() {
+            init: function(pageClass) {
+                currentPageClass = pageClass;
+
                 intro = introJs();
+                intro.oncomplete(function () {
+                    $.post('{{ tour.web_path.save_ajax }}', {
+                        page_class: currentPageClass
+                    }, function () {
+                        $btnStart.remove();
+                    });
+                });
             },
-            showStartButton: function(pageClassName) {
-                $('<button>', {
+            showStartButton: function() {
+                $btnStart = $('<button>', {
                     class: 'btn btn-primary btn-large',
                     text: '{{ tour.text.start_button }}',
                     click: function(e) {
                         e.preventDefault();
 
-                        var promise = chamiloTour.setSteps(pageClassName);
+                        var promise = chamiloTour.setSteps(currentPageClass);
 
                         $.when(promise).done(function (data) {
                             intro.start();
@@ -21,9 +32,9 @@
                     }
                 }).appendTo('#tour-button-cotainer');
             },
-            setSteps: function(pageClassName) {
+            setSteps: function() {
                 return $.getJSON('{{ tour.web_path.steps_ajax }}', {
-                    'page_class': pageClassName
+                    'page_class': currentPageClass
                 }, function(response) {
                     intro.setOptions({
                         steps: response,
@@ -38,27 +49,26 @@
     })();
 
     $(document).on('ready', function() {
-        $('<link>', {
-            href: '{{ tour.web_path.intro_css }}',
-            rel: 'stylesheet'
-        }).appendTo('head');
+        var pages = {{ tour.pages }};
 
-        $('<link>', {
-            href: '{{ tour.web_path.intro_theme_css }}',
-            rel: 'stylesheet'
-        }).appendTo('head');
+        $.each(pages, function(index, page) {
+            var thereIsSelectedPage = $(page.pageClass).length > 0;
 
-        $.getScript('{{ tour.web_path.intro_js }}', function() {
-            chamiloTour.init();
-        });
+            if (thereIsSelectedPage && page.show) {
+                $('<link>', {
+                    href: '{{ tour.web_path.intro_css }}',
+                    rel: 'stylesheet'
+                }).appendTo('head');
 
-        var pagesClassName = {{ tour.pagesClassName }};
+                $('<link>', {
+                    href: '{{ tour.web_path.intro_theme_css }}',
+                    rel: 'stylesheet'
+                }).appendTo('head');
 
-        $.each(pagesClassName, function(index, className) {
-            var thereIsSelectedPage = $(className).length > 0;
-
-            if (thereIsSelectedPage) {
-                chamiloTour.showStartButton(className);
+                $.getScript('{{ tour.web_path.intro_js }}', function() {
+                    chamiloTour.init(page.pageClass);
+                    chamiloTour.showStartButton(page.pageClass);
+                });
             }
         });
     });

@@ -34,8 +34,8 @@ if (is_object($objQuestion)) {
 		$type = $_REQUEST['answerType'];
 	}
 
-	$types_information = Question::get_question_type_list();
-	$form_title_extra = isset($types_information[$type][1]) ? get_lang($types_information[$type][1]) : null;
+	$typesInformation = Question::get_question_type_list();
+	$form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
 	// form title
 	$form->addElement('header', $text.': '.$form_title_extra);

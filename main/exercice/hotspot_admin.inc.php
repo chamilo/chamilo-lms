@@ -578,17 +578,17 @@ if ($modifyAnswers) {
                                 $option_lp = '';
 
                                 // setting the LP
-                                $is_selected = false;
+                                $isSelected = false;
                                 foreach ($flat_list as $id => $details) {
                                     $select_lp_id[$id] = $details['lp_name'];
                                     $selected = '';
                                     if ($id == $lp[$i]) {
-                                        $is_selected = true;
+                                        $isSelected = true;
                                         $selected = 'selected="selected"';
                                     }
                                     $option_lp.='<option value="' . $id . '" ' . $selected . '>' . $details['lp_name'] . '</option>';
                                 }
-                                if ($is_selected) {
+                                if ($isSelected) {
                                     $option_lp = '<option value="0">' . get_lang('SelectTargetLP') . '</option>' . $option_lp;
                                 } else {
                                     $option_lp = '<option value="0" selected="selected" >' . get_lang('SelectTargetLP') . '</option>' . $option_lp;
@@ -878,18 +878,18 @@ if ($modifyAnswers) {
                         $flat_list = $list->get_flat_list();
                         $select_lp_id = array();
                         $option_lp = '';
-                        $is_selected = false;
+                        $isSelected = false;
                         foreach ($flat_list as $id => $details) {
                             $selected = '';
                             $select_lp_id[$id] = $details['lp_name'];
                             if ($id == $lp_noerror) {
                                 $selected = 'selected="selected"';
-                                $is_selected = true;
+                                $isSelected = true;
                             }
                             $option_lp.='<option value="' . $id . '" ' . $selected . '>' . $details['lp_name'] . '</option>';
                         }
 
-                        if ($is_selected) {
+                        if ($isSelected) {
                             $option_lp = '<option value="0">' . get_lang('SelectTargetLP') . '</option>' . $option_lp;
                         } else {
                             $option_lp = '<option value="0" selected="selected" >' . get_lang('SelectTargetLP') . '</option>' . $option_lp;

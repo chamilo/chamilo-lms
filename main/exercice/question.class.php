@@ -1125,7 +1125,7 @@ abstract class Question
         return get_lang($key[1]);
     }
 
-    static function get_question_type($type) {error_log('TYPE --> '.$type);
+    static function get_question_type($type) {
         if ($type == ORAL_EXPRESSION && api_get_setting('enable_nanogong') != 'true') {
             return null;
         }

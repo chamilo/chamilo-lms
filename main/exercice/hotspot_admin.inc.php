@@ -235,7 +235,7 @@ if ($submitAnswers || $buttonBack) {
         }  // end for()
 
         //now the noerror section
-        $select_question_noerror = $_POST['select_question_noerror'];
+        $selectQuestionNoError = $_POST['select_question_noerror'];
         $lp_noerror = $_POST['lp_noerror'];
         $try_noerror = $_POST['try_noerror'];
         $url_noerror = $_POST['url_noerror'];
@@ -260,10 +260,10 @@ if ($submitAnswers || $buttonBack) {
             $url_str = $url_noerror;
         }
 
-        if ($select_question_noerror == '') {
+        if ($selectQuestionNoError == '') {
             $question_str = 0;
         } else {
-            $question_str = $select_question_noerror;
+            $question_str = $selectQuestionNoError;
         }
 
         $destination_noerror = $threadhold_total . '@@' . $try_str . '@@' . $lp_str . '@@' . $question_str . '@@' . $url_str;
@@ -384,7 +384,7 @@ if ($modifyAnswers) {
 
         $try_noerror = $destination_items[1];
         $lp_noerror = $destination_items[2];
-        $select_question_noerror = $destination_items[3];
+        $selectQuestionNoError = $destination_items[3];
         $url_noerror = $destination_items[4];
     }
 
@@ -902,18 +902,18 @@ if ($modifyAnswers) {
                         $option_feed.='<option value="0">' . get_lang('SelectTargetQuestion') . '</option>';
                         $details = isset($details) ? $details : null;
                         $id = isset($id) ? $id : 0;
-                        $select_question_noerror = isset($select_question_noerror) ? $select_question_noerror : null;
+                        $selectQuestionNoError = isset($selectQuestionNoError) ? $selectQuestionNoError : null;
                         foreach ($question_list as $key => $questionid) {
                             $selected = '';
                             $question = Question::read($questionid);
                             $val = 'Q' . $key . ' :' . substrwords($question->selectTitle(), ICON_SIZE_SMALL);
                             $select_lp_id[$id] = $details['lp_name'];
-                            if ($questionid == $select_question_noerror) {
+                            if ($questionid == $selectQuestionNoError) {
                                 $selected = 'selected="selected"';
                             }
                             $option_feed.='<option value="' . $questionid . '" ' . $selected . ' >' . $val . '</option>';
                         }
-                        if ($select_question_noerror == -1)
+                        if ($selectQuestionNoError == -1)
                             $option_feed.='<option value="-1" selected="selected" >' . get_lang('ExitTest') . '</option>';
                         else
                             $option_feed.='<option value="-1">' . get_lang('ExitTest') . '</option>';

@@ -22,8 +22,8 @@ require_once 'database.constants.inc.php';
  * Database class definition
  * @package chamilo.database
  */
-class Database {
-
+class Database
+{
     /* Variable use only in the installation process to log errors. See the Database::query function */
     static $log_queries = false;
 
@@ -36,7 +36,8 @@ class Database {
     /**
      *	Returns the name of the main database.
      */
-    public static function get_main_database() {
+    public static function get_main_database()
+    {
         global $_configuration;
         return $_configuration['main_database'];
     }
@@ -45,29 +46,31 @@ class Database {
      *	Returns the name of the statistics database.
      *  @todo use main_database
      */
-    public static function get_statistic_database() {
-        global $_configuration;
-        return $_configuration['main_database'];
+    public static function get_statistic_database()
+    {
+        return self::get_main_database();
     }
 
     /**
      *	Returns the name of the database where all the personal stuff of the user is stored
      *  @todo use main_database
      */
-    public static function get_user_personal_database() {
-        global $_configuration;
-        return $_configuration['main_database'];
+    public static function get_user_personal_database()
+    {
+        return self::get_main_database();
     }
 
     /**
      *	Returns the name of the current course database.
      *  @return    mixed   Glued database name of false if undefined
      */
-    public static function get_current_course_database() {
+    public static function get_current_course_database()
+    {
         $course_info = api_get_course_info();
         if (empty($course_info['dbName'])) {
             return false;
         }
+
         return $course_info['dbName'];
     }
 
@@ -75,7 +78,8 @@ class Database {
      *	Returns the glued name of the current course database.
      *  @return    mixed   Glued database name of false if undefined
      */
-    public static function get_current_course_glued_database() {
+    public static function get_current_course_glued_database()
+    {
         $course_info = api_get_course_info();
         if (empty($course_info['dbNameGlu'])) {
             return false;
@@ -90,7 +94,8 @@ class Database {
      *	there are multiple databases and the code can be written independent
      *	of the single / multiple database setting.
      */
-    public static function get_database_glue() {
+    public static function get_database_glue()
+    {
         global $_configuration;
         return $_configuration['db_glue'];
     }
@@ -102,7 +107,8 @@ class Database {
      *	TIP: This can be convenient if you have multiple system installations
      *	on the same physical server.
      */
-    public static function get_database_name_prefix() {
+    public static function get_database_name_prefix()
+    {
         global $_configuration;
         return $_configuration['db_prefix'];
     }
@@ -113,7 +119,8 @@ class Database {
      *	Do research.
      *	It's used in local.inc.php.
      */
-    public static function get_course_table_prefix() {
+    public static function get_course_table_prefix()
+    {
         global $_configuration;
         return $_configuration['table_prefix'];
     }
@@ -143,7 +150,8 @@ class Database {
      *
      * @param string $short_table_name, the name of the table
      */
-    public static function get_main_table($short_table_name) {
+    public static function get_main_table($short_table_name)
+    {
         return self::format_table_name(
           self::get_main_database(),
           $short_table_name);
@@ -181,8 +189,9 @@ class Database {
      *
      * @param string $short_table_name, the name of the table
      */
-    public static function get_statistic_table($short_table_name) {
-        return self::format_table_name(self::get_statistic_database(), $short_table_name);
+    public static function get_statistic_table($short_table_name)
+    {
+        return self::get_main_table($short_table_name);
     }
 
     /**
@@ -193,11 +202,13 @@ class Database {
      *
      * @param string $short_table_name, the name of the table
      */
-    public static function get_user_personal_table($short_table_name) {
-        return self::format_table_name(self::get_user_personal_database(), $short_table_name);
+    public static function get_user_personal_table($short_table_name)
+    {
+        return self::get_main_table($short_table_name);
     }
 
-    public static function get_course_chat_connected_table($database_name = '') {
+    public static function get_course_chat_connected_table($database_name = '')
+    {
         return self::format_glued_course_table_name(self::fix_database_parameter($database_name), TABLE_CHAT_CONNECTED);
     }
 
@@ -210,7 +221,8 @@ class Database {
      *	@return a list (array) of all courses.
      * 	@todo shouldn't this be in the course.lib.php script?
      */
-    public static function get_course_list() {
+    public static function get_course_list()
+    {
         $table = self::get_main_table(TABLE_MAIN_COURSE);
         return self::store_result(self::query("SELECT *, id as real_id FROM $table"));
     }
@@ -221,7 +233,8 @@ class Database {
      *	@param string The real (system) course code (main course table ID)
      * 	@todo shouldn't this be in the course.lib.php script?
      */
-    public static function get_course_info($course_code) {
+    public static function get_course_info($course_code)
+    {
         $course_code = self::escape_string($course_code);
         $table = self::get_main_table(TABLE_MAIN_COURSE);
         $result = self::generate_abstract_course_field_names(
@@ -240,7 +253,8 @@ class Database {
      * @desc find all the information about a specified user. Without parameter this is the current user.
      * @todo shouldn't this be in the user.lib.php script?
      */
-    public static function get_user_info_from_id($user_id = '') {
+    public static function get_user_info_from_id($user_id = '')
+    {
         if (empty($user_id)) {
             return $GLOBALS['_user'];
         }
@@ -256,7 +270,8 @@ class Database {
      * @return string  Course code
      * @todo move this function in a gradebook-related library
      */
-    public static function get_course_by_category($category_id) {
+    public static function get_course_by_category($category_id)
+    {
         $category_id = intval($category_id);
         $info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id), 'ASSOC');
         return $info ? $info['course_code'] : false;
@@ -278,7 +293,8 @@ class Database {
      * 		  for the database name we should consistently use or db_name
      *            or database (db_name probably being the better one)
      */
-    public static function generate_abstract_course_field_names($result_array) {
+    public static function generate_abstract_course_field_names($result_array)
+    {
         $visual_code = isset($result_array['visual_code']) ? $result_array['visual_code'] : null;
         $code        = isset($result_array['code']) ? $result_array['code'] : null;
         $title       = isset($result_array['title']) ? $result_array['title'] : null;
@@ -350,7 +366,7 @@ class Database {
     }
 
     /*
-        An intermediate API-layer between the system and the dabase server.
+        An intermediate API-layer between the system and the database server.
     */
 
     /**

@@ -1,0 +1,52 @@
+[
+    {
+        "pageClass": ".section-mycampus",
+        "steps": [
+            {
+                "elementSelector": "#user_image_block",
+                "message": "UserImageStep"
+            },
+            {
+                "elementSelector": "#profile_block",
+                "message": "UserProfileStep"
+            },
+            {
+                "elementSelector": "#course_block",
+                "message": "CourseBlockStep"
+            },
+            {
+                "elementSelector": "#help_block",
+                "message": "HelpBlockStep"
+            },
+            {
+                "elementSelector": "#homepage",
+                "message": "HomepageStep"
+            },
+            {
+                "elementSelector": "#hot_courses",
+                "message": "HotCoursesStep"
+            }
+        ]
+    },
+    {
+        "pageClass": ".section-mycourses",
+        "steps": [
+            {
+                "elementSelector": "#user_image_block",
+                "message": "UserImageStep"
+            },
+            {
+                "elementSelector": "#profile_block",
+                "message": "UserProfileStep"
+            },
+            {
+                "elementSelector": "#course_block",
+                "message": "CourseBlockStep"
+            },
+            {
+                "elementSelector": "#main_content",
+                "message": "MainContentStep"
+            }
+        ]
+    }
+]

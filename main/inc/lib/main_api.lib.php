@@ -2387,7 +2387,8 @@ function api_is_platform_admin_by_id($user_id = null, $url = null) {
     // We get here only if $url is set
     $url = intval($url);
     $url_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $sql = "SELCT * FROM $url_user_table WHERE access_url_id = $url AND user_id = $user_id";
+    $sql = "SELECT * FROM $url_user_table
+            WHERE access_url_id = $url AND user_id = $user_id";
     $res = Database::query($sql);
     $is_on_url = Database::num_rows($res) === 1;
     return $is_on_url;

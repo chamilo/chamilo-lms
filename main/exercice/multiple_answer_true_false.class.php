@@ -11,7 +11,7 @@
  */
 class MultipleAnswerTrueFalse extends Question
 {
-	static $typePicture = 'mcmao.gif';
+	static $typePicture = 'mcmao.png';
 	static $explanationLangVar = 'MultipleAnswerTrueFalse';
     public $options;
 

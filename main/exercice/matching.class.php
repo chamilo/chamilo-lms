@@ -13,7 +13,7 @@
  */
 class Matching extends Question
 {
-    static $typePicture = 'matching.gif';
+    static $typePicture = 'matching.png';
     static $explanationLangVar = 'Matching';
 
     /**

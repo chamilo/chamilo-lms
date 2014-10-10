@@ -10,7 +10,7 @@
  */
 class FreeAnswer extends Question
 {
-    static $typePicture = 'open_answer.gif';
+    static $typePicture = 'open_answer.png';
     static $explanationLangVar = 'FreeAnswer';
 
     /**

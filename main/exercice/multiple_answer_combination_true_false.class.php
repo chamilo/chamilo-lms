@@ -11,7 +11,7 @@
  **/
 class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
 {
-	static $typePicture = 'mcmaco.gif';
+	static $typePicture = 'mcmaco.png';
 	static $explanationLangVar = 'MultipleAnswerCombinationTrueFalse';
     var    $options;
 

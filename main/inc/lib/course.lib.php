@@ -4474,7 +4474,8 @@ class CourseManager
      * @return int Number of courses
      */
     public static function countAvailableCourses($accessUrlId = null)
-    {
+    {   
+        global $_configuration;
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $specialCourseList = self::get_special_course_list();
@@ -4483,9 +4484,15 @@ class CourseManager
         if (!empty($specialCourseList)) {
             $withoutSpecialCourses = ' AND c.code NOT IN ("'.implode('","',$specialCourseList).'")';
         }
-
+        if (isset($_configuration['course_catalog_hide_private'])) {
+            if ($_configuration['course_catalog_hide_private'] == true) {
+                $courseInfo = api_get_course_info();
+                $courseVisibility = $courseInfo['visibility'];
+                $visibilityCondition = ' AND c.visibility <> 1';
+            }
+        }
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
-            $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND c.visibility != 0 AND c.visibility != 4 $withoutSpecialCourses";
+            $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND c.visibility != 0 AND c.visibility != 4 $withoutSpecialCourses $visibilityCondition";
         }
         $res = Database::query($sql);
         $row = Database::fetch_row($res);

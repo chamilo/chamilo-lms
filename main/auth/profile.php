@@ -115,6 +115,9 @@ $value_array = $array_list_key[$id_temp_key];
 $user_data['api_key_generate'] = $value_array;
 
 if ($user_data !== false) {
+    if (api_get_setting('login_is_email') == 'true') {
+        $user_data['username'] = $user_data['email'];
+    }
     if (is_null($user_data['language'])) {
         $user_data['language'] = api_get_setting('platformLanguage');
     }
@@ -145,7 +148,7 @@ $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
 //    USERNAME
 $form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'size' => USERNAME_MAX_LENGTH));
-if (api_get_setting('profile', 'login') !== 'true') {
+if (api_get_setting('profile', 'login') !== 'true' || api_get_setting('login_is_email') == 'true') {
     $form->freeze('username');
 }
 $form->applyFilter('username', 'stripslashes');

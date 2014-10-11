@@ -236,3 +236,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['show_official_code_exercise_result_list'] = false;
 // One connection per user
 //$_configuration['prevent_multiple_simultaneous_login'] = false;
+// Hide private courses from course catalog
+//$_configuration['course_catalog_hide_private'] = false;

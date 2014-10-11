@@ -74,6 +74,7 @@ if (api_is_platform_admin()) {
 		array('url'=>'user_add.php', 	'label' => get_lang('AddUsers')),
 		array('url'=>'user_export.php', 'label' => get_lang('ExportUserListXMLCSV')),
 		array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
+               array('url'=>'user_update_import.php', 'label' => get_lang('EditUserListCSV')),
 	);
 
 	if (api_get_setting('allow_social_tool') == 'true') {

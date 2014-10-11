@@ -1151,10 +1151,11 @@ function movecatlink($catlinkid, $courseId = null, $sessionId = null)
             $sqlcatlinks = "SELECT id, display_order FROM " . $movetable . " WHERE c_id = $courseId  ORDER BY display_order $sortDirection";
         } else {
             $sqlcatlinks = "SELECT id, display_order FROM " . $movetable . "
-                			WHERE c_id = $courseId AND category_id='" . $catid[0] . "'
-                			ORDER BY display_order $sortDirection";
+                            WHERE c_id = $courseId AND category_id='" . $catid[0] . "'
+                            ORDER BY display_order $sortDirection";
         }
         $linkresult = Database :: query($sqlcatlinks);
+        $thislinkOrder = 1;
         while ($sortrow = Database :: fetch_array($linkresult)) {
             // STEP 2 : FOUND THE NEXT LINK ID AND ORDER, COMMIT SWAP
             // This part seems unlogic, but it isn't . We first look for the current link with the querystring ID
@@ -1162,17 +1163,12 @@ function movecatlink($catlinkid, $courseId = null, $sessionId = null)
             if (isset ($thislinkFound) && $thislinkFound) {
                 $nextlinkId = $sortrow['id'];
                 $nextlinkOrder = $sortrow['display_order'];
-                if ($sortrow['id'] == $thiscatlinkId) {
-                    $thislinkOrder = $sortrow['display_order'];
-                    $thislinkFound = true;
-                }
 
                 Database :: query(
                     "UPDATE " . $movetable . "
                     SET display_order = '$nextlinkOrder'
                     WHERE c_id = $courseId  AND id =  '$thiscatlinkId'"
                 );
-
                 Database :: query(
                     "UPDATE " . $movetable . "
                     SET display_order = '$thislinkOrder'
@@ -1180,6 +1176,10 @@ function movecatlink($catlinkid, $courseId = null, $sessionId = null)
                 );
 
                 break;
+            }
+            if ($sortrow['id'] == $thiscatlinkId) {
+                $thislinkOrder = $sortrow['display_order'];
+                $thislinkFound = true;
             }
         }
     }

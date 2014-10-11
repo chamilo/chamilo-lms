@@ -70,6 +70,8 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_RENAME) {
         $fileInfo          = $manager->getFolderInfo();
         $fileInfo['mtime'] = date(DATE_TIME_FORMAT, $fileInfo['mtime']);
     }
+    event_system(LOG_MY_FOLDER_CHANGE, LOG_MY_FOLDER_PATH, $_POST['original_path']);
+    event_system(LOG_MY_FOLDER_CHANGE, LOG_MY_FOLDER_NEW_PATH, $path);
 }
 
 echo "{";

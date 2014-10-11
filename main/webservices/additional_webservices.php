@@ -31,9 +31,16 @@ function wsConvertPpt($pptData)
     $tempPath = $tempArchivePath . 'wsConvert/' . $fileName . '/';
     $tempPathNewFiles = $tempArchivePath . 'wsConvert/' . $fileName . '-n/';
 
-    mkdir($tempPath, 0777, true);
-    mkdir($tempPathNewFiles, 0777, true);
-    mkdir($tempPathNewFiles . $fileName, 0777, true);
+    $perms = api_get_permissions_for_new_directories();
+    if (!is_dir($tempPath)) {
+        mkdir($tempPath, $perms, true);
+    }
+    if (!is_dir($tempPathNewFiles)) {
+        mkdir($tempPathNewFiles, $perms, true);
+    }
+    if (!is_dir($tempPathNewFiles . $fileName)) {
+        mkdir($tempPathNewFiles . $fileName, $perms, true);
+    }
 
     $file = base64_decode($fileData);
     file_put_contents($tempPath . $fullFileName, $file);
@@ -51,9 +58,10 @@ function wsConvertPpt($pptData)
     $cmd .= ' -p ' . api_get_setting('service_ppt2lp', 'port');
     $cmd .= ' -w 720 -h 540 -d oogie "' . $tempPath . $fullFileName.'"  "' . $tempPathNewFiles . $fileName . '.html"';
 
-    chmod($tempPath, 0777);
-    chmod($tempPathNewFiles, 0777);
-    chmod($tempPathNewFiles . $fileName, 0777, true);
+    $perms = api_get_permissions_for_new_files();
+    chmod($tempPath, $perms);
+    chmod($tempPathNewFiles, $perms);
+    chmod($tempPathNewFiles . $fileName, $perms, true);
 
     $files = array();
     $return = 0;
@@ -90,7 +98,11 @@ function deleteDirectory($directoryPath)
 {
     $files = array_diff(scandir($directoryPath), array('.','..'));
     foreach ($files as $file) {
-        (is_dir("$directoryPath/$file")) ? deleteDirectory("$directoryPath/$file") : unlink("$directoryPath/$file");
+        if (is_dir("$directoryPath/$file")) {
+            deleteDirectory("$directoryPath/$file");
+        } else {
+            unlink("$directoryPath/$file");
+        }
     }
 
     return rmdir($directoryPath);

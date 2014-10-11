@@ -496,7 +496,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     //.size([1, 2])
     .value(function(d) {
         //return 5.8 - d.depth;
-        //When having more than 4 children seems that the code above doesnt work
+        //When having more than 4 children seems that the code above does not work
         return 1;
     });
 

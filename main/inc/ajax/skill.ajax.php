@@ -131,14 +131,14 @@ switch ($action) {
         break;
     case 'get_skills_tree_json':        
         $user_id    = isset($_REQUEST['load_user']) && $_REQUEST['load_user'] == 1 ? api_get_user_id() : 0;
-        $skill_id   = isset($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : 0;
-        $depth      = isset($_REQUEST['main_depth']) ? $_REQUEST['main_depth'] : 2;        
+        $skill_id   = isset($_REQUEST['skill_id']) ? intval($_REQUEST['skill_id']) : 0;
+        $depth      = isset($_REQUEST['main_depth']) ? intval($_REQUEST['main_depth']) : 2;        
         $all = $skill->get_skills_tree_json($user_id, $skill_id, false, $depth);
         echo $all;
         break;
     case 'get_user_skill':
         $userId = api_get_user_id();
-        $skillId = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : 0;
+        $skillId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : 0;
         $skill = $skill->user_has_skill($userId, $skillId);
         if ($skill) {
             echo 1;
@@ -153,12 +153,12 @@ switch ($action) {
         echo Display::$global_template->fetch('default/skill/user_skills.tpl');
         break;
     case 'get_gradebook_info':
-        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $info = $gradebook->get($id);                    
         echo json_encode($info);
         break;  
     case 'load_children':
-        $id             = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $id             = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $skills = $skill->get_children($id, $load_user_data);
         
@@ -166,9 +166,10 @@ switch ($action) {
         foreach ($skills as $skill) {
             if (isset($skill['data']) && !empty($skill['data'])) {
                 $return[$skill['data']['id']] = array(
-                                                    'id'    => $skill['data']['id'],
-                                                    'name'  => $skill['data']['name'], 
-                                                    'passed'=> $skill['data']['passed']);
+                    'id'    => $skill['data']['id'],
+                    'name'  => $skill['data']['name'], 
+                    'passed'=> $skill['data']['passed']
+                );
             }
         }
         $success = true;
@@ -183,15 +184,15 @@ switch ($action) {
         echo json_encode($result);
         break;
     case 'load_direct_parents':
-        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $skills = $skill->get_direct_parents($id);        
         $return = array();
         foreach($skills as $skill) {
             $return [$skill['data']['id']] = array (
-                                                'id'        => $skill['data']['id'],
-                                                'parent_id' => $skill['data']['parent_id'],
-                                                'name'      => $skill['data']['name']
-                                                );
+                'id'        => $skill['data']['id'],
+                'parent_id' => $skill['data']['parent_id'],
+                'name'      => $skill['data']['name']
+            );
         }
         echo json_encode($return);        
         break;
@@ -285,7 +286,7 @@ switch ($action) {
         break;             
     case 'get_profile':
         $skillRelProfile = new SkillRelProfile();
-        $profileId = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : null;
+        $profileId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : null;
         $profile = $skillRelProfile->getProfileInfo($profileId);
         echo json_encode($profile);
         break; 
@@ -295,7 +296,7 @@ switch ($action) {
             $params = $_REQUEST;
             //$params['skills'] = isset($_SESSION['skills']) ? $_SESSION['skills'] : null; 
             $params['skills'] = $params['skill_id'];
-            $profileId = isset($_REQUEST['profile']) ? $_REQUEST['profile'] : null;
+            $profileId = isset($_REQUEST['profile']) ? intval($_REQUEST['profile']) : null;
             if ($profileId > 0) {
                 $skill_data = $skill_profile->UpdateProfileInfo($profileId,$params['name'],$params['description']);
             } else {

@@ -35,14 +35,19 @@ class SkillProfile extends Model
     * @param string $name
     * @param string $description
     */
-
     public function UpdateProfileInfo($profileId, $name, $description)
     {
-        $sql = "UPDATE $this->table SET `name` = '$name', `description` = '$description' WHERE id = $profileId ";
+        $sql = "UPDATE $this->table SET name = '$name', description = '$description' WHERE id = $profileId ";
         $result = Database::query($sql);
         return $result;
     }
 
+    /**
+     * Call the save method of the parent class and the SkillRelProfile object
+     * @param array Params
+     * @param bool Whether to show the query in parent save() method
+     * @return mixed Profile ID or false if incomplete params
+     */
     public function save($params, $show_query = false)
     {
         if (!empty($params)) {
@@ -91,7 +96,7 @@ class SkillRelProfile extends Model
 
     public function getProfileInfo($profileId)
     { 
-        $sql = "SELECT * FROM $this->table p INNER JOIN $this->tableProfile pr ON(pr.id = p.profile_id) WHERE p.profile_id = $profileId ";
+        $sql = "SELECT * FROM $this->table p INNER JOIN $this->tableProfile pr ON(pr.id = p.profile_id) WHERE p.profile_id = ".intval($profileId);
         $result = Database::query($sql);
         $profileData = Database::fetch_array($result, 'ASSOC');
         return $profileData;

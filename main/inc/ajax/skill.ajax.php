@@ -136,6 +136,16 @@ switch ($action) {
         $all = $skill->get_skills_tree_json($user_id, $skill_id, false, $depth);
         echo $all;
         break;
+    case 'get_user_skill':
+        $userId = api_get_user_id();
+        $skillId = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : 0;
+        $skill = $skill->user_has_skill($userId, $skillId);
+        if ($skill) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+        break;
     case 'get_user_skills':
         $skills = $skill->get_user_skills($user_id, true);        
         Display::display_no_header();        
@@ -273,13 +283,24 @@ switch ($action) {
             }
         }
         break;             
+    case 'get_profile':
+        $skillRelProfile = new SkillRelProfile();
+        $profileId = isset($_REQUEST['profile_id']) ? $_REQUEST['profile_id'] : null;
+        $profile = $skillRelProfile->getProfileInfo($profileId);
+        echo json_encode($profile);
+        break; 
     case 'save_profile':
         if (api_is_platform_admin() || api_is_drh()) {
             $skill_profile = new SkillProfile();
             $params = $_REQUEST;
             //$params['skills'] = isset($_SESSION['skills']) ? $_SESSION['skills'] : null; 
             $params['skills'] = $params['skill_id'];
-            $skill_data = $skill_profile->save($params);        
+            $profileId = isset($_REQUEST['profile']) ? $_REQUEST['profile'] : null;
+            if ($profileId > 0) {
+                $skill_data = $skill_profile->UpdateProfileInfo($profileId,$params['name'],$params['description']);
+            } else {
+                $skill_data = $skill_profile->save($params);
+            }         
             if (!empty($skill_data)) {
                 echo 1;
             } else {

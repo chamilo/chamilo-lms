@@ -3374,11 +3374,11 @@ function api_item_property_update(
 
     // Definition of variables.
     $tool           = Database::escape_string($tool);
-    $item_id        = Database::escape_string($item_id);
+    $item_id        = intval($item_id);
     $lastedit_type  = Database::escape_string($lastedit_type);
-    $user_id        = Database::escape_string($user_id);
-    $to_group_id    = Database::escape_string($to_group_id);
-    $to_user_id     = Database::escape_string($to_user_id);
+    $user_id        = intval($user_id);
+    $to_group_id    = intval($to_group_id);
+    $to_user_id     = intval($to_user_id);
     $start_visible  = Database::escape_string($start_visible);
     $end_visible    = Database::escape_string($end_visible);
     $start_visible  = ($start_visible == 0) ? '0000-00-00 00:00:00' : $start_visible;

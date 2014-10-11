@@ -235,9 +235,11 @@ function addlinkcategory($type)
 			        VALUES (".$course_id.", '" .Database::escape_string($category_title) . "', '" . Database::escape_string($description) . "', '$order', '$session_id')";
 			Database :: query($sql);
 
-            $link_id = Database :: insert_id();
-            if ($link_id) {
-                api_set_default_visibility($link_id, TOOL_LINK_CATEGORY); // add link_category
+            $linkId = Database :: insert_id();
+            if ($linkId) {
+                // add link_category visibility
+                // course ID is taken from context in api_set_default_visibility
+                api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
             }
 
 			$catlinkstatus = get_lang('CategoryAdded');
@@ -264,7 +266,7 @@ function deletelinkcategory($type)
 {
 	global $catlinkstatus;
 	global $_course;
-    $session_id = api_get_session_id();
+	$session_id = api_get_session_id();
 	$tbl_link              = Database :: get_course_table(TABLE_LINK);
 	$tbl_categories        = Database :: get_course_table(TABLE_LINK_CATEGORY);
 	$TABLE_ITEM_PROPERTY   = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -296,11 +298,7 @@ function deletelinkcategory($type)
 			$catlinkstatus = get_lang('CategoryDeleted');
 			unset ($id);
 			Database :: query($sql);
-            // Delete relation link_category : item_property : link_category not exist delete Logic.
-            $sqlP = "DELETE FROM $TABLE_ITEM_PROPERTY WHERE c_id = $course_id AND tool = '". TOOL_LINK_CATEGORY ."' "
-                . "AND ref = '" . intval($_GET['id']) . "' AND id_session = '$session_id' ";
-            Database :: query($sqlP);
-
+			api_item_property_update($_course, TOOL_LINK_CATEGORY, $_GET['id'], 'delete', api_get_user_id());
 			Display :: display_confirmation_message(get_lang('CategoryDeleted'));
 		}
 	}
@@ -612,41 +610,38 @@ function makedefaultviewcode($locatie) {
  */
 function change_visibility($id, $scope) {
 	global $_course, $_user;
-	if ($scope == 'link') {
+	if ($scope == TOOL_LINK) {
 		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);
 		Display :: display_confirmation_message(get_lang('VisibilityChanged'));
 	} elseif ($scope == TOOL_LINK_CATEGORY) {
-        api_item_property_update($_course, TOOL_LINK_CATEGORY, $id, $_GET['action'], $_user['user_id']);
-        Display :: display_confirmation_message(get_lang('VisibilityChanged'));
-    }
+		api_item_property_update($_course, TOOL_LINK_CATEGORY, $id, $_GET['action'], $_user['user_id']);
+		Display :: display_confirmation_message(get_lang('VisibilityChanged'));
+	}
 }
 
 /**
- * Generate SQL for select all the category of link
- *
+ * Generate SQL to select all the links categories in the current course and
+ * session
+ * @return string SQL query (to be executed)
  */
-function getSqlFromLinkCategory()
+function getLinkCategories($courseId, $sessionId)
 {
-    $tbl_linkCategory = Database :: get_course_table(TABLE_LINK_CATEGORY);
-    $tbl_itemProperty   = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $tblLinkCategory = Database :: get_course_table(TABLE_LINK_CATEGORY);
+    $tblItemProperty   = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
     // Condition for the session.
-    $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id, true, true);
+    $sessionCondition = api_get_session_condition($sessionId, true, true);
 
-    $course_id = api_get_course_int_id();
-
-    $sql = "SELECT *, linkcat.id FROM " . $tbl_linkCategory . " linkcat, " . $tbl_itemProperty . " itemproperties
+    $sql = "SELECT *, linkcat.id FROM $tblLinkCategory linkcat,
+                 $tblItemProperty itemproperties
              WHERE  itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
                     linkcat.id = itemproperties.ref AND
-
                     (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
-                    $condition_session AND
-                    linkcat.c_id = ".$course_id." AND
-                    itemproperties.c_id = ".$course_id."
+                    $sessionCondition AND
+                    linkcat.c_id = ".$courseId." AND
+                    itemproperties.c_id = ".$courseId."
                     ORDER BY linkcat.display_order DESC";
-    return  $sql;
-
+    return  Database::query($sql);
 }
 
 /**

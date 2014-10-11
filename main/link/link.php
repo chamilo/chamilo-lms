@@ -73,6 +73,7 @@ $target_link = !empty($_REQUEST['target_link']) ? $_REQUEST['target_link'] : '_s
 
 $nameTools = get_lang('Links');
 
+$course_id = api_get_course_int_id();
 // Condition for the session
 $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id, true, true);
@@ -98,8 +99,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'editlink') {
 // Database Table definitions
 $tbl_link       = Database::get_course_table(TABLE_LINK);
 $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
-
-$course_id = api_get_course_int_id();
 
 // Statistics
 event_access_tool(TOOL_LINK);
@@ -255,8 +254,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
                     </div>
                 </div>';
 
-        $sqlcategories = getSqlFromLinkCategory();
-        $resultcategories = Database::query($sqlcategories);
+        $resultcategories = getLinkCategories($course_id, $session_id);
 
         if (Database::num_rows($resultcategories)) {
             echo '	<div class="control-group category">
@@ -421,11 +419,9 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
     }
     // Making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
     // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-    $sqlcategories = getSqlFromLinkCategory();
-    $resultcategories = Database::query($sqlcategories);
+    $resultcategories = getLinkCategories($course_id, $session_id);
     $aantalcategories = Database::num_rows($resultcategories);
     if ($aantalcategories > 0) {
-        $resultcategories = Database::query($sqlcategories);
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
         for ($j = 1; $j <= $aantalcategories; $j++) {
             echo '0';

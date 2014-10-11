@@ -196,7 +196,15 @@ define('LOG_EXERCISE_RESULT_DELETE',           'exe_result_deleted');
 define('LOG_LP_ATTEMPT_DELETE',                'lp_attempt_deleted');
 define('LOG_QUESTION_RESULT_DELETE',           'qst_attempt_deleted');
 
-// event logs data types (max 20 chars)
+define('LOG_MY_FOLDER_CREATE',                  'my_folder_created');
+define('LOG_MY_FOLDER_CHANGE',                  'my_folder_changed');
+define('LOG_MY_FOLDER_DELETE',                  'my_folder_deleted');
+define('LOG_MY_FOLDER_COPY',                    'my_folder_copied');
+define('LOG_MY_FOLDER_CUT',                     'my_folder_cut');
+define('LOG_MY_FOLDER_PASTE',                   'my_folder_pasted');
+define('LOG_MY_FOLDER_UPLOAD',                  'my_folder_uploaded');
+
+// Event logs data types (max 20 chars)
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_COURSE_ID',                         'course_id');
 define('LOG_USER_ID',                           'user_id');
@@ -217,6 +225,9 @@ define('LOG_EXERCISE_ID',                        'exercise_id');
 define('LOG_EXERCISE_AND_USER_ID',               'exercise_and_user_id');
 define('LOG_LP_ID',                              'lp_id');
 define('LOG_EXERCISE_ATTEMPT_QUESTION_ID',       'exercise_a_q_id');
+
+define('LOG_MY_FOLDER_PATH',                    'path');
+define('LOG_MY_FOLDER_NEW_PATH',                'new_path');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 

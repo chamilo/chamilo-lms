@@ -204,7 +204,7 @@ define('LOG_MY_FOLDER_CUT',                     'my_folder_cut');
 define('LOG_MY_FOLDER_PASTE',                   'my_folder_pasted');
 define('LOG_MY_FOLDER_UPLOAD',                  'my_folder_uploaded');
 
-// Event logs data types
+// Event logs data types (max 20 chars)
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_COURSE_ID',                         'course_id');
 define('LOG_USER_ID',                           'user_id');

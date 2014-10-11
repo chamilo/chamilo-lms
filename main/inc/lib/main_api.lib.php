@@ -83,6 +83,7 @@ define('TOOL_THUMBNAIL', 'thumbnail');
 define('TOOL_HOTPOTATOES', 'hotpotatoes');
 define('TOOL_CALENDAR_EVENT', 'calendar_event');
 define('TOOL_LINK', 'link');
+define('TOOL_LINK_CATEGORY', 'link_category');
 define('TOOL_COURSE_DESCRIPTION', 'course_description');
 define('TOOL_SEARCH', 'search');
 define('TOOL_LEARNPATH', 'learnpath');
@@ -3373,11 +3374,11 @@ function api_item_property_update(
 
     // Definition of variables.
     $tool           = Database::escape_string($tool);
-    $item_id        = Database::escape_string($item_id);
+    $item_id        = intval($item_id);
     $lastedit_type  = Database::escape_string($lastedit_type);
-    $user_id        = Database::escape_string($user_id);
-    $to_group_id    = Database::escape_string($to_group_id);
-    $to_user_id     = Database::escape_string($to_user_id);
+    $user_id        = intval($user_id);
+    $to_group_id    = intval($to_group_id);
+    $to_user_id     = intval($to_user_id);
     $start_visible  = Database::escape_string($start_visible);
     $end_visible    = Database::escape_string($end_visible);
     $start_visible  = ($start_visible == 0) ? '0000-00-00 00:00:00' : $start_visible;
@@ -6641,6 +6642,7 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
 
     switch ($tool_id) {
         case TOOL_LINK:
+        case TOOL_LINK_CATEGORY:
             $tool_id = 'links';
             break;
         case TOOL_DOCUMENT:

@@ -574,7 +574,18 @@ class SocialManager extends UserManager
 
         $show_groups = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
 
-        $html = '';
+        // get count unread message and total invitations
+        $count_unread_message = MessageManager::get_number_of_messages(true);
+        $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
+
+        $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+        $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION, false);
+        $group_pending_invitations = count($group_pending_invitations);
+        $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
+        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
+        $showUserImage = user_is_online($user_id) || api_is_platform_admin();
+
+        $html = '<div class="social-menu">';
         if (in_array($show, $show_groups) && !empty($group_id)) {
             //--- Group image
             $group_info = GroupPortalManager::get_group_data($group_id);
@@ -591,7 +602,11 @@ class SocialManager extends UserManager
             $html .= '</div>';
             $html .= '</div>';
         } else {
-            $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
+            if ($showUserImage) {
+                $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
+            } else {
+                $img_array = UserManager::get_user_picture_path_by_id(null, 'web', true, true);
+            }
             $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
             $big_image = $big_image['file'].'?'.uniqid();
             $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();

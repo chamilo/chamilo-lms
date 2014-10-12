@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* For licensing terms, see /vendor/license.txt */
 
 /**
  * This script is included by main/admin/settings.lib.php when unselecting a plugin

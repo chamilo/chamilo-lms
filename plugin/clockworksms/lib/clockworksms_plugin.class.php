@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/* For licensing terms, see /vendor/license.txt */
 
 /**
  * Class ClockworksmsPlugin

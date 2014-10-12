@@ -210,19 +210,17 @@ if($register) {
         );
 
         api_mail_html(
-          $recipient_name,
-          $email_form,
-          $emailsubject,
-          $emailbody,
-          $sender_name,
-          $email_admin,
-          null,
-          null,
-          null,
-          $additionalParameters
+            $recipient_name,
+            $email_form,
+            $emailsubject,
+            $emailbody,
+            $sender_name,
+            $email_admin,
+            null,
+            null,
+            null,
+            $additionalParameters
         );
-
-        //@api_mail($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name,$email_admin);
 
         /*
          * remove <form> variables to prevent any pre-filled fields

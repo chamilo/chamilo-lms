@@ -82,7 +82,6 @@ switch ($action) {
 
                 //Send and email if account is active
                 if ($status == 1) {
-
                     $user_info = api_get_user_info($user_id);
                     $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
                     $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');

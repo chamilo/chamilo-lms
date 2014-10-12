@@ -1574,7 +1574,7 @@ function get_threads($forum_id, $course_code = null)
     }
 
     $course_id = $course_info['real_id'];
-
+    $groupId = api_get_group_id();
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1583,7 +1583,7 @@ function get_threads($forum_id, $course_code = null)
     // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
     // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
     // This is why it is added to the end of the field selection
-
+    $groupCondition = api_get_group_id() != 0 ? " AND item_properties.to_group_id = '$groupId' AND item_properties.c_id = '$course_id'" : "";
     $sql = "SELECT
                 thread.*,
                 item_properties.*,
@@ -1596,7 +1596,7 @@ function get_threads($forum_id, $course_code = null)
                 ON  thread.thread_id=item_properties.ref AND
                     item_properties.c_id = $course_id AND
                     thread.c_id = $course_id AND
-                    item_properties.tool='".TABLE_FORUM_THREAD."'
+                    item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
             LEFT JOIN $table_users users
                 ON thread.thread_poster_id=users.user_id
             WHERE
@@ -1609,6 +1609,7 @@ function get_threads($forum_id, $course_code = null)
         // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
         // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
         //This is why it is added to the end of the field selection
+        $groupCondition = api_get_group_id() != 0 ? " AND item_properties.to_group_id = '$groupId' AND item_properties.c_id = '$course_id'" : "";
         $sql = "SELECT
                     thread.*,
                     item_properties.*,
@@ -1621,7 +1622,7 @@ function get_threads($forum_id, $course_code = null)
                     ON  thread.thread_id=item_properties.ref AND
                         item_properties.c_id = $course_id AND
                         thread.c_id = $course_id AND
-                        item_properties.tool='".TABLE_FORUM_THREAD."'
+                        item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
                 LEFT JOIN $table_users users
                     ON thread.thread_poster_id=users.user_id
                 WHERE

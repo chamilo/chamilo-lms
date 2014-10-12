@@ -44,11 +44,18 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-<h1>Chamilo 1.9.8.3 - 21st of July, 2014</h1>
+<h1>Chamilo 1.9.10 - 30th of October, 2014</h1>
 <h3>Release notes - summary</h3>
-<p>Chamilo 1.9.8.3 is a small patch version with a few minor bugfixes and a new packaging. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.8.3, with a few changes to this changelog file and a few fixes throughout the code (as such, you can just overwrite previous files to upgrade from 1.9.8, 1.9.8.1 or 1.9.8.2 to 1.9.8.3).</p>
+<p>Chamilo 1.9.10 is a patch version with a few minor bugfixes and a new packaging. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.10, with a few changes to this changelog file and a few fixes throughout the code (as such, you can just overwrite previous files to upgrade from 1.9.8, 1.9.8.1 or 1.9.8.2 to 1.9.10).</p>
 <h3>Release name</h3>
 <p><a href="http://es.wikipedia.org/wiki/Departamento_de_Huánuco">Huánuco</a> is a small city in the Peruvian Andes, Northeast of Lima. This is a special version in memory of our cherished development team member César Perales, who passed away on July 22nd, 2014, at age 27. César contributed mostly "in the shadow" to Chamilo LMS, allowing the rest of the team to contribute more actively. He was a vibrant young man. He will be missed. César lived in calle Huánuco, in La Molina, Lima, Peru, where other team members bid him their last farewell for his last, eternal trip.</p>
+
+<h3>Possibly breaking changes</h3>
+<p>Two changes have been made to the forum tool code, which might make some of your forums disappear and require a direct database intervention.<br />
+First case: If you use forums with sessions and have placed a session forum inside a base-course forum category, the forum category will now no longer appear in any session, and as such, the session forums contained in that category will disappear. You can easily fix that by checking the c_forum_forum table for any record with session_id != 0 that points to a forum category that has session_id == 0. This is related to issue #7264.<br />
+Second case: if you use group forums and have had issues with posts appearing twice, then this release will fix this bug, but might also make some forum posts disappear. Although we could not reproduce the error, you should be able to fix it by changing the group_id column inside the c_forum_thread table. This is related to issue #7267<br />
+This is an exceptional event in the history of Chamilo, and we believe it should only affect very few portals, but we prefer to take precautionnary measures and warn you upfront.<br />
+</p>
 
 <h3>New Features</h3>
 <ul>

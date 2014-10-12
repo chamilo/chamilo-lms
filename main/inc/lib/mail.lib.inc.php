@@ -21,18 +21,36 @@ require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
  *
  * @author Bert Vanderkimpen ICT&O UGent
  *
- * @param recipient_name   	name of recipient
- * @param recipient_email  	email of recipient
+ * @param recipient_name    name of recipient
+ * @param recipient_email   email of recipient
  * @param message           email body
  * @param subject           email subject
  * @return                  returns true if mail was sent
  * @see                     class.phpmailer.php
  * @deprecated use api_mail_html()
  */
-function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '',
-    $sender_email = '', $extra_headers = '', $additional_parameters = array()) {
-	api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name,
-        $sender_email, $extra_headers, null, null, $additional_parameters);
+function api_mail(
+    $recipient_name,
+    $recipient_email,
+    $subject,
+    $message,
+    $sender_name = '',
+    $sender_email = '',
+    $extra_headers = '',
+    $additionalParameters = array()
+) {
+    api_mail_html(
+        $recipient_name,
+        $recipient_email,
+        $subject,
+        $message,
+        $sender_name,
+        $sender_email,
+        $extra_headers,
+        null,
+        null,
+        $additionalParameters
+    );
 }
 
 /**
@@ -66,7 +84,7 @@ function api_mail_html(
     $extra_headers = array(),
     $data_file = array(),
     $embedded_image = false,
-    $additional_parameters = array()
+    $additionalParameters = array()
 ) {
     global $platform_email;
 
@@ -122,14 +140,14 @@ function api_mail_html(
 
     // Send embedded image.
     if ($embedded_image) {
-    	// Get all images html inside content.
+        // Get all images html inside content.
         preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
         // Prepare new tag images.
         $new_images_html = array();
         $i = 1;
         if (!empty($m[1])) {
-        	foreach ($m[1] as $image_path) {
-            	$real_path = realpath($image_path);
+            foreach ($m[1] as $image_path) {
+                $real_path = realpath($image_path);
                 $filename  = basename($image_path);
                 $image_cid = $filename.'_'.$i;
                 $encoding = 'base64';
@@ -137,17 +155,17 @@ function api_mail_html(
                 $mail->AddEmbeddedImage($real_path, $image_cid, $filename, $encoding, $image_type);
                 $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
                 $i++;
-			}
-		}
+            }
+        }
 
-	    // Replace origin image for new embedded image html.
-	    $x = 0;
-	    if (!empty($m[0])) {
-	    	foreach ($m[0] as $orig_img) {
-	        	$message = str_replace($orig_img, $new_images_html[$x], $message);
-	            $x++;
-	         }
-	    }
+        // Replace origin image for new embedded image html.
+        $x = 0;
+        if (!empty($m[0])) {
+            foreach ($m[0] as $orig_img) {
+                $message = str_replace($orig_img, $new_images_html[$x], $message);
+                $x++;
+             }
+        }
     }
     $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
     $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
@@ -216,9 +234,9 @@ function api_mail_html(
     $plugin = new AppPlugin();
     $installedPluginsList = $plugin->getInstalledPluginListObject();
     foreach ($installedPluginsList as $installedPlugin) {
-        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additional_parameters)) {
+        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additionalParameters)) {
             $clockworksmsObject = new Clockworksms();
-            $clockworksmsObject->send($additional_parameters);
+            $clockworksmsObject->send($additionalParameters);
         }
     }
 

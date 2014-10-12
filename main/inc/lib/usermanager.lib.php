@@ -208,14 +208,24 @@ class UserManager
                     $values["prior_lang"] = null;
                     EventsDispatcher::events('user_registration', $values);
                 } else {
-                    $additional_parameters = array(
+                    $additionalParameters = array(
                         'smsType' => WELCOME_LOGIN_PASSWORD,
                         'userId' => $return,
                         'mobilePhoneNumber' => $extra['mobile_phone_number'],
                         'password' => $original_password
                     );
-                    api_mail_html($recipient_name, $email, $emailsubject, $emailbody,
-                        $sender_name, $email_admin, null, null, null, $additional_parameters);
+                    api_mail_html(
+                        $recipient_name,
+                        $email,
+                        $emailsubject,
+                        $emailbody,
+                        $sender_name,
+                        $email_admin,
+                        null,
+                        null,
+                        null,
+                        $additionalParameters
+                    );
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }

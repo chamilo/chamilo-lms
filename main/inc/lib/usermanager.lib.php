@@ -4425,8 +4425,9 @@ class UserManager
                     $form->applyFilter('extra_'.$field_details[1], 'html_filter');
 
                     if (!$admin_permissions) {
-                        if ($field_details[7] == 0)
+                        if ($field_details[7] == 0) {
                             $form->freeze('extra_'.$field_details[1]);
+                        }
                     }
                     break;
                 case self::USER_FIELD_TYPE_TEXTAREA:

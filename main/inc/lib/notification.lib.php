@@ -155,7 +155,7 @@ class Notification extends Model
                     case self::NOTIFY_INVITATION_AT_ONCE:
                     case self::NOTIFY_GROUP_AT_ONCE:
                         $mail = api_get_setting('noreply_email_address');
-                        if ($user_setting == NOTIFY_INVITATION_AT_ONCE) {
+                        if ($user_setting == self::NOTIFY_INVITATION_AT_ONCE) {
                             $sender_info['complete_name'] = $this->admin_name;
                             $extra_headers = array();
                             $extra_headers['reply_to']['name'] = $this->admin_name;
@@ -171,7 +171,7 @@ class Notification extends Model
                         if (!empty($user_info['mail']) || !empty($mail)) {
                             $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
                             if (!empty($sender_info['complete_name']) && !empty($sender_info['email'])) {
-                                if ($user_setting != NOTIFY_INVITATION_AT_ONCE) {
+                                if ($user_setting != self::NOTIFY_INVITATION_AT_ONCE) {
                                     $extra_headers = array();
                                     $extra_headers['reply_to']['mail'] = $sender_info['email'];
                                     $extra_headers['reply_to']['name'] = $sender_info['complete_name'];

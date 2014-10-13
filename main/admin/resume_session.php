@@ -96,12 +96,17 @@ switch ($action) {
         }
         break;
     case 'delete':
+        // Delete course from session.
         $idChecked = isset($_GET['idChecked']) ? $_GET['idChecked'] : null;
         if (is_array($idChecked)) {
             $usersToDelete = array();
-            foreach ($idChecked as $id) {
+            foreach ($idChecked as $courseCode) {
                 // forcing the escape_string
-                SessionManager::unsubscribe_user_from_session($id_session, $id);
+                $courseInfo = api_get_course_info($courseCode);
+                SessionManager::unsubscribe_course_from_session(
+                    $id_session,
+                    $courseInfo['real_id']
+                );
             }
         }
 

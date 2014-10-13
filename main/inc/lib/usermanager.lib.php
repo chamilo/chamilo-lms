@@ -153,8 +153,7 @@ class UserManager
         }
 
 
-        //@todo replace this date with the api_get_utc_date function big problem with users that are already registered
-        $current_date = date('Y-m-d H:i:s', time());
+        $current_date = api_get_utc_datetime();
         $sql = "INSERT INTO $table_user
                 SET lastname =         '".Database::escape_string(trim($lastName))."',
                 firstname =         '".Database::escape_string(trim($firstName))."',
@@ -208,14 +207,24 @@ class UserManager
                     $values["prior_lang"] = null;
                     EventsDispatcher::events('user_registration', $values);
                 } else {
-                    $additional_parameters = array(
+                    $additionalParameters = array(
                         'smsType' => WELCOME_LOGIN_PASSWORD,
                         'userId' => $return,
                         'mobilePhoneNumber' => $extra['mobile_phone_number'],
                         'password' => $original_password
                     );
-                    api_mail_html($recipient_name, $email, $emailsubject, $emailbody,
-                        $sender_name, $email_admin, null, null, null, $additional_parameters);
+                    api_mail_html(
+                        $recipient_name,
+                        $email,
+                        $emailsubject,
+                        $emailbody,
+                        $sender_name,
+                        $email_admin,
+                        null,
+                        null,
+                        null,
+                        $additionalParameters
+                    );
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }

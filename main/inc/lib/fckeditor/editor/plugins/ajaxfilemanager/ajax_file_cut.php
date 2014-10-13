@@ -26,5 +26,7 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_CUT) {
     $sessionAction->setFolder($_POST['currentFolderPath']);
     $sessionAction->set($_POST['selectedDoc']);
     $info = ',num:'.sizeof($_POST['selectedDoc']);
+    foreach ($_POST['selectedDoc'] as $doc) {
+        event_system(LOG_MY_FOLDER_COPY, LOG_MY_FOLDER_PATH, $doc);
+    }
 }
-echo "{error:'".$error."'\n".$info."}";

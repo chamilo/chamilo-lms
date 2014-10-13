@@ -55,6 +55,7 @@ class GlobalMultipleAnswer extends Question
         $correct = 0;
 
         /* Mise en variable du nombre de reponse */
+        $answer = false;
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();

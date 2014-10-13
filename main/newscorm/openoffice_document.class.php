@@ -133,8 +133,7 @@ abstract class OpenofficeDocument extends learnpath
         } else {
             // get result from webservices
             $result = $this->_get_remote_ppt2lp_files($file);
-            $result = unserialize(base64_decode($result));
-
+            $result = unserialize($result);
             // Save remote images to server
             chmod($this->base_work_dir.$this->created_dir, api_get_permissions_for_new_directories());
             if (!empty($result['images'])) {
@@ -174,7 +173,6 @@ abstract class OpenofficeDocument extends learnpath
      */
     private function _get_remote_ppt2lp_files($file)
     {
-        require_once api_get_path(LIBRARY_PATH) . 'nusoap/nusoap.php';
         // host
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');
 
@@ -182,27 +180,29 @@ abstract class OpenofficeDocument extends learnpath
         $secret_key = sha1(api_get_setting('service_ppt2lp', 'ftp_password'));
 
         // client
-        $client = new nusoap_client($ppt2lp_host, true);
-
+        $options = array(
+            'location' => $ppt2lp_host,
+            'uri' => $ppt2lp_host,
+            'trace' => 1,
+            'exception' => 1,
+            'cache_wsdl' => WSDL_CACHE_NONE,
+        );
+        $client = new SoapClient(null, $options);
         $result = '';
-        $err = $client->getError();
-        if (!$err) {
 
-            $file_data = base64_encode(file_get_contents($file['tmp_name']));
-            $file_name = $file['name'];
-            $service_ppt2lp_size = api_get_setting('service_ppt2lp', 'size');
+        $file_data = base64_encode(file_get_contents($file['tmp_name']));
+        $file_name = $file['name'];
+        $service_ppt2lp_size = api_get_setting('service_ppt2lp', 'size');
 
-            $params = array(
-                'secret_key' => $secret_key,
-                'file_data' => $file_data,
-                'file_name' => $file_name,
-                'service_ppt2lp_size' => $service_ppt2lp_size,
-            );
+        $params = array(
+            'secret_key' => $secret_key,
+            'file_data' => $file_data,
+            'file_name' => $file_name,
+            'service_ppt2lp_size' => $service_ppt2lp_size,
+        );
 
-            $result = $client->call('ws_convert_ppt', array('convert_ppt' => $params));
-        } else {
-            return false;
-        }
+        $result = $client->__call('wsConvertPpt', array('pptData' => $params));
+
         return $result;
     }
 

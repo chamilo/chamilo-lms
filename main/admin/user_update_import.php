@@ -9,7 +9,7 @@
  * Validate the imported data.
  */
 
-$language_file = array('admin', 'registration');
+$language_file = array ('admin', 'registration');
 
 $cidReset = true;
 require '../inc/global.inc.php';
@@ -22,12 +22,7 @@ require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
 
-/**
- * @param array $users
- * @param bool  $checkUniqueEmail
- * @return array
- */
-function validate_data($users, $checkUniqueEmail = false)
+function validate_data($users)
 {
     global $defined_auth_sources;
     $errors = array();
@@ -44,47 +39,37 @@ function validate_data($users, $checkUniqueEmail = false)
 
     foreach ($users as $user) {
         foreach ($mandatory_fields as $field) {
-            if (empty($user[$field])) {
-                $user['error'] = get_lang($field.'Mandatory');
-                $errors[] = $user;
-            }
-        }
-        // 2. Check username, first, check whether it is empty.
-        if (!UserManager::is_username_empty($user['UserName'])) {
-            // 2.1. Check whether username is too long.
-            if (UserManager::is_username_too_long($user['UserName'])) {
-                $user['error'] = get_lang('UserNameTooLong');
-                $errors[] = $user;
-            }
-            // 2.1.1
-            $hasDash = strpos($username, '-');
-            if ($hasDash !== false) {
-                $user['error'] = get_lang('UserNameHasDash');
-                $errors[] = $user;
-            }
-            // 2.2. Check whether the username was used twice in import file.
-            if (isset($usernames[$user['UserName']])) {
-                $user['error'] = get_lang('UserNameUsedTwice');
-                $errors[] = $user;
-            }
-            $usernames[$user['UserName']] = 1;
-            // 2.3. Check whether username is already occupied.
-            if (!UserManager::is_username_available($user['UserName'])) {
-                $user['error'] = get_lang('UserNameNotAvailable');
-                $errors[] = $user;
-            }
-        }
-
-        if ($checkUniqueEmail) {
-            if (isset($user['Email'])) {
-                $userFromEmail = api_get_user_info_from_email($user['Email']);
-                if (!empty($userFromEmail)) {
-                    $user['error'] = get_lang('EmailUsedTwice');
+            if (isset($user[$field])) {
+                if (empty($user[$field])) {
+                    $user['error'] = get_lang($field.'Mandatory');
                     $errors[] = $user;
                 }
             }
         }
 
+        // 2. Check username, first, check whether it is empty.
+        
+        if (isset($user['NewUserName'])) {
+            if (!UserManager::is_username_empty($user['NewUserName'])) {
+                // 2.1. Check whether username is too long.
+                if (UserManager::is_username_too_long($user['NewUserName'])) {
+                    $user['error'] = get_lang('UserNameTooLong');
+                    $errors[] = $user;
+                }
+                // 2.2. Check whether the username was used twice in import file.
+                if (isset($usernames[$user['NewUserName']])) {
+                    $user['error'] = get_lang('UserNameUsedTwice');
+                    $errors[] = $user;
+                }
+                $usernames[$user['UserName']] = 1;
+                // 2.3. Check whether username is allready occupied.
+                if (!UserManager::is_username_available($user['NewUserName']) && $user['NewUserName'] != $user['UserName']) {
+                    $user['error'] = get_lang('UserNameNotAvailable');
+                    $errors[] = $user;
+                }
+             }
+          }
+          
         // 3. Check status.
         if (isset($user['Status']) && !api_status_exists($user['Status'])) {
             $user['error'] = get_lang('WrongStatus');
@@ -144,52 +129,74 @@ function complete_missing_data($user)
     if (empty($user['AuthSource'])) {
         $user['AuthSource'] = PLATFORM_AUTH_SOURCE;
     }
-
-    if (empty($user['ExpiryDate'])) {
-        $user['ExpiryDate'] = '0000-00-00 00:00:00';
-    }
-
     return $user;
 }
 
 /**
- * Save the imported data
+ * Update users from the imported data
  * @param   array   $users List of users
  * @return  void
  * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
  */
-function save_data($users)
+ 
+function updateUsers($users)
 {
-    global $inserted_in_course;
+    global $insertedIn_course;
     // Not all scripts declare the $inserted_in_course array (although they should).
     if (!isset($inserted_in_course)) {
         $inserted_in_course = array();
     }
+    require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
     $usergroup = new UserGroup();
     $send_mail = $_POST['sendMail'] ? true : false;
-
     if (is_array($users)) {
         foreach ($users as $user) {
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
-            $user_id = UserManager :: create_user(
-                $user['FirstName'],
-                $user['LastName'],
-                $user['Status'],
-                $user['Email'],
-                $user['UserName'],
-                $user['Password'],
-                $user['OfficialCode'],
-                $user['language'],
-                $user['PhoneNumber'],
+            $userName = $user['UserName'];
+            $userInfo = api_get_user_info_from_username($userName);
+            $user_id = $userInfo['user_id'];
+            if ($user_id == 0) {
+                return false;
+            } 
+            $firstName = isset($user['FirstName']) ? $user['FirstName'] : $userInfo['firstname'];
+            $lastName = isset($user['LastName']) ? $user['LastName'] : $userInfo['lastname'];
+            $userName = isset($user['NewUserName']) ? $user['NewUserName'] : $userInfo['username'];
+            $password = isset($user['Password']) ? $user['Password'] : $userInfo['password'];
+            $authSource = isset($user['AuthSource']) ? $user['AuthSource'] : $userInfo['auth_source'];
+            $email = isset($user['Email']) ? $user['Email'] : $userInfo['email'];
+            $status = isset($user['Status']) ? $user['Status'] : $userInfo['status'];
+            $officialCode = isset($user['OfficialCode']) ? $user['OfficialCode'] : $userInfo['official_code'];
+            $phone = isset($user['PhoneNumber']) ? $user['PhoneNumber'] : $userInfo['phone'];
+            $pictureUrl = isset($user['PictureUri']) ? $user['PictureUri'] : $userInfo['picture_url'];
+            $expirationDate = isset($user['ExpiryDate']) ? $user['ExpiryDate'] : $userInfo['expiration_date'];
+            $active = isset($user['Active']) ? $user['Active'] : $userInfo['active'];
+            $creatorId = $userInfo['creator_id'];
+            $hrDeptId = $userInfo['hr_dept_id'];
+            $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
+            $sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
+            $userUpdated = UserManager :: update_user(
+                $user_id,
+                $firstName,
+                $lastName,
+                $userName,
+                $password,
+                $authSource,
+                $email,
+                $status,
+                $officialCode,
+                $phone,
+                $pictureUrl,
+                $expirationDate,
+                $active,
+                $creatorId,
+                $hrDeptId,
+                null,
+                $language,
+                '',   
                 '',
-                $user['AuthSource'],
-                $user['ExpiryDate'],
-                1,
-                0,
-                null,
-                null,
-                $send_mail
+                ''
+                
             );
             if (!is_array($user['Courses']) && !empty($user['Courses'])) {
                 $user['Courses'] = array($user['Courses']);
@@ -236,6 +243,7 @@ function save_data($users)
         }
     }
 }
+
 
 /**
  * Read the CSV-file
@@ -327,12 +335,12 @@ function parse_xml_data($file)
     xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
     xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
     xml_parser_free($parser);
-
     return $users;
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true, null, 'login');
+
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 
@@ -348,17 +356,14 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if (isset($_POST['formSent']) && $_POST['formSent'] AND
-    $_FILES['import_file']['size'] !== 0
-) {
-    $file_type = $_POST['file_type'];
+if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
+    
+    $file_type = 'csv';    
+   
     Security::clear_token();
     $tok = Security::get_token();
     $allowed_file_mimetype = array('csv', 'xml');
     $error_kind_file = false;
-
-    $checkUniqueEmail = isset($_POST['check_unique_email']) ?
-        $_POST['check_unique_email'] :null;
 
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
@@ -366,13 +371,14 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
             $users	= parse_csv_data($_FILES['import_file']['tmp_name']);
-            $errors = validate_data($users, $checkUniqueEmail);
+            $errors = validate_data($users);
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
             $users = parse_xml_data($_FILES['import_file']['tmp_name']);
-            $errors = validate_data($users, $checkUniqueEmail);
+            $errors = validate_data($users);
             $error_kind_file = false;
         } else {
+        
             $error_kind_file = true;
         }
     } else {
@@ -398,11 +404,9 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
 
     $inserted_in_course = array();
     if (strcmp($file_type, 'csv') === 0) {
-        save_data($users_to_insert);
-    } elseif (strcmp($file_type, 'xml') === 0) {
-        save_data($users_to_insert);
+        updateUsers($users_to_insert);
     } else {
-        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
+        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption1');
     }
 
     if (count($errors) > 0) {
@@ -414,15 +418,10 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     if (count($errors) != 0) {
         $warning_message = '<ul>';
         foreach ($errors as $index => $error_user) {
-            $email = isset($error_user['Email']) ? ' - '.$error_user['Email'] :
-                null;
             $warning_message .= '<li><b>'.$error_user['error'].'</b>: ';
             $warning_message .=
-                '<strong>'.$error_user['UserName'].'</strong> - '.
-                api_get_person_name(
-                    $error_user['FirstName'],
-                    $error_user['LastName']).'
-                '.$email;
+                '<strong>'.$error_user['UserName'].'</strong>&nbsp;('.
+                api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
             $warning_message .= '</li>';
         }
         $warning_message .= '</ul>';
@@ -439,49 +438,20 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.urlencode($warning_message).'&message='.urlencode($see_message_import).'&sec_token='.$tok);
         exit;
     }
-}
 
+}
 Display :: display_header($tool_name);
 
 if (!empty($error_message)) {
     Display::display_error_message($error_message);
 }
 
-$form = new FormValidator('user_import','post','user_import.php');
+$form = new FormValidator('user_update_import','post','user_update_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$group = array(
-    $form->createElement(
-        'radio',
-        'file_type',
-        '',
-        'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)',
-        'csv'
-    ),
-    $form->createElement(
-        'radio',
-        'file_type',
-        null,
-        'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)',
-        'xml'
-    )
-);
 
-$form->addGroup($group, '', get_lang('FileType'), '<br/>');
-
-$group = array(
-    $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
-    $form->createElement('radio', 'sendMail', null, get_lang('No'), 0)
-);
-$form->addGroup($group, '', get_lang('SendMailToUsers'), '<br/>');
-
-$form->addElement(
-    'checkbox',
-    'check_unique_email',
-    '',
-    get_lang('CheckUniqueEmail')
-);
+$group = array();
 
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 $defaults['formSent'] = 1;
@@ -510,32 +480,13 @@ if ($count_fields > 0) {
 
 ?>
     <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-    <blockquote>
-<pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></span>Courses;ClassId;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
-</pre>
-</blockquote>
-<p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-<blockquote>
-<pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
-&lt;Contacts&gt;
-    &lt;Contact&gt;
-        <b>&lt;LastName&gt;xxx&lt;/LastName&gt;</b>
-        <b>&lt;FirstName&gt;xxx&lt;/FirstName&gt;</b>
-        &lt;UserName&gt;xxx&lt;/UserName&gt;
-        &lt;Password&gt;xxx&lt;/Password&gt;
-        &lt;AuthSource&gt;<?php echo implode('/', $defined_auth_sources); ?>&lt;/AuthSource&gt;
-        <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
-        &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
-        &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') { echo '<br /><span style="color:red;">', $result_xml; echo '</span>'; } ?>&lt;/Status&gt;
-        &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
-        &lt;ClassId&gt;1&lt;/ClassId&gt;
-        &lt;/Contact&gt;
-&lt;/Contacts&gt;
-</pre>
-    </blockquote>
-<?php
+     
+        <blockquote>
+            <pre>
+                <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
+                xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;0/1;xxx;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
+            </pre>
+        </blockquote>
+    <p><?php
+
 Display :: display_footer();

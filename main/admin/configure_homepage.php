@@ -15,30 +15,33 @@
  */
 function home_tabs($file_logged_in)
 {
-	$file_logged_out = str_replace('_logged_in','', $file_logged_in);
+    $post = strpos($file_logged_in, "_logged_in");
+    if ($post !== false) {
+        $file_logged_out = str_replace('_logged_in','', $file_logged_in);
+        //variables initialization
+        $data_logged_out = array();
+        $data_logged_in  = array();
 
-	//variables initialization
-	$data_logged_out = array();
-	$data_logged_in  = array();
-
-	//we read the file with all links
-	$file = file($file_logged_in);
-	foreach ($file as $line) {
-		//not logged user only sees public links
-		if (!preg_match('/::private/',$line)) {
-			$data_logged_out[] = $line;
-		}
-		//logged user only sees all links
-		$data_logged_in[] = $line;
-	}
-	//tabs file for logged out users
-	$fp = fopen($file_logged_out, 'w');
-	fputs($fp, implode("\n", $data_logged_out));
-	fclose($fp);
-	//tabs file for logged in users
-	$fp = fopen($file_logged_in, 'w');
-	fputs($fp, implode("\n", $data_logged_in));
-	fclose($fp);
+        //we read the file with all links
+        $file = file($file_logged_in);
+        foreach ($file as $line) {
+            $line = str_replace("\n", '',$line);
+            //not logged user only sees public links
+            if (!preg_match('/::private/',$line)) {
+                $data_logged_out[] = $line;
+            }
+            //logged user only sees all links
+            $data_logged_in[] = $line;
+        }
+        //tabs file for logged out users
+        $fp = fopen($file_logged_out, 'w');
+        fputs($fp, implode("\n", $data_logged_out));
+        fclose($fp);
+        //tabs file for logged in users
+        $fp = fopen($file_logged_in, 'w');
+        fputs($fp, implode("\n", $data_logged_in));
+        fclose($fp);
+    }
 }
 
 $language_file = array('index','admin', 'accessibility');
@@ -830,8 +833,9 @@ switch ($action) {
         $default['link_name'] = $link_name;
     	}
 		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
-		$form->addElement('text', 'link_url', array(get_lang('LinkURL'), get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately')), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
-
+        $linkUrlComment = ($action == 'insert_tabs') ? get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately') : '';
+        $form->addElement('text', 'link_url', array(get_lang('LinkURL'), $linkUrlComment), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
+        
         $options = array('-1' => get_lang('FirstPlace'));
 
 		$selected = '';

@@ -412,12 +412,11 @@ class CoursesController { // extends Controller {
     {
         $mailSubject = get_lang('SubscribeToSession') . " '$sessionName'";
 
-        $mailMessage = get_lang('PleaseSubscribeToSession') . PHP_EOL . PHP_EOL;
-        $mailMessage = get_lang('Session') . ": $sessionName" . PHP_EOL . PHP_EOL;
-        $mailMessage.= get_lang('ContactInformation') . ':' . PHP_EOL;
-        $mailMessage.= get_lang('Name') . ": {$userInfo['complete_name']}" . PHP_EOL;
-        $mailMessage.= get_lang('Username') . ": {$userInfo['username']}" . PHP_EOL;
-        $mailMessage.= get_lang('Email') . ": {$userInfo['email']}" . PHP_EOL;
+        $mailMessage = sprintf(get_lang('PleaseSubscribeMeToSessionX'), $sessionName) . PHP_EOL . PHP_EOL;
+        $mailMessage.= get_lang('ContactInformation') . PHP_EOL;
+        $mailMessage.= sprintf(get_lang('NameX'), $userInfo['complete_name']) . PHP_EOL;
+        $mailMessage.= sprintf(get_lang('UsernameX'), $userInfo['username']) . PHP_EOL;
+        $mailMessage.= sprintf(get_lang('EmailX'), $userInfo['email']) . PHP_EOL;
 
         if ($allowEmailEditor) {
             $mailParams = http_build_query(array(

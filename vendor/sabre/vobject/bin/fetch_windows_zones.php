@@ -2,7 +2,7 @@
 <?php
 
 $windowsZonesUrl = 'http://unicode.org/repos/cldr/trunk/common/supplemental/windowsZones.xml';
-$outputFile = __DIR__ . '/../lib/Sabre/VObject/timezonedata/windowszones.php';
+$outputFile = __DIR__ . '/../lib/timezonedata/windowszones.php';
 
 echo "Fetching timezone map from: " . $windowsZonesUrl, "\n";
 

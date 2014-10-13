@@ -24,7 +24,8 @@ use \Memcached;
 /**
  * Memcached cache provider.
  *
-
+ * @link   www.doctrine-project.org
+ * @since  2.2
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Jonathan Wage <jonwage@gmail.com>

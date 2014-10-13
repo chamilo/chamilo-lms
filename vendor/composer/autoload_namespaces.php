@@ -11,7 +11,6 @@ return array(
     'Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
-    'Sabre\\VObject' => array($vendorDir . '/sabre/vobject/lib'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Neutron' => array($vendorDir . '/neutron/temporary-filesystem/src'),
     'HttpAdapter' => array($vendorDir . '/toin0u/http-adapter/src'),

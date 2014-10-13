@@ -393,16 +393,16 @@
         },
         {
             "name": "sabre/vobject",
-            "version": "3.3.2",
+            "version": "3.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fruux/sabre-vobject.git",
-                "reference": "2a5c49e706454d437a9e25bdb39583a18d470399"
+                "reference": "de508f160e811c09b5e651909eb20b9e058a043c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/2a5c49e706454d437a9e25bdb39583a18d470399",
-                "reference": "2a5c49e706454d437a9e25bdb39583a18d470399",
+                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/de508f160e811c09b5e651909eb20b9e058a043c",
+                "reference": "de508f160e811c09b5e651909eb20b9e058a043c",
                 "shasum": ""
             },
             "require": {
@@ -435,8 +435,14 @@
             "authors": [
                 {
                     "name": "Evert Pot",
-                    "email": "evert@rooftopsolutions.nl",
+                    "email": "me@evertpot.com",
                     "homepage": "http://evertpot.com/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Dominik Tobschall",
+                    "email": "dominik@fruux.com",
+                    "homepage": "http://tobschall.de/",
                     "role": "Developer"
                 }
             ],
@@ -449,7 +455,7 @@
                 "jCard",
                 "vCard"
             ],
-            "time": "2014-09-19 18:54:29"
+            "time": "2014-10-09 15:59:25"
         },
         {
             "name": "symfony/console",
@@ -769,16 +775,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.16.0",
+            "version": "v1.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "8ce37115802e257a984a82d38254884085060024"
+                "reference": "7c4c01dcf578523cfcddf383641a4f12790270ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/8ce37115802e257a984a82d38254884085060024",
-                "reference": "8ce37115802e257a984a82d38254884085060024",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/7c4c01dcf578523cfcddf383641a4f12790270ec",
+                "reference": "7c4c01dcf578523cfcddf383641a4f12790270ec",
                 "shasum": ""
             },
             "require": {
@@ -822,7 +828,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-07-05 12:19:05"
+            "time": "2014-10-10 14:09:53"
         }
     ],
     "packages-dev": [],

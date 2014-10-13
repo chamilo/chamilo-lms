@@ -6,8 +6,8 @@
   convertWarningsToExceptions="true"
   strict="true"
   >
-  <testsuite name="Sabre_VObject">
-    <directory>Sabre/</directory>
+  <testsuite name="Sabre\VObject">
+    <directory>VObject/</directory>
   </testsuite>
 
   <filter>

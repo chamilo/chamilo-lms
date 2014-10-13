@@ -9,6 +9,10 @@ tests/temp
 
 #binaries
 bin/phpunit
+bin/phpcs
 
 # Development stuff
 testdata/
+
+# OS X
+.DS_Store

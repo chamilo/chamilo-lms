@@ -166,6 +166,8 @@ $stok = Security::get_token();
                 $count_connections = $course['count_connections'];
                 $creation_date = substr($course['creation_date'],0,10);
 
+                $icon_title = null;
+
                 // display the course bloc
                 echo '<div class="well_border"><div class="row">';
 
@@ -243,7 +245,7 @@ function display_thumbnail($course, $icon_title)
     if (file_exists($course_path.'/course-pic85x85.png')) {
         $course_medium_image = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic85x85.png'; // redimensioned image 85x85
     } else {
-        $course_medium_image = api_get_path(WEB_IMG_PATH).'without_picture.png'; // without picture
+        $course_medium_image = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true); // without picture
     }
 
     // course image

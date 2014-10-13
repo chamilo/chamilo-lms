@@ -1,15 +1,12 @@
 <?php
 /* See license terms in /license.txt */
-/**
-*   @package chamilo.library
-*/
-/**
- * Code
- */
+
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 require_once _MPDF_PATH.'mpdf.php';
 /**
  * Class PDF
+ * @package chamilo.library
+ *
  */
 class PDF
 {
@@ -46,16 +43,29 @@ class PDF
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
         $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;
 
-        $this->pdf = new mPDF('UTF-8', $page_format, '', '', $params['left'], $params['right'], $params['top'], $params['bottom'], 8, 8, $orientation);
+        $this->pdf = new mPDF(
+            'UTF-8',
+            $page_format,
+            '',
+            '',
+            $params['left'],
+            $params['right'],
+            $params['top'],
+            $params['bottom'],
+            8,
+            8,
+            $orientation
+        );
     }
 
     /**
      * Export the given HTML to PDF, using a global template
-     * @param string the HTML content
+     * @param string $content the HTML content
      * @uses export/table_pdf.tpl
      */
     public function html_to_pdf_with_template($content)
     {
+        global $_configuration;
         Display :: display_no_header();
 
         //Assignments
@@ -72,6 +82,16 @@ class PDF
             }
         }
 
+        if (isset($_configuration['pdf_logo_header']) &&
+            $_configuration['pdf_logo_header']
+        ) {
+            $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/pdf_logo_header.png';
+            if (file_exists($img)) {
+                $img = api_get_path(WEB_CODE_PATH) . 'css/' . api_get_visual_theme() . '/images/pdf_logo_header.png';
+                $organization = "<img src='$img'>";
+            }
+        }
+
         Display::$global_template->assign('organization', $organization);
 
         //Showing only the current teacher/admin instead the all teacher list name see BT#4080
@@ -83,7 +103,7 @@ class PDF
         Display::$global_template->assign('pdf_course', $this->params['course_code']);
         Display::$global_template->assign('pdf_course_info', $this->params['course_info']);
         Display::$global_template->assign('pdf_session_info', $this->params['session_info']);
-        Display::$global_template->assign('pdf_date', api_format_date(api_get_utc_datetime(), DATE_TIME_FORMAT_LONG));
+        Display::$global_template->assign('pdf_date', api_format_date(api_get_local_time(), DATE_TIME_FORMAT_LONG));
         Display::$global_template->assign('pdf_teachers', $teacher_list);
         Display::$global_template->assign('pdf_title', $this->params['pdf_title']);
         Display::$global_template->assign('add_signatures', $this->params['add_signatures']);

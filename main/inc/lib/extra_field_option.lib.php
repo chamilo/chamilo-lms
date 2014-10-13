@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * Declaration of the ExtraFieldOption class
- */
-/**
+ * Class ExtraFieldOption
  * Handles the extra fields for various objects (users, sessions, courses)
  */
 class ExtraFieldOption extends Model

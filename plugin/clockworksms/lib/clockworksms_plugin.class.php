@@ -1,6 +1,12 @@
 <?php
+/* For licensing terms, see /vendor/license.txt */
+
 /**
  * Class ClockworksmsPlugin
+ * This script contains SMS type constants and basic plugin functions
+ * 
+ * @package chamilo.plugin.clockworksms.lib
+ * @author  Imanol Losada <imanol.losada@beeznest.com>
  */
 class ClockworksmsPlugin extends Plugin
 {
@@ -47,16 +53,25 @@ class ClockworksmsPlugin extends Plugin
     const BEEN_INVITED_COMPLETE_SURVEY_COURSE = 40;
     const REMINDER_ASSIGNMENT_COURSE_DUE = 41;
     const USER_DETAILS_MODIFIED = 42;
-    
+
     public $isCoursePlugin = true;
     public $isMailPlugin = true;
 
-    static function create()
+    /**
+     * create (a singleton function that ensures ClockworksmsPlugin instance is
+     * created only once. If it is already created, it returns the instance)
+     * @return  object  ClockworksmsPlugin instance
+     */
+    public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * Constructor
+     * @return  void
+     */
     protected function __construct()
     {
         $fields = array('tool_enable' => 'boolean', 'api_key' => 'text');
@@ -67,26 +82,36 @@ class ClockworksmsPlugin extends Plugin
         parent::__construct('0.1', 'Imanol Losada', $fields);
     }
 
+    /**
+     * addMobilePhoneNumberField (adds a mobile phone number field if it is not
+     * already created)
+     * @return  void
+     */
     private function addMobilePhoneNumberField()
     {
-        if (empty(Database::select('mobile_phone_number', 'user_field'))) {
+        $result = Database::select('mobile_phone_number', 'user_field');
+        if (empty($result)) {
             require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
             $extraField = new Extrafield('user');
             $extraField->save(array(
-                'field_type' => 1, 
-                'field_variable' => 'mobile_phone_number', 
-                'field_display_text' => $this->get_lang('mobile_phone_number'), 
-                'field_default_value' => null, 
-                'field_order' => 2, 
-                'field_visible' => 1, 
-                'field_changeable' => 1, 
+                'field_type' => 1,
+                'field_variable' => 'mobile_phone_number',
+                'field_display_text' => $this->get_lang('mobile_phone_number'),
+                'field_default_value' => null,
+                'field_order' => 2,
+                'field_visible' => 1,
+                'field_changeable' => 1,
                 'field_filter' => null
             ));
         }
     }
 
+    /**
+     * getSmsTypeOptions (returns all SMS types)
+     * @return  array   SMS types
+     */
     private function getSmsTypeOptions()
-    {   
+    {
         return array(
             'MessageWelcomeXLoginXPasswordX',
             'MessageXNewFileSharedCourseXByX',
@@ -106,7 +131,7 @@ class ClockworksmsPlugin extends Plugin
             'MessageXReceivedNewPersonalMessages',
             'MessageXNewUserXPendingApproval',
             'MessageXXPostedForumXCourseX',
-            'MessageXXXCheckEmailConnectMoreInfo',            
+            'MessageXXXCheckEmailConnectMoreInfo',
             'MessageXXStudentXAnsweredTestX',
             'MessageXXStudentXAnsweredTestXOpenQuestion',
             'MessageXXStudentXAnsweredTestXVoiceQuestion',
@@ -122,7 +147,7 @@ class ClockworksmsPlugin extends Plugin
             'MessageXUserXUploadedAssignmentXCourseX',
             'MessageXUserXUploadedAssignmentXCheckX',
             'MessageXSubscribedSessionX',
-            'MessageXSubscribedSessionXCSV',            
+            'MessageXSubscribedSessionXCSV',
             'MessageXUserXSuggestedBeFriends',
             'MessageXUserXAnsweredInboxMessage',
             'MessageXBeenInvitedJoinGroupX',
@@ -132,13 +157,20 @@ class ClockworksmsPlugin extends Plugin
             'MessageXReminderAssignmentXCourseXDue',
             'MessageXUserDetailsModified'
         );
-    }    
+    }
 
+    /**
+     * install (installs the plugin)
+     * @return  void
+     */
     public function install()
     {
         $this->addMobilePhoneNumberField();
     }
-
+    /**
+     * install (uninstalls the plugin and removes all plugin's tables and/or rows)
+     * @return  void
+     */
     public function uninstall()
     {
         $tSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);

@@ -14,6 +14,7 @@ class Agenda
     public $type = 'personal';
     public $types = array('personal', 'admin', 'course');
     public $sessionId = 0;
+    public $senderId;
     /** @var array */
     public $course;
 
@@ -34,15 +35,56 @@ class Agenda
         if (!empty($courseInfo)) {
             $this->course = $courseInfo;
         }
-        $this->sessionId = api_get_session_id();
+        $this->setSessionId(api_get_session_id());
+        $this->setSenderId(api_get_user_id());
         $this->events = array();
 
-        //Event colors
+        // Event colors
         $this->event_platform_color = 'red'; //red
         $this->event_course_color = '#458B00'; //green
         $this->event_group_color = '#A0522D'; //siena
         $this->event_session_color = '#00496D'; // kind of green
         $this->event_personal_color = 'steel blue'; //steel blue
+    }
+
+    /**
+     * @param int $senderId
+     */
+    public function setSenderId($senderId)
+    {
+        $this->senderId = intval($senderId);
+    }
+
+    /**
+     * @return int
+     */
+    public function getSenderId()
+    {
+        return $this->senderId;
+    }
+
+    /**
+     * @param string $type can be 'personal', 'admin'  or  'course'
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setSessionId($id)
+    {
+        $this->sessionId = intval($id);
+    }
+
+    /**
+     * @return int $id
+     */
+    public function getSessionId()
+    {
+        return $this->sessionId;
     }
 
     /**
@@ -103,7 +145,10 @@ class Agenda
                     'enddate' => $end,
                     'all_day' => $allDay
                 );
-                $id = Database::insert($this->tbl_personal_agenda, $attributes);
+                $id = Database::insert(
+                    $this->tbl_personal_agenda,
+                    $attributes
+                );
                 break;
             case 'course':
                 $attributes = array(
@@ -112,13 +157,16 @@ class Agenda
                     'start_date' => $start,
                     'end_date' => $end,
                     'all_day' => $allDay,
-                    'session_id' => api_get_session_id(),
+                    'session_id' => $this->getSessionId(),
                     'c_id' => $this->course['real_id']
                 );
 
                 if (!empty($parentEventId)) {
                     $attributes['parent_event_id'] = $parentEventId;
                 }
+
+                $senderId = $this->getSenderId();
+                $sessionId = $this->getSessionId();
 
                 // Simple course event.
                 $id = Database::insert($this->tbl_course_agenda, $attributes);
@@ -135,22 +183,24 @@ class Agenda
                                 TOOL_CALENDAR_EVENT,
                                 $id,
                                 "AgendaAdded",
-                                api_get_user_id(),
+                                $senderId,
                                 $groupId,
                                 '',
                                 $start,
-                                $end
+                                $end,
+                                $sessionId
                             );
                             api_item_property_update(
                                 $this->course,
                                 TOOL_CALENDAR_EVENT,
                                 $id,
                                 "visible",
-                                api_get_user_id(),
+                                $senderId,
                                 $groupId,
                                 '',
                                 $start,
-                                $end
+                                $end,
+                                $sessionId
                             );
                         } else {
                             // Storing the selected groups
@@ -161,11 +211,12 @@ class Agenda
                                         TOOL_CALENDAR_EVENT,
                                         $id,
                                         "AgendaAdded",
-                                        api_get_user_id(),
+                                        $senderId,
                                         $group,
                                         0,
                                         $start,
-                                        $end
+                                        $end,
+                                        $sessionId
                                     );
 
                                     api_item_property_update(
@@ -173,11 +224,12 @@ class Agenda
                                         TOOL_CALENDAR_EVENT,
                                         $id,
                                         "visible",
-                                        api_get_user_id(),
+                                        $senderId,
                                         $group,
                                         0,
                                         $start,
-                                        $end
+                                        $end,
+                                        $sessionId
                                     );
                                 }
                             }
@@ -190,11 +242,12 @@ class Agenda
                                         TOOL_CALENDAR_EVENT,
                                         $id,
                                         "AgendaAdded",
-                                        api_get_user_id(),
+                                        $senderId,
                                         $groupId,
                                         $userId,
                                         $start,
-                                        $end
+                                        $end,
+                                        $sessionId
                                     );
 
                                     api_item_property_update(
@@ -202,11 +255,12 @@ class Agenda
                                         TOOL_CALENDAR_EVENT,
                                         $id,
                                         "visible",
-                                        api_get_user_id(),
+                                        $senderId,
                                         $groupId,
                                         $userId,
                                         $start,
-                                        $end
+                                        $end,
+                                        $sessionId
                                     );
                                 }
                             }
@@ -543,7 +597,7 @@ class Agenda
                         $this->tbl_course_agenda,
                         $attributes,
                         array(
-                            'id = ? AND c_id = ? AND session_id = ? ' => array($id, $course_id, api_get_session_id())
+                            'id = ? AND c_id = ? AND session_id = ? ' => array($id, $course_id, $this->sessionId)
                         )
                     );
 
@@ -814,7 +868,7 @@ class Agenda
                 $this->get_platform_events($start, $end);
                 break;
             case 'course':
-                $session_id = api_get_session_id();
+                $session_id = $this->sessionId;
                 $courseInfo = api_get_course_info_by_id($course_id);
                 $this->get_course_events(
                     $start,
@@ -1807,13 +1861,13 @@ class Agenda
 
         $userList = CourseManager::get_user_list_from_course_code(
             api_get_course_id(),
-            api_get_session_id(),
+            $this->sessionId,
             null,
             $order
         );
         $groupList = CourseManager::get_group_list_of_course(
             api_get_course_id(),
-            api_get_session_id()
+            $this->sessionId
         );
 
         $this->setSendToSelect(

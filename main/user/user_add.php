@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt*/
 /**
-*	@package chamilo.user
+* @package chamilo.user
 */
 /**
  * Code
  */
 
-/* INIT	*/
+/* INIT */
 
 // name of the language file that needs to be included
 $language_file="registration";
@@ -25,7 +25,7 @@ $tbl_courseUser    = "course_rel_user";
 
 
 
-/* DATA CHECKING	*/
+/* DATA CHECKING */
 
 if($register) {
     /*
@@ -94,9 +94,9 @@ if($register) {
 
                     break;
                 }
-            }				// end while $result
-        }					// end if num rows
-    }						// end if datachecked
+            }       // end while $result
+        }         // end if num rows
+    }           // end if datachecked
 
 
 
@@ -203,16 +203,24 @@ if($register) {
             $message = stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedU');
         }
 
-        $additional_parameters = array(
+        $additionalParameters = array(
             'smsType' => BEEN_SUBSCRIBED_COURSE,
             'userId' => $user_id,
             'courseTitle' => $currentCourseName
         );
 
-        api_mail_html($recipient_name, $email_form, $emailsubject, $emailbody, 
-          $sender_name,$email_admin, null, null, null, $additional_parameters);
-
-        //@api_mail($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name,$email_admin);
+        api_mail_html(
+            $recipient_name,
+            $email_form,
+            $emailsubject,
+            $emailbody,
+            $sender_name,
+            $email_admin,
+            null,
+            null,
+            null,
+            $additionalParameters
+        );
 
         /*
          * remove <form> variables to prevent any pre-filled fields
@@ -220,10 +228,10 @@ if($register) {
 
         unset($lastname_form, $firstname_form, $username_form, $password_form, $email_form, $admin_form, $tutor_form);
 
-    } 	// end if ($platformRegSucceed)
+    }   // end if ($platformRegSucceed)
     //else
     //{
-    //	$message = get_lang('UserAlreadyRegistered');
+    //  $message = get_lang('UserAlreadyRegistered');
     //}
 
 } // end if register request
@@ -335,7 +343,7 @@ if ($_cid) // if we're inside a course, then it's a course registration
 </tr>
 <?php
 
-}			// end if $_cid - for the case we're not in a course registration
+}     // end if $_cid - for the case we're not in a course registration
             // but a platform registration
 else
 {

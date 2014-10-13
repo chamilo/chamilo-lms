@@ -5,9 +5,7 @@
 * to their course.
 * @package chamilo.user
 */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = array('registration','admin');
 require_once '../inc/global.inc.php';
@@ -25,7 +23,7 @@ if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false'
     }
 }
 
-// access restriction
+// Access restriction
 if (!api_is_allowed_to_edit()) {
 	 api_not_allowed(true);
 }
@@ -117,7 +115,11 @@ if (isset ($_POST['action'])) {
 					$user_id=intval($user_id);
 					if ($type =='teacher') {
 						if (!empty($current_session_id)) {
-							$is_suscribe[] = SessionManager::set_coach_to_course_session($user_id, $current_session_id, $_course['sysCode']);
+							$is_suscribe[] = SessionManager::set_coach_to_course_session(
+                                $user_id,
+                                $current_session_id,
+                                $_course['sysCode']
+                            );
 						} else {
 							$is_suscribe[] = CourseManager::subscribe_user($user_id, $_course['sysCode'],COURSEMANAGER);
 						}
@@ -138,23 +140,19 @@ if (isset ($_POST['action'])) {
 
 			$list_register_user='';
 
-			//if ($$is_suscribe_counter!=1) {
-				for ($i=0; $i<$is_suscribe_counter;$i++) {
-					for ($j=0; $j<count($user_id_temp);$j++) {
-						if ($is_suscribe_user_id[$i]==$user_id_temp[$j]) {
-								if ($is_suscribe[$i]) {
-									$list_register_user.=" - ".$user_name_temp[$j].'<br/>';
-									$temp_unique_user=$user_name_temp[$j];
-									$counter++;
-								} else {
-									$list_not_register_user.=" - ".$user_name_temp[$j].'<br/>';
-								}
-						}
-					}
-				}
-			//} else {
-				//$list_register_user=$temp_unique_user; // only 1 user register
-			//}
+            for ($i=0; $i<$is_suscribe_counter;$i++) {
+                for ($j=0; $j<count($user_id_temp);$j++) {
+                    if ($is_suscribe_user_id[$i]==$user_id_temp[$j]) {
+                            if ($is_suscribe[$i]) {
+                                $list_register_user.=" - ".$user_name_temp[$j].'<br/>';
+                                $temp_unique_user=$user_name_temp[$j];
+                                $counter++;
+                            } else {
+                                $list_not_register_user.=" - ".$user_name_temp[$j].'<br/>';
+                            }
+                    }
+                }
+            }
 
 			if (!empty($list_register_user)) {
 				if ($is_suscribe_counter==1) {
@@ -224,9 +222,10 @@ Display::display_footer();
 /*		SHOW LIST OF USERS  */
 
 /**
- *  * Get the users to display on the current page.
+ ** Get the users to display on the current page.
  */
-function get_number_of_users() {
+function get_number_of_users()
+{
 	global $_configuration;
 
 	// Database table definition
@@ -298,7 +297,10 @@ function get_number_of_users() {
 					LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
 			// we change the SQL when we have a filter
-			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+			if (isset($_GET['subscribe_user_filter_value']) AND
+                !empty($_GET['subscribe_user_filter_value']) AND
+                api_get_setting('ProfilingFilterAddingUsers') == 'true'
+            ){
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values
@@ -356,26 +358,14 @@ function get_number_of_users() {
 	   $row = Database::fetch_row($res);
 	   $count_user = $row[0];
 	}
-
-	/* @todo seems not to be used
-	// we add 1 for every additional user (a user where the keyword matches one of the additional profile fields)
-	// that is not yet in the course and not yet in the search result
-	if (isset ($_REQUEST['keyword']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true') {
-		foreach($additional_users as $additional_user_key=>$additional_user_value){
-			if (!in_array($additional_user_key,$users) AND !in_array($additional_user_key,$users_of_course)){
-				$result++;
-			}
-		}
-	}
-    */
-
 	return $count_user;
 }
 /**
  * Get the users to display on the current page.
  */
-function get_user_data($from, $number_of_items, $column, $direction) {
-	global $_course, $_configuration;
+function get_user_data($from, $number_of_items, $column, $direction)
+{
+	global $_configuration;
 
     $url_access_id = api_get_current_access_url_id();
     $course_code = api_get_course_id();
@@ -415,7 +405,6 @@ function get_user_data($from, $number_of_items, $column, $direction) {
                 u.active               AS col4,
                 u.user_id              AS col5";
     }
-
 
 	if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'teacher') {
 		// adding a teacher through a session
@@ -628,7 +617,6 @@ function reg_filter($user_id) {
 	return $result;
 }
 
-
 /**
  * Build the active-column of the table to lock or unlock a certain user
  * lock = the user can no longer use this account
@@ -650,6 +638,7 @@ function active_filter($active, $url_params, $row) {
 		$action='AccountInactive';
 		$image='error';
 	}
+    $result = null;
 	if ($row['0']<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 		$result = Display::return_icon($image.'.png',  get_lang(ucfirst($action)), array() , ICON_SIZE_TINY);
 	}
@@ -679,8 +668,8 @@ function search_additional_profile_fields($keyword)
 	$table_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 	// getting the field option text that match this keyword (for radio buttons and checkboxes)
-	$sql_profiling = "SELECT * FROM $table_user_field_options WHERE option_display_text LIKE '%".$keyword."%'";
-	$result_profiling = Database::query($sql_profiling);
+	$sql = "SELECT * FROM $table_user_field_options WHERE option_display_text LIKE '%".$keyword."%'";
+	$result_profiling = Database::query($sql);
 	while ($profiling_field_options = Database::fetch_array($result_profiling)) {
 		$profiling_field_options_exact_values[] = $profiling_field_options;
 	}
@@ -697,6 +686,7 @@ function search_additional_profile_fields($keyword)
 							AND ( field_value LIKE '%".$keyword."%'
 							".$profiling_field_options_exact_values_sql.")";
 	$result_profiling_values = Database::query($sql_profiling_values);
+    $additional_users = array();
 	while ($profiled_users = Database::fetch_array($result_profiling_values)) {
 		$additional_users[$profiled_users['col0']] = $profiled_users;
 	}

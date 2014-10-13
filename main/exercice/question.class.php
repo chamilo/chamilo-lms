@@ -1,15 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	File containing the Question class.
-*	@package chamilo.exercise
-* 	@author Olivier Brouckaert
-*   @author Julio Montoya <gugli100@gmail.com> lot of bug fixes
-*   Modified by hubert.borderiou@grenet.fr - add question categories
-*/
-/**
- * Code
- */
 
 // Question types
 define('UNIQUE_ANSWER',                             1);
@@ -35,13 +25,15 @@ define('MCMA',				2);
 define('FIB',				3);
 
 /**
-	QUESTION CLASS
+ * Class Question
  *
  *	This class allows to instantiate an object of type Question
  *
- *	@author Olivier Brouckaert, original author
- *	@author Patrick Cool, LaTeX support
-*	@package chamilo.exercise
+ * @author Olivier Brouckaert, original author
+ * @author Patrick Cool, LaTeX support
+ * @author Julio Montoya <gugli100@gmail.com> lot of bug fixes
+ * @author hubert.borderiou@grenet.fr - add question categories
+ * @package chamilo.exercise
  */
 abstract class Question
 {
@@ -101,7 +93,8 @@ abstract class Question
         $this->parent_id = 0;
 	}
 
-	public function getIsContent() {
+	public function getIsContent()
+    {
 	    $isContent = null;
 	    if (isset($_REQUEST['isContent'])) {
 		    $isContent = intval($_REQUEST['isContent']);
@@ -117,7 +110,8 @@ abstract class Question
      *
 	 * @return Question
 	 */
-	static function read($id, $course_id = null) {
+	static function read($id, $course_id = null)
+    {
         $id = intval($id);
 
         if (!empty($course_id)) {
@@ -167,9 +161,11 @@ abstract class Question
                         $objQuestion->exerciseList[] = $obj->exercice_id;
                     }
                 }
+
                 return $objQuestion;
             }
 		}
+
 		// question not found
 		return false;
 	}
@@ -180,7 +176,8 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @return - integer - question ID
 	 */
-	function selectId() {
+	function selectId()
+    {
 		return $this->id;
 	}
 
@@ -190,7 +187,8 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @return string - question title
 	 */
-	function selectTitle() {
+	function selectTitle()
+    {
 		return $this->question;
 	}
 
@@ -200,7 +198,8 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @return string - question description
 	 */
-	function selectDescription() {
+	function selectDescription()
+    {
 		$this->description=text_filter($this->description);
 		return $this->description;
 	}
@@ -222,7 +221,8 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @return integer - question position
 	 */
-	function selectPosition() {
+	function selectPosition()
+    {
 		return $this->position;
 	}
 
@@ -232,7 +232,8 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @return integer - answer type
 	 */
-	function selectType() {
+	function selectType()
+    {
 		return $this->type;
 	}
 
@@ -242,7 +243,8 @@ abstract class Question
 	 * @author Nicolas Raynaud
 	 * @return integer - level of the question, 0 by default.
 	 */
-	function selectLevel() {
+	function selectLevel()
+    {
 		return $this->level;
 	}
 
@@ -252,11 +254,13 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @return string - picture name
 	 */
-	function selectPicture() {
+	function selectPicture()
+    {
 		return $this->picture;
 	}
 
-    function selectPicturePath() {
+    function selectPicturePath()
+    {
         if (!empty($this->picture)) {
             return api_get_path(WEB_COURSE_PATH).$this->course['path'].'/document/images/'.$this->picture;
         }
@@ -269,7 +273,8 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @return array - list of exercise ID which the question is in
 	 */
-	function selectExerciseList() {
+	function selectExerciseList()
+    {
 		return $this->exerciseList;
 	}
 
@@ -360,7 +365,8 @@ abstract class Question
             foreach ($category_list as $category_id) {
                 $category_id = intval($category_id);
                 $question_id = Database::escape_string($this->id);
-                $sql = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY WHERE category_id = $category_id AND question_id = $question_id AND c_id=".api_get_course_int_id();
+                $sql = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY
+                        WHERE category_id = $category_id AND question_id = $question_id AND c_id=".api_get_course_int_id();
                 $res = Database::query($sql);
                 $row = Database::fetch_array($res);
                 if ($row['nb'] > 0) {
@@ -369,7 +375,7 @@ abstract class Question
                     //$res = Database::query($sql);
                 } else {
                     $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id) VALUES (".api_get_course_int_id().", $question_id, $category_id)";
-                    $res = Database::query($sql);
+                    Database::query($sql);
                 }
             }
 		}
@@ -377,11 +383,12 @@ abstract class Question
 
 	/**
 	 * @author Hubert Borderiou 12-10-2011
-	 * @param int $in_positive
+	 * @param int $in_category
 	 * in this version, a question can only have 1 category
 	 * if category is 0, then question has no category then delete the category entry
 	 */
-	function saveCategory($in_category) {
+	function saveCategory($in_category)
+    {
 		if ($in_category <= 0) {
 			$this->deleteCategory();
 		} else {
@@ -390,15 +397,16 @@ abstract class Question
 			$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 			$category_id = Database::escape_string($in_category);
 			$question_id = Database::escape_string($this->id);
-			$sql = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
+			$sql = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY
+			        WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
 			$res = Database::query($sql);
 			$row = Database::fetch_array($res);
 			if ($row['nb'] > 0){
 				$sql = "UPDATE $TBL_QUESTION_REL_CATEGORY SET category_id=$category_id WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
-				$res = Database::query($sql);
+				Database::query($sql);
 			} else {
 				$sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY VALUES (".api_get_course_int_id().", $question_id, $category_id)";
-				$res = Database::query($sql);
+				Database::query($sql);
 			}
 		}
 	}
@@ -409,10 +417,12 @@ abstract class Question
 	 * @param : none
 	 * delte the category for question
 	 */
-	function deleteCategory() {
+	function deleteCategory()
+    {
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$question_id = Database::escape_string($this->id);
-	 	$sql = "DELETE FROM $TBL_QUESTION_REL_CATEGORY WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
+	 	$sql = "DELETE FROM $TBL_QUESTION_REL_CATEGORY
+	 	        WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
 	 	Database::query($sql);
 	}
 
@@ -422,7 +432,8 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @param integer $position - question position
 	 */
-	function updatePosition($position) {
+	function updatePosition($position)
+    {
 		$this->position=$position;
 	}
 
@@ -432,7 +443,8 @@ abstract class Question
 	 * @author Nicolas Raynaud
 	 * @param integer $level - question level
 	 */
-	function updateLevel($level) {
+	function updateLevel($level)
+    {
 		$this->level=$level;
 	}
 
@@ -443,7 +455,8 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @param integer $type - answer type
 	 */
-	function updateType($type) {
+	function updateType($type)
+    {
 		$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $course_id              = $this->course['real_id'];
 
@@ -471,7 +484,8 @@ abstract class Question
 	 * @param string $PictureName - Name of the picture
 	 * @return boolean - true if uploaded, otherwise false
 	 */
-	function uploadPicture($Picture, $PictureName, $picturePath = null) {
+	function uploadPicture($Picture, $PictureName, $picturePath = null)
+    {
         if (empty($picturePath)) {
             global $picturePath;
         }
@@ -498,6 +512,7 @@ abstract class Question
                 return api_item_property_update($this->course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id());
             }
 		}
+
 		return false;
 	}
 
@@ -509,11 +524,12 @@ abstract class Question
 	 * @param integer $Max - Maximum size
 	 * @return boolean - true if success, false if failed
 	 */
-	function resizePicture($Dimension, $Max) {
+	function resizePicture($Dimension, $Max)
+    {
 		global $picturePath;
 
 		// if the question has an ID
-		if($this->id) {
+		if ($this->id) {
 	  		// Get dimensions from current image.
 	  		$my_image = new Image($picturePath.'/'.$this->picture);
 
@@ -1454,6 +1470,7 @@ abstract class Question
         }
 
         if ($this->type == FREE_ANSWER || $this->type == ORAL_EXPRESSION) {
+            $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
             if ($score['revised'] == true) {
                 $score_label = get_lang('Revised');
                 $class = '';

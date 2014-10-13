@@ -22,7 +22,12 @@ if (empty($workId)) {
 }
 
 $my_folder_data = get_work_data_by_id($workId);
+
 if (empty($my_folder_data)) {
+    api_not_allowed(true);
+}
+
+if ($my_folder_data['active'] != 1) {
     api_not_allowed(true);
 }
 

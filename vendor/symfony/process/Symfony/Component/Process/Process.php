@@ -70,6 +70,8 @@ class Process
     /** @var ProcessPipes */
     private $processPipes;
 
+    private $latestSignal;
+
     private static $sigchild;
 
     /**
@@ -213,9 +215,16 @@ class Process
      * @param callable|null $callback
      *
      * @return self
+     *
+     * @throws RuntimeException       if PHP was compiled with --enable-sigchild and the enhanced sigchild compatibility mode is not enabled
+     * @throws ProcessFailedException if the process didn't terminate successfully
      */
     public function mustRun($callback = null)
     {
+        if ($this->isSigchildEnabled() && !$this->enhanceSigchildCompatibility) {
+            throw new RuntimeException('This PHP has been compiled with --enable-sigchild. You must use setEnhanceSigchildCompatibility() to use this method.');
+        }
+
         if (0 !== $this->run($callback)) {
             throw new ProcessFailedException($this);
         }
@@ -347,7 +356,7 @@ class Process
         do {
             $this->checkTimeout();
             $running = defined('PHP_WINDOWS_VERSION_BUILD') ? $this->isRunning() : $this->processPipes->hasOpenHandles();
-            $close = !defined('PHP_WINDOWS_VERSION_BUILD') || !$running;;
+            $close = !defined('PHP_WINDOWS_VERSION_BUILD') || !$running;
             $this->readPipes(true, $close);
         } while ($running);
 
@@ -355,7 +364,7 @@ class Process
             usleep(1000);
         }
 
-        if ($this->processInformation['signaled']) {
+        if ($this->processInformation['signaled'] && $this->processInformation['termsig'] !== $this->latestSignal) {
             throw new RuntimeException(sprintf('The process has been signaled with signal "%s".', $this->processInformation['termsig']));
         }
 
@@ -404,6 +413,7 @@ class Process
      * @return Process
      *
      * @throws RuntimeException In case the process is already running
+     * @throws LogicException   if an idle timeout is set
      */
     public function disableOutput()
     {
@@ -782,7 +792,8 @@ class Process
                     throw new RuntimeException('Unable to kill the process');
                 }
             }
-            proc_terminate($this->process);
+            // given `SIGTERM` may not be defined and that `proc_terminate` uses the constant value and not the constant itself, we use the same here
+            $this->doSignal(15, false);
             do {
                 usleep(1000);
             } while ($this->isRunning() && microtime(true) < $timeoutMicro);
@@ -899,6 +910,7 @@ class Process
      *
      * @return self The current Process instance.
      *
+     * @throws LogicException           if the output is disabled
      * @throws InvalidArgumentException if the timeout is negative
      */
     public function setIdleTimeout($timeout)
@@ -1238,8 +1250,8 @@ class Process
      */
     private function getDescriptors()
     {
-        $this->processPipes = new ProcessPipes($this->useFileHandles, $this->tty, $this->pty);
-        $descriptors = $this->processPipes->getDescriptors($this->outputDisabled);
+        $this->processPipes = new ProcessPipes($this->useFileHandles, $this->tty, $this->pty, $this->outputDisabled);
+        $descriptors = $this->processPipes->getDescriptors();
 
         if (!$this->useFileHandles && $this->enhanceSigchildCompatibility && $this->isSigchildEnabled()) {
             // last exit code is output on the fourth pipe and caught to work around --enable-sigchild
@@ -1329,6 +1341,8 @@ class Process
      * @param int|float|null     $timeout
      *
      * @return float|null
+     *
+     * @throws InvalidArgumentException if the given timeout is a negative number
      */
     private function validateTimeout($timeout)
     {
@@ -1416,6 +1430,7 @@ class Process
         $this->stdout = null;
         $this->stderr = null;
         $this->process = null;
+        $this->latestSignal = null;
         $this->status = self::STATUS_READY;
         $this->incrementalOutputOffset = 0;
         $this->incrementalErrorOutputOffset = 0;
@@ -1458,6 +1473,8 @@ class Process
 
             return false;
         }
+
+        $this->latestSignal = $signal;
 
         return true;
     }

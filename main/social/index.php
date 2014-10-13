@@ -8,4 +8,4 @@
  * Redirect
  */
 header('Location: profile.php');
-exit();		
+exit();

@@ -466,7 +466,7 @@ if ($is_allowed_to_edit) {
         var heightAction = ($('#actions_lp').height())? $('#actions_lp').height() : 0 ;
 
         var heightTop = heightHeader + heightAuthorImg + heightAuthorName + heightMedia + heightTitle + heightAction + 100;
-        heightTop = (heightTop < 230)? heightTop : 230;
+        heightTop = (heightTop < 300)? heightTop : 300;
         var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
         // -40 is a static adjustement for margin, spaces on the page
 

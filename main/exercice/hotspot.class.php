@@ -1,18 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	File containing the HotSpot class.
-*	@package chamilo.exercise
-* 	@author Eric Marguin
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
-*/
-/**
- * Code
- */
-if(!class_exists('HotSpot')):
 
 /**
-	CLASS HotSpot
+ * Class HotSpot
  *
  *	This class allows to instantiate an object of type HotSpot (MULTIPLE CHOICE, UNIQUE ANSWER),
  *	extending the class question
@@ -20,9 +10,8 @@ if(!class_exists('HotSpot')):
  *	@author Eric Marguin
  *	@package chamilo.exercise
  **/
-
-class HotSpot extends Question {
-
+class HotSpot extends Question
+{
 	static $typePicture = 'hotspot.gif';
 	static $explanationLangVar = 'HotSpot';
 
@@ -85,9 +74,10 @@ class HotSpot extends Question {
 }
 
 /**
- * @package chamilo.exercise
+ * Class HotSpotDelineation
  */
-class HotSpotDelineation extends HotSpot {
+class HotSpotDelineation extends HotSpot
+{
 
 	static $typePicture = 'hotspot_delineation.gif';
 	static $explanationLangVar = 'HotspotDelineation';
@@ -115,4 +105,4 @@ class HotSpotDelineation extends HotSpot {
 		parent::processAnswersCreation ($form);
 	}
 }
-endif;
+

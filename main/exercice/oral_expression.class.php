@@ -1,24 +1,22 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Code
- */
-/**
- *  File containing the FreeAnswer class.
+ *  Class OralExpression
  *	This class allows to instantiate an object of type FREE_ANSWER,
  *	extending the class question
  * 	@author Eric Marguin
  * @package chamilo.exercise
  */
-class OralExpression extends Question {
-
+class OralExpression extends Question
+{
 	static $typePicture = 'audio_question.png';
 	static $explanationLangVar = 'OralExpression';
 
 	/**
 	 * Constructor
 	 */
-	function OralExpression(){
+	function OralExpression()
+    {
 		parent::question();
 		$this -> type = ORAL_EXPRESSION;
 		$this -> isContent = $this-> getIsContent();
@@ -26,9 +24,10 @@ class OralExpression extends Question {
 
 	/**
 	 * function which redifines Question::createAnswersForm
-	 * @param the formvalidator instance
+	 * @param $form FormValidator
 	 */
-	function createAnswersForm ($form) {
+	function createAnswersForm ($form)
+    {
 		$form -> addElement('text','weighting',get_lang('Weighting'), array('class' => 'span1'));
 		global $text, $class;
 		// setting the save button here and not in the question class.php
@@ -46,12 +45,14 @@ class OralExpression extends Question {
 	 * abstract function which creates the form to create / edit the answers of the question
 	 * @param the formvalidator instance
 	 */
-	function processAnswersCreation($form) {
+	function processAnswersCreation($form)
+    {
 		$this->weighting = $form -> getSubmitValue('weighting');
 		$this->save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null) {
+	function return_header($feedback_type = null, $counter = null, $score = null)
+    {
 	    $header = parent::return_header($feedback_type, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class.'">
 			<tr>
@@ -63,6 +64,7 @@ class OralExpression extends Question {
 			<tr>
                 <th>&nbsp;</th>
 			</tr>';
+
         return $header;
 	}
 }

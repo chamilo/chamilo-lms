@@ -123,6 +123,8 @@ $_configuration[1]['hosting_limit_sessions'] = 0;
 // Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB).
 // Default (0) = no limit
 $_configuration[1]['hosting_limit_disk_space'] = 0;
+// Email to warn if limit was reached.
+//$_configuration[1]['hosting_contact_mail'] = 'example@example.org';
 
 /**
  * Content Delivery Network (CDN) settings. Only use if you need a separate
@@ -205,3 +207,34 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['session_days_before_coach_access'] = 0;
 // Default session days after coach access
 //$_configuration['session_days_after_coach_access'] = 0;
+// PDF Logo header located in main/css/xxx/images/pdf_logo_header.png
+//$_configuration['pdf_logo_header'] = false;
+// Order inscription user list by official_code
+//$_configuration['order_user_list_by_official_code'] = false;
+// Default course setting "email_alert_manager_on_new_quiz"
+//$_configuration['email_alert_manager_on_new_quiz'] = 1;
+// If session_stored_in_db is false, an alternative session storage mechanism
+// can be used, which allows for a volatile storage in Memcache, and a more
+// permanent "backup" storage in the database, every once in a while (see
+// frequency). This is generally used in HA clusters configurations
+// This requires memcache or memcached and the php5-memcache module to be setup
+//$_configuration['session_stored_in_db_as_backup'] = true;
+// Define the different memcache servers available
+//$_configuration['memcache_server'] = array(
+//    0 => array(
+//        'host' => 'chamilo8',
+//        'port' => '11211',
+//    ),
+//    1 => array(
+//        'host' => 'chamilo9',
+//        'port' => '11211',
+//    ),
+//);
+// Define the frequency to which the data must be stored in the database
+//$_configuration['session_stored_after_n_times'] = 10;
+// Show official code in exercise report list.
+//$_configuration['show_official_code_exercise_result_list'] = false;
+// One connection per user
+//$_configuration['prevent_multiple_simultaneous_login'] = false;
+// Hide private courses from course catalog
+//$_configuration['course_catalog_hide_private'] = false;

@@ -10,9 +10,7 @@
 *   @author Julio Montoya adding support to query all questions from all session, courses, exercises
 *   @author Modify by hubert borderiou 2011-10-21 Question's category
 */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 
 use \ChamiloSession as Session;
@@ -388,6 +386,7 @@ echo "<input type='hidden' id='exercice_id_changed' name='exercice_id_changed' v
 <form method="post" action="<?php echo $url.'?'.api_get_cidreq().'&fromExercise='.$fromExercise; ?>" >
 <?php
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
+$main_question_list = array();
 
 // if we have selected an exercise in the list-box 'Filter'
 if ($exerciseId > 0) {
@@ -419,7 +418,8 @@ if ($exerciseId > 0) {
 	            AND qu.c_id=$selected_course
 	            $where
             ORDER BY question_order";
-    $result=Database::query($sql);
+
+    $result = Database::query($sql);
     while($row = Database::fetch_array($result, 'ASSOC')) {
         $main_question_list[] = $row;
     }
@@ -480,9 +480,10 @@ if ($exerciseId > 0) {
 	if (isset($answerType) && $answerType > 0) {
 		$filter .= ' AND qu.type='.$answerType.' ';
 	}
+
     if (!empty($session_id) && $session_id != '-1') {
         $main_question_list = array();
-        if (!empty($course_list))
+        if (!empty($course_list)) {
             foreach ($course_list as $course_item) {
                 if (!empty($selected_course) && $selected_course != '-1') {
                     if ($selected_course != $course_item['id']) {
@@ -497,7 +498,10 @@ if ($exerciseId > 0) {
                         if (!empty($my_exercise)) {
                             if (!empty($my_exercise->questionList)) {
                                 foreach ($my_exercise->questionList as $question_id) {
-                                    $question_obj = Question::read($question_id, $course_item['id']);
+                                    $question_obj = Question::read(
+                                        $question_id,
+                                        $course_item['id']
+                                    );
                                     if ($exerciseLevel != '-1') {
                                         if ($exerciseLevel != $question_obj->level) {
                                             continue;
@@ -509,21 +513,25 @@ if ($exerciseId > 0) {
                                             continue;
                                         }
                                     }
-                                    if ($courseCategoryId > 0 && Testcategory::getCategoryForQuestion($question_obj->id, $selected_course)) {
+                                    if ($courseCategoryId > 0 && Testcategory::getCategoryForQuestion(
+                                            $question_obj->id,
+                                            $selected_course
+                                        )
+                                    ) {
                                         continue;
                                     }
                                     if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                                        if ($question_obj->type == HOT_SPOT_DELINEATION)  {
+                                        if ($question_obj->type == HOT_SPOT_DELINEATION) {
                                             continue;
                                         }
                                     }
                                     $question_row = array(
-                                        'id'			=> $question_obj->id,
-                                        'question'		=> $question_obj->question,
-                                        'type'			=> $question_obj->type,
-                                        'level'			=> $question_obj->level,
-                                        'exercise_id'	=> $exercise['id'],
-                                        'course_id'		=> $course_item['id'],
+                                        'id' => $question_obj->id,
+                                        'question' => $question_obj->question,
+                                        'type' => $question_obj->type,
+                                        'level' => $question_obj->level,
+                                        'exercise_id' => $exercise['id'],
+                                        'course_id' => $course_item['id'],
                                     );
                                     $main_question_list[] = $question_row;
                                 }
@@ -532,11 +540,13 @@ if ($exerciseId > 0) {
                     }
                 }
             }
+        }
     } else {
 
         if ($session_id == -1 or empty($session_id)) {
             $session_id = 0;
         }
+
         // All tests for the course selected, not in session
         $sql = "SELECT DISTINCT qu.id, question, qu.type, level, q.session_id
                 FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q $from
@@ -549,7 +559,7 @@ if ($exerciseId > 0) {
                     q.id = qt.exercice_id $filter
                 ORDER BY session_id ASC";
         $result = Database::query($sql);
-        while($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             $main_question_list[] = $row;
         }
     }
@@ -727,6 +737,7 @@ function get_a_tag_for_question(
     $sessionId
 ) {
 	$res = $in_questionname;
+    $sessionIcon = null;
 	if ($in_addA) {
         if (!empty($sessionId)) {
             $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
@@ -800,7 +811,8 @@ function get_action_icon_for_question(
                 $from_exercice,
                 $in_questionid,
                 $in_questiontype,
-                Display::return_icon("edit.png", get_lang('Modify'))
+                Display::return_icon("edit.png", get_lang('Modify')),
+                $in_session_id
             );
 			break;
 		case "add":

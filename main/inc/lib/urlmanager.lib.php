@@ -1,13 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	This library provides functions for the access_url management.
-*	Include/require it in your code to use its functionality.
-*
-*	@package chamilo.library
-*/
+
 /**
  * Class UrlManager
+ * This library provides functions for the access_url management.
+ * Include/require it in your code to use its functionality.
+ *
+ *	@package chamilo.library
  */
 class UrlManager
 {

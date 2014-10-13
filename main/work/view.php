@@ -15,6 +15,10 @@ if (empty($id) || empty($work)) {
     api_not_allowed();
 }
 
+if ($work['active'] != 1) {
+    api_not_allowed(true);
+}
+
 $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));
 
 $my_folder_data = get_work_data_by_id($work['parent_id']);

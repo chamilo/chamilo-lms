@@ -1,15 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Exercise class: This class allows to instantiate an object of type Exercise
- * @package chamilo.exercise
- * @author Olivier Brouckaert
- * @author Julio Montoya Cleaning exercises
- * Modified by Hubert Borderiou #294
- */
-/**
- * Code
- */
+
 define('ALL_ON_ONE_PAGE',                   1);
 define('ONE_PER_PAGE',                      2);
 
@@ -28,6 +19,15 @@ $debug = false; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 
+/**
+ * Class Exercise
+ *
+ * Allows to instantiate an object of type Exercise
+ * @package chamilo.exercise
+ * @author Olivier Brouckaert
+ * @author Julio Montoya Cleaning exercises
+ * Modified by Hubert Borderiou #294
+ */
 class Exercise
 {
     public $id;
@@ -103,7 +103,8 @@ class Exercise
      * Reads exercise information from the data base
      *
      * @author Olivier Brouckaert
-     * @param integer $id - exercise ID
+     * @param integer $id - exercise Id
+     *
      * @return boolean - true if exercise exists, otherwise false
      */
     public function read($id)
@@ -144,9 +145,9 @@ class Exercise
             $this->pass_percentage          = $object->pass_percentage;
             $this->sessionId = $object->session_id;
 
-            $this->is_gradebook_locked      = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
+            $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
 
-            $this->review_answers   = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
+            $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
 
             $sql = "SELECT max_score FROM $table_lp_item
                     WHERE   c_id = {$this->course_id} AND
@@ -192,7 +193,7 @@ class Exercise
 			}*/
             return true;
         }
-        // exercise not found
+
         return false;
     }
 
@@ -248,7 +249,8 @@ class Exercise
     /**
      * returns the time limit
      */
-    function selectTimeLimit() {
+    public function selectTimeLimit()
+    {
         return $this->timeLimit;
     }
 
@@ -258,7 +260,8 @@ class Exercise
      * @author Olivier Brouckaert
      * @return string - exercise description
      */
-    function selectDescription() {
+    public function selectDescription()
+    {
         return $this->description;
     }
 
@@ -293,7 +296,8 @@ class Exercise
         return $this->display_category_name;
     }
 
-    function selectPassPercentage() {
+    public function selectPassPercentage()
+    {
         return $this->pass_percentage;
     }
 
@@ -302,7 +306,8 @@ class Exercise
      * @return : modify object to update the switch display_category_name
      * $in_txt is an integer 0 or 1
      */
-    function updateDisplayCategoryName($in_txt) {
+    public function updateDisplayCategoryName($in_txt)
+    {
         $this->display_category_name = $in_txt;
     }
 
@@ -310,7 +315,8 @@ class Exercise
      * @author hubert borderiou 28-11-11
      * @return html text : the text to display ay the end of the test.
      */
-    function selectTextWhenFinished() {
+    public function selectTextWhenFinished()
+    {
         return $this->text_when_finished;
     }
 
@@ -318,7 +324,8 @@ class Exercise
      * @author hubert borderiou 28-11-11
      * @return html text : update the text to display ay the end of the test.
      */
-    function updateTextWhenFinished($in_txt) {
+    public function updateTextWhenFinished($in_txt)
+    {
         $this->text_when_finished = $in_txt;
     }
 
@@ -327,7 +334,8 @@ class Exercise
      * @author hubert borderiou
      * @return integer - quiz random by category
      */
-    function selectRandomByCat() {
+    public function selectRandomByCat()
+    {
         return $this->randomByCat;
     }
 
@@ -338,7 +346,8 @@ class Exercise
      * @author hubert borderiou
      * @return integer - quiz random by category
      */
-    function isRandomByCat() {
+    public function isRandomByCat()
+    {
         $res = 0;
         if ($this->randomByCat == 1) {
             $res = 1;
@@ -353,7 +362,8 @@ class Exercise
      * update randomByCat value for object
      * @author hubert borderiou
      */
-    function updateRandomByCat($in_randombycat) {
+    public function updateRandomByCat($in_randombycat)
+    {
         if ($in_randombycat == 1) {
             $this->randomByCat = 1;
         } else if ($in_randombycat == 2) {
@@ -380,7 +390,8 @@ class Exercise
      * @author Olivier Brouckaert
      * @return integer - 0 if not random, otherwise the draws
      */
-    function isRandom() {
+    public function isRandom()
+    {
         if($this->random > 0 || $this->random == -1) {
             return true;
         } else {
@@ -393,14 +404,16 @@ class Exercise
      *
      * @author Juan Carlos Rana
      */
-    function selectRandomAnswers() {
+    public function selectRandomAnswers()
+    {
         return $this->random_answers;
     }
 
     /**
      * Same as isRandom() but has a name applied to values different than 0 or 1
      */
-    function getShuffle() {
+    public function getShuffle()
+    {
         return $this->random;
     }
 
@@ -410,7 +423,8 @@ class Exercise
      * @author Olivier Brouckaert
      * @return boolean - true if enabled, otherwise false
      */
-    function selectStatus() {
+    public function selectStatus()
+    {
         return $this->active;
     }
 
@@ -420,7 +434,8 @@ class Exercise
      * @author Olivier Brouckaert
      * @return array - question ID list
      */
-    function selectQuestionList($from_db = false) {
+    public function selectQuestionList($from_db = false)
+    {
         if ($from_db && !empty($this->id)) {
             $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -468,11 +483,13 @@ class Exercise
      * @author Olivier Brouckaert
      * @return integer - number of questions
      */
-    function selectNbrQuestions() {
+    public function selectNbrQuestions()
+    {
         return sizeof($this->questionList);
     }
 
-    function selectPropagateNeg() {
+    public function selectPropagateNeg()
+    {
         return $this->propagate_neg;
     }
 
@@ -484,7 +501,8 @@ class Exercise
      *					 without randomizing, otherwise, returns the list with questions selected randomly
      * Modified by Hubert Borderiou 15 nov 2011
      */
-    function selectRandomList() {
+    public function selectRandomList()
+    {
         $nbQuestions	= $this->selectNbrQuestions();
         $temp_list		= $this->questionList;
 
@@ -521,7 +539,8 @@ class Exercise
      * @param integer $questionId - question ID
      * @return boolean - true if in the list, otherwise false
      */
-    function isInList($questionId) {
+    public function isInList($questionId)
+    {
         if (is_array($this->questionList))
             return in_array($questionId,$this->questionList);
         else
@@ -534,7 +553,8 @@ class Exercise
      * @author Olivier Brouckaert
      * @param string $title - exercise title
      */
-    function updateTitle($title) {
+    public function updateTitle($title)
+    {
         $this->exercise=$title;
     }
 
@@ -543,17 +563,17 @@ class Exercise
      *
      * @param int $attempts - exercise max attempts
      */
-    function updateAttempts($attempts) {
+    public function updateAttempts($attempts)
+    {
         $this->attempts=$attempts;
     }
-
 
     /**
      * changes the exercise feedback type
      *
-     * @param int $attempts - exercise max attempts
+     * @param int $feedback_type
      */
-    function updateFeedbackType($feedback_type)
+    public function updateFeedbackType($feedback_type)
     {
         $this->feedback_type=$feedback_type;
     }
@@ -564,7 +584,7 @@ class Exercise
      * @author Olivier Brouckaert
      * @param string $description - exercise description
      */
-    function updateDescription($description)
+    public function updateDescription($description)
     {
         $this->description=$description;
     }
@@ -573,24 +593,24 @@ class Exercise
      * changes the exercise expired_time
      *
      * @author Isaac flores
-     * @param int The expired time of the quiz
+     * @param int $expired_time The expired time of the quiz
      */
-    function updateExpiredTime($expired_time)
+    public function updateExpiredTime($expired_time)
     {
         $this->expired_time = $expired_time;
     }
 
-    function updatePropagateNegative($value)
+    public function updatePropagateNegative($value)
     {
         $this->propagate_neg = $value;
     }
 
-    function updateReviewAnswers($value)
+    public function updateReviewAnswers($value)
     {
         $this->review_answers = (isset($value) && $value) ? true : false;
     }
 
-    function updatePassPercentage($value)
+    public function updatePassPercentage($value)
     {
         $this->pass_percentage = $value;
     }
@@ -602,7 +622,7 @@ class Exercise
      * @param string $sound - exercise sound file
      * @param string $delete - ask to delete the file
      */
-    function updateSound($sound,$delete)
+    public function updateSound($sound,$delete)
     {
         global $audioPath, $documentPath;
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
@@ -634,7 +654,7 @@ class Exercise
      * @author Olivier Brouckaert
      * @param integer $type - exercise type
      */
-    function updateType($type)
+    public function updateType($type)
     {
         $this->type=$type;
     }
@@ -646,7 +666,7 @@ class Exercise
      * @author Olivier Brouckaert
      * @param integer $random - 0 if not random, otherwise the draws
      */
-    function setRandom($random)
+    public function setRandom($random)
     {
         /*if ($random == 'all') {
             $random = $this->selectNbrQuestions();
@@ -654,14 +674,13 @@ class Exercise
         $this->random = $random;
     }
 
-
     /**
      * sets to 0 if answers are not selected randomly
      * if answers are selected randomly
      * @author Juan Carlos Rana
      * @param integer $random_answers - random answers
      */
-    function updateRandomAnswers($random_answers)
+    public function updateRandomAnswers($random_answers)
     {
         $this->random_answers = $random_answers;
     }
@@ -671,7 +690,8 @@ class Exercise
      *
      * @author Olivier Brouckaert
      */
-    function enable() {
+    public function enable()
+    {
         $this->active=1;
     }
 
@@ -680,22 +700,22 @@ class Exercise
      *
      * @author Olivier Brouckaert
      */
-    function disable()
+    public function disable()
     {
         $this->active=0;
     }
 
-    function disable_results()
+    public function disable_results()
     {
         $this->results_disabled = true;
     }
 
-    function enable_results()
+    public function enable_results()
     {
         $this->results_disabled = false;
     }
 
-    function updateResultsDisabled($results_disabled)
+    public function updateResultsDisabled($results_disabled)
     {
         $this->results_disabled = intval($results_disabled);
     }
@@ -705,7 +725,7 @@ class Exercise
      *
      * @author Olivier Brouckaert
      */
-    function save($type_e = '')
+    public function save($type_e = '')
     {
         global $_course;
         $TBL_EXERCICES      = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -726,7 +746,6 @@ class Exercise
         $text_when_finished     = $this->text_when_finished;
         $display_category_name  = intval($this->display_category_name);
         $pass_percentage        = intval($this->pass_percentage);
-
         $session_id             = api_get_session_id();
 
         //If direct we do not show results
@@ -864,7 +883,8 @@ class Exercise
      * @param integer $questionId - question ID
      * @return boolean - true if the question has been added, otherwise false
      */
-    function addToList($questionId) {
+    public function addToList($questionId)
+    {
         // checks if the question ID is not in the list
         if(!$this->isInList($questionId)) {
             // selects the max position
@@ -887,7 +907,8 @@ class Exercise
      * @param integer $questionId - question ID
      * @return boolean - true if the question has been removed, otherwise false
      */
-    function removeFromList($questionId) {
+    public function removeFromList($questionId)
+    {
         // searches the position of the question ID in the list
         $pos = array_search($questionId,$this->questionList);
 
@@ -915,11 +936,14 @@ class Exercise
      *
      * @author Olivier Brouckaert
      */
-    function delete() {
+    public function delete()
+    {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($this->id)."'";
+        $sql = "UPDATE $TBL_EXERCICES SET active='-1'
+                WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($this->id)."'";
         Database::query($sql);
-        api_item_property_update($this->course, TOOL_QUIZ, $this->id,'QuizDeleted',api_get_user_id());
+        api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizDeleted', api_get_user_id());
+        api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'delete', api_get_user_id());
 
         if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian') ) {
             $this->search_engine_delete();
@@ -930,7 +954,7 @@ class Exercise
      * Creates the form to create / edit an exercise
      * @param FormValidator $form
      */
-    function createForm($form, $type='full')
+    public function createForm($form, $type='full')
     {
         global $id;
 
@@ -3659,11 +3683,25 @@ class Exercise
         }
     }
 
-    function show_exercise_result_header($user_data, $start_date = null, $duration = null) {
+    /**
+     * @param array $user_data result of api_get_user_info()
+     * @param null $start_date
+     * @param null $duration
+     * @return string
+     */
+    public function show_exercise_result_header($user_data, $start_date = null, $duration = null)
+    {
         $array = array();
 
         if (!empty($user_data)) {
-            $array[] = array('title' => get_lang("User"), 'content' => $user_data);
+            $array[] = array('title' => get_lang("Name"), 'content' => $user_data['complete_name']);
+            $array[] = array('title' => get_lang("Username"), 'content' => $user_data['username']);
+            if (!empty($user_data['official_code'])) {
+                $array[] = array(
+                    'title' => get_lang("OfficialCode"),
+                    'content' => $user_data['official_code']
+                );
+            }
         }
         // Description can be very long and is generally meant to explain
         //   rules *before* the exam. Leaving here to make display easier if
@@ -3681,7 +3719,9 @@ class Exercise
             $array[] = array('title' => get_lang("Duration"), 'content' => $duration);
         }
 
-        $html  = Display::page_header(Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result'));
+        $html  = Display::page_header(
+            Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result')
+        );
         $html .= Display::description($array);
         return $html;
     }
@@ -3799,10 +3839,18 @@ class Exercise
             }
         }
 
+        // Deleted exercise.
+        if ($this->active == -1) {
+            return array(
+                'value' => false,
+                'message' => Display::return_message(get_lang('ExerciseNotFound'), 'warning', false)
+            );
+        }
+
         // Checking visibility in the item_property table.
         $visibility = api_get_item_visibility(api_get_course_info(), TOOL_QUIZ, $this->id, api_get_session_id());
 
-        if ($visibility == 0) {
+        if ($visibility == 0 || $visibility == 2) {
             $this->active = 0;
         }
 

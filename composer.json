@@ -2,6 +2,7 @@
     "require": {
         "php-ffmpeg/php-ffmpeg": "0.3.x-dev@dev",
         "sabre/vobject": "~3.1",
-        "toin0u/digitalocean": "~1.4"
+        "toin0u/digitalocean": "~1.4",
+        "twig/twig": "1.*"
     }
 }

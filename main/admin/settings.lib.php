@@ -17,7 +17,6 @@
  */
 function handle_regions()
 {
-
     if (isset($_POST['submit_plugins'])) {
         store_regions();
         // Add event to the system log.
@@ -117,7 +116,13 @@ function handle_plugins()
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+         event_system(
+             LOG_CONFIGURATION_SETTINGS_CHANGE,
+             LOG_CONFIGURATION_SETTINGS_CATEGORY,
+             $category,
+             api_get_utc_datetime(),
+             $user_id
+         );
         Display :: display_confirmation_message(get_lang('SettingsStored'));
     }
 
@@ -148,6 +153,7 @@ function handle_plugins()
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
             require $plugin_info_file;
+
             if (in_array($plugin, $installed_plugins)) {
                 echo '<tr class="row_selected">';
             } else {

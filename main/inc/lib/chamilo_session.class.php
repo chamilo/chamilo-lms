@@ -84,15 +84,39 @@ class ChamiloSession extends System\Session
           }
          */
 
-        if (self::session_stored_in_db() && function_exists('session_set_save_handler')) {
-            $handler = new SessionHandler();
+        if (isset($_configuration['session_stored_in_db']) && 
+                $_configuration['session_stored_in_db'] && 
+                function_exists('session_set_save_handler')
+           ) {
+            $handler = new SessionHandlerDatabase();
             @session_set_save_handler(
-                array(& $handler, 'open'),
-                array(& $handler, 'close'),
-                array(& $handler, 'read'),
-                array(& $handler, 'write'),
-                array(& $handler, 'destroy'),
-                array(& $handler, 'garbage')
+                array($handler, 'open'),
+                array($handler, 'close'),
+                array($handler, 'read'),
+                array($handler, 'write'),
+                array($handler, 'destroy'),
+                array($handler, 'garbage')
+            );
+        }
+
+        // An alternative session handler, storing the session in memcache,
+        // and in the DB as backup for memcache server failure, can be used
+        // by defining specific configuration settings. 
+        // This requires memcache or memcached and the php5-memcache module
+        // to be installed.
+        // See configuration.dist.php for greater details
+        if (isset($_configuration['session_stored_in_db_as_backup']) && 
+                $_configuration['session_stored_in_db_as_backup'] && 
+                function_exists('session_set_save_handler')
+           ) {
+            $handler = new SessionHandlerMemcache();
+            session_set_save_handler(
+                array(&$handler, 'open'),
+                array(&$handler, 'close'),
+                array(&$handler, 'read'),
+                array(&$handler, 'write'),
+                array(&$handler, 'destroy'),
+                array(&$handler, 'gc')
             );
         }
 
@@ -138,7 +162,6 @@ class ChamiloSession extends System\Session
         // If the session time has expired, refresh the starttime value,
         //  so we're starting to count down from a later time
         if ( $session->has('starttime') && $session->is_expired()) {
-            error_log(microtime().' -- '.__LINE__);
             $session->destroy();
         } else {
             //error_log('Time not expired, extend session for a bit more');

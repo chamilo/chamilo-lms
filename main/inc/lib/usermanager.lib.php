@@ -1,18 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+ *
+ * Class UserManager
+ *
  * This library provides functions for user management.
  * Include/require it in your code to use its functionality.
  * @package chamilo.library
  * @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
- */
-/**
- * Code
- */
-
-/**
- * Class
- * @package chamilo.include.user
+ *
  */
 class UserManager
 {
@@ -97,6 +93,7 @@ class UserManager
             $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
+                api_warn_hosting_contact('hosting_limit_users');
                 return api_set_failure('portal users limit reached');
             }
         }
@@ -108,6 +105,7 @@ class UserManager
         ) {
             $num = self::get_number_of_users(1);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
+                api_warn_hosting_contact('hosting_limit_teachers');
                 return api_set_failure('portal teachers limit reached');
             }
         }
@@ -155,8 +153,7 @@ class UserManager
         }
 
 
-        //@todo replace this date with the api_get_utc_date function big problem with users that are already registered
-        $current_date = date('Y-m-d H:i:s', time());
+        $current_date = api_get_utc_datetime();
         $sql = "INSERT INTO $table_user
                 SET lastname =         '".Database::escape_string(trim($lastName))."',
                 firstname =         '".Database::escape_string(trim($firstName))."',
@@ -210,14 +207,24 @@ class UserManager
                     $values["prior_lang"] = null;
                     EventsDispatcher::events('user_registration', $values);
                 } else {
-                    $additional_parameters = array(
+                    $additionalParameters = array(
                         'smsType' => WELCOME_LOGIN_PASSWORD,
                         'userId' => $return,
                         'mobilePhoneNumber' => $extra['mobile_phone_number'],
                         'password' => $original_password
                     );
-                    api_mail_html($recipient_name, $email, $emailsubject, $emailbody,
-                        $sender_name, $email_admin, null, null, null, $additional_parameters);
+                    api_mail_html(
+                        $recipient_name,
+                        $email,
+                        $emailsubject,
+                        $emailbody,
+                        $sender_name,
+                        $email_admin,
+                        null,
+                        null,
+                        null,
+                        $additionalParameters
+                    );
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
@@ -2345,24 +2352,12 @@ class UserManager
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_category = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return array();
-
-        $categories = array();
+        }
 
         // Get the list of sessions per user
         $now = api_get_utc_datetime();
-
-        if ($is_time_over) {
-            $condition_date_end = " AND (session.date_end < '$now' AND session.date_end != '0000-00-00')  ";
-        } else {
-            if (api_is_allowed_to_create_course()) {
-                // Teachers can access the session depending in the access_coach date
-                $condition_date_end = null;
-            } else {
-                $condition_date_end = " AND (session.date_end >= '$now' OR session.date_end = '0000-00-00') ";
-            }
-        }
 
         $sql = "SELECT DISTINCT
                     session.id,
@@ -2382,19 +2377,48 @@ class UserManager
                   LEFT JOIN $tbl_session_course_user as session_rel_course_user
                   ON (session_rel_course_user.id_session = session.id)
               WHERE (
-                        session_rel_course_user.id_user = $user_id OR
-                        session.id_coach = $user_id
-                    )  $condition_date_end
+                    session_rel_course_user.id_user = $user_id OR
+                    session.id_coach = $user_id
+              )
               ORDER BY session_category_name, name";
 
         $result = Database::query($sql);
+        $categories = array();
 
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
-                $categories[$row['session_category_id']]['session_category']['id'] = $row['session_category_id'];
-                $categories[$row['session_category_id']]['session_category']['name'] = $row['session_category_name'];
-                $categories[$row['session_category_id']]['session_category']['date_start'] = $row['session_category_date_start'];
-                $categories[$row['session_category_id']]['session_category']['date_end'] = $row['session_category_date_end'];
+
+                // User portal filters:
+                if ($is_time_over) {
+                    // History
+                    if (isset($row['date_end']) && $row['date_end'] != '0000-00-00') {
+                        if ($row['date_end'].' 23:59:59' > $now) {
+                            continue;
+                        }
+                    }
+
+                    if ($row['date_end'] == '0000-00-00') {
+                        continue;
+                    }
+                } else {
+                    // Current user portal
+                    if (api_is_allowed_to_create_course()) {
+                        // Teachers can access the session depending in the access_coach date
+                    } else {
+                        if (isset($row['date_end']) && $row['date_end'] != '0000-00-00') {
+                            if ($row['date_end'].' 23:59:59' <= $now) {
+                                continue;
+                            }
+                        }
+                    }
+                }
+
+                $categories[$row['session_category_id']]['session_category'] = array(
+                    'id' => $row['session_category_id'],
+                    'name' => $row['session_category_name'],
+                    'date_start' => $row['session_category_date_start'],
+                    'date_end' => $row['session_category_date_end']
+                );
 
                 $session_id = $row['id'];
 
@@ -2403,7 +2427,7 @@ class UserManager
                     $row['id']
                 );
 
-                // General coach session visibility.
+                // Session visibility.
                 $visibility = api_get_session_visibility(
                     $session_id,
                     null,
@@ -2411,7 +2435,8 @@ class UserManager
                 );
 
                 // Course Coach session visibility.
-                $atLeastOneCourseIsVisible = false;
+
+                $blockedCourseCount = 0;
                 foreach ($courseList as $course) {
                     // Checking session visibility
                     $visibility = api_get_session_visibility(
@@ -2419,13 +2444,23 @@ class UserManager
                         $course['code'],
                         $ignore_visibility_for_admins
                     );
-                    if ($visibility != SESSION_INVISIBLE) {
-                        $atLeastOneCourseIsVisible = true;
+
+                    $courseIsVisible = !in_array(
+                        $course['visibility'],
+                        array(
+                            COURSE_VISIBILITY_CLOSED,
+                            COURSE_VISIBILITY_HIDDEN
+                        )
+                    );
+
+                    if ($courseIsVisible == false || $visibility == SESSION_INVISIBLE) {
+                        $blockedCourseCount++;
                     }
                 }
 
-                if ($atLeastOneCourseIsVisible) {
-                    $visibility = $atLeastOneCourseIsVisible;
+                // If all courses are blocked then no show in the list.
+                if ($blockedCourseCount == count($courseList)) {
+                    $visibility = SESSION_INVISIBLE;
                 }
 
                 switch ($visibility) {
@@ -2437,18 +2472,19 @@ class UserManager
                         continue(2);
                 }
 
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name'] = $row['name'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id'] = $row['id'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['date_start'] = $row['date_start'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['date_end'] = $row['date_end'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_before_beginning'] = $row['nb_days_access_before_beginning'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_after_end'] = $row['nb_days_access_after_end'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = $courseList;
+                $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
+                    'session_name' => $row['name'],
+                    'session_id' => $row['id'],
+                    'date_start' => $row['date_start'],
+                    'date_end' => $row['date_end'],
+                    'nb_days_access_before_beginning' => $row['nb_days_access_before_beginning'],
+                    'nb_days_access_after_end' => $row['nb_days_access_after_end'],
+                    'courses' => $courseList
+                );
             }
         }
 
         return $categories;
-
     }
 
     /**
@@ -2485,23 +2521,24 @@ class UserManager
         // Courses in which we subscribed out of any session
         $tbl_user_course_category = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
-        $personal_course_list_sql = "SELECT
-                                        course.code,
-                                        course_rel_user.status course_rel_status,
-                                        course_rel_user.sort sort,
-                                        course_rel_user.user_course_cat user_course_cat
-                                     FROM ".$tbl_course_user." course_rel_user
-                                     LEFT JOIN ".$tbl_course." course
-                                     ON course.code = course_rel_user.course_code
-                                     LEFT JOIN ".$tbl_user_course_category." user_course_category
-                                     ON course_rel_user.user_course_cat = user_course_category.id
-                                     $join_access_url
-                                     WHERE  course_rel_user.user_id = '".$user_id."' AND
-                                            course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                                            $where_access_url
-                                     ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
+        $sql = "SELECT
+                    course.code,
+                    course_rel_user.status course_rel_status,
+                    course_rel_user.sort sort,
+                    course_rel_user.user_course_cat user_course_cat
+                 FROM ".$tbl_course_user." course_rel_user
+                 LEFT JOIN ".$tbl_course." course
+                 ON course.code = course_rel_user.course_code
+                 LEFT JOIN ".$tbl_user_course_category." user_course_category
+                 ON course_rel_user.user_course_cat = user_course_category.id
+                 $join_access_url
+                 WHERE
+                    course_rel_user.user_id = '".$user_id."' AND
+                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                    $where_access_url
+                 ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
 
-        $course_list_sql_result = Database::query($personal_course_list_sql);
+        $course_list_sql_result = Database::query($sql);
 
         $personal_course_list = array();
         if (Database::num_rows($course_list_sql_result) > 0) {
@@ -2541,31 +2578,32 @@ class UserManager
         // Get the list of sessions where the user is subscribed
         // This is divided into two different queries
         $sessions = array();
-        $sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
-                        FROM $tbl_session_user, $tbl_session
-                        WHERE (
-                            id_session = id AND
-                            id_user = $user_id AND
-                            relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-                        )
-                        $coachCourseConditions
-                        ORDER BY date_start, date_end, name";
+        $sql = "SELECT DISTINCT id, name, date_start, date_end
+                FROM $tbl_session_user, $tbl_session
+                WHERE (
+                    id_session = id AND
+                    id_user = $user_id AND
+                    relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                )
+                $coachCourseConditions
+                ORDER BY date_start, date_end, name";
 
-        $result = Database::query($sessions_sql);
+        $result = Database::query($sql);
         if (Database::num_rows($result)>0) {
             while ($row = Database::fetch_assoc($result)) {
                 $sessions[$row['id']] = $row;
             }
         }
-        $sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
-                        FROM $tbl_session_user, $tbl_session
-                        WHERE (
-                            id_coach = $user_id
-                        )
-                        $coachCourseConditions
-                        ORDER BY date_start, date_end, name";
 
-        $result = Database::query($sessions_sql);
+        $sql = "SELECT DISTINCT id, name, date_start, date_end
+                FROM $tbl_session_user, $tbl_session
+                WHERE (
+                    id_coach = $user_id
+                )
+                $coachCourseConditions
+                ORDER BY date_start, date_end, name";
+
+        $result = Database::query($sql);
         if (Database::num_rows($result)>0) {
             while ($row = Database::fetch_assoc($result)) {
                 if (empty($sessions[$row['id']])) {
@@ -2658,6 +2696,7 @@ class UserManager
                 }
             }
         }
+
         return $personal_course_list;
     }
 
@@ -2671,6 +2710,7 @@ class UserManager
     {
         // Database Table Definitions
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $tableCourse = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 
@@ -2695,12 +2735,17 @@ class UserManager
         session_rel_course_user table if there are courses registered
         to our user or not*/
 
-        $sql = "SELECT DISTINCT scu.course_code as code
+        $sql = "SELECT DISTINCT scu.course_code as code, c.visibility
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
                 ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
+                INNER JOIN $tableCourse as c
+                ON (scu.course_code = c.code)
                 $join_access_url
-                WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url";
+                WHERE
+                    scu.id_user = $user_id AND
+                    scu.id_session = $session_id
+                    $where_access_url";
 
         $orderBy = " ORDER BY code ";
         if (SessionManager::orderCourseIsEnabled()) {
@@ -2721,12 +2766,14 @@ class UserManager
         }
 
         if (api_is_allowed_to_create_course()) {
-            $sql = "SELECT DISTINCT scu.course_code as code
+            $sql = "SELECT DISTINCT scu.course_code as code, c.visibility
                     FROM $tbl_session_course_user as scu
                     INNER JOIN $tbl_session as s
                     ON (scu.id_session = s.id)
                     INNER JOIN $tbl_session_course sc
                     ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
+                    INNER JOIN $tableCourse as c
+                    ON (scu.course_code = c.code)
                     $join_access_url
                     WHERE
                       s.id = $session_id AND
@@ -2748,7 +2795,7 @@ class UserManager
                 }
             }
         }
-        $course_list = array();
+
         if (api_is_drh()) {
             $session_list = SessionManager::get_sessions_followed_by_drh($user_id);
             $session_list = array_keys($session_list);
@@ -2767,13 +2814,14 @@ class UserManager
                 $course_list = SessionManager::get_course_list_by_session_id($session_id);
                 if (!empty($course_list)) {
                     foreach ($course_list as $course) {
-                        if (!in_array($course['code'],$courses)) {
+                        if (!in_array($course['code'], $courses)) {
                             $personal_course_list[] = $course;
                         }
                     }
                 }
             }
         }
+
         return $personal_course_list;
     }
 
@@ -4598,8 +4646,8 @@ EOF;
 
                 case self::USER_FIELD_TYPE_MOBILE_PHONE_NUMBER:
                     $form->addElement(
-                        'text', 
-                        'extra_'.$field_details[1], 
+                        'text',
+                        'extra_'.$field_details[1],
                         $field_details[3]." (".get_lang('CountryDialCode').")",
                         array('size' => 40, 'placeholder'  => '(xx)xxxxxxxxx')
                     );
@@ -4607,8 +4655,8 @@ EOF;
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
                     $form->applyFilter('extra_'.$field_details[1], 'mobile_phone_number_filter');
                     $form->addRule(
-                        'extra_'.$field_details[1], 
-                        get_lang('MobilePhoneNumberWrong'), 
+                        'extra_'.$field_details[1],
+                        get_lang('MobilePhoneNumberWrong'),
                         'mobile_phone_number'
                     );
                     if (!$admin_permissions) {

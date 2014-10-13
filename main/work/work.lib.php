@@ -4,14 +4,14 @@
 use ChamiloSession as Session;
 
 /**
- *	@package chamilo.work
- * 	@author Thomas, Hugues, Christophe - original version
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University -
+ *  @package chamilo.work
+ *  @author Thomas, Hugues, Christophe - original version
+ *  @author Patrick Cool <patrick.cool@UGent.be>, Ghent University -
  * ability for course admins to specify wether uploaded documents are visible or invisible by default.
- * 	@author Roan Embrechts, code refactoring and virtual course support
- * 	@author Frederic Vauthier, directories management
+ *  @author Roan Embrechts, code refactoring and virtual course support
+ *  @author Frederic Vauthier, directories management
  *  @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 LOTS of bug fixes
- * 	@todo 	this lib should be convert in a static class and moved to main/inc/lib
+ *  @todo   this lib should be convert in a static class and moved to main/inc/lib
  */
 /**
  * Initialization
@@ -38,14 +38,14 @@ if (isset($_configuration['work_user_comments'])) {
 
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
- * @param	string	Current dir
- * @param	integer	Whether to show tool options
- * @param	integer	Whether to show upload form option
- * @return	void
+ * @param   string  Current dir
+ * @param   integer Whether to show tool options
+ * @param   integer Whether to show upload form option
+ * @return  void
  */
 function display_action_links($id, $cur_dir_path, $action)
 {
-	global $gradebook;
+    global $gradebook;
 
     $id = $my_back_id = intval($id);
     if ($action == 'list') {
@@ -81,11 +81,11 @@ function display_action_links($id, $cur_dir_path, $action)
         }
     }
 
-	if ($display_output != '') {
-		echo '<div class="actions">';
-		echo $display_output;
-		echo '</div>';
-	}
+    if ($display_output != '') {
+        echo '<div class="actions">';
+        echo $display_output;
+        echo '</div>';
+    }
 }
 
 /**
@@ -129,8 +129,8 @@ function settingsForm($defaults)
  */
 function two_digits($number)
 {
-	$number = (int)$number;
-	return ($number < 10) ? '0'.$number : $number;
+    $number = (int)$number;
+    return ($number < 10) ? '0'.$number : $number;
 }
 
 /**
@@ -155,7 +155,7 @@ function convert_date_to_array($date, $group)
     }
     list($data[$group]['year'], $data[$group]['month'], $data[$group]['day']) = $date_parts_tmp;
     list($data[$group]['hour'], $data[$group]['minute']) = $time_parts_tmp;
-	return $data;
+    return $data;
 }
 
 /**
@@ -163,7 +163,7 @@ function convert_date_to_array($date, $group)
  */
 function get_date_from_group($group)
 {
-	return $_POST[$group]['year'].'-'.two_digits($_POST[$group]['month']).'-'.two_digits($_POST[$group]['day']).' '.two_digits($_POST[$group]['hour']).':'.two_digits($_POST[$group]['minute']).':00';
+    return $_POST[$group]['year'].'-'.two_digits($_POST[$group]['month']).'-'.two_digits($_POST[$group]['day']).' '.two_digits($_POST[$group]['hour']).':'.two_digits($_POST[$group]['minute']).':00';
 }
 
 /**
@@ -195,21 +195,21 @@ function create_group_date_select($form, $prefix = '')
  */
 function get_work_data_by_path($path, $courseId = null)
 {
-	$path = Database::escape_string($path);
+    $path = Database::escape_string($path);
     if (empty($courseId)) {
-        $courseId 	= api_get_course_int_id();
+        $courseId = api_get_course_int_id();
     } else {
-        $courseId 	= intval($courseId);
+        $courseId = intval($courseId);
     }
 
-	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT *  FROM  ".$work_table." WHERE url = '$path' AND c_id = $courseId ";
-	$result = Database::query($sql);
-	$return = array();
-	if (Database::num_rows($result)) {
-		$return = Database::fetch_array($result,'ASSOC');
-	}
-	return $return;
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $sql = "SELECT *  FROM  ".$work_table." WHERE url = '$path' AND c_id = $courseId ";
+    $result = Database::query($sql);
+    $return = array();
+    if (Database::num_rows($result)) {
+        $return = Database::fetch_array($result,'ASSOC');
+    }
+    return $return;
 }
 
 /**
@@ -218,29 +218,29 @@ function get_work_data_by_path($path, $courseId = null)
  */
 function get_work_data_by_id($id, $courseId = null, $sessionId = null)
 {
-	$id = intval($id);
+    $id = intval($id);
 
     if (!empty($courseId)) {
         $courseId = intval($courseId);
     } else {
-        $courseId 	= api_get_course_int_id();
+        $courseId = api_get_course_int_id();
     }
 
-	$work_table	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $sessionCondition = null;
     if (!empty($sessionId)) {
         $sessionCondition = api_get_session_condition($sessionId, true);
     }
 
-	$sql = "SELECT * FROM $work_table
-	        WHERE
-	            id = $id AND c_id = $courseId
-	            $sessionCondition";
-	$result = Database::query($sql);
+    $sql = "SELECT * FROM $work_table
+            WHERE
+                id = $id AND c_id = $courseId
+                $sessionCondition";
+    $result = Database::query($sql);
     $work = array();
-	if (Database::num_rows($result)) {
-		$work = Database::fetch_array($result, 'ASSOC');
+    if (Database::num_rows($result)) {
+        $work = Database::fetch_array($result, 'ASSOC');
         if (empty($work['title'])) {
             $work['title'] = basename($work['url']);
         }
@@ -256,8 +256,8 @@ function get_work_data_by_id($id, $courseId = null, $sessionId = null)
                 $work['show_content'] = '<img src="'.$work['show_url'].'"/>';
             }
         }
-	}
-	return $work;
+    }
+    return $work;
 }
 
 /**
@@ -267,26 +267,26 @@ function get_work_data_by_id($id, $courseId = null, $sessionId = null)
  */
 function get_work_count_by_student($user_id, $work_id)
 {
-	$user_id = intval($user_id);
-	$work_id = intval($work_id);
-	$course_id = api_get_course_int_id();
+    $user_id = intval($user_id);
+    $work_id = intval($work_id);
+    $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
 
-	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT COUNT(*) as count FROM  $work_table
+    $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $sql = "SELECT COUNT(*) as count FROM  $work_table
             WHERE
                 c_id = $course_id AND
                 parent_id = $work_id AND
                 user_id = $user_id AND
                 active IN (0, 1) AND
                 session_id = $session_id ";
-	$result = Database::query($sql);
-	$return = 0;
-	if (Database::num_rows($result)) {
-		$return = Database::fetch_row($result,'ASSOC');
-		$return = intval($return[0]);
-	}
-	return $return;
+    $result = Database::query($sql);
+    $return = 0;
+    if (Database::num_rows($result)) {
+        $return = Database::fetch_row($result,'ASSOC');
+        $return = intval($return[0]);
+    }
+    return $return;
 }
 
 /**
@@ -301,16 +301,16 @@ function get_work_assignment_by_id($id, $courseId = null)
     } else {
         $courseId = intval($courseId);
     }
-	$id = intval($id);
+    $id = intval($id);
 
-	$table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-	$sql = "SELECT * FROM $table WHERE c_id = $courseId AND publication_id = $id";
-	$result = Database::query($sql);
-	$return = array();
-	if (Database::num_rows($result)) {
-		$return = Database::fetch_array($result,'ASSOC');
-	}
-	return $return;
+    $table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+    $sql = "SELECT * FROM $table WHERE c_id = $courseId AND publication_id = $id";
+    $result = Database::query($sql);
+    $return = array();
+    if (Database::num_rows($result)) {
+        $return = Database::fetch_array($result,'ASSOC');
+    }
+    return $return;
 }
 
 /**
@@ -518,111 +518,111 @@ function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $us
  */
 function display_student_publications_list($id, $my_folder_data, $work_parents, $origin, $userList = array())
 {
-	global $gradebook;
+    global $gradebook;
 
-	// Database table names
-	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$work_assigment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+    // Database table names
+    $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $work_assigment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
-	$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-	$session_id         = api_get_session_id();
+    $session_id         = api_get_session_id();
     $condition_session  = api_get_session_condition($session_id);
     $course_id          = api_get_course_int_id();
     $course_info        = api_get_course_info(api_get_course_id());
 
-	$sort_params = array();
+    $sort_params = array();
 
-	if (isset($_GET['column'])) {
-		$sort_params[] = 'column='.Security::remove_XSS($_GET['column']);
-	}
-	if (isset($_GET['page_nr'])) {
-		$sort_params[] = 'page_nr='.Security::remove_XSS($_GET['page_nr']);
-	}
-	if (isset($_GET['per_page'])) {
-		$sort_params[] = 'per_page='.Security::remove_XSS($_GET['per_page']);
-	}
-	if (isset($_GET['direction'])) {
-		$sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
-	}
-	$sort_params    = implode('&amp;', $sort_params);
-	$my_params      = $sort_params;
-	$origin         = Security::remove_XSS($origin);
+    if (isset($_GET['column'])) {
+        $sort_params[] = 'column='.Security::remove_XSS($_GET['column']);
+    }
+    if (isset($_GET['page_nr'])) {
+        $sort_params[] = 'page_nr='.Security::remove_XSS($_GET['page_nr']);
+    }
+    if (isset($_GET['per_page'])) {
+        $sort_params[] = 'per_page='.Security::remove_XSS($_GET['per_page']);
+    }
+    if (isset($_GET['direction'])) {
+        $sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
+    }
+    $sort_params    = implode('&amp;', $sort_params);
+    $my_params      = $sort_params;
+    $origin         = Security::remove_XSS($origin);
 
     $qualification_exists = false;
     if (!empty($my_folder_data['qualification']) && intval($my_folder_data['qualification']) > 0) {
         $qualification_exists = true;
     }
 
-	$table_header = array();
-	$table_has_actions_column = false;
-	$table_header[] = array(get_lang('Type'), false, 'style="width:40px"');
-	$table_header[] = array(get_lang('Title'), true);
+    $table_header = array();
+    $table_has_actions_column = false;
+    $table_header[] = array(get_lang('Type'), false, 'style="width:40px"');
+    $table_header[] = array(get_lang('Title'), true);
 
-	if (!empty($id)) {
-		$table_header[] = array(get_lang('FirstName'), true);
-		$table_header[] = array(get_lang('LastName'), true);
-	}
+    if (!empty($id)) {
+        $table_header[] = array(get_lang('FirstName'), true);
+        $table_header[] = array(get_lang('LastName'), true);
+    }
 
     $table_header[] = array(get_lang('HandOutDateLimit'), true, 'style="width:200px"');
 
-	if ($is_allowed_to_edit) {
+    if ($is_allowed_to_edit) {
         $table_header[] = array(get_lang('HandedOut'), false);
-		$table_header[] = array(get_lang('Actions'), false, 'style="width:90px"', array('class'=>'td_actions'));
-		$table_has_actions_column = true;
+        $table_header[] = array(get_lang('Actions'), false, 'style="width:90px"', array('class'=>'td_actions'));
+        $table_has_actions_column = true;
 
         if ($qualification_exists) {
             $table_header[] = array(get_lang('Qualification'), true);
         }
 
-	} else {
+    } else {
         // All users
         if ($course_info['show_score'] == 0) {
             $table_header[] = array(get_lang('Others'), false);
         }
     }
 
-	$table_data = array();
+    $table_data = array();
 
-	// List of all folders if no id was provided
+    // List of all folders if no id was provided
 
     $group_id = api_get_group_id();
 
-	if (is_array($work_parents)) {
-		foreach ($work_parents as $work_parent) {
-			$sql_select_directory = "SELECT
-			        title,
-			        url,
-			        prop.insert_date,
-			        prop.lastedit_date,
-			        work.id, author,
-			        has_properties,
-			        view_properties,
-			        description,
-			        qualification,
-			        weight,
-			        allow_text_assignment
+    if (is_array($work_parents)) {
+        foreach ($work_parents as $work_parent) {
+            $sql_select_directory = "SELECT
+                    title,
+                    url,
+                    prop.insert_date,
+                    prop.lastedit_date,
+                    work.id, author,
+                    has_properties,
+                    view_properties,
+                    description,
+                    qualification,
+                    weight,
+                    allow_text_assignment
                 FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id)
                 WHERE active IN (0, 1) AND ";
 
-			if (!empty($group_id)) {
-				$sql_select_directory .= " work.post_group_id = '".$group_id."' "; // set to select only messages posted by the user's group
-			} else {
-				$sql_select_directory .= " work.post_group_id = '0' ";
-			}
-			$sql_select_directory .= " AND ".
-			                           "  work.c_id = $course_id AND ".
-			                           "  work.id  = ".$work_parent->id." AND ".
-			                           "  work.filetype = 'folder' AND ".
-			                           "  prop.tool='work' $condition_session";
-			$result = Database::query($sql_select_directory);
-			$row    = Database::fetch_array($result, 'ASSOC');
+            if (!empty($group_id)) {
+                $sql_select_directory .= " work.post_group_id = '".$group_id."' "; // set to select only messages posted by the user's group
+            } else {
+                $sql_select_directory .= " work.post_group_id = '0' ";
+            }
+            $sql_select_directory .= " AND ".
+                                       "  work.c_id = $course_id AND ".
+                                       "  work.id  = ".$work_parent->id." AND ".
+                                       "  work.filetype = 'folder' AND ".
+                                       "  prop.tool='work' $condition_session";
+            $result = Database::query($sql_select_directory);
+            $row    = Database::fetch_array($result, 'ASSOC');
 
-			if (!$row) {
-				// the folder belongs to another session
-				continue;
-			}
+            if (!$row) {
+                // the folder belongs to another session
+                continue;
+            }
 
             // form edit directory
             if (!empty($row['has_properties'])) {
@@ -633,32 +633,32 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
             // save original value for later
             $utc_expiry_time = $homework['expires_on'];
 
-			$work_data = get_work_data_by_id($work_parent->id);
+            $work_data = get_work_data_by_id($work_parent->id);
 
             $workId = $row['id'];
 
-			$action = '';
-			$row = array();
-			$class = '';
-			$course_id  = api_get_course_int_id();
+            $action = '';
+            $row = array();
+            $class = '';
+            $course_id  = api_get_course_int_id();
 
-			if (api_is_allowed_to_edit()) {
+            if (api_is_allowed_to_edit()) {
                 $cant_files = get_count_work($work_data['id']);
-			} else {
+            } else {
                 $isSubscribed = userIsSubscribedToWork(api_get_user_id(), $work_data['id'], $course_id);
                 if ($isSubscribed == false) {
                     continue;
                 }
                 $cant_files = get_count_work($work_data['id'], api_get_user_id());
-			}
+            }
 
-			$text_file = get_lang('FilesUpload');
+            $text_file = get_lang('FilesUpload');
 
-			if ($cant_files == 1) {
-				$text_file = api_strtolower(get_lang('FileUpload'));
-			}
+            if ($cant_files == 1) {
+                $text_file = api_strtolower(get_lang('FileUpload'));
+            }
 
-			$icon = Display::return_icon('work.png', get_lang('Assignment'), array(), ICON_SIZE_SMALL);
+            $icon = Display::return_icon('work.png', get_lang('Assignment'), array(), ICON_SIZE_SMALL);
 
             $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'">'.$icon.'</a>';
 
@@ -707,9 +707,9 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                 }
             }
 
-			if ($origin != 'learnpath') {
-				if ($is_allowed_to_edit) {
-			        $cant_files_per_user = getUniqueStudentAttempts($work_data['id'], $group_id, $course_id, api_get_session_id(), null, $userList);
+            if ($origin != 'learnpath') {
+                if ($is_allowed_to_edit) {
+                    $cant_files_per_user = getUniqueStudentAttempts($work_data['id'], $group_id, $course_id, api_get_session_id(), null, $userList);
 
                     $row[] = $cant_files_per_user.'/'.count($userList);
                     if (api_resource_is_locked_by_gradebook($workId, LINK_STUDENTPUBLICATION)) {
@@ -721,67 +721,67 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                         $action .= ' <a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$workId.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('DirDelete').'"  >'.
                             Display::return_icon('delete.png',get_lang('DirDelete'),'',ICON_SIZE_SMALL).'</a>';
                     }
-					$row[] = $action;
-				} else {
-					$row[] = '';
-				}
-			}
+                    $row[] = $action;
+                } else {
+                    $row[] = '';
+                }
+            }
             $row[] = $work_data['title'];
-			$table_data[] = $row;
-		}
-	}
+            $table_data[] = $row;
+        }
+    }
 
-	$sorting_options = array();
-	$sorting_options['column'] = 1;
+    $sorting_options = array();
+    $sorting_options['column'] = 1;
 
-	// Here we change the way how the columns are going to be sorted
-	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
-	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
+    // Here we change the way how the columns are going to be sorted
+    // in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
+    // because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
 
-	$column_order = array();
-	$i=0;
-	foreach ($table_header as $item) {
-		$column_order[$i] = $i;
-		$i++;
-	}
+    $column_order = array();
+    $i=0;
+    foreach ($table_header as $item) {
+        $column_order[$i] = $i;
+        $i++;
+    }
     if (empty($my_folder_data)) {
-		$column_order[1] = 5;
-	} else {
-		$column_order[2] = 2;
-	}
+        $column_order[1] = 5;
+    } else {
+        $column_order[2] = 2;
+    }
 
-	// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
-	$column_show = array();
+    // An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
+    $column_show = array();
 
-	$column_show[] = 1; // type 0
-	$column_show[] = 1; // title 1
+    $column_show[] = 1; // type 0
+    $column_show[] = 1; // title 1
 
-	if (!empty($my_folder_data)) {
-		$column_show[] = 1;  // 2
-		$column_show[] = 1;  // 3
-		if ($qualification_exists) {
-			$column_show[] = 1;  // 4
-		}
-	}
-	$column_show[] = 1; //date
-	if ($table_has_actions_column) {
-		$column_show[] = 1; // modify
-	}
-	$column_show[] = 1; //real date in correct format
+    if (!empty($my_folder_data)) {
+        $column_show[] = 1;  // 2
+        $column_show[] = 1;  // 3
+        if ($qualification_exists) {
+            $column_show[] = 1;  // 4
+        }
+    }
+    $column_show[] = 1; //date
+    if ($table_has_actions_column) {
+        $column_show[] = 1; // modify
+    }
+    $column_show[] = 1; //real date in correct format
     $column_show[] = 0; //real date in correct format
 
-	$paging_options = array();
-	if (isset($_GET['curdirpath'])) {
-		$my_params = array ('curdirpath' => Security::remove_XSS($_GET['curdirpath']));
-	}
+    $paging_options = array();
+    if (isset($_GET['curdirpath'])) {
+        $my_params = array ('curdirpath' => Security::remove_XSS($_GET['curdirpath']));
+    }
 
-	$my_params = array ('id' => isset($_GET['id']) ? $_GET['id'] : null);
+    $my_params = array ('id' => isset($_GET['id']) ? $_GET['id'] : null);
 
-	if (isset($_GET['edit_dir'])) {
-		$my_params = array ('edit_dir' => intval($_GET['edit_dir']));
-	}
-	$my_params['origin'] = $origin;
-	Display::display_sortable_config_table('work', $table_header, $table_data, $sorting_options, $paging_options, $my_params, $column_show, $column_order);
+    if (isset($_GET['edit_dir'])) {
+        $my_params = array ('edit_dir' => intval($_GET['edit_dir']));
+    }
+    $my_params['origin'] = $origin;
+    Display::display_sortable_config_table('work', $table_header, $table_data, $sorting_options, $paging_options, $my_params, $column_show, $column_order);
 }
 
 /**
@@ -900,31 +900,31 @@ function showTeacherWorkGrid()
 // TODO: This function is a candidate for removal, it is not used anywhere.
 function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
 {
-	$form = '<form name="selector" action="'.api_get_self().'?'.api_get_cidreq().'" method="POST">';
-	$form .= get_lang('CurrentDirectory').' <select name="curdirpath" onchange="javascript: document.selector.submit();">';
-	//group documents cannot be uploaded in the root
-	if ($group_dir == '') {
-		$form .= '<option value="/">/ ('.get_lang('Root').')</option>';
-		if (is_array($folders)) {
-			foreach ($folders as $folder) {
-				$selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
-				$form .= '<option'.$selected.' value="'.$folder.'">'.$folder.'</option>'."\n";
-			}
-		}
-	} else {
-		foreach ($folders as $folder) {
-			$selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
-			$display_folder = substr($folder, strlen($group_dir));
-			$display_folder = ($display_folder == '') ? '/ ('.get_lang('Root').')' : $display_folder;
-			$form .= '<option'.$selected.' value="'.$folder.'">'.$display_folder.'</option>'."\n";
-		}
-	}
+    $form = '<form name="selector" action="'.api_get_self().'?'.api_get_cidreq().'" method="POST">';
+    $form .= get_lang('CurrentDirectory').' <select name="curdirpath" onchange="javascript: document.selector.submit();">';
+    //group documents cannot be uploaded in the root
+    if ($group_dir == '') {
+        $form .= '<option value="/">/ ('.get_lang('Root').')</option>';
+        if (is_array($folders)) {
+            foreach ($folders as $folder) {
+                $selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
+                $form .= '<option'.$selected.' value="'.$folder.'">'.$folder.'</option>'."\n";
+            }
+        }
+    } else {
+        foreach ($folders as $folder) {
+            $selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
+            $display_folder = substr($folder, strlen($group_dir));
+            $display_folder = ($display_folder == '') ? '/ ('.get_lang('Root').')' : $display_folder;
+            $form .= '<option'.$selected.' value="'.$folder.'">'.$display_folder.'</option>'."\n";
+        }
+    }
 
-	$form .= '</select>';
-	$form .= '<noscript><input type="submit" name="change_path" value="'.get_lang('Ok').'" /></noscript>';
-	$form .= '</form>';
+    $form .= '</select>';
+    $form .= '<noscript><input type="submit" name="change_path" value="'.get_lang('Ok').'" /></noscript>';
+    $form .= '</form>';
 
-	return $form;
+    return $form;
 }
 
 /**
@@ -941,89 +941,89 @@ function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
 function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '')
 {
     $course_id = api_get_course_int_id();
-	$move_file	= intval($move_file);
-	$tbl_work	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql 		= "SELECT title, url FROM $tbl_work WHERE c_id = $course_id AND id ='".$move_file."'";
-	$result 	= Database::query($sql);
-	$row = Database::fetch_array($result, 'ASSOC');
+    $move_file = intval($move_file);
+    $tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $sql = "SELECT title, url FROM $tbl_work WHERE c_id = $course_id AND id ='".$move_file."'";
+    $result = Database::query($sql);
+    $row = Database::fetch_array($result, 'ASSOC');
     $title = empty($row['title']) ? basename($row['url']) : $row['title'];
 
-	global $gradebook;
+    global $gradebook;
     //@todo use formvalidator please!
-	$form = '<form class="form-horizontal" name="move_to_form" action="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
-	$form .= '<legend>'.get_lang('MoveFile').' - '.Security::remove_XSS($title).'</legend>';
-	$form .= '<input type="hidden" name="item_id" value="'.$move_file.'" />';
-	$form .= '<input type="hidden" name="action" value="move_to" />';
-	$form .= '<div class="control-group">
-				<label>
-					<span class="form_required">*</span>'.get_lang('Select').'
-				</label>
-				<div class="controls">';
-	$form .= ' <select name="move_to_id">';
+    $form = '<form class="form-horizontal" name="move_to_form" action="'.api_get_self().'?'.api_get_cidreq().'&gradebook='.$gradebook.'&curdirpath='.Security::remove_XSS($curdirpath).'" method="POST">';
+    $form .= '<legend>'.get_lang('MoveFile').' - '.Security::remove_XSS($title).'</legend>';
+    $form .= '<input type="hidden" name="item_id" value="'.$move_file.'" />';
+    $form .= '<input type="hidden" name="action" value="move_to" />';
+    $form .= '<div class="control-group">
+                <label>
+                    <span class="form_required">*</span>'.get_lang('Select').'
+                </label>
+                <div class="controls">';
+    $form .= ' <select name="move_to_id">';
 
-	//group documents cannot be uploaded in the root
-	if ($group_dir == '') {
-		if ($curdirpath != '/') {
-			//$form .= '<option value="0">/ ('.get_lang('Root').')</option>';
-		}
-		if (is_array($folders)) {
-			foreach ($folders as $fid => $folder) {
-				//you cannot move a file to:
-				//1. current directory
-				//2. inside the folder you want to move
-				//3. inside a subfolder of the folder you want to move
-				if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
-					$form .= '<option value="'.$fid.'">'.$folder.'</option>';
-				}
-			}
-		}
-	} else {
-		if ($curdirpath != '/') {
-			$form .= '<option value="0">/ ('.get_lang('Root').')</option>';
-		}
-		foreach ($folders as $fid => $folder) {
-			if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
-				//cannot copy dir into his own subdir
-				$display_folder = substr($folder, strlen($group_dir));
-				$display_folder = ($display_folder == '') ? '/ ('.get_lang('Root').')' : $display_folder;
-				$form .= '<option value="'.$fid.'">'.$display_folder.'</option>'."\n";
-			}
-		}
-	}
+    //group documents cannot be uploaded in the root
+    if ($group_dir == '') {
+        if ($curdirpath != '/') {
+            //$form .= '<option value="0">/ ('.get_lang('Root').')</option>';
+        }
+        if (is_array($folders)) {
+            foreach ($folders as $fid => $folder) {
+                //you cannot move a file to:
+                //1. current directory
+                //2. inside the folder you want to move
+                //3. inside a subfolder of the folder you want to move
+                if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
+                    $form .= '<option value="'.$fid.'">'.$folder.'</option>';
+                }
+            }
+        }
+    } else {
+        if ($curdirpath != '/') {
+            $form .= '<option value="0">/ ('.get_lang('Root').')</option>';
+        }
+        foreach ($folders as $fid => $folder) {
+            if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
+                //cannot copy dir into his own subdir
+                $display_folder = substr($folder, strlen($group_dir));
+                $display_folder = ($display_folder == '') ? '/ ('.get_lang('Root').')' : $display_folder;
+                $form .= '<option value="'.$fid.'">'.$display_folder.'</option>'."\n";
+            }
+        }
+    }
 
-	$form .= '</select>';
-	$form .= '	</div>
-			</div>';
-	$form .= '<div class="control-group">
-					<div class="controls">
-						<button type="submit" class="save" name="move_file_submit">'.get_lang('MoveFile').'</button>
-					</div>
-				</div>';
-	$form .= '</form>';
-	$form .= '<div style="clear: both; margin-bottom: 10px;"></div>';
-	return $form;
+    $form .= '</select>';
+    $form .= '  </div>
+            </div>';
+    $form .= '<div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="save" name="move_file_submit">'.get_lang('MoveFile').'</button>
+                    </div>
+                </div>';
+    $form .= '</form>';
+    $form .= '<div style="clear: both; margin-bottom: 10px;"></div>';
+    return $form;
 }
 
 /**
  * Checks if the first given directory exists as a subdir of the second given directory
  * This function should now be deprecated by Security::check_abs_path()
- * @param	string	Subdir
- * @param	string	Base dir
- * @return	integer	-1 on error, 0 if not subdir, 1 if subdir
+ * @param   string  Subdir
+ * @param   string  Base dir
+ * @return  integer -1 on error, 0 if not subdir, 1 if subdir
  */
 // TODO: This function is a candidate for removal, it is not used anywhere.
 function is_subdir_of($subdir, $basedir)
 {
-	if (empty($subdir) or empty($basedir)) {
-		return -1;
-	}
-	if (substr($basedir, -1, 1) != '/') {
-		$basedir = $basedir.'/';
-	}
-	if (substr($subdir, 0, 1) == '/') {
-		$subdir = substr($subdir, 1);
-	}
-	return is_dir($basedir.$subdir) ? 1 : 0;
+    if (empty($subdir) or empty($basedir)) {
+        return -1;
+    }
+    if (substr($basedir, -1, 1) != '/') {
+        $basedir = $basedir.'/';
+    }
+    if (substr($subdir, 0, 1) == '/') {
+        $subdir = substr($subdir, 1);
+    }
+    return is_dir($basedir.$subdir) ? 1 : 0;
 }
 
 /**
@@ -1034,29 +1034,29 @@ function is_subdir_of($subdir, $basedir)
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @author Bert Vanderkimpen
  * @author Yannick Warnier <ywarnier@beeznest.org> Adaptation for work tool
- * @param	string	Base work dir (.../work)
- * @param 	string $desiredDirName complete path of the desired name
- * @return 	string actual directory name if it succeeds, boolean false otherwise
+ * @param   string  Base work dir (.../work)
+ * @param   string $desiredDirName complete path of the desired name
+ * @return  string actual directory name if it succeeds, boolean false otherwise
  */
 function create_unexisting_work_directory($base_work_dir, $desired_dir_name)
 {
-	$nb = '';
-	$base_work_dir = (substr($base_work_dir, -1, 1) == '/' ? $base_work_dir : $base_work_dir.'/');
-	while (file_exists($base_work_dir.$desired_dir_name.$nb)) {
-		$nb += 1;
-	}
-	if (@mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories())) {
-		return $desired_dir_name.$nb;
-	} else {
-		return false;
-	}
+    $nb = '';
+    $base_work_dir = (substr($base_work_dir, -1, 1) == '/' ? $base_work_dir : $base_work_dir.'/');
+    while (file_exists($base_work_dir.$desired_dir_name.$nb)) {
+        $nb += 1;
+    }
+    if (@mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories())) {
+        return $desired_dir_name.$nb;
+    } else {
+        return false;
+    }
 }
 
 /**
  * Delete a work-tool directory
- * @param	string	Base "work" directory for this course as /var/www/chamilo/courses/ABCD/work/
- * @param	string	The directory name as the bit after "work/", without trailing slash
- * @return	integer	-1 on error
+ * @param   string  Base "work" directory for this course as /var/www/chamilo/courses/ABCD/work/
+ * @param   string  The directory name as the bit after "work/", without trailing slash
+ * @return  integer -1 on error
  */
 function deleteDirWork($id)
 {
@@ -1077,15 +1077,15 @@ function deleteDirWork($id)
 
     $base_work_dir = api_get_path(SYS_COURSE_PATH) .$_course['path'].'/work';
     $work_data_url = $base_work_dir.$work_data['url'];
-	$check = Security::check_abs_path($work_data_url.'/', $base_work_dir.'/');
+    $check = Security::check_abs_path($work_data_url.'/', $base_work_dir.'/');
 
-	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $t_agenda   = Database::get_course_table(TABLE_AGENDA);
 
-	$course_id = api_get_course_int_id();
+    $course_id = api_get_course_int_id();
 
-	if (!empty($work_data['url'])) {
+    if (!empty($work_data['url'])) {
         if ($check) {
             // Deleting all contents inside the folder
             $sql = "UPDATE $table SET active = 2 WHERE c_id = $course_id AND filetype = 'folder' AND id = $id";
@@ -1095,15 +1095,15 @@ function deleteDirWork($id)
             Database::query($sql);
 
             require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-    		$new_dir = $work_data_url.'_DELETED_'.$id;
+            $new_dir = $work_data_url.'_DELETED_'.$id;
 
-    		if (api_get_setting('permanently_remove_deleted_files') == 'true') {
-    			my_delete($work_data_url);
-    		} else {
-    			if (file_exists($work_data_url)) {
-    				rename($work_data_url, $new_dir);
-    			}
-    		}
+            if (api_get_setting('permanently_remove_deleted_files') == 'true') {
+                my_delete($work_data_url);
+            } else {
+                if (file_exists($work_data_url)) {
+                    rename($work_data_url, $new_dir);
+                }
+            }
 
             // Gets calendar_id from student_publication_assigment
             $sql = "SELECT add_to_calendar FROM $TSTDPUBASG
@@ -1126,54 +1126,54 @@ function deleteDirWork($id)
             }
             return true;
         }
-	}
+    }
 }
 
 /**
  * Get the path of a document in the student_publication table (path relative to the course directory)
- * @param	integer	Element ID
- * @return	string	Path (or -1 on error)
+ * @param   integer Element ID
+ * @return  string  Path (or -1 on error)
  */
 function get_work_path($id)
 {
-	$table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$course_id 	= api_get_course_int_id();
-	$sql 		= 'SELECT url FROM '.$table.' WHERE c_id = '.$course_id.' AND id='.intval($id);
-	$res 		= Database::query($sql);
-	if (Database::num_rows($res)) {
-		$row = Database::fetch_array($res);
-		return $row['url'];
-	}
-	return -1;
+    $table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $course_id  = api_get_course_int_id();
+    $sql        = 'SELECT url FROM '.$table.' WHERE c_id = '.$course_id.' AND id='.intval($id);
+    $res        = Database::query($sql);
+    if (Database::num_rows($res)) {
+        $row = Database::fetch_array($res);
+        return $row['url'];
+    }
+    return -1;
 }
 
 /**
  * Update the url of a work in the student_publication table
- * @param	integer	ID of the work to update
- * @param	string	Destination directory where the work has been moved (must end with a '/')
- * @return	-1 on error, sql query result on success
+ * @param   integer ID of the work to update
+ * @param   string  Destination directory where the work has been moved (must end with a '/')
+ * @return  -1 on error, sql query result on success
  */
 function updateWorkUrl($id, $new_path, $parent_id)
 {
-	if (empty($id)) return -1;
-	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$course_id = api_get_course_int_id();
+    if (empty($id)) return -1;
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $course_id = api_get_course_int_id();
     $id = intval($id);
     $parent_id = intval($parent_id);
 
-	$sql = "SELECT * FROM $table WHERE c_id = $course_id AND id = $id";
-	$res = Database::query($sql);
-	if (Database::num_rows($res) != 1) {
-		return -1;
-	} else {
-		$row = Database::fetch_array($res);
-		$filename = basename($row['url']);
-		$new_url = $new_path.$filename;
+    $sql = "SELECT * FROM $table WHERE c_id = $course_id AND id = $id";
+    $res = Database::query($sql);
+    if (Database::num_rows($res) != 1) {
+        return -1;
+    } else {
+        $row = Database::fetch_array($res);
+        $filename = basename($row['url']);
+        $new_url = $new_path.$filename;
         $new_url = Database::escape_string($new_url);
         $sql2 = "UPDATE $table SET url = '$new_url', parent_id = '$parent_id' WHERE c_id = $course_id AND id = $id";
-		$res2 = Database::query($sql2);
-		return $res2;
-	}
+        $res2 = Database::query($sql2);
+        return $res2;
+    }
 }
 
 /**
@@ -1184,10 +1184,10 @@ function updateWorkUrl($id, $new_path, $parent_id)
  */
 function updateDirName($work_data, $newPath)
 {
-	$course_id = $work_data['c_id'];
+    $course_id = $work_data['c_id'];
     $courseInfo = api_get_course_info_by_id($course_id);
 
-	$work_id = intval($work_data['id']);
+    $work_id = intval($work_data['id']);
     $oldPath = $work_data['url'];
     $path  = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
@@ -1199,147 +1199,147 @@ function updateDirName($work_data, $newPath)
         return true;
     }
 
-	if (!empty($newPath)) {
+    if (!empty($newPath)) {
         $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
-		my_rename($base_work_dir.$oldPath, $newPath);
-		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        my_rename($base_work_dir.$oldPath, $newPath);
+        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-		//update all the files in the other directories according with the next query
-		$sql = "SELECT id, url FROM $table WHERE c_id = $course_id AND parent_id = $work_id";
-		$result = Database::query($sql);
+        //update all the files in the other directories according with the next query
+        $sql = "SELECT id, url FROM $table WHERE c_id = $course_id AND parent_id = $work_id";
+        $result = Database::query($sql);
         $work_len = strlen('work/'.$path);
 
-		while ($work = Database :: fetch_array($result)) {
-			$new_dir = $work['url'];
-			$name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
+        while ($work = Database :: fetch_array($result)) {
+            $new_dir = $work['url'];
+            $name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
             $name = Database::escape_string('work/'.$newPath.'/'.$name_with_directory);
-			$sql = 'UPDATE '.$table.' SET url= "'.$name.'" WHERE c_id = '.$course_id.' AND id = '.$work['id'];
-			Database::query($sql);
-		}
+            $sql = 'UPDATE '.$table.' SET url= "'.$name.'" WHERE c_id = '.$course_id.' AND id = '.$work['id'];
+            Database::query($sql);
+        }
 
         $sql = "UPDATE $table SET url= '/".$newPath."', title = '".$originalNewPath."'
                 WHERE c_id = $course_id AND id = $work_id";
         Database::query($sql);
-	}
+    }
 }
 
 /**
  * Return an array with all the folder's ids that are in the given path
- * @param	string Path of the directory
- * @return	array The list of ids of all the directories in the path
- * @author 	Julio Montoya Dokeos
+ * @param   string Path of the directory
+ * @return  array The list of ids of all the directories in the path
+ * @author  Julio Montoya Dokeos
  * @version April 2008
  */
 
 function get_parent_directories($id)
 {
-	$course_id = api_get_course_int_id();
-	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $course_id = api_get_course_int_id();
+    $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $id = intval($id);
     $sql = "SELECT id FROM $work_table WHERE c_id = $course_id AND parent_id = $id";
-	$result = Database::query($sql);
+    $result = Database::query($sql);
     $list_id = array();
     if (Database::num_rows($result)) {
-	   while ($row = Database::fetch_array($result)) {
-		  $list_id[] = $row['id'];
-	   }
+       while ($row = Database::fetch_array($result)) {
+          $list_id[] = $row['id'];
+       }
     }
-	return $list_id;
+    return $list_id;
 }
 
 /**
  * Transform an all directory structure (only directories) in an array
- * @param	string path of the directory
- * @return	array the directory structure into an array
- * @author 	Julio Montoya Dokeos
+ * @param   string path of the directory
+ * @return  array the directory structure into an array
+ * @author  Julio Montoya Dokeos
  * @version April 2008
  */
 function directory_to_array($directory)
 {
-	$array_items = array();
-	if ($handle = @opendir($directory)) {
-		while (false !== ($file = readdir($handle))) {
-			if ($file != '.' && $file != '..') {
-				if (is_dir($directory. '/' . $file)) {
-					$array_items = array_merge($array_items, directory_to_array($directory. '/' . $file));
-					$file = $directory . '/' . $file;
-					$array_items[] = preg_replace("/\/\//si", '/', $file);
-				}
-			}
-		}
-		closedir($handle);
-	}
-	return $array_items;
+    $array_items = array();
+    if ($handle = @opendir($directory)) {
+        while (false !== ($file = readdir($handle))) {
+            if ($file != '.' && $file != '..') {
+                if (is_dir($directory. '/' . $file)) {
+                    $array_items = array_merge($array_items, directory_to_array($directory. '/' . $file));
+                    $file = $directory . '/' . $file;
+                    $array_items[] = preg_replace("/\/\//si", '/', $file);
+                }
+            }
+        }
+        closedir($handle);
+    }
+    return $array_items;
 }
 
 /**
  * Insert into the DB of the course all the directories
- * @param	string path of the /work directory of the course
- * @return	-1 on error, sql query result on success
- * @author 	Julio Montoya
+ * @param   string path of the /work directory of the course
+ * @return  -1 on error, sql query result on success
+ * @author  Julio Montoya
  * @version April 2008
  * @param string $base_work_dir
  */
 
 function insert_all_directory_in_course_table($base_work_dir)
 {
-	$dir_to_array = directory_to_array($base_work_dir, true);
-	$only_dir = array();
+    $dir_to_array = directory_to_array($base_work_dir, true);
+    $only_dir = array();
 
-	for ($i = 0; $i < count($dir_to_array); $i++) {
-		$only_dir[] = substr($dir_to_array[$i], strlen($base_work_dir), strlen($dir_to_array[$i]));
-	}
-	$course_id = api_get_course_int_id();
+    for ($i = 0; $i < count($dir_to_array); $i++) {
+        $only_dir[] = substr($dir_to_array[$i], strlen($base_work_dir), strlen($dir_to_array[$i]));
+    }
+    $course_id = api_get_course_int_id();
     $group_id  = api_get_group_id();
 
-	for($i = 0; $i < count($only_dir); $i++) {
-		global $work_table;
+    for($i = 0; $i < count($only_dir); $i++) {
+        global $work_table;
         $url = Database::escape_string($only_dir[$i]);
-		$sql = "INSERT INTO " . $work_table . " SET
-               c_id 		= '$course_id',
-               url 			= '".$url."',
+        $sql = "INSERT INTO " . $work_table . " SET
+               c_id         = '$course_id',
+               url          = '".$url."',
                title        = '',
-               description 	= '',
-               author      	= '',
-               active		= '1',
-               accepted		= '1',
-               filetype		= 'folder',
+               description  = '',
+               author       = '',
+               active       = '1',
+               accepted     = '1',
+               filetype     = 'folder',
                post_group_id = '".$group_id."',
-               sent_date	= '0000-00-00 00:00:00' ";
-		Database::query($sql);
-	}
+               sent_date    = '0000-00-00 00:00:00' ";
+        Database::query($sql);
+    }
 }
 
 /**
  * This function displays the number of files contained in a directory
  *
- * @param	string the path of the directory
- * @param	boolean true if we want the total quantity of files include in others child directorys , false only  files in the directory
- * @return	array the first element is an integer with the number of files in the folder, the second element is the number of directories
- * @author 	Julio Montoya
- * @version	April 2008
+ * @param   string the path of the directory
+ * @param   boolean true if we want the total quantity of files include in others child directorys , false only  files in the directory
+ * @return  array the first element is an integer with the number of files in the folder, the second element is the number of directories
+ * @author  Julio Montoya
+ * @version April 2008
  */
 function count_dir($path_dir, $recurse)
 {
-	$count = 0;
-	$count_dir = 0;
-	$d = dir($path_dir);
-	while ($entry = $d->Read()) {
-		if (!(($entry == '..') || ($entry == '.'))) {
-			if (is_dir($path_dir.'/'.$entry)) {
-				$count_dir++;
-				if ($recurse) {
-					$count += count_dir($path_dir . '/' . $entry, $recurse);
-				}
-			} else {
-				$count++;
-			}
-		}
-	}
-	$return_array = array();
-	$return_array[] = $count;
-	$return_array[] = $count_dir;
-	return $return_array;
+    $count = 0;
+    $count_dir = 0;
+    $d = dir($path_dir);
+    while ($entry = $d->Read()) {
+        if (!(($entry == '..') || ($entry == '.'))) {
+            if (is_dir($path_dir.'/'.$entry)) {
+                $count_dir++;
+                if ($recurse) {
+                    $count += count_dir($path_dir . '/' . $entry, $recurse);
+                }
+            } else {
+                $count++;
+            }
+        }
+    }
+    $return_array = array();
+    $return_array[] = $count;
+    $return_array[] = $count_dir;
+    return $return_array;
 }
 
 /**
@@ -1351,77 +1351,77 @@ function to_javascript_work()
 {
     $origin = isset($_REQUEST['origin']) && !empty($_REQUEST['origin']) ? api_get_tools_lists($_REQUEST['origin']) : '';
 
-	$js = '<script>
-			function plus() {
-				if(document.getElementById(\'options\').style.display == \'none\') {
-					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide', ''), array('style' => 'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
-				} else {
-					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show', ''), array('style' => 'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
-				}
-			}
+    $js = '<script>
+            function plus() {
+                if(document.getElementById(\'options\').style.display == \'none\') {
+                    document.getElementById(\'options\').style.display = \'block\';
+                    document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide', ''), array('style' => 'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
+                } else {
+                    document.getElementById(\'options\').style.display = \'none\';
+                    document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show', ''), array('style' => 'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
+                }
+            }
 
-			function updateDocumentTitle(value) {
-				var temp = value.indexOf("/");
-				//linux path
-				if(temp!=-1){
-					var temp=value.split("/");
-				} else {
-					var temp=value.split("\\\");
-				}
-				document.getElementById("file_upload").value=temp[temp.length-1];
-				$("#contains_file_id").attr("value", 1);
-			}
+            function updateDocumentTitle(value) {
+                var temp = value.indexOf("/");
+                //linux path
+                if(temp!=-1){
+                    var temp=value.split("/");
+                } else {
+                    var temp=value.split("\\\");
+                }
+                document.getElementById("file_upload").value=temp[temp.length-1];
+                $("#contains_file_id").attr("value", 1);
+            }
 
-			function checkDate(month, day, year) {
-			  var monthLength =
-			    new Array(31,28,31,30,31,30,31,31,30,31,30,31);
+            function checkDate(month, day, year) {
+              var monthLength =
+                new Array(31,28,31,30,31,30,31,31,30,31,30,31);
 
-			  if (!day || !month || !year)
-			    return false;
+              if (!day || !month || !year)
+                return false;
 
-			  // check for bisestile year
-			  if (year/4 == parseInt(year/4))
-			    monthLength[1] = 29;
+              // check for bisestile year
+              if (year/4 == parseInt(year/4))
+                monthLength[1] = 29;
 
-			  if (month < 1 || month > 12)
-			    return false;
+              if (month < 1 || month > 12)
+                return false;
 
-			  if (day > monthLength[month-1])
-			    return false;
+              if (day > monthLength[month-1])
+                return false;
 
-			  return true;
-			}
+              return true;
+            }
 
-			function mktime() {
+            function mktime() {
 
-			    var no, ma = 0, mb = 0, i = 0, d = new Date(), argv = arguments, argc = argv.length;
-			    d.setHours(0,0,0); d.setDate(1); d.setMonth(1); d.setYear(1972);
+                var no, ma = 0, mb = 0, i = 0, d = new Date(), argv = arguments, argc = argv.length;
+                d.setHours(0,0,0); d.setDate(1); d.setMonth(1); d.setYear(1972);
 
-			    var dateManip = {
-			        0: function(tt){ return d.setHours(tt); },
-			        1: function(tt){ return d.setMinutes(tt); },
-			        2: function(tt){ set = d.setSeconds(tt); mb = d.getDate() - 1; return set; },
-			        3: function(tt){ set = d.setMonth(parseInt(tt)-1); ma = d.getFullYear() - 1972; return set; },
-			        4: function(tt){ return d.setDate(tt+mb); },
-			        5: function(tt){ return d.setYear(tt+ma); }
-			    };
+                var dateManip = {
+                    0: function(tt){ return d.setHours(tt); },
+                    1: function(tt){ return d.setMinutes(tt); },
+                    2: function(tt){ set = d.setSeconds(tt); mb = d.getDate() - 1; return set; },
+                    3: function(tt){ set = d.setMonth(parseInt(tt)-1); ma = d.getFullYear() - 1972; return set; },
+                    4: function(tt){ return d.setDate(tt+mb); },
+                    5: function(tt){ return d.setYear(tt+ma); }
+                };
 
-			    for( i = 0; i < argc; i++ ){
-			        no = parseInt(argv[i]*1);
-			        if (isNaN(no)) {
-			            return false;
-			        } else {
-			            // arg is number, lets manipulate date object
-			            if(!dateManip[i](no)){
-			                // failed
-			                return false;
-			            }
-			        }
-			    }
-			    return Math.floor(d.getTime()/1000);
-			}
+                for( i = 0; i < argc; i++ ){
+                    no = parseInt(argv[i]*1);
+                    if (isNaN(no)) {
+                        return false;
+                    } else {
+                        // arg is number, lets manipulate date object
+                        if(!dateManip[i](no)){
+                            // failed
+                            return false;
+                        }
+                    }
+                }
+                return Math.floor(d.getTime()/1000);
+            }
 
             function setFocus() {
                 $("#work_title").focus();
@@ -1448,7 +1448,7 @@ function to_javascript_work()
                 });
 
             });
-			</script>';
+            </script>';
     return $js;
 }
 
@@ -1460,24 +1460,24 @@ function to_javascript_work()
 // TODO: The name of this function does not fit with the kind of information it returns. Maybe check_work_id() or is_work_id()?
 function get_work_id($path)
 {
-	$TBL_STUDENT_PUBLICATION = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$TBL_PROP_TABLE = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$course_id = api_get_course_int_id();
+    $TBL_STUDENT_PUBLICATION = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $TBL_PROP_TABLE = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $course_id = api_get_course_int_id();
     $path = Database::escape_string($path);
 
-	if (api_is_allowed_to_edit()) {
-		$sql = "SELECT work.id FROM $TBL_STUDENT_PUBLICATION AS work, $TBL_PROP_TABLE AS props
-				WHERE
-				    props.c_id = $course_id AND
-				    work.c_id = $course_id AND
-				    props.tool='work' AND
-				    work.id=props.ref AND
-				    work.url LIKE 'work/".$path."%' AND
-				    work.filetype='file' AND
-				    props.visibility<>'2'";
-	} else {
-		$sql = "SELECT work.id FROM $TBL_STUDENT_PUBLICATION AS work,$TBL_PROP_TABLE AS props
-				WHERE
+    if (api_is_allowed_to_edit()) {
+        $sql = "SELECT work.id FROM $TBL_STUDENT_PUBLICATION AS work, $TBL_PROP_TABLE AS props
+                WHERE
+                    props.c_id = $course_id AND
+                    work.c_id = $course_id AND
+                    props.tool='work' AND
+                    work.id=props.ref AND
+                    work.url LIKE 'work/".$path."%' AND
+                    work.filetype='file' AND
+                    props.visibility<>'2'";
+    } else {
+        $sql = "SELECT work.id FROM $TBL_STUDENT_PUBLICATION AS work,$TBL_PROP_TABLE AS props
+                WHERE
                     props.c_id = $course_id AND
                     work.c_id = $course_id AND
                     props.tool='work' AND
@@ -1486,15 +1486,15 @@ function get_work_id($path)
                     work.filetype='file' AND
                     props.visibility<>'2' AND
                     props.lastedit_user_id = '".api_get_user_id()."'";
-	}
-	$result = Database::query($sql);
-	$num_rows = Database::num_rows($result);
+    }
+    $result = Database::query($sql);
+    $num_rows = Database::num_rows($result);
 
-	if ($result && $num_rows > 0) {
-		return true;
-	} else {
-		return false;
-	}
+    if ($result && $num_rows > 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -1505,7 +1505,7 @@ function get_work_id($path)
  */
 function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
 {
-    $work_table 	 = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $user_table      = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -2114,7 +2114,7 @@ function get_work_user_list(
             //$workItem = get_work_data_by_id($item_id);
 
             // Get the author ID for that document from the item_property table
-			$is_author  = false;
+            $is_author  = false;
             $can_read   = false;
 
             $owner_id = $work['user_id'];
@@ -2122,11 +2122,11 @@ function get_work_user_list(
             /* Because a bug found when saving items using the api_item_property_update()
                the field $item_property_data['insert_user_id'] is not reliable. */
 
-			// $item_property_data = api_get_item_property_info(api_get_course_int_id(), 'work', $item_id, api_get_session_id());
-			//if (!$is_allowed_to_edit && $item_property_data['insert_user_id'] == api_get_user_id()) {
+            // $item_property_data = api_get_item_property_info(api_get_course_int_id(), 'work', $item_id, api_get_session_id());
+            //if (!$is_allowed_to_edit && $item_property_data['insert_user_id'] == api_get_user_id()) {
             if (!$is_allowed_to_edit && $owner_id == api_get_user_id()) {
-				$is_author = true;
-			}
+                $is_author = true;
+            }
 
             if ($course_info['show_score'] == 0) {
                 $can_read = true;
@@ -2297,25 +2297,25 @@ function get_work_user_list(
  */
 function send_reminder_users_without_publication($task_data)
 {
-	global $_course;
-	$task_id = $task_data['id'];
-	$task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);
-	$subject = '[' . api_get_setting('siteName') . '] ';
+    global $_course;
+    $task_id = $task_data['id'];
+    $task_title = !empty($task_data['title']) ? $task_data['title'] : basename($task_data['url']);
+    $subject = '[' . api_get_setting('siteName') . '] ';
 
-	// The body can be as long as you wish, and any combination of text and variables
-	$content = get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName').' : '.$_course['name']."\n";
-	$content .= get_lang('WorkName').' : '.$task_title."\n";
+    // The body can be as long as you wish, and any combination of text and variables
+    $content = get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName').' : '.$_course['name']."\n";
+    $content .= get_lang('WorkName').' : '.$task_title."\n";
 
-	$list_users = get_list_users_without_publication($task_id);
+    $list_users = get_list_users_without_publication($task_id);
 
     $mails_sent_to = array();
-	foreach ($list_users as $user) {
-		$name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);
+    foreach ($list_users as $user) {
+        $name_user = api_get_person_name($user[1], $user[0], null, PERSON_NAME_EMAIL_ADDRESS);
         $dear_line = get_lang('Dear')." ".api_get_person_name($user[1], $user[0]) .", \n\n";
         $body      = $dear_line.$content;
         MessageManager::send_message($user[3], $subject, $body);
         $mails_sent_to[] = $name_user;
-	}
+    }
     return $mails_sent_to;
 }
 
@@ -2329,38 +2329,50 @@ function send_reminder_users_without_publication($task_data)
  */
 function send_email_on_homework_creation($course_id)
 {
-	// Get the students of the course
-	$session_id = api_get_session_id();
-	if (empty($session_id)) {
-		$students = CourseManager::get_student_list_from_course_code($course_id);
-	} else {
-		$students = CourseManager::get_student_list_from_course_code($course_id, true, $session_id);
-	}
-	$emailsubject = '[' . api_get_setting('siteName') . '] '.get_lang('HomeworkCreated');
-	$currentUser = api_get_user_info(api_get_user_id());
-	if (!empty($students)) {
-		foreach($students as $student) {
-			$user_info = api_get_user_info($student["user_id"]);
-			if(!empty($user_info["mail"])) {
-				$name_user = api_get_person_name($user_info["firstname"], $user_info["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
-				$emailbody = get_lang('Dear')." ".$name_user.",\n\n";
-				$emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
-				$emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
+    // Get the students of the course
+    $session_id = api_get_session_id();
+    if (empty($session_id)) {
+        $students = CourseManager::get_student_list_from_course_code($course_id);
+    } else {
+        $students = CourseManager::get_student_list_from_course_code($course_id, true, $session_id);
+    }
+    $emailsubject = '[' . api_get_setting('siteName') . '] '.get_lang('HomeworkCreated');
+    $currentUser = api_get_user_info(api_get_user_id());
+    if (!empty($students)) {
+        foreach($students as $student) {
+            $user_info = api_get_user_info($student["user_id"]);
+            if(!empty($user_info["mail"])) {
+                $name_user = api_get_person_name($user_info["firstname"], $user_info["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
+                $emailbody = get_lang('Dear')." ".$name_user.",\n\n";
+                $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
+                $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
 
-                $additional_parameters = array(
+                $additionalParameters = array(
                     'smsType' => ASSIGNMENT_BEEN_CREATED_COURSE,
                     'userId' => $student["user_id"],
                     'courseTitle' => $course_id
                 );
 
-                api_mail_html($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name(
-                    $currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS),
-                    $currentUser["mail"], null, null, null, $additional_parameters);
-
-                //@api_mail($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name($currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), $currentUser["mail"]);
-			}
-		}
-	}
+                api_mail_html(
+                    $name_user,
+                    $user_info["mail"],
+                    $emailsubject,
+                    $emailbody,
+                    api_get_person_name(
+                        $currentUser["firstname"],
+                        $currentUser["lastname"],
+                        null,
+                        PERSON_NAME_EMAIL_ADDRESS
+                    ),
+                    $currentUser["mail"],
+                    null,
+                    null,
+                    null,
+                    $additionalParameters
+                );
+            }
+        }
+    }
 }
 
 /**
@@ -2369,20 +2381,20 @@ function send_email_on_homework_creation($course_id)
  */
 function is_work_exist_by_url($url)
 {
-	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$url = Database::escape_string($url);
-	$sql = "SELECT id FROM $work_table WHERE url='$url'";
-	$result = Database::query($sql);
-	if (Database::num_rows($result)> 0) {
-		$row = Database::fetch_row($result);
-		if (empty($row)) {
-			return false;
-		} else {
-			return true;
-		}
-	} else {
-		return false;
-	}
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $url = Database::escape_string($url);
+    $sql = "SELECT id FROM $work_table WHERE url='$url'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result)> 0) {
+        $row = Database::fetch_row($result);
+        if (empty($row)) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -2393,12 +2405,12 @@ function is_work_exist_by_url($url)
  */
 function make_select($name, $values, $checked = '')
 {
-	$output = '<select name="'.$name.'" id="'.$name.'">';
-	foreach ($values as $key => $value) {
-		$output .= '<option value="'.$key.'" '.(($checked==$key) ? 'selected="selected"' : '').'>'.$value.'</option>';
-	}
-	$output .= '</select>';
-	return $output;
+    $output = '<select name="'.$name.'" id="'.$name.'">';
+    foreach ($values as $key => $value) {
+        $output .= '<option value="'.$key.'" '.(($checked==$key) ? 'selected="selected"' : '').'>'.$value.'</option>';
+    }
+    $output .= '</select>';
+    return $output;
 }
 
 /**
@@ -2409,11 +2421,11 @@ function make_select($name, $values, $checked = '')
  */
 function make_checkbox($name, $checked = '', $label = null)
 {
-	$check = '<input id ="'.$name.'" type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
-	if (!empty($label)) {
-		$check .="<label for ='$name'>$label</label>";
-	}
-	return $check;
+    $check = '<input id ="'.$name.'" type="checkbox" value="1" name="'.$name.'" '.((!empty($checked))?'checked="checked"':'').'/>';
+    if (!empty($label)) {
+        $check .="<label for ='$name'>$label</label>";
+    }
+    return $check;
 }
 
 /**
@@ -2423,21 +2435,21 @@ function make_checkbox($name, $checked = '', $label = null)
  */
 function draw_date_picker($prefix, $default = '')
 {
-	if (empty($default)) {
-		$default = api_get_local_time();
-	}
-	$parts = explode(' ', $default);
-	list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
-	list($d_hour, $d_minute) = explode(':', $parts[1]);
+    if (empty($default)) {
+        $default = api_get_local_time();
+    }
+    $parts = explode(' ', $default);
+    list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
+    list($d_hour, $d_minute) = explode(':', $parts[1]);
 
-	$minute = range(10, 59);
-	array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
-	$date_form = make_select($prefix.'_day', array_combine(range(1, 31), range(1, 31)), $d_day);
-	$date_form .= make_select($prefix.'_month', array_combine(range(1, 12), api_get_months_long()), $d_month);
-	$date_form .= make_select($prefix.'_year', array($d_year => $d_year, $d_year + 1 => $d_year + 1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
-	$date_form .= make_select($prefix.'_hour', array_combine(range(0, 23), range(0, 23)), $d_hour).' : ';
-	$date_form .= make_select($prefix.'_minute', $minute, $d_minute);
-	return $date_form;
+    $minute = range(10, 59);
+    array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
+    $date_form = make_select($prefix.'_day', array_combine(range(1, 31), range(1, 31)), $d_day);
+    $date_form .= make_select($prefix.'_month', array_combine(range(1, 12), api_get_months_long()), $d_month);
+    $date_form .= make_select($prefix.'_year', array($d_year => $d_year, $d_year + 1 => $d_year + 1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
+    $date_form .= make_select($prefix.'_hour', array_combine(range(0, 23), range(0, 23)), $d_hour).' : ';
+    $date_form .= make_select($prefix.'_minute', $minute, $d_minute);
+    return $date_form;
 }
 
 /**
@@ -2448,7 +2460,7 @@ function draw_date_picker($prefix, $default = '')
  */
 function get_date_from_select($prefix, $array = array())
 {
-	return
+    return
         $array[$prefix]['year'].'-'.
         two_digits($array[$prefix]['month']).'-'.
         two_digits($array[$prefix]['day']).' '.
@@ -2516,45 +2528,45 @@ function user_is_author($itemId, $userId = null, $courseId = null, $sessionId = 
  */
 function get_list_users_without_publication($task_id, $studentId = null)
 {
-	$work_table 			 = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$table_course_user 		 = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	$table_user 			 = Database::get_main_table(TABLE_MAIN_USER);
-	$session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $work_table              = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $table_course_user       = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $table_user              = Database::get_main_table(TABLE_MAIN_USER);
+    $session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-	//condition for the session
-	$session_id    = api_get_session_id();
-	$course_id     = api_get_course_int_id();
+    //condition for the session
+    $session_id    = api_get_session_id();
+    $course_id     = api_get_course_int_id();
 
-	$task_id = intval($task_id);
+    $task_id = intval($task_id);
 
-	if ($session_id == 0) {
-		$sql = "SELECT user_id as id FROM $work_table
-		        WHERE
-		            c_id = $course_id AND
-		            parent_id='$task_id' AND
-		            active IN (0, 1)";
-	} else {
-		$sql = "SELECT user_id as id FROM $work_table
-		        WHERE
-		            c_id = $course_id AND
-		            parent_id='$task_id' AND
-		            session_id='".$session_id."' AND
-		            active IN (0, 1)";
-	}
+    if ($session_id == 0) {
+        $sql = "SELECT user_id as id FROM $work_table
+                WHERE
+                    c_id = $course_id AND
+                    parent_id='$task_id' AND
+                    active IN (0, 1)";
+    } else {
+        $sql = "SELECT user_id as id FROM $work_table
+                WHERE
+                    c_id = $course_id AND
+                    parent_id='$task_id' AND
+                    session_id='".$session_id."' AND
+                    active IN (0, 1)";
+    }
 
-	$result = Database::query($sql);
-	$users_with_tasks = array();
-	while($row = Database::fetch_array($result)) {
-		$users_with_tasks[] = $row['id'];
-	}
+    $result = Database::query($sql);
+    $users_with_tasks = array();
+    while($row = Database::fetch_array($result)) {
+        $users_with_tasks[] = $row['id'];
+    }
 
-	if ($session_id == 0) {
-		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u
-		              WHERE u.status != 1 and cu.course_code='".api_get_course_id()."' AND u.user_id = cu.user_id";
-	} else {
-		$sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u
-		              WHERE u.status != 1 and cu.course_code='".api_get_course_id()."' AND u.user_id = cu.id_user and cu.id_session = '".$session_id."'";
-	}
+    if ($session_id == 0) {
+        $sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u
+                      WHERE u.status != 1 and cu.course_code='".api_get_course_id()."' AND u.user_id = cu.user_id";
+    } else {
+        $sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u
+                      WHERE u.status != 1 and cu.course_code='".api_get_course_id()."' AND u.user_id = cu.id_user and cu.id_session = '".$session_id."'";
+    }
 
     if (!empty($studentId)) {
         $sql_users.= " AND u.user_id = ".intval($studentId);
@@ -2573,25 +2585,25 @@ function get_list_users_without_publication($task_id, $studentId = null)
         }
     }
 
-	$result_users = Database::query($sql_users);
-	$users_without_tasks = array();
-	while ($row_users = Database::fetch_row($result_users)) {
+    $result_users = Database::query($sql_users);
+    $users_without_tasks = array();
+    while ($row_users = Database::fetch_row($result_users)) {
 
-		if (in_array($row_users[0], $users_with_tasks)) {
+        if (in_array($row_users[0], $users_with_tasks)) {
             continue;
         }
 
-		if ($group_id && !in_array($row_users[0], $new_group_user_list)) {
+        if ($group_id && !in_array($row_users[0], $new_group_user_list)) {
             continue;
         }
         $userId = $row_users[0];
         $row_users[0] = $row_users[1];
         $row_users[1] = $row_users[2];
-		$row_users[2] = Display::encrypted_mailto_link($row_users[3]);
+        $row_users[2] = Display::encrypted_mailto_link($row_users[3]);
         $row_users[3] = $userId;
-		$users_without_tasks[] = $row_users;
-	}
-	return $users_without_tasks;
+        $users_without_tasks[] = $row_users;
+    }
+    return $users_without_tasks;
 }
 
 /**
@@ -2605,35 +2617,35 @@ function get_list_users_without_publication($task_id, $studentId = null)
  */
 function display_list_users_without_publication($task_id, $studentId = null)
 {
-	global $origin;
-	$table_header[] = array(get_lang('LastName'), true);
-	$table_header[] = array(get_lang('FirstName'), true);
-	$table_header[] = array(get_lang('Email'), true);
+    global $origin;
+    $table_header[] = array(get_lang('LastName'), true);
+    $table_header[] = array(get_lang('FirstName'), true);
+    $table_header[] = array(get_lang('Email'), true);
 
-	$data = get_list_users_without_publication($task_id);
+    $data = get_list_users_without_publication($task_id);
 
-	$sorting_options = array();
-	$sorting_options['column'] = 1;
-	$paging_options = array();
-	$my_params = array();
+    $sorting_options = array();
+    $sorting_options['column'] = 1;
+    $paging_options = array();
+    $my_params = array();
 
-	if (isset($_GET['curdirpath'])) {
-		$my_params['curdirpath'] = Security::remove_XSS($_GET['curdirpath']);
-	}
-	if (isset($_GET['edit_dir'])) {
-		$my_params['edit_dir'] = Security::remove_XSS($_GET['edit_dir']);
-	}
-	if (isset($_GET['list'])) {
-		$my_params['list'] = Security::remove_XSS($_GET['list']);
-	}
-	$my_params['origin'] = $origin;
+    if (isset($_GET['curdirpath'])) {
+        $my_params['curdirpath'] = Security::remove_XSS($_GET['curdirpath']);
+    }
+    if (isset($_GET['edit_dir'])) {
+        $my_params['edit_dir'] = Security::remove_XSS($_GET['edit_dir']);
+    }
+    if (isset($_GET['list'])) {
+        $my_params['list'] = Security::remove_XSS($_GET['list']);
+    }
+    $my_params['origin'] = $origin;
     $my_params['id'] = intval($_GET['id']);
 
-	//$column_show
-	$column_show[] = 1;
-	$column_show[] = 1;
-	$column_show[] = 1;
-	Display::display_sortable_config_table('work', $table_header, $data, $sorting_options, $paging_options, $my_params, $column_show);
+    //$column_show
+    $column_show[] = 1;
+    $column_show[] = 1;
+    $column_show[] = 1;
+    Display::display_sortable_config_table('work', $table_header, $data, $sorting_options, $paging_options, $my_params, $column_show);
 }
 
 /**
@@ -2860,7 +2872,7 @@ function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessio
             $sessionId,
             null,
             null,
-            null,
+            STUDENT,
             $getCount
         );
     } else {
@@ -3169,8 +3181,8 @@ function getWorkDateValidationStatus($homework) {
             $time_now = time();
 
             if (!empty($homework['expires_on']) && $homework['expires_on'] != '0000-00-00 00:00:00') {
-                $time_expires 	= api_strtotime($homework['expires_on'], 'UTC');
-                $difference 	= $time_expires - $time_now;
+                $time_expires   = api_strtotime($homework['expires_on'], 'UTC');
+                $difference     = $time_expires - $time_now;
                 if ($difference < 0) {
                     $has_expired = true;
                 }
@@ -3181,14 +3193,14 @@ function getWorkDateValidationStatus($homework) {
             }
 
             if (!empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00') {
-                $time_ends 		= api_strtotime($homework['ends_on'], 'UTC');
-                $difference2 	= $time_ends - $time_now;
+                $time_ends      = api_strtotime($homework['ends_on'], 'UTC');
+                $difference2    = $time_ends - $time_now;
                 if ($difference2 < 0) {
                     $has_ended = true;
                 }
             }
 
-            $ends_on 	= api_convert_and_format_date($homework['ends_on']);
+            $ends_on    = api_convert_and_format_date($homework['ends_on']);
             $expires_on = api_convert_and_format_date($homework['expires_on']);
         }
 
@@ -3374,19 +3386,19 @@ function event_upload($docId, $userId, $courseCode, $sessionId)
     $courseCode = Database::escape_string($courseCode);
 
     $sql = "INSERT INTO ".$table."
-        		( upload_user_id,
-        		  upload_cours_id,
-        		  upload_work_id,
-        		  upload_date,
-        		  upload_session_id
-        		)
-        		VALUES (
-        		 ".$userId.",
-        		 '".$courseCode."',
-        		 '".$docId."',
-        		 '".$reallyNow."',
-        		 '".$sessionId."'
-        		)";
+                ( upload_user_id,
+                  upload_cours_id,
+                  upload_work_id,
+                  upload_date,
+                  upload_session_id
+                )
+                VALUES (
+                 ".$userId.",
+                 '".$courseCode."',
+                 '".$docId."',
+                 '".$reallyNow."',
+                 '".$sessionId."'
+                )";
     Database::query($sql);
     return 1;
 }
@@ -3437,18 +3449,18 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
     if ($saveWork) {
         $active = '1';
         $sql = "INSERT INTO ".$work_table." SET
-                   c_id 		= $courseId ,
-                   url         	= '".$url . "',
-                   title       	= '".Database::escape_string($title)."',
-                   description	= '".Database::escape_string($description)."',
+                   c_id         = $courseId ,
+                   url          = '".$url . "',
+                   title        = '".Database::escape_string($title)."',
+                   description  = '".Database::escape_string($description)."',
                    contains_file = '".$contains_file."',
-                   active		= '".$active."',
-                   accepted		= '1',
+                   active       = '".$active."',
+                   accepted     = '1',
                    post_group_id = '".$groupId."',
-                   sent_date	=  '".api_get_utc_datetime()."',
-                   parent_id 	=  '".$workInfo['id']."' ,
-                   session_id	= '".$sessionId."',
-                   user_id 		= '".$userId."'";
+                   sent_date    =  '".api_get_utc_datetime()."',
+                   parent_id    =  '".$workInfo['id']."' ,
+                   session_id   = '".$sessionId."',
+                   user_id      = '".$userId."'";
 
         Database::query($sql);
         $workId = Database::insert_id();
@@ -3507,33 +3519,33 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
     $course_id = $courseInfo['real_id'];
 
-    $directory 		= replace_dangerous_char($params['new_dir']);
-    $directory 		= disable_dangerous_file($directory);
-    $created_dir 	= create_unexisting_work_directory($base_work_dir, $directory);
+    $directory      = replace_dangerous_char($params['new_dir']);
+    $directory      = disable_dangerous_file($directory);
+    $created_dir    = create_unexisting_work_directory($base_work_dir, $directory);
 
     if (!empty($created_dir)) {
         $dir_name_sql = '/'.$created_dir;
         $today = api_get_utc_datetime();
         $sql = "INSERT INTO " . $work_table . " SET
-                c_id				= $course_id,
-                url         		= '".Database::escape_string($dir_name_sql)."',
+                c_id                = $course_id,
+                url                 = '".Database::escape_string($dir_name_sql)."',
                 title               = '".Database::escape_string($params['new_dir'])."',
-                description 		= '".Database::escape_string($params['description'])."',
-                author      		= '',
+                description         = '".Database::escape_string($params['description'])."',
+                author              = '',
                 active              = '1',
-                accepted			= '1',
+                accepted            = '1',
                 filetype            = 'folder',
                 post_group_id       = '".$group_id."',
                 sent_date           = '".$today."',
                 qualification       = '".(($params['qualification'] != '') ? Database::escape_string($params['qualification']) : '') ."',
                 parent_id           = '',
                 qualificator_id     = '',
-                date_of_qualification	= '0000-00-00 00:00:00',
+                date_of_qualification   = '0000-00-00 00:00:00',
                 weight              = '".Database::escape_string($params['weight'])."',
                 session_id          = '".$session_id."',
                 allow_text_assignment = '".Database::escape_string($params['allow_text_assignment'])."',
                 contains_file       = 0,
-                user_id 			= '".$user_id."'";
+                user_id             = '".$user_id."'";
 
         Database::query($sql);
 
@@ -3623,7 +3635,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
         if (!empty($params['enableExpiryDate'])) {
             $end_date = $params['expires_on'];
-            $date	  = $end_date;
+            $date     = $end_date;
         }
 
         $title = sprintf(get_lang('HandingOverOfTaskX'), $params['new_dir']);
@@ -3669,11 +3681,11 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
         $sql = "INSERT INTO $table SET
                 c_id = $course_id ,
-                expires_on       		= '".Database::escape_string($expiryDate)."',
-                ends_on        	 		= '".Database::escape_string($endDate)."',
-                add_to_calendar  		= $agendaId,
-                enable_qualification 	= '$qualification',
-                publication_id 			= '$workId'";
+                expires_on              = '".Database::escape_string($expiryDate)."',
+                ends_on                 = '".Database::escape_string($endDate)."',
+                add_to_calendar         = $agendaId,
+                enable_qualification    = '$qualification',
+                publication_id          = '$workId'";
         Database::query($sql);
 
         $my_last_id = Database::insert_id();
@@ -3782,8 +3794,14 @@ function deleteWorkItem($item_id, $courseInfo)
     $course_id = $courseInfo['real_id'];
 
     if (($is_allowed_to_edit && $locked == false) ||
-        ($locked == false AND $is_author && api_get_course_setting('student_delete_own_publication') == 1 && $work_data['qualificator_id'] == 0)) {
-        //we found the current user is the author
+        (
+            $locked == false &&
+            $is_author &&
+            api_get_course_setting('student_delete_own_publication') == 1 &&
+            $work_data['qualificator_id'] == 0
+        )
+    ) {
+        // We found the current user is the author
         $sql = "SELECT url, contains_file FROM ".$work_table." WHERE c_id = $course_id AND id = $item_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -3955,7 +3973,7 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
 {
     $showScore = intval($showScore);
     $courseId = api_get_course_int_id();
-    $main_course_table 	= Database :: get_main_table(TABLE_MAIN_COURSE);
+    $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
     $table_course_setting = Database :: get_course_table(TOOL_COURSE_SETTING);
 
     $query = "UPDATE ".$main_course_table." SET show_score = '".$showScore."'
@@ -4259,7 +4277,7 @@ function getFileContents($id, $course_info, $sessionId = 0)
 
             /*
             field show_score in table course :
-                0 => 	New documents are visible for all users
+                0 =>    New documents are visible for all users
                 1 =>    New documents are only visible for the teacher(s)
             field visibility in table item_property :
                 0 => eye closed, invisible for all students

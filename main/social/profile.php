@@ -18,6 +18,7 @@ if (api_get_setting('allow_social_tool') !='true') {
 }
 
 $user_id = api_get_user_id();
+$isAdmin = api_is_platform_admin($user_id);
 
 $show_full_profile = true;
 //social tab
@@ -65,6 +66,13 @@ if (isset($_GET['u'])) {
 } else {
     $user_info    = UserManager::get_user_info_by_id($user_id);
 }
+
+if ($user_info['user_id'] == api_get_user_id()) {
+    $isSelfUser = true;
+} else {
+    $isSelfUser = false;
+}
+$userIsOnline = user_is_online($user_id);
 $libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
@@ -302,7 +310,8 @@ if (is_array($personal_course_list)) {
     $course_list_code = array_unique_dimensional($course_list_code);
 }
 
-$social_left_content = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
+$social_avatar_block = SocialManager::show_social_avatar_block('shared_profile', null, $user_id);
+$social_menu_block = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
 
 $personal_info = null;
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
@@ -314,12 +323,14 @@ if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
 
 if ($show_full_profile) {
     $personal_info .=  '<dl class="dl-horizontal">';
-    $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'    </dd>';
+    if ($isAdmin || $isSelfUser) {
+        $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'    </dd>';
+    }
     if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
         $personal_info .=  '<dt>'.get_lang('Name')
             .'</dt><dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
     }
-    if (!empty($user_info['official_code'])) {
+    if (($isAdmin || $isSelfUser) && !empty($user_info['official_code'])) {
         $personal_info .=  '<dt>'.get_lang('OfficialCode').'</dt><dd>'.$user_info['official_code'].'</dd>';
     }
     if (!empty($user_info['email'])) {
@@ -334,7 +345,9 @@ if ($show_full_profile) {
 } else {
     $personal_info .=  '<dl class="dl-horizontal">';
     if (!empty($user_info['username'])) {
-        $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
+        if ($isAdmin || $isSelfUser) {
+            $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
+        }
     }
     $personal_info .=  '</dl>';
 }
@@ -763,7 +776,8 @@ $social_right_content .= MessageManager::generate_invitation_form('send_invitati
 
 
 $tpl = new Template(get_lang('Social'));
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('layout/social_layout.tpl');

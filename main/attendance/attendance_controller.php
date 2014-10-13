@@ -389,11 +389,11 @@
 
     /**
      * It's used to print attendance sheet
-     * @param string action
-     * @param int    attendance id
+     * @param string $action
+     * @param int    $attendance_id
      */
-    public function attendance_sheet_export_to_pdf($action, $attendance_id, $student_id = 0, $course_id = '') {
-
+    public function attendance_sheet_export_to_pdf($action, $attendance_id, $student_id = 0, $course_id = '')
+    {
         $attendance = new Attendance();
         $courseInfo = CourseManager::get_course_information($course_id);
 
@@ -429,12 +429,9 @@
             $data_array['user_id'] = $user_id;
         }
 
-
-
         $data_array['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);
 
-        //Set headers pdf
-
+        // Set headers pdf.
         $courseCategory = CourseManager::get_course_category($courseInfo['category_code']);
         $teacherInfo    = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
         $teacherName = null;
@@ -444,21 +441,17 @@
                 $teacherName.= $dados['firstname']." ".$dados['lastname'];
         }
 
-        // Get data table - Marco - ordenacao fixa - just fullname
+        // Get data table
 
         $data_table = array();
 
         $head_table = array('#', get_lang('Name'));
         foreach ($data_array['attendant_calendar'] as $class_day) {
-            //$head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_SHORT).' <br />'.api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT);
             $head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER_NO_YEAR);
         }
         $data_table[] = $head_table;
-
         $dataClass = array();
-
         $max_dates_per_page = 10;
-
         $data_attendant_calendar = $data_array['attendant_calendar'];
         $data_users_presence = $data_array['users_presence'];
         $count = 1;

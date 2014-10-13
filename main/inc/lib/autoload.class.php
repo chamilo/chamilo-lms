@@ -819,7 +819,8 @@ class Autoload
         $result['ScoreDisplayForm'] = '/main/gradebook/lib/fe/scoredisplayform.class.php';
         $result['ScormDocument'] = '/main/coursecopy/classes/ScormDocument.class.php';
         $result['Security'] = '/main/inc/lib/security.lib.php';
-        $result['SessionHandler'] = '/main/inc/lib/session_handler.class.php';
+        $result['SessionHandlerDatabase'] = '/main/inc/lib/session_handler.class.php';
+        $result['SessionHandlerMemcache'] = '/main/inc/lib/session_handler_memcache.class.php';
         $result['SessionManager'] = '/main/inc/lib/sessionmanager.lib.php';
         $result['Shibboleth\Admin'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Shibboleth\AdminStore'] = '/main/auth/shibboleth/app/model/admin.class.php';

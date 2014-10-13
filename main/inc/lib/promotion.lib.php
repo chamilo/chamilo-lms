@@ -1,20 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	This class provides methods for the promotion management.
-*	Include/require it in your code to use its features.
-*	@package chamilo.library
-*/
-/**
- * Code
- */
 
 require_once 'career.lib.php';
 require_once 'fckeditor/fckeditor.php';
 
 define ('PROMOTION_STATUS_ACTIVE',  1);
 define ('PROMOTION_STATUS_INACTIVE', 0);
+
 /**
+ * Class Promotion
+ * This class provides methods for the promotion management.
+ * Include/require it in your code to use its features.
  * @package chamilo.library
  */
 class Promotion extends Model

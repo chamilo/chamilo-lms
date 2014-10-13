@@ -1,19 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- *   This class provides methods for the notebook management.
- *   Include/require it in your code to use its features.
- * @package chamilo.library
- */
-/**
- * Code
- */
+
 define ('SKILL_TYPE_REQUIREMENT', 'required');
 define ('SKILL_TYPE_ACQUIRED', 'acquired');
 define ('SKILL_TYPE_BOTH', 'both');
 
 require_once api_get_path(LIBRARY_PATH).'model.lib.php';
 
+/**
+ * Class SkillProfile
+ * @package chamilo.library
+ */
 class SkillProfile extends Model
 {
     public $columns = array('id', 'name', 'description');
@@ -31,7 +28,26 @@ class SkillProfile extends Model
         $profiles = Database::store_result($result, 'ASSOC');
         return $profiles;
     }
+    
+    /**
+    * This function is for editing profile info from profile_id.
+    * @param int $profileId
+    * @param string $name
+    * @param string $description
+    */
+    public function UpdateProfileInfo($profileId, $name, $description)
+    {
+        $sql = "UPDATE $this->table SET name = '$name', description = '$description' WHERE id = $profileId ";
+        $result = Database::query($sql);
+        return $result;
+    }
 
+    /**
+     * Call the save method of the parent class and the SkillRelProfile object
+     * @param array Params
+     * @param bool Whether to show the query in parent save() method
+     * @return mixed Profile ID or false if incomplete params
+     */
     public function save($params, $show_query = false)
     {
         if (!empty($params)) {
@@ -58,6 +74,7 @@ class SkillRelProfile extends Model
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
+        $this->tableProfile = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
     }
 
     public function get_skills_by_profile($profile_id)
@@ -71,8 +88,20 @@ class SkillRelProfile extends Model
         }
         return $return_array;
     }
-}
 
+    /**
+    * This function is for getting profile info from profile_id.
+    * @param int $profileId
+    */
+
+    public function getProfileInfo($profileId)
+    { 
+        $sql = "SELECT * FROM $this->table p INNER JOIN $this->tableProfile pr ON(pr.id = p.profile_id) WHERE p.profile_id = ".intval($profileId);
+        $result = Database::query($sql);
+        $profileData = Database::fetch_array($result, 'ASSOC');
+        return $profileData;
+    }
+}
 class SkillRelSkill extends Model
 {
     public $columns = array('skill_id', 'parent_id', 'relation_type', 'level');

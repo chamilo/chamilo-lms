@@ -1,19 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *
- * * Class that is responsible for generating diagnostic information about the system
- *
+ * Class Diagnoser
+ * Class that is responsible for generating diagnostic information about the system
  *
  * @package chamilo.diagnoser
  * @author Ivan Tcholakov, 2008, initiall proposal and sample code.
  * @author spou595, 2009, implementation for Chamilo 2.x
  * @author Julio Montoya <gugli100@gmail.com>, 2010, port to chamilo 1.8.7, Some fixes
  *
- */
-/**
- * Diagnoser class
- * @package chamilo.diagnoser
  */
 class Diagnoser
 {

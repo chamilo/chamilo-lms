@@ -54,6 +54,17 @@ class StreamHandlerTest extends TestCase
     }
 
     /**
+     * @covers Monolog\Handler\StreamHandler::__construct
+     * @covers Monolog\Handler\StreamHandler::write
+     */
+    public function testWriteLocking()
+    {
+        $temp = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'monolog_locked_log';
+        $handler = new StreamHandler($temp, Logger::DEBUG, true, null, true);
+        $handler->handle($this->getRecord());
+    }
+
+    /**
      * @expectedException LogicException
      * @covers Monolog\Handler\StreamHandler::__construct
      * @covers Monolog\Handler\StreamHandler::write
@@ -64,6 +75,25 @@ class StreamHandlerTest extends TestCase
         $handler->handle($this->getRecord());
     }
 
+    public function invalidArgumentProvider()
+    {
+        return array(
+            array(1),
+            array(array()),
+            array(array('bogus://url')),
+        );
+    }
+    
+    /**
+     * @dataProvider invalidArgumentProvider
+     * @expectedException InvalidArgumentException
+     * @covers Monolog\Handler\StreamHandler::__construct
+     */
+    public function testWriteInvalidArgument($invalidArgument)
+    {
+        $handler = new StreamHandler($invalidArgument);
+    }
+    
     /**
      * @expectedException UnexpectedValueException
      * @covers Monolog\Handler\StreamHandler::__construct

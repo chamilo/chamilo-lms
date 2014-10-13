@@ -1,14 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	Exercise preview
 *
 *	@package chamilo.exercise
 * 	@author Julio Montoya <gugli100@gmail.com>
 */
-/**
- * Code
- */
 
 use \ChamiloSession as Session;
 
@@ -19,7 +17,7 @@ require_once 'exercise.lib.php';
 $current_course_tool  = TOOL_QUIZ;
 
 // Clear the exercise session just in case
-if (isset ($_SESSION['objExercise'])) {
+if (isset($_SESSION['objExercise'])) {
 	Session::erase('objExercise');
 }
 
@@ -36,13 +34,13 @@ if (!$result) {
 	api_not_allowed(true);
 }
 
-$gradebook 			= isset($_GET['gradebook'])             ? Security :: remove_XSS($_GET['gradebook']) : null;
-$learnpath_id       = isset($_REQUEST['learnpath_id']) 		? intval($_REQUEST['learnpath_id']) : null;
-$learnpath_item_id  = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
-$origin  			= isset($_REQUEST['origin']) 			? Security::remove_XSS($_REQUEST['origin']) : null;
+$gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
+$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : null;
 
-$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
-$interbreadcrumb[] = array ("url" => "#","name" => $objExercise->name);
+$interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
+$interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 
 $time_control = false;
 $clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
@@ -75,10 +73,13 @@ $message = '';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $edit_link = '';
 if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
-	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id);
+	$edit_link = Display::url(
+        Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
+        api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id
+    );
 }
 
-//Exercise name
+// Exercise name.
 $html .= Display::page_header($objExercise->name.' '.$edit_link);
 
 //Exercise description
@@ -130,7 +131,15 @@ if ($visible_return['value'] == false) {
     }
 }
 
-$attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id, 'desc');
+$attempts = get_exercise_results_by_user(
+    api_get_user_id(),
+    $objExercise->id,
+    api_get_course_id(),
+    api_get_session_id(),
+    $learnpath_id,
+    $learnpath_item_id,
+    'desc'
+);
 $counter = count($attempts);
 
 $my_attempt_array = array();
@@ -148,7 +157,7 @@ if ($current_browser == 'Internet Explorer') {
     $btn_class = '';
 }
 
-if (!empty($attempts)) {
+if (!empty($attempts) && $visible_return['value'] == true) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
 
@@ -156,11 +165,7 @@ if (!empty($attempts)) {
             $attempt_result['exe_result'],
             $attempt_result['exe_weighting']
         );
-        $attempt_url = api_get_path(
-                WEB_CODE_PATH
-            ) . 'exercice/result.php?' . api_get_cidreq(
-            ) . '&amp;id=' . $attempt_result['exe_id'] . '&amp;id_session=' . api_get_session_id(
-            ) . '&amp;height=500&amp;width=950' . $url_suffix;
+        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?' . api_get_cidreq() . '&amp;id=' . $attempt_result['exe_id'] . '&amp;id_session=' . api_get_session_id() . '&amp;height=500&amp;width=950' . $url_suffix;
         $attempt_link = Display::url(
             get_lang('Show'),
             $attempt_url,
@@ -189,8 +194,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES
             )
-        )
-        ) {
+        )) {
             $row['result'] = $score;
         }
 

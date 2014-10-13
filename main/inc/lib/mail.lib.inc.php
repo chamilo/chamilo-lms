@@ -9,7 +9,6 @@
  */
 require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
 
-
 // A regular expression for testing against valid email addresses.
 // It should actually be revised for using the complete RFC3696 description:
 // http://tools.ietf.org/html/rfc3696#section-3
@@ -22,18 +21,36 @@ require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
  *
  * @author Bert Vanderkimpen ICT&O UGent
  *
- * @param recipient_name   	name of recipient
- * @param recipient_email  	email of recipient
+ * @param recipient_name    name of recipient
+ * @param recipient_email   email of recipient
  * @param message           email body
  * @param subject           email subject
  * @return                  returns true if mail was sent
  * @see                     class.phpmailer.php
  * @deprecated use api_mail_html()
  */
-function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name = '', 
-    $sender_email = '', $extra_headers = '', $additional_parameters = array()) {
-	api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name, 
-        $sender_email, $extra_headers, null, null, $additional_parameters);
+function api_mail(
+    $recipient_name,
+    $recipient_email,
+    $subject,
+    $message,
+    $sender_name = '',
+    $sender_email = '',
+    $extra_headers = '',
+    $additionalParameters = array()
+) {
+    api_mail_html(
+        $recipient_name,
+        $recipient_email,
+        $subject,
+        $message,
+        $sender_name,
+        $sender_email,
+        $extra_headers,
+        null,
+        null,
+        $additionalParameters
+    );
 }
 
 /**
@@ -57,9 +74,18 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @return          returns true if mail was sent
  * @see             class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', 
-    $extra_headers = array(), $data_file = array(), $embedded_image = false, $additional_parameters = array())
-{
+function api_mail_html(
+    $recipient_name,
+    $recipient_email,
+    $subject,
+    $message,
+    $sender_name = '',
+    $sender_email = '',
+    $extra_headers = array(),
+    $data_file = array(),
+    $embedded_image = false,
+    $additionalParameters = array()
+) {
     global $platform_email;
 
     $mail = new PHPMailer();
@@ -73,6 +99,9 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
         $mail->SMTPAuth = 1;
         $mail->Username = $platform_email['SMTP_USER'];
         $mail->Password = $platform_email['SMTP_PASS'];
+        $mail->From = $platform_email['SMTP_FROM_EMAIL'];
+        $mail->Sender = $platform_email['SMTP_FROM_EMAIL'];
+        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
     }
 
     $mail->Priority = 3; // 5 = low, 1 = high
@@ -92,35 +121,33 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     // $mail->AddAttachment($path);
     // $mail->AddAttachment($path, $filename);
 
-    if ($sender_email != '') {
-        $mail->From         = $sender_email;
-        $mail->Sender       = $sender_email;
-        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
-    } else {
-        $mail->From         = $platform_email['SMTP_FROM_EMAIL'];
-        $mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
-        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
+    if (!$platform_email['SMTP_AUTH']) {
+        if ($sender_email != '') {
+            $mail->From = $sender_email;
+            $mail->Sender = $sender_email;
+            $mail->FromName = $sender_name;
+            //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
+        } else {
+            $mail->From = api_get_setting('emailAdministrator');
+            $mail->Sender = api_get_setting('emailAdministrator');
+            $mail->FromName = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+            //$noReply = api_get_setting('noreply_email_address');
+        }
     }
 
-    if ($sender_name != '') {
-        $mail->FromName = $sender_name;
-    } else {
-        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
-    }
     $mail->Subject = $subject;
-
     $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
 
     // Send embedded image.
     if ($embedded_image) {
-    	// Get all images html inside content.
+        // Get all images html inside content.
         preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
         // Prepare new tag images.
         $new_images_html = array();
         $i = 1;
         if (!empty($m[1])) {
-        	foreach ($m[1] as $image_path) {
-            	$real_path = realpath($image_path);
+            foreach ($m[1] as $image_path) {
+                $real_path = realpath($image_path);
                 $filename  = basename($image_path);
                 $image_cid = $filename.'_'.$i;
                 $encoding = 'base64';
@@ -128,17 +155,17 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
                 $mail->AddEmbeddedImage($real_path, $image_cid, $filename, $encoding, $image_type);
                 $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
                 $i++;
-			}
-		}
+            }
+        }
 
-	    // Replace origin image for new embedded image html.
-	    $x = 0;
-	    if (!empty($m[0])) {
-	    	foreach ($m[0] as $orig_img) {
-	        	$message = str_replace($orig_img, $new_images_html[$x], $message);
-	            $x++;
-	         }
-	    }
+        // Replace origin image for new embedded image html.
+        $x = 0;
+        if (!empty($m[0])) {
+            foreach ($m[0] as $orig_img) {
+                $message = str_replace($orig_img, $new_images_html[$x], $message);
+                $x++;
+             }
+        }
     }
     $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
     $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
@@ -196,7 +223,6 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
     $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
-
     // Send the mail message.
     if (!$mail->Send()) {
 
@@ -208,9 +234,9 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     $plugin = new AppPlugin();
     $installedPluginsList = $plugin->getInstalledPluginListObject();
     foreach ($installedPluginsList as $installedPlugin) {
-        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additional_parameters)) {
-            $clockworksmsObject = new Clockworksms();            
-            $clockworksmsObject->send($additional_parameters);
+        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additionalParameters)) {
+            $clockworksmsObject = new Clockworksms();
+            $clockworksmsObject->send($additionalParameters);
         }
     }
 

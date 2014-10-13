@@ -35,7 +35,7 @@ $form_sent  = 0;
 $errorMsg   = '';
 $users = $sessions = array();
 
-$id = intval($_GET['id']);
+$id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $htmlResult = null;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -80,7 +80,7 @@ echo Display::input('hidden', 'form_sent', '1');
                      'sessions[]',
                      $sessionList,
                      '',
-                     array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'sessions', 'size'=>'15px'),
+                     array('style'=>'width:100%', 'multiple'=>'multiple', 'id'=>'sessions', 'size'=>'15px'),
                      false
                  );
                 ?>
@@ -93,7 +93,7 @@ echo Display::input('hidden', 'form_sent', '1');
                     'sessions_destination[]',
                     $sessionList,
                     '',
-                    array('style'=>'width:360px', 'id'=>'courses', 'size'=>'15px'),
+                    array('style'=>'width:100%', 'id'=>'courses', 'size'=>'15px'),
                     false
                 );
                 ?>

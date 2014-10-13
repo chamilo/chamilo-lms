@@ -10,9 +10,7 @@
  * @todo small letters for table variables
  *
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 
 use \ChamiloSession as Session;
@@ -47,16 +45,17 @@ $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTE
 // General parameters passed via POST/GET
 if ($debug) { error_log('Entered exercise_result.php: '.print_r($_POST,1)); }
 
-if ( empty ( $formSent ) ) {            $formSent       = $_REQUEST['formSent']; }
-if ( empty ( $exerciseResult ) ) {      $exerciseResult = $_SESSION['exerciseResult'];}
-if ( empty ( $questionId ) ) {          $questionId     = $_REQUEST['questionId'];}
-if ( empty ( $choice ) ) {              $choice         = $_REQUEST['choice'];}
-if ( empty ( $questionNum ) ) {         $questionNum    = $_REQUEST['num'];}
-if ( empty ( $nbrQuestions ) ) {        $nbrQuestions   = $_REQUEST['nbrQuestions'];}
-if ( empty ( $questionList ) ) {        $questionList   = $_SESSION['questionList'];}
-if ( empty ( $objExercise ) ) {         $objExercise    = $_SESSION['objExercise'];}
-if ( empty ( $exeId ) ) {               $exeId          = $_REQUEST['id'];}
-if ( empty ( $action ) ) {              $action         = $_REQUEST['action']; }
+if (empty($formSent)) {            $formSent       = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null; }
+if (empty($exerciseResult)) {      $exerciseResult = isset($_SESSION['exerciseResult']) ? $_SESSION['exerciseResult'] : null; }
+if (empty($questionId)) {          $questionId     = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;}
+if (empty($choice)) {              $choice         = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;}
+if (empty($questionNum)) {         $questionNum    = isset($_REQUEST['num']) ? $_REQUEST['num'] : null;}
+if (empty($nbrQuestions)) {        $nbrQuestions   = isset($_REQUEST['nbrQuestions']) ? $_REQUEST['nbrQuestions'] : null;}
+if (empty($questionList)) {        $questionList   = isset($_SESSION['questionList']) ? $_SESSION['questionList'] : null;}
+if (empty($objExercise)) {         $objExercise    = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;}
+if (empty($exeId)) {               $exeId          = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;}
+if (empty($action)) {              $action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;}
+
 
 $id = intval($_REQUEST['id']); //exe id
 
@@ -204,9 +203,9 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 }
 
 if ($show_results || $show_only_total_score) {
-    $user_info   = api_get_user_info($student_id);
+    $user_info = api_get_user_info($student_id);
     //Shows exercise header
-    echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_date));
+    echo $objExercise->show_exercise_result_header($user_info, api_convert_and_format_date($exercise_date));
 }
 
 $i = $totalScore = $totalWeighting = 0;

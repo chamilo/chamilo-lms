@@ -12,6 +12,7 @@ require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanage
 $error                   = '';
 $fileMoved               = array();
 $unmovedDocDueToSamePath = array();
+$finalPath = '';
 if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
     $error = SYS_DISABLED;
 } elseif (empty($_GET['current_folder_path'])) {
@@ -61,6 +62,7 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                         $obj       = new manager($finalPath, false);
 
                         $fileType = $obj->getFileType($finalPath, (is_dir($finalPath) ? true : false));
+                        event_system(LOG_MY_FOLDER_PASTE, LOG_MY_FOLDER_PATH, $finalPath);
 
                         foreach ($fileType as $k => $v) {
                             $tem[$k] = $v;

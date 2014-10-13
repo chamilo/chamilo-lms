@@ -614,6 +614,10 @@ switch ($action) {
             $columns = array(
                 'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions'
             );
+            $officialCodeInList = api_get_configuration_value('show_official_code_exercise_result_list');
+            if ($officialCodeInList == true) {
+                $columns = array_merge(array('official_code'), $columns);
+            }
         }
         $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
         break;

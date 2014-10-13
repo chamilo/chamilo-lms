@@ -1,8 +1,101 @@
 ChangeLog
 =========
 
+3.3.3 (2014-10-09)
+------------------
+
+* #142: `CANCEL` and `REPLY` messages now include the `DTSTART` from the
+  original event.
+* #143: `SCHEDULE-AGENT` on the `ORGANIZER` property is respected.
+* #144: `PARTSTAT=NEEDS-ACTION` is now set for new invites, if no `PARTSTAT` is
+  set to support the inbox feature of iOS.
+* #147: Bugs related to scheduling all-day events.
+* #148: Ignore events that have attendees but no organizer.
+* #149: Avoiding logging errors during timezone detection. This is a workaround
+  for a PHP bug.
+* Support for "Line Islands Standard Time" windows timezone.
+* #154: Correctly work around vCard parameters that have a value but no name.
+
+3.3.2 (2014-09-19)
+------------------
+
+* Changed: iTip broker now sets RSVP status to false when replies are received.
+* #118: iTip Message now has a `getScheduleStatus()` method.
+* #119: Support for detecting 'significant changes'.
+* #120: Support for `SCHEDULE-FORCE-SEND`.
+* #121: iCal demands parameters containing the + sign to be quoted.
+* #122: Don't generate REPLY messages for events that have been cancelled.
+* #123: Added `SUMMARY` to iTip messages.
+* #130: Incorrect validation rules for `RELATED` (should be `RELATED-TO`).
+* #128: `ATTACH` in iCalendar is `URI` by default, not `BINARY`.
+* #131: RRULE that doesn't provide a single valid instance now throws an
+  exception.
+* #136: Validator rejects *all* control characters. We were missing a few.
+* #133: Splitter objects will throw exceptions when receiving incompatible
+  objects.
+* #127: Attendees who delete recurring event instances events they had already
+  declined earlier will no longer generate another reply.
+* #125: Send CANCEL messages when ORGANIZER property gets deleted.
+
+3.3.1 (2014-08-18)
+------------------
+
+* Changed: It's now possible to pass DateTime objects when using the magic
+  setters on properties. (`$event->DTSTART = new DateTime('now')`).
+* #111: iTip Broker does not process attendee adding events to EXDATE.
+* #112: EventIterator now sets TZID on RECURRENCE-ID.
+* #113: Timezone support during creation of iTip REPLY messages.
+* #114: VTIMEZONE is retained when generating new REQUEST objects.
+* #114: Support for 'MAILTO:' style email addresses (in uppercase) in the iTip
+  broker. This improves evolution support.
+* #115: Using REQUEST-STATUS from REPLY messages and now propegating that into
+  SCHEDULE-STATUS.
+
+
+3.3.0 (2014-08-07)
+------------------
+
+* We now use PSR-4 for the directory structure. This means that everything
+  that was used to be in the `lib/Sabre/VObject` directory is now moved to
+  `lib/`. If you use composer to load this library, you shouldn't have to do
+  anything about that though.
+* VEVENT now get populated with a DTSTAMP and UID property by default.
+* BC Break: Removed the 'includes.php' file. Use composer instead.
+* #103: Added support for processing [iTip][iTip] messages. This allows a user
+  to parse incoming iTip messages and apply the result on existing calendars,
+  or automatically generate invites/replies/cancellations based on changes that
+  a user made on objects.
+* #75, #58, #18: Fixes related to overriding the first event in recurrences.
+* Added: VCalendar::getBaseComponent to find the 'master' component in a
+  calendar.
+* #51: Support for iterating RDATE properties.
+* Fixed: Issue #101: RecurrenceIterator::nextMonthly() shows events that are
+  excluded events with wrong time
+
+
+3.2.4 (2014-07-14)
+------------------
+
+* Added: Issue #98. The VCardConverter now takes `X-APPLE-OMIT-YEAR` into
+  consideration when converting between vCard 3 and 4.
+* Fixed: Issue #96. Some support for Yahoo's broken vcards.
+* Fixed: PHP 5.3 support was broken in the cli tool.
+
+
+3.2.3 (2014-06-12)
+------------------
+
+* Validator now checks if DUE and DTSTART are of the same type in VTODO, and
+  ensures that DUE is always after DTSTART.
+* Removed documentation from source repository, to http://sabre.io/vobject/
+* Expanded the vobject cli tool validation output to make it easier to find
+  issues.
+* Fixed: vobject repair. It was not working for iCalendar objects.
+
+
 3.2.2 (2014-05-07)
 ------------------
+
 * Minor tweak in unittests to make it run on PHP 5.5.12. Json-prettifying
   slightly changed which caused the test to fail.
 
@@ -40,6 +133,13 @@ ChangeLog
 * Fixed: Issue #83. Creating new VALUE=DATE objects using php's DateTime.
 * Fixed: Issue #86. Don't go into an infinite loop when php errors are
   disabled and an invalid file is read.
+
+
+3.1.5 (2014-??-??)
+------------------
+* Updated: Some docblocks and other documentation. Made the unittests succeed
+  on recent php versions.
+
 
 3.1.4 (2014-03-30)
 ------------------
@@ -225,6 +325,13 @@ ChangeLog
   add() method.
 
 
+2.1.5 (2014-06-03)
+------------------
+
+* Fixed: #94: Better parameter escaping.
+* Changed: Documentation cleanups.
+
+
 2.1.4 (2014-03-30)
 ------------------
 
@@ -348,3 +455,5 @@ ChangeLog
 * New: It's possible to specify lists of parameters when constructing
   properties.
 * New: made it easier to construct the FreeBusyGenerator.
+
+[iTip]: http://tools.ietf.org/html/rfc5546

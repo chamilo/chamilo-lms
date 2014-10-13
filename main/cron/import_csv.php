@@ -152,7 +152,7 @@ class ImportCsv
                 }
             }
 
-            $sections = array('students-static', 'teachers-static', 'courses-static', 'sessions-static');
+            $sections = array('students-static', 'teachers-static', 'courses-static', 'sessions-static', 'calendar-static');
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import static files $section --");
 
@@ -259,6 +259,7 @@ class ImportCsv
         if (isset($row['CourseID'])) {
             $row['extra_'.$this->extraFieldIdNameList['course']] = $row['CourseID'];
         }
+
         return $row;
     }
 
@@ -573,6 +574,149 @@ class ImportCsv
     private function importCoursesStatic($file)
     {
         $this->importCourses($file, false);
+    }
+
+    private function importCalendarStatic($file, $moveFile = true)
+    {
+        $data = Import::csv_to_array($file);
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data) . " records found.");
+            $eventsToCreate = array();
+            $errorFound = false;
+            foreach ($data as $row) {
+                $sessionId = SessionManager::get_session_id_from_original_id(
+                    $row['external_sessionID'],
+                    $this->extraFieldIdNameList['session']
+                );
+
+                $courseCode = $row['coursecode'];
+                $courseInfo = api_get_course_info($courseCode);
+
+                if (empty($courseInfo)) {
+                    $this->logger->addInfo("Course '$courseCode' does not exists");
+                }
+
+                if (empty($sessionId)) {
+                    $this->logger->addInfo("Session '$sessionId' does not exists.");
+                }
+                $teacherId = null;
+
+                if (!empty($sessionId) && !empty($courseInfo)) {
+                    $courseIncluded = SessionManager::relation_session_course_exist(
+                        $sessionId,
+                        $courseInfo['code']
+                    );
+
+                    if ($courseIncluded == false) {
+                        $this->logger->addInfo(
+                            "Course '$courseCode' is not included in session: $sessionId"
+                        );
+                        $errorFound = true;
+                    } else {
+                        $teachers = CourseManager::get_coach_list_from_course_code(
+                            $courseInfo['code'],
+                            $sessionId
+                        );
+
+                        // Getting first teacher.
+                        if (!empty($teachers)) {
+                            $teacher = current($teachers);
+                            $teacherId = $teacher['user_id'];
+                        } else {
+                            $sessionInfo = api_get_session_info($sessionId);
+                            $teacherId = $sessionInfo['id_coach'];
+                        }
+                    }
+                } else {
+                    $errorFound = true;
+                }
+
+                if (empty($teacherId)) {
+                    $errorFound = true;
+
+                    $this->logger->addInfo(
+                        "No teacher found in  '$courseCode' and session: $sessionId"
+                    );
+                }
+
+                $date = $row['date'];
+                $startTime  = $row['time_start'];
+                $endTime = $row['time_end'];
+                $title = $row['title'];
+
+                $startDateYear = substr($date, 0, 4);
+                $startDateMonth = substr($date, 4, 2);
+                $startDateDay = substr($date, 6, 8);
+
+                $startDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$startTime.":00";
+                $endDate = $startDateYear.'-'.$startDateMonth.'-'.$startDateDay.' '.$endTime.":00";
+
+                if (!api_is_valid_date($startDate) OR !api_is_valid_date($endDate)) {
+                    $this->logger->addInfo(
+                        "Verify your dates:  '$startDate' : '$endDate' "
+                    );
+                    $errorFound = true;
+                }
+
+                if ($errorFound == false) {
+                    $eventsToCreate[] = array(
+                        'start' => $startDate,
+                        'end' => $endDate,
+                        'title' => $title,
+                        'sender_id' => $teacherId,
+                        'course_id' => $courseInfo['real_id'],
+                        'session_id' => $sessionId
+                    );
+                }
+            }
+
+            if (empty($eventsToCreate)) {
+                $this->logger->addInfo(
+                    "No events to add"
+                );
+
+                return 0;
+            }
+
+            if ($errorFound == false) {
+                $this->logger->addInfo(
+                    "Ready to insert events"
+                );
+
+                $content = null;
+                $agenda = new Agenda();
+
+                foreach ($eventsToCreate as $event) {
+                    $courseInfo = api_get_course_info_by_id($event['course_id']);
+                    $agenda->set_course($courseInfo);
+                    $agenda->setType('course');
+                    $agenda->setSessionId($event['session_id']);
+                    $agenda->setSenderId($event['sender_id']);
+                    $eventId = $agenda->add_event(
+                        $event['start'],
+                        $event['end'],
+                        false,
+                        $event['title'],
+                        $content,
+                        array('everyone'), // send to
+                        false //$addAsAnnouncement = false
+                    );
+
+                    $this->logger->addInfo(
+                        "Event added: #$eventId"
+                    );
+                }
+            } else {
+                echo 'There was an error check the logs in archive/import_csv.log ';
+
+                return 0;
+            }
+        }
+
+        if ($moveFile) {
+            $this->moveFile($file);
+        }
     }
 
     /**

@@ -71,13 +71,15 @@ $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
 $interbreadcrumb[]= array ('url' =>'#','name' => $nameTools);
 
-$social_left_content = SocialManager::show_social_menu('group_add');
+$social_avatar_block = SocialManager::show_social_avatar_block('group_add');
+$social_menu_block = SocialManager::show_social_menu('group_add');
 
 $social_right_content = $form->return_form();
 
 $tpl = new Template();
 $tpl->set_help('Groups');
-$tpl->assign('social_left_content', $social_left_content);
+$tpl->assign('social_avatar_block', $social_avatar_block);
+$tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 //$tpl->assign('actions', $actions);
 //$tpl->assign('message', $show_message);

@@ -62,12 +62,13 @@ switch ($action) {
         $emailText = Security::remove_XSS($_REQUEST['email_text']);
 }
         
-$defaults = array(  'dest' => $emailDest,
-                    'email_address' => $emailDest,
-                    'email_title' => $emailTitle,
-                    'email_text' => $emailText
-    
+$defaults = array(
+    'dest' => $emailDest,
+    'email_address' => $emailDest,
+    'email_title' => $emailTitle,
+    'email_text' => $emailText
 );
+
 $form->setDefaults($defaults);
 
 if ($form->validate()) {

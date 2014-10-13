@@ -2720,8 +2720,11 @@ class SessionManager
      * @param string $course_name
      * @return array list of courses
      */
-    public static function get_course_list_by_session_id($session_id, $course_name = '', $orderBy = null)
-    {
+    public static function get_course_list_by_session_id(
+        $session_id,
+        $course_name = '',
+        $orderBy = null
+    ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
@@ -2749,8 +2752,8 @@ class SessionManager
 
         $sql .= Database::escape_string($orderBy);
 
-        $result 	= Database::query($sql);
-        $num_rows 	= Database::num_rows($result);
+        $result = Database::query($sql);
+        $num_rows = Database::num_rows($result);
         $courses = array();
         if ($num_rows > 0) {
             while ($row = Database::fetch_array($result,'ASSOC'))	{

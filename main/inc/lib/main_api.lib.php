@@ -2054,7 +2054,9 @@ function api_get_session_visibility(
             $visibility = $original_visibility = $row['visibility'];
 
             // I don't care the session visibility.
-            if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
+            if ($row['date_start'] == '0000-00-00' &&
+                $row['date_end'] == '0000-00-00'
+            ) {
 
                 // Session duration per student.
                 if (SessionManager::durationPerUserIsEnabled()) {
@@ -2108,7 +2110,6 @@ function api_get_session_visibility(
                         $visibility = SESSION_INVISIBLE;
                     }
                 }
-
 
                 // If the end date was set.
                 if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
@@ -2170,6 +2171,7 @@ function api_get_session_visibility(
             $visibility = SESSION_INVISIBLE;
         }
     }
+
     return $visibility;
 }
 
@@ -2231,7 +2233,6 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
  */
 function api_get_coachs_from_course($session_id=0,$course_code='')
 {
-
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
@@ -2244,8 +2245,8 @@ function api_get_coachs_from_course($session_id=0,$course_code='')
         $course_code = api_get_course_id();
     }
 
-    $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
-    $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
+    $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $coaches = array();
 
     $sql = "SELECT u.user_id,u.lastname,u.firstname,u.username
@@ -2405,6 +2406,7 @@ function api_is_platform_admin_by_id($user_id = null, $url = null) {
     $is_on_url = Database::num_rows($res) === 1;
     return $is_on_url;
 }
+
 /**
  * Returns the user's numeric status ID from the users table
  * @param int User ID. If none provided, will use current user

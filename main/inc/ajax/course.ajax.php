@@ -233,7 +233,7 @@ switch ($action) {
         }
         break;
     case 'display_sessions_courses':
-        $sessionId = Security::remove_XSS($_GET['session']);
+        $sessionId = intval($_GET['session']);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $coursesData = SessionManager::get_course_list_by_session_id($sessionId);

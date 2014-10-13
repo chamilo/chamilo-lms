@@ -221,7 +221,7 @@ switch ($action) {
         break;
     case 'display_sessions':
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        $hiddenLinks = intval($_GET['hidden_links']) == 1;
+        $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
 
         $userInfo = api_get_user_info();
         $allowEmailEditor = api_get_setting('allow_email_editor') === 'true';

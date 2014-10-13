@@ -1197,7 +1197,7 @@ class AnnouncementManager
 
     /**
      * This function delete a attachment file by id
-     * @param integer attachment file Id
+     * @param integer $id attachment file Id
      *
      */
     public static function delete_announcement_attachment_file($id)
@@ -1209,9 +1209,13 @@ class AnnouncementManager
         Database::query($sql);
     }
 
-    public static function send_email($annoucement_id, $sendToUsersInSession = false)
+    /**
+     * @param int $id
+     * @param bool $sendToUsersInSession
+     */
+    public static function send_email($id, $sendToUsersInSession = false)
     {
-        $email = AnnouncementEmail::create(null, $annoucement_id);
+        $email = AnnouncementEmail::create(null, $id);
         $email->send($sendToUsersInSession);
     }
 }

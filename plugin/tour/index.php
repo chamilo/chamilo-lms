@@ -38,11 +38,3 @@ $_template['web_path'] = array(
     'steps_ajax' => "{$pluginWebPath}ajax/steps.ajax.php",
     'save_ajax' => "{$pluginWebPath}ajax/save.ajax.php"
 );
-
-$_template['text'] = array(
-    'start_button' => $tourPlugin->get_lang('StartButtonText'),
-    'next' => $tourPlugin->get_lang('Next'),
-    'prev' => $tourPlugin->get_lang('Prev'),
-    'skip' => $tourPlugin->get_lang('Skip'),
-    'done' => $tourPlugin->get_lang('Done')
-);

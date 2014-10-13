@@ -546,7 +546,8 @@ class Auth
             $date = Database::escape_string($date);
             
             $sql .= "WHERE ('$date' BETWEEN s.date_start AND s.date_end) "
-                    . "OR s.date_end = '0000-00-00'";
+                    . "OR (s.date_end = '0000-00-00') "
+                    . "OR (s.date_start = '0000-00-00' AND s.date_end != '0000-00-00' AND s.date_end > '$date')";
         }
 
         $sessionResult = Database::query($sql);

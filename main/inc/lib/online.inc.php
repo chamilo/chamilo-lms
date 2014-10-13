@@ -63,7 +63,7 @@ function preventMultipleLogin($userId)
             $isFirstLogin = Session::read('first_user_login');
             if (empty($isFirstLogin)) {
                 $sql = "SELECT login_id FROM $table
-                     WHERE login_user_id = " . $userId . " LIMIT 1";
+                        WHERE login_user_id = " . $userId . " LIMIT 1";
 
                 $result = Database::query($sql);
                 $loginData = array();
@@ -71,8 +71,10 @@ function preventMultipleLogin($userId)
                     $loginData = Database::fetch_array($result);
                 }
 
-                // Trying double login
-                if (!empty($loginData)) {
+                $userIsReallyOnline = user_is_online($userId);
+
+                // Trying double login.
+                if (!empty($loginData) && $userIsReallyOnline == true) {
                     session_regenerate_id();
                     Session::destroy();
                     header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=multiple_connection_not_allowed');
@@ -163,6 +165,10 @@ function LoginDelete($user_id)
 	@Database::query($query);
 }
 
+/**
+ * @param int $user_id
+ * @return bool
+ */
 function user_is_online($user_id)
 {
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
@@ -175,7 +181,9 @@ function user_is_online($user_id)
     $limit_date		= api_get_utc_datetime($online_time);
     $user_id = intval($user_id);
 
-	$query = " SELECT login_user_id,login_date FROM ".$track_online_table ." track INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)
+	$query = " SELECT login_user_id,login_date
+               FROM $track_online_table track
+               INNER JOIN $table_user u ON (u.user_id=track.login_user_id)
                WHERE
                     track.access_url_id =  $access_url_id AND
                     login_date >= '".$limit_date."'  AND

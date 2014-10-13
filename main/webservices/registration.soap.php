@@ -1604,8 +1604,9 @@ function WSEditUserWithPicture($params) {
     // Get picture and generate uri.
     $filename = basename($picture_url);
     $tempdir = sys_get_temp_dir();
-    file_put_contents($tempdir."/".$filename, file_get_contents($picture_url));
-    $picture_uri = UserManager::update_user_picture($user_id, $filename, $tempdir."/".$filename);
+    $tempDir = api_get_path(SYS_ARCHIVE_PATH);
+    file_put_contents($tempDir.$filename, file_get_contents($picture_url));
+    $picture_uri = UserManager::update_user_picture($user_id, $filename, $tempDir.$filename);
 
     if ($user_id == 0) {
         return 0;

@@ -327,73 +327,95 @@ class CoursesController { // extends Controller {
                 $categoryCode = $category['code'];
                 $categoryCourses = $category['count_courses'];
 
+                $html .= '<li>';
+
                 if ($code == $categoryCode) {
-                    $html .= '<li><strong>';
+                    $html .= '<strong>';
                     $html .= "$categoryName ($categoryCourses)";
-                    $html .= '</strong><li>';
+                    $html .= '</strong>';
                 } else {
                     if (!empty($categoryCourses)) {
-                        $html .= '<li><a href="' . api_get_self() . '"?action=display_courses&category_code=' . $categoryCode . '&hidden_links=' . $hiddenLinks . '">';
+                        $html .= '<a href="' . api_get_self() . '?action=display_courses&category_code=' . $categoryCode . '&hidden_links=' . $hiddenLinks . '">';
                         $html .= "$categoryName ($categoryCourses)";
-                        $html .= '</a></li>';
+                        $html .= '</a>';
                     } else {
-                        $html .= "<li>$categoryName ($categoryCourses)</li>";
+                        $html .= "$categoryName ($categoryCourses)";
                     }
                 }
 
                 if (!empty($categories[$categoryCode])) {
+                    $html .= '<ul class="nav nav-list">';
+
                     foreach ($categories[$categoryCode] as $subCategory1) {
                         $subCategory1Name = $subCategory1['name'];
                         $subCategory1Code = $subCategory1['code'];
                         $subCategory1Courses = $subCategory1['count_courses'];
 
+                        $html .= '<li>';
+
                         if ($code == $subCategory1Code) {
-                            $html .= '<li style="margin-left: 20px">';
                             $html .= "<strong>$subCategory1Name ($subCategory1Courses)</strong>";
-                            $html .= '</li>';
                         } else {
-                            $html .= '<li style="margin-left: 20px"><a href="' . api_get_self() . '?action=display_courses&category_code=' . $subCategory1Code . '&hidden_links=' . $hiddenLinks . '">';
+                            $html .= '<a href="' . api_get_self() . '?action=display_courses&category_code=' . $subCategory1Code . '&hidden_links=' . $hiddenLinks . '">';
                             $html .= "$subCategory1Name ($subCategory1Courses)";
-                            $html .= '</a></li>';
+                            $html .= '</a>';
                         }
 
                         if (!empty($categories[$subCategory1Code])) {
+                            $html .= '<ul class="nav nav-list">';
+
                             foreach ($categories[$subCategory1Code] as $subCategory2) {
                                 $subCategory2Name = $subCategory2['name'];
                                 $subCategory2Code = $subCategory2['code'];
                                 $subCategory2Courses = $subCategory2['count_courses'];
 
+                                $html .= '<li>';
+
                                 if ($code == $subCategory2Code) {
-                                    $html .= '<li style="margin-left: 40px">';
                                     $html .= "<strong>$subCategory2Name ($subCategory2Courses)</strong>";
-                                    $html .= '</li>';
                                 } else {
-                                    $html .= '<li style="margin-left: 40px"><a href="' . api_get_self() . '?action=display_courses&category_code=' . $subCategory2Code . '&hidden_links=' . $hiddenLinks . '">';
+                                    $html .= '<a href="' . api_get_self() . '?action=display_courses&category_code=' . $subCategory2Code . '&hidden_links=' . $hiddenLinks . '">';
                                     $html .= "$subCategory2Name ($subCategory2Courses)";
-                                    $html .= '</a></li>';
+                                    $html .= '</a>';
                                 }
 
                                 if (!empty($categories[$subCategory2Code])) {
+                                    $html .= '<ul class="nav nav-list">';
+
                                     foreach ($categories[$subCategory2Code] as $subCategory3) {
                                         $subCategory3Name = $subCategory3['name'];
                                         $subCategory3Code = $subCategory3['code'];
                                         $subCategory3Courses = $subCategory3['count_courses'];
 
+                                        $html .= '<li>';
+
                                         if ($code == $subCategory3Code) {
-                                            $html .= '<li style="margin-left: 40px">';
                                             $html .= "<strong>$subCategory3Name ($subCategory3Courses)</strong>";
-                                            $html .= '</li>';
                                         } else {
-                                            $html .= '<li style="margin-left: 40px"><a href="' . api_get_self() . '?action=display_courses&category_code=' . $subCategory3Code . '&hidden_links=' . $hiddenLinks . '">';
+                                            $html .= '<a href="' . api_get_self() . '?action=display_courses&category_code=' . $subCategory3Code . '&hidden_links=' . $hiddenLinks . '">';
                                             $html .= "$subCategory3Name ($subCategory3Courses)";
-                                            $html .= '</a></li>';
+                                            $html .= '</a>';
                                         }
+
+                                        $html .= '</li>';
                                     }
+
+                                    $html .= '</ul>';
                                 }
+
+                                $html .= '</li>';
                             }
+
+                            $html .= '</ul>';
                         }
+
+                        $html .= '</li>';
                     }
+
+                    $html .= '</ul>';
                 }
+
+                $html .= '</li>';
             }
         }
 

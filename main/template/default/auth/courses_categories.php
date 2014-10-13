@@ -11,6 +11,12 @@ $stok = Security::get_token();
 $showCourses = CoursesAndSessionsCatalog::showCourses();
 $showSessions = CoursesAndSessionsCatalog::showSessions();
 
+if ($showSessions && isset($_POST['date'])) {
+    $date = $_POST['date'];
+} else {
+    $date = date('Y-m-d');
+}
+
 $userInfo = api_get_user_info();
 ?>
 <script>
@@ -91,7 +97,7 @@ $userInfo = api_get_user_info();
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
                 <?php if ($showCourses) { ?>
-                <?php if (intval($_GET['hidden_links']) != 1) { ?>
+                <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
                 <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
                     <fieldset>
                         <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">

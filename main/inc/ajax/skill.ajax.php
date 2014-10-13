@@ -298,7 +298,7 @@ switch ($action) {
             $params['skills'] = $params['skill_id'];
             $profileId = isset($_REQUEST['profile']) ? intval($_REQUEST['profile']) : null;
             if ($profileId > 0) {
-                $skill_data = $skill_profile->UpdateProfileInfo($profileId,$params['name'],$params['description']);
+                $skill_data = $skill_profile->updateProfileInfo($profileId,$params['name'],$params['description']);
             } else {
                 $skill_data = $skill_profile->save($params);
             }         

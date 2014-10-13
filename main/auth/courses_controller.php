@@ -425,39 +425,16 @@ class CoursesController { // extends Controller {
     /**
      * Get a HTML button for subscribe to session
      * @param string $sessionName The session name
-     * @param array $userInfo The user information
-     * @param string $administratorEmail The administrator email
-     * @param boolean $allowEmailEditor (Optional) Whether the email editor online is enabled
      * @return string The button
      */
-    public function getRegisterInSessionButton($sessionName, $userInfo, $administratorEmail, $allowEmailEditor = false)
+    public function getRegisterInSessionButton($sessionName)
     {
-        $mailSubject = get_lang('SubscribeToSession') . " '$sessionName'";
+        $sessionName = urlencode($sessionName);
 
-        $mailMessage = sprintf(get_lang('PleaseSubscribeMeToSessionX'), $sessionName) . PHP_EOL . PHP_EOL;
-        $mailMessage.= get_lang('ContactInformation') . PHP_EOL;
-        $mailMessage.= sprintf(get_lang('NameX'), $userInfo['complete_name']) . PHP_EOL;
-        $mailMessage.= sprintf(get_lang('UsernameX'), $userInfo['username']) . PHP_EOL;
-        $mailMessage.= sprintf(get_lang('EmailX'), $userInfo['email']) . PHP_EOL;
-
-        if ($allowEmailEditor) {
-            $mailParams = http_build_query(array(
-                'email_title' => $mailSubject,
-                'email_text' => $mailMessage
-            ));
-
-            $url = "mailto:$administratorEmail&$mailParams";
-        } else {
-            $mailParams = http_build_query(array(
-                'subject' => $mailSubject,
-                'body' => $mailMessage
-            ));
-
-            $url = "mailto:$administratorEmail?$mailParams";
-        }
+        $url = api_get_path(WEB_PATH) . "main/inc/email_editor.php?action=subscribe_me_to_session&session=$sessionName";
 
         return Display::url(get_lang('Subscribe'), $url, array(
-                    'class' => 'btn btn-primary clickable_email_link',
+                    'class' => 'btn btn-primary',
         ));
     }
 

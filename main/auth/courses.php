@@ -252,18 +252,9 @@ switch ($action) {
         $tpl->assign('showCourses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('showSessions', CoursesAndSessionsCatalog::showSessions());
         $tpl->assign('api_get_self', api_get_self());
+        $tpl->assign('nameTools', $nameTools);
 
         $tpl->assign('coursesCategoriesList', $courses_controller->getCoursesCategoriesBlock());
-
-        $tpl->assign('texts', array(
-            'search' => get_lang('Search'),
-            'randomPick' => get_lang('RandomPick'),
-            'courseCategories' => get_lang('CourseCategories'),
-            'courseList' => get_lang('CourseList'),
-            'sessions' => get_lang('Sessions'),
-            'sessionList' => $nameTools,
-            'searchSessions' => get_lang('SearchSessions')
-        ));
 
         $tpl->assign('hiddenLinks', $hiddenLinks);
         $tpl->assign('searchToken', Security::get_token());

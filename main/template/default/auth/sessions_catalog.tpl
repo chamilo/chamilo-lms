@@ -55,7 +55,7 @@
                                 <div class="controls">
                                     <div class="input-append">
                                         <input class="span2" type="text" name="search_term" />
-                                        <button class="btn" type="submit">{{ texts.search }}</button>
+                                        <button class="btn" type="submit">{{ 'Search' | get_lang }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -64,14 +64,14 @@
                 {% endif %}
 
                 {% if coursesCategoriesList is not empty %}
-                    <a class="btn" href="{{ api_get_self }}?action=display_random_courses">{{ texts.randomPick }}</a>
+                    <a class="btn" href="{{ api_get_self }}?action=display_random_courses">{{ 'RandomPick' | get_lang }}</a>
                 {% endif %}
             </div>
 
             {% if coursesCategoriesList is not empty %}
                 <div class="well">
                     <ul class="nav nav-list">
-                        <li class="nav-header">{{ texts.courseCategories}}</li>
+                        <li class="nav-header">{{ 'CourseCategories' | get_lang }}</li>
 
                         {{ coursesCategoriesList }}
                     </ul>
@@ -82,16 +82,16 @@
         {% if showSessions %}
             <div class="well">
                 <ul class="nav nav-list">
-                    <li class="nav-header">{{ texts.sessions }}</li>
+                    <li class="nav-header">{{ 'Sessions' | get_lang }}</li>
                     <li>
-                        <strong>{{ texts.sessionList }}</strong>
+                        <strong>{{ nameTools }}</strong>
                     </li>
-                    <li class="nav-header">{{ texts.searchSessions }}</li>
+                    <li class="nav-header">{{ 'SearchSessions' | get_lang }}</li>
                 </ul>
                 <form class="form-search" method="post" action="{{ api_get_self }}?action=display_sessions">
                     <div class="input-append">
                         <input type="date" name="date" id="date" class="span2" value="{{ searchDate }}" readonly>
-                        <button class="btn" type="submit">{{ texts.search }}</button>
+                        <button class="btn" type="submit">{{ 'Search' | get_lang }}</button>
                     </div>
                 </form>
             </div>
@@ -99,7 +99,7 @@
     </div>
     <div class="span9">
         <div class="page-header">
-            <h2>{{ texts.sessionList }}</h2>
+            <h2>{{ nameTools }}</h2>
         </div>
 
         {% for session in sessions_blocks %}
@@ -122,7 +122,7 @@
                             <div class="accordion-group">
                                 <div class="accordion-heading">
                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#session-{{ session.id }}-accordion" href="#session-{{ session.id }}-courses">
-                                        {{ texts.courseList }}
+                                        {{ 'CourseList' | get_lang }}
                                     </a>
                                 </div>
                                 <div id="session-{{ session.id }}-courses" class="accordion-body collapse in">

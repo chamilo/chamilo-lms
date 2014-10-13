@@ -20,7 +20,7 @@
             showStartButton: function() {
                 $btnStart = $('<button>', {
                     class: 'btn btn-primary btn-large',
-                    text: '{{ tour.text.start_button }}',
+                    text: '{{ 'StartButtonText' | get_lang }}',
                     click: function(e) {
                         e.preventDefault();
 
@@ -38,10 +38,10 @@
                 }, function(response) {
                     intro.setOptions({
                         steps: response,
-                        nextLabel: '{{ tour.text.next }}',
-                        prevLabel: '{{ tour.text.prev }}',
-                        skipLabel: '{{ tour.text.skip }}',
-                        doneLabel: '{{ tour.text.done }}'
+                        nextLabel: '{{ 'Next' | get_lang }}',
+                        prevLabel: '{{ 'Prev' | get_lang }}',
+                        skipLabel: '{{ 'Skip' | get_lang }}',
+                        doneLabel: '{{ 'Done' | get_lang }}'
                     });
                 });
             }

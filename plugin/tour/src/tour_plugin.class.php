@@ -26,7 +26,7 @@ class Tour extends Plugin
     /**
      * Instance the plugin
      * @staticvar null $result
-     * @return type
+     * @return Tour
      */
     static function create()
     {
@@ -35,16 +35,28 @@ class Tour extends Plugin
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * Install the plugin
+     * @return void
+     */
     public function install()
     {
         $this->installDatabase();
     }
 
+    /**
+     * Uninstall the plugin
+     * @return void
+     */
     public function uninstall()
     {
         $this->unistallDatabase();
     }
 
+    /**
+     * Create the database tables for the plugin
+     * @return void
+     */
     private function installDatabase()
     {
         $pluginTourLogTable = Database::get_main_table(TABLE_TOUR_LOG);
@@ -59,6 +71,10 @@ class Tour extends Plugin
         Database::query($sql);
     }
 
+    /**
+     * Drop the database tables for the plugin
+     * @return void
+     */
     private function unistallDatabase()
     {
         $pluginTourLogTable = Database::get_main_table(TABLE_TOUR_LOG);
@@ -68,6 +84,12 @@ class Tour extends Plugin
         Database::query($sql);
     }
 
+    /**
+     * Check whether the tour should be displayed to the user
+     * @param string $currentPageClass The class of the current page
+     * @param int $userId The user id
+     * @return boolean If the user has seen the tour return false, otherwise return true
+     */
     public function checkTourForUser($currentPageClass, $userId)
     {
         $pluginTourLogTable = Database::get_main_table(TABLE_TOUR_LOG);
@@ -87,6 +109,12 @@ class Tour extends Plugin
         return true;
     }
 
+    /**
+     * Set the tour as seen
+     * @param string $currentPageClass The class of the current page
+     * @param int $userId The user id
+     * @return void
+     */
     public function saveCompletedTour($currentPageClass, $userId)
     {
         $pluginTourLogTable = Database::get_main_table(TABLE_TOUR_LOG);

@@ -1,5 +1,5 @@
 <?php
-
+/* This library is licensed under New BSD. See below to check its terms.*/
 /*
 ================================================================================
 

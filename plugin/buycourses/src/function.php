@@ -13,6 +13,7 @@ require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
 $tableBuySession = Database::get_main_table(TABLE_BUY_SESSION);
+$tableBuySessionTemporal = Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY);
 $tableBuySessionRelCourse = Database::get_main_table(TABLE_BUY_SESSION_COURSE);
 $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
@@ -30,14 +31,12 @@ $plugin = BuyCoursesPlugin::create();
 $buy_name = $plugin->get_lang('Buy');
 
 if ($_REQUEST['tab'] == 'sync') {
-
     $sql = "SELECT code, title FROM $tableCourse;";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
         $aux_code .= $row['code'];
         $aux_title .= $row['title'];
     }
-
     $sql = "SELECT name, date_start, date_end FROM $tableSession;";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
@@ -45,16 +44,14 @@ if ($_REQUEST['tab'] == 'sync') {
         $aux_date_start .= $row['date_start'];
         $aux_date_end .= $row['date_end'];
     }
-
     echo json_encode(array("status" => "true", "content" => $content));
 }
 
 if ($_REQUEST['tab'] == 'sessions_filter') {
-    $session = Database::escape_string($_REQUEST['session']);
-    $priceMin = Database::escape_string($_REQUEST['pricemin']);
-    $priceMax = Database::escape_string($_REQUEST['pricemax']);
-    $show = Database::escape_string($_REQUEST['show']);
-    $category = Database::escape_string($_REQUEST['category']);
+    $session = isset($_REQUEST['session']) ? Database::escape_string($_REQUEST['session']) : '';
+    $priceMin = isset($_REQUEST['pricemin']) ? Database::escape_string($_REQUEST['pricemin']) : '';
+    $priceMax = isset($_REQUEST['pricemax']) ? Database::escape_string($_REQUEST['pricemax']) : '';
+    $category = isset($_REQUEST['category']) ? Database::escape_string($_REQUEST['category']) : '';
     $server = api_get_path(WEB_PATH);
 
     $filter = '';
@@ -125,7 +122,7 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
                 $rowTmp = Database::fetch_assoc($tmp);
                 $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
                 //check images
-                if (file_exists("../../courses/" . $row['code'] . "/course-pic85x85.png")) {
+                if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['code'] . "/course-pic85x85.png")) {
                     $row['course_img'] = "courses/" . $row['code'] . "/course-pic85x85.png";
                 } else {
                     $row['course_img'] = "main/img/without_picture.png";
@@ -137,13 +134,15 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
         //check if the user is enrolled in the current session
         if (isset($_SESSION['_user']) || $_SESSION['_user']['user_id'] != '') {
             $sql = "SELECT 1 FROM $tableSessionRelUser
-                WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+                WHERE id_session='".$rowSession['session_id']."' AND
+                id_user ='" . $_SESSION['_user']['user_id'] . "';";
             Database::query($sql);
             if (Database::affected_rows() > 0) {
                 $rowSession['enrolled'] = "YES";
             } else {
                 $sql = "SELECT 1 FROM $tableBuySessionTemporal
-                    WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+                    WHERE session_id ='".$rowSession['session_id']."' AND
+                    user_id='" . $_SESSION['_user']['user_id'] . "';";
                 Database::query($sql);
                 if (Database::affected_rows() > 0) {
                     $rowSession['enrolled'] = "TMP";
@@ -153,7 +152,8 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
             }
         } else {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
-                WHERE user_id='" . $_SESSION['_user']['user_id'] . "';";
+                WHERE session_id ='".$rowSession['session_id']."' AND
+                user_id='" . $_SESSION['_user']['user_id'] . "';";
             Database::query($sql);
             if (Database::affected_rows() > 0) {
                 $rowSession['enrolled'] = "TMP";
@@ -168,7 +168,7 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
     }
 
     $currencyType = findCurrency();
-
+    $content = '';;
     foreach ($auxSessions as $session) {
         $content .= '<div class="well_border span8">';
         $content .= '<div class="row">';
@@ -177,6 +177,9 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
         $content .= '<h3>'.$session['name'].'</h3>';
         $content .= '<h5>'.get_lang('From').' '.$session['date_start'];
         $content .= ' '.get_lang('Until').' '.$session['date_end'].'</h5>';
+        if ($session['enrolled'] == "YES") {
+            $content .= '<span class="label label-info">'.$plugin->get_lang('TheUserIsAlreadyRegisteredInTheSession').'</span>';
+        }
         $content .= '</div>';
         $content .= '</div>';
         $content .= '<div class="span right">';
@@ -200,7 +203,7 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
             $content .= '<div class="span">';
             $content .= '<div class="thumbnail">';
             $content .= '<a class="ajax" rel="gb_page_center[778]" title=""';
-            $content .= 'href="'.$server.'main/inc/src/course_home.ajax.php?';
+            $content .= 'href="'.$server.'plugin/buycourses/src/ajax.php?';
             $content .= 'a=show_course_information&code='.$course['code'].'">';
             $content .= '<img alt="" src="' . $server . $course['course_img'] . '">';
             $content .= '</a>';
@@ -211,15 +214,12 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
             $content .= '<h3>' . $course['title'] . '</h3>';
             $content .= '<h5>' . get_lang('Teacher') . ': ' . $course['teacher'] . '</h5>';
             $content .= '</div>';
-            if ($course['enrolled'] == "YES") {
-                $content .= '<span class="label label-info">'.$plugin->get_lang('TheUserIsAlreadyRegistered').'</span>';
-            }
             $content .= '</div>';
             $content .= '<div class="span right">';
             $content .= '<div class="cleared"></div>';
             $content .= '<div class="btn-toolbar right">';
             $content .= '<a class="ajax btn btn-primary" title=""';
-            $content .= 'href="'.$server.'main/inc/src/course_home.ajax.php?';
+            $content .= 'href="'.$server.'plugin/buycourses/src/ajax.php?';
             $content .= 'a=show_course_information&code='.$course['code'].'">'.get_lang('Description').'</a>';
             $content .= '</div>';
             $content .= '</div>';
@@ -235,7 +235,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
     $course = Database::escape_string($_REQUEST['course']);
     $priceMin = Database::escape_string($_REQUEST['pricemin']);
     $priceMax = Database::escape_string($_REQUEST['pricemax']);
-    $show = Database::escape_string($_REQUEST['show']);
+    //$show = Database::escape_string($_REQUEST['show']);
     $category = Database::escape_string($_REQUEST['category']);
     $server = api_get_path(WEB_PATH);
 
@@ -315,21 +315,22 @@ if ($_REQUEST['tab'] == 'courses_filter') {
             $row['course_img'] = "main/img/without_picture.png";
         }
 
-        if ($show == "YES" && $row['enrolled'] == "YES") {
-            ;
-        } else {
-            $aux[] = $row;
-        }
+        //if ($show == "YES" && $row['enrolled'] == "YES") {
+        //    ;
+        //} else {
+        $aux[] = $row;
+        //}
 
     }
     $currencyType = findCurrency();
+    $content = '';
     foreach ($aux as $course) {
         $content .= '<div class="well_border span8">';
         $content .= '<div class="row">';
         $content .= '<div class="span">';
         $content .= '<div class="thumbnail">';
         $content .= '<a class="ajax" rel="gb_page_center[778]" title=""';
-        $content .= 'href="'.$server.'main/inc/src/course_home.ajax.php?';
+        $content .= 'href="'.$server.'plugin/buycourses/src/ajax.php?';
         $content .= 'a=show_course_information&code='.$course['code'].'">';
         $content .= '<img alt="" src="'.$server.$course['course_img'].'">';
         $content .= '</a>';
@@ -341,7 +342,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         $content .= '<h5>'.get_lang('Teacher').': '.$course['teacher'].'</h5>';
         $content .= '</div>';
         if ($course['enrolled'] == "YES") {
-            $content .= '<span class="label label-info">'.$plugin->get_lang('TheUserIsAlreadyRegistered').'</span>';
+            $content .= '<span class="label label-info">'.$plugin->get_lang('TheUserIsAlreadyRegisteredInTheCourse').'</span>';
         }
         $content .= '</div>';
         $content .= '<div class="span right">';
@@ -349,7 +350,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         $content .= '<div class="cleared"></div>';
         $content .= '<div class="btn-toolbar right">';
         $content .= '<a class="ajax btn btn-primary" title=""';
-        $content .= 'href="'.$server.'main/inc/src/course_home.ajax.php?';
+        $content .= 'href="'.$server.'plugin/buycourses/src/ajax.php?';
         $content .= 'a=show_course_information&code='.$course['code'].'">'.get_lang('Description').'</a>&nbsp;';
         if ($course['enrolled'] != "YES") {
             $content .= '<a class="btn btn-success" title=""';
@@ -360,7 +361,6 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         $content .= '</div>';
         $content .= '</div>';
     }
-
     echo json_encode(array("status" => "true", "content" => $content));
 }
 
@@ -433,19 +433,22 @@ if ($_REQUEST['tab'] == 'delete_account') {
 }
 
 if ($_REQUEST['tab'] == 'save_mod') {
-    $_REQUEST['id'] = Database::escape_string($_REQUEST['id']);
 
-    $id = intval($_REQUEST['course_id']);
-    $tableBuy = $tableBuyCourse;
-    $tableField = 'course_id';
+    $id;
+    $tableBuy;
+    $tableField;
 
-    if (isset($_REQUEST['session_id'])) {
+    if (isset($_REQUEST['course_id'])) {
+        $id = intval($_REQUEST['course_id']);
+        $tableBuy = $tableBuyCourse;
+        $tableField = 'course_id';
+    } else {
         $id = intval($_REQUEST['session_id']);
         $tableBuy = $tableBuySession;
         $tableField = 'session_id';
     }
 
-    $visible = ($_REQUEST['visible'] == "checked") ? 1 : 0;
+    $visible = (isset($_REQUEST['visible'])) ? 1 : 0;
     $price = Database::escape_string($_REQUEST['price']);
 
     $sql = "UPDATE $tableBuy
@@ -454,7 +457,7 @@ if ($_REQUEST['tab'] == 'save_mod') {
         WHERE " . $tableField . " = '" . $id . "';";
 
     $res = Database::query($sql);
-    if (!res) {
+    if (!$res) {
         $content = $plugin->get_lang('ProblemToSaveTheMessage') . Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {

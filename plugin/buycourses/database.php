@@ -32,7 +32,7 @@ $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $sql = "SELECT id, name, date_start, date_end FROM $tableSession";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
-    $presql = "INSERT INTO $table (session_id, name, date_start, date_end, visible) 
+    $presql = "INSERT INTO $table (session_id, name, date_start, date_end, visible)
     VALUES ('" . $row['id'] . "','" . $row['name'] . "','" . $row['date_start'] . "','" . $row['date_end'] . "','NO')";
     Database::query($presql);
 }
@@ -40,7 +40,7 @@ while ($row = Database::fetch_assoc($res)) {
 $table = Database::get_main_table(TABLE_BUY_COURSE);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
     id INT unsigned NOT NULL auto_increment PRIMARY KEY,
-    session_id INT unsigned NOT NULL DEFAULT '0',
+    session_id INT unsigned NOT NULL DEFAULT 0,
     course_id INT unsigned NOT NULL DEFAULT '0',
     code VARCHAR(40),
     title VARCHAR(250),
@@ -362,7 +362,7 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
     swift VARCHAR(100) NOT NULL DEFAULT '')";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_BUY_SESSION_TEMPORAL);
+$table = Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
     cod INT unsigned NOT NULL auto_increment PRIMARY KEY,
     user_id INT unsigned NOT NULL,

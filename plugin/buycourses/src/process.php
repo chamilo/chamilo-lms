@@ -27,13 +27,12 @@ if (!empty($_GET['code'])) {
     $code = $_SESSION['bc_code'];
 }
 
-$result = array_shift(
-    Database::select(
-        'selected_value',
-        Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT),
-        array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
-    )
+$selectedValue = Database::select(
+    'selected_value',
+    Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT),
+    array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
 );
+$result = array_shift($selectedValue);
 
 if ($codeType === 'SESSION' && $result['selected_value'] === 'true') {
     $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);

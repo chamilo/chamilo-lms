@@ -4,6 +4,7 @@
  * Description of buy_courses_plugin
  * @package chamilo.plugin.buycourses
  * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
+ * @author Imanol Losada      <imanol.losada@beeznest.com>
  */
 /**
  * Plugin class for the BuyCourses plugin
@@ -23,13 +24,14 @@ class BuyCoursesPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '1.0', 
-            'Jose Angel Ruiz - NoSoloRed (original author), 
-            Francis Gonzales and Yannick Warnier - BeezNest (integration)', 
+            '1.0',
+            'Jose Angel Ruiz - NoSoloRed (original author),
+            Francis Gonzales and Yannick Warnier - BeezNest (integration),
+            Imanol Losada - BeezNest',
             array(
-                'include_sessions' => 'boolean', 
-                'paypal_enable' => 'boolean', 
-                'transfer_enable' => 'boolean', 
+                'include_sessions' => 'boolean',
+                'paypal_enable' => 'boolean',
+                'transfer_enable' => 'boolean',
                 'unregistered_users_enable' => 'boolean'
             )
         );
@@ -51,7 +53,7 @@ class BuyCoursesPlugin extends Plugin
         $tablesToBeDeleted = array(
             TABLE_BUY_SESSION,
             TABLE_BUY_SESSION_COURSE,
-            TABLE_BUY_SESSION_TEMPORAL,
+            TABLE_BUY_SESSION_TEMPORARY,
             TABLE_BUY_SESSION_SALE,
             TABLE_BUY_COURSE,
             TABLE_BUY_COURSE_COUNTRY,

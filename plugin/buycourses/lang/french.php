@@ -65,5 +65,5 @@ $strings['ErrorContactPlatformAdmin'] = "Une erreur inconnue s'est produite. Veu
 $strings['PayPalConfig'] = "Configuration PayPal:";
 $strings['TransfersConfig'] = "Configuration des transfers bancaires:";
 $strings['PayPalPaymentOKPleaseConfirm'] = "PayPal nous indique que la transaction est prête à être exécutée. Par mesure de sécurité, nous vous demandons de bien vouloir confirmer une dernière fois la transaction en cliquant sur le bouton de confirmation ci-dessous. Une fois cliqué, vous serez immédiatement enregistré au cours, et les fonds correspondants seront soustraits de votre compte PayPal. Vous pouvez accéder à vos cours à tout moment à partir de l'onglet 'Mes cours'. Merci de votre fidélité!";
-$strings['EnrollToSessionXSuccessful'] = "Votre inscription au session %s est terminée.";
-$strings['TheUserIsAlreadyRegisteredInTheSession'] = "L'utilisateur est déjà inscrit au session";
+$strings['EnrollToSessionXSuccessful'] = "Votre inscription à la session %s est terminée.";
+$strings['TheUserIsAlreadyRegisteredInTheSession'] = "Vous êtes déjà inscrit à cette session";

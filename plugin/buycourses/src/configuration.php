@@ -44,13 +44,12 @@ if ($teacher) {
     $tpl->assign('save_img', $saveImgPath);
     $tpl->assign('currency', $currencyType);
 
-    $result = array_shift(
-        Database::select(
-            'selected_value', 
-            Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT), 
-            array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
-        )
+    $selectedValue = Database::select(
+        'selected_value',
+        Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT),
+        array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
     );
+    $result = array_shift($selectedValue);
     if ($result['selected_value'] === 'true') {
         $tpl->assign('sessionsAreIncluded', 'YES');
         $tpl->assign('sessions', listSessions());

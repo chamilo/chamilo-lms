@@ -65,23 +65,23 @@ if ($token != "") {
         $email = $resArray["EMAIL"]; // ' Email address of payer.
         $payerId = $resArray["PAYERID"]; // ' Unique PayPal customer account identification number.
         $payerStatus = $resArray["PAYERSTATUS"]; // ' Status of payer. Character length and limitations: 10 single-byte alphabetic characters.
-        $salutation = $resArray["SALUTATION"]; // ' Payer's salutation.
+        $salutation = isset($resArray["SALUTATION"]) ? $resArray["SALUTATION"] : null; // ' Payer's salutation.
         $firstName = $resArray["FIRSTNAME"]; // ' Payer's first name.
-        $middleName = $resArray["MIDDLENAME"]; // ' Payer's middle name.
+        $middleName = isset($resArray["MIDDLENAME"]) ? $resArray["MIDDLENAME"] : null; // ' Payer's middle name.
         $lastName = $resArray["LASTNAME"]; // ' Payer's last name.
-        $suffix = $resArray["SUFFIX"]; // ' Payer's suffix.
-        $cntryCode = $resArray["COUNTRY_CODE"]; // ' Payer's country of residence in the form of ISO standard 3166 two-character country codes.
-        $business = $resArray["BUSINESS"]; // ' Payer's business name.
+        $suffix = isset($resArray["SUFFIX"]) ? $resArray["SUFFIX"] : null; // ' Payer's suffix.
+        $cntryCode = isset($resArray["COUNTRY_CODE"]) ? $resArray["COUNTRY_CODE"] : null; // ' Payer's country of residence in the form of ISO standard 3166 two-character country codes.
+        $business = isset($resArray["BUSINESS"]) ? $resArray["BUSINESS"] : null; // ' Payer's business name.
         $shipToName = $resArray["PAYMENTREQUEST_0_SHIPTONAME"]; // ' Person's name associated with this address.
         $shipToStreet = $resArray["PAYMENTREQUEST_0_SHIPTOSTREET"]; // ' First street address.
-        $shipToStreet2 = $resArray["PAYMENTREQUEST_0_SHIPTOSTREET2"]; // ' Second street address.
+        $shipToStreet2 = isset($resArray["PAYMENTREQUEST_0_SHIPTOSTREET2"]) ? $resArray["PAYMENTREQUEST_0_SHIPTOSTREET2"] : null; // ' Second street address.
         $shipToCity = $resArray["PAYMENTREQUEST_0_SHIPTOCITY"]; // ' Name of city.
         $shipToState = $resArray["PAYMENTREQUEST_0_SHIPTOSTATE"]; // ' State or province
         $shipToCntryCode = $resArray["PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE"]; // ' Country code.
         $shipToZip = $resArray["PAYMENTREQUEST_0_SHIPTOZIP"]; // ' U.S. Zip code or other country-specific postal code.
         $addressStatus = $resArray["ADDRESSSTATUS"]; // ' Status of street address on file with PayPal
-        $invoiceNumber = $resArray["INVNUM"]; // ' Your own invoice or tracking number, as set by you in the element of the same name in SetExpressCheckout request .
-        $phonNumber = $resArray["PHONENUM"]; // ' Payer's contact telephone number. Note:  PayPal returns a contact telephone number only if your Merchant account profile settings require that the buyer enter one.
+        $invoiceNumber = isset($resArray["INVNUM"]) ? $resArray["INVNUM"] : null; // ' Your own invoice or tracking number, as set by you in the element of the same name in SetExpressCheckout request .
+        $phonNumber = isset($resArray["PHONENUM"]) ? $resArray["PHONENUM"] : null; // ' Payer's contact telephone number. Note:  PayPal returns a contact telephone number only if your Merchant account profile settings require that the buyer enter one.
     } else {
         //Display a user friendly Error on the page using any of the following error information returned by PayPal
         $ErrorCode = urldecode($resArray["L_ERRORCODE0"]);
@@ -231,7 +231,7 @@ if (!isset($_POST['paymentOption'])) {
                     );
                     $url = Display::url(
                         $all_session_information['name'],
-                        $_configuration['root_web']."main/session/index.php?session_id=".$sessionId
+                        api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId
                     );
                     $_SESSION['bc_message'] = 'EnrollToSessionXSuccessful';
                     $_SESSION['bc_url'] = $url;

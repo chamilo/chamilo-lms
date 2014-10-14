@@ -25,10 +25,10 @@ function sync()
     $sql = "SELECT id_session, course_code, nbr_users FROM $tableSessionRelCourse";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
-        $sql = "SELECT 1 FROM $tableBuySessionRelCourse WHERE id_session='" . $row['id'] . "';";
+        $sql = "SELECT 1 FROM $tableBuySessionRelCourse WHERE id_session='" . $row['id_session'] . "';";
         Database::query($sql);
         if (Database::affected_rows() > 0) {
-            $sql = "UPDATE $tableBuySessionRelCourse SET sync = 1 WHERE id_session='" . $row['id'] . "';";
+            $sql = "UPDATE $tableBuySessionRelCourse SET sync = 1 WHERE id_session='" . $row['id_session'] . "';";
             Database::query($sql);
         } else {
             $sql = "INSERT INTO $tableBuySessionRelCourse (id_session, course_code, nbr_users, sync)
@@ -147,7 +147,7 @@ function userSessionList()
     $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
     $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
     $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $tableBuySessionTemporal = Database::get_main_table(TABLE_BUY_SESSION_TEMPORAL);
+    $tableBuySessionTemporal = Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY);
 
     // get existing sessions
     $sql = "SELECT a.session_id, a.visible, a.price, b.*
@@ -182,8 +182,8 @@ function userSessionList()
                 $rowTmp = Database::fetch_assoc($tmp);
                 $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
                 //check images
-                if (file_exists("../../courses/" . $row['code'] . "/course-pic85x85.png")) {
-                    $row['course_img'] = "courses/" . $row['code'] . "/course-pic85x85.png";
+                if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['directory'] . "/course-pic85x85.png")) {
+                    $row['course_img'] = "courses/" . $row['directory'] . "/course-pic85x85.png";
                 } else {
                     $row['course_img'] = "main/img/without_picture.png";
                 }
@@ -195,14 +195,14 @@ function userSessionList()
         if (isset($_SESSION['_user']) || $_SESSION['_user']['user_id'] != '') {
             $sql = "SELECT 1 FROM $tableSessionRelUser
                 WHERE id_session='".$rowSession['session_id']."' AND
-                id_user='" . $_SESSION['_user']['user_id'] . "';";
+                id_user ='" . $_SESSION['_user']['user_id'] . "';";
             Database::query($sql);
             if (Database::affected_rows() > 0) {
                 $rowSession['enrolled'] = "YES";
             } else {
                 $sql = "SELECT 1 FROM $tableBuySessionTemporal
-                    WHERE id_session='".$rowSession['session_id']."' AND
-                    id_user='" . $_SESSION['_user']['user_id'] . "';";
+                    WHERE session_id ='".$rowSession['session_id']."' AND
+                    user_id='" . $_SESSION['_user']['user_id'] . "';";
                 Database::query($sql);
                 if (Database::affected_rows() > 0) {
                     $rowSession['enrolled'] = "TMP";
@@ -212,8 +212,8 @@ function userSessionList()
             }
         } else {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
-                WHERE id_session='".$rowSession['session_id']."' AND
-                id_user='" . $_SESSION['_user']['user_id'] . "';";
+                WHERE session_id ='".$rowSession['session_id']."' AND
+                user_id='" . $_SESSION['_user']['user_id'] . "';";
             Database::query($sql);
             if (Database::affected_rows() > 0) {
                 $rowSession['enrolled'] = "TMP";
@@ -320,7 +320,7 @@ function checkUserBuyTransfer($parameter, $user, $type = 'COURSE')
 {
     $sql = "SELECT 1 FROM %s WHERE %s ='" . $parameter . "' AND id_user='" . $user . "';";
     $sql = $type === 'SESSION' ?
-        sprintf($sql, Database::get_main_table(TABLE_BUY_SESSION_TEMPORAL), 'session_id') :
+        sprintf($sql, Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY), 'session_id') :
         sprintf($sql, Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL), 'course_code');
     Database::query($sql);
     if (Database::affected_rows() > 0) {
@@ -461,7 +461,7 @@ function sessionInfo($code)
     $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
     $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
     $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $tableBuySessionTemporal = Database::get_main_table(TABLE_BUY_SESSION_TEMPORAL);
+    $tableBuySessionTemporal = Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY);
 
     $code = Database::escape_string($code);
     $sql = "SELECT a.session_id, a.visible, a.price, b.*
@@ -495,8 +495,8 @@ function sessionInfo($code)
             $rowTmp = Database::fetch_assoc($tmp);
             $row['teacher'] = $rowTmp['firstname'].' '.$rowTmp['lastname'];
             //check images
-            if (file_exists("../../courses/".$row['code']."/course-pic85x85.png")) {
-                $row['course_img'] = "courses/".$row['code']."/course-pic85x85.png";
+            if (file_exists(api_get_path(SYS_COURSE_PATH).$row['directory']."/course-pic85x85.png")) {
+                $row['course_img'] = "courses/".$row['directory']."/course-pic85x85.png";
             } else {
                 $row['course_img'] = "main/img/without_picture.png";
             }
@@ -622,10 +622,10 @@ function randomText($long = 6, $minWords = true, $maxWords = true, $number = tru
  * Generates an order reference
  * @result string A reference number
  */
-function calculateReference($bc_codetext)
+function calculateReference($bcCodetext)
 {
-    $tableBuyTemporal = $bc_codetext === 'THIS_IS_A_SESSION' ?
-        Database::get_main_table(TABLE_BUY_SESSION_TEMPORAL) :
+    $tableBuyTemporal = $bcCodetext === 'THIS_IS_A_SESSION' ?
+        Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY) :
         Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
     $sql = "SELECT MAX(cod) as cod FROM $tableBuyTemporal";
     $res = Database::query($sql);
@@ -640,10 +640,10 @@ function calculateReference($bc_codetext)
  * @result array List of orders
  * @todo Enable pagination
  */
-function pendingList($bc_codetext)
+function pendingList($bcCodetext)
 {
-    $tableBuyTemporal = $bc_codetext === 'THIS_IS_A_SESSION' ?
-        Database::get_main_table(TABLE_BUY_SESSION_TEMPORAL) :
+    $tableBuyTemporal = $bcCodetext === 'THIS_IS_A_SESSION' ?
+        Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY) :
         Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
     $sql = "SELECT * FROM $tableBuyTemporal;";
     $res = Database::query($sql);

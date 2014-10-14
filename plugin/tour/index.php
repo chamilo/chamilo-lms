@@ -9,20 +9,17 @@
  */
 require_once dirname(__FILE__) . '/config.php';
 
-$pluginPath = api_get_path(PLUGIN_PATH) . 'tour/';
 $pluginWebPath = api_get_path(WEB_PLUGIN_PATH) . 'tour/';
 
 $userId = api_get_user_id();
 
 $tourPlugin = Tour::create();
 
-$jsonContent = file_get_contents($pluginPath . 'config/tour.json');
-
-$json = json_decode($jsonContent, true);
+$config = $tourPlugin->getTourCofig();
 
 $pages = array();
 
-foreach ($json as $pageContent) {
+foreach ($config as $pageContent) {
     $pages[] = array(
         'pageClass' => $pageContent['pageClass'],
         'show' => $tourPlugin->checkTourForUser($pageContent['pageClass'], $userId)

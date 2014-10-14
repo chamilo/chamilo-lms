@@ -126,4 +126,19 @@ class Tour extends Plugin
         ));
     }
 
+    /**
+     * Get the configuration to show the tour in pages
+     * @return array The config data
+     */
+    public function getTourCofig()
+    {
+        $pluginPath = api_get_path(PLUGIN_PATH) . 'tour/';
+
+        $jsonContent = file_get_contents($pluginPath . 'config/tour.json');
+
+        $jsonData = json_decode($jsonContent, true);
+
+        return $jsonData;
+    }
+
 }

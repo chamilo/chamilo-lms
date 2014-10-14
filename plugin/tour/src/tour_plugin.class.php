@@ -17,7 +17,8 @@ class Tour extends Plugin
     protected function __construct()
     {
         $parameters = array(
-            'show_tour' => 'boolean'
+            'show_tour' => 'boolean',
+            'theme' => 'text'
         );
 
         parent::__construct('1.0', 'Angel Fernando Quiroz Campos', $parameters);

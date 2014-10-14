@@ -18,6 +18,9 @@ $showTourHelpLine02 = 'Ver el archivo README para más información.';
 
 $strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", "<strong>", "</strong>", "<br>");
 
+$strings['theme'] = 'Tema';
+$strings['theme_help'] = 'Elegir entre <i>nassim</i>, <i>nazanin</i>, <i>royal</i>. Vacío para usar el tema por defecto.';
+
 /* Strings for plugin UI */
 $strings['Skip'] = 'Saltar';
 $strings['Next'] = 'Siguiente';

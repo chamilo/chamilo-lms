@@ -69,10 +69,12 @@
                         rel: 'stylesheet'
                     }).appendTo('head');
 
-                    $('<link>', {
-                        href: '{{ tour.web_path.intro_theme_css }}',
-                        rel: 'stylesheet'
-                    }).appendTo('head');
+                    {% if tour.web_path.intro_theme_css is not null %}
+                        $('<link>', {
+                            href: '{{ tour.web_path.intro_theme_css }}',
+                            rel: 'stylesheet'
+                        }).appendTo('head');
+                    {% endif %}
 
                     $.getScript('{{ tour.web_path.intro_js }}', function() {
                         chamiloTour.init(page.pageClass);

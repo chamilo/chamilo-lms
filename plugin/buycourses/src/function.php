@@ -168,7 +168,7 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
     }
 
     $currencyType = findCurrency();
-    $content = '';;
+    $content = '';
     foreach ($auxSessions as $session) {
         $content .= '<div class="well_border span8">';
         $content .= '<div class="row">';
@@ -235,6 +235,9 @@ if ($_REQUEST['tab'] == 'courses_filter') {
     $course = Database::escape_string($_REQUEST['course']);
     $priceMin = Database::escape_string($_REQUEST['pricemin']);
     $priceMax = Database::escape_string($_REQUEST['pricemax']);
+    /**
+     * Deprecated since 2014-10-14
+     */
     //$show = Database::escape_string($_REQUEST['show']);
     $category = Database::escape_string($_REQUEST['category']);
     $server = api_get_path(WEB_PATH);
@@ -315,11 +318,15 @@ if ($_REQUEST['tab'] == 'courses_filter') {
             $row['course_img'] = "main/img/without_picture.png";
         }
 
-        //if ($show == "YES" && $row['enrolled'] == "YES") {
-        //    ;
-        //} else {
         $aux[] = $row;
-        //}
+        /**
+         * Deprecated since 2014-10-14
+         */
+        /*if ($show == "YES" && $row['enrolled'] == "YES") {
+            ;
+        } else {
+          $aux[] = $row;
+        }*/
 
     }
     $currencyType = findCurrency();

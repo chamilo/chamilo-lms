@@ -2,6 +2,23 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$UserNameHasDash = "The username cannot contain the '-' character";
+$IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "If you want only integer values write both limits without decimals";
+$GiveAnswerVariations = "Please, write how many question variations you want";
+$AnswerVariations = "Question variations";
+$GiveFormula = "Please, write the formula";
+$Formula = "Formula";
+$FormulaExample = "Formula sample";
+$VariableRanges = "Variable ranges";
+$ExampleValue = "Range value";
+$CalculatedAnswer = "Calculated question";
+$UserIsCurrentlySubscribed = "The user is currently subscribed";
+$OnlyBestAttempts = "Only best attempts";
+$IncludeAllUsers = "Include all users";
+$HostingWarningReached = "Hosting warning reached";
+$SessionName = "Session name";
+$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains not valid characters";
+$CountryDialCode = "Include the country dial code";
 $FieldTypeMobilePhoneNumber = "Mobile phone number";
 $CheckUniqueEmail = "Check unique email";
 $EmailUsedTwice = "This email is not available";
@@ -1621,7 +1638,4 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
-$FieldTypeMobilePhoneNumber = "Mobile phone";
-$CountryDialCode = "Include the country dial code";
-$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains not valid characters";
 ?>

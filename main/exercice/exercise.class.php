@@ -1736,7 +1736,7 @@ class Exercise
         return $id;
     }
 
-    public function show_button($question_id, $questionNum, $questions_in_media = array()) {
+    public function show_button($question_id, $questionNum, $questions_in_media = array(), $currentAnswer = '') {
         global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
 
         $nbrQuestions = $this->get_count_question_list();
@@ -1779,7 +1779,7 @@ class Exercise
                         $questions_in_media = "['".implode("','",$questions_in_media)."']";
                         $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.'); ">'.$label.'</a>';
                     } else {
-                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
+                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.', \'\', \''.$currentAnswer.'\'); ">'.$label.'</a>';
                     }
                     $all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
 
@@ -2123,7 +2123,7 @@ class Exercise
             error_log('$answerType: '.$answerType);
         }
 
-        if ($answerType == FREE_ANSWER || $answerType == ORAL_EXPRESSION) {
+        if ($answerType == FREE_ANSWER || $answerType == ORAL_EXPRESSION || $answerType == CALCULATED_ANSWER) {
             $nbrAnswers = 1;
         }
 
@@ -2521,6 +2521,102 @@ class Exercise
                         }
                     }
                     break;
+                // for calculated answer
+                case CALCULATED_ANSWER:
+                    $answer = $objAnswerTmp->selectAnswer($_SESSION['calculatedAnswerId'][$questionId]);
+                    $preArray = explode('@@', $answer);
+                    $last = count($preArray) - 1;
+                    $answer = '';
+                    for ($k = 0; $k < $last; $k++) {
+                        $answer .= $preArray[$k];
+                    }
+                    $answerWeighting = array($answerWeighting);
+                    // we save the answer because it will be modified
+                    $temp = $answer;
+                    $answer = '';
+                    $j = 0;
+                    //initialise answer tags
+                    $userTags = $correctTags = $realText = array();
+                    // the loop will stop at the end of the text
+                    while (1) {
+                        // quits the loop if there are no more blanks (detect '[')
+                        if (($pos = api_strpos($temp, '[')) === false) {
+                            // adds the end of the text
+                            $answer = $temp;
+                            $realText[] = $answer;
+                            break; //no more "blanks", quit the loop
+                        }
+                        // adds the piece of text that is before the blank
+                        //and ends with '[' into a general storage array
+                        $realText[] = api_substr($temp, 0, $pos +1);
+                        $answer .= api_substr($temp, 0, $pos +1);
+                        //take the string remaining (after the last "[" we found)
+                        $temp = api_substr($temp, $pos +1);
+                        // quit the loop if there are no more blanks, and update $pos to the position of next ']'
+                        if (($pos = api_strpos($temp, ']')) === false) {
+                            // adds the end of the text
+                            $answer .= $temp;
+                            break;
+                        }
+                        if ($from_database) {
+                            $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                                          WHERE
+                                            exe_id = '".$exeId."' AND
+                                            question_id= '".Database::escape_string($questionId)."'";
+                            $resfill = Database::query($queryfill);
+                            $str = Database::result($resfill, 0, 'answer');
+                            api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
+                            $str = str_replace('\r\n', '', $str);
+                            $choice = $arr[1];
+                            if (isset($choice[$j])) {
+                                $tmp = api_strrpos($choice[$j], ' / ');
+                                $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                $choice[$j] = trim($choice[$j]);
+                                // Needed to let characters ' and " to work as part of an answer
+                                $choice[$j] = stripslashes($choice[$j]);
+                            } else {
+                                $choice[$j] = null;
+                            }
+                        } else {
+                            // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                            $choice[$j] = api_htmlentities(trim($choice[$j]));
+                        }
+                        $userTags[] = $choice[$j];
+                        //put the contents of the [] answer tag into correct_tags[]
+                        $correctTags[] = api_substr($temp, 0, $pos);
+                        $j++;
+                        $temp = api_substr($temp, $pos +1);
+                    }
+                    $answer = '';
+                    $realCorrectTags = $correctTags;
+                    for ($i = 0; $i < count($realCorrectTags); $i++) {
+                        if ($i == 0) {
+                            $answer .= $realText[0];
+                        }
+                        // Needed to parse ' and " characters
+                        $userTags[$i] = stripslashes($userTags[$i]);
+                        if ($correctTags[$i] == $userTags[$i]) {
+                            // gives the related weighting to the student
+                            $questionScore += $answerWeighting[$i];
+                            // increments total score
+                            $totalScore += $answerWeighting[$i];
+                            // adds the word in green at the end of the string
+                            $answer .= $correctTags[$i];
+                        } elseif (!empty($userTags[$i])) {
+                            // else if the word entered by the student IS NOT the same as the one defined by the professor
+                            // adds the word in red at the end of the string, and strikes it
+                            $answer .= '<font color="red"><s>' . $userTags[$i] . '</s></font>';
+                        } else {
+                            // adds a tabulation if no word has been typed by the student
+                            $answer .= ''; // remove &nbsp; that causes issue
+                        }
+                        // adds the correct word, followed by ] to close the blank
+                        $answer .= ' / <font color="green"><b>' . $realCorrectTags[$i] . '</b></font>]';
+                        if (isset($realText[$i +1])) {
+                            $answer .= $realText[$i +1];
+                        }
+                    }
+                    break;
                 // for free answer
                 case FREE_ANSWER:
                     if ($from_database) {
@@ -2757,6 +2853,10 @@ class Exercise
                             //if ($origin!='learnpath') {
                             ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,0,0);
                             //	}
+                        } elseif($answerType == CALCULATED_ANSWER) {
+                            //if ($origin!='learnpath') {
+                            ExerciseShowFunctions::display_calculated_answer($feedback_type, $answer,0,0);
+                            //  }
                         } elseif($answerType == FREE_ANSWER) {
                             //if($origin != 'learnpath') {
                             ExerciseShowFunctions::display_free_answer($feedback_type, $choice, $exeId, $questionId, $questionScore);
@@ -2963,6 +3063,9 @@ class Exercise
                             break;
                         case FILL_IN_BLANKS:
                             ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,$exeId,$questionId);
+                            break;
+                        case CALCULATED_ANSWER:
+                            ExerciseShowFunctions::display_calculated_answer($feedback_type, $answer, $exeId, $questionId);
                             break;
                         case FREE_ANSWER:
                             echo ExerciseShowFunctions::display_free_answer($feedback_type, $choice, $exeId, $questionId, $questionScore);
@@ -3197,7 +3300,6 @@ class Exercise
             'threadhold2'=>$threadhold2,
             'threadhold3'=> $threadhold3,
         );
-
         if ($from == 'exercise_result') {
             // if answer is hotspot. To the difference of exercise_show.php, we use the results from the session (from_db=0)
             // TODO Change this, because it is wrong to show the user some results that haven't been stored in the database yet

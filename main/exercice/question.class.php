@@ -17,6 +17,7 @@ define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
 define('ORAL_EXPRESSION',                           13);
 define('GLOBAL_MULTIPLE_ANSWER',                    14);
 define('MEDIA_QUESTION',                            15);
+define('CALCULATED_ANSWER',                         16);
 
 //Some alias used in the QTI exports
 define('MCUA',				1);
@@ -68,6 +69,7 @@ abstract class Question
         MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'),
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse'),
         GLOBAL_MULTIPLE_ANSWER =>		array('global_multiple_answer.class.php' , 'GlobalMultipleAnswer'),
+        CALCULATED_ANSWER =>			array('calculated_answer.class.php' , 'CalculatedAnswer')
         //MEDIA_QUESTION =>               array('media_question.class.php' , 'MediaQuestion')
     );
 

@@ -82,6 +82,7 @@ $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : 
 
 //From submit modal
 $current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
+$currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
 
 //Error message
 $error = '';
@@ -415,7 +416,7 @@ if ($formSent && isset($_POST)) {
                     if (isset($exe_id)) {
                     	//Manage the question and answer attempts
                         if ($debug) { error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
-                    	$objExercise->manage_answer(
+                        $objExercise->manage_answer(
                             $exe_id,
                             $questionId,
                             $choice,
@@ -424,7 +425,8 @@ if ($formSent && isset($_POST)) {
                             true,
                             false,
                             false,
-                            $objExercise->propagate_neg
+                            $objExercise->propagate_neg,
+                            array()
                         );
                     }
                     //END of saving and qualifying
@@ -442,7 +444,6 @@ if ($formSent && isset($_POST)) {
     Session::write('exerciseResultCoordinates',$exerciseResultCoordinates);
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
-
     if ($objExercise->type == ALL_ON_ONE_PAGE || $current_question >= $question_count) {
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
@@ -973,6 +974,7 @@ if (!empty($error)) {
          <input type="hidden" name="formSent"				value="1" />
          <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
          <input type="hidden" name="num" 					value="'.$current_question.'" id="num_current_id" />
+         <input type="hidden" name="num_answer"             value="'.$currentAnswer.'" id="num_current_answer_id" />
          <input type="hidden" name="exe_id" 				value="'.$exe_id . '" />
          <input type="hidden" name="origin" 				value="'.$origin . '" />
          <input type="hidden" name="learnpath_id" 			value="'.$learnpath_id . '" />

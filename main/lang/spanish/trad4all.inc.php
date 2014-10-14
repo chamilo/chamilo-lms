@@ -2,10 +2,40 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$UserNameHasDash = "El nombre de usuario no puede contener el caracter '-'";
+$IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "Si desea sólo números enteros escriba ambos límites sin decimales";
+$GiveAnswerVariations = "Por favor, escriba cuántos problemas desea generar";
+$AnswerVariations = "Problemas a generar";
+$GiveFormula = "Por favor, escriba la fórmula";
+$Formula = "Fórmula";
+$FormulaExample = "Ejemplo de fórmula";
+$VariableRanges = "Rangos de las variables";
+$ExampleValue = "Valor del rango";
+$CalculatedAnswer = "Pregunta calculada";
+$UserIsCurrentlySubscribed = "El usuario está actualmente suscrito";
+$OnlyBestAttempts = "Solo los mejores intentos";
+$IncludeAllUsers = "Incluir todos los usuarios";
+$HostingWarningReached = "Limite de alojamiento alcanzado";
+$SessionName = "Nombre de la sesión";
+$MobilePhoneNumberWrong = "El número de móvil que ha escrito está incompleto o contiene caracteres no válidos";
+$CountryDialCode = "Incluya el prefijo de llamada del país";
 $FieldTypeMobilePhoneNumber = "Número de móvil";
 $CheckUniqueEmail = "Verificar que los correos sean únicos.";
-$EmailUsedTwice = "El correo electrónico ya esta registrado en el sistema.";
+$EmailUsedTwice = "Este correo electrónico ya está registrado en el sistema.";
+$TotalPostsInAllForums = "Total de posts en todos los foros";
+$AddMeAsCoach = "Agregarme como tutor";
+$AddMeAsTeacherInCourses = "Agregarme como profesor en los cursos importados.";
+$ExerciseProgressInfo = "Progreso de los ejercicios llevados por el alumno";
+$CourseTimeInfo = "Tiempo pasado en el curso";
+$ExerciseAverageInfo = "Media del mejor resultado para cada intento de ejercicio.";
+$ExtraDurationForUser = "Días de acceso adicionales para este usuario.";
 $UserXSessionY = "Usuario: %s - Sesión: %s";
+$DurationIsSameAsDefault = "La duración de la sesión es la misma que el valor por defecto. Ignorando.";
+$FirstAccessWasXSessionDurationYEndDateWasZ = "El primer acceso de este usuario a la sesión fue el %s. Con una duración de %s días, el acceso a esta sesión expiró el %s.";
+$FirstAccessWasXSessionDurationYEndDateInZDays = "El primer acceso de este usuario a esta sesión fue el %s. Con una duración de %s días, la fecha de fin está configurada dentro de %s días.";
+$UserNeverAccessedSessionDefaultDurationIsX = "Este usuario nunca ha accedido a esta sesión antes. La duración está configurada a %s días (desde la fecha de primer acceso).";
+$SessionDurationEdit = "Editar duración de sesión";
+$EditUserSessionDuration = "Editar la duración de la sesión del usuario";
 $SessionDurationXDaysLeft = "Esta sesión tiene una duración máxima. Solo quedan %s días.";
 $NextTopic = "Próximo tema";
 $CurrentTopic = "Tema actual";
@@ -1613,7 +1643,4 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
-$FieldTypeMobilePhoneNumber = "Número de móvil"; 
-$CountryDialCode = "Incluya el prefijo de llamada del país";
-$MobilePhoneNumberWrong = "El número de móvil que ha escrito está incompleto o contiene caracteres no válidos.";
 ?>

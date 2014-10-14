@@ -50,6 +50,39 @@ class ExerciseShowFunctions
         }
 	}
 
+    /**
+     * Shows the answer to a calculated question, as HTML
+     * @param string    Answer text
+     * @param int       Exercise ID
+     * @param int       Question ID
+     * @return void
+     */
+    static function display_calculated_answer($feedback_type, $answer, $id, $questionId)
+    {
+        if (empty($id)) {
+            echo '<tr><td>'. (Security::remove_XSS($answer)).'</td></tr>';
+        } else {
+        ?>
+            <tr>
+                <td>
+                    <?php
+                    echo (Security::remove_XSS($answer));
+                    ?>
+                </td>
+
+            <?php
+            if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+                <td>
+                    <?php
+                    $comm = get_comments($id,$questionId);
+                    ?>
+                </td>
+            <?php } ?>
+            </tr>
+        <?php
+        }
+    }
+
 	/**
 	 * Shows the answer to a free-answer question, as HTML
 	 * @param string    Answer text

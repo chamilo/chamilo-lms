@@ -25,9 +25,7 @@
  *
  * @package chamilo.document
  */
-/**
- * Code
- */
+
 use \ChamiloSession as Session;
 // Language files that need to be included
 $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
@@ -1649,7 +1647,6 @@ if (!is_null($documentAndFolders)) {
     }
 }
 
-// Slideshow by Patrick Cool, May 2004
 require 'document_slideshow.inc.php';
 if ($image_present && !isset($_GET['keyword'])) {
     $actions .= Display::url(

@@ -27,7 +27,7 @@ class BuyCoursesPlugin extends Plugin
             '1.0',
             'Jose Angel Ruiz - NoSoloRed (original author),
             Francis Gonzales and Yannick Warnier - BeezNest (integration),
-            Imanol Losada - BeezNest',
+            Imanol Losada - BeezNest (introduction of sessions purchase)',
             array(
                 'include_sessions' => 'boolean',
                 'paypal_enable' => 'boolean',

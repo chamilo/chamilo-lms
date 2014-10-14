@@ -9,12 +9,14 @@
     "steps": [
         {
             "elementSelector": "element class or id",
-            "message": "Language variable"
+            "message": "LanguageVariable"
         },
         {
             "elementSelector": "element class or id",
-            "message": "Language variable"
+            "message": "LanguageVariable"
         },
     ]
 }
 </pre>
+Then set the language variables inside the `plugin/tour/lang/$language.php` file<br>
+<br>

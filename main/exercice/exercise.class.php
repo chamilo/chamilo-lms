@@ -2841,36 +2841,36 @@ class Exercise
                             //if ($origin != 'learnpath') {
                             ExerciseShowFunctions::display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, 0, 0, 0, $results_disabled);
                             //}
-                        } elseif($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+                        } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
                             //if ($origin!='learnpath') {
                             ExerciseShowFunctions::display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,$questionId,0, $results_disabled);
                             //}
-                        } elseif($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
+                        } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
                             //	if ($origin!='learnpath') {
                             ExerciseShowFunctions::display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect,0,0,0, $results_disabled);
                             //}
-                        } elseif($answerType == FILL_IN_BLANKS) {
+                        } elseif ($answerType == FILL_IN_BLANKS) {
                             //if ($origin!='learnpath') {
                             ExerciseShowFunctions::display_fill_in_blanks_answer($feedback_type, $answer,0,0);
                             //	}
-                        } elseif($answerType == CALCULATED_ANSWER) {
+                        } elseif ($answerType == CALCULATED_ANSWER) {
                             //if ($origin!='learnpath') {
                             ExerciseShowFunctions::display_calculated_answer($feedback_type, $answer,0,0);
                             //  }
-                        } elseif($answerType == FREE_ANSWER) {
+                        } elseif ($answerType == FREE_ANSWER) {
                             //if($origin != 'learnpath') {
                             ExerciseShowFunctions::display_free_answer($feedback_type, $choice, $exeId, $questionId, $questionScore);
                             //}
-                        } elseif($answerType == ORAL_EXPRESSION) {
+                        } elseif ($answerType == ORAL_EXPRESSION) {
                             // to store the details of open questions in an array to be used in mail
                             //if ($origin != 'learnpath') {
                             ExerciseShowFunctions::display_oral_expression_answer($feedback_type, $choice, 0, 0, $nano);
                             //}
-                        } elseif($answerType == HOT_SPOT) {
+                        } elseif ($answerType == HOT_SPOT) {
                             //if ($origin != 'learnpath') {
                             ExerciseShowFunctions::display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment, $results_disabled);
                             //	}
-                        } elseif($answerType == HOT_SPOT_ORDER) {
+                        } elseif ($answerType == HOT_SPOT_ORDER) {
                             //if ($origin != 'learnpath') {
                             ExerciseShowFunctions::display_hotspot_order_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment);
                             //}

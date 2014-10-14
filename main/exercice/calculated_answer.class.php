@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *
  *  Class CalculatedAnswer
+ *  This class contains calculated answer form and answer processing functions
  *
  *  @author Imanol Losada
  *  @package chamilo.exercise

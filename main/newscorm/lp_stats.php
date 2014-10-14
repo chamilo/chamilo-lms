@@ -114,7 +114,11 @@ $TBL_QUIZ = Database :: get_course_table(TABLE_QUIZ_TEST);
 $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_stats_attempts = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW WHERE c_id = $course_id AND lp_id = $lp_id AND user_id = '" . $user_id . "' $session_condition";
+$sql = "SELECT max(view_count) FROM $TBL_LP_VIEW
+        WHERE
+            c_id = $course_id AND
+            lp_id = $lp_id AND
+            user_id = '" . $user_id . "' $session_condition";
 $res = Database::query($sql);
 $view = '';
 $num = 0;
@@ -142,8 +146,11 @@ if (isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
     $clean_lp_item_id = Database::escape_string($_GET['lp_item_id']);
     $clean_lp_id = Database::escape_string($_GET['lp_id']);
     $clean_course_code = Database :: escape_string($course_code);
-    $sql_path = "SELECT path FROM $TBL_LP_ITEM WHERE c_id = $course_id AND id = '$clean_lp_item_id' AND lp_id = '$clean_lp_id'";
-    $res_path = Database::query($sql_path);
+    $sql = "SELECT path FROM $TBL_LP_ITEM
+            WHERE c_id = $course_id AND
+            id = '$clean_lp_item_id' AND
+            lp_id = '$clean_lp_id'";
+    $res_path = Database::query($sql);
     $row_path = Database::fetch_array($res_path);
 
     if (Database::num_rows($res_path) > 0) {
@@ -169,7 +176,6 @@ if (isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
                              ORDER BY exe_date';
         }
     }
-    //var_dump($sql_attempts);
 }
 
 //Show lp items
@@ -184,23 +190,26 @@ if (is_array($list) && count($list) > 0) {
 
         // Prepare statement to go through each attempt.
         if (!empty($view)) {
-            $sql = "SELECT  iv.status as mystatus,
-                            v.view_count as mycount,
-                            iv.score as myscore,
-                            iv.total_time as mytime,
-                            i.id as myid,
-                            i.lp_id as mylpid,
-                            iv.lp_view_id as mylpviewid,
-                            i.title as mytitle,
-                            i.max_score as mymaxscore,
-                            iv.max_score as myviewmaxscore,
-                            i.item_type as item_type,
-                            iv.view_count as iv_view_count,
-                            iv.id as iv_id,
-                            path
+            $sql = "SELECT
+                        iv.status as mystatus,
+                        v.view_count as mycount,
+                        iv.score as myscore,
+                        iv.total_time as mytime,
+                        i.id as myid,
+                        i.lp_id as mylpid,
+                        iv.lp_view_id as mylpviewid,
+                        i.title as mytitle,
+                        i.max_score as mymaxscore,
+                        iv.max_score as myviewmaxscore,
+                        i.item_type as item_type,
+                        iv.view_count as iv_view_count,
+                        iv.id as iv_id,
+                        path
                     FROM $TBL_LP_ITEM as i
-                    INNER JOIN $TBL_LP_ITEM_VIEW as iv ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
-                    INNER JOIN $TBL_LP_VIEW as v ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
+                    INNER JOIN $TBL_LP_ITEM_VIEW as iv
+                    ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
+                    INNER JOIN $TBL_LP_VIEW as v
+                    ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
             WHERE
                 i.id = $my_item_id AND
                 i.lp_id = $lp_id  AND
@@ -208,25 +217,28 @@ if (is_array($list) && count($list) > 0) {
                 v.view_count = $view AND
                 v.session_id = $session_id
             ORDER BY iv.view_count $qry_order ";
-            //var_dump($sql);
+
         } else {
-            $sql = "SELECT  iv.status as mystatus,
-                            v.view_count as mycount,
-                            iv.score as myscore,
-                            iv.total_time as mytime,
-                            i.id as myid,
-                            i.lp_id as mylpid,
-                            iv.lp_view_id as mylpviewid,
-                            i.title as mytitle,
-                            i.max_score as mymaxscore,
-                            iv.max_score as myviewmaxscore,
-                            i.item_type as item_type,
-                            iv.view_count as iv_view_count,
-                            iv.id as iv_id,
-                            path
+            $sql = "SELECT
+                        iv.status as mystatus,
+                        v.view_count as mycount,
+                        iv.score as myscore,
+                        iv.total_time as mytime,
+                        i.id as myid,
+                        i.lp_id as mylpid,
+                        iv.lp_view_id as mylpviewid,
+                        i.title as mytitle,
+                        i.max_score as mymaxscore,
+                        iv.max_score as myviewmaxscore,
+                        i.item_type as item_type,
+                        iv.view_count as iv_view_count,
+                        iv.id as iv_id,
+                        path
                     FROM $TBL_LP_ITEM as i
-                    INNER JOIN $TBL_LP_ITEM_VIEW as iv ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
-                    INNER JOIN $TBL_LP_VIEW as v ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
+                    INNER JOIN $TBL_LP_ITEM_VIEW as iv
+                    ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
+                    INNER JOIN $TBL_LP_VIEW as v
+                    ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
                     WHERE
                         i.id = $my_item_id AND
                         i.lp_id = $lp_id AND
@@ -234,6 +246,7 @@ if (is_array($list) && count($list) > 0) {
                         v.session_id = $session_id
                    ORDER BY iv.view_count $qry_order ";
         }
+
         $result = Database::query($sql);
         $num = Database :: num_rows($result);
         $time_for_total = 'NaN';
@@ -288,12 +301,17 @@ if (is_array($list) && count($list) > 0) {
             }
             $counter++;
 
+            $attemptCount = 1;
+
             do {
                 // Check if there are interactions below.
                 $extend_attempt_link = '';
                 $extend_this_attempt = 0;
 
-                if ((learnpath :: get_interactions_count_from_db($row['iv_id'], $course_id) > 0 || learnpath :: get_objectives_count_from_db($row['iv_id'], $course_id) > 0) && !$extend_all) {
+                if ((learnpath :: get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
+                    learnpath :: get_objectives_count_from_db($row['iv_id'], $course_id) > 0) &&
+                    !$extend_all
+                ) {
                     if (!empty($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
                         // The extend button for this attempt has been clicked.
                         $extend_this_attempt = 1;
@@ -312,9 +330,7 @@ if (is_array($list) && count($list) > 0) {
 
                 $lesson_status = $row['mystatus'];
                 $score = $row['myscore'];
-
                 $time_for_total = $row['mytime'];
-
                 $time = learnpathItem :: get_scorm_time('js', $row['mytime']);
                 $scoIdentifier = $row['myid'];
 
@@ -357,16 +373,17 @@ if (is_array($list) && count($list) > 0) {
                                 break;
                         }
                     }
+                    //$attemptCount = $row['iv_view_count'];
                     $output .= '<tr class="' . $oddclass . '">
                                     <td></td>
                                     <td>' . $extend_attempt_link . '</td>
-                                    <td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . '</td>
+                                    <td colspan="3">' . get_lang('Attempt') . ' ' . $attemptCount . '</td>
                                     <td colspan="2">' . learnpathItem::humanize_status($lesson_status) . '</td>
                                     <td colspan="2">' . $view_score . '</td>
                                     <td colspan="2">' . $time . '</td>
                                     <td></td>
                                 </tr>';
-
+                    $attemptCount++;
                     if (!empty($export_csv)) {
                         $temp = array();
                         $temp[] = $title = Security::remove_XSS($title);
@@ -390,7 +407,6 @@ if (is_array($list) && count($list) > 0) {
 
                 if ($extend_this_attempt OR $extend_all) {
                     $list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
-
                     foreach ($list1 as $id => $interaction) {
                         if (($counter % 2) == 0) {
                             $oddclass = 'row_odd';

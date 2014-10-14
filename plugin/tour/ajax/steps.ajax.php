@@ -16,8 +16,7 @@ if (!api_is_anonymous()) {
 
     $tourPlugin = Tour::create();
 
-    $jsonData = file_get_contents('../config/tour.json');
-    $json = json_decode($jsonData, true);
+    $json = $tourPlugin->getTourCofig();
 
     $currentPageSteps = array();
 

@@ -21,8 +21,7 @@ $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
 if (isset($_POST['Confirm'])) {
     // Save the user, course and reference in a tmp table
     $user_id = $_SESSION['bc_user_id'];
-    $course_code = $_SESSION['bc_course_codetext'];
-    $reference = calculateReference();
+    $reference = calculateReference($_SESSION['bc_codetext']);
 
     reset($_POST);
     while (list ($param, $val) = each($_POST)) {
@@ -30,8 +29,11 @@ if (isset($_POST['Confirm'])) {
         eval($asignacion);
     }
 
-    $sql = "INSERT INTO $tableBuyCourseTemporal (user_id, name, course_code, title, reference, price)
-        VALUES ('" . $user_id . "', '" . $name . "','" . $course_code . "','" . $title . "','" . $reference . "','" . $price . "');";
+    $sql = $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
+        "INSERT INTO $tableBuySessionTemporal (user_id, name, session_id, title, reference, price)
+        VALUES ('" . $user_id . "', '" . $name . "','" . $_SESSION['bc_code'] . "','" . $title . "','" . $reference . "','" . $price . "');" :
+        "INSERT INTO $tableBuyCourseTemporal (user_id, name, course_code, title, reference, price)
+        VALUES ('" . $user_id . "', '" . $name . "','" . $_SESSION['bc_codetext'] . "','" . $title . "','" . $reference . "','" . $price . "');";
     $res = Database::query($sql);
 
     // Notify the user and send the bank info
@@ -62,12 +64,12 @@ if (isset($_POST['Confirm'])) {
         $email = $_SESSION['bc_user']['email'];
     }
 
-    $courseInfo = courseInfo($_SESSION['bc_course_code']);
-    $title_course = $courseInfo['title'];
-
     $message = $plugin->get_lang('bc_message');
     $message = str_replace("{{name}}", $name, $message);
-    $message = str_replace("{{course}}", $title_course, $message);
+    $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
+        $message = str_replace("{{session}}", sessionInfo($_SESSION['bc_code'])['name'], $message) :
+        $message = str_replace("{{course}}", courseInfo($_SESSION['bc_code'])['title'], $message);
+    $message = str_replace("{{".$parameterName."}}", $title, $message);
     $message = str_replace("{{reference}}", $reference, $message);
     $message .= $text;
 
@@ -97,10 +99,13 @@ if ($_POST['payment_type'] == "PayPal") {
     $returnURL = $server . "plugin/buycourses/src/success.php";
     $cancelURL = $server . "plugin/buycourses/src/error.php";
 
-    $courseInfo = courseInfo($_SESSION['bc_course_code']);
-    $courseTitle = $courseInfo['title'];
+
+    $title = $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
+        sessionInfo($_SESSION['bc_code'])['name'] :
+        courseInfo($_SESSION['bc_code'])['title'];
+
     $i = 0;
-    $extra = "&L_PAYMENTREQUEST_0_NAME" . $i . "=" . $courseTitle;
+    $extra = "&L_PAYMENTREQUEST_0_NAME" . $i . "=" . $title;
     $extra .= "&L_PAYMENTREQUEST_0_AMT" . $i . "=" . $paymentAmount;
     $extra .= "&L_PAYMENTREQUEST_0_QTY" . $i . "=1";
 
@@ -130,12 +135,12 @@ if ($_POST['payment_type'] == "Transfer") {
 
     $tpl = new Template($templateName);
 
-    $code = $_SESSION['bc_course_code'];
-    $courseInfo = courseInfo($code);
+    $_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION' ?
+        $tpl->assign('session', sessionInfo($_SESSION['bc_code'])) :
+        $tpl->assign('course', courseInfo($_SESSION['bc_code']));
 
-    $tpl->assign('course', $courseInfo);
     $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('title', $_SESSION['bc_course_title']);
+    $tpl->assign('title', $_SESSION['bc_title']);
     $tpl->assign('price', $_SESSION['Payment_Amount']);
     $tpl->assign('currency', $_SESSION['bc_currency_type']);
     if (!isset($_SESSION['_user'])) {

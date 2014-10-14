@@ -22,7 +22,7 @@ $teacher = api_is_platform_admin();
 api_protect_course_script(true);
 
 if ($teacher) {
-    $pendingList = pendingList();
+    $pendingList = pendingList($_SESSION['bc_codetext']);
     $confirmationImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/message_confirmation.png';
     $deleteImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/delete.png';
     $currencyType = findCurrency();

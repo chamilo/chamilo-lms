@@ -1,84 +1,86 @@
-<script type="text/javascript">
-    var chamiloTour = (function() {
-        var intro = null;
-        var $btnStart = null;
+{% if tour.show_tour %}
+    <script type="text/javascript">
+        var chamiloTour = (function() {
+            var intro = null;
+            var $btnStart = null;
 
-        var setSteps = function (stepsData) {
-            var steps = new Array();
+            var setSteps = function (stepsData) {
+                var steps = new Array();
 
-            $.each(stepsData, function () {
-                var step = this;
+                $.each(stepsData, function () {
+                    var step = this;
 
-                if (step.element) {
-                    if ($(step.element).length > 0) {
+                    if (step.element) {
+                        if ($(step.element).length > 0) {
+                            steps.push(step);
+                        }
+                    } else {
                         steps.push(step);
                     }
-                } else {
-                    steps.push(step);
+                });
+
+                return steps;
+            };
+
+            return {
+                init: function(pageClass) {
+                    $.getJSON('{{ tour.web_path.steps_ajax }}', {
+                        'page_class': pageClass
+                    }, function(response) {
+                        intro = introJs();
+                        intro.setOptions({
+                            steps: setSteps(response),
+                            nextLabel: '{{ 'Next' | get_lang }}',
+                            prevLabel: '{{ 'Prev' | get_lang }}',
+                            skipLabel: '{{ 'Skip' | get_lang }}',
+                            doneLabel: '{{ 'Done' | get_lang }}'
+                        });
+                        intro.oncomplete(function () {
+                            $.post('{{ tour.web_path.save_ajax }}', {
+                                page_class: pageClass
+                            }, function () {
+                                $btnStart.remove();
+                            });
+                        });
+
+                        $btnStart = $('<button>', {
+                            class: 'btn btn-primary btn-large',
+                            text: '{{ 'StartButtonText' | get_lang }}',
+                            click: function(e) {
+                                e.preventDefault();
+
+                                intro.start();
+                            }
+                        }).appendTo('#tour-button-cotainer');
+                    });
+                }
+            };
+        })();
+
+        $(document).on('ready', function() {
+            var pages = {{ tour.pages }};
+
+            $.each(pages, function(index, page) {
+                var thereIsSelectedPage = $(page.pageClass).length > 0;
+
+                if (thereIsSelectedPage && page.show) {
+                    $('<link>', {
+                        href: '{{ tour.web_path.intro_css }}',
+                        rel: 'stylesheet'
+                    }).appendTo('head');
+
+                    $('<link>', {
+                        href: '{{ tour.web_path.intro_theme_css }}',
+                        rel: 'stylesheet'
+                    }).appendTo('head');
+
+                    $.getScript('{{ tour.web_path.intro_js }}', function() {
+                        chamiloTour.init(page.pageClass);
+                    });
                 }
             });
-
-            return steps;
-        };
-
-        return {
-            init: function(pageClass) {
-                $.getJSON('{{ tour.web_path.steps_ajax }}', {
-                    'page_class': pageClass
-                }, function(response) {
-                    intro = introJs();
-                    intro.setOptions({
-                        steps: setSteps(response),
-                        nextLabel: '{{ 'Next' | get_lang }}',
-                        prevLabel: '{{ 'Prev' | get_lang }}',
-                        skipLabel: '{{ 'Skip' | get_lang }}',
-                        doneLabel: '{{ 'Done' | get_lang }}'
-                    });
-                    intro.oncomplete(function () {
-                        $.post('{{ tour.web_path.save_ajax }}', {
-                            page_class: pageClass
-                        }, function () {
-                            $btnStart.remove();
-                        });
-                    });
-
-                    $btnStart = $('<button>', {
-                        class: 'btn btn-primary btn-large',
-                        text: '{{ 'StartButtonText' | get_lang }}',
-                        click: function(e) {
-                            e.preventDefault();
-
-                            intro.start();
-                        }
-                    }).appendTo('#tour-button-cotainer');
-                });
-            }
-        };
-    })();
-
-    $(document).on('ready', function() {
-        var pages = {{ tour.pages }};
-
-        $.each(pages, function(index, page) {
-            var thereIsSelectedPage = $(page.pageClass).length > 0;
-
-            if (thereIsSelectedPage && page.show) {
-                $('<link>', {
-                    href: '{{ tour.web_path.intro_css }}',
-                    rel: 'stylesheet'
-                }).appendTo('head');
-
-                $('<link>', {
-                    href: '{{ tour.web_path.intro_theme_css }}',
-                    rel: 'stylesheet'
-                }).appendTo('head');
-
-                $.getScript('{{ tour.web_path.intro_js }}', function() {
-                    chamiloTour.init(page.pageClass);
-                });
-            }
         });
-    });
-</script>
+    </script>
 
-<div id="tour-button-cotainer"></div>
+    <div id="tour-button-cotainer"></div>
+{% endif %}

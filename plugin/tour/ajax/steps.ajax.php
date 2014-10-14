@@ -23,10 +23,6 @@ if (!api_is_anonymous()) {
 
     foreach ($json as $pageContent) {
         if ($pageContent['pageClass'] == $currentPageClass) {
-            $currentPageSteps[] = array(
-                'intro' => $tourPlugin->get_lang('LogoStep')
-            );
-
             foreach ($pageContent['steps'] as $step) {
                 $currentPageSteps[] = array(
                     'element' => $step['elementSelector'],

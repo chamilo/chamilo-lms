@@ -1395,9 +1395,9 @@ abstract class Question
 			if ($objExercise->exercise_was_added_in_lp == true) {
                 $img = pathinfo($img);
 				$img = $img['filename'].'_na.'.$img['extension'];
-				echo Display::return_icon($img,$explanation);
+				echo Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
 			} else {
-                echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
+                echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
 			}
 			echo '</div>';
 			echo '</li>';
@@ -1406,14 +1406,14 @@ abstract class Question
 		echo '<li>';
 		echo '<div class="icon_image_content">';
 		if ($objExercise->exercise_was_added_in_lp == true) {
-            echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'));
+            echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'), null, ICON_SIZE_BIG);
 		} else {
 			if ($feedback_type==1) {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&type=1&fromExercise='.$exerciseId.'">';
 			} else {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
 			}
-			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'));
+			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), null, ICON_SIZE_BIG);
 		}
 		echo '</a>';
 		echo '</div></li>';

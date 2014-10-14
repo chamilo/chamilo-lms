@@ -33,12 +33,18 @@ while ($row = Database::fetch_array($res2)) {
     $answerOriginal = $row['answer'];
 
     $answer = $row['answer'];
+
     $answer = str_replace('â', '&acirc;', $answer);
     $answer = str_replace('à', '&agrave;', $answer);
     $answer = str_replace('é', '&eacute;', $answer);
     $answer = str_replace('ê', '&ecirc;', $answer);
     $answer = str_replace('è', '&egrave;', $answer);
+    $answer = str_replace('í', '&iacute;', $answer);
+    $answer = str_replace('ì', '&igrave;', $answer);
+    $answer = str_replace('ó', '&oacute;', $answer);
+    $answer = str_replace('ò', '&ograve;', $answer);
     $answer = str_replace('ù', '&ugrave;', $answer);
+    $answer = str_replace('ú', '&uacute', $answer);
     $answer = str_replace('ç', '&ccedil;', $answer);
     $answer = str_replace('À', '&Agrave;', $answer);
     $answer = str_replace('Ç', '&Ccedil;', $answer);

@@ -1624,4 +1624,5 @@ $LegalAgreementAccepted = "Legal agreement accepted";
 $FieldTypeMobilePhoneNumber = "Mobile phone";
 $CountryDialCode = "Include the country dial code";
 $MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains not valid characters";
+$SessionName = "Session name";
 ?>

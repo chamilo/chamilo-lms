@@ -34,13 +34,13 @@ require_once("paypalfunctions.php");
  * PayPal Express Checkout Call
  */
 
-// Check to see if the Request object contains a variable named 'token'	
+// Check to see if the Request object contains a variable named 'token'
 $token = "";
 if (isset($_REQUEST['token'])) {
     $token = $_REQUEST['token'];
 }
 
-// If the Request object contains the variable 'token' then it means that the user is coming from PayPal site.	
+// If the Request object contains the variable 'token' then it means that the user is coming from PayPal site.
 if ($token != "") {
     $sql = "SELECT * FROM $tableBuyCoursePaypal WHERE id='1';";
     $res = Database::query($sql);
@@ -65,23 +65,23 @@ if ($token != "") {
         $email = $resArray["EMAIL"]; // ' Email address of payer.
         $payerId = $resArray["PAYERID"]; // ' Unique PayPal customer account identification number.
         $payerStatus = $resArray["PAYERSTATUS"]; // ' Status of payer. Character length and limitations: 10 single-byte alphabetic characters.
-        $salutation = $resArray["SALUTATION"]; // ' Payer's salutation.
+        $salutation = isset($resArray["SALUTATION"]) ? $resArray["SALUTATION"] : null; // ' Payer's salutation.
         $firstName = $resArray["FIRSTNAME"]; // ' Payer's first name.
-        $middleName = $resArray["MIDDLENAME"]; // ' Payer's middle name.
+        $middleName = isset($resArray["MIDDLENAME"]) ? $resArray["MIDDLENAME"] : null; // ' Payer's middle name.
         $lastName = $resArray["LASTNAME"]; // ' Payer's last name.
-        $suffix = $resArray["SUFFIX"]; // ' Payer's suffix.
-        $cntryCode = $resArray["COUNTRY_CODE"]; // ' Payer's country of residence in the form of ISO standard 3166 two-character country codes.
-        $business = $resArray["BUSINESS"]; // ' Payer's business name.
+        $suffix = isset($resArray["SUFFIX"]) ? $resArray["SUFFIX"] : null; // ' Payer's suffix.
+        $cntryCode = isset($resArray["COUNTRY_CODE"]) ? $resArray["COUNTRY_CODE"] : null; // ' Payer's country of residence in the form of ISO standard 3166 two-character country codes.
+        $business = isset($resArray["BUSINESS"]) ? $resArray["BUSINESS"] : null; // ' Payer's business name.
         $shipToName = $resArray["PAYMENTREQUEST_0_SHIPTONAME"]; // ' Person's name associated with this address.
         $shipToStreet = $resArray["PAYMENTREQUEST_0_SHIPTOSTREET"]; // ' First street address.
-        $shipToStreet2 = $resArray["PAYMENTREQUEST_0_SHIPTOSTREET2"]; // ' Second street address.
+        $shipToStreet2 = isset($resArray["PAYMENTREQUEST_0_SHIPTOSTREET2"]) ? $resArray["PAYMENTREQUEST_0_SHIPTOSTREET2"] : null; // ' Second street address.
         $shipToCity = $resArray["PAYMENTREQUEST_0_SHIPTOCITY"]; // ' Name of city.
         $shipToState = $resArray["PAYMENTREQUEST_0_SHIPTOSTATE"]; // ' State or province
         $shipToCntryCode = $resArray["PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE"]; // ' Country code.
         $shipToZip = $resArray["PAYMENTREQUEST_0_SHIPTOZIP"]; // ' U.S. Zip code or other country-specific postal code.
         $addressStatus = $resArray["ADDRESSSTATUS"]; // ' Status of street address on file with PayPal
-        $invoiceNumber = $resArray["INVNUM"]; // ' Your own invoice or tracking number, as set by you in the element of the same name in SetExpressCheckout request .
-        $phonNumber = $resArray["PHONENUM"]; // ' Payer's contact telephone number. Note:  PayPal returns a contact telephone number only if your Merchant account profile settings require that the buyer enter one.
+        $invoiceNumber = isset($resArray["INVNUM"]) ? $resArray["INVNUM"] : null; // ' Your own invoice or tracking number, as set by you in the element of the same name in SetExpressCheckout request .
+        $phonNumber = isset($resArray["PHONENUM"]) ? $resArray["PHONENUM"] : null; // ' Payer's contact telephone number. Note:  PayPal returns a contact telephone number only if your Merchant account profile settings require that the buyer enter one.
     } else {
         //Display a user friendly Error on the page using any of the following error information returned by PayPal
         $ErrorCode = urldecode($resArray["L_ERRORCODE0"]);
@@ -106,12 +106,15 @@ if (!isset($_POST['paymentOption'])) {
 
     $tpl = new Template($templateName);
 
-    $code = $_SESSION['bc_course_code'];
-    $courseInfo = courseInfo($code);
+    if ($_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION') {
+        $tpl->assign('isSession', 'YES');
+        $tpl->assign('session', sessionInfo($_SESSION['bc_code']));
+    } else {
+        $tpl->assign('course', courseInfo($_SESSION['bc_code']));
+    }
 
-    $tpl->assign('course', $courseInfo);
     $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('title', $_SESSION['bc_course_title']);
+    $tpl->assign('title', $_SESSION['bc_title']);
     $tpl->assign('price', $_SESSION['Payment_Amount']);
     $tpl->assign('currency', $_SESSION['bc_currency_type']);
     if (!isset($_SESSION['_user'])) {
@@ -216,25 +219,43 @@ if (!isset($_POST['paymentOption'])) {
 
             // Insert the user information to activate the user
             if ($paymentStatus == "Completed") {
-                $user_id = $_SESSION['bc_user_id'];
-                $course_code = $_SESSION['bc_course_codetext'];
-                $all_course_information = CourseManager::get_course_information($course_code);
-
-                if (CourseManager::subscribe_user($user_id, $course_code)) {
-                    $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course_code);
-                    if ($send == 1) {
-                        CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = false);
-                    } else if ($send == 2) {
-                        CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = true);
-                    }
-                    $url = Display::url($all_course_information['title'], api_get_course_url($course_code));
-                    $_SESSION['bc_message'] = 'EnrollToCourseXSuccessful';
+                $userId = $_SESSION['bc_user_id'];
+                if ($_SESSION['bc_codetext'] === 'THIS_IS_A_SESSION') {
+                    $sessionId = $_SESSION['bc_code'];
+                    $all_session_information = SessionManager::fetch($sessionId);
+                    SessionManager::suscribe_users_to_session(
+                        $sessionId,
+                        array($userId),
+                        api_get_session_visibility($sessionId),
+                        false
+                    );
+                    $url = Display::url(
+                        $all_session_information['name'],
+                        api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId
+                    );
+                    $_SESSION['bc_message'] = 'EnrollToSessionXSuccessful';
                     $_SESSION['bc_url'] = $url;
                     $_SESSION['bc_success'] = true;
                 } else {
-                    $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
-                    $_SESSION['bc_success'] = false;
+                    $course_code = $_SESSION['bc_codetext'];
+                    $all_course_information = CourseManager::get_course_information($course_code);
+                    if (CourseManager::subscribe_user($user_id, $course_code)) {
+                        $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course_code);
+                        if ($send == 1) {
+                            CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = false);
+                        } else if ($send == 2) {
+                            CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = true);
+                        }
+                        $url = Display::url($all_course_information['title'], api_get_course_url($course_code));
+                        $_SESSION['bc_message'] = 'EnrollToCourseXSuccessful';
+                        $_SESSION['bc_url'] = $url;
+                        $_SESSION['bc_success'] = true;
+                    } else {
+                        $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
+                        $_SESSION['bc_success'] = false;
+                    }
                 }
+
                 // Activate the use
                 $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE " . $TABLE_USER . "	SET active='1' WHERE user_id='" . $_SESSION['bc_user_id'] . "'";
@@ -263,23 +284,27 @@ if (!isset($_POST['paymentOption'])) {
                     $_user['lastLogin'] = api_strtotime($uData['login_date'], 'UTC');
 
                     $is_platformAdmin = (bool)(!is_null($uData['is_admin']));
+
                     $is_allowedCreateCourse = (bool)(($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
+
                     ConditionalLogin::check_conditions($uData);
 
                     Session::write('_user', $_user);
 
                     UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
                     Session::write('is_platformAdmin', $is_platformAdmin);
+
                     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
+
                 } else {
                     header('location:' . api_get_path(WEB_PATH));
                 }
 
                 // Delete variables
                 unset($_SESSION['bc_user_id']);
-                unset($_SESSION['bc_course_code']);
-                unset($_SESSION['bc_course_codetext']);
-                unset($_SESSION['bc_course_title']);
+                unset($_SESSION['bc_code']);
+                unset($_SESSION['bc_codetext']);
+                unset($_SESSION['bc_title']);
                 unset($_SESSION['bc_user']);
                 unset($_SESSION["Payment_Amount"]);
                 unset($_SESSION["sec_token"]);
@@ -290,8 +315,8 @@ if (!isset($_POST['paymentOption'])) {
                 header('Location:list.php');
             } else {
                 $_SESSION['bc_message'] = 'CancelOrder';
-                unset($_SESSION['bc_course_code']);
-                unset($_SESSION['bc_course_title']);
+                unset($_SESSION['bc_code']);
+                unset($_SESSION['bc_title']);
                 unset($_SESSION["Payment_Amount"]);
                 unset($_SESSION["currencyCodeType"]);
                 unset($_SESSION["PaymentType"]);
@@ -306,9 +331,9 @@ if (!isset($_POST['paymentOption'])) {
             $ErrorLongMsg = urldecode($resArray["L_LONGMESSAGE0"]);
             $ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
             $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
-            unset($_SESSION['bc_course_code']);
-            unset($_SESSION['bc_course_codetext']);
-            unset($_SESSION['bc_course_title']);
+            unset($_SESSION['bc_code']);
+            unset($_SESSION['bc_codetext']);
+            unset($_SESSION['bc_title']);
             unset($_SESSION["Payment_Amount"]);
             unset($_SESSION["currencyCodeType"]);
             unset($_SESSION["PaymentType"]);

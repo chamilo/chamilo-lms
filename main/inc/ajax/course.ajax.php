@@ -232,6 +232,38 @@ switch ($action) {
             }
         }
         break;
+    case 'display_sessions_courses':
+        $sessionId = intval($_GET['session']);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $coursesData = SessionManager::get_course_list_by_session_id($sessionId);
+
+        $courses = array();
+
+        foreach ($coursesData as $courseId => $course) {
+            $coachData = SessionManager::getCoachesByCourseSession($sessionId, $course['code']);
+            
+            $coachName = '';
+
+            if (!empty($coachData)) {
+                $userResult = Database::select('lastname,firstname', $userTable, array(
+                    'where' => array(
+                        'user_id = ?' => $coachData[0]
+                    )
+                ), 'first');
+
+                $coachName = api_get_person_name($userResult['firstname'], $userResult['lastname']);
+           }
+           
+           $courses[] = array(
+               'id' => $courseId,
+               'name' => $course['title'],
+               'coachName' => $coachName,
+           );
+        }
+
+        echo json_encode($courses);
+        break;
     default:
         echo '';
 }

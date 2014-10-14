@@ -1386,7 +1386,6 @@ function get_exam_results_data(
                 if ($hp_title == '') {
                     $hp_title = basename($hpresults[$i][3]);
                 }
-                //var_dump($hpresults[$i]);
 
                 $hp_date = api_get_local_time($hpresults[$i][6], null, date_default_timezone_get());
                 $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2).'% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
@@ -1726,8 +1725,11 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
                 }
             }
         //}
-        $return_value = array('position'=>$position, 'count'=>count($my_ranking));
-        //var_dump($my_score, $my_ranking);
+        $return_value = array(
+            'position' => $position,
+            'count' => count($my_ranking)
+        );
+
         if ($return_string) {
             if (!empty($position) && !empty($my_ranking)) {
                $return_value = $position.'/'.count($my_ranking);
@@ -1786,8 +1788,11 @@ function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise
             	}
             }
         }
-        $return_value = array('position'=>$position, 'count'=>count($my_ranking));
-        //var_dump($my_score, $my_ranking);
+        $return_value = array(
+            'position' => $position,
+            'count' => count($my_ranking)
+        );
+
         if ($return_string) {
             if (!empty($position) && !empty($my_ranking)) {
                return $position.'/'.count($my_ranking);
@@ -1881,7 +1886,6 @@ function get_average_score_by_course($course_code, $session_id) {
         foreach($user_results as $result) {
             if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                 $score = $result['exe_result']/$result['exe_weighting'];
-                //var_dump($score);
                 $avg_score +=$score;
             }
         }
@@ -1889,7 +1893,6 @@ function get_average_score_by_course($course_code, $session_id) {
         //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
         $avg_score = ($avg_score / count($user_results));
     }
-    //var_dump($avg_score);
     return $avg_score;
 }
 
@@ -2081,7 +2084,6 @@ function get_number_students_answer_count($answer_id, $question_id, $exercise_id
                     cu.status        = ".STUDENT." AND
                     relation_type <> 2 AND
                     e.status = ''";
-    //var_dump($sql);
     $result = Database::query($sql);
     $return = 0;
     if ($result) {

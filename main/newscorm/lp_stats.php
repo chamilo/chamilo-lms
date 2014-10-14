@@ -556,7 +556,6 @@ if (is_array($list) && count($list) > 0) {
                 }
             }
 
-            //var_dump($row['path'] .' '.$score);
             if ($score == 0) {
                 $maxscore = $row['mymaxscore'];
             } else {
@@ -728,7 +727,6 @@ if (is_array($list) && count($list) > 0) {
             }
 
             $counter++;
-            //var_dump($extend_this_attempt, $extend_all);
             if ($extend_this_attempt OR $extend_all) {
                 $list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
 
@@ -872,7 +870,6 @@ if (!empty($a_my_id)) {
         $my_studen_id = intval(api_get_user_id());
         $my_course_id = Database::escape_string(api_get_course_id());
     }
-    //var_dump($my_studen_id, $my_course_id,$a_my_id);
     if (isset($_GET['extend_attempt'])) {
         //"Right green cross" extended
         $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, $session_id, false, false);
@@ -884,7 +881,6 @@ if (!empty($a_my_id)) {
     // Extend all "left green cross"
     if ($origin == 'tracking') {
         $my_course_id = Database::escape_string($_GET['course']);
-        //    var_dump($student_id, $my_course_id );
         if (!empty($student_id) && !empty($my_course_id)) {
             $total_score = Tracking::get_avg_student_score($student_id, $my_course_id, array(intval($_GET['lp_id'])), $session_id, false, false);
         } else {

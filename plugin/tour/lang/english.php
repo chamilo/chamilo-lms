@@ -27,3 +27,11 @@ $strings['Next'] = 'Next';
 $strings['Prev'] = 'Prev';
 $strings['Done'] = 'Done';
 $strings['StartButtonText'] = 'Start the tour';
+
+/* String for the steps */
+$strings['TheLogoStep'] = 'Welcome to <b>Chamilo LMS 1.9.x</b>';
+$strings['TheNavbarStep'] = 'Menu bar with main tools.';
+$strings['TheRightPanelStep'] = 'Sidebar panel.';
+$strings['TheUserImageBlock'] = 'Your profile photo.';
+$strings['TheProfileBlock'] = 'Your profile tools: <i>Inbox</i>, <i>Compose</i>, <i>Pending invitations</i>, <i>Edit</i>.';
+$strings['TheHomePageStep'] = 'This is the initial homepage.';

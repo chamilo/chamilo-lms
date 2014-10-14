@@ -27,3 +27,11 @@ $strings['Next'] = 'Siguiente';
 $strings['Prev'] = 'Anterior';
 $strings['Done'] = 'Hecho';
 $strings['StartButtonText'] = 'Empezar el recorrido';
+
+/* String for the steps */
+$strings['TheLogoStep'] = 'Bienvenido a <b>Chamilo LMS 1.9.x</b>.';
+$strings['TheNavbarStep'] = 'Barra de herramientas con principales herramientas.';
+$strings['TheRightPanelStep'] = 'Pane lateral.';
+$strings['TheUserImageBlock'] = 'Tu foto de perfil.';
+$strings['TheProfileBlock'] = 'Herramientas de perfil: <i>Bandeja de entrada</i>, <i>Nuevo mensaje</i>, <i>Invitaciones pendientes</i>, <i>Editar perfil</i>.';
+$strings['TheHomePageStep'] = 'Esta es la página de inicio.';

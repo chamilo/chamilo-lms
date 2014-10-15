@@ -807,6 +807,7 @@ class CourseRestorer
 	/**
 	 * Restore scorm documents
 	 * TODO @TODO check that the restore function with renaming doesn't break the scorm structure!
+     * see #7029
 	 */
 	public function restore_scorm_documents()
     {
@@ -824,14 +825,17 @@ class CourseRestorer
 					switch ($this->file_option) {
 						case FILE_OVERWRITE :
 							rmdirr($path.$document->path);
-							copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
+                            copyDirTo(
+                                $this->course->backup_path . '/' . $document->path,
+                                $path . dirname($document->path),
+                                false
+                            );
 							break;
 						case FILE_SKIP:
 							break;
                         case FILE_RENAME:
 							$i = 1;
 							$ext = explode('.', basename($document->path));
-
 							if (count($ext) > 1) {
 								$ext = array_pop($ext);
 								$file_name_no_ext = substr($document->path, 0, - (strlen($ext) + 1));
@@ -850,15 +854,29 @@ class CourseRestorer
 								$file_exists = file_exists($path.$new_file_name);
 							}
 
-							rename($this->course->backup_path.'/'.$document->path,$this->course->backup_path.'/'.$new_file_name);
-							copyDirTo($this->course->backup_path.'/'.$new_file_name, $path.dirname($new_file_name), false);
-							rename($this->course->backup_path.'/'.$new_file_name,$this->course->backup_path.'/'.$document->path);
+                            rename(
+                                $this->course->backup_path . '/' . $document->path,
+                                $this->course->backup_path . '/' . $new_file_name
+                            );
+                            copyDirTo(
+                                $this->course->backup_path . '/' . $new_file_name,
+                                $path . dirname($new_file_name),
+                                false
+                            );
+                            rename(
+                                $this->course->backup_path . '/' . $new_file_name,
+                                $this->course->backup_path . '/' . $document->path
+                            );
 
 							break;
 					} // end switch
 				} else {
                     // end if file exists
-					copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
+                    copyDirTo(
+                        $this->course->backup_path . '/' . $document->path,
+                        $path . dirname($document->path),
+                        false
+                    );
 				}
 			} // end for each
 		}

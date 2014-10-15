@@ -259,7 +259,7 @@ $tabAttrParam = array('class'=>'chzn-select', 'onchange'=>'submit_form(this)');
 $labelFormRow = get_lang('Session');
 $session_select_list = array();
 foreach ($sessionList as $item) {
-	$session_select_list[$item['session_id']] = $item['session_name'];
+    $session_select_list[$item['session_id']] = $item['session_name'];
 }
 $select_session_html =  Display::select('session_id', $session_select_list, $session_id, $tabAttrParam);
 echo Display::form_row($labelFormRow, $select_session_html);
@@ -272,10 +272,9 @@ if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
             $sessionInfo = $session;
         }
     }
-	$course_list = $sessionInfo['courses'];
-
+    $course_list = $sessionInfo['courses'];
 } else {
-	$course_list = CourseManager::get_course_list_of_user_as_course_admin(
+    $course_list = CourseManager::get_course_list_of_user_as_course_admin(
         api_get_user_id()
     );
 }

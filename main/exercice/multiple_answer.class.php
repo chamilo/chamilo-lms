@@ -12,7 +12,7 @@
  **/
 class MultipleAnswer extends Question
 {
-	static $typePicture = 'mcma.gif';
+	static $typePicture = 'mcma.png';
 	static $explanationLangVar = 'MultipleSelect';
 
 	/**

@@ -6,7 +6,7 @@
  */
 class GlobalMultipleAnswer extends Question
 {
-    static $typePicture = 'mcmagl.gif';
+    static $typePicture = 'mcmagl.png';
     static $explanationLangVar = 'GlobalMultipleAnswer';
 
     /**

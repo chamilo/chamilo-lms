@@ -12,7 +12,7 @@
 class MultipleAnswerCombination extends Question
 {
 
-	static $typePicture = 'mcmac.gif';
+	static $typePicture = 'mcmac.png';
 	static $explanationLangVar = 'MultipleSelectCombination';
 
 	/**

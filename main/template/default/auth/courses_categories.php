@@ -7,6 +7,17 @@
 * @package chamilo.auth
 */
 $stok = Security::get_token();
+
+$showCourses = CoursesAndSessionsCatalog::showCourses();
+$showSessions = CoursesAndSessionsCatalog::showSessions();
+
+if ($showSessions && isset($_POST['date'])) {
+    $date = $_POST['date'];
+} else {
+    $date = date('Y-m-d');
+}
+
+$userInfo = api_get_user_info();
 ?>
 <script>
     $(document).ready( function() {
@@ -26,6 +37,58 @@ $stok = Security::get_token();
                 }
             });
         });
+    
+        $('.courses-list-btn').toggle(function (e) {
+            e.preventDefault();
+
+            var $el = $(this);
+            var sessionId = getSessionId(this);
+
+            $el.children('img').remove();
+            $el.prepend('<?php echo Display::display_icon('nolines_minus.gif'); ?>');
+
+            $.ajax({
+                url: '<?php echo api_get_path(WEB_AJAX_PATH) . 'course.ajax.php' ?>',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    a: 'display_sessions_courses',
+                    session: sessionId
+                },
+                success: function (response){
+                    var $container = $el.prev('.course-list');
+
+                    var $courseList = $('<ul>');
+
+                    $.each(response, function (index, course){
+                        $courseList.append('<li><div><strong>' + course.name + '</strong><br>' + course.coachName + '</div></li>');
+                    });
+
+                    $container.append($courseList).show(250);
+                }
+            });
+        }, function (e) {
+            e.preventDefault();
+
+            var $el = $(this);
+            var $container = $el.prev('.course-list');
+            $container.hide(250).empty();
+            
+            $el.children('img').remove();
+            $el.prepend('<?php echo Display::display_icon('nolines_plus.gif'); ?>');
+        });
+        
+        var getSessionId = function (el){
+            var parts = el.id.split('_');
+            
+            return parseInt(parts[1], 10);
+        };
+        
+        <?php if ($showSessions) { ?>
+        $('#date').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        <?php } ?>
     });
 </script>
 
@@ -33,7 +96,8 @@ $stok = Security::get_token();
     <div class="span3">
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
-                <?php if (intval($_GET['hidden_links']) != 1) { ?>
+                <?php if ($showCourses) { ?>
+                <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
                 <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
                     <fieldset>
                         <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
@@ -127,12 +191,34 @@ $stok = Security::get_token();
                 }
             }
             ?>
+                <?php } ?>
+                <?php if ($showSessions) { ?>
+                    <li class="nav-header"><?php echo get_lang('Sessions'); ?></li>
+                    <li>
+                        <?php if ($action == 'display_sessions' && $_SERVER['REQUEST_METHOD'] != 'POST') { ?>
+                            <strong><?php echo get_lang('SessionList'); ?></strong>
+                        <?php } else { ?>
+                            <a href="<?php echo api_get_self() ?>?action=display_sessions"><?php echo get_lang('SessionList'); ?></a>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-header"><?php echo get_lang('SearchActiveSessions') ?></li>
+                    <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=display_sessions">
+                        <div class="input-append">
+                            <?php echo Display::input('date', 'date', $date, array(
+                                'class' => 'span2',
+                                'id' => 'date',
+                                'readonly' => ''
+                            )); ?>
+                            <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
+                        </div>
+                    </form>
+                <?php } ?>
         </div>
     </div>
 
     <div class="span9">
-        <?php
-        if (!empty($message)) { Display::display_confirmation_message($message, false); }
+        <?php if ($showCourses && $action != 'display_sessions') { ?>
+        <?php if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }
 
         if (!empty($content)) { echo $content; }
@@ -225,8 +311,8 @@ $stok = Security::get_token();
             if (!isset($_REQUEST['subscribe_user_with_password']) && !isset($_REQUEST['subscribe_course'])) {
                 Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
             }
-        }
-        ?>
+        } ?>
+        <?php } ?>
     </div>
 </div>
 
@@ -338,3 +424,5 @@ function display_unregister_button($course, $stok, $search_term, $code)
 {
     echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&amp;sec_token='.$stok.'&amp;unsubscribe='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
 }
+
+

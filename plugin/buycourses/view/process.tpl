@@ -23,7 +23,7 @@
             <div class="row">
                 <div class="span4">
                     <div class="categories-course-description">
-                        <h3>{{ title }}</h3>                                
+                        <h3>{{ title }}</h3>
                         <h5>{{ 'From'|get_lang }} {{ session.date_start }} {{ 'To'|get_lang }} {{ session.date_end }}</h5>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                     </div>
                 </div>
             {% endfor %}
-        {% else %}        
+        {% else %}
             <div class="row">
                 <div class="span">
                     <div class="thumbnail">

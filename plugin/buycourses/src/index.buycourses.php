@@ -25,7 +25,7 @@ if ($guess_enable == "true" || isset($_SESSION['_user'])) {
     $tpl->assign('OrdersPendingOfPayment', $plugin->get_lang('OrdersPendingOfPayment'));
     $listing_tpl = 'buycourses/view/index.tpl';
     $content = $tpl->fetch($listing_tpl);
-    $tpl->assign('content', $content);    
+    $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }
- 
+

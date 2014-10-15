@@ -3,7 +3,7 @@
     <ul class="nav nav-list">
         <li>
             <a href="src/list.php"> {{ BuyCourses }} </a>
-        </li>        
+        </li>
         {% if isAdmin == 'true' %}
         <li>
             <a href="src/configuration.php"> {{ ConfigurationOfCoursesAndPrices }} </a>

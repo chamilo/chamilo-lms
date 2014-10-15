@@ -1,7 +1,5 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
 /**
  * Strings to english L10n
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>

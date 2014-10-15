@@ -1,13 +1,11 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
 /**
  * Config the plugin
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.plugin.tour
  */
-require_once dirname(__FILE__) . '/config.php';
+require_once __DIR__ . '/config.php';
 
 $pluginPath = api_get_path(PLUGIN_PATH) . 'tour/';
 $pluginWebPath = api_get_path(WEB_PLUGIN_PATH) . 'tour/';
@@ -15,7 +13,7 @@ $pluginWebPath = api_get_path(WEB_PLUGIN_PATH) . 'tour/';
 $userId = api_get_user_id();
 
 $tourPlugin = Tour::create();
-$config = $tourPlugin->getTourCofig();
+$config = $tourPlugin->getTourConfig();
 $showTour = $tourPlugin->get('show_tour') === 'true';
 
 if ($showTour) {

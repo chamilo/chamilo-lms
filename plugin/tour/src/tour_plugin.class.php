@@ -1,16 +1,12 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
 /**
- * Description of Tour
- * 
+ * The Tour class allows a guided tour in HTML5 of the Chamilo interface
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.plugin.tour
  */
 class Tour extends Plugin
 {
-
     /**
      * Class constructor
      */
@@ -98,10 +94,10 @@ class Tour extends Plugin
         $checkResult = Database::select('count(1) as qty', $pluginTourLogTable, array(
                     'where' => array(
                         "page_class = '?' AND " => $currentPageClass,
-                        "user_id = ?" => $userId
+                        "user_id = ?" => intval($userId)
                     )), 'first');
 
-        if ($checkResult != false) {
+        if ($checkResult !== false) {
             if ($checkResult['qty'] > 0) {
                 return false;
             }
@@ -122,7 +118,7 @@ class Tour extends Plugin
 
         Database::insert($pluginTourLogTable, array(
             'page_class' => $currentPageClass,
-            'user_id' => $userId,
+            'user_id' => intval($userId),
             'visualization_datetime' => api_get_utc_datetime()
         ));
     }
@@ -131,7 +127,7 @@ class Tour extends Plugin
      * Get the configuration to show the tour in pages
      * @return array The config data
      */
-    public function getTourCofig()
+    public function getTourConfig()
     {
         $pluginPath = api_get_path(PLUGIN_PATH) . 'tour/';
 

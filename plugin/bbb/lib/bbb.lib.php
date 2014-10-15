@@ -114,13 +114,16 @@ class bbb
         $course_code = api_get_course_id();
         $params['session_id'] = api_get_session_id();
 
-        $attende_password = $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : api_get_course_id();
+        $attendee_password = $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : api_get_course_id();
         $moderator_password = $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->get_mod_meeting_password();
 
         $params['record'] = api_get_course_setting('big_blue_button_record_and_store', $course_code) == 1 ? true : false;
         $max = api_get_course_setting('big_blue_button_max_students_allowed', $course_code);
         $max =  isset($max) ? $max : -1;
         $params['status'] = 1;
+        // Generate a pseudo-global-unique-id to avoid clash of conferences on
+        // the same BBB server with several Chamilo portals
+        $params['remote_id'] = uniqid(true, true);
 
         if ($this->debug) error_log("enter create_meeting ".print_r($params, 1));
 
@@ -135,13 +138,13 @@ class bbb
             $record             = isset($params['record']) && $params['record'] ? 'true' : 'false';
             $duration           = isset($params['duration']) ? intval($params['duration']) : 0;
             // This setting currently limits the maximum conference duration,
-            // to avoid lingering sessions on the videoconference server #6261
+            // to avoid lingering sessions on the video-conference server #6261
             $duration = 300;
 
             $bbb_params = array(
-                'meetingId' => $id, 					// REQUIRED
+                'meetingId' => $params['remote_id'], 					// REQUIRED
                 'meetingName' => $meeting_name, 	// REQUIRED
-                'attendeePw' => $attende_password, 					// Match this value in getJoinMeetingURL() to join as attendee.
+                'attendeePw' => $attendee_password, 					// Match this value in getJoinMeetingURL() to join as attendee.
                 'moderatorPw' => $moderator_password, 					// Match this value in getJoinMeetingURL() to join as moderator.
                 'welcomeMsg' => $welcome_msg, 					// ''= use default. Change to customize.
                 'dialNumber' => '', 					// The main number to call into. Optional.
@@ -244,7 +247,7 @@ class bbb
         }
 
         $params = array(
-            'meetingId' => $meeting_data['id'],
+            'meetingId' => $meeting_data['remote_id'],
             //	-- REQUIRED - The unique id for the meeting
             'password' => $this->get_mod_meeting_password()
             //	-- REQUIRED - The moderator password for the meeting
@@ -285,7 +288,7 @@ class bbb
 
         if ($meeting_info_exists) {
             $joinParams = array(
-                'meetingId' => $meeting_data['id'],	//	-- REQUIRED - A unique id for the meeting
+                'meetingId' => $meeting_data['remote_id'],	//	-- REQUIRED - A unique id for the meeting
                 'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
                 'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
                 //'createTime' => api_get_utc_datetime(),			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
@@ -335,7 +338,7 @@ class bbb
         $item = array();
 
         foreach ($meeting_list as $meeting_db) {
-            $meeting_bbb = $this->get_meeting_info(array('meetingId' => $meeting_db['id'], 'password' => $pass));
+            $meeting_bbb = $this->get_meeting_info(array('meetingId' => $meeting_db['remote_id'], 'password' => $pass));
 
             $meeting_bbb['end_url'] = api_get_self().'?'.api_get_cidreq().'&action=end&id='.$meeting_db['id'];
 
@@ -351,7 +354,7 @@ class bbb
 
             if ($meeting_db['record'] == 1) {
                 $recordingParams = array(
-                    'meetingId' => $meeting_db['id'],		//-- OPTIONAL - comma separate if multiple ids
+                    'meetingId' => $meeting_db['remote_id'],		//-- OPTIONAL - comma separate if multiple ids
                 );
 
                 //To see the recording list in your BBB server do: bbb-record --list
@@ -413,7 +416,7 @@ class bbb
 
             if ($meeting_db['status'] == 1) {
                 $joinParams = array(
-                    'meetingId' => $meeting_db['id'],		//-- REQUIRED - A unique id for the meeting
+                    'meetingId' => $meeting_db['remote_id'],		//-- REQUIRED - A unique id for the meeting
                     'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
                     'password' => $pass,			//-- REQUIRED - The attendee or moderator password, depending on what's passed here
                     'createTime' => '',			//-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
@@ -447,17 +450,19 @@ class bbb
     /**
      * Closes a meeting (usually when the user click on the close button from
      * the conferences listing.
-     * @param string The name of the meeting (usually the course code)
+     * @param string The internal ID of the meeting (id field for this meeting)
      * @return void
      * @assert (0) === false
      */
     public function end_meeting($id)
     {
         if (empty($id)) { return false; }
+        $meeting_data = Database::select('*', $this->table, array('where' => array('id = ?' => array($id))), 'first');
         $pass = $this->get_user_meeting_password();
+
         $endParams = array(
-            'meetingId' => $id, 			// REQUIRED - We have to know which meeting to end.
-            'password' => $pass,				// REQUIRED - Must match moderator pass for meeting.
+            'meetingId' => $meeting_data['remote_id'],   // REQUIRED - We have to know which meeting to end.
+            'password' => $pass,        // REQUIRED - Must match moderator pass for meeting.
         );
         $this->api->endMeetingWithXmlResponseArray($endParams);
         Database::update($this->table, array('status' => 0, 'closed_at' => api_get_utc_datetime()), array('id = ? ' => $id));
@@ -499,7 +504,7 @@ class bbb
             return 0;
         }
         $pass = $this->get_mod_meeting_password();
-        $info = $this->get_meeting_info(array('meetingId' => $meeting_data['id'], 'password' => $pass));
+        $info = $this->get_meeting_info(array('meetingId' => $meeting_data['remote_id'], 'password' => $pass));
 
         if (!empty($info) && isset($info['participantCount'])) {
             return $info['participantCount'];
@@ -515,9 +520,10 @@ class bbb
      * @assert () === false
      * @todo Also delete links and agenda items created from this recording
      */
-    public function delete_record($ids)
+    public function delete_record($id)
     {
-        if (empty($ids) or (is_array($ids) && count($ids)==0)) { return false; }
+        if (empty($id) or $id != intval($id)) { return false; }
+        $meeting_data = Database::select('*', $this->table, array('where' => array('id = ?' => array($id))), 'first');
         $recordingParams = array(
            /*
             * NOTE: Set the recordId below to a valid id after you have
@@ -527,7 +533,7 @@ class bbb
             */
 
             // REQUIRED - We have to know which recording:
-            'recordId' => $ids,
+            'recordId' => $meeting_data['remote_id'],
         );
         return $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
     }

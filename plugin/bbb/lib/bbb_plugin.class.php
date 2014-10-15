@@ -48,7 +48,8 @@ class BBBPlugin extends Plugin
                 closed_at VARCHAR(255) NOT NULL,
                 calendar_id INT DEFAULT 0,
                 welcome_msg VARCHAR(255) NOT NULL DEFAULT '',
-                session_id INT unsigned DEFAULT 0)";
+                session_id INT unsigned DEFAULT 0,
+                remote_id char(36))";
         Database::query($sql);
 
         //Installing course settings

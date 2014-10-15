@@ -534,8 +534,100 @@ function showQuestion(
                             $attributes
                         ), $answer);*/
                 }
-    			$s .= $answer;
+                $s .= $answer;
 
+            } elseif ($answerType == CALCULATED_ANSWER) {
+                /*
+                 * In the CALCULATED_ANSWER test
+                 * you mustn't have [ and ] in the textarea
+                 * you mustn't have @@ in the textarea
+                 * the text to find mustn't be empty or contains only spaces
+                 * the text to find mustn't contains HTML tags
+                 * the text to find mustn't contains char "
+                 */
+                if ($origin !== null) {
+                    global $exe_id;
+                    $trackAttempts = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+                    $sqlTrackAttempt = 'SELECT answer FROM '.$trackAttempts.' WHERE exe_id='.$exe_id.' AND question_id='.$questionId;
+                    $rsLastAttempt = Database::query($sqlTrackAttempt);
+                    $rowLastAttempt = Database::fetch_array($rsLastAttempt);
+                    $answer = $rowLastAttempt['answer'];
+                    if (empty($answer)) {
+                        $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(1, $nbrAnswers);
+                        $answer = $objAnswerTmp->selectAnswer($_SESSION['calculatedAnswerId'][$questionId]);
+                    }
+                }
+                list($answer) = explode('@@', $answer);
+                // $correctAnswerList array of array with correct anwsers 0=> [0=>[\p] 1=>[plop]]
+                api_preg_match_all('/\[[^]]+\]/', $answer, $correctAnswerList);
+                // get student answer to display it if student go back to previous calculated answer question in a test
+                if (isset($user_choice[0]['answer'])) {
+                    api_preg_match_all('/\[[^]]+\]/', $answer, $studentAnswerList);
+                    $studentAnswerListTobecleaned = $studentAnswerList[0];
+                    $studentAnswerList = array();
+
+                    for ($i=0; $i < count($studentAnswerListTobecleaned); $i++) {
+                        $answerCorrected = $studentAnswerListTobecleaned[$i];
+                        $answerCorrected = api_preg_replace('| / <font color="green"><b>.*$|', '', $answerCorrected);
+                        $answerCorrected = api_preg_replace('/^\[/', '', $answerCorrected);
+                        $answerCorrected = api_preg_replace('|^<font color="red"><s>|', '', $answerCorrected);
+                        $answerCorrected = api_preg_replace('|</s></font>$|', '', $answerCorrected);
+                        $answerCorrected = '['.$answerCorrected.']';
+                        $studentAnswerList[] = $answerCorrected;
+                    }
+                }
+                // If display preview of answer in test view for exemple, set the student answer to the correct answers
+                if ($debug_mark_answer) {
+                    // contain the rights answers surronded with brackets
+                    $studentAnswerList = $correctAnswerList[0];
+                }
+                /*
+                Split the response by bracket
+                tabComments is an array with text surrounding the text to find
+                we add a space before and after the answerQuestion to be sure to
+                have a block of text before and after [xxx] patterns
+                so we have n text to find ([xxx]) and n+1 block of texts before,
+                between and after the text to find
+                */
+                $tabComments = api_preg_split('/\[[^]]+\]/', ' '.$answer.' ');
+                if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
+                    $answer = "";
+                    $i = 0;
+                    foreach ($studentAnswerList as $studentItem) {
+                        // remove surronding brackets
+                        $studentResponse = api_substr($studentItem, 1, api_strlen($studentItem) - 2);
+                        $size = strlen($studentItem);
+                        $attributes['class'] = detectInputAppropriateClass($size);
+
+                        $answer .= $tabComments[$i].
+                            Display::input(
+                                'text',
+                                "choice[$questionId][]",
+                                $studentResponse,
+                                $attributes
+                            );
+                        $i++;
+                    }
+                    $answer .= $tabComments[$i];
+                } else {
+                    // display exercise with empty input fields
+                    // every [xxx] are replaced with an empty input field
+                    foreach ($correctAnswerList[0] as $item) {
+                        $size = strlen($item);
+                        $attributes['class'] = detectInputAppropriateClass($size);
+                        $answer = str_replace(
+                            $item,
+                            Display::input('text', "choice[$questionId][]", '', $attributes),
+                            $answer
+                        );
+                    }
+                }
+                if ($origin !== null) {
+                    $s = $answer;
+                    break;
+                } else {
+                    $s .= $answer;
+                }
             } elseif ($answerType == MATCHING) {
     			// matching type, showing suggestions and answers
     			// TODO: replace $answerId by $numAnswer
@@ -1386,7 +1478,6 @@ function get_exam_results_data(
                 if ($hp_title == '') {
                     $hp_title = basename($hpresults[$i][3]);
                 }
-                //var_dump($hpresults[$i]);
 
                 $hp_date = api_get_local_time($hpresults[$i][6], null, date_default_timezone_get());
                 $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2).'% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
@@ -1726,8 +1817,11 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
                 }
             }
         //}
-        $return_value = array('position'=>$position, 'count'=>count($my_ranking));
-        //var_dump($my_score, $my_ranking);
+        $return_value = array(
+            'position' => $position,
+            'count' => count($my_ranking)
+        );
+
         if ($return_string) {
             if (!empty($position) && !empty($my_ranking)) {
                $return_value = $position.'/'.count($my_ranking);
@@ -1786,8 +1880,11 @@ function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise
             	}
             }
         }
-        $return_value = array('position'=>$position, 'count'=>count($my_ranking));
-        //var_dump($my_score, $my_ranking);
+        $return_value = array(
+            'position' => $position,
+            'count' => count($my_ranking)
+        );
+
         if ($return_string) {
             if (!empty($position) && !empty($my_ranking)) {
                return $position.'/'.count($my_ranking);
@@ -1881,7 +1978,6 @@ function get_average_score_by_course($course_code, $session_id) {
         foreach($user_results as $result) {
             if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                 $score = $result['exe_result']/$result['exe_weighting'];
-                //var_dump($score);
                 $avg_score +=$score;
             }
         }
@@ -1889,7 +1985,6 @@ function get_average_score_by_course($course_code, $session_id) {
         //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
         $avg_score = ($avg_score / count($user_results));
     }
-    //var_dump($avg_score);
     return $avg_score;
 }
 
@@ -2081,7 +2176,6 @@ function get_number_students_answer_count($answer_id, $question_id, $exercise_id
                     cu.status        = ".STUDENT." AND
                     relation_type <> 2 AND
                     e.status = ''";
-    //var_dump($sql);
     $result = Database::query($sql);
     $return = 0;
     if ($result) {

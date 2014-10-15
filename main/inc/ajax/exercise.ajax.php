@@ -389,7 +389,8 @@ switch ($action) {
                         false,
                         true,
                         false,
-                        $objExercise->selectPropagateNeg()
+                        $objExercise->selectPropagateNeg(),
+                        array()
                     );
 
                     // Removing old score.
@@ -422,8 +423,7 @@ switch ($action) {
                     false,
                     false,
                     $objExercise->selectPropagateNeg(),
-                    $hotspot_delineation_result,
-                    true
+                    $hotspot_delineation_result
                 );
 
                 //  Adding the new score.

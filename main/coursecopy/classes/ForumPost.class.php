@@ -1,13 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * Forum post backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
 
 /**
@@ -15,12 +8,14 @@ require_once 'Resource.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class ForumPost extends Resource {
+class ForumPost extends Resource
+{
 
     /**
      * Create a new ForumPost
      */
-    function ForumPost($obj) {
+    public function ForumPost($obj)
+    {
         parent::Resource($obj->post_id, RESOURCE_FORUMPOST);
         $this->obj = $obj;
     }
@@ -28,7 +23,8 @@ class ForumPost extends Resource {
     /**
      * Show this resource
      */
-    function show() {
+    public function show()
+    {
         parent::show();
         echo $this->obj->title . ' (' . $this->obj->poster_name . ', ' . $this->obj->post_date . ')';
     }

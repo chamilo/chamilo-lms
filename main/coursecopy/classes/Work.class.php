@@ -1,15 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+require_once 'Resource.class.php';
+
 /**
  * Work/Assignment/Student publication backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
-require_once 'Resource.class.php';
-/**
- * An event
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @package chamilo.backup
  */

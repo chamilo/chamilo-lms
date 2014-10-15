@@ -13,8 +13,8 @@ require_once 'buy_course_plugin.class.php';
 
 unset($_SESSION['bc_user_id']);
 unset($_SESSION['bc_registered']);
-unset($_SESSION['bc_course_code']);
-unset($_SESSION['bc_course_title']);
+unset($_SESSION['bc_code']);
+unset($_SESSION['bc_title']);
 unset($_SESSION['Payment_Amount']);
 unset($_SESSION['currencyCodeType']);
 unset($_SESSION['PaymentType']);

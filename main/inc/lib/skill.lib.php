@@ -35,8 +35,9 @@ class SkillProfile extends Model
     * @param string $name
     * @param string $description
     */
-    public function UpdateProfileInfo($profileId, $name, $description)
+    public function updateProfileInfo($profileId, $name, $description)
     {
+        $profileId = intval($profileId);
         $sql = "UPDATE $this->table SET name = '$name', description = '$description' WHERE id = $profileId ";
         $result = Database::query($sql);
         return $result;
@@ -77,9 +78,10 @@ class SkillRelProfile extends Model
         $this->tableProfile = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
     }
 
-    public function get_skills_by_profile($profile_id)
+    public function get_skills_by_profile($profileId)
     {
-        $skills       = $this->get_all(array('where' => array('profile_id = ? ' => $profile_id)));
+        $profileId = intval($profileId);
+        $skills       = $this->get_all(array('where' => array('profile_id = ? ' => $profileId)));
         $return_array = array();
         if (!empty($skills)) {
             foreach ($skills as $skill_data) {

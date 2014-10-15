@@ -1,13 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Tool intro backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
+
 /**
  * A WWW-link from the Links-module in a Chamilo-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -33,6 +28,7 @@ class ToolIntro extends Resource
 		$this->id = $id;
 		$this->intro_text = $intro_text;
 	}
+
 	/**
 	 * Show this resource
 	 */

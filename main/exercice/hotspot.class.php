@@ -12,7 +12,7 @@
  **/
 class HotSpot extends Question
 {
-	static $typePicture = 'hotspot.gif';
+	static $typePicture = 'hotspot.png';
 	static $explanationLangVar = 'HotSpot';
 
 	function HotSpot() {

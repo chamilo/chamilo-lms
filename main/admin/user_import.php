@@ -36,9 +36,10 @@ function validate_data($users, $checkUniqueEmail = false)
     // 1. Check if mandatory fields are set.
     $mandatory_fields = array('LastName', 'FirstName');
 
-    if (api_get_setting('registration', 'email') == 'true') {
+    if (api_get_setting('registration', 'email') == 'true' || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
+
     $classExistList = array();
     $usergroup = new UserGroup();
 
@@ -49,10 +50,11 @@ function validate_data($users, $checkUniqueEmail = false)
                 $errors[] = $user;
             }
         }
+        $username = $user['UserName'];
         // 2. Check username, first, check whether it is empty.
-        if (!UserManager::is_username_empty($user['UserName'])) {
+        if (!UserManager::is_username_empty($username)) {
             // 2.1. Check whether username is too long.
-            if (UserManager::is_username_too_long($user['UserName'])) {
+            if (UserManager::is_username_too_long($username)) {
                 $user['error'] = get_lang('UserNameTooLong');
                 $errors[] = $user;
             }
@@ -126,12 +128,20 @@ function validate_data($users, $checkUniqueEmail = false)
 function complete_missing_data($user)
 {
     global $purification_option_for_usernames;
+
     // 1. Create a username if necessary.
     if (UserManager::is_username_empty($user['UserName'])) {
-        $user['UserName'] = UserManager::create_unique_username($user['FirstName'], $user['LastName']);
+        $user['UserName'] = UserManager::create_unique_username(
+            $user['FirstName'],
+            $user['LastName']
+        );
     } else {
-        $user['UserName'] = UserManager::purify_username($user['UserName'], $purification_option_for_usernames);
+        $user['UserName'] = UserManager::purify_username(
+            $user['UserName'],
+            $purification_option_for_usernames
+        );
     }
+
     // 2. Generate a password if necessary.
     if (empty($user['Password'])) {
         $user['Password'] = api_generate_password();
@@ -357,14 +367,15 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     $allowed_file_mimetype = array('csv', 'xml');
     $error_kind_file = false;
 
-    $checkUniqueEmail = isset($_POST['check_unique_email']) ?
-        $_POST['check_unique_email'] :null;
+    $checkUniqueEmail = isset($_POST['check_unique_email']) ? $_POST['check_unique_email'] :null;
 
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
-
+    $users = array();
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
-        if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
+        if (strcmp($file_type, 'csv') === 0 &&
+            $ext_import_file == $allowed_file_mimetype[0]
+        ) {
             $users	= parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
@@ -380,17 +391,22 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     }
 
     // List user id with error.
-    $users_to_insert = $user_id_error = array();
+    $users_to_insert = array();
+
+    $keyToCheck = 'Username';
+    if ($checkUniqueEmail || api_get_setting('registration', 'email') == 'true') {
+        $keyToCheck = 'Email';
+    }
 
     if (is_array($errors)) {
         foreach ($errors as $my_errors) {
-            $user_id_error[] = $my_errors['UserName'];
+            $user_id_error[] = $my_errors[$keyToCheck];
         }
     }
 
     if (is_array($users)) {
         foreach ($users as $my_user) {
-            if (!in_array($my_user['UserName'], $user_id_error)) {
+            if (!in_array($my_user[$keyToCheck], $user_id_error)) {
                 $users_to_insert[] = $my_user;
             }
         }
@@ -414,8 +430,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND
     if (count($errors) != 0) {
         $warning_message = '<ul>';
         foreach ($errors as $index => $error_user) {
-            $email = isset($error_user['Email']) ? ' - '.$error_user['Email'] :
-                null;
+            $email = isset($error_user['Email']) ? ' - '.$error_user['Email'] : null;
             $warning_message .= '<li><b>'.$error_user['error'].'</b>: ';
             $warning_message .=
                 '<strong>'.$error_user['UserName'].'</strong> - '.

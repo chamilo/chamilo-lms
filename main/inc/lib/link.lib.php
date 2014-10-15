@@ -85,9 +85,11 @@ class Link extends Model
         if (is_null($courseId)) {
             $courseId = api_get_course_int_id();
         }
+        $courseId = intval($courseId);
         if (is_null($sessionId)) {
             $sessionId = api_get_session_id();
         }
+        $sessionId = intval($sessionId);
         if ($linkUrl != '') {
             $query = "UPDATE $tblLink SET url = '$linkUrl' WHERE id = $linkId AND c_id = $courseId AND session_id = $sessionId";
             $resLink = Database::query($query);
@@ -826,7 +828,7 @@ function getLinkCategories($courseId, $sessionId)
 {
     $tblLinkCategory = Database :: get_course_table(TABLE_LINK_CATEGORY);
     $tblItemProperty = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
+    $courseId = intval($courseId);
     // Condition for the session.
     $sessionCondition = api_get_session_condition($sessionId, true, true);
 
@@ -1116,6 +1118,11 @@ function movecatlink($catlinkid, $courseId = null, $sessionId = null)
     if (is_null($courseId)) {
         $courseId = api_get_course_int_id();
     }
+    $courseId = intval($courseId);
+    if (is_null($sessionId)) {
+        $sessionId = api_get_session_id();
+    }
+    $sessionId = intval($sessionId);
 
     if (!empty ($down)) {
         $thiscatlinkId = intval($down);

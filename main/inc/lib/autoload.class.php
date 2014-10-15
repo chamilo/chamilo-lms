@@ -115,6 +115,7 @@ class Autoload
         $result['Controller'] = '/main/inc/lib/controller.class.php';
         $result['Converter'] = '/main/inc/lib/system/text/converter.class.php';
         $result['Course'] = '/main/coursecopy/classes/Course.class.php';
+        $result['CoursesAndSessionsCatalog'] = '/main/inc/lib/CoursesAndSessionsCatalog.class.php';
         $result['CourseArchiver'] = '/main/coursecopy/classes/CourseArchiver.class.php';
         $result['CourseBuilder'] = '/main/coursecopy/classes/CourseBuilder.class.php';
         $result['CourseCopyLearnpath'] = '/main/coursecopy/classes/CourseCopyLearnpath.class.php';

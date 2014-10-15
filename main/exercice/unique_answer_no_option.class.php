@@ -12,7 +12,7 @@
  */
 class UniqueAnswerNoOption extends Question
 {
-	static $typePicture = 'mcuao.gif';
+	static $typePicture = 'mcuao.png';
 	static $explanationLangVar = 'UniqueAnswerNoOption';
 
 	/**

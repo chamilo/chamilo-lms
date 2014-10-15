@@ -50,6 +50,18 @@ $tpl->assign('courses', $courseList);
 $tpl->assign('category', $categoryList);
 $tpl->assign('currency', $currencyType);
 
+$selectedValue = Database::select(
+    'selected_value',
+    Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT),
+    array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
+);
+$result = array_shift($selectedValue);
+
+if ($result['selected_value'] === 'true') {
+    $tpl->assign('sessionsAreIncluded', 'YES');
+    $tpl->assign('sessions', userSessionList());
+}
+
 $listing_tpl = 'buycourses/view/list.tpl';
 $content = $tpl->fetch($listing_tpl);
 $tpl->assign('content', $content);

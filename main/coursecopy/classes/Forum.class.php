@@ -1,22 +1,15 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * Forum backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
 
 /**
- * A forum
+ * Class forum
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class Forum extends Resource {
-
+class Forum extends Resource
+{
     /**
      * The title
      */
@@ -110,7 +103,7 @@ class Forum extends Resource {
     /**
      * Create a new Forum
      */
-    /* function Forum($id, $title, $description, $category_id, $last_post, $topics, $posts, $allow_anonymous, $allow_edit, $approval_direct_post, $allow_attachements, 
+    /* function Forum($id, $title, $description, $category_id, $last_post, $topics, $posts, $allow_anonymous, $allow_edit, $approval_direct_post, $allow_attachements,
       $allow_new_topics, $default_view, $of_group, $group_public_private, $order, $locked, $session_id, $image)
       { */
     function Forum($obj) {

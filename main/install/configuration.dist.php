@@ -241,3 +241,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // Display sessions catalog
 // 0 = show only courses; 1 = show only sessions; 2 = show courses and sessions
 //$_configuration['catalog_show_courses_sessions'] = 0;
+// Auto detect language custom pages.
+// $_configuration['auto_detect_language_custom_pages'] = true;

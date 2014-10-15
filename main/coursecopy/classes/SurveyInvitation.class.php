@@ -1,13 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Survey invitations backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
+
 /**
  * An SurveyInvitation
  * @author Yannick Warnier <yannick.warnier@beeznest.com>

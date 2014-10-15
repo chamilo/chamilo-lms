@@ -1,13 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * Forum topic backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
 
 /**
@@ -15,13 +8,15 @@ require_once 'Resource.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class ForumTopic extends Resource {
+class ForumTopic extends Resource
+{
     /**
      * Create a new ForumTopic
      */
-    /* function ForumTopic($id, $title, $time, $topic_poster_id, $topic_poster_name, $forum_id, $last_post, $replies, $views = 0, $sticky = 0, $locked = 0, 
+    /* function ForumTopic($id, $title, $time, $topic_poster_id, $topic_poster_name, $forum_id, $last_post, $replies, $views = 0, $sticky = 0, $locked = 0,
       $time_closed = null, $weight = 0, $title_qualify = null, $qualify_max = 0) */
-    function ForumTopic($obj) {
+    function ForumTopic($obj)
+    {
         parent::Resource($obj->thread_id, RESOURCE_FORUMTOPIC);
         $this->obj = $obj;
         /*
@@ -44,13 +39,14 @@ class ForumTopic extends Resource {
     /**
      * Show this resource
      */
-    function show() {
+    function show()
+    {
         parent::show();
         $extra = api_convert_and_format_date($this->obj->thread_date);
         if ($this->obj->thread_poster_id) {
             $user_info = api_get_user_info($this->obj->thread_poster_id);
             $extra = $user_info['complete_name'].', '.$extra;
-        }        
+        }
         echo $this->obj->thread_title . ' (' . $extra . ')';
     }
 }

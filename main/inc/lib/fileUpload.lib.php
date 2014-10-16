@@ -295,7 +295,18 @@ function handle_uploaded_document(
 								update_existing_document($_course, $document_id, $uploaded_file['size']);
 
 								// Update document item_property
-								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                                api_item_property_update(
+                                    $_course,
+                                    TOOL_DOCUMENT,
+                                    $document_id,
+                                    'DocumentUpdated',
+                                    $user_id,
+                                    $to_group_id,
+                                    $to_user_id,
+                                    null,
+                                    null,
+                                    $current_session_id
+                                );
 
                                 // Redo visibility
                                 api_set_default_visibility(TOOL_DOCUMENT, $document_id);
@@ -305,7 +316,18 @@ function handle_uploaded_document(
                                 $document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true, null, $current_session_id);
                                 if ($document_id) {
                                     // Put the document in item_property update
-                                    api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                                    api_item_property_update(
+                                        $_course,
+                                        TOOL_DOCUMENT,
+                                        $document_id,
+                                        'DocumentAdded',
+                                        $user_id,
+                                        $to_group_id,
+                                        $to_user_id,
+                                        null,
+                                        null,
+                                        $current_session_id
+                                    );
 
                                     // Redo visibility
                                     api_set_default_visibility(TOOL_DOCUMENT, $document_id);
@@ -323,7 +345,18 @@ function handle_uploaded_document(
 							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true, null, $current_session_id);
 							if ($document_id) {
 								// Put the document in item_property update
-								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                                api_item_property_update(
+                                    $_course,
+                                    TOOL_DOCUMENT,
+                                    $document_id,
+                                    'DocumentAdded',
+                                    $user_id,
+                                    $to_group_id,
+                                    $to_user_id,
+                                    null,
+                                    null,
+                                    $current_session_id
+                                );
 
                                 // Redo visibility
                                 api_set_default_visibility(TOOL_DOCUMENT, $document_id);
@@ -364,7 +397,18 @@ function handle_uploaded_document(
 						$document_id = add_document($_course, $new_file_path, 'file', $file_size, $document_name, null, 0, true);
 						if ($document_id) {
 							// Update document item_property
-							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                            api_item_property_update(
+                                $_course,
+                                TOOL_DOCUMENT,
+                                $document_id,
+                                'DocumentAdded',
+                                $user_id,
+                                $to_group_id,
+                                $to_user_id,
+                                null,
+                                null,
+                                $current_session_id
+                            );
 
                             // Redo visibility
                             api_set_default_visibility(TOOL_DOCUMENT, $document_id);
@@ -399,7 +443,18 @@ function handle_uploaded_document(
 
 							if ($document_id) {
 								// Update document item_property
-								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                                api_item_property_update(
+                                    $_course,
+                                    TOOL_DOCUMENT,
+                                    $document_id,
+                                    'DocumentAdded',
+                                    $user_id,
+                                    $to_group_id,
+                                    $to_user_id,
+                                    null,
+                                    null,
+                                    $current_session_id
+                                );
                                 // Redo visibility
                                 api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 							}
@@ -819,9 +874,19 @@ function unzip_uploaded_document(
 
 	chdir($base_work_dir.$upload_path);
 	// We extract using a callback function that "cleans" the path
-	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip', PCLZIP_OPT_REPLACE_NEWER);
+    $unzipping_state = $zip_file->extract(
+        PCLZIP_CB_PRE_EXTRACT,
+        'clean_up_files_in_zip',
+        PCLZIP_OPT_REPLACE_NEWER
+    );
 	// Add all documents in the unzipped folder to the database
-	add_all_documents_in_folder_to_database($_course, $_user['user_id'], $base_work_dir ,$upload_path == '/' ? '' : $upload_path, $to_group_id);
+    add_all_documents_in_folder_to_database(
+        $_course,
+        $_user['user_id'],
+        $base_work_dir,
+        $upload_path == '/' ? '' : $upload_path,
+        $to_group_id
+    );
 
 	return true;
 }
@@ -868,7 +933,8 @@ function clean_up_path(&$path) {
  * Checks if the file is dangerous, based on extension and/or mimetype.
  * The list of extensions accepted/rejected can be found from
  * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include')
- * @param	string 	filename passed by reference. The filename will be modified if filter rules say so! (you can include path but the filename should look like 'abc.html')
+ * @param	string 	filename passed by reference. The filename will be modified
+ * if filter rules say so! (you can include path but the filename should look like 'abc.html')
  * @return	int		0 to skip file, 1 to keep file
  */
 function filter_extension(&$filename) {
@@ -1101,17 +1167,18 @@ function set_default_settings($upload_path, $filename, $filetype = 'file') {
 		$filename = substr($filename, 0, -1);
 	}
 
-	// $dbTable already has backticks!
-	//$query = "select count(*) as bestaat from $dbTable where path='$upload_path/$filename'";
-	$query = "select count(*) as bestaat from $dbTable where path='$upload_path/$filename'";
+	$query = "select count(*) as bestaat FROM $dbTable WHERE path='$upload_path/$filename'";
 	$result = Database::query($query);
 	$row = Database::fetch_array($result);
 	if ($row['bestaat'] > 0) {
-		//$query = "update $dbTable set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
-		$query = "UPDATE $dbTable SET path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
+		$query = "UPDATE $dbTable SET
+		            path='$upload_path/$filename',
+		            visibility='$default_visibility',
+		            filetype='$filetype'
+		          WHERE path='$upload_path/$filename'";
 	} else {
-		//$query = "INSERT INTO $dbTable (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
-		$query = "INSERT INTO $dbTable (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
+		$query = "INSERT INTO $dbTable (path,visibility,filetype)
+		          VALUES('$upload_path/$filename','$default_visibility','$filetype')";
 	}
 	Database::query($query);
 }
@@ -1205,15 +1272,33 @@ function create_unexisting_directory(
 	if (mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories(), true)) {
 		// Check if pathname already exists inside document table
 		$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-		$sql = "SELECT path FROM $tbl_document WHERE c_id = $course_id AND path='".$desired_dir_name.$nb."'";
+		$sql = "SELECT path FROM $tbl_document
+		        WHERE c_id = $course_id AND path='".$desired_dir_name.$nb."'";
 
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) == 0) {
-			$document_id = add_document($_course, $desired_dir_name.$nb, 'folder', 0, $title, null, 0, true, $to_group_id);
+
+            $document_id = add_document(
+                $_course,
+                $desired_dir_name . $nb,
+                'folder',
+                0,
+                $title,
+                null,
+                0,
+                true,
+                $to_group_id
+            );
+
 			if ($document_id) {
 				// Update document item_property
-				if ($visibility !== '') {
-					$visibilities = array(0 => 'invisible', 1 => 'visible', 2 => 'delete');
+				if (!empty($visibility)) {
+
+                    $visibilities = array(
+                        0 => 'invisible',
+                        1 => 'visible',
+                        2 => 'delete'
+                    );
 					api_item_property_update(
                         $_course,
                         TOOL_DOCUMENT,
@@ -1243,7 +1328,8 @@ function create_unexisting_directory(
 				return $desired_dir_name.$nb;
 			}
 		} else {
-			//This means the folder NOT exist in the filesystem (now this was created) but there is a record in the Database
+			/* This means the folder NOT exist in the filesystem
+			 (now this was created) but there is a record in the Database*/
 			return $desired_dir_name.$nb;
 		}
 	} else {
@@ -1626,11 +1712,28 @@ function add_all_documents_in_folder_to_database($_course, $user_id, $base_work_
 		   		// If we can't find the file, add it
 		   		if (!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file)) {
 		   			$document_id = add_document($_course, $current_path.'/'.$safe_file, 'folder', 0, $title);
-		   			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, null, null, null, $current_session_id);
+                    api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $document_id,
+                        'DocumentAdded',
+                        $user_id,
+                        $to_group_id,
+                        null,
+                        null,
+                        null,
+                        $current_session_id
+                    );
 		   			//echo $current_path.'/'.$safe_file.' added!<br />';
 		   		}
 		   		// Recursive
-		   		add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path.'/'.$safe_file, $to_group_id);
+               add_all_documents_in_folder_to_database(
+                   $_course,
+                   $user_id,
+                   $base_work_dir,
+                   $current_path . '/' . $safe_file,
+                   $to_group_id
+               );
 		   } else {
 		   		//Rename
 		   		$safe_file = disable_dangerous_file(replace_dangerous_char($file, 'strict'));
@@ -1640,10 +1743,32 @@ function add_all_documents_in_folder_to_database($_course, $user_id, $base_work_
 					$title = get_document_title($file);
 					$size = filesize($base_work_dir.$current_path.'/'.$safe_file);
 					$document_id = add_document($_course, $current_path.'/'.$safe_file, 'file', $size, $title);
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, null, null, null, $current_session_id);
-					//echo $current_path.'/'.$safe_file.' added!<br />';
+                    api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $document_id,
+                        'DocumentAdded',
+                        $user_id,
+                        $to_group_id,
+                        null,
+                        null,
+                        null,
+                        $current_session_id
+                    );
+
 				} else {
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $user_id, $to_group_id, null, null, null, $current_session_id);
+                    api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $document_id,
+                        'DocumentUpdated',
+                        $user_id,
+                        $to_group_id,
+                        null,
+                        null,
+                        null,
+                        $current_session_id
+                    );
 				}
 		   }
 		}

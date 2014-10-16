@@ -406,8 +406,18 @@ class bbb
             $actionLinksArray = array();
 
             if ($meetingDB['record'] == 1) {
+                // backwards compatibility (when there was no remote ID)
+                $mId = $meetingDB['remote_id'];
+                if (empty($mId)) {
+                    $mId = $meetingDB['id'];
+                }
+                if (empty($mId)) {
+                    // if the id is still empty (should *never* occur as 'id' is
+                    // the table's primary key), skip this conference
+                    continue;
+                }
                 $recordingParams = array(
-                    'meetingId' => $meetingDB['remote_id'],		//-- OPTIONAL - comma separate if multiple ids
+                    'meetingId' => $mId, //-- OPTIONAL - comma separate if multiple ids
                 );
 
                 //To see the recording list in your BBB server do: bbb-record --list
@@ -417,14 +427,43 @@ class bbb
                     if (isset($records['message']) && !empty($records['message'])) {
                         if ($records['messageKey'] == 'noRecordings') {
                             $recordArray[] = get_lang('NoRecording');
+                            if ($meetingDB['visibility'] == 0) {
+                                $actionLinksArray[] = Display::url(
+                                    Display::return_icon(
+                                        'invisible.png',
+                                        get_lang('MakeVisible'),
+                                        array(),
+                                        ICON_SIZE_MEDIUM
+                                    ),
+                                    api_get_self().'?'.
+                                    api_get_cidreq().
+                                    '&action=publish&id='.$meetingDB['id']
+                                );
+                            } else {
+                                $actionLinksArray[] = Display::url(
+                                    Display::return_icon(
+                                        'visible.png',
+                                        get_lang('MakeInvisible'),
+                                        array(),
+                                        ICON_SIZE_MEDIUM
+                                    ),
+                                    api_get_self().'?'.
+                                    api_get_cidreq().
+                                    '&action=unpublish&id='.$meetingDB['id']
+                                );
+                            }
                         } else {
                             //$recordArray[] = $records['message'];
                         }
                     } else {
                         foreach ($records as $record) {
+                            //if you get several recordings here and you used a
+                            // previous version of Chamilo, you might want to
+                            // only keep the last result for each chamilo conf
+                            // (see show_links after the end of this loop)
                             if (is_array($record) && isset($record['recordId'])) {
                                 $url = Display::url(
-                                    get_lang('ViewRecord'),
+                                    get_lang('ViewRecord')." [~".$record['playbackFormatLength']."']",
                                     $record['playbackFormatUrl'],
                                     array('target' => '_blank')
                                 );
@@ -552,7 +591,7 @@ class bbb
             return false;
         }
         $id = intval($id);
-        Database::update($this->table, array('visibility' => 1), array('id = ? ' => $id), true);
+        Database::update($this->table, array('visibility' => 1), array('id = ? ' => $id));
         return true;
     }
 
@@ -566,7 +605,7 @@ class bbb
             return false;
         }
         $id = intval($id);
-        Database::update($this->table, array('visibility' => 0), array('id = ? ' => $id), true);
+        Database::update($this->table, array('visibility' => 0), array('id = ? ' => $id));
         return true;
     }
 

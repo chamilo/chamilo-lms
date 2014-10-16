@@ -389,6 +389,9 @@ class bbb
                 $meetingBBB = $this->getMeetingInfo($params);
             }
 
+            if ($meetingDB['visibility'] == 0 and $this->isTeacher() == false) {
+                continue;
+            }
             $meetingBBB['end_url'] = api_get_self().'?'.api_get_cidreq().'&action=end&id='.$meetingDB['id'];
 
             if ((string)$meetingBBB['returncode'] == 'FAILED') {
@@ -400,6 +403,7 @@ class bbb
             }
 
             $recordArray = array();
+            $actionLinksArray = array();
 
             if ($meetingDB['record'] == 1) {
                 $recordingParams = array(
@@ -424,8 +428,9 @@ class bbb
                                     $record['playbackFormatUrl'],
                                     array('target' => '_blank')
                                 );
+                                $actionLinks = '';
                                 if ($this->isTeacher()) {
-                                    $url .= Display::url(
+                                    $actionLinks .= Display::url(
                                         Display::return_icon(
                                             'link.gif',
                                             get_lang('CopyToLinkTool')
@@ -434,7 +439,7 @@ class bbb
                                         api_get_cidreq().
                                         '&action=copy_record_to_link_tool&id='.$meetingDB['id']
                                     );
-                                    $url .= Display::url(
+                                    $actionLinks .= Display::url(
                                         Display::return_icon(
                                             'agenda.png',
                                             get_lang('AddToCalendar')
@@ -445,7 +450,7 @@ class bbb
                                         '&start='.api_strtotime($meetingDB['created_at']).
                                         '&url='.$record['playbackFormatUrl']
                                     );
-                                    $url .= Display::url(
+                                    $actionLinks .= Display::url(
                                         Display::return_icon(
                                             'delete.png',
                                             get_lang('Delete')
@@ -454,10 +459,36 @@ class bbb
                                         api_get_cidreq().
                                         '&action=delete_record&id='.$record['recordId']
                                     );
+                                    if ($meetingDB['visibility'] == 0) {
+                                        $actionLinks .= Display::url(
+                                            Display::return_icon(
+                                                'invisible.png',
+                                                get_lang('MakeVisible'),
+                                                array(),
+                                                ICON_SIZE_MEDIUM
+                                            ),
+                                            api_get_self().'?'.
+                                            api_get_cidreq().
+                                            '&action=publish&id='.$meetingDB['id']
+                                        );
+                                    } else {
+                                        $actionLinks .= Display::url(
+                                            Display::return_icon(
+                                                'visible.png',
+                                                get_lang('MakeInvisible'),
+                                                array(),
+                                                ICON_SIZE_MEDIUM
+                                            ),
+                                            api_get_self().'?'.
+                                            api_get_cidreq().
+                                            '&action=unpublish&id='.$meetingDB['id']
+                                        );
+                                    }
                                 }
                                 //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
                                 $count++;
                                 $recordArray[] = $url;
+                                $actionLinksArray[] = $actionLinks;
                             } else {
                                 /*if (is_array($record) && isset($record['recordID']) && isset($record['playbacks'])) {
 
@@ -484,6 +515,7 @@ class bbb
                 }
                 //var_dump($recordArray);
                 $item['show_links']  = implode('<br />', $recordArray);
+                $item['action_links'] = implode('<br />', $actionLinksArray);
             }
 
             $item['created_at'] = api_convert_and_format_date($meetingDB['created_at']);
@@ -516,6 +548,12 @@ class bbb
     public function publishMeeting($id)
     {
         //return BigBlueButtonBN::setPublishRecordings($id, 'true', $this->url, $this->salt);
+        if (empty($id)) {
+            return false;
+        }
+        $id = intval($id);
+        Database::update($this->table, array('visibility' => 1), array('id = ? ' => $id), true);
+        return true;
     }
 
     /**
@@ -524,6 +562,12 @@ class bbb
     public function unpublishMeeting($id)
     {
         //return BigBlueButtonBN::setPublishRecordings($id, 'false', $this->url, $this->salt);
+        if (empty($id)) {
+            return false;
+        }
+        $id = intval($id);
+        Database::update($this->table, array('visibility' => 0), array('id = ? ' => $id), true);
+        return true;
     }
 
     /**

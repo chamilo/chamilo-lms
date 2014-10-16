@@ -88,10 +88,10 @@ if ($teacher) {
 
             break;
         case 'publish':
-            //$result = $bbb->publish_meeting($_GET['id']);
+            $result = $bbb->publishMeeting($_GET['id']);
             break;
         case 'unpublish':
-            //$result = $bbb->unpublish_meeting($_GET['id']);
+            $result = $bbb->unpublishMeeting($_GET['id']);
             break;
         default:
             break;

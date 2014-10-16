@@ -99,48 +99,53 @@
     </div>
     <div class="span9">
         <div class="page-header">
-            <h2>{{ nameTools }}</h2>
+            <h3>{{ nameTools }}</h3>
         </div>
 
         {% for session in sessions_blocks %}
-            <div class="well" id="session-{{ session.id }}">
-                <div class="row">
-                    <div class="span6">
-                        <div class="row">
-                            <div class="span1">
-                                <span class="thumbnail">
-                                    {{ session.icon }}
-                                </span>
-                            </div>
-                            <div class="span5">
-                                <h3>{{ session.name }}</h3>
-                                <p>{{ session.coach_name }}</p>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="accordion" id="session-{{ session.id }}-accordion" style="margin-bottom: 0px;">
-                            <div class="accordion-group">
-                                <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#session-{{ session.id }}-accordion" href="#session-{{ session.id }}-courses">
-                                        {{ 'CourseList' | get_lang }}
-                                    </a>
+                <div class="well well-small session-group" id="session-{{ session.id }}">
+                    <div class="row-fluid">
+                        <div class="span9">
+                            <div class="row-fluid padding-clear">
+                                <div class="span2">
+                                    <span class="thumbnail">
+                                        {{ session.icon }}
+                                    </span>
                                 </div>
-                                <div id="session-{{ session.id }}-courses" class="accordion-body collapse in">
-                                    <div class="accordion-inner"></div>
+                                <div class="span10 border-info">
+                                    <h3>{{ session.name }}</h3>
+                                    <div class="tutor">General tutor: <img src="{{ _p.web }}/main/img/teachers.gif" width="16px"> {{ session.coach_name }}</div>
                                 </div>
                             </div>
+                            <div class="row-fluid">
+                                <div class="accordion" iid="session-{{ session.id }}-accordion">
+                                    <div class="accordion-group">
+                                        <div class="accordion-heading">
+                                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#session-{{ session.id }}-accordion" href="#session-{{ session.id }}-courses">
+                                                {{ 'CourseList' | get_lang }}
+                                            </a>
+                                        </div>
+                                        <div id="session-{{ session.id }}-courses" class="accordion-body collapse in">
+                                            <div class="accordion-inner"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="span2">
-                        <p class="lead">{{ session.date }}</p>
-                        {% if session.is_subscribed %}
-                            {{ already_subscribed_label }}
-                        {% else %}
-                            {{ session.subscribe_button }}
-                        {% endif %}
+                        <div class="span3">
+                            
+                            <div class="buttom-subscribed">
+                            {% if session.is_subscribed %}
+                                {{ already_subscribed_label }}
+                            {% else %}
+                                {{ session.subscribe_button }}
+                            {% endif %}
+                            </div>
+                            <div class="time">{{ session.date }}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
+
         {% endfor %}
     </div>
 

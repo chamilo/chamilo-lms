@@ -455,7 +455,7 @@ class CoursesController
         $url = api_get_path(WEB_PATH) . "main/inc/email_editor.php?action=subscribe_me_to_session&session=$sessionName";
 
         return Display::url(get_lang('Subscribe'), $url, array(
-                    'class' => 'btn btn-primary',
+                    'class' => 'btn btn-success',
         ));
     }
 

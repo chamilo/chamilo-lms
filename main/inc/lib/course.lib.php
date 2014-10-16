@@ -3141,7 +3141,7 @@ class CourseManager
      */
     public static function get_courses_followed_by_drh(
         $user_id,
-        $from = null,
+        $from = DRH,
         $limit = null,
         $column = null,
         $direction = null,

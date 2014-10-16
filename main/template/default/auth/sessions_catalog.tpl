@@ -47,7 +47,7 @@
         {% if showCourses %}
             <div class="well">
                 {% if not hiddenLinks %}
-                    <form class="form-search" method="post" action="{{ api_get_self }}?action=subscribe&amp;hidden_links=0">
+                    <form class="form-search" method="post" action="{{ courseUrl }}">
                         <fieldset>
                             <input type="hidden" name="sec_token" value="{{ searchToken }}">
                             <input type="hidden" name="search_course" value="1" />
@@ -88,7 +88,7 @@
                     </li>
                     <li class="nav-header">{{ 'SearchSessions' | get_lang }}</li>
                 </ul>
-                <form class="form-search" method="post" action="{{ api_get_self }}?action=display_sessions">
+                <form class="form-search" method="post" action="{{ sessionUrl }}">
                     <div class="input-append">
                         <input type="date" name="date" id="date" class="span2" value="{{ searchDate }}" readonly>
                         <button class="btn" type="submit">{{ 'Search' | get_lang }}</button>
@@ -102,6 +102,7 @@
             <h2>{{ nameTools }}</h2>
         </div>
 
+        {{ cataloguePagination }}
         {% for session in sessions_blocks %}
             <div class="well" id="session-{{ session.id }}">
                 <div class="row">
@@ -142,6 +143,7 @@
                 </div>
             </div>
         {% endfor %}
+        {{ cataloguePagination }}
     </div>
 
 {% endblock %}

@@ -3965,7 +3965,7 @@ function api_get_visual_theme() {
     if (!isset($visual_theme)) {
 
         $platform_theme = api_get_setting('stylesheets');
-        // Plataform's theme.
+        // Platform's theme.
         $visual_theme = $platform_theme;
 
         if (api_get_setting('user_selected_theme') == 'true') {

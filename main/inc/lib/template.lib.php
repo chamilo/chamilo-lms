@@ -218,7 +218,7 @@ class Template
     /**
      * @param string $helpInput
      */
-    function set_help($helpInput = null)
+    public function set_help($helpInput = null)
     {
         if (!empty($helpInput)) {
             $help = $helpInput;
@@ -240,12 +240,11 @@ class Template
         $this->assign('help_content', $content);
     }
 
-    /*
+    /**
      * Use template system to parse the actions menu
      * @todo finish it!
-     * */
-
-    function set_actions($actions)
+     **/
+    public function set_actions($actions)
     {
         $action_string = '';
         if (!empty($actions)) {
@@ -259,7 +258,7 @@ class Template
     /**
      * Shortcut to display a 1 col layout (index.php)
      * */
-    function display_one_col_template()
+    public function display_one_col_template()
     {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
@@ -267,8 +266,8 @@ class Template
 
     /**
      * Shortcut to display a 2 col layout (userportal.php)
-     * */
-    function display_two_col_template()
+     **/
+    public function display_two_col_template()
     {
         $tpl = $this->get_template('layout/layout_2_col.tpl');
         $this->display($tpl);
@@ -277,7 +276,7 @@ class Template
     /**
      * Displays an empty template
      */
-    function display_blank_template()
+    public function display_blank_template()
     {
         $tpl = $this->get_template('layout/blank.tpl');
         $this->display($tpl);
@@ -286,7 +285,7 @@ class Template
     /**
      * Displays an empty template
      */
-    function display_no_layout_template()
+    public function display_no_layout_template()
     {
         $tpl = $this->get_template('layout/no_layout.tpl');
         $this->display($tpl);
@@ -362,7 +361,9 @@ class Template
         return $this->templateFolder.'/'.$name;
     }
 
-    /** Set course parameters */
+    /**
+     * Set course parameters
+     */
     private function set_course_parameters()
     {
         //Setting course id
@@ -388,7 +389,9 @@ class Template
         $this->assign('_c', $_c);
     }
 
-    /** Set user parameters */
+    /**
+     * Set user parameters
+     */
     private function set_user_parameters()
     {
         $user_info               = array();
@@ -410,7 +413,9 @@ class Template
         $this->assign('_u', $user_info);
     }
 
-    /** Set system parameters */
+    /**
+     * Set system parameters
+     */
     private function set_system_parameters()
     {
         global $_configuration;
@@ -529,7 +534,7 @@ class Template
      * Declare and define the template variable that will be used to load
      * javascript libraries in the header.
      */
-    function set_js_files()
+    public function set_js_files()
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
 
@@ -592,7 +597,7 @@ class Template
      * upset when a variable is used in a function (even if not used yet)
      * when this variable hasn't been defined yet.
      */
-    function set_js_files_post()
+    public function set_js_files_post()
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
         $js_files = array();
@@ -816,7 +821,7 @@ class Template
     }
 
     /**
-     * Set footer parameteres
+     * Set footer parameters
      */
     private function set_footer_parameters()
     {
@@ -895,6 +900,9 @@ class Template
           $this->assign('execution_stats', $stats); */
     }
 
+    /**
+     * Show header template.
+     */
     public function show_header_template()
     {
         $tpl = $this->get_template('layout/show_header.tpl');
@@ -902,7 +910,10 @@ class Template
         $this->display($tpl);
     }
 
-    function show_footer_template()
+    /**
+     * Show footer template.
+     */
+    public function show_footer_template()
     {
         $tpl = $this->get_template('layout/show_footer.tpl');
         $this->display($tpl);

@@ -1,5 +1,4 @@
 {% if login_form %}
-
     <div id="login_block" class="well sidebar-nav">
         {{ login_language_form }}
 

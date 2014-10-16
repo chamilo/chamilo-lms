@@ -50,7 +50,8 @@ $TechnicalIssuesDescription = 'This portal is currently experiencing technical i
 
 if (is_int($global_error_code) && $global_error_code > 0) {
 
-	$theme = 'chamilo/';
+	$theme = Template::getThemeBackup().'/';
+
 	$css_path = 'main/css/';
     $css_file              = $css_path.$theme.'default.css';
     $bootstrap_file        = $css_path.'bootstrap.css';
@@ -200,7 +201,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                                     </ul>
                                 </div>
                             </div>
-                        </div>                                
+                        </div>
                     </div>
                     <ul class="breadcrumb">
                         <li><a href="#">{SECTION}</a></li>
@@ -224,8 +225,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                     &nbsp;<br />{POWERED_BY}
                     </div>
                 </div>
-                </div>
-
+            </div>
 		</footer>
 		</body>
 </html>

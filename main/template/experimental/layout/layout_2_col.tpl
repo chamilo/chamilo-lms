@@ -1,31 +1,41 @@
-{extends file="default/layout/main.tpl"}
+{% extends "default/layout/layout_2_col.tpl" %}
 
+{% block header %}
+    {% embed "default/layout/main_header.tpl" %}
+        {% block head %}
+            {{ parent() }}
+        {% endblock %}
 
-{block name="header"}
-	{include file="default/layout/main_header.tpl"}
-{/block}
+        {% block help_notifications %}
+            {{ parent() }}
+        {% endblock %}
 
-{block name=body}
-	<div id="maincontent" class="maincontent">
-		{$home_page_block}
-		{$plugin_courses_block}
-		{$content}
-		{$announcements_block}
-	</div>
-	
-	<div>	
-		{$login_block}
-		{$profile_block}	
-		{$account_block}
-		{$teacher_block}
-		{$navigation_course_links}
-		{$plugin_courses_right_block}
-		{$reservation_block}
-		{$search_block}
-		{$classes_block}
-	</div>
-{/block}
+        {% block logo %}
+            {{ parent() }}
+        {% endblock %}
 
-{block name=footer}
-	{include file="default/layout/footer.tpl"}	
-{/block}
+        {% block breadcrumb %}
+            {{ parent() }}
+        {% endblock %}
+
+        {% block menu %}
+            {{ parent() }}
+        {% endblock %}
+
+        {% block topbar %}
+            {{ parent() }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block login_form %}
+    {{ parent() }}
+{% endblock %}
+
+{% block page_body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    {{ parent() }}
+{% endblock %}

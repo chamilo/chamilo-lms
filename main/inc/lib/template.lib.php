@@ -12,9 +12,23 @@ require_once api_get_path(SYS_PATH).'vendor/twig/twig/lib/Twig/Autoloader.php';
  */
 class Template
 {
-    public $style = 'default'; //see the template folder
-    public $preview_theme = null;
-    public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
+    /**
+     * The Template folder name see main/template
+     * @var string
+     */
+    public $templateFolder = 'default';
+
+    /**
+     * The theme that will be used: chamilo, public_admin, chamilo_red, etc
+     * This variable is set from the database
+     * @var string
+     */
+    public $theme = '';
+
+    /**
+     * @var string
+     */
+    public $preview_theme = '';
     public $title = null;
     public $show_header;
     public $show_footer;
@@ -132,12 +146,18 @@ class Template
         $this->set_header_parameters();
         $this->set_footer_parameters();
 
-        $this->assign('style', $this->style);
-        $this->assign('css_style', $this->theme);
-        $this->assign('template', $this->style);
+        $defaultStyle = api_get_configuration_value('default_template');
+        if (!empty($defaultStyle)) {
+            $this->templateFolder = $defaultStyle;
+        }
+
+
+
+        $this->assign('template', $this->templateFolder);
+        $this->assign('css_styles', $this->theme);
         $this->assign('login_class', null);
 
-        //Chamilo plugins
+        // Chamilo plugins
         if ($this->show_header) {
             if ($this->load_plugins) {
 
@@ -276,7 +296,7 @@ class Template
      * Sets the footer visibility
      * @param bool true if we show the footer
      */
-    function set_footer($status)
+    public function set_footer($status)
     {
         $this->show_footer = $status;
         $this->assign('show_footer', $status);
@@ -286,7 +306,7 @@ class Template
      * Sets the header visibility
      * @param bool true if we show the header
      */
-    function set_header($status)
+    public function set_header($status)
     {
         $this->show_header = $status;
         $this->assign('show_header', $status);
@@ -332,9 +352,14 @@ class Template
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 
-    function get_template($name)
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
+    public function get_template($name)
     {
-        return $this->style.'/'.$name;
+        return $this->templateFolder.'/'.$name;
     }
 
     /** Set course parameters */
@@ -418,13 +443,13 @@ class Template
     }
 
     /**
-     * Set theme, include CSS files  */
-    function set_css_files()
+     * Set theme, include CSS files
+     */
+    public function set_css_files()
     {
         global $disable_js_and_css_files;
         $css = array();
 
-        //$platform_theme = api_get_setting('stylesheets');
         $this->theme = api_get_visual_theme();
 
         if (!empty($this->preview_theme)) {
@@ -870,9 +895,10 @@ class Template
           $this->assign('execution_stats', $stats); */
     }
 
-    function show_header_template()
+    public function show_header_template()
     {
         $tpl = $this->get_template('layout/show_header.tpl');
+
         $this->display($tpl);
     }
 
@@ -882,8 +908,12 @@ class Template
         $this->display($tpl);
     }
 
-    /* Sets the plugin content in a template variable */
-    function set_plugin_region($plugin_region)
+    /**
+     * Sets the plugin content in a template variable
+     * @param string $plugin_region
+     * @return null
+     */
+    public function set_plugin_region($plugin_region)
     {
         if (!empty($plugin_region)) {
             $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);
@@ -896,17 +926,28 @@ class Template
         return null;
     }
 
+    /**
+     * @param string $template
+     * @return string
+     */
     public function fetch($template = null)
     {
         $template = $this->twig->loadTemplate($template);
         return $template->render($this->params);
     }
 
+    /**
+     * @param $tpl_var
+     * @param null $value
+     */
     public function assign($tpl_var, $value = null)
     {
         $this->params[$tpl_var] = $value;
     }
 
+    /**
+     * @param string $template
+     */
     public function display($template)
     {
         echo $this->twig->render($template, $this->params);
@@ -918,5 +959,17 @@ class Template
     public function setLoginBodyClass()
     {
         $this->assign('login_class', 'section-login');
+    }
+
+    /**
+     * @return string
+     */
+    public static function getThemeBackup()
+    {
+        $theme = api_get_configuration_value('theme_backup');
+        if (empty($theme)) {
+            $theme = 'chamilo';
+        }
+        return $theme;
     }
 }

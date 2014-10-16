@@ -3175,7 +3175,8 @@ class CourseManager
         $direction = null,
         $getCount = false,
         $keyword = null,
-        $sessionId = null
+        $sessionId = null,
+        $showAllAssignedCourses = false
     ) {
         // Database Table Definitions
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -3192,10 +3193,10 @@ class CourseManager
         $whereConditions = null;
         switch ($status) {
             case COURSEMANAGER:
-                $whereConditions .= " AND
-                    cru.user_id = '$user_id' AND
-                    status = ".COURSEMANAGER."
-                ";
+                $whereConditions .= " AND cru.user_id = '$user_id'";
+                if (!$showAllAssignedCourses) {
+                    $whereConditions .= " AND status = ".COURSEMANAGER;
+                }
                 break;
             case DRH:
                 $whereConditions .= " AND

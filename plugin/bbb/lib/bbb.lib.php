@@ -85,6 +85,7 @@ class bbb
 
     /**
      * See this file in you BBB to set up default values
+     * @param   array $params Array of parameters that will be completed if not containing all expected variables
 
        /var/lib/tomcat6/webapps/bigbluebutton/WEB-INF/classes/bigbluebutton.properties
      *
@@ -120,8 +121,10 @@ class bbb
         $courseCode = api_get_course_id();
         $params['session_id'] = api_get_session_id();
 
-        $attendeePassword = $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : api_get_course_id();
-        $moderatorPassword = $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
+        $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : api_get_course_id();
+        $attendeePassword =  $params['attendee_pw'];
+        $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
+        $moderatorPassword = $params['moderator_pw'];
 
         $params['record'] = api_get_course_setting('big_blue_button_record_and_store', $courseCode) == 1 ? true : false;
         $max = api_get_course_setting('big_blue_button_max_students_allowed', $courseCode);
@@ -131,13 +134,17 @@ class bbb
         // the same BBB server with several Chamilo portals
         $params['remote_id'] = uniqid(true, true);
 
-        if ($this->debug) error_log("enter create_meeting ".print_r($params, 1));
+        if ($this->debug) {
+            error_log("enter create_meeting ".print_r($params, 1));
+        }
 
         $params['created_at'] = api_get_utc_datetime();
         $id = Database::insert($this->table, $params);
 
         if ($id) {
-            if ($this->debug) error_log("create_meeting: $id ");
+            if ($this->debug) {
+                error_log("create_meeting: $id ");
+            }
 
             $meetingName       = isset($params['meeting_name']) ? $params['meeting_name'] : api_get_course_id().'-'.api_get_session_id();
             $welcomeMessage    = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
@@ -163,7 +170,9 @@ class bbb
                 //'meta_category' => '', 				// Use to pass additional info to BBB server. See API docs.
             );
 
-            if ($this->debug) error_log("create_meeting params: ".print_r($bbbParams,1));
+            if ($this->debug) {
+                error_log("create_meeting params: ".print_r($bbbParams,1));
+            }
 
             $status = false;
             $meeting = null;
@@ -388,11 +397,41 @@ class bbb
                     } else {
                         foreach ($records as $record) {
                             if (is_array($record) && isset($record['recordId'])) {
-                                $url = Display::url(get_lang('ViewRecord'), $record['playbackFormatUrl'], array('target' => '_blank'));
+                                $url = Display::url(
+                                    get_lang('ViewRecord'),
+                                    $record['playbackFormatUrl'],
+                                    array('target' => '_blank')
+                                );
                                 if ($this->isTeacher()) {
-                                    $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?'.api_get_cidreq().'&action=copy_record_to_link_tool&id='.$meetingDB['id']);
-                                    $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?'.api_get_cidreq().'&action=add_to_calendar&id='.$meetingDB['id'].'&start='.api_strtotime($meetingDB['created_at']).'&url='.$record['playbackFormatUrl']);
-                                    $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?'.api_get_cidreq().'&action=delete_record&id='.$record['recordId']);
+                                    $url .= Display::url(
+                                        Display::return_icon(
+                                            'link.gif',
+                                            get_lang('CopyToLinkTool')
+                                        ),
+                                        api_get_self().'?'.
+                                        api_get_cidreq().
+                                        '&action=copy_record_to_link_tool&id='.$meetingDB['id']
+                                    );
+                                    $url .= Display::url(
+                                        Display::return_icon(
+                                            'agenda.png',
+                                            get_lang('AddToCalendar')
+                                        ),
+                                        api_get_self().'?'.
+                                        api_get_cidreq().
+                                        '&action=add_to_calendar&id='.$meetingDB['id'].
+                                        '&start='.api_strtotime($meetingDB['created_at']).
+                                        '&url='.$record['playbackFormatUrl']
+                                    );
+                                    $url .= Display::url(
+                                        Display::return_icon(
+                                            'delete.png',
+                                            get_lang('Delete')
+                                        ),
+                                        api_get_self().'?'.
+                                        api_get_cidreq().
+                                        '&action=delete_record&id='.$record['recordId']
+                                    );
                                 }
                                 //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
                                 $count++;
@@ -542,7 +581,9 @@ class bbb
      */
     public function deleteRecord($id)
     {
-        if (empty($id) or $id != intval($id)) { return false; }
+        if (empty($id) or $id != intval($id)) {
+            return false;
+        }
         $meetingData = Database::select('*', $this->table, array('where' => array('id = ?' => array($id))), 'first');
         $recordingParams = array(
            /*

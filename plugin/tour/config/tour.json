@@ -27,5 +27,95 @@
                 "message": "TheHomePageStep"
             }
         ]
+    },
+    {
+        "pageClass": ".section-mycourses",
+        "steps": [
+            {
+                "elementSelector": ".content-column",
+                "message": "YourCoursesList"
+            }
+        ]
+    },
+    {
+        "pageClass": ".section-myagenda",
+        "steps": [
+            {
+                "elementSelector": ".breacrumb",
+                "message": "AgendaAllowsYouToSeeWhatsHappening"
+            },
+            {
+                "elementSelector": ".actions",
+                "message": "AgendaTheActionBar"
+            },
+            {
+                "elementSelector": ".fc-button-today",
+                "message": "AgendaTodayButton"
+            },
+            {
+                "elementSelector": ".fc-header-title",
+                "message": "AgendaTheMonthIsAlwaysInEvidence"
+            },
+            {
+                "elementSelector": ".fc-button-month",
+                "message": "AgendaButtonsAllowYouToChangePeriod"
+            }
+        ]
+    },
+    {
+        "pageClass": ".section-session_my_space",
+        "steps": [
+            {
+                "elementSelector": ".breadcrumb",
+                "message": "MySpaceAllowsYouToKeepTrackOfProgress"
+            },
+            {
+                "elementSelector": ".actions",
+                "message": "MySpaceSectionsGiveYouImportantInsight"
+            }
+        ]
+    },
+    {
+        "pageClass": ".section-social",
+        "steps": [
+            {
+                "elementSelector": ".breadcrumb",
+                "message": "SocialAllowsYouToGetInTouchWithOtherUsersOfThePlatform"
+            },
+            {
+                "elementSelector": ".social-menu",
+                "message": "SocialMenuGivesAccessToDifferentToolsToGetInTouchOrPublishStuff"
+            }
+        ]
+    },
+    {
+        "pageClass": ".section-dashboard",
+        "steps": [
+            {
+                "elementSelector": ".breadcrumb",
+                "message": "DashboardAllowsYouToGetVerySpecificInformationInAnIllustratedCondensedFormat"
+            },
+            {
+                "elementSelector": ".actions",
+                "message": "DashboardMustBeConfiguredFirstFromTheAdminSectionPluginsThenHereToEnableDesiredBlocks"
+            }
+        ]
+    },
+    {
+        "pageClass": ".section-platform_admin",
+        "steps": [
+            {
+                "elementSelector": ".breadcrumb",
+                "message": "AdministrationAllowsYouToManageYourPortal"
+            },
+            {
+                "elementSelector": ".block-admin-users",
+                "message": "AdminUsersBlockAllowsYouToManageUsers"
+            },
+            {
+                "elementSelector": ".block-admin-courses",
+                "message": "AdminCoursesBlockAllowsYouToManageCourses"
+            }
+        ]
     }
 ]

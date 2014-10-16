@@ -3141,7 +3141,8 @@ class CourseManager
      */
     public static function get_courses_followed_by_drh(
         $user_id,
-        $from = DRH,
+        $status = DRH,
+        $from = null,
         $limit = null,
         $column = null,
         $direction = null,
@@ -3149,6 +3150,7 @@ class CourseManager
     ) {
         return self::getCoursesFollowedByUser(
             $user_id,
+            $status,
             $from,
             $limit,
             $column,

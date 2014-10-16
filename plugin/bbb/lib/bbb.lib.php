@@ -277,6 +277,17 @@ class bbb
         while ($status == false) {
 
             $meetingIsRunningInfo = $this->getMeetingInfo($params);
+            if ($meetingIsRunningInfo === false) {
+                //checking with the remote_id didn't work, so just in case and
+                // to provide backwards support, check with the id
+                $params = array(
+                    'meetingId' => $meetingData['id'],
+                    //  -- REQUIRED - The unique id for the meeting
+                    'password' => $this->getModMeetingPassword()
+                    //  -- REQUIRED - The moderator password for the meeting
+                );
+                $meetingIsRunningInfo = $this->getMeetingInfo($params);
+            }
 
             if ($this->debug) {
                 error_log(print_r($meetingIsRunningInfo, 1));
@@ -366,6 +377,17 @@ class bbb
 
         foreach ($meetingList as $meetingDB) {
             $meetingBBB = $this->getMeetingInfo(array('meetingId' => $meetingDB['remote_id'], 'password' => $pass));
+            if ($meetingBBB === false) {
+                //checking with the remote_id didn't work, so just in case and
+                // to provide backwards support, check with the id
+                $params = array(
+                    'meetingId' => $meetingDB['id'],
+                    //  -- REQUIRED - The unique id for the meeting
+                    'password' => $pass
+                    //  -- REQUIRED - The moderator password for the meeting
+                );
+                $meetingBBB = $this->getMeetingInfo($params);
+            }
 
             $meetingBBB['end_url'] = api_get_self().'?'.api_get_cidreq().'&action=end&id='.$meetingDB['id'];
 
@@ -564,6 +586,17 @@ class bbb
         }
         $pass = $this->getModMeetingPassword();
         $info = $this->getMeetingInfo(array('meetingId' => $meetingData['remote_id'], 'password' => $pass));
+        if ($info === false) {
+            //checking with the remote_id didn't work, so just in case and
+            // to provide backwards support, check with the id
+            $params = array(
+                'meetingId' => $meetingData['id'],
+                //  -- REQUIRED - The unique id for the meeting
+                'password' => $pass
+                //  -- REQUIRED - The moderator password for the meeting
+            );
+            $info = $this->getMeetingInfo($params);
+        }
 
         if (!empty($info) && isset($info['participantCount'])) {
             return $info['participantCount'];

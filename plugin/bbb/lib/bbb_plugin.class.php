@@ -32,7 +32,7 @@ class BBBPlugin extends Plugin
 
     protected function __construct()
     {
-        parent::__construct('2.1', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
+        parent::__construct('2.2', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
     }
 
     public function install()

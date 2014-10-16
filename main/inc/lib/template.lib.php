@@ -973,11 +973,12 @@ class Template
     }
 
     /**
+     * The theme that will be used if the database is not working.
      * @return string
      */
-    public static function getThemeBackup()
+    public static function getThemeFallback()
     {
-        $theme = api_get_configuration_value('theme_backup');
+        $theme = api_get_configuration_value('theme_fallback');
         if (empty($theme)) {
             $theme = 'chamilo';
         }

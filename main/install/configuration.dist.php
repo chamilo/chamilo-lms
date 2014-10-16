@@ -244,6 +244,6 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // Auto detect language custom pages.
 // $_configuration['auto_detect_language_custom_pages'] = true;
 // If the database is down this css style will be used to show the errors.
-//$_configuration['theme_backup'] = 'chamilo'; // (main/css/chamilo)
+//$_configuration['theme_fallback'] = 'chamilo'; // (main/css/chamilo)
 // The default template that will be use in the system.
 //$_configuration['default_template'] = 'default'; // (main/template/default)

@@ -2267,31 +2267,6 @@ class SessionManager
             $user_id
         );
 
-        // delete extra session fields where field variable is "PERIODO"
-        $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-        $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-
-        $sql = "SELECT t_sfv.field_id FROM $t_sfv t_sfv, $t_sf t_sf
-                WHERE t_sfv.session_id = '$id_checked' AND t_sf.field_variable = 'PERIODO' ";
-        $rs_field = Database::query($sql);
-
-        $field_id = 0;
-        if (Database::num_rows($rs_field) > 0) {
-            $row_field = Database::fetch_row($rs_field);
-            $field_id = $row_field[0];
-            $sql = "DELETE FROM $t_sfv
-                    WHERE session_id = '$id_checked' AND field_id = '$field_id'";
-            Database::query($sql);
-        }
-
-        $sql = "SELECT * FROM $t_sfv WHERE field_id = '$field_id' ";
-        $rs_field_id = Database::query($sql);
-
-        if (Database::num_rows($rs_field_id) == 0) {
-            $sql_delete_sf = "DELETE FROM $t_sf WHERE id = '$field_id'";
-            Database::query($sql_delete_sf);
-        }
-
         return true;
     }
 

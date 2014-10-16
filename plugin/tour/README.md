@@ -7,7 +7,7 @@ Shows people how to use your Chamilo LMS
 
 Edit the `plugin/tour/config/tour.json` file adding the page classes and steps
 
-To set the steps in a page, add a object like this:
+To set the steps in a page, add an object like this:
 ```
 {
     "pageClass": "page unique class selector",
@@ -24,3 +24,8 @@ To set the steps in a page, add a object like this:
 }
 ```
 Then set the language variables inside the `plugin/tour/lang/$language.php` file
+
+# Set a region to plugin
+
+You must assign a Region to Tour plugin in the Configuration Settings
+Choose preferably `header_right`

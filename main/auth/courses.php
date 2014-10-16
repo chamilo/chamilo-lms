@@ -80,6 +80,9 @@ $actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deleteco
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
 $nameTools = get_lang('SortMyCourses');
 
+// Get Limit values
+$limit = getLimitArray();
+
 if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
 	$action = $_GET['action'];
 }
@@ -169,7 +172,7 @@ if (isset($_POST['create_course_category']) && isset($_POST['title_course_catego
 if (isset($_REQUEST['search_course'])) {
     //echo "<p><strong>".get_lang('SearchResultsFor')." ".api_htmlentities($_POST['search_term'], ENT_QUOTES, api_get_system_encoding())."</strong><br />";
     if ($ctok == $_REQUEST['sec_token']) {
-        $courses_controller->search_courses($_REQUEST['search_term']);
+        $courses_controller->search_courses($_REQUEST['search_term'], null, null, null, $limit);
     }
 }
 
@@ -209,6 +212,8 @@ switch ($action) {
         $courses_controller->courses_list($action);
         break;
     case 'subscribe':
+        $courses_controller->courses_categories($action, $_GET['category_code'], null, null, null, $limit);
+        break;
     case 'display_random_courses':
         if ($user_can_view_page) {
             $courses_controller->courses_categories($action);
@@ -217,50 +222,9 @@ switch ($action) {
         }
         break;
     case 'display_courses':
-        $courses_controller->courses_categories($action, $_GET['category_code']);
+        $courses_controller->courses_categories($action, $_GET['category_code'], null, null, null, $limit);
         break;
     case 'display_sessions':
-        $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-        $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
-
-        $authModel = new Auth();
-        $sessions = $authModel->browseSessions($date);
-
-        $sessionsBlocks = array();
-
-        foreach ($sessions as $session) {
-            $sessionsBlocks[] = array(
-                'id' => $session['id'],
-                'name' => $session['name'],
-                'nbr_courses' => $session['nbr_courses'],
-                'nbr_users' => $session['nbr_users'],
-                'coach_name' => $session['coach_name'],
-                'is_subscribed' => $session['is_subscribed'],
-                'icon' => $courses_controller->getSessionIcon($session['name']),
-                'date' => SessionManager::getSessionFormattedDate($session),
-                'subscribe_button' => $courses_controller->getRegisterInSessionButton($session['name'])
-            );
-        }
-
-        $tpl = new Template();
-        $tpl->assign('action', $action);
-        $tpl->assign('showCourses', CoursesAndSessionsCatalog::showCourses());
-        $tpl->assign('showSessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('api_get_self', api_get_self());
-        $tpl->assign('nameTools', $nameTools);
-
-        $tpl->assign('coursesCategoriesList', $courses_controller->getCoursesCategoriesBlock());
-
-        $tpl->assign('hiddenLinks', $hiddenLinks);
-        $tpl->assign('searchToken', Security::get_token());
-
-        $tpl->assign('searchDate', $date);
-        $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');
-        $tpl->assign('sessions_blocks', $sessionsBlocks);
-        $tpl->assign('already_subscribed_label', $courses_controller->getAlreadyRegisterInSessionLabel());
-
-        $conentTemplate = $tpl->get_template('auth/sessions_catalog.tpl');
-
-        $tpl->display($conentTemplate);
+        $courses_controller->sessionsList($action, $nameTools, $limit);
         break;
 }

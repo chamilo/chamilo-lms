@@ -64,7 +64,7 @@ class BigBlueButtonBN {
 	A private utility method used by other public methods to process XML responses.
 	*/
 		if (extension_loaded('curl')) {
-			$ch = curl_init() or die ( curl_error() );
+			$ch = curl_init() or die ( curl_error($ch) );
 			$timeout = 10;
 			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt( $ch, CURLOPT_URL, $url );
@@ -439,8 +439,7 @@ class BigBlueButtonBN {
 		);
 		*/
 		$recordingsUrl = $this->_bbbServerBaseUrl."api/getRecordings?";
-		$params =
-		'meetingID='.urlencode($recordingParams['meetingId']);
+		$params = 'meetingID='.urlencode($recordingParams['meetingId']);
 		return ($recordingsUrl.$params.'&checksum='.sha1("getRecordings".$params.$this->_securitySalt));
 
 	}

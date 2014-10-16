@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-/* To showing the plugin course icons you need to add these icons:
-     * main/img/icons/22/plugin_name.png
-     * main/img/icons/64/plugin_name.png
-     * main/img/icons/64/plugin_name_na.png
+/* To show the plugin course icons you need to add these icons:
+ * main/img/icons/22/plugin_name.png
+ * main/img/icons/64/plugin_name.png
+ * main/img/icons/64/plugin_name_na.png
 */
-
+/**
+ * Videoconference plugin with BBB
+ */
+//namespace Chamilo\Plugin\BBB;
 /**
  * Class BBBPlugin
  */
@@ -22,7 +24,7 @@ class BBBPlugin extends Plugin
         )
     );
 
-    static function create()
+    public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();

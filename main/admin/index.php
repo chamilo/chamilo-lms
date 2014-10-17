@@ -62,6 +62,7 @@ $blocks = array();
 
 $blocks['users']['icon']  = Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_SMALL, false);
 $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
+$blocks['users']['class'] = 'block-admin-users';
 
 if (api_is_platform_admin()) {
 	$search_form = ' <form method="get" class="form-search" action="user_list.php">
@@ -102,6 +103,7 @@ if (api_is_platform_admin()) {
 	/* Courses */
 	$blocks['courses']['icon']  = Display::return_icon('course.gif', get_lang('Courses'), array(), ICON_SIZE_MEDIUM, false);
 	$blocks['courses']['label'] = api_ucfirst(get_lang('Courses'));
+    $blocks['courses']['class'] = 'block-admin-courses';
 
 	$search_form = ' <form method="get" class="form-search" action="course_list.php">
 							<input class="span3" type="text" name="keyword" value="">
@@ -140,6 +142,8 @@ if (api_is_platform_admin()) {
     /* Platform */
     $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM, false);
     $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
+    $blocks['platform']['class'] = 'block-admin-platform';
+
 
     $search_form = ' <form method="get" action="settings.php" class="form-search">
 							<input class="span3" type="text" name="search_field" value="" >
@@ -185,6 +189,8 @@ if (api_is_platform_admin()) {
 /* Sessions */
 $blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL, false);
 $blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
+$blocks['sessions']['class'] = 'block-admin-sessions';
+
 
 $search_form = ' <form method="GET" class="form-search" action="session_list.php">
                     <input class="span3" type="text" name="keyword" value="">
@@ -219,8 +225,10 @@ if (api_is_platform_admin()) {
 
 	$blocks['settings']['icon']  = Display::return_icon('settings.png', get_lang('System'), array(), ICON_SIZE_SMALL, false);
 	$blocks['settings']['label'] = api_ucfirst(get_lang('System'));
+    $blocks['settings']['class'] = 'block-admin-settings';
 
-	$items = array();
+
+    $items = array();
 	$items[] = array('url'=>'special_exports.php', 	'label' => get_lang('SpecialExports'));
 	if (!empty($_configuration['db_admin_path'])) {
 		$items[] = array('url'=>$_configuration['db_admin_path'], 	'label' => get_lang('AdminDatabases').' ('.get_lang('DBManagementOnlyForServerAdmin').') ');
@@ -254,6 +262,8 @@ if (api_is_platform_admin()) {
 	/*
 	$blocks['extensions']['icon']  = Display::return_icon('visio_meeting.gif', get_lang('ConfigureExtensions'), array(), ICON_SIZE_SMALL, false);
 	$blocks['extensions']['label'] = api_ucfirst(get_lang('ConfigureExtensions'));
+	$blocks['extensions']['class'] = 'block-admin-extensions';
+
 
 	$items = array();
 	$items[] = array('url'=>'configure_extensions.php?display=visio', 	'label' => get_lang('Visioconf'));
@@ -269,6 +279,8 @@ if (api_is_platform_admin()) {
     if (api_get_setting('allow_skills_tool') == 'true') {
         $blocks['skills']['icon']  = Display::return_icon('logo.png', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
         $blocks['skills']['label'] = get_lang('Skills');
+        $blocks['skills']['class'] = 'block-admin-skills';
+
 
         $items = array();
         //$items[] = array('url'=>'skills.php',           'label' => get_lang('SkillsTree'));
@@ -286,8 +298,10 @@ if (api_is_platform_admin()) {
 
 	$blocks['chamilo']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);
 	$blocks['chamilo']['label'] = 'Chamilo.org';
+    $blocks['chamilo']['class'] = 'block-admin-chamilo';
 
-	$items = array();
+
+    $items = array();
 	$items[] = array('url'=>'http://www.chamilo.org/', 	'label' => get_lang('ChamiloHomepage'));
 	$items[] = array('url'=>'http://www.chamilo.org/forum', 	'label' => get_lang('ChamiloForum'));
 
@@ -314,7 +328,7 @@ if (api_is_platform_admin()) {
 	$blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
-    //$blocks['version_check']['class'] = '';
+    $blocks['version_check']['class'] = 'block-admin-version_check';
 
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';

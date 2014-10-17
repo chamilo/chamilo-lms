@@ -5,38 +5,38 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.plugin.tour
  */
-$strings['plugin_title'] = 'Tour';
-$strings['plugin_comment'] = 'This plugin shows people how to use your Chamilo LMS. You must activar one region (e.g. "header-right") to show the button that allows the tour to start.';
+$strings['plugin_title'] = 'Tour guidé';
+$strings['plugin_comment'] = 'Ce plugin montre aux utilisateurs comment utiliser votre portail Chamilo. Vous devez activer une région (p.ex. "header-right") afin d\'afficher le bouton qui permet de démarrer le processus.';
 
 /* Strings for settings */
-$strings['show_tour'] = 'Show the tour';
+$strings['show_tour'] = 'Activer le tour guidé';
 
-$showTourHelpLine01 = 'The necessary configuration to show the help blocks, in JSON format, is located in the %splugin/tour/config/tour.json%s file.';
-$showTourHelpLine02 = 'See README file for more information.';
+$showTourHelpLine01 = 'La configuration nécessaire à l\'affichage du bloc d\'aide, au format JSON, se situe dans le fichier %splugin/tour/config/tour.json%s.';
+$showTourHelpLine02 = 'Voir fichier README pour plus d\'info.';
 
 $strings['show_tour_help'] = sprintf("$showTourHelpLine01 %s $showTourHelpLine02", "<strong>", "</strong>", "<br>");
 
-$strings['theme'] = 'Theme';
-$strings['theme_help'] = 'Chose <i>nassim</i>, <i>nazanin</i>, <i>royal</i>. Empty to use the default theme.';
+$strings['theme'] = 'Thème';
+$strings['theme_help'] = 'Choisissez entre <i>nassim</i>, <i>nazanin</i> et <i>royal</i>. Vide pour utiliser le thème par défaut.';
 
 /* Strings for plugin UI */
-$strings['Skip'] = 'Skip';
-$strings['Next'] = 'Next';
-$strings['Prev'] = 'Prev';
-$strings['Done'] = 'Done';
-$strings['StartButtonText'] = 'Start the tour';
+$strings['Skip'] = 'Passer';
+$strings['Next'] = 'Suivant';
+$strings['Prev'] = 'Précédent';
+$strings['Done'] = 'Terminé';
+$strings['StartButtonText'] = 'Démarrer le tour guidé';
 
 /* String for the steps */
 // if body class = section-mycampus
-$strings['TheLogoStep'] = 'Welcome to <b>Chamilo LMS 1.9.x</b>';
-$strings['TheNavbarStep'] = 'Menu bar with links to the main sections of the portal';
-$strings['TheRightPanelStep'] = 'Sidebar panel';
-$strings['TheUserImageBlock'] = 'Your profile photo';
-$strings['TheProfileBlock'] = 'Your profile tools: <i>Inbox</i>, <i>message composer</i>, <i>pending invitations</i>, <i>profile edition</i>.';
-$strings['TheHomePageStep'] = 'This is the initial homepage where you will find the portal announcements, links and any information the administration team has configured.';
+$strings['TheLogoStep'] = 'Bienvenu(e) dans <b>Chamilo LMS</b>';
+$strings['TheNavbarStep'] = 'Barre de menu, reprenant les sections principales.';
+$strings['TheRightPanelStep'] = 'Panneau latéral de menus';
+$strings['TheUserImageBlock'] = 'Votre photo de profil utilisateur';
+$strings['TheProfileBlock'] = 'Vos outils perso: <i>Boîte de messages</i>, <i>Composer des messages</i>, <i>Invitations en attente</i>, <i>Édition du profil</i>.';
+$strings['TheHomePageStep'] = 'Ceci est la page d\'accueil du portail. On y retrouve les annonces du portail, une section d\'introduction, des liens, etc, selon ce que l\'équipe d\'administration a préparé';
 
 // if body class = section-mycourses
-$strings['YourCoursesList'] = 'This area shows the different courses (or sessions) to which you are subscribed. If no course shows, go to the course catalogue (see menu) or discuss it with your portal administrator';
+$strings['YourCoursesList'] = 'Cette zone affiche les différents cours (ou sessions) auxquels vous avez accès. Si aucun cours ne s\'affiche, rendez-vous sur le catalogue de cours (voir menu) ou parlez-en à votre administrateur de portail';
 
 // if body class = section-myagenda
 $strings['AgendaAllowsYouToSeeWhatsHappening'] = 'The agenda tool allows you to see what events are scheduled for the upcoming days, weeks or months.';

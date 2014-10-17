@@ -165,7 +165,15 @@ class Tracking
 
             $platformCourses = CourseManager::getCoursesFollowedByUser(
                 $userId,
-                COURSEMANAGER
+                COURSEMANAGER,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                true
             );
             foreach ($platformCourses as $course) {
                 $courses[$course['code']] = $course['code'];

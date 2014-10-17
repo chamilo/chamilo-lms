@@ -861,144 +861,43 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
 {
     // Start empty html
     $pageDiv = '';
-    // Check if current page is the first page
-    if (1 === $pageCurrent) {
-        // Add anchor without href
-        $pageAnchor = Display::tag(
-            'a',
-            '<'
-        );
-        $pageAnchorFirst = Display::tag(
-            'a',
-            '<<'
-        );
-        // Page buttons disabled
-        $pageItemAttributes = array(
-            'class' => 'disabled'
-        );
+    $pageBottom = max(1, $pageCurrent - 3);
+    $pageTop = min($pageTotal, $pageCurrent + 3);
+
+    if ($pageBottom > 1) {
+        $pageDiv .= getPageNumberItem(1, $pageLength);
+        if ($pageBottom > 2) {
+            $pageDiv .= getPageNumberItem($pageBottom - 1, $pageLength, null, '...');
+        }
     } else {
-        // Add Anchor with href
-        // To previous page
-        $pageAnchor = Display::tag(
-            'a',
-            '<',
-            array(
-                'href' => getCourseCategoryUrl(
-                    $pageCurrent - 1,
-                    $pageLength
-                ),
-            )
-        );
-        // To First page
-        $pageAnchorFirst = Display::tag(
-            'a',
-            '<<',
-            array(
-                'href' => getCourseCategoryUrl(
-                    1,
-                    $pageLength
-                ),
-            )
-        );
-        $pageItemAttributes = array();
+        // Nothing to do
     }
-    // Add items to html
-    $pageDiv .= Display::tag(
-        'li',
-        $pageAnchorFirst,
-        $pageItemAttributes
-    );
-    $pageDiv .= Display::tag(
-        'li',
-        $pageAnchor,
-        $pageItemAttributes
-    );
+
     // For each page add its page button to html
     for (
-        $i = max(1, $pageCurrent - 3);
-        $i <= min($pageTotal, $pageCurrent + 3);
+        $i = $pageBottom;
+        $i <= $pageTop;
         $i++
     ) {
-        $pageUrl = getCourseCategoryUrl(
-            $i,
-            $pageLength
-        );
         if ($i === $pageCurrent) {
-            $pageAnchor = Display::tag(
-                'a',
-                $i
-            );
-            $pageItemAttributes = array(
-                'class' => 'active'
-            );
+            $pageItemAttributes = array('class' => 'active');
         } else {
-            $pageAnchor = Display::tag(
-                'a',
-                $i,
-                array(
-                    'href' => $pageUrl,
-                )
-            );
             $pageItemAttributes = array();
         }
-        $pageDiv .= Display::tag(
-            'li',
-            $pageAnchor,
-            $pageItemAttributes
-        );
+        $pageDiv .= getPageNumberItem($i, $pageLength, $pageItemAttributes);
+
     }
     // Check if current page is the last page
-    if ($pageTotal == $pageCurrent) {
-        // Add anchor without href
-        $pageAnchor = Display::tag(
-            'a',
-            '>'
-        );
-        $pageAnchorLast = Display::tag(
-            'a',
-            '>>'
-        );
-        $pageItemAttributes = array(
-            'class' => 'disabled'
-        );
-    } else {
-        // Add anchor with href
-        // To next Page
-        $pageAnchor = Display::tag(
-            'a',
-            '>',
-            array(
-                'href' => getCourseCategoryUrl(
-                    $pageCurrent + 1,
-                    $pageLength
-                ),
-            )
-        );
-        // To last page
-        $pageAnchorLast = Display::tag(
-            'a',
-            '>>',
-            array(
-                'href' => getCourseCategoryUrl(
-                    $pageTotal,
-                    $pageLength
-                ),
-            )
 
-        );
-        $pageItemAttributes = array();
+    if ($pageTop < $pageTotal) {
+        if ($pageTop < ($pageTotal - 1)) {
+            $pageDiv .= getPageNumberItem($pageTop + 1, $pageLength, null, '...');
+        }
+        $pageDiv .= getPageNumberItem($pageTotal, $pageLength);
+    } else {
+        // Nothing to do
     }
-    // Add items to html
-    $pageDiv .= Display::tag(
-        'li',
-        $pageAnchor,
-        $pageItemAttributes
-    );
-    $pageDiv .= Display::tag(
-        'li',
-        $pageAnchorLast,
-        $pageItemAttributes
-    );
+
     // Complete pagination html
     $pageDiv = Display::div(
         Display::tag(
@@ -1063,6 +962,41 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
         }
 
         return $pageUrl;
+}
+
+/**
+ * Get li HTML of page number
+ * @param $pageNumber
+ * @param $pageLength
+ * @param array $liAttributes
+ * @param string $content
+ * @return string
+ */
+function getPageNumberItem($pageNumber, $pageLength, $liAttributes = array(), $content = '')
+{
+    // Get page URL
+    $url = getCourseCategoryUrl(
+        $pageNumber,
+        $pageLength
+    );
+
+    // If is current page ('active' class) clear URL
+    if (isset($liAttributes) && is_array($liAttributes)) {
+        if (strpos('active', $liAttributes['class']) !== false) {
+            $url = '';
+        }
+    }
+
+    $content = !empty($content) ? $content : $pageNumber;
+
+    return Display::tag(
+        'li',
+        Display::url(
+            $content,
+            $url
+        ),
+        $liAttributes
+    );
 }
 /**
  CREATE TABLE IF NOT EXISTS access_url_rel_course_category (access_url_id int unsigned NOT NULL, course_category_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, course_category_id));

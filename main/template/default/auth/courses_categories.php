@@ -112,7 +112,7 @@ $userInfo = api_get_user_info();
                         </div>
                     </fieldset>
                 </form>
-                <?php
+            <?php
                 $hidden_links = 0;
             } else {
                 $hidden_links = 1;
@@ -124,7 +124,12 @@ $userInfo = api_get_user_info();
              */
             if (!empty($browse_course_categories)) {
                 echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
-
+            ?>
+            </ul>
+        </div>
+        <div class="well">
+            <ul class="nav nav-list">
+            <?php
                 echo '<li class="nav-header">'.get_lang('CourseCategories').'</li>';
 
                 // level 1
@@ -165,7 +170,7 @@ $userInfo = api_get_user_info();
                                     $count_courses_lv3 = $subcategory2['count_courses'];
                                     if ($code == $subcategory2_code) {
                                         $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
-                                    } else {
+                                                } else {
                                         $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
                                     }
                                     echo '<li style="margin-left:40px;">'.$subcategory2_link.'</li>';
@@ -188,17 +193,22 @@ $userInfo = api_get_user_info();
                             }
                         }
                     }
-                }
+                } ?>
+            </ul>
+        </div>
+            <?php
             }
+        }
             ?>
-                <?php } ?>
-                <?php if ($showSessions) { ?>
+        <?php if ($showSessions) { ?>
+        <div class="well">
+            <ul class="nav nav-list">
                     <li class="nav-header"><?php echo get_lang('Sessions'); ?></li>
                     <li>
                         <?php if ($action == 'display_sessions' && $_SERVER['REQUEST_METHOD'] != 'POST') { ?>
-                            <strong><?php echo get_lang('SessionList'); ?></strong>
+                            <strong><?php echo get_lang('Sessions'); ?></strong>
                         <?php } else { ?>
-                            <a href="<?php echo api_get_self() ?>?action=display_sessions"><?php echo get_lang('SessionList'); ?></a>
+                            <a href="<?php echo api_get_self() ?>?action=display_sessions"><?php echo get_lang('Sessions'); ?></a>
                         <?php } ?>
                     </li>
                     <li class="nav-header"><?php echo get_lang('SearchActiveSessions') ?></li>
@@ -212,11 +222,15 @@ $userInfo = api_get_user_info();
                             <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
                         </div>
                     </form>
-                <?php } ?>
+            </ul>
         </div>
+        <?php } ?>
     </div>
 
     <div class="span9">
+        <div class="page-header">
+            <h2><?php echo get_lang('CourseCatalog')?></h2>
+        </div>
         <?php if ($showCourses && $action != 'display_sessions') { ?>
         <?php if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }

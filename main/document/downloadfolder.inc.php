@@ -11,18 +11,36 @@ set_time_limit(0);
 require_once '../inc/global.inc.php';
 api_protect_course_script();
 
-$documentInfo = DocumentManager::get_document_data_by_id(
-    $_GET['id'],
-    api_get_course_id()
-);
-
-$path = $documentInfo['path'];
-
 $sysCoursePath = api_get_path(SYS_COURSE_PATH);
 $courseInfo = api_get_course_info();
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
+$courseCode = api_get_course_id();
+
+// Check if folder exists in current course.
+$documentInfo = DocumentManager::get_document_data_by_id(
+    $_GET['id'],
+    $courseCode,
+    false,
+    0
+);
+
+if (!empty($sessionId)) {
+    /* If no data found and session id exists
+       try to look the file inside the session */
+
+    if (empty($documentInfo)) {
+        $documentInfo = DocumentManager::get_document_data_by_id(
+            $_GET['id'],
+            $courseCode,
+            false,
+            $sessionId
+        );
+    }
+}
+
+$path = $documentInfo['path'];
 
 if (empty($path)) {
     $path = '/';
@@ -159,6 +177,7 @@ if (api_is_allowed_to_edit()) {
                 props.id_session    IN ('0', '$sessionId') AND
                 docs.filetype       = 'folder'";
     $query2 = Database::query($sql);
+
     // If we get invisible folders, we have to filter out these results from all visible files we found
     if (Database::num_rows($query2) > 0) {
         // Add item to an array

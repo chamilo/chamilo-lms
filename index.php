@@ -5,9 +5,7 @@
  * @package chamilo.main
  */
 
-
 use \ChamiloSession as Session;
-
 define('CHAMILO_HOMEPAGE', true);
 
 $language_file = array('courses', 'index', 'userInfo');
@@ -15,6 +13,9 @@ $language_file = array('courses', 'index', 'userInfo');
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
 // Maybe we should change this into an api function? an example: CourseManager::unset();
 $cidReset = true;
+
+// Set cookie for check if client browser are cookies enabled
+setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
 
 require_once 'main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
@@ -41,9 +42,6 @@ $htmlHeadXtra[] ='
         });
     });
 </script>';
-
-//set cookie for check if client browser are cookies enabled
-setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
 
 $controller = new IndexManager($header_title);
 

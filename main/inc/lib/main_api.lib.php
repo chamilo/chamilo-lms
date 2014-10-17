@@ -3226,10 +3226,20 @@ function api_not_allowed($print_headers = false, $message = null)
         $tpl->display_one_col_template();
         exit;
     }
+
     $msg = null;
-    // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
-    if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
-        $msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
+    /* Check if the cookies are enabled. If are enabled and if no course Id was
+       included in the requested URL, then the user has either lost his session
+       or is anonymous, so redirect to homepage
+    */
+    if (!isset($_COOKIE['TestCookie']) ||
+        isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie'])
+    ) {
+        $msg = Display::return_message(
+            get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.
+            get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error',
+            false
+        );
     } else {
         // The session is over and we were not in a course,
         // or we try to get directly to a private course without being logged

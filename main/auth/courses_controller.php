@@ -76,10 +76,10 @@ class CoursesController
      * It's used for listing courses with categories,
      * render to courses_categories view
      * @param $action
-     * @param null $category_code
+     * @param string $category_code
      * @param string $message
      * @param string $error
-     * @param null $content
+     * @param string $content
      * @param array $limit will be used if $random_value is not set.
      * This array should contains 'start' and 'length' keys
      * @internal param \action $string
@@ -100,6 +100,7 @@ class CoursesController
             if (!isset($category_code)) {
                 $category_code = $browse_course_categories[0][1]['code']; // by default first category
             }
+            $limit = isset($limit) ? $limit : getLimitArray();
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code, null, $limit);
         }
 
@@ -516,16 +517,6 @@ class CoursesController
     }
 
     /**
-     * @param string $courseCategory
-     * @param string $searchTerm
-     * @return int
-     */
-    public function getCountCourses($courseCategory = '', $searchTerm = '')
-    {
-        return countCoursesInCategory($courseCategory, $searchTerm);
-    }
-
-    /**
      * Return Session Catalogue rendered view
      * @param string $action
      * @param string $nameTools
@@ -535,28 +526,22 @@ class CoursesController
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
-        if (
-            !empty($limit) &&
-            is_array($limit) &&
-            isset($limit['start']) &&
-            isset($limit['current']) &&
-            isset($limit['length'])
-        ) {
-            // Nothing to do
-        } else {
-            $limit = getLimitArray();
-        }
+
+        $limit = isset($limit) ? $limit : getLimitArray();
 
         $countSessions = $this->model->countSessions($date);
         $sessions = $this->model->browseSessions($date, $limit);
 
         $pageTotal = intval(ceil(intval($countSessions) / $limit['length']));
+        // Do NOT show pagination if only one page or less
         $cataloguePagination = $pageTotal > 1 ?
             getCataloguePagination($limit['current'], $limit['length'], $pageTotal) :
-            '' . print_r($limit, 1) . ' ' . $pageTotal;
+            '';
         $sessionsBlocks = array();
 
+        // Get session list catalogue URL
         $sessionUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'display_sessions');
+        // Get session search catalogue URL
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
         foreach ($sessions as $session) {

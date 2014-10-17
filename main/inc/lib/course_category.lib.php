@@ -560,7 +560,7 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
 
 /**
  * @param string $category_code
- * @param string $random_value
+ * @param int $random_value
  * @param array $limit will be used if $random_value is not set.
  * This array should contains 'start' and 'length' keys
  * @return array
@@ -859,8 +859,11 @@ function getLimitFilterFromArray($limit)
  */
 function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
 {
+    // Start empty html
     $pageDiv = '';
+    // Check if current page is the first page
     if (1 === $pageCurrent) {
+        // Add anchor without href
         $pageAnchor = Display::tag(
             'a',
             '<'
@@ -869,10 +872,13 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
             'a',
             '<<'
         );
+        // Page buttons disabled
         $pageItemAttributes = array(
             'class' => 'disabled'
         );
     } else {
+        // Add Anchor with href
+        // To previous page
         $pageAnchor = Display::tag(
             'a',
             '<',
@@ -883,6 +889,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
                 ),
             )
         );
+        // To First page
         $pageAnchorFirst = Display::tag(
             'a',
             '<<',
@@ -895,6 +902,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
         );
         $pageItemAttributes = array();
     }
+    // Add items to html
     $pageDiv .= Display::tag(
         'li',
         $pageAnchorFirst,
@@ -905,6 +913,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
         $pageAnchor,
         $pageItemAttributes
     );
+    // For each page add its page button to html
     for (
         $i = max(1, $pageCurrent - 3);
         $i <= min($pageTotal, $pageCurrent + 3);
@@ -938,7 +947,9 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
             $pageItemAttributes
         );
     }
+    // Check if current page is the last page
     if ($pageTotal == $pageCurrent) {
+        // Add anchor without href
         $pageAnchor = Display::tag(
             'a',
             '>'
@@ -951,6 +962,8 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
             'class' => 'disabled'
         );
     } else {
+        // Add anchor with href
+        // To next Page
         $pageAnchor = Display::tag(
             'a',
             '>',
@@ -961,6 +974,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
                 ),
             )
         );
+        // To last page
         $pageAnchorLast = Display::tag(
             'a',
             '>>',
@@ -974,6 +988,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
         );
         $pageItemAttributes = array();
     }
+    // Add items to html
     $pageDiv .= Display::tag(
         'li',
         $pageAnchor,
@@ -984,6 +999,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
         $pageAnchorLast,
         $pageItemAttributes
     );
+    // Complete pagination html
     $pageDiv = Display::div(
         Display::tag(
             'ul',
@@ -1000,12 +1016,12 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
 
     /**
      * Return URL to course catalog
-     * @param $pageCurrent
-     * @param $pageLength
-     * @param null $categoryCode
-     * @param null $hiddenLinks
-     * @param null $action
-     * @return null|string
+     * @param int $pageCurrent
+     * @param int $pageLength
+     * @param string $categoryCode
+     * @param int $hiddenLinks
+     * @param string $action
+     * @return string
      */
     function getCourseCategoryUrl(
         $pageCurrent,
@@ -1017,6 +1033,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
     {
         $action = isset($action) ? Security::remove_XSS($action) :
             Security::remove_XSS($_REQUEST['action']);
+        // Start URL with params
         $pageUrl = api_get_self() .
             '?action=' . $action .
             '&category_code=' . (
@@ -1032,6 +1049,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
         ;
         switch ($action) {
             case 'subscribe' :
+                // for search
                 $pageUrl .=
                     '&search_term=' . $_REQUEST['search_term'] .
                     '&search_course=1' .
@@ -1043,6 +1061,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
                 break;
 
         }
+
         return $pageUrl;
 }
 /**

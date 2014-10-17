@@ -69,10 +69,9 @@
             </div>
 
             {% if coursesCategoriesList is not empty %}
-                <div class="well">
+                <div class="well sidebar-nav">
+                    <h4>{{ 'CourseCategories' | get_lang }}</h4>
                     <ul class="nav nav-list">
-                        <li class="nav-header">{{ 'CourseCategories' | get_lang }}</li>
-
                         {{ coursesCategoriesList }}
                     </ul>
                 </div>
@@ -80,20 +79,18 @@
         {% endif %}
 
         {% if showSessions %}
-            <div class="well">
+            <div class="well sidebar-nav">
+            <h4>{{ 'Sessions' | get_lang }}</h4>
                 <ul class="nav nav-list">
-                    <li class="nav-header">{{ 'Sessions' | get_lang }}</li>
+                    <li>{{ 'SearchSessions' | get_lang }}</li>
                     <li>
-                        <strong>{{ nameTools }}</strong>
-                    </li>
-                    <li class="nav-header">{{ 'SearchSessions' | get_lang }}</li>
-                </ul>
                 <form class="form-search" method="post" action="{{ api_get_self }}?action=display_sessions">
                     <div class="input-append">
-                        <input type="date" name="date" id="date" class="span2" value="{{ searchDate }}" readonly>
+                        <input type="date" name="date" id="date" class="span2 search-session" value="{{ searchDate }}" readonly>
                         <button class="btn" type="submit">{{ 'Search' | get_lang }}</button>
                     </div>
-                </form>
+                </form></li>
+                </ul>
             </div>
         {% endif %}
     </div>

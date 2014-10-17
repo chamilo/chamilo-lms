@@ -201,6 +201,18 @@ header #logo img{
 .session-group .items-session li{
     padding-bottom: 5px;
 }
+.well .nav.nav-list > li{
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.well .nav-list > li > a {
+  font-size: 13px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+.well .form-search .input-append .search-session{
+    width: 130px;
+}
 /* SESSION CATALOG END*/
 
 .subnav .brand {

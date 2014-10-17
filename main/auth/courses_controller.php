@@ -455,7 +455,7 @@ class CoursesController
         $url = api_get_path(WEB_PATH) . "main/inc/email_editor.php?action=subscribe_me_to_session&session=$sessionName";
 
         return Display::url(get_lang('Subscribe'), $url, array(
-                    'class' => 'btn btn-success',
+                    'class' => 'btn btn-large btn-primary',
         ));
     }
 
@@ -477,7 +477,7 @@ class CoursesController
      */
     public function getSessionIcon($sessionName)
     {
-        return Display::return_icon('window_list.png', $sessionName, null, ICON_SIZE_LARGE);
+        return Display::return_icon('window_list.png', $sessionName, null, ICON_SIZE_BIG);
     }
 
 }

@@ -11,34 +11,34 @@
                 var $target = $(e.target);
                 var $targetContent = $target.find('.accordion-inner');
 
-                $targetContent.empty();
+                if ($targetContent.is(':empty')) {
+                    var idParts = $target.attr('id').split('-');
 
-                var idParts = $target.attr('id').split('-');
+                    var sessionId = parseInt(idParts[1], 10);
 
-                var sessionId = parseInt(idParts[1], 10);
+                    $.ajax('{{ web_session_courses_ajax_url }}', {
+                        data: {
+                            a: 'display_sessions_courses',
+                            session: sessionId
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            var coursesUL = '';
 
-                $.ajax('{{ web_session_courses_ajax_url }}', {
-                    data: {
-                        a: 'display_sessions_courses',
-                        session: sessionId
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        var coursesUL = '';
+                            $.each(response, function(index, course) {
+                                coursesUL += '<li><img src="{{ _p.web }}/main/img/check.png"/> <strong>' + course.name + '</strong>';
 
-                        $.each(response, function(index, course) {
-                            coursesUL += '<li><strong>' + course.name + '</strong>';
+                                if (course.coachName != '') {
+                                    coursesUL += ' (' + course.coachName + ')';
+                                }
 
-                            if (course.coachName != '') {
-                                coursesUL += ' (' + course.coachName + ')';
-                            }
+                                coursesUL += '</li>';
+                            });
 
-                            coursesUL += '</li>';
-                        });
-
-                        $targetContent.html('<ul>' + coursesUL + '</ul>');
-                    }
-                });
+                            $targetContent.html('<ul class="items-session">' + coursesUL + '</ul>');
+                        }
+                    });
+                }
             });
         });
     </script>
@@ -98,11 +98,7 @@
         {% endif %}
     </div>
     <div class="span9">
-        <div class="page-header">
-            <h3>{{ nameTools }}</h3>
-        </div>
-
-        {% for session in sessions_blocks %}
+               {% for session in sessions_blocks %}
                 <div class="well well-small session-group" id="session-{{ session.id }}">
                     <div class="row-fluid">
                         <div class="span9">
@@ -114,7 +110,7 @@
                                 </div>
                                 <div class="span10 border-info">
                                     <h3>{{ session.name }}</h3>
-                                    <div class="tutor">General tutor: <img src="{{ _p.web }}/main/img/teachers.gif" width="16px"> {{ session.coach_name }}</div>
+                                    <div class="tutor"><img src="{{ _p.web }}/main/img/teachers.gif" width="16px"> {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}</div>
                                 </div>
                             </div>
                             <div class="row-fluid">
@@ -141,7 +137,7 @@
                                 {{ session.subscribe_button }}
                             {% endif %}
                             </div>
-                            <div class="time">{{ session.date }}</div>
+                            <div class="time"><img src="{{ _p.web }}/main/img/agenda.gif"> {{ session.date }}</div>
                         </div>
                     </div>
                 </div>

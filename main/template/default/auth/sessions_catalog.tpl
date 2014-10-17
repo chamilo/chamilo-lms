@@ -8,6 +8,8 @@
             });
 
             $('.accordion').on('show', function(e) {
+                e.preventDefault();
+
                 var $target = $(e.target);
                 var $targetContent = $target.find('.accordion-inner');
 
@@ -36,8 +38,13 @@
                             });
 
                             $targetContent.html('<ul class="items-session">' + coursesUL + '</ul>');
+                            $target.css({
+                                height: $targetContent.outerHeight()
+                            }).addClass('in');
                         }
                     });
+                } else {
+                    $target.addClass('in');
                 }
             });
         });
@@ -111,7 +118,7 @@
                                 </div>
                             </div>
                             <div class="row-fluid">
-                                <div class="accordion" iid="session-{{ session.id }}-accordion">
+                                <div class="accordion" id="session-{{ session.id }}-accordion">
                                     <div class="accordion-group">
                                         <div class="accordion-heading">
                                              <a class="accordion-toggle" data-toggle="collapse" data-parent="#session-{{ session.id }}-accordion" href="#session-{{ session.id }}-courses">

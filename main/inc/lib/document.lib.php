@@ -710,7 +710,10 @@ class DocumentManager
         $to_group_id = intval($to_group_id);
         $document_folders = array();
 
-        $students = CourseManager::get_user_list_from_course_code($_course['code'], api_get_session_id());
+        $students = CourseManager::get_user_list_from_course_code(
+            $_course['code'],
+            api_get_session_id()
+        );
         $sharedCondition = null;
 
         if (!empty($students)) {
@@ -865,7 +868,8 @@ class DocumentManager
      * @param array  $_course
      * @param int    $user_id id of the current user
      * @param string $file path stored in the database (if not defined, $documentId must be used)
-     * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
+     * @param int    $document_id in case you dont have the file path ,
+     *                insert the id of the file here and leave $file in blank ''
      * @param bool $to_delete
      * @param int $sessionId
      * @return boolean true/false
@@ -900,15 +904,16 @@ class DocumentManager
             if (self::is_folder($_course, $document_id)) {
                 if (!empty($file)) {
                     $path = Database::escape_string($file);
-                    $what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id
-                                          FROM $TABLE_DOCUMENT td , $TABLE_PROPERTY tp
-                                          WHERE td.c_id = $course_id AND
-                                          		tp.c_id = $course_id AND
-                                                td.session_id = $sessionId AND
-                    							tp.ref= td.id AND
-                    							(path='" . $path . "' OR path LIKE BINARY '" . $path . "/%' ) ";
+                    // Check
+                    $sql = "SELECT td.id, readonly, tp.insert_user_id
+                            FROM $TABLE_DOCUMENT td, $TABLE_PROPERTY tp
+                            WHERE td.c_id = $course_id AND
+                                tp.c_id = $course_id AND
+                                td.session_id = $sessionId AND
+                                tp.ref= td.id AND
+                                (path='" . $path . "' OR path LIKE BINARY '" . $path . "/%' ) ";
                     // Get all id's of documents that are deleted
-                    $what_to_check_result = Database::query($what_to_check_sql);
+                    $what_to_check_result = Database::query($sql);
 
                     if ($what_to_check_result && Database::num_rows($what_to_check_result) != 0) {
                         // file with readonly set to 1 exist?
@@ -1313,20 +1318,25 @@ class DocumentManager
                 return intval($row[0]);
             }
         }
+
         return false;
     }
 
     /**
      * Gets the document data with a given id
      *
-     * @param int $id Document ID (id field in c_document table)
-     * @param string $course_code course code (c_id field in document table)
-     * @param bool $load_parents load parents?
+     * @param int $id Document Id (id field in c_document table)
+     * @param string $course_code Course code
+     * @param bool $load_parents load folder parents.
      * @param int $session_id The session ID, 0 if requires context *out of* session, and null to use global context
      * @return array document content
      */
-    public static function get_document_data_by_id($id, $course_code, $load_parents = false, $session_id = null)
-    {
+    public static function get_document_data_by_id(
+        $id,
+        $course_code,
+        $load_parents = false,
+        $session_id = null
+    ) {
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
@@ -1353,13 +1363,12 @@ class DocumentManager
             //@todo need to clarify the name of the URLs not nice right now
             $url_path = urlencode($row['path']);
             $path = str_replace('%2F', '/', $url_path);
+            $pathinfo = pathinfo($row['path']);
 
             $row['url'] = api_get_path(WEB_CODE_PATH) . 'document/showinframes.php?cidReq=' . $course_code . '&id=' . $id;
             $row['document_url'] = api_get_path(WEB_CODE_PATH) . 'document/document.php?cidReq=' . $course_code . '&id=' . $id;
             $row['absolute_path'] = api_get_path(SYS_COURSE_PATH) . $course_info['path'] . '/document' . $row['path'];
             $row['absolute_path_from_document'] = '/document' . $row['path'];
-
-            $pathinfo = pathinfo($row['path']);
             $row['absolute_parent_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$pathinfo['dirname'] . '/';
             $row['direct_url'] = $www . $path;
 
@@ -1387,9 +1396,19 @@ class DocumentManager
                         $parent_id = self::get_document_id($course_info, $real_dir, 0);
                     }
                     if (!empty($parent_id)) {
-                        $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false, $session_id);
+                        $sub_document_data = self::get_document_data_by_id(
+                            $parent_id,
+                            $course_code,
+                            false,
+                            $session_id
+                        );
                         if ($session_id != 0 and !$sub_document_data) {
-                            $sub_document_data = self::get_document_data_by_id($parent_id, $course_code, false, 0);
+                            $sub_document_data = self::get_document_data_by_id(
+                                $parent_id,
+                                $course_code,
+                                false,
+                                0
+                            );
                         }
                         //@todo add visibility here
                         $parents[] = $sub_document_data;
@@ -1397,8 +1416,10 @@ class DocumentManager
                 }
             }
             $row['parents'] = $parents;
+
             return $row;
         }
+
         return false;
     }
 

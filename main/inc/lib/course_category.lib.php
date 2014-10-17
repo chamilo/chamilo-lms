@@ -828,5 +828,59 @@ function searchCategoryById($list)
 }
 
 /**
+ * Return the name tool by action
+ * @param string $action
+ * @return string
+ */
+function getCourseCatalogNametools($action)
+{
+    $actions = array(
+        'sortmycourses',
+        'createcoursecategory',
+        'subscribe',
+        'deletecoursecategory',
+        'display_courses',
+        'display_random_courses',
+        'subscribe_user_with_password',
+        'display_sessions'
+    );
+
+    $nameTools = get_lang('SortMyCourses');
+
+    if (empty($action)) {
+        if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
+            $action = Security::remove_XSS($_GET['action']);
+        } else {
+            // Nothing to do
+        }
+    }
+
+    switch ($action) {
+        case 'createcoursecategory' :
+            $nameTools = get_lang('CreateCourseCategory');
+            break;
+        case 'subscribe' :
+            $nameTools = get_lang('CourseManagement');
+            break;
+        case 'subscribe_user_with_password' :
+            $nameTools = get_lang('CourseManagement');
+            break;
+        case 'display_random_courses' :
+            // No break
+        case 'display_courses' :
+            $nameTools = get_lang('CourseManagement');
+            break;
+        case 'display_sessions' :
+            $nameTools = get_lang('Sessions');
+            break;
+        default :
+            // Nothing to do
+            break;
+    }
+
+    return $nameTools;
+}
+
+/**
  CREATE TABLE IF NOT EXISTS access_url_rel_course_category (access_url_id int unsigned NOT NULL, course_category_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, course_category_id));
  */

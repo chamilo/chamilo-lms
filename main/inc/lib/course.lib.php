@@ -3159,12 +3159,17 @@ class CourseManager
 
     /**
      * get courses followed by user
-     * @param int $user_id
-     * @param int $from
-     * @param int $limit
-     * @param string $column
-     * @param string $direction
-     * @return array    courses
+     * @param   int     $user_id
+     * @param   int     $status
+     * @param   int     $from
+     * @param   int     $limit
+     * @param   string  $column
+     * @param   string  $direction
+     * @param   boolean $getCount
+     * @param   string  $keyword
+     * @param   int     $sessionId
+     * @param   boolean $showAllAssignedCourses
+     * @return  array   courses
      */
     public static function getCoursesFollowedByUser(
         $user_id,

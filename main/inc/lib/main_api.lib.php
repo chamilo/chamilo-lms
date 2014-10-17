@@ -3347,6 +3347,67 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0)
 }
 
 /**
+ * Delete a row in the c_item_property table
+ *
+ * @param array $courseInfo
+ * @param string $tool
+ * @param int $itemId
+ * @param int $userId
+ * @param int $groupId
+ * @param int $sessionId
+ */
+function api_item_property_delete(
+    $courseInfo,
+    $tool,
+    $itemId,
+    $userId,
+    $groupId = 0,
+    $sessionId = 0
+) {
+    if (empty($courseInfo)) {
+        return false;
+    }
+
+    $courseId = intval($courseInfo['real_id']);
+
+    if (empty($courseId) || empty($tool) || empty($itemId)) {
+        return false;
+    }
+
+    $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+    $tool = Database::escape_string($tool);
+    $itemId = intval($itemId);
+    $userId = intval($userId);
+    $groupId = intval($groupId);
+    $sessionId = intval($sessionId);
+
+    $groupCondition = " AND to_group_id = $groupId ";
+    if (empty($groupId)) {
+        $groupCondition = " AND (to_group_id is NULL OR to_group_id = 0) ";
+    }
+
+    $userCondition = " AND to_user_id = $userId ";
+    if (empty($userId)) {
+        $userCondition = " AND (to_user_id is NULL OR to_user_id = 0) ";
+    }
+
+
+
+    $sql = "DELETE FROM $table
+            WHERE
+                c_id = $courseId AND
+                tool  = '$tool' AND
+                ref = $itemId AND
+                id_session = $sessionId
+                $userCondition
+                $groupCondition
+            ";
+    Database::query($sql);
+
+}
+
+/**
  * Updates or adds item properties to the Item_propetry table
  * Tool and lastedit_type are language independant strings (langvars->get_lang!)
  *
@@ -3494,6 +3555,7 @@ function api_item_property_update(
                             lastedit_user_id = '$user_id',
                             visibility='$visibility' $set_type
                         WHERE $filter";
+
             }
             break;
         case 'visible' : // Change item to visible.
@@ -3833,7 +3895,6 @@ function api_display_language_form($hide_if_no_choice = false) {
     }
     //-->
     </script>';
-//    var_dump($user_selected_language);
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
     $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
     $html .=  '<select id="language_list" class="chzn-select" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';

@@ -1,12 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.calendar
  */
 
-/**
- * INIT SECTION
- */
 use \ChamiloSession as Session;
 
 // name of the language file that needs to be included
@@ -202,7 +200,6 @@ if (api_is_allowed_to_edit(false, true) OR
                 }
 
                 // Editing normal event.
-
                 $agenda->edit_event(
                     $eventId,
                     $startDate,

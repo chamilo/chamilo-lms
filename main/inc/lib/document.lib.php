@@ -469,8 +469,10 @@ class DocumentManager
 
     /**
      * Session folder filters
+     *
      * @param string $path
-     * @param int $sessionId
+     * @param int    $sessionId
+     *
      * @return null|string
      */
     public static function getSessionFolderFilters($path, $sessionId)
@@ -486,6 +488,7 @@ class DocumentManager
             // share_folder filter
             $condition .= " AND docs.path != '/shared_folder' ";
         }
+
         return $condition;
     }
 
@@ -563,7 +566,8 @@ class DocumentManager
                 FROM $TABLE_ITEMPROPERTY AS last
                 INNER JOIN $TABLE_DOCUMENT AS docs
                 ON (
-                    docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND
+                    docs.id = last.ref AND
+                    last.tool = '".TOOL_DOCUMENT."' AND
                     docs.c_id = {$_course['real_id']} AND
                     last.c_id = {$_course['real_id']}
                 )
@@ -1045,6 +1049,7 @@ class DocumentManager
      * @param string $base_work_dir, path to the documents folder (if not defined, $documentId must be used)
      * @param int   $sessionId The ID of the session, if any
      * @param int   $documentId The document id, if available
+     * @param int $groupId
      * @return boolean true/false
      * @todo now only files/folders in a folder get visibility 2, we should rename them too.
      * @todo We should be able to get rid of this later when using only documentId (check further usage)
@@ -1058,6 +1063,7 @@ class DocumentManager
         $groupId = null
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+
         if (empty($groupId)) {
             $groupId = api_get_group_id();
         } else {

@@ -3240,6 +3240,8 @@ function api_not_allowed($print_headers = false, $message = null)
             get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error',
             false
         );
+        // Set cookie again.
+        setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
     } else {
         // The session is over and we were not in a course,
         // or we try to get directly to a private course without being logged

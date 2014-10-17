@@ -14,12 +14,12 @@ $language_file = array('courses', 'index', 'userInfo');
 // Maybe we should change this into an api function? an example: CourseManager::unset();
 $cidReset = true;
 
-// Set cookie for check if client browser are cookies enabled
-setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
-
 require_once 'main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 require_once 'main/chat/chat_functions.lib.php';
+
+// Set cookie for check if client browser are cookies enabled
+setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
 
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;

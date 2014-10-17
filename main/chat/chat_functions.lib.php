@@ -4,22 +4,21 @@
  *	@package chamilo.chat
  */
 
-
 /**
  * @author isaac flores paz
- * @param integer the user id
+ * @param integer $user_id
+ *
  * @return boolean
  * @todo this function need more parameters seems not to be use anymore
  * @deprecated fix this function or create another
  */
-function user_connected_in_chat ($user_id)
+function user_connected_in_chat($user_id)
 {
  	$tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
     $user_id 	= intval($user_id);
  	$session_id = api_get_session_id();
     $group_id   = api_get_group_id();
     $course_id  = api_get_course_int_id();
-	$extra_condition = '';
 
 	if (!empty($group_id)) {
 		$extra_condition = " AND to_group_id = '$group_id'";
@@ -27,7 +26,8 @@ function user_connected_in_chat ($user_id)
 		$extra_condition = api_get_session_condition($session_id);
 	}
 
- 	$sql = 'SELECT COUNT(*) AS count FROM '.$tbl_chat_connected .' c WHERE c_id = '.$course_id.' AND user_id='.$user_id.$extra_condition;
+ 	$sql = 'SELECT COUNT(*) AS count FROM '.$tbl_chat_connected .' c
+ 	        WHERE c_id = '.$course_id.' AND user_id='.$user_id.$extra_condition;
  	$result = Database::query($sql);
  	$count  = Database::fetch_array($result,'ASSOC');
  	return $count['count'] == 1;
@@ -41,24 +41,13 @@ function exit_of_chat($user_id)
 {
     $user_id = intval($user_id);
     $list_course = CourseManager::get_courses_list_by_user_id($user_id);
-
-    /*$session_id = api_get_session_id();
-    $group_id   = api_get_group_id();
-
-	$extra_condition = '';
-	if (!empty($group_id)) {
-		$extra_condition = " AND to_group_id = '$group_id'";
-	} else {
-		$extra_condition = api_get_session_condition($session_id);
-	}
-    $extra_condition.= " AND course_id = $course_id";*/
-
     $tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
 
     foreach ($list_course as $course) {
         $response = user_connected_in_chat($user_id);
         //if ($response === true) {
-            $sql = 'DELETE FROM '.$tbl_chat_connected.' WHERE c_id = '.$course['real_id'].' AND user_id = '.$user_id;
+            $sql = 'DELETE FROM '.$tbl_chat_connected.'
+                    WHERE c_id = '.$course['real_id'].' AND user_id = '.$user_id;
             Database::query($sql);
         //}
     }
@@ -69,8 +58,6 @@ function exit_of_chat($user_id)
  */
 function disconnect_user_of_chat()
 {
-	$list_info_user_in_chat = array();
-    $course_id = api_get_course_int_id();
     $list_info_user_in_chat = users_list_in_chat();
     $course_id = api_get_course_int_id();
 
@@ -111,7 +98,6 @@ function users_list_in_chat()
  	$session_id = api_get_session_id();
     $group_id   = api_get_group_id();
 
-	$extra_condition = '';
 	if (!empty($group_id)) {
 		$extra_condition = " WHERE to_group_id = '$group_id'";
 	} else{

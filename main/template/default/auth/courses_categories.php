@@ -138,7 +138,7 @@ $userInfo = api_get_user_info();
              * it, as this can considerably slow down your system
              */
             if (!empty($browse_course_categories)) {
-                echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
+                //echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
 
                 echo '<li class="nav-header">'.get_lang('CourseCategories').'</li>';
 

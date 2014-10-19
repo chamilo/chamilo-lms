@@ -142,6 +142,10 @@ textarea {
 	padding: 0;
 	margin:0;
 }
+.chat-message-block-name {
+    font-style: italic;
+    color: #666;
+}
 .user-online .profile li{
 	margin-bottom: 5px;
 }

@@ -139,7 +139,7 @@ if (!empty($course)) {
 						}
 					?>
 				</div>
-				<div class="user-email"><?php echo $email; ?></div>
+				<div class="user-email"><?php echo $user['username']; ?></div>
 			</li>
 			<?php
                 }

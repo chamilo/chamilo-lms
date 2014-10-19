@@ -80,6 +80,7 @@ if (!empty($course) && !empty($userId)) {
     $firstname = Database::result($result, 0, 'firstname');
     $lastname  = Database::result($result, 0, 'lastname');
     $picture  = Database::result($result, 0, 'picture_uri');
+    $fullName = api_get_person_name($firstname, $lastname);
 
     $date_now = date('Y-m-d');
 
@@ -220,9 +221,9 @@ if (!empty($course) && !empty($userId)) {
 
                 $filePhoto = '<img class="chat-image" src="'.$userPhoto.'"/>';
 				if ($isMaster) {
-					fputs($fp, '<div class="message-teacher"><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div><div class="icon-message"></div>'.$filePhoto.'</div>'."\n");
+					fputs($fp, '<div class="message-teacher"><div class="content-message"><div class="chat-message-block-name">'.$fullName.'</div><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div><div class="icon-message"></div>'.$filePhoto.'</div>'."\n");
 				} else {
-					fputs($fp, '<div class="message-student">'.$filePhoto.'<div class="icon-message"></div><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div></div>'."\n");
+					fputs($fp, '<div class="message-student">'.$filePhoto.'<div class="icon-message"></div><div class="content-message"><div class="chat-message-block-name">'.$fullName.'</div><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div></div>'."\n");
 				}
 				fclose($fp);
 

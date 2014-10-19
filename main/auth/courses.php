@@ -76,19 +76,34 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 }
 
 // filter actions
-$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses', 'display_random_courses', 'subscribe_user_with_password', 'display_sessions');
-$action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
-$nameTools = getCourseCatalogNametools($action);
-if (empty($nameTools)) {
-	$nameTools = get_lang('CourseManagement');
-} else {
+$actions = array(
+    'sortmycourses',
+    'createcoursecategory',
+    'subscribe',
+    'deletecoursecategory',
+    'display_courses',
+    'display_random_courses',
+    'subscribe_user_with_password',
+    'display_sessions'
+);
 
-	if (!in_array($action, array('sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe'))) {
-		$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'name' => get_lang('CourseManagement'));
-	}
-	if ($action == 'createcoursecategory') {
-		$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses', 'name' => get_lang('SortMyCourses'));
-	}
+$action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
+if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
+    $action = Security::remove_XSS($_GET['action']);
+} else {
+    // Nothing to do
+}
+
+$nameTools = getCourseCatalogNameTools($action);
+if (empty($nameTools)) {
+    $nameTools = get_lang('CourseManagement');
+} else {
+    if (!in_array($action, array('sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe'))) {
+        $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'name' => get_lang('CourseManagement'));
+    }
+    if ($action == 'createcoursecategory') {
+        $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses', 'name' => get_lang('SortMyCourses'));
+    }
     $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
 }
 

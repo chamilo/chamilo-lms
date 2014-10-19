@@ -1035,27 +1035,13 @@ function getPageNumberItem($pageNumber, $pageLength, $liAttributes = array(), $c
  * @param string $action
  * @return string
  */
-function getCourseCatalogNametools($action)
+function getCourseCatalogNameTools($action)
 {
-    $actions = array(
-        'sortmycourses',
-        'createcoursecategory',
-        'subscribe',
-        'deletecoursecategory',
-        'display_courses',
-        'display_random_courses',
-        'subscribe_user_with_password',
-        'display_sessions'
-    );
+
 
     $nameTools = get_lang('SortMyCourses');
-
     if (empty($action)) {
-        if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
-            $action = Security::remove_XSS($_GET['action']);
-        } else {
-            // Nothing to do
-        }
+        return $nameTools; //should never happen
     }
 
     switch ($action) {

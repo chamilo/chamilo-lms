@@ -89,7 +89,7 @@ class CoursesController
     {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();
-        
+
         global $_configuration;
 
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category($category_code);

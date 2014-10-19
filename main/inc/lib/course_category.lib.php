@@ -12,6 +12,7 @@ function isMultipleUrlSupport()
 
 /**
  * @param int $categoryId
+ *
  * @return array
  */
 function getCategoryById($categoryId)
@@ -28,6 +29,7 @@ function getCategoryById($categoryId)
 
 /**
  * @param string $category
+ *
  * @return array
  */
 function getCategory($category)
@@ -44,6 +46,7 @@ function getCategory($category)
 
 /**
  * @param string $category
+ *
  * @return array
  */
 function getCategories($category)
@@ -80,6 +83,7 @@ function getCategories($category)
                          t1.children_count
 				ORDER BY t1.tree_pos";
     $result = Database::query($sql);
+
     return Database::store_result($result);
 }
 
@@ -89,6 +93,7 @@ function getCategories($category)
  * @param string $name
  * @param string $canHaveCourses
  * @param int $parent_id
+ *
  * @return bool
  */
 function addNode($code, $name, $canHaveCourses, $parent_id)
@@ -98,7 +103,6 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $name = trim(Database::escape_string($name));
     $parent_id = Database::escape_string($parent_id);
     $canHaveCourses = Database::escape_string($canHaveCourses);
-
     $code = generate_course_code($code);
 
     $result = Database::query("SELECT 1 FROM $tbl_category WHERE code='$code'");
@@ -120,6 +124,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     if (isMultipleUrlSupport()) {
         addToUrl($categoryId);
     }
+
     return $categoryId;
 }
 
@@ -255,6 +260,7 @@ function compterFils($pere, $cpt)
 
 /**
  * @param string $categoryCode
+ *
  * @return array
  */
 function getChildren($categoryCode)
@@ -268,9 +274,14 @@ function getChildren($categoryCode)
         $subChildren = getChildren($row['code']);
         $children = array_merge($children, $subChildren);
     }
+
     return $children;
 }
 
+/**
+ * @param string $categoryCode
+ * @return array
+ */
 function getParents($categoryCode)
 {
     if (empty($categoryCode)) {
@@ -291,6 +302,11 @@ function getParents($categoryCode)
     }
     return $children;
 }
+
+/**
+ * @param string $categoryCode
+ * @return null|string
+ */
 function getParentsToString($categoryCode)
 {
     $parents = getParents($categoryCode);
@@ -359,6 +375,7 @@ function listCategories($categorySource)
             }
             $row++;
         }
+
         return $table->toHtml();
     } else {
         return Display::return_message(get_lang("NoCategories"), 'warning');
@@ -442,7 +459,7 @@ function browseCourseCategories()
         $url_access_id = api_get_current_access_url_id();
     }
     $countCourses = CourseManager :: countAvailableCourses($url_access_id);
-    
+
     $categories = array();
     $categories[0][0] = array(
         'id' => 0,
@@ -462,7 +479,7 @@ function browseCourseCategories()
             $categories[$row['parent_id']][$row['tree_pos']] = $row;
         }
     }
-    
+
     $count_courses = countCoursesInCategory();
 
     $categories[0][count($categories[0])+1] = array(
@@ -476,7 +493,7 @@ function browseCourseCategories()
         'auth_cat_child' => true,
         'count_courses' => $count_courses
     );
-    
+
     return $categories;
 }
 
@@ -515,6 +532,7 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
         $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
     }
 
+    $visibilityCondition = null;
     if (isset($_configuration['course_catalog_hide_private'])) {
         if ($_configuration['course_catalog_hide_private'] == true) {
             $courseInfo = api_get_course_info();
@@ -555,6 +573,7 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
                 $searchTerm . $without_special_courses. $visibilityCondition;
         }
     }
+
     return Database::num_rows(Database::query($sql));
 }
 
@@ -591,7 +610,6 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
         $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
     }
     if (isset($_configuration['course_catalog_hide_private'])) {
-
         if ($_configuration['course_catalog_hide_private'] == true) {
             $courseInfo = api_get_course_info();
             $courseVisibility = $courseInfo['visibility'];
@@ -642,12 +660,16 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
         $limitFilter = getLimitFilterFromArray($limit);
         $category_code = Database::escape_string($category_code);
         if (empty($category_code) || $category_code == "ALL") {
-            $sql = "SELECT * FROM $tbl_course WHERE 1=1 $without_special_courses $visibilityCondition ORDER BY title $limitFilter";
+            $sql = "SELECT * FROM $tbl_course
+                    WHERE 1=1 $without_special_courses $visibilityCondition
+                    ORDER BY $limitFilter ";
         } else {
             if ($category_code == 'NONE') {
                 $category_code = '';
             }
-            $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses $visibilityCondition ORDER BY title $limitFilter";
+            $sql = "SELECT * FROM $tbl_course
+                    WHERE category_code='$category_code' $without_special_courses $visibilityCondition
+                    ORDER BY $limitFilter ";
         }
 
         //showing only the courses of the current Chamilo access_url_id
@@ -659,13 +681,13 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
                     ON (url_rel_course.course_code=course.code)
                     WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses $visibilityCondition
                     ORDER BY title $limitFilter";
-            } else{
+            } else {
                 $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
                     WHERE access_url_id = $url_access_id $without_special_courses $visibilityCondition
                     ORDER BY title $limitFilter";
             }
-            
+
         }
     }
 
@@ -674,7 +696,11 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
     while ($row = Database::fetch_array($result)) {
         $row['registration_code'] = !empty($row['registration_code']);
         $count_users = CourseManager::get_users_count_in_course($row['code']);
-        $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+        $count_connections_last_month = Tracking::get_course_connections_count(
+            $row['code'],
+            0,
+            api_get_utc_datetime(time() - (30 * 86400))
+        );
 
         if ($row['tutor_name'] == '0') {
             $row['tutor_name'] = get_lang('NoManager');
@@ -698,7 +724,8 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
             'count_connections' => $count_connections_last_month
         );
     }
-    return $courses;      
+
+    return $courses;
 }
 
 /**
@@ -780,8 +807,14 @@ function searchCategoryByKeyword($keyword)
 
     $keyword = Database::escape_string($keyword);
 
-    $sql = "SELECT c.*, c.name as text FROM $tableCategory c $conditions
-            WHERE (c.code LIKE '%$keyword%' or name LIKE '%$keyword%') AND auth_course_child = 'TRUE' $whereCondition ";
+    $sql = "SELECT c.*, c.name as text
+            FROM $tableCategory c $conditions
+            WHERE
+                (
+                    c.code LIKE '%$keyword%' OR name LIKE '%$keyword%'
+                ) AND
+                auth_course_child = 'TRUE'
+                $whereCondition ";
     $result = Database::query($sql);
     return Database::store_result($result, 'ASSOC');
 }

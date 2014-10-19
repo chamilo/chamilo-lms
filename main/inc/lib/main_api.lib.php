@@ -3226,10 +3226,22 @@ function api_not_allowed($print_headers = false, $message = null)
         $tpl->display_one_col_template();
         exit;
     }
+
     $msg = null;
-    // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
-    if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
-        $msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
+    /* Check if the cookies are enabled. If are enabled and if no course Id was
+       included in the requested URL, then the user has either lost his session
+       or is anonymous, so redirect to homepage
+    */
+    if (!isset($_COOKIE['TestCookie']) ||
+        isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie'])
+    ) {
+        $msg = Display::return_message(
+            get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.
+            get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error',
+            false
+        );
+        // Set cookie again.
+        setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
     } else {
         // The session is over and we were not in a course,
         // or we try to get directly to a private course without being logged
@@ -3344,6 +3356,67 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0)
     $row = Database::fetch_array($res);
 
     return $row['visibility'];
+}
+
+/**
+ * Delete a row in the c_item_property table
+ *
+ * @param array $courseInfo
+ * @param string $tool
+ * @param int $itemId
+ * @param int $userId
+ * @param int $groupId
+ * @param int $sessionId
+ */
+function api_item_property_delete(
+    $courseInfo,
+    $tool,
+    $itemId,
+    $userId,
+    $groupId = 0,
+    $sessionId = 0
+) {
+    if (empty($courseInfo)) {
+        return false;
+    }
+
+    $courseId = intval($courseInfo['real_id']);
+
+    if (empty($courseId) || empty($tool) || empty($itemId)) {
+        return false;
+    }
+
+    $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+    $tool = Database::escape_string($tool);
+    $itemId = intval($itemId);
+    $userId = intval($userId);
+    $groupId = intval($groupId);
+    $sessionId = intval($sessionId);
+
+    $groupCondition = " AND to_group_id = $groupId ";
+    if (empty($groupId)) {
+        $groupCondition = " AND (to_group_id is NULL OR to_group_id = 0) ";
+    }
+
+    $userCondition = " AND to_user_id = $userId ";
+    if (empty($userId)) {
+        $userCondition = " AND (to_user_id is NULL OR to_user_id = 0) ";
+    }
+
+
+
+    $sql = "DELETE FROM $table
+            WHERE
+                c_id = $courseId AND
+                tool  = '$tool' AND
+                ref = $itemId AND
+                id_session = $sessionId
+                $userCondition
+                $groupCondition
+            ";
+    Database::query($sql);
+
 }
 
 /**
@@ -3494,6 +3567,7 @@ function api_item_property_update(
                             lastedit_user_id = '$user_id',
                             visibility='$visibility' $set_type
                         WHERE $filter";
+
             }
             break;
         case 'visible' : // Change item to visible.
@@ -3833,7 +3907,6 @@ function api_display_language_form($hide_if_no_choice = false) {
     }
     //-->
     </script>';
-//    var_dump($user_selected_language);
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
     $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
     $html .=  '<select id="language_list" class="chzn-select" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';

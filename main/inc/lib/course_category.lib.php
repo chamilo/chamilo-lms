@@ -662,14 +662,14 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
         if (empty($category_code) || $category_code == "ALL") {
             $sql = "SELECT * FROM $tbl_course
                     WHERE 1=1 $without_special_courses $visibilityCondition
-                    ORDER BY $limitFilter ";
+                    ORDER BY title $limitFilter ";
         } else {
             if ($category_code == 'NONE') {
                 $category_code = '';
             }
             $sql = "SELECT * FROM $tbl_course
                     WHERE category_code='$category_code' $without_special_courses $visibilityCondition
-                    ORDER BY $limitFilter ";
+                    ORDER BY title $limitFilter ";
         }
 
         //showing only the courses of the current Chamilo access_url_id

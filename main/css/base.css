@@ -61,56 +61,56 @@ header #logo img{
   padding-bottom: 5px;
   color: #006699;
 }
-.items-progress {
+.thematic-postit .items-progress {
   border-top: 2px solid #C4DDEB;
   padding: 5px;
   margin-top: 0px;
   background-color: #ECF4F8;
 }
-.items-progress.current {
+.thematic-postit .items-progress.current {
     border-top: 2px solid #C4DDEB;
     padding: 5px;
     margin-top: 0px;
     background-color: #C4DDEB;
 }
-.items-progress .date{
+.thematic-postit .items-progress .date{
   color: #666;
   font-size: 11px;
   display: block;
 }
-.items-progress .title{
+.thematic-postit .items-progress .title{
   font-size: 14px;
   line-height: 18px;
   display: block;
 }
-.items-progress .time{
+.thematic-postit .items-progress .time{
   display: block;
   padding-top: 5px;
 }
-.info-progress{
+.thematic-postit .info-progress{
   padding: 10px;
 }
-.score-thematic .score{
+.thematic-postit .score-thematic .score{
   text-align: right;
 }
 
-.score-thematic .name-student{
+.thematic-postit .score-thematic .name-student{
   font-weight: bold;
   font-size: 16px;
   padding-left: 70px;
   margin: 0px;
 }
-.score-thematic{
+.thematic-postit .score-thematic{
   color: #666;
 }
-.score-thematic p{
+.thematic-postit .score-thematic p{
   padding: 0px;
   margin: 0px;
 }
-.row-fluid.score-thematic {
+.thematic-postit .row-fluid.score-thematic {
   padding-top: 5px;
 }
-.accordion-heading .accordion-toggle {
+.thematic-postit .accordion-heading .accordion-toggle {
   display: inline;
   padding-bottom: 3px;
   padding-left: 10px;
@@ -121,42 +121,99 @@ header #logo img{
   margin-bottom: 10px;
   margin-right: 15px;
 }
-.accordion-heading .title-accordion{
+.thematic-postit .accordion-heading .title-accordion{
   padding:0px;
   background:url(thematic.png) no-repeat left bottom transparent;
 }
-.name-student h2{
+
+.thematic-postit .name-student h2{
   font-size: 18px;
   margin: 0;
 }
-.accordion-heading h3, .accordion-heading h2{
+.thematic-postit .accordion-heading h3, .accordion-heading h2{
   line-height: 17px;
 }
-.accordion-group{
+.thematic-postit .accordion-group{
   border: 1px solid #D4E6F0;
 
 }
-.name-student h3{
+.thematic-postit .name-student h3{
   font-size: 13px;
   font-weight: normal;
   margin: 0;
 
 }
-.accordion-heading {
+.thematic-postit .accordion-heading {
   background-color: #E7F1F7;
 }
-.items-progress p{
+.thematic-postit .items-progress p{
   margin-bottom: 3px;
 }
-.accordion-body.collapse {
+.thematic-postit .accordion-body.collapse {
   height: 0;
   display: none;
 }
-.accordion-body.collapse.in {
+.thematic-postit .accordion-body.collapse.in {
   height: auto;
   display: block;
 }
+
 /* END COURSE PROGRESS*/
+
+/* SESSION CATALOG*/
+.session-group .padding-clear{
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+/*.session-group .thumbnail{
+    border: none;
+    box-shadow: none;
+}*/
+.session-group .border-info{
+    /*border-bottom: 1px solid #ccc;*/
+    padding-bottom: 5px;
+}
+.session-group .buttom-subscribed{
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+.session-group .time{
+    font-size: 12px;
+}
+.session-group .accordion-heading{
+    background-color: #D2E7F3;
+}
+.session-group .accordion-group{
+    border: 1px solid #B7D7EF;
+}
+.session-group .accordion-inner{
+    border-top: 1px solid #B7D7EF;
+    background-color: #FFFFFF;
+}
+.buttom-subscribed .btn{
+    display: block;
+}
+.session-group .items-session{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.session-group .items-session li{
+    padding-bottom: 5px;
+}
+.well .nav.nav-list > li{
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.well .nav-list > li > a {
+  font-size: 13px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+.well .form-search .input-append .search-session{
+    width: 130px;
+}
+/* SESSION CATALOG END*/
 
 .subnav .brand {
     display:none;

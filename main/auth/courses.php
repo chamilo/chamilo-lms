@@ -78,37 +78,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 // filter actions
 $actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses', 'display_random_courses', 'subscribe_user_with_password', 'display_sessions');
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
-$nameTools = get_lang('SortMyCourses');
-
-// Get Limit values
-$limit = getLimitArray();
-
-if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
-	$action = $_GET['action'];
-}
-
-if ($action == 'createcoursecategory') {
-	$nameTools = get_lang('CreateCourseCategory');
-}
-if ($action == 'subscribe') {
-	$nameTools = get_lang('CourseManagement');
-}
-
-if ($action == 'subscribe_user_with_password') {
-	$nameTools = get_lang('CourseManagement');
-}
-
-if ($action == 'display_random_courses' || $action == 'display_courses' ) {
-	$nameTools = get_lang('CourseManagement');
-}
-
-if ($action == 'display_sessions') {
-    $nameTools = get_lang('Sessions');
-}
-
-// Breadcrumbs.
-$interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'name' => get_lang('MyCourses'));
-
+$nameTools = getCourseCatalogNametools($action);
 if (empty($nameTools)) {
 	$nameTools = get_lang('CourseManagement');
 } else {

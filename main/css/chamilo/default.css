@@ -127,9 +127,8 @@ a.thumbnail:hover{
     text-shadow: none;
 }
 .breadcrumb a.btn-mini{
-    line-height: 17px;
+    line-height: 22px;
     text-transform: none;
-    margin-top: 5px;
 }
 .breadcrumb a.btn-mini > .btn-success{
   color: #FFFFFF;
@@ -428,10 +427,14 @@ a.thumbnail:hover{
 }
 .breadcrumb {
   margin-bottom: 0;
-  background-image: none;
-  background-color: #e7f1f7;
-  padding-top: 0;
-  padding-bottom: 0;
+  background: rgb(255,255,255); /* Old browsers */
+  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(192,219,234,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(192,219,234,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(192,219,234,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#c0dbea',GradientType=0 ); /* IE6-9 */
   margin-top: 5px;
   border: 1px solid #d4e6f0;
   box-shadow: none;
@@ -584,15 +587,6 @@ a.thumbnail:hover{
     padding-bottom: 5px;
 }
 
-.well {
-  background-color: rgba(96,165,209, 0.1);
-  border: 1px solid rgba(96,165,209, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
-  margin-bottom: 20px;
-  min-height: 20px;
-  padding: 20px 10px;
-}
 .sidebar-nav img{
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -627,22 +621,7 @@ a.thumbnail:hover{
 .page-header {
   border:none;
 }
-.well_border{
-  background-color: rgba(96,165,209, 0.1);
-  border: 1px solid rgba(96,165,209, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
-  margin-bottom: 20px;
-  min-height: 20px;
-  padding: 19px;
-}
-.well_border .row .span2 {
-  width: 98px;
-}
-.well_border .row .span2 .thumbnail {
-  background-color: #FFFFFF;
-  background-image: none;
-}
+
 #hot_courses .row .span9 .well_border .row .span6{
     width: auto;
 }

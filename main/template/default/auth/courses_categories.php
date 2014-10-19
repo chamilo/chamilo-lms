@@ -127,7 +127,7 @@ $userInfo = api_get_user_info();
                         </div>
                     </fieldset>
                 </form>
-                <?php
+            <?php
                 $hidden_links = 0;
             } else {
                 $hidden_links = 1;
@@ -139,7 +139,12 @@ $userInfo = api_get_user_info();
              */
             if (!empty($browse_course_categories)) {
                 //echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
-
+            ?>
+            </ul>
+        </div>
+        <div class="well">
+            <ul class="nav nav-list">
+            <?php
                 echo '<li class="nav-header">'.get_lang('CourseCategories').'</li>';
 
                 $action = 'display_courses';
@@ -232,15 +237,20 @@ $userInfo = api_get_user_info();
                             }
                         }
                     }
-                }
+                } ?>
+            </ul>
+        </div>
+            <?php
             }
+        }
             ?>
-                <?php } ?>
-                <?php if ($showSessions) { ?>
+        <?php if ($showSessions) { ?>
+        <div class="well">
+            <ul class="nav nav-list">
                     <li class="nav-header"><?php echo get_lang('Sessions'); ?></li>
                     <li>
                         <?php if ($action == 'display_sessions' && $_SERVER['REQUEST_METHOD'] != 'POST') { ?>
-                            <strong><?php echo get_lang('SessionList'); ?></strong>
+                            <strong><?php echo get_lang('Sessions'); ?></strong>
                         <?php } else { ?>
                             <a href="<?php echo getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>"><?php echo get_lang('SessionList'); ?></a>
                         <?php } ?>
@@ -256,14 +266,15 @@ $userInfo = api_get_user_info();
                             <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
                         </div>
                     </form>
-                <?php } ?>
+            </ul>
         </div>
+        <?php } ?>
     </div>
 
     <div class="span9">
-        <?php
-            echo $cataloguePagination;
-        ?>
+        <div class="page-header">
+            <h2><?php echo get_lang('CourseCatalog')?></h2>
+        </div>
         <?php if ($showCourses && $action != 'display_sessions') { ?>
         <?php if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }

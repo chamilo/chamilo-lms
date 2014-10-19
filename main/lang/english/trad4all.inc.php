@@ -17,7 +17,7 @@ $OnlyBestAttempts = "Only best attempts";
 $IncludeAllUsers = "Include all users";
 $HostingWarningReached = "Hosting warning reached";
 $SessionName = "Session name";
-$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains not valid characters";
+$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains invalid characters";
 $CountryDialCode = "Include the country dial code";
 $FieldTypeMobilePhoneNumber = "Mobile phone number";
 $CheckUniqueEmail = "Check unique email";
@@ -1638,8 +1638,4 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
-$FieldTypeMobilePhoneNumber = "Mobile phone";
-$CountryDialCode = "Include the country dial code";
-$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains invalid characters";
-$SessionName = "Session name";
 ?>

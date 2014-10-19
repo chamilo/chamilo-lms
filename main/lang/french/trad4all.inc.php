@@ -2,6 +2,47 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$UserNameHasDash = "Le nom d'utilisateur ne peut pas contenir de tirets (-)";
+$IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "Si vous souhaitez seulement des nombres entiers, indiquez les deux limites sans décimales";
+$GiveAnswerVariations = "Veuillez indiquer le nombre de variantes à générer";
+$AnswerVariations = "Variantes";
+$GiveFormula = "Merci d'écrire la formule";
+$Formula = "Formule";
+$FormulaExample = "Exemple de formule";
+$VariableRanges = "Plages de valeurs des variables";
+$ExampleValue = "Plage de valeurs";
+$CalculatedAnswer = "Question calculée";
+$UserIsCurrentlySubscribed = "L'utilisateur est inscrit en ce moment";
+$OnlyBestAttempts = "Uniquement les meilleures tentatives";
+$IncludeAllUsers = "Inclure tous les utilisateurs";
+$HostingWarningReached = "Limite d'hébergement atteinte";
+$SessionName = "Nom de la session";
+$MobilePhoneNumberWrong = "Le numéro de téléphone portable que vous avez indiqué est incomplet ou contient des caractères non valides.";
+$CountryDialCode = "Inclure le préfixe d'appels du pays";
+$FieldTypeMobilePhoneNumber = "Numéro de téléphone portable";
+$CheckUniqueEmail = "Vérifier l'unicité des courriels";
+$EmailUsedTwice = "Ce courriel est déjà utilisé sur cette plateforme.";
+$TotalPostsInAllForums = "Total de réponses dans tous les forums";
+$AddMeAsCoach = "M'ajouter comme coach";
+$AddMeAsTeacherInCourses = "Ajoutez-moi tant que professeur dans les cours";
+$ExerciseProgressInfo = "Progrès des exercices passés par l'étudiant";
+$CourseTimeInfo = "Temps passé dans le cours";
+$ExerciseAverageInfo = "Moyenne du meilleur résultat de chaque tentative d'exercice";
+$ExtraDurationForUser = "Jours d'accès extra pour cet utilisateur";
+$UserXSessionY = "Utilisateur: %s - Session: %s";
+$DurationIsSameAsDefault = "La durée configurée pour la session est celle par défaut. Valeur par défaut enregistrée.";
+$FirstAccessWasXSessionDurationYEndDateWasZ = "Le premier accès de cet étudiant à cette session a eu lieu le %s. D'une durée maximum de %s jours, la période d'accès à cette session est déjà expirée.";
+$FirstAccessWasXSessionDurationYEndDateInZDays = "Le premier accès de cet étudiant à cette session a eu lieu le %s. D'une durée maximum de %s jours, la fin est programmée pour dans %s jours.";
+$UserNeverAccessedSessionDefaultDurationIsX = "Cet utilisateur n'est jamais entré dans cette session auparavant. La durée est configurée pour %s jours (depuis la date de premier accès).";
+$SessionDurationEdit = "Éditer la durée de la session";
+$EditUserSessionDuration = "Éditer la durée de la session de l'utilisateur";
+$SessionDurationXDaysLeft = "Cette session a une durée maximum. Il vous reste %s jours.";
+$NextTopic = "Thème suivant";
+$CurrentTopic = "Thème actuel";
+$ShowFullCourseAdvance = "Voir la programmation";
+$RedirectToCourseHome = "Rediriger vers la page d'accueil du cours";
+$LpReturnLink = "Lien de retour aux parcours";
+$LearningPathList = "Liste de parcours";
 $UsersWithoutTask = "Apprenants n'ayant pas envoyé leur travail";
 $UsersWithTask = "Apprenants ayant envoyé leur travail";
 $UploadFromTemplate = "Envoyer depuis un modèle";

@@ -2,6 +2,20 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$HumanResourcesManagerShouldNotBeRegisteredToCourses = "Manažéri ľudských zdrojov by nemali byť zaregistrovaní kurzov. Zodpovedajúci používatelia, ktorých ste vybrali neboli zapísaní.";
+$CleanAndUpdateCourseCoaches = "Vyčistiť a aktualizovať trénerov kurzov";
+$NoPDFFoundAtRoot = "Nenašlo sa žiadne PDF v koreňovom adresári: uistite sa, že PDF sú v koreňovom adresári vášho zip súboru (nie prostriedku adresára)";
+$PDFsMustLookLike = "PDF musí vyzerať:";
+$ImportZipFileLocation = "Umiestnenie importovaného zip súboru";
+$YouMustImportAZipFile = "Musíte importovať zip súbor";
+$ImportPDFIntroToCourses = "Importovať PDF úvody do kurzov";
+$SubscribeTeachersToSession = "Zapísať učiteľov do stretnutia(í)";
+$SubscribeStudentsToSession = "Zapísať študentov na stretnutie(ia)";
+$ManageCourseCategories = "Spravovať kategórie kurzov";
+$CourseCategoryListInX = "Kategórie kurzov na %s stránke:";
+$CourseCategoryInPlatform = "Kategórie kurzov k dispozícii";
+$UserGroupBelongURL = "Skupina teraz patrí do vybranej stránky";
+$AtLeastOneUserGroupAndOneURL = "Musíte vybrať aspoň jednu skupinu a jednu stránku";
 $ClassIdDoesntExists = "ID triedy neexistuje";
 $SearchSessions = "Hľadať stretnutie";
 $DeleteUsersNotInList = "Odhlásiť študentov, ktorí nie sú v importovanom zozname";

@@ -53,11 +53,20 @@ echo Display::page_header($nameTools);
 
 /*	MAIN CODE */
 
-if ((isset($_POST['action']) &&
-    $_POST['action'] == 'course_select_form') ||
-    (isset($_POST['backup_option']) &&
-    $_POST['backup_option'] == 'full_backup')
+if (
+    Security::check_token('post') && (
+        (
+            isset($_POST['action']) &&
+            $_POST['action'] == 'course_select_form'
+        ) || (
+            isset($_POST['backup_option']) &&
+            $_POST['backup_option'] == 'full_backup'
+        )
+    )
 ) {
+    // Clear token
+    Security::clear_token();
+
 	if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
 		$course = CourseSelectForm::get_posted_course();
 	} else {
@@ -70,7 +79,15 @@ if ((isset($_POST['action']) &&
 	echo '<br /><a class="btn btn-primary btn-large" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$zip_file.'&'.api_get_cidreq().'">
 	'.get_lang('Download').'</a>';
 
-} elseif (isset($_POST['backup_option']) && $_POST['backup_option'] == 'select_items') {
+} elseif (
+    Security::check_token('post') && (
+        isset($_POST['backup_option']) &&
+        $_POST['backup_option'] == 'select_items'
+    )
+) {
+    // Clear token
+    Security::clear_token();
+
 	$cb = new CourseBuilder('partial');
 	$course = $cb->build();
 	CourseSelectForm::display_form($course);
@@ -97,6 +114,12 @@ if ((isset($_POST['action']) &&
         );
 		$values['backup_option'] = 'full_backup';
 		$form->setDefaults($values);
+
+        // Add Security token
+        $token = Security::get_token();
+        $form->addElement('hidden', 'sec_token');
+        $form->setConstants(array('sec_token' => $token));
+
 		$form->display();
 	}
 }

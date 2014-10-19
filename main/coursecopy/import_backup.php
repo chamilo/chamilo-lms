@@ -48,11 +48,20 @@ echo Display::page_header($nameTools);
 
 /*	MAIN CODE */
 
-if ((isset($_POST['action']) &&
-    $_POST['action'] == 'course_select_form') ||
-    (isset($_POST['import_option']) &&
-    $_POST['import_option'] == 'full_backup')
+if (
+    Security::check_token('post') && (
+        (
+            isset($_POST['action']) &&
+            $_POST['action'] == 'course_select_form'
+        ) || (
+            isset($_POST['import_option']) &&
+            $_POST['import_option'] == 'full_backup'
+        )
+    )
 ) {
+    // Clear token
+    Security::clear_token();
+
 	$error = false;
 	if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
 		// Partial backup here we recover the documents posted
@@ -106,7 +115,15 @@ if ((isset($_POST['action']) &&
 	}
 	CourseArchiver::clean_backup_dir();
 
-} elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_items') {
+} elseif (
+    Security::check_token('post') && (
+        isset($_POST['import_option']) &&
+        $_POST['import_option'] == 'select_items'
+    )
+) {
+    // Clear token
+    Security::clear_token();
+
 	if ($_POST['backup_type'] == 'server') {
 		$filename = $_POST['backup_server'];
 		$delete_file = false;
@@ -185,6 +202,11 @@ if ((isset($_POST['action']) &&
             $form->getAttribute('onsubmit')
         )
     ));
+
+    // Add Security token
+    $token = Security::get_token();
+    $form->addElement('hidden', 'sec_token');
+    $form->setConstants(array('sec_token' => $token));
 
 	$form->display();
 }

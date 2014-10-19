@@ -131,6 +131,10 @@ function display_form()
     $html .= '<label class="checkbox"><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label><br /><br/>';
 
     $html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.get_lang('CopyCourse').'</button>';
+
+    // Add Security token
+    $html .= '<input type="hidden" value="' . Security::get_token() . '" name="sec_token">';
+
     $html .= '</form>';
 
     echo $html;
@@ -271,9 +275,19 @@ if (isset($_POST['copy_only_session_items']) && $_POST['copy_only_session_items'
 }
 
 /*  MAIN CODE  */
-if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
-    (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')
+if (
+    Security::check_token('post') && (
+        (
+            isset($_POST['action']) &&
+            $_POST['action'] == 'course_select_form'
+        ) || (
+            isset($_POST['copy_option']) &&
+            $_POST['copy_option'] == 'full_copy'
+        )
+    )
 ) {
+    // Clear token
+    Security::clear_token();
 
 	$destination_course = $origin_course = $destination_session = $origin_session = '';
 
@@ -339,7 +353,14 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 			display_form();
 		}
 	}
-} elseif (isset($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
+} elseif (
+    Security::check_token('post') && (
+        isset($_POST['copy_option']) &&
+        $_POST['copy_option'] == 'select_items'
+    )
+) {
+    // Clear token
+    Security::clear_token();
 
 	// Else, if a CourseSelectForm is requested, show it
 	if (api_get_setting('show_glossary_in_documents') != 'none') {

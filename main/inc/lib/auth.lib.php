@@ -412,7 +412,7 @@ class Auth
     /**
      * Display all the courses in the given course category. I could have used a parameter here
      * @param string $categoryCode Category code
-     * @param null $randomValue
+     * @param int $randomValue
      * @param array $limit will be used if $random_value is not set.
      * This array should contains 'start' and 'length' keys
      * @return array Courses data
@@ -626,6 +626,7 @@ class Auth
         if ($res !== false && Database::num_rows($res) > 0) {
             $count = current(Database::fetch_row($res));
         }
+
         return $count;
     }
 }

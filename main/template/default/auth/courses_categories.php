@@ -22,7 +22,9 @@ $pageLength = isset($pageLength) ? $pageLength :
     isset($_GET['pageLength']) ? intval($_GET['pageLength']) :
         10;
 $pageTotal = intval(ceil(intval($countCoursesInCategory) / $pageLength));
-$cataloguePagination = getCataloguePagination($pageCurrent, $pageLength, $pageTotal);
+$cataloguePagination = $pageTotal > 1 ?
+    getCataloguePagination($pageCurrent, $pageLength, $pageTotal) :
+    '';
 
 if ($showSessions && isset($_POST['date'])) {
     $date = $_POST['date'];

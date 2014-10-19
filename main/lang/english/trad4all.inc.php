@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchActiveSessions = "Search active sessions";
 $UserNameHasDash = "The username cannot contain the '-' character";
 $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "If you want only integer values write both limits without decimals";
 $GiveAnswerVariations = "Please, write how many question variations you want";
@@ -137,6 +138,7 @@ $RegisteredClasses = "Registered classes";
 $DeleteItemsNotInFile = "Delete items not in file";
 $ImportGroups = "Import groups";
 $HereIsYourFeedback = "Here is your feedback";
+$SearchSessions = "Session Search";
 $ShowSystemFolders = "Show system folders.";
 $LoginToGoToThisCourse = "Please login to go to this course";
 $LoginDate = "Login date";

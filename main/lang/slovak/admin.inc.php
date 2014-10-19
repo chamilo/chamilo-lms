@@ -17,7 +17,6 @@ $CourseCategoryInPlatform = "Kategórie kurzov k dispozícii";
 $UserGroupBelongURL = "Skupina teraz patrí do vybranej stránky";
 $AtLeastOneUserGroupAndOneURL = "Musíte vybrať aspoň jednu skupinu a jednu stránku";
 $ClassIdDoesntExists = "ID triedy neexistuje";
-$SearchSessions = "Hľadať stretnutie";
 $DeleteUsersNotInList = "Odhlásiť študentov, ktorí nie sú v importovanom zozname";
 $IfSessionExistsUpdate = "Aktualizovať, ak existuje stretnutie";
 $SearchCourseBySession = "Vyhľadať kurz podľa stretnutia";

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchActiveSessions = "Buscar sesiones activas";
 $UserNameHasDash = "El nombre de usuario no puede contener el caracter '-'";
 $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "Si desea sólo números enteros escriba ambos límites sin decimales";
 $GiveAnswerVariations = "Por favor, escriba cuántos problemas desea generar";
@@ -137,6 +138,7 @@ $RegisteredClasses = "Clases subscritas";
 $DeleteItemsNotInFile = "Eliminar elementos que no se encuentran en el archivo";
 $ImportGroups = "Importar grupos";
 $HereIsYourFeedback = "Respuesta del profesor:";
+$SearchSessions = "Búsqueda de sesiones";
 $ShowSystemFolders = "Mostrar directorios del sistema.";
 $LoginToGoToThisCourse = "Conectarse para entrar al curso";
 $LoginDate = "Fecha de ingreso";

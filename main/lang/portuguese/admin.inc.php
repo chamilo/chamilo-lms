@@ -3,7 +3,6 @@
 for more information: see languages.txt in the lang folder.
 */
 $ClassIdDoesntExists = "Não existe ID de Turma";
-$SearchSessions = "Procura de sessões";
 $DeleteUsersNotInList = "Anular subscrição de estudantes que não estão na lista de importados";
 $IfSessionExistsUpdate = "Se uma sessão existe, atualizá-lo";
 $SearchCourseBySession = "Pesquisar curso por sessão";

@@ -124,6 +124,7 @@ $RegisteredClasses = "Registrované triedy";
 $DeleteItemsNotInFile = "Odstrániť položky, ktoré nie sú v súbore";
 $ImportGroups = "Importovať skupiny";
 $HereIsYourFeedback = "Tu je vaša spätná väzba";
+$SearchSessions = "Hľadať stretnutie";
 $ShowSystemFolders = "Zobraziť systémové adresáre.";
 $LoginToGoToThisCourse = "Prosím prihláste sa do tohto kurzu";
 $LoginDate = "Dátum prihlásenia";

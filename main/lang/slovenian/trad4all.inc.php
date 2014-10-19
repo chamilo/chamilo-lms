@@ -137,6 +137,7 @@ $RegisteredClasses = "Registrirani razredi";
 $DeleteItemsNotInFile = "Odstrani elemente/zapise, ki niso vsebovani v datoteki";
 $ImportGroups = "Uvozi skupine";
 $HereIsYourFeedback = "Povpratna informacija učitelja";
+$SearchSessions = "Iskanje po sejah";
 $ShowSystemFolders = "Prikaži sistemske mape";
 $LoginToGoToThisCourse = "Prosim da se prijavite za dostop do tega tečaja";
 $LoginDate = "Datum prijave";

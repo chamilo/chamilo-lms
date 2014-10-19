@@ -17,7 +17,6 @@ $CourseCategoryInPlatform = "Dostopne kategorije tečajev";
 $UserGroupBelongURL = "Skupina sedaj pripada izbrani spletni strani";
 $AtLeastOneUserGroupAndOneURL = "Izbrati je potrebno vsaj eno skupino in eno spletno stran";
 $ClassIdDoesntExists = "ID razreda ne obstaja";
-$SearchSessions = "Iskanje po sejah";
 $DeleteUsersNotInList = "Izpiši uporabnike, ki niso na spisku uvoza";
 $IfSessionExistsUpdate = "Če seja obstaja, jo ažuriraj";
 $SearchCourseBySession = "Išči tečaje po sejah";

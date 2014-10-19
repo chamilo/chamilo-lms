@@ -3,7 +3,6 @@
 for more information: see languages.txt in the lang folder.
 */
 $ClassIdDoesntExists = "La classe ID no existeix";
-$SearchSessions = "Recerca de sessions";
 $DeleteUsersNotInList = "Dóna de baixa als alumnes que no estiguin a la llista importada";
 $IfSessionExistsUpdate = "Si la sessió existeix, actualitza-la";
 $SearchCourseBySession = "Cerca curs per sessió";

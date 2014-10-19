@@ -17,7 +17,6 @@ $CourseCategoryInPlatform = "Catégories de cours disponibles";
 $UserGroupBelongURL = "Le(s) groupe(s) appartien(nen)t désormais au site sélectionné";
 $AtLeastOneUserGroupAndOneURL = "Vous devez sélectionner au moins un groupe et un site";
 $ClassIdDoesntExists = "La classe d'id %s n'existe pas. L'utilisateur ci-après n'a pas été inscrit à la plateforme.";
-$SearchSessions = "Recherche de session.";
 $DeleteUsersNotInList = "Désinscrite les apprenants qui ne sont pas dans la liste importée";
 $IfSessionExistsUpdate = "Si une session existe, la mettre à jour";
 $SearchCourseBySession = "Recherche de cours par session";

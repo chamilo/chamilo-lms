@@ -2892,7 +2892,7 @@ function getStudentSubscribedToWork(
             $sessionId,
             null,
             null,
-            STUDENT,
+            0,
             $getCount
         );
     } else {
@@ -2908,6 +2908,7 @@ function getStudentSubscribedToWork(
 
     if (ADD_DOCUMENT_TO_WORK == true) {
         $usersInWork = getAllUserToWork($workId, $courseId, $getCount);
+
         if (empty($usersInWork)) {
             return $usersInCourse;
         } else {

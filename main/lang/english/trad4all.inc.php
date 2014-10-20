@@ -223,6 +223,7 @@ $ReplyShort = "Re:";
 $SendToAllUsers = "Send to all users";
 $SelectACategory = "Select a category";
 $AdvancedEdit = "Advanced edit";
+$NoTimeLimits = "No time limits";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
 $Title = "Title";
 $By = "By";

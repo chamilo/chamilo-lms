@@ -201,7 +201,6 @@ $langTechnicalTools = "Technical";
 $langConfig = "System config";
 $langLogIdentLogoutComplete = "Login list (extended)";
 $langLimitUsersListDefaultMax = "Maximum users showing in scroll list";
-$NoTimeLimits = "No time limits";
 $GeneralCoach = "General coach";
 $GeneralProperties = "General properties";
 $CourseCoach = "Course coach";

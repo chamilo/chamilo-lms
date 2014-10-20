@@ -223,6 +223,7 @@ $ReplyShort = "Re:";
 $SendToAllUsers = "Enviar a todos los usuarios";
 $SelectACategory = "Seleccione una categoría";
 $AdvancedEdit = "Edición avanzada";
+$NoTimeLimits = "Sin límite de tiempo";
 $SearchXapianModuleNotInstalled = "El modulo Xapian de PHP no está configurado en su servidor, póngase en contacto con su administrador";
 $Title = "Título";
 $By = "Publicado por";

@@ -224,6 +224,7 @@ $ReplyShort = "Re:";
 $SendToAllUsers = "Envoyer à tous";
 $SelectACategory = "Sélectionnez une catégorie";
 $AdvancedEdit = "Édition avancée";
+$NoTimeLimits = "Pas de limite de temps";
 $SearchXapianModuleNotInstalled = "Le module de recherche Xapian n'est pas installé";
 $Title = "Titre";
 $By = "Par";

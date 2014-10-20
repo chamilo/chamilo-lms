@@ -5963,11 +5963,9 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     if ($sender_email != '') {
         $mail->From = $sender_email;
         $mail->Sender = $sender_email;
-        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
     } else {
         $mail->From = $platform_email['SMTP_FROM_EMAIL'];
         $mail->Sender = $platform_email['SMTP_FROM_EMAIL'];
-        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
     }
 
     if ($sender_name != '') {
@@ -5977,8 +5975,8 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     }
     $mail->Subject = $subject;
     $mail->Body = $message;
+
     // Only valid address are to be accepted.
-    //if (eregi( $regexp, $recipient_email )) { // Deprecated, 13-OCT-2010.
     if (api_valid_email($recipient_email)) {
         $mail->AddAddress($recipient_email, $recipient_name);
     }

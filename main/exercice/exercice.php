@@ -893,7 +893,7 @@ if (!empty($exercise_list)) {
 }
 
 // end exercise list
-//Hotpotatoes results
+// Hotpotatoes results
 $hotpotatoes_exist = false;
 
 if ($is_allowedToEdit) {
@@ -966,17 +966,33 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 $actions .='    <a href="'.$exercicePath.'?'.api_get_cidreq().'&hpchoice=enable&amp;page='.$page.'&amp;file='.$path.'">'.Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL).'</a>';
             }
             $actions .= '<a href="'.$exercicePath.'?'.api_get_cidreq().'&amp;hpchoice=delete&amp;file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset).' '.$title."?").'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
-
-            //$actions .='<img src="../img/lp_quiz_na.gif" border="0" title="'.get_lang('NotMarkActivity').'" alt="" />';
             $item .= Display::tag('td', $actions);
             echo Display::tag('tr', $item, array('class' => $class));
-        } else { // student only
+        } else {
+            // Student only
             if ($active == 1) {
+
+                $attempt = getLatestHotPotatoResult(
+                    $path,
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
+
                 $nbrActiveTests = $nbrActiveTests + 1;
                 $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a>');
-                //$item .= Display::tag('td', '');
-                $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.api_get_user_id().'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-                $item .= Display::tag('td', $actions);
+
+                if (!empty($attempt)) {
+                    $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.api_get_user_id().'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                    $attemptText = get_lang('LatestAttempt').' : ';
+                    $attemptText .= show_score($attempt['exe_result'], $attempt['exe_weighting']).' ';
+                    $attemptText .= $actions;
+                } else {
+                    // No attempts.
+                    $attemptText = get_lang('NotAttempted').' ';
+                }
+
+                $item .= Display::tag('td', $attemptText);
                 echo Display::tag('tr', $item, array('class' => $class));
             }
         }

@@ -156,6 +156,7 @@ class CoursesController
     public function search_courses($search_term, $message = '', $error = '', $content = null, $limit = array())
     {
         $data = array();
+        $limit = !empty($limit) ? $limit : getLimitArray();
 
         $browse_course_categories = $this->model->browse_course_categories();
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category('ALL', $search_term);

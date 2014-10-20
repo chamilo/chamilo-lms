@@ -53,6 +53,8 @@ if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
     </script>';
 }
 
+// Get Limit data
+$limit = getLimitArray();
 
 // Section for the tabs.
 $this_section = SECTION_COURSES;

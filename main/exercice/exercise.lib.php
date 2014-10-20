@@ -1053,7 +1053,8 @@ function get_exam_results_hotpotatoes_data(
     $where_condition = null
 ) {
     $course_code = api_get_course_id();
-    // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
+    /* by default in_column = 1 If parameters given,
+    it is the name of the column witch is the bdd field name*/
     if ($in_column == 1) {
         $in_column = 'firstname';
     }

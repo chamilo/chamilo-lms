@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SubscribeToSessionRequest = "Request for subscription to a session";
+$PleaseSubscribeMeToSession = "Please consider subscribing me to session";
 $SearchActiveSessions = "Search active sessions";
 $UserNameHasDash = "The username cannot contain the '-' character";
 $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "If you want only integer values write both limits without decimals";

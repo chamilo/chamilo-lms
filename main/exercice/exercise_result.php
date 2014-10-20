@@ -13,9 +13,6 @@
 *
 *	@todo	split more code up in functions, move functions to library?
 */
-/**
- * Code
- */
 
 use \ChamiloSession as Session;
 
@@ -103,15 +100,15 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '</div>';
 }
 
-$feedback_type           = $objExercise->feedback_type;
-$exercise_stat_info      = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+$feedback_type = $objExercise->feedback_type;
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 
 if (!empty($exercise_stat_info['data_tracking'])) {
 	$question_list		= explode(',', $exercise_stat_info['data_tracking']);
 }
 
-$learnpath_id           = $exercise_stat_info['orig_lp_id'];
-$learnpath_item_id      = $exercise_stat_info['orig_lp_item_id'];
+$learnpath_id = $exercise_stat_info['orig_lp_id'];
+$learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];
 $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
 if ($origin == 'learnpath') {
@@ -179,7 +176,7 @@ if ($origin != 'learnpath') {
         Session::erase('exe_id');
     }
 
-	//record the results in the learning path, using the SCORM interface (API)
+	// Record the results in the learning path, using the SCORM interface (API)
 	echo "<script>window.parent.API.void_save_asset('$total_score', '$total_weight', 0, 'completed');</script>";
     echo '<script type="text/javascript">'.$href.'</script>';
 	echo '</body></html>';

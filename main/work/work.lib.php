@@ -257,6 +257,7 @@ function get_work_data_by_id($id, $courseId = null, $sessionId = null)
             }
         }
     }
+
     return $work;
 }
 
@@ -1185,6 +1186,7 @@ function updateWorkUrl($id, $new_path, $parent_id)
 function updateDirName($work_data, $newPath)
 {
     $course_id = $work_data['c_id'];
+    $sessionId = intval($work_data['session_id']);
     $courseInfo = api_get_course_info_by_id($course_id);
 
     $work_id = intval($work_data['id']);
@@ -1204,8 +1206,12 @@ function updateDirName($work_data, $newPath)
         my_rename($base_work_dir.$oldPath, $newPath);
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-        //update all the files in the other directories according with the next query
-        $sql = "SELECT id, url FROM $table WHERE c_id = $course_id AND parent_id = $work_id";
+        // Update all the files in the other directories according with the next query
+        $sql = "SELECT id, url FROM $table
+                WHERE
+                    c_id = $course_id AND
+                    parent_id = $work_id AND
+                    session_id = $sessionId";
         $result = Database::query($sql);
         $work_len = strlen('work/'.$path);
 
@@ -1213,12 +1219,22 @@ function updateDirName($work_data, $newPath)
             $new_dir = $work['url'];
             $name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
             $name = Database::escape_string('work/'.$newPath.'/'.$name_with_directory);
-            $sql = 'UPDATE '.$table.' SET url= "'.$name.'" WHERE c_id = '.$course_id.' AND id = '.$work['id'];
+            $sql = 'UPDATE '.$table.'
+                    SET url= "'.$name.'"
+                    WHERE
+                        c_id = '.$course_id.' AND
+                        id = '.$work['id'].' AND
+                        session_id = '.$sessionId;
             Database::query($sql);
         }
 
-        $sql = "UPDATE $table SET url= '/".$newPath."', title = '".$originalNewPath."'
-                WHERE c_id = $course_id AND id = $work_id";
+        $sql = "UPDATE $table SET
+                    url= '/".$newPath."',
+                    title = '".$originalNewPath."'
+                WHERE
+                    c_id = $course_id AND
+                    id = $work_id AND
+                    session_id = $sessionId";
         Database::query($sql);
     }
 }
@@ -3596,20 +3612,26 @@ function agendaExistsForWork($workId, $courseInfo)
  * @param int $workId
  * @param array $params
  * @param array $courseInfo
+ * @param int $sessionId
  */
-function updateWork($workId, $params, $courseInfo)
+function updateWork($workId, $params, $courseInfo, $sessionId = 0)
 {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $filteredParams = array(
         'description' => $params['description'],
         'qualification' => $params['qualification'],
         'weight' => $params['weight'],
-        'allow_text_assignment' => $params['allow_text_assignment'],
+        'allow_text_assignment' => $params['allow_text_assignment']
     );
+
     Database::update(
         $workTable,
         $filteredParams,
-        array('id = ? AND c_id = ?' => array($workId, $courseInfo['real_id']))
+        array(
+            'id = ? AND c_id = ? AND session_id = ? ' => array(
+                $workId, $courseInfo['real_id'], $sessionId
+            )
+        )
     );
 }
 

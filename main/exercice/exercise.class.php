@@ -16,7 +16,6 @@ define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES',       3); //Show 
 define('EXERCISE_MAX_NAME_SIZE',            80);
 
 $debug = false; //All exercise scripts should depend in this debug variable
-
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 
 /**
@@ -296,15 +295,19 @@ class Exercise
         return $this->display_category_name;
     }
 
+    /**
+     * @return int
+     */
     public function selectPassPercentage()
     {
         return $this->pass_percentage;
     }
 
     /**
+     *
+     * Modify object to update the switch display_category_name
      * @author hubert borderiou 30-11-11
-     * @return : modify object to update the switch display_category_name
-     * $in_txt is an integer 0 or 1
+     * @param int $in_txt is an integer 0 or 1
      */
     public function updateDisplayCategoryName($in_txt)
     {
@@ -313,7 +316,7 @@ class Exercise
 
     /**
      * @author hubert borderiou 28-11-11
-     * @return html text : the text to display ay the end of the test.
+     * @return string html text : the text to display ay the end of the test.
      */
     public function selectTextWhenFinished()
     {
@@ -322,7 +325,7 @@ class Exercise
 
     /**
      * @author hubert borderiou 28-11-11
-     * @return html text : update the text to display ay the end of the test.
+     * @return string  html text : update the text to display ay the end of the test.
      */
     public function updateTextWhenFinished($in_txt)
     {
@@ -488,6 +491,9 @@ class Exercise
         return sizeof($this->questionList);
     }
 
+    /**
+     * @return int
+     */
     public function selectPropagateNeg()
     {
         return $this->propagate_neg;
@@ -497,9 +503,9 @@ class Exercise
      * Selects questions randomly in the question list
      *
      * @author Olivier Brouckaert
+     * @author Hubert Borderiou 15 nov 2011
      * @return array - if the exercise is not set to take questions randomly, returns the question list
      *					 without randomizing, otherwise, returns the list with questions selected randomly
-     * Modified by Hubert Borderiou 15 nov 2011
      */
     public function selectRandomList()
     {
@@ -600,16 +606,25 @@ class Exercise
         $this->expired_time = $expired_time;
     }
 
+    /**
+     * @param $value
+     */
     public function updatePropagateNegative($value)
     {
         $this->propagate_neg = $value;
     }
 
+    /**
+     * @param $value
+     */
     public function updateReviewAnswers($value)
     {
-        $this->review_answers = (isset($value) && $value) ? true : false;
+        $this->review_answers = isset($value) && $value ? true : false;
     }
 
+    /**
+     * @param $value
+     */
     public function updatePassPercentage($value)
     {
         $this->pass_percentage = $value;
@@ -631,16 +646,30 @@ class Exercise
             $this->sound=$sound['name'];
 
             if (@move_uploaded_file($sound['tmp_name'],$audioPath.'/'.$this->sound)) {
-                $query="SELECT 1 FROM $TBL_DOCUMENT  WHERE c_id = ".$this->course_id." AND path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
+                $query = "SELECT 1 FROM $TBL_DOCUMENT
+                        WHERE c_id = ".$this->course_id." AND path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
                 $result=Database::query($query);
 
-                if(!Database::num_rows($result)) {
-                    /*$query="INSERT INTO $TBL_DOCUMENT(path,filetype) VALUES "
-                     ." ('".str_replace($documentPath,'',$audioPath).'/'.$this->sound."','file')";
-                    Database::query($query);*/
-                    $id = add_document($this->course,str_replace($documentPath,'',$audioPath).'/'.$this->sound,'file',$sound['size'],$sound['name']);
-                    api_item_property_update($this->course, TOOL_DOCUMENT, $id, 'DocumentAdded',api_get_user_id());
-                    item_property_update_on_folder($this->course,str_replace($documentPath,'',$audioPath),api_get_user_id());
+                if (!Database::num_rows($result)) {
+                    $id = add_document(
+                        $this->course,
+                        str_replace($documentPath,'',$audioPath).'/'.$this->sound,
+                        'file',
+                        $sound['size'],
+                        $sound['name']
+                    );
+                    api_item_property_update(
+                        $this->course,
+                        TOOL_DOCUMENT,
+                        $id,
+                        'DocumentAdded',
+                        api_get_user_id()
+                    );
+                    item_property_update_on_folder(
+                        $this->course,
+                        str_replace($documentPath, '', $audioPath),
+                        api_get_user_id()
+                    );
                 }
             }
         } elseif($delete && is_file($audioPath.'/'.$this->sound)) {
@@ -705,16 +734,25 @@ class Exercise
         $this->active=0;
     }
 
+    /**
+     * Set disable results
+     */
     public function disable_results()
     {
         $this->results_disabled = true;
     }
 
+    /**
+     * Enable results
+     */
     public function enable_results()
     {
         $this->results_disabled = false;
     }
 
+    /**
+     * @param int $results_disabled
+     */
     public function updateResultsDisabled($results_disabled)
     {
         $this->results_disabled = intval($results_disabled);
@@ -822,9 +860,11 @@ class Exercise
                 $end_time = '0000-00-00 00:00:00';
             }
 
-            $sql = "INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
-                                                results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
-                                                text_when_finished, display_category_name, pass_percentage)
+            $sql = "INSERT INTO $TBL_EXERCICES (
+                        c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
+                        results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
+                        text_when_finished, display_category_name, pass_percentage
+                    )
 					VALUES(
 						".$this->course_id.",
 						'$start_time','$end_time',
@@ -851,25 +891,30 @@ class Exercise
 
             // insert into the item_property table
             api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());
-            api_set_default_visibility($this->id, TOOL_QUIZ, null, true); // This function save the quiz again, carefull about start_time and end_time if you remove this line (see above)
+            // This function save the quiz again, carefull about start_time and end_time if you remove this line (see above)
+            api_set_default_visibility($this->id, TOOL_QUIZ, null, true);
 
             if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
                 $this->search_engine_save();
             }
         }
 
-        // updates the question position
+        // Updates the question position
         $this->update_question_positions();
     }
 
-    /* Updates question position */
-    function update_question_positions() {
+    /**
+     * Updates question position
+     */
+    function update_question_positions()
+    {
         $quiz_question_table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         //Fixes #3483 when updating order
         $question_list = $this->selectQuestionList(true);
         if (!empty($question_list)) {
             foreach ($question_list as $position => $questionId) {
-                $sql="UPDATE $quiz_question_table SET question_order ='".intval($position)."'".
+                $sql="UPDATE $quiz_question_table SET
+                        question_order ='".intval($position)."'".
                     "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id=".intval($this->id);
                 Database::query($sql);
             }
@@ -886,15 +931,16 @@ class Exercise
     public function addToList($questionId)
     {
         // checks if the question ID is not in the list
-        if(!$this->isInList($questionId)) {
+        if (!$this->isInList($questionId)) {
             // selects the max position
-            if(!$this->selectNbrQuestions()) {
-                $pos=1;
+            if (!$this->selectNbrQuestions()) {
+                $pos = 1;
             } else {
-                if (is_array($this->questionList))
-                    $pos=max(array_keys($this->questionList))+1;
+                if (is_array($this->questionList)) {
+                    $pos = max(array_keys($this->questionList)) + 1;
+                }
             }
-            $this->questionList[$pos]=$questionId;
+            $this->questionList[$pos] = $questionId;
             return true;
         }
         return false;
@@ -1351,7 +1397,8 @@ class Exercise
         $this->save($type);
     }
 
-    function search_engine_save() {
+    function search_engine_save()
+    {
         if ($_POST['index_document'] != 1) {
             return;
         }
@@ -1410,7 +1457,8 @@ class Exercise
         }
     }
 
-    function search_engine_edit() {
+    function search_engine_edit()
+    {
         // update search enchine and its values table if enabled
         if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
             $course_id = api_get_course_id();
@@ -1484,7 +1532,8 @@ class Exercise
 
     }
 
-    function search_engine_delete() {
+    function search_engine_delete()
+    {
         // remove from search engine if enabled
         if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian') ) {
             $course_id = api_get_course_id();
@@ -1608,8 +1657,8 @@ class Exercise
     /**
      * Copies an exercise (duplicate all questions and answers)
      */
-
-    public function copy_exercise() {
+    public function copy_exercise()
+    {
         $exercise_obj= new Exercise();
         $exercise_obj = $this;
 
@@ -1649,7 +1698,8 @@ class Exercise
      *
      * @param int $id - exercise id
      */
-    private function updateId($id) {
+    private function updateId($id)
+    {
         $this->id = $id;
     }
 
@@ -1658,11 +1708,24 @@ class Exercise
      *
      * @param string $status - exercise status
      */
-    function updateStatus($status) {
+    function updateStatus($status)
+    {
         $this->active = $status;
     }
 
-    public function get_stat_track_exercise_info($lp_id = 0, $lp_item_id = 0, $lp_item_view_id = 0, $status = 'incomplete') {
+    /**
+     * @param int $lp_id
+     * @param int $lp_item_id
+     * @param int $lp_item_view_id
+     * @param string $status
+     * @return array
+     */
+    public function get_stat_track_exercise_info(
+        $lp_id = 0,
+        $lp_item_id = 0,
+        $lp_item_view_id = 0,
+        $status = 'incomplete'
+    ) {
         $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         if (empty($lp_id)) {
             $lp_id = 0;
@@ -1701,9 +1764,15 @@ class Exercise
      * @param int  lp item id
      * @param int  lp item_view id
      * @param array question list
-
      */
-    public function save_stat_track_exercise_info($clock_expired_time = 0, $safe_lp_id = 0, $safe_lp_item_id = 0, $safe_lp_item_view_id = 0, $questionList = array(), $weight = 0) {
+    public function save_stat_track_exercise_info(
+        $clock_expired_time = 0,
+        $safe_lp_id = 0,
+        $safe_lp_item_id = 0,
+        $safe_lp_item_view_id = 0,
+        $questionList = array(),
+        $weight = 0
+    ) {
         $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $safe_lp_id 			= intval($safe_lp_id);
         $safe_lp_item_id 		= intval($safe_lp_item_id);
@@ -1736,7 +1805,15 @@ class Exercise
         return $id;
     }
 
-    public function show_button($question_id, $questionNum, $questions_in_media = array(), $currentAnswer = '') {
+    /**
+     * @param int $question_id
+     * @param int $questionNum
+     * @param array $questions_in_media
+     * @param string $currentAnswer
+     * @return string
+     */
+    public function show_button($question_id, $questionNum, $questions_in_media = array(), $currentAnswer = '')
+    {
         global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
 
         $nbrQuestions = $this->get_count_question_list();
@@ -1753,7 +1830,7 @@ class Exercise
             }
             $html .='<br />';
         } else {
-            //User
+            // User
             if (api_is_allowed_to_session_edit()) {
                 if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
                     if ($this->review_answers) {
@@ -1805,7 +1882,8 @@ class Exercise
     /**
      * So the time control will work
      */
-    public function show_time_control_js($time_left) {
+    public function show_time_control_js($time_left)
+    {
         $time_left = intval($time_left);
         return "<script>
 
@@ -1896,8 +1974,8 @@ class Exercise
     /**
      * Lp javascript for hotspots
      */
-    public function show_lp_javascript() {
-
+    public function show_lp_javascript()
+    {
         return "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
                     <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
                     <script language=\"JavaScript\" type=\"text/javascript\">

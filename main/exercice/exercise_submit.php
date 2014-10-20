@@ -134,10 +134,10 @@ if (!is_object($objExercise)) {
 
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
-	if ($remind_question_id == -1) {
-		header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId);
-		exit;
-	}
+    if ($remind_question_id == -1) {
+        header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId);
+        exit;
+    }
 }
 
 $current_timestamp = time();
@@ -173,10 +173,9 @@ if ($objExercise->selectAttempts() > 0) {
 	if ($attempt_count >= $objExercise->selectAttempts()) {
 		$show_clock = false;
 		if (!api_is_allowed_to_edit(null,true)) {
+            if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
 
-			if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
-
-				// Showing latest attempt according with task BT#1628
+                // Showing latest attempt according with task BT#1628
                 $exercise_stat_info = get_exercise_results_by_user(
                     $user_id,
                     $exerciseId,
@@ -184,23 +183,23 @@ if ($objExercise->selectAttempts() > 0) {
                     api_get_session_id()
                 );
 
-				if (!empty($exercise_stat_info)) {
-					$max_exe_id = max(array_keys($exercise_stat_info));
-					$last_attempt_info = $exercise_stat_info[$max_exe_id];
-					$attempt_html .= Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>''));
+                if (!empty($exercise_stat_info)) {
+                    $max_exe_id = max(array_keys($exercise_stat_info));
+                    $last_attempt_info = $exercise_stat_info[$max_exe_id];
+                    $attempt_html .= Display::div(get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']), array('id'=>''));
 
-					$attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
+                    $attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
 
-					if (!empty($last_attempt_info['question_list'])) {
-						foreach($last_attempt_info['question_list'] as $question_data) {
-							$question_id = $question_data['question_id'];
-							$marks       = $question_data['marks'];
+                    if (!empty($last_attempt_info['question_list'])) {
+                        foreach($last_attempt_info['question_list'] as $question_data) {
+                            $question_id = $question_data['question_id'];
+                            $marks       = $question_data['marks'];
 
-							$question_info = Question::read($question_id);
-							$attempt_html .= Display::div($question_info->question, array('class'=>'question_title'));
-							$attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
-						}
-					}
+                            $question_info = Question::read($question_id);
+                            $attempt_html .= Display::div($question_info->question, array('class'=>'question_title'));
+                            $attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
+                        }
+                    }
 					$score =  show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
 					$attempt_html .= Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
 				} else {
@@ -211,7 +210,6 @@ if ($objExercise->selectAttempts() > 0) {
 			}
 		} else {
 			$attempt_html .= Display :: return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
-			//Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttemptsAdmin'), $exercise_title, $objExercise->selectAttempts()), false);
 		}
 
 		if ($origin == 'learnpath') {
@@ -231,8 +229,14 @@ if ($debug) {
     error_log("4. Setting the exe_id: $exe_id");
 }
 
-// 5. Getting user exercise info (if the user took the exam before) - generating exe_id
-$exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+/* 5. Getting user exercise info (if the user took the exam before)
+   generating exe_id */
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info(
+    $learnpath_id,
+    $learnpath_item_id,
+    $learnpath_item_view_id
+);
+
 $clock_expired_time = null;
 
 if (empty($exercise_stat_info)) {
@@ -442,7 +446,7 @@ if ($formSent && isset($_POST)) {
                     // gets the student choice for this question
                     $choice = $exerciseResult[$questionId];
                     if (isset($exe_id)) {
-                    	//Manage the question and answer attempts
+                    	// Manage the question and answer attempts
                         if ($debug) { error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
                         $objExercise->manage_answer(
                             $exe_id,

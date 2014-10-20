@@ -88,7 +88,7 @@ $currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']
 $error = '';
 
 //Table calls
-$exercice_attemp_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$exercice_attemp_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview,
     we delete the objExercise from the session in order to get the latest
@@ -102,6 +102,7 @@ if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['previ
 if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
     // Construction of Exercise
     $objExercise = new Exercise();
+    Session::write('firstTime', true);
     if ($debug) {error_log('1. Setting the $objExercise variable'); };
     unset($_SESSION['questionList']);
 
@@ -117,6 +118,8 @@ if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUES
         Session::write('objExercise', $objExercise);
         if ($debug) {error_log('1.1. $_SESSION[objExercise] was unset - set now - end'); };
     }
+} else {
+    Session::write('firstTime', false);
 }
 
 //2. Checking if $objExercise is set
@@ -148,13 +151,13 @@ if ($objExercise->expired_time != 0) {
 	$time_control = true;
 }
 
-//Generating the time control key for the user
+// Generating the time control key for the user
 $current_expired_time_key = get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
 if ($time_control) {
-	//Get the expired time of the current exercice in track_e_exercices
+	// Get the expired time of the current exercice in track_e_exercices
 	$total_seconds = $objExercise->expired_time*60;
 }
 
@@ -239,6 +242,7 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
 
 $clock_expired_time = null;
 
+
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
@@ -277,6 +281,26 @@ if (empty($exercise_stat_info)) {
     if ($debug)  error_log("5.5  exercise_stat_info[] exists getting exe_id $exe_id");
 } else {
 	$exe_id = $exercise_stat_info['exe_id'];
+    // Remember last question id position.
+    $isFirstTime = Session::read('firstTime');
+    if ($isFirstTime && $objExercise->type == ONE_PER_PAGE) {
+        $resolvedQuestions = get_all_exercise_event_by_exe_id($exe_id);
+        if (!empty($resolvedQuestions) &&
+            !empty($exercise_stat_info['data_tracking'])
+        ) {
+            $last = current(end($resolvedQuestions));
+            $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
+            $count = 1;
+            foreach ($attemptQuestionList as $question) {
+                if ($last['question_id'] == $question) {
+                    break;
+                }
+                $count++;
+            }
+            $current_question = $count;
+        }
+    }
+
     if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
 }
 
@@ -534,7 +558,7 @@ if ($formSent && isset($_POST)) {
 }
 
 // If questionNum comes from POST and not from GET
-if (!$current_question || $_REQUEST['num']) {
+if (!$current_question || isset($_REQUEST['num']) && $_REQUEST['num']) {
     if (!$current_question) {
         $current_question = 1;
     } else {
@@ -804,12 +828,12 @@ if (!empty($error)) {
     $number_of_hotspot_questions = 0;
     $onsubmit = '';
     $i = 0;
-
     if (!empty($questionList)) {
         foreach ($questionList as $questionId) {
             $i++;
             $objQuestionTmp = Question::read($questionId);
             // for sequential exercises
+
             if ($objExercise->type == ONE_PER_PAGE) {
                 // if it is not the right question, goes to the next loop iteration
                 if ($current_question != $i) {

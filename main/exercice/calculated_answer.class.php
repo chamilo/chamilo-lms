@@ -133,7 +133,23 @@ class CalculatedAnswer extends Question
         $form->addElement('label', null, get_lang('IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals'));
         $form->addElement('html', '<div id="blanks_weighting"></div>');
 
-        $form->addElement('label', null, get_lang('FormulaExample').': &radic;<span style="text-decoration:overline;">&nbsp;x &divide y&nbsp;</span> &times e <sup>(ln(pi))</sup> = sqrt([x]/[y])*(e^(ln(pi)))');
+        $notationListButton = Display::url(
+            get_lang('NotationList'),
+            api_get_path(WEB_PATH).'main/exercice/evalmathnotation.php',
+            array(
+                'class' => 'btn ajax',
+                '_target' => '_blank'
+            )
+        );
+        $form->addElement(
+            'html',
+            '<div class="control-group">
+                <label class="control-label"></label>
+                <div class="controls">'.$notationListButton.'</div>
+            </div>');
+
+        $form->addElement('label', null, get_lang('FormulaExample'));
+
         $form->addElement('text', 'formula', get_lang('Formula'), array('id' => 'formula', 'class' => 'span4'));
         $form->addRule('formula', get_lang('GiveFormula'), 'required');
 
@@ -183,8 +199,12 @@ class CalculatedAnswer extends Question
                     $replace = array("[", "]");
                     $newBlankItem = str_replace($replace, "", $blankItem);
                     $newBlankItem = "[".trim($newBlankItem)."]";
-                    $randomValue = mt_rand($lowestValues[$i],$highestValues[$i]);
-                    //$randomValue = mt_rand($lowestValues[$i]*100,$highestValues[$i]*100)/100;
+                    // take random float values when one or both edge values have a decimal point
+                    $randomValue =
+                        (strpos($lowestValues[$i],'.') !== false ||
+                        strpos($highestValues[$i],'.') !== false) ?
+                        mt_rand($lowestValues[$i]*100,$highestValues[$i]*100)/100 :
+                        mt_rand($lowestValues[$i],$highestValues[$i]);
                     $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
                     $auxFormula = str_replace($blankItem, $randomValue, $auxFormula);
                 }
@@ -203,7 +223,7 @@ class CalculatedAnswer extends Question
             }
             $this->save();
             $objAnswer = new answer($this->id);
-            $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, array());
+            $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, null);
             $objAnswer->position = array();
             $objAnswer->save();
 

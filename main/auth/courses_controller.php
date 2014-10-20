@@ -96,6 +96,7 @@ class CoursesController
         if ($action == 'display_random_courses') {
             // Random value is used instead limit filter
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 10);
+            $data['countCoursesInCategory'] = count($data['browse_courses_in_category']);
         } else {
             if (!isset($category_code)) {
                 $category_code = $browse_course_categories[0][1]['code']; // by default first category
@@ -155,6 +156,7 @@ class CoursesController
     public function search_courses($search_term, $message = '', $error = '', $content = null, $limit = array())
     {
         $data = array();
+        $limit = !empty($limit) ? $limit : getLimitArray();
 
         $browse_course_categories = $this->model->browse_course_categories();
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category('ALL', $search_term);

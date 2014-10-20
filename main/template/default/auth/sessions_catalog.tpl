@@ -71,7 +71,7 @@
                 {% endif %}
 
                 {% if coursesCategoriesList is not empty %}
-                    <!-- a class="btn" href="{{ api_get_self }}?action=display_random_courses">{{ 'RandomPick' | get_lang }}</a-->
+                    <a class="btn" href="{{ api_get_self }}?action=display_random_courses">{{ 'RandomPick' | get_lang }}</a>
                 {% endif %}
             </div>
 

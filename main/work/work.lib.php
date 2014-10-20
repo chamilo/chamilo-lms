@@ -1655,8 +1655,8 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
         $work['others'] = Display::url(Display::return_icon('group.png', get_lang('Others')), $urlOthers.$work['id']);
         $works[] = $work;
     }
-    return $works;
 
+    return $works;
 }
 
 /**
@@ -1679,7 +1679,7 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
     $group_id           = api_get_group_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-    if (!in_array($direction, array('asc','desc'))) {
+    if (!in_array($direction, array('asc', 'desc'))) {
         $direction = 'desc';
     }
 
@@ -1719,7 +1719,6 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
             $workId = $work['id'];
             $work['type'] = Display::return_icon('work.png');
             $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
-            //$work['ends_on'] = $work['ends_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['ends_on']);
 
             $totalUsers = getStudentSubscribedToWork(
                 $workId,
@@ -2860,8 +2859,13 @@ function userIsSubscribedToWork($userId, $workId, $courseId)
  * @param bool $getCount Whether we want just the amount or the full result
  * @return array|int An integer (if we just asked for the count) or an array of users
  */
-function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessionId = null, $getCount = false)
-{
+function getStudentSubscribedToWork(
+    $workId,
+    $courseId,
+    $groupId = null,
+    $sessionId = null,
+    $getCount = false
+) {
     $usersInWork = null;
     $usersInCourse = null;
 
@@ -3519,9 +3523,9 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
     $course_id = $courseInfo['real_id'];
 
-    $directory      = replace_dangerous_char($params['new_dir']);
-    $directory      = disable_dangerous_file($directory);
-    $created_dir    = create_unexisting_work_directory($base_work_dir, $directory);
+    $directory = replace_dangerous_char($params['new_dir']);
+    $directory = disable_dangerous_file($directory);
+    $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
 
     if (!empty($created_dir)) {
         $dir_name_sql = '/'.$created_dir;

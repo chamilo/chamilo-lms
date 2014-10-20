@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 use ChamiloSession as Session;
 
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
@@ -19,6 +20,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $courseInfo = api_get_course_info();
+$sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
 $workData = get_work_data_by_id($workId);

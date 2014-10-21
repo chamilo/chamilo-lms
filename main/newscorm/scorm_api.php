@@ -3,23 +3,17 @@
 
 /**
  * API event handler functions for Scorm 1.1 and 1.2 and 1.3
- *
+ * This script is divided into three sections.
+ * The first section (below) is the initialisation part.
+ * The second section is the SCORM object part
+ * The third section defines the event handlers for Chamilo's internal messaging
+ * and frames refresh
  * @author   Denes Nagy <darkden@freemail.hu> (original author - 2003-2004)
  * @author   Yannick Warnier <ywarnier@beeznest.org> (extended and maintained - 2005-2014)
  * @version  v 1.1
  * @access   public
  * @package  chamilo.learnpath.scorm
  */
-
-/**
- * This script is divided into three sections.
- * The first section (below) is the initialisation part.
- * The second section is the SCORM object part
- * The third section defines the event handlers for Chamilo's internal messaging
- * and frames refresh
- */
-
-/* INIT SECTION */
 
 // If you open the imsmanifest.xml via local machine (f.ex.: file://c:/...), then the Apiwrapper.js
 // of Maritime Navigation when trying to execute this row
@@ -35,9 +29,10 @@ require_once 'learnpathItem.class.php';
 require_once 'scorm.class.php';
 
 $file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
-/** @var Learnpath $oLP */
-$oLP    = unserialize($_SESSION['lpobject']);
-$oItem 	= isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;
+/** @var learnpath $oLP */
+$oLP = unserialize($_SESSION['lpobject']);
+/** @var learnpathItem $oItem */
+$oItem = isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;
 
 if (!is_object($oItem)) {
     error_log('New LP - scorm_api - Could not load oItem item',0);
@@ -45,6 +40,7 @@ if (!is_object($oItem)) {
 }
 $autocomplete_when_80pct = 0;
 $user = api_get_user_info();
+$userId = api_get_user_id();
 
 header('Content-type: text/javascript');
 
@@ -174,7 +170,7 @@ olms.lms_initialized = 0;
 
 olms.lms_view_id = '<?php echo $oLP->get_view();?>';
 if(olms.lms_view_id == ''){ olms.lms_view_id = 1;}
-olms.lms_user_id = '<?php echo $_user['user_id'];?>';
+olms.lms_user_id = '<?php echo $userId;?>';
 olms.lms_next_item = '<?php echo $oLP->get_next_item_id();?>';
 olms.lms_previous_item = '<?php echo $oLP->get_previous_item_id();?>';
 olms.lms_lp_type = '<?php echo $oLP->get_type();?>';
@@ -414,11 +410,11 @@ function LMSGetValue(param) {
         }
     } else if(param == 'cmi.core.student_id'){
         // ---- cmi.core.student_id
-        result='<?php echo $_user['user_id']; ?>';
+        result='<?php echo $userId; ?>';
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes($_user['complete_name']);
+          $who = addslashes($user['complete_name']);
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){
@@ -788,7 +784,7 @@ function LMSSetValue(param, val) {
         }
     }
     <?php
-    if ($oLP->force_commit == 1){
+    if ($oLP->force_commit == 1) {
         echo " var mycommit = LMSCommit('force');";
     }
     ?>
@@ -1278,7 +1274,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
  */
 function process_scorm_values() {
     logit_scorm('process_scorm_values()');
-    for (i=0; i<olms.scorm_variables.length; i++) {
+    for (i=0; i < olms.scorm_variables.length; i++) {
         if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.variable_to_send.push(olms.scorm_variables[i]);
         }
@@ -1293,7 +1289,7 @@ function process_scorm_values() {
  */
 function reinit_updatable_vars_list() {
     logit_scorm('Cleaning updatable_vars_list: reinit_updatable_vars_list');
-    for (i=0;i<olms.scorm_variables.length;i++) {
+    for (i=0;i < olms.scorm_variables.length;i++) {
         if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.updatable_vars_list[olms.scorm_variables[i]]=false;
         }
@@ -1438,7 +1434,7 @@ function switch_item(current_item, next_item){
     var mysrc = 'lp_controller.php?action=content&lp_id='+olms.lms_lp_id+'&item_id='+next_item+'&cidReq='+olms.lms_course_code;
     var cont_f = $("#content_id");
 
-    <?php if($oLP->mode == 'fullscreen') { ?>
+    <?php if ($oLP->mode == 'fullscreen') { ?>
     cont_f = window.open(''+mysrc,'content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     cont_f.onload=function(){
         olms.info_lms_item[0]=olms.info_lms_item[1];
@@ -1558,7 +1554,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
 
     my_scorm_values = process_scorm_values();
 
-    for (k=0; k<my_scorm_values.length; k++) {
+    for (k=0; k < my_scorm_values.length; k++) {
         if (my_scorm_values[k]=='cmi.core.session_time') {
             params += '&t='+olms.session_time;
         } else if (my_scorm_values[k]=='cmi.core.lesson_status' && olms.lesson_status!='') {
@@ -1785,7 +1781,7 @@ function attach_glossary_into_scorm(type) {
                 data_terms=datas.split("[|.|_|.|-|.|]");
                 var complex_array = new Array();
                 var cp_complex_array = new Array();
-                for(i=0;i<data_terms.length;i++) {
+                for(i=0;i < data_terms.length;i++) {
                     specific_terms= data_terms[i].split("__|__|");
                     var real_term = specific_terms[1]; // glossary term
                     var real_code = specific_terms[0]; // glossary id

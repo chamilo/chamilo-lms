@@ -96,12 +96,30 @@ class MessagesWebService extends WebService
      */
     public function getNewMessages($username, $lastId = 0)
     {
+        $messages = array();
+
         $lastId = intval($lastId);
 
         $userInfo = api_get_user_info_from_username($username);
         $userId = intval($userInfo['user_id']);
 
-        return MessageManager::getMessagesFromLastReceivedMessage($userId, $lastId);
+        $lastMessages = MessageManager::getMessagesFromLastReceivedMessage($userId, $lastId);
+
+        foreach ($lastMessages as $message) {
+            $messages[] = array(
+                'id' => $message['id'],
+                'title' => $message['title'],
+                'sender' => array(
+                    'id' => $message['user_id'],
+                    'lastname' => $message['lastname'],
+                    'firstname' => $message['firstname'],
+                    'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
+                ),
+                'content' => $message['content']
+            );
+        }
+
+        return $messages;
     }
 
 }

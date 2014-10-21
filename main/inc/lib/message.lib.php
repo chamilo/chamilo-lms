@@ -1563,17 +1563,7 @@ class MessageManager
 
         if ($result !== false) {
             while ($row = Database::fetch_assoc($result)) {
-                $messages[] = array(
-                    'id' => $row['id'],
-                    'title' => $row['title'],
-                    'sender' => array(
-                        'id' => $row['user_id'],
-                        'lastname' => $row['lastname'],
-                        'firstname' => $row['firstname'],
-                        'completeName' => api_get_person_name($row['firstname'], $row['lastname']),
-                    ),
-                    'content' => $row['content']
-                );
+                $messages[] = $row;
             }
         }
 

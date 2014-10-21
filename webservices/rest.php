@@ -58,7 +58,9 @@ switch ($action) {
             $webService = new MessagesWebService();
             $webService->setApiKey($apiKey);
 
-            $messages = $webService->getNewMessages($username);
+            $lastId = isset($_POST['last']) ? $_POST['last'] : 0;
+
+            $messages = $webService->getNewMessages($username, $lastId);
 
             $json = array(
                 'newMessages' => $messages

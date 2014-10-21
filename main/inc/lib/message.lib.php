@@ -1538,4 +1538,46 @@ class MessageManager
         return 0;
     }
 
+    /**
+     * Get the count of the last received messages for a user
+     * @param int $userId The user id
+     * @param int $lastId The id of the last received message
+     * @return int The count of new messages
+     */
+    public static function getMessagesFromLastReceivedMessage($userId, $lastId)
+    {
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $messages = array();
+
+        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname "
+                . "FROM $messagesTable as m "
+                . "INNER JOIN $userTable as u "
+                . "ON m.user_receiver_id = u.user_id "
+                . "WHERE u.user_id = $userId "
+                . "AND m.msg_status = " . MESSAGE_STATUS_UNREAD . " "
+                . "AND m.id > $lastId";
+
+        $result = Database::query($sql);
+
+        if ($result !== false) {
+            while ($row = Database::fetch_assoc($result)) {
+                $messages = array(
+                    'id' => $row['id'],
+                    'title' => $row['title'],
+                    'sender' => array(
+                        'id' => $row['user_id'],
+                        'lastname' => $row['lastname'],
+                        'firstname' => $row['firstname'],
+                        'completeName' => api_get_person_name($row['firstname'], $row['lastname']),
+                    ),
+                    'content' => $row['content']
+                );
+            }
+        }
+
+        return $messages;
+    }
+
 }

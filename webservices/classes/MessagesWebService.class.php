@@ -126,9 +126,14 @@ class MessagesWebService extends WebService
      * @param string $username The username
      * @return array the new message list
      */
-    public function getNewMessages($username)
+    public function getNewMessages($username, $lastId = 0)
     {
-        return array();
+        $lastId = intval($lastId);
+
+        $userInfo = api_get_user_info_from_username($username);
+        $userId = intval($userInfo['user_id']);
+
+        return MessageManager::getMessagesFromLastReceivedMessage($userId, $lastId);
     }
 
 }

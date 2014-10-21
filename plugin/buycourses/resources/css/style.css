@@ -36,11 +36,10 @@ table td.ta-center, table th.ta-center {
 }
 
 .sprice {
-    color: #FF5555;
-    font-size: 26px;
-    font-weight: 500;
+    color: #4D984E;
+    font-size: 18px;
+    font-weight: bold;
     margin: 15px 0;
-    text-shadow: 2px 1px 0 #222222;
 }
 
 .dinline {
@@ -82,4 +81,32 @@ select#lsessions, select#lcourses, select#lexercises, select#status {
 
 .margin-left-fifty{
     margin-left: 50px !important;
+}
+#course_category_well h4{
+	padding-left: 0;
+}
+#course_category_well .form-content{
+	padding-left: 1em;
+	padding-right: 1em;
+}
+#course_category_well .btn{
+	width: 100%;
+	line-height: 30px;
+	font-size: 16px;
+}
+.icon-course .thumbnail{
+	border: none;
+	box-shadow: none;
+}
+.well-course{
+	padding-top: 1em;
+	padding-bottom: 1em;
+	border-bottom: 1px solid #D3E6F0;
+}
+.ui-widget-content .well-course a, .ui-widget-content .well-course a:hover{
+	color: #fff;
+}
+.label-info, .badge-info {
+  background-color: #53a0c6;
+  font-weight: normal;
 }

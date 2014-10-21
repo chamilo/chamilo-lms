@@ -1,6 +1,6 @@
 <script type='text/javascript' src="../js/buycourses.js"></script>
 
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
+<link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
 
 <div class="row">
     <div class="span12">

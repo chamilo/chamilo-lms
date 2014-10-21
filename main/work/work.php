@@ -1,10 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *	@package chamilo.work
  **/
-
-/* INIT SECTION */
 
 use ChamiloSession as Session;
 
@@ -113,7 +112,6 @@ if (!empty($group_id)) {
     }
 } else {
     if ($origin != 'learnpath') {
-
         if (isset($_GET['id']) && !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir') {
             $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));
         } else {
@@ -183,7 +181,6 @@ switch ($action) {
         $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
 
         if ($form->validate()) {
-
             $result = addDir($_POST, $user_id, $_course, $group_id, $id_session);
             if ($result) {
                 $message = Display::return_message(get_lang('DirectoryCreated'), 'success');

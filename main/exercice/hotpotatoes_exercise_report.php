@@ -6,9 +6,7 @@
  *	@author hubert.borderiou
  *
  */
-/**
- * Code
- */
+
 use ChamiloSession as Session;
 
 // name of the language file that needs to be included
@@ -43,17 +41,17 @@ require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 
 /*	Constants and variables */
-$is_allowedToEdit           = api_is_allowed_to_edit(null, true) || api_is_drh();
-$is_tutor                   = api_is_allowed_to_edit(true);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh();
+$is_tutor = api_is_allowed_to_edit(true);
 
-$TBL_QUESTIONS              = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_HOTPOTATOES_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-$TBL_LP_ITEM_VIEW           = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+$TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_HOTPOTATOES_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
-$course_id            = api_get_course_int_id();
-$hotpotatoes_path     = isset($_REQUEST['path']) ? $_REQUEST['path'] : null;
-$filter_user          = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
+$course_id = api_get_course_int_id();
+$hotpotatoes_path = isset($_REQUEST['path']) ? $_REQUEST['path'] : null;
+$filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
 
 if (empty($hotpotatoes_path)) {
     api_not_allowed();
@@ -88,7 +86,6 @@ $actions = null;
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-        //$actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.Security::remove_XSS($hotpotatoes_path).' ">'.Display::return_icon('save.png',   get_lang('Export'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 } else {
@@ -110,19 +107,6 @@ if ($is_allowedToEdit) {
     }
 }
 
-
-//Deleting an attempt
-//if ( ($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false) {
-//    $exe_id = intval($_GET['did']);
-//    if (!empty($exe_id)) {
-//        $sql = 'DELETE FROM '.$TBL_TRACK_EXERCICES.' WHERE exe_id = '.$exe_id;
-//        Database::query($sql);
-//        $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
-//        Database::query($sql);
-//        header('Location: exercise_report.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&exerciseId='.$exercise_id);
-//        exit;
-//    }
-//}
 $nameTools = get_lang('Results');
 
 if ($is_allowedToEdit || $is_tutor) {
@@ -219,7 +203,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('Actions')
     );
 
-  //Column config
+  // Column config
   // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
 	$column_model   = array(
         array('name'=>'firstname',      'index'=>'firstname',		'width'=>'50',   'align'=>'left', 'search' => 'false'),

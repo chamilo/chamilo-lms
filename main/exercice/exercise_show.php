@@ -56,7 +56,6 @@ if (empty($objExercise)) {         $objExercise    = isset($_SESSION['objExercis
 if (empty($exeId)) {               $exeId          = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;}
 if (empty($action)) {              $action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;}
 
-
 $id = intval($_REQUEST['id']); //exe id
 
 if (empty($id)) {
@@ -216,19 +215,23 @@ $arrques = array();
 $arrans  = array();
 
 $user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($student_id)." ";
-$query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as attempts
-				INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices ON stats_exercices.exe_id=attempts.exe_id
-				INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions
-				    ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id
-				    AND quizz_rel_questions.question_id = attempts.question_id
-				    AND quizz_rel_questions.c_id=".api_get_course_int_id()."
-				INNER JOIN ".$TBL_QUESTIONS." AS questions
-				    ON questions.id=quizz_rel_questions.question_id
-				    AND questions.c_id = ".api_get_course_int_id()."
-		  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
-		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
+$sql = "SELECT attempts.question_id, answer
+        FROM ".$TBL_TRACK_ATTEMPT." as attempts
+        INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices
+        ON stats_exercices.exe_id=attempts.exe_id
+        INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions
+        ON
+            quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND
+            quizz_rel_questions.question_id = attempts.question_id AND
+            quizz_rel_questions.c_id=".api_get_course_int_id()."
+        INNER JOIN ".$TBL_QUESTIONS." AS questions
+        ON
+            questions.id=quizz_rel_questions.question_id AND
+            questions.c_id = ".api_get_course_int_id()."
+        WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
+		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 
-$result = Database::query($query);
+$result = Database::query($sql);
 
 $question_list_from_database = array();
 $exerciseResult = array();
@@ -242,11 +245,11 @@ while ($row = Database::fetch_array($result)) {
 if (!empty($track_exercise_info['data_tracking'])) {
 	$temp_question_list = explode(',', $track_exercise_info['data_tracking']);
 
-    //Getting question list from data_tracking
+    // Getting question list from data_tracking
     if (!empty($temp_question_list)) {
         $questionList = $temp_question_list;
     }
-    //If for some reason data_tracking is empty we select the question list from db
+    // If for some reason data_tracking is empty we select the question list from db
     if (empty($questionList)) {
         $questionList = $question_list_from_database;
     }
@@ -267,10 +270,9 @@ foreach ($questionList as $questionId) {
     $objQuestionTmp     = Question::read($questionId);
     $total_weighting  +=$objQuestionTmp->selectWeighting();
 }
+
 $counter = 1;
-
 $exercise_content = null;
-
 $category_list = array();
 
 foreach ($questionList as $questionId) {
@@ -626,7 +628,6 @@ foreach ($questionList as $questionId) {
     $exercise_content .= $question_content;
 } // end of large foreach on questions
 
-
 $total_score_text = null;
 
 //Total score
@@ -644,8 +645,10 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 
 if (!empty($category_list) && ($show_results || $show_only_total_score)) {
     //Adding total
-    $category_list['total'] = array('score' => $my_total_score_temp, 'total' => $totalWeighting);
-
+    $category_list['total'] = array(
+        'score' => $my_total_score_temp,
+        'total' => $totalWeighting
+    );
     echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
 }
 
@@ -712,7 +715,7 @@ if ($origin != 'learnpath') {
 	}
 }
 
-//destroying the session
+// Destroying the session
 Session::erase('questionList');
 unset ($questionList);
 

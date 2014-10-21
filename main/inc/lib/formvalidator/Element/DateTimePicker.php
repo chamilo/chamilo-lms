@@ -7,28 +7,30 @@ require_once 'HTML/QuickForm/date.php';
  */
 class DateTimePicker extends HTML_QuickForm_text
 {
-	/**
-	 * Constructor
-	 */
-	public function DateTimePicker($elementName = null, $elementLabel = null, $attributes = null)
-	{
+    /**
+     * Constructor
+     */
+    public function DateTimePicker($elementName = null, $elementLabel = null, $attributes = null)
+    {
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
         }
 
-		HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
-		$this->_appendName = true;
-		$this->_type = 'date_time_picker';
-	}
+        HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        $this->_appendName = true;
+        $this->_type = 'date_time_picker';
+    }
 
-	/**
-	 * HTML code to display this datepicker
-	 */
-	public function toHtml()
-	{
-		$js = $this->getElementJS();
-		return $js.parent::toHtml();
-	}
+    /**
+     * HTML code to display this datepicker
+     * @return string
+     */
+    public function toHtml()
+    {
+        $js = $this->getElementJS();
+
+        return $js.parent::toHtml();
+    }
 
     /**
      * @param string $value
@@ -43,11 +45,12 @@ class DateTimePicker extends HTML_QuickForm_text
         );
     }
 
-	/**
-	 * Get the necessary javascript for this datepicker
-	 */
-	private function getElementJS()
-	{
+    /**
+     * Get the necessary javascript for this datepicker
+     * @return string
+     */
+    private function getElementJS()
+    {
         $js = null;
         $id = $this->getAttribute('id');
         //timeFormat: 'hh:mm'
@@ -60,6 +63,6 @@ class DateTimePicker extends HTML_QuickForm_text
             });
         </script>";
 
-		return $js;
-	}
+        return $js;
+    }
 }

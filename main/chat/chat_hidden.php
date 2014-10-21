@@ -7,9 +7,6 @@
  *	@author Olivier Brouckaert
  *	@package chamilo.chat
  */
-/**
- * Code
- */
 
 define('FRAME', 'hidden');
 
@@ -19,12 +16,12 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once 'chat_functions.lib.php';
 
-$tbl_user 				= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_chat_connected 	= Database::get_course_table(TABLE_CHAT_CONNECTED);
-
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
+$userId = api_get_user_id();
 $course_id = api_get_course_int_id();
 
-$query = "SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
+$query = "SELECT username FROM $tbl_user WHERE user_id='".$userId."'";
 $result = Database::query($query);
 
 list($pseudo_user) = Database::fetch_row($result);
@@ -76,26 +73,30 @@ if (file_exists($file)) {
     $chat_size_new = filesize($file);
 }
 
-$sql = "SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$_user['user_id']."' $extra_condition";
+$sql = "SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$userId."' $extra_condition";
 $result = Database::query($sql);
 
 // The user_id exists so we must do an UPDATE and not a INSERT
 $current_time = date('Y-m-d H:i:s');
 if (Database::num_rows($result) == 0) {
-	$query = "INSERT INTO $tbl_chat_connected(c_id, user_id,last_connection,session_id,to_group_id) VALUES($course_id, '".$_user['user_id']."','$current_time','$session_id','$group_id')";
+	$query = "INSERT INTO $tbl_chat_connected(c_id, user_id,last_connection,session_id,to_group_id)
+	          VALUES($course_id, '".$userId."','$current_time','$session_id','$group_id')";
 } else {
-	$query = "UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE c_id = $course_id AND user_id='".$_user['user_id']."' AND session_id='$session_id' AND to_group_id='$group_id'";
+	$query = "UPDATE $tbl_chat_connected set last_connection='".$current_time."'
+	          WHERE c_id = $course_id AND user_id='".$userId."' AND session_id='$session_id' AND to_group_id='$group_id'";
 }
 
 Database::query($query);
 
-$query = "SELECT COUNT(user_id) FROM $tbl_chat_connected WHERE last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' $extra_condition";
+$query = "SELECT COUNT(user_id) FROM $tbl_chat_connected
+          WHERE last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' $extra_condition";
 $result = Database::query($query);
 
 $connected_old = isset($_POST['connected_old']) ? intval($_POST['connected_old']) : null;
 list($connected_new) = Database::fetch_row($result);
+
 /*disconnected user of chat*/
-disconnect_user_of_chat ();
+disconnect_user_of_chat();
 require 'header_frame.inc.php';
 ?>
 <form name="formHidden" method="post" action="<?php echo api_get_self().'?'.api_get_cidreq(); ?>">

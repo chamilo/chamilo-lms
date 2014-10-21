@@ -1,24 +1,26 @@
 <?php
 
 $strings['plugin_title'] = "Course legal agreement";
-$strings['plugin_comment'] = "Add a legal agreement per course and even course in a session";
+$strings['plugin_comment'] = "Add a legal agreement per course (also works with courses in sessions)";
+$strings['tool_enable'] = 'Enable plugin';
+$strings['tool_enable_help'] = 'Once enabled, you will have to configure the plugin inside the course configuration, then from the course homepage (a button will appear there only for the teacher)';
 
 $strings['CourseLegal'] = 'Course legal agreement';
 $strings['WebAgreement'] = 'Web agreement';
-$strings['MailAgreement'] = 'Mail agreement';
-$strings['MailAgreementWasSentWithClickX'] = 'Click to the link below to agree with the terms and conditions of course %s: <br /> %s';
-$strings['AgreementUpdated'] = 'Agreement Updated';
-$strings['AgreementWasUpdatedClickHere'] = 'Agreement was updated click here %s';
-$strings['YouNeedToConfirmYourAgreementCheckYourEmail'] = 'You need to confirm your agreement check your email.';
-$strings['DeleteFile'] = 'Delete file';
-$strings['RemoveAllUserAgreements'] = 'Remove all user agreements';
-$strings['WarnAllUsersByEmail'] = 'Warn all users by email';
-$strings['WarnAllUsersByEmailAndSendAttachment'] = 'Warn all users by email and send the attachment.';
-$strings['ReSendMailAgreementLink'] = 'Re send mail agreement link';
-$strings['SendOnlyWarning'] = 'Send only warning';
-$strings['SendAgreementFile'] = 'Send warning and attach the agreement';
-$strings['NoSendWarning'] = 'No send warning';
-$strings['TheAgreementIsAttachedInThisEmail'] = 'A copy of the agreement is attached in this email';
+$strings['MailAgreement'] = 'Agreement by e-mail';
+$strings['MailAgreementWasSentWithClickX'] = 'Click on the link below to agree with the terms and conditions to access course %s: <br /> %s';
+$strings['AgreementUpdated'] = 'Agreement updated';
+$strings['AgreementWasUpdatedClickHere'] = 'The agreement was updated. Click here: %s';
+$strings['YouNeedToConfirmYourAgreementCheckYourEmail'] = 'You need to confirm that you agree. Please check your email.';
+$strings['DeleteFile'] = 'Delete the file attachment';
+$strings['RemoveAllUserAgreements'] = 'Remove all previous user agreements';
+$strings['WarnAllUsersByEmail'] = 'Notify all users by email';
+$strings['WarnAllUsersByEmailAndSendAttachment'] = 'Notify all users by email and send them the attachment.';
+$strings['ReSendMailAgreementLink'] = 'Send e-mail agreement link again';
+$strings['SendOnlyWarning'] = 'Send only notification';
+$strings['SendAgreementFile'] = 'Send notification and attach the agreement';
+$strings['NoSendWarning'] = 'Do not send notification';
+$strings['TheAgreementIsAttachedInThisEmail'] = 'A copy of the agreement document is attached to this email';
 
 
 

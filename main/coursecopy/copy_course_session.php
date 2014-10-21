@@ -4,7 +4,7 @@
  * Copy resources from one course in a session to another one.
  *
  * @author Christian Fasanando <christian.fasanando@dokeos.com>
- * @author Julio Montoya	<gugli100@gmail.com> Lots of bug fixes/improvements
+ * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
  * @package chamilo.backup
  */
 /**
@@ -56,13 +56,13 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 function make_select_session_list($name, $sessions, $attr = array())
 {
-    $attrs = '';
+    $attributes = '';
     if (count($attr) > 0) {
         foreach ($attr as $key => $value) {
-            $attrs .= ' '.$key.'="'.$value.'"';
+            $attributes .= ' '.$key.'="'.$value.'"';
         }
     }
-    $output = '<select name="'.$name.'" '.$attrs.'>';
+    $output = '<select name="'.$name.'" '.$attributes.'>';
 
     if (count($sessions) == 0) {
         $output .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option>';
@@ -96,7 +96,7 @@ function display_form()
     $html .= '<div class="actions">';
     // Link back to the documents overview
     $html .= '<a href="../admin/index.php">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).
+        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).
         '</a>';
     $html .= '</div>';
 
@@ -131,6 +131,10 @@ function display_form()
     $html .= '<label class="checkbox"><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label><br /><br/>';
 
     $html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.get_lang('CopyCourse').'</button>';
+
+    // Add Security token
+    $html .= '<input type="hidden" value="' . Security::get_token() . '" name="sec_token">';
+
     $html .= '</form>';
 
     echo $html;
@@ -167,7 +171,9 @@ function search_courses($id_session, $type)
                 $select_destination .= '<select name="sessions_list_destination" width="380px" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';
                 foreach ($sessions as $session) {
-                    if ($id_session == $session['id']) { continue; };
+                    if ($id_session == $session['id']) {
+                        continue;
+                    };
                     if (!empty($session['category_name'])) {
                         $session['category_name'] = ' ('.$session['category_name'].') ';
                     }
@@ -218,8 +224,7 @@ function search_courses($id_session, $type)
             );
         }
     }
-
-	return $xajax_response;
+    return $xajax_response;
 }
 $xajax->processRequests();
 
@@ -271,126 +276,138 @@ if (isset($_POST['copy_only_session_items']) && $_POST['copy_only_session_items'
 }
 
 /*  MAIN CODE  */
-if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
-    (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')
+if (Security::check_token('post') && (
+        (
+            isset($_POST['action']) &&
+            $_POST['action'] == 'course_select_form'
+        ) || (
+            isset($_POST['copy_option']) &&
+            $_POST['copy_option'] == 'full_copy'
+        )
+    )
 ) {
+    // Clear token
+    Security::clear_token();
+    $destination_course = $origin_course = $destination_session = $origin_session = '';
+    if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
+        $destination_course	 	= $_POST['destination_course'];
+        $origin_course 			= $_POST['origin_course'];
+        $destination_session 	= $_POST['destination_session'];
+        $origin_session 		= $_POST['origin_session'];
 
-	$destination_course = $origin_course = $destination_session = $origin_session = '';
-
-	if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
-
-		$destination_course	 	= $_POST['destination_course'];
-		$origin_course 			= $_POST['origin_course'];
-		$destination_session 	= $_POST['destination_session'];
-		$origin_session 		= $_POST['origin_session'];
-
-		$course = CourseSelectForm::get_posted_course(
+        $course = CourseSelectForm::get_posted_course(
             'copy_course',
             $origin_session,
             $origin_course
         );
 
-		$cr = new CourseRestorer($course);
-		//$cr->set_file_option($_POST['same_file_name_option']);
-		$cr->restore($destination_course, $destination_session);
-		Display::display_confirmation_message(get_lang('CopyFinished'));
-		display_form();
-	} else {
+        $cr = new CourseRestorer($course);
+        //$cr->set_file_option($_POST['same_file_name_option']);
+        $cr->restore($destination_course, $destination_session);
+        Display::display_confirmation_message(get_lang('CopyFinished'));
+        display_form();
+    } else {
 
-		$arr_course_origin 		= array();
-		$arr_course_destination = array();
-		$destination_session 	= '';
-		$origin_session 		= '';
+        $arr_course_origin 		= array();
+        $arr_course_destination = array();
+        $destination_session 	= '';
+        $origin_session 		= '';
 
-		if (isset($_POST['SessionCoursesListOrigin'])) {
-			$arr_course_origin 		= $_POST['SessionCoursesListOrigin'];
-		}
-		if (isset($_POST['SessionCoursesListDestination'])) {
-			$arr_course_destination = $_POST['SessionCoursesListDestination'];
-		}
-		if (isset($_POST['sessions_list_destination'])) {
-			$destination_session 	= $_POST['sessions_list_destination'];
-		}
-		if (isset($_POST['sessions_list_origin'])) {
-			$origin_session 		= $_POST['sessions_list_origin'];
-		}
+        if (isset($_POST['SessionCoursesListOrigin'])) {
+            $arr_course_origin 		= $_POST['SessionCoursesListOrigin'];
+        }
+        if (isset($_POST['SessionCoursesListDestination'])) {
+            $arr_course_destination = $_POST['SessionCoursesListDestination'];
+        }
+        if (isset($_POST['sessions_list_destination'])) {
+            $destination_session 	= $_POST['sessions_list_destination'];
+        }
+        if (isset($_POST['sessions_list_origin'])) {
+            $origin_session 		= $_POST['sessions_list_origin'];
+        }
 
-		if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
-			//We need only one value
-			if (count($arr_course_origin) > 1 || count($arr_course_destination) > 1) {
-				Display::display_error_message(get_lang('YouMustSelectACourseFromOriginalSession'));
-			} else {
-				//foreach ($arr_course_origin as $course_origin) {
-				//first element of the array
-				$course_code = $arr_course_origin[0];
-				$course_destinatination = $arr_course_destination[0];
+        if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
+            //We need only one value
+            if (count($arr_course_origin) > 1 || count($arr_course_destination) > 1) {
+                Display::display_error_message(get_lang('YouMustSelectACourseFromOriginalSession'));
+            } else {
+                //foreach ($arr_course_origin as $course_origin) {
+                //first element of the array
+                $course_code = $arr_course_origin[0];
+                $course_destinatination = $arr_course_destination[0];
 
-				$course_origin = api_get_course_info($course_code);
-				$cb = new CourseBuilder('', $course_origin);
-				$course = $cb->build($origin_session, $course_code, $with_base_content);
-				$cr = new CourseRestorer($course);
-				$cr->restore($course_destinatination, $destination_session);
+                $course_origin = api_get_course_info($course_code);
+                $cb = new CourseBuilder('', $course_origin);
+                $course = $cb->build($origin_session, $course_code, $with_base_content);
+                $cr = new CourseRestorer($course);
+                $cr->restore($course_destinatination, $destination_session);
 
-			}
-			Display::display_confirmation_message(get_lang('CopyFinished'));
-			display_form();
-		} else {
-			Display::display_error_message(get_lang('YouMustSelectACourseFromOriginalSession'));
-			display_form();
-		}
-	}
-} elseif (isset($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
+            }
+            Display::display_confirmation_message(get_lang('CopyFinished'));
+            display_form();
+        } else {
+            Display::display_error_message(get_lang('YouMustSelectACourseFromOriginalSession'));
+            display_form();
+        }
+    }
+} elseif (Security::check_token('post') && (
+        isset($_POST['copy_option']) &&
+        $_POST['copy_option'] == 'select_items'
+    )
+) {
+    // Clear token
+    Security::clear_token();
 
-	// Else, if a CourseSelectForm is requested, show it
-	if (api_get_setting('show_glossary_in_documents') != 'none') {
-		Display::display_normal_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
-	}
+    // Else, if a CourseSelectForm is requested, show it
+    if (api_get_setting('show_glossary_in_documents') != 'none') {
+        Display::display_normal_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
+    }
 
-	$arr_course_origin 		= array();
-	$arr_course_destination = array();
-	$destination_session 	= '';
-	$origin_session 		= '';
+    $arr_course_origin 		= array();
+    $arr_course_destination = array();
+    $destination_session 	= '';
+    $origin_session 		= '';
 
-	if (isset($_POST['SessionCoursesListOrigin'])) {
-		$arr_course_origin 		= $_POST['SessionCoursesListOrigin'];
-	}
-	if (isset($_POST['SessionCoursesListDestination'])) {
-		$arr_course_destination = $_POST['SessionCoursesListDestination'];
-	}
-	if (isset($_POST['sessions_list_destination'])) {
-		$destination_session 	= $_POST['sessions_list_destination'];
-	}
-	if (isset($_POST['sessions_list_origin'])) {
-		$origin_session 		= $_POST['sessions_list_origin'];
-	}
+    if (isset($_POST['SessionCoursesListOrigin'])) {
+        $arr_course_origin 		= $_POST['SessionCoursesListOrigin'];
+    }
+    if (isset($_POST['SessionCoursesListDestination'])) {
+        $arr_course_destination = $_POST['SessionCoursesListDestination'];
+    }
+    if (isset($_POST['sessions_list_destination'])) {
+        $destination_session 	= $_POST['sessions_list_destination'];
+    }
+    if (isset($_POST['sessions_list_origin'])) {
+        $origin_session 		= $_POST['sessions_list_origin'];
+    }
 
-	if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
-		Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
-		$course_origin = api_get_course_info($arr_course_origin[0]);
-		$cb = new CourseBuilder('', $course_origin);
-		$course = $cb->build($origin_session, $arr_course_origin[0], $with_base_content);
-		//$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
-		$hidden_fields['destination_course'] 	= $arr_course_destination[0];
-		$hidden_fields['origin_course'] 		= $arr_course_origin[0];
-		$hidden_fields['destination_session'] 	= $destination_session;
-		$hidden_fields['origin_session'] 		= $origin_session;
+    if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
+        Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
+        $course_origin = api_get_course_info($arr_course_origin[0]);
+        $cb = new CourseBuilder('', $course_origin);
+        $course = $cb->build($origin_session, $arr_course_origin[0], $with_base_content);
+        //$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
+        $hidden_fields['destination_course'] 	= $arr_course_destination[0];
+        $hidden_fields['origin_course'] 		= $arr_course_origin[0];
+        $hidden_fields['destination_session'] 	= $destination_session;
+        $hidden_fields['origin_session'] 		= $origin_session;
 
-		CourseSelectForm :: display_form($course, $hidden_fields, true);
-		echo '<div style="float:right"><a href="javascript:window.back();">'.
+        CourseSelectForm :: display_form($course, $hidden_fields, true);
+        echo '<div style="float:right"><a href="javascript:window.back();">'.
             Display::return_icon(
                 'back.png',
                 get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin'),
                 array('style' => 'vertical-align:middle')
             ).
             get_lang('Back').'</a></div>';
-	} else {
-		Display::display_error_message(
+    } else {
+        Display::display_error_message(
             get_lang('You must select a course from original session and select a destination session')
         );
-		display_form();
-	}
+        display_form();
+    }
 } else {
-	display_form();
+    display_form();
 }
 
 Display::display_footer();

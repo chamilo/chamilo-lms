@@ -53,7 +53,7 @@ switch ($action) {
         $mailTemplate = $objTemplate->get_template('mail/subscribe_me_to_session.tpl');
 
         $emailDest = api_get_setting('emailAdministrator');
-        $emailTitle = get_lang('SubscribeToSession');
+        $emailTitle = get_lang('SubscribeToSessionRequest');
         $emailText = $objTemplate->fetch($mailTemplate);
         break;
     default:

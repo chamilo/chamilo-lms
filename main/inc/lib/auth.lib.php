@@ -391,12 +391,13 @@ class Auth
 
     /**
      * Counts the number of courses in a given course category
-     * @param   string  $categoryCode Category code
+     * @param   string $categoryCode Category code
+     * @param $searchTerm
      * @return  int     Count of courses
      */
-    public function count_courses_in_category($categoryCode)
+    public function count_courses_in_category($categoryCode, $searchTerm = '')
     {
-        return countCoursesInCategory($categoryCode);
+        return countCoursesInCategory($categoryCode, $searchTerm);
     }
 
     /**
@@ -410,25 +411,31 @@ class Auth
 
     /**
      * Display all the courses in the given course category. I could have used a parameter here
-     * @param   string  $categoryCode Category code
-     * @return  array   Courses data
+     * @param string $categoryCode Category code
+     * @param int $randomValue
+     * @param array $limit will be used if $random_value is not set.
+     * This array should contains 'start' and 'length' keys
+     * @return array Courses data
      */
-    public function browse_courses_in_category($categoryCode, $randomValue = null)
+    public function browse_courses_in_category($categoryCode, $randomValue = null, $limit = array())
     {
-        return browseCoursesInCategory($categoryCode, $randomValue);
+        return browseCoursesInCategory($categoryCode, $randomValue, $limit);
     }
 
     /**
      * Search the courses database for a course that matches the search term.
      * The search is done on the code, title and tutor field of the course table.
-     * @param string $search_term: the string that the user submitted, what we are looking for
+     * @param string $search_term : the string that the user submitted, what we are looking for
+     * @param array $limit
      * @return array an array containing a list of all the courses (the code, directory, dabase, visual_code, title, ... ) matching the the search term.
      */
-    public function search_courses($search_term)
+    public function search_courses($search_term, $limit)
     {
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+
+        $limitFilter = getLimitFilterFromArray($limit);
 
         // get course list auto-register
         $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id =  tcf.id
@@ -447,16 +454,25 @@ class Auth
         }
 
         $search_term_safe = Database::escape_string($search_term);
-        $sql_find = "SELECT * FROM $TABLECOURS WHERE (code LIKE '%" . $search_term_safe . "%' OR title LIKE '%" . $search_term_safe . "%' OR tutor_name LIKE '%" . $search_term_safe . "%') $without_special_courses ORDER BY title, visual_code ASC";
+        $sql_find = "SELECT * FROM $TABLECOURS WHERE (code LIKE '%" .
+            $search_term_safe . "%' OR title LIKE '%" . $search_term_safe .
+            "%' OR tutor_name LIKE '%" . $search_term_safe . "%')" .
+            $without_special_courses . "ORDER BY title, visual_code ASC " .
+            $limitFilter;
 
         global $_configuration;
         if ($_configuration['multiple_access_urls']) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql_find = "SELECT * FROM $TABLECOURS as course INNER JOIN $tbl_url_rel_course as url_rel_course
-                                        ON (url_rel_course.course_code=course.code)
-                                        WHERE access_url_id = $url_access_id AND  (code LIKE '%" . $search_term_safe . "%' OR title LIKE '%" . $search_term_safe . "%' OR tutor_name LIKE '%" . $search_term_safe . "%' ) $without_special_courses ORDER BY title, visual_code ASC ";
+                $sql_find = "SELECT * FROM $TABLECOURS as course INNER JOIN" .
+                    $tbl_url_rel_course . "as url_rel_course ON
+                    (url_rel_course.course_code=course.code) WHERE access_url_id = " .
+                    $url_access_id . "AND (code LIKE '%" . $search_term_safe . "%'
+                    OR title LIKE '%" . $search_term_safe . "%'
+                    OR tutor_name LIKE '%" . $search_term_safe . "%' )
+                    $without_special_courses ORDER BY title, visual_code ASC " .
+                    $limitFilter;
             }
         }
         $result_find = Database::query($sql_find);
@@ -535,13 +551,14 @@ class Auth
             return array('message' => $message, 'content' => $content);
         }
     }
-    
+
     /**
-     * List the sessions 
+     * List the sessions
      * @param date $date (optional) The date of sessions
+     * @param array $limit
      * @return array The session list
      */
-    public function browseSessions($date = null)
+    public function browseSessions($date = null, $limit = array())
     {
         require_once api_get_path(LIBRARY_PATH) . 'sessionmanager.lib.php';
 
@@ -551,18 +568,24 @@ class Auth
         $sessionsToBrowse = array();
         $userId = api_get_user_id();
 
+        $limitFilter = getLimitFilterFromArray($limit);
+
         $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username "
                 . "FROM $sessionTable AS s "
                 . "INNER JOIN $userTable AS u "
-                . "ON s.id_coach = u.user_id ";
+                . "ON s.id_coach = u.user_id "
+                . "WHERE 1 = 1 ";
 
         if (!is_null($date)) {
             $date = Database::escape_string($date);
             
-            $sql .= "WHERE ('$date' BETWEEN s.date_start AND s.date_end) "
+            $sql .= "AND ('$date' BETWEEN s.date_start AND s.date_end) "
                     . "OR (s.date_end = '0000-00-00') "
                     . "OR (s.date_start = '0000-00-00' AND s.date_end != '0000-00-00' AND s.date_end > '$date')";
         }
+
+        // Add limit filter to do pagination
+        $sql .= $limitFilter;
 
         $sessionResult = Database::query($sql);
 
@@ -579,5 +602,31 @@ class Auth
         }
 
         return $sessionsToBrowse;
+    }
+
+    /**
+     * Return a COUNT from Session table
+     * @param date $date in Y-m-d format
+     * @return int
+     */
+    function countSessions($date = null)
+    {
+        $count = 0;
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $date = Database::escape_string($date);
+        $dateFilter = '';
+        if (!empty($date)) {
+            $dateFilter = ' AND ("' . $date . '" BETWEEN s.date_start AND s.date_end) ' .
+                'OR (s.date_end = "0000-00-00") ' .
+                'OR (s.date_start = "0000-00-00" AND ' .
+                's.date_end != "0000-00-00" AND s.date_end > "' . $date . '") ';
+        }
+        $sql = "SELECT COUNT(*) FROM $sessionTable s WHERE 1 = 1 $dateFilter";
+        $res = Database::query($sql);
+        if ($res !== false && Database::num_rows($res) > 0) {
+            $count = current(Database::fetch_row($res));
+        }
+
+        return $count;
     }
 }

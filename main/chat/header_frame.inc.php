@@ -7,28 +7,25 @@
  * Modified by Denes Nagy
  * @package chamilo.chat
  */
-/**
- * Code
- */
 if (!defined('FRAME')) {
-	exit();
+    exit();
 }
 
 $bodyXtra = ' class="course_chat" dir="'.api_get_text_direction().'" ';
 
 if (FRAME == 'hidden') {
-	$bodyXtra .= 'onload="javascript: updateChat(); updateConnected(); setTimeout(\'submitHiddenForm();\', 5000);"';
-	// Change timeout to change refresh time of the chat window
+    $bodyXtra .= 'onload="javascript: updateChat(); updateConnected(); setTimeout(\'submitHiddenForm();\', 5000);"';
+    // Change timeout to change refresh time of the chat window
 } elseif (FRAME == 'message') {
-	$bodyXtra .= 'onload="javascript: eventMessage();"';
+    $bodyXtra .= 'onload="javascript: eventMessage();"';
 }
 
 $mycourseid=api_get_cidreq();
 if (empty($mycourseid)) {
-	// If it is not set $mycourse id we reload the chat_message window in order to hide the textarea to submit a message.
-	echo '<script type="text/javascript" language="javascript">';
-	echo "parent.chat_message.location.href='chat_whoisonline.php?".api_get_cidreq()."';";
-	echo '</script>';
+    // If it is not set $mycourse id we reload the chat_message window in order to hide the textarea to submit a message.
+    echo '<script type="text/javascript" language="javascript">';
+    echo "parent.chat_message.location.href='chat_whoisonline.php?".api_get_cidreq()."';";
+    echo '</script>';
 }
 
 /*

@@ -386,9 +386,8 @@ class Testcategory
     * tabres[24] = array of question id with category id = 24
     * In this version, a question has 0 or 1 category
     */
-    public function getQuestionsByCat($in_exerciceId)
+    public static function getQuestionsByCat($in_exerciceId)
     {
-		$tabres = array();
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $in_exerciceId = intval($in_exerciceId);
@@ -401,20 +400,21 @@ class Testcategory
                     eq.c_id=qrc.c_id
                 ORDER BY category_id, question_id";
 		$res = Database::query($sql);
+        $list = array();
 		while ($data = Database::fetch_array($res)) {
-			if (!is_array($tabres[$data['category_id']])) {
-				$tabres[$data['category_id']] = array();
+			if (!isset($tabres[$data['category_id']])) {
+                $list[$data['category_id']] = array();
 			}
-			$tabres[$data['category_id']][] = $data['question_id'];
+            $list[$data['category_id']][] = $data['question_id'];
 		}
 
-		return $tabres;
+		return $list;
 	}
 
 	/**
 	 * return a tab of $in_number random elements of $in_tab
 	 */
-    public function getNElementsFromArray($in_tab, $in_number)
+    public static function getNElementsFromArray($in_tab, $in_number)
     {
 		$tabres = $in_tab;
 		shuffle($tabres);
@@ -473,7 +473,7 @@ class Testcategory
 	 * value is the array of question id of this category
 	 * Sort question by Category
 	*/
-    public function sortTabByBracketLabel($in_tab)
+    public static function sortTabByBracketLabel($in_tab)
     {
 		$tabResult = array();
 		$tabCatName = array();	// tab of category name

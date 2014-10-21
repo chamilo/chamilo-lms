@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$SearchSessions = "Procura de sessões";
 $CasMainActivateComment = "Ativando a autenticação CAS permitirá aos usuários se autenticarem com as credenciais CAS deles. Pode ir à seção Plugin para adicionar um botão de \"Login CAS\" configurável no seu campus Chamilo.";
 $UsersRegisteredInAnyGroup = "Usuários cadastrados em qualquer grupo";
 $ShowHotCoursesComment = "A lista de cursos populares será adicionada na página índice";

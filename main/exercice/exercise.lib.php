@@ -1053,7 +1053,8 @@ function get_exam_results_hotpotatoes_data(
     $where_condition = null
 ) {
     $course_code = api_get_course_id();
-    // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
+    /* by default in_column = 1 If parameters given,
+    it is the name of the column witch is the bdd field name*/
     if ($in_column == 1) {
         $in_column = 'firstname';
     }
@@ -1105,7 +1106,44 @@ function get_exam_results_hotpotatoes_data(
             'actions' => $actions,
         );
     }
+
     return $result;
+}
+
+/**
+ * @param string $exercisePath
+ * @param int $userId
+ * @param int $courseId
+ * @param int $sessionId
+ *
+ * @return array
+ */
+function getLatestHotPotatoResult(
+    $exercisePath,
+    $userId,
+    $courseId,
+    $sessionId)
+{
+    $table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+
+    $courseInfo = api_get_course_info_by_id($courseId);
+    $courseCode = $courseInfo['code'];
+    $exercisePath = Database::escape_string($exercisePath);
+    $userId = intval($userId);
+
+    $sql = "SELECT * FROM $table
+            WHERE
+                exe_cours_id = '$courseCode' AND
+                exe_name LIKE '$exercisePath%' AND
+                exe_user_id = $userId
+            ORDER BY id
+            LIMIT 1";
+    $result = Database::query($sql);
+    $attempt = array();
+    if (Database::num_rows($result)) {
+        $attempt = Database::fetch_array($result, 'ASSOC');
+    }
+    return $attempt;
 }
 
 /**

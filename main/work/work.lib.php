@@ -257,6 +257,7 @@ function get_work_data_by_id($id, $courseId = null, $sessionId = null)
             }
         }
     }
+
     return $work;
 }
 
@@ -1185,6 +1186,7 @@ function updateWorkUrl($id, $new_path, $parent_id)
 function updateDirName($work_data, $newPath)
 {
     $course_id = $work_data['c_id'];
+    $sessionId = intval($work_data['session_id']);
     $courseInfo = api_get_course_info_by_id($course_id);
 
     $work_id = intval($work_data['id']);
@@ -1204,8 +1206,12 @@ function updateDirName($work_data, $newPath)
         my_rename($base_work_dir.$oldPath, $newPath);
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-        //update all the files in the other directories according with the next query
-        $sql = "SELECT id, url FROM $table WHERE c_id = $course_id AND parent_id = $work_id";
+        // Update all the files in the other directories according with the next query
+        $sql = "SELECT id, url FROM $table
+                WHERE
+                    c_id = $course_id AND
+                    parent_id = $work_id AND
+                    session_id = $sessionId";
         $result = Database::query($sql);
         $work_len = strlen('work/'.$path);
 
@@ -1213,12 +1219,22 @@ function updateDirName($work_data, $newPath)
             $new_dir = $work['url'];
             $name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
             $name = Database::escape_string('work/'.$newPath.'/'.$name_with_directory);
-            $sql = 'UPDATE '.$table.' SET url= "'.$name.'" WHERE c_id = '.$course_id.' AND id = '.$work['id'];
+            $sql = 'UPDATE '.$table.'
+                    SET url= "'.$name.'"
+                    WHERE
+                        c_id = '.$course_id.' AND
+                        id = '.$work['id'].' AND
+                        session_id = '.$sessionId;
             Database::query($sql);
         }
 
-        $sql = "UPDATE $table SET url= '/".$newPath."', title = '".$originalNewPath."'
-                WHERE c_id = $course_id AND id = $work_id";
+        $sql = "UPDATE $table SET
+                    url= '/".$newPath."',
+                    title = '".$originalNewPath."'
+                WHERE
+                    c_id = $course_id AND
+                    id = $work_id AND
+                    session_id = $sessionId";
         Database::query($sql);
     }
 }
@@ -1655,8 +1671,8 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
         $work['others'] = Display::url(Display::return_icon('group.png', get_lang('Others')), $urlOthers.$work['id']);
         $works[] = $work;
     }
-    return $works;
 
+    return $works;
 }
 
 /**
@@ -1679,7 +1695,7 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
     $group_id           = api_get_group_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-    if (!in_array($direction, array('asc','desc'))) {
+    if (!in_array($direction, array('asc', 'desc'))) {
         $direction = 'desc';
     }
 
@@ -1719,7 +1735,6 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
             $workId = $work['id'];
             $work['type'] = Display::return_icon('work.png');
             $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
-            //$work['ends_on'] = $work['ends_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['ends_on']);
 
             $totalUsers = getStudentSubscribedToWork(
                 $workId,
@@ -2860,8 +2875,13 @@ function userIsSubscribedToWork($userId, $workId, $courseId)
  * @param bool $getCount Whether we want just the amount or the full result
  * @return array|int An integer (if we just asked for the count) or an array of users
  */
-function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessionId = null, $getCount = false)
-{
+function getStudentSubscribedToWork(
+    $workId,
+    $courseId,
+    $groupId = null,
+    $sessionId = null,
+    $getCount = false
+) {
     $usersInWork = null;
     $usersInCourse = null;
 
@@ -2872,7 +2892,7 @@ function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessio
             $sessionId,
             null,
             null,
-            STUDENT,
+            0,
             $getCount
         );
     } else {
@@ -2888,6 +2908,7 @@ function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessio
 
     if (ADD_DOCUMENT_TO_WORK == true) {
         $usersInWork = getAllUserToWork($workId, $courseId, $getCount);
+
         if (empty($usersInWork)) {
             return $usersInCourse;
         } else {
@@ -3519,9 +3540,9 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
     $course_id = $courseInfo['real_id'];
 
-    $directory      = replace_dangerous_char($params['new_dir']);
-    $directory      = disable_dangerous_file($directory);
-    $created_dir    = create_unexisting_work_directory($base_work_dir, $directory);
+    $directory = replace_dangerous_char($params['new_dir']);
+    $directory = disable_dangerous_file($directory);
+    $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
 
     if (!empty($created_dir)) {
         $dir_name_sql = '/'.$created_dir;
@@ -3592,20 +3613,26 @@ function agendaExistsForWork($workId, $courseInfo)
  * @param int $workId
  * @param array $params
  * @param array $courseInfo
+ * @param int $sessionId
  */
-function updateWork($workId, $params, $courseInfo)
+function updateWork($workId, $params, $courseInfo, $sessionId = 0)
 {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $filteredParams = array(
         'description' => $params['description'],
         'qualification' => $params['qualification'],
         'weight' => $params['weight'],
-        'allow_text_assignment' => $params['allow_text_assignment'],
+        'allow_text_assignment' => $params['allow_text_assignment']
     );
+
     Database::update(
         $workTable,
         $filteredParams,
-        array('id = ? AND c_id = ?' => array($workId, $courseInfo['real_id']))
+        array(
+            'id = ? AND c_id = ? AND session_id = ? ' => array(
+                $workId, $courseInfo['real_id'], $sessionId
+            )
+        )
     );
 }
 

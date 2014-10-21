@@ -31,9 +31,7 @@
  *
  * @package chamilo.document
  */
-/**
- * Code
- */
+
 // Name of the language file that needs to be included
 $language_file = array('document','gradebook');
 
@@ -50,7 +48,7 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'
 $htmlHeadXtra[] = '<script>
 
 function check_unzip() {
-    if(document.upload.unzip.checked){
+    if (document.upload.unzip.checked){
         document.upload.if_exists[0].disabled=true;
         document.upload.if_exists[1].checked=true;
         document.upload.if_exists[2].disabled=true;
@@ -62,9 +60,9 @@ function check_unzip() {
     }
 
 function advanced_parameters() {
-    if(document.getElementById(\'options\').style.display == \'none\') {
-    document.getElementById(\'options\').style.display = \'block\';
-    document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+    if (document.getElementById(\'options\').style.display == \'none\') {
+        document.getElementById(\'options\').style.display = \'block\';
+        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
     } else {
         document.getElementById(\'options\').style.display = \'none\';
         document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
@@ -109,19 +107,35 @@ $base_work_dir = $sys_course_path.$courseDir;
 $sessionId = api_get_session_id();
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 
-$document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true, $sessionId);
+$document_data = DocumentManager::get_document_data_by_id(
+    $_REQUEST['id'],
+    api_get_course_id(),
+    true,
+    $sessionId
+);
+
 if ($sessionId != 0 && !$document_data) {
-    $document_data  = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true, 0);
+    $document_data = DocumentManager::get_document_data_by_id(
+        $_REQUEST['id'],
+        api_get_course_id(),
+        true,
+        0
+    );
 }
+
 if (empty($document_data)) {
     $document_id  = $parent_id =  0;
     $path = '/';
 } else {
-    $document_id    = $document_data['id'];
-    $path           = $document_data['path'];
-    $parent_id      = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
+    $document_id = $document_data['id'];
+    $path = $document_data['path'];
+    $parent_id = DocumentManager::get_document_id(
+        api_get_course_info(),
+        dirname($path)
+    );
 }
 $group_properties = array();
+
 // This needs cleaning!
 if (api_get_group_id()) {
     // If the group id is set, check if the user has the right to be here
@@ -130,7 +144,8 @@ if (api_get_group_id()) {
     // Get group info
     $group_properties = GroupManager::get_group_properties(api_get_group_id());
 
-    if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], api_get_group_id())) { // Only courseadmin or group members allowed
+    // Only courseadmin or group members allowed
+    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())) {
         $to_group_id = api_get_group_id();
         $req_gid = '&amp;gidReq='.api_get_group_id();
         $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace'));
@@ -142,7 +157,8 @@ if (api_get_group_id()) {
     // Admin for "regular" upload, no group documents. And check if is my shared folder
     $to_group_id = 0;
     $req_gid = '';
-} else { // No course admin and no group member...
+} else {
+    // No course admin and no group member...
     api_not_allowed(true);
 }
 
@@ -161,7 +177,8 @@ if ($is_certificate_array[0] == 'certificates') {
 
 // Title of the tool
 $add_group_to_title = null;
-if ($to_group_id != 0) { // Add group name after for group documents
+if ($to_group_id != 0) {
+    // Add group name after for group documents
     $add_group_to_title = ' ('.$group_properties['name'].')';
 }
 if (isset($_REQUEST['certificate'])) {
@@ -195,7 +212,16 @@ Display::display_header($nameTools, 'Doc');
 
 // User has submitted a file
 if (!empty($_FILES)) {
-    DocumentManager::upload_document($_FILES, $_POST['curdirpath'], $_POST['title'], $_POST['comment'], $_POST['unzip'], $_POST['if_exists'], $_POST['index_document'], true);
+    DocumentManager::upload_document(
+        $_FILES,
+        $_POST['curdirpath'],
+        $_POST['title'],
+        $_POST['comment'],
+        $_POST['unzip'],
+        $_POST['if_exists'],
+        $_POST['index_document'],
+        true
+    );
 }
 
 // Actions
@@ -215,7 +241,11 @@ echo '</div>';
 // Form to select directory
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 if (!$is_certificate_mode) {
-    echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()));
+    echo build_directory_selector(
+        $folders,
+        $document_id,
+        (isset($group_properties['directory']) ? $group_properties['directory'] : array())
+    );
 }
 
 $action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
@@ -225,11 +255,9 @@ $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 
 $course_quota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
-
 $label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.$course_quota;
 
 $form->addElement('file', 'file', array(get_lang('File'), $label), 'style="width: 250px" id="user_upload"');
-
 $form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
 $form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');
 
@@ -274,8 +302,6 @@ $simple_form = $form->return_form();
 
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
-//Adding icon replace the  <div>'.get_lang('UploadFiles').'</div> with this:
-//<div style="width:50%;margin:0 auto;"> '.Display::div(Display::return_icon('folder_document.png', '', array(), 64), array('style'=>'float:left')).' '.get_lang('UploadFiles').'</div>
 $multiple_form .=  '
     <center>
     <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">

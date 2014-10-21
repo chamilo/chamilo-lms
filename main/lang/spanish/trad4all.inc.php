@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchActiveSessions = "Buscar sesiones activas";
 $UserNameHasDash = "El nombre de usuario no puede contener el caracter '-'";
 $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "Si desea sólo números enteros escriba ambos límites sin decimales";
 $GiveAnswerVariations = "Por favor, escriba cuántos problemas desea generar";
@@ -137,6 +138,7 @@ $RegisteredClasses = "Clases subscritas";
 $DeleteItemsNotInFile = "Eliminar elementos que no se encuentran en el archivo";
 $ImportGroups = "Importar grupos";
 $HereIsYourFeedback = "Respuesta del profesor:";
+$SearchSessions = "Búsqueda de sesiones";
 $ShowSystemFolders = "Mostrar directorios del sistema.";
 $LoginToGoToThisCourse = "Conectarse para entrar al curso";
 $LoginDate = "Fecha de ingreso";
@@ -221,6 +223,7 @@ $ReplyShort = "Re:";
 $SendToAllUsers = "Enviar a todos los usuarios";
 $SelectACategory = "Seleccione una categoría";
 $AdvancedEdit = "Edición avanzada";
+$NoTimeLimits = "Sin límite de tiempo";
 $SearchXapianModuleNotInstalled = "El modulo Xapian de PHP no está configurado en su servidor, póngase en contacto con su administrador";
 $Title = "Título";
 $By = "Publicado por";
@@ -1643,8 +1646,4 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
-$FieldTypeMobilePhoneNumber = "Número de móvil"; 
-$CountryDialCode = "Incluya el prefijo de llamada del país";
-$MobilePhoneNumberWrong = "El número de móvil que ha escrito está incompleto o contiene caracteres no válidos.";
-$SessionName = "Nombre de la sesión";
 ?>

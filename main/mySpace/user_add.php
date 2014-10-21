@@ -318,12 +318,10 @@ if ($form->validate()) {
 			$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
 			Database::query($sql);
 		}
-		if (!empty ($email) && $send_mail) {
-			$emailto = '"'.api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS).'" <'.$email.'>';
-			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-			$emailheaders = 'From: '.api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS).' <'.api_get_setting('emailAdministrator').">\n";
-			$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
 
+		if (!empty ($email) && $send_mail) {
+			//$emailto = '"'.api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS).'" <'.$email.'>';
+			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
 			$portal_url = $_configuration['root_web'];
 			if ($_configuration['multiple_access_urls']) {
 				$access_url_id = api_get_current_access_url_id();
@@ -332,8 +330,14 @@ if ($form->validate()) {
 					$portal_url = $url['url'];
 				}
 			}
-			$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+			$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+
+			api_mail_html(
+                api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS),
+                $email,
+                $emailsubject,
+                $emailbody
+            );
 		}
 		Security::clear_token();
 		if (isset($user['submit_plus'])) {

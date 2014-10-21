@@ -45,6 +45,7 @@ switch ($action) {
             if (!empty($results)) {
                 foreach ($results as &$item) {
                     $item['id'] = $item['code'];
+                    $item['text'] = '('.$item['code'].') '.$item['name'];
                 }
                 echo json_encode($results);
             } else {
@@ -242,7 +243,7 @@ switch ($action) {
 
         foreach ($coursesData as $courseId => $course) {
             $coachData = SessionManager::getCoachesByCourseSession($sessionId, $course['code']);
-            
+
             $coachName = '';
 
             if (!empty($coachData)) {
@@ -254,7 +255,7 @@ switch ($action) {
 
                 $coachName = api_get_person_name($userResult['firstname'], $userResult['lastname']);
            }
-           
+
            $courses[] = array(
                'id' => $courseId,
                'name' => $course['title'],

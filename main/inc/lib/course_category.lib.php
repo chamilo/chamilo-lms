@@ -12,6 +12,7 @@ function isMultipleUrlSupport()
 
 /**
  * @param int $categoryId
+ *
  * @return array
  */
 function getCategoryById($categoryId)
@@ -28,6 +29,7 @@ function getCategoryById($categoryId)
 
 /**
  * @param string $category
+ *
  * @return array
  */
 function getCategory($category)
@@ -44,6 +46,7 @@ function getCategory($category)
 
 /**
  * @param string $category
+ *
  * @return array
  */
 function getCategories($category)
@@ -80,6 +83,7 @@ function getCategories($category)
                          t1.children_count
 				ORDER BY t1.tree_pos";
     $result = Database::query($sql);
+
     return Database::store_result($result);
 }
 
@@ -89,6 +93,7 @@ function getCategories($category)
  * @param string $name
  * @param string $canHaveCourses
  * @param int $parent_id
+ *
  * @return bool
  */
 function addNode($code, $name, $canHaveCourses, $parent_id)
@@ -98,7 +103,6 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $name = trim(Database::escape_string($name));
     $parent_id = Database::escape_string($parent_id);
     $canHaveCourses = Database::escape_string($canHaveCourses);
-
     $code = generate_course_code($code);
 
     $result = Database::query("SELECT 1 FROM $tbl_category WHERE code='$code'");
@@ -120,6 +124,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     if (isMultipleUrlSupport()) {
         addToUrl($categoryId);
     }
+
     return $categoryId;
 }
 
@@ -255,6 +260,7 @@ function compterFils($pere, $cpt)
 
 /**
  * @param string $categoryCode
+ *
  * @return array
  */
 function getChildren($categoryCode)
@@ -268,9 +274,14 @@ function getChildren($categoryCode)
         $subChildren = getChildren($row['code']);
         $children = array_merge($children, $subChildren);
     }
+
     return $children;
 }
 
+/**
+ * @param string $categoryCode
+ * @return array
+ */
 function getParents($categoryCode)
 {
     if (empty($categoryCode)) {
@@ -291,6 +302,11 @@ function getParents($categoryCode)
     }
     return $children;
 }
+
+/**
+ * @param string $categoryCode
+ * @return null|string
+ */
 function getParentsToString($categoryCode)
 {
     $parents = getParents($categoryCode);
@@ -359,6 +375,7 @@ function listCategories($categorySource)
             }
             $row++;
         }
+
         return $table->toHtml();
     } else {
         return Display::return_message(get_lang("NoCategories"), 'warning');
@@ -442,7 +459,7 @@ function browseCourseCategories()
         $url_access_id = api_get_current_access_url_id();
     }
     $countCourses = CourseManager :: countAvailableCourses($url_access_id);
-    
+
     $categories = array();
     $categories[0][0] = array(
         'id' => 0,
@@ -462,7 +479,7 @@ function browseCourseCategories()
             $categories[$row['parent_id']][$row['tree_pos']] = $row;
         }
     }
-    
+
     $count_courses = countCoursesInCategory();
 
     $categories[0][count($categories[0])+1] = array(
@@ -476,20 +493,25 @@ function browseCourseCategories()
         'auth_cat_child' => true,
         'count_courses' => $count_courses
     );
-    
+
     return $categories;
 }
 
 /**
  * @param string $category_code
+ * @param string $searchTerm
  * @return int
  */
-function countCoursesInCategory($category_code="")
+function countCoursesInCategory($category_code="", $searchTerm = '')
 {   
     global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
     $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    $categoryCode = Database::escape_string($category_code);
+    $searchTerm = Database::escape_string($searchTerm);
+    $categoryFilter = '';
+    $searchFilter = '';
 
     // get course list auto-register
     $sql = "SELECT course_code
@@ -509,7 +531,8 @@ function countCoursesInCategory($category_code="")
     if (!empty($special_course_list)) {
         $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
     }
-    
+
+    $visibilityCondition = null;
     if (isset($_configuration['course_catalog_hide_private'])) {
         if ($_configuration['course_catalog_hide_private'] == true) {
             $courseInfo = api_get_course_info();
@@ -517,8 +540,25 @@ function countCoursesInCategory($category_code="")
             $visibilityCondition = ' AND course.visibility <> 1';
         }
     }
+
+    if ($categoryCode == 'ALL') {
+        // Nothing to do
+    } elseif ($categoryCode == 'NONE') {
+        $categoryFilter =  ' AND category_code = "" ';
+    } else {
+        $categoryFilter =  ' AND category_code = "' . $categoryCode . '" ';
+    }
+
+    if (!empty($searchTerm)) {
+        $searchFilter = ' AND (code LIKE "%' . $searchTerm . '%"
+            OR title LIKE "%' . $searchTerm . '%"
+            OR tutor_name LIKE "%' . $searchTerm . '%") ';
+    }
+
     $sql = "SELECT * FROM $tbl_course
-            WHERE visibility != '0' AND visibility != '4' AND category_code" . "='" . $category_code . "'" . $without_special_courses. $visibilityCondition;
+        WHERE visibility != '0' AND visibility != '4'".
+        $categoryFilter . $searchFilter .
+        $without_special_courses . $visibilityCondition;
     // Showing only the courses of the current portal access_url_id.
 
     if (api_is_multiple_url_enabled()) {
@@ -526,20 +566,25 @@ function countCoursesInCategory($category_code="")
         if ($url_access_id != -1) {
             $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $sql = "SELECT * FROM $tbl_course as course
-                    INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.course_code=course.code)
-                    WHERE access_url_id = $url_access_id AND course.visibility != '0' AND course.visibility != '4' AND category_code" . "='" . $category_code . "'" . $without_special_courses. $visibilityCondition;
+                INNER JOIN $tbl_url_rel_course as url_rel_course
+                ON (url_rel_course.course_code=course.code)
+                WHERE access_url_id = $url_access_id AND course.visibility != '0'
+                AND course.visibility != '4' AND category_code" . "='" . $category_code . "'" .
+                $searchTerm . $without_special_courses. $visibilityCondition;
         }
     }
+
     return Database::num_rows(Database::query($sql));
 }
 
 /**
  * @param string $category_code
- * @param string $random_value
+ * @param int $random_value
+ * @param array $limit will be used if $random_value is not set.
+ * This array should contains 'start' and 'length' keys
  * @return array
  */
-function browseCoursesInCategory($category_code, $random_value = null)
+function browseCoursesInCategory($category_code, $random_value = null, $limit = array())
 {   
     global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -565,7 +610,6 @@ function browseCoursesInCategory($category_code, $random_value = null)
         $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
     }
     if (isset($_configuration['course_catalog_hide_private'])) {
-
         if ($_configuration['course_catalog_hide_private'] == true) {
             $courseInfo = api_get_course_info();
             $courseVisibility = $courseInfo['visibility'];
@@ -613,14 +657,19 @@ function browseCoursesInCategory($category_code, $random_value = null)
         }
         $sql = "SELECT * FROM $tbl_course WHERE id IN($id_in)";
     } else {
+        $limitFilter = getLimitFilterFromArray($limit);
         $category_code = Database::escape_string($category_code);
         if (empty($category_code) || $category_code == "ALL") {
-            $sql = "SELECT * FROM $tbl_course WHERE 1=1 $without_special_courses $visibilityCondition ORDER BY title ";
+            $sql = "SELECT * FROM $tbl_course
+                    WHERE 1=1 $without_special_courses $visibilityCondition
+                    ORDER BY title $limitFilter ";
         } else {
             if ($category_code == 'NONE') {
                 $category_code = '';
             }
-            $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses $visibilityCondition ORDER BY title ";
+            $sql = "SELECT * FROM $tbl_course
+                    WHERE category_code='$category_code' $without_special_courses $visibilityCondition
+                    ORDER BY title $limitFilter ";
         }
 
         //showing only the courses of the current Chamilo access_url_id
@@ -631,14 +680,14 @@ function browseCoursesInCategory($category_code, $random_value = null)
                 $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
                     WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses $visibilityCondition
-                    ORDER BY title";    
-            } else{
+                    ORDER BY title $limitFilter";
+            } else {
                 $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
                     WHERE access_url_id = $url_access_id $without_special_courses $visibilityCondition
-                    ORDER BY title";
+                    ORDER BY title $limitFilter";
             }
-            
+
         }
     }
 
@@ -647,7 +696,11 @@ function browseCoursesInCategory($category_code, $random_value = null)
     while ($row = Database::fetch_array($result)) {
         $row['registration_code'] = !empty($row['registration_code']);
         $count_users = CourseManager::get_users_count_in_course($row['code']);
-        $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+        $count_connections_last_month = Tracking::get_course_connections_count(
+            $row['code'],
+            0,
+            api_get_utc_datetime(time() - (30 * 86400))
+        );
 
         if ($row['tutor_name'] == '0') {
             $row['tutor_name'] = get_lang('NoManager');
@@ -671,7 +724,8 @@ function browseCoursesInCategory($category_code, $random_value = null)
             'count_connections' => $count_connections_last_month
         );
     }
-    return $courses;      
+
+    return $courses;
 }
 
 /**
@@ -753,8 +807,14 @@ function searchCategoryByKeyword($keyword)
 
     $keyword = Database::escape_string($keyword);
 
-    $sql = "SELECT c.*, c.name as text FROM $tableCategory c $conditions
-            WHERE (c.code LIKE '%$keyword%' or name LIKE '%$keyword%') AND auth_course_child = 'TRUE' $whereCondition ";
+    $sql = "SELECT c.*, c.name as text
+            FROM $tableCategory c $conditions
+            WHERE
+                (
+                    c.code LIKE '%$keyword%' OR name LIKE '%$keyword%'
+                ) AND
+                auth_course_child = 'TRUE'
+                $whereCondition ";
     $result = Database::query($sql);
     return Database::store_result($result, 'ASSOC');
 }
@@ -785,6 +845,229 @@ function searchCategoryById($list)
             WHERE c.id IN $list $whereCondition";
     $result = Database::query($sql);
     return Database::store_result($result, 'ASSOC');
+}
+
+/**
+ * @return array
+ */
+function getLimitArray()
+{
+    $pageCurrent = isset($_REQUEST['pageCurrent']) ?
+        intval($_GET['pageCurrent']) :
+        1;
+    $pageLength = isset($_REQUEST['pageLength']) ?
+        intval($_GET['pageLength']) :
+        10;
+    return array(
+        'start' => ($pageCurrent - 1) * $pageLength,
+        'current' => $pageCurrent,
+        'length' => $pageLength,
+    );
+}
+
+/**
+ * Return LIMIT to filter SQL query
+ * @param array $limit
+ * @return string
+ */
+function getLimitFilterFromArray($limit)
+{
+    $limitFilter = '';
+    if (!empty($limit) && is_array($limit)) {
+        $limitStart = isset($limit['start']) ? $limit['start'] : 0;
+        $limitLength = isset($limit['length']) ? $limit['length'] : 10;
+        $limitFilter = 'LIMIT ' . $limitStart . ', ' . $limitLength;
+    }
+
+    return $limitFilter;
+}
+
+/**
+ * Get Pagination HTML div
+ * @param $pageCurrent
+ * @param $pageLength
+ * @param $pageTotal
+ * @return string
+ */
+function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
+{
+    // Start empty html
+    $pageDiv = '';
+    $pageBottom = max(1, $pageCurrent - 3);
+    $pageTop = min($pageTotal, $pageCurrent + 3);
+
+    if ($pageBottom > 1) {
+        $pageDiv .= getPageNumberItem(1, $pageLength);
+        if ($pageBottom > 2) {
+            $pageDiv .= getPageNumberItem($pageBottom - 1, $pageLength, null, '...');
+        }
+    } else {
+        // Nothing to do
+    }
+
+    // For each page add its page button to html
+    for (
+        $i = $pageBottom;
+        $i <= $pageTop;
+        $i++
+    ) {
+        if ($i === $pageCurrent) {
+            $pageItemAttributes = array('class' => 'active');
+        } else {
+            $pageItemAttributes = array();
+        }
+        $pageDiv .= getPageNumberItem($i, $pageLength, $pageItemAttributes);
+
+    }
+    // Check if current page is the last page
+
+    if ($pageTop < $pageTotal) {
+        if ($pageTop < ($pageTotal - 1)) {
+            $pageDiv .= getPageNumberItem($pageTop + 1, $pageLength, null, '...');
+        }
+        $pageDiv .= getPageNumberItem($pageTotal, $pageLength);
+    } else {
+        // Nothing to do
+    }
+
+    // Complete pagination html
+    $pageDiv = Display::div(
+        Display::tag(
+            'ul',
+            $pageDiv
+        ),
+        array(
+            'class' => 'pagination pagination-centered',
+        )
+    );
+
+    return $pageDiv;
+}
+
+
+    /**
+     * Return URL to course catalog
+     * @param int $pageCurrent
+     * @param int $pageLength
+     * @param string $categoryCode
+     * @param int $hiddenLinks
+     * @param string $action
+     * @return string
+     */
+    function getCourseCategoryUrl(
+        $pageCurrent,
+        $pageLength,
+        $categoryCode = null,
+        $hiddenLinks = null,
+        $action = null
+    )
+    {
+        $action = isset($action) ? Security::remove_XSS($action) :
+            Security::remove_XSS($_REQUEST['action']);
+        // Start URL with params
+        $pageUrl = api_get_self() .
+            '?action=' . $action .
+            '&category_code=' . (
+            isset($categoryCode) ? $categoryCode :
+                Security::remove_XSS($_REQUEST['category_code'])
+            ) .
+            '&hidden_links=' . (
+            isset($hiddenLinks) ? $hiddenLinks :
+                Security::remove_XSS($_REQUEST['hidden_links'])
+            ).
+            '&pageCurrent=' . $pageCurrent .
+            '&pageLength=' . $pageLength
+        ;
+        switch ($action) {
+            case 'subscribe' :
+                // for search
+                $pageUrl .=
+                    '&search_term=' . $_REQUEST['search_term'] .
+                    '&search_course=1' .
+                    '&sec_token=' . $_SESSION['sec_token'];
+                break;
+            case 'display_courses' :
+                // No break
+            default :
+                break;
+
+        }
+
+        return $pageUrl;
+}
+
+/**
+ * Get li HTML of page number
+ * @param $pageNumber
+ * @param $pageLength
+ * @param array $liAttributes
+ * @param string $content
+ * @return string
+ */
+function getPageNumberItem($pageNumber, $pageLength, $liAttributes = array(), $content = '')
+{
+    // Get page URL
+    $url = getCourseCategoryUrl(
+        $pageNumber,
+        $pageLength
+    );
+
+    // If is current page ('active' class) clear URL
+    if (isset($liAttributes) && is_array($liAttributes)) {
+        if (strpos('active', $liAttributes['class']) !== false) {
+            $url = '';
+        }
+    }
+
+    $content = !empty($content) ? $content : $pageNumber;
+
+    return Display::tag(
+        'li',
+        Display::url(
+            $content,
+            $url
+        ),
+        $liAttributes
+    );
+}
+/**
+ * Return the name tool by action
+ * @param string $action
+ * @return string
+ */
+function getCourseCatalogNameTools($action)
+{
+
+
+    $nameTools = get_lang('SortMyCourses');
+    if (empty($action)) {
+        return $nameTools; //should never happen
+    }
+
+    switch ($action) {
+        case 'createcoursecategory' :
+            $nameTools = get_lang('CreateCourseCategory');
+            break;
+        case 'subscribe' :
+            $nameTools = get_lang('CourseManagement');
+            break;
+        case 'subscribe_user_with_password' :
+            $nameTools = get_lang('CourseManagement');
+            break;
+        case 'display_random_courses' :
+            // No break
+        case 'display_courses' :
+            $nameTools = get_lang('CourseManagement');
+            break;
+        case 'display_sessions' :
+            $nameTools = get_lang('Sessions');
+            break;
+        default :
+            // Nothing to do
+            break;
+    }
+
+    return $nameTools;
 }
 
 /**

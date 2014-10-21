@@ -102,7 +102,7 @@ define('TOOL_QUIZ', 'quiz');
 define('TOOL_TEST_CATEGORY', 'test_category');
 define('TOOL_USER', 'user');
 define('TOOL_GROUP', 'group');
-define('TOOL_BLOGS', 'blog_management'); // Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
+define('TOOL_BLOGS', 'blog_management');
 define('TOOL_CHAT', 'chat');
 define('TOOL_CONFERENCE', 'conference');
 define('TOOL_STUDENTPUBLICATION', 'student_publication');
@@ -349,9 +349,7 @@ define('CATALOG_COURSES_SESSIONS', 2);
 /**
  * Inclusion of internationalization libraries
  */
-
 require_once __DIR__.'/internationalization.lib.php';
-
 
 /* PATHS & FILES - ROUTINES */
 
@@ -791,7 +789,8 @@ function apiGetDisplayGroupsForumInGeneralTool() {
 
 /**
  * This function checks whether a given path points inside the system.
- * @param string $path      The path to be tested. It should be full path, web-absolute (WEB), semi-absolute (REL) or system-absolyte (SYS).
+ * @param string $path      The path to be tested.
+ * It should be full path, web-absolute (WEB), semi-absolute (REL) or system-absolyte (SYS).
  * @return bool             Returns true when the given path is inside the system, false otherwise.
  */
 function api_is_internal_path($path) {
@@ -944,8 +943,12 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
                 }
                 break;
         }
+
         //If password is set and user is not registered to the course then the course is not visible
-        if ($is_allowed_in_course == false & isset($course_info['registration_code']) && !empty($course_info['registration_code'])) {
+        if ($is_allowed_in_course == false &
+            isset($course_info['registration_code']) &&
+            !empty($course_info['registration_code'])
+        ) {
             $is_visible = false;
         }
     }
@@ -1518,9 +1521,11 @@ function api_format_course_array($course_data) {
     $_course['directory'    ]         = $course_data['directory'      ];
 
     //@todo should be deprecated
-    $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
+    // Use as key in db list.
+    $_course['dbName'       ]         = $course_data['db_name'        ];
     $_course['db_name'      ]         = $course_data['db_name'         ];
-    $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
+    // Use in all queries.
+    $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue'];
 
     $_course['titular'      ]         = $course_data['tutor_name'     ];
     $_course['language'     ]         = $course_data['course_language'];
@@ -1557,12 +1562,11 @@ function api_format_course_array($course_data) {
         $url_image = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true);
     }
     $_course['course_image'] = $url_image;
+
     return $_course;
 }
 
-
 /* SESSION MANAGEMENT */
-
 /*
  * DEPRECATED: @see Session
  */
@@ -3226,10 +3230,22 @@ function api_not_allowed($print_headers = false, $message = null)
         $tpl->display_one_col_template();
         exit;
     }
+
     $msg = null;
-    // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
-    if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
-        $msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
+    /* Check if the cookies are enabled. If are enabled and if no course Id was
+       included in the requested URL, then the user has either lost his session
+       or is anonymous, so redirect to homepage
+    */
+    if (!isset($_COOKIE['TestCookie']) ||
+        isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie'])
+    ) {
+        $msg = Display::return_message(
+            get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.
+            get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error',
+            false
+        );
+        // Set cookie again.
+        setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
     } else {
         // The session is over and we were not in a course,
         // or we try to get directly to a private course without being logged
@@ -3269,7 +3285,6 @@ function api_not_allowed($print_headers = false, $message = null)
             );
         }
     }
-//    $msg = Display::div($msg, array('align'=>'center'));
     $tpl->assign('content', $msg);
     $tpl->display_one_col_template();
     exit;
@@ -3344,6 +3359,67 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0)
     $row = Database::fetch_array($res);
 
     return $row['visibility'];
+}
+
+/**
+ * Delete a row in the c_item_property table
+ *
+ * @param array $courseInfo
+ * @param string $tool
+ * @param int $itemId
+ * @param int $userId
+ * @param int $groupId
+ * @param int $sessionId
+ */
+function api_item_property_delete(
+    $courseInfo,
+    $tool,
+    $itemId,
+    $userId,
+    $groupId = 0,
+    $sessionId = 0
+) {
+    if (empty($courseInfo)) {
+        return false;
+    }
+
+    $courseId = intval($courseInfo['real_id']);
+
+    if (empty($courseId) || empty($tool) || empty($itemId)) {
+        return false;
+    }
+
+    $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+    $tool = Database::escape_string($tool);
+    $itemId = intval($itemId);
+    $userId = intval($userId);
+    $groupId = intval($groupId);
+    $sessionId = intval($sessionId);
+
+    $groupCondition = " AND to_group_id = $groupId ";
+    if (empty($groupId)) {
+        $groupCondition = " AND (to_group_id is NULL OR to_group_id = 0) ";
+    }
+
+    $userCondition = " AND to_user_id = $userId ";
+    if (empty($userId)) {
+        $userCondition = " AND (to_user_id is NULL OR to_user_id = 0) ";
+    }
+
+
+
+    $sql = "DELETE FROM $table
+            WHERE
+                c_id = $courseId AND
+                tool  = '$tool' AND
+                ref = $itemId AND
+                id_session = $sessionId
+                $userCondition
+                $groupCondition
+            ";
+    Database::query($sql);
+
 }
 
 /**
@@ -3494,6 +3570,7 @@ function api_item_property_update(
                             lastedit_user_id = '$user_id',
                             visibility='$visibility' $set_type
                         WHERE $filter";
+
             }
             break;
         case 'visible' : // Change item to visible.
@@ -3530,9 +3607,7 @@ function api_item_property_update(
             break;
         case 'invisible' : // Change item to invisible.
             $visibility = '0';
-
             if (!empty($session_id)) {
-
                 // Check whether session id already exist into item_properties for updating visibility or add it
                 $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY
                         WHERE c_id=$course_id AND tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
@@ -3678,9 +3753,13 @@ function api_get_item_property_id($course_code, $tool, $ref) {
 }
 
 /**
- *
  * Inserts a record in the track_e_item_property table (No update)
- *
+ * @param string $tool
+ * @param int $ref
+ * @param string $title
+ * @param string $content
+ * @param int $progress
+ * @return bool|int
  */
 function api_track_item_property_update($tool, $ref, $title, $content, $progress)
 {
@@ -3705,6 +3784,11 @@ function api_track_item_property_update($tool, $ref, $title, $content, $progress
     return false;
 }
 
+/**
+ * @param string $tool
+ * @param int $ref
+ * @return array|resource
+ */
 function api_get_track_item_property_history($tool, $ref)
 {
     $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
@@ -3833,7 +3917,6 @@ function api_display_language_form($hide_if_no_choice = false) {
     }
     //-->
     </script>';
-//    var_dump($user_selected_language);
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
     $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
     $html .=  '<select id="language_list" class="chzn-select" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';
@@ -4206,7 +4289,13 @@ function api_time_to_hms($seconds) {
 
     // $seconds = -1 means that we have wrong data in the db.
     if ($seconds == -1) {
-        return get_lang('Unknown').Display::return_icon('info2.gif', get_lang('WrongDatasForTimeSpentOnThePlatform'), array('align' => 'absmiddle', 'hspace' => '3px'));
+        return
+            get_lang('Unknown').
+            Display::return_icon(
+                'info2.gif',
+                get_lang('WrongDatasForTimeSpentOnThePlatform'),
+                array('align' => 'absmiddle', 'hspace' => '3px')
+            );
     }
 
     // How many hours ?
@@ -4404,8 +4493,14 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
 }
 
 // TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
-function copy_folder_course_session($pathname, $base_path_document, $session_id, $course_info, $document, $source_course_id)
-{
+function copy_folder_course_session(
+    $pathname,
+    $base_path_document,
+    $session_id,
+    $course_info,
+    $document,
+    $source_course_id
+) {
     $table = Database :: get_course_table(TABLE_DOCUMENT);
     $session_id = intval($session_id);
     $source_course_id = intval($source_course_id);
@@ -5890,11 +5985,9 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     if ($sender_email != '') {
         $mail->From = $sender_email;
         $mail->Sender = $sender_email;
-        //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
     } else {
         $mail->From = $platform_email['SMTP_FROM_EMAIL'];
         $mail->Sender = $platform_email['SMTP_FROM_EMAIL'];
-        //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; // Disposition-Notification
     }
 
     if ($sender_name != '') {
@@ -5904,8 +5997,8 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     }
     $mail->Subject = $subject;
     $mail->Body = $message;
+
     // Only valid address are to be accepted.
-    //if (eregi( $regexp, $recipient_email )) { // Deprecated, 13-OCT-2010.
     if (api_valid_email($recipient_email)) {
         $mail->AddAddress($recipient_email, $recipient_name);
     }

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchSessions = "Procura de sessões";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item é invisível para o aluno mas você tem acesso como professor.";
 $DeleteAllAttendances = "Apagar todas as presenças criadas";
 $Unsubscribe = "Apagar a conta";

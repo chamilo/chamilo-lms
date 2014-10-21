@@ -11,9 +11,11 @@
 api_protect_course_script(true);
 
 // display messages
-if ($messages['edit'] || $messages['add']) {
+if ((isset($messages['edit']) && $messages['edit']) ||
+    (isset($messages['add']) && $messages['add'])
+) {
 	Display :: display_confirmation_message(get_lang('CourseDescriptionUpdated'));
-} else if ($messages['destroy']) {
+} else if (isset($messages['destroy']) && $messages['destroy']) {
 	Display :: display_confirmation_message(get_lang('CourseDescriptionDeleted'));
 }
 
@@ -39,42 +41,45 @@ if (api_is_allowed_to_edit(null,true)) {
 	}
 	echo '</div>';
 }
+$history = isset($history) ? $history : null;
 
 // display course description list
 if ($history) {
 	echo '<div><table width="100%"><tr><td><h3>'.get_lang('ThematicAdvanceHistory').'</h3></td><td align="right"><a href="index.php?action=listing">'.Display::return_icon('info.png',get_lang('BackToCourseDesriptionList'),array('style'=>'vertical-align:middle;'),ICON_SIZE_SMALL).' '.get_lang('BackToCourseDesriptionList').'</a></td></tr></table></div>';
 }
+
 $user_info = api_get_user_info();
 
 if (isset($descriptions) && count($descriptions) > 0) {
 	foreach ($descriptions as $id => $description) {
-		echo '<div class="sectiontitle">';
+        if (!empty($description)) {
+            echo '<div class="sectiontitle">';
 
-		if (api_is_allowed_to_edit(null,true) && !$history) {
-			if (api_get_session_id() == $description['session_id']) {
-                $description['title'] = $description['title'].' '.api_get_session_image(api_get_session_id(), $user_info['status']);
+            if (api_is_allowed_to_edit(null,true) && !$history) {
+                if (api_get_session_id() == $description['session_id']) {
+                    $description['title'] = $description['title'].' '.api_get_session_image(api_get_session_id(), $user_info['status']);
 
-				//delete
-				echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
-				echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
-				echo '</a> ';
+                    //delete
+                    echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
+                    echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
+                    echo '</a> ';
 
-                //edit
-                echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
-                echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),ICON_SIZE_SMALL);
-                echo '</a> ';
-			} else {
-                echo Display::return_icon('edit_na.png', get_lang('EditionNotAvailableFromSession'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
-
+                    //edit
+                    echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
+                    echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),ICON_SIZE_SMALL);
+                    echo '</a> ';
+                } else {
+                    echo Display::return_icon('edit_na.png', get_lang('EditionNotAvailableFromSession'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
+                }
             }
-		}
 
-		echo $description['title'];
-		echo '</div>';
-		echo '<div class="sectioncomment">';
-		echo $description['content'];
-		echo '</div>';
-	}
+            echo $description['title'];
+            echo '</div>';
+            echo '<div class="sectioncomment">';
+            echo $description['content'];
+            echo '</div>';
+        }
+    }
 } else {
-	echo '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
+    echo '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
 }

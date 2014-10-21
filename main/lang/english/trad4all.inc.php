@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SubscribeToSessionRequest = "Request for subscription to a session";
+$PleaseSubscribeMeToSession = "Please consider subscribing me to session";
+$SearchActiveSessions = "Search active sessions";
 $UserNameHasDash = "The username cannot contain the '-' character";
 $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "If you want only integer values write both limits without decimals";
 $GiveAnswerVariations = "Please, write how many question variations you want";
@@ -17,7 +20,7 @@ $OnlyBestAttempts = "Only best attempts";
 $IncludeAllUsers = "Include all users";
 $HostingWarningReached = "Hosting warning reached";
 $SessionName = "Session name";
-$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains not valid characters";
+$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains invalid characters";
 $CountryDialCode = "Include the country dial code";
 $FieldTypeMobilePhoneNumber = "Mobile phone number";
 $CheckUniqueEmail = "Check unique email";
@@ -137,6 +140,7 @@ $RegisteredClasses = "Registered classes";
 $DeleteItemsNotInFile = "Delete items not in file";
 $ImportGroups = "Import groups";
 $HereIsYourFeedback = "Here is your feedback";
+$SearchSessions = "Session Search";
 $ShowSystemFolders = "Show system folders.";
 $LoginToGoToThisCourse = "Please login to go to this course";
 $LoginDate = "Login date";
@@ -221,6 +225,7 @@ $ReplyShort = "Re:";
 $SendToAllUsers = "Send to all users";
 $SelectACategory = "Select a category";
 $AdvancedEdit = "Advanced edit";
+$NoTimeLimits = "No time limits";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
 $Title = "Title";
 $By = "By";
@@ -1638,8 +1643,4 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
-$FieldTypeMobilePhoneNumber = "Mobile phone";
-$CountryDialCode = "Include the country dial code";
-$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains invalid characters";
-$SessionName = "Session name";
 ?>

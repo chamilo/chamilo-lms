@@ -76,7 +76,7 @@ class CourseLegalPlugin extends Plugin
                 WHERE user_id = $userId AND c_id = $courseId AND session_id = $sessionId";
         $result = Database::query($sql);
         $data = array();
-        if (Database::num_rows($result) > 0 ) {
+        if (Database::num_rows($result) > 0) {
             $data = Database::fetch_array($result, 'ASSOC');
         }
 
@@ -310,7 +310,7 @@ class CourseLegalPlugin extends Plugin
         }
         $result = Database::query($sql);
         $data = array();
-        if (Database::num_rows($result) > 0 ) {
+        if (Database::num_rows($result) > 0) {
             $data = Database::store_result($result, 'ASSOC');
         }
 

@@ -661,6 +661,7 @@ class SocialManager extends UserManager
                 $html .= '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
             }
             $html .= '</div>';
+            $html .= '</div>';
         }
         return $html;
     }

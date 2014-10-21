@@ -2,15 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This file contains the lp_item class, that inherits from the learnpath class
- * @package    chamilo.learnpath
- * @author    Yannick Warnier <ywarnier@beeznest.org>
- */
-
-/**
  * lp_item defines items belonging to a learnpath. Each item has a name,
  * a score, a use time and additional information that enables tracking a user's
  * progress in a learning path
+ * @package    chamilo.learnpath
+ * @author    Yannick Warnier <ywarnier@beeznest.org>
  */
 class learnpathItem
 {
@@ -153,7 +149,8 @@ class learnpathItem
         $this->db_id = $id;
 
         // Load children list
-        $sql = "SELECT id FROM $items_table WHERE c_id = $course_id AND lp_id = ".$this->lp_id." AND parent_item_id = $id";
+        $sql = "SELECT id FROM $items_table
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id." AND parent_item_id = $id";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {
             // Nothing to do (no children)
@@ -204,6 +201,7 @@ class learnpathItem
                 0
             );
         }
+
         return true;
     }
 
@@ -226,7 +224,9 @@ class learnpathItem
     /**
      * Adds an interaction to the current item
      * @param    int   $index  Index (order ID) of the interaction inside this item
-     * @param    array $params Array of parameters: id(0), type(1), time(2), weighting(3), correct_responses(4), student_response(5), result(6), latency(7)
+     * @param    array $params Array of parameters:
+     * id(0), type(1), time(2), weighting(3), correct_responses(4),
+     * student_response(5), result(6), latency(7)
      * @result   void
      */
     public function add_interaction($index, $params)
@@ -254,7 +254,8 @@ class learnpathItem
 
     /**
      * Adds an objective to the current item
-     * @param    array    Array of parameters: id(0), status(1), score_raw(2), score_max(3), score_min(4)
+     * @param    array    Array of parameters:
+     * id(0), status(1), score_raw(2), score_max(3), score_min(4)
      * @result    void
      */
     public function add_objective($index, $params)
@@ -270,7 +271,8 @@ class learnpathItem
     }
 
     /**
-     * Closes/stops the item viewing. Finalises runtime values. If required, save to DB.
+     * Closes/stops the item viewing. Finalises runtime values.
+     * If required, save to DB.
      * @return    boolean    True on success, false otherwise
      */
     public function close()
@@ -293,6 +295,7 @@ class learnpathItem
         if ($this->save_on_close) {
             $this->save();
         }
+
         return true;
     }
 
@@ -420,8 +423,8 @@ class learnpathItem
      * and reinit autorization. Credit tells the sco(content) if Chamilo will
      * record the data it is sent (credit) or not (no-credit)
      * @return    string    'credit' or 'no-credit'. Defaults to 'credit'
-     *                      because if we don't know enough about this item,
-     *                      it's probably because it was never used before.
+     * Because if we don't know enough about this item, it's probably because
+     * it was never used before.
      */
     public function get_credit()
     {
@@ -493,7 +496,8 @@ class learnpathItem
      * Gets the file path from the course's root directory, no matter what
      * tool it is from.
      * @param string  $path_to_scorm_dir
-     * @return The file path, or an empty string if there is no file attached, or '-1' if the file must be replaced by an error page
+     * @return string The file path, or an empty string if there is no file
+     * attached, or '-1' if the file must be replaced by an error page
      */
     public function get_file_path($path_to_scorm_dir = '')
     {
@@ -598,8 +602,8 @@ class learnpathItem
 
     /**
      * Gets the current count of interactions recorded in the database
-     * @param   bool    Whether to count from database or not (defaults to no)
-     * @return    int    The current number of interactions recorder
+     * @param   bool $checkdb Whether to count from database or not (defaults to no)
+     * @return  int    The current number of interactions recorder
      */
     public function get_interactions_count($checkdb = false)
     {
@@ -641,8 +645,8 @@ class learnpathItem
 
     /**
      * Gets the JavaScript array content to fill the interactions array.
-     * @param  bool  $checkdb  Whether to check directly into the database (default no)
-     * @return  An empty string if no interaction, a JS array definition otherwise
+     * @param  bool $checkdb  Whether to check directly into the database (default no)
+     * @return string An empty string if no interaction, a JS array definition otherwise
      */
     public function get_interactions_js_array($checkdb = false)
     {
@@ -707,7 +711,7 @@ class learnpathItem
     /**
      * Gets the lesson location
      * @return string lesson location as recorded by the SCORM and AICC
-     *  elements. Defaults to ''
+     * elements. Defaults to ''
      */
     public function get_lesson_location()
     {
@@ -727,7 +731,7 @@ class learnpathItem
 
     /**
      * Gets the lesson_mode (scorm feature, but might be used by aicc as well
-     * as dokeos/chamilo paths)
+     * as chamilo paths)
      *
      * The "browse" mode is not supported yet (because there is no such way of
      * seeing a sco in Chamilo)
@@ -778,7 +782,7 @@ class learnpathItem
 
     /**
      * Gets the maximum (score)
-     * @return    int    Maximum score. Defaults to 100 if nothing else is defined
+     * @return int Maximum score. Defaults to 100 if nothing else is defined
      */
     public function get_max()
     {
@@ -808,7 +812,8 @@ class learnpathItem
 
     /**
      * Gets the maximum time allowed for this user in this attempt on this item
-     * @return    string    Time string in SCORM format (HH:MM:SS or HH:MM:SS.SS or HHHH:MM:SS.SS)
+     * @return    string    Time string in SCORM format
+     * (HH:MM:SS or HH:MM:SS.SS or HHHH:MM:SS.SS)
      */
     public function get_max_time_allowed()
     {
@@ -917,7 +922,8 @@ class learnpathItem
                     $this->prevent_reinit = $row['prevent_reinit'];
                 }
             } else {
-                $this->prevent_reinit = 1; // Prevent reinit is always 1 by default - see learnpath.class.php.
+                // Prevent reinit is always 1 by default - see learnpath.class.php
+                $this->prevent_reinit = 1;
             }
         }
         if (self::debug > 2) {
@@ -994,7 +1000,9 @@ class learnpathItem
      * @param    string   $type type (one of the Chamilo tools) - optional (otherwise takes the current item's type)
      * @param    string   $abs_path absolute file path - optional (otherwise takes the current item's path)
      * @param    int      $recursivity level of recursivity we're in
-     * @return   array    List of file paths. An additional field containing 'local' or 'remote' helps determine if the file should be copied into the zip or just linked
+     * @return   array    List of file paths.
+     * An additional field containing 'local' or 'remote' helps determine if
+     * the file should be copied into the zip or just linked
      */
     public function get_resources_from_source(
         $type = null,
@@ -1654,7 +1662,7 @@ class learnpathItem
 
     /**
      * Gets the score
-     * @return    float    The current score or 0 if no score set yet
+     * @return    float The current score or 0 if no score set yet
      */
     public function get_score()
     {
@@ -1768,10 +1776,11 @@ class learnpathItem
 
     /**
      * Gets the total time spent on this item view so far
-     * @param  string  $origin  Origin of the request. If coming from PHP, send formatted as xxhxx'xx", otherwise use scorm format 00:00:00
+     * @param  string  $origin  Origin of the request. If coming from PHP,
+     * send formatted as xxhxx'xx", otherwise use scorm format 00:00:00
      * @param  integer|null $given_time   Given time is a default time to return formatted
      * @param  bool    $query_db Whether to get the value from db or from memory
-     * @return A string with the time in SCORM format
+     * @return string A string with the time in SCORM format
      */
     public function get_scorm_time(
         $origin = 'php',
@@ -1792,10 +1801,10 @@ class learnpathItem
                 if ($query_db === true) {
                     $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                     $sql = "SELECT start_time, total_time FROM $table
-                           WHERE  c_id = $course_id AND
+                           WHERE
+                                c_id = $course_id AND
                                 id = '" . $this->db_item_view_id . "' AND
-                                view_count = '" . $this->get_attempt_id(
-                        ) . "'";
+                                view_count = '" . $this->get_attempt_id() . "'";
                     $res = Database::query($sql);
                     $row = Database::fetch_array($res);
                     $start = $row['start_time'];
@@ -1840,6 +1849,7 @@ class learnpathItem
         if (self::debug > 2) {
             error_log('learnpathItem::get_scorm_time(' . $scorm_time . ')', 0);
         }
+
         return $scorm_time;
     }
 

@@ -695,15 +695,19 @@ class learnpathItem
             error_log('learnpathItem::get_launch_data()', 0);
         }
         if (!empty($this->launch_data)) {
-            return $this->launch_data;
+            return str_replace(
+                array("\r", "\n", "'"),
+                array('\r', '\n', "\\'"),
+                $this->launch_data
+            );
         }
         return '';
     }
 
     /**
      * Gets the lesson location
-     * @return string    lesson location as recorded by the SCORM and AICC
-     *                  elements. Defaults to ''
+     * @return string lesson location as recorded by the SCORM and AICC
+     *  elements. Defaults to ''
      */
     public function get_lesson_location()
     {
@@ -711,7 +715,11 @@ class learnpathItem
             error_log('learnpathItem::get_lesson_location()', 0);
         }
         if (!empty($this->lesson_location)) {
-            return $this->lesson_location;
+            return str_replace(
+                array("\r", "\n", "'"),
+                array('\r', '\n', "\\'"),
+                $this->lesson_location
+            );
         } else {
             return '';
         }
@@ -1749,8 +1757,8 @@ class learnpathItem
         // a beautiful way to do it ?
         if (!empty($this->current_data)) {
             return str_replace(
-                array("\r", "\n"),
-                array('\r', '\n'),
+                array("\r", "\n", "'"),
+                array('\r', '\n', "\\'"),
                 $this->current_data
             );
         } else {

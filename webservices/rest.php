@@ -40,7 +40,9 @@ switch ($action) {
             $webService = new MessagesWebService();
             $webService->setApiKey($apiKey);
 
-            $count = $webService->countNewMessages($username);
+            $lastId = isset($_POST['last']) ? $_POST['last'] : 0;
+
+            $count = $webService->countNewMessages($username, $lastId);
 
             $json = array(
                 'count' => $count

@@ -110,9 +110,14 @@ class MessagesWebService extends WebService
      * @param string $username The username
      * @return int The count fo new messages
      */
-    public function countNewMessages($username)
+    public function countNewMessages($username, $lastId = 0)
     {
-        return 0;
+        $lastId = intval($lastId);
+
+        $userInfo = api_get_user_info_from_username($username);
+        $userId = intval($userInfo['user_id']);
+
+        return MessageManager::countMessagesFromLastReceivedMessage($userId, $lastId);
     }
 
     /**

@@ -1508,4 +1508,34 @@ class MessageManager
         $html .= $table->return_table();
         return $html;
     }
+
+    /**
+     * Get the count of the last received messages for a user
+     * @param int $userId The user id
+     * @param int $lastId The id of the last seen message
+     * @return int The count of new messages
+     */
+    public static function countMessagesFromLastReceivedMessage($userId, $lastId)
+    {
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+
+        $conditions = array(
+            'where' => array(
+                'user_receiver_id = ?' => $userId,
+                'AND msg_status = ?' => MESSAGE_STATUS_UNREAD,
+                'AND id > ?' => $lastId
+            )
+        );
+
+        $result = Database::select('COUNT(1) AS qty', $messagesTable, $conditions);
+
+        if (!empty($result)) {
+            $row = current($result);
+
+            return $row['qty'];
+        }
+
+        return 0;
+    }
+
 }

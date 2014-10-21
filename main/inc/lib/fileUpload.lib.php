@@ -290,6 +290,27 @@ function handle_uploaded_document(
                 $current_session_id
             );
 
+            $documentList = DocumentManager::getDocumentByPathInCourse(
+                $_course,
+                $file_path
+            );
+
+            // This means that the path already exists in this course.
+            if (!empty($documentList)) {
+                $found = false;
+                // Checking if we are talking about the same course + session
+                foreach ($documentList as $document) {
+                    if ($document['session_id'] == $current_session_id) {
+                        $found = true;
+                        break;
+                    }
+                }
+
+                if ($found == false) {
+                    $what_if_file_exists = 'rename';
+                }
+            }
+
             // What to do if the target file exists
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
@@ -335,9 +356,10 @@ function handle_uploaded_document(
                                     null,
                                     0,
                                     true,
-                                    null,
+                                    $to_group_id,
                                     $current_session_id
                                 );
+
                                 if ($document_id) {
                                     // Put the document in item_property update
                                     api_item_property_update(
@@ -378,9 +400,10 @@ function handle_uploaded_document(
                                 null,
                                 0,
                                 true,
-                                null,
+                                $to_group_id,
                                 $current_session_id
                             );
+
 							if ($document_id) {
 								// Put the document in item_property update
                                 api_item_property_update(
@@ -417,12 +440,9 @@ function handle_uploaded_document(
 
 				// Rename the file if it exists
 				case 'rename':
-                    if ($docId) {
-                        $new_name = unique_name($where_to_save, $clean_name);
-                        $document_name = $new_name;
-                    } else {
-                        $new_name = $clean_name;
-                    }
+                    // Always rename.
+                    $new_name = unique_name($where_to_save, $clean_name);
+                    $document_name = $new_name;
 
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
@@ -438,10 +458,13 @@ function handle_uploaded_document(
                             'file',
                             $file_size,
                             $document_name,
-                            null,
-                            0,
-                            true
+                            null, // comment
+                            0, // read only
+                            true, // save visibility
+                            $to_group_id,
+                            $current_session_id
                         );
+
 						if ($document_id) {
 							// Update document item_property
                             api_item_property_update(
@@ -460,6 +483,7 @@ function handle_uploaded_document(
                             // Redo visibility
                             api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 						}
+
 						// If the file is in a folder, we need to update all parent folders
 						item_property_update_on_folder($_course, $upload_path, $user_id);
 
@@ -489,7 +513,18 @@ function handle_uploaded_document(
 						    chmod($store_path, $files_perm);
 
 							// Put the document data in the database
-							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true);
+                            $document_id = add_document(
+                                $_course,
+                                $file_path,
+                                'file',
+                                $file_size,
+                                $document_name,
+                                null,
+                                0,
+                                true,
+                                $to_group_id,
+                                $current_session_id
+                            );
 
 							if ($document_id) {
 								// Update document item_property
@@ -510,7 +545,11 @@ function handle_uploaded_document(
 							}
 
 							// If the file is in a folder, we need to update all parent folders
-							item_property_update_on_folder($_course,$upload_path,$user_id);
+                            item_property_update_on_folder(
+                                $_course,
+                                $upload_path,
+                                $user_id
+                            );
 
 							// Display success message to user
 							if ($output){
@@ -1048,7 +1087,7 @@ function filter_extension(&$filename) {
  * @param bool $save_visibility
  * @param int $group_id
  * @param int $session_id Session ID, if any
- * @return id if inserted document
+ * @return int id if inserted document
  */
 function add_document(
     $_course,
@@ -1125,8 +1164,8 @@ function update_existing_document($_course, $document_id, $filesize, $readonly =
  * @param string $path
  * @param int $user_id
  */
-function item_property_update_on_folder($_course, $path, $user_id) {
-	//display_message("Start update_lastedit_on_folder");
+function item_property_update_on_folder($_course, $path, $user_id)
+{
 	// If we are in the root, just return... no need to update anything
 	if ($path == '/') {
 		return;
@@ -1140,7 +1179,7 @@ function item_property_update_on_folder($_course, $path, $user_id) {
 		$path = substr($path, 0, strlen($path) - 1);
 	}
 
-	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	// Get the time
 	$time = date('Y-m-d H:i:s', time());
@@ -1162,7 +1201,8 @@ function item_property_update_on_folder($_course, $path, $user_id) {
 			$folder_id = DocumentManager::get_document_id($_course, $newpath);
 
 			if ($folder_id) {
-				$sql = "UPDATE $TABLE_ITEMPROPERTY SET lastedit_date='$time',lastedit_type='DocumentInFolderUpdated', lastedit_user_id='$user_id'
+				$sql = "UPDATE $table SET
+				        lastedit_date='$time',lastedit_type='DocumentInFolderUpdated', lastedit_user_id='$user_id'
 						WHERE c_id = $course_id AND tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
 				Database::query($sql);
 			}

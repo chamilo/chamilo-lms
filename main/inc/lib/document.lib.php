@@ -2667,12 +2667,15 @@ class DocumentManager
                 );
 
                 if ($new_path) {
-                    $documentId = DocumentManager::get_document_id($course_info, $new_path);
+                    $documentId = DocumentManager::get_document_id(
+                        $course_info,
+                        $new_path,
+                        api_get_session_id()
+                    );
 
                     if (!empty($documentId)) {
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
                         $params = array();
-
                         if ($if_exists == 'rename') {
                             $new_path = basename($new_path);
                             $params['title'] = get_document_title($new_path);
@@ -2687,6 +2690,7 @@ class DocumentManager
                         if (!empty($comment)) {
                             $params['comment'] = trim($comment);
                         }
+
                         Database::update(
                             $table_document,
                             $params,
@@ -4159,5 +4163,25 @@ class DocumentManager
             unlink($_SESSION['temp_audio_nanogong']);
             unset($_SESSION['temp_audio_nanogong']);
         }
+    }
+
+    /**
+     * Check if the past is used in this course.
+     * @param array $courseInfo
+     * @param string $path
+     *
+     * @return array
+     */
+    public static function getDocumentByPathInCourse($courseInfo, $path)
+    {
+        $table = Database::get_course_table(TABLE_DOCUMENT);
+        $path = Database::escape_string($path);
+        $courseId = $courseInfo['real_id'];
+        if (empty($courseId)) {
+            return false;
+        }
+        $sql = "SELECT * FROM $table WHERE c_id = $courseId AND path = '$path' ";
+        $result = Database::query($sql);
+        return Database::store_result($result, 'ASSOC');
     }
 }

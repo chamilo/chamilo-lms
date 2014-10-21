@@ -108,6 +108,7 @@ class MessagesWebService extends WebService
     /**
      * Get the count of new messages for a user
      * @param string $username The username
+     * @param int $lastId The id of the last received message
      * @return int The count fo new messages
      */
     public function countNewMessages($username, $lastId = 0)

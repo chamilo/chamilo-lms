@@ -1563,7 +1563,7 @@ class MessageManager
 
         if ($result !== false) {
             while ($row = Database::fetch_assoc($result)) {
-                $messages = array(
+                $messages[] = array(
                     'id' => $row['id'],
                     'title' => $row['title'],
                     'sender' => array(

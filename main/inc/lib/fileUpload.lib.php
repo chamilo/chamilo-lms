@@ -86,7 +86,8 @@ function get_document_title($name) {
  * @param array $uploaded_file ($_FILES)
  * @return true if upload succeeded
  */
-function process_uploaded_file($uploaded_file, $show_output = true) {
+function process_uploaded_file($uploaded_file, $show_output = true)
+{
 	// Checking the error code sent with the file upload.
     if (isset($uploaded_file['error'])) {
         switch ($uploaded_file['error']) {
@@ -95,6 +96,7 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
                 if ($show_output) {
                     Display::display_error_message(get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'));
                 }
+
                 return false;
             case 2:
                 // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
@@ -103,27 +105,30 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
                 if ($show_output) {
                     Display::display_error_message(get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size));
                 }
+
                 return false;
             case 3:
                 // The uploaded file was only partially uploaded.
                 if ($show_output) {
                      Display::display_error_message(get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'));
                 }
+
                 return false;
             case 4:
                 // No file was uploaded.
                 if ($show_output) {
                      Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
                 }
+
                 return false;
         }
     }
 
-	if (!file_exists($uploaded_file['tmp_name'])) {
-	    // No file was uploaded.
-	    if ($show_output) {
+    if (!file_exists($uploaded_file['tmp_name'])) {
+        // No file was uploaded.
+        if ($show_output) {
             Display::display_error_message(get_lang('UplUploadFailed'));
-	    }
+        }
         return false;
     }
 
@@ -152,8 +157,8 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
         }
     }
 
-	// case 0: default: We assume there is no error, the file uploaded with success.
-	return true;
+    // case 0: default: We assume there is no error, the file uploaded with success.
+    return true;
 }
 
 /**
@@ -173,7 +178,7 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
  * @param int $unzip 1/0
  * @param string $what_if_file_exists overwrite, rename or warn if exists (default)
  * @param boolean Optional output parameter. So far only use for unzip_uploaded_document function. If no output wanted on success, set to false.
- * @return path of the saved file
+ * @return string path of the saved file
  */
 function handle_uploaded_document(
     $_course,
@@ -189,14 +194,14 @@ function handle_uploaded_document(
     $onlyUploadFile = false
 ) {
 	if (!$user_id) {
-        die('Not a valid user.');
+        return false;
     }
 
 	// Strip slashes
 	$uploaded_file['name'] = stripslashes($uploaded_file['name']);
 	// Add extension to files without one (if possible)
 	$uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']);
-	$current_session_id    = api_get_session_id();
+	$current_session_id = api_get_session_id();
 
     // Just in case process_uploaded_file is not called
     $max_filled_space = DocumentManager::get_course_quota();
@@ -252,11 +257,14 @@ function handle_uploaded_document(
             if (!is_dir($where_to_save)) {
                 if (!mkdir($where_to_save, api_get_permissions_for_new_directories())) {
                     if ($output) {
-                        Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+                        Display::display_error_message(
+                            get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')'
+                        );
                     }
                     return false;
                 }
             }
+
 			// Full path of the destination
 			$store_path = $where_to_save.$clean_name;
 
@@ -266,6 +274,7 @@ function handle_uploaded_document(
 			$file_size = $uploaded_file['size'];
 			$files_perm = api_get_permissions_for_new_files();
 
+            // Just upload file.
             if ($onlyUploadFile) {
                 $errorResult = moveUploadedFile($uploaded_file, $store_path);
                 if ($errorResult) {
@@ -275,7 +284,11 @@ function handle_uploaded_document(
                 }
             }
 
-            $docId = DocumentManager::get_document_id($_course, $file_path, $current_session_id);
+            $docId = DocumentManager::get_document_id(
+                $_course,
+                $file_path,
+                $current_session_id
+            );
 
             // What to do if the target file exists
 			switch ($what_if_file_exists) {
@@ -313,7 +326,18 @@ function handle_uploaded_document(
 							} else {
                                 // There might be cases where the file exists on disk but there is no registration of that in the database
                                 // In this case, and if we are in overwrite mode, overwrite and create the db record
-                                $document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true, null, $current_session_id);
+                                $document_id = add_document(
+                                    $_course,
+                                    $file_path,
+                                    'file',
+                                    $file_size,
+                                    $document_name,
+                                    null,
+                                    0,
+                                    true,
+                                    null,
+                                    $current_session_id
+                                );
                                 if ($document_id) {
                                     // Put the document in item_property update
                                     api_item_property_update(
@@ -337,12 +361,26 @@ function handle_uploaded_document(
 							item_property_update_on_folder($_course, $upload_path, $user_id);
 							// Display success message with extra info to user
 							if ($output) {
-								Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.$file_path .' '. get_lang('UplFileOverwritten'), false);
+                                Display::display_confirmation_message(
+                                    get_lang('UplUploadSucceeded') . '<br />' . $file_path . ' ' . get_lang('UplFileOverwritten'),
+                                    false
+                                );
         					}
 							return $file_path;
 						} else {
 							// Put the document data in the database
-							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true, null, $current_session_id);
+                            $document_id = add_document(
+                                $_course,
+                                $file_path,
+                                'file',
+                                $file_size,
+                                $document_name,
+                                null,
+                                0,
+                                true,
+                                null,
+                                $current_session_id
+                            );
 							if ($document_id) {
 								// Put the document in item_property update
                                 api_item_property_update(
@@ -394,7 +432,16 @@ function handle_uploaded_document(
 						chmod($store_path, $files_perm);
 
 						// Put the document data in the database
-						$document_id = add_document($_course, $new_file_path, 'file', $file_size, $document_name, null, 0, true);
+                        $document_id = add_document(
+                            $_course,
+                            $new_file_path,
+                            'file',
+                            $file_size,
+                            $document_name,
+                            null,
+                            0,
+                            true
+                        );
 						if ($document_id) {
 							// Update document item_property
                             api_item_property_update(
@@ -418,7 +465,10 @@ function handle_uploaded_document(
 
 						// Display success message to user
 						if ($output) {
-							Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.get_lang('UplFileSavedAs').$new_file_path, false);
+                            Display::display_confirmation_message(
+                                get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') . $new_file_path,
+                                false
+                            );
 						}
 						return $new_file_path;
 					} else {

@@ -124,6 +124,7 @@ class MessagesWebService extends WebService
     /**
      * Get the list of new messages for a user
      * @param string $username The username
+     * @param int $lastId The id of the last received message
      * @return array the new message list
      */
     public function getNewMessages($username, $lastId = 0)

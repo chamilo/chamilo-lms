@@ -1,26 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Defines the AICC class, which is meant to contain the aicc items (nuclear elements)
- * @package chamilo.learnpath
- * @author	Yannick Warnier <ywarnier@beeznest.org>
- * @license	GNU/GPL
- */
-/**
- * Code
- */
 require_once 'aiccItem.class.php';
 //require_once 'aiccMetadata.class.php';
 //require_once 'aiccOrganization.class.php';
 require_once 'aiccResource.class.php';
 require_once 'aiccBlock.class.php';
 /**
- * Class
+ * Class aicc
+ * Defines the AICC class, which is meant to contain the aicc items (nuclear elements)
+ * @package chamilo.learnpath
+ * @author	Yannick Warnier <ywarnier@beeznest.org>
+ * @license	 GNU/GPL
  * @package chamilo.learnpath
  */
-class aicc extends learnpath {
-
+class aicc extends learnpath
+{
     public $config = array();
     public $config_basename = '';	// The configuration files might be multiple and might have
                                     // funny names. We need to keep the name of that file while we
@@ -228,7 +223,7 @@ class aicc extends learnpath {
      */
     function import_aicc($course_code) {
         $course_id = api_get_course_int_id();
-        
+
         if ($this->debug > 0) { error_log('New LP - In aicc::import_aicc('.$course_code.')', 0); }
         // Get table names.
         $new_lp = 'lp';
@@ -239,7 +234,7 @@ class aicc extends learnpath {
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) { error_log('New LP - Database for '.$course_code.' not found '.__FILE__.' '.__LINE__, 0); return -1; }
         $row = Database::fetch_array($res);
-                
+
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $get_max = "SELECT MAX(display_order) FROM $new_lp WHERE c_id = $course_id";

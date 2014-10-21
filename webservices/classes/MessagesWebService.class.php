@@ -9,6 +9,7 @@
 class MessagesWebService extends WebService
 {
 
+    const SERVICE_NAME = 'MsgREST';
     const FIELD_VARIABLE = 'api_key_message';
 
     /**
@@ -28,43 +29,20 @@ class MessagesWebService extends WebService
     public function getApiKey($username)
     {
         $userInfo = api_get_user_info_from_username($username);
-        $saveApiKey = false;
+        $userId = $userInfo['user_id'];
 
         if ($this->apiKey !== null) {
             return $this->apiKey;
         } else {
-            $field = new ExtraField('user');
-            $fieldData = $field->get_handler_field_info_by_field_variable(self::FIELD_VARIABLE);
+            $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
 
-            if ($fieldData !== false) { // Exists the api_key_message extra field
-                $fieldId = $fieldData['id'];
+            if (empty($apiKey)) {
+                UserManager::add_api_key($userId, self::SERVICE_NAME);
 
-                $fieldValue = new ExtraFieldValue('user');
-                $fieldValueData = $fieldValue->get_values_by_handler_and_field_id($userInfo['user_id'], $fieldId);
-
-                if ($fieldValueData !== false) {
-                    return $fieldValueData['field_value'];
-                } else {
-                    $saveApiKey = true;
-                }
-            } else {
-                $fieldId = UserManager::create_extra_field(self::FIELD_VARIABLE, ExtraField::FIELD_TYPE_TEXT, 'APIKeyMessages', '');
-
-                $saveApiKey = true;
+                $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
             }
 
-            if ($saveApiKey) {  // If needs save the api key
-                $this->apiKey = $this->generateApiKey();
-
-                $fieldValueTable = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
-                Database::insert($fieldValueTable, array(
-                    'user_id' => $userInfo['user_id'],
-                    'field_id' => $fieldId,
-                    'field_value' => $this->apiKey,
-                    'tms' => api_get_utc_datetime()
-                ));
-            }
+            $this->apiKey = current($apiKey);
 
             return $this->apiKey;
         }
@@ -73,31 +51,20 @@ class MessagesWebService extends WebService
     /**
      * Check if the api is valid for a user
      * @param string $username The username
-     * @param string $apiKey The api key
+     * @param string $apiKeyToValidate The api key
      * @return boolean Whether the api belongs to the user return true. Otherwise return false
      */
-    public static function isValidApiKey($username, $apiKey)
+    public static function isValidApiKey($username, $apiKeyToValidate)
     {
-        $fieldValueTable = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $fieldTable = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $userInfo = api_get_user_info_from_username($username);
+        $userId = $userInfo['user_id'];
 
-        $sql = "SELECT COUNT(1) AS qty "
-                . "FROM $fieldValueTable AS v "
-                . "INNER JOIN $fieldTable AS f "
-                . "ON v.field_id = f.id "
-                . "INNER JOIN $userTable AS u "
-                . "ON v.user_id = u.user_id "
-                . "WHERE u.username = '$username'"
-                . "AND (f.field_variable = '" . self::FIELD_VARIABLE . "' "
-                . "AND v.field_value = '$apiKey')";
+        $apiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME);
 
-        $result = Database::query($sql);
+        if (!empty($apiKeys)) {
+            $apiKey = current($apiKeys);
 
-        if ($result !== false) {
-            $row = Database::fetch_assoc($result);
-
-            if ($row['qty'] > 0) {
+            if ($apiKey == $apiKeyToValidate) {
                 return true;
             }
         }

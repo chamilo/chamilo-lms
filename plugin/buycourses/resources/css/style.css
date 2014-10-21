@@ -110,3 +110,8 @@ select#lsessions, select#lcourses, select#lexercises, select#status {
   background-color: #53a0c6;
   font-weight: normal;
 }
+.categories-course-description h3 {
+  color: #666;
+  font-weight: bold;
+  font-family: Arial;
+}

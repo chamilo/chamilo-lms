@@ -1643,4 +1643,8 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
+$FieldTypeMobilePhoneNumber = "Mobile phone";
+$CountryDialCode = "Include the country dial code";
+$MobilePhoneNumberWrong = "Mobile phone number is incomplete or contains not valid characters";
+$AreYouSureToDeleteFileX = "Are you sure you want to delete file %s ?";
 ?>

@@ -167,7 +167,7 @@ if (!empty($values) AND isset($_POST['SubmitPost'])) {
     window.location = "'.$url.'";
     </script>';
 } else {
-    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], -1);
+    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], 0);
     echo $attachmentAjaxForm;
 }
 

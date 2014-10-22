@@ -6,9 +6,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
@@ -32,7 +30,6 @@ $display_mode = '';
 $autostart = 'true';
 
 if (isset($_SESSION['lpobject'])) {
-    //if($debug>0) //error_log('New LP - in lp_nav.php - SESSION[lpobject] is defined',0);
     $oLP = unserialize($_SESSION['lpobject']);
     if (is_object($oLP)) {
         $_SESSION['oLP'] = $oLP;
@@ -46,8 +43,7 @@ if (isset($_SESSION['lpobject'])) {
 
     $my_style = api_get_visual_theme();
 
-    //Setting up the CSS theme if exists
-
+    // Setting up the CSS theme if exists
     $mycourselptheme = null;
     if (api_get_setting('allow_course_theme') == 'true') {
         $mycourselptheme = api_get_course_setting('allow_learning_path_theme');

@@ -1515,8 +1515,15 @@ class MessageManager
      * @param int $lastId The id of the last received message
      * @return int The count of new messages
      */
-    public static function countMessagesFromLastReceivedMessage($userId, $lastId)
+    public static function countMessagesFromLastReceivedMessage($userId, $lastId = 0)
     {
+        $userId = intval($userId);
+        $lastId = intval($lastId);
+
+        if (empty($userId)) {
+            return 0;
+        }
+
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
 
         $conditions = array(
@@ -1544,8 +1551,15 @@ class MessageManager
      * @param int $lastId The id of the last received message
      * @return int The count of new messages
      */
-    public static function getMessagesFromLastReceivedMessage($userId, $lastId)
+    public static function getMessagesFromLastReceivedMessage($userId, $lastId = 0)
     {
+        $userId = intval($userId);
+        $lastId = intval($lastId);
+
+        if (empty($userId)) {
+            return 0;
+        }
+
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 

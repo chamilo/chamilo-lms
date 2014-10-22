@@ -106,7 +106,7 @@ function get_specific_field_values_list($conditions = array(), $order_by = array
     $sql = "SELECT * FROM $table_sfv";
     if (count($conditions) > 0) {
         $sql .= ' WHERE ';
-        
+
         //Fixing course id
         if (isset($conditions['c_id'])) {
             $course_info = api_get_course_info_by_id($conditions['c_id']);
@@ -117,9 +117,9 @@ function get_specific_field_values_list($conditions = array(), $order_by = array
         if (!isset($conditions['course_code'])) {
             $conditions['course_code'] = " '".api_get_course_id()."' ";
         }
-        
+
         $conditions_string_array = array();
-        foreach ($conditions as $field => $value) {            
+        foreach ($conditions as $field => $value) {
             $conditions_string_array[] = $field.' = '. $value;
         }
         $sql .= implode(' AND ', $conditions_string_array);
@@ -203,7 +203,7 @@ function delete_all_values_for_item($course_id, $tool_id, $ref_id) {
   $table_sf_values = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
   $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s';
   $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id);
-  $result = Database::query($sql);
+  Database::query($sql);
 }
 
 /**

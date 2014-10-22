@@ -2,6 +2,36 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$InverseHyperbolicTangentAtanh = "Tangente hiperbólica inversa:\tatanh(x)";
+$HyperbolicArctangentArctanh = "Arcotangente hiperbólica:\tarctanh(x)";
+$InverseTangentAtan = "Tangente inversa:\t\tatan(x)";
+$ArctangentArctan = "Arcotangente:\t\t\tarctan(x)";
+$HyperbolicTangentTanh = "Tangente hiperbólica:\t\ttanh(x)";
+$TangentTan = "Tangente:\t\t\ttan(x)";
+$InverseHyperbolicCosineAcosh = "Coseno hiperbólico inverso:\tacosh(x)";
+$HyperbolicArccosineArccosh = "Arcocoseno hiperbólico:\t\tarccosh(x)";
+$InverseCosineAcos = "Coseno inverso:\t\t\tacos(x)";
+$ArccosineArccos = "Arcocoseno:\t\t\tarccos(x)";
+$HyperbolicCosineCosh = "Coseno hiperbólico:\t\tcosh(x)";
+$CosineCos = "Coseno:\t\t\t\tcos(x)";
+$InverseHyperbolicSineAsinh = "Seno hiperbólico inverso:\tasinh(x)";
+$HyperbolicArcsineArcsinh = "Arcoseno hiperbólico:\t\tarcsinh(x)";
+$InverseSineAsin = "Seno inverso:\t\t\tasin(x)";
+$ArcsineArcsin = "Arcoseno:\t\t\tarcsin(x)";
+$HyperbolicSineSinh = "Seno hiperbólico:\t\tsinh(x)";
+$SineSin = "Seno:\t\t\t\tsin(x)";
+$PiNumberPi = "Número pi:\t\t\tpi";
+$ENumberE = "Número e:\t\t\te";
+$LogarithmLog = "Logaritmo:\t\t\tlog(x)";
+$NaturalLogarithmLn = "Logaritmo natural:\t\tln(x)";
+$AbsoluteValueAbs = "Valor absoluto:\t\t\tabs(x)";
+$SquareRootSqrt = "Raíz cuadrada:\t\t\tsqrt(x)";
+$ExponentiationCircumflex = "Potencia:\t\t\t^";
+$DivisionSlash = "División:\t\t\t/";
+$MultiplicationStar = "Multiplicación:\t\t\t*";
+$SubstractionMinus = "Resta:\t\t\t\t-";
+$SummationPlus = "Suma:\t\t\t\t+";
+$NotationList = "Notación para fórmula";
 $SearchActiveSessions = "Buscar sesiones activas";
 $UserNameHasDash = "El nombre de usuario no puede contener el caracter '-'";
 $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "Si desea sólo números enteros escriba ambos límites sin decimales";
@@ -9,7 +39,7 @@ $GiveAnswerVariations = "Por favor, escriba cuántos problemas desea generar";
 $AnswerVariations = "Problemas a generar";
 $GiveFormula = "Por favor, escriba la fórmula";
 $Formula = "Fórmula";
-$FormulaExample = "Ejemplo de fórmula";
+$FormulaExample = "Ejemplo de fórmula: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )";
 $VariableRanges = "Rangos de las variables";
 $ExampleValue = "Valor del rango";
 $CalculatedAnswer = "Pregunta calculada";

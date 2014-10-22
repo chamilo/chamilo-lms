@@ -3081,17 +3081,23 @@ class learnpath
             if ($color_counter % 2 == 0) {
                 $scorm_color_background = 'scorm_item_1';
             }
-            if ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
+
+            $dirTypes = array(
+                'dokeos_module',
+                'dokeos_chapter',
+                'dir'
+            );
+
+            if (in_array($item['type'], $dirTypes)) {
                 $scorm_color_background =' scorm_item_section ';
             }
             if ($item['id'] == $this->current) {
-                $scorm_color_background .= ' scorm_item_highlight';
+                $scorm_color_background .= ' scorm_item_highlight ';
             } else {
-                $scorm_color_background .= ' scorm_item_normal';
+                $scorm_color_background .= ' scorm_item_normal ';
             }
 
             $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';
-
 
             // Learning path title
             $title = $item['title'];
@@ -3100,51 +3106,25 @@ class learnpath
             }
             $title = Security::remove_XSS($title);
 
-             // Learning path personalization
+            // Learning path personalization
             // build the LP tree
             // The anchor atoc_ will let us center the TOC on the currently viewed item &^D
-            if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
+            if (in_array($item['type'], $dirTypes)) {
+                // Chapters
+                $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$item['description'].'" >';
+            } else {
                 $html .= '<div class="'.$style_item.' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$item['description'].'" >';
                 $html .= '<a name="atoc_'.$item['id'].'" />';
-            } else {
-                $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$item['description'].'" >';
             }
-            // display title
-            if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dir' && $item['type'] != 'dokeos_module') {
-                $this->get_link('http', $item['id'], $toc_list);
-                $html .= '<a href="" onClick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
-            } else {
+
+            if (in_array($item['type'], $dirTypes)) {
+                // Chapter
                 // if you want to put an image before, you should use css
                 $html .= stripslashes($title);
-            }
-
-            /*$tbl_track_e_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-            $user_id = api_get_user_id();
-
-            $sql = "SELECT path  FROM $tbl_track_e_exercises, $tbl_lp_item
-                    WHERE   c_id = $course_id AND
-                            path =   '" . $item['path'] . "' AND
-                            exe_user_id =  '$user_id' AND
-                            exe_cours_id = '$course_code' AND
-                            path = exe_exo_id AND
-                            status <> 'incomplete'";
-            $result = Database::query($sql);
-            $count = Database :: num_rows($result);*/
-
-            /*if ($item['type'] == 'quiz') {
-                if ($item['status'] == 'completed') {
-                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
-                } else {
-                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name['not attempted'] . "' alt='" . substr('not attempted', 0, 1) . "' width='14' />";
-                }
             } else {
-                if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dokeos_module' && $item['type'] != 'dir') {
-                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
-                }
+                $this->get_link('http', $item['id'], $toc_list);
+                $html .= '<a href="" onClick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
             }
-            */
-
             $html .= "</div>";
 
             if ($scorm_color_background != '') {
@@ -3160,7 +3140,8 @@ class learnpath
      * Gets the learnpath maker name - generally the editor's name
      * @return	string	Learnpath maker name
      */
-    public function get_maker() {
+    public function get_maker()
+    {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_maker()', 0);
         }

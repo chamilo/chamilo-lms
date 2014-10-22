@@ -398,6 +398,19 @@
     background-repeat: no-repeat;
 }
 
+.scorm_item_section.scorm_item_normal.scorm_completed {
+    background-image: url("images/blue_arrow.png") !important;
+    background-position: 270px center !important;
+    background-repeat: no-repeat;
+    background-color: #05abe0;
+}
+
+.scorm_item_section.scorm_item_normal.scorm_not_attempted {
+    background-image: none;
+    background-position: 270px center !important;
+    background-repeat: no-repeat;
+    background-color: #808080;
+}
 
 #learning_path_main #control {
     background-image: none;

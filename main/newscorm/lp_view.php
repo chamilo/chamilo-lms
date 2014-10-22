@@ -311,7 +311,7 @@ if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -
     $lp_theme_css = $my_style;
 }
 
-$progress_bar   = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
+$progress_bar   = $_SESSION['oLP']->getProgressBar();
 $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 $mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
 

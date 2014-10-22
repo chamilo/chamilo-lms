@@ -1623,7 +1623,8 @@ class learnpath
                     'dokeos_chapter',
                     'chapter',
                     'dir'
-                )))
+                ))
+            )
             $total++;
         }
         return $total;
@@ -1638,8 +1639,6 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::first()', 0);
             error_log('$this->last_item_seen '.$this->last_item_seen);
-            //error_log('$this->items '.print_r($this->items, 1));
-            //error_log('$this->ordered_items '.print_r($this->ordered_items, 1));
         }
 
         // Test if the last_item_seen exists and is not a dir.
@@ -2031,22 +2030,33 @@ class learnpath
 
     /**
      * Gets the progress value from the progress field in the database (allows use as abstract method)
-     * @param	integer	Learnpath ID
-     * @param	integer	User ID
-     * @param	string	Mode of display ('%','abs' or 'both')
-     * @param	string	Course database name (optional, defaults to '')
-     * @param	boolean	Whether to return null if no record was found (true), or 0 (false) (optional, defaults to false)
+     * @param	integer	$lp_id Learnpath ID
+     * @param	integer	$user_id User ID
+     * @param	string	$mode Mode of display ('%','abs' or 'both')
+     * @param	string	$course_code Course code (optional, defaults to '')
+     * @param	boolean	$sincere Whether to return null if no record
+     * was found (true), or 0 (false) (optional, defaults to false)
+     * @param  int     $session_id
      * @return	integer	Current progress value as found in the database
      */
-    public static function get_db_progress($lp_id, $user_id, $mode = '%', $course_code = '', $sincere = false,$session_id = 0) {
-
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::get_db_progress()', 0); }
+    public static function get_db_progress(
+        $lp_id,
+        $user_id,
+        $mode = '%',
+        $course_code = '',
+        $sincere = false,
+        $session_id = 0
+    ) {
+        $table = Database :: get_course_table(TABLE_LP_VIEW);
+        $lp_id = intval($lp_id);
         $session_id = intval($session_id);
+        $user_id = intval($user_id);
         $course_info = api_get_course_info($course_code);
         $session_condition = api_get_session_condition($session_id);
         $course_id = $course_info['real_id'];
-        $table = Database :: get_course_table(TABLE_LP_VIEW);
-        $sql = "SELECT * FROM $table WHERE c_id = ".$course_id." AND lp_id = $lp_id AND user_id = $user_id $session_condition";
+
+        $sql = "SELECT * FROM $table
+                WHERE c_id = ".$course_id." AND lp_id = $lp_id AND user_id = $user_id $session_condition";
         $res = Database::query($sql);
         $view_id = 0;
         if (Database :: num_rows($res) > 0) {
@@ -2059,7 +2069,7 @@ class learnpath
             }
         }
 
-        if (empty ($progress)) {
+        if (empty($progress)) {
             $progress = '0';
         }
 
@@ -2069,25 +2079,29 @@ class learnpath
             // Get the number of items completed and the number of items total.
             $tbl = Database :: get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT count(*) FROM $tbl
-            		WHERE c_id = $course_id AND c_id = ".$course_id." AND lp_id = " . $lp_id . " AND item_type NOT IN('dokeos_chapter','chapter','dir')";
+            		WHERE
+            		    c_id = $course_id AND
+            		    c_id = ".$course_id." AND
+            		    lp_id = " . $lp_id . " AND
+            		    item_type NOT IN('dokeos_chapter','chapter','dir')";
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
             $total = $row[0];
             $tbl_item_view = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
             $tbl_item = Database :: get_course_table(TABLE_LP_ITEM);
 
-            //$sql = "SELECT count(distinct(lp_item_id)) FROM $tbl WHERE lp_view_id = ".$view_id." AND status IN ('passed','completed','succeeded')";
             // Trying as also counting browsed and failed items.
             $sql = "SELECT count(distinct(lp_item_id))
                     FROM $tbl_item_view as item_view
                     INNER JOIN $tbl_item as item
-                    ON item.id = item_view.lp_item_id
-                    AND item_type NOT IN('dokeos_chapter','chapter','dir')
+                    ON
+                        item.id = item_view.lp_item_id AND
+                        item_type NOT IN('dokeos_chapter','chapter','dir')
                     WHERE
                     	item_view.c_id 	= $course_id AND
                     	item.c_id 		= $course_id  AND
                     	lp_view_id 		= " . $view_id . " AND
-            			status IN ('passed','completed','succeeded','browsed','failed')"; //echo '<br />';
+            			status IN ('passed','completed','succeeded','browsed','failed')";
             $res = Database::query($sql);
             $row = Database :: fetch_array($res);
             $completed = $row[0];
@@ -2100,6 +2114,7 @@ class learnpath
                 return $progress . '% (' . $completed . '/' . $total . ')';
             }
         }
+
         return $progress;
     }
 
@@ -2279,21 +2294,11 @@ class learnpath
      * @param	boolean true if it comes from a Diplay LP view
      * @return	string	HTML string containing the progress bar
      */
-    public function get_progress_bar($mode = '', $percentage = -1, $text_add = '', $from_lp = false) {
-        //if ($this->debug > 0) {error_log('New LP - In learnpath::get_progress_bar('.$mode.','.$percentage.','.$text_add.','.$from_lp.')', 0); }
-        global $lp_theme_css;
-
-        // Setting up the CSS path of the current style if exists.
-        if (!empty ($lp_theme_css)) {
-            $css_path = api_get_path(WEB_CODE_PATH) . 'css/' . $lp_theme_css . '/images/';
-        } else {
-            $css_path = '../img/';
-        }
-
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::get_progress_bar()', 0); }
-        if (isset($this) && is_object($this) && ($percentage == '-1' OR $text_add == '')) {
+    public static function get_progress_bar($percentage = -1, $text_add = '')
+    {
+        /*if (isset($this) && is_object($this) && ($percentage == '-1' OR $text_add == '')) {
             list($percentage, $text_add) = $this->get_progress_bar_text($mode);
-        }
+        }*/
         $text = $percentage . $text_add;
         //@todo use Display::display_progress();
         $output = '<div class="progress progress-striped">
@@ -2305,9 +2310,21 @@ class learnpath
     }
 
     /**
-     * Gets the progress bar info to display inside the progress bar. Also used by scorm_api.php
-     * @param	string	Mode of display (can be '%' or 'abs').abs means we display a number of completed elements per total elements
-     * @param	integer	Additional steps to fake as completed
+     * @param string $mode
+     * @return string
+     */
+    public function getProgressBar($mode)
+    {
+        list($percentage, $text_add) = $this->get_progress_bar_text($mode);
+        return self::get_progress_bar($percentage, $text_add);
+    }
+
+    /**
+     * Gets the progress bar info to display inside the progress bar.
+     * Also used by scorm_api.php
+     * @param	string	$mode Mode of display (can be '%' or 'abs').abs means
+     * we display a number of completed elements per total elements
+     * @param	integer	$add Additional steps to fake as completed
      * @return	list	Percentage or number and symbol (% or /xx)
      */
     public function get_progress_bar_text($mode = '', $add = 0)
@@ -2336,6 +2353,7 @@ class learnpath
         if ($i > $total_items) {
             $i = $total_items;
         }
+        $percentage = 0;
         if ($mode == '%') {
             if ($total_items > 0) {
                 $percentage = ((float) $i / (float) $total_items) * 100;
@@ -2348,6 +2366,7 @@ class learnpath
             $percentage = $i;
             $text = '/' . $total_items;
         }
+
         return array(
             $percentage,
             $text

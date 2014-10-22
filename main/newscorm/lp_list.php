@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This file was origially the copy of document.php, but many modifications happened since then ;
- * the direct file view is not any more needed, if the user uploads a scorm zip file, a directory
+ * This file was originally the copy of document.php, but many modifications happened since then ;
+ * the direct file view is not any more needed, if the user uploads a SCORM zip file, a directory
  * will be automatically created for it, and the files will be uncompressed there for example ;
  *
  * @package chamilo.learnpath
@@ -234,7 +234,16 @@ if (!empty($flat_list)) {
         if ($is_allowed_to_edit) {
             $dsp_progress = '<td><center>'.$progress.'</center></td>';
         } else {
-            $dsp_progress = '<td>'.learnpath::get_progress_bar('%', learnpath::get_db_progress($id, $userId, '%', '', false, api_get_session_id())).'</td>';
+            $dsp_progress = '<td>'.learnpath::get_progress_bar(
+                    learnpath::get_db_progress(
+                        $id,
+                        $userId,
+                        '%',
+                        '',
+                        false,
+                        api_get_session_id()
+                    )
+                ).'</td>';
         }
 
         $dsp_edit = '<td class="td_actions">';

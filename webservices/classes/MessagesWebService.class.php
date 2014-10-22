@@ -14,11 +14,20 @@ class MessagesWebService extends WebService
 
     /**
      * Generate the api key for a user
+     * @param int $userId The user id
      * @return string The api key
      */
-    public function generateApiKey()
+    public function generateApiKey($userId)
     {
-        return sha1('Chamilo-LMS');
+        $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        if (empty($apiKey)) {
+            UserManager::add_api_key($userId, self::SERVICE_NAME);
+
+            $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+        }
+
+        return current($apiKey);
     }
 
     /**
@@ -34,15 +43,7 @@ class MessagesWebService extends WebService
         if ($this->apiKey !== null) {
             return $this->apiKey;
         } else {
-            $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
-
-            if (empty($apiKey)) {
-                UserManager::add_api_key($userId, self::SERVICE_NAME);
-
-                $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
-            }
-
-            $this->apiKey = current($apiKey);
+            $this->apiKey = $this->generateApiKey($userId);
 
             return $this->apiKey;
         }

@@ -160,6 +160,7 @@ $stats = Tracking::getStats($userId);
 $students = $stats['students'];
 $teachers = $stats['teachers'];
 $humanResourcesUsers = $stats['drh'];
+$assignedCourses = $stats['assignedCourses'];
 $courses = $stats['courses'];
 $sessions = $stats['sessions'];
 
@@ -171,6 +172,7 @@ if (!empty($sessions)) {
 }
 
 // Courses for the user
+$countAssignedCourses = count($assignedCourses);
 $count_courses = count($courses);
 
 // Sessions for the user
@@ -273,6 +275,14 @@ echo '<div class="report_section">
             ).
             '</td>
                 <td align="right">'.($nb_students + $numberTeachers + $countHumanResourcesUsers).$linkAddUser.'</td>
+            </tr>
+            <tr>
+                <td>'.Display::url(
+                    get_lang('AssignedCourses'),
+                    api_get_path(WEB_CODE_PATH).'mySpace/course.php'
+                ).
+                '</td>
+                <td align="right">'.$countAssignedCourses.$linkAddCourse.'</td>
             </tr>
             <tr>
                 <td>'.Display::url(

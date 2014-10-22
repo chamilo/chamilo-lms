@@ -24,6 +24,7 @@ class Tracking
      */
     public static function getStats($userId)
     {
+        $assignedCourses = array();
         if (api_is_drh() && api_drh_can_access_all_session_content()) {
             $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
@@ -175,6 +176,15 @@ class Tracking
                 null,
                 true
             );
+
+            foreach ($platformCourses as $course) {
+                $assignedCourses[$course['code']] = $course['code'];
+            }
+
+            $platformCourses = CourseManager::getCoursesFollowedByUser(
+                $userId,
+                COURSEMANAGER
+            );
             foreach ($platformCourses as $course) {
                 $courses[$course['code']] = $course['code'];
             }
@@ -190,7 +200,8 @@ class Tracking
             'teachers' => $teachers,
             'students' => $students,
             'courses' => $courses,
-            'sessions' => $sessions
+            'sessions' => $sessions,
+            'assignedCourses' => $assignedCourses
         );
     }
 

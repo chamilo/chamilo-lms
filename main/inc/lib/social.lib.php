@@ -622,7 +622,7 @@ class SocialManager extends UserManager
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
         $showUserImage = user_is_online($user_id) || api_is_platform_admin();
 
-        $html = '<div class="social-menu">';
+        $html = '<div>';
         if (in_array($show, $show_groups) && !empty($group_id)) {
             //--- Group image
             $group_info = GroupPortalManager::get_group_data($group_id);
@@ -662,6 +662,7 @@ class SocialManager extends UserManager
             }
             $html .= '</div>';
         }
+        $html .= '</div>';
         return $html;
     }
 

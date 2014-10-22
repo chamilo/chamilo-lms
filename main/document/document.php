@@ -1108,30 +1108,26 @@ if ($is_allowed_to_edit ||
             $dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
             $dir_name = disable_dangerous_file($dir_name);
             $dir_check = $base_work_dir.$dir_name;
+            $visibility = empty($groupId) ? null : 1;
 
-            if (!is_dir($dir_check)) {
-                $visibility = empty($groupId) ? null : 1;
+            $created_dir = create_unexisting_directory(
+                $courseInfo,
+                api_get_user_id(),
+                $sessionId,
+                $groupId,
+                $to_user_id,
+                $base_work_dir,
+                $dir_name,
+                $post_dir_name,
+                $visibility
+            );
 
-                $created_dir = create_unexisting_directory(
-                    $courseInfo,
-                    api_get_user_id(),
-                    $sessionId,
-                    $groupId,
-                    $to_user_id,
-                    $base_work_dir,
-                    $dir_name,
-                    $post_dir_name,
-                    $visibility
-                );
-
-                if ($created_dir) {
-                    $message = Display::return_message(get_lang('DirCr').' '.$created_dir, 'confirmation');
-                } else {
-                    $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
-                }
+            if ($created_dir) {
+                $message = Display::return_message(get_lang('DirCr').' '.$created_dir, 'confirmation');
             } else {
                 $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
             }
+
         }
         Session::write('message', $message);
     }

@@ -24,9 +24,6 @@
  * @todo improve script structure (FormValidator is used to display form, but
  * not for validation at the moment)
  */
-/**
- * Code
- */
 
 // Name of the language file that needs to be included
 $language_file = array('document', 'gradebook');
@@ -241,10 +238,10 @@ if (isset($_POST['comment'])) {
 if ($is_allowed_to_edit) {
 	if (isset($_POST['formSent']) && $_POST['formSent'] == 1) {
 
-		$filename   = stripslashes($_POST['filename']);
-        $extension  = $_POST['extension'];
-		$content    = trim(str_replace(array("\r", "\n"), '', stripslashes($_POST['content'])));
-		$content    = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
+		$filename = stripslashes($_POST['filename']);
+        $extension = $_POST['extension'];
+		$content = isset($_POST['content']) ? trim(str_replace(array("\r", "\n"), '', stripslashes($_POST['content']))) : null;
+		$content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
 
 		if (!strstr($content, '/css/frames.css')) {
 			$content = str_replace('</title></head>', '</title><link rel="stylesheet" href="../css/frames.css" type="text/css" /></head>', $content);
@@ -255,7 +252,7 @@ if ($is_allowed_to_edit) {
         }
 
 		$file = $dir.'/'.$filename.'.'.$extension;
-		$read_only_flag = $_POST['readonly'];
+		$read_only_flag = isset($_POST['readonly']) ? $_POST['readonly'] : null;
 		$read_only_flag = empty($read_only_flag) ? 0 : 1;
 
 		if (empty($filename)) {
@@ -267,17 +264,8 @@ if ($is_allowed_to_edit) {
 			if ($read_only_flag == 0) {
 				if (!empty($content)) {
 					if ($fp = @fopen($document_data['absolute_path'], 'w')) {
-						// For flv player, change absolute paht temporarely to prevent from erasing it in the following lines
+						// For flv player, change absolute path temporarily to prevent from erasing it in the following lines
 						$content = str_replace(array('flv=h', 'flv=/'), array('flv=h|', 'flv=/|'), $content);
-
-						// Change the path of mp3 to absolute
-						// The first regexp deals with ../../../ urls
-						// Disabled by Ivan Tcholakov.
-						//$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
-						// The second regexp deals with audio/ urls
-						// Disabled by Ivan Tcholakov.
-						//$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);
-
  						fputs($fp, $content);
 						fclose($fp);
 
@@ -331,15 +319,21 @@ if ($is_allowed_to_edit) {
 }
 
 // Replace relative paths by absolute web paths (e.g. './' => 'http://www.chamilo.org/courses/ABC/document/')
+$content = null;
+$extension = null;
+$filename = null;
 if (file_exists($document_data['absolute_path'])) {
     $path_info = pathinfo($document_data['absolute_path']);
     $filename = $path_info['filename'];
-    $extension = $path_info['extension'];
 
-	if (in_array($extension, array('html', 'htm'))) {
-		$content = file($document_data['absolute_path']);
-		$content = implode('', $content);
-	}
+    if (is_file($document_data['absolute_path'])) {
+        $extension = $path_info['extension'];
+
+        if (in_array($extension, array('html', 'htm'))) {
+            $content = file($document_data['absolute_path']);
+            $content = implode('', $content);
+        }
+    }
 }
 
 /*	Display user interface */
@@ -365,7 +359,13 @@ $document_info  = api_get_item_property_info(api_get_course_int_id(),'document',
 $owner_id       = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
 
-if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id() )) {
+if ($owner_id == api_get_user_id() ||
+    api_is_platform_admin() ||
+    $is_allowed_to_edit || GroupManager:: is_user_in_group(
+        api_get_user_id(),
+        api_get_group_id()
+    )
+) {
 	$action = api_get_self().'?id='.$document_data['id'].'&'.api_get_cidreq();
 	$form = new FormValidator('formEdit', 'post', $action, null, array('class' => 'form-vertical'));
 
@@ -469,16 +469,6 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 }
 
 Display::display_footer();
-
-
-/* General functions */
-
-/*
-	Workhorse functions
-
-	These do the actual work that is expected from of this tool, other functions
-	are only there to support these ones.
-*/
 
 /**
 	This function changes the name of a certain file.

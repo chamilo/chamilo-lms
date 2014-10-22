@@ -54,9 +54,9 @@ require_once 'aicc.class.php';
 
 // Is this needed? This is probabaly done in the header file.
 //$_user							= $_SESSION['_user'];
-$file							= $_SESSION['file'];
-$oLP							= unserialize($_SESSION['lpobject']);
-$oItem 							=& $oLP->items[$oLP->current];
+$file = $_SESSION['file'];
+$oLP = unserialize($_SESSION['lpobject']);
+$oItem =& $oLP->items[$oLP->current];
 if (!is_object($oItem)) {
     error_log('New LP - aicc_hacp - Could not load oItem item', 0);
     exit;

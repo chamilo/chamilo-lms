@@ -28,8 +28,8 @@ if ($teacher) {
 
     $confirmationImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/message_confirmation.png';
     $saveImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/save.png';
-    $moreImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/more.png';
-    $deleteImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/delete.png';
+    $moreImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/img/32/new.png';
+    $deleteImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/img/32/delete.png';
     $showImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/acces_tool.gif';
 
     $paypalEnable = $plugin->get('paypal_enable');

@@ -1,6 +1,6 @@
 <script type='text/javascript' src="../js/buycourses.js"></script>
 
-<link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
+<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 
 <script>
 $(function() {
@@ -22,11 +22,11 @@ $(function() {
     <div class="span12">
         <table id="courses_table" class="data_table">
             <tr class="row_odd">
-                <th>{{ 'Title'|get_lang }}</th>
-                <th>{{ 'OfficialCode'|get_lang }}</th>
-                <th class="ta-center">{{ 'Visible'|get_lang }}</th>
-                <th class="span2">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th class="span1 ta-center">{{ 'Option'|get_lang }}</th>
+                <th class="bg-color">{{ 'Title'|get_lang }}</th>
+                <th class="bg-color">{{ 'OfficialCode'|get_lang }}</th>
+                <th class="ta-center bg-color">{{ 'Visible'|get_lang }}</th>
+                <th class="span2 bg-color">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th class="span1 ta-center bg-color">{{ 'Option'|get_lang }}</th>
             </tr>
             {% set i = 0 %}
 
@@ -64,12 +64,12 @@ $(function() {
     <div class="span12">
         <table id="courses_table" class="data_table">
             <tr class="row_odd">
-                <th>{{ 'Title'|get_lang }}</th>
-                <th>{{ 'StartDate'|get_lang }}</th>
-                <th>{{ 'EndDate'|get_lang }}</th>
-                <th class="ta-center">{{ 'Visible'|get_lang }}</th>
-                <th class="span2">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th class="span1 ta-center">{{ 'Option'|get_lang }}</th>
+                <th class="bg-color">{{ 'Title'|get_lang }}</th>
+                <th class="bg-color">{{ 'StartDate'|get_lang }}</th>
+                <th class="bg-color">{{ 'EndDate'|get_lang }}</th>
+                <th class="bg-color ta-center">{{ 'Visible'|get_lang }}</th>
+                <th class="bg-color span2">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th class="bg-color span1 ta-center">{{ 'Option'|get_lang }}</th>
             </tr>
             {% set i = 0 %}
 

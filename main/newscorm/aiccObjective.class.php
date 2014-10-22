@@ -1,18 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+require_once 'learnpathItem.class.php';
+
 /**
+ * Class defining the Block elements in an AICC Course Structure file.
  * Container for the aiccResource class that deals with elemens from AICC Objectives file
  * @package	chamilo.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @license	GNU/GPL
  */
-
-/**
- * Class defining the Block elements in an AICC Course Structure file.
- */
-require_once 'learnpathItem.class.php';
-class aiccObjective extends learnpathItem {
+class aiccObjective extends learnpathItem
+{
     public $identifier = '';
     public $members = array();
 
@@ -22,8 +21,8 @@ class aiccObjective extends learnpathItem {
      * @param	string	Type of construction needed ('db' or 'config', default = 'config')
      * @param	mixed	Depending on the type given, DB id for the lp_item or parameters array
      */
-    function aiccObjective($type = 'config', $params) {
-
+    function aiccObjective($type = 'config', $params)
+    {
         if (isset($params)) {
             switch ($type) {
                 case 'db':
@@ -48,9 +47,11 @@ class aiccObjective extends learnpathItem {
                                  break;
                          }
                      }
+
                     return true;
             }
         }
+
         return false;
      }
 }

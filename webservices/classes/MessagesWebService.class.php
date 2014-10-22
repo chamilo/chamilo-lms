@@ -81,10 +81,8 @@ class MessagesWebService extends WebService
      */
     public function countNewMessages($username, $lastId = 0)
     {
-        $lastId = intval($lastId);
-
         $userInfo = api_get_user_info_from_username($username);
-        $userId = intval($userInfo['user_id']);
+        $userId = $userInfo['user_id'];
 
         return MessageManager::countMessagesFromLastReceivedMessage($userId, $lastId);
     }
@@ -99,10 +97,8 @@ class MessagesWebService extends WebService
     {
         $messages = array();
 
-        $lastId = intval($lastId);
-
         $userInfo = api_get_user_info_from_username($username);
-        $userId = intval($userInfo['user_id']);
+        $userId = $userInfo['user_id'];
 
         $lastMessages = MessageManager::getMessagesFromLastReceivedMessage($userId, $lastId);
 

@@ -33,8 +33,8 @@ if ($teacher) {
     $visibility[] = getCourseVisibilityIcon('3');
 
     $coursesList = listCourses();
-    $confirmationImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/message_confirmation.png';
-    $saveImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/save.png';
+    $confirmationImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/img/32/accept.png';
+    $saveImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/img/32/save.png';
     $currencyType = findCurrency();
 
     $tpl->assign('server', $_configuration['root_web']);

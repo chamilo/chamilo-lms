@@ -1802,7 +1802,7 @@ class learnpath
             $info .= "top.set_max(" . learnpathItem :: get_max() . ");\n";
             $info .= "top.set_min(" . learnpathItem :: get_min() . ");\n";
             $info .= "top.set_lesson_status('" . learnpathItem :: get_status() . "');";
-            $info .= "top.set_session_time('" . learnpathItem :: get_scorm_time('js') . "');";
+            $info .= "top.set_session_time('" . learnpathItem :: getScormTimeFromParameter('js') . "');";
             $info .= "top.set_suspend_data('" . learnpathItem :: get_suspend_data() . "');";
             $info .= "top.set_saved_lesson_status('" . learnpathItem :: get_status() . "');";
             $info .= "top.set_flag_synchronized();";

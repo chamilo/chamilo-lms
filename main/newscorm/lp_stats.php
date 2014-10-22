@@ -335,7 +335,7 @@ if (is_array($list) && count($list) > 0) {
                 $lesson_status = $row['mystatus'];
                 $score = $row['myscore'];
                 $time_for_total = $row['mytime'];
-                $time = learnpathItem :: get_scorm_time('js', $row['mytime']);
+                $time = learnpathItem :: getScormTimeFromParameter('js', $row['mytime']);
                 $scoIdentifier = $row['myid'];
 
                 if ($score == 0) {
@@ -627,7 +627,7 @@ if (is_array($list) && count($list) > 0) {
             }
 
             $time_for_total = $subtotal_time;
-            $time = learnpathItem :: get_scorm_time('js', $subtotal_time);
+            $time = learnpathItem :: getScormTimeFromParameter('js', $subtotal_time);
             if (empty($title)) {
                 $title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
             }
@@ -818,7 +818,7 @@ if (is_array($list) && count($list) > 0) {
                             $mktime_exe_date = api_strtotime($row_attempts['exe_date'], 'UTC');
                             if ($mktime_start_date && $mktime_exe_date) {
                                 $mytime = ((int) $mktime_exe_date - (int) $mktime_start_date);
-                                $time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
+                                $time_attemp = learnpathItem :: getScormTimeFromParameter('js', $mytime);
                                 $time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
                             } else {
                                 $time_attemp = ' - ';
@@ -945,7 +945,7 @@ if (!empty($a_my_id)) {
     }
 }
 
-$total_time = learnpathItem :: get_scorm_time('js', $total_time);
+$total_time = learnpathItem :: getScormTimeFromParameter('js', $total_time);
 $total_time = str_replace('NaN', '00' . $h . '00\'00"', $total_time);
 
 if (!$is_allowed_to_edit && $result_disabled_ext_all) {

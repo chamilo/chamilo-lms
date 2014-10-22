@@ -332,9 +332,9 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                                        </tr>";
                                    while ($ar3['status'] != '') {
                                     require_once '../newscorm/learnpathItem.class.php';
-                                    $time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
+                                    $time = learnpathItem::getScormTimeFromParameter('php', $ar3['total_time']);
                                        echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
-                                       echo "$title</td><td align=right>{$ar3['status']}</td><td     align=right>{$ar3['score']}</td><td align=right>$time</td>";
+                                       echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
                                        echo "</tr>";
                                        $ar3=Database::fetch_array($result3);
                                    }

@@ -1771,6 +1771,24 @@ class learnpathItem
     }
 
     /**
+     * @param string $origin
+     * @return string
+     */
+    public static function getScormTimeFromParameter($origin = 'php', $time = null)
+    {
+        $h = get_lang('h');
+        if (!isset($time)) {
+            if ($origin == 'js') {
+                return '00:00:00';
+            } else {
+                return '00' . $h . '00\'00"';
+            }
+        } else {
+            return self::calculateScormTime($origin, $time);
+        }
+    }
+
+    /**
      * Gets the total time spent on this item view so far
      * @param  string  $origin  Origin of the request. If coming from PHP,
      * send formatted as xxhxx'xx", otherwise use scorm format 00:00:00
@@ -1783,7 +1801,6 @@ class learnpathItem
         $given_time = null,
         $query_db = false
     ) {
-        $h = get_lang('h');
         $time = null;
         $course_id = api_get_course_int_id();
         if (!isset($given_time)) {
@@ -1793,34 +1810,26 @@ class learnpathItem
                     0
                 );
             }
-            if (is_object($this)) {
-                if ($query_db === true) {
-                    $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                    $sql = "SELECT start_time, total_time FROM $table
-                           WHERE
-                                c_id = $course_id AND
-                                id = '" . $this->db_item_view_id . "' AND
-                                view_count = '" . $this->get_attempt_id() . "'";
-                    $res = Database::query($sql);
-                    $row = Database::fetch_array($res);
-                    $start = $row['start_time'];
-                    $stop = $start + $row['total_time'];
-                } else {
-                    $start = $this->current_start_time;
-                    $stop = $this->current_stop_time;
-                }
-                if (!empty($start)) {
-                    if (!empty($stop)) {
-                        $time = $stop - $start;
-                    } else {
-                        $time = time() - $start;
-                    }
-                }
+            if ($query_db === true) {
+                $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+                $sql = "SELECT start_time, total_time FROM $table
+                       WHERE
+                            c_id = $course_id AND
+                            id = '" . $this->db_item_view_id . "' AND
+                            view_count = '" . $this->get_attempt_id() . "'";
+                $res = Database::query($sql);
+                $row = Database::fetch_array($res);
+                $start = $row['start_time'];
+                $stop = $start + $row['total_time'];
             } else {
-                if ($origin == 'js') {
-                    return '00:00:00';
+                $start = $this->current_start_time;
+                $stop = $this->current_stop_time;
+            }
+            if (!empty($start)) {
+                if (!empty($stop)) {
+                    $time = $stop - $start;
                 } else {
-                    return '00' . $h . '00\'00"';
+                    $time = time() - $start;
                 }
             }
         } else {
@@ -1832,21 +1841,35 @@ class learnpathItem
                 0
             );
         }
+        $time = self::calculateScormTime($origin, $time);
+
+        return $time;
+    }
+
+    /**
+     * @param string $origin
+     * @param string $time
+     * @return string
+     */
+    public static function calculateScormTime($origin, $time)
+    {
+        $h = get_lang('h');
         $hours = $time / 3600;
         $mins = ($time % 3600) / 60;
         $secs = ($time % 60);
+
         if ($origin == 'js') {
-            $scorm_time = trim(sprintf("%4d:%02d:%02d", $hours, $mins, $secs));
+            $scormTime = trim(sprintf("%4d:%02d:%02d", $hours, $mins, $secs));
         } else {
-            $scorm_time = trim(
+            $scormTime = trim(
                 sprintf("%4d$h%02d'%02d\"", $hours, $mins, $secs)
             );
         }
         if (self::debug > 2) {
-            error_log('learnpathItem::get_scorm_time(' . $scorm_time . ')', 0);
+            error_log('learnpathItem::get_scorm_time(' . $scormTime . ')', 0);
         }
 
-        return $scorm_time;
+        return $scormTime;
     }
 
     /**

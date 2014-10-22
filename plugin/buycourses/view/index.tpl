@@ -11,9 +11,9 @@
                 <div class="normal-message">
                     <h3>{{ 'Instructions'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
                     <ul>
-                        <li>{{ 'OneInstruction'|get_plugin_lang('BuyCoursesPlugin') }}</li>
-                        <li>{{ 'TwoInstruction'|get_plugin_lang('BuyCoursesPlugin') }}</li>
-                        <li>{{ 'ThreeInstruction'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                        <li>{{ 'InstructionsStep1'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                        <li>{{ 'InstructionsStep2'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                        <li>{{ 'InstructionsStep3'|get_plugin_lang('BuyCoursesPlugin') }}</li>
                     </ul>
                 </div>
             </div>

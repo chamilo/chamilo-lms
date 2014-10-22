@@ -112,7 +112,11 @@ class MessagesWebService extends WebService
                     'firstname' => $message['firstname'],
                     'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
                 ),
-                'content' => $message['content']
+                'content' => $message['content'],
+                'platform' => array(
+                    'website' => api_get_path(WEB_PATH),
+                    'messagingTool' => api_get_path(WEB_PATH) . 'main/messages/inbox.php'
+                )
             );
         }
 

@@ -330,7 +330,7 @@ function checkUserBuy($parameter, $user, $type = 'COURSE')
  */
 function checkUserBuyTransfer($parameter, $user, $type = 'COURSE')
 {
-    $sql = "SELECT 1 FROM %s WHERE %s ='" . Database::escape_string($parameter) . "' AND id_user='" . intval($user) . "';";
+    $sql = "SELECT 1 FROM %s WHERE %s ='" . Database::escape_string($parameter) . "' AND user_id='" . intval($user) . "';";
     $sql = $type === 'SESSION' ?
         sprintf($sql, Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY), 'session_id') :
         sprintf($sql, Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL), 'course_code');
@@ -521,7 +521,7 @@ function sessionInfo($code)
     //check if the user is enrolled in the current session
     if ($currentUserId > 0) {
         $sql = "SELECT 1 FROM $tableSessionRelUser
-            WHERE user_id='".$currentUserId."';";
+            WHERE id_user='".$currentUserId."';";
         Database::query($sql);
         if (Database::affected_rows() > 0) {
             $rowSession['enrolled'] = "YES";

@@ -7,11 +7,6 @@
  * @package chamilo.tracking
  * @todo clean code - structure is unclear and difficult to modify
  */
-/**
- * Code
- */
-
-/* INIT SECTION */
 
 $uInfo = $_REQUEST['uInfo'];
 $view  = $_REQUEST['view'];
@@ -174,18 +169,16 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
             $offset = 0;
         }
         echo $navLink;
-
-    if (!settype($offset, 'integer') || !settype($step, 'integer')) die('Offset or step variables are not integers.');	//sanity check of integer vars
-        if( $is_allowedToTrackEverybodyInCourse ) {
+    //sanity check of integer vars
+    if (!settype($offset, 'integer') || !settype($step, 'integer')) die('Offset or step variables are not integers.');
+        if ($is_allowedToTrackEverybodyInCourse) {
             // list of users in this course
             $sql = "SELECT u.user_id, u.firstname,u.lastname
                         FROM $TABLECOURSUSER cu , $TABLEUSER u
                         WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                             AND cu.course_code = '".Database::escape_string($_cid)."'
                         LIMIT $offset,$step";
-        }
-        else
-        {
+        } else {
             // list of users of this group
             $sql = "SELECT u.user_id, u.firstname,u.lastname
                         FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
@@ -198,7 +191,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     ."<tr align='center' valign='top' bgcolor='#E6E6E6'>\n"
                     ."<td align='left'>",get_lang('UserName'),"</td>\n"
                     ."</tr>\n";
-        for($i = 0 ; $i < sizeof($list_users) ; $i++) {
+        for ($i = 0 ; $i < sizeof($list_users) ; $i++) {
             echo    "<tr valign='top' align='center'>\n"
                     ."<td align='left'>"
                     ."<a href='".api_get_self()."?uInfo=",$list_users[$i][0],"'>"
@@ -206,8 +199,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     ."</a>".
                     "</td>\n";
         }
-        echo        "</table>\n";
-
+        echo        "</table>";
         echo $navLink;
     } else {
         // if uInfo is set
@@ -225,10 +217,10 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
 
             // check if user is in the group of this tutor
             $sql = "SELECT u.firstname,u.lastname, u.email
-                        FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-                        WHERE gu.user_id = u.user_id
-                            AND gu.group_id = '".Database::escape_string($_gid)."'
-                            AND u.user_id = '".Database::escape_string($uInfo)."'";
+                    FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
+                    WHERE gu.user_id = u.user_id
+                        AND gu.group_id = '".Database::escape_string($_gid)."'
+                        AND u.user_id = '".Database::escape_string($uInfo)."'";
             $query = Database::query($sql);
             $tracked_user_info = @Database::fetch_assoc($query);
             if(is_array($tracked_user_info)) $tracking_is_accepted = true;
@@ -256,8 +248,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     "</td>
                 </tr>
             ";
-            if(!isset($view))
-            {
+
+            if(!isset($view)) {
                 $view ='0000000';
             }
             //Logins
@@ -277,7 +269,6 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
         } else {
             echo get_lang('ErrorUserNotInGroup');
         }
-
 
         /*
          *		Scorm contents and Learning Path
@@ -306,45 +297,46 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     echo "<tr><td>";
                     echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."&uInfo=".Security::remove_XSS($uInfo)."' class='specialLink'>$lp_title</a>";
                     echo "</td></tr>";
-                    if ($ar['id']==$scormcontopen) { //have to list the students here
-                            $contentId=$ar['id'];
-                            $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
-                                    "FROM $tbl_learnpath_item i " .
-                                    "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
-                                    "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
-                                    "WHERE (v.user_id=".Database::escape_string($uInfo)." and v.lp_id=$contentId) ORDER BY v.id, i.id";
-                               $result3=Database::query($sql3);
+                    if ($ar['id'] == $scormcontopen) {
+                        //have to list the students here
+                        $contentId=$ar['id'];
+                        $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
+                                "FROM $tbl_learnpath_item i " .
+                                "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
+                                "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
+                                "WHERE (v.user_id=".Database::escape_string($uInfo)." and v.lp_id=$contentId) ORDER BY v.id, i.id";
+                        $result3=Database::query($sql3);
+                        $ar3=Database::fetch_array($result3);
+                        if (is_array($ar3)) {
+                            echo "<tr><td>&nbsp;&nbsp;&nbsp;</td>
+                                   <td class='secLine'>
+                                   &nbsp;".get_lang('ScormTitleColumn')."&nbsp;
+                                   </td>
+                                   <td class='secLine'>
+                                   &nbsp;".get_lang('ScormStatusColumn')."&nbsp;
+                                   </td>
+                                   <td class='secLine'>
+                                   &nbsp;".get_lang('ScormScoreColumn')."&nbsp;
+                                   </td>
+                                   <td class='secLine'>
+                                   &nbsp;".get_lang('ScormTimeColumn')."&nbsp;
+                                   </td>
+                                   </tr>";
+                            while ($ar3['status'] != '') {
+                            require_once '../newscorm/learnpathItem.class.php';
+                            $time = learnpathItem::getScormTimeFromParameter('php', $ar3['total_time']);
+                               echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
+                               echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
+                               echo "</tr>";
                                $ar3=Database::fetch_array($result3);
-                            if (is_array($ar3)) {
-                                echo "<tr><td>&nbsp;&nbsp;&nbsp;</td>
-                                       <td class='secLine'>
-                                       &nbsp;".get_lang('ScormTitleColumn')."&nbsp;
-                                       </td>
-                                       <td class='secLine'>
-                                       &nbsp;".get_lang('ScormStatusColumn')."&nbsp;
-                                       </td>
-                                       <td class='secLine'>
-                                       &nbsp;".get_lang('ScormScoreColumn')."&nbsp;
-                                       </td>
-                                       <td class='secLine'>
-                                       &nbsp;".get_lang('ScormTimeColumn')."&nbsp;
-                                       </td>
-                                       </tr>";
-                                   while ($ar3['status'] != '') {
-                                    require_once '../newscorm/learnpathItem.class.php';
-                                    $time = learnpathItem::getScormTimeFromParameter('php', $ar3['total_time']);
-                                       echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
-                                       echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
-                                       echo "</tr>";
-                                       $ar3=Database::fetch_array($result3);
-                                   }
-                            } else {
-                                echo "<tr>";
-                                echo "<td colspan='3'><center>".get_lang('ScormNeverOpened')."</center></td>";
-                                echo"</tr>";
                             }
-                       }
-                    $ar=Database::fetch_array($result);
+                        } else {
+                            echo "<tr>";
+                            echo "<td colspan='3'><center>".get_lang('ScormNeverOpened')."</center></td>";
+                            echo"</tr>";
+                        }
+                    }
+                    $ar = Database::fetch_array($result);
                 }
             } else {
                 $noscorm=true;
@@ -367,11 +359,10 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                 </tr>
             ";
         }
-
     }
 } else {
     // not allowed
-        api_not_allowed();
+    api_not_allowed();
 }
 ?>
 </table>

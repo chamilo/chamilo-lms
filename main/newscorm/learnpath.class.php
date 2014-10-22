@@ -2381,10 +2381,11 @@ class learnpath
     }
 
     /**
-     * @param string $mode
+     * @param string $mode can be '%' or 'abs'
+     * otherwise this value will be used $this->progress_bar_mode
      * @return string
      */
-    public function getProgressBar($mode)
+    public function getProgressBar($mode = null)
     {
         list($percentage, $text_add) = $this->get_progress_bar_text($mode);
         return self::get_progress_bar($percentage, $text_add);
@@ -2403,7 +2404,7 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_progress_bar_text()', 0);
         }
-        if (empty ($mode)) {
+        if (empty($mode)) {
             $mode = $this->progress_bar_mode;
         }
         $total_items = $this->get_total_items_count_without_chapters();

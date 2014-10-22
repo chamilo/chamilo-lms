@@ -896,7 +896,7 @@ if (!empty($a_my_id)) {
         $my_course_id = Database::escape_string(api_get_course_id());
     }
     if (isset($_GET['extend_attempt'])) {
-        //"Right green cross" extended
+        // "Right green cross" extended
         $total_score = Tracking::get_avg_student_score(
             $my_studen_id,
             $my_course_id,
@@ -905,8 +905,9 @@ if (!empty($a_my_id)) {
             false,
             false
         );
+
     } else {
-        //"Left green cross" extended
+        // "Left green cross" extended
         $total_score = Tracking::get_avg_student_score(
             $my_studen_id,
             $my_course_id,
@@ -945,18 +946,16 @@ if (!empty($a_my_id)) {
 }
 
 $total_time = learnpathItem :: get_scorm_time('js', $total_time);
-//$total_time = str_replace('NaN', '00:00:00' ,$total_time);
 $total_time = str_replace('NaN', '00' . $h . '00\'00"', $total_time);
-//$lp_type = learnpath :: get_type_static($lp_id);
-//$total_percent = 0;
 
 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
     $final_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
 } else {
-    if (is_numeric($total_score))
+    if (is_numeric($total_score)) {
         $final_score = $total_score . '%';
-    else
+    } else {
         $final_score = $total_score;
+    }
 }
 
 if (($counter % 2) == 0) {

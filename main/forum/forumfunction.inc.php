@@ -65,6 +65,7 @@ $(function () {
         uploadTable:   $('.files'),
         downloadTable: $('.files'),
         buildUploadRow: function (files, index) {
+            advanced_parameters();
             return $('<tr><td>' + files[index].name + '<\/td>' +
                     '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
                     '<td class=\"file_upload_cancel\">' +
@@ -2439,11 +2440,11 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
 
-        $iframe = null;
+        /*$iframe = null;
         $myThread = Security::remove_XSS($myThread);
         if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
             $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
-        }
+        }*/
 
         if (!empty($iframe)) {
             $form->addElement('label', get_lang('Thread'), $iframe);

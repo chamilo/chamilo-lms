@@ -3898,14 +3898,16 @@ a.forum_group_link {
 .forum_description {
     color: #000;
     font-weight: normal;
-    font-size: 11px;
+    font-size: 15px;
+    padding-top: 1em;
+    padding-bottom: .5em;
 }
 .forum_description p{
     font-size: 11px;
 }
-.forum_title {
+.forum_title h1{
     color: #000;
-    font-size: 14px;
+    padding-top: 1em;
 }
 .forum_low_description {
     color: #737780;

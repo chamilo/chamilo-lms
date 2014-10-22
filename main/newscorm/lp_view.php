@@ -439,6 +439,7 @@ if ($is_allowed_to_edit) {
     <!-- right zone -->
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
     <?php
+    $src = !empty($src) ? str_replace('&amp;', '&', $src) : '';
         // hub 26-05-2010 Fullscreen or not fullscreen
         $height = '100%';
         if ($_SESSION['oLP']->mode == 'fullscreen') {

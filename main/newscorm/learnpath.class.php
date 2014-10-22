@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use \ChamiloSession as Session;
+
 /**
  * This class defines the parent attributes and methods for Chamilo learnpaths and SCORM
  * learnpaths. It is used by the scorm class.
@@ -8,11 +11,6 @@
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @author	Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
  */
-/**
- * Defines the learnpath parent class
- * @package chamilo.learnpath
- */
-
 class learnpath
 {
     public $attempt = 0; // The number for the current ID view.
@@ -4039,8 +4037,16 @@ class learnpath
             $item_id = $this->get_current_item_id();
         }
         if (isset($this->items[$item_id]) && is_object($this->items[$item_id])) {
-            if ($debug) { error_log('Object exists'); }
-            $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));
+            if ($debug) {
+                error_log('Object exists');
+            }
+
+            // Saving the item.
+            $res = $this->items[$item_id]->save(
+                $from_outside,
+                $this->prerequisites_match($item_id)
+            );
+
             if ($debug) {
                 error_log('update_queue before:');
                 error_log(print_r($this->update_queue,1));
@@ -4063,7 +4069,8 @@ class learnpath
     /**
      * Saves the last item seen's ID only in case
      */
-    public function save_last() {
+    public function save_last()
+    {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::save_last()', 0);
@@ -9459,6 +9466,24 @@ EOD;
     private static function format_scorm_type_item($in_type)
     {
         return str_replace(' ', '_', $in_type);
+    }
+
+    /**
+     * @return \learnpath
+     */
+    public static function getLpFromSession($courseCode, $lp_id, $user_id)
+    {
+        $lpObject = Session::read('lpobject');
+        $learnPath = null;
+        if (isset($lpObject)) {
+            $learnPath = unserialize($lpObject);
+        }
+
+        if (!is_object($learnPath)) {
+            $learnPath = new learnpath($courseCode, $lp_id, $user_id);
+        }
+
+        return $learnPath;
     }
 }
 

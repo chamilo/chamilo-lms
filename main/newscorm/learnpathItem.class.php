@@ -3742,10 +3742,11 @@ class learnpathItem
 
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $sql_verified = 'SELECT status FROM ' . $item_view_table . '
-		                 WHERE c_id = ' . $course_id . '
-		                    AND lp_item_id="' . $this->db_id . '"
-		                    AND lp_view_id="' . $this->view_id . '"
-		                    AND view_count="' . $this->get_attempt_id() . '" ;';
+		                 WHERE
+                            c_id = ' . $course_id . ' AND
+                            lp_item_id="' . $this->db_id . '" AND
+                            lp_view_id="' . $this->view_id . '" AND
+                            view_count="' . $this->get_attempt_id() . '" ;';
         $rs_verified = Database::query($sql_verified);
         $row_verified = Database::fetch_array($rs_verified);
 
@@ -3754,7 +3755,7 @@ class learnpathItem
             'passed',
             'browsed',
             'failed'
-        ); // Added by Isaac Flores.
+        );
 
         $save = true;
 
@@ -3765,9 +3766,8 @@ class learnpathItem
         }
 
         if ((($save === false && $this->type == 'sco') ||
-                ($this->type == 'sco' &&
-                    ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))
-            ) && ($this->seriousgame_mode != 1 && $this->type == 'sco')
+           ($this->type == 'sco' && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))
+           ) && ($this->seriousgame_mode != 1 && $this->type == 'sco')
         ) {
             if (self::debug > 1) {
                 error_log(
@@ -3930,11 +3930,8 @@ class learnpathItem
 
                         //is not multiple attempts
                         if ($this->seriousgame_mode == 1 && $this->type == 'sco') {
-                            $total_time = " total_time = total_time +" . $this->get_total_time(
-                                ) . ", ";
-                            $my_status = " status = '" . $this->get_status(
-                                    false
-                                ) . "' ,";
+                            $total_time = " total_time = total_time +" . $this->get_total_time() . ", ";
+                            $my_status = " status = '" . $this->get_status(false) . "' ,";
                         } elseif ($this->get_prevent_reinit() == 1) {
                             // Process of status verified into data base.
                             $sql_verified = 'SELECT status FROM ' . $item_view_table . '
@@ -3947,17 +3944,13 @@ class learnpathItem
 
                             // Get type lp: 1=lp dokeos and  2=scorm.
                             // If not is completed or passed or browsed and learning path is scorm.
-                            if (!in_array(
-                                    $this->get_status(false),
-                                    $case_completed
-                                ) && $my_type_lp == 2
-                            ) { //&& $this->type!='dir'
+                            if (!in_array($this->get_status(false), $case_completed) &&
+                                $my_type_lp == 2
+                            ) {
                                 $total_time = " total_time = total_time +" . $this->get_total_time() . ", ";
-                                $my_status = " status = '" . $this->get_status(
-                                        false
-                                    ) . "' ,";
+                                $my_status = " status = '" . $this->get_status(false) . "' ,";
                             } else {
-                                // Verified into data base.
+                                // Verified into database.
                                 if (!in_array(
                                         $row_verified['status'],
                                         $case_completed
@@ -4052,6 +4045,7 @@ class learnpathItem
                             "WHERE c_id = $course_id AND lp_item_id = " . $this->db_id . " " .
                             "AND lp_view_id = " . $this->view_id . " " .
                             "AND view_count = " . $this->get_attempt_id();
+
                     } else {
                         $sql = "UPDATE $item_view_table " .
                             "SET " . $total_time .
@@ -4074,13 +4068,10 @@ class learnpathItem
                         0
                     );
                 }
-                $res = Database::query($sql);
+                Database::query($sql);
             }
 
-            if (is_array($this->interactions) && count(
-                    $this->interactions
-                ) > 0
-            ) {
+            if (is_array($this->interactions) && count($this->interactions) > 0) {
                 // Save interactions.
                 $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                 $sql = "SELECT id FROM $tbl " .

@@ -2038,6 +2038,7 @@ class learnpath
      * was found (true), or 0 (false) (optional, defaults to false)
      * @param  int     $session_id
      * @return	integer	Current progress value as found in the database
+     * @deprecated
      */
     public static function get_db_progress(
         $lp_id,
@@ -2238,12 +2239,10 @@ class learnpath
             $is_visible = true;
 
             if (!empty($prerequisite)) {
-                $progress = self::get_db_progress(
+                $progress = self::getProgress(
                     $prerequisite,
                     $student_id,
-                    '%',
-                    $courseCode,
-                    false,
+                    $course['real_id'],
                     $sessionId
                 );
                 $progress = intval($progress);
@@ -2286,21 +2285,46 @@ class learnpath
     }
 
     /**
-     * Gets a progress bar for the learnpath by counting the number of items in it and the number of items
+     * @param int $lpId
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     * @return int
+     */
+    public static function getProgress($lpId, $userId, $courseId, $sessionId = 0)
+    {
+        $lpId = intval($lpId);
+        $userId = intval($userId);
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+        $progress = 0;
+
+        $sessionCondition = api_get_session_condition($sessionId);
+        $table = Database :: get_course_table(TABLE_LP_VIEW);
+        $sql = "SELECT * FROM $table
+                WHERE
+                    c_id = ".$courseId." AND
+                    lp_id = $lpId AND
+                    user_id = $userId $sessionCondition";
+        $res = Database::query($sql);
+        if (Database :: num_rows($res) > 0) {
+            $row = Database:: fetch_array($res);
+            $progress = $row['progress'];
+        }
+        return $progress;
+
+    }
+
+    /**
+     * Displays a progress bar
      * completed so far.
-     * @param	string	Mode in which we want the values
-     * @param	integer	Progress value to display (optional but mandatory if used in abstract context)
-     * @param	string	Text to display near the progress value (optional but mandatory in abstract context)
-     * @param	boolean true if it comes from a Diplay LP view
+     * @param	integer	$percentage Progress value to display
+     * @param	string	$text_add Text to display near the progress value
      * @return	string	HTML string containing the progress bar
      */
     public static function get_progress_bar($percentage = -1, $text_add = '')
     {
-        /*if (isset($this) && is_object($this) && ($percentage == '-1' OR $text_add == '')) {
-            list($percentage, $text_add) = $this->get_progress_bar_text($mode);
-        }*/
         $text = $percentage . $text_add;
-        //@todo use Display::display_progress();
         $output = '<div class="progress progress-striped">
                         <div id="progress_bar_value" class="bar" style="width: '.$text.';"></div>
                     </div>

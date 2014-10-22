@@ -1539,7 +1539,7 @@ class MessageManager
     }
 
     /**
-     * Get the count of the last received messages for a user
+     * Get the data of the last received messages for a user
      * @param int $userId The user id
      * @param int $lastId The id of the last received message
      * @return int The count of new messages

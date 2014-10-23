@@ -260,7 +260,7 @@ class CalculatedAnswer extends Question
      */
     public function isAnswered()
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);var_dump($this->course);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $result = Database::select(
             'question_id',
             $table,

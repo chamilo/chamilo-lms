@@ -69,6 +69,10 @@ if (isset($form)) {
                 1
             );
         }
+        if (isset($values['show_main_menu_tab'])) {
+            $objPlugin = $plugin_info['plugin_class']::create();
+            $objPlugin->manageTab($values['show_main_menu_tab']);
+        }
         $message = Display::return_message(get_lang('Updated'), 'success');
     }
 }

@@ -493,6 +493,7 @@ if ($exerciseId > 0) {
                 SELECT q.* FROM $TBL_QUESTIONS q
                 LEFT OUTER JOIN $TBL_EXERCICE_QUESTION r
                 ON (q.c_id = r.c_id AND q.id = r.question_id)
+                $from
                 WHERE
                     q.c_id = '$selected_course' AND
                     r.question_id is null
@@ -503,6 +504,7 @@ if ($exerciseId > 0) {
                 SELECT q.* FROM $TBL_QUESTIONS q
                 INNER JOIN $TBL_EXERCICE_QUESTION r
                 ON (q.c_id = r.c_id AND q.id = r.question_id)
+                $from
                 WHERE
                     r.c_id = '$selected_course' AND
                     (r.exercice_id = '-1' OR r.exercice_id = '0')

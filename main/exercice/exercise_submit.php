@@ -531,17 +531,6 @@ if ($formSent && isset($_POST)) {
                 header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             } else {
-                //Time control is only enabled for ONE PER PAGE
-                if (!empty($exe_id) && is_numeric($exe_id)) {
-                    //Verify if the current test is fraudulent
-                    if (exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id)) {
-                    	$sql_exe_result = "";
-                        if ($debug) { error_log('exercise_time_control_is_valid is valid'); }
-                    } else {
-                    	$sql_exe_result = ", exe_result = 0";
-                        if ($debug) { error_log('exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
-                    }
-                }
                 if ($debug) { error_log('10. Redirecting to exercise_show.php'); }
                 header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
@@ -600,19 +589,6 @@ if ($question_count != 0) {
 	                }
 	            }
 	        } else {
-	            //Time control is only enabled for ONE PER PAGE
-	            if (!empty($exe_id) && is_numeric($exe_id)) {
-	                //Verify if the current test is fraudulent
-	            	$check = exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id);
-
-	                if ($check) {
-	                	$sql_exe_result = "";
-	                    if ($debug) { error_log('12. exercise_time_control_is_valid is valid'); }
-	                } else {
-	                	$sql_exe_result = ", exe_result = 0";
-	                    if ($debug) { error_log('12. exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
-                    }
-	            }
 	            if ($objExercise->review_answers) {
 	            	header('Location: exercise_reminder.php?'.$params);
 	            	exit;

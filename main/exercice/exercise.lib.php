@@ -2439,21 +2439,20 @@ function delete_chat_exercise_session($exe_id) {
  */
 function display_question_list_by_attempt($objExercise, $exe_id, $save_user_result = false)
 {
-    global $origin, $debug;
+    global $origin;
 
-    //Getting attempt info
+    // Getting attempt info
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 
-    //Getting question list
+    // Getting question list
     $question_list = array();
     if (!empty($exercise_stat_info['data_tracking'])) {
         $question_list = explode(',', $exercise_stat_info['data_tracking']);
     } else {
-        //Try getting the question list only if save result is off
+        // Try getting the question list only if save result is off
         if ($save_user_result == false) {
             $question_list = $objExercise->get_validated_question_list();
         }
-        //error_log("Data tracking is empty! exe_id: $exe_id");
     }
 
     $counter = 1;
@@ -2461,7 +2460,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
     $exercise_content = null;
 
-    //Hide results
+    // Hide results
     $show_results     = false;
     $show_only_score  = false;
 

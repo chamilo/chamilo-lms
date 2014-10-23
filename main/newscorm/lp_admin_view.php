@@ -12,7 +12,7 @@
 */
 
 /**
- * INIT SECTION 
+ * INIT SECTION
  */
 
 $this_section = SECTION_COURSES;
@@ -50,7 +50,7 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
-$course_id = api_get_course_int_id(); 
+$course_id = api_get_course_int_id();
 
 $sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
 $result = Database::query($sql_query);
@@ -88,10 +88,10 @@ $lp_theme_css = $_SESSION['oLP']->get_theme();
 
 // POST action handling (uploading mp3, deleting mp3)
 if (isset($_POST['save_audio'])) {
-    
+
     //Updating the lp.modified_on
-    $_SESSION['oLP']->set_modified_on();                
-                
+    $_SESSION['oLP']->set_modified_on();
+
     // Deleting the audio fragments.
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 9) == 'removemp3') {
@@ -104,7 +104,7 @@ if (isset($_POST['save_audio'])) {
     if (count($lp_items_to_remove_audio)>0) {
         $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$in.")";
         $result = Database::query($sql);
-    }           
+    }
 
     // Uploading the audio files.
     foreach ($_FILES as $key => $value) {
@@ -114,12 +114,7 @@ if (isset($_POST['save_audio'])) {
 
             // Create the audio folder if it does not exist yet.
             global $_course;
-            $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-            if (!is_dir($filepath.'audio')) {
-                mkdir($filepath.'audio', api_get_permissions_for_new_directories());
-                $audio_id = add_document($_course, '/audio', 'folder', 0, 'audio');
-                api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(), null, null, null, null, api_get_session_id());
-            }
+            DocumentManager::createDefaultAudioFolder($_course);
 
             // Check if file already exits into document/audio/
             $file_name = $_FILES[$key]['name'];
@@ -156,7 +151,7 @@ if (isset($_POST['save_audio'])) {
 
             // Store the mp3 file in the lp_item table.
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' 
+            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."'
                                  WHERE c_id = $course_id AND id = '".Database::escape_string($lp_item_id)."'";
             Database::query($sql_insert_audio);
         }
@@ -179,14 +174,14 @@ var newOrderData= "";
 
 $(function() {
     <?php
-    if (!isset($_REQUEST['updateaudio'])) { 
+    if (!isset($_REQUEST['updateaudio'])) {
     ?>
-	$("#lp_item_list").sortable({ 
+	$("#lp_item_list").sortable({
 		items: "li",
-		handle: ".moved", //only the class "moved" 
-		cursor: "move",  
-		placeholder: "ui-state-highlight", //defines the yellow highlight			   
-	});	
+		handle: ".moved", //only the class "moved"
+		cursor: "move",
+		placeholder: "ui-state-highlight", //defines the yellow highlight
+	});
 
 	$("#listSubmit").click(function () {
 		//Disable the submit button to prevent a double-click
@@ -195,57 +190,57 @@ $(function() {
 		newOrderData= "";
 		//All direct descendants of the lp_item_list will have a parentId of 0
 		var parentId= 0;
-		
+
 		//Walk through the direct descendants of the lp_item_list <ul>
 		$("#lp_item_list").children().each(function () {
-			
+
 			/*Only process elements with an id attribute (in order to skip the blank,
 			unmovable <li> elements.*/
-			
+
 			if ($(this).attr("id")) {
-					/*Build a string of data with the child's ID and parent ID, 
-					 using the "|" as a delimiter between the two IDs and the "^" 
+					/*Build a string of data with the child's ID and parent ID,
+					 using the "|" as a delimiter between the two IDs and the "^"
 					 as a record delimiter (these delimiters were chosen in case the data
 					 involved includes more common delimiters like commas within the content)
 					*/
 					newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
-					
+
 					//Determine if this child is a containter
 					if ($(this).is(".li_container")) {
 						  //Process the child elements of the container
                         processChildren($(this).attr("id"));
 					}
 				}
-			
+
 		}); //end of lp_item_list children loop
-		
+
 		//Write the newOrderData string out to the listResults form element
 		//$("#listResults").val(newOrderData);
 		var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
 		$.post("<?php echo api_get_path(WEB_AJAX_PATH)?>lp.ajax.php", order, function(reponse){
             $("#message").html(reponse);
-        }); 
+        });
 
 		 setTimeout(function() {
 		        $("#message").html('');
 		    }, 3000);
-						
+
 		return false;
-		
+
 	}); //end of lp_item_list event assignment
-	
+
 	<?php } ?>
 	function processChildren(parentId) {
 		//Loop through the children of the UL element defined by the parentId
 		var ulParentID= "UL_" + parentId;
 		$("#" + ulParentID).children().each(function () {
-			
+
 			/*Only process elements with an id attribute (in order to skip the blank,
 				unmovable <li> elements.*/
-				
+
 			if ($(this).attr("id")) {
-                /*Build a string of data with the child's ID and parent ID, 
-                    using the "|" as a delimiter between the two IDs and the "^" 
+                /*Build a string of data with the child's ID and parent ID,
+                    using the "|" as a delimiter between the two IDs and the "^"
                     as a record delimiter (these delimiters were chosen in case the data
                     involved includes more common delimiters like commas within the content)
                 */
@@ -256,9 +251,9 @@ $(function() {
                     //Process the child elements of the container
                     processChildren($(this).attr("id"));
                 }
-            }				
-		});  //end of children loop		
-	} //end of processChildren function	
+            }
+		});  //end of children loop
+	} //end of processChildren function
 });
 
 /* <![CDATA[ */
@@ -285,7 +280,7 @@ echo $_SESSION['oLP']->build_action_menu();
 
 echo '<div class="row-fluid">';
 echo '<div class="span3">';
-echo $_SESSION['oLP']->return_new_tree(null, true); 
+echo $_SESSION['oLP']->return_new_tree(null, true);
 echo '</div>';
 
 echo '<div class="span9">';

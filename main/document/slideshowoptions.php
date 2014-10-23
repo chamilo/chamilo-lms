@@ -20,16 +20,10 @@
  *	On this page the options of the slideshow can be set: maintain the original file
  *	or resize the file to a given width.
  */
-/**
- * Code
- */
 
 // Language files that need to be included
 $language_file = array('slideshow', 'document');
-
 require_once '../inc/global.inc.php';
-
-
 api_protect_course_script();
 
 $path = Security::remove_XSS($_GET['curdirpath']);
@@ -51,7 +45,6 @@ $originaltoolname = '<b>'.get_lang('SlideshowOptions').'</b>';
 $interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname );
 
 Display::display_header($originalToolName, 'Doc');
-
 $image_resizing = isset($_SESSION['image_resizing']) ? $_SESSION['image_resizing'] : null;
 
 ?>
@@ -66,9 +59,7 @@ $image_resizing = isset($_SESSION['image_resizing']) ? $_SESSION['image_resizing
 -->
 </style>
 
-<script language="JavaScript" type="text/javascript">
-<!--
-
+<script type="text/javascript">
 function enableresizing() { //v2.0
 	document.options.width.disabled=false;
 	document.options.width.className='enabled_input';
@@ -81,18 +72,13 @@ function disableresizing() { //v2.0
 	document.options.height.disabled=true;
 	document.options.height.className='disabled_input';
 }
-
 window.onload = <?php echo $image_resizing == 'resizing' ? 'enableresizing' : 'disableresizing'; ?>;
-
-//-->
 </script>
 
 <?php
 echo '<div class="actions">';
 echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-
 echo '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('slideshow.png',get_lang('BackTo').' '.get_lang('SlideShow'),'',ICON_SIZE_MEDIUM).'</a>';
-
 echo '</div>';
 
 ?>
@@ -107,14 +93,11 @@ echo '</div>';
 	}
 			?>>
 		<?php echo get_lang('NoResizing');?>
-            
+
 		</div>
 		<div><?php echo get_lang('NoResizingComment');?>
 		</div>
 	</div>
-    
-    
-    
    <div>
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="disableresizing()" value="autoresizing" <?php
@@ -123,17 +106,15 @@ echo '</div>';
 	}
 			?>>
 		<?php echo get_lang('ResizingAuto');?>
-            
+
 		</div>
 		<div><?php echo get_lang('ResizingAutoComment');?>
 		</div>
-	</div> 
- 
-    
+	</div>
 	<div>
 		<div class="label">
 			<input class="checkbox" name="radio_resizing" type="radio" onClick="javascript: enableresizing();" value="resizing" <?php
-	
+
 	if ($image_resizing == 'resizing') {
 		echo ' checked';
 		$width = $_SESSION['image_resizing_width'];

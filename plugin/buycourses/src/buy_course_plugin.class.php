@@ -5,6 +5,7 @@
  * @package chamilo.plugin.buycourses
  * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
  * @author Imanol Losada      <imanol.losada@beeznest.com>
+ * @author Alex Aragón      <alex.aragon@beeznest.com>
  */
 /**
  * Plugin class for the BuyCourses plugin
@@ -27,7 +28,8 @@ class BuyCoursesPlugin extends Plugin
             '1.0',
             'Jose Angel Ruiz - NoSoloRed (original author),
             Francis Gonzales and Yannick Warnier - BeezNest (integration),
-            Imanol Losada - BeezNest',
+            Alex Aragón - BeezNest (Design icons and css styles),
+            Imanol Losada - BeezNest (introduction of sessions purchase)',
             array(
                 'show_main_menu_tab' => 'boolean',
                 'include_sessions' => 'boolean',

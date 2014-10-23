@@ -4,6 +4,7 @@
 /**
  * Class Testcategory
  * @author hubert.borderiou
+ * @author Julio Montoya - several fixes
  * @todo rename to ExerciseCategory
  */
 class Testcategory
@@ -15,9 +16,13 @@ class Testcategory
 	/**
 	 * Constructor of the class Category
 	 * @author - Hubert Borderiou
-	 If you give an in_id and no in_name, you get info concerning the category of id=in_id
-	 otherwise, you've got an category objet avec your in_id, in_name, in_descr
-	 */
+	 * If you give an in_id and no in_name, you get info concerning the category of id=in_id
+	 * otherwise, you've got an category objet avec your in_id, in_name, in_descr
+	 *
+     * @param int $in_id
+     * @param string $in_name
+     * @param string $in_description
+     */
 	public function Testcategory($in_id=0, $in_name = '', $in_description="")
     {
 		if ($in_id != 0 && $in_name == "") {
@@ -33,8 +38,10 @@ class Testcategory
 		}
 	}
 
-	/** return the Testcategory object with id=in_id
-	 */
+    /**
+     * return the Testcategory object with id=in_id
+     * @param $in_id
+     */
     public function getCategory($in_id)
     {
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
@@ -81,8 +88,10 @@ class Testcategory
                 'TestCategoryAdded',
                 api_get_user_id()
             );
+
 			return $new_id;
 		} else {
+
 			return false;
 		}
 	}
@@ -113,16 +122,16 @@ class Testcategory
 	}
 
 	/**
-     * modify category name or description of category with id=in_id
+     * Modify category name or description of category with id=in_id
 	 */
-	//function modifyCategory($in_id, $in_name, $in_description) {
     public function modifyCategory()
     {
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$v_id = Database::escape_string($this->id);
 		$v_name = Database::escape_string($this->name);
 		$v_description = Database::escape_string($this->description);
-		$sql = "UPDATE $t_cattable SET title='$v_name', description='$v_description' WHERE id='$v_id' AND c_id=".api_get_course_int_id();
+		$sql = "UPDATE $t_cattable SET title='$v_name', description='$v_description'
+		        WHERE id='$v_id' AND c_id=".api_get_course_int_id();
 		Database::query($sql);
 		if (Database::affected_rows() <= 0) {
 			return false;
@@ -130,7 +139,13 @@ class Testcategory
             // item_property update
             $course_code = api_get_course_id();
             $course_info = api_get_course_info($course_code);
-            api_item_property_update($course_info, TOOL_TEST_CATEGORY, $this->id, 'TestCategoryModified', api_get_user_id());
+            api_item_property_update(
+                $course_info,
+                TOOL_TEST_CATEGORY,
+                $this->id,
+                'TestCategoryModified',
+                api_get_user_id()
+            );
 			return true;
 		}
 	}
@@ -142,7 +157,8 @@ class Testcategory
     {
 		$t_reltable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$in_id = Database::escape_string($this->id);
-		$sql = "SELECT count(*) AS nb FROM $t_reltable WHERE category_id=$in_id AND c_id=".api_get_course_int_id();
+		$sql = "SELECT count(*) AS nb FROM $t_reltable
+		        WHERE category_id=$in_id AND c_id=".api_get_course_int_id();
 		$res = Database::query($sql);
 		$row = Database::fetch_array($res);
 		return $row['nb'];
@@ -189,23 +205,28 @@ class Testcategory
 		return $tabres;
 	}
 
-	/**
-	 Return the testcategory id for question with question_id = $in_questionid
-	 In this version, a question has only 1 testcategory.
-	 Return the testcategory id, 0 if none
-	 */
-	public static function getCategoryForQuestion($in_questionid, $in_courseid="")
+    /**
+     * Return the testcategory id for question with question_id = $in_questionid
+     * In this version, a question has only 1 testcategory.
+     * Return the testcategory id, 0 if none
+     * @param int $questionId
+     * @param int $courseId
+     *
+     * @return int
+     */
+	public static function getCategoryForQuestion($questionId, $courseId ="")
     {
 		$result = 0;
-		if (empty($in_courseid) || $in_courseid=="") {
-			$in_courseid = api_get_course_int_id();
+		if (empty($courseId) || $courseId=="") {
+            $courseId = api_get_course_int_id();
 		}
-		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-		$question_id = Database::escape_string($in_questionid);
-		$sql = "SELECT category_id FROM $t_cattable WHERE question_id='$question_id' AND c_id=$in_courseid";
+		$table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $questionId = Database::escape_string($questionId);
+		$sql = "SELECT category_id FROM $table
+		        WHERE question_id='$questionId' AND c_id = $courseId";
 		$res = Database::query($sql);
-		$data = Database::fetch_array($res);
 		if (Database::num_rows($res) > 0) {
+            $data = Database::fetch_array($res);
 			$result = $data['category_id'];
 		}
 		return $result;
@@ -246,7 +267,7 @@ class Testcategory
 	}
 
 	/**
-	 * return the list of differents categories ID for a test in the current course
+	 * Return the list of differents categories ID for a test in the current course
 	 * input : test_id
 	 * return : array of category id (integer)
 	 * hubert.borderiou 07-04-2011
@@ -365,9 +386,8 @@ class Testcategory
     * tabres[24] = array of question id with category id = 24
     * In this version, a question has 0 or 1 category
     */
-    public function getQuestionsByCat($in_exerciceId)
+    public static function getQuestionsByCat($in_exerciceId)
     {
-		$tabres = array();
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $in_exerciceId = intval($in_exerciceId);
@@ -380,20 +400,21 @@ class Testcategory
                     eq.c_id=qrc.c_id
                 ORDER BY category_id, question_id";
 		$res = Database::query($sql);
+        $list = array();
 		while ($data = Database::fetch_array($res)) {
-			if (!is_array($tabres[$data['category_id']])) {
-				$tabres[$data['category_id']] = array();
+			if (!isset($tabres[$data['category_id']])) {
+                $list[$data['category_id']] = array();
 			}
-			$tabres[$data['category_id']][] = $data['question_id'];
+            $list[$data['category_id']][] = $data['question_id'];
 		}
 
-		return $tabres;
+		return $list;
 	}
 
 	/**
 	 * return a tab of $in_number random elements of $in_tab
 	 */
-    public function getNElementsFromArray($in_tab, $in_number)
+    public static function getNElementsFromArray($in_tab, $in_number)
     {
 		$tabres = $in_tab;
 		shuffle($tabres);
@@ -452,7 +473,7 @@ class Testcategory
 	 * value is the array of question id of this category
 	 * Sort question by Category
 	*/
-    public function sortTabByBracketLabel($in_tab)
+    public static function sortTabByBracketLabel($in_tab)
     {
 		$tabResult = array();
 		$tabCatName = array();	// tab of category name
@@ -482,9 +503,13 @@ class Testcategory
         $in_exe_id = intval($in_exe_id);
         $in_user_id = intval($in_user_id);
 
-		$query = "SELECT DISTINCT marks, exe_id, user_id, ta.question_id, category_id
+		$query = "SELECT DISTINCT
+		            marks, exe_id, user_id, ta.question_id, category_id
                   FROM $tbl_track_attempt ta , $tbl_question_rel_category qrc
-                  WHERE ta.question_id=qrc.question_id AND qrc.category_id=$in_cat_id AND exe_id=$in_exe_id AND user_id=$in_user_id";
+                  WHERE
+                    ta.question_id=qrc.question_id AND
+                    qrc.category_id=$in_cat_id AND
+                    exe_id=$in_exe_id AND user_id=$in_user_id";
 		$res = Database::query($query);
 		$totalcatscore = "";
 		while ($data = Database::fetch_array($res)) {
@@ -517,7 +542,8 @@ class Testcategory
     /**
      * Returns a category summary report
      * @params int exercise id
-     * @params array prefilled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
+     * @params array pre filled array with the category_id, score, and weight
+     * example: array(1 => array('score' => '10', 'total' => 20));
      */
     public static function get_stats_table_by_attempt($exercise_id, $category_list = array())
     {

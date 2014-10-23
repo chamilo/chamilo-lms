@@ -78,7 +78,7 @@ class Course
     }
 
     /**
-     * Show this course resources
+     * @inheritdoc
      */
     public function show()
     { /*

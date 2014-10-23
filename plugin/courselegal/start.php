@@ -21,7 +21,7 @@ $url = api_get_self().'?'.api_get_cidreq();
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
-$form = new FormValidator('plugin', 'post', $url );
+$form = new FormValidator('plugin', 'post', $url);
 $form->addElement('header', $legal->get_lang('CourseLegal'));
 $form->addElement('hidden', 'session_id', $sessionId);
 $form->addElement('hidden', 'c_id', $courseId);

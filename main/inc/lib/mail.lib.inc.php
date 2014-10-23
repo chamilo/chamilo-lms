@@ -89,54 +89,52 @@ function api_mail_html(
     global $platform_email;
 
     $mail = new PHPMailer();
-    $mail->Mailer  = $platform_email['SMTP_MAILER'];
-    $mail->Host    = $platform_email['SMTP_HOST'];
-    $mail->Port    = $platform_email['SMTP_PORT'];
+    $mail->Mailer = $platform_email['SMTP_MAILER'];
+    $mail->Host = $platform_email['SMTP_HOST'];
+    $mail->Port = $platform_email['SMTP_PORT'];
     $mail->CharSet = $platform_email['SMTP_CHARSET'];
-    $mail->WordWrap = 200; // Stay far below SMTP protocol 980 chars limit.
+    // Stay far below SMTP protocol 980 chars limit.
+    $mail->WordWrap = 200;
 
     if ($platform_email['SMTP_AUTH']) {
         $mail->SMTPAuth = 1;
         $mail->Username = $platform_email['SMTP_USER'];
         $mail->Password = $platform_email['SMTP_PASS'];
-        $mail->From = $platform_email['SMTP_FROM_EMAIL'];
-        $mail->Sender = $platform_email['SMTP_FROM_EMAIL'];
-        $mail->FromName = $platform_email['SMTP_FROM_NAME'];
     }
 
-    $mail->Priority = 3; // 5 = low, 1 = high
-    $mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
-
+    // 5 = low, 1 = high
+    $mail->Priority = 3;
     $mail->SMTPKeepAlive = true;
 
-    if (($sender_email != '') && ($sender_name != '')) {
+    // Default values:
+    $mail->From = api_get_setting('emailAdministrator');
+    $mail->Sender = api_get_setting('emailAdministrator');
+    $mail->FromName = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+
+    // Error to admin.
+    $mail->AddCustomHeader('Errors-To: '.$mail->From);
+
+    // If the parameter is set don't use the admin.
+    $mail->From = !empty($sender_email) ? $sender_email : $mail->From;
+    $mail->Sender = !empty($sender_email) ? $sender_email : $mail->Sender;
+    $mail->FromName =  !empty($sender_name) ? $sender_name : $mail->FromName;
+
+    // Add reply
+    if (!empty($sender_email) && !empty($sender_name)) {
         $mail->AddReplyTo($sender_email, $sender_name);
     }
 
     if (isset($extra_headers['reply_to'])) {
-        $mail->AddReplyTo($extra_headers['reply_to']['mail'], $extra_headers['reply_to']['name']);
-    }
-
-    // Attachments
-    // $mail->AddAttachment($path);
-    // $mail->AddAttachment($path, $filename);
-
-    if (!$platform_email['SMTP_AUTH']) {
-        if ($sender_email != '') {
-            $mail->From = $sender_email;
-            $mail->Sender = $sender_email;
-            $mail->FromName = $sender_name;
-            //$mail->ConfirmReadingTo = $sender_email; // Disposition-Notification
-        } else {
-            $mail->From = api_get_setting('emailAdministrator');
-            $mail->Sender = api_get_setting('emailAdministrator');
-            $mail->FromName = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
-            //$noReply = api_get_setting('noreply_email_address');
-        }
+        $mail->AddReplyTo(
+            $extra_headers['reply_to']['mail'],
+            $extra_headers['reply_to']['name']
+        );
     }
 
     $mail->Subject = $subject;
-    $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
+    $mail->AltBody = strip_tags(
+        str_replace('<br />', "\n", api_html_entity_decode($message))
+    );
 
     // Send embedded image.
     if ($embedded_image) {
@@ -152,7 +150,13 @@ function api_mail_html(
                 $image_cid = $filename.'_'.$i;
                 $encoding = 'base64';
                 $image_type = mime_content_type($real_path);
-                $mail->AddEmbeddedImage($real_path, $image_cid, $filename, $encoding, $image_type);
+                $mail->AddEmbeddedImage(
+                    $real_path,
+                    $image_cid,
+                    $filename,
+                    $encoding,
+                    $image_type
+                );
                 $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
                 $i++;
             }
@@ -180,7 +184,6 @@ function api_mail_html(
         foreach ($recipient_email as $dest) {
             if (api_valid_email($dest)) {
                 $mail->AddAddress($dest, $recipient_name);
-                //$mail->AddAddress($dest, ($i > 1 ? '' : $recipient_name));
             }
         }
     } else {
@@ -225,8 +228,6 @@ function api_mail_html(
     $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
     // Send the mail message.
     if (!$mail->Send()) {
-
-        //echo 'ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />';
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
         return 0;
     }

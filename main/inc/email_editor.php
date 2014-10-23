@@ -27,6 +27,8 @@ if (empty($_SESSION['origin_url'])) {
 	Session::write('origin_url',$origin_url);
 }
 
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+
 $form = new FormValidator('email_editor', 'post');
 $form->addElement('hidden', 'dest');
 $form->addElement('text', 'email_address', get_lang('EmailDestination'));
@@ -40,13 +42,33 @@ $form->addRule('email_text', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_address', get_lang('EmailWrong'), 'email');
 
 $form->addElement('button', 'submit', get_lang('SendMail'));
+
+switch ($action) {
+    case 'subscribe_me_to_session':
+        $sessionName = isset($_GET['session']) ? Security::remove_XSS($_GET['session']) : null;
         
-$defaults = array(  'dest' => Security::remove_XSS($_REQUEST['dest']),
-                    'email_address' => Security::remove_XSS($_REQUEST['dest']),
-                    'email_title' => Security::remove_XSS($_POST['email_title']),
-                    'email_text' => Security::remove_XSS($_POST['email_text'])
-    
+        $objTemplate = new Template();
+        $objTemplate->assign('session_name', $sessionName);
+        $objTemplate->assign('user', api_get_user_info());
+        $mailTemplate = $objTemplate->get_template('mail/subscribe_me_to_session.tpl');
+
+        $emailDest = api_get_setting('emailAdministrator');
+        $emailTitle = get_lang('SubscribeToSessionRequest');
+        $emailText = $objTemplate->fetch($mailTemplate);
+        break;
+    default:
+        $emailDest = Security::remove_XSS($_REQUEST['dest']);
+        $emailTitle = Security::remove_XSS($_REQUEST['email_title']);
+        $emailText = Security::remove_XSS($_REQUEST['email_text']);
+}
+        
+$defaults = array(
+    'dest' => $emailDest,
+    'email_address' => $emailDest,
+    'email_title' => $emailTitle,
+    'email_text' => $emailText
 );
+
 $form->setDefaults($defaults);
 
 if ($form->validate()) {

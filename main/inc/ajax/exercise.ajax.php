@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls
  */
@@ -45,18 +46,17 @@ switch ($action) {
             $sidx = 1;
         }
 
-        $track_exercise        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $user_table            = Database::get_main_table(TABLE_MAIN_USER);
-        $track_attempt         = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $track_exercise = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $minutes        = intval($_REQUEST['minutes']);
-        $now            = time() - 60*$minutes; //1 hour
-        $now            = api_get_utc_datetime($now);
+        $minutes = intval($_REQUEST['minutes']);
+        $now = time() - 60 * $minutes;
+        $now = api_get_utc_datetime($now);
 
         $where_condition = " orig_lp_id = 0 AND exe_exo_id = $exercise_id AND start_date > '$now' ";
         $sql    = "SELECT COUNT(DISTINCT exe_id) FROM $track_exercise WHERE $where_condition ";
         $result = Database::query($sql);
-
         $count  = Database::fetch_row($result);
         $count  = $count[0];
 
@@ -68,6 +68,7 @@ switch ($action) {
                 $total_pages = ceil($count/$limit);
             }
         }
+
         if ($page > $total_pages) {
             $page = $total_pages;
         }
@@ -389,7 +390,8 @@ switch ($action) {
                         false,
                         true,
                         false,
-                        $objExercise->selectPropagateNeg()
+                        $objExercise->selectPropagateNeg(),
+                        array()
                     );
 
                     // Removing old score.
@@ -407,7 +409,7 @@ switch ($action) {
                     }
 
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
-                        $total_score  -= $attempt_list[$my_question_id]['marks'];
+                        $total_score -= $attempt_list[$my_question_id]['marks'];
                     }
                 }
 
@@ -422,8 +424,7 @@ switch ($action) {
                     false,
                     false,
                     $objExercise->selectPropagateNeg(),
-                    $hotspot_delineation_result,
-                    true
+                    $hotspot_delineation_result
                 );
 
                 //  Adding the new score.

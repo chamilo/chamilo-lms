@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-/* To showing the plugin course icons you need to add these icons:
-     * main/img/icons/22/plugin_name.png
-     * main/img/icons/64/plugin_name.png
-     * main/img/icons/64/plugin_name_na.png
+/* To show the plugin course icons you need to add these icons:
+ * main/img/icons/22/plugin_name.png
+ * main/img/icons/64/plugin_name.png
+ * main/img/icons/64/plugin_name_na.png
 */
-
+/**
+ * Videoconference plugin with BBB
+ */
+//namespace Chamilo\Plugin\BBB;
 /**
  * Class BBBPlugin
  */
@@ -22,7 +24,7 @@ class BBBPlugin extends Plugin
         )
     );
 
-    static function create()
+    public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
@@ -30,7 +32,7 @@ class BBBPlugin extends Plugin
 
     protected function __construct()
     {
-        parent::__construct('2.1', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
+        parent::__construct('2.2', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
     }
 
     public function install()
@@ -48,7 +50,10 @@ class BBBPlugin extends Plugin
                 closed_at VARCHAR(255) NOT NULL,
                 calendar_id INT DEFAULT 0,
                 welcome_msg VARCHAR(255) NOT NULL DEFAULT '',
-                session_id INT unsigned DEFAULT 0)";
+                session_id INT unsigned DEFAULT 0,
+                remote_id CHAR(30),
+                visibility TINYINT NOT NULL DEFAULT 1
+                )";
         Database::query($sql);
 
         //Installing course settings

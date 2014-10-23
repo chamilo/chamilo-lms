@@ -6,7 +6,33 @@
 * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
 * @package chamilo.auth
 */
-$stok = Security::get_token();
+
+if (Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
+    $stok = Security::get_token();
+} else {
+    $stok = $_SESSION['sec_token'];
+}
+
+$showCourses = CoursesAndSessionsCatalog::showCourses();
+$showSessions = CoursesAndSessionsCatalog::showSessions();
+$pageCurrent = isset($pageCurrent) ? $pageCurrent :
+    isset($_GET['pageCurrent']) ? intval($_GET['pageCurrent']) :
+        1;
+$pageLength = isset($pageLength) ? $pageLength :
+    isset($_GET['pageLength']) ? intval($_GET['pageLength']) :
+        10;
+$pageTotal = intval(ceil(intval($countCoursesInCategory) / $pageLength));
+$cataloguePagination = $pageTotal > 1 ?
+    getCataloguePagination($pageCurrent, $pageLength, $pageTotal) :
+    '';
+
+if ($showSessions && isset($_POST['date'])) {
+    $date = $_POST['date'];
+} else {
+    $date = date('Y-m-d');
+}
+
+$userInfo = api_get_user_info();
 ?>
 <script>
     $(document).ready( function() {
@@ -26,6 +52,58 @@ $stok = Security::get_token();
                 }
             });
         });
+    
+        $('.courses-list-btn').toggle(function (e) {
+            e.preventDefault();
+
+            var $el = $(this);
+            var sessionId = getSessionId(this);
+
+            $el.children('img').remove();
+            $el.prepend('<?php echo Display::display_icon('nolines_minus.gif'); ?>');
+
+            $.ajax({
+                url: '<?php echo api_get_path(WEB_AJAX_PATH) . 'course.ajax.php' ?>',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    a: 'display_sessions_courses',
+                    session: sessionId
+                },
+                success: function (response){
+                    var $container = $el.prev('.course-list');
+
+                    var $courseList = $('<ul>');
+
+                    $.each(response, function (index, course){
+                        $courseList.append('<li><div><strong>' + course.name + '</strong><br>' + course.coachName + '</div></li>');
+                    });
+
+                    $container.append($courseList).show(250);
+                }
+            });
+        }, function (e) {
+            e.preventDefault();
+
+            var $el = $(this);
+            var $container = $el.prev('.course-list');
+            $container.hide(250).empty();
+            
+            $el.children('img').remove();
+            $el.prepend('<?php echo Display::display_icon('nolines_plus.gif'); ?>');
+        });
+        
+        var getSessionId = function (el){
+            var parts = el.id.split('_');
+            
+            return parseInt(parts[1], 10);
+        };
+        
+        <?php if ($showSessions) { ?>
+        $('#date').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        <?php } ?>
     });
 </script>
 
@@ -33,8 +111,9 @@ $stok = Security::get_token();
     <div class="span3">
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
-                <?php if (intval($_GET['hidden_links']) != 1) { ?>
-                <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
+                <?php if ($showCourses) { ?>
+                <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
+                <form class="form-search" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
                     <fieldset>
                         <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                         <input type="hidden" name="search_course" value="1" />
@@ -48,7 +127,7 @@ $stok = Security::get_token();
                         </div>
                     </fieldset>
                 </form>
-                <?php
+            <?php
                 $hidden_links = 0;
             } else {
                 $hidden_links = 1;
@@ -60,9 +139,15 @@ $stok = Security::get_token();
              */
             if (!empty($browse_course_categories)) {
                 echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
-
+            ?>
+            </ul>
+        </div>
+        <div class="well">
+            <ul class="nav nav-list">
+            <?php
                 echo '<li class="nav-header">'.get_lang('CourseCategories').'</li>';
 
+                $action = 'display_courses';
                 // level 1
                 foreach ($browse_course_categories[0] as $category) {
                     $category_name = $category['name'];
@@ -73,7 +158,14 @@ $stok = Security::get_token();
                         $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';
                     } else {
                         if (!empty($count_courses_lv1)) {
-                            $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$category_code.'&amp;hidden_links='.$hidden_links.'">'.$category_name.' ('.$count_courses_lv1.') </a>';
+                            $category_link = '<a href="' .
+                                getCourseCategoryUrl(
+                                    1,
+                                    $pageLength,
+                                    $category_code,
+                                    $hidden_links,
+                                    $action
+                                ) .'">'.$category_name.' ('.$count_courses_lv1.') </a>';
                         } else {
                             $category_link = ''.$category_name.' ('.$count_courses_lv1.')';
                         }
@@ -89,7 +181,14 @@ $stok = Security::get_token();
                             if ($code == $subcategory1_code) {
                                 $subcategory1_link = '<strong>'.$subcategory1_name.' ('.$count_courses_lv2.')</strong>';
                             } else {
-                                $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory1_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory1_name.' ('.$count_courses_lv2.') </a> ';
+                                $subcategory1_link = '<a href="' .
+                                    getCourseCategoryUrl(
+                                        1,
+                                        $pageLength,
+                                        $subcategory1_code,
+                                        $hidden_links,
+                                        $action
+                                    ) . '">'.$subcategory1_name.' ('.$count_courses_lv2.') </a> ';
                             }
                             echo '<li style="margin-left:20px;">'.$subcategory1_link.'</li>';
 
@@ -102,7 +201,14 @@ $stok = Security::get_token();
                                     if ($code == $subcategory2_code) {
                                         $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
                                     } else {
-                                        $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
+                                        $subcategory2_link = '<a href="' .
+                                            getCourseCategoryUrl(
+                                                1,
+                                                $pageLength,
+                                                $subcategory2_code,
+                                                $hidden_links,
+                                                $action
+                                            ) . '">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
                                     }
                                     echo '<li style="margin-left:40px;">'.$subcategory2_link.'</li>';
 
@@ -115,7 +221,14 @@ $stok = Security::get_token();
                                             if ($code == $subcategory3_code) {
                                                 $subcategory3_link = '<strong>'.$subcategory3_name.' ('.$count_courses_lv4.')</strong>';
                                             } else {
-                                                $subcategory3_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory3_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory3_name.' ('.$count_courses_lv4.') </a>';
+                                                $subcategory3_link = '<a href="' .
+                                                    getCourseCategoryUrl(
+                                                        1,
+                                                        $pageLength,
+                                                        $subcategory3_code,
+                                                        $hidden_links,
+                                                        $action
+                                                    ) . '">'.$subcategory3_name.' ('.$count_courses_lv4.') </a>';
                                             }
                                             echo '<li style="margin-left:60px;">'.$subcategory3_link.'</li>';
                                         }
@@ -124,15 +237,46 @@ $stok = Security::get_token();
                             }
                         }
                     }
-                }
-            }
-            ?>
+                } ?>
+            </ul>
         </div>
+            <?php
+            }
+        }
+            ?>
+        <?php if ($showSessions) { ?>
+        <div class="well">
+            <ul class="nav nav-list">
+                    <li class="nav-header"><?php echo get_lang('Sessions'); ?></li>
+                    <li>
+                        <?php if ($action == 'display_sessions' && $_SERVER['REQUEST_METHOD'] != 'POST') { ?>
+                            <strong><?php echo get_lang('Sessions'); ?></strong>
+                        <?php } else { ?>
+                            <a href="<?php echo getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>"><?php echo get_lang('SessionList'); ?></a>
+                        <?php } ?>
+                    </li>
+                    <li class="nav-header"><?php echo get_lang('SearchActiveSessions') ?></li>
+                    <form class="form-search" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
+                        <div class="input-append">
+                            <?php echo Display::input('date', 'date', $date, array(
+                                'class' => 'span2',
+                                'id' => 'date',
+                                'readonly' => ''
+                            )); ?>
+                            <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
+                        </div>
+                    </form>
+            </ul>
+        </div>
+        <?php } ?>
     </div>
 
     <div class="span9">
-        <?php
-        if (!empty($message)) { Display::display_confirmation_message($message, false); }
+        <div class="page-header">
+            <h2><?php echo get_lang('CourseCatalog')?></h2>
+        </div>
+        <?php if ($showCourses && $action != 'display_sessions') { ?>
+        <?php if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }
 
         if (!empty($content)) { echo $content; }
@@ -225,7 +369,10 @@ $stok = Security::get_token();
             if (!isset($_REQUEST['subscribe_user_with_password']) && !isset($_REQUEST['subscribe_course'])) {
                 Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
             }
-        }
+        } ?>
+        <?php } ?>
+        <?php
+            echo $cataloguePagination;
         ?>
     </div>
 </div>
@@ -338,3 +485,5 @@ function display_unregister_button($course, $stok, $search_term, $code)
 {
     echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&amp;sec_token='.$stok.'&amp;unsubscribe='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
 }
+
+

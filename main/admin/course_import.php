@@ -53,10 +53,10 @@ function validate_data($courses)
                     $course['error'] = get_lang('UnknownTeacher').' ('.$teacher.')';
                     $errors[] = $course;
                 } else {
-                    if ($teacherInfo['status'] != COURSEMANAGER) {
+                    /*if ($teacherInfo['status'] != COURSEMANAGER) {
                         $course['error'] = get_lang('UserIsNotATeacher').' ('.$teacher.')';
                         $errors[] = $course;
-                    }
+                    }*/
                 }
             }
         }
@@ -76,6 +76,11 @@ function validate_data($courses)
     return $errors;
 }
 
+/**
+ * @param array $teachers
+ *
+ * @return array
+ */
 function getTeacherListInArray($teachers)
 {
     if (!empty($teachers)) {

@@ -17,6 +17,7 @@ define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
 define('ORAL_EXPRESSION',                           13);
 define('GLOBAL_MULTIPLE_ANSWER',                    14);
 define('MEDIA_QUESTION',                            15);
+define('CALCULATED_ANSWER',                         16);
 
 //Some alias used in the QTI exports
 define('MCUA',				1);
@@ -68,6 +69,7 @@ abstract class Question
         MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'),
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse'),
         GLOBAL_MULTIPLE_ANSWER =>		array('global_multiple_answer.class.php' , 'GlobalMultipleAnswer'),
+        CALCULATED_ANSWER =>			array('calculated_answer.class.php' , 'CalculatedAnswer')
         //MEDIA_QUESTION =>               array('media_question.class.php' , 'MediaQuestion')
     );
 
@@ -1395,9 +1397,9 @@ abstract class Question
 			if ($objExercise->exercise_was_added_in_lp == true) {
                 $img = pathinfo($img);
 				$img = $img['filename'].'_na.'.$img['extension'];
-				echo Display::return_icon($img,$explanation);
+				echo Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
 			} else {
-                echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
+                echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
 			}
 			echo '</div>';
 			echo '</li>';
@@ -1406,14 +1408,14 @@ abstract class Question
 		echo '<li>';
 		echo '<div class="icon_image_content">';
 		if ($objExercise->exercise_was_added_in_lp == true) {
-            echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'));
+            echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'), null, ICON_SIZE_BIG);
 		} else {
 			if ($feedback_type==1) {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&type=1&fromExercise='.$exerciseId.'">';
 			} else {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
 			}
-			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'));
+			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), null, ICON_SIZE_BIG);
 		}
 		echo '</a>';
 		echo '</div></li>';

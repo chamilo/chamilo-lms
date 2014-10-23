@@ -15,7 +15,7 @@
 
 class UniqueAnswer extends Question
 {
-    static $typePicture = 'mcua.gif';
+    static $typePicture = 'mcua.png';
     static $explanationLangVar = 'UniqueSelect';
 
     /**

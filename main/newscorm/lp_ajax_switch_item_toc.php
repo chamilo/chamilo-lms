@@ -36,21 +36,7 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
     require_once 'learnpathItem.class.php';
     require_once 'scormItem.class.php';
     require_once 'aiccItem.class.php';
-    $mylp = '';
-    if (isset($_SESSION['lpobject'])) {
-        if ($debug > 1) { error_log('$_SESSION[lpobject] is set', 0); }
-        $oLP = unserialize($_SESSION['lpobject']);
-        if (!is_object($oLP)) {
-            if ($debug > 1) { error_log(print_r($oLP, true), 0); }
-            if ($debug > 2) { error_log('Building new lp', 0); }
-            unset($oLP);
-            $code = api_get_course_id();
-            $mylp = new learnpath($code, $lp_id, $user_id);
-        } else {
-            if ($debug > 1) { error_log('Reusing session lp', 0); }
-            $mylp = $oLP;
-        }
-    }
+    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $new_item_id = 0;
     switch ($next_item) {
         case 'next':
@@ -87,7 +73,7 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
     $mylp->start_current_item(true);
     if ($mylp->force_commit) {
         $mylp->save_current();
-    }    
+    }
     if (is_object($mylp->items[$new_item_id])) {
         $mylpi = $mylp->items[$new_item_id];
     } else {
@@ -181,6 +167,6 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
     if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }
     $_SESSION['scorm_item_id'] = $new_item_id; // Save the new item ID for the exercise tool to use.
     $_SESSION['lpobject'] = serialize($mylp);
-    return $return;    
+    return $return;
 }
 echo switch_item_toc($_POST['lid'], $_POST['uid'], $_POST['vid'], $_POST['iid'], $_POST['next']);

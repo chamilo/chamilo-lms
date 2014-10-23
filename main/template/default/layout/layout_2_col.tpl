@@ -19,13 +19,15 @@
         {% endif %}
 
 	    {# if user is not login show the login form #}
+        {% block login_form %}
 		{% if _u.logged  == 0 %}
 			{% include "default/layout/login_form.tpl" %}
 		{% endif %}
+        {% endblock %}
+
         <div class="block_user_info">
 		{# User picture #}
         {{ user_image_block }}
-        
 
         {# User Profile links #}
 		{{ profile_block }}
@@ -58,7 +60,7 @@
 
 		{# Skills #}
 		{{ skills_block }}
-        
+
 		{# Plugin courses sidebar #}
         {# Plugins for footer section #}
 
@@ -91,7 +93,9 @@
 		{#  ??  #}
 		{{ sniff_notification }}
 
+        {% block page_body %}
         {% include "default/layout/page_body.tpl" %}
+        {% endblock %}
 
         {# Welcome to course block  #}
         {% if welcome_to_course_block %}
@@ -100,11 +104,13 @@
             </section>
         {% endif %}
 
+        {% block content %}
         {% if content is not null %}
             <section id="main_content">
                 {{ content }}
             </section>
         {% endif %}
+        {% endblock %}
 
 		{# Announcements  #}
         {% if announcements_block %}

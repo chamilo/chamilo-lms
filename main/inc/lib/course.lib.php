@@ -440,11 +440,23 @@ class CourseManager
 
             // add event to system log
             $user_id = api_get_user_id();
-            event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), $user_id);
+            event_system(
+                LOG_UNSUBSCRIBE_USER_FROM_COURSE,
+                LOG_COURSE_CODE,
+                $course_code,
+                api_get_utc_datetime(),
+                $user_id
+            );
 
             foreach ($user_list as $userId) {
                 $userInfo = api_get_user_info($userId);
-                event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_USER_OBJECT, $userInfo, api_get_utc_datetime(), $user_id);
+                event_system(
+                    LOG_UNSUBSCRIBE_USER_FROM_COURSE,
+                    LOG_USER_OBJECT,
+                    $userInfo,
+                    api_get_utc_datetime(),
+                    $user_id
+                );
             }
         }
     }
@@ -555,10 +567,22 @@ class CourseManager
             $result = @Database::query($sql);
 
             // Add event to the system log
-            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), api_get_user_id());
+            event_system(
+                LOG_SUBSCRIBE_USER_TO_COURSE,
+                LOG_COURSE_CODE,
+                $course_code,
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
 
             $user_info = api_get_user_info($user_id);
-            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
+            event_system(
+                LOG_SUBSCRIBE_USER_TO_COURSE,
+                LOG_USER_OBJECT,
+                $user_info,
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
         }
         return (bool)$result;
     }
@@ -862,34 +886,45 @@ class CourseManager
         }
 
         // Definitions database tables and variables
-        $tbl_course      = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $user_id = intval($user_id);
         $data = array();
 
         $sql = "SELECT
-            course_rel_user.course_code, course.title, course.id, course.db_name, course.id as real_id
-            FROM $tbl_course_user as course_rel_user
-            INNER JOIN $tbl_course as course
-            ON course.code = course_rel_user.course_code
-            WHERE course_rel_user.user_id='$user_id' AND course_rel_user.status='1'
-            ORDER BY course.title";
+                    course_rel_user.course_code,
+                    course.title,
+                    course.id,
+                    course.db_name,
+                    course.id as real_id
+                FROM $tbl_course_user as course_rel_user
+                INNER JOIN $tbl_course as course
+                ON course.code = course_rel_user.course_code
+                WHERE
+                    course_rel_user.user_id='$user_id' AND
+                    course_rel_user.status='1'
+                ORDER BY course.title";
 
         if (api_get_multiple_access_url()) {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $sql = "
-                    SELECT course_rel_user.course_code, course.title, course.id, course.db_name, course.id as real_id
+                    SELECT
+                        course_rel_user.course_code,
+                        course.title,
+                        course.id,
+                        course.db_name,
+                        course.id as real_id
                     FROM $tbl_course_user as course_rel_user
                     INNER JOIN $tbl_course as course
                     ON course.code = course_rel_user.course_code
                     INNER JOIN $tbl_course_rel_access_url course_rel_url
                     ON (course_rel_url.course_code= course.code)
                     WHERE
-                      access_url_id =  $access_url_id  AND
-                      course_rel_user.user_id='$user_id' AND
-                      course_rel_user.status='1'
+                        access_url_id =  $access_url_id  AND
+                        course_rel_user.user_id='$user_id' AND
+                        course_rel_user.status='1'
                     ORDER BY course.title";
             }
         }
@@ -1280,13 +1315,12 @@ class CourseManager
         $filterByActive = null
     ) {
         // variable initialisation
-        $session_id     = intval($session_id);
-        $course_code    = Database::escape_string($course_code);
-        $where          = array();
+        $session_id = intval($session_id);
+        $course_code = Database::escape_string($course_code);
+        $where = array();
 
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {
-            //if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))) {
             $order_by = Database::escape_string($order_by);
             if (!empty($order_by)) {
                 $order_by = 'ORDER BY '.$order_by;
@@ -1304,9 +1338,10 @@ class CourseManager
             }
             $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
-                      ON user.user_id = session_course_user.id_user
-                      AND session_course_user.course_code="'.$course_code.'"
-                      AND session_course_user.id_session = '.$session_id;
+                      ON
+                        user.user_id = session_course_user.id_user AND
+                        session_course_user.course_code="'.$course_code.'" AND
+                        session_course_user.id_session = '.$session_id;
             $where[] = ' session_course_user.course_code IS NOT NULL ';
 
             // 2 = coach
@@ -1394,6 +1429,7 @@ class CourseManager
         }
 
         $sql .= ' '.$order_by.' '.$limit;
+
         $rs = Database::query($sql);
         $users = array();
 
@@ -3106,6 +3142,7 @@ class CourseManager
      */
     public static function get_courses_followed_by_drh(
         $user_id,
+        $status = DRH,
         $from = null,
         $limit = null,
         $column = null,
@@ -3114,6 +3151,7 @@ class CourseManager
     ) {
         return self::getCoursesFollowedByUser(
             $user_id,
+            $status,
             $from,
             $limit,
             $column,
@@ -3140,7 +3178,8 @@ class CourseManager
         $direction = null,
         $getCount = false,
         $keyword = null,
-        $sessionId = null
+        $sessionId = null,
+        $showAllAssignedCourses = false
     ) {
         // Database Table Definitions
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -3157,10 +3196,10 @@ class CourseManager
         $whereConditions = null;
         switch ($status) {
             case COURSEMANAGER:
-                $whereConditions .= " AND
-                    cru.user_id = '$user_id' AND
-                    status = ".COURSEMANAGER."
-                ";
+                $whereConditions .= " AND cru.user_id = '$user_id'";
+                if (!$showAllAssignedCourses) {
+                    $whereConditions .= " AND status = ".COURSEMANAGER;
+                }
                 break;
             case DRH:
                 $whereConditions .= " AND
@@ -4483,7 +4522,7 @@ class CourseManager
      * @return int Number of courses
      */
     public static function countAvailableCourses($accessUrlId = null)
-    {   
+    {
         global $_configuration;
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);

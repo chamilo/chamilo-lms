@@ -9,6 +9,8 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 api_protect_course_script();
 api_block_anonymous_users();
 
+$_course = api_get_course_info();
+
 # Save the audio to a URL-accessible directory for playback.
 parse_str($_SERVER['QUERY_STRING'], $params);
 
@@ -26,7 +28,7 @@ if ($wamiuserid != api_get_user_id() || api_get_user_id() == 0 || $wamiuserid ==
     die();
 }
 
-//clean
+// Clean
 $waminame = Security::remove_XSS($waminame);
 $waminame = Database::escape_string($waminame);
 $waminame = replace_dangerous_char($waminame, 'strict');
@@ -45,12 +47,17 @@ if ($ext != 'wav') {
     die();
 }
 
-//Do not use here check Fileinfo method because return: text/plain
+// Do not use here check Fileinfo method because return: text/plain
 
-$dirBaseDocuments   = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$saveDir            = $dirBaseDocuments.$wamidir;
+$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$saveDir = $dirBaseDocuments . $wamidir;
+
+if (!is_dir($saveDir)) {
+    DocumentManager::createDefaultAudioFolder($_course);
+}
+
 $current_session_id = api_get_session_id();
-$groupId            = api_get_group_id();
+$groupId = api_get_group_id();
 
 //avoid duplicates
 $waminame_to_save = $waminame;
@@ -67,6 +74,7 @@ if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
 }
 
 $documentPath = $saveDir.'/'.$waminame_to_save;
+
 // Add to disk
 $fh = fopen($documentPath, 'w') or die("can't open file");
 fwrite($fh, $content);
@@ -86,11 +94,24 @@ $file = array(
 );
 
 $output = true;
-$documentData = DocumentManager::upload_document($file, $wamidir, null, null, 0, 'overwrite', false, $output);
+$documentData = DocumentManager::upload_document(
+    $file,
+    $wamidir,
+    null,
+    null,
+    0,
+    'overwrite',
+    false,
+    $output
+);
 
 if (!empty($documentData)) {
     $newDocId = $documentData['id'];
-    $newMp3DocumentId = DocumentManager::addAndConvertWavToMp3($documentData, $courseInfo, api_get_user_id());
+    $newMp3DocumentId = DocumentManager::addAndConvertWavToMp3(
+        $documentData,
+        $courseInfo,
+        api_get_user_id()
+    );
 
     if ($newMp3DocumentId) {
         $newDocId = $newMp3DocumentId;

@@ -597,7 +597,11 @@ class Agenda
                         $this->tbl_course_agenda,
                         $attributes,
                         array(
-                            'id = ? AND c_id = ? AND session_id = ? ' => array($id, $course_id, $this->sessionId)
+                            'id = ? AND c_id = ? AND session_id = ? ' => array(
+                                $id,
+                                $course_id,
+                                $this->sessionId
+                            )
                         )
                     );
 
@@ -611,41 +615,34 @@ class Agenda
                         $groupToAdd = array_diff($sendTo['groups'], $eventInfo['send_to']['groups']);
 
                         if ($sendTo['everyone']) {
-                            // Delete all:
-                            if (!empty($eventInfo['send_to']['groups']) &&
-                                isset($eventInfo['send_to']['groups'])
+
+                            // Delete all from group
+                            if (isset($eventInfo['send_to']['groups']) &&
+                                !empty($eventInfo['send_to']['groups'])
                             ) {
                                 foreach ($eventInfo['send_to']['groups'] as $group) {
-                                    api_item_property_update(
+                                    api_item_property_delete(
                                         $this->course,
                                         TOOL_CALENDAR_EVENT,
                                         $id,
-                                        "delete",
-                                        api_get_user_id(),
-                                        $group,
                                         0,
-                                        $start,
-                                        $end,
+                                        $group,
                                         $this->sessionId
                                     );
                                 }
                             }
 
-                            // storing the selected users
-                            if (!empty($eventInfo['send_to']['users']) &&
-                                isset($eventInfo['send_to']['users'])
+                            // Storing the selected users.
+                            if (isset($eventInfo['send_to']['users']) &&
+                                !empty($eventInfo['send_to']['users'])
                             ) {
                                 foreach ($eventInfo['send_to']['users'] as $userId) {
-                                    api_item_property_update(
+                                    api_item_property_delete(
                                         $this->course,
                                         TOOL_CALENDAR_EVENT,
                                         $id,
-                                        "delete",
-                                        api_get_user_id(),
-                                        $groupId,
                                         $userId,
-                                        $start,
-                                        $end,
+                                        $groupId,
                                         $this->sessionId
                                     );
                                 }
@@ -659,13 +656,24 @@ class Agenda
                                 "visible",
                                 api_get_user_id(),
                                 $groupId,
-                                '',
+                                null,
                                 $start,
                                 $end,
                                 $this->sessionId
                             );
                         } else {
-                            // Groups
+
+                            // Delete "everyone".
+                            api_item_property_delete(
+                                $this->course,
+                                TOOL_CALENDAR_EVENT,
+                                $id,
+                                0,
+                                0,
+                                $this->sessionId
+                            );
+
+                            // Add groups
                             if (!empty($groupToAdd)) {
                                 foreach ($groupToAdd as $group) {
                                     api_item_property_update(
@@ -683,24 +691,21 @@ class Agenda
                                 }
                             }
 
+                            // Delete groups.
                             if (!empty($groupsToDelete)) {
                                 foreach ($groupsToDelete as $group) {
-                                    api_item_property_update(
+                                    api_item_property_delete(
                                         $this->course,
                                         TOOL_CALENDAR_EVENT,
                                         $id,
-                                        "delete",
-                                        api_get_user_id(),
-                                        $group,
                                         0,
-                                        $start,
-                                        $end,
+                                        $group,
                                         $this->sessionId
                                     );
                                 }
                             }
 
-                            // Users.
+                            // Add users.
                             if (!empty($usersToAdd)) {
                                 foreach ($usersToAdd as $userId) {
                                     api_item_property_update(
@@ -718,18 +723,15 @@ class Agenda
                                 }
                             }
 
+                            // Delete users.
                             if (!empty($usersToDelete)) {
                                 foreach ($usersToDelete as $userId) {
-                                    api_item_property_update(
+                                    api_item_property_delete(
                                         $this->course,
                                         TOOL_CALENDAR_EVENT,
                                         $id,
-                                        "delete",
-                                        api_get_user_id(),
-                                        $groupId,
                                         $userId,
-                                        $start,
-                                        $end,
+                                        $groupId,
                                         $this->sessionId
                                     );
                                 }

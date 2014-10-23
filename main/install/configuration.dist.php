@@ -238,3 +238,12 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['prevent_multiple_simultaneous_login'] = false;
 // Hide private courses from course catalog
 //$_configuration['course_catalog_hide_private'] = false;
+// Display sessions catalog
+// 0 = show only courses; 1 = show only sessions; 2 = show courses and sessions
+//$_configuration['catalog_show_courses_sessions'] = 0;
+// Auto detect language custom pages.
+// $_configuration['auto_detect_language_custom_pages'] = true;
+// If the database is down this css style will be used to show the errors.
+//$_configuration['theme_fallback'] = 'chamilo'; // (main/css/chamilo)
+// The default template that will be use in the system.
+//$_configuration['default_template'] = 'default'; // (main/template/default)

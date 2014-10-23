@@ -594,8 +594,12 @@ if (!empty($exercise_list)) {
 
                 //Blocking empty start times see BT#2800
                 global $_custom;
-                if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercises_hidden_when_no_start_date']) {
-                    if (empty($row['start_time']) || $row['start_time'] == '0000-00-00 00:00:00') {
+                if (isset($_custom['exercises_hidden_when_no_start_date']) &&
+                    $_custom['exercises_hidden_when_no_start_date']
+                ) {
+                    if (empty($row['start_time']) ||
+                        $row['start_time'] == '0000-00-00 00:00:00'
+                    ) {
                         $time_limits = true;
                         $is_actived_time = false;
                     }
@@ -611,7 +615,10 @@ if (!empty($exercise_list)) {
                 if ($is_allowedToEdit) {
                     $lp_blocked = null;
                 if ($exercise_obj->exercise_was_added_in_lp == true) {
-                    $lp_blocked = Display::div(get_lang('AddedToLPCannotBeAccessed'), array('class' => 'lp_content_type_label'));
+                    $lp_blocked = Display::div(
+                        get_lang('AddedToLPCannotBeAccessed'),
+                        array('class' => 'lp_content_type_label')
+                    );
                 }
 
                 $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
@@ -639,10 +646,10 @@ if (!empty($exercise_list)) {
 
                 $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
-                //Count number exercice - teacher
-                $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION
+                // Count number exercise - teacher
+                $sql = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION
                              WHERE c_id = $course_id AND exercice_id = $my_exercise_id";
-                $sqlresult = Database::query($sqlquery);
+                $sqlresult = Database::query($sql);
                 $rowi = Database :: result($sqlresult, 0);
 
                 if ($session_id == $row['session_id']) {
@@ -741,21 +748,23 @@ if (!empty($exercise_list)) {
                 //$item .=  Display::tag('td',$attempts);
                 $item .= Display::tag('td', $number_of_questions);
             } else {
-                // Student only
+                // Student only.
                 $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
 
                 if ($visibility == 0) {
                     continue;
                 }
 
-                $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$cut_title.'</a>';
+                $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.
+                        $cut_title.'</a>';
 
-                //Link of the exercise
+                // Link of the exercise.
                 $item = Display::tag('td', $url.' '.$session_img);
 
-                //count number exercise questions
-                $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = ".$row['id'];
-                $sqlresult = Database::query($sqlquery);
+                // Count number exercise questions.
+                /*$sql = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION
+                        WHERE c_id = $course_id AND exercice_id = ".$row['id'];
+                $sqlresult = Database::query($sql);
                 $rowi = Database::result($sqlresult, 0);
 
                 if ($row['random'] > 0) {
@@ -763,11 +772,11 @@ if (!empty($exercise_list)) {
                 } else {
                     //show results student
                     $rowi.' '.api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
-                }
+                }*/
 
-                //This query might be improved later on by ordering by the new "tms" field rather than by exe_id
-                //Don't remove this marker: note-query-exe-results
-                $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
+                // This query might be improved later on by ordering by the new "tms" field rather than by exe_id
+                // Don't remove this marker: note-query-exe-results
+                $sql = "SELECT * FROM $TBL_TRACK_EXERCICES
                         WHERE
                             exe_exo_id      = ".$row['id']." AND
                             exe_user_id     = ".api_get_user_id()." AND
@@ -777,17 +786,18 @@ if (!empty($exercise_list)) {
                             orig_lp_item_id = 0 AND
                             session_id      =  '".api_get_session_id()."'
                         ORDER BY exe_id DESC";
-                $qryres = Database::query($qry);
+
+                $qryres = Database::query($sql);
                 $num = Database :: num_rows($qryres);
 
-                //Hide the results
+                // Hide the results.
                 $my_result_disabled = $row['results_disabled'];
 
-                //Time limits are on
+                // Time limits are on
                 if ($time_limits) {
                     // Exam is ready to be taken
                     if ($is_actived_time) {
-                        //Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
+                        // Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
                         if ($my_result_disabled == 0 || $my_result_disabled == 2) {
                             //More than one attempt
                             if ($num > 0) {
@@ -827,8 +837,8 @@ if (!empty($exercise_list)) {
                         }
                     }
                 } else {
-                    //Normal behaviour
-                    //Show results
+                    // Normal behaviour.
+                    // Show results.
                     if ($my_result_disabled == 0 || $my_result_disabled == 2) {
                         if ($num > 0) {
                             $row_track = Database :: fetch_array($qryres);
@@ -856,10 +866,8 @@ if (!empty($exercise_list)) {
                     }
                     $num = '<span class="tooltip" style="display: none;">'.$num.'</span>';
                 }
-                $item .= Display::tag('td', $attempt_text);
 
-                //See results
-                //$actions = '<a class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.$num.Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_SMALL).' </a>';
+                $item .= Display::tag('td', $attempt_text);
             }
             $class = 'row_even';
             if ($count % 2) {
@@ -869,7 +877,15 @@ if (!empty($exercise_list)) {
             if ($is_allowedToEdit) {
                 $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
             }
-            echo Display::tag('tr', $item, array('id' => 'exercise_list_'.$my_exercise_id, 'class' => $class));
+
+            echo Display::tag(
+                'tr',
+                $item,
+                array(
+                    'id' => 'exercise_list_' . $my_exercise_id,
+                    'class' => $class
+                )
+            );
 
             $count++;
         } // end foreach()
@@ -877,7 +893,7 @@ if (!empty($exercise_list)) {
 }
 
 // end exercise list
-//Hotpotatoes results
+// Hotpotatoes results
 $hotpotatoes_exist = false;
 
 if ($is_allowedToEdit) {
@@ -950,17 +966,33 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 $actions .='    <a href="'.$exercicePath.'?'.api_get_cidreq().'&hpchoice=enable&amp;page='.$page.'&amp;file='.$path.'">'.Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL).'</a>';
             }
             $actions .= '<a href="'.$exercicePath.'?'.api_get_cidreq().'&amp;hpchoice=delete&amp;file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset).' '.$title."?").'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
-
-            //$actions .='<img src="../img/lp_quiz_na.gif" border="0" title="'.get_lang('NotMarkActivity').'" alt="" />';
             $item .= Display::tag('td', $actions);
             echo Display::tag('tr', $item, array('class' => $class));
-        } else { // student only
+        } else {
+            // Student only
             if ($active == 1) {
+
+                $attempt = getLatestHotPotatoResult(
+                    $path,
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
+
                 $nbrActiveTests = $nbrActiveTests + 1;
                 $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a>');
-                //$item .= Display::tag('td', '');
-                $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.api_get_user_id().'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-                $item .= Display::tag('td', $actions);
+
+                if (!empty($attempt)) {
+                    $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.api_get_user_id().'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                    $attemptText = get_lang('LatestAttempt').' : ';
+                    $attemptText .= show_score($attempt['exe_result'], $attempt['exe_weighting']).' ';
+                    $attemptText .= $actions;
+                } else {
+                    // No attempts.
+                    $attemptText = get_lang('NotAttempted').' ';
+                }
+
+                $item .= Display::tag('td', $attemptText);
                 echo Display::tag('tr', $item, array('class' => $class));
             }
         }

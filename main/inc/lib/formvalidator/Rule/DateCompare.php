@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-/** @author Bart Mollet, Julio Montoya */
+
 require_once 'HTML/QuickForm/Rule/Compare.php';
+
 /**
  * Class HTML_QuickForm_Rule_DateCompare
+ * @author Julio Montoya
  */
 class HTML_QuickForm_Rule_DateCompare extends HTML_QuickForm_Rule_Compare
 {

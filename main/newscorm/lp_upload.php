@@ -5,9 +5,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 require_once 'back_compat.inc.php';
@@ -25,13 +23,12 @@ $uncompress = 1;
  * because if the file size exceed the maximum file upload
  * size set in php.ini, all variables from POST are cleared !
  */
-
 $user_file = Request::is_post() ? Request::file('user_file') : array();
 $user_file = $user_file ? $user_file : array();
 $is_error = isset($user_file['error']) ? $user_file['error'] : false;
 if (Request::is_post() && $is_error) {
     return api_failure::set_failure('upload_file_too_big');
-    unset($_FILEs['user_file']);
+    unset($_FILES['user_file']);
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
 
     // A file upload has been detected, now deal with the file...

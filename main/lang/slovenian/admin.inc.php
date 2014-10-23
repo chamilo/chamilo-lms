@@ -2,8 +2,21 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$HumanResourcesManagerShouldNotBeRegisteredToCourses = "Upravitelj človeških virov (HRM) ne sme biti vpisan v tečaj. Uporabniki tega tipa niso bili vpisani.";
+$CleanAndUpdateCourseCoaches = "Počisti in ažuriraj coach-e tečajev";
+$NoPDFFoundAtRoot = "V korenu ne morem najti PDF datoteke. Zagotovite, da bo PDF datoteka v korenu .zip datoteke (ne sme biti vsebovana v imeniku)";
+$PDFsMustLookLike = "PDF mora biti videti kot:";
+$ImportZipFileLocation = "Lokacija .zip datoteke za uvoz";
+$YouMustImportAZipFile = "Uvoziti je potrebno .zip datoteko";
+$ImportPDFIntroToCourses = "Uvozi uvodno besedilo v PDF obliki v tečaje";
+$SubscribeTeachersToSession = "Vpiši učitelje v sejo/seje";
+$SubscribeStudentsToSession = "Vpiši uporabnike v sejo/seje";
+$ManageCourseCategories = "Upravljaj kategorije tečajev";
+$CourseCategoryListInX = "Kategorije tečajev v okviru %s spletne strani:";
+$CourseCategoryInPlatform = "Dostopne kategorije tečajev";
+$UserGroupBelongURL = "Skupina sedaj pripada izbrani spletni strani";
+$AtLeastOneUserGroupAndOneURL = "Izbrati je potrebno vsaj eno skupino in eno spletno stran";
 $ClassIdDoesntExists = "ID razreda ne obstaja";
-$SearchSessions = "Iskanje po sejah";
 $DeleteUsersNotInList = "Izpiši uporabnike, ki niso na spisku uvoza";
 $IfSessionExistsUpdate = "Če seja obstaja, jo ažuriraj";
 $SearchCourseBySession = "Išči tečaje po sejah";

@@ -37,6 +37,7 @@ $RegisteredClasses = "Turmas registadas";
 $DeleteItemsNotInFile = "Apagar items que não estejam no ficheiro";
 $ImportGroups = "Importar grupos";
 $HereIsYourFeedback = "Aqui está o seu comentário";
+$SearchSessions = "Procura de sessões";
 $ShowSystemFolders = "Mostrar ficheiros do sistema";
 $LoginToGoToThisCourse = "Por favor, faça o login para ir para este curso";
 $LoginDate = "Data do login";

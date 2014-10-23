@@ -118,11 +118,11 @@ if ($is_allowedToTrack) {
                 // BEGIN % visited
                 // sum of all items (= multiple learningpaths + SCORM imported paths)
                 $sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) FROM $tbl_learnpath_item_view iv " .
-                        "INNER JOIN $tbl_learnpath_view v 
+                        "INNER JOIN $tbl_learnpath_view v
                         ON iv.lp_view_id = v.id " .
                         "WHERE
                         	v.c_id = $course_id AND
-                        	iv.c_id = $course_id AND                        	 
+                        	iv.c_id = $course_id AND
                 		v.user_id = " . $results[$j][0];
                 $total_lpath_items = getOneResult($sql);
 
@@ -130,7 +130,7 @@ if ($is_allowedToTrack) {
                 $sql = "SELECT COUNT(DISTINCT(iv.lp_item_id)) " .
                         "FROM $tbl_learnpath_item_view iv " .
                         "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id = v.id " .
-                        "WHERE 
+                        "WHERE
                         	v.c_id = $course_id AND
                         	iv.c_id = $course_id AND
                         	v.user_id = " . $results[$j][0] . " " .
@@ -272,7 +272,7 @@ if ($is_allowedToTrack) {
                     FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
                     WHERE
                     	cl.c_id = $course_id AND
-                    	sl.links_link_id = cl.id AND 
+                    	sl.links_link_id = cl.id AND
                     	sl.links_cours_id = '$_cid'
                     GROUP BY cl.title, cl.url";
 
@@ -371,7 +371,7 @@ if ($is_allowedToTrack) {
                                         "FROM $tbl_learnpath_item i " .
                                         "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
                                         "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
-                                        "WHERE 	i.c_id = $course_id AND 
+                                        "WHERE 	i.c_id = $course_id AND
                                         		iv.c_id = $course_id AND
                                         		v.c_id = $course_id AND
                                 				v.user_id=$studentId and v.lp_id=$contentId ORDER BY v.id, i.id";
@@ -380,7 +380,7 @@ if ($is_allowedToTrack) {
                                 $title_line .= get_lang('ScormTitleColumn') . ";" . get_lang('ScormStatusColumn') . ";" . get_lang('ScormScoreColumn') . ";" . get_lang('ScormTimeColumn');
                                 while ($ar3['status'] != '') {
                                     require_once '../newscorm/learnpathItem.class.php';
-                                    $time = learnpathItem::get_scorm_time('php', $ar3['total_time']);
+                                    $time = learnpathItem::getScormTimeFromParameter('php', $ar3['total_time']);
                                     $line .= $title . ";" . $ar3['status'] . ";" . $ar3['score'] . ";" . $time;
                                     $ar3 = Database::fetch_array($result3);
                                 }

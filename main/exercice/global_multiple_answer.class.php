@@ -6,7 +6,7 @@
  */
 class GlobalMultipleAnswer extends Question
 {
-    static $typePicture = 'mcmagl.gif';
+    static $typePicture = 'mcmagl.png';
     static $explanationLangVar = 'GlobalMultipleAnswer';
 
     /**
@@ -22,7 +22,6 @@ class GlobalMultipleAnswer extends Question
     /**
      * function which redefines Question::createAnswersForm
      * @param the FormValidator
-     * @param the answers number to display
      */
     public function createAnswersForm($form)
     {
@@ -44,17 +43,11 @@ class GlobalMultipleAnswer extends Question
                         ' . get_lang('Answer') . '
                     </th>';
 
-        // Espace entre l'entete et les reponses
         $html .='<th>' . get_lang('Comment') . '</th>';
         $html .='</tr>';
-
         $form->addElement('label', get_lang('Answers') . '<br /> <img src="../img/fill_field.png">', $html);
-
-        /* Initialiation variable */
         $defaults = array();
         $correct = 0;
-
-        /* Mise en variable du nombre de reponse */
         $answer = false;
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
@@ -96,10 +89,11 @@ class GlobalMultipleAnswer extends Question
             }
             //------------- Fin
             //------------- Debut si un des scores par reponse est egal � 0 : la coche vaut 1 (coch�)
-            if ($scoreA == 0)
+            if ($scoreA == 0) {
                 $defaults['pts'] = 1;
-            else
+            } else {
                 $defaults['pts'] = 0;
+            }
 
             $renderer = & $form->defaultRenderer();
 
@@ -177,8 +171,7 @@ class GlobalMultipleAnswer extends Question
 
     /**
      * abstract function which creates the form to create / edit the answers of the question
-     * @param the formvalidator instance
-     * @param the answers number to display
+     * @param the FormValidator instance
      */
     function processAnswersCreation($form)
     {
@@ -203,13 +196,11 @@ class GlobalMultipleAnswer extends Question
         // Set score per answer
         $nbr_corrects = $nbr_corrects == 0 ? 1 : $nbr_corrects;
         $answer_score = $nbr_corrects == 0 ? 0 : $answer_score;
-        //echo('affiche1');var_dump($answer_score);echo('<br>');
 
         $answer_score = ($answer_score / $nbr_corrects);
-        //echo('affiche2');var_dump($answer_score);echo('<br>');
+
         //$answer_score �quivaut � la valeur d'une bonne r�ponse
         // cr�ation variable pour r�cuperer la valeur de la coche pour la prise en compte des n�gatifs
-        $test = "";
         $test = $form->getSubmitValue('pts');
 
         for ($i = 1; $i <= $nb_answers; $i++) {
@@ -222,8 +213,9 @@ class GlobalMultipleAnswer extends Question
             } else {
                 if ($test == 1) {
                     $weighting = 0;
-                }else
+                } else {
                     $weighting = -abs($answer_score);
+                }
             }
 
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, $weighting, $i);
@@ -249,6 +241,7 @@ class GlobalMultipleAnswer extends Question
             <th>' . get_lang("Answer") . '</th>';
         $header .= '<th>' . get_lang("Comment") . '</th>';
         $header .= '</tr>';
+
         return $header;
     }
 }

@@ -2435,8 +2435,12 @@ class UserManager
                 );
 
                 // Course Coach session visibility.
-
                 $blockedCourseCount = 0;
+                $closedVisibilityList = array(
+                    COURSE_VISIBILITY_CLOSED,
+                    COURSE_VISIBILITY_HIDDEN
+                );
+
                 foreach ($courseList as $course) {
                     // Checking session visibility
                     $visibility = api_get_session_visibility(
@@ -2445,13 +2449,7 @@ class UserManager
                         $ignore_visibility_for_admins
                     );
 
-                    $courseIsVisible = !in_array(
-                        $course['visibility'],
-                        array(
-                            COURSE_VISIBILITY_CLOSED,
-                            COURSE_VISIBILITY_HIDDEN
-                        )
-                    );
+                    $courseIsVisible = !in_array($course['visibility'], $closedVisibilityList);
 
                     if ($courseIsVisible == false || $visibility == SESSION_INVISIBLE) {
                         $blockedCourseCount++;
@@ -2735,7 +2733,8 @@ class UserManager
         session_rel_course_user table if there are courses registered
         to our user or not*/
 
-        $sql = "SELECT DISTINCT scu.course_code as code, c.visibility
+        $sql = "SELECT DISTINCT
+                    scu.course_code as code, c.visibility, c.id as real_id
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
                 ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
@@ -2766,7 +2765,8 @@ class UserManager
         }
 
         if (api_is_allowed_to_create_course()) {
-            $sql = "SELECT DISTINCT scu.course_code as code, c.visibility
+            $sql = "SELECT DISTINCT
+                        scu.course_code as code, c.visibility, c.id as real_id
                     FROM $tbl_session_course_user as scu
                     INNER JOIN $tbl_session as s
                     ON (scu.id_session = s.id)
@@ -4425,8 +4425,9 @@ class UserManager
                     $form->applyFilter('extra_'.$field_details[1], 'html_filter');
 
                     if (!$admin_permissions) {
-                        if ($field_details[7] == 0)
+                        if ($field_details[7] == 0) {
                             $form->freeze('extra_'.$field_details[1]);
+                        }
                     }
                     break;
                 case self::USER_FIELD_TYPE_TEXTAREA:

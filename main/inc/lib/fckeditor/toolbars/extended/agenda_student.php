@@ -1,6 +1,6 @@
 <?php
-// Dokeos - elearning and course management software
-// See license terms in dokeos/documentation/license.txt
+
+/* For licensing terms, see /license.txt */
 
 // Training tools
 // Agenda (student)
@@ -17,7 +17,7 @@ if ((api_get_setting('allow_spellcheck') == 'true')) {
 	$VSpellCheck='SpellCheck';
 }
 else{
-	$VSpellCheck='';	
+	$VSpellCheck='';
 }
 
 // This is the visible toolbar set when the editor has "normal" size.
@@ -42,12 +42,12 @@ $config['ToolbarSets']['Maximized'] = array(
 '/',
 	array('TableOC','Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),	
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','TextColor','BGColor'),
-	array($VSpellCheck),	
-	array('Style','FontFormat','FontName','FontSize'),	
+	array($VSpellCheck),
+	array('Style','FontFormat','FontName','FontSize'),
 	array('PageBreak','ShowBlocks'),
-	array('FitWindow')	
+	array('FitWindow')
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.

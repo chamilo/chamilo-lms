@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once 'Resource.class.php';
+
 /**
  * ScormDocument class
  * @author Olivier Brouckaert <oli.brouckaert@dokeos.com>

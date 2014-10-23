@@ -8,9 +8,6 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
 
 use \ChamiloSession as Session;
 
@@ -71,33 +68,7 @@ function save_item(
         error_log("score: $score - max:$max - min: $min - status:$status - time:$time - suspend: $suspend - location: $location - core_exit: $core_exit");
     }
 
-    $mylp = null;
-    $lpobject = Session::read('lpobject');
-    /*if (!is_object($lpobject) && isset($sessionId) && isset($courseId)) {
-        $lpobject = new learnpathItem($lp_id, $user_id, $courseId);
-    }*/
-
-    if (isset($lpobject)) {
-        if (is_object($lpobject)) {
-            $mylp = $lpobject;
-        } else {
-            $oLP = unserialize($lpobject);
-            if ($debug) error_log("lpobject was set");
-            if (!is_object($oLP)) {
-                unset($oLP);
-                $code = api_get_course_id();
-                $mylp = new learnpath($code, $lp_id, $user_id);
-                if ($debug) error_log("Creating learnpath");
-            } else {
-                $mylp = $oLP;
-                if ($debug) error_log("Loading learnpath from unserialize");
-            }
-        }
-    } else {
-        if ($debug) {
-            error_log("lpobject was not set");
-        }
-    }
+    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
 
     if (!is_a($mylp, 'learnpath')) {
         if ($debug) {
@@ -131,7 +102,6 @@ function save_item(
         }
 
         return $return;
-
     } else {
         if ($debug > 1) { error_log('Prerequisites are OK'); }
 
@@ -205,9 +175,8 @@ function save_item(
         } else {
             $time = $mylpi->get_total_time();
         }
-
         if (isset($suspend) && $suspend != '' && $suspend != 'undefined') {
-            $mylpi->current_data = $suspend; //escapetxt($suspend);
+            $mylpi->current_data = $suspend;
         }
 
         if (isset($location) && $location != '' && $location!='undefined') {

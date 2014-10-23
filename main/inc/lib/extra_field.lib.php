@@ -86,7 +86,7 @@ class ExtraField extends Model
                 $this->primaryKey = 'user_id';
                 break;
             case 'session':
-                $this->table_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
+                //$this->table_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
                 $this->table_field_values  = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 
                 //Used for the model
@@ -1040,9 +1040,9 @@ EOF;
                         break;
                     case ExtraField::FIELD_TYPE_MOBILE_PHONE_NUMBER:
                         $form->addElement(
-                            'text', 
+                            'text',
                             'extra_'.$field_details[1],
-                            $field_details[3]." (".get_lang('CountryDialCode').")", 
+                            $field_details[3]." (".get_lang('CountryDialCode').")",
                             array('size' => 40, 'placeholder' => '(xx)xxxxxxxxx')
                         );
                         $form->applyFilter('extra_'.$field_details[1], 'stripslashes');

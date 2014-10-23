@@ -73,24 +73,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     require_once 'learnpathItem.class.php';
     require_once 'scormItem.class.php';
     require_once 'aiccItem.class.php';
-    $mylp = '';
-    if (isset($_SESSION['lpobject'])) {
-        if ($debug > 1) { error_log('$_SESSION[lpobject] is set', 0); }
-        $oLP = unserialize($_SESSION['lpobject']);
-        if (!is_object($oLP)) {
-            if ($debug > 2) { error_log(print_r($oLP, true), 0); }
-            if ($debug > 2) { error_log('Building new lp', 0); }
-            unset($oLP);
-            $code = api_get_course_id();
-            $mylp = new learnpath($code, $lp_id, $user_id);
-        } else {
-            if ($debug > 2) { error_log('Reusing session lp', 0); }
-            $mylp = $oLP;
-        }
-    }
-    //$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
-
-
+    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $prereq_check = $mylp->prerequisites_match($item_id);
     if ($prereq_check === true) { // Launch the prerequisites check and set error if needed.
 
@@ -144,7 +127,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     $mycomplete         = $mylp->get_complete_items_count();
     $myprogress_mode    = $mylp->get_progress_bar_mode();
     $myprogress_mode    = ($myprogress_mode == '' ? '%' : $myprogress_mode);
-    
+
     //$mylpi->write_to_db();
     $_SESSION['lpobject'] = serialize($mylp);
     if ($mylpi->get_type()!='sco'){
@@ -170,7 +153,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
         $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login 
+        $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
                                 WHERE login_user_id='".api_get_user_id()."' ORDER BY login_date DESC LIMIT 0,1";
 
         $q_last_connection = Database::query($sql_last_connection);
@@ -205,24 +188,9 @@ function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = arr
     require_once 'learnpathItem.class.php';
     require_once 'scormItem.class.php';
     require_once 'aiccItem.class.php';
-    $mylp = '';
-    if (isset($_SESSION['lpobject'])) {
-        if ($debug > 1) { error_log('$_SESSION[lpobject] is set', 0); }
-        $oLP = unserialize($_SESSION['lpobject']);
-        if (!is_object($oLP)) {
-            if ($debug > 2) { error_log(print_r($oLP, true), 0); }
-            if ($debug > 2) { error_log('Building new lp', 0); }
-            unset($oLP);
-            $code = api_get_course_id();
-            $mylp = new learnpath($code,$lp_id,$user_id);
-        } else {
-            if ($debug > 2) { error_log('Reusing session lp', 0); }
-            $mylp = $oLP;
-        }
-    }
+    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $mylpi =& $mylp->items[$item_id];
-    //error_log(__FILE__.' '.__LINE__.' '.print_r($objectives,true), 0);
-    if(is_array($objectives) && count($objectives)>0){
+    if (is_array($objectives) && count($objectives)>0){
         foreach($objectives as $index=>$objective){
             //error_log(__FILE__.' '.__LINE__.' '.$objectives[$index][0], 0);
             $mylpi->add_objective($index,$objectives[$index]);
@@ -259,21 +227,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     require_once 'learnpathItem.class.php';
     require_once 'scormItem.class.php';
     require_once 'aiccItem.class.php';
-    $mylp = '';
-    if (isset($_SESSION['lpobject'])) {
-        if ($debug > 1) { error_log('$_SESSION[lpobject] is set', 0); }
-        $oLP = unserialize($_SESSION['lpobject']);
-        if (!is_object($oLP)) {
-            if ($debug > 1) { error_log(print_r($oLP, true), 0); }
-            if ($debug > 2) { error_log('Building new lp', 0); }
-            unset($oLP);
-            $code = api_get_course_id();
-            $mylp = new learnpath($code,$lp_id,$user_id);
-        } else {
-            if ($debug > 1) { error_log('Reusing session lp', 0); }
-            $mylp = $oLP;
-        }
-    }
+    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $new_item_id = 0;
     switch ($next_item) {
         case 'next':

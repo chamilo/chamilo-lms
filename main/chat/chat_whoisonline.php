@@ -6,9 +6,7 @@
  *	@author Olivier Brouckaert
  *	@package chamilo.chat
  */
-/**
- * Code
- */
+
 define('FRAME', 'online');
 $language_file = array('chat');
 
@@ -120,14 +118,14 @@ if (!empty($course)) {
 					} else {
 						$status = CourseManager::is_course_teacher($user['user_id'], $_SESSION['_course']['id']) ? 1 : 5;
 					}
-				$userImage = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
-                                if (substr($userImage['file'],0,7) != 'unknown') {
-				    $fileUrl = $userImage['dir'].'medium_'.$userImage['file'];
-                                } else {
-				    $fileUrl = $userImage['dir'].$userImage['file'];
-                                }
-				$email = $user['email'];
-				$url_user_profile=api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user['user_id'].'&';
+				    $userImage = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
+                    if (substr($userImage['file'],0,7) != 'unknown') {
+				        $fileUrl = $userImage['dir'].'medium_'.$userImage['file'];
+                    } else {
+				        $fileUrl = $userImage['dir'].$userImage['file'];
+                    }
+				    $email = $user['email'];
+				    $url_user_profile=api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user['user_id'].'&';
 			?>
 			<li class="list-group-item">
 				<img src="<?php echo $fileUrl;?>" border="0" width="50" alt="" class="user-image-chat" />
@@ -141,9 +139,12 @@ if (!empty($course)) {
 						}
 					?>
 				</div>
-				<div class="user-email"><?php echo $email; ?></div>
+				<div class="user-email"><?php echo $user['username']; ?></div>
 			</li>
-			<?php  } unset($users); ?>
+			<?php
+                }
+                unset($users);
+            ?>
 		</ul>
 	</div></div></div></div>
 	<?php

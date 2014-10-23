@@ -11,10 +11,6 @@
                 "message": "TheNavbarStep"
             },
             {
-                "elementSelector": "div.span3:nth-child(1)",
-                "message": "TheRightPanelStep"
-            },
-            {
                 "elementSelector": "#user_image_block",
                 "message": "TheUserImageBlock"
             },

@@ -44,8 +44,8 @@
                         });
 
                         $btnStart = $('<button>', {
-                            class: 'btn btn-primary btn-large',
-                            text: '{{ 'StartButtonText' | get_lang }}',
+                            class: 'tour-warning',
+                            html: '<img src="{{ _p.web }}/plugin/tour/resources/tour-chamilo.png">{{ 'StartButtonText' | get_lang }}',
                             click: function(e) {
                                 e.preventDefault();
 

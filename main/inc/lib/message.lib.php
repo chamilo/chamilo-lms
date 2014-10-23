@@ -1584,4 +1584,36 @@ class MessageManager
         return $messages;
     }
 
+    /**
+     * Check whether a message has attachments
+     * @param int $messageId The message id
+     * @return boolean Whether the message has attachments return true. Otherwise return false
+     */
+    public static function hasAttachments($messageId)
+    {
+        $messageId = intval($messageId);
+
+        if (empty($messageId)) {
+            return false;
+        }
+
+        $messageAttachmentTable = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+
+        $conditions = array(
+            'where' => array(
+                'message_id = ?' => $messageId
+            )
+        );
+
+        $result = Database::select('COUNT(1) AS qty', $messageAttachmentTable, $conditions, 'first');
+
+        if (!empty($result)) {
+            if ($result['qty'] > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

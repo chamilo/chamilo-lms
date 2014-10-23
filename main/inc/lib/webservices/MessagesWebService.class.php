@@ -102,6 +102,8 @@ class MessagesWebService extends WebService
         $lastMessages = MessageManager::getMessagesFromLastReceivedMessage($userId, $lastId);
 
         foreach ($lastMessages as $message) {
+            $hasAttachments = MessageManager::hasAttachments($message['id']);
+
             $messages[] = array(
                 'id' => $message['id'],
                 'title' => $message['title'],
@@ -112,6 +114,7 @@ class MessagesWebService extends WebService
                     'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
                 ),
                 'content' => $message['content'],
+                'hasAttachments' => $hasAttachments,
                 'platform' => array(
                     'website' => api_get_path(WEB_PATH),
                     'messagingTool' => api_get_path(WEB_PATH) . 'main/messages/inbox.php'

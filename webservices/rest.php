@@ -62,10 +62,12 @@ switch ($action) {
 
             $messages = $webService->getNewMessages($username, $lastId);
 
-            $json = $messages;
-        } else {
             $json = array(
                 'status' => true,
+                'messages' => $messages
+            );
+        } else {
+            $json = array(
                 'status' => false
             );
         }

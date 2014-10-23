@@ -7,8 +7,6 @@
  */
 /* Require libs and classes */
 require_once '../main/inc/global.inc.php';
-require_once './classes/WebService.class.php';
-require_once './classes/MessagesWebService.class.php';
 
 /* Manage actions */
 $json = array();

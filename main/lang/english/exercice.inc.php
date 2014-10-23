@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy = "Question edition is not available because the question has been already answered. However, you can copy and modify it.";
 $SelectADateOnTheCalendar = "Select a date from the calendar";
 $AreYouSureDeleteTestResultBeforeDateD = "Are you sure you want to clean results for this test before the selected date ?";
 $CleanStudentsResultsBeforeDate = "Clean all results before a selected date";

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AssignedCourses = "Cours assignés";
 $SleepingStudents = "Apprenants sans activité durant les derniers jours";
 $SleepingTeachers = "Enseignants sans activité durant les derniers jours";
 $InactiveUsers = "Utilisateurs au compte désactivé";

@@ -25,6 +25,7 @@ switch ($action) {
             $apiKey = $webService->getApiKey($username);
 
             $json = array(
+                'status' => true,
                 'apiKey' => $apiKey
             );
         } else {
@@ -43,6 +44,7 @@ switch ($action) {
             $count = $webService->countNewMessages($username, $lastId);
 
             $json = array(
+                'status' => true,
                 'count' => $count
             );
         } else {
@@ -63,6 +65,7 @@ switch ($action) {
             $json = $messages;
         } else {
             $json = array(
+                'status' => true,
                 'status' => false
             );
         }

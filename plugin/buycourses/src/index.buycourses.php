@@ -26,7 +26,6 @@ if ($guess_enable == "true" || isset($_SESSION['_user'])) {
     $listing_tpl = 'buycourses/view/index.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
-    //$matches = null;
     preg_match_all('/src\/.*\.php/', $content, $matches);
     count($matches[0]) > 1 ? $tpl->display_one_col_template() : header('Location: '.$matches[0][0]);
 }

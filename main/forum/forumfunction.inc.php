@@ -4787,13 +4787,13 @@ function getAttachmentAjaxForm($forumId, $threadId, $postId, $path = null)
         }
     }
     // Form
-    $formFileUpload = '
+    $formFileUpload = '<div class="form-ajax">
         <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="curdirpath" value="'.$path.'" />
             <input type="file" name="user_upload" multiple>
-            <button type="submit">Upload</button>
-            '.get_lang('UploadFiles').'
-        </form>
+            <button type="submit">Upload</button><div class="button-load">
+            '.get_lang('UploadFiles').'</div>
+        </form></div>
         ';
 
     return $formFileUpload;

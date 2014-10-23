@@ -44,7 +44,32 @@ header #logo img{
     margin-left: 30px;
 }
 
+/*buttom load ajax form*/
 
+.button-load{
+  background: url("../img/icons/64/file_upload.png") no-repeat center 20px;
+  padding-top: 70px;
+  /*-webkit-animation:glide 2250ms infinite;
+  animation:glide 2250ms infinite;*/
+}
+/*@-webkit-keyframes glide {
+  from {
+    background-position: center 0;
+  } to {
+      background-position: center 20px;
+
+    }
+
+}
+
+@keyframes glide {
+  from {
+    background-position:center 0;
+  } to {
+      background-position:center 20px;
+
+    }
+}*/
 /* START COURSE PROGRESS */
 .thematic-postit{
   padding-top: 5px;

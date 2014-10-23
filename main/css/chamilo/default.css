@@ -118,7 +118,6 @@ a.thumbnail:hover{
 }
 
 .breadcrumb a{
-  line-height: 30px;
   text-transform: none;
 }
 
@@ -441,7 +440,6 @@ a.thumbnail:hover{
 }
 .breadcrumb a{
   padding-top: 0;
-  line-height: 30px;
   text-transform: none;
 }
 

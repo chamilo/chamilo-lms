@@ -10,8 +10,13 @@
         </div>
         <div class="span9">
             <div class="row">
-                <span id="message_ajax_reponse" class="span9"></span>
+                <div class="span9">
+                    <div id="message_ajax_reponse" class=""></div>
+                </div>
+            </div>
+            <div class="row">
                 {{ social_right_content}}
+            </div>
                 <div id="display_response_id" class="span9"></div>
             </div>
         </div>

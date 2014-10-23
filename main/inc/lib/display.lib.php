@@ -1661,7 +1661,7 @@ class Display
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
-        return '<div class="page-header"><h2>'.Security::remove_XSS($title).'</h2></div>';
+        return '<h3>'.Security::remove_XSS($title).'</h3>';
     }
 
     public static function page_subheader2($title, $second_title = null)

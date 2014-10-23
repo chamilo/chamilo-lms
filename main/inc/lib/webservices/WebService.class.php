@@ -46,6 +46,10 @@ abstract class WebService
      */
     public static function isValidUser($username, $password)
     {
+        if (empty($username) || empty($password)) {
+            return false;
+        }
+
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $whereConditions = array(

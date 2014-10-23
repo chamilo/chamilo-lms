@@ -12,12 +12,12 @@ require_once '../main/inc/global.inc.php';
 $json = array();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'nothing';
-$username = Security::remove_XSS($_POST['username']);
+$username = isset($_POST['username']) ? Security::remove_XSS($_POST['username']) : null;
 $apiKey = isset($_POST['api_key']) ? Security::remove_XSS($_POST['api_key']) : null;
 
 switch ($action) {
     case 'loginNewMessages':
-        $password = Security::remove_XSS($_POST['password']);
+        $password = isset($_POST['password']) ? Security::remove_XSS($_POST['password']) : null;
 
         if (MessagesWebService::isValidUser($username, $password)) {
             $webService = new MessagesWebService();

@@ -180,9 +180,7 @@ class CalculatedAnswer extends Question
     function processAnswersCreation($form)
     {
         if (!self::isAnswered()) {
-            // Can't use TABLE_QUIZ_ANSWER because it returns "quiz_answer"
-            // instead of "c_quiz_answer"
-            $table = Database::get_main_table("c_quiz_answer");
+            $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
             Database::delete(
                 $table,
                 array(
@@ -268,8 +266,9 @@ class CalculatedAnswer extends Question
             $table,
             array(
                 'where' => array(
-                    'question_id = ?' => array(
-                        $this->id
+                    'question_id = ? AND course_code = ?' => array(
+                        $this->id,
+                        $this->course['id']
                     )
                 )
             )

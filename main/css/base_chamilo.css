@@ -1393,14 +1393,26 @@ a.read {
 
 /* INVITATIONS */
 
-.invitation_confirm {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #D8DFEA;    
+.invitation-clear{
+  padding-bottom: 1em;
+  padding-top: 1em;
 }
-.invitation_image {
-    width:110px;
+.invitation-clear .title-profile, .invitation-clear .title-group {
+  font-size: 15px;
+  font-weight: bold;
+  padding-bottom: 0.2em;
 }
-
+.invitation-clear .title-profile a, .invitation-clear .title-group a{
+  color: #333;
+}
+.invitation-clear .title-profile a:hover, .invitation-clear .title-group a:hover{
+  color: #666;
+}
+.invitation-clear .content-invitation, .invitation-clear .description-group {
+  color: #666;
+  font-size: 13px;
+  padding-bottom: 0.3em;
+}
 /* DASHBOARD */
 
 /* Head section */

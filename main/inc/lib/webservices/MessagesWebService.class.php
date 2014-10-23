@@ -10,7 +10,6 @@ class MessagesWebService extends WebService
 {
 
     const SERVICE_NAME = 'MsgREST';
-    const FIELD_VARIABLE = 'api_key_message';
 
     /**
      * Generate the api key for a user

@@ -34,11 +34,6 @@ abstract class WebService
     abstract public function getApiKey($username);
 
     /**
-     * @abstract
-     */
-    abstract public static function isValidApiKey($username, $apiKey);
-
-    /**
      * Check whether the username and password are valid
      * @param string $username The username
      * @param string $password the password

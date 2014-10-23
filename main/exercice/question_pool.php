@@ -462,11 +462,10 @@ if ($exerciseId > 0) {
 	$level_where = '';
 	$from = '';
 	if (isset($courseCategoryId) && $courseCategoryId > 0) {
-		$from = ", $TBL_COURSE_REL_CATEGORY crc ";
+		$from = " INNER JOIN  $TBL_COURSE_REL_CATEGORY crc ON crc.question_id=q.id  AND crc.c_id= q.c_id ";
 		$level_where .= " AND
-		        crc.c_id=$selected_course AND
-		        crc.question_id=qu.id AND
-		        crc.category_id=$courseCategoryId";
+		        crc.c_id = $selected_course AND
+		        crc.category_id = $courseCategoryId";
 	}
 	if (isset($exerciseLevel) && $exerciseLevel!= -1 ) {
 		$level_where = ' AND level='.$exerciseLevel;
@@ -485,7 +484,8 @@ if ($exerciseId > 0) {
                 ON (ex.id = r.exercice_id AND ex.c_id = r.c_id )
                 $from
                 WHERE
-                    ex.c_id = '$selected_course' AND ex.active = '-1'
+                    ex.c_id = '$selected_course' AND
+                    ex.active = '-1'
                     $level_where $answer_where
              )
              UNION
@@ -493,6 +493,7 @@ if ($exerciseId > 0) {
                 SELECT q.* FROM $TBL_QUESTIONS q
                 LEFT OUTER JOIN $TBL_EXERCICE_QUESTION r
                 ON (q.c_id = r.c_id AND q.id = r.question_id)
+                $from
                 WHERE
                     q.c_id = '$selected_course' AND
                     r.question_id is null
@@ -503,6 +504,7 @@ if ($exerciseId > 0) {
                 SELECT q.* FROM $TBL_QUESTIONS q
                 INNER JOIN $TBL_EXERCICE_QUESTION r
                 ON (q.c_id = r.c_id AND q.id = r.question_id)
+                $from
                 WHERE
                     r.c_id = '$selected_course' AND
                     (r.exercice_id = '-1' OR r.exercice_id = '0')
@@ -611,7 +613,11 @@ if ($exerciseId > 0) {
 
         // All tests for the course selected, not in session
         $sql = "SELECT DISTINCT qu.id, question, qu.type, level, q.session_id
-                FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q $from
+                FROM
+                $TBL_QUESTIONS as qu,
+                $TBL_EXERCICE_QUESTION as qt,
+                $TBL_EXERCICES as q
+                $from
                 WHERE
                     qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND

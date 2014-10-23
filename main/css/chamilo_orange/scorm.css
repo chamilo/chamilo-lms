@@ -30,6 +30,9 @@
     text-decoration: none;
 }
 .inner_lp_toc .scorm_item_highlight a {
+    color: #ffffff;
+}
+.inner_lp_toc .scorm_item_highlight a {
     color:#fff;
     margin-right: 1px;
     text-decoration: none;
@@ -152,13 +155,6 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff7400', endColorstr='#df3a01',GradientType=0 ); /* IE6-9 */
     margin-right: 1px;
     padding: 10px 0px 10px 0px;
-    text-decoration: none;
-    -webkit-border-top-left-radius: 10px;
-    -webkit-border-top-right-radius: 10px;
-    -moz-border-radius-topleft: 10px;
-    -moz-border-radius-topright: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
 }
 
 .inner_lp_toc .scorm_item {
@@ -351,7 +347,6 @@ opacity: 0.7;
     margin-right: 1px;
     padding-bottom: 2px;
     text-decoration: none;
-    color: #2F3E46;
 }
 
 .inner_lp_toc .scorm_item a.chapter_module {
@@ -362,15 +357,13 @@ opacity: 0.7;
 .scorm_item_1,
 .scorm_item_2 {
     font-size: 16px;
-    margin-left: 10px;
+    margin-left: 0;
     margin-right:10px;
     text-decoration: none;
-    border-color: rgba(255, 255, 255, 0.3);
 }
 .scorm_item_1 {
     border-bottom: 1px solid #CCCCCC;
     color:#444;
-    text-shadow:0 1px 1px #f6f6f6;
     background: none;
     margin-right: 1px;
     padding: 10px 0px 10px 0px;
@@ -378,7 +371,6 @@ opacity: 0.7;
 .scorm_item_2 {
     border-bottom: 1px solid #CCCCCC;
     color: #444444;
-    text-shadow: 0 1px 1px #F6F6F6;
     margin-right: 1px;
     padding: 10px 0px 10px 0px;
     background-image:none;

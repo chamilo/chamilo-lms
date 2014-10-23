@@ -1,17 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-define('ALL_ON_ONE_PAGE',                   1);
-define('ONE_PER_PAGE',                      2);
+define('ALL_ON_ONE_PAGE', 1);
+define('ONE_PER_PAGE', 2);
 
-define('EXERCISE_FEEDBACK_TYPE_END',        0); //Feedback 		 - show score and expected answers
-define('EXERCISE_FEEDBACK_TYPE_DIRECT',     1); //DirectFeedback - Do not show score nor answers
-define('EXERCISE_FEEDBACK_TYPE_EXAM',       2); //NoFeedback 	 - Show score only
+define('EXERCISE_FEEDBACK_TYPE_END', 0); //Feedback 		 - show score and expected answers
+define('EXERCISE_FEEDBACK_TYPE_DIRECT', 1); //DirectFeedback - Do not show score nor answers
+define('EXERCISE_FEEDBACK_TYPE_EXAM', 2); //NoFeedback 	 - Show score only
 
-define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS',        0); //show score and expected answers
-define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS',     1); //Do not show score nor answers
-define('RESULT_DISABLE_SHOW_SCORE_ONLY',       2); //Show score only
-define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES',       3); //Show final score only with categories
+define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS', 0); //show score and expected answers
+define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score nor answers
+define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
+define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
 
 define('EXERCISE_MAX_NAME_SIZE',            80);
 
@@ -2362,25 +2362,26 @@ class Exercise
                 case GLOBAL_MULTIPLE_ANSWER:
                     if ($from_database) {
                         $choice = array();
-                        $queryans = "SELECT answer FROM $TBL_TRACK_ATTEMPT WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
-                        $resultans = Database::query($queryans);
+                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
+                                WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+                        $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
                             $choice[$ind] = 1;
                         }
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
                         if ($studentChoice) {
-                            $questionScore  +=$answerWeighting;
+                            $questionScore +=$answerWeighting;
                         }
                     } else {
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         if (isset($studentChoice)) {
-                            $questionScore  += $answerWeighting;
+                            $questionScore += $answerWeighting;
                         }
                         $real_answers[$answerId] = (bool)$studentChoice;
                     }
-                    $totalScore     += $answerWeighting;
+                    $totalScore += $answerWeighting;
                     if ($debug) error_log("studentChoice: $studentChoice");
                     break;
                 case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
@@ -3338,11 +3339,12 @@ class Exercise
         }
 
         //Fixes multiple answer question in order to be exact
-        if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
+        //if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
+       /* if ($answerType == GLOBAL_MULTIPLE_ANSWER) {
             $diff = @array_diff($answer_correct_array, $real_answers);
 
-            /*
-             * All good answers or nothing works like exact
+            // All good answers or nothing works like exact
+
             $counter = 1;
             $correct_answer = true;
             foreach ($real_answers as $my_answer) {
@@ -3352,20 +3354,21 @@ class Exercise
                     break;
                 }
                 $counter++;
-            }*/
+            }
+
             if ($debug) error_log(" answer_correct_array: ".print_r($answer_correct_array, 1)."");
             if ($debug) error_log(" real_answers: ".print_r($real_answers, 1)."");
-            //if ($debug) error_log(" correct_answer: ".$correct_answer);
+            if ($debug) error_log(" correct_answer: ".$correct_answer);
 
-            /*if ($correct_answer == false) {
+            if ($correct_answer == false) {
                 $questionScore = 0;
-            }*/
-
-            //This makes the result non exact
-            if (!empty($diff)) {
-                //$questionScore = 0;
             }
-        }
+
+            // This makes the result non exact
+            if (!empty($diff)) {
+                $questionScore = 0;
+            }
+        }*/
 
         $extra_data = array(
             'final_overlap' => $final_overlap,

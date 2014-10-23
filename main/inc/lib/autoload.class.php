@@ -929,6 +929,8 @@ class Autoload
         $result['Utf8'] = '/main/inc/lib/system/text/utf8.class.php';
         $result['Utf8Decoder'] = '/main/inc/lib/system/text/utf8_decoder.class.php';
         $result['Utf8Encoder'] = '/main/inc/lib/system/text/utf8_encoder.class.php';
+        $result['WebService'] = '/main/inc/lib/webservices/WebService.class.php';
+        $result['MessagesWebService'] = '/main/inc/lib/webservices/MessagesWebService.class.php';
         $result['Wiki'] = '/main/coursecopy/classes/wiki.class.php';
         $result['Work\Access'] = '/main/work/access.class.php';
         $result['Work\AjaxController'] = '/main/work/ajax_controller.class.php';

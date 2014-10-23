@@ -111,8 +111,8 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 $fromlink = '';
 
-$interbreadcrumb[]= array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
-$interbreadcrumb[]= array("url" => "overview.php?exerciseId=".$exercise_id.'&id_session='.api_get_session_id(),"name" => $objExercise->name);
+$interbreadcrumb[]= array("url" => "exercice.php?".api_get_cidreq(),"name" => get_lang('Exercices'));
+$interbreadcrumb[]= array("url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),"name" => $objExercise->name);
 $interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
@@ -591,7 +591,15 @@ foreach ($questionList as $questionId) {
         }
     }
 
-    //No category for this question!
+    // No category for this question!
+    if (!isset($category_list['none']['score'])) {
+        $category_list['none']['score'] = 0;
+    }
+
+    if (!isset($category_list['none']['total'])) {
+        $category_list['none']['total'] = 0;
+    }
+
     if ($category_was_added_for_this_test == false) {
         $category_list['none']['score'] += $my_total_score;
         $category_list['none']['total'] += $my_total_weight;

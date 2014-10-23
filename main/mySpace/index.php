@@ -221,6 +221,7 @@ $nb_posts = $posts;
 $avg_time_spent = $totalTimeSpent;
 
 $linkAddUser = null;
+$linkCourseDetailsAsTeacher = null;
 $linkAddCourse = null;
 $linkAddSession = null;
 
@@ -230,9 +231,14 @@ if (api_is_platform_admin()) {
         api_get_path(WEB_CODE_PATH).'admin/dashboard_add_users_to_user.php?user='.api_get_user_id(),
         array('class' => '')
     );
+    $linkCourseDetailsAsTeacher = ' '.Display::url(
+        Display::return_icon('2rightarrow.gif', get_lang('Details')),
+        api_get_path(WEB_CODE_PATH).'mySpace/course.php',
+        array('class' => '')
+    );
     $linkAddCourse = ' '.Display::url(
-        Display::return_icon('add.png', get_lang('Add')),
-        api_get_path(WEB_CODE_PATH).'admin/dashboard_add_courses_to_user.php?user='.api_get_user_id(),
+        Display::return_icon('2rightarrow.gif', get_lang('Details')),
+        api_get_path(WEB_CODE_PATH).'mySpace/course.php?follow',
         array('class' => '')
     );
     $linkAddSession = ' '.Display::url(
@@ -282,15 +288,15 @@ echo '<div class="report_section">
                     api_get_path(WEB_CODE_PATH).'mySpace/course.php'
                 ).
                 '</td>
-                <td align="right">'.$countAssignedCourses.$linkAddCourse.'</td>
+                <td align="right">'.$count_courses.$linkCourseDetailsAsTeacher.'</td>
             </tr>
             <tr>
                 <td>'.Display::url(
                     get_lang('FollowedCourses'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/course.php'
+                    api_get_path(WEB_CODE_PATH).'mySpace/course.php?follow'
                 ).
                 '</td>
-                <td align="right">'.$count_courses.$linkAddCourse.'</td>
+                <td align="right">'.$countAssignedCourses.$linkAddCourse.'</td>
             </tr>
             <tr>
                 <td>'.Display::url(

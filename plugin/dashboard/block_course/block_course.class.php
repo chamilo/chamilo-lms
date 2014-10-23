@@ -130,7 +130,7 @@ class BlockCourse extends Block
         }
         $content .= $data_table;
         if (!empty($course_data)) {
-            $content .= '<div style="text-align:right;margin-top:10px;"><a href="' . api_get_path(WEB_CODE_PATH) . 'mySpace/course.php">' . get_lang('SeeMore') . '</a></div>';
+            $content .= '<div style="text-align:right;margin-top:10px;"><a href="' . api_get_path(WEB_CODE_PATH) . 'mySpace/course.php?follow">' . get_lang('SeeMore') . '</a></div>';
         }
         $content .= '</div>';
 

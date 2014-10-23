@@ -462,7 +462,7 @@ if ($exerciseId > 0) {
 	$level_where = '';
 	$from = '';
 	if (isset($courseCategoryId) && $courseCategoryId > 0) {
-		$from = " INNER JOIN  $TBL_COURSE_REL_CATEGORY crc ON crc.question_id=qu.id  AND crc.c_id= qu.c_id ";
+		$from = " INNER JOIN  $TBL_COURSE_REL_CATEGORY crc ON crc.question_id=q.id  AND crc.c_id= q.c_id ";
 		$level_where .= " AND
 		        crc.c_id = $selected_course AND
 		        crc.category_id = $courseCategoryId";

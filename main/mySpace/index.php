@@ -160,6 +160,7 @@ $stats = Tracking::getStats($userId);
 $students = $stats['students'];
 $teachers = $stats['teachers'];
 $humanResourcesUsers = $stats['drh'];
+$assignedCourses = $stats['assignedCourses'];
 $courses = $stats['courses'];
 $sessions = $stats['sessions'];
 
@@ -171,6 +172,7 @@ if (!empty($sessions)) {
 }
 
 // Courses for the user
+$countAssignedCourses = count($assignedCourses);
 $count_courses = count($courses);
 
 // Sessions for the user
@@ -219,6 +221,7 @@ $nb_posts = $posts;
 $avg_time_spent = $totalTimeSpent;
 
 $linkAddUser = null;
+$linkCourseDetailsAsTeacher = null;
 $linkAddCourse = null;
 $linkAddSession = null;
 
@@ -228,9 +231,14 @@ if (api_is_platform_admin()) {
         api_get_path(WEB_CODE_PATH).'admin/dashboard_add_users_to_user.php?user='.api_get_user_id(),
         array('class' => '')
     );
+    $linkCourseDetailsAsTeacher = ' '.Display::url(
+        Display::return_icon('2rightarrow.gif', get_lang('Details')),
+        api_get_path(WEB_CODE_PATH).'mySpace/course.php',
+        array('class' => '')
+    );
     $linkAddCourse = ' '.Display::url(
-        Display::return_icon('add.png', get_lang('Add')),
-        api_get_path(WEB_CODE_PATH).'admin/dashboard_add_courses_to_user.php?user='.api_get_user_id(),
+        Display::return_icon('2rightarrow.gif', get_lang('Details')),
+        api_get_path(WEB_CODE_PATH).'mySpace/course.php?follow',
         array('class' => '')
     );
     $linkAddSession = ' '.Display::url(
@@ -276,11 +284,19 @@ echo '<div class="report_section">
             </tr>
             <tr>
                 <td>'.Display::url(
-                    get_lang('FollowedCourses'),
+                    get_lang('AssignedCourses'),
                     api_get_path(WEB_CODE_PATH).'mySpace/course.php'
                 ).
                 '</td>
-                <td align="right">'.$count_courses.$linkAddCourse.'</td>
+                <td align="right">'.$count_courses.$linkCourseDetailsAsTeacher.'</td>
+            </tr>
+            <tr>
+                <td>'.Display::url(
+                    get_lang('FollowedCourses'),
+                    api_get_path(WEB_CODE_PATH).'mySpace/course.php?follow'
+                ).
+                '</td>
+                <td align="right">'.$countAssignedCourses.$linkAddCourse.'</td>
             </tr>
             <tr>
                 <td>'.Display::url(

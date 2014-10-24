@@ -197,6 +197,7 @@ function get_courses($from, $limit, $column, $direction)
     $userId = api_get_user_id();
     $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
+    $follow = isset($_GET['follow']) ? true : false;
     $drhLoaded = false;
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
@@ -224,7 +225,8 @@ function get_courses($from, $limit, $column, $direction)
             $direction,
             false,
             $keyword,
-            $sessionId
+            $sessionId,
+            $follow
         );
     }
 

@@ -295,6 +295,10 @@ define('DRAWING_ASCIISVG', '{DRAWING_ASCIISVG}');
 // Forcing PclZip library to use a custom temporary folder.
 define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
 
+// Relations type with Course manager
+define('COURSE_RELATION_TYPE_COURSE_MANAGER', 1);
+define('SESSION_RELATION_TYPE_COURSE_MANAGER', 1);
+
 // Relations type with Human resources manager
 define('COURSE_RELATION_TYPE_RRHH', 1);
 define('SESSION_RELATION_TYPE_RRHH', 1);

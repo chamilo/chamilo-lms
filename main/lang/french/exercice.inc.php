@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy = "L'édition de cette question est désactivée parce qu'elle a déjà été utilisée par au moins un étudiant dans un test. Cependant, vous pouvez la copier et modifier la copie.";
 $SelectADateOnTheCalendar = "Sélectionnez une date";
 $AreYouSureDeleteTestResultBeforeDateD = "Êtes vous sur de vouloir supprimer toutes les tentatives antérieures à la date sélectionnée ?";
 $CleanStudentsResultsBeforeDate = "Supprimer les tentatives antérieures à une date donnée";

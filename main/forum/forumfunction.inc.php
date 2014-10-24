@@ -43,7 +43,7 @@ $(document).ready(function () {
  * This function handles all the forum and forumcategories actions. This is a wrapper for the
  * forum and forum categories. All this code code could go into the section where this function is
  * called but this make the code there cleaner.
- * @param   int Learning path ID
+ * @param int $lp_id Learning path ID
  * @return void
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Juan Carlos Raña Trabado (return to lp_id)
@@ -67,6 +67,7 @@ function handle_forum_and_forumcategories($lp_id = null)
     if (($action_forum_cat == 'add' && $get_content == 'forumcategory') || $post_submit_cat) {
         show_add_forumcategory_form(array(), $lp_id); //$lp_id when is called from learning path
     }
+
     // Adding a forum
     if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $get_content == 'forum') || $post_submit_forum) {
         if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
@@ -82,6 +83,7 @@ function handle_forum_and_forumcategories($lp_id = null)
         $forum_category = get_forum_categories($get_id);
         show_edit_forumcategory_form($forum_category);
     }
+
     // Delete a forum category
     if ($action_forum_cat == 'delete') {
         $id_forum = intval($get_id);
@@ -118,8 +120,8 @@ function handle_forum_and_forumcategories($lp_id = null)
 /**
  * This function displays the form that is used to add a forum category.
  *
- * @param array input values (deprecated, set to null when calling)
- * @param   int Learning path ID
+ * @param array $inputvalues (deprecated, set to null when calling)
+ * @param   int $lp_id Learning path ID
  * @return void HTML
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Juan Carlos Raña Trabado (return to lp_id)
@@ -166,7 +168,8 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
 /**
  * This function displays the form that is used to add a forum category.
  *
- * @param array
+ * @param array $inputvalues
+ * @param int $lp_id
  * @return void HTML
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -385,16 +388,14 @@ function delete_forum_image($forum_id)
  */
 function show_edit_forumcategory_form($inputvalues = array())
 {
-    // Initialize the object.
-    $gradebook = Security::remove_XSS($_GET['gradebook']);
-    $form = new FormValidator('forumcategory', 'post', 'index.php?&amp;gradebook='.$gradebook.'');
+    $categoryId = $inputvalues['cat_id'];
+    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq().'&id='.$categoryId);
 
     // Setting the form elements.
     $form->addElement('header', '', get_lang('EditForumCategory'));
     $form->addElement('hidden', 'forum_category_id');
     $form->addElement('text', 'forum_category_title', get_lang('Title'), 'class="input_titles"');
 
-    //$form->applyFilter('forum_category_title', 'html_filter');
     $form->addElement(
         'html_editor',
         'forum_category_comment',
@@ -403,7 +404,6 @@ function show_edit_forumcategory_form($inputvalues = array())
         array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200')
     );
 
-    //$form->applyFilter('forum_category_comment', 'html_filter');
     $form->addElement('style_submit_button', 'SubmitEditForumCategory', get_lang('ModifyCategory'), 'class="save"');
 
     // Setting the default values.
@@ -446,7 +446,8 @@ function store_forumcategory($values)
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
-    $sql = "SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string($table_categories)." WHERE c_id = $course_id";
+    $sql = "SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string($table_categories)."
+            WHERE c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     $new_max = $row['sort_max'] + 1;
@@ -454,7 +455,8 @@ function store_forumcategory($values)
 
     $clean_cat_title = Database::escape_string($values['forum_category_title']);
 
-    if (isset($values['forum_category_id'])) { // Storing after edition.
+    if (isset($values['forum_category_id'])) {
+        // Storing after edition.
         $sql = "UPDATE ".$table_categories." SET
                 cat_title='".$clean_cat_title."',
                 cat_comment='".Database::escape_string($values['forum_category_comment'])."'
@@ -475,7 +477,13 @@ function store_forumcategory($values)
         Database::query($sql);
         $last_id = Database::insert_id();
         if ($last_id > 0) {
-            api_item_property_update(api_get_course_info(), TOOL_FORUM_CATEGORY, $last_id, 'ForumCategoryAdded', api_get_user_id());
+            api_item_property_update(
+                api_get_course_info(),
+                TOOL_FORUM_CATEGORY,
+                $last_id,
+                'ForumCategoryAdded',
+                api_get_user_id()
+            );
             api_set_default_visibility($last_id, TOOL_FORUM_CATEGORY);
         }
         $return_message = get_lang('ForumCategoryAdded');
@@ -589,7 +597,6 @@ function store_forum($values)
             WHERE c_id = $course_id AND forum_id='".Database::escape_string($values['forum_id'])."'";
         Database::query($sql);
 
-
         api_item_property_update(
             $_course,
             TOOL_FORUM,
@@ -639,15 +646,19 @@ function store_forum($values)
 
 /**
  * This function deletes a forum or a forum category
- * This function currently does not delete the forums inside the category, nor the threads and replies inside these forums.
- * For the moment this is the easiest method and it has the advantage that it allows to recover fora that were acidently deleted
+ * This function currently does not delete the forums inside the category,
+ * nor the threads and replies inside these forums.
+ * For the moment this is the easiest method and it has the advantage that it
+ * allows to recover fora that were acidently deleted
  * when the forum category got deleted.
  *
  * @param $content = what we are deleting (a forum or a forum category)
  * @param $id The id of the forum category that has to be deleted.
  *
- * @todo write the code for the cascading deletion of the forums inside a forum category and also the threads and replies inside these forums
- * @todo config setting for recovery or not (see also the documents tool: real delete or not).
+ * @todo write the code for the cascading deletion of the forums inside a
+ * forum category and also the threads and replies inside these forums
+ * @todo config setting for recovery or not
+ * (see also the documents tool: real delete or not).
  * @return void
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
@@ -659,13 +670,17 @@ function delete_forum_forumcategory_thread($content, $id)
     $table_forums_post = Database::get_course_table(TABLE_FORUM_POST);
     $table_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
+    $id = intval($id);
 
     // Delete all attachment file about this tread id.
-    $sql = "SELECT post_id FROM $table_forums_post WHERE c_id = $course_id AND thread_id = '".(int) $id."' ";
+    $sql = "SELECT post_id FROM $table_forums_post WHERE c_id = $course_id AND thread_id = '".$id."' ";
     $res = Database::query($sql);
     while ($poster_id = Database::fetch_row($res)) {
         delete_attachment($poster_id[0]);
     }
+
+    $tool_constant = null;
+    $return_message = null;
 
     if ($content == 'forumcategory') {
         $tool_constant = TOOL_FORUM_CATEGORY;
@@ -737,11 +752,18 @@ function delete_post($post_id)
         $post_parent_id_of_deleted_post = $tab_post_info['post_parent_id'];
         $thread_id_of_deleted_post = $tab_post_info['thread_id'];
         $forum_if_of_deleted_post = $tab_post_info['forum_id'];
-        $sql = "UPDATE $table_posts SET post_parent_id=$post_parent_id_of_deleted_post
-                WHERE c_id = $course_id AND post_parent_id=$post_id AND thread_id=$thread_id_of_deleted_post AND forum_id=$forum_if_of_deleted_post;";
+        $sql = "UPDATE $table_posts
+                SET post_parent_id=$post_parent_id_of_deleted_post
+                WHERE
+                    c_id = $course_id AND
+                    post_parent_id=$post_id AND
+                    thread_id=$thread_id_of_deleted_post AND
+                    forum_id=$forum_if_of_deleted_post;";
         Database::query($sql);
 
-        $sql = "DELETE FROM $table_posts WHERE c_id = $course_id AND post_id='".Database::escape_string($post_id)."'"; // Note: This has to be a recursive function that deletes all of the posts in this block.
+        // Note: This has to be a recursive function that deletes all of the posts in this block.
+        $sql = "DELETE FROM $table_posts
+                WHERE c_id = $course_id AND post_id='".Database::escape_string($post_id)."'";
         Database::query($sql);
 
         // Delete attachment file about this post id.
@@ -761,7 +783,8 @@ function delete_post($post_id)
     }
     if (!$last_post_of_thread) {
         // We deleted the very single post of the thread so we need to delete the entry in the thread table also.
-        $sql = "DELETE FROM $table_threads WHERE c_id = $course_id AND thread_id='".intval($_GET['thread'])."'";
+        $sql = "DELETE FROM $table_threads
+                WHERE c_id = $course_id AND thread_id='".intval($_GET['thread'])."'";
         Database::query($sql);
         return 'PostDeletedSpecial';
     }
@@ -781,7 +804,9 @@ function check_if_last_post_of_thread($thread_id)
 {
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT * FROM $table_posts WHERE c_id = $course_id AND thread_id='".Database::escape_string($thread_id)."' ORDER BY post_date DESC";
+    $sql = "SELECT * FROM $table_posts
+            WHERE c_id = $course_id AND thread_id='".Database::escape_string($thread_id)."'
+            ORDER BY post_date DESC";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $row = Database::fetch_array($result);
@@ -933,8 +958,18 @@ function display_up_down_icon($content, $id, $list)
 function change_visibility($content, $id, $target_visibility)
 {
     $_course = api_get_course_info();
-    $constants = array('forumcategory' => TOOL_FORUM_CATEGORY, 'forum' => TOOL_FORUM, 'thread' => TOOL_FORUM_THREAD);
-    api_item_property_update($_course, $constants[$content], $id, $target_visibility, api_get_user_id());
+    $constants = array(
+        'forumcategory' => TOOL_FORUM_CATEGORY,
+        'forum' => TOOL_FORUM,
+        'thread' => TOOL_FORUM_THREAD
+    );
+    api_item_property_update(
+        $_course,
+        $constants[$content],
+        $id,
+        $target_visibility,
+        api_get_user_id()
+    );
 
     if ($target_visibility == 'visible') {
         handle_mail_cue($content, $id);
@@ -1031,7 +1066,8 @@ function move_up_down($content, $direction, $id)
         $id_column = 'forum_id';
         $sort_column = 'forum_order';
         // We also need the forum_category of this forum.
-        $sql = "SELECT forum_category FROM $table_forums WHERE c_id = $course_id AND forum_id=".Database::escape_string($id);
+        $sql = "SELECT forum_category FROM $table_forums
+                WHERE c_id = $course_id AND forum_id=".Database::escape_string($id);
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $forum_category = $row['forum_category'];
@@ -1358,7 +1394,7 @@ function get_forums(
         we use this part of the function) */
 
         // Select all the forum information of the given forum (that is not deleted).
-        $sql = "SELECT * FROM $table_forums forum , ".$table_item_property." item_properties
+        $sql = "SELECT * FROM $table_forums forum, ".$table_item_property." item_properties
                 WHERE
                     forum.forum_id=item_properties.ref AND
                     forum_id='".Database::escape_string($id)."' AND
@@ -1386,10 +1422,13 @@ function get_forums(
                 GROUP BY forum_id";
 
         // Select the last post and the poster (note: this is probably no longer needed).
-        $sql4 = "SELECT  post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname
+        $sql4 = "SELECT
+                    post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname
                 FROM $table_posts post, $table_users users
-                WHERE forum_id=".Database::escape_string($id)."
-                    AND post.poster_id=users.user_id  AND post.c_id = $course_id
+                WHERE
+                    forum_id=".Database::escape_string($id)." AND
+                    post.poster_id=users.user_id AND
+                    post.c_id = $course_id
                 GROUP BY post.forum_id
                 ORDER BY post.post_id ASC";
     }
@@ -1516,8 +1555,13 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
 
     $sql = "SELECT post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname, post.visible, thread_properties.visibility AS thread_visibility, forum_properties.visibility AS forum_visibility
-            FROM $table_posts post, $table_users users, $table_item_property thread_properties,  $table_item_property forum_properties
-            WHERE post.forum_id=".Database::escape_string($forum_id)."
+            FROM
+                $table_posts post,
+                $table_users users,
+                $table_item_property thread_properties,
+                $table_item_property forum_properties
+            WHERE
+                post.forum_id=".Database::escape_string($forum_id)."
                 AND post.poster_id=users.user_id
                 AND post.thread_id=thread_properties.ref
                 AND thread_properties.tool='".TOOL_FORUM_THREAD."'

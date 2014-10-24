@@ -177,7 +177,10 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param int $to_user_id, NULL for everybody
  * @param int $unzip 1/0
  * @param string $what_if_file_exists overwrite, rename or warn if exists (default)
- * @param boolean Optional output parameter. So far only use for unzip_uploaded_document function. If no output wanted on success, set to false.
+ * @param boolean Optional output parameter.
+ * So far only use for unzip_uploaded_document function.
+ * If no output wanted on success, set to false.
+ * @param string $comment
  * @return string path of the saved file
  */
 function handle_uploaded_document(
@@ -191,7 +194,8 @@ function handle_uploaded_document(
     $unzip = 0,
     $what_if_file_exists = '',
     $output = true,
-    $onlyUploadFile = false
+    $onlyUploadFile = false,
+    $comment = null
 ) {
 	if (!$user_id) {
         return false;
@@ -224,8 +228,8 @@ function handle_uploaded_document(
             $output,
             $to_group_id
         );
-		//display_message('Unzipping file');
-	} elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploaded_file['name']))) { // We can only unzip ZIP files (no gz, tar,...)
+	} elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
+        // We can only unzip ZIP files (no gz, tar,...)
 	    if ($output) {
             Display::display_error_message(get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain'));
 	    }
@@ -315,18 +319,21 @@ function handle_uploaded_document(
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
 				case 'overwrite':
+
                     // Check if the target file exists, so we can give another message
 					$file_exists = file_exists($store_path);
 					if (moveUploadedFile($uploaded_file, $store_path)) {
 						chmod($store_path, $files_perm);
-
 						if ($file_exists && $docId) {
 							// UPDATE DATABASE
 							$document_id = DocumentManager::get_document_id($_course, $file_path);
-
 							if (is_numeric($document_id)) {
 								// Update file size
-								update_existing_document($_course, $document_id, $uploaded_file['size']);
+								update_existing_document(
+                                    $_course,
+                                    $document_id,
+                                    $uploaded_file['size']
+                                );
 
 								// Update document item_property
                                 api_item_property_update(
@@ -353,7 +360,7 @@ function handle_uploaded_document(
                                     'file',
                                     $file_size,
                                     $document_name,
-                                    null,
+                                    $comment,
                                     0,
                                     true,
                                     $to_group_id,
@@ -397,7 +404,7 @@ function handle_uploaded_document(
                                 'file',
                                 $file_size,
                                 $document_name,
-                                null,
+                                $comment,
                                 0,
                                 true,
                                 $to_group_id,
@@ -458,7 +465,7 @@ function handle_uploaded_document(
                             'file',
                             $file_size,
                             $document_name,
-                            null, // comment
+                            $comment, // comment
                             0, // read only
                             true, // save visibility
                             $to_group_id,
@@ -519,7 +526,7 @@ function handle_uploaded_document(
                                 'file',
                                 $file_size,
                                 $document_name,
-                                null,
+                                $comment,
                                 0,
                                 true,
                                 $to_group_id,
@@ -1331,9 +1338,13 @@ function search_img_from_html($html_file) {
  * @author  Bert Vanderkimpen
  * @param   array   $_course current course information
  * @param   int     $user_id current user id
- * @param   string  $desiredDirName complete path of the desired name
- * @param   string  The visible name of the directory
- * @param   int     Visibility (0 for invisible, 1 for visible, 2 for deleted)
+ * @param   int     $session_id
+ * @param   int     $to_group_id
+ * @param   int     $to_user_id
+ * @param   string  $base_work_dir
+ * @param   string  $desired_dir_name complete path of the desired name
+ * @param   string  $title
+ * @param   int     $visibility (0 for invisible, 1 for visible, 2 for deleted)
  * @return  string  actual directory name if it succeeds,
  *          boolean false otherwise
  */

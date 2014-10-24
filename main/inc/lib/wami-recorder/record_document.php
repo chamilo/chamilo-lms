@@ -56,9 +56,6 @@ if (!is_dir($saveDir)) {
     DocumentManager::createDefaultAudioFolder($_course);
 }
 
-$current_session_id = api_get_session_id();
-$groupId = api_get_group_id();
-
 //avoid duplicates
 $waminame_to_save = $waminame;
 $title_to_save    = str_replace('_', ' ', $waminame);
@@ -80,7 +77,6 @@ $fh = fopen($documentPath, 'w') or die("can't open file");
 fwrite($fh, $content);
 fclose($fh);
 
-
 $fileInfo = pathinfo($documentPath);
 $courseInfo = api_get_course_info();
 
@@ -92,13 +88,12 @@ $file = array(
         'from_file' => true
     )
 );
-
 $output = true;
 $documentData = DocumentManager::upload_document(
     $file,
     $wamidir,
-    null,
-    null,
+    $fileInfo['basename'],
+    'wav',
     0,
     'overwrite',
     false,
@@ -107,6 +102,7 @@ $documentData = DocumentManager::upload_document(
 
 if (!empty($documentData)) {
     $newDocId = $documentData['id'];
+    $documentData['comment'] = 'mp3';
     $newMp3DocumentId = DocumentManager::addAndConvertWavToMp3(
         $documentData,
         $courseInfo,

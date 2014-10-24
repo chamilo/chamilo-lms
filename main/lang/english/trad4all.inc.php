@@ -2,6 +2,38 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ActivateAudioRecorder = "Activate audio recorder";
+$StartSpeaking = "Start speaking";
+$InverseHyperbolicTangentAtanh = "Inverse hyperbolic tangent:\tatanh(x)";
+$HyperbolicArctangentArctanh = "Hyperbolic arctangent:\t\tarctanh(x)";
+$InverseTangentAtan = "Inverse tangent:\t\tatan(x)";
+$ArctangentArctan = "Arctangent:\t\t\tarctan(x)";
+$HyperbolicTangentTanh = "Hyperbolic tangent:\t\ttanh(x)";
+$TangentTan = "Tangent:\t\t\ttan(x)";
+$InverseHyperbolicCosineAcosh = "Inverse hyperbolic cosine:\tacosh(x)";
+$HyperbolicArccosineArccosh = "Hyperbolic arccosine:\t\tarccosh(x)";
+$InverseCosineAcos = "Inverse cosine:\t\t\tacos(x)";
+$ArccosineArccos = "Arccosine:\t\t\tarccos(x)";
+$HyperbolicCosineCosh = "Hyperbolic cosine:\t\tcosh(x)";
+$CosineCos = "Cosine:\t\t\t\tcos(x)";
+$InverseHyperbolicSineAsinh = "Inverse hyperbolic sine:\tasinh(x)";
+$HyperbolicArcsineArcsinh = "Hyperbolic arcsine:\t\tarcsinh(x)";
+$InverseSineAsin = "Inverse sine:\t\t\tasin(x)";
+$ArcsineArcsin = "Arcsine:\t\t\tarcsin(x)";
+$HyperbolicSineSinh = "Hyperbolic sine:\t\tsinh(x)";
+$SineSin = "Sine:\t\t\t\tsin(x)";
+$PiNumberPi = "Pi number:\t\t\tpi";
+$ENumberE = "E number:\t\t\te";
+$LogarithmLog = "Logarithm:\t\t\tlog(x)";
+$NaturalLogarithmLn = "Natural logarithm:\t\tln(x)";
+$AbsoluteValueAbs = "Absolute value:\t\t\tabs(x)";
+$SquareRootSqrt = "Square root:\t\t\tsqrt(x)";
+$ExponentiationCircumflex = "Exponentiation:\t\t\t^";
+$DivisionSlash = "Division:\t\t\t/";
+$MultiplicationStar = "Multiplication:\t\t\t*";
+$SubstractionMinus = "Substraction:\t\t\t-";
+$SummationPlus = "Summation:\t\t\t+";
+$NotationList = "Formula notation";
 $SubscribeToSessionRequest = "Request for subscription to a session";
 $PleaseSubscribeMeToSession = "Please consider subscribing me to session";
 $SearchActiveSessions = "Search active sessions";
@@ -11,7 +43,7 @@ $GiveAnswerVariations = "Please, write how many question variations you want";
 $AnswerVariations = "Question variations";
 $GiveFormula = "Please, write the formula";
 $Formula = "Formula";
-$FormulaExample = "Formula sample";
+$FormulaExample = "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )";
 $VariableRanges = "Variable ranges";
 $ExampleValue = "Range value";
 $CalculatedAnswer = "Calculated question";

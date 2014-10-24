@@ -65,7 +65,7 @@ $(function () {
         uploadTable:   $('.files'),
         downloadTable: $('.files'),
         buildUploadRow: function (files, index) {
-            advanced_parameters();
+            $('.files').closest('.control-group').show();
             return $('<tr><td>' + files[index].name + '<\/td>' +
                     '<td class=\"file_upload_progress\"><div><\/div><\/td>' +
                     '<td class=\"file_upload_cancel\">' +
@@ -75,18 +75,19 @@ $(function () {
         buildDownloadRow: function (file) {
             if (!file.error) {
                 return $('<tr id=' + file.id + ' ><td>' + file.name + '<\/td><td>' + file.size + '<\/td><td>&nbsp;' + file.result +
-                    ' <\/td><td> <input type=\"text\" value=\"' + file.comment + '\" name=\"file_comments[]\"> <\/td><td>' +
+                    ' <\/td><td> <input style=\"width:90%;\" type=\"text\" value=\"' + file.comment + '\" name=\"file_comments[]\"> <\/td><td>' +
                     file.delete + '<\/td>' +
                     '<input type=\"hidden\" value=\"' + file.id +'\" name=\"file_ids[]\">' + '<\/tr>');
             } else {
-                alert('FAILED UPLOAD!');
+                alert('" . get_lang('ErrorUploadAttachment') . "');
             }
         }
     });
+    enableDeleteFile();
 });
 </script>";
 // Recover Thread ID, will be used to generate delete attachment URL to do ajax
-$threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
+$threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : 0;
 // The next javascript script is to delete file by ajax
 $htmlHeadXtra[] =
     '<script>
@@ -106,6 +107,9 @@ $htmlHeadXtra[] =
                         success: function(data) {
                                 if (data.error == false) {
                                     l.closest("tr").remove();
+                                    if ($(".files td").length < 1) {
+                                        $(".files").closest(".control-group").hide();
+                                    }
                                 }
                             }
                     })
@@ -2338,6 +2342,14 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     );
 
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
+    $iframe = null;
+    $myThread = Security::remove_XSS($myThread);
+    if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
+        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
+    }
+    if (!empty($iframe)) {
+        $form->addElement('label', get_lang('Thread'), $iframe);
+    }
     $form->addElement('advanced_settings', '<a href="javascript://" onclick="return advanced_parameters()">
                               <span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>');
 
@@ -2380,15 +2392,9 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $values = $form->exportValues();
     }
 
-    // Delete from $_SESSION forum attachment from other posts
-    clearAttachedFiles(0);
-    // Get forum attachment ajax table to add it to form
-    $fileData = getAttachmentAjaxTable(0, $current_forum['forum_id']);
-    $form->addElement('html', $fileData);
     $form->addElement('html', '</div>');
 
     $form->addElement('style_submit_button', 'SubmitPost', $text, 'class="'.$class.'"');
-    $form->add_real_progress_bar('DocumentUpload', 'user_upload');
 
     if (!empty($form_values)) {
         $defaults['post_title'] = prepare4display($form_values['post_title']);
@@ -2440,15 +2446,12 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
 
-        $iframe = null;
-        $myThread = Security::remove_XSS($myThread);
-        if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
-            $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
-        }
-
-        if (!empty($iframe)) {
-            $form->addElement('label', get_lang('Thread'), $iframe);
-        }
+        // Delete from $_SESSION forum attachment from other posts
+        clearAttachedFiles(0);
+        // Get forum attachment ajax table to add it to form
+        $attachmentAjaxTable = getAttachmentAjaxTable(0, $current_forum['forum_id']);
+        $ajaxHtml = $attachmentAjaxTable;
+        $form->addElement('html', $ajaxHtml);
         $form->display();
     }
 }
@@ -2822,10 +2825,6 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         }
     }
 
-    clearAttachedFiles($current_post['post_id']);
-    $fileData = getAttachmentAjaxTable($current_post['post_id'], $current_forum['forum_id']);
-    $form->addElement('html', $fileData);
-
     if ($current_forum['allow_attachments'] == '1' || api_is_allowed_to_edit(null, true)) {
         if (empty($form_values) && !isset($_POST['SubmitPost'])) {
             //edit_added_resources('forum_post', $current_post['post_id']);
@@ -2863,6 +2862,11 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         }
         return $values;
     } else {
+        // Delete from $_SESSION forum attachment from other posts
+        clearAttachedFiles($current_post['post_id']);
+        // Get forum attachment ajax table to add it to form
+        $fileData = getAttachmentAjaxTable($current_post['post_id'], $current_forum['forum_id']);
+        $form->addElement('html', $fileData);
         $form->display();
     }
 }
@@ -4828,7 +4832,7 @@ function getAttachmentAjaxTable($postId = null)
             if (!empty($uploadedFile) && in_array($uploadedFile['id'], $attachIds)) {
                 // Buil html table including an input with attachmentID
                 $fileDataContent .= '<tr id=' . $uploadedFile['id'] . ' ><td>' . $uploadedFile['name'] . '</td><td>' . $uploadedFile['size'] . '</td><td>&nbsp;' . $uploadedFile['result'] .
-                    ' </td><td> <input type="text" value="' . $uploadedFile['comment'] . '" name="file_comments[]"> </td><td>' .
+                    ' </td><td> <input style="width:90%;" type="text" value="' . $uploadedFile['comment'] . '" name="file_comments[]"> </td><td>' .
                     $uploadedFile['delete'] . '</td>' .
                     '<input type="hidden" value="' . $uploadedFile['id'] .'" name="file_ids[]">' . '</tr>';
             } else {
@@ -4840,12 +4844,13 @@ function getAttachmentAjaxTable($postId = null)
             }
         }
     }
+    $style = empty($fileDataContent) ? 'display: none;' : '';
     // Forum attachment Ajax table
     $fileData = '
-    <div class="control-group ">
+    <div class="control-group " style="'. $style . '">
         <label class="control-label">'.get_lang('AttachmentFilesList').'</label>
         <div class="controls">
-            <table id="attachmentFileList" class="files data_table span6">
+            <table id="attachmentFileList" class="files data_table span10">
                 <tr>
                     <th>'.get_lang('FileName').'</th>
                     <th>'.get_lang('Size').'</th>

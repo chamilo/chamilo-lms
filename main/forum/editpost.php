@@ -57,7 +57,6 @@ $htmlHeadXtra[] = '<script>
         if(document.getElementById(\'id_qualify\').style.display == \'none\') {
             document.getElementById(\'id_qualify\').style.display = \'block\';
             document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-            enableDeleteFile();
         } else {
             document.getElementById(\'id_qualify\').style.display = \'none\';
             document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';

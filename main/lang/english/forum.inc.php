@@ -147,5 +147,6 @@ $ThreadMoved = "Thread moved";
 $MigrateForum = "Migrate forum";
 $YouWillBeNotified = "You will be notified";
 $ForumCategories = "Forum Categories";
-$AttachmentFilesList = "Attachments list"
+$AttachmentFilesList = "Attachments list";
+$ErrorUploadAttachment = "There was an error when uploading attachment";
 ?>

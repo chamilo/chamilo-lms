@@ -59,16 +59,17 @@
                         &nbsp;
                     </div>
                     <div id="header_right" class="span5">
-                        <ul id="notifications" class="nav nav-pills pull-right">
-                            {{ notification_menu }}
-                        </ul>
                         {# plugin_header right #}
                         {% if plugin_header_right is not null %}
-                            <div id="plugin_header_right">
-                                {{ plugin_header_right }}
-                            </div>
+                        <div id="plugin_header_right">
+                            {{ plugin_header_right }}
+                        </div>
                         {% endif %}
-                        &nbsp;
+                        <div class="section-notifications">
+                            <ul id="notifications" class="nav nav-pills pull-right">
+                            {{ notification_menu }}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             {% if plugin_header_main %}

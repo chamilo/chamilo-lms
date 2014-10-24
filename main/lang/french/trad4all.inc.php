@@ -2,6 +2,40 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ActivateAudioRecorder = "Activer l'enregistreur audio";
+$StartSpeaking = "Parlez maintenant";
+$InverseHyperbolicTangentAtanh = "Tangente hyperbolique inverse:\tatanh(x)";
+$HyperbolicArctangentArctanh = "Arctangente hyperbolique:\t\tarctanh(x)";
+$InverseTangentAtan = "Tangente inverse:\t\tatan(x)";
+$ArctangentArctan = "Arctangente:\t\t\tarctan(x)";
+$HyperbolicTangentTanh = "Tangente hyperbolique:\t\ttanh(x)";
+$TangentTan = "Tangente:\t\t\ttan(x)";
+$InverseHyperbolicCosineAcosh = "Cosinus hyperbolique inverse:\tacosh(x)";
+$HyperbolicArccosineArccosh = "Arcosinus hyperbolique:\t\tarccosh(x)";
+$InverseCosineAcos = "Cosinus inverse:\t\t\tacos(x)";
+$ArccosineArccos = "Arccosinus:\t\t\tarccos(x)";
+$HyperbolicCosineCosh = "Cosinus hyperbolique:\t\tcosh(x)";
+$CosineCos = "Cosinus:\t\t\t\tcos(x)";
+$InverseHyperbolicSineAsinh = "Sinus hyperbolique inverse:\tasinh(x)";
+$HyperbolicArcsineArcsinh = "Arcsinus hyperbolique:\t\tarcsinh(x)";
+$InverseSineAsin = "Sinus inverse:\t\t\tasin(x)";
+$ArcsineArcsin = "Arcsinus:\t\t\tarcsin(x)";
+$HyperbolicSineSinh = "Sinus hyperbolique:\tsinh(x)";
+$SineSin = "Sinus:\t\t\t\tsin(x)";
+$PiNumberPi = "Nombre Pi:\t\t\tpi";
+$ENumberE = "Nombre e:\t\t\te";
+$LogarithmLog = "Logarithme:\t\t\tlog(x)";
+$NaturalLogarithmLn = "Logarithme naturel:\t\tln(x)";
+$AbsoluteValueAbs = "Valeur absolue:\t\t\tabs(x)";
+$SquareRootSqrt = "Racine carrée:\t\t\tsqrt(x)";
+$ExponentiationCircumflex = "Exponentiation:\t\t\t^";
+$DivisionSlash = "Division:\t\t\t/";
+$MultiplicationStar = "Multiplication:\t\t\t*";
+$SubstractionMinus = "Soustraction:\t\t\t-";
+$SummationPlus = "Somme:\t\t\t\t+";
+$NotationList = "Syntaxe de formules";
+$SubscribeToSessionRequest = "Requête d'inscription à une session";
+$PleaseSubscribeMeToSession = "Merci de bien vouloir considérer mon inscription à la session";
 $SearchActiveSessions = "Recherche sessions actives";
 $UserNameHasDash = "Le nom d'utilisateur ne peut pas contenir de tirets (-)";
 $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "Si vous souhaitez seulement des nombres entiers, indiquez les deux limites sans décimales";

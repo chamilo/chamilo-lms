@@ -1508,4 +1508,112 @@ class MessageManager
         $html .= $table->return_table();
         return $html;
     }
+
+    /**
+     * Get the count of the last received messages for a user
+     * @param int $userId The user id
+     * @param int $lastId The id of the last received message
+     * @return int The count of new messages
+     */
+    public static function countMessagesFromLastReceivedMessage($userId, $lastId = 0)
+    {
+        $userId = intval($userId);
+        $lastId = intval($lastId);
+
+        if (empty($userId)) {
+            return 0;
+        }
+
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+
+        $conditions = array(
+            'where' => array(
+                'user_receiver_id = ?' => $userId,
+                'AND msg_status = ?' => MESSAGE_STATUS_UNREAD,
+                'AND id > ?' => $lastId
+            )
+        );
+
+        $result = Database::select('COUNT(1) AS qty', $messagesTable, $conditions);
+
+        if (!empty($result)) {
+            $row = current($result);
+
+            return $row['qty'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get the data of the last received messages for a user
+     * @param int $userId The user id
+     * @param int $lastId The id of the last received message
+     * @return int The count of new messages
+     */
+    public static function getMessagesFromLastReceivedMessage($userId, $lastId = 0)
+    {
+        $userId = intval($userId);
+        $lastId = intval($lastId);
+
+        if (empty($userId)) {
+            return 0;
+        }
+
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $messages = array();
+
+        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname "
+                . "FROM $messagesTable as m "
+                . "INNER JOIN $userTable as u "
+                . "ON m.user_receiver_id = u.user_id "
+                . "WHERE u.user_id = $userId "
+                . "AND m.msg_status = " . MESSAGE_STATUS_UNREAD . " "
+                . "AND m.id > $lastId";
+
+        $result = Database::query($sql);
+
+        if ($result !== false) {
+            while ($row = Database::fetch_assoc($result)) {
+                $messages[] = $row;
+            }
+        }
+
+        return $messages;
+    }
+
+    /**
+     * Check whether a message has attachments
+     * @param int $messageId The message id
+     * @return boolean Whether the message has attachments return true. Otherwise return false
+     */
+    public static function hasAttachments($messageId)
+    {
+        $messageId = intval($messageId);
+
+        if (empty($messageId)) {
+            return false;
+        }
+
+        $messageAttachmentTable = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+
+        $conditions = array(
+            'where' => array(
+                'message_id = ?' => $messageId
+            )
+        );
+
+        $result = Database::select('COUNT(1) AS qty', $messageAttachmentTable, $conditions, 'first');
+
+        if (!empty($result)) {
+            if ($result['qty'] > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

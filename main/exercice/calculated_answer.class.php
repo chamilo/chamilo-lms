@@ -133,7 +133,23 @@ class CalculatedAnswer extends Question
         $form->addElement('label', null, get_lang('IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals'));
         $form->addElement('html', '<div id="blanks_weighting"></div>');
 
-        $form->addElement('label', null, get_lang('FormulaExample').': &radic;<span style="text-decoration:overline;">&nbsp;x &divide y&nbsp;</span> &times e <sup>(ln(pi))</sup> = sqrt([x]/[y])*(e^(ln(pi)))');
+        $notationListButton = Display::url(
+            get_lang('NotationList'),
+            api_get_path(WEB_PATH).'main/exercice/evalmathnotation.php',
+            array(
+                'class' => 'btn ajax',
+                '_target' => '_blank'
+            )
+        );
+        $form->addElement(
+            'html',
+            '<div class="control-group">
+                <label class="control-label"></label>
+                <div class="controls">'.$notationListButton.'</div>
+            </div>');
+
+        $form->addElement('label', null, get_lang('FormulaExample'));
+
         $form->addElement('text', 'formula', get_lang('Formula'), array('id' => 'formula', 'class' => 'span4'));
         $form->addRule('formula', get_lang('GiveFormula'), 'required');
 
@@ -163,50 +179,62 @@ class CalculatedAnswer extends Question
      */
     function processAnswersCreation($form)
     {
-        global $charset;
-        $answer = $form->getSubmitValue('answer');
-        $formula = $form->getSubmitValue('formula');
-        $lowestValues = $form->getSubmitValue('lowestValue');
-        $highestValues = $form->getSubmitValue('highestValue');
-        $answerVariations = $form->getSubmitValue('answerVariations');
-        $this->weighting = $form->getSubmitValue('weighting');
-        //Remove previous answers
-        Database::delete("c_quiz_answer", array('question_id = ?' => $this->id));
-        // Create as many answers as $answerVariations
-        for ($j=0 ; $j < $answerVariations; $j++) {
-            $auxAnswer = $answer;
-            $auxFormula = $formula;
-            $nb = preg_match_all('/\[[^\]]*\]/', $auxAnswer, $blanks);
-            if ($nb > 0) {
-                for ($i=0 ; $i < $nb; ++$i) {
-                    $blankItem = $blanks[0][$i];
-                    $replace = array("[", "]");
-                    $newBlankItem = str_replace($replace, "", $blankItem);
-                    $newBlankItem = "[".trim($newBlankItem)."]";
-                    $randomValue = mt_rand($lowestValues[$i],$highestValues[$i]);
-                    //$randomValue = mt_rand($lowestValues[$i]*100,$highestValues[$i]*100)/100;
-                    $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
-                    $auxFormula = str_replace($blankItem, $randomValue, $auxFormula);
+        if (!self::isAnswered()) {
+            $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
+            Database::delete(
+                $table,
+                array(
+                    'c_id = ? AND question_id = ?' => array(
+                        $this->course['real_id'],
+                        $this->id
+                    )
+                )
+            );
+            $answer = $form->getSubmitValue('answer');
+            $formula = $form->getSubmitValue('formula');
+            $lowestValues = $form->getSubmitValue('lowestValue');
+            $highestValues = $form->getSubmitValue('highestValue');
+            $answerVariations = $form->getSubmitValue('answerVariations');
+            $this->weighting = $form->getSubmitValue('weighting');
+            // Create as many answers as $answerVariations
+            for ($j=0 ; $j < $answerVariations; $j++) {
+                $auxAnswer = $answer;
+                $auxFormula = $formula;
+                $nb = preg_match_all('/\[[^\]]*\]/', $auxAnswer, $blanks);
+                if ($nb > 0) {
+                    for ($i=0 ; $i < $nb; ++$i) {
+                        $blankItem = $blanks[0][$i];
+                        $replace = array("[", "]");
+                        $newBlankItem = str_replace($replace, "", $blankItem);
+                        $newBlankItem = "[".trim($newBlankItem)."]";
+                        // take random float values when one or both edge values have a decimal point
+                        $randomValue =
+                            (strpos($lowestValues[$i],'.') !== false ||
+                            strpos($highestValues[$i],'.') !== false) ?
+                            mt_rand($lowestValues[$i]*100,$highestValues[$i]*100)/100 :
+                            mt_rand($lowestValues[$i],$highestValues[$i]);
+                        $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
+                        $auxFormula = str_replace($blankItem, $randomValue, $auxFormula);
+                    }
+                    require_once(api_get_path(LIBRARY_PATH).'evalmath.class.php');
+                    $math = new EvalMath();
+                    $result = $math->evaluate($auxFormula);
+                    $result = number_format($result, 2, ".", "");
+                    // Remove decimal trailing zeros
+                    $result = rtrim($result, "0");
+                    // If it is an integer (ends in .00) remove the decimal point
+                    if (mb_substr($result, -1) === ".") {
+                        $result = str_replace(".", "", $result);
+                    }
+                    // Attach formula
+                    $auxAnswer .= " [".$result."]@@".$formula;
                 }
-                require_once(api_get_path(LIBRARY_PATH).'evalmath.class.php');
-                $math = new EvalMath();
-                $result = $math->evaluate($auxFormula);
-                $result = number_format($result, 2, ".", "");
-                // Remove decimal trailing zeros
-                $result = rtrim($result, "0");
-                // If it is an integer (ends in .00) remove the decimal point
-                if (mb_substr($result, -1) === ".") {
-                    $result = str_replace(".", "", $result);
-                }
-                // Attach formula
-                $auxAnswer .= " [".$result."]@@".$formula;
+                $this->save();
+                $objAnswer = new answer($this->id);
+                $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, null);
+                $objAnswer->position = array();
+                $objAnswer->save();
             }
-            $this->save();
-            $objAnswer = new answer($this->id);
-            $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, array());
-            $objAnswer->position = array();
-            $objAnswer->save();
-
         }
     }
 
@@ -224,5 +252,27 @@ class CalculatedAnswer extends Question
                 <th>'.get_lang("Answer").'</th>
             </tr>';
         return $header;
+    }
+
+    /**
+     * Returns true if the current question has been attempted to be answered
+     * @return boolean
+     */
+    public function isAnswered()
+    {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $result = Database::select(
+            'question_id',
+            $table,
+            array(
+                'where' => array(
+                    'question_id = ? AND course_code = ?' => array(
+                        $this->id,
+                        $this->course['code']
+                    )
+                )
+            )
+        );
+        return empty($result) ? false : true;
     }
 }

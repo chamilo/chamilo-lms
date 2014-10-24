@@ -227,7 +227,7 @@ $linkAddSession = null;
 
 if (api_is_platform_admin()) {
     $linkAddUser = ' '.Display::url(
-        Display::return_icon('add.png', get_lang('Add')),
+        Display::return_icon('2rightarrow.gif', get_lang('Add')),
         api_get_path(WEB_CODE_PATH).'admin/dashboard_add_users_to_user.php?user='.api_get_user_id(),
         array('class' => '')
     );
@@ -242,7 +242,7 @@ if (api_is_platform_admin()) {
         array('class' => '')
     );
     $linkAddSession = ' '.Display::url(
-        Display::return_icon('add.png', get_lang('Add')),
+        Display::return_icon('2rightarrow.gif', get_lang('Add')),
         api_get_path(WEB_CODE_PATH).'admin/dashboard_add_sessions_to_user.php?user='.api_get_user_id(),
         array('class' => '')
     );
@@ -250,7 +250,7 @@ if (api_is_platform_admin()) {
 
 echo Display::page_subheader(get_lang('Overview'));
 echo '<div class="report_section">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-striped">
             <tr>
                 <td>'.Display::url(
                     get_lang('FollowedStudents'),
@@ -347,7 +347,7 @@ if ($export_csv) {
 
     // html part
     echo '<div class="report_section">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-striped">
                 <tr>
                     <td>'.get_lang('AverageCoursePerStudent').'</td>
                     <td align="right">'.(is_null($avg_courses_per_student) ? '' : round($avg_courses_per_student, 2)).'</td>

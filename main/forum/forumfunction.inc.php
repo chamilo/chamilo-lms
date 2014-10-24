@@ -26,6 +26,8 @@ use \ChamiloSession as Session;
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
+define('FORUM_NEW_POST', 0);
+
 get_notifications_of_user();
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
@@ -2447,9 +2449,10 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $form->setConstants(array('sec_token' => $token));
 
         // Delete from $_SESSION forum attachment from other posts
-        clearAttachedFiles(0);
+        // and keep only attachments for new post
+        clearAttachedFiles(FORUM_NEW_POST);
         // Get forum attachment ajax table to add it to form
-        $attachmentAjaxTable = getAttachmentAjaxTable(0, $current_forum['forum_id']);
+        $attachmentAjaxTable = getAttachmentsAjaxTable(0, $current_forum['forum_id']);
         $ajaxHtml = $attachmentAjaxTable;
         $form->addElement('html', $ajaxHtml);
         $form->display();
@@ -2865,7 +2868,7 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         // Delete from $_SESSION forum attachment from other posts
         clearAttachedFiles($current_post['post_id']);
         // Get forum attachment ajax table to add it to form
-        $fileData = getAttachmentAjaxTable($current_post['post_id'], $current_forum['forum_id']);
+        $fileData = getAttachmentsAjaxTable($current_post['post_id'], $current_forum['forum_id']);
         $form->addElement('html', $fileData);
         $form->display();
     }
@@ -3995,18 +3998,22 @@ function get_attachment($post_id)
 
 function getAllAttachment($postId)
 {
-    $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
-    $course_id = api_get_course_int_id();
-    $array = array();
+    $forumAttachmentTable = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
+    $courseId = api_get_course_int_id();
     $postId = intval($postId);
-    $sql = "SELECT id, path, filename, comment FROM $forum_table_attachment
-            WHERE c_id = $course_id AND post_id = $postId";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        while($row = Database::fetch_array($result)) {
-            $array[] = $row;
-        }
-    }
+    $columns = array('id', 'path', 'filename', 'comment');
+    $conditions = array(
+        'where' => array(
+            'c_id = ? AND post_id = ?' => array($courseId, $postId)
+        )
+    );
+    $array = Database::select(
+        $columns,
+        $forumAttachmentTable,
+        $conditions,
+        'all',
+        'ASSOC'
+    );
 
     return $array;
 }
@@ -4761,13 +4768,12 @@ function editAttachedFile($array, $id, $courseId = null) {
 
 /**
  * Return a form to upload asynchronously attachments to forum post.
- * @param $forumId Forum ID from where the post is
- * @param $threadId Thread ID where forum post is
+ * @param $forumId Forum ID from where the post are
+ * @param $threadId Thread ID where forum post are
  * @param $postId Post ID to identify Post
- * @param null $path Path where are forum attachment files
  * @return string The Forum Attachment Ajax Form
  */
-function getAttachmentAjaxForm($forumId, $threadId, $postId, $path = null)
+function getAttachmentAjaxForm($forumId, $threadId, $postId)
 {
     // Init variables
     $forumId = intval($forumId);
@@ -4779,21 +4785,9 @@ function getAttachmentAjaxForm($forumId, $threadId, $postId, $path = null)
         return '';
     }
     $url = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?forum=' . $forumId . '&thread=' . $threadId . '&postId=' . $postId . '&a=upload_file';
-    if (empty($path)) {
-        // If there is not path, use
-        $path = '/../upload/forum';
-    } else {
-        $testPath = api_get_path(SYS_COURSE_PATH).'/'.api_get_course_id().'/document'.$path;
-        // Check if path exists
-        if (!file_exists($testPath)) {
-
-            return '';
-        }
-    }
     // Form
     $formFileUpload = '<div class="form-ajax">
         <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="curdirpath" value="'.$path.'" />
             <input type="file" name="user_upload" multiple>
             <button type="submit">Upload</button><div class="button-load">
             '.get_lang('UploadFiles').'</div>
@@ -4806,9 +4800,9 @@ function getAttachmentAjaxForm($forumId, $threadId, $postId, $path = null)
 /**
  * Return a table where the attachments will be set
  * @param null $postId Forum Post ID
- * @return string The Forum Attachment Ajax Table
+ * @return string The Forum Attachments Ajax Table
  */
-function getAttachmentAjaxTable($postId = null)
+function getAttachmentsAjaxTable($postId = null)
 {
     // Init variables
     $postId = intval($postId);
@@ -4831,7 +4825,7 @@ function getAttachmentAjaxTable($postId = null)
         foreach ($uploadedFiles as $k => $uploadedFile) {
             if (!empty($uploadedFile) && in_array($uploadedFile['id'], $attachIds)) {
                 // Buil html table including an input with attachmentID
-                $fileDataContent .= '<tr id=' . $uploadedFile['id'] . ' ><td>' . $uploadedFile['name'] . '</td><td>' . $uploadedFile['size'] . '</td><td>&nbsp;' . $uploadedFile['result'] .
+                $fileDataContent .= '<tr id="' . $uploadedFile['id'] . '" ><td>' . $uploadedFile['name'] . '</td><td>' . $uploadedFile['size'] . '</td><td>&nbsp;' . $uploadedFile['result'] .
                     ' </td><td> <input style="width:90%;" type="text" value="' . $uploadedFile['comment'] . '" name="file_comments[]"> </td><td>' .
                     $uploadedFile['delete'] . '</td>' .
                     '<input type="hidden" value="' . $uploadedFile['id'] .'" name="file_ids[]">' . '</tr>';

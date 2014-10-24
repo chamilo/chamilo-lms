@@ -102,6 +102,7 @@ $documentData = DocumentManager::upload_document(
 
 if (!empty($documentData)) {
     $newDocId = $documentData['id'];
+    $documentData['comment'] = 'mp3';
     $newMp3DocumentId = DocumentManager::addAndConvertWavToMp3(
         $documentData,
         $courseInfo,

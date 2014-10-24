@@ -149,7 +149,6 @@ if ($origin == 'learnpath') {
 } else {
     Display :: display_header(null);
 }
-
 handle_forum_and_forumcategories();
 
 // Action links
@@ -158,11 +157,21 @@ echo '<span style="float:right;">'.search_link().'</span>';
 echo '<a href="viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackToForum'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
+// Set forum attachment data into $_SESSION
+echo '<div class="row">';
+echo '<div class="span12">';
+getAttachedFiles($current_forum['forum_id'], 0, 0);
 $values = show_add_post_form($current_forum, $forum_setting, 'newthread', '', isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null);
-
+echo '</div></div>';
 if (!empty($values) && isset($values['SubmitPost'])) {
     // Add new thread in table forum_thread.
     store_thread($current_forum, $values);
+} else {
+    // Only show Forum attachment ajax form when do not pass form submit
+    echo '<div class="row"><div class="span12">';
+    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], 0);
+    echo $attachmentAjaxForm;
+    echo '</div></div>';
 }
 
 /* FOOTER */

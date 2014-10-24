@@ -19,11 +19,11 @@
             </div>
         {% endif %}
             <div class="span12">
-                
+
             </div>
         </div>
         <div class="row">
-            
+
             <div class="span3">
                 <div class="thumbnail">
                     <img src="resources/img/128/buycourses.png">

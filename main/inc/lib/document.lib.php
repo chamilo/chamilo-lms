@@ -2733,7 +2733,14 @@ class DocumentManager
                     }
 
                     if ($index_document) {
-                        self::index_document($documentId, $course_info['code'], null, $_POST['language'], $_REQUEST, $if_exists);
+                        self::index_document(
+                            $documentId,
+                            $course_info['code'],
+                            null,
+                            $_POST['language'],
+                            $_REQUEST,
+                            $if_exists
+                        );
                     }
 
                     if (!empty($documentId) && is_numeric($documentId)) {
@@ -4045,6 +4052,7 @@ class DocumentManager
      * @param null $userId
      * @param null $groupId
      * @param null $toUserId
+     * @param string $comment
      * @return bool|path
      */
     public static function addFileToDocumentTool(
@@ -4054,7 +4062,8 @@ class DocumentManager
         $userId,
         $whatIfFileExists = 'overwrite',
         $groupId = null,
-        $toUserId = null
+        $toUserId = null,
+        $comment = null
     ) {
         if (!file_exists($filePath)) {
             return false;
@@ -4082,7 +4091,9 @@ class DocumentManager
             $toUserId,
             false,
             $whatIfFileExists,
-            false
+            false,
+            false,
+            $comment
         );
 
         if ($filePath) {
@@ -4127,15 +4138,20 @@ class DocumentManager
      * @param string $whatIfFileExists
      * @return bool|path
      */
-    public static function addAndConvertWavToMp3($documentData, $courseInfo, $userId, $whatIfFileExists = 'overwrite')
-    {
+    public static function addAndConvertWavToMp3(
+        $documentData,
+        $courseInfo,
+        $userId,
+        $whatIfFileExists = 'overwrite'
+    ) {
         if (empty($documentData)) {
             return false;
         }
 
-        if (isset($documentData['absolute_path']) && file_exists($documentData['absolute_path'])) {
+        if (isset($documentData['absolute_path']) &&
+            file_exists($documentData['absolute_path'])
+        ) {
             $mp3FilePath = self::convertWavToMp3($documentData['absolute_path']);
-            //$mp3FilePath = str_replace('wav', 'mp3', $documentData['absolute_path']);
             if (!empty($mp3FilePath)) {
 
                 $documentId = self::addFileToDocumentTool(
@@ -4143,7 +4159,10 @@ class DocumentManager
                     dirname($documentData['path']),
                     $courseInfo,
                     $userId,
-                    $whatIfFileExists
+                    $whatIfFileExists,
+                    null,
+                    null,
+                    $documentData['comment']
                 );
 
                 if (!empty($documentId)) {
@@ -4248,7 +4267,7 @@ class DocumentManager
         $path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
         if (!is_dir($path.'audio')) {
             mkdir($path.'audio', api_get_permissions_for_new_directories());
-            $audioId = add_document($_course, '/audio', 'folder', 0, 'audio');
+            $audioId = add_document($_course, '/audio', 'folder', 0, 'Audio');
             api_item_property_update(
                 $_course,
                 TOOL_DOCUMENT,

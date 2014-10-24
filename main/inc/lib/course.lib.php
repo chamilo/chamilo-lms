@@ -3162,12 +3162,17 @@ class CourseManager
 
     /**
      * get courses followed by user
-     * @param int $user_id
-     * @param int $from
-     * @param int $limit
-     * @param string $column
-     * @param string $direction
-     * @return array    courses
+     * @param   int     $user_id
+     * @param   int     $status
+     * @param   int     $from
+     * @param   int     $limit
+     * @param   string  $column
+     * @param   string  $direction
+     * @param   boolean $getCount
+     * @param   string  $keyword
+     * @param   int     $sessionId
+     * @param   boolean $showAllAssignedCourses
+     * @return  array   courses
      */
     public static function getCoursesFollowedByUser(
         $user_id,
@@ -3199,6 +3204,8 @@ class CourseManager
                 $whereConditions .= " AND cru.user_id = '$user_id'";
                 if (!$showAllAssignedCourses) {
                     $whereConditions .= " AND status = ".COURSEMANAGER;
+                } else {
+                    $whereConditions .= " AND relation_type = ".COURSE_RELATION_TYPE_COURSE_MANAGER;
                 }
                 break;
             case DRH:

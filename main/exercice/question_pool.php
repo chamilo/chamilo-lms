@@ -812,7 +812,7 @@ function get_a_tag_for_question(
 	$res = $in_questionname;
     $sessionIcon = null;
 	if ($in_addA) {
-        if (!empty($sessionId)) {
+        if (!empty($sessionId) && $sessionId != -1) {
             $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
         }
 		$res = "<a href='admin.php?".api_get_cidreq()."&editQuestion=$in_questionid&type=$in_questiontype&fromExercise=$in_fromex'>".

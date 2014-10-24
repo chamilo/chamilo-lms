@@ -14,7 +14,6 @@ if (!function_exists('api_get_path')) {
 /**
  * Create the script context, then execute database queries to enable
  */
-$objPlugin = BuyCoursesPlugin::create();
 
 $table = Database::get_main_table(TABLE_BUY_SESSION);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
@@ -407,10 +406,3 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
     status VARCHAR(20) NOT NULL DEFAULT '',
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
 Database::query($sql);
-
-//Menu main tabs
-$rsTab = $objPlugin->addTab($objPlugin->get_lang('BuyCourses'), 'plugin/buycourses/index.php');
-
-if ($rsTab) {
-    echo "<script>location.href = '" . Security::remove_XSS($_SERVER['REQUEST_URI']) . "';</script>";
-}

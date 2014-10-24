@@ -31,6 +31,7 @@ class BuyCoursesPlugin extends Plugin
             Alex Aragón - BeezNest (Design icons and css styles),
             Imanol Losada - BeezNest (introduction of sessions purchase)',
             array(
+                'show_main_menu_tab' => 'boolean',
                 'include_sessions' => 'boolean',
                 'paypal_enable' => 'boolean',
                 'transfer_enable' => 'boolean',
@@ -69,8 +70,6 @@ class BuyCoursesPlugin extends Plugin
             $sql = "DROP TABLE IF EXISTS $tableToBeDeleted";
             Database::query($sql);
         }
-
-        $objPlugin = BuyCoursesPlugin::create();
-        $objPlugin->deleteTab('custom_tab_1');
+        $this->manageTab(false);
     }
 }

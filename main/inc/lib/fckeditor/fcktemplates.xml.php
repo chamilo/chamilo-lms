@@ -165,6 +165,17 @@ function load_platform_templates() {
                     </Html>
                 </Template>';
     }
+
+    $certificateTemplateContent = file_get_contents(api_get_path(SYS_PATH) . 'main/gradebook/certificate_template/template.html');
+
+    echo '<Template title="TemplateCertificateTitle" image="' . "{$template_thumb}empty.gif" . '">'
+    . '<Description>TemplateCertificateDescription</Description>'
+    . '<Html>'
+    . '<![CDATA['
+    . $certificateTemplateContent
+    . ']]>'
+    . '</Html>'
+    . '</Template>';
 }
 
 /**

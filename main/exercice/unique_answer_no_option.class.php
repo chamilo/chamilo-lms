@@ -2,35 +2,24 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	File containing the UNIQUE_ANSWER class.
- *	@package chamilo.exercise
- * 	@author Eric Marguin
- */
-
-/**
- * Code
- */
-
-/**
-	CLASS UNIQUE_ANSWER
+ * Class UniqueAnswerNoOption
+ * Allows to instantiate an object of type UNIQUE_ANSWER (MULTIPLE CHOICE, UNIQUE ANSWER),
+ * extending the class question
+ * @author Eric Marguin
+ * @author Julio Montoya
+ * @package chamilo.exercise
  *
- *	This class allows to instantiate an object of type UNIQUE_ANSWER (MULTIPLE CHOICE, UNIQUE ANSWER),
- *	extending the class question
- *
- *	@author Eric Marguin
- *  @author Julio Montoya
- *	@package chamilo.exercise
- **/
-
+ */
 class UniqueAnswerNoOption extends Question
 {
-	static $typePicture = 'mcuao.gif';
+	static $typePicture = 'mcuao.png';
 	static $explanationLangVar = 'UniqueAnswerNoOption';
 
 	/**
 	 * Constructor
 	 */
-	function UniqueAnswerNoOption(){
+	function UniqueAnswerNoOption()
+    {
 		//this is highly important
 		parent::question();
 		$this -> type = UNIQUE_ANSWER_NO_OPTION;
@@ -42,7 +31,8 @@ class UniqueAnswerNoOption extends Question
 	 * @param the formvalidator instance
 	 * @param the answers number to display
 	 */
-	function createAnswersForm ($form) {
+	function createAnswersForm ($form)
+    {
 		// getting the exercise list
 		$obj_ex = $_SESSION['objExercise'];
 
@@ -93,7 +83,7 @@ class UniqueAnswerNoOption extends Question
 
 		$defaults = array();
 		$correct = 0;
-
+        $answer = false;
 		if (!empty($this -> id)) {
 			$answer = new Answer($this -> id);
 			$answer -> read();
@@ -108,8 +98,8 @@ class UniqueAnswerNoOption extends Question
 			$nb_answers = 1;
 			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
 		}
-        if ($_GET['editQuestion']) {
-
+        $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : false;
+        if ($editQuestion) {
             //fixing $nb_answers
             $new_list = array();
             $count = 1;
@@ -277,10 +267,7 @@ class UniqueAnswerNoOption extends Question
 		}
 
 		$form->addElement('hidden', 'nb_answers');
-
-
 	    $form->setConstants(array('nb_answers' => $nb_answers));
-
 	}
 
 
@@ -289,8 +276,8 @@ class UniqueAnswerNoOption extends Question
 	 * @param the formvalidator instance
 	 * @param the answers number to display
 	 */
-	function processAnswersCreation($form) {
-
+	function processAnswersCreation($form)
+    {
 		$questionWeighting = $nbrGoodAnswers = 0;
 		$correct = $form -> getSubmitValue('correct');
 		$objAnswer = new Answer($this->id);
@@ -306,9 +293,6 @@ class UniqueAnswerNoOption extends Question
             $comment    = trim($form -> getSubmitValue('comment['.$i.']'));
             $weighting  = trim($form -> getSubmitValue('weighting['.$i.']'));
             $scenario   = $form -> getSubmitValue('scenario');
-
-
-//
 
            	//$list_destination = $form -> getSubmitValue('destination'.$i);
            	//$destination_str = $form -> getSubmitValue('destination'.$i);
@@ -386,7 +370,8 @@ class UniqueAnswerNoOption extends Question
         $this -> save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null) {
+	function return_header($feedback_type = null, $counter = null, $score = null)
+    {
 	    $header = parent::return_header($feedback_type, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>

@@ -1,16 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Class MultipleAnswerTrueFalse
  * This class allows to instantiate an object of type MULTIPLE_ANSWER
  * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question
- * @author  Julio Montoya
+ * @author Julio Montoya
  *
  * @package chamilo.exercise
  */
 class MultipleAnswerTrueFalse extends Question
 {
-	static $typePicture = 'mcmao.gif';
+	static $typePicture = 'mcmao.png';
 	static $explanationLangVar = 'MultipleAnswerTrueFalse';
     public $options;
 

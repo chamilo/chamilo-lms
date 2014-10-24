@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This file was origially the copy of document.php, but many modifications happened since then ;
- * the direct file view is not any more needed, if the user uploads a scorm zip file, a directory
+ * This file was originally the copy of document.php, but many modifications happened since then ;
+ * the direct file view is not any more needed, if the user uploads a SCORM zip file, a directory
  * will be automatically created for it, and the files will be uncompressed there for example ;
  *
  * @package chamilo.learnpath
@@ -107,7 +107,6 @@ $userInfo = api_get_user_info();
 
 $list = new LearnpathList($userId);
 $flat_list = $list->get_flat_list();
-
 
 if (!empty($flat_list)) {
     echo '<table class="data_table">';
@@ -229,12 +228,17 @@ if (!empty($flat_list)) {
         $dsp_debug = '';
         $dsp_order = '';
 
-        $progress = learnpath::get_db_progress($id, $userId, '%', '', false, api_get_session_id());
+        $progress = learnpath::getProgress(
+            $id,
+            $userId,
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
 
         if ($is_allowed_to_edit) {
             $dsp_progress = '<td><center>'.$progress.'</center></td>';
         } else {
-            $dsp_progress = '<td>'.learnpath::get_progress_bar('%', learnpath::get_db_progress($id, $userId, '%', '', false, api_get_session_id())).'</td>';
+            $dsp_progress = '<td>'.learnpath::get_progress_bar($progress, '%').'</td>';
         }
 
         $dsp_edit = '<td class="td_actions">';
@@ -252,7 +256,8 @@ if (!empty($flat_list)) {
 
             // EDIT LP
             if ($current_session == $details['lp_session']) {
-                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL).'</a>';
+                $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.
+                                Display::return_icon('settings.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL).'</a>';
             } else {
                 $dsp_edit_lp = Display::return_icon('settings_na.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL);
             }
@@ -260,7 +265,8 @@ if (!empty($flat_list)) {
             // BUILD
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
-                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=step&amp;lp_id='.$id.'">'.Display::return_icon('edit.png', get_lang('LearnpathEditLearnpath'), '', ICON_SIZE_SMALL).'</a>';
+                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=step&amp;lp_id='.$id.'">'.
+                                  Display::return_icon('edit.png', get_lang('LearnpathEditLearnpath'), '', ICON_SIZE_SMALL).'</a>';
                 } else {
                     $dsp_build = Display::return_icon('edit_na.png', get_lang('LearnpathEditLearnpath'), '', ICON_SIZE_SMALL);
                 }
@@ -270,16 +276,15 @@ if (!empty($flat_list)) {
 
             /* VISIBILITY COMMAND */
 
-            // Session test not necessary if we want to show base course learning paths inside the session (see http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions).
-            //if ($current_session == $details['lp_session']) {
+            /*  Session test not necessary if we want to show base course learning
+                paths inside the session.
+                See http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions).
+            */
             if ($details['lp_visibility'] == 0) {
                 $dsp_visible = "<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">".Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL)."</a>";
             } else {
                 $dsp_visible = "<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>".Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL)."</a>";
             }
-            //} else {
-            //	$dsp_visible = '<img src="../img/invisible.gif" border="0" title="'.get_lang('Show').'" />';
-            //}
 
             /* PUBLISH COMMAND */
             if ($current_session == $details['lp_session']) {
@@ -349,7 +354,6 @@ if (!empty($flat_list)) {
             }
 
             /*  DEBUG  */
-
             if ($test_mode == 'test' or api_is_platform_admin()) {
                 if ($details['lp_scorm_debug'] == 1) {
                     $dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">'.
@@ -360,9 +364,7 @@ if (!empty($flat_list)) {
                 }
             }
 
-
             /* Export */
-
             if ($details['lp_type'] == 1) {
                 $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
             } elseif ($details['lp_type'] == 2) {
@@ -371,8 +373,16 @@ if (!empty($flat_list)) {
                 $dsp_disk = Display::return_icon('cd_gray.gif', get_lang('Export'), array(), ICON_SIZE_SMALL);
             }
 
-            //Copy
-            $copy = Display::url(Display::return_icon('cd_copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
+            // Copy
+            $copy = Display::url(
+                Display::return_icon(
+                    'cd_copy.png',
+                    get_lang('Copy'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ),
+                api_get_self() . "?" . api_get_cidreq() . "&action=copy&lp_id=$id"
+            );
 
             /* Auto Lunch LP code */
             if (api_get_course_setting('enable_lp_auto_launch') == 1) {
@@ -386,14 +396,11 @@ if (!empty($flat_list)) {
                 }
             }
 
-            //if (api_get_setting('pdf_export_watermark_enable') == 'true') {
-            //Export to PDF
+            // Export to PDF
             $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">
 				  '.Display::return_icon('pdf.png', get_lang('ExportToPDFOnlyHTMLAndImages'), '', ICON_SIZE_SMALL).'</a>';
-            //}
 
-            /* DELETE COMMAND */
-
+            /* Delete */
             if ($current_session == $details['lp_session']) {
                 $dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" ".
                     "onclick=\"javascript: return confirmation('".addslashes($name)."');\">".
@@ -402,11 +409,8 @@ if (!empty($flat_list)) {
                 $dsp_delete = Display::return_icon('delete_na.png', get_lang('LearnpathDeleteLearnpath'), '', ICON_SIZE_SMALL);
             }
 
-
             /* COLUMN ORDER	 */
-
             // Only active while session mode is not active
-
             if ($current_session == 0) {
                 if ($details['lp_display_order'] == 1 && $max != 1) {
                     $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">
@@ -429,18 +433,32 @@ if (!empty($flat_list)) {
             } else {
                 $start_time = $end_time = '';
             }
-        } else { // end if ($is_allowedToEdit)
+        } else {
             //Student
             $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
+        }
+
+        global $_configuration;
+        if (isset($_configuration['hide_scorm_export_link']) && $_configuration['hide_scorm_export_link']) {
+            $dsp_disk = null;
+        }
+
+        if (isset($_configuration['hide_scorm_copy_link']) && $_configuration['hide_scorm_copy_link']) {
+            $copy = null;
+        }
+
+        if (isset($_configuration['hide_scorm_pdf_link']) && $_configuration['hide_scorm_pdf_link']) {
+            $export_icon = null;
         }
 
         echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
         $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
         echo "</tr>";
-        $current++; //counter for number of elements treated
+        //counter for number of elements treated
+        $current++;
+
     } // end foreach ($flat_list)
-    // TODO: Erint some user-friendly message if counter is still = 0 to tell nothing can be display yet.
     echo "</table>";
 } else {
     if ($is_allowed_to_edit) {

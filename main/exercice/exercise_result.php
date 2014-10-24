@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	Exercise result
 *	This script gets information from the script "exercise_submit.php",
@@ -13,9 +14,6 @@
 *
 *	@todo	split more code up in functions, move functions to library?
 */
-/**
- * Code
- */
 
 use \ChamiloSession as Session;
 
@@ -50,7 +48,6 @@ if ($debug) {
 }
 
 // general parameters passed via POST/GET
-// general parameters passed via POST/GET
 if (empty($origin)) {
     $origin = Security::remove_XSS($_REQUEST['origin']);
 }
@@ -64,14 +61,14 @@ if (empty($remind_list)) {
 $exe_id = isset($_REQUEST['exe_id']) ? intval($_REQUEST['exe_id']) : 0;
 
 if (empty($objExercise)) {
-	//Redirect to the exercise overview
-	//Check if the exe_id exists
-	$objExercise = new Exercise();
-	$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
-	if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
-		header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
-		exit;
-	}
+    // Redirect to the exercise overview
+    // Check if the exe_id exists
+    $objExercise = new Exercise();
+    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+    if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
+        header("Location: overview.php?exerciseId=".$exercise_stat_info['exe_exo_id']);
+        exit;
+    }
     api_not_allowed();
 }
 
@@ -88,7 +85,7 @@ $nameTools = get_lang('Exercice');
 $interbreadcrumb[]= array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 
 if ($origin != 'learnpath') {
-	//so we are not in learnpath tool
+	// So we are not in learnpath tool
 	Display::display_header($nameTools,get_lang('Exercise'));
 } else {
     Display::display_reduced_header();
@@ -104,15 +101,15 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '</div>';
 }
 
-$feedback_type           = $objExercise->feedback_type;
-$exercise_stat_info      = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+$feedback_type = $objExercise->feedback_type;
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 
 if (!empty($exercise_stat_info['data_tracking'])) {
-	$question_list		= explode(',', $exercise_stat_info['data_tracking']);
+	$question_list = explode(',', $exercise_stat_info['data_tracking']);
 }
 
-$learnpath_id           = $exercise_stat_info['orig_lp_id'];
-$learnpath_item_id      = $exercise_stat_info['orig_lp_item_id'];
+$learnpath_id = $exercise_stat_info['orig_lp_id'];
+$learnpath_item_id = $exercise_stat_info['orig_lp_item_id'];
 $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
 if ($origin == 'learnpath') {
@@ -129,9 +126,18 @@ $i = $total_score = $total_weight = 0;
 
 //We check if the user attempts before sending to the exercise_result.php
 if ($objExercise->selectAttempts() > 0) {
-    $attempt_count = get_attempt_count(api_get_user_id(), $objExercise->id, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+    $attempt_count = get_attempt_count(
+        api_get_user_id(),
+        $objExercise->id,
+        $learnpath_id,
+        $learnpath_item_id,
+        $learnpath_item_view_id
+    );
     if ($attempt_count >= $objExercise->selectAttempts()) {
-        Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()), false);
+        Display :: display_warning_message(
+            sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
+            false
+        );
         if ($origin != 'learnpath') {
             //we are not in learnpath tool
             Display::display_footer();
@@ -142,7 +148,7 @@ if ($objExercise->selectAttempts() > 0) {
 
 Display :: display_normal_message(get_lang('Saved').'<br />',false);
 
-// Display questions
+// Display and save questions
 display_question_list_by_attempt($objExercise, $exe_id, true);
 
 //If is not valid
@@ -157,7 +163,6 @@ if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise-
 
 //Unset session for clock time
 exercise_time_control_delete($objExercise->id, $learnpath_id, $learnpath_item_id);
-
 delete_chat_exercise_session($exe_id);
 
 if ($origin != 'learnpath') {
@@ -180,7 +185,7 @@ if ($origin != 'learnpath') {
         Session::erase('exe_id');
     }
 
-	//record the results in the learning path, using the SCORM interface (API)
+	// Record the results in the learning path, using the SCORM interface (API)
 	echo "<script>window.parent.API.void_save_asset('$total_score', '$total_weight', 0, 'completed');</script>";
     echo '<script type="text/javascript">'.$href.'</script>';
 	echo '</body></html>';

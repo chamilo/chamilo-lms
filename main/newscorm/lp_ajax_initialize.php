@@ -46,27 +46,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
      * -'last'
      * - a real item ID
      */
-
-    $mylp = '';
-
-    $lpobject = Session::read('lpobject');
-    if (isset($lpobject)) {
-        $oLP = unserialize($lpobject);
-        if ($debug) error_log("lpobject was set");
-        if (!is_object($oLP)) {
-            unset($oLP);
-            $code = api_get_course_id();
-            $mylp = new learnpath($code, $lp_id, $user_id);
-            if ($debug) error_log("Creating learnpath");
-        } else {
-            $mylp = $oLP;
-            if ($debug) error_log("Loading learnpath from unserialize");
-        }
-    } else {
-        if ($debug) {
-            error_log("lpobject was not set");
-        }
-    }
+    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $mylp->set_current_item($next_item);
     if ($debug > 1) { error_log('In initialize_item() - new item is '.$next_item, 0); }
     $mylp->start_current_item(true);

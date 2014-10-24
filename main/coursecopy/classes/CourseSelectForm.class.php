@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 require_once 'Course.class.php';
 
 /**

@@ -9,10 +9,12 @@ $try = array(
 
 foreach($try as $path) {
     if (file_exists($path)) {
-        include $path;
+        $autoLoader = include $path;
         break;
     }
 }
+
+$autoLoader->addPsr4('Sabre\\VObject\\',__DIR__ . '/VObject');
 
 if (!defined('SABRE_TEMPDIR')) {
   define('SABRE_TEMPDIR', __DIR__ . '/temp/');

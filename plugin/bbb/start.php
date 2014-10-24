@@ -21,7 +21,7 @@ $salt = null;
 $bbb = new bbb();
 
 if ($bbb->plugin_enabled) {
-    if ($bbb->is_server_running()) {
+    if ($bbb->isServerRunning()) {
 
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {
 
@@ -51,17 +51,17 @@ if ($bbb->plugin_enabled) {
             $meeting_params = array();
             $meeting_params['meeting_name'] = api_get_course_id().'-'.api_get_session_id();
 
-            if ($bbb->meeting_exists($meeting_params['meeting_name'])) {
-                $url = $bbb->join_meeting($meeting_params['meeting_name']);
+            if ($bbb->meetingExists($meeting_params['meeting_name'])) {
+                $url = $bbb->joinMeeting($meeting_params['meeting_name']);
                 if ($url) {
                     $bbb->redirectToBBB($url);
                 } else {
-                    $url = $bbb->create_meeting($meeting_params);
+                    $url = $bbb->createMeeting($meeting_params);
                     $bbb->redirectToBBB($url);
                 }
             } else {
-                if ($bbb->is_teacher()) {
-                    $url = $bbb->create_meeting($meeting_params);
+                if ($bbb->isTeacher()) {
+                    $url = $bbb->createMeeting($meeting_params);
                     $bbb->redirectToBBB($url);
                 } else {
                     $url = 'listing.php?'.api_get_cidreq();

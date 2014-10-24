@@ -183,6 +183,7 @@ class AnnouncementEmail
                 $new_list_users[$user['user_id']] = array('user_id' => $user['user_id']);
             }
         }
+
         return $new_list_users;
     }
 
@@ -196,6 +197,7 @@ class AnnouncementEmail
     public function sender($key = '')
     {
         global $_user;
+
         return $key ? $_user[$key] : $_user;
     }
 
@@ -287,6 +289,7 @@ class AnnouncementEmail
 
     /**
      * Send emails to users.
+     * @param bool $sendToUsersInSession
      */
     public function send($sendToUsersInSession = false)
     {
@@ -315,12 +318,18 @@ class AnnouncementEmail
                     $userList = CourseManager::get_user_list_from_course_code($this->course['code'], $sessionId);
                     if (!empty($userList)) {
                         foreach ($userList as $user) {
-                            MessageManager::send_message_simple($user['user_id'], $subject, $message, $sender['user_id']);
+                            MessageManager::send_message_simple(
+                                $user['user_id'],
+                                $subject,
+                                $message,
+                                $sender['user_id']
+                            );
                         }
                     }
                 }
             }
         }
+
         $this->log_mail_sent();
     }
 

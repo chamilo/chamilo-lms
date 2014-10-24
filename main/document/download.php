@@ -2,13 +2,10 @@
 /* For licensing terms, see /license.txt */
 /**
  *	This file is responsible for  passing requested documents to the browser.
- *
+ *  Many functions updated and moved to lib/document.lib.php
  *	@package chamilo.document
  */
-/**
- * Code
- * Many functions updated and moved to lib/document.lib.php
- */
+
 session_cache_limiter('none');
 
 require_once '../inc/global.inc.php';

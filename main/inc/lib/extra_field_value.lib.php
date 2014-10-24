@@ -2,15 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Class ExtraFieldValue
  * Declaration for the ExtraFieldValue class, managing the values in extra
- * fields for any datatype
+ * fields for any data type
  * @package chamilo.library
+ *
  */
-/**
- * Class managing the values in extra fields for any datatype
- * @package chamilo.library.extrafields
- */
-
 class ExtraFieldValue extends Model
 {
     public $type = null;
@@ -504,8 +501,12 @@ class ExtraFieldValue extends Model
      * @return mixed Give the ID if found, or false on failure or not found
      * @assert (-1,-1) === false
      */
-    public function get_item_id_from_field_variable_and_field_value($field_variable, $field_value, $transform = false, $last = false)
-    {
+    public function get_item_id_from_field_variable_and_field_value(
+        $field_variable,
+        $field_value,
+        $transform = false,
+        $last = false
+    ) {
         $field_value = Database::escape_string($field_value);
         $field_variable = Database::escape_string($field_variable);
 

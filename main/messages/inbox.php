@@ -1,12 +1,9 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * 	@package chamilo.messages
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = array('registration', 'messages', 'userInfo');
 $cidReset = true;
@@ -46,6 +43,7 @@ function hide_icon_edit(element_html)  {
  */
 $nameTools = get_lang('Messages');
 $request = api_is_xml_http_request();
+$show_message = null;
 if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
     $info_reply = array();
     $info_delete = array();
@@ -116,7 +114,7 @@ $social_parameter = '';
 if (isset($_GET['f']) && $_GET['f'] == 'social' || api_get_setting('allow_social_tool') == 'true') {
     $social_parameter = '?f=social';
 } else {
-
+    $actions = null;
     //Comes from normal profile
     if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
         $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
@@ -131,7 +129,8 @@ if (isset($_GET['f']) && $_GET['f'] == 'social' || api_get_setting('allow_social
 
 //LEFT CONTENT
 if (api_get_setting('allow_social_tool') == 'true') {
-    $social_left_content = SocialManager::show_social_menu('messages');
+    $social_avatar_block = SocialManager::show_social_avatar_block('messages');
+    $social_menu_block = SocialManager::show_social_menu('messages');
 }
 
 //Right content
@@ -167,7 +166,8 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
 $tpl = new Template(null);
 if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_left_content', $social_left_content);
+    $tpl->assign('social_avatar_block', $social_avatar_block);
+    $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
     $tpl->display($social_layout);

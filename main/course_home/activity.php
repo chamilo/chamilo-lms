@@ -53,6 +53,15 @@ if (api_is_platform_admin()) {
 	}
 }
 
+// Course legal
+$enabled = api_get_plugin_setting('courselegal', 'tool_enable');
+$pluginExtra = null;
+if ($enabled == 'true') {
+    require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
+    $plugin = CourseLegalPlugin::create();
+    $pluginExtra = $plugin->getTeacherLink();
+}
+
 //	COURSE ADMIN ONLY VIEW
 
 // Start of tools for CourseAdmins (teachers/tutors)
@@ -66,6 +75,7 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
 		<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>
 	</div>';
 
+    $content .= $pluginExtra;
 
 	if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
         $content .= '<div class="courseadminview">
@@ -79,22 +89,19 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
     $content .= return_block(get_lang('Authoring'),  $items, 'course-tools-author');
 
     $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
-
     $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
 
     $my_list = array_merge($my_list,$list2);
     $items =  CourseHome::show_tools_category($my_list);
-
     $content .= return_block(get_lang('Interaction'),  $items, 'course-tools-interaction');
 
     $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
     $items = CourseHome::show_tools_category($my_list);
-
     $content .= return_block(get_lang('Administration'),  $items , 'course-tools-administration');
 
 } elseif (api_is_coach()) {
+    $content .= $pluginExtra;
 	if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
-
 		$content .= '<div class="row">
 			<span class="viewcaption">'.get_lang('SessionData').'</span>
 			<table class="course_activity_home">';
@@ -103,10 +110,9 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
 	}
 
     $content .=  '<div class="row">';
-				$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-				$content .= CourseHome::show_tools_category($my_list);
+    $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
+    $content .= CourseHome::show_tools_category($my_list);
     $content .= '</div>';
-    //	TOOLS AUTHORING
 
 } else {
 	$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);

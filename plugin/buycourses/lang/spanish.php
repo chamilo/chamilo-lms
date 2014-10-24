@@ -1,32 +1,28 @@
 <?php
-//Needed in order to show the plugin title
 $strings['plugin_title'] = "Venta de cursos";
 $strings['plugin_comment'] = "Vender cursos a través de PayPal directamente desde su portal Chamilo. Plugin en versión Beta, a usar con mucha precaución. La asociación Chamilo y los desarrolladores involucrados no pueden ser considerados responsables de cualquier inconveniente que se presente.";
-
+$strings['show_main_menu_tab'] = "Mostrar pestaña en el menu principal";
+$strings['show_main_menu_tab_help'] = "En caso de no querer mostrar la pestaña, puede agregar el siguiente enlace a su portal Chamilo: %s";
 $strings['Visible'] = "Mostrar en el listado";
 $strings['Options'] = "Opciones";
 $strings['Price'] = "Precio";
 $strings['SyncCourseDatabase'] = "Sincronizar cursos de la base de datos";
-
 $strings['Private'] = "Privado - acceso autorizado s&oacute;lo para los miembros del curso";
 $strings['CourseVisibilityClosed'] = "Cerrado - no hay acceso a este curso";
 $strings['OpenToThePlatform'] = "Abierto - acceso autorizado s&oacute;lo para los usuarios registrados en la plataforma";
 $strings['OpenToTheWorld'] = "P&uacute;blico - acceso autorizado a cualquier persona";
-
 $strings['Description'] = "Descripci&oacute;n";
 $strings['Buy'] = "Comprar";
 $strings['Mostrar_disponibles'] = "Mostrar cursos disponibles";
-
+$strings['include_sessions'] = "Incluir sesiones";
 $strings['paypal_enable'] = "Habilitar PayPal";
 $strings['transfer_enable'] = "Habilitar transferencia";
 $strings['unregistered_users_enable'] = "Permitir usuarios sin registro en la plataforma";
 $strings['Cancelacionpedido'] = "El pedido se ha cancelado.";
 $strings['AlreadyBuy'] = "Ya está matriculado en el curso";
 $strings['bc_subject'] = "Confirmación pedido de cursos";
-
 $strings['paypal'] = 'PayPal';
 $strings['confirmar_compra'] = 'Confirmar compra de curso';
-
 $strings['TheUserIsAlreadyRegistered'] = 'El usuario ya está registrado';
 $strings['ProblemToSaveTheCurrencyType'] = 'Problema al guardar el tipo de moneda';
 $strings['ProblemToSaveThePaypalParameters'] = 'Problema para guardar los parametros de Paypal';
@@ -37,6 +33,7 @@ $strings['ProblemToSubscribeTheUser'] = 'Problema para suscribir el usuario';
 $strings['TheSubscriptionAndActivationWereDoneSuccessfully'] = 'La suscripción y la activación se realizaron con éxito.';
 $strings['TheUserIsAlreadyRegisteredInTheCourse'] = 'El usuario ya está registrado en el curso.';
 $strings['CourseListOnSale'] = 'Lista de cursos a la venta';
+$strings['BuySessions'] = "Comprar sesiones";
 $strings['BuyCourses'] = 'Comprar cursos';
 $strings['ConfigurationOfCoursesAndPrices'] = 'Configuración de cursos y precios';
 $strings['ConfigurationOfPayments'] = 'Configuración de pagos';
@@ -70,3 +67,18 @@ $strings['ErrorContactPlatformAdmin'] = "Se ha producido un error desconocido. P
 $strings['PayPalConfig'] = "Configuraci&oacute;n PayPal:";
 $strings['TransfersConfig'] = "Configuraci&oacute;n de transferencias:";
 $strings['PayPalPaymentOKPleaseConfirm'] = "PayPal nos indicó que todo estaba listo para ejecutar el pago. Por seguridad, le pedimos confirme una última vez su pedido dando clic en el botón de confirmación a bajo. Una vez le haya dado clic, será registrado al curso y el monto correspondiente será retirado de su cuenta PayPal. Siempre puede acceder a sus cursos a partir de la pestaña 'Mis cursos'. Gracias por su compra!";
+$strings['EnrollToSessionXSuccessful'] = "Su inscripción en la sesión %s se ha completado.";
+$strings['TheUserIsAlreadyRegisteredInTheSession'] = 'El usuario ya está registrado en la sesión.';
+$strings['Instructions'] = 'Instrucciones de uso';
+$strings['InstructionsStepOne'] = 'Crea un curso o una sesión de formación en la plataforma.';
+$strings['InstructionsStepTwo'] = 'En la sección <strong>configuración de pagos</strong>, configure el tipo de moneda con el que venderá sus cursos o sesiones.';
+$strings['InstructionsStepThree'] = 'Configure los cursos a vender en la sección <strong>Configuración de cursos y precios</strong>';
+$strings['PluginPresentation'] = 'El Plugin BuyCourses le da los recursos para vender sus cursos o sus sesiones ya creados y enseñar en línea, todo en unos simples pasos y configuraciones. ¿Qué espera? Empiece a vender cursos a través de Chamilo ahora!';
+$strings['TitlePlugin'] = 'Todo lo que necesita para enseñar y vender cursos en línea';
+$strings['PluginInstruction'] = 'Puede activar o desactivar la opción de pagos vía PayPal o configuración de transferencias bancarias, en la sección del configuración del plugin.';
+$strings['ClickHere'] = 'Clic Aquí';
+$strings['InfoCurrency'] = 'Permite configurar el tipo de moneda (de pago) para sus cursos.';
+$strings['InfoApiCredentials'] = 'Para generar tu credenciales API para integrar su cuenta PayPal con Chamilo LMS, deberá seguir los siguientes pasos';
+$strings['InfoApiStepOne'] = 'Ir a la opción de <strong>Perfil de PayPal</strong>, luego en <strong>Mis herramientas de venta</strong>';
+$strings['InfoApiStepTwo'] = 'En el apartado <strong>Acceso API</strong>, dar clic en la opción <strong>Actualizar</strong>';
+$strings['InfoApiStepThree'] = 'En la opción 2, de Configuración de credenciales y permisos de API, dar clic en <strong>Ver firma de API</strong>. Copiar los datos de las credenciales en el formulario de configuración de este plugin';

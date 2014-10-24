@@ -192,7 +192,6 @@ $group_cats = GroupManager::get_categories(api_get_course_id());
 echo '</div>';
 
 /*  List all categories */
-
 if (api_get_setting('allow_group_categories') == 'true') {
     foreach ($group_cats as $index => $category) {
         $group_list = GroupManager :: get_group_list($category['id']);
@@ -233,7 +232,6 @@ if (api_get_setting('allow_group_categories') == 'true') {
 } else {
     $group_list = GroupManager::get_group_list();
     GroupManager::process_groups($group_list);
-
 }
 
 if (!isset($_GET['origin']) || $_GET['origin'] != 'learnpath') {

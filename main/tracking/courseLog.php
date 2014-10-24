@@ -379,14 +379,14 @@ if (count($a_students) > 0) {
     $table->set_header(3, get_lang('Login'), false);
     $tab_table_header[] = get_lang('Login');
 
-    $table->set_header(4, get_lang('TrainingTime'), false);
+    $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.Display::return_icon('info3.gif', get_lang('TrainingTimeInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $tab_table_header[] = get_lang('TrainingTime');
     $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $tab_table_header[] = get_lang('CourseProgress');
 
-    $table->set_header(6, get_lang('ExerciseProgress'), false);
+    $table->set_header(6, get_lang('ExerciseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $tab_table_header[] = get_lang('ExerciseProgress');
-    $table->set_header(7, get_lang('ExerciseAverage'), false);
+    $table->set_header(7, get_lang('ExerciseAverage').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $tab_table_header[] = get_lang('ExerciseAverage');
     $table->set_header(8, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
     $tab_table_header[] = get_lang('Score');

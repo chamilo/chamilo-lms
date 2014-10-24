@@ -216,6 +216,7 @@ class TableSort
 			// Replace the multi-arrays
 			$data = $new_order_data;
 		}
+
 		return $data;
 	}
 

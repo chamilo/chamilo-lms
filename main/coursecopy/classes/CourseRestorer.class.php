@@ -807,6 +807,7 @@ class CourseRestorer
 	/**
 	 * Restore scorm documents
 	 * TODO @TODO check that the restore function with renaming doesn't break the scorm structure!
+     * see #7029
 	 */
 	public function restore_scorm_documents()
     {
@@ -824,14 +825,17 @@ class CourseRestorer
 					switch ($this->file_option) {
 						case FILE_OVERWRITE :
 							rmdirr($path.$document->path);
-							copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
+                            copyDirTo(
+                                $this->course->backup_path . '/' . $document->path,
+                                $path . dirname($document->path),
+                                false
+                            );
 							break;
 						case FILE_SKIP:
 							break;
                         case FILE_RENAME:
 							$i = 1;
 							$ext = explode('.', basename($document->path));
-
 							if (count($ext) > 1) {
 								$ext = array_pop($ext);
 								$file_name_no_ext = substr($document->path, 0, - (strlen($ext) + 1));
@@ -850,15 +854,29 @@ class CourseRestorer
 								$file_exists = file_exists($path.$new_file_name);
 							}
 
-							rename($this->course->backup_path.'/'.$document->path,$this->course->backup_path.'/'.$new_file_name);
-							copyDirTo($this->course->backup_path.'/'.$new_file_name, $path.dirname($new_file_name), false);
-							rename($this->course->backup_path.'/'.$new_file_name,$this->course->backup_path.'/'.$document->path);
+                            rename(
+                                $this->course->backup_path . '/' . $document->path,
+                                $this->course->backup_path . '/' . $new_file_name
+                            );
+                            copyDirTo(
+                                $this->course->backup_path . '/' . $new_file_name,
+                                $path . dirname($new_file_name),
+                                false
+                            );
+                            rename(
+                                $this->course->backup_path . '/' . $new_file_name,
+                                $this->course->backup_path . '/' . $document->path
+                            );
 
 							break;
 					} // end switch
 				} else {
                     // end if file exists
-					copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
+                    copyDirTo(
+                        $this->course->backup_path . '/' . $document->path,
+                        $path . dirname($document->path),
+                        false
+                    );
 				}
 			} // end for each
 		}
@@ -1263,11 +1281,15 @@ class CourseRestorer
 		}
 	}
 
-	/**
-	 * Restore Quiz
-	 */
-    public function restore_quizzes($session_id = 0, $respect_base_content = false)
-    {
+    /**
+     * Restore Quiz
+     * @param int $session_id
+     * @param bool $respect_base_content
+     */
+    public function restore_quizzes(
+        $session_id = 0,
+        $respect_base_content = false
+    ) {
 		if ($this->course->has_resources(RESOURCE_QUIZ)) {
 			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -1309,7 +1331,9 @@ class CourseRestorer
                     );
 
 					global $_custom;
-					if (isset($_custom['exercises_clean_dates_when_restoring']) && $_custom['exercises_clean_dates_when_restoring']) {
+					if (isset($_custom['exercises_clean_dates_when_restoring']) &&
+                        $_custom['exercises_clean_dates_when_restoring']
+                    ) {
 						$quiz->start_time = null;
 						$quiz->end_time   = null;
 					}
@@ -1418,7 +1442,10 @@ class CourseRestorer
 
             if ($new_id) {
                 if (!empty($question->picture)) {
-                    $question_temp = Question::read($new_id, $this->destination_course_info['real_id']);
+                    $question_temp = Question::read(
+                        $new_id,
+                        $this->destination_course_info['real_id']
+                    );
 
                     $documentPath = api_get_path(SYS_COURSE_PATH).$this->destination_course_info['path'].'/document';
                     // picture path
@@ -1550,8 +1577,7 @@ class CourseRestorer
                 } else {
                     $new_options = array();
                     if (isset($question->question_options)) {
-                        foreach($question->question_options as $obj) {
-
+                        foreach ($question->question_options as $obj) {
                             $item = array();
                             $item['question_id'] = $new_id;
                             $item['c_id'] = $this->destination_course_id;
@@ -1561,6 +1587,7 @@ class CourseRestorer
                             $question_option_id = Database::insert($table_options, $item);
                             $new_options[$obj->obj->id] = $question_option_id;
                         }
+
                         foreach($correct_answers as $answer_id => $correct_answer) {
                             $params = array();
                             $params['correct'] = $new_options[$correct_answer];

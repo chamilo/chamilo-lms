@@ -1,11 +1,22 @@
 <script type='text/javascript' src="../js/buycourses.js"></script>
 
-<link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
-
+<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 <div class="row">
     <div class="span12">
-        <h3>{{ 'CurrencyType'|get_plugin_lang('BuyCoursesPlugin') }}:</h3>
-        <select id="currency_type">
+        <p class="normal-message">{{ 'PluginInstruction'|get_plugin_lang('BuyCoursesPlugin') }}<a href="{{ server }}main/admin/configure_plugin.php?name=buycourses">{{ 'ClickHere'|get_plugin_lang('BuyCoursesPlugin') }}</a></p>
+    </div>
+</div>
+<div class="row">
+    <div class="span6">
+        <div class="info">
+            
+
+            <h3>{{ 'CurrencyType'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+            <p>{{ 'InfoCurrency'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+
+        </div>
+        <div class="input-content">
+            <select id="currency_type">
             <option value="" selected="selected">{{ 'SelectACurrency'|get_plugin_lang('BuyCoursesPlugin') }}</option>
             {% for currency in currencies %}
                 {% if currency.status == 1 %}
@@ -17,31 +28,54 @@
             {% endfor %}
         </select>
         <input type="button" id="save_currency" class="btn btn-primary" value="{{ 'Save'|get_lang }}" />
-
-        {% if paypal_enable == "true" %}
-            <hr />
+        </div>
+    </div>
+    {% if paypal_enable == "true" %}
+    <div class="span6">
+        <div class="info">
             <h3>{{ 'PayPalConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
-                {% if paypal.sandbox == "YES" %}
-                    {{ 'Sandbox'|get_plugin_lang('BuyCoursesPlugin') }}: <input type="checkbox" id="sandbox" value="YES" checked="checked"/>
+        </div>
+         <div class="input-content">
+            
+            <p>{{ 'InfoApiCredentials'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+            <ul>
+                <li>{{ 'InfoApiStepOne'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                <li>{{ 'InfoApiStepTwo'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                <li>{{ 'InfoApiStepThree'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+            </ul>
+            <label class="control-label">API_UserName: </label><input type="text" id="username" value="{{ paypal.username | e}}" />
+            <label class="control-label">API_Password: </label><input type="text" id="password" value="{{ paypal.password | e }}"/>
+            <label class="control-label">API_Signature: </label> <input type="text" id="signature" value="{{ paypal.signature | e }}"/>
+           
+            {% if paypal.sandbox == "YES" %}
+                    <label class="checkbox">
+                        <input type="checkbox" id="sandbox" value="YES" checked="checked"> {{ 'Sandbox'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </label>
                 {% else %}
-                    {{ 'Sandbox'|get_plugin_lang('BuyCoursesPlugin') }}: <input type="checkbox" id="sandbox" value="YES" />
-                {% endif %}
-            <br />
-            API_UserName: <input type="text" id="username" value="{{ paypal.username | e}}" /><br/>
-            API_Password: <input type="text" id="password" value="{{ paypal.password | e }}"/><br/>
-            API_Signature: <input type="text" id="signature" value="{{ paypal.signature | e }}"/><br/>
+                    <label class="checkbox">
+                        <input type="checkbox" id="sandbox" value="YES" />{{ 'Sandbox'|get_plugin_lang('BuyCoursesPlugin') }}
+                    </label>
+                     
+            {% endif %}
+            
             <input type="button" id="save_paypal" class="btn btn-primary" value="{{ 'Save'|get_lang }}"/>
-        {% endif %}
+         </div>
+    </div>
+    {% endif %}
+</div>
 
+<div class="row">
+    <div class="span12">
+        
         {% if transfer_enable == "true" %}
             <hr />
             <h3>{{ 'TransfersConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
             <table id="transfer_table" class="data_table">
                 <tr class="row_odd">
-                <th>{{ 'Name'|get_lang }}</th>
-                <th>{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                <th>{{ 'SWIFT'|get_lang }}</th>
-                <th class="span1 ta-center">{{ 'Option'|get_lang }}</th>
+                <th class="bg-color">{{ 'Name'|get_lang }}</th>
+                <th class="bg-color">{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th class="bg-color">{{ 'SWIFT'|get_lang }}</th>
+                <th class="span1 ta-center bg-color">{{ 'Option'|get_lang }}</th>
                 </tr>
                 {% set i = 0 %}
 

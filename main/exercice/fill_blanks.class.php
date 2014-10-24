@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- *
  *	Class FillBlanks
  *
  *	@author Eric Marguin
@@ -10,7 +10,7 @@
  **/
 class FillBlanks extends Question
 {
-	static $typePicture = 'fill_in_blanks.gif';
+	static $typePicture = 'fill_in_blanks.png';
 	static $explanationLangVar = 'FillBlanks';
 
     /**

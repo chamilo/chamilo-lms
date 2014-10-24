@@ -41,11 +41,14 @@ api_protect_course_script();
 $lp_id = intval($_GET['lp_id']);
 
 // Check if the learning path is visible for student - (LP requisites)
-if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
-    api_not_allowed(true);
+
+if (!api_is_platform_admin()) {
+    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
+        api_not_allowed(true);
+    }
 }
 
-//Checking visibility (eye icon)
+// Checking visibility (eye icon)
 $visibility = api_get_item_visibility(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id(), api_get_session_id());
 if (!api_is_allowed_to_edit(false, true, false, false) && intval($visibility) == 0) {
     api_not_allowed(true);
@@ -308,7 +311,7 @@ if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -
     $lp_theme_css = $my_style;
 }
 
-$progress_bar   = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
+$progress_bar   = $_SESSION['oLP']->getProgressBar();
 $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 $mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
 
@@ -319,7 +322,7 @@ $sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE c_id = $course_id AND lp_id
 $res_media= Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {
-    while ($row_media= Database::fetch_array($res_media)) {
+    while ($row_media = Database::fetch_array($res_media)) {
         if (!empty($row_media['audio'])) {
             $show_audioplayer = true;
             break;
@@ -328,7 +331,8 @@ if (Database::num_rows($res_media) > 0) {
 }
 
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
+$is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
+
 if ($is_allowed_to_edit) {
     echo '<div id="learning_path_breadcrumb_zone">';
     global $interbreadcrumb;
@@ -435,6 +439,7 @@ if ($is_allowed_to_edit) {
     <!-- right zone -->
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
     <?php
+    $src = !empty($src) ? str_replace('&amp;', '&', $src) : '';
         // hub 26-05-2010 Fullscreen or not fullscreen
         $height = '100%';
         if ($_SESSION['oLP']->mode == 'fullscreen') {
@@ -462,7 +467,7 @@ if ($is_allowed_to_edit) {
         var heightAction = ($('#actions_lp').height())? $('#actions_lp').height() : 0 ;
 
         var heightTop = heightHeader + heightAuthorImg + heightAuthorName + heightMedia + heightTitle + heightAction + 100;
-        heightTop = (heightTop < 230)? heightTop : 230;
+        heightTop = (heightTop < 300)? heightTop : 300;
         var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
         // -40 is a static adjustement for margin, spaces on the page
 

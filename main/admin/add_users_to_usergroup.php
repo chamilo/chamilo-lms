@@ -209,6 +209,13 @@ if (api_is_western_name_order()) {
     $order = array('firstname');
 }
 
+global $_configuration;
+if (isset($_configuration['order_user_list_by_official_code']) &&
+    $_configuration['order_user_list_by_official_code']
+) {
+    $order = array('official_code', 'lastname');
+}
+
 $conditions = array();
 
 if (!empty($first_letter_user)) {
@@ -242,10 +249,22 @@ if (!empty($complete_user_list)) {
         }
 
         if (in_array($item['user_id'], $list_in)) {
+            $officialCode = !empty($item['official_code']) ? ' - '.$item['official_code'] : null;
             $person_name = api_get_person_name(
                 $item['firstname'],
                 $item['lastname']
-            ).' ('.$item['username'].') '.$item['official_code'];
+            ).' ('.$item['username'].') '.$officialCode;
+
+            if (isset($_configuration['order_user_list_by_official_code']) &&
+                $_configuration['order_user_list_by_official_code']
+            ) {
+                $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
+                $person_name = $officialCode.api_get_person_name(
+                        $item['firstname'],
+                        $item['lastname']
+                    ).' ('.$item['username'].') ';
+            }
+
             $elements_in[$item['user_id']] = $person_name;
         }
     }
@@ -273,11 +292,27 @@ if (!empty($user_list)) {
                 continue;
             }
         }
-        if ($item['status'] == 6 ) continue; //avoid anonymous users
+
+        // Avoid anonymous users
+        if ($item['status'] == 6) {
+            continue;
+        }
+        $officialCode = !empty($item['official_code']) ? ' - '.$item['official_code'] : null;
         $person_name = api_get_person_name(
             $item['firstname'],
             $item['lastname']
-        ).' ('.$item['username'].') '.$item['official_code'];
+        ).' ('.$item['username'].') '.$officialCode;
+
+        if (isset($_configuration['order_user_list_by_official_code']) &&
+            $_configuration['order_user_list_by_official_code']
+        ) {
+            $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
+            $person_name = $officialCode.api_get_person_name(
+                    $item['firstname'],
+                    $item['lastname']
+                ).' ('.$item['username'].') ';
+        }
+
         if (in_array($item['user_id'], $list_in)) {
             //$elements_in[$item['user_id']] = $person_name;
         } else {

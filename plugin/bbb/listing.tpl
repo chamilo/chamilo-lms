@@ -17,7 +17,7 @@
 
         <table class="table">
             <tr>
-                <th>#</th>
+                <!-- th>#</th -->
                 <th>{{ 'CreatedAt'|get_lang }}</th>
                 <th>{{ 'Status'|get_lang }}</th>
                 <th>{{ 'Records'|get_lang }}</th>
@@ -29,8 +29,12 @@
             </tr>
             {% for meeting in meetings %}
             <tr>
-                <td>{{ meeting.id }}</td>
-                <td>{{ meeting.created_at }}</td>
+                <!-- td>{{ meeting.id }}</td -->
+                {% if meeting.visibility == 0 %}
+                    <td class="muted">{{ meeting.created_at }}</td>
+                {% else %}
+                    <td>{{ meeting.created_at }}</td>
+                {% endif %}
                 <td>
                     {% if meeting.status == 1 %}
                         <span class="label label-success">{{ 'MeetingOpened'|get_lang }}</span>
@@ -49,6 +53,8 @@
                     <td>
                     {% if meeting.status == 1 %}
                         <a class="btn" href="{{ meeting.end_url }} "> {{ 'CloseMeeting'|get_lang }}</a>
+                    {% else %}
+                        {{ meeting.action_links }}
                     {% endif %}
                     </td>
                 {% endif %}

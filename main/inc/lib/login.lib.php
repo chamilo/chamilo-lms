@@ -791,7 +791,8 @@ class Login
      * @param string $username (email or username)
      * @return boolean
      */
-    function get_user_accounts_by_username($username) {
+    public static function get_user_accounts_by_username($username)
+    {
         if (strpos($username,'@')){
             $username = api_strtolower($username);
             $email = true;

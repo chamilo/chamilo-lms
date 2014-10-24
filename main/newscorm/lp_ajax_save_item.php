@@ -8,9 +8,6 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
 
 use \ChamiloSession as Session;
 
@@ -44,8 +41,23 @@ require_once 'aiccItem.class.php';
  * @param   array   Interactions array
  * @param   string  Core exit SCORM string
  */
-function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none', $sessionId = null, $courseId = null)
-{
+function save_item(
+    $lp_id,
+    $user_id,
+    $view_id,
+    $item_id,
+    $score = -1,
+    $max = -1,
+    $min = -1,
+    $status = '',
+    $time = 0,
+    $suspend = '',
+    $location = '',
+    $interactions = array(),
+    $core_exit = 'none',
+    $sessionId = null,
+    $courseId = null
+) {
     global $debug;
     $return = null;
 
@@ -56,37 +68,13 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         error_log("score: $score - max:$max - min: $min - status:$status - time:$time - suspend: $suspend - location: $location - core_exit: $core_exit");
     }
 
-    $mylp = null;
-    $lpobject = Session::read('lpobject');
-    if (!is_object($lpobject) && isset($sessionId) && isset($courseId)) {
-        $lpobject = new learnpathItem($lp_id, $user_id, $courseId);
-    }
-    if (isset($lpobject)) {
-        if (is_object($lpobject)) {
-            $mylp = $lpobject;
-        } else {
-            $oLP = unserialize($lpobject);
-            if ($debug) error_log("lpobject was set");
-            if (!is_object($oLP)) {
-                unset($oLP);
-                $code = api_get_course_id();
-                $mylp = new learnpath($code, $lp_id, $user_id);
-                if ($debug) error_log("Creating learnpath");
-            } else {
-                $mylp = $oLP;
-                if ($debug) error_log("Loading learnpath from unserialize");
-            }
-        }
-    } else {
-        if ($debug) {
-            error_log("lpobject was not set");
-        }
-    }
+    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
 
     if (!is_a($mylp, 'learnpath')) {
         if ($debug) {
             error_log("mylp variable is not an learnpath object");
         }
+
         return null;
     }
 
@@ -99,6 +87,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         if ($debug > 0) {
             error_log("item #$item_id not found in the items array: ".print_r($mylp->items, 1));
         }
+
         return false;
     }
 
@@ -137,17 +126,17 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             if ($debug > 1) { error_log('Done calling set_score '.$mylpi->get_score(), 0); }
         } else {
             if ($debug > 1) { error_log("Score not updated"); }
+        }
 
-            // Default behaviour
-            if (isset($status) && $status != '' && $status != 'undefined') {
-                if ($debug > 1) { error_log('Calling set_status('.$status.')', 0); }
+        // Default behaviour.
+        if (isset($status) && $status != '' && $status != 'undefined') {
+            if ($debug > 1) { error_log('Calling set_status('.$status.')', 0); }
 
-                $mylpi->set_status($status);
+            $mylpi->set_status($status);
 
-                if ($debug > 1) { error_log('Done calling set_status: checking from memory: '.$mylpi->get_status(false), 0); }
-            } else {
-                if ($debug > 1) { error_log("Status not updated"); }
-            }
+            if ($debug > 1) { error_log('Done calling set_status: checking from memory: '.$mylpi->get_status(false), 0); }
+        } else {
+            if ($debug > 1) { error_log("Status not updated"); }
         }
 
         // Hack to set status to completed for hotpotatoes if score > 80%.
@@ -186,9 +175,8 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         } else {
             $time = $mylpi->get_total_time();
         }
-
         if (isset($suspend) && $suspend != '' && $suspend != 'undefined') {
-            $mylpi->current_data = $suspend; //escapetxt($suspend);
+            $mylpi->current_data = $suspend;
         }
 
         if (isset($location) && $location != '' && $location!='undefined') {
@@ -235,8 +223,6 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     if ($debug > 1) { error_log("myprogress_mode: $myprogress_mode", 0); }
     if ($debug > 1) { error_log("progress: $mycomplete / $mytotal", 0); }
 
-    //$_SESSION['lpobject'] = serialize($mylp);
-
     if ($mylpi->get_type() != 'sco') {
         // If this object's JS status has not been updated by the SCORM API, update now.
         $return .= "olms.lesson_status='".$mystatus."';";
@@ -245,7 +231,9 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     $update_list = $mylp->get_update_queue();
 
     foreach ($update_list as $my_upd_id => $my_upd_status)  {
-        if ($my_upd_id != $item_id) { // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.
+        if ($my_upd_id != $item_id) {
+            /* Only update the status from other items (i.e. parents and brothers),
+            do not update current as we just did it already. */
             $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
         }
     }
@@ -259,18 +247,20 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.
         $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql_last_connection = "SELECT login_id, login_date
+        $sql = "SELECT login_id, login_date
             FROM $tbl_track_login
             WHERE login_user_id='".api_get_user_id()."'
             ORDER BY login_date DESC LIMIT 0,1";
 
-        $q_last_connection = Database::query($sql_last_connection);
+        $q_last_connection = Database::query($sql);
         if (Database::num_rows($q_last_connection) > 0) {
             $current_time = api_get_utc_datetime();
             $row = Database::fetch_array($q_last_connection);
             $i_id_last_connection = $row['login_id'];
-            $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='".$current_time."' WHERE login_id='$i_id_last_connection'";
-            Database::query($s_sql_update_logout_date);
+            $sql = "UPDATE $tbl_track_login
+                    SET logout_date='".$current_time."'
+                    WHERE login_id='$i_id_last_connection'";
+            Database::query($sql);
         }
     }
 
@@ -278,7 +268,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
          $return .= "update_stats();";
     }
 
-    //To be sure progress is updated
+    // To be sure progress is updated.
     $mylp->save_last();
 
     Session::write('lpobject', serialize($mylp));

@@ -34,4 +34,3 @@ api_display_tool_title($nameTools.$add_group_to_title);
 		FOOTER
 */
 Display::display_footer();
-?>

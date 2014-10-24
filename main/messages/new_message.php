@@ -12,7 +12,6 @@
 * - reply on message (when pressing reply when viewing a message)
 * - send to specific user (when pressing send message in the who is online list)
 */
-/* 		INIT SECTION	*/
 // name of the language file that needs to be included
 $language_file= array('messages', 'userInfo', 'admin');
 $cidReset	= true;
@@ -83,7 +82,7 @@ function check_users() {
                             }
                         });
                     }
-                },
+                }
             });
         }
     });
@@ -149,6 +148,7 @@ function show_compose_reply_to_message($message_id, $receiver_id)
     $sent_to = $pre_html.'<strong>'.GetFullUserName($row['user_sender_id']).'</strong>'.$post;
 	$default['users'] = array($row['user_sender_id']);
 	$html .= manage_form($default, null, $sent_to);
+
     return $html;
 }
 
@@ -279,8 +279,6 @@ if ($_GET['f']=='social') {
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
 }
 
-//Display::display_header(get_lang('ComposeMessage'));
-
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 $social_right_content = null;
 if ($group_id != 0) {
@@ -304,11 +302,11 @@ if ($group_id != 0) {
 	}
 }
 
-
-//LEFT COLUMN
+// LEFT COLUMN
 $social_left_content = null;
 if (api_get_setting('allow_social_tool') == 'true') {
-    $social_left_content = SocialManager::show_social_menu('messages');
+    $social_avatar_block = SocialManager::show_social_avatar_block('messages');
+    $social_menu_block = SocialManager::show_social_menu('messages');
     $social_right_content .= '<div class="span9">';
     $social_right_content .= '<div class="actions">';
     $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
@@ -317,7 +315,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .= '<div class="span9">';
 }
 
-//MAIN CONTENT
+// MAIN CONTENT
 if (!isset($_POST['compose'])) {
     if(isset($_GET['re_id'])) {
         $social_right_content .= show_compose_reply_to_message($_GET['re_id'], api_get_user_id());
@@ -365,7 +363,8 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
 $tpl = new Template(get_lang('ComposeMessage'));
 if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_left_content', $social_left_content);
+    $tpl->assign('social_avatar_block', $social_avatar_block);
+    $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
     $tpl->display($social_layout);

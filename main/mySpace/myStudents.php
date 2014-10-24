@@ -8,7 +8,16 @@
  * Code
  */
 // name of the language file that needs to be included
-$language_file = array('registration', 'index', 'tracking', 'exercice', 'admin', 'gradebook', 'survey');
+$language_file = array(
+    'registration',
+    'index',
+    'tracking',
+    'exercice',
+    'admin',
+    'gradebook',
+    'survey',
+    'forum'
+);
 
 require_once '../inc/global.inc.php';
 
@@ -613,9 +622,7 @@ if (empty($_GET['details'])) {
 		}
 
 		// Courses
-
 		echo '<h3>'.$title.'</h3>';
-
 		echo '<table class="data_table">';
 		echo '<tr>
 				<th>'.get_lang('Course').'</th>
@@ -647,8 +654,7 @@ if (empty($_GET['details'])) {
     					$attendances_faults_avg = '0/0 (0%)';
     				}
 
-    				// get evaluatios by student
-
+    				// Get evaluations by student
     				$cats = Category::load(null, null, $course_code, null, null, $session_id);
 
     				$scoretotal = array();
@@ -702,32 +708,33 @@ if (empty($_GET['details'])) {
 		echo '</table>';
 	}
 } else {
-	$csv_content[] = array ();
-    $csv_content[] = array (str_replace('&nbsp;', '', $table_title));
-
+	$csv_content[] = array();
+    $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
     $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
 
     // csv export headers
-    $csv_content[] = array ();
-    $csv_content[] = array (
-    	get_lang('Learnpath', ''),
-    	get_lang('Time', ''),
-    	get_lang('AverageScore', ''),
-    	get_lang('LatestScore', ''),
-    	get_lang('Progress', ''),
-    	get_lang('LastConnexion', '')
+    $csv_content[] = array();
+    $csv_content[] = array(
+    	get_lang('Learnpath'),
+    	get_lang('Time'),
+    	get_lang('AverageScore'),
+    	get_lang('LatestAttemptAverageScore'),
+    	get_lang('Progress'),
+    	get_lang('LastConnexion')
     );
 
     if (empty($session_id)) {
-        $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE session_id = 0 AND c_id = {$info_course['real_id']} ORDER BY lp.display_order";
+        $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp
+                    WHERE session_id = 0 AND c_id = {$info_course['real_id']}
+                    ORDER BY lp.display_order";
     } else {
-    	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = {$info_course['real_id']}  ORDER BY lp.display_order";
+    	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp
+    	            WHERE c_id = {$info_course['real_id']}
+                    ORDER BY lp.display_order";
     }
     $rs_lp = Database::query($sql_lp);
-
     if (Database :: num_rows($rs_lp) > 0) {
     ?>
-
         <!-- LPs-->
         <table class="data_table">
             <tr>
@@ -855,8 +862,7 @@ if (empty($_GET['details'])) {
     }
     ?>
     </table>
-
-	<!-- line about exercises -->
+	    <!-- line about exercises -->
 		<table class="data_table">
 			<tr>
 				<th><?php echo get_lang('Exercices'); ?></th>
@@ -868,12 +874,13 @@ if (empty($_GET['details'])) {
 			</tr>
 		<?php
 
-		$csv_content[] = array ();
-		$csv_content[] = array (
-			get_lang('Exercices'),
-			get_lang('Score'),
-			get_lang('Attempts')
-		);
+		$csv_content[] = array();
+        $csv_content[] = array(
+            get_lang('Exercices'),
+            get_lang('LearningPath'),
+            get_lang('AvgCourseScore'),
+            get_lang('Attempts')
+        );
 
 		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$sql_exercices = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
@@ -886,7 +893,6 @@ if (empty($_GET['details'])) {
 		if (Database :: num_rows($result_exercices) > 0) {
 			while ($exercices = Database :: fetch_array($result_exercices)) {
 				$exercise_id = intval($exercices['id']);
-
 				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id, 2);
 				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id, 1, 0);
 
@@ -898,11 +904,6 @@ if (empty($_GET['details'])) {
                     $lp_name = '-';
                 }
                 $lp_name = !empty($lp_name) ? $lp_name : get_lang('NoLearnpath');
-				$csv_content[] = array (
-					$exercices['title'],
-					$score_percentage . '%',
-					$count_attempts
-				);
 
                 if ($i % 2) {
                     $css_class = 'row_odd';
@@ -956,6 +957,14 @@ if (empty($_GET['details'])) {
 				$data_exercices[$i][] = $exercices['title'];
 				$data_exercices[$i][] = $score_percentage . '%';
 				$data_exercices[$i][] = $count_attempts;
+
+                $csv_content[] = array(
+                    $exercices['title'],
+                    $lp_name,
+                    $score_percentage,
+                    $count_attempts
+                );
+
 				$i++;
 
 			}
@@ -963,7 +972,6 @@ if (empty($_GET['details'])) {
 			echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
 		}
 		echo '</table>';
-
 
         //@when using sessions we do not show the survey list
         if (empty($session_id)) {
@@ -981,7 +989,6 @@ if (empty($_GET['details'])) {
             }
 
             if (!empty($survey_list)) {
-
                 $table = new HTML_Table(array('class' => 'data_table'));
                 $header_names = array(get_lang('Survey'), get_lang('Answered'));
                 $row = 0;
@@ -995,7 +1002,6 @@ if (empty($_GET['details'])) {
                     foreach ($survey_data as $data) {
                         $column = 0;
                         $table->setCellContents($row, $column, $data);
-                        //$table->setRowAttributes($row, 'style="text-align:center"');
                         $class = 'class="row_odd"';
                         if($row % 2) {
                             $class = 'class="row_even"';
@@ -1020,30 +1026,34 @@ if (empty($_GET['details'])) {
 		$documents				= Tracking::count_student_downloaded_documents($student_id, $course_code, $session_id);
 		$uploaded_documents		= Tracking::count_student_uploaded_documents($student_id, $course_code, $session_id);
 
-		$csv_content[] = array (
-			get_lang('Student_publication'),
-			$nb_assignments
-		);
-		$csv_content[] = array (
-			get_lang('Messages'),
-			$messages
-		);
-		$csv_content[] = array (
-			get_lang('LinksDetails'),
-			$links
-		);
-		$csv_content[] = array (
-			get_lang('DocumentsDetails'),
-			$documents
-		);
-		$csv_content[] = array (
-			get_lang('UploadedDocuments'),
-			$uploaded_documents
-		);
-		$csv_content[] = array (
-			get_lang('ChatLastConnection'),
-			$chat_last_connection
-		);
+        $csv_content[] = array(
+            get_lang('OtherTools')
+        );
+
+        $csv_content[] = array(
+            get_lang('Student_publication'),
+            $nb_assignments
+        );
+        $csv_content[] = array(
+            get_lang('Messages'),
+            $messages
+        );
+        $csv_content[] = array(
+            get_lang('LinksDetails'),
+            $links
+        );
+        $csv_content[] = array(
+            get_lang('DocumentsDetails'),
+            $documents
+        );
+        $csv_content[] = array(
+            get_lang('UploadedDocuments'),
+            $uploaded_documents
+        );
+        $csv_content[] = array(
+            get_lang('ChatLastConnection'),
+            $chat_last_connection
+        );
 ?>
 		<tr>
 			<th colspan="2"><?php echo get_lang('OtherTools'); ?></th>
@@ -1053,7 +1063,7 @@ if (empty($_GET['details'])) {
 			<td><?php echo $nb_assignments ?></td>
 		</tr>
 		<tr><!-- messages -->
-			<td><?php echo get_lang('Messages') ?></td>
+			<td><?php echo get_lang('Forum').' - '.get_lang('NumberOfPostsForThisUser') ?></td>
 			<td><?php echo $messages ?></td>
 		</tr>
 		<tr><!-- links -->
@@ -1085,5 +1095,5 @@ if ($export_csv) {
 	Export :: export_table_csv($csv_content, 'reporting_student');
 	exit;
 }
-/*		FOOTER  */
+
 Display :: display_footer();

@@ -46,7 +46,6 @@ $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 // Getting all sessions where I'm subscribed
 $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
-
 $user_course_list = array();
 foreach ($new_session_list as $session_item) {
     $user_course_list[] = $session_item['code'];
@@ -69,8 +68,15 @@ if (!empty($new_session_list)) {
 
                 $course_info   = api_get_course_info($my_course['code']);
 
-                //Getting all exercises from the current course
-                $exercise_list = get_all_exercises($course_info, $my_session_id, true);
+                // Getting all visible exercises from the current course
+                $exercise_list = get_all_exercises(
+                    $course_info,
+                    $my_session_id,
+                    true,
+                    null,
+                    false,
+                    1
+                );
 
                 $course['name'] = $course_info['name'];
                 $course['id']   = $course_info['real_id'];
@@ -99,6 +105,7 @@ if (!empty($new_session_list)) {
         $my_session_list[] =  $my_session_id;
     }
 }
+$new_course_list = array();
 
 if (!empty($course_list)) {
     foreach ($course_list as $course_data) {
@@ -118,7 +125,6 @@ if (!empty($course_list)) {
             'publicated_on ASC',
             true
         );
-
         $lp_list = $list->get_flat_list();
 
         $lp_count = 0;
@@ -132,7 +138,16 @@ if (!empty($course_list)) {
         }
 
         $course_info    = api_get_course_info($course_data['code']);
-        $exercise_count = count(get_all_exercises($course_info, $session_id, true));
+        $exercise_count = count(
+            get_all_exercises(
+                $course_info,
+                $session_id,
+                true,
+                null,
+                false,
+                1
+            )
+        );
         $max_mutation_date = '';
 
         $last_date = Tracking::get_last_connection_date_on_the_course(
@@ -516,9 +531,11 @@ $(function() {
 </script>
 
 <?php
-$my_reporting = Tracking::show_user_progress(api_get_user_id(), $session_id, '#tabs-4', false);
+
+$courseCode = isset($_GET['course']) ? $_GET['course'] : null;
+$my_reporting = Tracking::show_user_progress(api_get_user_id(), $session_id, '#tabs-4', false, false);
 if (!empty($my_reporting))  {
-    $my_reporting  .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $session_id);
+    $my_reporting  .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $courseCode, $session_id);
 }
 if (empty($my_reporting)) {
     $my_reporting  = Display::return_message(get_lang('NoDataAvailable'), 'warning');

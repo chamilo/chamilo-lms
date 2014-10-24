@@ -51,6 +51,7 @@ $RegisteredClasses = "Classes subscrites";
 $DeleteItemsNotInFile = "Elimina elements que no es trobin a l'arxiu";
 $ImportGroups = "Importa grups";
 $HereIsYourFeedback = "Reposta del professor:";
+$SearchSessions = "Recerca de sessions";
 $ShowSystemFolders = "Mostra els directoris del sistema";
 $LoginToGoToThisCourse = "Connecteu-vos per accedir a aquest curs";
 $LoginDate = "Data d'accés";

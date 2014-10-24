@@ -57,7 +57,6 @@ $htmlHeadXtra[] = '<script>
         if(document.getElementById(\'id_qualify\').style.display == \'none\') {
             document.getElementById(\'id_qualify\').style.display = \'block\';
             document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-
         } else {
             document.getElementById(\'id_qualify\').style.display = \'none\';
             document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
@@ -130,7 +129,6 @@ if ($origin == 'learnpath') {
 } else {
     Display :: display_header(null);
 }
-
 /* Is the user allowed here? */
 
 // The user is not allowed here if
@@ -185,17 +183,22 @@ if ($origin != 'learnpath') {
 
 /* Display Forum Category and the Forum information */
 
-echo "<table class=\"forum_table\" width=\"100%\">";
-// The forum category
-echo "<tr><th class=\"forum_head\" colspan=\"2\">";
-echo '<a href="viewforum.php?&amp;origin='.$origin.'&amp;forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a><br />';
-echo '<span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';
-echo "</th>";
-echo "</tr>";
-echo '</table>';
+/*New display forum div*/
+    echo '<div class="row">';
+    echo '<div class="span12">';
+    echo '<div class="forum_title">';
+    echo '<h1><a href="viewforum.php?&amp;origin='.$origin.'&amp;forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a></h1>';
+    echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
+    echo '</div></div></div>';
+/* End new display forum */
 
+// Set forum attachment data into $_SESSION
+getAttachedFiles($current_forum['forum_id'], $current_thread['thread_id'], $current_post['post_id']);
 // The form for the reply
+echo '<div class="row">';
+echo '<div class="span12">';
 $values = show_edit_post_form($forum_setting, $current_post, $current_thread, $current_forum, isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '');
+echo '</div></div>';
 
 if (!empty($values) and isset($_POST['SubmitPost'])) {
     store_edit_post($values);
@@ -216,6 +219,12 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
             Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
         }
     }
+} else {
+    // Only show Forum attachment ajax form when do not pass form submit
+    echo '<div class="row"><div class="span12">';
+    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], $current_post['post_id']);
+    echo $attachmentAjaxForm;
+    echo '</div></div>';
 }
 
 // Footer

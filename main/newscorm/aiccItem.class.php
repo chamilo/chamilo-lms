@@ -1,21 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+require_once 'learnpathItem.class.php';
+
 /**
+ * This class handles the elements from an AICC Descriptor file.
  * Container for the aiccItem class that deals with AICC Assignable Units (AUs)
  * @package	chamilo.learnpath
  * @author	Yannick Warnier	<ywarnier@beeznest.org>
  * @license	GNU/GPL
- */
-/**
- * Code
- */
-require_once 'learnpathItem.class.php';
-/**
- * This class handles the elements from an AICC Descriptor file.
  * @package	chamilo.learnpath
  */
-class aiccItem extends learnpathItem {
+class aiccItem extends learnpathItem
+{
     public $identifier = ''; // AICC AU's system_id
     public $identifierref = '';
     public $parameters = ''; // AICC AU's web_launch
@@ -39,7 +36,8 @@ class aiccItem extends learnpathItem {
      * @param	string	Type of construction needed ('db' or 'config', default = 'config')
      * @param	mixed	Depending on the type given, DB id for the lp_item or parameters array
      */
-    public function aiccItem($type = 'config', $params = array(), $course_id = null) {
+    public function aiccItem($type = 'config', $params = array(), $course_id = null)
+    {
         if (isset($params)) {
             switch ($type) {
                 case 'db':

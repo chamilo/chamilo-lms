@@ -33,8 +33,8 @@ if ($teacher) {
     $visibility[] = getCourseVisibilityIcon('3');
 
     $coursesList = listCourses();
-    $confirmationImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/message_confirmation.png';
-    $saveImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/save.png';
+    $confirmationImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/img/32/accept.png';
+    $saveImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/img/32/save.png';
     $currencyType = findCurrency();
 
     $tpl->assign('server', $_configuration['root_web']);
@@ -43,6 +43,17 @@ if ($teacher) {
     $tpl->assign('confirmation_img', $confirmationImgPath);
     $tpl->assign('save_img', $saveImgPath);
     $tpl->assign('currency', $currencyType);
+
+    $selectedValue = Database::select(
+        'selected_value',
+        Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT),
+        array('where'=> array('variable = ?' => array('buycourses_include_sessions')))
+    );
+    $result = array_shift($selectedValue);
+    if ($result['selected_value'] === 'true') {
+        $tpl->assign('sessionsAreIncluded', 'YES');
+        $tpl->assign('sessions', listSessions());
+    }
 
     $listing_tpl = 'buycourses/view/configuration.tpl';
     $content = $tpl->fetch($listing_tpl);

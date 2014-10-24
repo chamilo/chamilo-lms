@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * EXTRA FUNCTIONS FOR DOCUMENTS TOOL
@@ -180,9 +179,6 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 
     $tooltip_title = $title;
 
-    //Cut long titles
-    //$title = cut($title, 120);
-
     $tooltip_title_alt = $tooltip_title;
     if ($path == '/shared_folder') {
         $tooltip_title_alt = get_lang('UserFolders');
@@ -297,6 +293,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                         (preg_match('/wav$/i', urldecode($url)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
                         preg_match('/ogg$/i', urldecode($url))) {
                     $sound_preview = DocumentManager::generate_media_preview($counter);
+
                     return $sound_preview;
                 } elseif (
                     //Show preview
@@ -326,6 +323,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                         (preg_match('/wav$/i', urldecode($url)) && !preg_match('/_chnano_.wav$/i', urldecode($url))) ||
                         preg_match('/ogg$/i', urldecode($url))) {
                     $sound_preview = DocumentManager::generate_media_preview($counter);
+
                     return $sound_preview;
                 } elseif (
                         //Show preview
@@ -478,6 +476,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     } else {
         $req_gid = '';
     }
+    $web_odf_extension_list = DocumentManager::get_web_odf_extension_list();
     $document_id = $document_data['id'];
     $type = $document_data['filetype'];
     $is_read_only = $document_data['readonly'];
@@ -514,6 +513,8 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         if (api_is_course_admin() || api_is_platform_admin()) {
             if ($extension == 'svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
                 $modify_icons = '<a href="edit_draw.php?' . api_get_cidreq() . '&id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
+            } elseif (in_array($extension, $web_odf_extension_list)  && api_get_setting('enabled_support_odf') === true) {
+            $modify_icons = '<a href="edit_odf.php?' . api_get_cidreq() . '&id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
             } elseif ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'bmp' || $extension == 'gif' || $extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true') {
                 $modify_icons = '<a href="edit_paint.php?' . api_get_cidreq() . '&id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
             } else {
@@ -539,8 +540,10 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                 if ($document_data['session_id'] == api_get_session_id()) {
                     if ($extension == 'svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
                         $modify_icons = '<a href="edit_draw.php?' . api_get_cidreq() . '&amp;id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
+                    } elseif (in_array($extension, $web_odf_extension_list)  && api_get_setting('enabled_support_odf') === true) {
+                        $modify_icons = '<a href="edit_odf.php?' . api_get_cidreq() . '&id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
                     } elseif ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'bmp' || $extension == 'gif' || $extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true') {
-                        $modify_icons = '<a href="edit_paint.php?' . api_get_cidreq() . '&amp;id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
+                        $modify_icons = '<a href="edit_paint.php?' . api_get_cidreq() . '&id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
                     } else {
                         $modify_icons = '<a href="edit_document.php?' . api_get_cidreq() . '&amp;id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
                     }
@@ -550,6 +553,8 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             } else {
                 if ($extension == 'svg' && api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
                     $modify_icons = '<a href="edit_draw.php?' . api_get_cidreq() . '&amp;id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
+                } elseif (in_array($extension, $web_odf_extension_list)  && api_get_setting('enabled_support_odf') === true) {
+                    $modify_icons = '<a href="edit_odf.php?' . api_get_cidreq() . '&id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
                 } elseif ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'bmp' || $extension == 'gif' || $extension == 'pxd' && api_get_setting('enabled_support_pixlr') == 'true') {
                     $modify_icons = '<a href="edit_paint.php?' . api_get_cidreq() . '&amp;id=' . $document_id . $req_gid . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
                 } else {

@@ -9,9 +9,7 @@
  *  @todo fix excel export
  *
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = array('exercice');
 
@@ -71,31 +69,62 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-if (!empty($exercise_id))
+if (!empty($exercise_id)) {
     $parameters['exerciseId'] = $exercise_id;
+}
+
 if (!empty($_GET['path'])) {
     $parameters['path'] = Security::remove_XSS($_GET['path']);
 }
 
 if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-
-        $load_extra_data = false;
+    if (api_is_platform_admin() || api_is_course_admin() ||
+        api_is_course_tutor() || api_is_course_coach()
+    ) {
+        $loadExtraData = false;
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
-            $load_extra_data = true;
+            $loadExtraData = true;
+        }
+
+        $includeAllUsers = false;
+        if (isset($_REQUEST['include_all_users']) &&
+            $_REQUEST['include_all_users'] == 1
+        ) {
+            $includeAllUsers = true;
+        }
+
+        $onlyBestAttempts = false;
+        if (isset($_REQUEST['only_best_attempts']) &&
+            $_REQUEST['only_best_attempts'] == 1
+        ) {
+            $onlyBestAttempts = true;
         }
 
         require_once 'exercise_result.class.php';
+        $export = new ExerciseResult();
+        $export->setIncludeAllUsers($includeAllUsers);
+        $export->setOnlyBestAttempts($onlyBestAttempts);
+
         switch ($_GET['export_format']) {
             case 'xls' :
-                $export = new ExerciseResult();
-                $export->exportCompleteReportXLS($documentPath, null, $load_extra_data, null, $_GET['exerciseId'], $_GET['hotpotato_name']);
+                $export->exportCompleteReportXLS(
+                    $documentPath,
+                    null,
+                    $loadExtraData,
+                    null,
+                    $_GET['exerciseId']
+                );
                 exit;
                 break;
             case 'csv' :
             default :
-                $export = new ExerciseResult();
-                $export->exportCompleteReportCSV($documentPath, null, $load_extra_data, null, $_GET['exerciseId'], $_GET['hotpotato_name']);
+                $export->exportCompleteReportCSV(
+                    $documentPath,
+                    null,
+                    $loadExtraData,
+                    null,
+                    $_GET['exerciseId']
+                );
                 exit;
                 break;
         }
@@ -124,7 +153,12 @@ if (isset($_REQUEST['comments']) &&
 
     // Teacher data
     $teacher_info = api_get_user_info(api_get_user_id());
-    $from_name = api_get_person_name($teacher_info['firstname'], $teacher_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+    $from_name = api_get_person_name(
+        $teacher_info['firstname'],
+        $teacher_info['lastname'],
+        null,
+        PERSON_NAME_EMAIL_ADDRESS
+    );
     $url = api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
     $my_post_info = array();
@@ -163,24 +197,28 @@ if (isset($_REQUEST['comments']) &&
         $result = Database::query($sql);
         Database::result($result, 0, "question");
 
-        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments' WHERE question_id = ".$my_questionid." AND exe_id=".$id;
+        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments'
+                  WHERE question_id = ".$my_questionid." AND exe_id=".$id;
         Database::query($query);
 
         //Saving results in the track recording table
-        $recording_changes = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment)
-                              VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
-        Database::query($recording_changes);
+        $sql = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment)
+                VALUES ('."'$id','".$my_questionid."','$my_marks','".api_get_utc_datetime()."','".api_get_user_id()."'".',"'.$my_comments.'")';
+        Database::query($sql);
     }
 
-    $qry = 'SELECT DISTINCT question_id, marks FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id.' GROUP BY question_id';
+    $qry = 'SELECT DISTINCT question_id, marks
+            FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id.'
+            GROUP BY question_id';
     $res = Database::query($qry);
     $tot = 0;
     while ($row = Database :: fetch_array($res, 'ASSOC')) {
         $tot += $row['marks'];
     }
 
-    $totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."' WHERE exe_id = ".$id;
-    Database::query($totquery);
+    $sql = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."'
+            WHERE exe_id = ".$id;
+    Database::query($sql);
 
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
@@ -204,8 +242,9 @@ if (isset($_REQUEST['comments']) &&
 
     //Updating LP score here
     if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp'))) {
-        $sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '".floatval($tot)."' WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
-        Database::query($sql_update_score);
+        $sql = "UPDATE $TBL_LP_ITEM_VIEW SET score = '".floatval($tot)."'
+                WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
+        Database::query($sql);
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
             header('location: exercice.php?course='.Security :: remove_XSS($_GET['course']));
@@ -221,11 +260,14 @@ if (isset($_REQUEST['comments']) &&
 $actions = null;
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
+    if (api_is_platform_admin() || api_is_course_admin() ||
+        api_is_course_tutor() || api_is_course_coach()
+    ) {
         $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .='<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .='<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.$path.'&exerciseId='.intval($_GET['exerciseId']).'" >'.
+
+        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.intval($_GET['exerciseId']).'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         // clean result before a selected date icon
         $actions .= Display::url(
@@ -248,7 +290,10 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 }
 
 //Deleting an attempt
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete']) && $_GET['delete'] == 'delete' && !empty($_GET['did']) && $locked == false) {
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
+    isset($_GET['delete']) && $_GET['delete'] == 'delete' &&
+    !empty($_GET['did']) && $locked == false
+) {
     $exe_id = intval($_GET['did']);
     if (!empty($exe_id)) {
         $sql = 'DELETE FROM '.$TBL_TRACK_EXERCICES.' WHERE exe_id = '.$exe_id;
@@ -293,14 +338,11 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete_be
 
 // Security token to protect deletion
 $token = Security::get_token();
-
 $actions = Display::div($actions, array('class' => 'actions'));
 
 $extra = '<script>
     $(document).ready(function() {
-
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
-
         $( "#dialog-confirm" ).dialog({
                 autoOpen: false,
                 show: "blind",
@@ -318,7 +360,10 @@ $extra = '<script>
                     "'.addslashes(get_lang('Download')).'": function() {
                         var export_format = $("input[name=export_format]:checked").val();
                         var extra_data  = $("input[name=load_extra_data]:checked").val();
-                        location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data;
+                        var includeAllUsers  = $("input[name=include_all_users]:checked").val();
+                        var attempts = $("input[name=only_best_attempts]:checked").val();
+
+                        location.href = targetUrl+"&export_format="+export_format+"&extra_data="+extra_data+"&include_all_users="+includeAllUsers+"&only_best_attempts="+attempts;
                         $( this ).dialog( "close" );
                     },
                 }
@@ -334,6 +379,9 @@ $form = new FormValidator('report', 'post', null, null, array('class' => 'form-v
 $form->addElement('radio', 'export_format', null, get_lang('ExportAsCSV'), 'csv', array('id' => 'export_format_csv_label'));
 $form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
 $form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
+$form->addElement('checkbox', 'include_all_users', null, get_lang('IncludeAllUsers'), '0');
+$form->addElement('checkbox', 'only_best_attempts', null, get_lang('OnlyBestAttempts'), '0');
+
 $form->setDefaults(array('export_format' => 'csv'));
 $extra .= $form->return_form();
 $extra .= '</div>';
@@ -359,9 +407,12 @@ if (!empty($group_parameters)) {
     $group_parameters = implode(';', $group_parameters);
 }
 
+$officialCodeInList = api_get_configuration_value('show_official_code_exercise_result_list');
+
 if ($is_allowedToEdit || $is_tutor) {
 
-    //The order is important you need to check the the $column variable in the model.ajax.php file
+    // The order is important you need to check the the $column variable in the model.ajax.php file
+
     $columns = array(
         get_lang('FirstName'),
         get_lang('LastName'),
@@ -375,6 +426,10 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('ToolLearnpath'),
         get_lang('Actions')
     );
+
+    if ($officialCodeInList == true) {
+        $columns = array_merge(array(get_lang('OfficialCode')), $columns);
+    }
 
     //Column config
     $column_model = array(
@@ -403,6 +458,11 @@ if ($is_allowedToEdit || $is_tutor) {
         array('name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false')
     );
 
+    if ($officialCodeInList == true) {
+        $officialCodeRow = array('name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true');
+        $column_model = array_merge(array($officialCodeRow), $column_model);
+    }
+
     $action_links = '
     // add username as title in lastname filed - ref 4226
     function action_formatter(cellvalue, options, rowObject) {
@@ -421,21 +481,21 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 ?>
-
 <script>
-
     function setSearchSelect(columnName) {
-        $("#results").jqGrid('setColProp', columnName,
-        {
-            searchoptions:{
-                dataInit:function(el){
-                    $("option[value='1']",el).attr("selected", "selected");
-                    setTimeout(function(){
-                        $(el).trigger('change');
-                    },1000);
+        $("#results").jqGrid(
+            'setColProp',
+            columnName, {
+                searchoptions:{
+                    dataInit:function(el) {
+                        $("option[value='1']",el).attr("selected", "selected");
+                        setTimeout(function(){
+                            $(el).trigger('change');
+                        },1000);
+                    }
                 }
             }
-        });
+        );
     }
 
     function exportExcel() {
@@ -469,7 +529,6 @@ $extra_params['height'] = 'auto';
 
         if ($is_allowedToEdit || $is_tutor) {
             ?>
-
                 //setSearchSelect("status");
                 //
                 //view:true, del:false, add:false, edit:false, excel:true}
@@ -563,15 +622,12 @@ $extra_params['height'] = 'auto';
         * initiate datepicker
         */
         $(function() {
-
             $( "#datepicker_start" ).datepicker({
                 defaultDate: "",
                 changeMonth: false,
                 numberOfMonths: 1
             });
-
         });
-
 </script>
 <form id="export_report_form" method="post" action="exercise_report.php">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />

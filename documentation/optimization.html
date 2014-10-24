@@ -50,6 +50,7 @@
   <li><a href="#8.Avoid-non-fixed-values">Avoiding non-fixed values</a></li>
   <li><a href="#9.xsendfile">Speeding file downloads with mod_xsendfile</a></li>
   <li><a href="#10.igbinary">IGBinary for faster courses backups and better sessions</a></li>
+  <li><a href="#11.permissions-check">Removing files download permissions check</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using xCache or APC</h2>
@@ -245,6 +246,38 @@ If you use php5-memcached (different set of functions than php5-memcache!), then
             ...
         }
 </pre>
+Finally, the Free Campus of Chamilo has a very specific case of slow query: the courses catalog! Because there might be more than 30,000 courses in there, getting the number of "Connections last month" can be a desastrous query in terms of performances. This is why you should try to cache the results as well.<br />
+Obviously, as we are speaking about showing the number of visits this month, it doesn't really matter if the number doesn't refresh for an hour or so...<br />
+Locate the main/inc/lib/course_category.lib.php file, open it and go to the browseCoursesInCategory() function.<br />
+Locate the $count_connections_last_month = Tracking::get_course_connections_count(...) call, and wrap in into something like this:
+<pre>
+    $xc = method_exists('Memcached', 'add');
+    if ($xc) {
+        // Make sure the server is available
+        $xm = new Memcached;
+        $xm->addServer('localhost', 11211);
+        // The following concatenates the name of the database + the id of the
+        // access url to make it a unique variable prefix for the variables to
+        // be stored
+        $xs = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
+    $result = Database::query($sql);
+    $courses = array();
+    while ($row = Database::fetch_array($result)) {
+        $row['registration_code'] = !empty($row['registration_code']);
+        $count_users = CourseManager::get_users_count_in_course($row['code']);
+        if ($xc) {
+            if ($xm->get($xs.'cccount_'.$row['code'])) {
+                $number = $xm->get($xs.'cccount_'.$row['code']);
+            } else {
+                $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+                $xm->set($xs.'cccount_'.$row['code'], $count_connections_last_month, 3600);
+            }
+        } else {
+            $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+        }
+   ...
+</pre>
 <hr />
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log
@@ -368,6 +401,41 @@ Done! Now your downloads should go substantially faster. This is still a feature
 <h2><a name="#10.igbinary"></a>IGBinary for courses backups and better sessions management</h2>
 <p>
 <a href="http://pecl.php.net/package/igbinary">IGBinary</a> is a small PECL library that replaces the PHP serializer. It uses less space (so less memory for serialized objects) and is particularly efficient with memory-based storages (like Memcached). Use it for course backups (see <a href="https://support.chamilo.org/issues/4443">issue 4443</a>) or <a href="http://www.neanderthal-technology.com/2011/11/ubuntu-10-install-php-memcached-with-igbinary-support/">to boost sessions management</a>.
+</p>
+<h2><a name="#11.permissions-check"></a>Removing files download permissions check</h2>
+<p>
+This measure is not cumulative with mod_xsendfile explained above. It is not *recommended* either, as it removes an important security layer.<br />
+<br />
+In Chamilo, for security and tracking purposes, all downloaded files pass through PHP scripts that check whether the user has access to the file given his/her current permissions. This process requires important database accesses and processing, which might terminally affect your server's performance. In particular, this can have a huge effect if having hundreds of simultaneous users accessing learning paths pages composed of local resources.<br /><br />
+The logic behind this verification is that, whatever resources that needs to be downloaded/viewed that come from the /courses/ directory, the /courses/.htaccess file with get in the middle and redirect these accesses to a PHP script (usually called download.php but there are more than one depending on the type of resource).<br /><br />
+If you want to speed up files accesses and you don't really care about whom can see your files, then an option is to simply remove this redirection to download.php and let Apache treat the file on its own.<br /><br />
+Furthermore, using a PHP script for the download (unless you have special rules) will usually prevent static content caching, which will multiply downloads and use large amount of additional bandwidth.<br /><br />
+Typically, the .htaccess will look like this (with additional comments):<br />
+<pre>
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /courses/
+RewriteCond %{REQUEST_URI} !^/main/
+RewriteRule ([^/]+)/document/(.*)&(.*)$ $1/document/$2///$3 [N]
+RewriteRule ([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
+RewriteRule ([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
+</IfModule>
+</pre><br />
+The idea is to remove the "scorm" line, so you are left with:
+<pre>
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /courses/
+RewriteCond %{REQUEST_URI} !^/main/
+RewriteRule ([^/]+)/document/(.*)&(.*)$ $1/document/$2///$3 [N]
+RewriteRule ([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
+</IfModule>
+</pre><br />
+This is easy, doesn't require a server reload and you should see the results pretty quickly. As mentioned above, if security of your content is an issue, though, you should avoid using this technique.
+</p>
+<p>
 </p>
 <hr />
 <h2>Authors</h2>

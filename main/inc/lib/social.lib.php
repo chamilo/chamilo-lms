@@ -1,32 +1,25 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *    This class provides methods for the social network management.
- *    Include/require it in your code to use its features.
- *
- *    @package chamilo.social
- */
-/**
- * Code
- */
-//PLUGIN PLACES
+// PLUGIN PLACES
 define('SOCIAL_LEFT_PLUGIN', 1);
 define('SOCIAL_CENTER_PLUGIN', 2);
 define('SOCIAL_RIGHT_PLUGIN', 3);
-
 define('CUT_GROUP_NAME', 50);
 
 //This require is necessary because we use constants that need to be loaded before the SocialManager class
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 /**
+ * Class SocialManager
  *
- *    @package chamilo.social
+ * This class provides methods for the social network management.
+ * Include/require it in your code to use its features.
+ *
+ * @package chamilo.social
  */
 class SocialManager extends UserManager
 {
-
     public function __construct()
     {
 
@@ -93,6 +86,7 @@ class SocialManager extends UserManager
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
+
             return $row['id'];
         } else {
             return USER_UNKNOW;
@@ -114,7 +108,8 @@ class SocialManager extends UserManager
         $list_ids_friends = array();
         $tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.' WHERE relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND friend_user_id<>'.((int) $user_id).' AND user_id='.((int) $user_id);
+        $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.'
+                WHERE relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND friend_user_id<>'.((int) $user_id).' AND user_id='.((int) $user_id);
         if (isset($id_group) && $id_group > 0) {
             $sql.=' AND relation_type='.$id_group;
         }
@@ -129,11 +124,18 @@ class SocialManager extends UserManager
             if ($load_extra_info) {
                 $path = UserManager::get_user_picture_path_by_id($row['friend_user_id'], 'web', false, true);
                 $my_user_info = api_get_user_info($row['friend_user_id']);
-                $list_ids_friends[] = array('friend_user_id' => $row['friend_user_id'], 'firstName' => $my_user_info['firstName'], 'lastName' => $my_user_info['lastName'], 'username' => $my_user_info['username'], 'image' => $path['file']);
+                $list_ids_friends[] = array(
+                    'friend_user_id' => $row['friend_user_id'],
+                    'firstName' => $my_user_info['firstName'],
+                    'lastName' => $my_user_info['lastName'],
+                    'username' => $my_user_info['username'],
+                    'image' => $path['file']
+                );
             } else {
                 $list_ids_friends[] = $row;
             }
         }
+
         return $list_ids_friends;
     }
 
@@ -152,9 +154,13 @@ class SocialManager extends UserManager
         if (is_array($list_ids)) {
             foreach ($list_ids as $values_ids) {
                 $list_path_image_friend[] = UserManager::get_user_picture_path_by_id($values_ids['friend_user_id'], 'web', false, true);
-                $combine_friend = array('id_friend' => $list_ids, 'path_friend' => $list_path_image_friend);
+                $combine_friend = array(
+                    'id_friend' => $list_ids,
+                    'path_friend' => $list_path_image_friend
+                );
             }
         }
+
         return $combine_friend;
     }
 
@@ -170,7 +176,12 @@ class SocialManager extends UserManager
         $list_ids = self::get_list_invitation_of_friends_by_user_id((int) $user_id);
         $list_path_image_friend = array();
         foreach ($list_ids as $values_ids) {
-            $list_path_image_friend[] = UserManager::get_user_picture_path_by_id($values_ids['user_sender_id'], 'web', false, true);
+            $list_path_image_friend[] = UserManager::get_user_picture_path_by_id(
+                $values_ids['user_sender_id'],
+                'web',
+                false,
+                true
+            );
         }
         return $list_path_image_friend;
     }
@@ -199,7 +210,8 @@ class SocialManager extends UserManager
 
         $now = api_get_utc_datetime();
 
-        $sql_exist = 'SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status IN(5,6,7);';
+        $sql_exist = 'SELECT COUNT(*) AS count FROM '.$tbl_message.'
+                      WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status IN(5,6,7);';
 
         $res_exist = Database::query($sql_exist);
         $row_exist = Database::fetch_array($res_exist, 'ASSOC');
@@ -212,17 +224,25 @@ class SocialManager extends UserManager
 
             $sender_info = api_get_user_info($user_id);
             $notification = new Notification();
-            $notification->save_notification(Notification::NOTIFICATION_TYPE_INVITATION, array($friend_id), $message_title, $message_content, $sender_info);
+            $notification->save_notification(
+                Notification::NOTIFICATION_TYPE_INVITATION,
+                array($friend_id),
+                $message_title,
+                $message_content,
+                $sender_info
+            );
 
             return true;
         } else {
             //invitation already exist
-            $sql_if_exist = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.' WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7';
+            $sql_if_exist = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.'
+                             WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7';
             $res_if_exist = Database::query($sql_if_exist);
             $row_if_exist = Database::fetch_array($res_if_exist, 'ASSOC');
             if ($row_if_exist['count'] == 1) {
-                $sql_if_exist_up = 'UPDATE '.$tbl_message.'SET msg_status=5, content = "'.$clean_message_content.'"  WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7 ';
-                Database::query($sql_if_exist_up);
+                $sql = 'UPDATE '.$tbl_message.'SET msg_status=5, content = "'.$clean_message_content.'"
+                        WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7 ';
+                Database::query($sql);
                 return true;
             } else {
                 return false;
@@ -239,7 +259,8 @@ class SocialManager extends UserManager
     public static function get_message_number_invitation_by_user_id($user_receiver_id)
     {
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.' WHERE user_receiver_id='.intval($user_receiver_id).' AND msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
+        $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.'
+                WHERE user_receiver_id='.intval($user_receiver_id).' AND msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
         return $row['count_message_in_box'];
@@ -253,12 +274,12 @@ class SocialManager extends UserManager
      */
     public static function get_list_invitation_of_friends_by_user_id($user_id)
     {
-        $list_friend_invitation = array();
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
         $sql = 'SELECT user_sender_id,send_date,title,content
                 FROM '.$tbl_message.'
                 WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
+        $list_friend_invitation = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list_friend_invitation[] = $row;
         }
@@ -349,7 +370,6 @@ class SocialManager extends UserManager
     {
         global $charset;
 
-        $user_info = array();
         $user_info = api_get_user_info($userfriend_id);
         $succes = get_lang('MessageSentTo');
         $succes.= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
@@ -391,7 +411,6 @@ class SocialManager extends UserManager
         if (!function_exists('fetch_rss')) {
             return '';
         }
-        $feeds = array();
         $feed = UserManager::get_extra_user_data_by_field($user, 'rssfeeds');
         if (empty($feed)) {
             return '';
@@ -567,31 +586,31 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Shows the right menu of the Social Network tool
+     * Shows the avatar block in social pages
      *
      * @param string highlight link possible values: group_add, home, messages, messages_inbox, messages_compose ,messages_outbox ,invitations, shared_profile, friends, groups search
      * @param int group id
      * @param int user id
-     * @param bool show profile or not (show or hide the user image/information)
      *
      */
-    public static function show_social_menu($show = '', $group_id = 0, $user_id = 0, $show_full_profile = false, $show_delete_account_button = false)
+    public static function show_social_avatar_block($show = '', $group_id = 0, $user_id = 0)
     {
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
-        $user_info = api_get_user_info($user_id, true);
 
-        $current_user_id = api_get_user_id();
-        $current_user_info = api_get_user_info($current_user_id, true);
-
-        if ($current_user_id == $user_id) {
-            $user_friend_relation = null;
-        } else {
-            $user_friend_relation = SocialManager::get_relation_between_contacts($current_user_id, $user_id);
-        }
-
-        $show_groups = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
+        $show_groups = array(
+            'groups',
+            'group_messages',
+            'messages_list',
+            'group_add',
+            'mygroups',
+            'group_edit',
+            'member_list',
+            'invite_friends',
+            'waiting_list',
+            'browse_groups'
+        );
 
         // get count unread message and total invitations
         $count_unread_message = MessageManager::get_number_of_messages(true);
@@ -602,8 +621,9 @@ class SocialManager extends UserManager
         $group_pending_invitations = count($group_pending_invitations);
         $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
+        $showUserImage = user_is_online($user_id) || api_is_platform_admin();
 
-        $html = '<div class="social-menu">';
+        $html = '<div>';
         if (in_array($show, $show_groups) && !empty($group_id)) {
             //--- Group image
             $group_info = GroupPortalManager::get_group_data($group_id);
@@ -620,7 +640,11 @@ class SocialManager extends UserManager
             $html .= '</div>';
             $html .= '</div>';
         } else {
-            $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
+            if ($showUserImage) {
+                $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
+            } else {
+                $img_array = UserManager::get_user_picture_path_by_id(null, 'web', true, true);
+            }
             $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
             $big_image = $big_image['file'].'?'.uniqid();
             $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
@@ -639,6 +663,78 @@ class SocialManager extends UserManager
             }
             $html .= '</div>';
         }
+        $html .= '</div>';
+        return $html;
+    }
+
+    /**
+     * Shows the right menu of the Social Network tool
+     *
+     * @param string $show highlight link possible values:
+     * group_add,
+     * home,
+     * messages,
+     * messages_inbox,
+     * messages_compose ,
+     * messages_outbox,
+     * invitations,
+     * shared_profile,
+     * friends,
+     * groups search
+     * @param int $group_id group id
+     * @param int $user_id user id
+     * @param bool $show_full_profile show profile or not (show or hide the user image/information)
+     * @param bool $show_delete_account_button
+     *
+     */
+    public static function show_social_menu(
+        $show = '',
+        $group_id = 0,
+        $user_id = 0,
+        $show_full_profile = false,
+        $show_delete_account_button = false
+    ) {
+        if (empty($user_id)) {
+            $user_id = api_get_user_id();
+        }
+        $user_info = api_get_user_info($user_id, true);
+        $current_user_id = api_get_user_id();
+        $current_user_info = api_get_user_info($current_user_id, true);
+
+        if ($current_user_id == $user_id) {
+            $user_friend_relation = null;
+        } else {
+            $user_friend_relation = SocialManager::get_relation_between_contacts($current_user_id, $user_id);
+        }
+
+        $show_groups = array(
+            'groups',
+            'group_messages',
+            'messages_list',
+            'group_add',
+            'mygroups',
+            'group_edit',
+            'member_list',
+            'invite_friends',
+            'waiting_list',
+            'browse_groups'
+        );
+
+        // get count unread message and total invitations
+        $count_unread_message = MessageManager::get_number_of_messages(true);
+        $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
+
+        $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+        $group_pending_invitations = GroupPortalManager::get_groups_by_user(
+            api_get_user_id(),
+            GROUP_USER_PERMISSION_PENDING_INVITATION,
+            false
+        );
+        $group_pending_invitations = count($group_pending_invitations);
+        $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
+        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
+
+        $html = '';
 
         if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends'))) {
 
@@ -672,7 +768,11 @@ class SocialManager extends UserManager
         }
 
         if (in_array($show, $show_groups) && !empty($group_id)) {
-            $html .= GroupPortalManager::show_group_column_information($group_id, api_get_user_id(), $show);
+            $html .= GroupPortalManager::show_group_column_information(
+                $group_id,
+                api_get_user_id(),
+                $show
+            );
         }
 
         if ($show == 'shared_profile') {
@@ -695,14 +795,13 @@ class SocialManager extends UserManager
                 $html .= '<li class="myfiles-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
             }
 
-            // My friend profile
-
+            // My friend profile.
             if ($user_id != api_get_user_id()) {
                 $html .= '<li><a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user_id.'\');" title="'.get_lang('SendMessage').'">';
                 $html .= Display::return_icon('compose_message.png', get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';
             }
 
-            //check if I already sent an invitation message
+            // Check if I already sent an invitation message
             $invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
 
             if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) > 0) {
@@ -713,7 +812,7 @@ class SocialManager extends UserManager
                 }
             }
 
-            //Chat
+            // Chat
             //@todo check if user is online and if it's a friend to show the chat link
             if (api_is_global_chat_enabled()) {
                 $user_name = $user_info['complete_name'];
@@ -724,7 +823,13 @@ class SocialManager extends UserManager
                         if ($current_user_info['user_is_online_in_chat'] == 1) {
                             $options = array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."', '".$user_info['user_is_online_in_chat']."')");
                             $chat_icon = $user_info['user_is_online_in_chat'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
-                            $html .= Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'), 'javascript:void(0);', $options));
+                            $html .= Display::tag('li',
+                                Display::url(
+                                    $chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'),
+                                    'javascript:void(0);',
+                                    $options
+                                )
+                            );
                         }
                     }
                 } else {
@@ -733,7 +838,13 @@ class SocialManager extends UserManager
                             $message = Security::remove_XSS(sprintf(get_lang("YouHaveToAddXAsAFriendFirst"), $user_name));
                             $options = array('onclick' => "javascript:chatNotYetWith('".$message."')");
                             $chat_icon = $user_info['user_is_online_in_chat'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
-                            $html .= Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'), 'javascript:void(0);', $options));
+                            $html .= Display::tag('li',
+                                Display::url(
+                                    $chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'),
+                                    'javascript:void(0);',
+                                    $options
+                                )
+                            );
                         }
                     }
                 }
@@ -789,7 +900,7 @@ class SocialManager extends UserManager
             $html .= Display::url(Display::return_icon('delete.png', get_lang('Unsubscribe'), array(), ICON_SIZE_TINY).get_lang('Unsubscribe'), $url);
             $html .= '</li></ul></div>';
         }
-        $html .= '</div>';
+        $html .= '';
         return $html;
     }
 
@@ -832,7 +943,7 @@ class SocialManager extends UserManager
 
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid);
-            //Anonymous users can't have access to the profile
+            // Anonymous users can't have access to the profile
             if (!api_is_anonymous()) {
                 if (api_get_setting('allow_social_tool') == 'true') {
                     $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
@@ -1000,6 +1111,7 @@ class SocialManager extends UserManager
         $html .= '<div class="well_border">';
         $html .= $content;
         $html .= '</div></div>';
+
         return $html;
     }
 

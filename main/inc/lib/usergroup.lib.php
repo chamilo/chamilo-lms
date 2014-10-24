@@ -1,17 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * This class provides methods for the UserGroup management.
- * Include/require it in your code to use its features.
- * @package chamilo.library
- */
-/**
- * Code
- */
+
 require_once 'model.lib.php';
 
 /**
  * Class UserGroup
+ *
+ * This class provides methods for the UserGroup management.
+ * Include/require it in your code to use its features.
+ * @package chamilo.library
+ *
  */
 class UserGroup extends Model
 {
@@ -749,15 +747,32 @@ class UserGroup extends Model
     /**
      * @param $params
      * @param bool $show_query
-     * @return bool|void
+     * @return bool|int
      */
     public function save($params, $show_query = false)
     {
-        $id = parent::save($params, $show_query);
-        if ($this->useMultipleUrl) {
-            $this->subscribeToUrl($id, api_get_current_access_url_id());
+        $groupExists = $this->usergroup_exists(trim($params['name']));
+        if ($groupExists == false) {
+            $id = parent::save($params, $show_query);
+            if ($this->useMultipleUrl) {
+                $this->subscribeToUrl($id, api_get_current_access_url_id());
+            }
+            return $id;
         }
-        return $id;
+
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function update($params)
+    {
+        $groupExists = $this->usergroup_exists(trim($params['name']));
+        if ($groupExists == false) {
+            return parent::update($params);
+        }
+        return false;
     }
 
     /**
@@ -835,5 +850,24 @@ class UserGroup extends Model
 
         return $response;
     }
+
+    /**
+     * Get user list by usergroup
+     * @param $id
+     * @return array
+     */
+    public function getUserListByUserGroup($id)
+    {
+        $id = intval($id);
+        $sql = "SELECT u.* FROM ".$this->table_user." u
+                INNER JOIN ".$this->usergroup_rel_user_table." c
+                ON c.user_id = u.user_id
+                WHERE c.usergroup_id = $id"
+                ;
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
 }
 /* CREATE TABLE IF NOT EXISTS access_url_rel_usergroup (access_url_id int unsigned NOT NULL, usergroup_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, usergroup_id));*/

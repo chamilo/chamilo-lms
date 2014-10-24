@@ -482,7 +482,7 @@ class AppPlugin
 
                 if (file_exists($plugin_path)) {
                     require $plugin_path;
-                    if (isset($plugin_info) && isset($plugin_info['plugin_class'])) {
+                    if (isset($plugin_info) && isset($plugin_info['plugin_class']) && $obj->isCoursePlugin) {
                         $obj->course_install($courseId);
                     }
                 }
@@ -501,7 +501,21 @@ class AppPlugin
             $plugin_name = $obj->get_name();
             $pluginTitle = $obj->get_title();
             if (!empty($obj->course_settings)) {
-                $icon = Display::return_icon($plugin_name.'.png', Security::remove_XSS($pluginTitle),'', ICON_SIZE_SMALL);
+                if (is_file(api_get_path(SYS_CODE_PATH).'img/icons/'.ICON_SIZE_SMALL.'/'.$plugin_name.'.png')) {
+                    $icon = Display::return_icon(
+                        $plugin_name . '.png',
+                        Security::remove_XSS($pluginTitle),
+                        '',
+                        ICON_SIZE_SMALL
+                    );
+                } else {
+                    $icon = Display::return_icon(
+                        'plugins.png',
+                        Security::remove_XSS($pluginTitle),
+                        '',
+                        ICON_SIZE_SMALL
+                    );
+                }
                 //$icon = null;
                 $form->addElement('html', '<div><h3>'.$icon.' '.Security::remove_XSS($pluginTitle).'</h3><div>');
 

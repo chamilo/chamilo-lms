@@ -175,16 +175,22 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         unset($_user['user_id']);
     }
 
-    //Platform legal terms and conditions
+    // Platform legal terms and conditions
     if (api_get_setting('allow_terms_conditions') == 'true') {
-        if (isset($_POST['login']) && isset($_POST['password']) && isset($_SESSION['term_and_condition']['user_id'])) {
-            $user_id = $_SESSION['term_and_condition']['user_id'];    // user id
+        if (isset($_POST['login']) && isset($_POST['password']) &&
+            isset($_SESSION['term_and_condition']['user_id'])
+        ) {
+            // user id
+            $user_id = $_SESSION['term_and_condition']['user_id'];
             // Update the terms & conditions
             $legal_type = null;
             //verify type of terms and conditions
             if (isset($_POST['legal_info'])) {
                 $info_legal = explode(':', $_POST['legal_info']);
-                $legal_type = LegalManager::get_type_of_terms_and_conditions($info_legal[0], $info_legal[1]);
+                $legal_type = LegalManager::get_type_of_terms_and_conditions(
+                    $info_legal[0],
+                    $info_legal[1]
+                );
             }
 
             //is necessary verify check
@@ -622,9 +628,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 //lookup the user in the main database
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
-                    FROM $user_table
-                    WHERE openid = '$id1'
-                    OR openid = '$id2' ";
+                        FROM $user_table
+                        WHERE openid = '$id1'
+                        OR openid = '$id2' ";
                 $result = Database::query($sql);
                 if ($result !== false) {
                     if (Database::num_rows($result)>0) {
@@ -717,7 +723,9 @@ if (!empty($cDir)) {
 
 // if the requested course is different from the course in session
 
-if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))) {
+if (!empty($cidReq) && (!isset($_SESSION['_cid']) or
+    (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))
+) {
     $cidReset = true;
     $gidReset = true;    // As groups depend from courses, group id is reset
 }
@@ -796,8 +804,8 @@ if (isset($cidReset) && $cidReset) {
         if (!empty($_course)) {
 
             //@TODO real_cid should be cid, for working with numeric course id
-            $_real_cid                      = $_course['real_id'];
-            $_cid                           = $_course['code'];
+            $_real_cid = $_course['real_id'];
+            $_cid = $_course['code'];
 
             Session::write('_real_cid', $_real_cid);
             Session::write('_cid', $_cid);
@@ -853,7 +861,7 @@ if (isset($cidReset) && $cidReset) {
             }
         }
 
-        //Deleting session info
+        // Deleting session info.
         if (api_get_session_id()) {
             Session::erase('id_session');
             Session::erase('session_name');
@@ -880,12 +888,12 @@ if (isset($cidReset) && $cidReset) {
     }
 
     if (empty($_SESSION['_course']) or empty($_SESSION['_cid'])) { //no previous values...
-        $_cid         = -1;        //set default values that will be caracteristic of being unset
-        $_course      = -1;
+        $_cid = -1; // Set default values
+        $_course = -1;
     } else {
 
-        $_cid      = $_SESSION['_cid'   ];
-        $_course   = $_SESSION['_course'];
+        $_cid = $_SESSION['_cid'];
+        $_course = $_SESSION['_course'];
 
         // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
         // Moreover, if we want to track a course with another session it can be usefull
@@ -949,7 +957,7 @@ if (isset($cidReset) && $cidReset) {
                             WHERE   user_id     = ".intval($_user ['user_id'])." AND
                                     course_code = '$course_code' AND
                                     session_id  = ".api_get_session_id()." AND
-                                    login_course_date > now() - INTERVAL $session_lifetime SECOND
+                                    login_course_date > '$time' - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {
@@ -1154,7 +1162,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                         }
                     }
                 }
-
             }
 
             //If I'm the admin platform i'm a teacher of the course

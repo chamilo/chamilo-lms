@@ -1,10 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Code
- */
-/**
-	CLASS MultipleAnswer
+ * Class MultipleAnswer
  *
  *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
  *	extending the class question
@@ -12,16 +9,17 @@
  *	@author Eric Marguin
  *	@package chamilo.exercise
  **/
+class MultipleAnswerCombination extends Question
+{
 
-class MultipleAnswerCombination extends Question {
-
-	static $typePicture = 'mcmac.gif';
+	static $typePicture = 'mcmac.png';
 	static $explanationLangVar = 'MultipleSelectCombination';
 
 	/**
 	 * Constructor
 	 */
-	function MultipleAnswerCombination(){
+	function MultipleAnswerCombination()
+    {
 		parent::question();
 		$this -> type = MULTIPLE_ANSWER_COMBINATION;
 		$this -> isContent = $this-> getIsContent();
@@ -29,10 +27,11 @@ class MultipleAnswerCombination extends Question {
 
 	/**
 	 * function which redifines Question::createAnswersForm
-	 * @param the formvalidator instance
+	 * @param $form FormValidator
 	 * @param the answers number to display
 	 */
-	function createAnswersForm ($form) {
+	function createAnswersForm ($form)
+    {
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 		$obj_ex = $_SESSION['objExercise'];
@@ -54,10 +53,11 @@ class MultipleAnswerCombination extends Question {
 
 		$defaults = array();
 		$correct = 0;
+        $answer = false;
 		if(!empty($this -> id))	{
 			$answer = new Answer($this -> id);
 			$answer -> read();
-			if(count($answer->nbrAnswers)>0 && !$form->isSubmitted()) {
+			if (count($answer->nbrAnswers)>0 && !$form->isSubmitted()) {
 				$nb_answers = $answer->nbrAnswers;
 			}
 		}
@@ -92,7 +92,6 @@ class MultipleAnswerCombination extends Question {
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
-
 
 			$answer_number=$form->addElement('text', 'counter['.$i.']', null,'value="'.$i.'"');
 			$answer_number->freeze();
@@ -131,11 +130,10 @@ class MultipleAnswerCombination extends Question {
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
                 $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');
-
 				// setting the save button here and not in the question class.php
-
 			}
 		}
+
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}&nbsp;','moreAnswers');
@@ -157,8 +155,8 @@ class MultipleAnswerCombination extends Question {
 	 * @param the formvalidator instance
 	 * @param the answers number to display
 	 */
-	function processAnswersCreation($form) {
-
+	function processAnswersCreation($form)
+    {
 		$questionWeighting = $nbrGoodAnswers = 0;
 
 		$objAnswer = new Answer($this->id);
@@ -197,7 +195,8 @@ class MultipleAnswerCombination extends Question {
         $this -> save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null) {
+	function return_header($feedback_type = null, $counter = null, $score = null)
+    {
 	    $header = parent::return_header($feedback_type, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>

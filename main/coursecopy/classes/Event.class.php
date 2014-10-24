@@ -1,15 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+require_once 'Resource.class.php';
+
 /**
  * Event backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
-require_once 'Resource.class.php';
-/**
- * An event
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
@@ -62,19 +57,19 @@ class Event extends Resource
 	 */
 	function Event($id, $title, $content, $start_date, $end_date, $attachment_path = null, $attachment_filename= null, $attachment_size= null, $attachment_comment= null, $all_day = 0) {
 		parent::Resource($id,RESOURCE_EVENT);
-		
+
 		$this->title 				= $title;
 		$this->content 				= $content;
 		$this->start_date 			= $start_date;
 		$this->end_date 			= $end_date;
         $this->all_day              = $all_day;
-		
+
 		$this->attachment_path 		= $attachment_path;
 		$this->attachment_filename	= $attachment_filename;
 		$this->attachment_size		= $attachment_size;
-		$this->attachment_comment	= $attachment_comment;		
+		$this->attachment_comment	= $attachment_comment;
 	}
-    
+
 	/**
 	 * Show this Event
 	 */

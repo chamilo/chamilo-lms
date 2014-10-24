@@ -34,12 +34,18 @@ $interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmi
 $interbreadcrumb[] = array('url' => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" => get_lang('SessionOverview'));
 
-list($year_start,$month_start,$day_start)   = explode('-', $infos['date_start']);
-list($year_end,$month_end,$day_end)         = explode('-', $infos['date_end']);
+list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
+list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
 
-$showDescriptionChecked = null;
-if (isset($infos['show_description']) && !empty($infos['show_description'])) {
-    $showDescriptionChecked = 'checked';
+// Default value
+$showDescriptionChecked = 'checked';
+
+if (isset($infos['show_description'])) {
+    if (!empty($infos['show_description'])) {
+        $showDescriptionChecked = 'checked';
+    } else {
+        $showDescriptionChecked = null;
+    }
 }
 
 $end_year_disabled = $end_month_disabled = $end_day_disabled = '';
@@ -348,7 +354,11 @@ if (!empty($return)) {
             <?php echo get_lang('SessionVisibility') ?> <br />
             <select name="session_visibility" style="width:250px;">
                 <?php
-                $visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
+                $visibility_list = array(
+                    SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
+                    SESSION_VISIBLE => get_lang('SessionAccessible'),
+                    SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible'))
+                );
                 foreach($visibility_list as $key=>$item): ?>
                 <option value="<?php echo $key; ?>" <?php if($key == $infos['visibility']) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
                 <?php endforeach; ?>

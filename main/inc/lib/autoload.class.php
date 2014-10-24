@@ -115,6 +115,7 @@ class Autoload
         $result['Controller'] = '/main/inc/lib/controller.class.php';
         $result['Converter'] = '/main/inc/lib/system/text/converter.class.php';
         $result['Course'] = '/main/coursecopy/classes/Course.class.php';
+        $result['CoursesAndSessionsCatalog'] = '/main/inc/lib/CoursesAndSessionsCatalog.class.php';
         $result['CourseArchiver'] = '/main/coursecopy/classes/CourseArchiver.class.php';
         $result['CourseBuilder'] = '/main/coursecopy/classes/CourseBuilder.class.php';
         $result['CourseCopyLearnpath'] = '/main/coursecopy/classes/CourseCopyLearnpath.class.php';
@@ -819,7 +820,8 @@ class Autoload
         $result['ScoreDisplayForm'] = '/main/gradebook/lib/fe/scoredisplayform.class.php';
         $result['ScormDocument'] = '/main/coursecopy/classes/ScormDocument.class.php';
         $result['Security'] = '/main/inc/lib/security.lib.php';
-        $result['SessionHandler'] = '/main/inc/lib/session_handler.class.php';
+        $result['SessionHandlerDatabase'] = '/main/inc/lib/session_handler.class.php';
+        $result['SessionHandlerMemcache'] = '/main/inc/lib/session_handler_memcache.class.php';
         $result['SessionManager'] = '/main/inc/lib/sessionmanager.lib.php';
         $result['Shibboleth\Admin'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Shibboleth\AdminStore'] = '/main/auth/shibboleth/app/model/admin.class.php';
@@ -927,6 +929,8 @@ class Autoload
         $result['Utf8'] = '/main/inc/lib/system/text/utf8.class.php';
         $result['Utf8Decoder'] = '/main/inc/lib/system/text/utf8_decoder.class.php';
         $result['Utf8Encoder'] = '/main/inc/lib/system/text/utf8_encoder.class.php';
+        $result['WebService'] = '/main/inc/lib/webservices/WebService.class.php';
+        $result['MessagesWebService'] = '/main/inc/lib/webservices/MessagesWebService.class.php';
         $result['Wiki'] = '/main/coursecopy/classes/wiki.class.php';
         $result['Work\Access'] = '/main/work/access.class.php';
         $result['Work\AjaxController'] = '/main/work/ajax_controller.class.php';

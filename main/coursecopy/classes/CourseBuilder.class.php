@@ -82,7 +82,6 @@ class CourseBuilder
         $this->course->path         = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
         $this->course->backup_path  = api_get_path(SYS_COURSE_PATH).$_course['path'];
         $this->course->encoding     = api_get_system_encoding(); //current platform encoding
-  
         $this->course->db_name      = $_course['dbName'];
         $this->course->info         = $_course;
     }
@@ -977,11 +976,13 @@ class CourseBuilder
             $this->course->add_resource($lp);
         }
 
-        //save scorm directory (previously build_scorm_documents())
+        // Save scorm directory (previously build_scorm_documents())
         $i = 1;
-        if ($dir=@opendir($this->course->backup_path.'/scorm')) {
-            while($file=readdir($dir)) {
-                if(is_dir($this->course->backup_path.'/scorm/'.$file) && !in_array($file,array('.','..'))) {
+        if ($dir = @opendir($this->course->backup_path . '/scorm')) {
+            while ($file = readdir($dir)) {
+                if (is_dir($this->course->backup_path.'/scorm/'.$file) &&
+                    !in_array($file, array('.','..'))
+                ) {
                     $doc = new ScormDocument($i++, '/'.$file, $file);
                     $this->course->add_resource($doc);
                 }

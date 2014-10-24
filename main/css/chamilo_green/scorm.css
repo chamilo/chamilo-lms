@@ -142,23 +142,8 @@
     font-weight:normal;
     color:#fff;
     text-shadow:none;
-    background: #a0c400; /* Old browsers */
-    background: -moz-linear-gradient(top, #a0c400 0%, #73a000 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a0c400), color-stop(100%,#73a000)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #a0c400 0%,#73a000 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #a0c400 0%,#73a000 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #a0c400 0%,#73a000 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #a0c400 0%,#73a000 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a0c400', endColorstr='#73a000',GradientType=0 ); /* IE6-9 */
-    margin-right: 1px;
     padding: 10px 0px 10px 0px;
     text-decoration: none;
-    -webkit-border-top-left-radius: 10px;
-    -webkit-border-top-right-radius: 10px;
-    -moz-border-radius-topleft: 10px;
-    -moz-border-radius-topright: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
 }
 
 .inner_lp_toc .scorm_item {
@@ -362,7 +347,7 @@ opacity: 0.7;
 .scorm_item_1,
 .scorm_item_2 {
     font-size: 16px;
-    margin-left: 10px;
+    margin-left: 0;
     margin-right:10px;
     text-decoration: none;
     border-color: rgba(255, 255, 255, 0.3);
@@ -370,7 +355,6 @@ opacity: 0.7;
 .scorm_item_1 {
     border-bottom: 1px solid #CCCCCC;
     color:#444;
-    text-shadow:0 1px 1px #f6f6f6;
     background: none;
     margin-right: 1px;
     padding: 10px 0px 10px 0px;
@@ -378,7 +362,6 @@ opacity: 0.7;
 .scorm_item_2 {
     border-bottom: 1px solid #CCCCCC;
     color: #444444;
-    text-shadow: 0 1px 1px #F6F6F6;
     margin-right: 1px;
     padding: 10px 0px 10px 0px;
     background-image:none;

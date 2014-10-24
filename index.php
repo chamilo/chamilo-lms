@@ -5,9 +5,7 @@
  * @package chamilo.main
  */
 
-
 use \ChamiloSession as Session;
-
 define('CHAMILO_HOMEPAGE', true);
 
 $language_file = array('courses', 'index', 'userInfo');
@@ -19,6 +17,9 @@ $cidReset = true;
 require_once 'main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 require_once 'main/chat/chat_functions.lib.php';
+
+// Set cookie for check if client browser are cookies enabled
+setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
 
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
@@ -41,9 +42,6 @@ $htmlHeadXtra[] ='
         });
     });
 </script>';
-
-//set cookie for check if client browser are cookies enabled
-setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
 
 $controller = new IndexManager($header_title);
 

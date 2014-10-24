@@ -96,39 +96,31 @@ switch ($action) {
         }
         break;
     case 'delete':
-        $idChecked = $_GET['idChecked'];
+        // Delete course from session.
+        $idChecked = isset($_GET['idChecked']) ? $_GET['idChecked'] : null;
         if (is_array($idChecked)) {
-            $my_temp = array();
-            foreach ($idChecked as $id){
-                $my_temp[]= Database::escape_string($id);// forcing the escape_string
+            $usersToDelete = array();
+            foreach ($idChecked as $courseCode) {
+                // forcing the escape_string
+                $courseInfo = api_get_course_info($courseCode);
+                SessionManager::unsubscribe_course_from_session(
+                    $id_session,
+                    $courseInfo['real_id']
+                );
             }
-            $idChecked = $my_temp;
-
-            $idChecked="'".implode("','",$idChecked)."'";
-
-            Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
-            $nbr_affected_rows=Database::affected_rows();
-
-            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
-            Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
         }
 
-        if (!empty($_GET['class'])){
+        if (!empty($_GET['class'])) {
             Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
             $nbr_affected_rows=Database::affected_rows();
             Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
         }
 
         if (!empty($_GET['user'])) {
-            Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND id_session='$id_session' AND id_user=".intval($_GET['user']));
-            $nbr_affected_rows=Database::affected_rows();
-
-            Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
-
-            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
-            $nbr_affected_rows=Database::affected_rows();
-
-            Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'");
+            SessionManager::unsubscribe_user_from_session(
+                $id_session,
+                $_GET['user']
+            );
         }
         break;
 }
@@ -230,10 +222,22 @@ if ($multiple_url_is_on) {
     echo '</td>';
     echo '<td>';
     $url_list = UrlManager::get_access_url_from_session($id_session);
-    foreach($url_list as $url_data) {
+    foreach ($url_list as $url_data) {
         echo $url_data['url'].'<br />';
     }
     echo '</td></tr>';
+}
+
+if (SessionManager::durationPerUserIsEnabled()) {
+    $sessionInfo = api_get_session_info($id_session);
+    echo '<tr><td>';
+    echo get_lang('Duration');
+    echo '</td>';
+    echo '<td>';
+    echo $sessionInfo['duration'].' ';
+    echo get_lang('Days');
+    echo '</td></tr>';
+
 }
 ?>
 </table>
@@ -387,11 +391,8 @@ $url .= Display::url(
     "session_user_import.php?id_session=$id_session"
 );
 echo Display::page_subheader(get_lang('UserList').$url);
-
 ?>
-
 <!--List of users -->
-
 <table class="data_table">
     <tr>
         <th>
@@ -444,15 +445,28 @@ if ($session['nbr_users']==0) {
                 $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
             }
         }
+
+        $editUrl = null;
+        if (SessionManager::durationPerUserIsEnabled()) {
+            if (isset($sessionInfo['duration']) && !empty($sessionInfo['duration'])) {
+                $editUrl = api_get_path(WEB_CODE_PATH) . 'admin/session_user_edit.php?session_id=' . $id_session . '&user_id=' . $user['user_id'];
+                $editUrl = Display::url(
+                    Display::return_icon('agenda.png', get_lang('SessionDurationEdit')),
+                    $editUrl
+                );
+            }
+        }
 		echo '<tr>
-                <td width="90%">
+                <td width="80%">
                     '.$user_link.'
                 </td>
                 <td>
+                    '.$editUrl.'
                     <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
                     <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
                     <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
                     '.$link_to_add_user_in_url.'
+
                 </td>
                 </tr>';
 	}
@@ -460,11 +474,16 @@ if ($session['nbr_users']==0) {
 ?>
 </table>
 <?php
-// footer
+
 Display :: display_footer();
 
 /*
  ALTER TABLE session_rel_course ADD COLUMN position int;
  ALTER TABLE session_rel_course ADD COLUMN category varchar(255);
+
+ https://task.beeznest.com/issues/8317:
+
+ ALTER TABLE session ADD COLUMN duration int;
+ ALTER TABLE session_rel_user ADD COLUMN duration int;
  *
 */

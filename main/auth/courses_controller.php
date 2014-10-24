@@ -4,13 +4,11 @@
  * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
  * @author Christian Fasanando <christian1827@gmail.com> - BeezNest
  * @package chamilo.auth
+ *
+ * Class CoursesController
  */
-/**
- * Code
- * @package chamilo.auth
- */
-class CoursesController { // extends Controller {
-
+class CoursesController
+{
     private $toolname;
     private $view;
     private $model;
@@ -18,7 +16,8 @@ class CoursesController { // extends Controller {
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->toolname = 'auth';
         $actived_theme_path = api_get_template();
         $this->view = new View($this->toolname, $actived_theme_path);
@@ -31,7 +30,8 @@ class CoursesController { // extends Controller {
      * @param string   	action
      * @param string    confirmation message(optional)
      */
-    public function courses_list($action, $message = '') {
+    public function courses_list($action, $message = '')
+    {
         $data = array();
         $user_id = api_get_user_id();
 
@@ -39,9 +39,7 @@ class CoursesController { // extends Controller {
         $data['user_course_categories']   = $this->model->get_user_course_categories();
         $data['courses_in_category']      = $this->model->get_courses_in_category();
         $data['all_user_categories']      = $this->model->get_user_course_categories();
-
         $data['action'] = $action;
-
         $data['message'] = $message;
 
         // render to the view
@@ -59,7 +57,8 @@ class CoursesController { // extends Controller {
      * @param string    confirmation message(optional)
      * @param string    error message(optional)
      */
-    public function categories_list($action, $message='', $error='') {
+    public function categories_list($action, $message='', $error='')
+    {
         $data = array();
         $data['user_course_categories'] = $this->model->get_user_course_categories();
         $data['action'] = $action;
@@ -76,20 +75,34 @@ class CoursesController { // extends Controller {
     /**
      * It's used for listing courses with categories,
      * render to courses_categories view
-     * @param string   	action
-     * @param string    Category code (optional)
+     * @param $action
+     * @param string $category_code
+     * @param string $message
+     * @param string $error
+     * @param string $content
+     * @param array $limit will be used if $random_value is not set.
+     * This array should contains 'start' and 'length' keys
+     * @internal param \action $string
+     * @internal param \Category $string code (optional)
      */
-    public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null) {
+    public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null, $limit = array())
+    {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();
 
+        global $_configuration;
+
+        $data['countCoursesInCategory'] = $this->model->count_courses_in_category($category_code);
         if ($action == 'display_random_courses') {
+            // Random value is used instead limit filter
             $data['browse_courses_in_category'] = $this->model->browse_courses_in_category(null, 10);
+            $data['countCoursesInCategory'] = count($data['browse_courses_in_category']);
         } else {
             if (!isset($category_code)) {
                 $category_code = $browse_course_categories[0][1]['code']; // by default first category
             }
-            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code);
+            $limit = isset($limit) ? $limit : getLimitArray();
+            $data['browse_courses_in_category'] = $this->model->browse_courses_in_category($category_code, null, $limit);
         }
 
         $data['browse_course_categories'] = $browse_course_categories;
@@ -119,6 +132,12 @@ class CoursesController { // extends Controller {
         $data['message']          = $message;
         $data['content']          = $content;
         $data['error']            = $error;
+        
+        $data['catalogShowCoursesSessions'] = 0;
+        
+        if (isset($_configuration['catalog_show_courses_sessions'])) {
+            $data['catalogShowCoursesSessions'] = $_configuration['catalog_show_courses_sessions'];
+        }
 
         // render to the view
         $this->view->set_data($data);
@@ -128,19 +147,20 @@ class CoursesController { // extends Controller {
     }
 
     /**
-     *
      * @param string $search_term
      * @param string $message
      * @param string $error
      * @param string $content
+     * @param $limit
      */
-    public function search_courses($search_term, $message = '', $error = '', $content = null) {
-
+    public function search_courses($search_term, $message = '', $error = '', $content = null, $limit = array())
+    {
         $data = array();
+        $limit = !empty($limit) ? $limit : getLimitArray();
 
         $browse_course_categories = $this->model->browse_course_categories();
-
-        $data['browse_courses_in_category'] = $this->model->search_courses($search_term);
+        $data['countCoursesInCategory'] = $this->model->count_courses_in_category('ALL', $search_term);
+        $data['browse_courses_in_category'] = $this->model->search_courses($search_term, $limit);
         $data['browse_course_categories']   = $browse_course_categories;
 
         $data['search_term'] = Security::remove_XSS($search_term); //filter before showing in template
@@ -204,11 +224,15 @@ class CoursesController { // extends Controller {
      * render to listing view
      * @param   string  Category title
      */
-    public function add_course_category($category_title) {
+    public function add_course_category($category_title)
+    {
         $result = $this->model->store_course_category($category_title);
         $message = '';
-        if ($result) { $message = get_lang("CourseCategoryStored"); }
-        else { $error = get_lang('ACourseCategoryWithThisNameAlreadyExists');}
+        if ($result) {
+            $message = get_lang("CourseCategoryStored");
+        } else {
+            $error = get_lang('ACourseCategoryWithThisNameAlreadyExists');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -219,10 +243,13 @@ class CoursesController { // extends Controller {
      * @param string    Course code
      * @param int    Category id
      */
-    public function change_course_category($course_code, $category_id) {
+    public function change_course_category($course_code, $category_id)
+    {
         $result = $this->model->store_changecoursecategory($course_code, $category_id);
         $message = '';
-        if ($result) { $message = get_lang('EditCourseCategorySucces'); }
+        if ($result) {
+            $message = get_lang('EditCourseCategorySucces');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -234,10 +261,13 @@ class CoursesController { // extends Controller {
      * @param string    Course code
      * @param int    Category id
      */
-    public function move_course($move, $course_code, $category_id) {
+    public function move_course($move, $course_code, $category_id)
+    {
         $result = $this->model->move_course($move, $course_code, $category_id);
         $message = '';
-        if ($result) { $message = get_lang('CourseSortingDone'); }
+        if ($result) {
+            $message = get_lang('CourseSortingDone');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -248,10 +278,13 @@ class CoursesController { // extends Controller {
      * @param string    move to up or down
      * @param int    Category id
      */
-    public function move_category($move, $category_id) {
+    public function move_category($move, $category_id)
+    {
         $result = $this->model->move_category($move, $category_id);
         $message = '';
-        if ($result) { $message = get_lang('CategorySortingDone'); }
+        if ($result) {
+            $message = get_lang('CategorySortingDone');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -262,10 +295,13 @@ class CoursesController { // extends Controller {
      * @param string Category title
      * @param int    Category id
      */
-    public function edit_course_category($title, $category) {
+    public function edit_course_category($title, $category)
+    {
         $result = $this->model->store_edit_course_category($title, $category);
         $message = '';
-        if ($result) { $message = get_lang('CourseCategoryEditStored'); }
+        if ($result) {
+            $message = get_lang('CourseCategoryEditStored');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -275,10 +311,13 @@ class CoursesController { // extends Controller {
      * render to listing view
      * @param int    Category id
      */
-    public function delete_course_category($category_id) {
+    public function delete_course_category($category_id)
+    {
         $result = $this->model->delete_course_category($category_id);
         $message = '';
-        if ($result) { $message = get_lang('CourseCategoryDeleted'); }
+        if ($result) {
+            $message = get_lang('CourseCategoryDeleted');
+        }
         $action = 'sortmycourses';
         $this->courses_list($action, $message);
     }
@@ -288,10 +327,13 @@ class CoursesController { // extends Controller {
      * render to listing view
      * @param string    Course code
      */
-    public function unsubscribe_user_from_course($course_code, $search_term = null, $category_code = null) {
+    public function unsubscribe_user_from_course($course_code, $search_term = null, $category_code = null)
+    {
         $result = $this->model->remove_user_from_course($course_code);
         $message = '';
-        if ($result) { $message = get_lang('YouAreNowUnsubscribed'); }
+        if ($result) {
+            $message = get_lang('YouAreNowUnsubscribed');
+        }
         $action = 'sortmycourses';
         if (!empty($search_term)) {
             $this->search_courses($search_term, $message, $error);
@@ -299,4 +341,248 @@ class CoursesController { // extends Controller {
             $this->courses_categories('subcribe', $category_code, $message, $error);
         }
     }
+
+    /**
+     * Get the html block for courses categories
+     * @param string $code Current category code
+     * @param boolean $hiddenLinks Whether hidden links
+     * @param array $limit
+     * @return string The HTML block
+     */
+    public function getCoursesCategoriesBlock($code = null, $hiddenLinks = false, $limit = null)
+    {
+        $categories = $this->model->browse_course_categories();
+
+        $html = '';
+
+        if (!empty($categories)) {
+            $action = 'display_courses';
+            foreach ($categories[0] as $category) {
+                $categoryName = $category['name'];
+                $categoryCode = $category['code'];
+                $categoryCourses = $category['count_courses'];
+
+                $html .= '<li>';
+
+                if ($code == $categoryCode) {
+                    $html .= '<strong>';
+                    $html .= "$categoryName ($categoryCourses)";
+                    $html .= '</strong>';
+                } else {
+                    if (!empty($categoryCourses)) {
+                        $html .= '<a href="' . getCourseCategoryUrl(
+                                1,
+                                $limit['length'],
+                                $categoryCode,
+                                $hiddenLinks,
+                                $action
+                            ) . '">';
+                        $html .= "$categoryName ($categoryCourses)";
+                        $html .= '</a>';
+                    } else {
+                        $html .= "$categoryName ($categoryCourses)";
+                    }
+                }
+
+                if (!empty($categories[$categoryCode])) {
+                    $html .= '<ul class="nav nav-list">';
+
+                    foreach ($categories[$categoryCode] as $subCategory1) {
+                        $subCategory1Name = $subCategory1['name'];
+                        $subCategory1Code = $subCategory1['code'];
+                        $subCategory1Courses = $subCategory1['count_courses'];
+
+                        $html .= '<li>';
+
+                        if ($code == $subCategory1Code) {
+                            $html .= "<strong>$subCategory1Name ($subCategory1Courses)</strong>";
+                        } else {
+                            $html .= '<a href="' . getCourseCategoryUrl(
+                                    1,
+                                    $limit['length'],
+                                    $categoryCode,
+                                    $hiddenLinks,
+                                    $action
+                                ) . '">';
+                            $html .= "$subCategory1Name ($subCategory1Courses)";
+                            $html .= '</a>';
+                        }
+
+                        if (!empty($categories[$subCategory1Code])) {
+                            $html .= '<ul class="nav nav-list">';
+
+                            foreach ($categories[$subCategory1Code] as $subCategory2) {
+                                $subCategory2Name = $subCategory2['name'];
+                                $subCategory2Code = $subCategory2['code'];
+                                $subCategory2Courses = $subCategory2['count_courses'];
+
+                                $html .= '<li>';
+
+                                if ($code == $subCategory2Code) {
+                                    $html .= "<strong>$subCategory2Name ($subCategory2Courses)</strong>";
+                                } else {
+                                    $html .= '<a href="' . getCourseCategoryUrl(
+                                            1,
+                                            $limit['length'],
+                                            $categoryCode,
+                                            $hiddenLinks,
+                                            $action
+                                        ) . '">';
+                                    $html .= "$subCategory2Name ($subCategory2Courses)";
+                                    $html .= '</a>';
+                                }
+
+                                if (!empty($categories[$subCategory2Code])) {
+                                    $html .= '<ul class="nav nav-list">';
+
+                                    foreach ($categories[$subCategory2Code] as $subCategory3) {
+                                        $subCategory3Name = $subCategory3['name'];
+                                        $subCategory3Code = $subCategory3['code'];
+                                        $subCategory3Courses = $subCategory3['count_courses'];
+
+                                        $html .= '<li>';
+
+                                        if ($code == $subCategory3Code) {
+                                            $html .= "<strong>$subCategory3Name ($subCategory3Courses)</strong>";
+                                        } else {
+                                            $html .= '<a href="' . getCourseCategoryUrl(
+                                                    1,
+                                                    $limit['length'],
+                                                    $categoryCode,
+                                                    $hiddenLinks,
+                                                    $action
+                                                ) . '">';
+                                            $html .= "$subCategory3Name ($subCategory3Courses)";
+                                            $html .= '</a>';
+                                        }
+
+                                        $html .= '</li>';
+                                    }
+
+                                    $html .= '</ul>';
+                                }
+
+                                $html .= '</li>';
+                            }
+
+                            $html .= '</ul>';
+                        }
+
+                        $html .= '</li>';
+                    }
+
+                    $html .= '</ul>';
+                }
+
+                $html .= '</li>';
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * Get a HTML button for subscribe to session
+     * @param string $sessionName The session name
+     * @return string The button
+     */
+    public function getRegisterInSessionButton($sessionName)
+    {
+        $sessionName = urlencode($sessionName);
+
+        $url = api_get_path(WEB_PATH) . "main/inc/email_editor.php?action=subscribe_me_to_session&session=$sessionName";
+
+        return Display::url(get_lang('Subscribe'), $url, array(
+                    'class' => 'btn btn-large btn-primary',
+        ));
+    }
+
+    /**
+     * Generate a label if the user has been  registered in session
+     * @return string The label
+     */
+    public function getAlreadyRegisterInSessionLabel()
+    {
+        $icon = Display::return_icon('students.gif', get_lang('Student'));
+
+        return Display::label($icon . ' ' . get_lang("AlreadyRegisteredToSession"), "info");
+    }
+
+    /**
+     * Get a icon for a session
+     * @param string $sessionName The session name
+     * @return string The icon
+     */
+    public function getSessionIcon($sessionName)
+    {
+        return Display::return_icon('window_list.png', $sessionName, null, ICON_SIZE_BIG);
+    }
+
+    /**
+     * Return Session Catalogue rendered view
+     * @param string $action
+     * @param string $nameTools
+     * @param array $limit
+     */
+    public function sessionsList($action, $nameTools, $limit = array())
+    {
+        $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
+        $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
+
+        $limit = isset($limit) ? $limit : getLimitArray();
+
+        $countSessions = $this->model->countSessions($date);
+        $sessions = $this->model->browseSessions($date, $limit);
+
+        $pageTotal = intval(ceil(intval($countSessions) / $limit['length']));
+        // Do NOT show pagination if only one page or less
+        $cataloguePagination = $pageTotal > 1 ?
+            getCataloguePagination($limit['current'], $limit['length'], $pageTotal) :
+            '';
+        $sessionsBlocks = array();
+
+        // Get session list catalogue URL
+        $sessionUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'display_sessions');
+        // Get session search catalogue URL
+        $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
+
+        foreach ($sessions as $session) {
+            $sessionsBlocks[] = array(
+                'id' => $session['id'],
+                'name' => $session['name'],
+                'nbr_courses' => $session['nbr_courses'],
+                'nbr_users' => $session['nbr_users'],
+                'coach_name' => $session['coach_name'],
+                'is_subscribed' => $session['is_subscribed'],
+                'icon' => $this->getSessionIcon($session['name']),
+                'date' => SessionManager::getSessionFormattedDate($session),
+                'subscribe_button' => $this->getRegisterInSessionButton($session['name'])
+            );
+        }
+
+        $tpl = new Template();
+        $tpl->assign('action', $action);
+        $tpl->assign('showCourses', CoursesAndSessionsCatalog::showCourses());
+        $tpl->assign('showSessions', CoursesAndSessionsCatalog::showSessions());
+        $tpl->assign('api_get_self', api_get_self());
+        $tpl->assign('sessionUrl', $sessionUrl);
+        $tpl->assign('courseUrl', $courseUrl);
+        $tpl->assign('nameTools', $nameTools);
+
+        $tpl->assign('coursesCategoriesList', $this->getCoursesCategoriesBlock(null, false, $limit));
+        $tpl->assign('cataloguePagination', $cataloguePagination);
+
+        $tpl->assign('hiddenLinks', $hiddenLinks);
+        $tpl->assign('searchToken', Security::get_token());
+
+        $tpl->assign('searchDate', $date);
+        $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');
+        $tpl->assign('sessions_blocks', $sessionsBlocks);
+        $tpl->assign('already_subscribed_label', $this->getAlreadyRegisterInSessionLabel());
+
+        $contentTemplate = $tpl->get_template('auth/sessions_catalog.tpl');
+
+        $tpl->display($contentTemplate);
+    }
+
 }

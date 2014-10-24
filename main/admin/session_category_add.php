@@ -31,7 +31,7 @@ $interbreadcrumb[]=array('url' => "session_category_list.php","name" => get_lang
 $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent=1;
 	$name= $_POST['name'];
 	$year_start= $_POST['year_start'];
@@ -233,4 +233,4 @@ function setDisable(select) {
 </script>
 <?php
 Display::display_footer();
-?>
+

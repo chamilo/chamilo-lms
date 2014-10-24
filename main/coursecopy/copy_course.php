@@ -42,12 +42,22 @@ $this_section = SECTION_COURSES;
 Display::display_header(get_lang('CopyCourse'));
 echo Display::page_header(get_lang('CopyCourse'));
 
-/*	MAIN CODE */
+/* MAIN CODE */
 
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
-if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
+if (Security::check_token('post') && (
+        (
+            isset($_POST['action']) &&
+            $_POST['action'] == 'course_select_form') || (
+                isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy'
+        )
+    )
+) {
+    // Clear token
+    Security::clear_token();
+
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
-        $course = CourseSelectForm::get_posted_course('copy_course');
+        $course = CourseSelectForm :: get_posted_course('copy_course');
     } else {
         $cb = new CourseBuilder();
         $course = $cb->build();
@@ -56,7 +66,14 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     $cr->set_file_option($_POST['same_file_name_option']);
     $cr->restore($_POST['destination_course']);
     Display::display_normal_message(get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.$_POST['destination_course'].'</a>', false);
-} elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
+} elseif (Security::check_token('post') && (
+        isset ($_POST['copy_option']) &&
+        $_POST['copy_option'] == 'select_items'
+    )
+) {
+    // Clear token
+    Security::clear_token();
+
     $cb = new CourseBuilder();
     $course = $cb->build();
     $hidden_fields = array();
@@ -104,8 +121,14 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         $form->add_progress_bar();
         $form->addElement('style_submit_button', 'submit', get_lang('CopyCourse'), 'class="save"');
         $form->setDefaults(array('copy_option' =>'select_items','same_file_name_option' => FILE_OVERWRITE));
+
+        // Add Security token
+        $token = Security::get_token();
+        $form->addElement('hidden', 'sec_token');
+        $form->setConstants(array('sec_token' => $token));
+
         $form->display();
-	}
+    }
 }
 
 Display::display_footer();

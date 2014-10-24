@@ -32,14 +32,13 @@ $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('Sessi
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 
 // Database Table Definitions
-$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToSession');
-
 $add_type = 'unique';
 
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
@@ -48,7 +47,7 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
 
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
-//checking for extra field with filter on
+// Checking for extra field with filter on
 
 $extra_field_list = UserManager::get_extra_fields();
 
@@ -57,20 +56,25 @@ if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
         //if is enabled to filter and is a "<select>" field type
         if ($extra_field[8]==1 && $extra_field[2]==4) {
-            $new_field_list[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
+            $new_field_list[] = array(
+                'name'=> $extra_field[3],
+                'variable'=>$extra_field[1],
+                'data'=> $extra_field[9]
+            );
         }
     }
 }
 
 function search_users($needle, $type)
 {
-    global $tbl_user,$tbl_session_rel_user,$id_session;
+    global $tbl_user, $tbl_session_rel_user, $id_session;
+
     $xajax_response = new XajaxResponse();
     $return = '';
 
     if (!empty($needle) && !empty($type)) {
 
-        //normal behaviour
+        // Normal behaviour
         if ($type == 'any_session' && $needle == 'false') {
             $type = 'multiple';
             $needle = '';
@@ -82,9 +86,20 @@ function search_users($needle, $type)
         $needle = api_convert_encoding($needle, $charset, 'utf-8');
 
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+
+
+        $showOfficialCode = false;
+        global $_configuration;
+        if (isset($_configuration['order_user_list_by_official_code']) &&
+            $_configuration['order_user_list_by_official_code']
+        ) {
+            $showOfficialCode = true;
+            $order_clause = ' ORDER BY official_code, firstname, lastname, username';
+        }
+
         $cond_user_id = '';
 
-        //Only for single & multiple
+        // Only for single & multiple
         if (in_array($type, array('single','multiple')))
         if (!empty($id_session)) {
             $id_session = intval($id_session);
@@ -108,10 +123,14 @@ function search_users($needle, $type)
                 // search users where username or firstname or lastname begins likes $needle
                 $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
-                        WHERE (username LIKE "'.$needle.'%" OR firstname LIKE "'.$needle.'%"
-                            OR lastname LIKE "'.$needle.'%") AND user.status<>6 AND user.status<>'.DRH.''.
-                            $order_clause.
-                            ' LIMIT 11';
+                        WHERE
+                            (
+                                username LIKE "'.$needle.'%" OR
+                                firstname LIKE "'.$needle.'%" OR
+                                lastname LIKE "'.$needle.'%"
+                            ) AND user.status<>6 AND user.status<>'.DRH.''.
+                        $order_clause.'
+                        LIMIT 11';
                 break;
             case 'multiple':
                 $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
@@ -123,8 +142,10 @@ function search_users($needle, $type)
                 $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
                         LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.id_user = user.user_id)
-                        WHERE   s.id_user IS null AND user.status<>'.DRH.' AND
-                                user.status<>6 '.$cond_user_id.
+                        WHERE
+                            s.id_user IS null AND
+                            user.status<>'.DRH.' AND
+                            user.status<>6 '.$cond_user_id.
                         $order_clause;
                 break;
         }
@@ -138,21 +159,26 @@ function search_users($needle, $type)
                         $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
                         INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-                        WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
-                        OR firstname LIKE "'.$needle.'%"
-                        OR lastname LIKE "'.$needle.'%") AND user.status<>6 AND user.status<>'.DRH.' '.
+                        WHERE
+                            access_url_id = '.$access_url_id.' AND
+                            (
+                                username LIKE "'.$needle.'%" OR
+                                firstname LIKE "'.$needle.'%" OR
+                                lastname LIKE "'.$needle.'%"
+                            ) AND user.status<>6 AND user.status<>'.DRH.' '.
                         $order_clause.
                         ' LIMIT 11';
                         break;
                     case 'multiple':
-                        $sql = 'SELECT user.user_id, username, lastname, firstname , official_code
-                        FROM '.$tbl_user.' user
-                        INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-                        WHERE access_url_id = '.$access_url_id.' AND
-                            '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND
-                                user.status<>'.DRH.' AND
-                                user.status<>6 '.$cond_user_id.
-                        $order_clause;
+                        $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
+                                FROM '.$tbl_user.' user
+                                INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                                WHERE
+                                    access_url_id = '.$access_url_id.' AND
+                                    '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND
+                                    user.status<>'.DRH.' AND
+                                    user.status<>6 '.$cond_user_id.
+                                $order_clause;
                         break;
                     case 'any_session' :
                         $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname, official_code
@@ -164,7 +190,7 @@ function search_users($needle, $type)
                                 s.id_user IS null AND
                                 user.status<>'.DRH.' AND
                                 user.status<>6 '.$cond_user_id.
-                        $order_clause;
+                            $order_clause;
                         break;
                 }
             }
@@ -177,6 +203,11 @@ function search_users($needle, $type)
                 $i++;
                 if ($i<=10) {
                     $person_name = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') '.$user['official_code'];
+                    if ($showOfficialCode) {
+                        $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
+                        $person_name = $officialCode.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+                    }
+
                     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['user_id'].'\',\''.$person_name.' '.'\')">'.$person_name.' </a><br />';
                 } else {
                     $return .= '...<br />';
@@ -188,7 +219,13 @@ function search_users($needle, $type)
             global $nosessionUsersList;
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
             while ($user = Database :: fetch_array($rs)) {
+
                 $person_name = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') '.$user['official_code'];
+                if ($showOfficialCode) {
+                    $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
+                    $person_name = $officialCode.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+                }
+
 	            $return .= '<option value="'.$user['user_id'].'">'.$person_name.' </option>';
 			}
 			$return .= '</select>';
@@ -275,17 +312,28 @@ $session_info = SessionManager::fetch($id_session);
 Display::display_header($tool_name);
 
 $nosessionUsersList = $sessionUsersList = array();
-
+$where_filter = null;
 $ajax_search = $add_type == 'unique' ? true : false;
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+
+$showOfficialCode = false;
+global $_configuration;
+if (isset($_configuration['order_user_list_by_official_code']) &&
+    $_configuration['order_user_list_by_official_code']
+) {
+    $showOfficialCode = true;
+    $order_clause = ' ORDER BY official_code, firstname, lastname, username';
+}
+
 if ($ajax_search) {
     $sql = "SELECT user_id, lastname, firstname, username, id_session, official_code
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
                 ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 AND $tbl_session_rel_user.id_session = ".intval($id_session)."
-            WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
+            WHERE u.status<>".DRH." AND u.status<>6
+            $order_clause";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -296,7 +344,7 @@ if ($ajax_search) {
             INNER JOIN $tbl_session_rel_user
                 ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 AND $tbl_session_rel_user.id_session = ".intval($id_session)."
-                INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+            INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
             WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
             $order_clause";
         }
@@ -337,7 +385,6 @@ if ($ajax_search) {
             $final_result = $extra_field_result[0];
         }
 
-        $where_filter ='';
         if (api_is_multiple_url_enabled()) {
             if (is_array($final_result) && count($final_result)>0) {
                 $where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
@@ -532,7 +579,14 @@ if (!empty($errorMsg)) {
               foreach ($nosessionUsersList as $uid => $enreg) {
               ?>
                   <option value="<?php echo $uid; ?>" <?php if(in_array($uid,$UserList)) echo 'selected="selected"'; ?>>
-                      <?php echo api_get_person_name($enreg['fn'], $enreg['ln']).' ('.$enreg['un'].') '.$enreg['official_code']; ?>
+                      <?php
+                      $personName = api_get_person_name($enreg['fn'], $enreg['ln']).' ('.$enreg['un'].') '.$enreg['official_code'];
+                      if ($showOfficialCode) {
+                          $officialCode = !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
+                          $personName = $officialCode.api_get_person_name($enreg['fn'], $enreg['ln']).' ('.$enreg['un'].')';
+                      }
+                      echo $personName;
+                      ?>
                   </option>
               <?php
               }
@@ -586,7 +640,14 @@ if (!empty($errorMsg)) {
         foreach ($sessionUsersList as $enreg) {
         ?>
             <option value="<?php echo $enreg['user_id']; ?>">
-                <?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].') '.$enreg['official_code']; ?>
+            <?php
+                $personName = api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].') '.$enreg['official_code'];
+                if ($showOfficialCode) {
+                    $officialCode = !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
+                    $personName = $officialCode.api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')';
+                }
+                echo $personName;
+            ?>
             </option>
         <?php
         }

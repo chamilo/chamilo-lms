@@ -710,7 +710,7 @@ class AnnouncementManager
      */
     public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
     {
-        echo '<select name="not_selected_form[]" size="7" class="span4" multiple>';
+        echo '<select id="not_selected_form" name="not_selected_form[]" size="7" class="span4" multiple>';
         // adding the groups to the select form
         if ($group_list) {
             foreach ($group_list as $this_group) {
@@ -1197,7 +1197,7 @@ class AnnouncementManager
 
     /**
      * This function delete a attachment file by id
-     * @param integer attachment file Id
+     * @param integer $id attachment file Id
      *
      */
     public static function delete_announcement_attachment_file($id)
@@ -1209,9 +1209,13 @@ class AnnouncementManager
         Database::query($sql);
     }
 
-    public static function send_email($annoucement_id, $sendToUsersInSession = false)
+    /**
+     * @param int $id
+     * @param bool $sendToUsersInSession
+     */
+    public static function send_email($id, $sendToUsersInSession = false)
     {
-        $email = AnnouncementEmail::create(null, $annoucement_id);
+        $email = AnnouncementEmail::create(null, $id);
         $email->send($sendToUsersInSession);
     }
 }

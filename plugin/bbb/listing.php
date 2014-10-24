@@ -16,7 +16,7 @@ $tpl = new Template($tool_name);
 $bbb = new bbb();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$teacher = $bbb->is_teacher();
+$teacher = $bbb->isTeacher();
 
 api_protect_course_script(true);
 $message = null;
@@ -47,7 +47,7 @@ if ($teacher) {
             }
             break;
         case 'copy_record_to_link_tool':
-            $result = $bbb->copy_record_to_link_tool($_GET['id'], $_GET['record_id']);
+            $result = $bbb->copyRecordToLinkTool($_GET['id']);
             if ($result) {
                 $message = Display::return_message(get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
             } else {
@@ -55,7 +55,7 @@ if ($teacher) {
             }
             break;
         case 'delete_record':
-            $bbb->delete_record($_GET['id']);
+            $bbb->deleteRecord($_GET['id']);
             if ($result) {
                 $message = Display::return_message(get_lang('Deleted'), 'success');
             } else {
@@ -63,7 +63,7 @@ if ($teacher) {
             }
             break;
         case 'end':
-            $bbb->end_meeting($_GET['id']);
+            $bbb->endMeeting($_GET['id']);
             $message = Display::return_message(
                 get_lang('MeetingClosed') . '<br />' . get_lang(
                     'MeetingClosedComment'
@@ -88,23 +88,23 @@ if ($teacher) {
 
             break;
         case 'publish':
-            //$result = $bbb->publish_meeting($_GET['id']);
+            $result = $bbb->publishMeeting($_GET['id']);
             break;
         case 'unpublish':
-            //$result = $bbb->unpublish_meeting($_GET['id']);
+            $result = $bbb->unpublishMeeting($_GET['id']);
             break;
         default:
             break;
     }
 }
 
-$meetings = $bbb->get_course_meetings();
+$meetings = $bbb->getCourseMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
-$users_online   = $bbb->get_users_online_in_current_room();
-$status         = $bbb->is_server_running();
-$meeting_exists = $bbb->meeting_exists(api_get_course_id().'-'.api_get_session_id());
+$users_online   = $bbb->getUsersOnlineInCurrentRoom();
+$status         = $bbb->isServerRunning();
+$meeting_exists = $bbb->meetingExists(api_get_course_id().'-'.api_get_session_id());
 $show_join_button = false;
 if ($meeting_exists || $teacher) {
     $show_join_button = true;
@@ -112,8 +112,8 @@ if ($meeting_exists || $teacher) {
 
 $tpl->assign('allow_to_edit', $teacher);
 $tpl->assign('meetings', $meetings);
-$conference_url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?launch=1&'.api_get_cidreq();
-$tpl->assign('conference_url', $conference_url);
+$conferenceUrl = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?launch=1&'.api_get_cidreq();
+$tpl->assign('conference_url', $conferenceUrl);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $show_join_button);

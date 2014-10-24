@@ -1638,7 +1638,7 @@ $FacebookMainActivateComment = "Zuerst muß eine Facebook Anwendung erstellt wer
 <br /><br />
 Danach die Datei
 <br /><br />
-<strong>main/auth/external_login/facebook.conf.php</strong>
+<strong>main/inc/conf/auth.conf.php</strong>
 <br /><br />
 öffnen und 'appId' und 'secret' für \$facebook_config aus der FB-Anwendung einfügen.
 Anschließend zu den <a href=\"/settings.php?category=Facebook\">Plugins</a> wechseln und 'Facebook Login' Button für die Plattform aktivieren.";

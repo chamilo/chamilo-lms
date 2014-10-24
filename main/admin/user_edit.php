@@ -23,7 +23,6 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = '
 <script>
-
 var is_platform_id = "'.$is_platform_admin.'";
 
 <!--
@@ -89,8 +88,8 @@ $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 $sql = "SELECT u.*, a.user_id AS is_admin FROM $table_user u LEFT JOIN $table_admin a ON a.user_id = u.user_id WHERE u.user_id = '".$user_id."'";
 $res = Database::query($sql);
 if (Database::num_rows($res) != 1) {
-	header('Location: user_list.php');
-	exit;
+    header('Location: user_list.php');
+    exit;
 }
 
 $user_data = Database::fetch_array($res, 'ASSOC');
@@ -180,25 +179,25 @@ if (api_get_setting('login_is_email') != 'true') {
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
 $nb_ext_auth_source_added = 0;
-if (isset($extAuthSource) && count($extAuthSource) > 0) {
-	$auth_sources = array();
-	foreach ($extAuthSource as $key => $info) {
-	    // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
-	    // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
-	    // extAuthSource always on for CAS even if not activated
-	    // same action for file user_add.php
-	    if (($key == CAS_AUTH_SOURCE && api_get_setting('cas_activate') === 'true') || ($key != CAS_AUTH_SOURCE)) {
-    		$auth_sources[$key] = $key;
-    		$nb_ext_auth_source_added++;
-	    }
-	}
-	if ($nb_ext_auth_source_added > 0) {
-	    // @todo check the radio button for external authentification and select the external authentification in the menu
-	    $group[] =$form->createElement('radio', 'reset_password', null, get_lang('ExternalAuthentication').' ', 3);
-	    $group[] =$form->createElement('select', 'auth_source', null, $auth_sources);
-	    $group[] =$form->createElement('static', '', '', '<br />');
-	    $form->addGroup($group, 'password', null, '', false);
-	}
+if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
+    $auth_sources = array();
+    foreach ($extAuthSource as $key => $info) {
+        // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
+        // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
+        // extAuthSource always on for CAS even if not activated
+        // same action for file user_add.php
+        if (($key == CAS_AUTH_SOURCE && api_get_setting('cas_activate') === 'true') || ($key != CAS_AUTH_SOURCE)) {
+            $auth_sources[$key] = $key;
+            $nb_ext_auth_source_added++;
+        }
+    }
+    if ($nb_ext_auth_source_added > 0) {
+        // @todo check the radio button for external authentification and select the external authentification in the menu
+        $group[] = $form->createElement('radio', 'reset_password', null, get_lang('ExternalAuthentication').' ', 3);
+        $group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
+        $group[] = $form->createElement('static', '', '', '<br />');
+        $form->addGroup($group, 'password', null, '', false);
+    }
 }
 $form->addElement('radio', 'reset_password', null, get_lang('AutoGeneratePassword'), 1);
 $group = array();
@@ -252,8 +251,8 @@ $form->addElement('select_language', 'language', get_lang('Language'));
 
 // Send email
 $group = array();
-$group[] =$form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
-$group[] =$form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
+$group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
+$group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
 
 // Registration User and Date

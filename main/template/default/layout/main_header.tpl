@@ -4,7 +4,9 @@
 <!--[if IE 8]>    <html lang="{{ document_language }}" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--><html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
+{% block head %}
 {% include "default/layout/head.tpl" %}
+{% endblock %}
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
 <noscript>{{ "NoJavascript"|get_lang }}</noscript>
@@ -16,56 +18,60 @@
             <li><a href="#content" accesskey="2">{{ "WCAGGoContent"|get_lang }}</a></li>
         </ul>
     </div>
-
     <div id="wrapper">
     <div id="page" class="page-section"> <!-- page section -->
         {# Bug and help notifications #}
+        {% block help_notifications %}
         <ul id="navigation" class="notification-panel">
             {{ help_content }}
             {{ bug_notification_link }}
         </ul>
+        {% endblock %}
 
         {# topbar #}
+        {% block topbar %}
         {% include "default/layout/topbar.tpl" %}
+        {% endblock %}
 
         <div id="main" class="container">
-          <header>
-            <div class="row">
-                <div id="header_left" class="span4">
-                    {# logo #}
-                    {{ logo }}
+            <header>
+                <div class="row">
+                    <div id="header_left" class="span4">
+                        {# logo #}
+                        {% block logo %}
+                        {{ logo }}
+                        {% endblock %}
 
-                    {# plugin_header left #}
-                    {% if plugin_header_left is not null %}
-                        <div id="plugin_header_left">
-                            {{ plugin_header_left }}
-                        </div>
-                    {% endif %}
-                </div>
-                <div id="header_center" class="span3">
-                    {# plugin_header center #}
-                    {% if plugin_header_center is not null %}
-                        <div id="plugin_header_center">
-                            {{ plugin_header_center }}
-                        </div>
-                    {% endif %}
-                    &nbsp;
-                </div>
-                <div id="header_right" class="span5">
-                    <ul id="notifications" class="nav nav-pills pull-right">
-                        {{ notification_menu }}
-                    </ul>
-
-                    {# plugin_header right #}
-                    {% if plugin_header_right is not null %}
+                        {# plugin_header left #}
+                        {% if plugin_header_left is not null %}
+                            <div id="plugin_header_left">
+                                {{ plugin_header_left }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div id="header_center" class="span3">
+                        {# plugin_header center #}
+                        {% if plugin_header_center is not null %}
+                            <div id="plugin_header_center">
+                                {{ plugin_header_center }}
+                            </div>
+                        {% endif %}
+                        &nbsp;
+                    </div>
+                    <div id="header_right" class="span5">
+                        {# plugin_header right #}
+                        {% if plugin_header_right is not null %}
                         <div id="plugin_header_right">
                             {{ plugin_header_right }}
                         </div>
-                    {% endif %}
-                    &nbsp;
+                        {% endif %}
+                        <div class="section-notifications">
+                            <ul id="notifications" class="nav nav-pills pull-right">
+                            {{ notification_menu }}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
             {% if plugin_header_main %}
                 <div class="row">
                     <div class="span12">
@@ -75,12 +81,17 @@
                     </div>
                 </div>
             {% endif %}
-            {# menu #}
-            {% include "default/layout/menu.tpl" %}
-            {# breadcrumb #}
-            {{ breadcrumb }}
-        </header>
 
+            {# menu #}
+            {% block menu %}
+            {% include "default/layout/menu.tpl" %}
+            {% endblock %}
+
+            {# breadcrumb #}
+            {% block breadcrumb %}
+            {{ breadcrumb }}
+            {% endblock %}
+        </header>
         <div id="top_main_content" class="row">
 
         {# course navigation links/shortcuts need to be activated by the admin #}

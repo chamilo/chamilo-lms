@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This script displays a form for registering new users.
- *	@package	 chamilo.auth
+ *  This script displays a form for registering new users.
+ *  @package    chamilo.auth
  */
 
 use \ChamiloSession as Session;
@@ -51,11 +51,11 @@ if (!empty($course_code_redirect)) {
 if ($user_already_registered_show_terms == false) {
 
     if (api_is_western_name_order()) {
-        //	FIRST NAME and LAST NAME
+        // FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
         $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
     } else {
-        //	LAST NAME and FIRST NAME
+        // LAST NAME and FIRST NAME
         $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
     }
@@ -63,7 +63,7 @@ if ($user_already_registered_show_terms == false) {
     $form->addRule('lastname',  get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
-    //	EMAIL
+    // EMAIL
     $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
     if (api_get_setting('registration', 'email') == 'true') {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
@@ -83,14 +83,14 @@ if ($user_already_registered_show_terms == false) {
         $form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
     }
     // Enabled by Ivan Tcholakov, 06-APR-2009. CONFVAL_ASK_FOR_OFFICIAL_CODE = false by default.
-    //	OFFICIAL CODE
+    // OFFICIAL CODE
     if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
         $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
         if (api_get_setting('registration', 'officialcode') == 'true')
             $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
     }
 
-    //	USERNAME
+    // USERNAME
     if (api_get_setting('login_is_email') != 'true') {
         $form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'size' => USERNAME_MAX_LENGTH));
         $form->applyFilter('username','trim');
@@ -100,7 +100,7 @@ if ($user_already_registered_show_terms == false) {
         $form->addRule('username', get_lang('UserTaken'), 'username_available');
     }
 
-    //	PASSWORD
+    // PASSWORD
     $form->addElement('password', 'pass1', get_lang('Pass'), array('id' => 'pass1', 'size' => 20, 'autocomplete' => 'off'));
 
     if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
@@ -115,7 +115,7 @@ if ($user_already_registered_show_terms == false) {
     if (CHECK_PASS_EASY_TO_FIND)
         $form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
 
-    //	PHONE
+    // PHONE
     $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
     if (api_get_setting('registration', 'phone') == 'true')
         $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
@@ -127,11 +127,11 @@ if ($user_already_registered_show_terms == false) {
         $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
     }*/
 
-    //	LANGUAGE
+    // LANGUAGE
     if (api_get_setting('registration', 'language') == 'true') {
         $form->addElement('select_language', 'language', get_lang('Language'));
     }
-    //	STUDENT/TEACHER
+    // STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
         $form->addElement('radio', 'status', get_lang('Profile'), get_lang('RegStudent'), STUDENT);
         $form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
@@ -165,7 +165,7 @@ if ($user_already_registered_show_terms == false) {
         $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
     }
 
-    //	EXTENDED FIELDS
+    // EXTENDED FIELDS
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
         $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
     }
@@ -358,6 +358,23 @@ if ($form->validate()) {
         $is_admin = UserManager::is_admin($user_id);
         Session::write('is_platformAdmin', $is_admin);
     } else {
+        // Moved here to include extra fields when creating a user. Formerly placed after user creation
+        // Register extra fields
+        $extras = array();
+        foreach ($values as $key => $value) {
+            if (substr($key, 0, 6) == 'extra_') {
+                //an extra field
+                $extras[substr($key, 6)] = $value;
+            } elseif (strpos($key, 'remove_extra_') !== false) {
+                $extra_value = Security::filter_filename(urldecode(key($value)));
+                // To remove from user_field_value and folder
+                UserManager::update_extra_field_value(
+                    $user_id,
+                    substr($key,13),
+                    $extra_value
+                );
+            }
+        }
 
         // Creates a new user
         $user_id = UserManager::create_user(
@@ -375,27 +392,10 @@ if ($form->validate()) {
             null,
             1,
             0,
-            null,
+            $extras,
             null,
             true
         );
-
-        // Register extra fields
-        $extras = array();
-        foreach ($values as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') {
-                //an extra field
-                $extras[substr($key, 6)] = $value;
-            } elseif (strpos($key, 'remove_extra_') !== false) {
-                $extra_value = Security::filter_filename(urldecode(key($value)));
-                // To remove from user_field_value and folder
-                UserManager::update_extra_field_value(
-                    $user_id,
-                    substr($key,13),
-                    $extra_value
-                );
-            }
-        }
 
         //update the extra fields
         $count_extra_field = count($extras);
@@ -485,26 +485,26 @@ if ($form->validate()) {
                 Database::query($sql);
 
                 // 2. Send mail to all platform admin
-                $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
-                $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
-                $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
+                $emailsubject  = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
+                $emailbody = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
+                $emailbody .= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
 
                 if (api_is_western_name_order()) {
-                    $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
-                    $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
+                    $emailbody .= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
+                    $emailbody .= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
                 } else {
-                    $emailbody	.= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
-                    $emailbody	.= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
+                    $emailbody .= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
+                    $emailbody .= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
                 }
-                $emailbody		.= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
-                $emailbody		.= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
+                $emailbody .= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
+                $emailbody .= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
 
                 $url_edit = Display::url(
                     api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id,
                     api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
                 );
 
-                $emailbody		.= get_lang('ManageUser',null,$values['language']).": $url_edit";
+                $emailbody .= get_lang('ManageUser',null,$values['language']).": $url_edit";
 
                 $admins = UserManager::get_all_administrators();
                 foreach ($admins as $admin_info) {
@@ -551,10 +551,10 @@ if ($form->validate()) {
     /* SESSION REGISTERING */
     /* @todo move this in a function */
     $_user['firstName'] = stripslashes($values['firstname']);
-    $_user['lastName'] 	= stripslashes($values['lastname']);
-    $_user['mail'] 		= $values['email'];
-    $_user['language'] 	= $values['language'];
-    $_user['user_id']	= $user_id;
+    $_user['lastName'] = stripslashes($values['lastname']);
+    $_user['mail'] = $values['email'];
+    $_user['language'] = $values['language'];
+    $_user['user_id'] = $user_id;
     $is_allowedCreateCourse = $values['status'] == 1;
     $usersCanCreateCourse = (api_get_setting('allow_users_to_create_courses') == 'true');
 

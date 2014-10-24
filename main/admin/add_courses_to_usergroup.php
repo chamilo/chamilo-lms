@@ -39,8 +39,7 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 $add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script>
+$htmlHeadXtra[] = '<script>
 function add_user_to_session (code, content) {
     document.getElementById("user_to_add").value = "";
     document.getElementById("ajax_list_users_single").innerHTML = "";

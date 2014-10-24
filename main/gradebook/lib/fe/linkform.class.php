@@ -76,6 +76,7 @@ class LinkForm extends FormValidator
 		$select = $this->addElement('select', 'select_link', get_lang('ChooseLink'), null, array('onchange' => 'document.create_link.submit()'));
 
 		$linkTypes = LinkFactory::get_all_types();
+
 		$select->addoption('['.get_lang('ChooseLink').']', 0);
 
 		$courseCode = $this->category_object->get_course_code();

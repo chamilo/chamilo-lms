@@ -52,10 +52,8 @@ require_once('language.php');
 		}?>
 			<form id="lostpassword-form" class="form" action="lostPassword.php" method="post">
 				<div>
-        <label for="user">*<?php echo custompages_get_lang('UserName');?></label>
+                    <label for="user">*<?php echo custompages_get_lang('LoginOrEmailAddress');?></label>
 					<input name="user" type="text" /><br />
-          <label for="email">*<?php echo custompages_get_lang('Email');?></label>
-					<input name="email" type="text" /><br />
 				</div>
 			</form>
 			<div id="lostpassword-form-submit" class="form-submit" onclick="document.forms['lostpassword-form'].submit();">

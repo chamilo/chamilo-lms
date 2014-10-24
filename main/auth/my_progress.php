@@ -22,7 +22,6 @@ $nameTools = get_lang('MyProgress');
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.5.js');
-
 $htmlHeadXtra[] = '
 <script language="javascript">
 $(function() {
@@ -48,7 +47,6 @@ $(function() {
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
 $user_id = api_get_user_id();
-
 $course_user_list = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
 
@@ -74,13 +72,17 @@ if (!empty($course_user_list)) {
                         <div class="row">
                             <div class="span2"><div class="thumbnail">'.$course_image.'</div>
                         </div>
-                        <div class="span3">'.sprintf(get_lang('YouHaveEnteredTheCourseXInY'), $result['course_code'], api_convert_and_format_date($login, DATE_FORMAT_LONG)).'</div>
+                        <div class="span3">'.sprintf(
+                            get_lang('YouHaveEnteredTheCourseXInY'),
+                            $result['course_code'],
+                            api_convert_and_format_date($login, DATE_FORMAT_LONG)
+                        ).'</div>
                     </li>';
         $count++;
     }
 }
 
-$content .= Tracking::show_user_progress(api_get_user_id());
+$content .= Tracking::show_user_progress(api_get_user_id(), $_GET['session_id']);
 $content .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
 
 if (!empty($dates)) {
@@ -88,13 +90,11 @@ if (!empty($dates)) {
         $content .= '<br /><br />';
     }
     $content .= '<div class="row"><div class="span12">'.Display::page_subheader(get_lang('Timeline')).'</div>';
-
     $content .= '<div id="my_timeline">
         <div class="actions">
             <a href="#" id="prev"></a> <!-- optional -->
             <a href="#" id="next"></a> <!-- optional -->
         </div>
-
     <ul id="dates">
         '.$dates.'
     </ul>

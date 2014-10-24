@@ -159,12 +159,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                             $changeable = 1;
                         }
 
-                        $params = array('variable = ?' =>  array($key));
+                        $params = array('variable = ?' => array($key));
                         $data = api_get_settings_params($params);
 
                         if (!empty($data)) {
                             foreach ($data as $item) {
-                                $params = array('id' =>$item['id'], 'access_url_changeable' => $changeable);
+                                $params = array('id' => $item['id'], 'access_url_changeable' => $changeable);
                                 api_set_setting_simple($params);
                             }
                         }
@@ -443,7 +443,7 @@ if (!empty($_GET['category'])) {
         case 'Plugins':
             // Displaying the extensions: Plugins.
             // This will be available to all the sites (access_urls).
-            $securityToken = Security::remove_XSS($_GET['sec_token']);
+            $securityToken = isset($_GET['sec_token']) ? Security::remove_XSS($_GET['sec_token']) : null;
             if (isset($_POST['submit_dashboard_plugins']) && Security::check_token($securityToken)) {
                 Security::clear_token();
                 $affected_rows = DashboardManager::store_dashboard_plugins($_POST);

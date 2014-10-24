@@ -1,14 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 require_once('Resource.class.php');
-/**
- * Wiki backup script
- * @package chamilo.backup
- */
+
 /**
  * Class for migrating the wiki
- *
- *@author Matthias Crauwels <matthias.crauwels@UGent.be>, Ghent University
+ * Wiki backup script
+ * @package chamilo.backup
+ * @author Matthias Crauwels <matthias.crauwels@UGent.be>, Ghent University
  */
 class Wiki extends Resource
 {
@@ -19,7 +17,7 @@ class Wiki extends Resource
 	var $content;
 	var $user_id;
 	var $group_id;
-	var $timestamp;	
+	var $timestamp;
 	var $progress;
 	var $version;
 

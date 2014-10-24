@@ -1,10 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Code
- */
-/**
-	CLASS MultipleAnswer
+ * 	Class MultipleAnswer
  *
  *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
  *	extending the class question
@@ -14,7 +11,7 @@
  **/
 class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
 {
-	static $typePicture = 'mcmaco.gif';
+	static $typePicture = 'mcmaco.png';
 	static $explanationLangVar = 'MultipleAnswerCombinationTrueFalse';
     var    $options;
 

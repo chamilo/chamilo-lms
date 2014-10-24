@@ -18,8 +18,54 @@
         </div>
 
         <br/><br/>
-
         <div class="well_border span8">
+        {% if isSession == "YES" %}
+            <div class="row">
+                <div class="span4">
+                    <div class="categories-course-description">
+                        <h3>{{ title }}</h3>
+                        <h5>{{ 'From'|get_lang }} {{ session.date_start }} {{ 'To'|get_lang }} {{ session.date_end }}</h5>
+                    </div>
+                </div>
+                <div class="span right">
+                    <div class="sprice right">
+                        {{ session.price }} {{ currency }}
+                    </div>
+                    <div class="cleared"></div>
+                </div>
+            </div>
+            {% for course in session.courses %}
+                <div class="row">
+                    <div class="span">
+                        <div class="thumbnail">
+                            <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
+                                <img alt="" src="{{ server }}{{ course.course_img }}">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <div class="categories-course-description">
+                            <h3>{{ course.title }}</h3>
+                            <h5>{{ 'Teacher'|get_lang }}: {{ course.teacher }}</h5>
+                        </div>
+                        {% if course.enrolled == "YES" %}
+                            <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                        {% endif %}
+                        {% if course.enrolled == "TMP" %}
+                            <span class="label label-warning">{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="span right">
+                        <div class="cleared"></div>
+                        <div class="btn-toolbar right">
+                            <a class="ajax btn btn-primary" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
+                                {{ 'Description'|get_lang }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
             <div class="row">
                 <div class="span">
                     <div class="thumbnail">
@@ -45,6 +91,7 @@
                     </div>
                 </div>
             </div>
+        {% endif %}
         </div>
     </div>
     <div class="cleared"></div>

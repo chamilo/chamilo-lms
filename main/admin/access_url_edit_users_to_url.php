@@ -24,6 +24,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_global_admin_script();
+
 if (!api_get_multiple_access_url()) {
     header('Location: index.php');
     exit;
@@ -52,8 +53,7 @@ if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id'] != '') {
 
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_user_to_url(code, content) {
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users").innerHTML = "";

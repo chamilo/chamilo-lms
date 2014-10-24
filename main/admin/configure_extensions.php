@@ -26,7 +26,7 @@ if (isset($_POST['activeExtension'])) {
 					WHERE variable="service_visio"
 					AND subkey="active"';
 			$rs = Database::query($sql);
-			if(Database::affected_rows()>0) {
+			if (Database::affected_rows($rs)>0) {
 				// select all the courses and insert the tool inside
 				$sql = 'SELECT id FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
 				$rs = Database::query($sql);
@@ -105,7 +105,7 @@ if (isset($_POST['activeExtension'])) {
 
 			$rs = Database::query($sql);
 
-			if(Database::affected_rows()>0){
+			if (Database::affected_rows($rs)>0){
 				$message = get_lang('ServiceActivated');
 			}
 
@@ -441,8 +441,7 @@ Display::display_header($nameTool);
 	</div>
 	*/
     /*
-	
-    
+   
 	<!-- SEARCH -->
 	<div id="main_search">
 		<div id="extension_header_search" class="accordion_header">

@@ -73,7 +73,7 @@ if (api_is_allowed_to_edit()) {
 	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
 	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
 }
-$courseCode = $_GET['cidReq'];
+$courseCode = isset($_GET['cidReq']) ? $_GET['cidReq'] : null;
 $surveyAnonymous = survey_manager::get_survey($survey_id, 0, $courseCode);
 $surveyAnonymous = $surveyAnonymous['anonymous'];
 if ($surveyAnonymous == 0 && api_is_anonymous()) {
@@ -215,7 +215,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 
 	if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
         if ($show == 0) {
-            echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'   </button>';    
+            echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'   </button>';
         } else {
 		    echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'   </button>';
         }

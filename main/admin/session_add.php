@@ -95,7 +95,7 @@ function fill_coach_field (username) {
 </script>';
 
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent = 1;
     $name = $_POST['name'];
     $year_start = $_POST['year_start'];
@@ -145,8 +145,14 @@ if ($_POST['formSent']) {
 	}
 }
 
-$nb_days_acess_before = 0;
-$nb_days_acess_after = 0;
+global $_configuration;
+$defaultBeforeDays = isset($_configuration['session_days_before_coach_access']) ?
+    $_configuration['session_days_before_coach_access'] : 0;
+$defaultAfterDays = isset($_configuration['session_days_after_coach_access'])
+    ? $_configuration['session_days_after_coach_access'] : 0;
+
+$nb_days_acess_before = $defaultBeforeDays;
+$nb_days_acess_after = $defaultAfterDays;
 
 $thisYear=date('Y');
 $thisMonth=date('m');
@@ -221,9 +227,6 @@ $Categories = SessionManager::get_all_session_category();
 ?>
         </div>
     </div>
-
-
-
     <div class="control-group">
         <label class="control-label">
             <?php echo get_lang('SessionCategory') ?>
@@ -388,7 +391,6 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
   </select>
   /
   <select name="year_end">
-
 <?php
 for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 ?>
@@ -401,13 +403,16 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
     <?php echo get_lang('SessionVisibility') ?>
     <select name="session_visibility" style="width:250px;">
         <?php
-        $visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('SessionReadOnly'), SESSION_VISIBLE=>get_lang('SessionAccessible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('SessionNotAccessible')));
+        $visibility_list = array(
+            SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
+            SESSION_VISIBLE => get_lang('SessionAccessible'),
+            SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible'))
+        );
         foreach($visibility_list as $key=>$item): ?>
-        <option value="<?php echo $key; ?>" <?php if($item == $visibility_id) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
+        <option value="<?php echo $key; ?>"><?php echo $item; ?></option>
         <?php endforeach; ?>
     </select>
      </div>
-
         </div>
     </div>
 

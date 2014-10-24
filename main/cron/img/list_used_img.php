@@ -93,7 +93,7 @@ function get_all_php_files($base_path) {
         	if (in_array($ext,array('.php','html','.htm','.css'))) {
                   $files[] = $base_path.$item;
         	}
-        } 
+        }
     }
     $list = null;
     return $files;

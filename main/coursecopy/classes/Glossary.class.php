@@ -1,12 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Glossary backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
 
 /**
@@ -28,20 +22,20 @@ class Glossary extends Resource
 	 * @param string $description
 	 * @param int $display_order
 	 */
-	function Glossary($id,$name,$description,$display_order)
+    public function Glossary($id,$name,$description,$display_order)
 	{
 		parent::Resource($id,RESOURCE_GLOSSARY);
 		$this->glossary_id = $id;
 		$this->name = $name;
 		$this->description = $description;
 		$this->display_order = $display_order;
-
-
 	}
+
 	/**
 	 * Show this glossary
 	 */
-	function show() {
+	public function show()
+    {
 		parent::show();
 		echo $this->name;
 	}

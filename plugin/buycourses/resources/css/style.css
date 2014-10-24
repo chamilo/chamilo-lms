@@ -1,0 +1,117 @@
+.thumbnail .caption{
+	text-align: center;
+}
+.cleared {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+}
+table .bg-color{
+	background-color: #E5EDF9;
+	color: #333;
+}
+table td.ta-center, table th.ta-center {
+    text-align: center;
+}
+
+#courses_table td, #transfer_table td, #order_table td {
+    vertical-align: middle;
+}
+
+#courses_table td input.price, #transfer_table td input, #currency_type {
+    margin: 0;
+}
+
+#courses_table td.btop {
+    border-top: 1px solid #C5DEEB;
+    border-bottom: 1px solid #C5DEEB;
+}
+
+#courses_table tr.fmod {
+    border: 1px solid #C5DEEB;
+    background: #C5DEEB;
+}
+
+.sprice {
+    color: #4D984E;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.dinline {
+    display: inline;
+}
+
+.fright {
+    float: right;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.ta-center {
+    text-align: center;
+}
+
+textarea#message {
+    width: 50%;
+}
+
+.send_result {
+    font-weight: bold;
+}
+
+select#lsessions, select#lcourses, select#lexercises, select#status {
+    margin-bottom: 0px;
+}
+
+.column_field_filter {
+    padding: 6px 10px 1px 1px;
+    text-align: right;
+}
+
+.height5 {
+    height: 5px;
+}
+
+.margin-left-fifty{
+    margin-left: 50px !important;
+}
+#course_category_well h4{
+	padding-left: 0;
+}
+#course_category_well .form-content{
+	padding-left: 1em;
+	padding-right: 1em;
+}
+#course_category_well .btn{
+	width: 100%;
+	line-height: 30px;
+	font-size: 16px;
+}
+.icon-course .thumbnail{
+	border: none;
+	box-shadow: none;
+}
+.well-course{
+	padding-top: 1em;
+	padding-bottom: 1em;
+	border-bottom: 1px solid #D3E6F0;
+}
+.ui-widget-content .well-course a, .ui-widget-content .well-course a:hover{
+	color: #fff;
+}
+.label-info, .badge-info {
+  background-color: #53a0c6;
+  font-weight: normal;
+}
+.categories-course-description h3 {
+  color: #666;
+  font-weight: bold;
+  font-family: Arial;
+}

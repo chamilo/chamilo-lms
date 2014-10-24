@@ -24,6 +24,7 @@ class Plugin
     // Translation strings.
     private $strings = null;
     public $isCoursePlugin = false;
+    public $isMailPlugin = false;
 
     /**
      * When creating a new course, these settings are added to the course, in
@@ -75,15 +76,18 @@ class Plugin
         $result['author']           = $this->get_author();
         $result['plugin_class']     = get_class($this);
         $result['is_course_plugin'] = $this->isCoursePlugin;
+        $result['is_mail_plugin']   = $this->isMailPlugin;
 
         if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;
             foreach ($this->fields as $name => $type) {
                 $value = $this->get($name);
+                if (is_array($type)) {
+                    $value = $type['options'];
+                }
                 $result[$name] = $value;
             }
         }
-
         return $result;
     }
 
@@ -163,7 +167,20 @@ class Plugin
         $result = new FormValidator($this->get_name());
 
         $defaults = array();
+        $checkboxGroup = array();
+        $checkboxCollection = array();
+
+        if ($checkboxNames = array_keys($this->fields, 'checkbox')) {
+            $pluginInfoCollection = api_get_settings('Plugins');
+            foreach ($pluginInfoCollection as $pluginInfo) {
+                if (array_search($pluginInfo['title'], $checkboxNames) !== false) {
+                    $checkboxCollection[$pluginInfo['title']] = $pluginInfo;
+                }
+            }
+        }
+
         foreach ($this->fields as $name => $type) {
+
             $value = $this->get($name);
 
             $defaults[$name] = $value;
@@ -172,6 +189,12 @@ class Plugin
             $help = null;
             if ($this->get_lang_plugin_exists($name.'_help')) {
                 $help = $this->get_lang($name.'_help');
+                if ($name === "show_main_menu_tab") {
+                    $pluginName = strtolower(str_replace('Plugin', '', get_class($this)));
+                    $pluginUrl = api_get_path(WEB_PATH)."plugin/$pluginName/index.php";
+                    $pluginUrl = "<a href=$pluginUrl>$pluginUrl</a>";
+                    $help = sprintf($help, $pluginUrl);
+                }
             }
 
             switch ($type) {
@@ -190,11 +213,31 @@ class Plugin
                     $group[] = $result->createElement('radio', $name, '', get_lang('No'), 'false');
                     $result->addGroup($group, null, array($this->get_lang($name), $help));
                     break;
+                case 'checkbox':
+                    $selectedValue = null;
+                    if (isset($checkboxCollection[$name])) {
+                        if ($checkboxCollection[$name]['selected_value'] === 'true') {
+                            $selectedValue = 'checked';
+                        }
+                    }
+                    $element = $result->createElement(
+                        $type,
+                        $name,
+                        '',
+                        $this->get_lang($name),
+                        $selectedValue
+                    );
+                    $element->_attributes['value'] = 'true';
+                    $checkboxGroup[] = $element;
+                    break;
             }
+        }
+
+        if (!empty($checkboxGroup)) {
+            $result->addGroup($checkboxGroup, null, array($this->get_lang('sms_types'), $help));
         }
         $result->setDefaults($defaults);
         $result->addElement('style_submit_button', 'submit_button', $this->get_lang('Save'));
-
         return $result;
     }
 
@@ -255,6 +298,7 @@ class Plugin
     {
         // Check whether the language strings for the plugin have already been
         // loaded. If so, no need to load them again.
+
         if (is_null($this->strings)) {
             global $language_interface;
             $root = api_get_path(SYS_PLUGIN_PATH);
@@ -418,7 +462,7 @@ class Plugin
      */
     public function install_course_fields_in_all_courses($add_tool_link = true)
     {
-        // Update existing courses to add conference settings
+        // Update existing courses to add plugin settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT id FROM $t_courses ORDER BY id";
         $res = Database::query($sql);
@@ -596,5 +640,38 @@ class Plugin
         $resp = Database::update('settings_current', $attributes, $whereCondition);
 
         return $resp;
+    }
+
+    /**
+     * This method shows or hides plugin's tab
+     * @param boolean Shows or hides the main menu plugin tab
+     * @param string Plugin starter file path
+     */
+    public function manageTab($showTab, $filePath = 'index.php')
+    {
+        $langString = str_replace('Plugin', '', get_class($this));
+        $pluginName = strtolower($langString);
+        $pluginUrl = 'plugin/'.$pluginName.'/'.$filePath;
+        if ($showTab === 'true') {
+            $tabAdded = $this->addTab($this->get_lang($langString), $pluginUrl);
+            if ($tabAdded) {
+                // The page must be refreshed to show the recently created tab
+                echo "<script>location.href = '".Security::remove_XSS($_SERVER['REQUEST_URI'])."';</script>";
+            }
+        } else {
+            $settingsCurrentTable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+            $conditions = array(
+                'where' => array(
+                    "variable = 'show_tabs' AND title = ? AND comment = ? " => array(
+                        $this->get_lang($langString),
+                        $pluginUrl
+                    )
+                )
+            );
+            $result = Database::select('subkey', $settingsCurrentTable, $conditions);
+            if (!empty($result)) {
+                $this->deleteTab($result[0]['subkey']);
+            }
+        }
     }
 }

@@ -11,9 +11,7 @@
  * "Course validation" feature, technical adaptation for Chamilo 1.8.8:
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>
  */
-/**
- * Code
- */
+use \ChamiloSession as Session;
 
 // Name of the language file that needs to be included.
 $language_file = array('create_course', 'registration','admin','exercice', 'course_description', 'course_info');
@@ -152,12 +150,10 @@ if ($course_validation_feature) {
         $form->addElement('checkbox', 'legal', null, get_lang('IAcceptTermsAndConditions'), 1);
         $form->addRule('legal', get_lang('YouHaveToAcceptTermsAndConditions'), 'required');
         // Link to terms and conditions.
-        $link_terms_and_conditions = '<script type="text/JavaScript">
-        <!--
+        $link_terms_and_conditions = '<script>
         function MM_openBrWindow(theURL,winName,features) { //v2.0
             window.open(theURL,winName,features);
         }
-        //-->
         </script><a href="#" onclick="javascript: MM_openBrWindow(\''.$terms_and_conditions_url.'\',\'Conditions\',\'scrollbars=yes, width=800\')">';
         $link_terms_and_conditions .= get_lang('ReadTermsAndConditions').'</a>';
         $form->addElement('label', null, $link_terms_and_conditions);
@@ -188,15 +184,15 @@ $form->setDefaults($values);
 if ($form->validate()) {
     $course_values = $form->exportValues();
 
-    $wanted_code        = $course_values['wanted_code'];
-    $category_code      = $course_values['category_code'];
-    $title              = $course_values['title'];
-    $course_language    = $course_values['course_language'];
-    $exemplary_content  = !empty($course_values['exemplary_content']);
+    $wanted_code = $course_values['wanted_code'];
+    $category_code = $course_values['category_code'];
+    $title = $course_values['title'];
+    $course_language = $course_values['course_language'];
+    $exemplary_content = !empty($course_values['exemplary_content']);
 
     if ($course_validation_feature) {
-        $description     = $course_values['description'];
-        $objetives       = $course_values['objetives'];
+        $description = $course_values['description'];
+        $objetives = $course_values['objetives'];
         $target_audience = $course_values['target_audience'];
     }
 
@@ -225,7 +221,7 @@ if ($form->validate()) {
             $course_info = CourseManager::create_course($params);
 
             if (!empty($course_info)) {
-
+                /*
                 $directory  = $course_info['directory'];
                 $title      = $course_info['title'];
 
@@ -237,7 +233,11 @@ if ($form->validate()) {
                 $tpl->assign('course_id', $course_info['code']);
 
                 $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
-                $message = $tpl->fetch($add_course_tpl);
+                $message = $tpl->fetch($add_course_tpl);*/
+
+                $url = api_get_path(WEB_CODE_PATH).'course_info/start.php?cidReq='.$course_info['code'].'&first=1';
+                header('Location: '.$url);
+                exit;
 
             } else {
                 $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);
@@ -266,7 +266,6 @@ if ($form->validate()) {
         // Display the form.
         $content = $form->return_form();
     }
-
 } else {
     if (!$course_validation_feature) {
         $message = Display :: return_message(get_lang('Explanation'));

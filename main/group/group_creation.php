@@ -57,19 +57,19 @@ if (isset($_POST['action'])) {
             exit;
             break;
         case 'create_virtual_groups':
-            $ids = GroupManager :: create_groups_from_virtual_courses();
+            $ids = GroupManager::create_groups_from_virtual_courses();
             $msg = urlencode(count($ids).' '.get_lang('GroupsAdded'));
             header('Location: group.php?action=show_msg&msg='.$msg);
             exit;
             break;
         case 'create_subgroups':
-            GroupManager :: create_subgroups($_POST['base_group'], $_POST['number_of_groups']);
+            GroupManager::create_subgroups($_POST['base_group'], $_POST['number_of_groups']);
             $msg = urlencode($_POST['number_of_groups'].' '.get_lang('GroupsAdded'));
             header('Location: group.php?action=show_msg&msg='.$msg);
             exit;
             break;
         case 'create_class_groups':
-            $ids = GroupManager :: create_class_groups($_POST['group_category']);
+            $ids = GroupManager::create_class_groups($_POST['group_category']);
             $msg = urlencode(count($ids).' '.get_lang('GroupsAdded'));
             header('Location: group.php?action=show_msg&msg='.$msg);
             exit;

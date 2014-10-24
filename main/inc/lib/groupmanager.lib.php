@@ -1399,6 +1399,13 @@ class GroupManager
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
+        global $_configuration;
+        if (isset($_configuration['order_user_list_by_official_code']) &&
+             $_configuration['order_user_list_by_official_code']
+        ) {
+            $order_clause = " ORDER BY u.official_code, u.firstname, u.lastname";
+        }
+
         if (empty($group_id)) {
             return array();
         }
@@ -1436,8 +1443,15 @@ class GroupManager
     {
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
-        $order_clause = api_sort_by_first_name(
-        ) ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
+        $order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
+
+        global $_configuration;
+        if (isset($_configuration['order_user_list_by_official_code']) &&
+            $_configuration['order_user_list_by_official_code']
+        ) {
+            $order_clause = " ORDER BY u.official_code, u.firstname, u.lastname";
+        }
+
         $group_id = Database::escape_string($group_id);
         $course_id = api_get_course_int_id();
 

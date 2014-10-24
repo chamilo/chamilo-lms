@@ -7,9 +7,6 @@
  *	@author Olivier Brouckaert
  *	@package chamilo.chat
  */
-/**
- * Code
- */
 
 define('FRAME', 'chat');
 
@@ -22,12 +19,15 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 $course = $_GET['cidReq'];
 $session_id = api_get_session_id();
 $group_id 	= api_get_group_id();
+$userId = api_get_user_id();
+$_course = api_get_course_info();
+$time = api_get_utc_datetime();
 
 // if we have the session set up
 if (!empty($course)) {
     $reset = isset($_GET['reset']) ? (bool)$_GET['reset'] : null;
     $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-    $query = "SELECT username FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
+    $query = "SELECT username FROM $tbl_user WHERE user_id='".$userId."'";
     $result = Database::query($query);
 
     list($pseudo_user) = Database::fetch_row($result);
@@ -67,22 +67,22 @@ if (!empty($course)) {
         }
     }
 
-	$filename_chat = '';
-	if (!empty($group_id)) {
-		$filename_chat = 'messages-'.$date_now.'_gid-'.$group_id.'.log.html';
-	} else if (!empty($session_id)) {
-		$filename_chat = 'messages-'.$date_now.'_sid-'.$session_id.'.log.html';
-	} else {
-		$filename_chat = 'messages-'.$date_now.'.log.html';
-	}
+    $filename_chat = '';
+    if (!empty($group_id)) {
+        $filename_chat = 'messages-'.$date_now.'_gid-'.$group_id.'.log.html';
+    } else if (!empty($session_id)) {
+        $filename_chat = 'messages-'.$date_now.'_sid-'.$session_id.'.log.html';
+    } else {
+        $filename_chat = 'messages-'.$date_now.'.log.html';
+    }
 
 	if (!file_exists($chat_path.$filename_chat)) {
 		@fclose(fopen($chat_path.$filename_chat, 'w'));
 		if (!api_is_anonymous()) {
 			$doc_id = add_document($_course, $basepath_chat.'/'.$filename_chat, 'file', 0, $filename_chat);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $group_id, null, null, null, $session_id);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], $group_id, null, null, null, $session_id);
-			item_property_update_on_folder($_course, $basepath_chat, $_user['user_id']);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $userId, $group_id, null, null, null, $session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $userId, $group_id, null, null, null, $session_id);
+			item_property_update_on_folder($_course, $basepath_chat, $userId);
 		}
 	}
 
@@ -103,14 +103,12 @@ if (!empty($course)) {
 		}
 
 		@rename($chat_path.$basename_chat.'.log.html', $chat_path.$basename_chat.'-'.$i.'.log.html');
-
 		@fclose(fopen($chat_path.$basename_chat.'.log.html', 'w'));
-
 		$doc_id = add_document($_course, $basepath_chat.'/'.$basename_chat.'-'.$i.'.log.html', 'file', filesize($chat_path.$basename_chat.'-'.$i.'.log.html'), $basename_chat.'-'.$i.'.log.html');
 
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $group_id, null, null, null, $session_id);
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], $group_id, null, null, null, $session_id);
-		item_property_update_on_folder($_course,$basepath_chat, $_user['user_id']);
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $userId, $group_id, null, null, null, $session_id);
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $userId, $group_id, null, null, null, $session_id);
+		item_property_update_on_folder($_course, $basepath_chat, $userId);
 
 		$doc_id = DocumentManager::get_document_id($_course, $basepath_chat.'/'.$basename_chat.'.log.html');
 
@@ -132,12 +130,15 @@ if (!empty($course)) {
 	array_splice($content, 0, $remove);
 	require 'header_frame.inc.php';
 
-	if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonline') {  //the caller
+	if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonline') {
+	    //the caller
 		$content[0] = get_lang('CallSent').'<br />'.$content[0];
 	}
-	if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonlinejoin') {   //the joiner (we have to delete the chat request to him when he joins the chat)
+	if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonlinejoin') {
+	    //the joiner (we have to delete the chat request to him when he joins the chat)
 		$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "UPDATE $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' WHERE (user_id = ".$_user['user_id'].")";
+		$sql = "UPDATE $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text=''
+		        WHERE (user_id = ".$userId.")";
 		$result = Database::query($sql);
 	}
 
@@ -150,7 +151,9 @@ if (!empty($course)) {
 	if ($isMaster || $is_courseCoach) {
 		$rand = mt_rand(1, 1000);
 		echo '<div id="clear-chat">';
-		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&'.api_get_cidreq().'#bottom" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmReset'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('ClearList')).' '.get_lang('ClearList').'</a>';
+		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&'.api_get_cidreq().'#bottom" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmReset'), ENT_QUOTES)).'\')) return false;">'.
+            Display::return_icon('delete.png', get_lang('ClearList')).' '.get_lang('ClearList').
+            '</a>';
 		echo '</div>';
 	}
 } else {

@@ -14,8 +14,6 @@
         </div> <!-- end of #row" -->
         </div> <!-- end of #main" -->
         <div class="push"></div>
-        
     {% endif %}
-
     {% include "default/layout/main_footer.tpl" %}
 {% endblock %}

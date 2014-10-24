@@ -6,9 +6,7 @@
 *	@package chamilo.exercise
 * 	@author Julio Montoya Armas switchable fill in blank option added
 */
-/**
- *	INIT SECTION
- */
+
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
@@ -85,7 +83,7 @@ if (empty($exercise_stat_info) || empty($question_list)) {
 }
 
 $nameTools = get_lang('Exercice');
-$interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+$interbreadcrumb[] = array("url" => "exercice.php?".api_get_cidreq(), "name" => get_lang('Exercices'));
 
 if ($origin != 'learnpath') {
 	//so we are not in learnpath tool
@@ -112,72 +110,67 @@ if ($time_control) {
 echo Display::div('', array('id'=>'message'));
 
 echo '<script>
-		lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
+    lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
-        function final_submit() {
-        	//Normal inputs
-        	window.location = "exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
-		}
+    function final_submit() {
+        //Normal inputs
+        window.location = "exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
+    }
 
-		function review_questions() {
-			var is_checked = 1;
-			$("input[type=checkbox]").each(function () {
-			    if ($(this).attr("checked") == "checked") {
-			    	is_checked = 2;
-			    	return false;
-			    }
-			});
+    function review_questions() {
+        var is_checked = 1;
+        $("input[type=checkbox]").each(function () {
+            if ($(this).attr("checked") == "checked") {
+                is_checked = 2;
+                return false;
+            }
+        });
 
-			if (is_checked == 1) {
-				$("#message").addClass("warning-message");
-				$("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
-			}
-			window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&origin='.$origin.'&" + lp_data;
-		}
+        if (is_checked == 1) {
+            $("#message").addClass("warning-message");
+            $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
+        }
+        window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&origin='.$origin.'&" + lp_data;
+    }
 
-		function save_remind_item(obj, question_id) {
-			var action = "";
-			if ($(obj).is(\':checked\')) {
-				action = "add";
-			} else {
-				action = "delete";
-			}
-			$.ajax({
-				url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=add_question_to_reminder",
-				data: "question_id="+question_id+"&exe_id='.$exe_id.'&action="+action,
-				success: function(return_value) {
-				},
-			});
-		}
+    function save_remind_item(obj, question_id) {
+        var action = "";
+        if ($(obj).is(\':checked\')) {
+            action = "add";
+        } else {
+            action = "delete";
+        }
+        $.ajax({
+            url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=add_question_to_reminder",
+            data: "question_id="+question_id+"&exe_id='.$exe_id.'&action="+action,
+            success: function(return_value) {
+            }
+        });
+    }
 </script>';
 
-$attempt_list       = get_all_exercise_event_by_exe_id($exe_id);
-
-$remind_list        = $exercise_stat_info['questions_to_check'];
-$remind_list        = explode(',', $remind_list);
+$attempt_list = get_all_exercise_event_by_exe_id($exe_id);
+$remind_list = $exercise_stat_info['questions_to_check'];
+$remind_list = explode(',', $remind_list);
 
 $exercise_result    = array();
 
 foreach ($attempt_list as $question_id => $options) {
-	//echo $question_id.'<br />';
-	foreach($options as $item) {
+    foreach ($options as $item) {
+        $question_obj = Question::read($item['question_id']);
+        switch ($question_obj->type) {
+            case FILL_IN_BLANKS:
+                $item['answer'] = $objExercise->fill_in_blank_answer_to_string($item['answer']);
+                break;
+            case HOT_SPOT:
+                break;
+        }
 
-		$question_obj = Question::read($item['question_id']);
-
-		switch($question_obj->type) {
-			case FILL_IN_BLANKS:
-				$item['answer'] = $objExercise->fill_in_blank_answer_to_string($item['answer']);
-				break;
-			case HOT_SPOT:
-				//var_dump($item['answer']);
-				break;
-		}
-
-		if ($item['answer'] != '0' && !empty($item['answer'])) {
-    		$exercise_result[] = $question_id;
-    		break;
-		}
-	}
+        if ($item['answer'] != '0' && !empty($item['answer'])) {
+            $exercise_result[] = $question_id;
+            break;
+        }
+    }
 }
 echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
 echo '<div class="clear"></div><br />';
@@ -192,7 +185,6 @@ foreach ($question_list as $questionId) {
 
 	// creates a temporary Question object
 	$objQuestionTmp        = Question :: read($questionId);
-	// initialize question information
 
 	$quesId         = $objQuestionTmp->selectId();
 	$check_id 		= 'remind_list['.$questionId.']';
@@ -233,6 +225,6 @@ echo Display::div('', array('class'=>'clear'));
 echo Display::div($exercise_actions, array('class'=>'form-actions'));
 
 if ($origin != 'learnpath') {
-	//we are not in learnpath tool
+	// We are not in learnpath tool
 	Display::display_footer();
 }

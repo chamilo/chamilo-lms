@@ -31,7 +31,7 @@ class learnpathList
      * @param	int			Optional session id (otherwise we use api_get_session_id())
      * @return	void
      */
-    function __construct($user_id, $course_code = '', $session_id = null, $order_by = null, $check_publication_dates = false)
+    public function __construct($user_id, $course_code = '', $session_id = null, $order_by = null, $check_publication_dates = false)
     {
         $course_info = api_get_course_info($course_code);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
@@ -65,10 +65,10 @@ class learnpathList
 
         if ($check_publication_dates) {
             $time_conditions = " AND (
-                (publicated_on <> '0000-00-00 00:00:00' AND publicated_on < '$now'  AND expired_on <> '0000-00-00 00:00:00'  AND expired_on > '$now' )  OR
-                (publicated_on <> '0000-00-00 00:00:00'  AND publicated_on < '$now'  AND expired_on = '0000-00-00 00:00:00') OR
-                (publicated_on = '0000-00-00 00:00:00'   AND expired_on <> '0000-00-00 00:00:00' AND expired_on > '$now') OR
-                (publicated_on = '0000-00-00 00:00:00'   AND expired_on = '0000-00-00 00:00:00' ))
+                (publicated_on <> '0000-00-00 00:00:00' AND publicated_on < '$now' AND expired_on <> '0000-00-00 00:00:00' AND expired_on > '$now' )  OR
+                (publicated_on <> '0000-00-00 00:00:00' AND publicated_on < '$now' AND expired_on = '0000-00-00 00:00:00') OR
+                (publicated_on = '0000-00-00 00:00:00' AND expired_on <> '0000-00-00 00:00:00' AND expired_on > '$now') OR
+                (publicated_on = '0000-00-00 00:00:00' AND expired_on = '0000-00-00 00:00:00' ))
             ";
         }
 

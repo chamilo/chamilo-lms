@@ -10,6 +10,7 @@
 require_once '../../../../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
 
+$path = isset($_REQUEST['path'])? Security::remove_XSS($_REQUEST['path']) : null ;
 if (!isset($manager)) {
     /**
      *  this is part of  script for processing file paste
@@ -41,7 +42,7 @@ if (!isset($manager)) {
         $sessionAction = new SessionAction();
         include_once(DIR_AJAX_INC."class.manager.php");
 
-        $manager = new manager();
+        $manager = new manager($path);
         $manager->setSessionAction($sessionAction);
 
         $fileList   = $manager->getFileList();

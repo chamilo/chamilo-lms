@@ -121,6 +121,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
             $res = $usergroup->save($values);
             if ($res) {
                 Display::display_confirmation_message(get_lang('ItemAdded'));
+            } else {
+                Display::display_warning_message(
+                    Security::remove_XSS($values['name']).': '.
+                    get_lang('AlreadyExists')
+                );
             }
         }
         Security::clear_token();
@@ -140,7 +145,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form = new FormValidator('career', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
     // Setting the form elements
     $form->addElement('header', '', get_lang('Modify'));
-    $form->addElement('hidden', 'id',intval($_GET['id']));
+    $form->addElement('hidden', 'id', intval($_GET['id']));
     $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
     $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
     $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
@@ -160,6 +165,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
             $res = $usergroup->update($values);
             if ($res) {
                 Display::display_confirmation_message(get_lang('Updated'));
+            } else {
+                Display::display_warning_message(
+                    Security::remove_XSS($values['name']).': '.
+                    get_lang('AlreadyExists')
+                );
             }
         }
         Security::clear_token();
@@ -173,10 +183,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-}
-
-// Action handling: deleting a note
-elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
+} elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
     $res = $usergroup->delete(Security::remove_XSS($_GET['id']));
     if ($res) {
         Display::display_confirmation_message(get_lang('Deleted'));
@@ -185,5 +192,4 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GE
 } else {
     $usergroup->display();
 }
-
 Display :: display_footer();

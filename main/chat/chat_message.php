@@ -8,18 +8,12 @@
  * 	Modified by Alex Aragón (BeezNest)
  *	@package chamilo.chat
  */
-/**
- * Code
- */
-
-/*		INIT SECTION */
 
 define('FRAME', 'message');
-
 $language_file = array('chat');
-
 require_once '../inc/global.inc.php';
-
+$userId = api_get_user_id();
+$userInfo = api_get_user_info();
 $course = api_get_course_id();
 $session_id = api_get_session_id();
 $group_id 	= api_get_group_id();
@@ -55,14 +49,14 @@ function close_chat_window() {
 
 // Mode open in a new window: close the window when there isn't an user login
 
-if (empty($_user['user_id'])) {
+if (empty($userId)) {
 	echo '<script languaje="javascript" type="text/javascript"> close_chat_window(); </script>';
 } else {
 	api_protect_course_script();
 }
 
 // if we have the session set up
-if (!empty($course) && !empty($_user['user_id'])) {
+if (!empty($course) && !empty($userId)) {
 	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
@@ -73,7 +67,8 @@ if (!empty($course) && !empty($_user['user_id'])) {
 
     /*	MAIN CODE */
 
-    $query = "SELECT user_id, lastname, firstname, username, picture_uri FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
+    $query = "SELECT user_id, lastname, firstname, username, picture_uri
+              FROM $tbl_user WHERE user_id='".$userId."'";
     $result = Database::query($query);
 
     list($pseudo_user) = Database::fetch_row($result);
@@ -85,6 +80,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
     $firstname = Database::result($result, 0, 'firstname');
     $lastname  = Database::result($result, 0, 'lastname');
     $picture  = Database::result($result, 0, 'picture_uri');
+    $fullName = api_get_person_name($firstname, $lastname);
 
     $date_now = date('Y-m-d');
 
@@ -206,34 +202,35 @@ if (!empty($course) && !empty($_user['user_id'])) {
                 if (!file_exists($chat_path.$basename_chat.'.log.html')) {
 					$doc_id = add_document($_course, $basepath_chat.'/'.$basename_chat.'.log.html', 'file', 0, $basename_chat.'.log.html');
 
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $group_id, null, null, null, $session_id);
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], $group_id, null, null, null, $session_id);
-					item_property_update_on_folder($_course, $basepath_chat, $_user['user_id']);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $userId, $group_id, null, null, null, $session_id);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $userId, $group_id, null, null, null, $session_id);
+					item_property_update_on_folder($_course, $basepath_chat, $userId);
 				} else {
 					$doc_id = DocumentManager::get_document_id($_course, $basepath_chat.'/'.$basename_chat.'.log.html');
 				}
 
 				$fp = fopen($chat_path.$basename_chat.'.log.html', 'a');
-					// view user picture
-					$userImage = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
-                                        if (substr($userImage['file'],0,7) != 'unknown') {
-    					$userPhoto = $userImage['dir'].'medium_'.$userImage['file'];
-                                        } else {
-    					$userPhoto = $userImage['dir'].$userImage['file'];
-                                        }
-					$filePhoto = '<img class="chat-image" src="'.$userPhoto.'"/>';
+                // view user picture
+                $userImage = UserManager::get_user_picture_path_by_id($userId, 'web', false, true);
 
+                if (substr($userImage['file'],0,7) != 'unknown') {
+                    $userPhoto = $userImage['dir'].'medium_'.$userImage['file'];
+                } else {
+                    $userPhoto = $userImage['dir'].$userImage['file'];
+                }
+
+                $filePhoto = '<img class="chat-image" src="'.$userPhoto.'"/>';
 				if ($isMaster) {
-					fputs($fp, '<div class="message-teacher"><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div><div class="icon-message"></div>'.$filePhoto.'</div>'."\n");
+					fputs($fp, '<div class="message-teacher"><div class="content-message"><div class="chat-message-block-name">'.$fullName.'</div><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div><div class="icon-message"></div>'.$filePhoto.'</div>'."\n");
 				} else {
-					fputs($fp, '<div class="message-student">'.$filePhoto.'<div class="icon-message"></div><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div></div>'."\n");
+					fputs($fp, '<div class="message-student">'.$filePhoto.'<div class="icon-message"></div><div class="content-message"><div class="chat-message-block-name">'.$fullName.'</div><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div></div>'."\n");
 				}
 				fclose($fp);
 
 				$chat_size = filesize($chat_path.$basename_chat.'.log.html');
 
 				update_existing_document($_course, $doc_id, $chat_size);
-				item_property_update_on_folder($_course, $basepath_chat, $_user['user_id']);
+				item_property_update_on_folder($_course, $basepath_chat, $userId);
 			}
 		}
 	}

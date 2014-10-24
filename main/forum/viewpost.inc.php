@@ -57,19 +57,20 @@ if (isset($rows)) {
         echo "</tr>";
 
         // The check if there is an attachment
-        $attachment_list=get_attachment($row['post_id']);
+        $attachment_list=getAllAttachment($row['post_id']);
 
         if (!empty($attachment_list)) {
-            echo '<tr ><td height="50%">';
-            $realname=$attachment_list['path'];
-            $user_filename=$attachment_list['filename'];
-
-            echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-            echo '<a href="download.php?file=';
-            echo $realname;
-            echo ' "> '.$user_filename.' </a>';
-            echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span><br />';
-            echo '</td></tr>';
+            foreach ($attachment_list as $attachment) {
+                echo '<tr ><td height="50%">';
+                $realname=$attachment['path'];
+                $user_filename=$attachment['filename'];
+                echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+                echo '<a href="download.php?file=';
+                echo $realname;
+                echo ' "> '.$user_filename.' </a>';
+                echo '<span class="forum_attach_comment" >'.$attachment['comment'].'</span><br />';
+                echo '</td></tr>';
+            }
         }
 
         // The post has been displayed => it can be removed from the what's new array

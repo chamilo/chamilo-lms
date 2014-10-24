@@ -4284,4 +4284,32 @@ class DocumentManager
 
         return $audioId;
     }
+
+    /**
+     * Generate a default certificate for a courses
+     * @param array $courseData The course info
+     */
+    public static function generateDefaultCertificate($courseData)
+    {
+        $dir = '/';
+
+        $title = get_lang('DefaultCertificate');
+        $comment = null;
+
+        $fileName = replace_dangerous_char($title);
+        $filePath = api_get_path(SYS_COURSE_PATH) . "{$courseData['path']}/document{$dir}";
+        $fileSize = filesize("{$filePath}{$fileName}.html") | 100;
+        $fileType = 'file';
+
+        $saveFilePath = "{$dir}{$fileName}.html";
+
+        $documentId = add_document($courseData, $saveFilePath, $fileType, $fileSize, $title, $comment);
+
+        $defaultCertificateId = self::get_default_certificate_id($courseData['code']);
+
+        if (!isset($defaultCertificateId)) {
+            self::attach_gradebook_certificate($courseData['code'], $documentId);
+        }
+    }
+
 }

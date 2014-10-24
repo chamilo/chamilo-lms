@@ -9,14 +9,23 @@
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    width: 500px;
-    height: 50px;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
     line-height: 50px;
-    background: palegreen;
-    border: 1px solid limegreen;
+    background-color: #D4E6F0;
+    border: 2px dashed #bbbbbb;
     font-size:120%;
+    margin-bottom: 0;
 }
-
+.form-ajax{
+  border: 2px solid #bbbbbb;
+  padding: .5em;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
 .file_upload_small {
     width: 500px;
     height: 50px;

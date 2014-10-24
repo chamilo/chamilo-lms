@@ -388,14 +388,14 @@ function delete_forum_image($forum_id)
  */
 function show_edit_forumcategory_form($inputvalues = array())
 {
-    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());
+    $categoryId = $inputvalues['cat_id'];
+    $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq().'&id='.$categoryId);
 
     // Setting the form elements.
     $form->addElement('header', '', get_lang('EditForumCategory'));
     $form->addElement('hidden', 'forum_category_id');
     $form->addElement('text', 'forum_category_title', get_lang('Title'), 'class="input_titles"');
 
-    //$form->applyFilter('forum_category_title', 'html_filter');
     $form->addElement(
         'html_editor',
         'forum_category_comment',
@@ -446,7 +446,8 @@ function store_forumcategory($values)
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
-    $sql = "SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string($table_categories)." WHERE c_id = $course_id";
+    $sql = "SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string($table_categories)."
+            WHERE c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     $new_max = $row['sort_max'] + 1;
@@ -454,7 +455,8 @@ function store_forumcategory($values)
 
     $clean_cat_title = Database::escape_string($values['forum_category_title']);
 
-    if (isset($values['forum_category_id'])) { // Storing after edition.
+    if (isset($values['forum_category_id'])) {
+        // Storing after edition.
         $sql = "UPDATE ".$table_categories." SET
                 cat_title='".$clean_cat_title."',
                 cat_comment='".Database::escape_string($values['forum_category_comment'])."'
@@ -475,7 +477,13 @@ function store_forumcategory($values)
         Database::query($sql);
         $last_id = Database::insert_id();
         if ($last_id > 0) {
-            api_item_property_update(api_get_course_info(), TOOL_FORUM_CATEGORY, $last_id, 'ForumCategoryAdded', api_get_user_id());
+            api_item_property_update(
+                api_get_course_info(),
+                TOOL_FORUM_CATEGORY,
+                $last_id,
+                'ForumCategoryAdded',
+                api_get_user_id()
+            );
             api_set_default_visibility($last_id, TOOL_FORUM_CATEGORY);
         }
         $return_message = get_lang('ForumCategoryAdded');

@@ -196,8 +196,8 @@ function userSessionList()
         //check if the user is enrolled in the current session
         if ($currentUserId > 0) {
             $sql = "SELECT 1 FROM $tableSessionRelUser
-                WHERE id_session='".$rowSession['session_id']."' AND
-                id_user ='" . $currentUserId . "';";
+                WHERE id_session ='".$rowSession['session_id']."' AND
+                id_user = $currentUserId";
             Database::query($sql);
             if (Database::affected_rows() > 0) {
                 $rowSession['enrolled'] = "YES";
@@ -521,7 +521,7 @@ function sessionInfo($code)
     //check if the user is enrolled in the current session
     if ($currentUserId > 0) {
         $sql = "SELECT 1 FROM $tableSessionRelUser
-            WHERE id_user='".$currentUserId."';";
+            WHERE id_user = $currentUserId";
         Database::query($sql);
         if (Database::affected_rows() > 0) {
             $rowSession['enrolled'] = "YES";

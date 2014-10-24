@@ -645,15 +645,17 @@ class Plugin
     /**
      * This method shows or hides plugin's tab
      * @param boolean Shows or hides the main menu plugin tab
+     * @param string Plugin starter file path
      */
-    public function manageTab($showTab)
+    public function manageTab($showTab, $filePath = 'index.php')
     {
         $langString = str_replace('Plugin', '', get_class($this));
         $pluginName = strtolower($langString);
-        $pluginUrl = 'plugin/'.$pluginName.'/index.php';
+        $pluginUrl = 'plugin/'.$pluginName.'/'.$filePath;
         if ($showTab === 'true') {
-            $rsTab = $this->addTab($this->get_lang($langString), $pluginUrl);
-            if ($rsTab) {
+            $tabAdded = $this->addTab($this->get_lang($langString), $pluginUrl);
+            if ($tabAdded) {
+                // The page must be refreshed to show the recently created tab
                 echo "<script>location.href = '".Security::remove_XSS($_SERVER['REQUEST_URI'])."';</script>";
             }
         } else {

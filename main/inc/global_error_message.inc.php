@@ -50,9 +50,13 @@ $TechnicalIssuesDescription = 'This portal is currently experiencing technical i
 
 if (is_int($global_error_code) && $global_error_code > 0) {
 
-	$theme = Template::getThemeFallback().'/';
+    if (class_exists('Template')) {
+        $theme = Template::getThemeFallback().'/';
+    } else {
+        $theme = 'chamilo';
+    }
 
-	$css_path = 'main/css/';
+    $css_path = 'main/css/';
     $css_file              = $css_path.$theme.'default.css';
     $bootstrap_file        = $css_path.'bootstrap.css';
 	$css_base_file         = $css_path.'base.css';

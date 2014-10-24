@@ -1,6 +1,8 @@
 <?php
 $strings['plugin_title'] = "Vente de cours";
 $strings['plugin_comment'] = "Vendez vos cours directement depuis votre portail Chamilo, au travers d'un compte PayPal. Plugin en version beta, à utiliser avec précaution. Ni l'association Chamilo ni les développeurs impliqués dans le développement de ce plugin ne sauraient être tenus responsables d'un quelconque inconvénient causé par celui-ci.";
+$strings['show_main_menu_tab'] = "Montrer l'onglet dans le menu principal";
+$strings['show_main_menu_tab_help'] = "Dans le cas où vous ne souhaitez pas montrer l'onglet, il est possible de rajouter le lien suivant à votre portail Chamilo: %s";
 $strings['Visible'] = "Montrer dans la liste";
 $strings['Options'] = "Options";
 $strings['Price'] = "Prix";

@@ -189,6 +189,12 @@ class Plugin
             $help = null;
             if ($this->get_lang_plugin_exists($name.'_help')) {
                 $help = $this->get_lang($name.'_help');
+                if ($name === "show_main_menu_tab") {
+                    $pluginName = strtolower(str_replace('Plugin', '', get_class($this)));
+                    $pluginUrl = api_get_path(WEB_PATH)."plugin/$pluginName/index.php";
+                    $pluginUrl = "<a href=$pluginUrl>$pluginUrl</a>";
+                    $help = sprintf($help, $pluginUrl);
+                }
             }
 
             switch ($type) {
@@ -634,5 +640,38 @@ class Plugin
         $resp = Database::update('settings_current', $attributes, $whereCondition);
 
         return $resp;
+    }
+
+    /**
+     * This method shows or hides plugin's tab
+     * @param boolean Shows or hides the main menu plugin tab
+     * @param string Plugin starter file path
+     */
+    public function manageTab($showTab, $filePath = 'index.php')
+    {
+        $langString = str_replace('Plugin', '', get_class($this));
+        $pluginName = strtolower($langString);
+        $pluginUrl = 'plugin/'.$pluginName.'/'.$filePath;
+        if ($showTab === 'true') {
+            $tabAdded = $this->addTab($this->get_lang($langString), $pluginUrl);
+            if ($tabAdded) {
+                // The page must be refreshed to show the recently created tab
+                echo "<script>location.href = '".Security::remove_XSS($_SERVER['REQUEST_URI'])."';</script>";
+            }
+        } else {
+            $settingsCurrentTable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+            $conditions = array(
+                'where' => array(
+                    "variable = 'show_tabs' AND title = ? AND comment = ? " => array(
+                        $this->get_lang($langString),
+                        $pluginUrl
+                    )
+                )
+            );
+            $result = Database::select('subkey', $settingsCurrentTable, $conditions);
+            if (!empty($result)) {
+                $this->deleteTab($result[0]['subkey']);
+            }
+        }
     }
 }

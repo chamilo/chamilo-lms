@@ -3205,7 +3205,7 @@ class CourseManager
                 if (!$showAllAssignedCourses) {
                     $whereConditions .= " AND status = ".COURSEMANAGER;
                 } else {
-                    $whereConditions .= " AND relation_type = '1'";
+                    $whereConditions .= " AND relation_type = ".COURSE_RELATION_TYPE_COURSE_MANAGER;
                 }
                 break;
             case DRH:

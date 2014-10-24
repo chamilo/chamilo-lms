@@ -10,6 +10,8 @@
 $language_file = array('userInfo', 'index');
 $cidReset = true;
 require_once '../inc/global.inc.php';
+// Include OpenGraph NOT AVAILABLE 
+// require_once api_get_path(LIBRARY_PATH) . 'opengraph/OpenGraph.php';
 
 if (api_get_setting('allow_social_tool') !='true') {
     $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
@@ -18,13 +20,39 @@ if (api_get_setting('allow_social_tool') !='true') {
 }
 
 $user_id = api_get_user_id();
+$friendId = isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
 
 $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
 
-//I'm your friend? I can see your profile?
-if (isset($_GET['u'])) {
+if (!empty($_POST['social_wall_new_msg_main'])) {
+    $messageId = 0;
+    $idMessage = SocialManager::sendWallMessage(api_get_user_id(), $friendId, $_POST['social_wall_new_msg_main'], $messageId, MESSAGE_STATUS_WALL_POST);
+    if (!empty($_FILES['picture']['tmp_name']) && $idMessage > 0) {
+        $error = SocialManager::sendWallMessageAttachmentFile(api_get_user_id(), $_FILES['picture'], $idMessage, $fileComment = '');
+    }
+
+    $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
+    $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?' . $_SERVER['QUERY_STRING'];
+    header('Location: ' . $url);
+    exit;
+
+} else if (!empty($_POST['social_wall_new_msg'])  && !empty($_POST['messageId'])) {
+    $messageId = intval($_POST['messageId']);
+    $res = SocialManager::sendWallMessage(api_get_user_id(), $friendId, $_POST['social_wall_new_msg'], $messageId , MESSAGE_STATUS_WALL);
+    $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
+    $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?' . $_SERVER['QUERY_STRING'];
+    header('Location: ' . $url);
+    exit;
+
+} else if (isset($_GET['messageId'])) {
+    $messageId = Security::remove_XSS($_GET['messageId']);
+    $status = SocialManager::deleteMessage($messageId);
+    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'social/profile.php');
+    exit;
+
+} else if (isset($_GET['u'])) { //I'm your friend? I can see your profile?
     $user_id     = (int) Database::escape_string($_GET['u']);
     if (api_is_anonymous($user_id, true)) {
         api_not_allowed(true);
@@ -65,6 +93,7 @@ if (isset($_GET['u'])) {
 } else {
     $user_info    = UserManager::get_user_info_by_id($user_id);
 }
+
 $libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
@@ -275,6 +304,7 @@ if (isset($_GET['u'])) {
     $info_user = api_get_user_info(api_get_user_id());
     $param_user = '';
 }
+
 $_SESSION['social_user_id'] = intval($user_id);
 
 /**
@@ -282,7 +312,7 @@ $_SESSION['social_user_id'] = intval($user_id);
  */
 
 //Setting some course info
-$my_user_id=isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
+$my_user_id = isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
 $personal_course_list = UserManager::get_personal_session_course_list($my_user_id);
 
 $course_list_code = array();
@@ -304,9 +334,24 @@ if (is_array($personal_course_list)) {
 
 $social_left_content = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
 
+//Setting some session info
+$user_info = api_get_user_info($my_user_id);
+$sessionList = SessionManager::getSessionsFollowedByUser($my_user_id, $user_info['status']);
+$htmlSessionList = null;
+foreach ($sessionList as $session) {
+    $htmlSessionList .= '<div>';
+    $htmlSessionList .= Display::return_icon('session.png', get_lang('Session'));
+    $htmlSessionList .= $session['name'];
+    $htmlSessionList .= '</div>';
+}
+
+// My friends
+$friend_html = _listMyFriends($user_id, $link_shared ,$show_full_profile);
+$social_left_content.= '<div class="well sidebar-nav">' .$friend_html . '</div>';
+
 $personal_info = null;
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
-    $personal_info .= '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
+    $personal_info .= '<div DATA="DATA"><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
 } else {
     //--- Basic Information
     $personal_info .=  '<div><h3>'.get_lang('Profile').'</h3></div>';
@@ -339,98 +384,16 @@ if ($show_full_profile) {
     $personal_info .=  '</dl>';
 }
 
-$social_right_content =  SocialManager::social_wrapper_div($personal_info, 4);
+$wallSocialAddPost .= _wallSocialAddPost();
+$social_right_content .= SocialManager::social_wrapper_div($wallSocialAddPost, 5);
+
+$social_right_content .=  SocialManager::social_wrapper_div($personal_info, 4);
+
+$social_right_content .= _wallSocialPost($my_user_id, $friendId);
+//$social_right_content .= SocialManager::social_wrapper_div($wallSocial, 5);
+
 
 if ($show_full_profile) {
-
-    //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
-    $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
-
-    $friend_html        = '';
-    $number_of_images    = 6;
-    $number_friends        = 0;
-    $number_friends      = count($friends);
-
-    if ($number_friends != 0) {
-        $friend_html.= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';
-        $friend_html.= '<div id="friend-container" class="social-friend-container">';
-        $friend_html.= '<div id="friend-header">';
-
-        if ($number_friends == 1) {
-            $friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friend').'</div>';
-        } else {
-            $friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friends').'</div>';
-        }
-
-        if ($number_friends > $number_of_images) {
-            if (api_get_user_id() == $user_id) {
-                $friend_html.= '<div style="float:right;width:20%">'
-                    .'<a href="friends.php">'.get_lang('SeeAll').'</a></div>';
-            } else {
-                $friend_html.= '<div style="float:right;width:20%">'
-                    .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
-                    .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
-                    .'class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></div>';
-            }
-        }
-        $friend_html.= '</div>'; // close div friend-header
-
-        $friend_html.='<ul class="thumbnails">';
-
-        $j=1;
-        for ($k=0;$k<$number_friends;$k++) {
-            if ($j > $number_of_images) break;
-
-            if (isset($friends[$k])) {
-                $friend = $friends[$k];
-                $name_user    = api_get_person_name($friend['firstName'], $friend['lastName']);
-                $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
-
-                if ($user_info_friend['user_is_online']) {
-                    $status_icon = Display::span('', array('class' => 'online_user_in_text'));
-                } else {
-                    $status_icon = Display::span('', array('class' => 'offline_user_in_text'));
-                }
-
-                $friend_html.= '<li class="span2">';
-                $friend_html.= '<div class="thumbnail">';
-
-                // the height = 92 must be the sqme in the image_friend_network span style in default.css
-                $friends_profile = SocialManager::get_picture_user(
-                    $friend['friend_user_id'],
-                    $friend['image'],
-                    92,
-                    USER_IMAGE_SIZE_ORIGINAL
-                );
-
-                $friend_html.= '<img src="'.$friends_profile['file'].'"'
-                    .' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
-
-                $friend_html.= '<div class="caption">';
-                $friend_html.= $status_icon.'<a href="profile.php?'
-                    .'u='.$friend['friend_user_id']
-                    .'&amp;'.$link_shared.'">';
-                $friend_html.= $name_user;
-                $friend_html.= '</a></div>';
-                $friend_html.= '</div>';
-                $friend_html.= '</li>';
-            }
-            $j++;
-        }
-        $friend_html.='</ul>';
-    } else {
-        // No friends!! :(
-        $friend_html .= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';
-        $friend_html.= '<div id="friend-container" class="social-friend-container">';
-        $friend_html.= '<div id="friend-header">';
-        $friend_html.= '<div>'.get_lang('NoFriendsInYourContactList').'<br />'
-            .'<a class="btn" href="'.api_get_path(WEB_PATH).'whoisonline.php">'
-            .get_lang('TryAndFindSomeFriends')
-            .'</a></div>';
-        $friend_html.= '</div>'; // close div friend-header
-    }
-    $friend_html.= '</div>';
-    $social_right_content .=  SocialManager::social_wrapper_div($friend_html, 5);
 
     // Extra information
     $t_uf    = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
@@ -641,6 +604,12 @@ if ($show_full_profile) {
         $social_right_content .=  SocialManager::social_wrapper_div($my_courses, 9);
     }
 
+
+    $sessions .=  '<div><h3>'.api_ucfirst(get_lang('MySessions')).'</h3></div>';
+    $sessions .=  "<div class='social-content-training'>$htmlSessionList</div>";
+    $social_right_content .=  SocialManager::social_wrapper_div($sessions, 9);
+
+
     // user feeds
     $user_feeds = SocialManager::get_user_feeds($user_id);
     if (!empty($user_feeds)) {
@@ -768,3 +737,97 @@ $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);
+
+/*
+* function list my friends
+*/
+function _listMyFriends($user_id, $link_shared, $show_full_profile)
+{
+    //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
+    $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
+
+    $friendHtml = '';
+    $number_of_images = 30;
+    $number_friends = 0;
+    $number_friends = count($friends);
+
+    $friendHtml = '<div class="nav-list"><h3>'.get_lang('SocialFriend').'<span>(' . $number_friends . ')</span></h3></div>';
+
+    if ($number_friends != 0) {
+        if ($number_friends > $number_of_images) {
+            if (api_get_user_id() == $user_id) {
+                $friendHtml.= ' : <span><a href="friends.php">'.get_lang('SeeAll').'</a></span>';
+            } else {
+                $friendHtml.= ' : <span>'
+                    .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
+                    .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
+                    .'class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
+            }
+        }
+
+        $friendHtml.= '<ul class="nav nav-list">';
+        $j = 1;
+        for ($k=0; $k < $number_friends; $k++) {
+            if ($j > $number_of_images) break;
+
+            if (isset($friends[$k])) {
+                $friend = $friends[$k];
+                $name_user    = api_get_person_name($friend['firstName'], $friend['lastName']);
+                $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
+
+                if ($user_info_friend['user_is_online']) {
+                    $statusIcon = Display::span('', array('class' => 'online_user_in_text'));
+                } else {
+                    $statusIcon = Display::span('', array('class' => 'offline_user_in_text'));
+                }
+
+                $friendHtml.= '<li class="">';
+                // the height = 92 must be the sqme in the image_friend_network span style in default.css
+                $friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 20, USER_IMAGE_SIZE_SMALL);
+                $friendHtml.= '<img src="'.$friends_profile['file'].'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'"/>';
+                $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
+                $friendHtml.= $statusIcon .'<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">' . $name_user .'</a>';
+                $friendHtml.= '</li>';
+            }
+            $j++;
+        }
+        $friendHtml.='</ul>';
+    } else {
+        $friendHtml.= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
+            .'<a class="btn" href="'.api_get_path(WEB_PATH).'whoisonline.php">'. get_lang('TryAndFindSomeFriends').'</a></div>';
+    }
+
+    return $friendHtml;
+}
+
+
+function _wallSocialAddPost()
+{
+    $html = '';
+    $html .= '<h3>' . get_lang('SocialWall') . '</h3>';
+    $html .=
+        '<form name="social_wall_main" method="POST" enctype="multipart/form-data">
+            <label for="social_wall_new_msg_main" class="hide">' . get_lang('SocialWallWhatAreYouThinkingAbout') . '</label>
+        <textarea name="social_wall_new_msg_main" rows="2" cols="80" style="width: 98%" placeholder="'.get_lang('SocialWallWhatAreYouThinkingAbout').'"></textarea>
+        <br />
+        <input class="" name="picture" type="file">
+        <input type="submit" name="social_wall_new_msg_main_submit" value="'.get_lang('Post').'" class="float right btn btn-primary" />
+    </form>';
+
+    return $html;
+}
+
+function _wallSocialPost($userId, $friendId)
+{
+    $array = SocialManager::getWallMessagesPostHTML($userId, $friendId);
+    $html = '';
+
+    for($i = 0; $i < count($array); $i++) {
+        $post = $array[$i]['html'];
+        $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id']);
+
+        $html .= SocialManager::social_wrapper_div($post.$comment, 5);
+    }
+
+    return $html;
+}

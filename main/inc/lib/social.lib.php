@@ -474,19 +474,20 @@ class SocialManager extends UserManager
 
         //display course entry
         $result .= '<div id="div_'.$count.'">';
-        $result .= '<h3><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_course(this,\''.$course_id.'\' )">';
+        //$result .= '<h3><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_course(this,\''.$course_id.'\' )">';
         $result .= $s_htlm_status_icon;
 
         //show a hyperlink to the course, unless the course is closed and user is not course admin
         if ($course_visibility != COURSE_VISIBILITY_HIDDEN && ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER)) {
-            $result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_id.'\');>&nbsp;'.$course_title.'</a>';
+           //$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_id.'\');>&nbsp;'.$course_title.'</a>';
+           $result .= $course_title;
         } else {
             $result .= $course_title." "." ".get_lang('CourseClosed')."";
         }
         $result .= '</h3>';
         //$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
         // display the what's new icons
-        if ($nbDigestEntries > 0) {
+        /*if ($nbDigestEntries > 0) {
             reset($digest);
             $result .= '<ul>';
             while (list ($key2) = each($digest[$thisCourseSysCode])) {
@@ -522,7 +523,7 @@ class SocialManager extends UserManager
                 $result .= '</li>';
             }
             $result .= '</ul>';
-        }
+        }*/
         $result .= '</li>';
         $result .= '</div>';
 
@@ -1029,4 +1030,384 @@ class SocialManager extends UserManager
         }
         return $content;
     }
+    /**
+     * Sends a message to someone's wall
+     * @param int $userId id of author
+     * @param int $friendId id where we send the message
+     * @param string $messageContent of the message
+     * @param int $messageId id parent
+     * @param string $messageStatus status type of message
+     * @return boolean
+     * @author Yannick Warnier
+     */
+    public static function sendWallMessage($userId, $friendId, $messageContent, $messageId = 0 ,$messageStatus)
+    {
+        $tblMessage = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $userId = intval($userId);
+        $friendId = intval($friendId);
+        $messageId = intval($messageId);
+        $return = false;
+
+        //Just in case we replace the and \n and \n\r while saving in the DB
+        $messageContent = str_replace(array("\n", "\n\r"), '<br />', $messageContent);
+        $cleanMessageContent = Database::escape_string($messageContent);
+
+        $now = api_get_utc_datetime();
+
+        $sql = 'INSERT INTO '.$tblMessage.'(
+            user_sender_id,user_receiver_id,msg_status,send_date,title,content,parent_id
+            ) VALUES(
+            '.$userId.','.$friendId.','.$messageStatus.',"'.$now.'","","'.$cleanMessageContent.'", "'.$messageId.'" ) ';
+        Database::query($sql);
+        $return = Database::insert_id();
+/*
+        $senderInfo = api_get_user_info($userId);
+        $notification = new Notification();
+        $notification->save_notification(Notification::NOTIFICATION_TYPE_WALL_MESSAGE, array($friendId), '', $messageContent, $senderInfo);
+*/
+        return $return;
+    }
+
+    /**
+     * Send File attachment (jpg,png)
+     * @author Anibal Copitan
+     * @param int $userId id user
+     * @param array $fileAttach
+     * @param int $messageId id message (relation with main message)
+     * @param string $fileComment description attachment file
+     * @return bool
+     */
+    public static function sendWallMessageAttachmentFile($userId, $fileAttach, $messageId, $fileComment = '')
+    {
+        $flag = false;
+        $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+
+        // create directory
+        $pathUserInfo = UserManager::get_user_picture_path_by_id($userId, 'system', true);
+        $social = '/social/';
+        $pathMessageAttach = $pathUserInfo['dir'] . 'message_attachments'. $social;
+        $safeFileComment = Database::escape_string($fileComment);
+        $safeFileName = Database::escape_string($fileAttach['name']);
+
+        $extension = strtolower(substr(strrchr($safeFileName, '.'), 1));
+        $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
+        if (!in_array($extension, $allowedTypes)) {
+            $flag = false;
+        } else {
+            $newFileName = uniqid('') . '.' . $extension;
+            if (!file_exists($pathMessageAttach)) {
+                @mkdir($pathMessageAttach, api_get_permissions_for_new_directories(), true);
+            }
+
+            $newPath = $pathMessageAttach . $newFileName;
+            if (is_uploaded_file($fileAttach['tmp_name'])) {
+                @copy($fileAttach['tmp_name'], $newPath);
+            }
+
+            $small = self::resize_picture($newPath, IMAGE_WALL_SMALL_SIZE);
+            $medium = self::resize_picture($newPath, IMAGE_WALL_MEDIUM_SIZE);
+
+            $big = new Image($newPath);
+            $ok = $small && $small->send_image($pathMessageAttach . IMAGE_WALL_SMALL . '_' . $newFileName) &&
+                $medium && $medium->send_image($pathMessageAttach . IMAGE_WALL_MEDIUM .'_' . $newFileName) &&
+                $big && $big->send_image($pathMessageAttach . IMAGE_WALL_BIG . '_' . $newFileName);
+
+            // Insert
+            $newFileName = $social.$newFileName;
+            $sql = "INSERT INTO $tbl_message_attach(filename, comment, path, message_id, size)
+				  VALUES ( '$safeFileName', '$safeFileComment', '$newFileName' , '$messageId', '".$fileAttach['size']."' )";
+            Database::query($sql);
+            $flag = true;
+        }
+
+        return $flag;
+    }
+
+    /**
+     * Gets all messages from someone's wall (within specific limits)
+     * @param int $userId id of wall shown
+     * @param string $messageStatus status wall message
+     * @param int $parentId id message (Post main)
+     * @param string Date from which we want to show the messages, in UTC time
+     * @param int   Limit for the number of parent messages we want to show
+     * @return boolean
+     * @author Yannick Warnier
+     */
+    public static function getWallMessages($userId, $messageStatus, $parentId = '', $start = null, $limit = 10)
+    {
+        if (empty($start)) {
+            $start = '0000-00-00';
+        }
+        $tblMessage = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $userId = intval($userId);
+        $start = Database::escape_string($start);
+        // TODO: set a maximum of 3 months for messages
+        //if ($start == '0000-00-00') {
+        //
+        //}
+        $limit = intval($limit);
+        $messages = array();
+        $sql = "SELECT id, user_sender_id,user_receiver_id, send_date, content, parent_id,
+          (SELECT ma.path from message_attachment ma WHERE  ma.message_id = tm.id ) as path,
+          (SELECT ma.filename from message_attachment ma WHERE  ma.message_id = tm.id ) as filename
+            FROM $tblMessage tm
+            WHERE user_receiver_id = $userId
+                AND send_date > '$start' ";
+        $sql .= (empty($messageStatus) || is_null($messageStatus)) ? '' : " AND msg_status = '$messageStatus' ";
+        $sql .= (empty($parentId) || is_null($parentId)) ? '' : " AND parent_id = '$parentId' ";
+        $sql .= " ORDER BY send_date DESC
+                LIMIT $limit ";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res)) {
+                $messages[] = $row;
+            }
+        }
+        
+        return $messages;
+    }
+
+    /**
+     * Gets all messages from someone's wall (within specific limits), formatted
+     * @param int $userId USER ID of the person's wall
+     * @param int $friendId id person
+     * @param int $idMessage id message
+     * @param string  Start date (from when we want the messages until today)
+     * @param int Limit to the number of messages we want
+     * @return string  HTML formatted string to show messages
+     */
+    public static function getWallMessagesHTML($userId, $friendId, $idMessage, $start = null, $limit = 10)
+    {
+        if (empty($start)) {
+            $start = '0000-00-00';
+        }
+
+        $visibility = (api_get_user_id() == $userId  && $userId == $friendId);
+        $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL, $idMessage, $start, $limit);
+        $formattedList = '<div>';
+        $users = array();
+
+        foreach ($messages as $message) {
+            $date = api_get_local_time($message['send_date']);
+            $userIdLoop = $message['user_sender_id'];
+            if (!isset($users[$userIdLoop])) {
+                $users[$userIdLoop] = api_get_user_info($userIdLoop);
+            }
+
+            $nameComplete = api_is_western_name_order()
+                ? $users[$userIdLoop]['firstname'] .' ' . $users[$userIdLoop]['lastname']
+                : $users[$userIdLoop]['lastname'] . ' ' . $users[$userIdLoop]['firstname'];
+            $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$userIdLoop;
+
+            $media = '';
+            $media .= '<div class="media">';
+            $media .= '<a href="'.$url.'" class="pull-left">'
+                . '<img class="" src="'. $users[$userIdLoop]['avatar'] .'" '
+                . 'width="32" height="32" alt="'.$users[$userIdLoop]['complete_name'].'" style="width: 32px; height: 32px;"> '
+                . '</a>';
+
+            $media .= '<div class="media-body">'
+                . '<h4 class="media-heading">'
+                . '<a href="'.$url.'">' . $nameComplete . '</a> '
+                . '<small><span class="time" title="' . $date . '">' . $date . '</span></small>'
+                . '</h4>'
+                . '</div>';
+
+            $media .= '<span class="content">'.Security::remove_XSS($message['content']).'</span>';
+
+            if ($visibility) {
+                $media .= '<div><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId=' . $message['id'].'">'.get_lang('SocialMessageDelete').'</a></div>';
+            }
+            $media .= '</div>'; // end media
+
+            $formattedList .= $media;
+        }
+
+        $formattedList .= '<form name="social_wall_message" method="POST">
+            <label for="social_wall_new_msg" class="hide">' . get_lang('SocialWriteNewComment') . '</label>
+            <input type="hidden" name = "messageId" value="'.$idMessage.'" />
+            <textarea placeholder="' . get_lang('SocialWriteNewComment') . '" name="social_wall_new_msg" rows="1" cols="80" style="width: 98%"></textarea>
+            <br />
+            <input type="submit" name="social_wall_new_msg_submit" value="'.get_lang('Post').'" />
+            </form>';
+        $formattedList .= '</div>';
+
+        return $formattedList;
+    }
+
+    /**
+     * @param int $userId id
+     * @param int $friendId id
+     * @param null $start
+     * @param int $limit
+     * @return array $data return array associative
+     */
+    public static function getWallMessagesPostHTML($userId, $friendId = 0, $start = null, $limit = 10)
+    {
+        if (empty($start)) {
+            $start = '0000-00-00';
+        }
+        $visibility = (api_get_user_id() == $userId  && $userId == $friendId);
+        $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL_POST , null, $start, $limit);
+        $users = array();
+        $data = array();
+        foreach ($messages as $key => $message) {
+            $date = api_get_local_time($message['send_date']);
+            $userIdLoop = $message['user_sender_id'];
+            $userFriendIdLoop = $message['user_receiver_id'];
+
+            if (!isset($users[$userIdLoop])) {
+                $users[$userIdLoop] = api_get_user_info($userIdLoop);
+            }
+
+            if (!isset($users[$userFriendIdLoop])) {
+                $users[$userFriendIdLoop] = api_get_user_info($userFriendIdLoop);
+            }
+
+            $html = '';
+            $html .= self::_headerMessagePost($message['user_sender_id'], $message['user_receiver_id'], $users, $message, $visibility);
+            $html .= '<hr>';
+
+            $data[$key]['id'] = $message['id'];
+            $data[$key]['html'] = $html;
+        }
+
+        return $data;
+    }
+
+
+    private  static function _headerMessagePost($authorId, $reciverId, $users, $message, $visibility = false)
+    {
+        $date = api_get_local_time($message['send_date']);
+        $avatarAuthor = $users[$authorId]['avatar'];
+        $urlAuthor = api_get_path(WEB_PATH).'main/social/profile.php?u='.$authorId;
+        $nameCompleteAuthor = api_is_western_name_order()
+            ? $users[$authorId]['firstname'] .' ' . $users[$authorId]['lastname']
+            : $users[$authorId]['lastname'] . ' ' . $users[$authorId]['firstname'];
+
+        $avatarReciver = $users[$reciverId]['avatar'];
+        $urlReciber = api_get_path(WEB_PATH).'main/social/profile.php?u='.$reciverId;
+        $nameCompleteReciver = api_is_western_name_order()
+            ? $users[$reciverId]['firstname'] .' ' . $users[$reciverId]['lastname']
+            : $users[$reciverId]['lastname'] . ' ' . $users[$reciverId]['firstname'];
+
+        $htmlReciber = '';
+        if ($authorId != $reciverId) {
+            $htmlReciber = ' > <a href="'.$urlReciber.'">' . $nameCompleteReciver . '</a> ';
+        }
+
+        $wallImage = '';
+        if (!empty($message['path'])) {
+            $pathUserInfo = UserManager::get_user_picture_path_by_id($authorId, 'web', true);
+            $pathImg = $pathUserInfo['dir'] . 'message_attachments';
+            $imageBig = $pathImg .self::_geImage($message['path'], IMAGE_WALL_BIG);
+            $imageSmall =  $pathImg. self::_geImage($message['path'], IMAGE_WALL_SMALL);
+            $wallImage = '<hr><a class="thumbnail thickbox" href="'.$imageBig.'"><img src="'.$imageSmall.'"> </a>';
+        }
+
+
+        $htmlDelete = '';
+        if ($visibility) {
+            $htmlDelete .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId=' . $message['id'].'">'.get_lang('SocialMessageDelete').'</a>';
+        }
+
+        $html = '';
+        $html .= '<div class="mediaPost">';
+        $html .= '<a href="'.$urlAuthor.'" class="pull-left">'
+            . '<img class="" src="'. $avatarAuthor .'"  width="40" height="40" alt="'.$nameCompleteAuthor.'" style="width: 40px; height: 40px;"></a>';
+        $html .= '<div class="media-body">';
+        $html .= '<h4 class="media-heading"> <a href="'.$urlAuthor.'">' . $nameCompleteAuthor . '</a> ' . $htmlReciber;
+        $html .= '<small><span class="time" title="' . $date . '">' . $date . '</span></small></h4>';
+        $html .= $htmlDelete;
+        $html .= $wallImage;
+        $html .= '</div>';
+        $html .= '<span class="content">'.Security::remove_XSS(self::readContentWithOpenGraph($message['content'])).'</span>';
+        $html .= '</div>'; // end mediaPost
+
+        return $html;
+    }
+
+    /**
+     * Get schedule html (with data openGrap)
+     * @param $text content text
+     */
+    public function readContentWithOpenGraph($text)
+    {
+        // search link in first line
+        $regExUrl = "/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+        $newText = '';
+        $count = 0;
+        if(preg_match($regExUrl, $text, $url)) {
+            // make the urls hyper links
+            $newText .= preg_replace($regExUrl, "<a target=\"_blank\" href=" . $url[0] . ">".$url[0]."</a> ", $text);
+            if ($count == 0) {
+                //$newText .= self::getHtmlByLink($url[0]);
+            }
+            $count++;
+        } else {
+            $newText .= $text;
+        }
+
+        return $newText;
+    }
+
+    /**
+     * html with data OpenGrap
+     * @param $link url
+     * @return string data html
+     */
+    public function getHtmlByLink($link)
+    {
+        $graph = OpenGraph::fetch($link);
+        $title =  !empty($graph->site_name) ? $graph->site_name .' : '.$graph->title : $graph->title;
+        $html = '<div style="border:1px solid gray">';
+        $html .= '<h3><a target="_blank" href="'.$link.'">' . $title . '</h3>';
+        $html .= empty($graph->image) ? '' : '<img alt="" src="'.$graph->image.'" height="160" >';
+        $html .= empty($graph->description) ? '' : '<div>'.$graph->description.'</div>';
+        $html .= "</div>";
+
+        return $html;
+    }
+
+
+    /**
+     * Get name img by sizes
+     * @param string$path
+     * @return string
+     */
+    private static function _geImage($path, $size = '')
+    {
+        $name = '';
+        $array = preg_split('#\/#', $path);
+        if (isset($array[2]) && !empty($array[2])) {
+
+            if ($size == IMAGE_WALL_SMALL) {
+                $name = IMAGE_WALL_SMALL. '_' . $array[2];
+            }else if($size == IMAGE_WALL_MEDIUM){
+                $name = IMAGE_WALL_MEDIUM. '_' . $array[2];
+            }else if($size == IMAGE_WALL_BIG){
+                $name = IMAGE_WALL_BIG. '_' . $array[2];
+            }else {
+                $name = IMAGE_WALL_SMALL. '_' . $array[2];
+            }
+            $lessImage = str_replace($array[2], '', $path);
+            $name = $lessImage . $name;
+        }
+
+        return $name;
+    }
+    /**
+    * Delete messages delete logic
+    * @param int $id indice message to delete.
+    * @return status query
+    */
+    public static function deleteMessage($id)
+    {
+        $id = intval($id);
+        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
+        $statusMessage = MESSAGE_STATUS_WALL_DELETE;
+        $sql = "UPDATE $tblMessage SET msg_status = '$statusMessage' WHERE id = '{$id}' ";
+        return Database::query($sql);
+    }
+
 }

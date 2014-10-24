@@ -3981,7 +3981,7 @@ function api_disp_html_area($name, $content = '', $height = '', $width = '100%',
  * @deprecated
  */
 function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
-    global $_configuration, $_course, $fck_attribute;
+    global $fck_attribute;
     require_once api_get_path(LIBRARY_PATH).'formvalidator/Element/html_editor.php';
     $editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
     $editor->setValue($content);

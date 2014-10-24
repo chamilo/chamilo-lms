@@ -1,0 +1,49 @@
+.title-institution{
+    font-size: 18px;
+    text-align: center;
+    font-weight: normal;
+    padding-bottom: .2em;
+}
+.title-certified{
+    text-align: center;
+    font-weight: bold;
+    font-size: 42px;
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+.line-certified{
+    text-align: center;
+    font-size: 18px;
+    padding-bottom: .5em;
+    padding-top: .5em;
+}
+.student-certified{
+    padding-bottom: .5em;
+    padding-top: .5em;
+    font-size: 35px;
+    text-align: center;
+}
+.couse-certified{
+    padding-bottom: .5em;
+    padding-top: .5em;
+    font-size: 30px;
+    text-align: center;
+}
+.code-course{
+    text-align: left;
+    font-size: 12px;
+    font-style: italic;
+    padding-top: 1em;
+}
+.paper{
+    background: url("../img/paper.png") repeat;
+    padding: 10px;
+}
+.page-container{
+    width: 1072px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.page{
+    background-color: #fff;
+}

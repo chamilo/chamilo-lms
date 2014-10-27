@@ -5,8 +5,6 @@
  *	@package chamilo.group
  */
 
-/*	INIT SETTINGS */
-
 // Name of the language file that needs to be included
 $language_file = 'group';
 
@@ -41,7 +39,7 @@ if (isset($_POST['action'])) {
                 }
                 if (api_get_setting('allow_group_categories') == 'false') {
                     $group['category'] = GroupManager::DEFAULT_GROUP_CATEGORY;
-                } elseif ($_POST['same_category']) {
+                } elseif (isset($_POST['same_category']) && $_POST['same_category']) {
                     $group['category'] = $_POST['group_0_category'];
                 }
 
@@ -122,8 +120,7 @@ elseif (isset($_POST['number_of_groups'])) {
 
     function copy_value(key) {
         ref = document.getElementById(key+'_0');
-        for( i=1; i<number_of_groups; i++)
-        {
+        for( i=1; i<number_of_groups; i++) {
             element = document.getElementById(key+'_'+i);
             element.value = ref.value;
         }
@@ -178,7 +175,6 @@ EOT;
 			if (api_get_setting('allow_group_categories') == 'true') {
 				$group_el[] = $form->createElement('checkbox', 'same_category', null, get_lang('SameForAll'), array('onclick' => "javascript: switch_state('category');"));
 			}
-			//$group_el[] = $form->createElement('checkbox', 'same_tutor', null, get_lang('SameForAll'), array ('onclick' => "javascript: switch_state('tutor');"));
 			$group_el[] = $form->createElement('checkbox', 'same_places', null, get_lang('SameForAll'), array ('onclick' => "javascript: switch_state('places');"));
 			$form->addGroup($group_el, 'groups', null, '</td><td>', false);
 		}
@@ -307,5 +303,4 @@ EOT;
 	}
 }
 
-/*	FOOTER */
 Display :: display_footer();

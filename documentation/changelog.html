@@ -44,7 +44,7 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-<h1>Chamilo 1.9.10 - 30th of October, 2014</h1>
+<h1>Chamilo 1.9.10 - 10th of November, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.10 is a patch version with a few minor bugfixes and a new packaging. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.10, with a few changes to this changelog file and a few fixes throughout the code (as such, you can just overwrite previous files to upgrade from 1.9.8, 1.9.8.1 or 1.9.8.2 to 1.9.10).</p>
 <h3>Release name</h3>
@@ -57,25 +57,94 @@ Second case: if you use group forums and have had issues with posts appearing tw
 This is an exceptional event in the history of Chamilo, and we believe it should only affect very few portals, but we prefer to take precautionnary measures and warn you upfront.<br />
 </p>
 
+<h3>Security</h3>
+All security issues are published and patches are attached on <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a>. If you think you found an additional security issue you'd like to report, please check our procedure there.
+<ul>
+    <li></li>
+    <li>(8a75f65 - #7242) Fix SQL injection in mySpace/users.php</li>
+</ul>
+
 <h3>New Features</h3>
 <ul>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li>(eb45183 - BT#8662) Add $_configuration['hide_scorm_pdf_link'] to remove option to "download as PDF" in learning paths list</li>
+  <li>(bea2ed0 - #7225) Add Clockworks SMS sending plugin</li>
+  <li>(606c84b - #7236) Add $_configuration['course_catalog_hide_private'] option to hide private courses from courses catalogue</li>
+  <li>(5720f35 - #7252) Add support for phone numbers extra field type</li>
+  <li>(7610baf - BT#8441) Add webservice mode to converter from ppt</li>
+  <li>(2582408 - BT#8274) Add ViewerJS (view .pdf) in documents tool</li>
+  <li>(3ef3032 - BT#8274) Add Wodo text editor (edit .odt and .odp) in documents</li>
   <li>(eadeaf8 - BT#8317) Add sessions duration feature</li>
   <li>(019987d - BT#8316) Allow courses to be sorted inside a session (requires manual database change)</li>
 </ul>
 
 <h3>Improvements (minor features)</h3>
 <ul>
+  <li></li>
+  <li>(557d45c - BT#8663) Fix layout of social network messages</li>
+  <li>(70753e9 - BT#6449) Set new coach through CSV import if the session only contains one single course</li>
+  <li>(97a1862 - BT#8397) Fix time delay by replacing mysql now()</li>
+  <li>(b14987d - BT#7707) Add work, forum and time info + export option to user information page</li>
+  <li>(cefb740 - BT#8606) Fix session label</li>
+  <li>(85ad24f - #7261) Fix issue updating user field when login = email</li>
+  <li>(d75f9c2 - #7249) Fix visibility issues in links categories</li>
+  <li>(152e395 - BT#7057) Fix removal of user from session</li>
+  <li>(bafcdef - BT#8611) Add option to make a copy of a surveys inside the same course</li>
+  <li>(1ee0d78 - BT#8605) Add option to "add me as teacher in courses" during CSV import</li>
+  <li>(9373db4) Fix double ampercent in logout link</li>
+  <li>(25f5896 - #7244) Fix duplicating documents</li>
+  <li>(56f891e - #7244) Set overwrite as default method for AJAX documents upload (reverts 9dcb404)</li>
+  <li>(2024407 - BT#8624) Fix language setting in registration form</li>
+  <li>(8e316df - BT#8606) Add date format to sessions CSV import</li>
+  <li>(16e70d2 - BT#8604) Fix sessions category update</li>
+  <li>(51b5937 - #7229) Fix issue in skills coloration and update</li>
+  <li>(0358044 - #7237) Fix issue not hiding hidden exercises</li>
+  <li>(1759dab - BT#8490) Fix CSV report</li>
+  <li>(6736430) Fix issue in questions copy</li>
+  <li>(07eda14 - BT#7780) Fix &copy bug making questions copy fail</li>
+  <li>(92dd4a0 - BT#8423) Fix score = 0 in exam with a timer</li>
+  <li>(b16193e - BT#8572) Fix issue setting score to 0 when there is a progress but no score in learning paths</li>
+  <li>(34e50bb) Fix LPs list to allow admins to view all LPs</li>
+  <li>(0000dd4 - #7683) Fix issue with SCORM items not appearing</li>
+  <li>(0798f1d - BT#8498) Fix visibility of sessions for coaches when additional access days have been defined</li>
+  <li>(804cc1b - #7232) Fix issue with users counting in tasks (when in session)</li>
+  <li>(f979b13 - #7229) Fix bug when saving skill profile name and description</li>
+  <li>(f25aed4) Fix double \n in global links file</li>
+  <li>(9dbab31 - BT#8459) Add $_configuration['hide_scorm_copy_link'] to hide the icon in the learning paths list</li>
+  <li>(6eae236 - BT#8479) Add sessions filter to questions bank page</li>
+  <li>(4c324c2 - #6839) Add user account expiry date to CSV import</li>
+  <li>(a8181c1 - #3702) Fix invitation mail sender field</li>
+  <li>(9b29a3b - #7222) Fix issue with plugins only installing as course plugins</li>
+  <li>(d942e8e - BT#8457) Add $_configuration['allow_lp_return_link'] option to change the return link in LPs</li>
+  <li>(c2687f9 - BT#8426, #7208) Fix SCORM export+import feature</li>
+  <li>(1973d6f - BT#8397) Add details to reporting screen</li>
+  <li>(4e9576d - BT#8151) Fix issue with student download of own work</li>
+  <li>(a914c0a, ...) Vastly improved presentation of thematic advance/course progress feature in course home</li>
+  <li>(8f5ae4b - #6839) Add users edition through CSV import</li>
+  <li>(bcea0b4) Fix bug in course information's users list when multi-url enabled</li>
+  <li>(265499f - BT#8339) Fix custom pages link</li>
+  <li>(caf2a58 - BT#8074) Hide shared_folder to users not registered in course</li>
+  <li>(dfff494 - BT#7215) Add CSRF check in plugins config</li>
+  <li>(4d15a0f - BT#8417) Fix buttons to hide fields in tracking page</li>
+  <li>(911b2ac - BT#7179) Fix issue preventing password edition when username=email</li>
   <li>(4d15a0f - BT#8417) Fix hide buttons in users report<li>
   <li>(5213de2) Fix 1800 seconds flaw in learning paths availability</li>
   <li>(5660b37) Fix download link in install doc</li>
   <li>(09dc3f3) Update install doc for full-text indexing</li>
   <li>(333319b) Fix deadlock condition in documents download</li>
+  <li>(7c18635 - BT#7210) Fix issue preventing the appearance of the "Create course" link</li>
+  <li>(8be2bce - BT#8314) Add logging in track_e_default for changes in personal filemanager</li>
+  <li>(8be2bce - BT#8314) Fix personal filemanager when root folder changes name</li>
   <li>(bc94d5c - BT#8392) Allow ExtraFieldValue method to get the last value instead of the first in case of duplicates</li>
   <li>(bbe627b - BT#8268) Add sso_challenge method as a second alternative to SSO authentication</li>
   <li>(5ed701e) Add optimization documentation for user_rel_tag table index</li>
   <li>(1204e13) Fix who is online user preview</li>
+  <li>(9dcb404) Fix issue with AJAX document uploads using overwrite by default</li>
   <li>(a98ab8c - BT#8157) Fix error loading wav files using LP</li>
-  <li>(cfac025 - BT#7780) Fix QTI import response</li>
+  <li>(cfac025 - BT#7780) Fix QTI import response message</li>
   <li>(c830878 - BT#7780, BT#6819) Fix condition showing deleted exercises</li>
   <li>(c98d190 - BT#7803) Show events for "everyone" when showing user events</li>
   <li>(f01b3b5 - BT#7780) Fix Aiken exercise import redirect display</li>
@@ -87,7 +156,6 @@ This is an exceptional event in the history of Chamilo, and we believe it should
   <li>(fbda6e2 - BT#8157) Add export users-class to CSV</li>
   <li>(fd61c0f) Add missing icons</li>
   <li>(a55776c - BT#8189) Fix for users inscription with approval setting</li>
-  <li></li>
 </ul>
 
 

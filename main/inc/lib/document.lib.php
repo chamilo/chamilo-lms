@@ -4291,17 +4291,33 @@ class DocumentManager
      */
     public static function generateDefaultCertificate($courseData)
     {
-        $dir = '/';
+        $dir = '/certificates';
 
         $title = get_lang('DefaultCertificate');
         $comment = null;
 
         $fileName = replace_dangerous_char($title);
         $filePath = api_get_path(SYS_COURSE_PATH) . "{$courseData['path']}/document{$dir}";
-        $fileSize = filesize("{$filePath}{$fileName}.html") | 100;
+        $fileFullPath = "{$filePath}/{$fileName}.html";
+        $fileSize = 0;
         $fileType = 'file';
+        $fileContent = file_get_contents(api_get_path(SYS_PATH) . 'main/gradebook/certificate_template/template.html');
 
-        $saveFilePath = "{$dir}{$fileName}.html";
+        $saveFilePath = "{$dir}/{$fileName}.html";
+
+        if (!is_dir($filePath)) {
+            mkdir($filePath, api_get_permissions_for_new_directories());
+        }
+
+        $defaultCertificateFile = $fp = @fopen($fileFullPath, 'w');
+
+        if ($defaultCertificateFile != false) {
+            @fputs($defaultCertificateFile, $fileContent);
+            fclose($defaultCertificateFile);
+            chmod($fileFullPath, api_get_permissions_for_new_files());
+
+            $fileSize = filesize($fileFullPath);
+        }
 
         $documentId = add_document($courseData, $saveFilePath, $fileType, $fileSize, $title, $comment);
 

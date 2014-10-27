@@ -5,7 +5,7 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.plugin.tour
  */
-require_once 'config.php';
+require_once __DIR__.'/config.php';
 
 $plugin_info = Tour::create()->get_info();
 

@@ -6,14 +6,14 @@
             <div class="span12">
                 <div>
                     <h2>{{ 'TitlePlugin'|get_plugin_lang('BuyCoursesPlugin') }}</h2>
-                    <p>{{ 'PresentationPlugin'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+                    <p>{{ 'PluginPresentation'|get_plugin_lang('BuyCoursesPlugin') }}</p>
                 </div>
                 <div class="normal-message">
                     <h3>{{ 'Instructions'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
                     <ul>
-                        <li>{{ 'InstructionsStep1'|get_plugin_lang('BuyCoursesPlugin') }}</li>
-                        <li>{{ 'InstructionsStep2'|get_plugin_lang('BuyCoursesPlugin') }}</li>
-                        <li>{{ 'InstructionsStep3'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                        <li>{{ 'InstructionsStepOne'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                        <li>{{ 'InstructionsStepTwo'|get_plugin_lang('BuyCoursesPlugin') }}</li>
+                        <li>{{ 'InstructionsStepThree'|get_plugin_lang('BuyCoursesPlugin') }}</li>
                     </ul>
                 </div>
             </div>

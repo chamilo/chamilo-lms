@@ -116,6 +116,7 @@ function get_tabs() {
             if (api_get_setting($tab['variable'], $tab['subkey']) == 'true') {
                 if (!empty($tab['comment']) && $tab['comment'] !== 'ShowTabsComment') {
                     $navigation[$tab['subkey']]['url'] = $tab['comment'];
+                    // $tab['title'] value must be included in trad4all.inc.php
                     $navigation[$tab['subkey']]['title'] = get_lang($tab['title']);
                     $navigation[$tab['subkey']]['key'] = $tab['subkey'];
                 }

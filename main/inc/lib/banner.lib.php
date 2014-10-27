@@ -116,7 +116,7 @@ function get_tabs() {
             if (api_get_setting($tab['variable'], $tab['subkey']) == 'true') {
                 if (!empty($tab['comment']) && $tab['comment'] !== 'ShowTabsComment') {
                     $navigation[$tab['subkey']]['url'] = $tab['comment'];
-                    $navigation[$tab['subkey']]['title'] = $tab['title'];
+                    $navigation[$tab['subkey']]['title'] = get_lang($tab['title']);
                     $navigation[$tab['subkey']]['key'] = $tab['subkey'];
                 }
             }

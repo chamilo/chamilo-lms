@@ -154,21 +154,21 @@ class GroupManager
     /**
      * Create a group
      * @param string $name The name for this group
+     * @param int $category_id
      * @param int $tutor The user-id of the group's tutor
      * @param int $places How many people can subscribe to the new group
      */
     public static function create_group($name, $category_id, $tutor, $places)
     {
         $_course = api_get_course_info();
-        $table_group = Database :: get_course_table(TABLE_GROUP);
-
         $session_id = api_get_session_id();
         $course_id  = api_get_course_int_id();
+
+
         $currentCourseRepository = $_course['path'];
-
         $category = self :: get_category($category_id);
-        $places = intval($places);
 
+        $places = intval($places);
         if ($places == 0) {
             //if the amount of users per group is not filled in, use the setting from the category
             $places = $category['max_student'];
@@ -178,6 +178,7 @@ class GroupManager
             }
         }
 
+        $table_group = Database :: get_course_table(TABLE_GROUP);
         $sql = "INSERT INTO ".$table_group." SET
                 c_id = $course_id ,
                 category_id='".Database::escape_string($category_id)."',
@@ -192,16 +193,30 @@ class GroupManager
                 self_registration_allowed = '".$category['self_reg_allowed']."',
                 self_unregistration_allowed = '".$category['self_unreg_allowed']."',
                 session_id='".Database::escape_string($session_id)."'";
+        error_log($sql);
         Database::query($sql);
         $lastId = Database::insert_id();
 
         if ($lastId) {
             $desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
-            $my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';
-            $unique_name = create_unexisting_directory($_course, api_get_user_id(), $session_id, $lastId, null, $my_path, $desired_dir_name, null,  1);
+            $my_path = api_get_path(SYS_COURSE_PATH) . $currentCourseRepository . '/document';
+
+            $unique_name = create_unexisting_directory(
+                $_course,
+                api_get_user_id(),
+                $session_id,
+                $lastId,
+                null,
+                $my_path,
+                $desired_dir_name,
+                null,
+                1
+            );
 
             /* Stores the directory path into the group table */
-            $sql = "UPDATE ".$table_group." SET name = '".Database::escape_string($name)."', secret_directory = '".$unique_name."'
+            $sql = "UPDATE ".$table_group." SET
+                    name = '".Database::escape_string($name)."',
+                    secret_directory = '".$unique_name."'
                     WHERE c_id = $course_id AND id ='".$lastId."'";
 
             Database::query($sql);
@@ -234,7 +249,7 @@ class GroupManager
                 $values['approval_direct_group']['approval_direct'] = 0;
                 $values['allow_attachments_group']['allow_attachments'] = 1;
                 $values['allow_new_threads_group']['allow_new_threads'] = 1;
-                $values['default_view_type_group']['default_view_type']=api_get_setting('default_forum_view');
+                $values['default_view_type_group']['default_view_type'] = api_get_setting('default_forum_view');
                 $values['group_forum'] = $lastId;
                 if ($category['forum_state'] == '1') {
                     $values['public_private_group_forum_group']['public_private_group_forum']='public';
@@ -730,9 +745,9 @@ class GroupManager
         $course_info = api_get_course_info($course_code);
         $course_id     = $course_info['real_id'];
 
-        $table_group         = Database :: get_course_table(TABLE_GROUP);
-        $table_group_cat     = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-        $cat_id             = Database::escape_string($cat_id);
+        $table_group = Database:: get_course_table(TABLE_GROUP);
+        $table_group_cat = Database:: get_course_table(TABLE_GROUP_CATEGORY);
+        $cat_id = Database::escape_string($cat_id);
         $sql = "SELECT id FROM $table_group WHERE c_id = $course_id AND category_id='".$cat_id."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
@@ -801,7 +816,8 @@ class GroupManager
         Database::query($sql);
         $categoryId = Database::insert_id();
         if ($categoryId == self::VIRTUAL_COURSE_CATEGORY) {
-            $sql = "UPDATE  ".$table_group_category." SET id = ". ($categoryId +1)." WHERE c_id = $course_id AND id = $categoryId";
+            $sql = "UPDATE  ".$table_group_category." SET id = ". ($categoryId +1)."
+                    WHERE c_id = $course_id AND id = $categoryId";
             Database::query($sql);
             return $categoryId +1;
         }
@@ -931,9 +947,11 @@ class GroupManager
         $res = Database::query($sql);
         $cat1 = Database::fetch_object($res);
         $cat2 = Database::fetch_object($res);
-        $sql = "UPDATE $table_group_cat SET display_order=$cat2->display_order WHERE id = $cat1->id AND c_id = $course_id ";
+        $sql = "UPDATE $table_group_cat SET display_order=$cat2->display_order
+                WHERE id = $cat1->id AND c_id = $course_id ";
         Database::query($sql);
-        $sql = "UPDATE $table_group_cat SET display_order=$cat1->display_order WHERE id = $cat2->id AND c_id = $course_id ";
+        $sql = "UPDATE $table_group_cat SET display_order=$cat1->display_order
+                WHERE id = $cat2->id AND c_id = $course_id ";
         Database::query($sql);
     }
 
@@ -1060,7 +1078,8 @@ class GroupManager
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $course_id = api_get_course_int_id();
         $group_id = intval($group_id);
-        $sql = "SELECT user_id FROM $group_user_table WHERE c_id = $course_id AND group_id = $group_id";
+        $sql = "SELECT user_id FROM $group_user_table
+                WHERE c_id = $course_id AND group_id = $group_id";
         $res = Database::query($sql);
         $users = array();
 
@@ -1098,19 +1117,19 @@ class GroupManager
     /**
      * Fill the groups with students.
      * The algorithm takes care to first fill the groups with the least # of users.
-     *    Analysis
-     *    There was a problem with the "ALL" setting.
-     *    When max # of groups is set to all, the value is sometimes NULL and sometimes ALL
-     *    and in both cased the query does not work as expected.
-     *    Stupid solution (currently implemented: set ALL to a big number (INFINITE) and things are solved :)
-     *    Better solution: that's up to you.
+     * Analysis
+     * There was a problem with the "ALL" setting.
+     * When max # of groups is set to all, the value is sometimes NULL and sometimes ALL
+     * and in both cased the query does not work as expected.
+     * Stupid solution (currently implemented: set ALL to a big number (INFINITE) and things are solved :)
+     * Better solution: that's up to you.
      *
-     *    Note
-     *    Throughout Dokeos there is some confusion about "course id" and "course code"
-     *    The code is e.g. TEST101, but sometimes a variable that is called courseID also contains a course code string.
-     *    However, there is also a integer course_id that uniquely identifies the course.
-     *    ywarnier:> Now the course_id has been removed (25/1/2005)
-     *    The databases are als very inconsistent in this.
+     * Note
+     * Throughout Dokeos there is some confusion about "course id" and "course code"
+     * The code is e.g. TEST101, but sometimes a variable that is called courseID also contains a course code string.
+     * However, there is also a integer course_id that uniquely identifies the course.
+     * ywarnier:> Now the course_id has been removed (25/1/2005)
+     * The databases are als very inconsistent in this.
      *
      * @author Chrisptophe Gesche <christophe.geshe@claroline.net>,
      *         Hugues Peeters     <hugues.peeters@claroline.net> - original version
@@ -1232,7 +1251,8 @@ class GroupManager
         } else {
             $course_id = intval($course_id);
         }
-        $sql = "SELECT  COUNT(*) AS number_of_students FROM $table_group_user WHERE c_id = $course_id AND group_id = $group_id";
+        $sql = "SELECT  COUNT(*) AS number_of_students FROM $table_group_user
+                WHERE c_id = $course_id AND group_id = $group_id";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
         return $db_object->number_of_students;
@@ -1274,7 +1294,8 @@ class GroupManager
             $cat_condition = " AND g.category_id =  $cat_id ";
         }
 
-        $sql = "SELECT  COUNT(*) AS number_of_groups FROM $table_group_user gu, $table_group g
+        $sql = "SELECT  COUNT(*) AS number_of_groups
+                FROM $table_group_user gu, $table_group g
                 WHERE     gu.c_id     = $course_id AND
                         g.c_id         = $course_id AND
                         gu.user_id     = $user_id AND

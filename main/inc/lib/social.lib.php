@@ -1313,7 +1313,7 @@ class SocialManager extends UserManager
 
             $media = '';
             $media .= '<div class="media" style="width:100%; display:inline-block; margin-bottom:5px;">';
-                $media .= '<div class="media-body" style="width: 100%; height: 32px;">';
+                $media .= '<div class="media-body" style="width: 100%; height: 32px; margin-bottom:5px;">';
                     $media .= '<div class="pull-left" style="width: 32px; height: 100%;">';
                     $media .= '<a href="'.$url.'" >'
                         . '<img class="" src="'. $users[$userIdLoop]['avatar'] .'" '
@@ -1329,14 +1329,14 @@ class SocialManager extends UserManager
                         $media .= '<div class="pull-left" style="height: 100%;">';
                         $media .= '<small><span class="time" title="'.$date.'">'.$date.'</span></small>';
                         $media .= '</div>';
-                        $media .= '<div class="pull-right" style="height: 100%;">';
-                        if ($visibility) {
-                            $media .= '<div><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId=' . $message['id'].'">'.get_lang('SocialMessageDelete').'</a></div>';
-                        }
-                        $media .= '</div>';
                         $media .= '</div>';
                     $media .= '</div>';
                 $media .= '</div>';
+            if ($visibility) {
+                $media .= '<div class="pull-left" style="width: 100%;height:20px">';
+                $media .= '<div><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId=' . $message['id'].'">'.get_lang('SocialMessageDelete').'</a></div>';
+                $media .= '</div>';
+            }
                 $media .= '<div class="pull-left" style="width: 100%;">';
                     $media .= '<span class="content">'.Security::remove_XSS($message['content']).'</span>';
                 $media .= '</div>';
@@ -1436,7 +1436,7 @@ class SocialManager extends UserManager
 
         $html = '';
         $html .= '<div class="mediaPost" style="width: 100%; display:inline-block; margin-bottom:5px;">';
-        $html .= '<div class="media-body" style="width: 100%; height: 40px;">';
+        $html .= '<div class="media-body" style="width: 100%; height: 40px; margin-bottom:5px;">';
         $html .= '<div class="pull-left" style="width: 40px; height: 100%;">';
         $html .= '<a href="'.$urlAuthor.'">'.'<img class="" src="'.$avatarAuthor.
         '" alt="'.$nameCompleteAuthor.'" style="width: 40px; height: 40px;"></a>';
@@ -1450,13 +1450,15 @@ class SocialManager extends UserManager
         $html .= '<div class="pull-left" style="height: 100%;">';
         $html .= '<small><span class="time" title="'.$date.'">'.$date.'</span></small>';
         $html .= '</div>';
-        $html .= '<div class="pull-right" style="height: 100%;">';
-        $html .= $htmlDelete;
-        $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= $wallImage;
         $html .= '</div>';
+        if ($visibility) {
+            $html .= '<div class="pull-left" style="width: 100%;height:20px">';
+            $html .= $htmlDelete;
+            $html .= '</div>';
+        }
         $html .= '<div class="pull-left" style="width: 100%;">';
         $html .= '<span class="content">'.Security::remove_XSS(self::readContentWithOpenGraph($message['content'])).'</span>';
         $html .= '</div>';

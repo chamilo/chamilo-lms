@@ -1479,7 +1479,8 @@ class SocialManager extends UserManager
             // make the urls hyper links
             $newText .= preg_replace($regExUrl, "<a target=\"_blank\" href=" . $url[0] . ">".$url[0]."</a> ", $text);
             if ($count == 0) {
-                //$newText .= self::getHtmlByLink($url[0]);
+                // Comment this line to disable OpenGraph
+                $newText .= self::getHtmlByLink($url[0]);
             }
             $count++;
         } else {
@@ -1497,10 +1498,10 @@ class SocialManager extends UserManager
     public function getHtmlByLink($link)
     {
         $graph = OpenGraph::fetch($link);
-        $title =  !empty($graph->site_name) ? $graph->site_name .' : '.$graph->title : $graph->title;
-        $html = '<div style="border:1px solid gray">';
-        $html .= '<h3><a target="_blank" href="'.$link.'">' . $title . '</h3>';
-        $html .= empty($graph->image) ? '' : '<img alt="" src="'.$graph->image.'" height="160" >';
+        $title = $graph->title;
+        $html = '<div>';
+        $html .= '<a target="_blank" href="'.$link.'"><h3>'.$title.'</h3>';
+        $html .= empty($graph->image) ? '' : '<img alt="" src="'.$graph->image.'" height="160" ></a>';
         $html .= empty($graph->description) ? '' : '<div>'.$graph->description.'</div>';
         $html .= "</div>";
 

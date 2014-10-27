@@ -11,7 +11,7 @@ $language_file = array('userInfo', 'index');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 // Include OpenGraph NOT AVAILABLE 
-// require_once api_get_path(LIBRARY_PATH) . 'opengraph/OpenGraph.php';
+require_once api_get_path(LIBRARY_PATH) . 'opengraph/OpenGraph.php';
 
 if (api_get_setting('allow_social_tool') !='true') {
     $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);

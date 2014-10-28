@@ -1297,7 +1297,7 @@ class SocialManager extends UserManager
         $visibility = (api_get_user_id() == $userId  && $userId == $friendId);
         $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL, $idMessage, $start, $limit);
         $formattedList = '<div class="mediaPost" style="width:calc(100%-14px);
-        display:inline-block;padding-left:14px">';
+        display:block;padding-left:14px">';
         $users = array();
 
         foreach ($messages as $message) {
@@ -1312,7 +1312,7 @@ class SocialManager extends UserManager
                 : $users[$userIdLoop]['lastname'] . ' ' . $users[$userIdLoop]['firstname'];
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$userIdLoop;
             $media = '';
-            $media .= '<div class="media" style="width:100%; display:inline-block; margin-bottom:5px;">';
+            $media .= '<div class="media" style="width:100%; display:block; margin-bottom:5px;">';
             $media .= '<div class="media-body" style="width: 100%; height: 32px; margin-bottom:5px;">';
             $media .= '<div class="pull-left" style="width: 32px; height: 100%;">';
             $media .= '<a href="'.$url.'" >'
@@ -1347,7 +1347,7 @@ class SocialManager extends UserManager
 
         $formattedList .= '</div>';
 
-        $formattedList .= '<div class="mediaPost" style="display:inline-block;">';
+        $formattedList .= '<div class="mediaPost" style="display:block;">';
             $formattedList .= '<form name="social_wall_message" method="POST">
                 <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$idMessage.'" />
@@ -1443,7 +1443,7 @@ class SocialManager extends UserManager
         }
 
         $html = '';
-        $html .= '<div class="mediaPost" style="width: 100%; display:inline-block; margin-bottom:5px;">';
+        $html .= '<div class="mediaPost" style="width: 100%; display:block; margin-bottom:5px;">';
         $html .= '<div class="media-body" style="width: 100%; height: 40px; margin-bottom:5px;">';
         $html .= '<div class="pull-left" style="width: 40px; height: 100%;">';
         $html .= '<a href="'.$urlAuthor.'">'.'<img class="" src="'.$avatarAuthor.

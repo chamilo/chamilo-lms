@@ -478,10 +478,10 @@ $(document).ready(function() {
                             <form id="skill_search" class="form-search">
                                 <select id="skill_id" name="skill_id" /></select>
                                 <div class="button-skill">
-                                    <a class="btn btn-block load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
+                                    <a class="btn btn-block btn-large btn-danger load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
                                     <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->
                                 </div>
-                                <ul id="skill_holder" class="holder holder_simple"></ul>
+                                <ul id="skill_holder" class="holder_simple border"></ul>
                             </form>
                         </div>
                         <!-- END SEARCH -->
@@ -494,7 +494,7 @@ $(document).ready(function() {
                         <h4 class="title-skill">{{ 'ProfileSearch'|get_lang }}</h4>
                     </a>
                 </div>
-                <div id="collapseTwo" class="accordion-body collapse in">
+                <div id="collapseTwo" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <!-- SEARCH PROFILE -->
                         <div class="search-profile-skill">

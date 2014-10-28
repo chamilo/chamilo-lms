@@ -143,7 +143,7 @@ $query_extra_fields = array();
 $query_vars = array('q' => $query, 'search_type' => $query_search_type);
 foreach ($extra_fields as $extra_field) {
     $field_name = 'field_'.$extra_field['variable'];
-    if (isset($_GET[$field_name])) {
+    if (isset($_GET[$field_name]) && $_GET[$field_name]!='0') {
         $query_vars[$field_name]=$_GET[$field_name];
     }
 }
@@ -155,7 +155,7 @@ $social_right_content = '<div class="span9">'.UserManager::get_search_form($quer
 
 // I'm searching something
 if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) {
-
+var_dump($query_vars);
     $itemPerPage = 9;
     $search_type = $_GET['search_type'];
     

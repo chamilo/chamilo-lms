@@ -653,7 +653,7 @@ class Plugin
         $pluginName = strtolower($langString);
         $pluginUrl = 'plugin/'.$pluginName.'/'.$filePath;
         if ($showTab === 'true') {
-            $tabAdded = $this->addTab($this->get_lang($langString), $pluginUrl);
+            $tabAdded = $this->addTab($langString, $pluginUrl);
             if ($tabAdded) {
                 // The page must be refreshed to show the recently created tab
                 echo "<script>location.href = '".Security::remove_XSS($_SERVER['REQUEST_URI'])."';</script>";
@@ -663,7 +663,7 @@ class Plugin
             $conditions = array(
                 'where' => array(
                     "variable = 'show_tabs' AND title = ? AND comment = ? " => array(
-                        $this->get_lang($langString),
+                        $langString,
                         $pluginUrl
                     )
                 )

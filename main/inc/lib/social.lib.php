@@ -1496,7 +1496,7 @@ class SocialManager extends UserManager
             $newText .= preg_replace($regExUrl, "<a target=\"_blank\" href=" . $url[0] . ">".$url[0]."</a> ", $text);
             if ($count == 0) {
                 // Comment this line to disable OpenGraph
-                $newText .= self::getHtmlByLink($url[0]);
+                //$newText .= self::getHtmlByLink($url[0]);
             }
             $count++;
         } else {

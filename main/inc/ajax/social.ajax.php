@@ -193,12 +193,10 @@ switch ($action) {
         if (!empty($array)) {
             ksort($array);
             $html = '';
-
             for($i = 0; $i < count($array); $i++) {
                 $post = $array[$i]['html'];
                 $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id'], null, $length, $start);
-
-                $html .= SocialManager::social_wrapper_div($post . $comment, 5);
+                $html .= '<div class="well_border">'.$post.$comment.'</div>';
             }
             $html .= Display::div(
                 Display::url(

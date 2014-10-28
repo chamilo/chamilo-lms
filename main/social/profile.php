@@ -261,8 +261,7 @@ $(document).ready(function (){
 
     var container = $("#wallMessages");
     container.jscroll({
-        loadingHtml: "<div class=\"span5\"> <div class=\"well_border\">' . get_lang('Loading') . ' </div></div>",
-        padding: -880,
+        loadingHtml: "<div class=\"well_border\">' . get_lang('Loading') . ' </div>",
         nextSelector: "a.nextPage:last",
         contentSelector: "",
         debug: true
@@ -414,22 +413,19 @@ if ($show_full_profile) {
 }
 
 $wallSocialAddPost .= wallSocialAddPost();
-$social_right_content .= Display::div(
-    wallSocialPost($my_user_id, $friendId) . Display::url(
-        get_lang('Next'),
-        $socialAjaxUrl . '?a=listWallMessage&start=10&length=5',
-        array(
-            'class' => 'nextPage next',
-            'style' => 'display: none;'
-        )
-    ),
-    array(
-        'id' => 'wallMessages'
-    )
-);
 $social_right_content .= SocialManager::social_wrapper_div($wallSocialAddPost, 5);
 
-$social_right_content .=  SocialManager::social_wrapper_div($personal_info, 4);
+$social_right_content .= wallSocialPost($my_user_id, $friendId);
+$socialAutoExtendLink = Display::url(
+    get_lang('Next'),
+    $socialAjaxUrl . '?a=listWallMessage&start=5&length=1',
+    array(
+        'class' => 'nextPage next',
+        'style' => 'display: none;'
+    )
+);
+
+$socialRightInformation .=  SocialManager::social_wrapper_div($personal_info, 4);
 
 //$social_right_content .= SocialManager::social_wrapper_div($wallSocial, 5);
 
@@ -521,7 +517,7 @@ if ($show_full_profile) {
     }
     //     if there are information to show
     if (!empty($extra_information_value)) {
-        $social_right_content .=  SocialManager::social_wrapper_div($extra_information, 9);
+        $socialRightInformation .=  SocialManager::social_wrapper_div($extra_information, 4);
     }
 
     // MY GROUPS
@@ -622,7 +618,7 @@ if ($show_full_profile) {
             }
             $i++;
         }
-        $social_right_content .=  SocialManager::social_wrapper_div($my_groups, 9);
+        $socialRightInformation .=  SocialManager::social_wrapper_div($my_groups, 4);
     }
 
     $my_courses = null;
@@ -642,13 +638,13 @@ if ($show_full_profile) {
             }
         }
         $my_courses .=  '</div>';        //social-content-training
-        $social_right_content .=  SocialManager::social_wrapper_div($my_courses, 9);
+        $socialRightInformation .=  SocialManager::social_wrapper_div($my_courses, 4);
     }
 
 
     $sessions .=  '<div><h3>'.api_ucfirst(get_lang('MySessions')).'</h3></div>';
     $sessions .=  "<div class='social-content-training'>$htmlSessionList</div>";
-    $social_right_content .=  SocialManager::social_wrapper_div($sessions, 9);
+    $socialRightInformation .=  SocialManager::social_wrapper_div($sessions, 4);
 
 
     // user feeds
@@ -656,7 +652,7 @@ if ($show_full_profile) {
     if (!empty($user_feeds)) {
         $rss =  '<div><h3>'.get_lang('RSSFeeds').'</h3></div>';
         $rss .=  '<div class="social-content-training">'.$user_feeds.'</div>';
-        $social_right_content .=  SocialManager::social_wrapper_div($rss, 9);
+        $socialRightInformation .=  SocialManager::social_wrapper_div($rss, 4);
     }
 
     //--Productions
@@ -715,7 +711,7 @@ if ($show_full_profile) {
                         $invitations .=  '</div>';
                     $invitations .=  '</div>';
                 }
-                $social_right_content .=  SocialManager::social_wrapper_div($invitations, 4);
+                $socialRightInformation .=  SocialManager::social_wrapper_div($invitations, 4);
             }
         }
 
@@ -726,7 +722,7 @@ if ($show_full_profile) {
         if (!empty($production_list)) {
             $product_content .= '<div><h3>'.get_lang('MyProductions').'</h3></div>';
             $product_content .=  $production_list;
-            $social_right_content .=  SocialManager::social_wrapper_div($product_content, 5);
+            $socialRightInformation .=  SocialManager::social_wrapper_div($product_content, 4);
         }
 
         $images_uploaded = null;
@@ -736,7 +732,7 @@ if ($show_full_profile) {
             $images_uploaded .=  '<div class="social-content-information">';
             $images_uploaded .=  $file_list;
             $images_uploaded .=  '</div>';
-            $social_right_content .=  SocialManager::social_wrapper_div($images_uploaded, 9);
+            $socialRightInformation .=  SocialManager::social_wrapper_div($images_uploaded, 4);
         }
     }
 
@@ -765,7 +761,7 @@ if ($show_full_profile) {
             $more_info .=  '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
             $more_info .=  '<br />';
         }
-        $social_right_content .=  SocialManager::social_wrapper_div($more_info, 9);
+        $socialRightInformation .=  SocialManager::social_wrapper_div($more_info, 4);
     }
 }
 $social_right_content .= MessageManager::generate_message_form('send_message');
@@ -776,7 +772,8 @@ $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
-
+$tpl->assign('socialRightInformation', $socialRightInformation);
+$tpl->assign('socialAutoExtendLink', $socialAutoExtendLink);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);
 

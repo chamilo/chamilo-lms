@@ -1390,7 +1390,7 @@ class SocialManager extends UserManager
             }
 
             $html = '';
-            $html .= self::_headerMessagePost(
+            $html .= self::headerMessagePost(
                 $message['user_sender_id'],
                 $message['user_receiver_id'],
                 $users,
@@ -1406,7 +1406,7 @@ class SocialManager extends UserManager
     }
 
 
-    private  static function _headerMessagePost($authorId, $reciverId, $users, $message, $visibility = false)
+    private  static function headerMessagePost($authorId, $reciverId, $users, $message, $visibility = false)
     {
         $date = api_get_local_time($message['send_date']);
         $avatarAuthor = $users[$authorId]['avatar'];
@@ -1430,8 +1430,8 @@ class SocialManager extends UserManager
         if (!empty($message['path'])) {
             $pathUserInfo = UserManager::get_user_picture_path_by_id($authorId, 'web', true);
             $pathImg = $pathUserInfo['dir'] . 'message_attachments';
-            $imageBig = $pathImg .self::_geImage($message['path'], IMAGE_WALL_BIG);
-            $imageSmall =  $pathImg. self::_geImage($message['path'], IMAGE_WALL_SMALL);
+            $imageBig = $pathImg .self::getImage($message['path'], IMAGE_WALL_BIG);
+            $imageSmall =  $pathImg. self::getImage($message['path'], IMAGE_WALL_SMALL);
             $wallImage = '<a class="thumbnail thickbox" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
@@ -1527,7 +1527,7 @@ class SocialManager extends UserManager
      * @param string$path
      * @return string
      */
-    private static function _geImage($path, $size = '')
+    private static function getImage($path, $size = '')
     {
         $name = '';
         $array = preg_split('#\/#', $path);

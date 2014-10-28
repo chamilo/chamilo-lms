@@ -359,12 +359,12 @@ foreach ($sessionList as $session) {
 }
 
 // My friends
-$friend_html = _listMyFriends($user_id, $link_shared ,$show_full_profile);
+$friend_html = listMyFriends($user_id, $link_shared ,$show_full_profile);
 $social_left_content.= '<div class="well sidebar-nav">' .$friend_html . '</div>';
 
 $personal_info = null;
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
-    $personal_info .= '<div DATA="DATA"><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
+    $personal_info .= '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
 } else {
     //--- Basic Information
     $personal_info .=  '<div><h3>'.get_lang('Profile').'</h3></div>';
@@ -401,12 +401,12 @@ if ($show_full_profile) {
     $personal_info .=  '</dl>';
 }
 
-$wallSocialAddPost .= _wallSocialAddPost();
+$wallSocialAddPost .= wallSocialAddPost();
 $social_right_content .= SocialManager::social_wrapper_div($wallSocialAddPost, 5);
 
 $social_right_content .=  SocialManager::social_wrapper_div($personal_info, 4);
 
-$social_right_content .= _wallSocialPost($my_user_id, $friendId);
+$social_right_content .= wallSocialPost($my_user_id, $friendId);
 //$social_right_content .= SocialManager::social_wrapper_div($wallSocial, 5);
 
 
@@ -759,7 +759,7 @@ $tpl->display($social_layout);
 /*
 * function list my friends
 */
-function _listMyFriends($user_id, $link_shared, $show_full_profile)
+function listMyFriends($user_id, $link_shared, $show_full_profile)
 {
     //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
     $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
@@ -819,7 +819,7 @@ function _listMyFriends($user_id, $link_shared, $show_full_profile)
 }
 
 
-function _wallSocialAddPost()
+function wallSocialAddPost()
 {
     $html = '';
     $html .= '<h3>' . get_lang('SocialWall') . '</h3>';
@@ -835,7 +835,7 @@ function _wallSocialAddPost()
     return $html;
 }
 
-function _wallSocialPost($userId, $friendId)
+function wallSocialPost($userId, $friendId)
 {
     $array = SocialManager::getWallMessagesPostHTML($userId, $friendId);
     $html = '';

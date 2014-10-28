@@ -276,6 +276,18 @@ if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
         api_get_user_id()
     );
 
+    // Admin fix, add the current course in the question pool.
+    if (api_is_platform_admin()) {
+        $courseInfo = api_get_course_info();
+        if (!empty($course_list)) {
+            $courseIdList = array_keys($course_list);
+            if (!in_array($courseInfo['real_id'], $courseIdList)) {
+                $course_list = array_merge($course_list, array($courseInfo));
+            }
+        } else {
+            $course_list = array($courseInfo);
+        }
+    }
 }
 
 $course_select_list = array();

@@ -66,14 +66,21 @@ All security issues are published and patches are attached on <a href="https://s
 
 <h3>New Features</h3>
 <ul>
-  <li></li>
-  <li></li>
-  <li></li>
-  <li></li>
+  <li>()</li>
+  <li>()</li>
+  <li>()</li>
+  <li>(6830ae3 - BT#8340) Add optional Memcache + DB persistence session storage mode (clusters context)</li>
+  <li>(577c7e7 - BT#8703) Add $api_warn_hosting_contact() and $_configuration[1]['hosting_contact_mail'] to explain who to contact in case of reaching a hosting limit</li>
+  <li>(5a5e6bc - BT#8736) Add $_configuration['email_alert_manager_on_new_quiz'] to send an e-mail to administrator for new quiz</li>
+  <li>(ea16dbd - BT#8697) Add $_configuration['order_user_list_by_official_code'] to order users lists by official code</li>
+  <li>(f286f35 - BT#7848) Add course legal agreement plugin</li>
+  <li>(75045f7 - BT8730) Add pdf_logo_header setting</li>
+  <li>(4601849, be487d6 - #7272) Add support for session in BuyCourse plugin</li>
+  <li>(d06fd47 - #7275) Add support for sessions in course catalogue</li>
   <li>(eb45183 - BT#8662) Add $_configuration['hide_scorm_pdf_link'] to remove option to "download as PDF" in learning paths list</li>
   <li>(bea2ed0 - #7225) Add Clockworks SMS sending plugin</li>
   <li>(606c84b - #7236) Add $_configuration['course_catalog_hide_private'] option to hide private courses from courses catalogue</li>
-  <li>(5720f35 - #7252) Add support for phone numbers extra field type</li>
+  <li>(5720f35 - #7252) Add support for mobile phone numbers extra field type</li>
   <li>(7610baf - BT#8441) Add webservice mode to converter from ppt</li>
   <li>(2582408 - BT#8274) Add ViewerJS (view .pdf) in documents tool</li>
   <li>(3ef3032 - BT#8274) Add Wodo text editor (edit .odt and .odp) in documents</li>
@@ -83,7 +90,42 @@ All security issues are published and patches are attached on <a href="https://s
 
 <h3>Improvements (minor features)</h3>
 <ul>
-  <li></li>
+  <li>()</li>
+  <li>()</li>
+  <li>()</li>
+  <li>()</li>
+  <li>(5a947dc - BT#8340) Fix DB session handler by using alternative class name</li>
+  <li>(b33c2b5 - BT#7740) Fix sessions list in sessions history page</li>
+  <li>(5445d05) Fix display bug in learning paths that hides the table of contents when more than 15 items</li>
+  <li>(6f818a9) Add getUserListByUserGroup() method</li>
+  <li>(6f0062f - BT#8732) Fix removed userCoruseCategory</li>
+  <li>(eefaab7 - BT#8717) Add CSRF token in dashboard configuration</li>
+  <li>(59965d9) Fix user creation time</li>
+  <li>(8dd695e - BT#8704) Fix old links in homepage configuration feature</li>
+  <li>(d2b5877 - BT#7286) Fix PDF header date to show time in local time</li>
+  <li>(f168c72 - BT#8700) Fix to several display issues in session page</li>
+  <li>(a552a21 - #7237) Show only visible exercises in questions database</li>
+  <li>(3547a45 - BT#8689) Prevent non-unique classes names</li>
+  <li>(7a36a94 - #7271) Fix image gallery icon (had disappeared) in documents tool</li>
+  <li>(03b4435 - #7269) Privacy change: hide users pictures to anonymous visitors</li>
+  <li>(7333997 - BT#8680) Fix lost password process (not working with username)</li>
+  <li>(b9bf6d1 - #7253) Improve UX flow by redirecting at the end of the course progress edition process</li>
+  <li>(acdc14c - BT#8676) Add unique email validation option</li>
+  <li>(3c09102 - #7253) Remove indication of mandatory fields in course progress details</li>
+  <li>(25f34f2) Hide the forum thread preview frame when creating the thread</li>
+  <li>(f783b34 - BT#8672) Add course_user_import_by_email.php as disabled script for now</li>
+  <li>(3fd48df - BT#8672) Fix issue with CSV import of students to courses</li>
+  <li>(94549cc - #7254) Show course progress advance inside sessions</li>
+  <li>(8b650bf - #7269) Hide username to other users in the social network</li>
+  <li>(3e6c69e - #7251) Fix issue with course progress not allowing edition in sessions</li>
+  <li>(60f485b - BT#8671) Fix possible unintentional document deletion in session</li>
+  <li>(30871fb) Add api_get_user_info_from_email() function to main API</li>
+  <li>(2990cd0 - #7264) Exclude base-course forums and categories from the session course view</li>
+  <li>(b64428b - BT#8660) Add support for free answers in Excel upload feature</li>
+  <li>(b1c7d61 - #7243) Fix issue counting teachers in expected tasks in assignments tool</li>
+  <li>(340fce8 - BT#6449) Add shortcuts in teachers registrations to session courses</li>
+  <li>(eef6933 - BT#7740) Fix support for delayed access days in session-course teachers views</li>
+  <li>(f021b04 - BT#8659) Add support for global and multiple answers question types to XLS upload method</li>
   <li>(557d45c - BT#8663) Fix layout of social network messages</li>
   <li>(70753e9 - BT#6449) Set new coach through CSV import if the session only contains one single course</li>
   <li>(97a1862 - BT#8397) Fix time delay by replacing mysql now()</li>

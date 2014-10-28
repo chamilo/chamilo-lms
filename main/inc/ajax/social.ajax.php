@@ -185,6 +185,38 @@ switch ($action) {
                 break;
         }
         break;
+    case 'listWallMessage':
+        $start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) - 1 : 0;
+        $length = isset($_REQUEST['length']) ? intval($_REQUEST['length']) : 10;
+        $userId = api_get_user_id();
+        $array = SocialManager::getWallMessagesPostHTML($userId, $friendId, null, $length, $start);
+        if (!empty($array)) {
+            ksort($array);
+            $html = '';
+
+            for($i = 0; $i < count($array); $i++) {
+                $post = $array[$i]['html'];
+                $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id'], null, $length, $start);
+
+                $html .= SocialManager::social_wrapper_div($post . $comment, 5);
+            }
+            $html .= Display::div(
+                Display::url(
+                    get_lang('Next'),
+                    api_get_self() . '?a=listWallMessage&start=' .
+                    ($start + $length + 1) . '&length=' . $length,
+                    array(
+                        'class' => 'nextPage',
+                        'style' => 'display: none;',
+                    )
+                ),
+                array(
+                    'class' => 'next'
+                )
+            );
+            echo $html;
+        }
+        break;
     default:
         echo '';
 }

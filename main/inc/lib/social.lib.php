@@ -1239,13 +1239,14 @@ class SocialManager extends UserManager
      * Gets all messages from someone's wall (within specific limits)
      * @param int $userId id of wall shown
      * @param string $messageStatus status wall message
-     * @param int $parentId id message (Post main)
-     * @param string Date from which we want to show the messages, in UTC time
-     * @param int   Limit for the number of parent messages we want to show
+     * @param int|string $parentId id message (Post main)
+     * @param date $start Date from which we want to show the messages, in UTC time
+     * @param int $limit Limit for the number of parent messages we want to show
+     * @param int $offset Wall message query offset
      * @return boolean
      * @author Yannick Warnier
      */
-    public static function getWallMessages($userId, $messageStatus, $parentId = '', $start = null, $limit = 10)
+    public static function getWallMessages($userId, $messageStatus, $parentId = '', $start = null, $limit = 10, $offset = 0)
     {
         if (empty($start)) {
             $start = '0000-00-00';
@@ -1267,8 +1268,7 @@ class SocialManager extends UserManager
                 AND send_date > '$start' ";
         $sql .= (empty($messageStatus) || is_null($messageStatus)) ? '' : " AND msg_status = '$messageStatus' ";
         $sql .= (empty($parentId) || is_null($parentId)) ? '' : " AND parent_id = '$parentId' ";
-        $sql .= " ORDER BY send_date DESC
-                LIMIT $limit ";
+        $sql .= " ORDER BY send_date DESC LIMIT $offset, $limit ";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
@@ -1285,17 +1285,18 @@ class SocialManager extends UserManager
      * @param int $friendId id person
      * @param int $idMessage id message
      * @param string  Start date (from when we want the messages until today)
-     * @param int Limit to the number of messages we want
+     * @param int $limit Limit to the number of messages we want
+     * @param int $offset
      * @return string  HTML formatted string to show messages
      */
-    public static function getWallMessagesHTML($userId, $friendId, $idMessage, $start = null, $limit = 10)
+    public static function getWallMessagesHTML($userId, $friendId, $idMessage, $start = null, $limit = 10, $offset = 0)
     {
         if (empty($start)) {
             $start = '0000-00-00';
         }
 
         $visibility = (api_get_user_id() == $userId  && $userId == $friendId);
-        $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL, $idMessage, $start, $limit);
+        $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL, $idMessage, $start, $limit, $offset);
         $formattedList = '<div class="mediaPost" style="width:calc(100%-14px);
         display:block;padding-left:14px">';
         $users = array();
@@ -1364,17 +1365,18 @@ class SocialManager extends UserManager
     /**
      * @param int $userId id
      * @param int $friendId id
-     * @param null $start
+     * @param date $start
      * @param int $limit
+     * @param int $offset
      * @return array $data return array associative
      */
-    public static function getWallMessagesPostHTML($userId, $friendId = 0, $start = null, $limit = 10)
+    public static function getWallMessagesPostHTML($userId, $friendId = 0, $start = null, $limit = 10, $offset= 0)
     {
         if (empty($start)) {
             $start = '0000-00-00';
         }
         $visibility = (api_get_user_id() == $userId  && $userId == $friendId);
-        $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL_POST , null, $start, $limit);
+        $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL_POST , null, $start, $limit, $offset);
         $users = array();
         $data = array();
         foreach ($messages as $key => $message) {

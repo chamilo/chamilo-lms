@@ -3334,6 +3334,46 @@ form .formw .freeze {
 }
 
 /* jsPlumb */
+/* ****************************************************
+                     CSS SKILL
+ **************************************************** */
+.skill-options .legend{
+  border: 1px dashed #cccccc;
+  padding: 1em;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+.skill-options .legend .title-skill{
+  color: #666655;
+  padding-bottom: 1em;
+  font-size: 16px;
+}
+.skill-options .skill-home{
+  margin-top: 1em;
+}
+.skill-options .btn-block {
+  box-sizing: border-box;
+  display: block;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+}
+.skill-options .accordion-heading {
+  border-bottom: 0px none;
+  background: #3FA5C3;
+}
+.skill-options .accordion-heading a{
+  color: #FFFFFF;
+}
+.skill-options .button-skill{
+  margin-top: 1em;
+}
+/* ****************************************************
+                     END SKILL
+ **************************************************** */
 
 .skill_root {
     box-shadow: 2px 2px 19px #aaa;

@@ -136,8 +136,17 @@ $this_section      = SECTION_SOCIAL;
 $tool_name         = get_lang('Search');
 $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
 
-$query      = isset($_GET['q']) ? $_GET['q'] : null;
-$query_vars = array('q' => $query);
+$query = isset($_GET['q']) ? $_GET['q'] : null;
+$query_search_type = isset($_GET['search_type']) ? $_GET['search_type'] : null;
+$extra_fields = UserManager::get_extra_filtrable_fields();
+$query_extra_fields = array();
+$query_vars = array('q' => $query, 'search_type' => $query_search_type);
+foreach ($extra_fields as $extra_field) {
+    $field_name = 'field_'.$extra_field['variable'];
+    if (isset($_GET[$field_name])) {
+        $query_vars[$field_name]=$_GET[$field_name];
+    }
+}
 
 $social_avatar_block = SocialManager::show_social_avatar_block('search');
 $social_menu_block = SocialManager::show_social_menu('search');
@@ -145,22 +154,28 @@ $social_menu_block = SocialManager::show_social_menu('search');
 $social_right_content = '<div class="span9">'.UserManager::get_search_form($query).'</div>';
 
 // I'm searching something
-if ($query != '') {
+if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) {
 
     $itemPerPage = 9;
-    $page = isset($_GET['users_page_nr']) ? intval($_GET['users_page_nr']) : 1;
-    $totalUsers = UserManager::get_all_user_tags($_GET['q'], 0, 0, $itemPerPage, true);
+    $search_type = $_GET['search_type'];
+    
+    if ($search_type=='0' || $search_type=='1') {
+        $page = isset($_GET['users_page_nr']) ? intval($_GET['users_page_nr']) : 1;
+        $totalUsers = UserManager::get_all_user_tags($_GET['q'], 0, 0, $itemPerPage, true);
 
-    $from = intval(($page - 1) * $itemPerPage);
-    // Get users from tags
-    $users  = UserManager::get_all_user_tags($_GET['q'], 0, $from, $itemPerPage);
+        $from = intval(($page - 1) * $itemPerPage);
+        // Get users from tags
+        $users  = UserManager::get_all_user_tags($_GET['q'], 0, $from, $itemPerPage);
+    }
 
-    $pageGroup = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
-    // Groups
-    $fromGroups = intval(($pageGroup - 1) * $itemPerPage);
+    if ($search_type=='0' || $search_type=='2') {
+        $pageGroup = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
+        // Groups
+        $fromGroups = intval(($pageGroup - 1) * $itemPerPage);
 
-    $totalGroups = GroupPortalManager::get_all_group_tags($_GET['q'], 0, $itemPerPage, true);
-    $groups = GroupPortalManager::get_all_group_tags($_GET['q'], $fromGroups, $itemPerPage);
+        $totalGroups = GroupPortalManager::get_all_group_tags($_GET['q'], 0, $itemPerPage, true);
+        $groups = GroupPortalManager::get_all_group_tags($_GET['q'], $fromGroups, $itemPerPage);
+    }
 
     if (empty($users) && empty($groups)) {
         $social_right_content .= get_lang('SorryNoResults');

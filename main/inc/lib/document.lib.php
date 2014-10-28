@@ -4287,10 +4287,15 @@ class DocumentManager
 
     /**
      * Generate a default certificate for a courses
+     * @global string $css CSS directory
+     * @global string $img_dir Imgage direcory
+     * @global string $default_course_dir Course directory
+     * @global string $js JS directory
      * @param array $courseData The course info
      */
     public static function generateDefaultCertificate($courseData)
     {
+        global $css, $img_dir, $default_course_dir, $js;
         $dir = '/certificates';
 
         $title = get_lang('DefaultCertificate');
@@ -4301,7 +4306,12 @@ class DocumentManager
         $fileFullPath = "{$filePath}/{$fileName}.html";
         $fileSize = 0;
         $fileType = 'file';
-        $fileContent = file_get_contents(api_get_path(SYS_PATH) . 'main/gradebook/certificate_template/template.html');
+        $templateContent = file_get_contents(api_get_path(SYS_PATH) . 'main/gradebook/certificate_template/template.html');
+
+        $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{WEB_PATH}');
+        $replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir, api_get_path(WEB_PATH));
+
+        $fileContent = str_replace($search, $replace, $templateContent);
 
         $saveFilePath = "{$dir}/{$fileName}.html";
 

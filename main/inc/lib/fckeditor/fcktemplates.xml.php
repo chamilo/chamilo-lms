@@ -147,8 +147,8 @@ function load_platform_templates() {
     $sql = "SELECT title, image, comment, content FROM $table_template";
     $result = Database::query($sql);
 
-    $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
-    $replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir);
+    $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{WEB_PATH}');
+    $replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir, api_get_path(WEB_PATH));
     $template_thumb = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/';
 
     while ($row = Database::fetch_array($result)) {
@@ -167,12 +167,13 @@ function load_platform_templates() {
     }
 
     $certificateTemplateContent = file_get_contents(api_get_path(SYS_PATH) . 'main/gradebook/certificate_template/template.html');
+    $certificateTemplateHTML = str_replace($search, $replace, $certificateTemplateContent);
 
     echo '<Template title="TemplateCertificateTitle" image="' . "{$template_thumb}empty.gif" . '">'
     . '<Description>TemplateCertificateDescription</Description>'
     . '<Html>'
     . '<![CDATA['
-    . $certificateTemplateContent
+    . $certificateTemplateHTML
     . ']]>'
     . '</Html>'
     . '</Template>';

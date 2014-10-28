@@ -1354,7 +1354,8 @@ class SocialManager extends UserManager
                 <textarea placeholder="'.get_lang('SocialWriteNewComment').
                 '" name="social_wall_new_msg" rows="1" cols="80" style="width: 98%"></textarea>
                 <br />
-                <input type="submit" name="social_wall_new_msg_submit" value="'.get_lang('Post').'" />
+                <input type="submit" name="social_wall_new_msg_submit"
+                value="'.get_lang('Post').'" class="float right btn" />
                 </form>';
         $formattedList .= '</div>';
         return $formattedList;

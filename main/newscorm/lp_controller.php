@@ -1095,7 +1095,8 @@ switch ($action) {
         else {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();
-            require 'lp_stats.php';
+            $output = require 'lp_stats.php';
+            echo $output;
         }
         break;
     case 'list':

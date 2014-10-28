@@ -1296,7 +1296,8 @@ class SocialManager extends UserManager
 
         $visibility = (api_get_user_id() == $userId  && $userId == $friendId);
         $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL, $idMessage, $start, $limit);
-        $formattedList = '<div class="mediaPost" style="width: calc(100% - 14px); display:inline-block; padding-left:14px">';
+        $formattedList = '<div class="mediaPost" style="width:calc(100%-14px);
+        display:inline-block;padding-left:14px">';
         $users = array();
 
         foreach ($messages as $message) {
@@ -1310,38 +1311,37 @@ class SocialManager extends UserManager
                 ? $users[$userIdLoop]['firstname'] .' ' . $users[$userIdLoop]['lastname']
                 : $users[$userIdLoop]['lastname'] . ' ' . $users[$userIdLoop]['firstname'];
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$userIdLoop;
-
             $media = '';
             $media .= '<div class="media" style="width:100%; display:inline-block; margin-bottom:5px;">';
-                $media .= '<div class="media-body" style="width: 100%; height: 32px; margin-bottom:5px;">';
-                    $media .= '<div class="pull-left" style="width: 32px; height: 100%;">';
-                    $media .= '<a href="'.$url.'" >'
-                        . '<img class="" src="'. $users[$userIdLoop]['avatar'] .'" '
-                        . 'alt="'.$users[$userIdLoop]['complete_name'].'" style="width: 32px; height: 32px;"> '
-                        . '</a>';
-                    $media .= '</div>';
-                    $media .= '<div class="pull-left" style="padding-left:4px;width: calc(100% - 36px);height: 100%;">';
-                        $media .= '<div style="width: 100%; height: 50%;">';
-                            $media .= '<h4 class="media-heading" style="width: inherit;">'
-                            . '<a href="'.$url.'">'.$nameComplete.'</a></h4>';
-                        $media .= '</div>';
-                        $media .= '<div style="width: 100%; height: 50%;">';
-                        $media .= '<div class="pull-left" style="height: 100%;">';
-                        $media .= '<small><span class="time" title="'.$date.'">'.$date.'</span></small>';
-                        $media .= '</div>';
-                        $media .= '</div>';
-                    $media .= '</div>';
-                $media .= '</div>';
+            $media .= '<div class="media-body" style="width: 100%; height: 32px; margin-bottom:5px;">';
+            $media .= '<div class="pull-left" style="width: 32px; height: 100%;">';
+            $media .= '<a href="'.$url.'" >'
+            . '<img class="" src="'. $users[$userIdLoop]['avatar'] .'" '
+            . 'alt="'.$users[$userIdLoop]['complete_name'].'" style="width: 32px; height: 32px;"> '
+            . '</a>';
+            $media .= '</div>';
+            $media .= '<div class="pull-left" style="padding-left:4px;width: calc(100% - 36px);height: 100%;">';
+            $media .= '<div style="width: 100%; height: 50%;">';
+            $media .= '<h4 class="media-heading" style="width: inherit;">'
+            . '<a href="'.$url.'">'.$nameComplete.'</a></h4>';
+            $media .= '</div>';
+            $media .= '<div style="width: 100%; height: 50%;">';
+            $media .= '<div class="pull-left" style="height: 100%;">';
+            $media .= '<small><span class="time" title="'.$date.'">'.$date.'</span></small>';
+            $media .= '</div>';
+            $media .= '</div>';
+            $media .= '</div>';
+            $media .= '</div>';
             if ($visibility) {
                 $media .= '<div class="pull-left" style="width: 100%;height:20px">';
-                $media .= '<div><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId=' . $message['id'].'">'.get_lang('SocialMessageDelete').'</a></div>';
+                $media .= '<div><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId='.
+                $message['id'].'">'.get_lang('SocialMessageDelete').'</a></div>';
                 $media .= '</div>';
             }
-                $media .= '<div class="pull-left" style="width: 100%;">';
-                    $media .= '<span class="content">'.Security::remove_XSS($message['content']).'</span>';
-                $media .= '</div>';
+            $media .= '<div class="pull-left" style="width: 100%;">';
+            $media .= '<span class="content">'.Security::remove_XSS($message['content']).'</span>';
+            $media .= '</div>';
             $media .= '</div>'; // end media
-
             $formattedList .= $media;
         }
 
@@ -1349,9 +1349,10 @@ class SocialManager extends UserManager
 
         $formattedList .= '<div class="mediaPost" style="display:inline-block;">';
             $formattedList .= '<form name="social_wall_message" method="POST">
-                <label for="social_wall_new_msg" class="hide">' . get_lang('SocialWriteNewComment') . '</label>
+                <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$idMessage.'" />
-                <textarea placeholder="' . get_lang('SocialWriteNewComment') . '" name="social_wall_new_msg" rows="1" cols="80" style="width: 98%"></textarea>
+                <textarea placeholder="'.get_lang('SocialWriteNewComment').
+                '" name="social_wall_new_msg" rows="1" cols="80" style="width: 98%"></textarea>
                 <br />
                 <input type="submit" name="social_wall_new_msg_submit" value="'.get_lang('Post').'" />
                 </form>';
@@ -1389,7 +1390,13 @@ class SocialManager extends UserManager
             }
 
             $html = '';
-            $html .= self::_headerMessagePost($message['user_sender_id'], $message['user_receiver_id'], $users, $message, $visibility);
+            $html .= self::_headerMessagePost(
+                $message['user_sender_id'],
+                $message['user_receiver_id'],
+                $users,
+                $message,
+                $visibility
+            );
 
             $data[$key]['id'] = $message['id'];
             $data[$key]['html'] = $html;
@@ -1425,13 +1432,14 @@ class SocialManager extends UserManager
             $pathImg = $pathUserInfo['dir'] . 'message_attachments';
             $imageBig = $pathImg .self::_geImage($message['path'], IMAGE_WALL_BIG);
             $imageSmall =  $pathImg. self::_geImage($message['path'], IMAGE_WALL_SMALL);
-            $wallImage = '<hr><a class="thumbnail thickbox" href="'.$imageBig.'"><img src="'.$imageSmall.'"> </a>';
+            $wallImage = '<hr><a class="thumbnail thickbox" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
 
         $htmlDelete = '';
         if ($visibility) {
-            $htmlDelete .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId=' . $message['id'].'">'.get_lang('SocialMessageDelete').'</a>';
+            $htmlDelete .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId='.
+            $message['id'].'">'.get_lang('SocialMessageDelete').'</a>';
         }
 
         $html = '';
@@ -1460,7 +1468,8 @@ class SocialManager extends UserManager
             $html .= '</div>';
         }
         $html .= '<div class="pull-left" style="width: 100%;">';
-        $html .= '<span class="content">'.Security::remove_XSS(self::readContentWithOpenGraph($message['content'])).'</span>';
+        $html .= '<span class="content">'.
+            Security::remove_XSS(self::readContentWithOpenGraph($message['content'])).'</span>';
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost
 

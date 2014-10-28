@@ -112,7 +112,10 @@ require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
 
 require_once $libpath.'magpierss/rss_fetch.inc';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
+$socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 api_block_anonymous_users();
+
+$htmlHeadXtra[] = api_get_js('jscroll/jquery.jscroll.js');
 
 $htmlHeadXtra[] = '<script>
 
@@ -255,6 +258,15 @@ $(document).ready(function (){
         width    : 550,
         height    : 300
        });
+
+    var container = $("#wallMessages");
+    container.jscroll({
+        loadingHtml: "<div class=\"span5\"> <div class=\"well_border\">' . get_lang('Loading') . ' </div></div>",
+        padding: -880,
+        nextSelector: "a.nextPage:last",
+        contentSelector: "",
+        debug: true
+    });
 
 });
 
@@ -402,11 +414,23 @@ if ($show_full_profile) {
 }
 
 $wallSocialAddPost .= wallSocialAddPost();
+$social_right_content .= Display::div(
+    wallSocialPost($my_user_id, $friendId) . Display::url(
+        get_lang('Next'),
+        $socialAjaxUrl . '?a=listWallMessage&start=10&length=5',
+        array(
+            'class' => 'nextPage next',
+            'style' => 'display: none;'
+        )
+    ),
+    array(
+        'id' => 'wallMessages'
+    )
+);
 $social_right_content .= SocialManager::social_wrapper_div($wallSocialAddPost, 5);
 
 $social_right_content .=  SocialManager::social_wrapper_div($personal_info, 4);
 
-$social_right_content .= wallSocialPost($my_user_id, $friendId);
 //$social_right_content .= SocialManager::social_wrapper_div($wallSocial, 5);
 
 

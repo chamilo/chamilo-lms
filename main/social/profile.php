@@ -828,7 +828,7 @@ function _wallSocialAddPost()
             <label for="social_wall_new_msg_main" class="hide">' . get_lang('SocialWallWhatAreYouThinkingAbout') . '</label>
         <textarea name="social_wall_new_msg_main" rows="2" cols="80" style="width: 98%" placeholder="'.get_lang('SocialWallWhatAreYouThinkingAbout').'"></textarea>
         <br />
-        <input class="" name="picture" type="file">
+        <input class="" name="picture" type="file" accept="image/*">
         <input type="submit" name="social_wall_new_msg_main_submit" value="'.get_lang('Post').'" class="float right btn btn-primary" />
     </form>';
 

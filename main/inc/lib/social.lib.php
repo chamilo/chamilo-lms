@@ -1312,7 +1312,7 @@ class SocialManager extends UserManager
                 : $users[$userIdLoop]['lastname'] . ' ' . $users[$userIdLoop]['firstname'];
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$userIdLoop;
             $media = '';
-            $media .= '<div class="media" style="width:100%; display:block; margin-bottom:5px;">';
+            $media .= '<div class="media" style="width:100%; display:inline-block; margin-bottom:5px;">';
             $media .= '<div class="media-body" style="width: 100%; height: 32px; margin-bottom:5px;">';
             $media .= '<div class="pull-left" style="width: 32px; height: 100%;">';
             $media .= '<a href="'.$url.'" >'
@@ -1333,12 +1333,12 @@ class SocialManager extends UserManager
             $media .= '</div>';
             $media .= '</div>';
             if ($visibility) {
-                $media .= '<div class="pull-left" style="width: 100%;height:20px">';
+                $media .= '<div style="width: 100%;height:20px">';
                 $media .= '<div><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId='.
                 $message['id'].'">'.get_lang('SocialMessageDelete').'</a></div>';
                 $media .= '</div>';
             }
-            $media .= '<div class="pull-left" style="width: 100%;">';
+            $media .= '<div style="width:100%;text-align:justify;">';
             $media .= '<span class="content">'.Security::remove_XSS($message['content']).'</span>';
             $media .= '</div>';
             $media .= '</div>'; // end media
@@ -1347,7 +1347,7 @@ class SocialManager extends UserManager
 
         $formattedList .= '</div>';
 
-        $formattedList .= '<div class="mediaPost" style="display:block;">';
+        $formattedList .= '<div class="mediaPost" style="display:inline-block;">';
             $formattedList .= '<form name="social_wall_message" method="POST">
                 <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$idMessage.'" />
@@ -1432,7 +1432,7 @@ class SocialManager extends UserManager
             $pathImg = $pathUserInfo['dir'] . 'message_attachments';
             $imageBig = $pathImg .self::_geImage($message['path'], IMAGE_WALL_BIG);
             $imageSmall =  $pathImg. self::_geImage($message['path'], IMAGE_WALL_SMALL);
-            $wallImage = '<hr><a class="thumbnail thickbox" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
+            $wallImage = '<a class="thumbnail thickbox" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
 
@@ -1443,7 +1443,7 @@ class SocialManager extends UserManager
         }
 
         $html = '';
-        $html .= '<div class="mediaPost" style="width: 100%; display:block; margin-bottom:5px;">';
+        $html .= '<div class="mediaPost" style="width: 100%; display:inline-block; margin-bottom:5px;">';
         $html .= '<div class="media-body" style="width: 100%; height: 40px; margin-bottom:5px;">';
         $html .= '<div class="pull-left" style="width: 40px; height: 100%;">';
         $html .= '<a href="'.$urlAuthor.'">'.'<img class="" src="'.$avatarAuthor.
@@ -1460,14 +1460,16 @@ class SocialManager extends UserManager
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
-        $html .= $wallImage;
         $html .= '</div>';
         if ($visibility) {
-            $html .= '<div class="pull-left" style="width: 100%;height:20px">';
+            $html .= '<div style="width: 100%;height:20px">';
             $html .= $htmlDelete;
             $html .= '</div>';
         }
-        $html .= '<div class="pull-left" style="width: 100%;">';
+        $html .= '<div style="width: 100%;">';
+        $html .= $wallImage;
+        $html .= '</div>';
+        $html .= '<div style="width:100%;text-align:justify;">';
         $html .= '<span class="content">'.
             Security::remove_XSS(self::readContentWithOpenGraph($message['content'])).'</span>';
         $html .= '</div>';

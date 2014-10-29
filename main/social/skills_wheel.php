@@ -31,6 +31,11 @@ $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag
 $tpl = new Template(null, false, false);
 
 $load_user = api_get_user_id();
+$userInfo = api_get_user_info();
+
+$skill = new Skill();
+$ranking = $skill->get_user_skill_ranking($load_user);
+$countSkill = count($skill->get_all());
 
 $skill_condition = '';
 if (isset($_GET['skill_id'])) {
@@ -44,6 +49,10 @@ $tpl->assign('wheel_url', $url);
 
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 $tpl->assign('url', $url);
+
+$tpl->assign('userInfo', $userInfo);
+$tpl->assign('ranking', 2);
+$tpl->assign('countSkill', $countSkill);
 
 $content = $tpl->fetch('default/skill/skill_wheel_student.tpl');
 $tpl->assign('content', $content);

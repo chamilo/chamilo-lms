@@ -262,6 +262,25 @@ $(document).ready(function() {
         
         <div class="span3">
             <div class="well sidebar-nav-skill-wheel ">
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="{{ userInfo.avatar }}">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ userInfo.complete_name }}</h4>
+                        <p>{{ 'YourSkillRankingX' | get_lang | format(ranking) }}</p>
+                        <div>
+                            {% for i in 1..ranking %}
+                                +
+                            {% endfor %}
+                            {% for i in 1..(countSkill - ranking) %}
+                                -
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="well sidebar-nav-skill-wheel ">
                 
                 <div class="page-header">
                     <h3>{{ 'MySkills'|get_lang }}</h3>                

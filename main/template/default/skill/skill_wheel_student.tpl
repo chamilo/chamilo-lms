@@ -328,14 +328,16 @@ $(document).ready(function() {
                                         <a class="btn btn-block btn-large btn-danger load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
                                         <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->
                                     </div>
-                                    <ul id="skill_holder" class="holder_simple border"></ul>
+                                    <ul id="skill_holder" class="holder_simple"></ul>
                                 </form>
                             </div>
                             <!-- END SEARCH -->
                             <!-- INFO SKILL -->
+
                             <h4 class="title-skill">{{ 'SkillInfo'|get_lang }}</h4>
                             <div id="skill_info"></div>
                             <!-- END INFO SKILL -->
+
                         </div>
                     </div>
                 </div>

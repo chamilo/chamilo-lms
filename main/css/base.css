@@ -3399,6 +3399,23 @@ form .formw .freeze {
   padding: 9px 15px;
   border-top: 1px solid #3FA5C3;
 }
+.skill-options .load_wheel{
+  -moz-border-radius:6px;
+  -webkit-border-radius:6px;
+  border-radius:6px;
+  border:1px solid #C09853;
+  background:#FCF8E3;
+  padding:1px 5px 2px;
+  color:#333;
+}
+.skill-options .skill-winner{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.skill-options .skill-winner li a{
+  background: url("../img/icons/16/winner.png") no-repeat;
+}
 .skill_partition {
   cursor: pointer;
   stroke: #000000;
@@ -3409,6 +3426,7 @@ form .formw .freeze {
   float:left;
   padding-right: 10px;
 }
+
 
 /* ****************************************************
                      END SKILL

@@ -1301,6 +1301,8 @@ class SocialManager extends UserManager
         display:block;padding-left:14px">';
         $users = array();
 
+        // The messages are ordered by date descendant, for comments we need ascendant
+        krsort($messages);
         foreach ($messages as $message) {
             $date = api_get_local_time($message['send_date']);
             $userIdLoop = $message['user_sender_id'];
@@ -1328,7 +1330,7 @@ class SocialManager extends UserManager
             $media .= '</div>';
             $media .= '<div style="width: 100%; height: 50%;">';
             $media .= '<div class="pull-left" style="height: 100%;">';
-            $media .= '<small><span class="time" title="'.$date.'">'.$date.'</span></small>';
+            $media .= '<small><span class="time timeago" title="'.$date.'">'.$date.'</span></small>';
             $media .= '</div>';
             $media .= '</div>';
             $media .= '</div>';
@@ -1459,7 +1461,7 @@ class SocialManager extends UserManager
         $html .= '</div>';
         $html .= '<div style="width: 100%; height: 50%;">';
         $html .= '<div class="pull-left" style="height: 100%;">';
-        $html .= '<small><span class="time" title="'.$date.'">'.$date.'</span></small>';
+        $html .= '<small><span class="time timeago" title="'.$date.'">'.$date.'</span></small>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';

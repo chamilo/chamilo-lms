@@ -113,9 +113,17 @@ require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
 require_once $libpath.'magpierss/rss_fetch.inc';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
+$javascriptDir = api_get_path(LIBRARY_PATH) . 'javascript/';
 api_block_anonymous_users();
-
+$locale = _api_get_locale_from_language();
+// Add Jquery scroll pagination plugin
 $htmlHeadXtra[] = api_get_js('jscroll/jquery.jscroll.js');
+// Add Jquery Time ago plugin
+$htmlHeadXtra[] = api_get_js('jquery-timeago/jquery.timeago.js');
+$timeAgoLocaleDir = $javascriptDir . 'jquery-timeago/locales/jquery.timeago.' . $locale . '.js';
+if (file_exists($timeAgoLocaleDir)) {
+    $htmlHeadXtra[] = api_get_js('jquery-timeago/locales/jquery.timeago.' . $locale . '.js');
+}
 
 $htmlHeadXtra[] = '<script>
 
@@ -264,10 +272,15 @@ $(document).ready(function (){
         loadingHtml: "<div class=\"well_border\">' . get_lang('Loading') . ' </div>",
         nextSelector: "a.nextPage:last",
         contentSelector: "",
-        debug: true
+        callback: timeAgo
     });
+    timeAgo()
 
 });
+
+function timeAgo() {
+    $(".timeago").timeago();
+}
 
 function display_hide () {
     setTimeout("hide_display_message()",3000);
@@ -418,10 +431,9 @@ $social_right_content .= SocialManager::social_wrapper_div($wallSocialAddPost, 5
 $social_right_content .= wallSocialPost($my_user_id, $friendId);
 $socialAutoExtendLink = Display::url(
     get_lang('Next'),
-    $socialAjaxUrl . '?a=listWallMessage&start=10&length=5',
+    $socialAjaxUrl . '?u='. $my_user_id . '&a=listWallMessage&start=10&length=5',
     array(
         'class' => 'nextPage next',
-        'style' => 'display: none;'
     )
 );
 

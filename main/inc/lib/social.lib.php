@@ -1158,26 +1158,28 @@ class SocialManager extends UserManager
         $userId = intval($userId);
         $friendId = intval($friendId);
         $messageId = intval($messageId);
-        $return = false;
 
         //Just in case we replace the and \n and \n\r while saving in the DB
         $messageContent = str_replace(array("\n", "\n\r"), '<br />', $messageContent);
         $cleanMessageContent = Database::escape_string($messageContent);
 
-        $now = api_get_utc_datetime();
+        $attributes = array(
+            'user_sender_id' => $userId,
+            'user_receiver_id' => $friendId,
+            'msg_status' => $messageStatus,
+            'send_date' => api_get_utc_datetime(),
+            'title' => '',
+            'content' => $cleanMessageContent,
+            'parent_id' => $messageId
+        );
+        return Database::insert($tblMessage, $attributes);
 
-        $sql = 'INSERT INTO '.$tblMessage.'(
-            user_sender_id,user_receiver_id,msg_status,send_date,title,content,parent_id
-            ) VALUES(
-            '.$userId.','.$friendId.','.$messageStatus.',"'.$now.'","","'.$cleanMessageContent.'", "'.$messageId.'" ) ';
-        Database::query($sql);
-        $return = Database::insert_id();
-/*
+        /* Deprecated since 2014-10-29
         $senderInfo = api_get_user_info($userId);
         $notification = new Notification();
         $notification->save_notification(Notification::NOTIFICATION_TYPE_WALL_MESSAGE, array($friendId), '', $messageContent, $senderInfo);
-*/
-        return $return;
+        */
+
     }
 
     /**

@@ -11,7 +11,7 @@ $language_file = array('userInfo', 'index');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 // Include OpenGraph NOT AVAILABLE 
-require_once api_get_path(LIBRARY_PATH) . 'opengraph/OpenGraph.php';
+require_once api_get_path(LIBRARY_PATH).'opengraph/OpenGraph.php';
 
 if (api_get_setting('allow_social_tool') !='true') {
     $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
@@ -431,7 +431,7 @@ $social_right_content .= SocialManager::social_wrapper_div($wallSocialAddPost, 5
 $social_right_content .= wallSocialPost($my_user_id, $friendId);
 $socialAutoExtendLink = Display::url(
     get_lang('Next'),
-    $socialAjaxUrl . '?u='. $my_user_id . '&a=listWallMessage&start=5&length=1',
+    $socialAjaxUrl . '?u='. $my_user_id . '&a=listWallMessage&start=10&length=5',
     array(
         'class' => 'nextPage next',
     )

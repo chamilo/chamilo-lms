@@ -453,8 +453,14 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
  * @param array $onlyUserList only parse this user list
  * @return mixed
  */
-function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $userId = null, $onlyUserList = array())
-{
+function getUniqueStudentAttempts(
+    $workId,
+    $groupId,
+    $course_id,
+    $sessionId,
+    $userId = null,
+    $onlyUserList = array()
+) {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -710,7 +716,14 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
             if ($origin != 'learnpath') {
                 if ($is_allowed_to_edit) {
-                    $cant_files_per_user = getUniqueStudentAttempts($work_data['id'], $group_id, $course_id, api_get_session_id(), null, $userList);
+                    $cant_files_per_user = getUniqueStudentAttempts(
+                        $work_data['id'],
+                        $group_id,
+                        $course_id,
+                        api_get_session_id(),
+                        null,
+                        $userList
+                    );
 
                     $row[] = $cant_files_per_user.'/'.count($userList);
                     if (api_resource_is_locked_by_gradebook($workId, LINK_STUDENTPUBLICATION)) {
@@ -4232,8 +4245,17 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
  * @param bool $getCount
  * @return array|int
  */
-function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount = false)
-{
+function getWorkUserListData(
+    $workId,
+    $courseCode,
+    $sessionId,
+    $groupId,
+    $start,
+    $limit,
+    $sidx,
+    $sord,
+    $getCount = false
+) {
     $my_folder_data = get_work_data_by_id($workId);
     $workParents = array();
     if (empty($my_folder_data)) {
@@ -4248,7 +4270,18 @@ function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start,
     }
 
     $courseInfo = api_get_course_info($courseCode);
-    $userList = getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount);
+
+    $userList = getWorkUserList(
+        $courseCode,
+        $sessionId,
+        $groupId,
+        $start,
+        $limit,
+        $sidx,
+        $sord,
+        $getCount
+    );
+
     if ($getCount) {
         return $userList;
     }
@@ -4260,7 +4293,13 @@ function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start,
             $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), $link);
             $userWorks = 0;
             if (!empty($workIdList)) {
-                $userWorks = getUniqueStudentAttempts($workIdList, $groupId, $courseInfo['real_id'], $sessionId, $user['user_id']);
+                $userWorks = getUniqueStudentAttempts(
+                    $workIdList,
+                    $groupId,
+                    $courseInfo['real_id'],
+                    $sessionId,
+                    $user['user_id']
+                );
             }
             $works = $userWorks." / ".count($workParents);
             $results[] = array('student' => $url, 'works' => $works);

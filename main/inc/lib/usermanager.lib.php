@@ -3131,7 +3131,7 @@ class UserManager
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
-            switch($size_picture) {
+            switch ($size_picture) {
                 case USER_IMAGE_SIZE_ORIGINAL :
                 case USER_IMAGE_SIZE_BIG :
                 case USER_IMAGE_SIZE_MEDIUM :

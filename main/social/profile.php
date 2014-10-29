@@ -37,7 +37,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     }
 
     $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
-    $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?' . $_SERVER['QUERY_STRING'];
+    $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: ' . $url);
     exit;
 
@@ -45,7 +45,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     $messageId = intval($_POST['messageId']);
     $res = SocialManager::sendWallMessage(api_get_user_id(), $friendId, $_POST['social_wall_new_msg'], $messageId , MESSAGE_STATUS_WALL);
     $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
-    $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?' . $_SERVER['QUERY_STRING'];
+    $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: ' . $url);
     exit;
 

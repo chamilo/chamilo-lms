@@ -56,7 +56,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     exit;
 
 } else if (isset($_GET['u'])) { //I'm your friend? I can see your profile?
-    $user_id     = (int) Database::escape_string($_GET['u']);
+    $user_id = intval($_GET['u']);
     if (api_is_anonymous($user_id, true)) {
         api_not_allowed(true);
     }

@@ -1414,24 +1414,26 @@ class SocialManager extends UserManager
     }
 
 
-    private  static function headerMessagePost($authorId, $reciverId, $users, $message, $isOwnWall = false)
+    private  static function headerMessagePost($authorId, $receiverId, $users, $message, $isOwnWall = false)
     {
         $date = api_get_local_time($message['send_date']);
         $avatarAuthor = $users[$authorId]['avatar'];
         $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
-        $nameCompleteAuthor = api_is_western_name_order()
-            ? $users[$authorId]['firstname'] .' ' . $users[$authorId]['lastname']
-            : $users[$authorId]['lastname'] . ' ' . $users[$authorId]['firstname'];
+        $nameCompleteAuthor = api_get_person_name(
+            $users[$authorId]['firstname'],
+            $users[$authorId]['lastname']
+        );
+        // Deprecated since 2014-10-29
+        //$avatarReceiver = $users[$receiverId]['avatar'];
+        $urlReceiver = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$receiverId;
+        $nameCompleteReceiver = api_get_person_name(
+            $users[$receiverId]['firstname'],
+            $users[$receiverId]['lastname']
+        );
 
-        $avatarReciver = $users[$reciverId]['avatar'];
-        $urlReciber = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$reciverId;
-        $nameCompleteReciver = api_is_western_name_order()
-            ? $users[$reciverId]['firstname'] .' ' . $users[$reciverId]['lastname']
-            : $users[$reciverId]['lastname'] . ' ' . $users[$reciverId]['firstname'];
-
-        $htmlReciber = '';
-        if ($authorId != $reciverId) {
-            $htmlReciber = ' > <a href="'.$urlReciber.'">' . $nameCompleteReciver . '</a> ';
+        $htmlReceiver = '';
+        if ($authorId != $receiverId) {
+            $htmlReceiver = ' > <a href="'.$urlReceiver.'">' . $nameCompleteReceiver . '</a> ';
         }
 
         $wallImage = '';
@@ -1460,7 +1462,7 @@ class SocialManager extends UserManager
         $html .= '<div class="pull-left" style="padding-left:4px; width: calc(100% - 44px);height: 100%;">';
         $html .= '<div style="width: 100%; height: 50%;">';
         $html .= '<h4 class="media-heading" style="width: inherit;">';
-        $html .= '<a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReciber.'</h4>';
+        $html .= '<a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</h4>';
         $html .= '</div>';
         $html .= '<div style="width: 100%; height: 50%;">';
         $html .= '<div class="pull-left" style="height: 100%;">';

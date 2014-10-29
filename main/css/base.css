@@ -3347,10 +3347,17 @@ form .formw .freeze {
   margin-top: 1em;
   background-color: #FFFFFF;
 }
-.skill-options .legend .title-skill, .skill-options .saved_profiles .title-skill{
+.skill-options .legend .title-skill,
+.skill-options .saved_profiles .title-skill
+{
   color: #666655;
   padding-bottom: 1em;
   font-size: 16px;
+}
+.skill-options .skill-profile .title-skill{
+  color: #666655;
+  padding-bottom: .5em;
+  font-size: 18px;
 }
 .skill-options .skill-home{
   margin-top: 1em;
@@ -3408,13 +3415,46 @@ form .formw .freeze {
   padding:1px 5px 2px;
   color:#333;
 }
+.skill-options .skill-items{
+  padding-bottom: 1em;
+  margin-bottom: .5em;
+  margin-top: .5em;
+}
 .skill-options .skill-winner{
   list-style: none;
   margin: 0;
   padding: 0;
 }
+.skill-options .skill-winner li{
+  float: left;
+  margin-right: 1em;
+  padding-bottom: 1em;
+}
 .skill-options .skill-winner li a{
   background: url("../img/icons/16/winner.png") no-repeat;
+  padding-left: 1.5em;
+  padding-bottom: 1em;
+}
+.skill-options .skill-profile{
+  width: 100%;
+  display: block;
+  border: 1px solid #CCC;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  margin-top: 1em;
+  background-color: #FFFFFF;
+}
+.skill-options .skill-profile .avatar{
+  display: block;
+  width: auto;
+  text-align: center;
+}
+.skill-options .skill-profile .info-user{
+  display: block;
+  width: auto;
+  margin-left: 1em;
+  padding: 1em;
 }
 .skill_partition {
   cursor: pointer;

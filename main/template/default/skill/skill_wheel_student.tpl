@@ -282,23 +282,21 @@ $(document).ready(function() {
             <div class="skill-home">
                 <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a>
             </div>
-            <div class="well sidebar-nav-skill-wheel ">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="{{ userInfo.avatar }}">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">{{ userInfo.complete_name }}</h4>
+            <div class="skill-profile">
+
+                <div class="avatar">
+                    <img width="100px" src="{{ userInfo.avatar }}" style="text-align: center">
+                </div>
+                <div class="info-user">
+                        <h4 class="title-skill">{{ userInfo.complete_name }}</h4>
                         <p>{{ 'YourSkillRankingX' | get_lang | format(ranking) }}</p>
-                        <div>
+
                             {% for i in 1..ranking %}
-                                +
+                            <img src="{{ _p.web }}main/img/icons/22/award_red.png"/>
                             {% endfor %}
                             {% for i in 1..(countSkill - ranking) %}
-                                -
+                            <img src="{{ _p.web }}main/img/icons/22/award_red_na.png"/>
                             {% endfor %}
-                        </div>
-                    </div>
                 </div>
             </div>
             <!-- Legend -->
@@ -322,7 +320,7 @@ $(document).ready(function() {
                     <div id="collapseOne" class="accordion-body collapse">
                         <div class="accordion-inner">
                             <!-- MY SKILLS -->
-                            <div id="my_skills">
+                            <div id="my_skills" class="skill-items">
                             </div>
                             <!-- MY SKILLS -->
                         </div>

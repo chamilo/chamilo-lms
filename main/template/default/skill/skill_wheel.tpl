@@ -284,7 +284,7 @@ $(document).ready(function() {
     update_my_saved_profiles();
     
     /* Click in profile */
-    $("#saved_profiles").on("click", "a.load_profile", function() {
+    $("#saved_profiles").on("click", "li.load_profile", function() {
         profile_id = $(this).attr('rel');
         $('#profile_id').attr('value',profile_id);        
         $.ajax({
@@ -304,8 +304,19 @@ $(document).ready(function() {
             }                           
         });        
     });
-    
-    
+    $("#saved_profiles").on('click', 'li.load_profile button.close', function () {
+        var $parent = $(this).parent();
+        var profileId = $parent.attr('rel');
+
+        $.getJSON('{{ url }}&a=delete_profile', {
+            profile: profileId
+        }, function (response) {
+            if (response.status) {
+                $parent.remove();
+            }
+        });
+    });
+
     /* Wheel skill popup form */
     
     /* Close button in gradebook select */

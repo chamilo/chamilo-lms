@@ -332,6 +332,18 @@ switch ($action) {
             }
         }
         break;
+    case 'delete_profile':
+        if (api_is_platform_admin() || api_is_drh()) {
+            $profileId = $_REQUEST['profile'];
+
+            $skillProfile = new SkillProfile();
+            $isDeleted = $skillProfile->delete($profileId);
+
+            echo json_encode(array(
+                'status' => $isDeleted
+            ));
+        }
+        break;
     case 'skill_exists':
         $skill_data = $skill->get($_REQUEST['skill_id']);
         if (!empty($skill_data)) {

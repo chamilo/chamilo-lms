@@ -66,6 +66,22 @@ class SkillProfile extends Model
         }
         return false;
     }
+
+    /**
+     * Delete a skill profile
+     * @param int $id The skill profile id
+     * @return boolean Whether delete a skill profile
+     */
+    public function delete($id) {
+        Database::delete(
+            $this->table_rel_profile,
+            array(
+                'profile_id' => $id
+            )
+        );
+
+        return parent::delete($id);
+    }
 }
 
 class SkillRelProfile extends Model

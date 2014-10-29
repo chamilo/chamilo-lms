@@ -348,9 +348,10 @@ $(document).ready(function() {
                             </div>
                             <!-- END SEARCH -->
                             <!-- INFO SKILL -->
-
-                            <h4 class="title-skill">{{ 'SkillInfo'|get_lang }}</h4>
-                            <div id="skill_info"></div>
+                            <div class="section-info-skill">
+                                <h4 class="title-skill">{{ 'SkillInfo'|get_lang }}</h4>
+                                <div id="skill_info"></div>
+                            </div>
                             <!-- END INFO SKILL -->
 
                         </div>

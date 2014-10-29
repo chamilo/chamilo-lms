@@ -3444,6 +3444,15 @@ form .formw .freeze {
   -webkit-border-radius: 10px;
   margin-top: 1em;
   background-color: #FFFFFF;
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+.skill-options .section-info-skill{
+  display: inline-block;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  width: 100%;
+  clear: both;
 }
 .skill-options .skill-profile .avatar{
   display: block;
@@ -3456,6 +3465,9 @@ form .formw .freeze {
   margin-left: 1em;
   padding: 1em;
 }
+.skill-options .button-skill{
+  margin-bottom: .5em;
+}
 .skill_partition {
   cursor: pointer;
   stroke: #000000;
@@ -3465,6 +3477,7 @@ form .formw .freeze {
 #skill_holder li {
   float:left;
   padding-right: 10px;
+  margin-bottom: .5em;
 }
 
 

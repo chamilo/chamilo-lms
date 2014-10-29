@@ -168,7 +168,7 @@ function set_skill_style(d, attribute, searched_skill_id) {
 
     //2. Yellow - If the skill has a gradebook attached
     if (d.skill_has_gradebook) {      
-        return_fill = '#FFA800';
+        return_fill = '#F89406';
         //return_stroke = 'grey';
     }
 

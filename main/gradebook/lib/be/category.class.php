@@ -1633,8 +1633,17 @@ class Category implements GradebookItem
                         $url,
                         array('target' => '_blank')
                     );
+                    $exportToPDF = Display::url(
+                        Display::return_icon(
+                            'pdf.png',
+                            get_lang('ExportToPDF'),
+                            array(),
+                            32
+                        ),
+                        "$url&action=export"
+                    );
                     $html = '<div class="actions" align="right">';
-                    $html .= $certificates;
+                    $html .= $certificates . $exportToPDF;
                     $html .= '</div>';
                 }
                 return $html;

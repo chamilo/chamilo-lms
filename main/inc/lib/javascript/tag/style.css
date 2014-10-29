@@ -5,7 +5,7 @@ ul.holder {
     height: 1%;
 }
 *:first-child+html ul.holder { padding-bottom: 2px; } * html ul.holder { padding-bottom: 2px; } /* ie7 and below */
-ul.holder li { 
+ul.holder_simple li {
     float: left; 
     list-style-type: none; 
     margin: 0 5px 4px 0; 
@@ -16,19 +16,19 @@ ul.holder li.bit-box,ul.holder li.bit-input input {
   box-shadow:none
 }
 
-ul.holder li.bit-box {
+ul.holder_simple li.bit-box {
   -moz-border-radius:6px;
   -webkit-border-radius:6px;
   border-radius:6px;
-  border:1px solid #CAD8F3;
-  background:#DEE7F8;
+  border:1px solid #FCF8E3;
+  background:#FCF8E3;
   padding:1px 5px 2px
 }
 
-ul.holder li.bit-box-focus {
-  border-color:#598BEC;
-  background:#598BEC;
-  color:#fff
+ul.holder_simple li.bit-box-focus {
+  border-color:#FCF8E3;
+  background:#FCF8E3;
+  color:#333;
 }
 
 ul.holder li.bit-input input {

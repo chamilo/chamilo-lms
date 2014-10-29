@@ -3379,7 +3379,7 @@ form .formw .freeze {
 }
 .skill-options .accordion-inner {
   padding: 9px 15px;
-  border: 1px solid #dadada;
+  /*border: 1px solid #dadada;*/
   background-color: #FFFFFF;
 }
 /* ****************************************************

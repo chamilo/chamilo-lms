@@ -188,7 +188,7 @@ switch ($action) {
     case 'listWallMessage':
         $start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) - 1 : 0;
         $length = isset($_REQUEST['length']) ? intval($_REQUEST['length']) : 10;
-        $userId = api_get_user_id();
+        $userId = isset($_REQUEST['u']) ? intval($_REQUEST['u']) : api_get_user_id();
         $array = SocialManager::getWallMessagesPostHTML($userId, $friendId, null, $length, $start);
         if (!empty($array)) {
             ksort($array);
@@ -201,15 +201,14 @@ switch ($action) {
             $html .= Display::div(
                 Display::url(
                     get_lang('Next'),
-                    api_get_self() . '?a=listWallMessage&start=' .
+                    api_get_self() . '?u=' . $userId . '&a=listWallMessage&start=' .
                     ($start + $length + 1) . '&length=' . $length,
                     array(
                         'class' => 'nextPage',
-                        'style' => 'display: none;',
                     )
                 ),
                 array(
-                    'class' => 'next'
+                    'class' => 'next',
                 )
             );
             echo $html;

@@ -201,7 +201,7 @@ switch ($action) {
             }
             $html .= Display::div(
                 Display::url(
-                    get_lang('Next'),
+                    get_lang('SeeMore'),
                     api_get_self() . '?u=' . $userId . '&a=listWallMessage&start=' .
                     ($start + $length + 1) . '&length=' . $length,
                     array(

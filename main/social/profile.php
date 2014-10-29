@@ -29,7 +29,7 @@ $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
 
-if (!empty($_POST['social_wall_new_msg_main'])) {
+if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
     $messageId = 0;
     $idMessage = SocialManager::sendWallMessage(api_get_user_id(), $friendId, $_POST['social_wall_new_msg_main'], $messageId, MESSAGE_STATUS_WALL_POST);
     if (!empty($_FILES['picture']['tmp_name']) && $idMessage > 0) {
@@ -430,7 +430,7 @@ $social_right_content .= SocialManager::social_wrapper_div($wallSocialAddPost, 5
 
 $social_right_content .= wallSocialPost($my_user_id, $friendId);
 $socialAutoExtendLink = Display::url(
-    get_lang('Next'),
+    get_lang('SeeMore'),
     $socialAjaxUrl . '?u='. $my_user_id . '&a=listWallMessage&start=10&length=5',
     array(
         'class' => 'nextPage next',

@@ -8,7 +8,7 @@
             {{ social_menu_block }}
             </div>
         </div>
-        <div id="wallMessages" class="span5">
+        <div id="wallMessages" class="span5" style="min-height:1px">
             <div class="row">
                 <div class="span5">
                     <div id="message_ajax_reponse" class=""></div>

@@ -79,8 +79,8 @@ function api_mail_html(
     $recipient_email,
     $subject,
     $message,
-    $sender_name = '',
-    $sender_email = '',
+    $senderName = '',
+    $senderEmail = '',
     $extra_headers = array(),
     $data_file = array(),
     $embedded_image = false,
@@ -106,26 +106,19 @@ function api_mail_html(
     $mail->Priority = 3;
     $mail->SMTPKeepAlive = true;
 
-    // Default values:
-
+    // Default values
     $notification = new Notification();
-
-    $mail->From = $notification->getDefaultPlatformSenderEmail();
-    $mail->Sender = $notification->getDefaultPlatformSenderEmail();
-    $mail->FromName = $notification->getDefaultPlatformSenderName();
+    $defaultEmail = $notification->getDefaultPlatformSenderEmail();
+    $defaultName = $notification->getDefaultPlatformSenderName();
 
     // Error to admin.
-    $mail->AddCustomHeader('Errors-To: '.$mail->From);
+    $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
 
     // If the parameter is set don't use the admin.
-    $mail->From = !empty($sender_email) ? $sender_email : $mail->From;
-    $mail->Sender = !empty($sender_email) ? $sender_email : $mail->Sender;
-    $mail->FromName =  !empty($sender_name) ? $sender_name : $mail->FromName;
+    $senderName = !empty($senderName) ? $senderName : $defaultEmail;
+    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultName;
 
-    // Add reply
-    if (!empty($sender_email) && !empty($sender_name)) {
-        $mail->AddReplyTo($sender_email, $sender_name);
-    }
+    $mail->SetFrom($senderEmail, $senderName);
 
     if (isset($extra_headers['reply_to'])) {
         $mail->AddReplyTo(

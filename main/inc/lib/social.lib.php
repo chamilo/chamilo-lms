@@ -1367,12 +1367,13 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param int $userId id
-     * @param int $friendId id
-     * @param date $start
-     * @param int $limit
-     * @param int $offset
-     * @return array $data return array associative
+     * Gets all user's starting wall messages (within specific limits)
+     * @param   int     $userId     User's id
+     * @param   int     $friendId   Friend's id
+     * @param   date    $start      Start date (from when we want the messages until today)
+     * @param   int     $limit      Limit to the number of messages we want
+     * @param   int     $offset     Wall messages offset
+     * @return  array   $data       return user's starting wall messages along with message extra data
      */
     public static function getWallMessagesPostHTML($userId, $friendId = 0, $start = null, $limit = 10, $offset= 0)
     {

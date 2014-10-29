@@ -24,6 +24,7 @@ class Tracking
      * @param int $extendAttemptId
      * @param string $extendedAttempt
      * @param string $extendedAll
+     * @param string $type classic or simple
      * @return null|string
      */
     public static function getLpStats(
@@ -37,18 +38,20 @@ class Tracking
         $extendId = null,
         $extendAttemptId = null,
         $extendedAttempt = null,
-        $extendedAll = null
+        $extendedAll = null,
+        $type = 'classic'
     ) {
-        if (empty($courseInfo)) {
+        if (empty($courseInfo) || empty($lp_id)) {
             return null;
         }
-
-        $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $courseInfo['real_id']);
 
         $lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
         $user_id = intval($user_id);
+        $session_id = intval($session_id);
         $origin = Security::remove_XSS($origin);
+
+        $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $courseInfo['real_id']);
 
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $course_id = $courseInfo['real_id'];
@@ -66,12 +69,17 @@ class Tracking
         }
 
         if (!empty($extendedAll)) {
-            $extend_all_link = '<a href="' . api_get_self() . '?action=stats' . $url_suffix . '">
-                <img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="' . get_lang('HideAllAttempts') . '"></a>';
+            $extend_all_link = Display::url(
+                Display::return_icon('view_less_stats.gif', get_lang('HideAllAttempts')),
+                api_get_self() . '?action=stats' . $url_suffix
+            );
+
             $extend_all = 1;
         } else {
-            $extend_all_link = '<a href="' . api_get_self() . '?action=stats&extend_all=1' . $url_suffix . '">
-                <img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="' . get_lang('ShowAllAttempts') . '"></a>';
+            $extend_all_link = Display::url(
+                Display::return_icon('view_more_stats.gif', get_lang('ShowAllAttempts')),
+                api_get_self() . '?action=stats&extend_all=1' . $url_suffix
+            );
         }
 
         if ($origin != 'tracking') {
@@ -110,11 +118,13 @@ class Tracking
         $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $tbl_stats_attempts = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW
+        $sql = "SELECT max(view_count)
+                FROM $TBL_LP_VIEW
                 WHERE
                     c_id = $course_id AND
                     lp_id = $lp_id AND
-                    user_id = '" . $user_id . "' $session_condition";
+                    user_id = $user_id
+                    $session_condition";
         $res = Database::query($sql);
         $view = '';
         if (Database :: num_rows($res) > 0) {
@@ -137,80 +147,57 @@ class Tracking
 
         $result_disabled_ext_all = true;
 
+        $chapterTypes = learnpath::getChapterTypes();
+
         // Show lp items
         if (is_array($list) && count($list) > 0) {
             foreach ($list as $my_item_id) {
                 $extend_this = 0;
-                $qry_order = 'DESC';
+                $order = 'DESC';
                 if ((!empty($extendId) && $extendId == $my_item_id) || $extend_all) {
                     $extend_this = 1;
-                    $qry_order = 'ASC';
+                    $order = 'ASC';
                 }
 
                 // Prepare statement to go through each attempt.
+                $viewCondition = null;
                 if (!empty($view)) {
-                    $sql = "SELECT
-                        iv.status as mystatus,
-                        v.view_count as mycount,
-                        iv.score as myscore,
-                        iv.total_time as mytime,
-                        i.id as myid,
-                        i.lp_id as mylpid,
-                        iv.lp_view_id as mylpviewid,
-                        i.title as mytitle,
-                        i.max_score as mymaxscore,
-                        iv.max_score as myviewmaxscore,
-                        i.item_type as item_type,
-                        iv.view_count as iv_view_count,
-                        iv.id as iv_id,
-                        path
-                    FROM $TBL_LP_ITEM as i
-                    INNER JOIN $TBL_LP_ITEM_VIEW as iv
-                    ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
-                    INNER JOIN $TBL_LP_VIEW as v
-                    ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
-                    WHERE
-                        i.id = $my_item_id AND
-                        i.lp_id = $lp_id  AND
-                        v.user_id = $user_id AND
-                        v.view_count = $view AND
-                        v.session_id = $session_id
-                    ORDER BY iv.view_count $qry_order ";
-
-                } else {
-                    $sql = "SELECT
-                        iv.status as mystatus,
-                        v.view_count as mycount,
-                        iv.score as myscore,
-                        iv.total_time as mytime,
-                        i.id as myid,
-                        i.lp_id as mylpid,
-                        iv.lp_view_id as mylpviewid,
-                        i.title as mytitle,
-                        i.max_score as mymaxscore,
-                        iv.max_score as myviewmaxscore,
-                        i.item_type as item_type,
-                        iv.view_count as iv_view_count,
-                        iv.id as iv_id,
-                        path
-                    FROM $TBL_LP_ITEM as i
-                    INNER JOIN $TBL_LP_ITEM_VIEW as iv
-                    ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
-                    INNER JOIN $TBL_LP_VIEW as v
-                    ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
-                    WHERE
-                        i.id = $my_item_id AND
-                        i.lp_id = $lp_id AND
-                        v.user_id = $user_id AND
-                        v.session_id = $session_id
-                    ORDER BY iv.view_count $qry_order ";
+                    $viewCondition =  " AND v.view_count = $view  ";
                 }
+
+                $sql = "SELECT
+                    iv.status as mystatus,
+                    v.view_count as mycount,
+                    iv.score as myscore,
+                    iv.total_time as mytime,
+                    i.id as myid,
+                    i.lp_id as mylpid,
+                    iv.lp_view_id as mylpviewid,
+                    i.title as mytitle,
+                    i.max_score as mymaxscore,
+                    iv.max_score as myviewmaxscore,
+                    i.item_type as item_type,
+                    iv.view_count as iv_view_count,
+                    iv.id as iv_id,
+                    path
+                FROM $TBL_LP_ITEM as i
+                INNER JOIN $TBL_LP_ITEM_VIEW as iv
+                ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
+                INNER JOIN $TBL_LP_VIEW as v
+                ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
+                WHERE
+                    i.id = $my_item_id AND
+                    i.lp_id = $lp_id  AND
+                    v.user_id = $user_id AND
+                    v.session_id = $session_id
+                    $viewCondition
+                ORDER BY iv.view_count $order ";
 
                 $result = Database::query($sql);
                 $num = Database :: num_rows($result);
                 $time_for_total = 'NaN';
 
-                //Extend all + extend scorm?
+                // Extend all
                 if (($extend_this || $extend_all) && $num > 0) {
                     $row = Database :: fetch_array($result);
                     $result_disabled_ext_all = false;
@@ -220,7 +207,9 @@ class Tracking
 
                         $sql = "SELECT results_disabled
                                 FROM $TBL_QUIZ
-                                WHERE c_id = $course_id AND id ='" . $my_path . "'";
+                                WHERE
+                                    c_id = $course_id AND
+                                    id ='" . $my_path . "'";
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -237,25 +226,44 @@ class Tracking
                     } else {
                         $oddclass = 'row_even';
                     }
+
                     $extend_link = '';
                     if (!empty($inter_num)) {
-                        $extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '">
-                                <img src="../img/visible.gif" alt="' . get_lang('HideAttemptView') . '" title="' . get_lang('HideAttemptView') . '"  border="0">
-                                </a>';
+                        $extend_link = Display::url(
+                              Display::return_icon('visible.gif', get_lang('HideAttemptView')),
+                              api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix
+                        );
                     }
                     $title = $row['mytitle'];
 
                     if (empty($title)) {
-                        $title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
+                        $title = rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
                     }
 
-                    if ($row['item_type'] != 'dokeos_chapter') {
-                        $correct_test_link = '-';
-                        $title = Security::remove_XSS($title);
+                    if (in_array($row['item_type'], $chapterTypes)) {
+                        $title = "<h4> $title </h4>";
+                    }
+                    $lesson_status = $row['mystatus'];
+                    $title = Security::remove_XSS($title);
+                    $counter++;
+
+                    if (in_array($row['item_type'], $chapterTypes)) {
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
                                 <td colspan="4">
-                                    '.$title.'
+                                   '.$title.'
+                                </td>
+                                <td colspan="2">'.learnpathItem::humanize_status($lesson_status, true, $type).'</td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td></td>
+                            </tr>';
+                        continue;
+                    } else {
+                        $output .= '<tr class="'.$oddclass.'">
+                                <td>'.$extend_link.'</td>
+                                <td colspan="4">
+                                   '.$title.'
                                 </td>
                                 <td colspan="2"></td>
                                 <td colspan="2"></td>
@@ -263,7 +271,6 @@ class Tracking
                                 <td></td>
                             </tr>';
                     }
-                    $counter++;
 
                     $attemptCount = 1;
 
@@ -272,19 +279,23 @@ class Tracking
                         $extend_attempt_link = '';
                         $extend_this_attempt = 0;
 
-                        if ((learnpath :: get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
-                                learnpath :: get_objectives_count_from_db($row['iv_id'], $course_id) > 0) &&
+                        if ((learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
+                            learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0) &&
                             !$extend_all
                         ) {
                             if ($extendAttemptId == $row['iv_id']) {
                                 // The extend button for this attempt has been clicked.
                                 $extend_this_attempt = 1;
-                                $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '">
-                            <img src="../img/visible.gif" alt="' . get_lang('HideAttemptView') . '" title="' . get_lang('HideAttemptView') . '" border="0"></a>';
+                                $extend_attempt_link = Display::url(
+                                    Display::return_icon('visible.gif', get_lang('HideAttemptView')),
+                                    api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix
+                                );
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                                 // The extend button for this attempt has not been clicked.
-                                $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '">
-                            <img src="../img/invisible.gif" alt="' . get_lang('ExtendAttemptView') . '" title="' . get_lang('ExtendAttemptView') . '"  border="0"></a>';
+                                $extend_attempt_link = Display::url(
+                                    Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')),
+                                    api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix
+                                );
                             }
                         }
 
@@ -343,7 +354,7 @@ class Tracking
                                     <td></td>
                                     <td>' . $extend_attempt_link . '</td>
                                     <td colspan="3">' . get_lang('Attempt') . ' ' . $attemptCount . '</td>
-                                    <td colspan="2">' . learnpathItem::humanize_status($lesson_status) . '</td>
+                                    <td colspan="2">' . learnpathItem::humanize_status($lesson_status, true, $type) . '</td>
                                     <td colspan="2">' . $view_score . '</td>
                                     <td colspan="2">' . $time . '</td>
                                     <td></td>
@@ -352,7 +363,7 @@ class Tracking
                             if (!empty($export_csv)) {
                                 $temp = array();
                                 $temp[] = $title = Security::remove_XSS($title);
-                                $temp[] = Security::remove_XSS(learnpathItem::humanize_status($lesson_status, false));
+                                $temp[] = Security::remove_XSS(learnpathItem::humanize_status($lesson_status, false, $type));
 
                                 if ($row['item_type'] == 'quiz') {
                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -384,7 +395,7 @@ class Tracking
                                 if (count($content_student_response) > 0) {
                                     if (count($content_student_response) >= 3) {
                                         // Pop the element off the end of array.
-                                        $new_content_student_response = array_pop($content_student_response);
+                                        array_pop($content_student_response);
                                     }
                                     $student_response = implode(',', $content_student_response);
                                 }
@@ -428,7 +439,7 @@ class Tracking
                         }
                     } while ($row = Database :: fetch_array($result));
                 } elseif ($num > 0) {
-                    //Not extended
+                    // Not extended.
 
                     $row = Database :: fetch_array($result, 'ASSOC');
                     $my_id = $row['myid'];
@@ -441,9 +452,9 @@ class Tracking
                     if ($row['item_type'] == 'quiz') {
                         // Check results_disabled in quiz table.
                         $my_path = Database::escape_string($my_path);
-
-                        $sql = "SELECT results_disabled FROM $TBL_QUIZ
-                        WHERE c_id = $course_id AND id ='" . (int) $my_path . "'";
+                        $sql = "SELECT results_disabled
+                                FROM $TBL_QUIZ
+                                WHERE c_id = $course_id AND id ='" . $my_path . "'";
                         $res_result_disabled = Database::query($sql);
                         $row_result_disabled = Database::fetch_row($res_result_disabled);
 
@@ -461,18 +472,21 @@ class Tracking
                     $objec_num = learnpath::get_objectives_count_from_db($row['iv_id'], $course_id);
 
                     $extend_attempt_link = '';
-                    if (($inter_num > 0 || $objec_num > 0)) {
+                    if ($inter_num > 0 || $objec_num > 0) {
                         if (!empty($extendAttemptId) && $extendAttemptId == $row['iv_id']) {
                             // The extend button for this attempt has been clicked.
                             $extend_this_attempt = 1;
-                            $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '">
-                        <img src="../img/visible.gif" alt="' . get_lang('HideAttemptView') . '" title="' . get_lang('HideAttemptView') . '" border="0">
-                        </a>';
-                        } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
+                            $extend_attempt_link = Display::url(
+                                Display::return_icon('visible.gif', get_lang('HideAttemptView')),
+                                api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix
+                            );
+                        } else {
+                            // Same case if fold_attempt_id is set, so not implemented explicitly.
                             // The extend button for this attempt has not been clicked.
-                            $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '">
-                        <img src="../img/invisible.gif" alt="' . get_lang('ExtendAttemptView') . '" title="' . get_lang('ExtendAttemptView') . '" border="0">
-                        </a>';
+                            $extend_attempt_link = Display::url(
+                                Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')),
+                                api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix
+                            );
                         }
                     }
 
@@ -484,9 +498,10 @@ class Tracking
 
                     $extend_link = '';
                     if ($inter_num > 1) {
-                        $extend_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '">
-                    <img src="../img/invisible.gif" alt="' . get_lang('ExtendAttemptView') . '" title="' . get_lang('ExtendAttemptView') . '"  border="0">
-                </a>';
+                        $extend_link = Display::url(
+                            Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')),
+                            api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix
+                        );
                     }
 
                     $lesson_status = $row['mystatus'];
@@ -496,7 +511,7 @@ class Tracking
                     while ($tmp_row = Database :: fetch_array($result)) {
                         $subtotal_time += $tmp_row['mytime'];
                     }
-                    //$scoIdentifier = $row['myid'];
+
                     $title = $row['mytitle'];
 
                     // Selecting the exe_id from stats attempts tables in order to look the max score value.
@@ -535,24 +550,28 @@ class Tracking
                         } else {
                             if ($row['item_type'] == 'quiz') {
                                 // Get score and total time from last attempt of a exercise en lp.
-                                $sql = "SELECT score FROM $TBL_LP_ITEM_VIEW
-                                WHERE
-                                    c_id = $course_id AND
-                                    lp_item_id = '" . (int) $my_id . "' AND
-                                    lp_view_id = '" . (int) $my_lp_view_id . "'
-                                ORDER BY view_count DESC limit 1";
+                                $sql = "SELECT score
+                                        FROM $TBL_LP_ITEM_VIEW
+                                        WHERE
+                                            c_id = $course_id AND
+                                            lp_item_id = '" . (int) $my_id . "' AND
+                                            lp_view_id = '" . (int) $my_lp_view_id . "'
+                                        ORDER BY view_count DESC limit 1";
                                 $res_score = Database::query($sql);
                                 $row_score = Database::fetch_array($res_score);
 
-                                $sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW
-                                WHERE
-                                    c_id = $course_id AND
-                                    lp_item_id = '" . (int) $my_id . "' AND
-                                    lp_view_id = '" . (int) $my_lp_view_id . "'";
+                                $sql = "SELECT SUM(total_time) as total_time
+                                        FROM $TBL_LP_ITEM_VIEW
+                                        WHERE
+                                            c_id = $course_id AND
+                                            lp_item_id = '" . (int) $my_id . "' AND
+                                            lp_view_id = '" . (int) $my_lp_view_id . "'";
                                 $res_time = Database::query($sql);
                                 $row_time = Database::fetch_array($res_time);
 
-                                if (Database::num_rows($res_score) > 0 && Database::num_rows($res_time) > 0) {
+                                if (Database::num_rows($res_score) > 0 &&
+                                    Database::num_rows($res_time) > 0
+                                ) {
                                     $score = (float) $row_score['score'];
                                     $subtotal_time = (int) $row_time['total_time'];
                                 } else {
@@ -561,11 +580,11 @@ class Tracking
                                 }
                                 // Selecting the max score from an attempt.
                                 $sql = "SELECT SUM(t.ponderation) as maxscore
-                                FROM (
-                        			SELECT distinct question_id, marks, ponderation
-                                    FROM $tbl_stats_attempts as at INNER JOIN  $tbl_quiz_questions as q
-                        			ON (q.id = at.question_id AND q.c_id = $course_id
-                                    )
+                                        FROM (
+                                            SELECT distinct question_id, marks, ponderation
+                                            FROM $tbl_stats_attempts as at INNER JOIN  $tbl_quiz_questions as q
+                                            ON (q.id = at.question_id AND q.c_id = $course_id
+                                            )
                                 WHERE exe_id ='$id_last_attempt' ) as t";
 
                                 $result = Database::query($sql);
@@ -580,17 +599,25 @@ class Tracking
                     $time_for_total = $subtotal_time;
                     $time = learnpathItem :: getScormTimeFromParameter('js', $subtotal_time);
                     if (empty($title)) {
-                        $title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
+                        $title = rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
                     }
-                    // Remove "NaN" if any (@todo: locate the source of these NaN)
-                    //$time = str_replace('NaN', '00'.$h.'00\'00"', $time);
 
-                    if ($row['item_type'] != 'dokeos_chapter') {
+                    if (in_array($row['item_type'], $chapterTypes)) {
+                        $title = Security::remove_XSS($title);
+                        $output .= '<tr class="'.$oddclass.'">
+                                <td>'.$extend_link.'</td>
+                                <td colspan="4">
+                                <h4>'.$title.'</h4>
+                                </td>
+                                <td colspan="2">'.learnpathitem::humanize_status($lesson_status).'</td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td></td>
+                            </tr>';
+                    } else {
+                        $correct_test_link = '-';
                         if ($row['item_type'] == 'quiz') {
-                            $correct_test_link = '';
-                            $my_url_suffix = '';
-
-                            $my_url_suffix = '&course=' . $courseCode . '&student_id=' . $user_id . '&lp_id=' . intval($row['mylpid']) . '&origin=' . Security::remove_XSS($origin);
+                            $my_url_suffix = '&course=' . $courseCode . '&student_id=' . $user_id . '&lp_id=' . intval($row['mylpid']) . '&origin=' . $origin;
                             $sql = 'SELECT * FROM ' . $tbl_stats_exercices . '
                                      WHERE
                                         exe_exo_id="' . $row['path'] . '" AND
@@ -605,18 +632,21 @@ class Tracking
                             $resultLastAttempt = Database::query($sql);
                             $num = Database :: num_rows($resultLastAttempt);
                             if ($num > 0) {
-                                if ($extendedAttempt == 1 && ($lp_id == $my_lp_id) && $lp_item_id == $my_id) {
-                                    $correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '">
-                            <img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="' . get_lang('HideAllAttempts') . '"></a>';
+                                if ($extendedAttempt == 1 &&
+                                    $lp_id == $my_lp_id &&
+                                    $lp_item_id == $my_id
+                                ) {
+                                    $correct_test_link = Display::url(
+                                        Display::return_icon('view_less_stats.gif', get_lang('HideAllAttempts')),
+                                        api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . $session_id . '&lp_item_id=' . $my_id
+                                    );
                                 } else {
-                                    $correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '">
-                            <img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="' . get_lang('ShowAllAttemptsByExercise') . '"></a>';
+                                    $correct_test_link = Display::url(
+                                        Display::return_icon('view_more_stats.gif', get_lang('ShowAllAttemptsByExercise')),
+                                        api_get_self() . '?action=stats&extend_attempt=1' . $my_url_suffix . '&session_id=' . $session_id . '&lp_item_id=' . $my_id
+                                    );
                                 }
-                            } else {
-                                $correct_test_link = '-';
                             }
-                        } else {
-                            $correct_test_link = '-';
                         }
 
                         $title = Security::remove_XSS($title);
@@ -647,20 +677,24 @@ class Tracking
                                 $title = Display::url($title, $item_path_url, array('class' => 'ajax'));
                             }*/
 
+                            $scoreItem = null;
+                            if ($row['item_type'] == 'quiz') {
+                                if (!$is_allowed_to_edit && $result_disabled_ext_all) {
+                                    $scoreItem .= Display::return_icon(
+                                        'invisible.gif',
+                                        get_lang('ResultsHiddenByExerciseSetting')
+                                    );
+                                } else {
+                                    $scoreItem .= show_score($score, $maxscore, false);
+                                }
+                            } else {
+                                $scoreItem .= $score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore);
+                            }
+
                             $output .= '<td>'.$extend_link.'</td>
                                 <td colspan="4">' . $title . '</td>
                                 <td colspan="2">' . learnpathitem::humanize_status($lesson_status) .'</td>
-                                <td colspan="2">';
-                            if ($row['item_type'] == 'quiz') {
-                                if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                    $output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
-                                } else {
-                                    $output .= show_score($score, $maxscore, false);
-                                }
-                            } else {
-                                $output .= ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
-                            }
-                            $output .= '</td>
+                                <td colspan="2">'.$scoreItem.'</td>
                                 <td colspan="2">'.$time.'</td>
                                  <td>'.$correct_test_link.'</td>';
                             $output .= '</tr>';
@@ -669,7 +703,7 @@ class Tracking
                         if (!empty($export_csv)) {
                             $temp = array();
                             $temp[] = api_html_entity_decode($title, ENT_QUOTES);
-                            $temp[] = api_html_entity_decode($my_lesson_status, ENT_QUOTES);
+                            $temp[] = api_html_entity_decode($lesson_status, ENT_QUOTES);
 
                             if ($row['item_type'] == 'quiz') {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -688,7 +722,6 @@ class Tracking
                     $counter++;
                     if ($extend_this_attempt OR $extend_all) {
                         $list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
-
                         foreach ($list1 as $id => $interaction) {
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';
@@ -735,9 +768,7 @@ class Tracking
 
                     // Attempts listing by exercise.
                     if ($lp_id == $my_lp_id && $lp_item_id== $my_id && $extendedAttempt) {
-
                         // Get attempts of a exercise.
-                        $num_attempts = 0;
                         if (!empty($lp_id) && !empty($lp_item_id) && $row['item_type'] === 'quiz') {
                             $sql = "SELECT path FROM $TBL_LP_ITEM
                                     WHERE
@@ -845,7 +876,7 @@ class Tracking
         if (!empty($a_my_id)) {
             if ($extendedAttempt) {
                 // "Right green cross" extended
-                $total_score = Tracking::get_avg_student_score(
+                $total_score = self::get_avg_student_score(
                     $user_id,
                     $course_id,
                     $a_my_id,
@@ -855,7 +886,7 @@ class Tracking
                 );
             } else {
                 // "Left green cross" extended
-                $total_score = Tracking::get_avg_student_score(
+                $total_score = self::get_avg_student_score(
                     $user_id,
                     $course_id,
                     $a_my_id,
@@ -866,7 +897,7 @@ class Tracking
             }
         } else {
             // Extend all "left green cross"
-            $total_score = Tracking::get_avg_student_score(
+            $total_score = self::get_avg_student_score(
                 $user_id,
                 $course_id,
                 array($lp_id),
@@ -876,7 +907,7 @@ class Tracking
             );
         }
 
-        $total_time = learnpathItem :: getScormTimeFromParameter('js', $total_time);
+        $total_time = learnpathItem::getScormTimeFromParameter('js', $total_time);
         $total_time = str_replace('NaN', '00' . $h . '00\'00"', $total_time);
 
         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -889,6 +920,8 @@ class Tracking
             }
         }
 
+        $progress = learnpath::getProgress($lp_id, $user_id, $course_id, $session_id);
+
         if (($counter % 2) == 0) {
             $oddclass = 'row_odd';
         } else {
@@ -900,7 +933,7 @@ class Tracking
                 <td colspan="4">
                     <i>' . get_lang('AccomplishedStepsTotal') .'</i>
                 </td>
-                <td colspan="2"></td>
+                <td colspan="2">'.$progress.'%</td>
                 <td colspan="2">
                     ' . $final_score.'
                 </td>
@@ -1755,7 +1788,7 @@ class Tracking
      * get teacher progress by course and session
      * @param int course id
      * @param int session id
-     * @return data array
+     * @return array
      */
     static function get_teachers_progress_by_course($courseId, $sessionId)
     {
@@ -1778,6 +1811,7 @@ class Tracking
         while ($teacher = Database::fetch_array($rs,'ASSOC')) {
             $teachers[] = $teacher;
         }
+        $data = array();
         foreach ($teachers as $teacher) {
             //total documents added
             $sql = "SELECT count(*) as total
@@ -1911,19 +1945,26 @@ class Tracking
         return $data;
     }
 
-
     /**
      * Returns the average student progress in the learning paths of the given
      * course.
-     * @param   int/array    Student id(s)
-     * @param   string        Course code
-     * @param     array         Limit average to listed lp ids
-     * @param    int            Session id (optional), if parameter $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
-     * @param    bool        Will return an array of the type: [sum_of_progresses, number] if it is set to true
-     * @return double        Average progress of the user in this course
+     * @param int|array $student_id
+     * @param string    $course_code
+     * @param array     $lp_ids Limit average to listed lp ids
+     * @param int       $session_id     Session id (optional),
+     * if parameter $session_id is null(default) it'll return results including
+     * sessions, 0 = session is not filtered
+     * @param bool      $return_array Will return an array of the type:
+     * [sum_of_progresses, number] if it is set to true
+     * @return double   Average progress of the user in this course
      */
-    public static function get_avg_student_progress($student_id, $course_code = null, $lp_ids = array(), $session_id = null, $return_array = false)
-    {
+    public static function get_avg_student_progress(
+        $student_id,
+        $course_code = null,
+        $lp_ids = array(),
+        $session_id = null,
+        $return_array = false
+    ) {
         $conditions = array();
         $session_id = intval($session_id);
 
@@ -3404,9 +3445,8 @@ class Tracking
      * @author     isaac flores paz
      * @deprecated get_avg_student_score should be use
      */
-    public static function get_average_test_scorm_and_lp ($user_id, $course_id)
+    public static function get_average_test_scorm_and_lp($user_id, $course_id)
     {
-
         //the score inside the Reporting table
         $course_info      = api_get_course_info($course_id);
         $course_id        = $course_info['real_id'];
@@ -3420,6 +3460,7 @@ class Tracking
         $rs_type=Database::query($sql_type);
         $average_data=0;
         $count_loop=0;
+        $average_data_sum = 0;
         $lp_list = array();
         while ($row_type = Database::fetch_array($rs_type)) {
             $lp_list[] = $row_type['id'];
@@ -3453,12 +3494,10 @@ class Tracking
                     $tot=1;
                 }
                 $average_data1=$sum/$tot;
-                $sql_list_view='';
-                $rs_last_lp_view_id='';
-
             } elseif ($row_type['lp_type']==2) {
                 //lp scorm
-                $sql = "SELECT id FROM $lp_view_table  WHERE c_id = $course_id AND user_id = '".intval($user_id)."' and lp_id='".$row_type['id']."'";
+                $sql = "SELECT id FROM $lp_view_table
+                        WHERE c_id = $course_id AND user_id = '".intval($user_id)."' and lp_id='".$row_type['id']."'";
                 $rs_last_lp_view_id = Database::query($sql);
                 $lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));
 
@@ -3494,7 +3533,7 @@ class Tracking
 
         //We only count the LP that have an exercise to get the average
         $lp_with_quiz = 0;
-        foreach($lp_list as $lp_id) {
+        foreach ($lp_list as $lp_id) {
 
             //check if LP have a score
             $sql = "SELECT count(id) as count FROM $lp_item_table
@@ -3650,7 +3689,6 @@ class Tracking
                         AND $fieldEndDate <= '%s'", $date_from, $date_to);
                 }
             }
-
 
             //query
             $sql = "SELECT %s as user, count(*) as total
@@ -6504,6 +6542,4 @@ class TrackingUserLogCSV
             'html' => $courseToolInformationTotal
         );
     }
-
-
 }

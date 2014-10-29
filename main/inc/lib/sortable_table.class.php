@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.library
- */
-/**
- * Code
- */
+
 require_once 'pear/HTML/Table.php';
 require_once 'pear/Pager/Pager.php';
 
@@ -260,7 +255,7 @@ class SortableTable extends HTML_Table
             $form  = $this->get_page_select_form();
             $nav   = $this->get_navigation_html();
 
-            //Only show pagination info when there are items to paginate
+            // Only show pagination info when there are items to paginate
 
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
                 $html  = '<table class="data_table_pagination">';
@@ -907,8 +902,20 @@ class SortableTableFromArray extends SortableTable
      * @param int $default_column
      * @param int $default_items_per_page
      */
-    public function __construct($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename', $get_total_number_function = null) {
-        parent :: __construct ($tablename, $get_total_number_function, null, $default_column, $default_items_per_page);
+    public function __construct(
+        $table_data,
+        $default_column = 1,
+        $default_items_per_page = 20,
+        $tablename = 'tablename',
+        $get_total_number_function = null
+    ) {
+        parent:: __construct(
+            $tablename,
+            $get_total_number_function,
+            null,
+            $default_column,
+            $default_items_per_page
+        );
         $this->table_data = $table_data;
     }
 

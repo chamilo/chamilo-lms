@@ -1779,9 +1779,9 @@ class learnpathItem
         $h = get_lang('h');
         if (!isset($time)) {
             if ($origin == 'js') {
-                return '00:00:00';
+                return '00 : 00: 00';
             } else {
-                return '00' . $h . '00\'00"';
+                return '00 ' . $h . ' 00 \' 00"';
             }
         } else {
             return self::calculateScormTime($origin, $time);
@@ -1859,12 +1859,11 @@ class learnpathItem
         $secs = ($time % 60);
 
         if ($origin == 'js') {
-            $scormTime = trim(sprintf("%4d:%02d:%02d", $hours, $mins, $secs));
+            $scormTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
         } else {
-            $scormTime = trim(
-                sprintf("%4d$h%02d'%02d\"", $hours, $mins, $secs)
-            );
+            $scormTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
         }
+
         if (self::debug > 2) {
             error_log('learnpathItem::get_scorm_time(' . $scormTime . ')', 0);
         }
@@ -3308,7 +3307,9 @@ class learnpathItem
 
     /**
      * Sets the status for this item
-     * @param   string $status must be one of the values defined in $this->possible_status
+     * @param   string      $status must be one of the values defined
+     * in $this->possible_status
+     * (this affects the status setting)
      * @return  boolean True on success, false on error
      */
     public function set_status($status)
@@ -4291,11 +4292,12 @@ class learnpathItem
      * in different user languages
      * @param $status
      * @param bool $decorate
+     * @param string $type classic|simple
      * @return array|string
      */
-    static function humanize_status($status, $decorate = true)
+    static function humanize_status($status, $decorate = true, $type = 'classic')
     {
-        $mylanglist = array(
+        $statusList = array(
             'completed' => 'ScormCompstatus',
             'incomplete' => 'ScormIncomplete',
             'failed' => 'ScormFailed',
@@ -4304,30 +4306,38 @@ class learnpathItem
             'not attempted' => 'ScormNotAttempted'
         );
 
-        $my_lesson_status = get_lang($mylanglist[$status]);
+        $myLessonStatus = get_lang($statusList[$status]);
 
         switch ($status) {
             case 'completed':
             case 'browsed':
-                $class_status = 'info';
+                $classStatus = 'info';
                 break;
             case 'incomplete':
-                $class_status = 'warning';
+                $classStatus = 'warning';
                 break;
             case 'passed':
-                $class_status = 'success';
+                $classStatus = 'success';
                 break;
             case 'failed':
-                $class_status = 'important';
+                $classStatus = 'important';
                 break;
             default:
-                $class_status = 'default';
+                $classStatus = 'default';
                 break;
         }
+
+        if ($type == 'simple') {
+            if (in_array($status, array('failed', 'passed', 'browsed'))) {
+                $myLessonStatus = get_lang('ScormIncomplete');;
+                $classStatus = 'warning';
+            }
+        }
+
         if ($decorate) {
-            return Display::label($my_lesson_status, $class_status);
+            return Display::label($myLessonStatus, $classStatus);
         } else {
-            return $my_lesson_status;
+            return $myLessonStatus;
         }
     }
 }

@@ -4,13 +4,22 @@
 /**
  * Notification class
  * This class provides methods for the Notification management.
- * 	Include/require it in your code to use its features.
+ * Include/require it in your code to use its features.
  * @package chamilo.library
  */
 class Notification extends Model
 {
     public $table;
-    public $columns = array('id', 'dest_user_id', 'dest_mail', 'title', 'content', 'send_freq', 'created_at', 'sent_at');
+    public $columns = array(
+        'id',
+        'dest_user_id',
+        'dest_mail',
+        'title',
+        'content',
+        'send_freq',
+        'created_at',
+        'sent_at'
+    );
 
     //Max length of the notification.content field
     public $max_content_length = 254;
@@ -54,8 +63,29 @@ class Notification extends Model
         // If no-reply  email doesn't exist use the admin email
         if (empty($this->admin_email)) {
             $this->admin_email = api_get_setting('emailAdministrator');
-            $this->admin_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+            $this->admin_name = api_get_person_name(
+                api_get_setting('administratorName'),
+                api_get_setting('administratorSurname'),
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultPlatformSenderEmail()
+    {
+        return $this->admin_email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultPlatformSenderName()
+    {
+        return $this->admin_name;
     }
 
     /**
@@ -64,7 +94,10 @@ class Notification extends Model
      */
     public function send($frequency = 8)
     {
-        $notifications = $this->find('all', array('where' => array('sent_at IS NULL AND send_freq = ?' => $frequency)));
+        $notifications = $this->find(
+            'all',
+            array('where' => array('sent_at IS NULL AND send_freq = ?' => $frequency))
+        );
 
         if (!empty($notifications)) {
             foreach ($notifications as $item_to_send) {
@@ -93,14 +126,23 @@ class Notification extends Model
 
     /**
      * Save message notification
-     * @param	array	message type NOTIFICATION_TYPE_MESSAGE, NOTIFICATION_TYPE_INVITATION, NOTIFICATION_TYPE_GROUP
-     * @param	array	recipients: user list of ids
-     * @param	string	title
-     * @param	string	content of the message
-     * @param	array	result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param	int	$type message type
+     * NOTIFICATION_TYPE_MESSAGE,
+     * NOTIFICATION_TYPE_INVITATION,
+     * NOTIFICATION_TYPE_GROUP
+     * @param	array	$user_list recipients: user list of ids
+     * @param	string	$title
+     * @param	string	$content
+     * @param	array	$sender_info
+     * result of api_get_user_info() or GroupPortalManager:get_group_data()
      */
-    public function save_notification($type, $user_list, $title, $content, $sender_info = array())
-    {
+    public function save_notification(
+        $type,
+        $user_list,
+        $title,
+        $content,
+        $sender_info = array()
+    ) {
         $this->type = intval($type);
         $content = $this->format_content($content, $sender_info);
 
@@ -142,47 +184,26 @@ class Notification extends Model
                     $user_setting = $extra_data[$setting_to_check];
                 }
 
-                $params = array();
-
+                $sendDate = null;
                 switch ($user_setting) {
-                    //No notifications
+                    // No notifications
                     case self::NOTIFY_MESSAGE_NO:
                     case self::NOTIFY_INVITATION_NO:
                     case self::NOTIFY_GROUP_NO:
                         break;
-                    //Send notification right now!
+                    // Send notification right now!
                     case self::NOTIFY_MESSAGE_AT_ONCE:
                     case self::NOTIFY_INVITATION_AT_ONCE:
                     case self::NOTIFY_GROUP_AT_ONCE:
-                        $mail = api_get_setting('noreply_email_address');
-                        if ($user_setting == self::NOTIFY_INVITATION_AT_ONCE) {
-                            $sender_info['complete_name'] = $this->admin_name;
-                            $extra_headers = array();
-                            $extra_headers['reply_to']['name'] = $this->admin_name;
-                            if (!empty($mail)) {
-                                $sender_info['email'] = $mail;
-                                $extra_headers['reply_to']['mail'] = $mail;
-                                
-                            } else {
-                                $sender_info['email'] = $this->admin_email;
-                                $extra_headers['reply_to']['mail'] = $this->admin_email;
-                            }
-                        }
-                        if (!empty($user_info['mail']) || !empty($mail)) {
-                            $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
-                            if (!empty($sender_info['complete_name']) && !empty($sender_info['email'])) {
-                                if ($user_setting != self::NOTIFY_INVITATION_AT_ONCE) {
-                                    $extra_headers = array();
-                                    $extra_headers['reply_to']['mail'] = $sender_info['email'];
-                                    $extra_headers['reply_to']['name'] = $sender_info['complete_name'];
-                                }
-                            } else {
-                                $extra_headers = array();
-                                $sender_info['complete_name'] = $this->admin_name;
-                                $sender_info['email'] = $this->admin_email;
-                            }
+                        $extra_headers = array();
+                        $sender_info['complete_name'] = $this->admin_name;
+                        $sender_info['email'] = $this->admin_email;
+                        $extra_headers['reply_to']['name'] = $user_info['complete_name'];
+                        $extra_headers['reply_to']['mail'] = $user_info['email'];
+
+                        if (!empty($user_info['email'])) {
                             api_mail_html(
-                                $name,
+                                $user_info['complete_name'],
                                 $user_info['mail'],
                                 Security::filter_terms($title),
                                 Security::filter_terms($content),
@@ -190,27 +211,29 @@ class Notification extends Model
                                 $sender_info['email'],
                                 $extra_headers
                             );
-                    
                         }
-                        $params['sent_at'] = api_get_utc_datetime();
-                        // Saving the notification to be sent some day.
-                    default:
-                        $params['dest_user_id'] = $user_id;
-                        $params['dest_mail'] = $user_info['mail'];
-                        $params['title'] = $title;
-                        $params['content'] = cut($content, $this->max_content_length);
-                        $params['send_freq'] = $user_setting;
-                        $this->save($params);
-                        break;
+                        $sendDate = api_get_utc_datetime();
                 }
+
+                // Saving the notification to be sent some day.
+                $params = array();
+                $params['sent_at'] = $sendDate;
+                $params['dest_user_id'] = $user_id;
+                $params['dest_mail'] = $user_info['email'];
+                $params['title'] = $title;
+                $params['content'] = cut($content, $this->max_content_length);
+                $params['send_freq'] = $user_setting;
+                $this->save($params);
             }
         }
     }
 
     /**
-     * Formats the content in order to add the welcome message, the notification preference, etc
-     * @param   string 	the content
-     * @param   array	result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * Formats the content in order to add the welcome message,
+     * the notification preference, etc
+     * @param   string 	$content
+     * @param   array	$sender_info result of api_get_user_info() or
+     * GroupPortalManager:get_group_data()
      * @return string
      * */
     public function format_content($content, $sender_info)
@@ -220,27 +243,49 @@ class Notification extends Model
         switch ($this->type) {
             case self::NOTIFICATION_TYPE_MESSAGE:
                 if (!empty($sender_info)) {
-                    $sender_name = api_get_person_name($sender_info['firstname'], $sender_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-                    //$sender_mail = $sender_info['email'] ;
+                    $sender_name = api_get_person_name(
+                        $sender_info['firstname'],
+                        $sender_info['lastname'],
+                        null,
+                        PERSON_NAME_EMAIL_ADDRESS
+                    );
                     $new_message_text = sprintf(get_lang('YouHaveANewMessageFromX'), $sender_name);
                 }
-                $link_to_new_message = Display::url(get_lang('SeeMessage'), api_get_path(WEB_CODE_PATH).'messages/inbox.php');
+                $link_to_new_message = Display::url(
+                    get_lang('SeeMessage'),
+                    api_get_path(WEB_CODE_PATH) . 'messages/inbox.php'
+                );
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
                 if (!empty($sender_info)) {
-                    $sender_name = api_get_person_name($sender_info['firstname'], $sender_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-                    //$sender_mail = $sender_info['email'] ;
+                    $sender_name = api_get_person_name(
+                        $sender_info['firstname'],
+                        $sender_info['lastname'],
+                        null,
+                        PERSON_NAME_EMAIL_ADDRESS
+                    );
                     $new_message_text = sprintf(get_lang('YouHaveANewInvitationFromX'), $sender_name);
                 }
-                $link_to_new_message = Display::url(get_lang('SeeInvitation'), api_get_path(WEB_CODE_PATH).'social/invitations.php');
+                $link_to_new_message = Display::url(
+                    get_lang('SeeInvitation'),
+                    api_get_path(WEB_CODE_PATH) . 'social/invitations.php'
+                );
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
                 $topic_page = intval($_REQUEST['topics_page_nr']);
                 if (!empty($sender_info)) {
                     $sender_name = $sender_info['group_info']['name'];
                     $new_message_text = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $sender_name);
-                    $sender_name = api_get_person_name($sender_info['user_info']['firstname'], $sender_info['user_info']['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-                    $sender_name = Display::url($sender_name, api_get_path(WEB_CODE_PATH).'social/profile.php?'.$sender_info['user_info']['user_id']);
+                    $sender_name = api_get_person_name(
+                        $sender_info['user_info']['firstname'],
+                        $sender_info['user_info']['lastname'],
+                        null,
+                        PERSON_NAME_EMAIL_ADDRESS
+                    );
+                    $sender_name = Display::url(
+                        $sender_name,
+                        api_get_path(WEB_CODE_PATH).'social/profile.php?'.$sender_info['user_info']['user_id']
+                    );
                     $new_message_text .= '<br />'.get_lang('User').': '.$sender_name;
                 }
                 $group_url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$sender_info['group_info']['id'].'&topic_id='.$sender_info['group_info']['topic_id'].'&msg_id='.$sender_info['group_info']['msg_id'].'&topics_page_nr='.$topic_page;
@@ -261,7 +306,11 @@ class Notification extends Model
 
         // You have received this message because you are subscribed text
         $content = $content.'<br /><hr><i>'.
-            sprintf(get_lang('YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX'), Display::url($preference_url, $preference_url)).'</i>';
+            sprintf(
+                get_lang('YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX'),
+                Display::url($preference_url, $preference_url)
+            ).'</i>';
+
         return $content;
     }
 }

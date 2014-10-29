@@ -1340,18 +1340,28 @@ class Display
                   //  var_dump($item_property);
                 }
                 // Also drop announcements and events that are not for the user or his group.
-                if (($item_property['tool'] == TOOL_ANNOUNCEMENT
-                         || $item_property['tool'] == TOOL_CALENDAR_EVENT)
-                   && (($item_property['to_user_id'] != $user_id )
-                         && (!isset($item_property['to_group_id'])
-                             || !in_array($item_property['to_group_id'], $group_ids)))) {
+                if ((
+                        $item_property['tool'] == TOOL_ANNOUNCEMENT ||
+                        $item_property['tool'] == TOOL_CALENDAR_EVENT
+                    ) &&
+                    (
+                        ($item_property['to_user_id'] != $user_id) &&
+                        (!isset($item_property['to_group_id']) || !in_array($item_property['to_group_id'], $group_ids)))
+                ) {
                    continue;
                 }
                 // If it's a survey, make sure the user's invited. Otherwise drop it.
                 if ($item_property['tool'] == TOOL_SURVEY) {
                     $survey_info = survey_manager::get_survey($item_property['ref'], 0, $course_code);
-                    $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_code);
-                    if (!in_array($user_id, $invited_users['course_users'])) continue;
+                    if (!empty($survey_info)) {
+                        $invited_users = SurveyUtil::get_invited_users(
+                            $survey_info['code'],
+                            $course_code
+                        );
+                        if (!in_array($user_id, $invited_users['course_users'])) {
+                            continue;
+                        }
+                    }
                 }
                 // If it's a learning path, ensure it is currently visible to the user
                 if ($item_property['tool'] == TOOL_LEARNPATH) {
@@ -1365,11 +1375,6 @@ class Display
                 }
                 $notifications[$item_property['tool']] = $item_property;
             }
-        }
-
-        if ($course_info['real_id'] == 1) {
-            /*var_dump($notifications);
-            exit;*/
         }
 
         // Show all tool icons where there is something new.
@@ -1386,6 +1391,7 @@ class Display
             $retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$course_code.'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.
                             Display::return_icon($notification['image'], $label).'</a>&nbsp;';
         }
+
         return $retvalue;
     }
 

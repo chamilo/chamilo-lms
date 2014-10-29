@@ -1534,7 +1534,7 @@ class SocialManager extends UserManager
 
 
     /**
-     * Get sized image path
+     * Get full image path from a path and a size
      * @param   string  $path
      * @return  string
      */

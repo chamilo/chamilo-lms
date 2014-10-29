@@ -7558,5 +7558,9 @@ function api_get_configuration_value($variable)
  */
 function getSupportedImageExtensions()
 {
-    return array('jpg', 'jpeg', 'png', 'gif', 'svg', 'webp');
+    $supportedImageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'svg');
+    if (version_compare(PHP_VERSION, '5.5.0', '>=')) {
+        array_push($supportedImageExtensions, 'webp');
+    }
+    return $supportedImageExtensions;
 }

@@ -147,14 +147,16 @@ class Tracking
 
         $result_disabled_ext_all = true;
 
+        $chapterTypes = learnpath::getChapterTypes();
+
         // Show lp items
         if (is_array($list) && count($list) > 0) {
             foreach ($list as $my_item_id) {
                 $extend_this = 0;
-                $qry_order = 'DESC';
+                $order = 'DESC';
                 if ((!empty($extendId) && $extendId == $my_item_id) || $extend_all) {
                     $extend_this = 1;
-                    $qry_order = 'ASC';
+                    $order = 'ASC';
                 }
 
                 // Prepare statement to go through each attempt.
@@ -189,13 +191,13 @@ class Tracking
                     v.user_id = $user_id AND
                     v.session_id = $session_id
                     $viewCondition
-                ORDER BY iv.view_count $qry_order ";
+                ORDER BY iv.view_count $order ";
 
                 $result = Database::query($sql);
                 $num = Database :: num_rows($result);
                 $time_for_total = 'NaN';
 
-                // Extend all + extend scorm?
+                // Extend all
                 if (($extend_this || $extend_all) && $num > 0) {
                     $row = Database :: fetch_array($result);
                     $result_disabled_ext_all = false;
@@ -224,6 +226,7 @@ class Tracking
                     } else {
                         $oddclass = 'row_even';
                     }
+
                     $extend_link = '';
                     if (!empty($inter_num)) {
                         $extend_link = Display::url(
@@ -234,16 +237,33 @@ class Tracking
                     $title = $row['mytitle'];
 
                     if (empty($title)) {
-                        $title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
+                        $title = rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
                     }
 
-                    if ($row['item_type'] != 'dokeos_chapter') {
-                        $correct_test_link = '-';
-                        $title = Security::remove_XSS($title);
+                    if (in_array($row['item_type'], $chapterTypes)) {
+                        $title = "<h4> $title </h4>";
+                    }
+                    $lesson_status = $row['mystatus'];
+                    $title = Security::remove_XSS($title);
+                    $counter++;
+
+                    if (in_array($row['item_type'], $chapterTypes)) {
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
                                 <td colspan="4">
-                                    '.$title.'
+                                   '.$title.'
+                                </td>
+                                <td colspan="2">'.learnpathItem::humanize_status($lesson_status, true, $type).'</td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td></td>
+                            </tr>';
+                        continue;
+                    } else {
+                        $output .= '<tr class="'.$oddclass.'">
+                                <td>'.$extend_link.'</td>
+                                <td colspan="4">
+                                   '.$title.'
                                 </td>
                                 <td colspan="2"></td>
                                 <td colspan="2"></td>
@@ -251,7 +271,7 @@ class Tracking
                                 <td></td>
                             </tr>';
                     }
-                    $counter++;
+
                     $attemptCount = 1;
 
                     do {
@@ -259,8 +279,8 @@ class Tracking
                         $extend_attempt_link = '';
                         $extend_this_attempt = 0;
 
-                        if ((learnpath :: get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
-                            learnpath :: get_objectives_count_from_db($row['iv_id'], $course_id) > 0) &&
+                        if ((learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
+                            learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0) &&
                             !$extend_all
                         ) {
                             if ($extendAttemptId == $row['iv_id']) {
@@ -452,7 +472,7 @@ class Tracking
                     $objec_num = learnpath::get_objectives_count_from_db($row['iv_id'], $course_id);
 
                     $extend_attempt_link = '';
-                    if (($inter_num > 0 || $objec_num > 0)) {
+                    if ($inter_num > 0 || $objec_num > 0) {
                         if (!empty($extendAttemptId) && $extendAttemptId == $row['iv_id']) {
                             // The extend button for this attempt has been clicked.
                             $extend_this_attempt = 1;
@@ -491,7 +511,7 @@ class Tracking
                     while ($tmp_row = Database :: fetch_array($result)) {
                         $subtotal_time += $tmp_row['mytime'];
                     }
-                    //$scoIdentifier = $row['myid'];
+
                     $title = $row['mytitle'];
 
                     // Selecting the exe_id from stats attempts tables in order to look the max score value.
@@ -579,14 +599,24 @@ class Tracking
                     $time_for_total = $subtotal_time;
                     $time = learnpathItem :: getScormTimeFromParameter('js', $subtotal_time);
                     if (empty($title)) {
-                        $title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
+                        $title = rl_get_resource_name($courseInfo['code'], $lp_id, $row['myid']);
                     }
 
-                    if ($row['item_type'] != 'dokeos_chapter') {
+                    if (in_array($row['item_type'], $chapterTypes)) {
+                        $title = Security::remove_XSS($title);
+                        $output .= '<tr class="'.$oddclass.'">
+                                <td>'.$extend_link.'</td>
+                                <td colspan="4">
+                                <h4>'.$title.'</h4>
+                                </td>
+                                <td colspan="2">'.learnpathitem::humanize_status($lesson_status).'</td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td></td>
+                            </tr>';
+                    } else {
+                        $correct_test_link = '-';
                         if ($row['item_type'] == 'quiz') {
-                            $correct_test_link = '';
-                            $my_url_suffix = '';
-
                             $my_url_suffix = '&course=' . $courseCode . '&student_id=' . $user_id . '&lp_id=' . intval($row['mylpid']) . '&origin=' . $origin;
                             $sql = 'SELECT * FROM ' . $tbl_stats_exercices . '
                                      WHERE
@@ -602,22 +632,21 @@ class Tracking
                             $resultLastAttempt = Database::query($sql);
                             $num = Database :: num_rows($resultLastAttempt);
                             if ($num > 0) {
-                                if ($extendedAttempt == 1 && ($lp_id == $my_lp_id) && $lp_item_id == $my_id) {
+                                if ($extendedAttempt == 1 &&
+                                    $lp_id == $my_lp_id &&
+                                    $lp_item_id == $my_id
+                                ) {
                                     $correct_test_link = Display::url(
                                         Display::return_icon('view_less_stats.gif', get_lang('HideAllAttempts')),
-                                        api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id
+                                        api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . $session_id . '&lp_item_id=' . $my_id
                                     );
                                 } else {
                                     $correct_test_link = Display::url(
                                         Display::return_icon('view_more_stats.gif', get_lang('ShowAllAttemptsByExercise')),
-                                        api_get_self() . '?action=stats&extend_attempt=1' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id
+                                        api_get_self() . '?action=stats&extend_attempt=1' . $my_url_suffix . '&session_id=' . $session_id . '&lp_item_id=' . $my_id
                                     );
                                 }
-                            } else {
-                                $correct_test_link = '-';
                             }
-                        } else {
-                            $correct_test_link = '-';
                         }
 
                         $title = Security::remove_XSS($title);
@@ -648,20 +677,24 @@ class Tracking
                                 $title = Display::url($title, $item_path_url, array('class' => 'ajax'));
                             }*/
 
+                            $scoreItem = null;
+                            if ($row['item_type'] == 'quiz') {
+                                if (!$is_allowed_to_edit && $result_disabled_ext_all) {
+                                    $scoreItem .= Display::return_icon(
+                                        'invisible.gif',
+                                        get_lang('ResultsHiddenByExerciseSetting')
+                                    );
+                                } else {
+                                    $scoreItem .= show_score($score, $maxscore, false);
+                                }
+                            } else {
+                                $scoreItem .= $score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore);
+                            }
+
                             $output .= '<td>'.$extend_link.'</td>
                                 <td colspan="4">' . $title . '</td>
                                 <td colspan="2">' . learnpathitem::humanize_status($lesson_status) .'</td>
-                                <td colspan="2">';
-                            if ($row['item_type'] == 'quiz') {
-                                if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                    $output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
-                                } else {
-                                    $output .= show_score($score, $maxscore, false);
-                                }
-                            } else {
-                                $output .= ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
-                            }
-                            $output .= '</td>
+                                <td colspan="2">'.$scoreItem.'</td>
                                 <td colspan="2">'.$time.'</td>
                                  <td>'.$correct_test_link.'</td>';
                             $output .= '</tr>';
@@ -670,7 +703,7 @@ class Tracking
                         if (!empty($export_csv)) {
                             $temp = array();
                             $temp[] = api_html_entity_decode($title, ENT_QUOTES);
-                            $temp[] = api_html_entity_decode($my_lesson_status, ENT_QUOTES);
+                            $temp[] = api_html_entity_decode($lesson_status, ENT_QUOTES);
 
                             if ($row['item_type'] == 'quiz') {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {

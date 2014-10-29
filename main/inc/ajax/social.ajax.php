@@ -189,13 +189,14 @@ switch ($action) {
         $start = isset($_REQUEST['start']) ? intval($_REQUEST['start']) - 1 : 0;
         $length = isset($_REQUEST['length']) ? intval($_REQUEST['length']) : 10;
         $userId = api_get_user_id();
+        $friendId = $userId;
         $array = SocialManager::getWallMessagesPostHTML($userId, $friendId, null, $length, $start);
         if (!empty($array)) {
             ksort($array);
             $html = '';
             for($i = 0; $i < count($array); $i++) {
                 $post = $array[$i]['html'];
-                $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id'], null, $length, $start);
+                $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id']);
                 $html .= '<div class="well_border">'.$post.$comment.'</div>';
             }
             $html .= Display::div(
@@ -205,7 +206,7 @@ switch ($action) {
                     ($start + $length + 1) . '&length=' . $length,
                     array(
                         'class' => 'nextPage',
-                        'style' => 'display: none;',
+                        'style' => 'display: none;'
                     )
                 ),
                 array(

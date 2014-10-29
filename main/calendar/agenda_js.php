@@ -93,8 +93,14 @@ switch ($type) {
         if (api_is_anonymous()) {
             api_not_allowed(true);
         }
-        $extra_field_data = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'google_calendar_url');
-        if (!empty($extra_field_data) && isset($extra_field_data['google_calendar_url']) && !empty($extra_field_data['google_calendar_url'])) {
+        $extra_field_data = UserManager::get_extra_user_data_by_field(
+            api_get_user_id(),
+            'google_calendar_url'
+        );
+        if (!empty($extra_field_data) &&
+            isset($extra_field_data['google_calendar_url']) &&
+            !empty($extra_field_data['google_calendar_url'])
+        ) {
             $tpl->assign('use_google_calendar', 1);
             $tpl->assign('google_calendar_url', $extra_field_data['google_calendar_url']);
         }
@@ -149,7 +155,7 @@ $actions = $agenda->displayActions('calendar', $userId);
 
 $tpl->assign('actions', $actions);
 
-//Calendar Type : course, admin, personal
+// Calendar Type : course, admin, personal
 $tpl->assign('type', $type);
 
 $type_event_class = $type.'_event';
@@ -189,37 +195,35 @@ if (!empty($userId)) {
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 $course_code = api_get_course_id();
 
-//if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $type == 'course') {
+$form = new FormValidator('form', 'get', null, null, array('id' => 'add_event_form'));
+$form->addElement('html', '<div id="visible_to_input">');
 
-    $form = new FormValidator('form', 'get', null, null, array('id' => 'add_event_form'));
-    $form->addElement('html', '<div id="visible_to_input">');
+$sendTo = $agenda->parseAgendaFilter($userId);
+$addOnlyItemsInSendTo = true;
 
-    $sendTo = $agenda->parseAgendaFilter($userId);
-    $addOnlyItemsInSendTo = true;
+if ($sendTo['everyone']) {
+    $addOnlyItemsInSendTo = false;
+}
 
-    if ($sendTo['everyone']) {
-        $addOnlyItemsInSendTo = false;
-    }
+$agenda->showToForm($form, $sendTo, array(), $addOnlyItemsInSendTo);
+$form->addElement('html', '</div>');
 
-    $agenda->showToForm($form, $sendTo, array(), $addOnlyItemsInSendTo);
+$form->addElement('html', '<div id="visible_to_read_only" style="display: none">');
+$form->addElement('label', get_lang('To'), '<div id="visible_to_read_only_users"></div>');
+$form->addElement('html', '</div>');
+
+$form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');
+$form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span id="end_date"></span>');
+$form->addElement('text', 'title', get_lang('Title'), array('id' => 'title'));
+$form->addElement('textarea', 'content', get_lang('Description'), array('id' => 'content'));
+
+if ($agenda->type == 'course') {
+    $form->addElement('html', '<div id="add_as_announcement_div" style="display: none">');
+    $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
     $form->addElement('html', '</div>');
+}
 
-    $form->addElement('html', '<div id="visible_to_read_only" style="display: none">');
-    $form->addElement('label', get_lang('To'), '<div id="visible_to_read_only_users"></div>');
-    $form->addElement('html', '</div>');
-
-    $form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');
-    $form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span id="end_date"></span>');
-    $form->addElement('text', 'title', get_lang('Title'), array('id' => 'title'));
-    $form->addElement('textarea', 'content', get_lang('Description'), array('id' => 'content'));
-    if ($agenda->type == 'course') {
-        $form->addElement('html', '<div id="add_as_announcement_div" style="display: none">');
-        $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
-        $form->addElement('html', '</div>');
-    }
-
-    $tpl->assign('form_add', $form->return_form());
-//}
+$tpl->assign('form_add', $form->return_form());
 
 // Loading Agenda template.
 $content = $tpl->fetch('default/agenda/month.tpl');

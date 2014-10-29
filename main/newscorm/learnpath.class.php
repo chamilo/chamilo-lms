@@ -7137,8 +7137,6 @@ class learnpath
             $form->applyFilter('title', 'html_filter');
         }
 
-        //$arrHide = array($id);
-
         $arrHide[0]['value'] = $this->name;
         $arrHide[0]['padding'] = 3;
 

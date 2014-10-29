@@ -20,15 +20,15 @@ ul.holder_simple li.bit-box {
   -moz-border-radius:6px;
   -webkit-border-radius:6px;
   border-radius:6px;
-  border:1px solid #FCF8E3;
+  border:1px solid #C09853;
   background:#FCF8E3;
-  padding:1px 5px 2px
+  padding:1px 5px 2px;
+  color:#333;
 }
 
 ul.holder_simple li.bit-box-focus {
   border-color:#FCF8E3;
   background:#FCF8E3;
-  color:#333;
 }
 
 ul.holder li.bit-input input {
@@ -178,8 +178,8 @@ ul.holder li.bit-box-focus a.closebutton,ul.holder li.bit-box-focus a.closebutto
 }
 
 .facebook-auto ul li.auto-focus {
-  background:#4173CC;
-  color:#fff
+  background:#F0F0F0;
+  color:#333;
 }
 
 .facebook-auto ul li.auto-focus em {

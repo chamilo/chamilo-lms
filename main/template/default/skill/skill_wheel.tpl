@@ -429,7 +429,24 @@ $(document).ready(function() {
             }                           
         });
     }
-
+/* change background color */
+    $(document).ready(function () {
+        $("#celestial").click(function () {
+            $("#page-back").css("background","#A9E2F3");
+        });
+        $("#white").click(function () {
+            $("#page-back").css("background","#FFFFFF");
+        });
+        $("#black").click(function () {
+            $("#page-back").css("background","#000000");
+        });
+        $("#lead").click(function () {
+            $("#page-back").css("background","#848484");
+        });
+        $("#light-yellow").click(function () {
+            $("#page-back").css("background","#F7F8E0");
+        });
+    });
     /* Generated random colour */
     /*
     function colour(d) {
@@ -446,6 +463,7 @@ $(document).ready(function() {
     }*/
 });
 </script>
+<div id="page-back">
 <div class="container-fluid">
     <div class="row-fluid">
 
@@ -514,6 +532,25 @@ $(document).ready(function() {
                     </div>
                 </div>
             </div>
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                            <h4 class="title-skill">Opciones de presentación</h4>
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <p>Escoge un color de fondo:</p>
+                            <ul>
+                                <li><a href="#" id="white">Blanco</a></li>
+                                <li><a href="#" id="black">Negro</a></li>
+                                <li><a href="#" id="celestial">Celeste</a></li>
+                                <li><a href="#" id="lead">Plomo</a></li>
+                                <li><a href="#" id="light-yellow">Amarillo</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- END ACCORDEON -->
@@ -596,4 +633,5 @@ $(document).ready(function() {
             </div>
         </fieldset>
     </form>
+</div>
 </div>

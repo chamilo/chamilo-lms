@@ -3347,7 +3347,7 @@ form .formw .freeze {
   margin-top: 1em;
   background-color: #FFFFFF;
 }
-.skill-options .legend .title-skill{
+.skill-options .legend .title-skill, .skill-options .saved_profiles .title-skill{
   color: #666655;
   padding-bottom: 1em;
   font-size: 16px;
@@ -3382,6 +3382,34 @@ form .formw .freeze {
   /*border: 1px solid #dadada;*/
   background-color: #FFFFFF;
 }
+.skill-options .items_save{
+  margin-top: .5em;
+  margin-bottom: .5em;
+  display: inline-block;
+  height: auto !important;
+  clear: both;
+  width: 100%;
+}
+.skill-options .accordion-group {
+  margin-bottom: 2px;
+  border: 1px solid #3FA5C3;
+  border-radius: 4px;
+}
+.skill-options .accordion-inner {
+  padding: 9px 15px;
+  border-top: 1px solid #3FA5C3;
+}
+.skill_partition {
+  cursor: pointer;
+  stroke: #000000;
+  stroke-width: 0.5px;
+}
+
+#skill_holder li {
+  float:left;
+  padding-right: 10px;
+}
+
 /* ****************************************************
                      END SKILL
  **************************************************** */
@@ -4890,16 +4918,6 @@ i.size-32.icon-new-work{
 }
 
 /* Default skill partition colors */
-.skill_partition {
-    cursor: pointer;
-    stroke: #000000;
-    stroke-width: 1.5;
-}
-
-#skill_holder li {
-    float:left;
-    padding-right: 10px;
-}
 
 #filepaths input{
     margin-bottom:5px;

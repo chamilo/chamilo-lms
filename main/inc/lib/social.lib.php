@@ -1283,12 +1283,12 @@ class SocialManager extends UserManager
 
     /**
      * Gets all messages from someone's wall (within specific limits), formatted
-     * @param int $userId USER ID of the person's wall
-     * @param int $friendId id person
-     * @param int $idMessage id message
-     * @param string  Start date (from when we want the messages until today)
-     * @param int $limit Limit to the number of messages we want
-     * @param int $offset
+     * @param int       $userId     USER ID of the person's wall
+     * @param int       $friendId   id person
+     * @param int       $idMessage  id message
+     * @param string    $start      Start date (from when we want the messages until today)
+     * @param int       $limit      Limit to the number of messages we want
+     * @param int       $offset     Wall messages offset
      * @return string  HTML formatted string to show messages
      */
     public static function getWallMessagesHTML($userId, $friendId, $idMessage, $start = null, $limit = 10, $offset = 0)

@@ -1661,7 +1661,7 @@ class DocumentManager
      * @param int The document id
      * @return void()
      */
-    function attach_gradebook_certificate($course_id, $document_id)
+    public static function attach_gradebook_certificate($course_id, $document_id)
     {
         $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = api_get_session_id();
@@ -4284,4 +4284,58 @@ class DocumentManager
 
         return $audioId;
     }
+
+    /**
+     * Generate a default certificate for a courses
+     * @global string $css CSS directory
+     * @global string $img_dir Imgage direcory
+     * @global string $default_course_dir Course directory
+     * @global string $js JS directory
+     * @param array $courseData The course info
+     */
+    public static function generateDefaultCertificate($courseData)
+    {
+        global $css, $img_dir, $default_course_dir, $js;
+        $dir = '/certificates';
+
+        $title = get_lang('DefaultCertificate');
+        $comment = null;
+
+        $fileName = replace_dangerous_char($title);
+        $filePath = api_get_path(SYS_COURSE_PATH) . "{$courseData['path']}/document{$dir}";
+        $fileFullPath = "{$filePath}/{$fileName}.html";
+        $fileSize = 0;
+        $fileType = 'file';
+        $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH) . 'gradebook/certificate_template/template.html');
+
+        $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{WEB_CODE_PATH}');
+        $replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir, api_get_path(WEB_CODE_PATH));
+
+        $fileContent = str_replace($search, $replace, $templateContent);
+
+        $saveFilePath = "{$dir}/{$fileName}.html";
+
+        if (!is_dir($filePath)) {
+            mkdir($filePath, api_get_permissions_for_new_directories());
+        }
+
+        $defaultCertificateFile = $fp = @fopen($fileFullPath, 'w');
+
+        if ($defaultCertificateFile != false) {
+            @fputs($defaultCertificateFile, $fileContent);
+            fclose($defaultCertificateFile);
+            chmod($fileFullPath, api_get_permissions_for_new_files());
+
+            $fileSize = filesize($fileFullPath);
+        }
+
+        $documentId = add_document($courseData, $saveFilePath, $fileType, $fileSize, $title, $comment);
+
+        $defaultCertificateId = self::get_default_certificate_id($courseData['code']);
+
+        if (!isset($defaultCertificateId)) {
+            self::attach_gradebook_certificate($courseData['code'], $documentId);
+        }
+    }
+
 }

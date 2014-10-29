@@ -490,28 +490,27 @@ function getUniqueStudentAttempts(
     }
 
     $sql = "SELECT count(*) FROM (
-                SELECT count(*)
+                SELECT count(*), w.parent_id
                 FROM $work_table w
                 INNER JOIN $user_table u
                     ON w.user_id = u.user_id
                 WHERE
+                    w.filetype = 'file' AND
                     w.c_id = $course_id AND
                     w.session_id = $sessionId AND
                    $workCondition
                     w.post_group_id = ".$groupId." AND
                     w.active IN (0, 1) $studentCondition
                 ";
-
     if (!empty($userId)) {
         $userId = intval($userId);
         $sql .= " AND u.user_id = ".$userId;
     }
-    $sql .= " GROUP BY u.user_id) as t";
+    $sql .= " GROUP BY u.user_id, w.parent_id) as t";
+    $result = Database::query($sql);
+    $row = Database::fetch_row($result);
 
-    $res_document = Database::query($sql);
-    $rowCount = Database::fetch_row($res_document);
-
-    return $rowCount[0];
+    return $row[0];
 }
 
 /**

@@ -47,7 +47,9 @@ class MessageManager
      */
     public static function display_success_message($uid)
     {
-        if ($_SESSION['social_exist'] === true) {
+        if (isset($_SESSION['social_exist']) &&
+            $_SESSION['social_exist'] === true
+        ) {
             if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
                 $success = get_lang('MessageSentTo').
                     "&nbsp;<b>".
@@ -190,15 +192,15 @@ class MessageManager
     /**
      * Sends a message to a user/group
      *
-     * @param int 	  $receiver_user_id
+     * @param int 	   $receiver_user_id
      * @param string  $subject
      * @param string  $content
      * @param array   $file_attachments files array($_FILES) (optional)
      * @param array   $file_comments about attachment files (optional)
-     * @param int     $group_id id (optional)
-     * @param int     $parent_id id (optional)
-     * @param int 	  $edit_message_id id for updating the message (optional)
-     * @param int     $topic_id id (optional) the default value is the current user_id
+     * @param int     $group_id (optional)
+     * @param int     $parent_id (optional)
+     * @param int 	   $edit_message_id id for updating the message (optional)
+     * @param int     $topic_id (optional) the default value is the current user_id
      * @param int     $sender_id
      * @return bool
      */
@@ -247,7 +249,10 @@ class MessageManager
         if (empty($subject) && empty($group_id)) {
             return get_lang('YouShouldWriteASubject');
         } else if ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
-            return sprintf(get_lang("FilesSizeExceedsX"), format_file_size(api_get_setting('message_max_upload_filesize')));
+            return sprintf(
+                get_lang("FilesSizeExceedsX"),
+                format_file_size(api_get_setting('message_max_upload_filesize'))
+            );
         }
 
         $inbox_last_id = null;
@@ -265,7 +270,9 @@ class MessageManager
             //message in inbox for user friend
             //@todo it's possible to edit a message? yes, only for groups
             if ($edit_message_id) {
-                $query = " UPDATE $table_message SET update_date = '".$now."', content = '$clean_content'
+                $query = " UPDATE $table_message SET
+                                update_date = '".$now."',
+                                content = '$clean_content'
                            WHERE id = '$edit_message_id' ";
                 Database::query($query);
                 $inbox_last_id = $edit_message_id;
@@ -281,7 +288,14 @@ class MessageManager
                 $i = 0;
                 foreach ($file_attachments as $file_attach) {
                     if ($file_attach['error'] == 0) {
-                        self::save_message_attachment_file($file_attach, $file_comments[$i], $inbox_last_id, null, $receiver_user_id, $group_id);
+                        self::save_message_attachment_file(
+                            $file_attach,
+                            $file_comments[$i],
+                            $inbox_last_id,
+                            null,
+                            $receiver_user_id,
+                            $group_id
+                        );
                     }
                     $i++;
                 }
@@ -299,7 +313,12 @@ class MessageManager
                     $o = 0;
                     foreach ($file_attachments as $file_attach) {
                         if ($file_attach['error'] == 0) {
-                            self::save_message_attachment_file($file_attach, $file_comments[$o], $outbox_last_id, $user_sender_id);
+                            self::save_message_attachment_file(
+                                $file_attach,
+                                $file_comments[$o],
+                                $outbox_last_id,
+                                $user_sender_id
+                            );
                         }
                         $o++;
                     }
@@ -325,7 +344,7 @@ class MessageManager
 
                 $user_list = GroupPortalManager::get_users_by_group($group_id, false, array(), 0, 1000);
 
-                //Adding more sens to the message group
+                // Adding more sense to the message group
                 $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
 
                 $new_user_list = array();

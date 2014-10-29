@@ -1297,7 +1297,7 @@ class SocialManager extends UserManager
             $start = '0000-00-00';
         }
 
-        $visibility = (api_get_user_id() == $userId  && $userId == $friendId);
+        $isOwnWall = (api_get_user_id() == $userId  && $userId == $friendId);
         $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL, $idMessage, $start, $limit, $offset);
         $formattedList = '<div class="mediaPost" style="width:calc(100%-14px);
         display:block;padding-left:14px">';
@@ -1337,7 +1337,7 @@ class SocialManager extends UserManager
             $media .= '</div>';
             $media .= '</div>';
             $media .= '</div>';
-            if ($visibility) {
+            if ($isOwnWall) {
                 $media .= '<div style="width: 100%;height:20px">';
                 $media .= '<div><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId='.
                 $message['id'].'">'.get_lang('SocialMessageDelete').'</a></div>';
@@ -1379,7 +1379,7 @@ class SocialManager extends UserManager
         if (empty($start)) {
             $start = '0000-00-00';
         }
-        $visibility = (api_get_user_id() == $userId  && $userId == $friendId);
+        $isOwnWall = (api_get_user_id() == $userId  && $userId == $friendId);
         $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL_POST , null, $start, $limit, $offset);
         $users = array();
         $data = array();
@@ -1402,7 +1402,7 @@ class SocialManager extends UserManager
                 $message['user_receiver_id'],
                 $users,
                 $message,
-                $visibility
+                $isOwnWall
             );
 
             $data[$key]['id'] = $message['id'];
@@ -1413,7 +1413,7 @@ class SocialManager extends UserManager
     }
 
 
-    private  static function headerMessagePost($authorId, $reciverId, $users, $message, $visibility = false)
+    private  static function headerMessagePost($authorId, $reciverId, $users, $message, $isOwnWall = false)
     {
         $date = api_get_local_time($message['send_date']);
         $avatarAuthor = $users[$authorId]['avatar'];
@@ -1444,7 +1444,7 @@ class SocialManager extends UserManager
 
 
         $htmlDelete = '';
-        if ($visibility) {
+        if ($isOwnWall) {
             $htmlDelete .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId='.
             $message['id'].'">'.get_lang('SocialMessageDelete').'</a>';
         }
@@ -1468,7 +1468,7 @@ class SocialManager extends UserManager
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
-        if ($visibility) {
+        if ($isOwnWall) {
             $html .= '<div style="width: 100%;height:20px">';
             $html .= $htmlDelete;
             $html .= '</div>';

@@ -51,7 +51,7 @@ $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 $tpl->assign('url', $url);
 
 $tpl->assign('userInfo', $userInfo);
-$tpl->assign('ranking', 2);
+$tpl->assign('ranking', $ranking);
 $tpl->assign('countSkill', $countSkill);
 
 $content = $tpl->fetch('default/skill/skill_wheel_student.tpl');

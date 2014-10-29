@@ -289,7 +289,9 @@ $(document).ready(function() {
                 </div>
                 <div class="info-user">
                         <h4 class="title-skill">{{ userInfo.complete_name }}</h4>
-                        <p>{{ 'YourSkillRankingX' | get_lang | format(ranking) }}</p>
+                        <p>
+                            <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default btn-block" target="_blank">{{ 'YourSkillRankingX' | get_lang | format(ranking) }}</a>
+                        </p>
 
                             {% for i in 1..ranking %}
                             <img src="{{ _p.web }}main/img/icons/22/award_red.png"/>

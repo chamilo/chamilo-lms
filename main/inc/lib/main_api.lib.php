@@ -7551,3 +7551,12 @@ function api_get_configuration_value($variable)
     }
     return false;
 }
+
+/**
+ * Returns supported image extensions
+ * @return  array   Supported image extensions
+ */
+function getSupportedImageExtensions()
+{
+    return array('jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'webm');
+}

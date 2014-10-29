@@ -1204,7 +1204,7 @@ class SocialManager extends UserManager
         $safeFileName = Database::escape_string($fileAttach['name']);
 
         $extension = strtolower(substr(strrchr($safeFileName, '.'), 1));
-        $allowedTypes = array('jpg', 'jpeg', 'png', 'gif');
+        $allowedTypes = getSupportedImageExtensions();
         if (!in_array($extension, $allowedTypes)) {
             $flag = false;
         } else {

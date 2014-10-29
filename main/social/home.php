@@ -44,7 +44,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
             get_lang('DelImage')
         );
     }
-    $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
+    $allowed_picture_types = getSupportedImageExtensions();
     $form->addRule(
         'picture',
         get_lang('OnlyImagesAllowed') . ' (' . implode(

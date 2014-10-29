@@ -3517,6 +3517,8 @@ class learnpath
                 default :
                     break;
             }
+            // Replace &amp; by & because &amp; will break URL with params
+            $file = !empty($file) ? str_replace('&amp;', '&', $file) : '';
         }
         if ($this->debug > 2) {
             error_log('New LP - In learnpath::get_link() - returning "' . $file . '" from get_link', 0);

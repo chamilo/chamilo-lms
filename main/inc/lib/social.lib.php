@@ -1490,7 +1490,8 @@ class SocialManager extends UserManager
 
     /**
      * Get schedule html (with data openGrap)
-     * @param $text content text
+     * @param   string  $text       Content text
+     * @return  string  $newText    Content text with OpenGraph
      */
     public function readContentWithOpenGraph($text)
     {

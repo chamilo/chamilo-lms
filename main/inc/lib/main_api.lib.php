@@ -7558,5 +7558,5 @@ function api_get_configuration_value($variable)
  */
 function getSupportedImageExtensions()
 {
-    return array('jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'webm');
+    return array('jpg', 'jpeg', 'png', 'gif', 'svg', 'webp');
 }

@@ -312,7 +312,9 @@ class IndexManager
 
             $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'));
 
-            if (api_get_setting('allow_hr_skills_management') == 'true' || api_is_platform_admin()) {
+            $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
+
+            if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
                 $content .= Display::tag('li', Display::url(get_lang('ManageSkills'), api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'));
             }
             $content .= '</ul>';

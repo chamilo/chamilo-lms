@@ -118,7 +118,7 @@ function api_mail_html(
     $senderName = !empty($senderName) ? $senderName : $defaultEmail;
     $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultName;
 
-    $mail->SetFrom($senderEmail, $senderName);
+    $mail->SetFrom($senderEmail, $senderName, false);
 
     if (isset($extra_headers['reply_to'])) {
         $mail->AddReplyTo(

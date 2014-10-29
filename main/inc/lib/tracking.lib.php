@@ -24,6 +24,7 @@ class Tracking
      * @param int $extendAttemptId
      * @param string $extendedAttempt
      * @param string $extendedAll
+     * @param string $type classic or simple
      * @return null|string
      */
     public static function getLpStats(
@@ -886,8 +887,8 @@ class Tracking
             }
         }
 
-        //$progress = self::get_avg_student_progress()
-        $progress = null;
+        $progress = learnpath::getProgress($lp_id, $user_id, $course_id, $session_id);
+
         if (($counter % 2) == 0) {
             $oddclass = 'row_odd';
         } else {
@@ -899,7 +900,7 @@ class Tracking
                 <td colspan="4">
                     <i>' . get_lang('AccomplishedStepsTotal') .'</i>
                 </td>
-                <td colspan="2"> ' . $progress.'</td>
+                <td colspan="2">'.$progress.'%</td>
                 <td colspan="2">
                     ' . $final_score.'
                 </td>

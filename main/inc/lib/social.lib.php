@@ -1440,8 +1440,8 @@ class SocialManager extends UserManager
         if (!empty($message['path'])) {
             $pathUserInfo = UserManager::get_user_picture_path_by_id($authorId, 'web', true);
             $pathImg = $pathUserInfo['dir'] . 'message_attachments';
-            $imageBig = $pathImg .self::getImage($message['path'], IMAGE_WALL_BIG);
-            $imageSmall =  $pathImg. self::getImage($message['path'], IMAGE_WALL_SMALL);
+            $imageBig = $pathImg .self::getImagePath($message['path'], IMAGE_WALL_BIG);
+            $imageSmall =  $pathImg. self::getImagePath($message['path'], IMAGE_WALL_SMALL);
             $wallImage = '<a class="thumbnail thickbox" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
@@ -1534,11 +1534,11 @@ class SocialManager extends UserManager
 
 
     /**
-     * Get name img by sizes
-     * @param string$path
-     * @return string
+     * Get sized image path
+     * @param   string  $path
+     * @return  string
      */
-    private static function getImage($path, $size = '')
+    private static function getImagePath($path, $size = '')
     {
         $name = '';
         $array = preg_split('#\/#', $path);

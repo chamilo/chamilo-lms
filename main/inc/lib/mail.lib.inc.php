@@ -107,9 +107,12 @@ function api_mail_html(
     $mail->SMTPKeepAlive = true;
 
     // Default values:
-    $mail->From = api_get_setting('emailAdministrator');
-    $mail->Sender = api_get_setting('emailAdministrator');
-    $mail->FromName = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+
+    $notification = new Notification();
+
+    $mail->From = $notification->getDefaultPlatformSenderEmail();
+    $mail->Sender = $notification->getDefaultPlatformSenderEmail();
+    $mail->FromName = $notification->getDefaultPlatformSenderName();
 
     // Error to admin.
     $mail->AddCustomHeader('Errors-To: '.$mail->From);

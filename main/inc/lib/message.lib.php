@@ -18,11 +18,10 @@ define('MESSAGE_STATUS_INVITATION_DENIED', '7');
 /**
  * Class MessageManager
  *
- * 	This class provides methods for messages management.
- * 	Include/require it in your code to use its features.
+ * This class provides methods for messages management.
+ * Include/require it in your code to use its features.
  *
- * 	@package chamilo.library
- *
+ * @package chamilo.library
  */
 class MessageManager
 {
@@ -49,7 +48,6 @@ class MessageManager
     public static function display_success_message($uid)
     {
         if ($_SESSION['social_exist'] === true) {
-            $redirect = "#remote-tab-2";
             if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
                 $success = get_lang('MessageSentTo').
                     "&nbsp;<b>".
@@ -393,10 +391,10 @@ class MessageManager
         // get message id from data found early for other receiver user
         $sql = "SELECT id FROM $table_message
                 WHERE
-                  user_sender_id ='{$row_message[user_sender_id]}' AND
-                  title='{$row_message[title]}' AND
-                  content='{$row_message[content]}' AND
-                  group_id='{$row_message[group_id]}' AND
+                  user_sender_id ='{$row_message['user_sender_id']}' AND
+                  title='{$row_message['title']}' AND
+                  content='{$row_message['content']}' AND
+                  group_id='{$row_message['group_id']}' AND
                   user_receiver_id='$receiver_user_id'";
         $rs_msg_id = Database::query($sql);
         $row = Database::fetch_array($rs_msg_id);
@@ -423,9 +421,8 @@ class MessageManager
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs);
             // delete attachment file
-            $res = self::delete_message_attachment_file($id, $user_receiver_id);
+            self::delete_message_attachment_file($id, $user_receiver_id);
             // delete message
             $query = "UPDATE $table_message SET msg_status=3
                       WHERE user_receiver_id=".$user_receiver_id." AND id=".$id;
@@ -458,9 +455,8 @@ class MessageManager
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs);
             // delete attachment file
-            $res = self::delete_message_attachment_file($id, $user_sender_id);
+            self::delete_message_attachment_file($id, $user_sender_id);
             // delete message
             $query = "UPDATE $table_message SET msg_status=3
                     WHERE user_sender_id='$user_sender_id' AND id='$id'";
@@ -579,6 +575,7 @@ class MessageManager
     {
         if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id)))
             return false;
+
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = "UPDATE $table_message SET msg_status = '0'
                 WHERE
@@ -636,7 +633,9 @@ class MessageManager
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
         $query = "SELECT * FROM $table_message
-                  WHERE group_id= $group_id AND msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
+                  WHERE
+                    group_id= $group_id AND
+                    msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
                   ORDER BY id";
         $rs = Database::query($query);
         $data = array();
@@ -661,7 +660,9 @@ class MessageManager
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $group_id = intval($group_id);
         $query = "SELECT * FROM $table_message
-                  WHERE group_id = $group_id AND msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
+                  WHERE
+                    group_id = $group_id AND
+                    msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
                   ORDER BY id ";
 
         $rs = Database::query($query);
@@ -752,7 +753,6 @@ class MessageManager
      */
     public static function get_message_data_sent($from, $number_of_items, $column, $direction)
     {
-        global $charset;
         $from = intval($from);
         $number_of_items = intval($number_of_items);
         if (!isset($direction)) {
@@ -765,7 +765,8 @@ class MessageManager
         }
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $request = api_is_xml_http_request();
-        $sql = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, user_receiver_id as col4, msg_status as col5
+        $sql = "SELECT
+                    id as col0, user_sender_id as col1, title as col2, send_date as col3, user_receiver_id as col4, msg_status as col5
                 FROM $table_message
                 WHERE
                     user_sender_id=".api_get_user_id()." AND

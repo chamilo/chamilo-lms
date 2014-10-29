@@ -45,7 +45,7 @@ color_patterns[17] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOr
 
 //Too make the gray tones lighter
 col = 3;
-color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greys[col]);
+color_patterns[18] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greens[col]);
 
 //If you want to use the category10()
 //var normal_fill = d3.scale.category10().domain(my_domain);
@@ -137,7 +137,7 @@ function get_color(d) {
         }                  
         return color;
     }
-    color = '#fefefe';        
+    color = '#fefefe';
     return color; //missing colors
 }
 
@@ -156,7 +156,7 @@ bright red for missing skills, in the "Required skills" view for a student when 
 **/
 function set_skill_style(d, attribute, searched_skill_id) {
     //Default border color (stroke)
-    return_stroke = 'black';
+    return_stroke = '#000';
 
     //0. Nice rainbow colors (Comment 1.0 to see the rainbow!)
     return_fill = get_color(d);
@@ -168,7 +168,7 @@ function set_skill_style(d, attribute, searched_skill_id) {
 
     //2. Yellow - If the skill has a gradebook attached
     if (d.skill_has_gradebook) {      
-        return_fill = '#F89406';            
+        return_fill = '#FFA800';
         //return_stroke = 'grey';
     }
 

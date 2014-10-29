@@ -193,8 +193,12 @@ if (api_is_platform_admin()) {
     $defaults['use_max_score'] = $_SESSION['oLP']->use_max_score;
 }
 
-$extraField = new ExtraField('lp');
-$extra = $extraField->addElements($form, $_SESSION['oLP']->get_id());
+$enableLpExtraFields = false;
+
+if ($enableLpExtraFields) {
+    $extraField = new ExtraField('lp');
+    $extra = $extraField->addElements($form, $_SESSION['oLP']->get_id());
+}
 
 //Submit button
 $form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
@@ -205,11 +209,13 @@ $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-$htmlHeadXtra[] ='<script>
-$(function() {
-    '.$extra['jquery_ready_content'].'
-});
-</script>';
+if ($enableLpExtraFields) {
+    $htmlHeadXtra[] = '<script>
+    $(function() {
+        ' . $extra['jquery_ready_content'] . '
+    });
+    </script>';
+}
 
 
 $defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');

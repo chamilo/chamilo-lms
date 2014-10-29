@@ -631,10 +631,10 @@ class SocialManager extends UserManager
 
             $html .= '<div class="social-content-image">';
             $html .= '<div class="well social-background-content">';
-            $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id);
+            $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group_id);
             if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
                 $html .= '<div id="edit_image" class="hidden_message" style="display:none">
-                            <a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.
+                            <a href="'.api_get_path(WEB_CODE_PATH).'social/group_edit.php?id='.$group_id.'">'.
                     get_lang('EditGroup').'</a></div>';
             }
             $html .= '</div>';
@@ -659,7 +659,7 @@ class SocialManager extends UserManager
             }
             if (api_get_user_id() == $user_id) {
                 $html .= '<div id="edit_image" class="hidden_message" style="display:none">';
-                $html .= '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
+                $html .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('EditProfile').'</a></div>';
             }
             $html .= '</div>';
         }
@@ -740,29 +740,29 @@ class SocialManager extends UserManager
 
             $html .= '<div class="well sidebar-nav"><ul class="nav nav-list">';
             $active = $show == 'home' ? 'active' : null;
-            $html .= '<li class="home-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.get_lang('Home').'</a></li>';
+            $html .= '<li class="home-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Home').'</a></li>';
             $active = $show == 'messages' ? 'active' : null;
-            $html .= '<li class="messages-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.get_lang('Messages').$count_unread_message.'</a></li>';
+            $html .= '<li class="messages-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social">'.get_lang('Messages').$count_unread_message.'</a></li>';
 
             //Invitations
             $active = $show == 'invitations' ? 'active' : null;
-            $html .= '<li class="invitations-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('Invitations').$total_invitations.'</a></li>';
+            $html .= '<li class="invitations-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.get_lang('Invitations').$total_invitations.'</a></li>';
 
             //Shared profile and groups
             $active = $show == 'shared_profile' ? 'active' : null;
-            $html .= '<li class="shared-profile-icon'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.get_lang('ViewMySharedProfile').'</a></li>';
+            $html .= '<li class="shared-profile-icon'.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">'.get_lang('ViewMySharedProfile').'</a></li>';
             $active = $show == 'friends' ? 'active' : null;
-            $html .= '<li class="friends-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.get_lang('Friends').'</a></li>';
+            $html .= '<li class="friends-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">'.get_lang('Friends').'</a></li>';
             $active = $show == 'browse_groups' ? 'active' : null;
-            $html .= '<li class="browse-groups-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.get_lang('SocialGroups').'</a></li>';
+            $html .= '<li class="browse-groups-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php">'.get_lang('SocialGroups').'</a></li>';
 
             //Search users
             $active = $show == 'search' ? 'active' : null;
-            $html .= '<li class="search-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.get_lang('Search').'</a></li>';
+            $html .= '<li class="search-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">'.get_lang('Search').'</a></li>';
 
             //My files
             $active = $show == 'myfiles' ? 'active' : null;
-            $html .= '<li class="myfiles-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</span></a></li>';
+            $html .= '<li class="myfiles-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">'.get_lang('MyFiles').'</span></a></li>';
             $html .='</ul>
                   </div>';
         }
@@ -781,18 +781,18 @@ class SocialManager extends UserManager
 
             // My own profile
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
-                $html .= '<li class="home-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.get_lang('Home').'</a></li>
-                          <li class="messages-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.get_lang('Messages').$count_unread_message.'</a></li>';
+                $html .= '<li class="home-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Home').'</a></li>
+                          <li class="messages-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social">'.get_lang('Messages').$count_unread_message.'</a></li>';
                 $active = $show == 'invitations' ? 'active' : null;
-                $html .= '<li class="invitations-icon'.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('Invitations').$total_invitations.'</a></li>';
+                $html .= '<li class="invitations-icon'.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.get_lang('Invitations').$total_invitations.'</a></li>';
 
-                $html .= '<li class="shared-profile-icon active"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.get_lang('ViewMySharedProfile').'</a></li>
-                          <li class="friends-icon"><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.get_lang('Friends').'</a></li>
-                          <li class="browse-groups-icon"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.get_lang('SocialGroups').'</a></li>';
+                $html .= '<li class="shared-profile-icon active"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">'.get_lang('ViewMySharedProfile').'</a></li>
+                          <li class="friends-icon"><a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">'.get_lang('Friends').'</a></li>
+                          <li class="browse-groups-icon"><a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php">'.get_lang('SocialGroups').'</a></li>';
                 $active = $show == 'search' ? 'active' : null;
-                $html .= '<li class="search-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.get_lang('Search').'</a></li>';
+                $html .= '<li class="search-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">'.get_lang('Search').'</a></li>';
                 $active = $show == 'myfiles' ? 'active' : null;
-                $html .= '<li class="myfiles-icon '.$active.'"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
+                $html .= '<li class="myfiles-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
             }
 
             // My friend profile.
@@ -805,7 +805,7 @@ class SocialManager extends UserManager
             $invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
 
             if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) > 0) {
-                $html .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
+                $html .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
             } else {
                 if (!$show_full_profile) {
                     $html .= '<li><a  href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user_id.'\');" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
@@ -946,7 +946,7 @@ class SocialManager extends UserManager
             // Anonymous users can't have access to the profile
             if (!api_is_anonymous()) {
                 if (api_get_setting('allow_social_tool') == 'true') {
-                    $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
+                    $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$uid.$course_url;
                 } else {
                     $url = '?id='.$uid.$course_url;
                 }
@@ -1315,7 +1315,7 @@ class SocialManager extends UserManager
             $nameComplete = api_is_western_name_order()
                 ? $users[$userIdLoop]['firstname'] .' ' . $users[$userIdLoop]['lastname']
                 : $users[$userIdLoop]['lastname'] . ' ' . $users[$userIdLoop]['firstname'];
-            $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$userIdLoop;
+            $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
             $media = '';
             $media .= '<div class="media" style="width:100%; display:inline-block; margin-bottom:5px;">';
             $media .= '<div class="media-body" style="width: 100%; height: 32px; margin-bottom:5px;">';
@@ -1339,7 +1339,7 @@ class SocialManager extends UserManager
             $media .= '</div>';
             if ($isOwnWall) {
                 $media .= '<div style="width: 100%;height:20px">';
-                $media .= '<div><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId='.
+                $media .= '<div><a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
                 $message['id'].'">'.get_lang('SocialMessageDelete').'</a></div>';
                 $media .= '</div>';
             }
@@ -1418,13 +1418,13 @@ class SocialManager extends UserManager
     {
         $date = api_get_local_time($message['send_date']);
         $avatarAuthor = $users[$authorId]['avatar'];
-        $urlAuthor = api_get_path(WEB_PATH).'main/social/profile.php?u='.$authorId;
+        $urlAuthor = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$authorId;
         $nameCompleteAuthor = api_is_western_name_order()
             ? $users[$authorId]['firstname'] .' ' . $users[$authorId]['lastname']
             : $users[$authorId]['lastname'] . ' ' . $users[$authorId]['firstname'];
 
         $avatarReciver = $users[$reciverId]['avatar'];
-        $urlReciber = api_get_path(WEB_PATH).'main/social/profile.php?u='.$reciverId;
+        $urlReciber = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$reciverId;
         $nameCompleteReciver = api_is_western_name_order()
             ? $users[$reciverId]['firstname'] .' ' . $users[$reciverId]['lastname']
             : $users[$reciverId]['lastname'] . ' ' . $users[$reciverId]['firstname'];
@@ -1446,7 +1446,7 @@ class SocialManager extends UserManager
 
         $htmlDelete = '';
         if ($isOwnWall) {
-            $htmlDelete .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?messageId='.
+            $htmlDelete .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
             $message['id'].'">'.get_lang('SocialMessageDelete').'</a>';
         }
 

@@ -453,8 +453,14 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
  * @param array $onlyUserList only parse this user list
  * @return mixed
  */
-function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $userId = null, $onlyUserList = array())
-{
+function getUniqueStudentAttempts(
+    $workId,
+    $groupId,
+    $course_id,
+    $sessionId,
+    $userId = null,
+    $onlyUserList = array()
+) {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -484,28 +490,27 @@ function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $us
     }
 
     $sql = "SELECT count(*) FROM (
-                SELECT count(*)
+                SELECT count(*), w.parent_id
                 FROM $work_table w
                 INNER JOIN $user_table u
                     ON w.user_id = u.user_id
                 WHERE
+                    w.filetype = 'file' AND
                     w.c_id = $course_id AND
                     w.session_id = $sessionId AND
                    $workCondition
                     w.post_group_id = ".$groupId." AND
                     w.active IN (0, 1) $studentCondition
                 ";
-
     if (!empty($userId)) {
         $userId = intval($userId);
         $sql .= " AND u.user_id = ".$userId;
     }
-    $sql .= " GROUP BY u.user_id) as t";
+    $sql .= " GROUP BY u.user_id, w.parent_id) as t";
+    $result = Database::query($sql);
+    $row = Database::fetch_row($result);
 
-    $res_document = Database::query($sql);
-    $rowCount = Database::fetch_row($res_document);
-
-    return $rowCount[0];
+    return $row[0];
 }
 
 /**
@@ -710,7 +715,14 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
             if ($origin != 'learnpath') {
                 if ($is_allowed_to_edit) {
-                    $cant_files_per_user = getUniqueStudentAttempts($work_data['id'], $group_id, $course_id, api_get_session_id(), null, $userList);
+                    $cant_files_per_user = getUniqueStudentAttempts(
+                        $work_data['id'],
+                        $group_id,
+                        $course_id,
+                        api_get_session_id(),
+                        null,
+                        $userList
+                    );
 
                     $row[] = $cant_files_per_user.'/'.count($userList);
                     if (api_resource_is_locked_by_gradebook($workId, LINK_STUDENTPUBLICATION)) {
@@ -2887,12 +2899,16 @@ function getStudentSubscribedToWork(
 
     if (empty($groupId)) {
         $courseInfo = api_get_course_info_by_id($courseId);
+        $status = STUDENT;
+        if (!empty($sessionId)) {
+            $status = 0;
+        }
         $usersInCourse = CourseManager::get_user_list_from_course_code(
             $courseInfo['code'],
             $sessionId,
             null,
             null,
-            0,
+            $status,
             $getCount
         );
     } else {
@@ -3364,10 +3380,22 @@ function sendAlertToTeacher($workId, $courseInfo, $session_id)
         // Lets predefine some variables. Be sure to change the from address!
         if (empty($session_id)) {
             //Teachers
-            $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), null, null, null, COURSEMANAGER);
+            $user_list = CourseManager::get_user_list_from_course_code(
+                api_get_course_id(),
+                null,
+                null,
+                null,
+                COURSEMANAGER
+            );
         } else {
-            //Coaches
-            $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), $session_id, null, null, 2);
+            // Coaches
+            $user_list = CourseManager::get_user_list_from_course_code(
+                api_get_course_id(),
+                $session_id,
+                null,
+                null,
+                2
+            );
         }
 
         $subject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$courseInfo['name']."  ";
@@ -4153,7 +4181,16 @@ function showStudentList($workId)
 function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount = false)
 {
     if (!empty($groupId)) {
-        $userList = GroupManager::get_users($groupId, false, $start, $limit, $getCount, null, $sidx, $sord);
+        $userList = GroupManager::get_users(
+            $groupId,
+            false,
+            $start,
+            $limit,
+            $getCount,
+            null,
+            $sidx,
+            $sord
+        );
     } else {
         $limitString = null;
         if (!empty($start) && !empty($limit)) {
@@ -4187,6 +4224,7 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
                 $getCount
             );
         }
+
         if ($getCount == false) {
             $userList = array_keys($userList);
         }
@@ -4206,8 +4244,17 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
  * @param bool $getCount
  * @return array|int
  */
-function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount = false)
-{
+function getWorkUserListData(
+    $workId,
+    $courseCode,
+    $sessionId,
+    $groupId,
+    $start,
+    $limit,
+    $sidx,
+    $sord,
+    $getCount = false
+) {
     $my_folder_data = get_work_data_by_id($workId);
     $workParents = array();
     if (empty($my_folder_data)) {
@@ -4222,7 +4269,18 @@ function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start,
     }
 
     $courseInfo = api_get_course_info($courseCode);
-    $userList = getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount);
+
+    $userList = getWorkUserList(
+        $courseCode,
+        $sessionId,
+        $groupId,
+        $start,
+        $limit,
+        $sidx,
+        $sord,
+        $getCount
+    );
+
     if ($getCount) {
         return $userList;
     }
@@ -4234,7 +4292,13 @@ function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start,
             $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), $link);
             $userWorks = 0;
             if (!empty($workIdList)) {
-                $userWorks = getUniqueStudentAttempts($workIdList, $groupId, $courseInfo['real_id'], $sessionId, $user['user_id']);
+                $userWorks = getUniqueStudentAttempts(
+                    $workIdList,
+                    $groupId,
+                    $courseInfo['real_id'],
+                    $sessionId,
+                    $user['user_id']
+                );
             }
             $works = $userWorks." / ".count($workParents);
             $results[] = array('student' => $url, 'works' => $works);

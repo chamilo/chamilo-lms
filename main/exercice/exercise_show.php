@@ -161,37 +161,38 @@ $show_only_total_score  = false;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
-	// if the results_disabled of the Quiz is 1 when block the script
-	$result_disabled		= $track_exercise_info['results_disabled'];
+    // if the results_disabled of the Quiz is 1 when block the script
+    $result_disabled		= $track_exercise_info['results_disabled'];
 
-	if (!(api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) ) {
-		if ($result_disabled == 1) {
-			//api_not_allowed();
-			$show_results = false;
-			//Display::display_warning_message(get_lang('CantViewResults'));
-			if ($origin != 'learnpath') {
-			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    if (!(api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) ) {
+        if ($result_disabled == 1) {
+            $show_results = false;
+            if ($origin != 'learnpath') {
+                echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td colspan="2">';
-				Display::display_warning_message(get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>', false);
-				echo '</td>
-				</tr>
-				</table>';
-			}
-		} elseif ($result_disabled == 2) {
-		    $show_results = false;
-		    $show_only_total_score = true;
-			if ($origin != 'learnpath') {
-			    echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                Display::display_warning_message(
+                    get_lang('ThankYouForPassingTheTest').'<br /><br /><a href="exercice.php">'.(get_lang('BackToExercisesList')).'</a>',
+                    false
+                );
+                echo '</td>
+                </tr>
+                </table>';
+            }
+        } elseif ($result_disabled == 2) {
+            $show_results = false;
+            $show_only_total_score = true;
+            if ($origin != 'learnpath') {
+                echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">
                       <tr>
                         <td colspan="2">';
-				Display::display_warning_message(get_lang('ThankYouForPassingTheTest'), false);
-				echo '</td>
-				</tr>
-				</table>';
-			}
-		}
-	}
+                Display::display_warning_message(get_lang('ThankYouForPassingTheTest'), false);
+                echo '</td>
+                </tr>
+                </table>';
+            }
+        }
+    }
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
 	$show_results = false;
@@ -204,7 +205,10 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 if ($show_results || $show_only_total_score) {
     $user_info = api_get_user_info($student_id);
     //Shows exercise header
-    echo $objExercise->show_exercise_result_header($user_info, api_convert_and_format_date($exercise_date));
+    echo $objExercise->show_exercise_result_header(
+        $user_info,
+        api_convert_and_format_date($exercise_date)
+    );
 }
 
 $i = $totalScore = $totalWeighting = 0;
@@ -574,10 +578,17 @@ foreach ($questionList as $questionId) {
     $my_total_score  = $questionScore;
 	$my_total_weight = $questionWeighting;
     $totalWeighting += $questionWeighting;
-
     $category_was_added_for_this_test = false;
 
     if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+        if (!isset($category_list[$objQuestionTmp->category]['score'])) {
+            $category_list[$objQuestionTmp->category]['score'] = 0;
+        }
+
+        if (!isset($category_list[$objQuestionTmp->category]['total'])) {
+            $category_list[$objQuestionTmp->category]['total'] = 0;
+        }
+
         $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
         $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
         $category_was_added_for_this_test = true;

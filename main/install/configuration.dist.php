@@ -247,3 +247,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['theme_fallback'] = 'chamilo'; // (main/css/chamilo)
 // The default template that will be use in the system.
 //$_configuration['default_template'] = 'default'; // (main/template/default)
+// Show reduce LP report
+//$_configuration['lp_show_reduced_report'] = false;

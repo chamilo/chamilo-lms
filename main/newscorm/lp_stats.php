@@ -28,6 +28,11 @@ $extendedAttempt = isset($_GET['extend_attempt']) ? $_GET['extend_attempt'] : nu
 $extendedAll = isset($_GET['extend_all']) ? $_GET['extend_all'] : null;
 $export = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 
+$lpReportType = api_get_configuration_value('lp_show_reduced_report');
+$type = 'classic';
+if ($lpReportType) {
+    $type = 'simple';
+}
 $courseInfo = api_get_course_info($courseCode);
 $output = Tracking::getLpStats(
     $userId,
@@ -40,7 +45,8 @@ $output = Tracking::getLpStats(
     $extendId,
     $extendAttemptId,
     $extendedAttempt,
-    $extendedAll
+    $extendedAll,
+    $type
 );
 
 // Origin = tracking means that teachers see that info in the Reporting tool

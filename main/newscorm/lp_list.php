@@ -66,8 +66,6 @@ Display::display_introduction_section(TOOL_LEARNPATH, array(
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 if ($is_allowed_to_edit) {
-    /* DIALOG BOX SECTION */
-
     if (!empty($dialog_box)) {
         switch ($_GET['dialogtype']) {
             case 'confirmation':
@@ -162,7 +160,7 @@ if (!empty($flat_list)) {
             }
 
             if ($time_limits) {
-                // check if start time
+                // Check if start time
                 if (!empty($details['publicated_on']) && $details['publicated_on'] != '0000-00-00 00:00:00' &&
                     !empty($details['expired_on']) && $details['expired_on'] != '0000-00-00 00:00:00') {
                     $start_time = api_strtotime($details['publicated_on'], 'UTC');
@@ -366,9 +364,15 @@ if (!empty($flat_list)) {
 
             /* Export */
             if ($details['lp_type'] == 1) {
-                $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id");
+                $dsp_disk = Display::url(
+                    Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL),
+                    api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id"
+                );
             } elseif ($details['lp_type'] == 2) {
-                $dsp_disk = Display::url(Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip");
+                $dsp_disk = Display::url(
+                    Display::return_icon('cd.gif', get_lang('Export'), array(), ICON_SIZE_SMALL),
+                    api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name, 'strict').".zip"
+                );
             } else {
                 $dsp_disk = Display::return_icon('cd_gray.gif', get_lang('Export'), array(), ICON_SIZE_SMALL);
             }
@@ -434,8 +438,9 @@ if (!empty($flat_list)) {
                 $start_time = $end_time = '';
             }
         } else {
-            //Student
-            $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
+            // Student
+            $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">'.
+                Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
         }
 
         global $_configuration;
@@ -474,7 +479,7 @@ if (!empty($flat_list)) {
 $course_info = api_get_course_info();
 learnpath::generate_learning_path_folder($course_info);
 
-//Deleting the objects
+// Deleting the objects
 Session::erase('oLP');
 Session::erase('lpobject');
 DocumentManager::removeGeneratedAudioTempFile();

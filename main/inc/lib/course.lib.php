@@ -1381,7 +1381,7 @@ class CourseManager
             }
             $where[] = ' course_rel_user.course_code IS NOT NULL ';
 
-            if (isset($filter_by_status) && $filter_by_status != '') {
+            if (isset($filter_by_status) && is_numeric($filter_by_status)) {
                 $filter_by_status = intval($filter_by_status);
                 $filter_by_status_condition = " course_rel_user.status = $filter_by_status AND ";
             }
@@ -1429,7 +1429,6 @@ class CourseManager
         }
 
         $sql .= ' '.$order_by.' '.$limit;
-
         $rs = Database::query($sql);
         $users = array();
 
@@ -2866,7 +2865,6 @@ class CourseManager
                 $rowcfv = Database::fetch_array($rescfv);
                 if ($rowcfv['field_value'] != $fvalues) {
                     $sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowcfv['id'];
-                    //error_log('UM::update_extra_field_value: '.$sqlu);
                     $resu = Database::query($sqlu);
                     return ($resu ? true : false);
                 }
@@ -2874,7 +2872,6 @@ class CourseManager
             } else {
                 $sqli = "INSERT INTO $t_cfv (course_code,field_id,field_value,tms) " .
                     "VALUES ('$course_code',".$rowcf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
-                //error_log('UM::update_extra_field_value: '.$sqli);
                 $resi = Database::query($sqli);
                 return ($resi ? true : false);
             }

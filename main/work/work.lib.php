@@ -2887,12 +2887,16 @@ function getStudentSubscribedToWork(
 
     if (empty($groupId)) {
         $courseInfo = api_get_course_info_by_id($courseId);
+        $status = STUDENT;
+        if (!empty($sessionId)) {
+            $status = 0;
+        }
         $usersInCourse = CourseManager::get_user_list_from_course_code(
             $courseInfo['code'],
             $sessionId,
             null,
             null,
-            0,
+            $status,
             $getCount
         );
     } else {
@@ -3364,10 +3368,22 @@ function sendAlertToTeacher($workId, $courseInfo, $session_id)
         // Lets predefine some variables. Be sure to change the from address!
         if (empty($session_id)) {
             //Teachers
-            $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), null, null, null, COURSEMANAGER);
+            $user_list = CourseManager::get_user_list_from_course_code(
+                api_get_course_id(),
+                null,
+                null,
+                null,
+                COURSEMANAGER
+            );
         } else {
-            //Coaches
-            $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), $session_id, null, null, 2);
+            // Coaches
+            $user_list = CourseManager::get_user_list_from_course_code(
+                api_get_course_id(),
+                $session_id,
+                null,
+                null,
+                2
+            );
         }
 
         $subject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$courseInfo['name']."  ";
@@ -4153,7 +4169,16 @@ function showStudentList($workId)
 function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount = false)
 {
     if (!empty($groupId)) {
-        $userList = GroupManager::get_users($groupId, false, $start, $limit, $getCount, null, $sidx, $sord);
+        $userList = GroupManager::get_users(
+            $groupId,
+            false,
+            $start,
+            $limit,
+            $getCount,
+            null,
+            $sidx,
+            $sord
+        );
     } else {
         $limitString = null;
         if (!empty($start) && !empty($limit)) {
@@ -4187,6 +4212,7 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
                 $getCount
             );
         }
+
         if ($getCount == false) {
             $userList = array_keys($userList);
         }

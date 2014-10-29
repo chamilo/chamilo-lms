@@ -119,7 +119,25 @@ $(document).ready(function() {
             }
         });
     });
-        
+
+    /* change background color */
+    $(document).ready(function () {
+        $("#celestial").click(function () {
+            $("#page-back").css("background","#A9E2F3");
+        });
+        $("#white").click(function () {
+            $("#page-back").css("background","#FFFFFF");
+        });
+        $("#black").click(function () {
+            $("#page-back").css("background","#000000");
+        });
+        $("#lead").click(function () {
+            $("#page-back").css("background","#848484");
+        });
+        $("#light-yellow").click(function () {
+            $("#page-back").css("background","#F7F8E0");
+        });
+    });
     
     /* Wheel skill popup form */
     
@@ -255,51 +273,95 @@ $(document).ready(function() {
         }       
     }
 });
-</script>
 
+</script>
+<div id="page-back">
 <div class="container-fluid">
     <div class="row-fluid">
         
-        <div class="span3">
-            <div class="well sidebar-nav-skill-wheel ">
-                
-                <div class="page-header">
-                    <h3>{{ 'MySkills'|get_lang }}</h3>                
-                </div>
-                
-                <div id="my_skills">
-                </div>
-                
-                
-                <div class="page-header">
-                    <h3>{{ 'GetNewSkills'|get_lang }}</h3>
-                </div>
-                
-                <form id="skill_search" class="form-search">
-                    <select id="skill_id" name="skill_id" />
-                    </select>
-                    <br /><br />
-                    <div class="btn-group">
-                        <a class="btn load_root" rel="0" href="#">{{ "SkillRoot"|get_lang }}</a>                        
+        <div class="span3 skill-options">
+
+            <div class="skill-home">
+                <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a>
+            </div>
+            <!-- Legend -->
+            <div class="legend">
+                <h4 class="title-skill">{{ "Legend"|get_lang }}</h4>
+                <p><span class="label-info">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouAcquired"|get_lang }}</p>
+                <p><span class="label-warning">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
+                <p><span class="label-important">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>
+            </div>
+            <!-- End Legend -->
+
+            <!-- ACCORDION -->
+
+            <div class="accordion" id="accordion2">
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                            <h4 class="title-skill">{{ 'MySkills'|get_lang }}</h4>
+                        </a>
                     </div>
-                    <ul id="skill_holder" class="holder holder_simple">
-                    </ul>
-                </form>
-                
-                <div class="page-header">
-                    <h3>{{ 'SkillInfo'|get_lang }}</h3>
-                </div>                
-                <div id="skill_info">
+                    <div id="collapseOne" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <!-- MY SKILLS -->
+                            <div id="my_skills">
+                            </div>
+                            <!-- MY SKILLS -->
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="page-header">
-                <h3>{{ "Legend"|get_lang }}</h3>
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                            <h4 class="title-skill">{{ 'GetNewSkills'|get_lang }}</h4>
+                        </a>
+                    </div>
+                    <div id="collapseTwo" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <!-- SEARCH -->
+                            <div class="search-skill">
+                                <p>Escriba la competencia a buscar</p>
+                                <form id="skill_search" class="form-search">
+                                    <select id="skill_id" name="skill_id" /></select>
+                                    <div class="button-skill">
+                                        <a class="btn btn-block btn-large btn-danger load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
+                                        <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->
+                                    </div>
+                                    <ul id="skill_holder" class="holder_simple border"></ul>
+                                </form>
+                            </div>
+                            <!-- END SEARCH -->
+                            <!-- INFO SKILL -->
+                            <h4 class="title-skill">{{ 'SkillInfo'|get_lang }}</h4>
+                            <div id="skill_info"></div>
+                            <!-- END INFO SKILL -->
+                        </div>
+                    </div>
                 </div>
-                <span class="label label-info">{{ "SkillsYouAcquired"|get_lang }}</span><br />
-                <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br />
-                <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br /><br />
-                <div><a class="btn btn-small" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a></div>
-            </div>                
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                            <h4 class="title-skill">Opciones de presentación</h4>
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <p>Escoge un color de fondo:</p>
+                            <ul>
+                                <li><a href="#" id="white">Blanco</a></li>
+                                <li><a href="#" id="black">Negro</a></li>
+                                <li><a href="#" id="celestial">Celeste</a></li>
+                                <li><a href="#" id="lead">Plomo</a></li>
+                                <li><a href="#" id="light-yellow">Amarillo</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END ACCORDEON -->
+
         </div>
             
         <div id="wheel_container" class="span9">
@@ -311,4 +373,5 @@ $(document).ready(function() {
 <div id="dialog-course-info" style="display:none;">        
     <div id="course_info">
     </div>    
+</div>
 </div>

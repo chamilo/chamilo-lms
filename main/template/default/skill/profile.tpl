@@ -1,4 +1,4 @@
-{% if search_skill_list is not null %}    
+{% if search_skill_list is not null %}
     <div class="skills-skills">
         <h3>{{"Skills"|get_lang}}</h3>
         <ul class="holder">             

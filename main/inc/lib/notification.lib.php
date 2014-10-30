@@ -144,7 +144,7 @@ class Notification extends Model
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle = sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
+                    $newTitle .= sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
@@ -155,13 +155,13 @@ class Notification extends Model
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle = sprintf(get_lang('YouHaveANewInvitationFromX'), $senderName);
+                    $newTitle .= sprintf(get_lang('YouHaveANewInvitationFromX'), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
                 if (!empty($senderInfo)) {
                     $senderName = $senderInfo['group_info']['name'];
-                    $newTitle = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
+                    $newTitle .= sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
                     $senderName = api_get_person_name(
                         $senderInfo['user_info']['firstname'],
                         $senderInfo['user_info']['lastname'],

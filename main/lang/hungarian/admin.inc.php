@@ -161,7 +161,6 @@ $langTechnicalTools = "Technikai";
 $langConfig = "Rendszer beállítások";
 $langLogIdentLogoutComplete = "Belépési lista (bővített)";
 $langLimitUsersListDefaultMax = "A gördíthető listán egyszerre mutatott felhasználók maximális száma";
-$NoTimeLimits = "Nincs időkorlát";
 $GeneralCoach = "Általános tréner";
 $GeneralProperties = "Általános jellemzők";
 $CourseCoach = "Kurzus tréner";

@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Aldoni novan forumon";
 $ReplyShort = "Respondo:";
+$NoTimeLimits = "Sen templimo";
 $Title = "Titolo";
 $UsersOnline = "Konektitaj uzuloj";
 $Remove = "Forigi";

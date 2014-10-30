@@ -198,7 +198,6 @@ $langTechnicalTools = "Technický";
 $langConfig = "Konfigurácia systému";
 $langLogIdentLogoutComplete = "Zoznam prihlásení (rozšírený)";
 $langLimitUsersListDefaultMax = "Maximálny počet používateľov v posuvnom zozname";
-$NoTimeLimits = "Bez časových obmedzení";
 $GeneralCoach = "Hlavný tútor";
 $GeneralProperties = "Hlavné vlastnosti";
 $CourseCoach = "Tútor kurzu";

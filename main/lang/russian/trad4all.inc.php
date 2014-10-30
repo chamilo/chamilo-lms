@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Добавить новый форум";
 $ReplyShort = "Re:";
+$NoTimeLimits = "Время не ограничено";
 $Title = "Заголовок";
 $By = "касательно";
 $UsersOnline = "Пользователи онлайн (на связи)";

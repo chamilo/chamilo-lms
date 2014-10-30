@@ -14,6 +14,11 @@
  */
 Log::notice('Entering file');
 
+if (!defined('SYSTEM_INSTALLATION')) {
+    echo 'You are not allowed here !' . __FILE__;
+    return;
+}
+
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php'; //check_name_exists()
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';

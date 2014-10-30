@@ -3131,9 +3131,20 @@ class UserManager
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
+            switch ($size_picture) {
+                case USER_IMAGE_SIZE_ORIGINAL :
+                case USER_IMAGE_SIZE_BIG :
+                case USER_IMAGE_SIZE_MEDIUM :
+                    $picture_file = 'unknown.jpg';
+                    break;
+                case USER_IMAGE_SIZE_SMALL:
+                    $picture_file = 'unknown_22.jpg';
+                    break;
+            }
             $picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
             return $picture;
         }
+
         switch ($size_picture) {
             case USER_IMAGE_SIZE_ORIGINAL :
                 $size_picture = '';

@@ -486,6 +486,9 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     $is_certificate_mode = DocumentManager::is_certificate_mode($path);
     $curdirpath = urlencode($curdirpath);
     $extension = pathinfo($path, PATHINFO_EXTENSION);
+    $usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
+    $formatTypeList = DocumentManager::getFormatTypeListConvertor('from', $extension);
+    $formatType = current($formatTypeList);
 
     // Build URL-parameters for table-sorting
     $sort_params = array();
@@ -617,6 +620,24 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                             Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
                     }
                 }
+            }
+        }
+
+        // Add action to covert to PDF, will create a new document whit same filename but .pdf extension
+        // @TODO: add prompt to select a format target
+        if (in_array($path, DocumentManager::get_system_folders())) {
+            // nothing to do
+        } else {
+            if ($usePpt2lp && $formatType) {
+                $modify_icons .= '&nbsp;<a class="convertAction" href="#" ' .
+                    'data-documentId = ' . $document_id .
+                    ' data-formatType = ' . $formatType . '>' .
+                    Display::return_icon(
+                        'convert.png',
+                        get_lang('Convert'),
+                        array(),
+                        ICON_SIZE_SMALL
+                    ) . '</a>';
             }
         }
     }

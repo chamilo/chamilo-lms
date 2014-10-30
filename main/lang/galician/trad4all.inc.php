@@ -9,6 +9,7 @@ $AddForum = "Engadir un novo foro";
 $ReplyShort = "Re:";
 $SelectACategory = "Seleccione unha categoría";
 $AdvancedEdit = "Edición avanzada";
+$NoTimeLimits = "Sen límite temporal";
 $SearchXapianModuleNotInstalled = "O módulo Xapian de PHP non está configurado no seu servidor, póñase en contacto con seu administrador.";
 $Title = "Título";
 $By = "Por";

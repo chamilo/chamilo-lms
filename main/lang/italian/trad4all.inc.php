@@ -5,6 +5,7 @@ for more information: see languages.txt in the lang folder.
 $DeleteAllAttendances = "Elimina tutte le presenze registrate";
 $AddForum = "Aggiungi un forum";
 $ReplyShort = "Re:";
+$NoTimeLimits = "Senza limiti di tempo";
 $SearchXapianModuleNotInstalled = "Il modulo Xapian non è installato";
 $Title = "Titolo";
 $By = "Da";

@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Yapay hoq k'itirimanata";
 $ReplyShort = "Kuti:";
+$NoTimeLimits = "Sin límite de tiempo";
 $Title = "Sutinchaynin";
 $By = "Pi churarun";
 $UsersOnline = "Haykan kashanku";

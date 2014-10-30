@@ -40,6 +40,10 @@ $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 switch ($action) {
     case 'export_all_certificates':
         $params['orientation'] = 'landscape';
+        $params['left'] = 0;
+        $params['right'] = 0;
+        $params['top'] = 0;
+        $params['bottom'] = 0;
         $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
 

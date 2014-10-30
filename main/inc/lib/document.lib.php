@@ -1661,7 +1661,7 @@ class DocumentManager
      * @param int The document id
      * @return void()
      */
-    function attach_gradebook_certificate($course_id, $document_id)
+    public static function attach_gradebook_certificate($course_id, $document_id)
     {
         $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = api_get_session_id();
@@ -3901,6 +3901,155 @@ class DocumentManager
     }
 
     /**
+     * Set of extension allowed to use Jodconverter
+     * @param $mode 'from'
+     *              'to'
+     *              'all'
+     * @param $format   'text'
+     *                  'spreadsheet'
+     *                  'presentation'
+     *                  'drawing'
+     *                  'all'
+     * @return array
+     */
+    public static function getJodconverterExtensionList($mode, $format)
+    {
+        $extensionList = array();
+        $extensionListFromText = array(
+            'odt',
+            'sxw',
+            'rtf',
+            'doc',
+            'docx',
+            'wpd',
+            'txt',
+        );
+        $extensionListToText = array(
+            'pdf',
+            'odt',
+            'sxw',
+            'rtf',
+            'doc',
+            'docx',
+            'txt',
+        );
+        $extensionListFromSpreadsheet = array(
+            'ods',
+            'sxc',
+            'xls',
+            'xlsx',
+            'csv',
+            'tsv',
+        );
+        $extensionListToSpreadsheet = array(
+            'pdf',
+            'ods',
+            'sxc',
+            'xls',
+            'xlsx',
+            'csv',
+            'tsv',
+        );
+        $extensionListFromPresentation = array(
+            'odp',
+            'sxi',
+            'ppt',
+            'pptx',
+        );
+        $extensionListToPresentation = array(
+            'pdf',
+            'swf',
+            'odp',
+            'sxi',
+            'ppt',
+            'pptx',
+        );
+        $extensionListFromDrawing = array('odg');
+        $extensionListToDrawing = array('svg', 'swf');
+
+        if ($mode === 'from') {
+            if ($format === 'text') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+            } elseif ($format === 'spreadsheet') {
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+            } elseif ($format === 'presentation') {
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+            } elseif ($format === 'drawing') {
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+            } elseif ($format === 'all') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+            }
+        } elseif ($mode === 'to') {
+            if ($format === 'text') {
+                $extensionList = array_merge($extensionList, $extensionListToText);
+            } elseif ($format === 'spreadsheet') {
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+            } elseif ($format === 'presentation') {
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+            } elseif ($format === 'drawing') {
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            } elseif ($format === 'all') {
+                $extensionList = array_merge($extensionList, $extensionListToText);
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            }
+        } elseif ($mode === 'all') {
+            if ($format === 'text') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+                $extensionList = array_merge($extensionList, $extensionListToText);
+            } elseif ($format === 'spreadsheet') {
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+            } elseif ($format === 'presentation') {
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+            } elseif ($format === 'drawing') {
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            } elseif ($format === 'all') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+                $extensionList = array_merge($extensionList, $extensionListToText);
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            }
+        }
+        return $extensionList;
+    }
+
+    /**
+     * Get Format type list by extension and mode
+     * @param string $mode Mode to search format type list
+     * @example 'from'
+     * @example 'to'
+     * @param string $extension file extension to check file type
+     * @return array
+     */
+    public static function getFormatTypeListConvertor($mode = 'from', $extension)
+    {
+        $formatTypesList = array();
+        $formatTypes = array('text', 'spreadsheet', 'presentation', 'drawing');
+        foreach ($formatTypes as $formatType) {
+            if (
+                in_array(
+                    $extension,
+                    self::getJodconverterExtensionList($mode, $formatType)
+                )
+            ) {
+                $formatTypesList[] = $formatType;
+            }
+        }
+        return $formatTypesList;
+    }
+
+    /**
      * @param string $path
      * @param bool $is_certificate_mode
      * @return bool
@@ -3949,7 +4098,14 @@ class DocumentManager
         if (api_get_setting('show_chat_folder') == 'false') {
             $foldersToAvoid[] = '/chat_files';
         }
-        return in_array($path, $foldersToAvoid);
+
+        if (is_array($foldersToAvoid)) {
+
+            return in_array($path, $foldersToAvoid);
+        } else {
+
+            return false;
+        }
     }
 
     /**
@@ -4284,4 +4440,58 @@ class DocumentManager
 
         return $audioId;
     }
+
+    /**
+     * Generate a default certificate for a courses
+     * @global string $css CSS directory
+     * @global string $img_dir Imgage direcory
+     * @global string $default_course_dir Course directory
+     * @global string $js JS directory
+     * @param array $courseData The course info
+     */
+    public static function generateDefaultCertificate($courseData)
+    {
+        global $css, $img_dir, $default_course_dir, $js;
+        $dir = '/certificates';
+
+        $title = get_lang('DefaultCertificate');
+        $comment = null;
+
+        $fileName = replace_dangerous_char($title);
+        $filePath = api_get_path(SYS_COURSE_PATH) . "{$courseData['path']}/document{$dir}";
+        $fileFullPath = "{$filePath}/{$fileName}.html";
+        $fileSize = 0;
+        $fileType = 'file';
+        $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH) . 'gradebook/certificate_template/template.html');
+
+        $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{WEB_CODE_PATH}');
+        $replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir, api_get_path(WEB_CODE_PATH));
+
+        $fileContent = str_replace($search, $replace, $templateContent);
+
+        $saveFilePath = "{$dir}/{$fileName}.html";
+
+        if (!is_dir($filePath)) {
+            mkdir($filePath, api_get_permissions_for_new_directories());
+        }
+
+        $defaultCertificateFile = $fp = @fopen($fileFullPath, 'w');
+
+        if ($defaultCertificateFile != false) {
+            @fputs($defaultCertificateFile, $fileContent);
+            fclose($defaultCertificateFile);
+            chmod($fileFullPath, api_get_permissions_for_new_files());
+
+            $fileSize = filesize($fileFullPath);
+        }
+
+        $documentId = add_document($courseData, $saveFilePath, $fileType, $fileSize, $title, $comment);
+
+        $defaultCertificateId = self::get_default_certificate_id($courseData['code']);
+
+        if (!isset($defaultCertificateId)) {
+            self::attach_gradebook_certificate($courseData['code'], $documentId);
+        }
+    }
+
 }

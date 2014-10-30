@@ -153,7 +153,6 @@ $langTechnicalTools = "技術支援";
 $langConfig = "系統配置";
 $langLogIdentLogoutComplete = "登錄名單（擴展）";
 $langLimitUsersListDefaultMax = "在清單能顯示的最大用戶數";
-$NoTimeLimits = "沒有時限";
 $GeneralCoach = "一般指導員";
 $GeneralProperties = "一般屬性";
 $CourseCoach = "課程指導員";

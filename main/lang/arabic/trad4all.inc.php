@@ -9,6 +9,7 @@ $AddForum = "أضف منتدى جديد";
 $ReplyShort = " رد:";
 $SelectACategory = " اختار الفئة";
 $AdvancedEdit = "تعديل متقدم";
+$NoTimeLimits = " لا حدود للوقت";
 $Title = "العنوان";
 $By = "بواسطة";
 $UsersOnline = "الأعضاء المتصلون";

@@ -176,7 +176,6 @@ $langTechnicalTools = "Technisch";
 $langConfig = "Systeemconfiguratie";
 $langLogIdentLogoutComplete = "Login- en logoutlijst (uitgebreid)";
 $langLimitUsersListDefaultMax = "Maximumaantal gebruikers, getoond in de scroll-lijst";
-$NoTimeLimits = "Geen beperking in tijd";
 $GeneralCoach = "Algemene begeleider";
 $GeneralProperties = "Algemene eigenschappen";
 $CourseCoach = "Begeleider van de cursus";

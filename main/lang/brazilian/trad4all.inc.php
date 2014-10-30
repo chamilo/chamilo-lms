@@ -8,6 +8,7 @@ $DeleteAllAttendances = "Apagar todas as presenças criadas";
 $Unsubscribe = "Apagar a conta";
 $AddForum = "Adicionar um novo fórum";
 $ReplyShort = "Re:";
+$NoTimeLimits = "Sem limite de tempo";
 $SearchXapianModuleNotInstalled = "O módulo de busca Xampian não está instalado";
 $Title = "Título";
 $By = "Por";

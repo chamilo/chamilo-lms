@@ -384,7 +384,7 @@ foreach ($sessionList as $session) {
 
 // My friends
 $friend_html = listMyFriends($user_id, $link_shared ,$show_full_profile);
-$social_left_content.= '<div class="well sidebar-nav">' .$friend_html . '</div>';
+$social_left_content = '<div class="well sidebar-nav">' .$friend_html . '</div>';
 
 $personal_info = null;
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
@@ -425,8 +425,8 @@ if ($show_full_profile) {
     $personal_info .=  '</dl>';
 }
 
-$wallSocialAddPost .= wallSocialAddPost();
-$social_right_content .= SocialManager::social_wrapper_div($wallSocialAddPost, 5);
+$wallSocialAddPost = wallSocialAddPost();
+$social_right_content = SocialManager::social_wrapper_div($wallSocialAddPost, 5);
 
 $social_right_content .= wallSocialPost($my_user_id, $friendId);
 $socialAutoExtendLink = Display::url(
@@ -437,7 +437,7 @@ $socialAutoExtendLink = Display::url(
     )
 );
 
-$socialRightInformation .=  SocialManager::social_wrapper_div($personal_info, 4);
+$socialRightInformation =  SocialManager::social_wrapper_div($personal_info, 4);
 
 //$social_right_content .= SocialManager::social_wrapper_div($wallSocial, 5);
 
@@ -654,7 +654,7 @@ if ($show_full_profile) {
     }
 
 
-    $sessions .=  '<div><h3>'.api_ucfirst(get_lang('MySessions')).'</h3></div>';
+    $sessions =  '<div><h3>'.api_ucfirst(get_lang('MySessions')).'</h3></div>';
     $sessions .=  "<div class='social-content-training'>$htmlSessionList</div>";
     $socialRightInformation .=  SocialManager::social_wrapper_div($sessions, 4);
 

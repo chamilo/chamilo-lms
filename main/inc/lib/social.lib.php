@@ -735,7 +735,7 @@ class SocialManager extends UserManager
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
 
         $html = '';
-
+        $active = null;
         if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends'))) {
 
             $html .= '<div class="well sidebar-nav"><ul class="nav nav-list">';
@@ -1204,7 +1204,7 @@ class SocialManager extends UserManager
         $safeFileName = Database::escape_string($fileAttach['name']);
 
         $extension = strtolower(substr(strrchr($safeFileName, '.'), 1));
-        $allowedTypes = getSupportedImageExtensions();
+        $allowedTypes = api_get_supported_image_extensions();
         if (!in_array($extension, $allowedTypes)) {
             $flag = false;
         } else {
@@ -1413,7 +1413,15 @@ class SocialManager extends UserManager
         return $data;
     }
 
-
+    /**
+     * Returns the formatted header message post
+     * @param   int     $authorId   Author's id
+     * @param   int     $receiverId Receiver's id
+     * @param   array   $users      Author's and receiver's data
+     * @param   array   $message    Message data
+     * @param   boolean $isOwnWall  Determines if the author is in its own social wall or not
+     * @return  string  $html       The formatted header message post
+     */
     private  static function headerMessagePost($authorId, $receiverId, $users, $message, $isOwnWall = false)
     {
         $date = api_get_local_time($message['send_date']);
@@ -1493,7 +1501,7 @@ class SocialManager extends UserManager
      * @param   string  $text       Content text
      * @return  string  $newText    Content text with OpenGraph
      */
-    public function readContentWithOpenGraph($text)
+    public static function readContentWithOpenGraph($text)
     {
         // search link in first line
         $regExUrl = "/(http|https)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";

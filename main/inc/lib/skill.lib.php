@@ -989,6 +989,11 @@ class Skill extends Model
         return false;
     }
 
+    /**
+     * Check if a skill is searched
+     * @param int $id The skill id
+     * @return boolean Whether el skill is searched return true. Otherwise return false
+     */
     public static function isSearched($id)
     {
         $id = intval($id);

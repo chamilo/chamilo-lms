@@ -128,49 +128,47 @@ class Notification extends Model
     /**
      * @param string $title
      * @param array $senderInfo
+     *
+     * @return string
      */
     public function formatTitle($title, $senderInfo)
     {
-        $newTitle = '';
+        $newTitle = '[ '.api_get_setting('siteName').'] ';
 
         switch ($this->type) {
             case self::NOTIFICATION_TYPE_MESSAGE:
-                if (!empty($sender_info)) {
-                    $sender_name = api_get_person_name(
+                if (!empty($senderInfo)) {
+                    $senderName = api_get_person_name(
                         $senderInfo['firstname'],
                         $senderInfo['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle = sprintf(get_lang('YouHaveANewMessageFromX'), $sender_name);
+                    $newTitle = sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
-                if (!empty($sender_info)) {
-                    $sender_name = api_get_person_name(
+                if (!empty($senderInfo)) {
+                    $senderName = api_get_person_name(
                         $senderInfo['firstname'],
                         $senderInfo['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle = sprintf(get_lang('YouHaveANewInvitationFromX'), $sender_name);
+                    $newTitle = sprintf(get_lang('YouHaveANewInvitationFromX'), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
-                if (!empty($sender_info)) {
-                    $sender_name = $sender_info['group_info']['name'];
-                    $newTitle = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $sender_name);
-                    $sender_name = api_get_person_name(
+                if (!empty($senderInfo)) {
+                    $senderName = $senderInfo['group_info']['name'];
+                    $newTitle = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
+                    $senderName = api_get_person_name(
                         $senderInfo['user_info']['firstname'],
                         $senderInfo['user_info']['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $sender_name = Display::url(
-                        $sender_name,
-                        api_get_path(WEB_CODE_PATH).'social/profile.php?'.$sender_info['user_info']['user_id']
-                    );
-                    $newTitle .= '<br />'.get_lang('User').': '.$sender_name;
+                    $newTitle .= $senderName;
                 }
                 break;
         }
@@ -303,13 +301,13 @@ class Notification extends Model
         switch ($this->type) {
             case self::NOTIFICATION_TYPE_MESSAGE:
                 if (!empty($sender_info)) {
-                    $sender_name = api_get_person_name(
+                    $senderName = api_get_person_name(
                         $sender_info['firstname'],
                         $sender_info['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $new_message_text = sprintf(get_lang('YouHaveANewMessageFromX'), $sender_name);
+                    $new_message_text = sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
                 }
                 $link_to_new_message = Display::url(
                     get_lang('SeeMessage'),
@@ -318,13 +316,13 @@ class Notification extends Model
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
                 if (!empty($sender_info)) {
-                    $sender_name = api_get_person_name(
+                    $senderName = api_get_person_name(
                         $sender_info['firstname'],
                         $sender_info['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $new_message_text = sprintf(get_lang('YouHaveANewInvitationFromX'), $sender_name);
+                    $new_message_text = sprintf(get_lang('YouHaveANewInvitationFromX'), $senderName);
                 }
                 $link_to_new_message = Display::url(
                     get_lang('SeeInvitation'),
@@ -334,19 +332,19 @@ class Notification extends Model
             case self::NOTIFICATION_TYPE_GROUP:
                 $topic_page = intval($_REQUEST['topics_page_nr']);
                 if (!empty($sender_info)) {
-                    $sender_name = $sender_info['group_info']['name'];
-                    $new_message_text = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $sender_name);
-                    $sender_name = api_get_person_name(
+                    $senderName = $sender_info['group_info']['name'];
+                    $new_message_text = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
+                    $senderName = api_get_person_name(
                         $sender_info['user_info']['firstname'],
                         $sender_info['user_info']['lastname'],
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $sender_name = Display::url(
-                        $sender_name,
+                    $senderName = Display::url(
+                        $senderName,
                         api_get_path(WEB_CODE_PATH).'social/profile.php?'.$sender_info['user_info']['user_id']
                     );
-                    $new_message_text .= '<br />'.get_lang('User').': '.$sender_name;
+                    $new_message_text .= '<br />'.get_lang('User').': '.$senderName;
                 }
                 $group_url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$sender_info['group_info']['id'].'&topic_id='.$sender_info['group_info']['topic_id'].'&msg_id='.$sender_info['group_info']['msg_id'].'&topics_page_nr='.$topic_page;
                 $link_to_new_message = Display::url(get_lang('SeeMessage'), $group_url);

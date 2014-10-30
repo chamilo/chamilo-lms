@@ -29,6 +29,8 @@ class Notification extends Model
     public $type;
     public $adminName;
     public $adminEmail;
+    public $titlePrefix;
+
     //mail_notify_message ("At once", "Daily", "No")
     const NOTIFY_MESSAGE_AT_ONCE = 1;
     const NOTIFY_MESSAGE_DAILY = 8;
@@ -57,11 +59,12 @@ class Notification extends Model
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
-
+        // Default no-reply email
         $this->adminEmail = api_get_setting('noreply_email_address');
         $this->adminName = api_get_setting('siteName');
+        $this->titlePrefix = '['.api_get_setting('siteName').'] ';
 
-        // If no-reply  email doesn't exist use the admin email
+        // If no-reply email doesn't exist use the admin name/email
         if (empty($this->adminEmail)) {
             $this->adminEmail = api_get_setting('emailAdministrator');
             $this->adminName = api_get_person_name(
@@ -71,6 +74,14 @@ class Notification extends Model
                 PERSON_NAME_EMAIL_ADDRESS
             );
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitlePrefix()
+    {
+        return $this->titlePrefix;
     }
 
     /**
@@ -133,7 +144,7 @@ class Notification extends Model
      */
     public function formatTitle($title, $senderInfo)
     {
-        $newTitle = '[ '.api_get_setting('siteName').'] ';
+        $newTitle = $this->getTitlePrefix();
 
         switch ($this->type) {
             case self::NOTIFICATION_TYPE_MESSAGE:
@@ -274,13 +285,15 @@ class Notification extends Model
                 }
 
                 // Saving the notification to be sent some day.
-                $params = array();
-                $params['sent_at'] = $sendDate;
-                $params['dest_user_id'] = $user_id;
-                $params['dest_mail'] = $userInfo['email'];
-                $params['title'] = $title;
-                $params['content'] = cut($content, $this->max_content_length);
-                $params['send_freq'] = $userSetting;
+                $params = array(
+                    'sent_at' => $sendDate,
+                    'dest_user_id' => $user_id,
+                    'dest_mail' => $userInfo['email'],
+                    'title' => $title,
+                    'content' => cut($content, $this->max_content_length),
+                    'send_freq' => $userSetting
+                );
+
                 $this->save($params);
             }
         }

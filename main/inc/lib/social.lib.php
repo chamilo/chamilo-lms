@@ -1527,7 +1527,7 @@ class SocialManager extends UserManager
      * @param $link url
      * @return string data html
      */
-    public function getHtmlByLink($link)
+    public static function getHtmlByLink($link)
     {
         $graph = OpenGraph::fetch($link);
         $title = $graph->title;

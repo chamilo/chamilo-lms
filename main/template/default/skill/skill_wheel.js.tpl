@@ -173,10 +173,8 @@ function set_skill_style(d, attribute, searched_skill_id) {
     }
 
     //3. Red - if you search that skill
-    if (searched_skill_id) {
-        if (d.id ==  searched_skill_id) {
-            return_fill = '#B94A48';
-        }
+    if (d.isSearched) {
+        return_fill = '#B94A48';
     }
     
     //4. Blue - if user achieved that skill

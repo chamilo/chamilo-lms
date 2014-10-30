@@ -3912,15 +3912,58 @@ class DocumentManager
      *                  'all'
      * @return array
      */
-    public static function get_jodconverter_extension_list($mode, $format)
+    public static function getJodconverterExtensionList($mode, $format)
     {
         $extensionList = array();
-        $extensionListFromText = array('odt', 'sxw', 'rtf', 'doc', 'docx', 'wpd', 'txt');
-        $extensionListToText = array('pdf', 'odt', 'sxw', 'rtf', 'doc', 'docx', 'txt');
-        $extensionListFromSpreadsheet = array('ods', 'sxc', 'xls', 'xlsx', 'csv', 'tsv');
-        $extensionListToSpreadsheet = array('pdf', 'ods', 'sxc', 'xls', 'xlsx', 'csv', 'tsv');
-        $extensionListFromPresentation = array('odp', 'sxi', 'ppt', 'pptx');
-        $extensionListToPresentation = array('pdf', 'swf', 'odp', 'sxi', 'ppt', 'pptx');
+        $extensionListFromText = array(
+            'odt',
+            'sxw',
+            'rtf',
+            'doc',
+            'docx',
+            'wpd',
+            'txt',
+        );
+        $extensionListToText = array(
+            'pdf',
+            'odt',
+            'sxw',
+            'rtf',
+            'doc',
+            'docx',
+            'txt',
+        );
+        $extensionListFromSpreadsheet = array(
+            'ods',
+            'sxc',
+            'xls',
+            'xlsx',
+            'csv',
+            'tsv',
+        );
+        $extensionListToSpreadsheet = array(
+            'pdf',
+            'ods',
+            'sxc',
+            'xls',
+            'xlsx',
+            'csv',
+            'tsv',
+        );
+        $extensionListFromPresentation = array(
+            'odp',
+            'sxi',
+            'ppt',
+            'pptx',
+        );
+        $extensionListToPresentation = array(
+            'pdf',
+            'swf',
+            'odp',
+            'sxi',
+            'ppt',
+            'pptx',
+        );
         $extensionListFromDrawing = array('odg');
         $extensionListToDrawing = array('svg', 'swf');
 
@@ -3981,12 +4024,25 @@ class DocumentManager
         return $extensionList;
     }
 
+    /**
+     * Get Format type list by extension and mode
+     * @param string $mode Mode to search format type list
+     * @example 'from'
+     * @example 'to'
+     * @param string $extension file extension to check file type
+     * @return array
+     */
     public static function getFormatTypeListConvertor($mode = 'from', $extension)
     {
         $formatTypesList = array();
         $formatTypes = array('text', 'spreadsheet', 'presentation', 'drawing');
         foreach ($formatTypes as $formatType) {
-            if (in_array($extension, self::get_jodconverter_extension_list($mode, $formatType))) {
+            if (
+                in_array(
+                    $extension,
+                    self::getJodconverterExtensionList($mode, $formatType)
+                )
+            ) {
                 $formatTypesList[] = $formatType;
             }
         }

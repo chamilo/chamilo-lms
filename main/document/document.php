@@ -57,10 +57,11 @@ if(
     unlink($_SESSION['temp_realpath_image']);
 }
 $courseInfo = api_get_course_info();
-$course_dir = $courseInfo['directory'].'/document';
+$course_dir = $courseInfo['directory'] . '/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir = $sys_course_path.$course_dir;
-$http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
+$base_work_dir = $sys_course_path . $course_dir;
+$http_www = api_get_path(WEB_COURSE_PATH) .
+    $courseInfo['directory'] . '/document';
 $document_path = $base_work_dir;
 $usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
 
@@ -415,8 +416,12 @@ switch ($action) {
         break;
     case 'convertToPdf':
         // PDF format as target by default
-        $formatTarget = $_REQUEST['formatTarget']? strtolower(Security::remove_XSS($_REQUEST['formatTarget'])) : 'pdf';
-        $formatType = $_REQUEST['formatType']? strtolower(Security::remove_XSS($_REQUEST['formatType'])) : 'text';
+        $formatTarget = $_REQUEST['formatTarget'] ?
+            strtolower(Security::remove_XSS($_REQUEST['formatTarget'])) :
+            'pdf';
+        $formatType = $_REQUEST['formatType'] ?
+            strtolower(Security::remove_XSS($_REQUEST['formatType'])) :
+            'text';
         // Get the document data from the ID
         $document_info = DocumentManager::get_document_data_by_id(
             $document_id,
@@ -424,35 +429,75 @@ switch ($action) {
             true,
             $session_id
         );
-        $file = $sys_course_path.$courseInfo['directory'].'/document'.$document_info['path'];
+        $file = $sys_course_path . $courseInfo['directory'] .
+            '/document' . $document_info['path'];
         $fileInfo = pathinfo($file);
         if ($fileInfo['extension'] == $formatTarget) {
-            $message = Display::return_message(get_lang('ErrorSameFormat'), 'warning');
-        } elseif (!(in_array($fileInfo['extension'], DocumentManager::get_jodconverter_extension_list('from', $formatType))) ||
-            !(in_array($formatTarget, DocumentManager::get_jodconverter_extension_list('to', $formatType)))) {
-            $message = Display::return_message(get_lang('FormatNotSupported'), 'warning');
+            $message = Display::return_message(
+                get_lang('ErrorSameFormat'),
+                'warning'
+            );
+        } elseif (
+            !(
+                in_array(
+                    $fileInfo['extension'],
+                    DocumentManager::getJodconverterExtensionList(
+                        'from',
+                        $formatType
+                    )
+                )
+            ) || !(
+                in_array(
+                    $formatTarget,
+                    DocumentManager::getJodconverterExtensionList(
+                        'to',
+                        $formatType
+                    )
+                )
+            )
+        ) {
+            $message = Display::return_message(
+                get_lang('FormatNotSupported'),
+                'warning'
+            );
         } else {
-            $convertedFile = $fileInfo['dirname'] . DIRECTORY_SEPARATOR . $fileInfo['filename'] .
-                '_from_' . $fileInfo['extension'] . '.' . $formatTarget;
+            $convertedFile = $fileInfo['dirname'] . DIRECTORY_SEPARATOR .
+                $fileInfo['filename'] . '_from_' . $fileInfo['extension'] .
+                '.' . $formatTarget;
             $convertedTitle = $document_info['title'];
             $obj = new OpenofficePresentation(true);
             if (file_exists($convertedFile)) {
-                $message = Display::return_message(get_lang('FileExists'), 'error');
+                $message = Display::return_message(
+                    get_lang('FileExists'),
+                    'error'
+                );
             } else {
-                $result = $obj->convertCopyDocument($file, $convertedFile, $convertedTitle);
+                $result = $obj->convertCopyDocument(
+                    $file,
+                    $convertedFile,
+                    $convertedTitle
+                );
                 if (empty($result)) {
-                    $message = Display::return_message(get_lang('CopyFailed'), 'error');
+                    $message = Display::return_message(
+                        get_lang('CopyFailed'),
+                        'error'
+                    );
                 } else {
                     $cidReq = Security::remove_XSS($_GET['cidReq']);
                     $id_session = api_get_session_id();
                     $gidReq = Security::remove_XSS($_GET['gidReq']);
                     $file_link = Display::url(
                         get_lang('SeeFile'),
-                        api_get_path(WEB_CODE_PATH).'document/showinframes.php?'.
-                        'cidReq='.$cidReq.'&amp;id_session='.$id_session.'&amp;'.
-                        'gidReq='.$gidReq.'&amp;id='.current($result)
+                        api_get_path(WEB_CODE_PATH) .
+                        'document/showinframes.php?' . 'cidReq=' . $cidReq .
+                        '&id_session=' . $id_session . '&' .
+                        'gidReq=' . $gidReq . '&id=' . current($result)
                     );
-                    $message = Display::return_message(get_lang('CopyMade').' '.$file_link, 'confirmation', false);
+                    $message = Display::return_message(
+                        get_lang('CopyMade') . ' ' . $file_link,
+                        'confirmation',
+                        false
+                    );
                 }
             }
         }
@@ -663,10 +708,11 @@ function convertModal (id, format) {
     $("#convertSelect").change(function() {
         var formatTarget = $(this).val();
         window.location.href = "'.
-            api_get_self() . '?' . api_get_cidreq() . '&curdirpath=' . $curdirpath .
-            '&action=convertToPdf&formatTarget='.'" + formatTarget + "&id=" + id + "'.
-            $req_gid . '&formatType=" + format
-            ;
+            api_get_self() . '?' . api_get_cidreq() .
+            '&curdirpath=' . $curdirpath .
+            '&action=convertToPdf&formatTarget=' .
+            '" + formatTarget + "&id=" + id + "' .
+            $req_gid . '&formatType=" + format;
     });
     $("#convertModal").on("hidden", function(){
         $("." + format + "FormatType").hide();
@@ -1835,7 +1881,6 @@ if (count($documentAndFolders) > 1) {
         $form_action['set_invisible'] = get_lang('SetInvisible');
         $form_action['set_visible'] = get_lang('SetVisible');
         $form_action['delete'] = get_lang('Delete');
-        // $form_action['convert'] = get_lang('ConvertFormat');
         $portfolio_actions = Portfolio::actions();
         foreach ($portfolio_actions as $action) {
             $form_action[$action->get_name()] = $action->get_title();

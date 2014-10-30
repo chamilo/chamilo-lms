@@ -214,9 +214,9 @@ abstract class OpenofficeDocument extends learnpath
 
     /**
      * Used to convert copied from document
-     * @param $originalPath
-     * @param $convertedPath
-     * @param string $action_after_conversion
+     * @param string $originalPath
+     * @param string $convertedPath
+     * @param string $convertedTitle
      * @return bool
      */
     function convertCopyDocument($originalPath, $convertedPath, $convertedTitle){

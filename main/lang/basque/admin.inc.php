@@ -176,7 +176,6 @@ $langTechnicalTools = "Teknikoa";
 $langConfig = "Sistemaren konfigurazioa";
 $langLogIdentLogoutComplete = "Konexio zerrenda (zehaztua)";
 $langLimitUsersListDefaultMax = "Goitibeherako zerrendan gehienez agertzen diren erabiltzaileak";
-$NoTimeLimits = "Ez dago denbora mugarik";
 $GeneralCoach = "Arduradun irakasle nagusia";
 $GeneralProperties = "Ezaugarri orokorrak";
 $CourseCoach = "Ikastaroko arduraduna";

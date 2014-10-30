@@ -136,6 +136,7 @@ $ReplyShort = "Re:";
 $SendToAllUsers = "Envia a tots els usuaris";
 $SelectACategory = "Seleccioneu una categoria";
 $AdvancedEdit = "Edició avançada";
+$NoTimeLimits = "Sense límit de temps";
 $SearchXapianModuleNotInstalled = "El mòdul Xapian de PHP no està configurat en el seu servidor";
 $Title = "Títol";
 $By = "Publicat per";

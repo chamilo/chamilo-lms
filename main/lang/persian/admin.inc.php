@@ -166,7 +166,6 @@ $langTechnicalTools = "تکنیکی";
 $langConfig = "برنامه ریزی سیستم";
 $langLogIdentLogoutComplete = "لیست\n(کامل)\nنام های\nکاربری";
 $langLimitUsersListDefaultMax = "حداکثر نمایش کاربران در فهرست اسکرول";
-$NoTimeLimits = "بدون محدودیت زمانی";
 $GeneralCoach = "مشاور آموزشی عمومی";
 $GeneralProperties = "خواص عمومی";
 $CourseCoach = "مشاور آموزشی درس";

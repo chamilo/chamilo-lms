@@ -173,7 +173,6 @@ $langTechnicalTools = "Τεχνικά";
 $langConfig = "Ρυθμίσεις συστήματος";
 $langLogIdentLogoutComplete = "Λίστα εισόδου (εκτεταμένη)";
 $langLimitUsersListDefaultMax = "Μέγιστος αριθμός χρηστών που θα εμφανίζονται στη λίστα";
-$NoTimeLimits = "Χωρίς χρονικό όριο";
 $GeneralCoach = "Γενικός υπεύθυνος";
 $GeneralProperties = "Γενικές ιδιότητες";
 $CourseCoach = "Υπεύθυνος μαθήματος";

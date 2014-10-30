@@ -155,7 +155,6 @@ $langTechnicalTools = "Techninis";
 $langConfig = "Sistemos nustatymai";
 $langLogIdentLogoutComplete = "Prisijungimų sąrašas (išplėstas)";
 $langLimitUsersListDefaultMax = "Maksimalus vartotojų skaičius, rodomas sąraše";
-$NoTimeLimits = "Laiko apribojimų nėra";
 $GeneralCoach = "Generalinis kuratorius";
 $GeneralProperties = "Pagrindinės savybės";
 $CourseCoach = "Kurso kuratorius";

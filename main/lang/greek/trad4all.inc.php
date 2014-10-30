@@ -9,6 +9,7 @@ $AddForum = "Προσθήκη Forum";
 $ReplyShort = "Απ.:";
 $SelectACategory = "Επιλογή Κατηγορίας";
 $AdvancedEdit = "Επεξεργασία για προχωρημένους";
+$NoTimeLimits = "Χωρίς χρονικό όριο";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
 $Title = "Τίτλος";
 $By = "Από";

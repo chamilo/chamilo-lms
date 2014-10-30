@@ -155,7 +155,6 @@ $langTechnicalTools = "Teknika";
 $langConfig = "Sistema konfiguro";
 $langLogIdentLogoutComplete = "Ensaluti liston (etende)";
 $langLimitUsersListDefaultMax = "Maksimuma nombro da uzantoj montrataj en la rullisto";
-$NoTimeLimits = "Sen templimo";
 $GeneralCoach = "Ĝenerala gvidanto";
 $GeneralProperties = "Ĝeneralaj ecoj";
 $CourseCoach = "Kursgvidanto";

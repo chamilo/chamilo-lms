@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Forum ekle";
 $ReplyShort = "Cevap:";
+$NoTimeLimits = "Zaman sınırlaması yok";
 $Title = "Başlık";
 $UsersOnline = "Online kullanıcılar";
 $Remove = "Kaldır";

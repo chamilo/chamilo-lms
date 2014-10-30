@@ -164,7 +164,6 @@ $langTechnicalTools = "技术支持";
 $langConfig = "系统配置";
 $langLogIdentLogoutComplete = "登录名单（扩展）";
 $langLimitUsersListDefaultMax = "在列表能显示的最大用户数";
-$NoTimeLimits = "无时间限制";
 $GeneralCoach = "一般训练";
 $GeneralProperties = "一般选项";
 $CourseCoach = "课程训练";

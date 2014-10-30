@@ -164,7 +164,6 @@ $langTechnicalTools = "Tehnic";
 $langConfig = "Configurarea sistemului";
 $langLogIdentLogoutComplete = "Lista de logare (extinsa)";
 $langLimitUsersListDefaultMax = "Maximum de utilizatori afisati in lista";
-$NoTimeLimits = "Fara limite de timp";
 $GeneralCoach = "Antrenor general";
 $GeneralProperties = "Proprietati generale";
 $CourseCoach = "Antrenor curs";

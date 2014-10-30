@@ -150,7 +150,6 @@ $langTechnicalTools = "Teknis";
 $langConfig = "Konfigurasi System";
 $langLogIdentLogoutComplete = "Daftar Login (extended)";
 $langLimitUsersListDefaultMax = "Jumlah maksimum user tampil di scroll list";
-$NoTimeLimits = "Tanpa batas waktu";
 $GeneralCoach = "Pelatih umum";
 $GeneralProperties = "Properti umum";
 $CourseCoach = "Pelatih kuliah";

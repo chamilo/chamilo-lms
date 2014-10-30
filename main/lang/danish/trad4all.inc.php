@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Tilføj et nyt diskussionsforum";
 $ReplyShort = "SV:";
+$NoTimeLimits = "Ingen tidsbegrænsning";
 $Title = "Titel";
 $By = "Af";
 $UsersOnline = "Brugere online";

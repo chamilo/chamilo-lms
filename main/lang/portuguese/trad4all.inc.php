@@ -106,6 +106,7 @@ $PasswordIsTooShort = "A password é muito curta";
 $BadCredentials = "Más credenciais";
 $AddForum = "Acrescentar novo fórum";
 $ReplyShort = "Re:";
+$NoTimeLimits = "Sem limite de tempo";
 $Title = "Título";
 $By = "Por";
 $UsersOnline = "Utilizadores online";

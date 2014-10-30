@@ -164,7 +164,6 @@ $langTechnicalTools = "Teknik yönetim araçları";
 $langConfig = "Konfigürasyon";
 $langLogIdentLogoutComplete = "Kayıt listesi (ayrıntılı)";
 $langLimitUsersListDefaultMax = "Kaydırma çubuğunda gösterilen en fazla kullanıcı";
-$NoTimeLimits = "Zaman sınırlaması yok";
 $GeneralCoach = "Bölüm Yetkilisi";
 $GeneralProperties = "Genel özellikler";
 $CourseCoach = "Ders Yetkilisi";

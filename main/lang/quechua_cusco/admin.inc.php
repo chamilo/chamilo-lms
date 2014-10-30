@@ -164,7 +164,6 @@ $langTechnicalTools = "Técnico";
 $langConfig = "Sistemaq kamachiynin";
 $langLogIdentLogoutComplete = "Lista de logins (detallada)";
 $langLimitUsersListDefaultMax = "Máximo de usuarios mostrados en la lista desplegable";
-$NoTimeLimits = "Sin límite de tiempo";
 $GeneralCoach = "Lliw pusaq";
 $GeneralProperties = "Lliw imaymanakuna";
 $CourseCoach = "Yachachinaq pusaqnin";

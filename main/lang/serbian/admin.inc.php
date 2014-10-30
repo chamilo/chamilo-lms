@@ -164,7 +164,6 @@ $langTechnicalTools = "Tehnički alati";
 $langConfig = "Konfiguracija sistema";
 $langLogIdentLogoutComplete = "Lista korisničkih imena";
 $langLimitUsersListDefaultMax = "Maksimalni broj korisnika prikazanih u listi";
-$NoTimeLimits = "Bez vremenskog ograničenja";
 $GeneralCoach = "Glavni tutor";
 $GeneralProperties = "Glavne postavke";
 $CourseCoach = "Tutor kursa";

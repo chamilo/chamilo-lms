@@ -7,5 +7,5 @@
     {% endfor %}
 </ul>    
 {% else %}
-    {{ 'UserHasNotSkill' | get_lang }}
+    {{ 'YouHaveNotYetAchievedSkills' | get_lang }}
 {% endif %}

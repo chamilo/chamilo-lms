@@ -136,10 +136,9 @@ $this_section      = SECTION_SOCIAL;
 $tool_name         = get_lang('Search');
 $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
 
-$query = isset($_GET['q']) ? $_GET['q'] : null;
-$query_search_type = isset($_GET['search_type']) ? $_GET['search_type'] : null;
+$query = isset($_GET['q']) ? Database::escape_string($_GET['q']) : null;
+$query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], array('0','1','2')) ? $_GET['search_type'] : null;
 $extra_fields = UserManager::get_extra_filtrable_fields();
-$query_extra_fields = array();
 $query_vars = array('q' => $query, 'search_type' => $query_search_type);
 foreach ($extra_fields as $extra_field) {
     $field_name = 'field_'.$extra_field['variable'];

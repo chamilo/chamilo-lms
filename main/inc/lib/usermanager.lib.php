@@ -3640,9 +3640,7 @@ class UserManager
         if (is_array($extra_field_list)) {
             foreach ($extra_field_list as $extra_field) {
                 //if is enabled to filter and is a "<select>" field type
-                if ($extra_field[8]==1 && $extra_field[2]==4) {
-                    $extra_filtrabe_fields[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
-                }
+                if ($extra_field[8]==1 && $extra_field[2]==4) { $extra_filtrabe_fields[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]); }
             }
         }    
         if (is_array($extra_filtrabe_fields) && count($extra_filtrabe_fields)>0 ) return $extra_filtrabe_fields;
@@ -3666,7 +3664,7 @@ class UserManager
                 if (UserManager::is_extra_field_available($extra_field['variable'])) {
                     if (isset($_GET[$varname]) && $_GET[$varname]!='0') {
                         $use_extra_fields = true;
-                            $extra_field_result[]= UserManager::get_extra_user_data_by_value($extra_field['variable'], Database::escape_string($_GET[$varname]));
+                        $extra_field_result[]= UserManager::get_extra_user_data_by_value($extra_field['variable'], $_GET[$varname]);
                     }
                 }
             }
@@ -3675,9 +3673,9 @@ class UserManager
         if ($use_extra_fields) {
             $final_result = array();
             if (count($extra_field_result)>1) {
-                for($i=0;$i<count($extra_field_result)-1;$i++) {
+                for ($i=0; $i < count($extra_field_result) -1; $i++) {
                     if (is_array($extra_field_result[$i+1])) {
-                        $final_result  = array_intersect($extra_field_result[$i],$extra_field_result[$i+1]);
+                        $final_result  = array_intersect($extra_field_result[$i], $extra_field_result[$i+1]);
                     }
                 }
             }
@@ -3693,7 +3691,7 @@ class UserManager
                 //no results
                 $where_filter = " AND u.user_id  = -1 ";
             }
-        return $where_filter;
+            return $where_filter;
         }
     }
     
@@ -3733,7 +3731,8 @@ class UserManager
         return '
         <form method="GET" class="well form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">
                 <input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-medium" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
-                Tipo <select name="search_type" onchange="javascript: if (jQuery("select[name=search_type]").val()=="2") jQuery(".extra_field").hide(); else jQuery(".extra_field").show();">
+                ' . get_lang('Type') .' 
+                <select name="search_type" onchange="javascript: extra_field_toogle();">
                 <option value="0">--'.get_lang('Select').'--</option>
                 <option value="1"' . (($search_type=='1')?'selected="selected"':"") . '>--' . get_lang('User') .'--</option>
                 <option value="2"' . (($search_type=='2')?'selected="selected"':"") . '>--' . get_lang('Group') . '--</option>
@@ -3741,6 +3740,13 @@ class UserManager
                 '.$extra_fields.'
                 <button class="btn" type="submit" value="search">'.get_lang('Search').'</button>
         </form>
+        <script>
+        extra_field_toogle();
+        function extra_field_toogle()
+        {
+            if (jQuery("select[name=search_type]").val() == "2") { jQuery(".extra_field").hide(); } else { jQuery(".extra_field").show(); }
+        }
+        </script>
         ';
     }
     

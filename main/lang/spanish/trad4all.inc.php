@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SocialWriteNewComment = "Redactar nuevo comentario";
 $SocialWallWhatAreYouThinkingAbout = "En que está pensando en este momento?";
 $SocialMessageDelete = "Eliminar comentario";
 $SocialWall = "Muro";

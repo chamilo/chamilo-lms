@@ -274,4 +274,11 @@ $NoSVGImagesInImagesGalleryPath = "No existen imágenes SVG en su carpeta de gal
 $NoSVGImages = "No hay imágenes SVG";
 $WamiNeedFilename = "Antes de activar la grabación es necesario dar un nombre al archivo.";
 $SelectAnAudioFileFromDocuments = "Seleccionar un archivo de audio desde los documentos";
-?>
+$ConvertedFromX = "Convertido desde %s";
+$PleaseSelectConvertFormat = "Por favor, Seleccione un formato de conversión";
+$ConvertFormats = "Formatos de conversión";
+$SelectConvertFormat = "Seleccione el formato de conversión";
+$ConvertedFromXToY = "Convertido desde %s a %s";
+$Convert = "Convertir";
+$FormatNotSupported = "Formatos de conversión no soportados";
+$ErrorSameFormat = "El formato de destino es el mismo del formato de origen";

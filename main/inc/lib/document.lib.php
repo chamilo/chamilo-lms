@@ -3901,6 +3901,155 @@ class DocumentManager
     }
 
     /**
+     * Set of extension allowed to use Jodconverter
+     * @param $mode 'from'
+     *              'to'
+     *              'all'
+     * @param $format   'text'
+     *                  'spreadsheet'
+     *                  'presentation'
+     *                  'drawing'
+     *                  'all'
+     * @return array
+     */
+    public static function getJodconverterExtensionList($mode, $format)
+    {
+        $extensionList = array();
+        $extensionListFromText = array(
+            'odt',
+            'sxw',
+            'rtf',
+            'doc',
+            'docx',
+            'wpd',
+            'txt',
+        );
+        $extensionListToText = array(
+            'pdf',
+            'odt',
+            'sxw',
+            'rtf',
+            'doc',
+            'docx',
+            'txt',
+        );
+        $extensionListFromSpreadsheet = array(
+            'ods',
+            'sxc',
+            'xls',
+            'xlsx',
+            'csv',
+            'tsv',
+        );
+        $extensionListToSpreadsheet = array(
+            'pdf',
+            'ods',
+            'sxc',
+            'xls',
+            'xlsx',
+            'csv',
+            'tsv',
+        );
+        $extensionListFromPresentation = array(
+            'odp',
+            'sxi',
+            'ppt',
+            'pptx',
+        );
+        $extensionListToPresentation = array(
+            'pdf',
+            'swf',
+            'odp',
+            'sxi',
+            'ppt',
+            'pptx',
+        );
+        $extensionListFromDrawing = array('odg');
+        $extensionListToDrawing = array('svg', 'swf');
+
+        if ($mode === 'from') {
+            if ($format === 'text') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+            } elseif ($format === 'spreadsheet') {
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+            } elseif ($format === 'presentation') {
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+            } elseif ($format === 'drawing') {
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+            } elseif ($format === 'all') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+            }
+        } elseif ($mode === 'to') {
+            if ($format === 'text') {
+                $extensionList = array_merge($extensionList, $extensionListToText);
+            } elseif ($format === 'spreadsheet') {
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+            } elseif ($format === 'presentation') {
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+            } elseif ($format === 'drawing') {
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            } elseif ($format === 'all') {
+                $extensionList = array_merge($extensionList, $extensionListToText);
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            }
+        } elseif ($mode === 'all') {
+            if ($format === 'text') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+                $extensionList = array_merge($extensionList, $extensionListToText);
+            } elseif ($format === 'spreadsheet') {
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+            } elseif ($format === 'presentation') {
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+            } elseif ($format === 'drawing') {
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            } elseif ($format === 'all') {
+                $extensionList = array_merge($extensionList, $extensionListFromText);
+                $extensionList = array_merge($extensionList, $extensionListToText);
+                $extensionList = array_merge($extensionList, $extensionListFromSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListToSpreadsheet);
+                $extensionList = array_merge($extensionList, $extensionListFromPresentation);
+                $extensionList = array_merge($extensionList, $extensionListToPresentation);
+                $extensionList = array_merge($extensionList, $extensionListFromDrawing);
+                $extensionList = array_merge($extensionList, $extensionListToDrawing);
+            }
+        }
+        return $extensionList;
+    }
+
+    /**
+     * Get Format type list by extension and mode
+     * @param string $mode Mode to search format type list
+     * @example 'from'
+     * @example 'to'
+     * @param string $extension file extension to check file type
+     * @return array
+     */
+    public static function getFormatTypeListConvertor($mode = 'from', $extension)
+    {
+        $formatTypesList = array();
+        $formatTypes = array('text', 'spreadsheet', 'presentation', 'drawing');
+        foreach ($formatTypes as $formatType) {
+            if (
+                in_array(
+                    $extension,
+                    self::getJodconverterExtensionList($mode, $formatType)
+                )
+            ) {
+                $formatTypesList[] = $formatType;
+            }
+        }
+        return $formatTypesList;
+    }
+
+    /**
      * @param string $path
      * @param bool $is_certificate_mode
      * @return bool
@@ -3949,7 +4098,14 @@ class DocumentManager
         if (api_get_setting('show_chat_folder') == 'false') {
             $foldersToAvoid[] = '/chat_files';
         }
-        return in_array($path, $foldersToAvoid);
+
+        if (is_array($foldersToAvoid)) {
+
+            return in_array($path, $foldersToAvoid);
+        } else {
+
+            return false;
+        }
     }
 
     /**

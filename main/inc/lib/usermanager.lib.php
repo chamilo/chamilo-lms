@@ -3744,7 +3744,7 @@ class UserManager
         extra_field_toogle();
         function extra_field_toogle()
         {
-            if (jQuery("select[name=search_type]").val() == "2") { jQuery(".extra_field").hide(); } else { jQuery(".extra_field").show(); }
+            if (jQuery("select[name=search_type]").val() != "1") { jQuery(".extra_field").hide(); } else { jQuery(".extra_field").show(); }
         }
         </script>
         ';

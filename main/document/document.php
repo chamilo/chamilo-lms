@@ -711,8 +711,8 @@ function convertModal (id, format) {
             api_get_self() . '?' . api_get_cidreq() .
             '&curdirpath=' . $curdirpath .
             '&action=convertToPdf&formatTarget=' .
-            '" + formatTarget + "&id=" + id + "' .
-            $req_gid . '&formatType=" + format;
+            '" + formatTarget + "&id=" + id + "&' .
+            api_get_cidreq() . '&formatType=" + format;
     });
     $("#convertModal").on("hidden", function(){
         $("." + format + "FormatType").hide();

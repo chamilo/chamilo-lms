@@ -49,6 +49,7 @@ class Notification extends Model
     const NOTIFICATION_TYPE_MESSAGE = 1;
     const NOTIFICATION_TYPE_INVITATION = 2;
     const NOTIFICATION_TYPE_GROUP = 3;
+    const NOTIFICATION_TYPE_WALL_MESSAGE = 4;
 
     /**
      *

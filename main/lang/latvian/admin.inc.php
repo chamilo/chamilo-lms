@@ -165,7 +165,6 @@ $langTechnicalTools = "Tehniskie rīki";
 $langConfig = "Sistēmas konfigurācija";
 $langLogIdentLogoutComplete = "Pieteikšanos saraksts (paplašināts)";
 $langLimitUsersListDefaultMax = "Lietotāju maksimums redzams ritinot sarakstu";
-$NoTimeLimits = "Bez laika ierobežojuma";
 $GeneralCoach = "Galvenais mācībspēks";
 $GeneralProperties = "Galvenās īpašības";
 $CourseCoach = "Kursa Lektors";

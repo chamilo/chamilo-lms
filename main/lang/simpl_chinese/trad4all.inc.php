@@ -5,6 +5,7 @@ for more information: see languages.txt in the lang folder.
 $DeleteAllAttendances = "删除全部的出勤记录";
 $AddForum = "添加新论坛";
 $ReplyShort = "回复主题";
+$NoTimeLimits = "无时间限制";
 $Title = "标题";
 $By = "By";
 $UsersOnline = "在线用户";

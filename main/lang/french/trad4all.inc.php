@@ -2,6 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SocialWriteNewComment = "Rédiger un nouveau commentaire";
+$SocialWallWhatAreYouThinkingAbout = "À quoi pensez-vous?";
+$SocialMessageDelete = "Supprimer le commentaire";
+$SocialWall = "Mur";
+$BuyCourses = "Achat de cours";
+$MySessions = "Mes sessions";
 $ActivateAudioRecorder = "Activer l'enregistreur audio";
 $StartSpeaking = "Parlez maintenant";
 $InverseHyperbolicTangentAtanh = "Tangente hyperbolique inverse:\tatanh(x)";

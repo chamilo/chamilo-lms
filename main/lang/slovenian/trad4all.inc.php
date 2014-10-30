@@ -222,6 +222,7 @@ $ReplyShort = "Odg:";
 $SendToAllUsers = "Pošlji vsem uporabnikom";
 $SelectACategory = "Izberi kategorijo";
 $AdvancedEdit = "Napredno urejanje";
+$NoTimeLimits = "Brez časovnih omejitev";
 $SearchXapianModuleNotInstalled = "Xapian iskalni modul ni nameščen";
 $Title = "Naslov";
 $By = "Objavil";

@@ -211,6 +211,7 @@ $ReplyShort = "Re:";
 $SendToAllUsers = "Poslať všetkým používateľom";
 $SelectACategory = "Vybrať kategóriu";
 $AdvancedEdit = "Pokročilá úprava";
+$NoTimeLimits = "Bez časových obmedzení";
 $SearchXapianModuleNotInstalled = "Vyhľadávací modul Xapian nie je nainštalovaný";
 $Title = "Nadpis";
 $By = "Od";

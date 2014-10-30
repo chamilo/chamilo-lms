@@ -30,9 +30,11 @@ $nameTools = get_lang('PlatformAdmin');
 $message = '';
 
 if (api_is_platform_admin()) {
+    /* deprecated since 2014-10-30 (all main/install/ files were checked against direct execution)
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
         $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'),'warning');
     }
+    */
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
         $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'),'warning');
     }

@@ -5,6 +5,7 @@ for more information: see languages.txt in the lang folder.
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $AddForum = "Agregar un nuevo foro";
 $ReplyShort = "Re:";
+$NoTimeLimits = "Sin límite de tiempo";
 $Title = "Título";
 $UsersOnline = "Usuarios en línea";
 $Remove = "Eliminar";

@@ -9,6 +9,7 @@ $AddForum = "ایجاد یک تالار جدید";
 $ReplyShort = "پاسخ:";
 $SelectACategory = "انتخاب یک دسته";
 $AdvancedEdit = "ویرایش پیشرفته";
+$NoTimeLimits = "بدون محدودیت زمانی";
 $SearchXapianModuleNotInstalled = "ماژول جستجوی اگزاپیان نصب نیست";
 $Title = "عنوان";
 $By = "توسط";

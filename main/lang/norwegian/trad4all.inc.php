@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$NoTimeLimits = "Ingen tidsbegrensning";
 $Title = "Tittel";
 $UsersOnline = "Brukere online";
 $Remove = "Fjern";

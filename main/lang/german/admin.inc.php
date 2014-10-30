@@ -172,7 +172,6 @@ $langTechnicalTools = "Technische Verwaltung";
 $langConfig = "Ssystem konfigurieren";
 $langLogIdentLogoutComplete = "Anmeldeliste (erweitert)";
 $langLimitUsersListDefaultMax = "Maximum Anzahl Benutzer in Scroll-Liste";
-$NoTimeLimits = "Keine Zeitbeschränkung";
 $GeneralCoach = "Haupt-Kursleiter";
 $GeneralProperties = "Allgemeine Einstellungen";
 $CourseCoach = "Kursleiter";

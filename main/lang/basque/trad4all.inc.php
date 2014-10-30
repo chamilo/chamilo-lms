@@ -10,6 +10,7 @@ $AddForum = "Gehitu foroa";
 $ReplyShort = "Erantz:";
 $SelectACategory = "Hautatu kategoria bat";
 $AdvancedEdit = "Edizio aurreratua";
+$NoTimeLimits = "Ez dago denbora mugarik";
 $SearchXapianModuleNotInstalled = "PHPren Xapian bilaketa modulua ez dago instalaturik zerbitzarian, mesedez, jarri harremanetan zure kudeatzailearekin";
 $Title = "Titulua";
 $By = "Egilea:";

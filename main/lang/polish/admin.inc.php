@@ -176,7 +176,6 @@ $langTechnicalTools = "Narzędzia";
 $langConfig = "Konfiguracja";
 $langLogIdentLogoutComplete = "Lista loginów (przedłużona)";
 $langLimitUsersListDefaultMax = "Maksymalna liczba użytkowników na przewijanej liście";
-$NoTimeLimits = "Brak ograniczeń czasowych";
 $GeneralCoach = "Główny trener";
 $GeneralProperties = "Ustawienia główne";
 $CourseCoach = "Trener kursu (Nauczyciel)";

@@ -155,7 +155,6 @@ $langTechnicalTools = "Технички алатки";
 $langConfig = "Изглед на системот";
 $langLogIdentLogoutComplete = "Список на кориснички имиња (долг)";
 $langLimitUsersListDefaultMax = "Максимален број на корсиници во лозгачкиот список";
-$NoTimeLimits = "Нема временски ограничувања";
 $GeneralCoach = "Главен обучувач";
 $GeneralProperties = "Општи својства";
 $CourseCoach = "Обучувач на курсот";

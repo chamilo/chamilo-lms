@@ -9,6 +9,7 @@ $DeleteAllAttendances = "Verwijder alle gemaakte aanwezigheden";
 $Unsubscribe = "Uitschrijven";
 $AddForum = "Nieuw forum toevoegen";
 $ReplyShort = "Antwoord:";
+$NoTimeLimits = "Geen beperking in tijd";
 $SearchXapianModuleNotInstalled = "The Xapian zoekmodule is niet geïnstalleerd";
 $Title = "Titel";
 $By = "Door";

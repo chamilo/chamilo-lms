@@ -7,6 +7,7 @@ $DeleteAllAttendances = "Alle erstellten Anwesenheiten löschen";
 $Unsubscribe = "Abmelden";
 $AddForum = "Neues Forum hinzufügen";
 $ReplyShort = "Aw:";
+$NoTimeLimits = "Keine Zeitbeschränkung";
 $SearchXapianModuleNotInstalled = "Das Xapian Such-Modul ist nicht installiert";
 $Title = "Titel";
 $By = "von";

@@ -183,7 +183,6 @@ $langTechnicalTools = "Técnica";
 $langConfig = "Configuració del sistema";
 $langLogIdentLogoutComplete = "Llista de conexions (extesa)";
 $langLimitUsersListDefaultMax = "Nombre màxim d'usuaris a mostrar en una llista deplegable";
-$NoTimeLimits = "Sense límit de temps";
 $GeneralCoach = "Tutor general";
 $GeneralProperties = "propietats generals";
 $CourseCoach = "Tutor del curs";

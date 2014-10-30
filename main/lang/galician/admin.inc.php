@@ -178,7 +178,6 @@ $langTechnicalTools = "Técnico";
 $langConfig = "Configuración do sistema";
 $langLogIdentLogoutComplete = "Lista de Login (detallada)";
 $langLimitUsersListDefaultMax = "Número máximo de usuarios a ser mostrado na listaxe";
-$NoTimeLimits = "Sen límite temporal";
 $GeneralCoach = "Tutor xeral";
 $GeneralProperties = "Propiedades xerais";
 $CourseCoach = "Titor do curso";

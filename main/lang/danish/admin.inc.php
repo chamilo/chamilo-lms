@@ -155,7 +155,6 @@ $langTechnicalTools = "Teknisk";
 $langConfig = "System config";
 $langLogIdentLogoutComplete = "Login liste (udvidet)";
 $langLimitUsersListDefaultMax = "Det højeste antal brugere vist på listen";
-$NoTimeLimits = "Ingen tidsbegrænsning";
 $GeneralCoach = "Instruktor";
 $GeneralProperties = "Overordnede rettigheder";
 $CourseCoach = "Kursussidens instruktor";

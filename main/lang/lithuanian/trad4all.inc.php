@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Sukurti naują forumą";
 $ReplyShort = "Re:";
+$NoTimeLimits = "Laiko apribojimų nėra";
 $Title = "Antraštė";
 $By = "By";
 $UsersOnline = "Prisijungę vartotojai";

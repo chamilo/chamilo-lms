@@ -3468,6 +3468,64 @@ form .formw .freeze {
 .skill-options .button-skill{
   margin-bottom: .5em;
 }
+.page-items-profile{
+  padding-top: 2em;
+  padding-bottom: 2em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.page-items-profile .title-skill{
+  margin-bottom: 1em;
+  font-size: 18px;
+  color: #333333;
+  margin-top: 1em;
+}
+.page-items-profile .block-items{
+  display: block;
+  width: 22.5%;
+  margin:10px;
+  float: left;
+}
+.page-items-profile .award-items{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.page-items-profile .number-skill{
+  background-color: #FFFFFF;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  padding-left: .5em;
+  margin-bottom: 1em;
+  border: 1px solid #cccccc;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.page-items-profile .block-items .border-items{
+  background-color: #EFEFEF;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: 1px solid #cccccc;
+}
+.page-items-profile .items-info{
+  padding:1em;
+}
+.page-items-profile .info-profile{
+  margin-top: 1em;
+  margin-bottom: .5em;
+}
+.page-items-profile .items-info .avatar-profile{
+  text-align: center;
+  background: #FFFFFF;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border: 1px solid #cccccc;
+}
 .skill_partition {
   cursor: pointer;
   stroke: #000000;

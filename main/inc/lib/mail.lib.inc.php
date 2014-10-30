@@ -118,14 +118,17 @@ function api_mail_html(
     $senderName = !empty($senderName) ? $senderName : $defaultEmail;
     $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultName;
 
-    $mail->SetFrom($senderEmail, $senderName, false);
-
+    // Reply to first
     if (isset($extra_headers['reply_to'])) {
         $mail->AddReplyTo(
             $extra_headers['reply_to']['mail'],
             $extra_headers['reply_to']['name']
         );
+        $mail->Sender = $extra_headers['reply_to']['mail'];
+        unset($extra_headers['reply_to']);
     }
+
+    $mail->SetFrom($senderEmail, $senderName);
 
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
@@ -203,11 +206,6 @@ function api_mail_html(
                 case 'contenttype':
                 case 'content-type':
                     $mail->ContentType = $value;
-                    break;
-                case 'reply_to':
-                    if (isset($value['mail']) && isset($value['name'])) {
-                        $mail->AddReplyTo($value['mail'], $value['name']);
-                    }
                     break;
                 default:
                     $mail->AddCustomHeader($key.':'.$value);

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SocialWallWhatAreYouThinkingAbout = "What are you thinking about?";
 $SocialMessageDelete = "Delete comment";
 $SocialWall = "Social wall";
 $BuyCourses = "Buy courses";

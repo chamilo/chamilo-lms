@@ -13,7 +13,7 @@
 * - send to specific user (when pressing send message in the who is online list)
 */
 // name of the language file that needs to be included
-$language_file= array('messages', 'userInfo', 'admin');
+$language_file = array('messages', 'userInfo', 'admin');
 $cidReset	= true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
@@ -242,8 +242,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 			$file_comments	= $_POST['legend'];
 			$title 			= $default['title'];
 			$content 		= $default['content'];
-			$group_id		= $default['group_id'];
-			$parent_id 		= $default['parent_id'];
+			$group_id		= isset($default['group_id']) ? $default['group_id'] : null;
+			$parent_id 		= isset($default['parent_id']) ? $default['parent_id'] : null;
 			if (is_array($user_list) && count($user_list)> 0) {
 				//all is well, send the message
 				foreach ($user_list as $user) {

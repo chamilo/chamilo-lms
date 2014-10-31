@@ -108,7 +108,7 @@
         "sonata-project/exporter": "~1.3@dev",
 
         "sonata-project/timeline-bundle": "~2.2@dev",
-        "sonata-project/classification-bundle": "~2.2@dev",
+        "sonata-project/classification-bundle": "dev-master",
         "sonata-project/ecommerce": "dev-develop",
         "sonata-project/comment-bundle": "~2.2@dev",
 
@@ -138,20 +138,23 @@
 
         "zendframework/zend-filter": "2.3.*@dev",
 
-        "jbroadway/urlify": "1.0.0-stable",
+        "jbroadway/urlify": "~1.0",
         "composer/composer": "1.0.0-alpha8",
         "liip/theme-bundle": "dev-master",
         "chamilo/chash" : "dev-master",
         "white-october/pagerfanta-bundle": "dev-master",
-        "sylius/resource-bundle": "dev-master",
-        "sylius/resource": "dev-master",
+        "sylius/resource-bundle": "0.11",
+        "sylius/resource": "0.11",
+        "sylius/flow-bundle": "0.11",
+        "sylius/settings-bundle": "0.11",
         "apy/datagrid-bundle": "dev-master",
         "jms/translation-bundle": "dev-master",
-        "sylius/flow-bundle": "0.11.*@dev",
-        "sylius/settings-bundle": "dev-master",
+
         "sp/bower-bundle": "dev-master",
         "jmontoyaa/migration-bundle":"dev-master",
-        "thrace/datagrid-bundle":"dev-master"
+        "thrace/datagrid-bundle":"dev-master",
+        "patchwork/utf8": "dev-master",
+        "vich/uploader-bundle": "~0.11.0"
     },
     "require-dev": {
         "akeneo/crowdin-api": "1.0.*@dev",

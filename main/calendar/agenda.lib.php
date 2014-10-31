@@ -393,6 +393,8 @@ class Agenda
 
         $typeList = array('daily', 'weekly', 'monthlyByDate', 'monthlyByDay', 'monthlyByDayR', 'yearly');
 
+        // The event has to repeat *in the future*. We don't allow repeated
+        // events in the past
         if ($end > $now && in_array($type, $typeList)) {
             $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
                     VALUES ($course_id, '$eventId', '$type', '$end')";
@@ -2275,6 +2277,11 @@ class Agenda
                     $freq = $trans[$repeat['FREQ']];
 
                     if (isset($repeat['UNTIL']) && !empty($repeat['UNTIL'])) {
+                        // Check if datetime or just date (strlen == 8)
+                        if (strlen($repeat['UNTIL']) == 8) {
+                            // Fix the datetime format to avoid exception in the next step
+                            $repeat['UNTIL'] .= 'T000000';
+                        }
                         $until = Sabre\VObject\DateTimeParser::parseDateTime($repeat['UNTIL'], new DateTimeZone($currentTimeZone));
                         $until = $until->format('Y-m-d H:i');
                         //$res = agenda_add_repeat_item($courseInfo, $id, $freq, $until, $attendee);
@@ -2318,6 +2325,9 @@ class Agenda
 
         if (!empty($messages)) {
             $messages = implode('<br /> ', $messages);
+        } else {
+            $messages = get_lang('NoAgendaItems');
+                    
         }
 
         return $messages;

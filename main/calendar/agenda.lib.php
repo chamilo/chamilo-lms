@@ -2275,6 +2275,10 @@ class Agenda
                     $freq = $trans[$repeat['FREQ']];
 
                     if (isset($repeat['UNTIL']) && !empty($repeat['UNTIL'])) {
+                        if (strlen($repeat['UNTIL']) == 8) {
+                            // Fix the datetime format to avoid exception in the next step
+                            $repeat['UNTIL'] .= 'T000000';
+                        }
                         $until = Sabre\VObject\DateTimeParser::parseDateTime($repeat['UNTIL'], new DateTimeZone($currentTimeZone));
                         $until = $until->format('Y-m-d H:i');
                         //$res = agenda_add_repeat_item($courseInfo, $id, $freq, $until, $attendee);

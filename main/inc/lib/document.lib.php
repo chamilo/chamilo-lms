@@ -4273,6 +4273,7 @@ class DocumentManager
             try {
                 $ffmpeg = \FFMpeg\FFMpeg::create();
                 $video = $ffmpeg->open($wavFile);
+
                 $mp3File = str_replace('wav', 'mp3', $wavFile);
                 $result = $video->save(new FFMpeg\Format\Audio\Mp3(), $mp3File);
                 if ($result && $removeWavFileIfSuccess) {
@@ -4283,6 +4284,8 @@ class DocumentManager
                     return $mp3File;
                 }
             } catch (Exception $e) {
+                error_log($e->getMessage());
+                error_log($e->getPrevious()->getMessage());
             }
         }
         return false;

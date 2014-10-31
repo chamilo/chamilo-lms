@@ -44,7 +44,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
             get_lang('DelImage')
         );
     }
-    $allowed_picture_types = getSupportedImageExtensions();
+    $allowed_picture_types = api_get_supported_image_extensions();
     $form->addRule(
         'picture',
         get_lang('OnlyImagesAllowed') . ' (' . implode(
@@ -109,9 +109,9 @@ $socialRightContent .= '
         ' . get_lang('EditProfile') . '
     </a>
     </div></div></div>';
-
+$socialRightInformation = '<div class="span4">';
 if (api_get_setting('allow_skills_tool') == 'true') {
-    $socialRightInformation .= '<div><div class="well_border">';
+    $socialRightInformation .= '<div class="well_border">';
     $skill = new Skill();
     $ranking = $skill->get_user_skill_ranking(api_get_user_id());
     $url = api_get_path(WEB_CODE_PATH) . 'social/skills_ranking.php';
@@ -147,12 +147,11 @@ if (api_get_setting('allow_skills_tool') == 'true') {
     $socialRightInformation .= '</div>';
 }
 
-$socialRightInformation .= '</div>';
 
 //Search box
 $socialRightInformation .= '<div>';
 $socialRightInformation .= UserManager::get_search_form('');
-$socialRightInformation .= '<br />';
+$socialRightInformation .= '<br /></div>';
 
 //Group box by age
 $results = GroupPortalManager::get_groups_by_age(1, false);

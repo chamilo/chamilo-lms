@@ -44,7 +44,7 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-<h1>Chamilo 1.9.10 - 10th of November, 2014</h1>
+<h1>Chamilo 1.9.10 - Huánuco, 10th of November, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.10 is a patch version with a few minor bugfixes and a new packaging. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.10, with a few changes to this changelog file and a few fixes throughout the code (as such, you can just overwrite previous files to upgrade from 1.9.8, 1.9.8.1 or 1.9.8.2 to 1.9.10).</p>
 <h3>Release name</h3>
@@ -272,9 +272,11 @@ All security issues are published and patches are attached on <a href="https://s
   <li>(a55776c - BT#8189) Fix for users inscription with approval setting</li>
 </ul>
 <h3>Stylesheets and theming</h3>
-Stylesheets have been considerably changed in version 1.9.8, which might require a little update on your side if you have a custom stylesheet. We're sorry about it, but it was really necessary to improve the adaptability of the interface for mobile devices (which we are sure you will appreciate). If you only changed the logo, we recommend you make a copy of an existing Chamilo style (main/css/chamilo*) again, rename it and simply replace the logo then upload the new style. If you have more complex styles, you might want to ask for the assistance of your web designer at the moment you update Chamilo to this version.
 <ul>
   <li>No major style changes in this version, but a lot of visual improvements</li>
+  <li>The possibility to select a template (from main/template/) through the configuration.php file has been added, although no new template is available yet</li>
+  <li>Old question types icons were replaced by new icons</li>
+  <li>Old session "window" icon was replaced by a new icon</li>
 </ul>
 <h3>Web services</h3>
 <ul>
@@ -283,8 +285,7 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
 <h3>Removals</h3>
 <ul>
-  <li>Old question types icons were replaced by new icons</li>
-  <li>Old session "window" icon was replaced by a new icon</li>
+  <li>No removal worth mentioning in this version</li>
 </ul>
 
 
@@ -2172,9 +2173,8 @@ This version of Chamilo only includes a few minor new features:
   <li>Added support for .docx</li>
   <li>Improve group homepage (#2077)</li>
   <li>Added support for global announcement by URL (#1763)</li>
-</li>
-
 </ul>
+
 <h3>Debugging</h3>
 <ul>
   <li>Fixed tools shortcuts crash bug (#3356)</li>

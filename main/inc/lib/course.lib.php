@@ -1646,12 +1646,12 @@ class CourseManager
      */
     public static function get_coach_list_from_course_code($course_code, $session_id)
     {
-        if ($session_id != strval(intval($session_id))) {
+        if (empty($course_code) OR empty($session_id)) {
             return array();
         }
 
         $course_code = Database::escape_string($course_code);
-
+        $session_id = intval($session_id);
         $users = array();
 
         // We get the coach for the given course in a given session.
@@ -1667,9 +1667,9 @@ class CourseManager
             $users[$user['id_user']] = $user_info;
         }
 
+        $table = Database::get_main_table(TABLE_MAIN_SESSION);
         // We get the session coach.
-        $sql = 'SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
-                WHERE id="'.$session_id.'"';
+        $sql = 'SELECT id_coach FROM '.$table.' WHERE id='.$session_id;
         $rs = Database::query($sql);
         $session_id_coach = Database::result($rs, 0, 'id_coach');
         $user_info = api_get_user_info($session_id_coach);

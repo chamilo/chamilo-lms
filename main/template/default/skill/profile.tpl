@@ -83,14 +83,14 @@
                         </div>
                     </div>
                 {% endfor %}
-            {% endfor %}
+            </div>
         </div>
-
-    {% else %}
-        {% if search_skill_list is null %}
-            <div class="warning-message">{{"NoResults"|get_lang}}</div>
-        {% endif %}
+    {% endfor %}
+{% else %}
+    {% if search_skill_list is null %}
+        <div class="warning-message">{{"NoResults"|get_lang}}</div>
     {% endif %}
+{% endif %}
 </div>
 <div id="dialog-form" style="display:none;">    
     <form id="save_profile_form" class="form-horizontal" name="form">       

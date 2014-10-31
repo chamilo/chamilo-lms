@@ -1117,7 +1117,7 @@ function add_document(
 	$comment       = Database::escape_string($comment);
 	$path          = Database::escape_string($path);
 	$filetype      = Database::escape_string($filetype);
-	$filesize      = intval($filesize);
+	$filesize      = Database::escape_string($filesize);
     $title         = Database::escape_string(htmlspecialchars($title));
     $c_id          = $_course['real_id'];
 

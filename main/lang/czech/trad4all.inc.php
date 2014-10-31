@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$NoTimeLimits = "Žádné časové omezení";
 $Title = "Nadpis";
 $UsersOnline = "Uživatel online";
 $Remove = "Odstranit";

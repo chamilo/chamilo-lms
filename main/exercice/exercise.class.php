@@ -3626,6 +3626,7 @@ class Exercise
             'open_answer'   => $arrans,
             'answer_type'   => $answerType
         );
+
         return $return_array;
     }
 
@@ -3633,15 +3634,21 @@ class Exercise
      * Sends a notification when a user ends an examn
      *
      */
-    function send_mail_notification_for_exam($question_list_answers, $origin, $exe_id) {
+    public function send_mail_notification_for_exam($question_list_answers, $origin, $exe_id)
+    {
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
             return null;
         }
         // Email configuration settings
-        $courseCode     = api_get_course_id();
-        $courseInfo    = api_get_course_info($courseCode);
+        $courseCode = api_get_course_id();
+        $courseInfo = api_get_course_info($courseCode);
+        $sessionId = api_get_session_id();
 
-        $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.$sessionId.'&id='.$exe_id.'&action=qualify';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
         $msg = '<p>'.get_lang('ExerciseAttempted').' :</p>
@@ -3666,12 +3673,11 @@ class Exercise
                     </table>';
         $open_question_list = null;
 
-        $msg    = str_replace("#email#",       $user_info['email'],$msg);
-        $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
-        $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
-        $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
-
-        $msg    = str_replace("#course#",      $courseInfo['name'],$msg1);
+        $msg = str_replace("#email#", $user_info['email'], $msg);
+        $msg1 = str_replace("#exercise#", $this->exercise, $msg);
+        $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
+        $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
+        $msg = str_replace("#course#", $courseInfo['name'], $msg1);
 
         if ($origin != 'learnpath') {
             $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
@@ -3681,32 +3687,35 @@ class Exercise
         $mail_content = $msg1;
         $subject = get_lang('ExerciseAttempted');
 
-        $teachers = array();
-        if (api_get_session_id()) {
-            $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+        if (!empty($sessionId)) {
+            $teachers = CourseManager::get_coach_list_from_course_code($courseCode, $sessionId);
         } else {
-            $teachers = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
+            $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
         }
 
         if (!empty($teachers)) {
             foreach ($teachers as $user_id => $teacher_data) {
-                MessageManager::send_message_simple($user_id, $subject, $mail_content);
+                MessageManager::send_message_simple(
+                    $user_id,
+                    $subject,
+                    $mail_content
+                );
             }
         }
-
     }
 
     /**
      * Sends a notification when a user ends an examn
      *
      */
-    function send_notification_for_open_questions($question_list_answers, $origin, $exe_id) {
+    function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
+    {
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
             return null;
         }
         // Email configuration settings
-        $coursecode     = api_get_course_id();
-        $course_info    = api_get_course_info(api_get_course_id());
+        $courseCode     = api_get_course_id();
+        $course_info    = api_get_course_info($courseCode);
 
         $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());
@@ -3770,32 +3779,35 @@ class Exercise
             $mail_content = $msg1;
             $subject = get_lang('OpenQuestionsAttempted');
 
-            $teachers = array();
             if (api_get_session_id()) {
-                $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+                $teachers = CourseManager::get_coach_list_from_course_code($courseCode, api_get_session_id());
             } else {
-                $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+                $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
             }
 
             if (!empty($teachers)) {
                 foreach ($teachers as $user_id => $teacher_data) {
-                    MessageManager::send_message_simple($user_id, $subject, $mail_content);
+                    MessageManager::send_message_simple(
+                        $user_id,
+                        $subject,
+                        $mail_content
+                    );
                 }
             }
         }
     }
 
-    function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id) {
+    function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id)
+    {
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
             return null;
         }
         // Email configuration settings
-        $coursecode     = api_get_course_id();
-        $course_info    = api_get_course_info(api_get_course_id());
+        $courseCode     = api_get_course_id();
+        $course_info    = api_get_course_info($courseCode);
 
         $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());
-
 
         $oral_question_list = null;
         foreach ($question_list_answers as $item) {
@@ -3851,16 +3863,19 @@ class Exercise
             $mail_content = $msg1;
             $subject = get_lang('OralQuestionsAttempted');
 
-            $teachers = array();
             if (api_get_session_id()) {
-                $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+                $teachers = CourseManager::get_coach_list_from_course_code($courseCode, api_get_session_id());
             } else {
-                $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+                $teachers = CourseManager::get_teacher_list_from_course_code($courseCode);
             }
 
             if (!empty($teachers)) {
                 foreach ($teachers as $user_id => $teacher_data) {
-                    MessageManager::send_message_simple($user_id, $subject, $mail_content);
+                    MessageManager::send_message_simple(
+                        $user_id,
+                        $subject,
+                        $mail_content
+                    );
                 }
             }
         }
@@ -3954,7 +3969,8 @@ class Exercise
         return $quiz_id;
     }
 
-    function process_geometry() {
+    function process_geometry()
+    {
 
     }
 
@@ -3963,7 +3979,6 @@ class Exercise
      * @param 	int		attempt id
      * @return 	float 	exercise result
      */
-
     public function get_exercise_result($exe_id) {
         $result = array();
         $track_exercise_info = get_exercise_track_exercise_info($exe_id);
@@ -4125,7 +4140,8 @@ class Exercise
     public function added_in_lp()
     {
         $TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT max_score FROM $TBL_LP_ITEM WHERE c_id = ".$this->course_id." AND item_type = '".TOOL_QUIZ."' AND path = '".$this->id."'";
+        $sql = "SELECT max_score FROM $TBL_LP_ITEM
+                WHERE c_id = ".$this->course_id." AND item_type = '".TOOL_QUIZ."' AND path = '".$this->id."'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;
@@ -4133,7 +4149,8 @@ class Exercise
         return false;
     }
 
-    function get_media_list() {
+    function get_media_list()
+    {
         $media_questions = array();
         $question_list = $this->get_validated_question_list();
         if (!empty($question_list)) {
@@ -4150,7 +4167,8 @@ class Exercise
         return $media_questions;
     }
 
-    function media_is_activated($media_list) {
+    function media_is_activated($media_list)
+    {
         $active = false;
         if (isset($media_list) && !empty($media_list)) {
             $media_count = count($media_list);
@@ -4167,7 +4185,8 @@ class Exercise
         return $active;
     }
 
-    function get_validated_question_list() {
+    function get_validated_question_list()
+    {
         $tabres = array();
         $isRandomByCategory = $this->isRandomByCat();
         if ($isRandomByCategory == 0) {
@@ -4221,13 +4240,15 @@ class Exercise
         return $tabres;
     }
 
-    function get_question_list($expand_media_questions = false) {
+    function get_question_list($expand_media_questions = false)
+    {
         $question_list = $this->get_validated_question_list();
         $question_list = $this->transform_question_list_with_medias($question_list, $expand_media_questions);
         return $question_list;
     }
 
-    function transform_question_list_with_medias($question_list, $expand_media_questions = false) {
+    function transform_question_list_with_medias($question_list, $expand_media_questions = false)
+    {
         $new_question_list = array();
         if (!empty($question_list)) {
             $media_questions = $this->get_media_list();
@@ -4268,7 +4289,8 @@ class Exercise
         return $new_question_list;
     }
 
-    public function get_stat_track_exercise_info_by_exe_id($exe_id) {
+    public function get_stat_track_exercise_info_by_exe_id($exe_id)
+    {
         $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $exe_id = intval($exe_id);
         $sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
@@ -4298,7 +4320,8 @@ class Exercise
         return $new_array;
     }
 
-    public function edit_question_to_remind($exe_id, $question_id, $action = 'add') {
+    public function edit_question_to_remind($exe_id, $question_id, $action = 'add')
+    {
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
         $question_id = intval($question_id);
         $exe_id = intval($exe_id);
@@ -4340,18 +4363,20 @@ class Exercise
                 }
                 $remind_list_string = Database::escape_string($remind_list_string);
                 $sql = "UPDATE $track_exercises SET questions_to_check = '$remind_list_string' WHERE exe_id = $exe_id ";
-                $result = Database::query($sql);
+                Database::query($sql);
             }
         }
     }
 
-    public function fill_in_blank_answer_to_array($answer) {
+    public function fill_in_blank_answer_to_array($answer)
+    {
         api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
         $teacher_answer_list = $teacher_answer_list[0];
         return $teacher_answer_list;
     }
 
-    public function fill_in_blank_answer_to_string($answer) {
+    public function fill_in_blank_answer_to_string($answer)
+    {
         $teacher_answer_list = $this->fill_in_blank_answer_to_array($answer);
         $result = '';
         if (!empty($teacher_answer_list)) {
@@ -4372,13 +4397,15 @@ class Exercise
         return $result;
     }
 
-    function return_time_left_div() {
+    function return_time_left_div()
+    {
         $html  = '<div id="clock_warning" style="display:none">'.Display::return_message(get_lang('ReachedTimeLimit'), 'warning').' '.sprintf(get_lang('YouWillBeRedirectedInXSeconds'), '<span id="counter_to_redirect" class="red_alert"></span>').'</div>';
         $html .= '<div id="exercise_clock_warning" class="well count_down"></div>';
         return $html;
     }
 
-    function get_count_question_list() {
+    function get_count_question_list()
+    {
         //Real question count
         $question_count = 0;
         $question_list = $this->get_question_list();
@@ -4388,7 +4415,8 @@ class Exercise
         return $question_count;
     }
 
-    function get_exercise_list_ordered() {
+    function get_exercise_list_ordered()
+    {
         $table_exercise_order = Database::get_course_table(TABLE_QUIZ_ORDER);
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
@@ -4402,7 +4430,6 @@ class Exercise
         }
         return $list;
     }
-
 
     /**
      * Calculate the max_score of the quiz, depending of question inside, and quiz advanced option
@@ -4479,7 +4506,6 @@ class Exercise
     {
         return api_htmlentities($this->title);
     }
-
 
     /**
      * @param $in_title

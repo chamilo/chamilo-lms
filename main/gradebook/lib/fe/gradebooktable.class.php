@@ -417,10 +417,14 @@ class GradebookTable extends SortableTable
                 }
 
                 if (empty($new_content[0])) {
-                    $warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');
-                    $cert_icon = '<a class="right_link" href="../document/document.php?curdirpath=/certificates&'.$course_code.'&origin=gradebook&selectcat=' . $id_cat . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'), array(), ICON_SIZE_SMALL).'</a>';
+                    // Set default certificate
+                    $courseData = api_get_course_info($course_code);
+                    DocumentManager::generateDefaultCertificate($courseData);
 
-                    Display::display_warning_message($warning_message.$cert_icon,false);
+                    //$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');
+                    //$cert_icon = '<a class="right_link" href="../document/document.php?curdirpath=/certificates&'.$course_code.'&origin=gradebook&selectcat=' . $id_cat . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'), array(), ICON_SIZE_SMALL).'</a>';
+
+                    //Display::display_warning_message($warning_message.$cert_icon,false);
                 }
             }
 

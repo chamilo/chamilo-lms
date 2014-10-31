@@ -164,7 +164,6 @@ $langTechnicalTools = "Технически";
 $langConfig = "Конфигурация на системата";
 $langLogIdentLogoutComplete = "Пълен списък на посещенията";
 $langLimitUsersListDefaultMax = "Максимален брой потребители, показани на една страница";
-$NoTimeLimits = "Без ограничения във времето";
 $GeneralCoach = "Водещ преподавател/инструктор";
 $GeneralProperties = "Основни свойства";
 $CourseCoach = "Преподавател на курса";

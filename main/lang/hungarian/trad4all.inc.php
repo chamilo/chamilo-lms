@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Új fórum hozzáadása";
 $ReplyShort = "Vá:";
+$NoTimeLimits = "Nincs időkorlát";
 $Title = "Cím";
 $By = "Szerző";
 $UsersOnline = "Jelenlévő felhasználó";

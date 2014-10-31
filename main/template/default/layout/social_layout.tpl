@@ -8,16 +8,21 @@
             {{ social_menu_block }}
             </div>
         </div>
-        <div class="span9">
+        <div id="wallMessages" class="span5" style="min-height:1px">
             <div class="row">
-                <div class="span9">
+                <div class="span5">
                     <div id="message_ajax_reponse" class=""></div>
                 </div>
             </div>
             <div class="row">
                 {{ social_right_content}}
             </div>
-                <div id="display_response_id" class="span9"></div>
+            <div id="display_response_id" class="span5"></div>
+            {{ socialAutoExtendLink }}
+        </div>
+        <div class="span4">
+            <div class="row">
+                {{ socialRightInformation}}
             </div>
         </div>
     </div>

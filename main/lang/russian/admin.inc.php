@@ -155,7 +155,6 @@ $langTechnicalTools = "Технический";
 $langConfig = "Конфигурация системы";
 $langLogIdentLogoutComplete = "Список зарегистрированных пользователей (расширенный)";
 $langLimitUsersListDefaultMax = "Максимальное число пользователей, отображаемых на странице";
-$NoTimeLimits = "Время не ограничено";
 $GeneralCoach = "Главный инструктор";
 $GeneralProperties = "Основные свойства";
 $CourseCoach = "Инструктор курса";

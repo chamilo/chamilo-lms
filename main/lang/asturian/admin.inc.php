@@ -164,7 +164,6 @@ $langTechnicalTools = "Téunicu";
 $langConfig = "Configuración del sistema";
 $langLogIdentLogoutComplete = "Llistáu de conesiones (detalláu)";
 $langLimitUsersListDefaultMax = "Númberu másimu d'usuarios que se ven nel llistáu desplegable";
-$NoTimeLimits = "Ensin llende de tiempu";
 $GeneralCoach = "Tutor xeneral";
 $GeneralProperties = "Propiedaes xenerales";
 $CourseCoach = "Tutor del cursu";

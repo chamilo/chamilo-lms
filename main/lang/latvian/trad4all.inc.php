@@ -7,6 +7,7 @@ $DeleteAllAttendances = "Dzēst visu klātienes reģistru";
 $Unsubscribe = "Atrakstīties";
 $AddForum = "Pievienot jaunu forumu";
 $ReplyShort = "Atbildēt:";
+$NoTimeLimits = "Bez laika ierobežojuma";
 $SearchXapianModuleNotInstalled = "Xapian meklēšanas modulis nav instalēts";
 $Title = "Virsraksts";
 $By = "Autors";

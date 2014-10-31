@@ -169,7 +169,6 @@ $langTechnicalTools = " تقني";
 $langConfig = " تشكيل النظام";
 $langLogIdentLogoutComplete = " (قائمة التسجيل (موسعة";
 $langLimitUsersListDefaultMax = " الحد الأقصى للمستخدمين الظاهرين على القائمة المنسدلة";
-$NoTimeLimits = " لا حدود للوقت";
 $GeneralCoach = " المشرف العام";
 $GeneralProperties = " المشرف العام";
 $CourseCoach = " المشرف على المقرر";

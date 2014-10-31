@@ -164,7 +164,6 @@ $langTechnicalTools = "Tekniskt";
 $langConfig = "Systemkonfiguration";
 $langLogIdentLogoutComplete = "Inloggningslista (utökad)";
 $langLimitUsersListDefaultMax = "Maximalt antal visade användare i rullisten";
-$NoTimeLimits = "Ingen tidsbegränsning";
 $GeneralCoach = "Övergripande lärare";
 $GeneralProperties = "Generella egenskaper";
 $CourseCoach = "Kurslärare";

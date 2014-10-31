@@ -5,6 +5,7 @@ for more information: see languages.txt in the lang folder.
 $Unsubscribe = "Avsluta prenumeration";
 $AddForum = "Lägg till ett nytt forum";
 $ReplyShort = "Re:";
+$NoTimeLimits = "Ingen tidsbegränsning";
 $Title = "Titel";
 $By = "Av";
 $UsersOnline = "Inloggade användare";

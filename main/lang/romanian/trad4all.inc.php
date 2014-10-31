@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Adaugati un forum nou";
 $ReplyShort = "Re:";
+$NoTimeLimits = "Fara limite de timp";
 $Title = "Titlu";
 $By = "De";
 $UsersOnline = "Utilizatori online";

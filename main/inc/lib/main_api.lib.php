@@ -4182,7 +4182,7 @@ function api_disp_html_area($name, $content = '', $height = '', $width = '100%',
  * @deprecated
  */
 function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
-    global $_configuration, $_course, $fck_attribute;
+    global $fck_attribute;
     require_once api_get_path(LIBRARY_PATH).'formvalidator/Element/html_editor.php';
     $editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
     $editor->setValue($content);
@@ -7550,4 +7550,17 @@ function api_get_configuration_value($variable)
         return $_configuration[$variable];
     }
     return false;
+}
+
+/**
+ * Returns supported image extensions in the portal
+ * @return  array   Supported image extensions in the portal
+ */
+function api_get_supported_image_extensions()
+{
+    $supportedImageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'svg');
+    if (version_compare(PHP_VERSION, '5.5.0', '>=')) {
+        array_push($supportedImageExtensions, 'webp');
+    }
+    return $supportedImageExtensions;
 }

@@ -26,6 +26,7 @@ $AddForum = "Dodaj nowe forum";
 $ReplyShort = "Odp:";
 $SelectACategory = "Wybierz kategorię";
 $AdvancedEdit = "Zaawansowana edycja";
+$NoTimeLimits = "Brak ograniczeń czasowych";
 $SearchXapianModuleNotInstalled = "Moduł wyszukiwania Xapian nie jest zainstalowany";
 $Title = "Tytuł";
 $By = "przez";

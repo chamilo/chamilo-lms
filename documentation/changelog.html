@@ -44,7 +44,7 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-<h1>Chamilo 1.9.10 - 10th of November, 2014</h1>
+<h1>Chamilo 1.9.10 - Huánuco, 10th of November, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.10 is a patch version with a few minor bugfixes and a new packaging. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.10, with a few changes to this changelog file and a few fixes throughout the code (as such, you can just overwrite previous files to upgrade from 1.9.8, 1.9.8.1 or 1.9.8.2 to 1.9.10).</p>
 <h3>Release name</h3>
@@ -80,7 +80,8 @@ All security issues are published and patches are attached on <a href="https://s
 
 <h3>Notable new Features</h3>
 <ul>
-  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1a6a4a927eaf9aa919e47852a5ea7d6698063fac">1a6a4a92</a> - <a href="https://support.chamilo.org/issues/7272">#7272</a>) Add possibility for plugins to define main tabs</li>
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/57750c212909bb4d74fb7b4bbba93b836c69979e">57750c21</a> - <a href="https://task.beeznest.com/issues/8900">BT#8900</a>) Adding progress in learning paths report</li>
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/903436eadfd7bc4cb8b20136301ceaba165b4ae1">903436ea</a> - <a href="https://task.beeznest.com/issues/8902">BT#8902</a>) Adding learning paths reduced report</li><li>(<a href="https://github.com/chamilo/chamilo-lms/commit/1a6a4a927eaf9aa919e47852a5ea7d6698063fac">1a6a4a92</a> - <a href="https://support.chamilo.org/issues/7272">#7272</a>) Add possibility for plugins to define main tabs</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ef242abd937637ec96973ecd7ad7b431949eab87">ef242abd</a> - <a href="https://support.chamilo.org/issues/7255">#7255</a>) Add multiple file upload in forum, and show list of attachment files from view threads</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/c8f940be4aa4587e57fb36bab800b3e90a4f8762">c8f940be</a> - <a href="https://support.chamilo.org/issues/7338">#7338</a>) Add REST web service to get personal messages (from inbox)</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2db9057d7b589e1d91554f5f39df415c810aeb95">2db9057d</a> - <a href="https://support.chamilo.org/issues/7328">#7328</a>) Add theme_backup and default_template settings</li>
@@ -121,6 +122,12 @@ All security issues are published and patches are attached on <a href="https://s
 
 <h3>Improvements (minor features) and debug</h3>
 <ul>
+
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/7d5f7236ea45d8afab59f312853a63aa7c07e697">7d5f7236</a> - <a href="https://support.chamilo.org/issues/7323">#7323</a>) Remove main/install/ existence warning in admin page: risks have been removed</li>
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/ee6b696af77289b031e4894ca8ed0611da89f2ec">ee6b696a</a> - <a href="https://support.chamilo.org/issues/7358">#7358</a>) Students can download their certificates in PDF file</li>
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/4f3a08d7c7938b10f6c8d75c64e6b6946712b053">4f3a08d7</a>) Add script to list unused images</li>
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/fe20a087411b502c70c79d9b2a939b4c5d75ca0a">fe20a087</a> - <a href="https://task.beeznest.com/issues/8960">BT#8960</a>) Do not add auto reply for the main email</li>
+  <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/f32cacb292bf1d53f3699d1250789979639f9be9">f32cacb2</a> - <a href="https://task.beeznest.com/issues/8958">BT#8958</a>) Fixing work counter</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/147a23b81041ccdc8eadc6506d767c14fe1b0ac4">147a23b8</a> - <a href="https://task.beeznest.com/issues/8953">BT#8953</a>) Fixing question pool for admins</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/5e8de8ff9223af5432e3097297aa0ffa456a0bf7">5e8de8ff</a>) Improvements to presentation of the lp results table</li>
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a6bed8f0027c975c6c493c249324311dcc12e6c3">a6bed8f0</a>) Update installation guide for 1.9.10</li>
@@ -265,9 +272,11 @@ All security issues are published and patches are attached on <a href="https://s
   <li>(a55776c - BT#8189) Fix for users inscription with approval setting</li>
 </ul>
 <h3>Stylesheets and theming</h3>
-Stylesheets have been considerably changed in version 1.9.8, which might require a little update on your side if you have a custom stylesheet. We're sorry about it, but it was really necessary to improve the adaptability of the interface for mobile devices (which we are sure you will appreciate). If you only changed the logo, we recommend you make a copy of an existing Chamilo style (main/css/chamilo*) again, rename it and simply replace the logo then upload the new style. If you have more complex styles, you might want to ask for the assistance of your web designer at the moment you update Chamilo to this version.
 <ul>
   <li>No major style changes in this version, but a lot of visual improvements</li>
+  <li>The possibility to select a template (from main/template/) through the configuration.php file has been added, although no new template is available yet</li>
+  <li>Old question types icons were replaced by new icons</li>
+  <li>Old session "window" icon was replaced by a new icon</li>
 </ul>
 <h3>Web services</h3>
 <ul>
@@ -276,8 +285,7 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
 <h3>Removals</h3>
 <ul>
-  <li>Old question types icons were replaced by new icons</li>
-  <li>Old session "window" icon was replaced by a new icon</li>
+  <li>No removal worth mentioning in this version</li>
 </ul>
 
 
@@ -2165,9 +2173,8 @@ This version of Chamilo only includes a few minor new features:
   <li>Added support for .docx</li>
   <li>Improve group homepage (#2077)</li>
   <li>Added support for global announcement by URL (#1763)</li>
-</li>
-
 </ul>
+
 <h3>Debugging</h3>
 <ul>
   <li>Fixed tools shortcuts crash bug (#3356)</li>

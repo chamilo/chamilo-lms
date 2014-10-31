@@ -2,6 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SocialWriteNewComment = "Redactar nuevo comentario";
+$SocialWallWhatAreYouThinkingAbout = "En que está pensando en este momento?";
+$SocialMessageDelete = "Eliminar comentario";
+$SocialWall = "Muro";
+$BuyCourses = "Comprar cursos";
+$MySessions = "Mis sesiones";
 $ActivateAudioRecorder = "Activar la grabación de voz";
 $StartSpeaking = "Hable ahora";
 $InverseHyperbolicTangentAtanh = "Tangente hiperbólica inversa:\tatanh(x)";
@@ -1680,8 +1686,4 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
-$FieldTypeMobilePhoneNumber = "Número de móvil"; 
-$CountryDialCode = "Incluya el prefijo de llamada del país";
-$MobilePhoneNumberWrong = "El número de móvil que ha escrito está incompleto o contiene caracteres no válidos.";
-$AreYouSureToDeleteFileX = "¿Está seguro de querer eliminar el archivo %s ?";
 ?>

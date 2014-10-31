@@ -4455,6 +4455,7 @@ class DocumentManager
     public static function generateDefaultCertificate($courseData)
     {
         global $css, $img_dir, $default_course_dir, $js;
+        $codePath = api_get_path(REL_CODE_PATH);
         $dir = '/certificates';
 
         $title = get_lang('DefaultCertificate');
@@ -4467,8 +4468,8 @@ class DocumentManager
         $fileType = 'file';
         $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH) . 'gradebook/certificate_template/template.html');
 
-        $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{WEB_CODE_PATH}');
-        $replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir, api_get_path(WEB_CODE_PATH));
+        $search = array('{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{COURSE_DIR}');
+        $replace = array($css.$js, $img_dir, $codePath, $default_course_dir);
 
         $fileContent = str_replace($search, $replace, $templateContent);
 

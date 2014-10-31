@@ -434,7 +434,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo Display::return_icon('question_category_show.gif', get_lang('QuestionCategory'));
     echo '</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/question_pool.php?'.api_get_cidreq().'">';
-    echo Display::return_icon('database.png', get_lang('QuestionPool'), array('style' => 'width:32px'));
+    echo Display::return_icon('database.png', get_lang('QuestionPool'),'', ICON_SIZE_MEDIUM);
     echo '</a>';
 
     //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());

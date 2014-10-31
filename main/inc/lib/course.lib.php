@@ -7,7 +7,7 @@ require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 /**
  * Class CourseManager
  *
- *  This is the course library for Chamilo.
+ * This is the course library for Chamilo.
  *
  * All main course functions should be placed here.
  *
@@ -24,7 +24,8 @@ require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 class CourseManager
 {
     const MAX_COURSE_LENGTH_CODE = 40;
-    /** This constant is used to show separate user names in the course list (userportal), footer, etc */
+    /** This constant is used to show separate user names in the course
+     * list (userportal), footer, etc */
     const USER_SEPARATOR = ' |';
     const COURSE_FIELD_TYPE_CHECKBOX = 10;
     public $columns = array();
@@ -136,6 +137,7 @@ class CourseManager
      * Returns all the information of a given coursecode
      * @param   int     the course id
      * @return an array with all the fields of the course table
+     * @deprecated use api_get_course_info_by_id()
      * @assert ('') === false
      */
     public static function get_course_information_by_id($course_id)
@@ -271,8 +273,9 @@ class CourseManager
 
     /**
      * Returns the status of a user in a course, which is COURSEMANAGER or STUDENT.
-     * @param   int      User ID
-     * @param   string   Course code
+     * @param   int      $user_id
+     * @param   string   $course_code
+     *
      * @return int the status of the user in that course
      */
     public static function get_user_in_course_status($user_id, $course_code)
@@ -281,6 +284,7 @@ class CourseManager
             "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
             WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".Database::escape_string($user_id))
         );
+
         return $result['status'];
     }
 
@@ -295,6 +299,7 @@ class CourseManager
                 "SELECT tutor_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".Database::escape_string($user_id))
         );
+
         return $result['tutor_id'];
     }
 
@@ -523,7 +528,8 @@ class CourseManager
             }
 
             // check if the user is registered in the session with other course
-            $sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session='".$session_id."' AND id_user='$user_id'";
+            $sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
+                    WHERE id_session='".$session_id."' AND id_user='$user_id'";
             $rs = Database::query($sql);
             if (Database::num_rows($rs) == 0) {
                 // Check whether the user has not already been stored in the session_rel_user table
@@ -588,13 +594,14 @@ class CourseManager
     }
 
     /**
-     * Get the course id based on the original id and field name in the extra fields. Returns 0 if course was not found
-     *
-     * @param string Original course id
-     * @param string Original field name
-     * @return int Course id
-     * @assert ('', '') === false
-     */
+    * Get the course id based on the original id and field name in the
+    * extra fields. Returns 0 if course was not found
+    *
+    * @param string Original course id
+    * @param string Original field name
+    * @return int Course id
+    * @assert ('', '') === false
+    */
     public static function get_course_code_from_original_id($original_course_id_value, $original_course_id_name)
     {
         $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -719,8 +726,8 @@ class CourseManager
     }
 
     /**
-     *    @return true if there already are one or more courses
-     *    with the same code OR visual_code (visualcode), false otherwise
+     *  @return true if there already are one or more courses
+     *  with the same code OR visual_code (visualcode), false otherwise
      */
     public static function course_code_exists($wanted_course_code)
     {
@@ -732,7 +739,7 @@ class CourseManager
     }
 
     /**
-     *    @return an array with the course info of all real courses on the platform
+     * @return an array with the course info of all real courses on the platform
      */
     public static function get_real_course_list() {
         $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
@@ -776,10 +783,13 @@ class CourseManager
                 WHERE course.target_course_code IS NULL
                     AND course_user.user_id = '$user_id'
                     AND course_user.status = '1'");
-        if ($sql_result === false) { return $result_array; }
+        if ($sql_result === false) {
+            return $result_array;
+        }
         while ($result = Database::fetch_array($sql_result)) {
             $result_array[] = $result;
         }
+
         return $result_array;
     }
 
@@ -818,6 +828,7 @@ class CourseManager
                 }
             }
         }
+
         return $courseList;
     }
 
@@ -1635,17 +1646,18 @@ class CourseManager
      */
     public static function get_coach_list_from_course_code($course_code, $session_id)
     {
-        if ($session_id != strval(intval($session_id))) {
+        if (empty($course_code) OR empty($session_id)) {
             return array();
         }
 
         $course_code = Database::escape_string($course_code);
-
+        $session_id = intval($session_id);
         $users = array();
 
         // We get the coach for the given course in a given session.
-        $rs = Database::query('SELECT id_user FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-                ' WHERE id_session="'.$session_id.'" AND course_code="'.$course_code.'" AND status = 2');
+        $sql = 'SELECT id_user FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+               ' WHERE id_session="'.$session_id.'" AND course_code="'.$course_code.'" AND status = 2';
+        $rs = Database::query($sql);
         while ($user = Database::fetch_array($rs)) {
             $user_info = api_get_user_info($user['id_user']);
             $user_info['status'] = $user['status'];
@@ -1655,8 +1667,10 @@ class CourseManager
             $users[$user['id_user']] = $user_info;
         }
 
+        $table = Database::get_main_table(TABLE_MAIN_SESSION);
         // We get the session coach.
-        $rs = Database::query('SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id="'.$session_id.'"');
+        $sql = 'SELECT id_coach FROM '.$table.' WHERE id='.$session_id;
+        $rs = Database::query($sql);
         $session_id_coach = Database::result($rs, 0, 'id_coach');
         $user_info = api_get_user_info($session_id_coach);
         $user_info['status'] = $user['status'];
@@ -1669,15 +1683,15 @@ class CourseManager
     }
 
     /**
-     *    Return user info array of all users registered in the specified real or virtual course
-     *    This only returns the users that are registered in this actual course, not linked courses.
+     *  Return user info array of all users registered in the specified real or virtual course
+     *  This only returns the users that are registered in this actual course, not linked courses.
      *
-     *    @param string $course_code
-     *    @param boolean $with_session
-     *    @param integer $session_id
-     *    @param date $date_from
-     *    @param date $date_to
-     *    @return array with user id
+     *  @param string $course_code
+     *  @param boolean $with_session
+     *  @param integer $session_id
+     *  @param date $date_from
+     *  @param date $date_to
+     *  @return array with user id
      */
     public static function get_student_list_from_course_code(
         $course_code,
@@ -1730,6 +1744,7 @@ class CourseManager
                 $students[$student['id_user']] = $student;
             }
         }
+
         return $students;
     }
 

@@ -8,7 +8,7 @@
  * @package chamilo.library
  */
 
-define ('EXERCISE_NUMBER_OF_DECIMALS', 2);
+define('EXERCISE_NUMBER_OF_DECIMALS', 2);
 
 /**
  * This function strips all html-tags found in the input string and outputs a pure text.
@@ -16,7 +16,8 @@ define ('EXERCISE_NUMBER_OF_DECIMALS', 2);
  * @param  string $string    The input string with html-tags to be converted to plain text.
  * @return string            The returned plain text as a result.
  */
-function api_html_to_text($string) {
+function api_html_to_text($string)
+{
     // These purifications have been found experimentally, for nice looking output.
     $string = preg_replace('/<br[^>]*>/i', "\n", $string);
     $string = preg_replace('/<\/?(div|p|h[1-6]|table|ol|ul|blockquote)[^>]*>/i', "\n", $string);
@@ -729,12 +730,13 @@ function implode_with_key($glue, $array) {
 /**
  * Transform the file size in a human readable format.
  *
- * @param  int      Size of the file in bytes
+ * @param  int  $file_size    Size of the file in bytes
  * @return string A human readable representation of the file size
  */
-function format_file_size($file_size) {
+function format_file_size($file_size)
+{
     $file_size = intval($file_size);
-    if($file_size >= 1073741824) {
+    if ($file_size >= 1073741824) {
         $file_size = round($file_size / 1073741824 * 100) / 100 . 'G';
     } elseif($file_size >= 1048576) {
         $file_size = round($file_size / 1048576 * 100) / 100 . 'M';
@@ -746,7 +748,8 @@ function format_file_size($file_size) {
     return $file_size;
 }
 
-function return_datetime_from_array($array) {
+function return_datetime_from_array($array)
+{
     $year	 = '0000';
     $month = $day = $hours = $minutes = $seconds = '00';
     if (isset($array['Y']) && (isset($array['F']) || isset($array['M']))  && isset($array['d']) && isset($array['H']) && isset($array['i'])) {

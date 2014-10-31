@@ -7553,10 +7553,10 @@ function api_get_configuration_value($variable)
 }
 
 /**
- * Returns supported image extensions
- * @return  array   Supported image extensions
+ * Returns supported image extensions in the portal
+ * @return  array   Supported image extensions in the portal
  */
-function getSupportedImageExtensions()
+function api_get_supported_image_extensions()
 {
     $supportedImageExtensions = array('jpg', 'jpeg', 'png', 'gif', 'svg');
     if (version_compare(PHP_VERSION, '5.5.0', '>=')) {

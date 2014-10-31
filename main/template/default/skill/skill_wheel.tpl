@@ -496,14 +496,14 @@ $(document).ready(function() {
             <div class="accordion-group">
                 <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                        <h4 class="title-skill">Busqueda de {{ 'Skills'|get_lang }}</h4>
+                        <h4 class="title-skill">{{ 'SkillsSearch' | get_lang }}</h4>
                     </a>
                 </div>
                 <div id="collapseOne" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <!-- SEARCH -->
                         <div class="search-skill">
-                            <p>Escriba la competencia a buscar</p>
+                            <p>{{ 'EnterTheSkillNameToSearch' | get_lang }}</p>
                             <form id="skill_search" class="form-search">
                                 <select id="skill_id" name="skill_id" /></select>
                                 <div class="button-skill">
@@ -546,18 +546,18 @@ $(document).ready(function() {
                 <div class="accordion-group">
                     <div class="accordion-heading">
                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                            <h4 class="title-skill">Opciones de presentación</h4>
+                            <h4 class="title-skill">{{ 'DisplayOptions' | get_lang }}</h4>
                         </a>
                     </div>
                     <div id="collapseThree" class="accordion-body collapse">
                         <div class="accordion-inner">
-                            <p>Escoge un color de fondo:</p>
+                            <p>{{ 'ChooseABackgroundColor' | get_lang }}</p>
                             <ul>
-                                <li><a href="#" id="white">Blanco</a></li>
-                                <li><a href="#" id="black">Negro</a></li>
-                                <li><a href="#" id="celestial">Celeste</a></li>
-                                <li><a href="#" id="lead">Plomo</a></li>
-                                <li><a href="#" id="light-yellow">Amarillo</a></li>
+                                <li><a href="#" id="white">{{ 'White' | get_lang }}</a></li>
+                                <li><a href="#" id="black">{{ 'Black' | get_lang }}</a></li>
+                                <li><a href="#" id="celestial">{{ 'LightBlue' }}</a></li>
+                                <li><a href="#" id="lead">{{ 'Gray' | get_lang }}</a></li>
+                                <li><a href="#" id="light-yellow">{{ 'Corn' | get_lang }}</a></li>
                             </ul>
                         </div>
                     </div>

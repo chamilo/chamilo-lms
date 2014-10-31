@@ -1,4 +1,4 @@
-{% if skills is not null %}
+{% if skills is not empty %}
 <ul class="skill-winner">
     {%for skill in skills %}        
         <li>
@@ -6,4 +6,6 @@
         </li>        
     {% endfor %}
 </ul>    
+{% else %}
+    {{ 'YouHaveNotYetAchievedSkills' | get_lang }}
 {% endif %}

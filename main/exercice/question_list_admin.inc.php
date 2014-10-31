@@ -191,7 +191,7 @@ if (!$inATest) {
                     array(),
                     ICON_SIZE_SMALL
                 ).'</a>';
-
+                $delete_link = null;
 				if ($objExercise->edit_exercise_in_lp == true) {
 				     $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
 				}

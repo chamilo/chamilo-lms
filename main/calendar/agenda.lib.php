@@ -2318,6 +2318,9 @@ class Agenda
 
         if (!empty($messages)) {
             $messages = implode('<br /> ', $messages);
+        } else {
+            $messages = get_lang('NoAgendaItems');
+                    
         }
 
         return $messages;

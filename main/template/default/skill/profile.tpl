@@ -55,7 +55,7 @@
                 </div>
                 <div class="info-profile">
                     <h4><a href="{{ _p.web_main }}social/profile.php?u={{ user['user'].user_id }}">{{ user['user'].complete_name }} </a></h4>
-                    <p>Usuario:{{user['user'].username}} </p>
+                    <p>{{ 'User' | get_lang }}: {{user['user'].username}} </p>
                 </div>
                 <div class="number-skill">{{ "Skills"|get_lang }} {{ user.total_found_skills }} / {{ total_search_skills }}</div>
                 <div class="skill-user-items">

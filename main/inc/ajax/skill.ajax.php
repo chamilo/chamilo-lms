@@ -263,7 +263,7 @@ switch ($action) {
             }
 
             if (!empty($ordered_user_list)) {
-                arsort($ordered_user_list);
+                krsort($ordered_user_list);
             }
         }
         

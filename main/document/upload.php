@@ -303,14 +303,16 @@ $simple_form = $form->return_form();
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
 $multiple_form .=  '
-    <center>
+    <div class="form-ajax">
     <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="curdirpath" value="'.$path.'" />
         <input type="file" name="file" multiple>
         <button type="submit">Upload</button>
+        <div class="button-load">
         '.get_lang('UploadFiles').'
+        </div>
     </form>
-    </center>
+    </div>
     <table style="display:none; width:50%" class="files data_table">
         <tr>
             <th>'.get_lang('FileName').'</th>

@@ -27,12 +27,10 @@
   border-radius: 10px;
 }
 .file_upload_small {
-    width: 500px;
-    height: 50px;
     line-height: 50px;
     font-size: auto;
-    background: palegreen;
-    border: 1px solid limegreen;
+    background: #aed1e5;
+    border: 2px dashed #bbbbbb;
 }
 
 .file_upload_large {
@@ -44,7 +42,8 @@
 }
 
 .file_upload_highlight {
-    background: lawngreen;
+    background: #9acce9;
+    border: 2px dashed #88bbd8;
 }
 
 .file_upload input {

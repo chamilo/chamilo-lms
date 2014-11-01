@@ -263,7 +263,7 @@ switch ($action) {
             }
 
             if (!empty($ordered_user_list)) {
-                arsort($ordered_user_list);
+                krsort($ordered_user_list);
             }
         }
         
@@ -330,6 +330,18 @@ switch ($action) {
             } else {
                 echo 0;
             }
+        }
+        break;
+    case 'delete_profile':
+        if (api_is_platform_admin() || api_is_drh()) {
+            $profileId = $_REQUEST['profile'];
+
+            $skillProfile = new SkillProfile();
+            $isDeleted = $skillProfile->delete($profileId);
+
+            echo json_encode(array(
+                'status' => $isDeleted
+            ));
         }
         break;
     case 'skill_exists':

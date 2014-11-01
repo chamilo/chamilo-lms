@@ -1,13 +1,11 @@
-{% if skills is not null %}
-<ul class="nav nav-list">
+{% if skills is not empty %}
+<ul class="skill-winner">
     {%for skill in skills %}        
         <li>
-            <a rel="{{ skill.id}}" href="#">
-                <span class="label label-info">
-            {{ skill.name }}
-                </span>
-                </a>
+            <a class="" rel="{{ skill.id}}" href="#">{{ skill.name }}</a>
         </li>        
     {% endfor %}
 </ul>    
+{% else %}
+    {{ 'YouHaveNotYetAchievedSkills' | get_lang }}
 {% endif %}

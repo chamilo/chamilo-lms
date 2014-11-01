@@ -2,6 +2,16 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$YouHaveNotYetAchievedSkills = "You have not yet achieved skills";
+$Corn = "Corn";
+$Gray = "Gray";
+$LightBlue = "Light blue";
+$Black = "Black";
+$White = "White";
+$DisplayOptions = "Display options";
+$EnterTheSkillNameToSearch = "Enter the skill name to search";
+$SkillsSearch = "Skills search";
+$ChooseABackgroundColor = "Choose a background color";
 $SocialWriteNewComment = "Write new comment";
 $SocialWallWhatAreYouThinkingAbout = "What are you thinking about?";
 $SocialMessageDelete = "Delete comment";

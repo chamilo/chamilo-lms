@@ -50,11 +50,6 @@ if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
 
 $_course = api_get_course_info();
 
-// document path
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-// picture path
-$picturePath = $documentPath.'/images';
-
 if (empty($objExercise) && !empty($fromExercise)) {
     $objExercise = new Exercise();
     $objExercise->read($fromExercise);
@@ -136,7 +131,7 @@ if ($is_allowedToEdit) {
         // Adds the question ID represented by $recup into the list of questions for the current exercise
         $objExercise->addToList($recup);
         Session::write('objExercise', $objExercise);
-    } else if( isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
+    } else if (isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
         $list_recup = $_POST['recup'];
 
         foreach ($list_recup as $course_id => $question_data) {
@@ -403,22 +398,23 @@ $question_list = Question::get_question_type_list();
 
 $new_question_list = array();
 $new_question_list['-1']  = get_lang('All');
-$objExercise = new Exercise();
-$objExercise->read($fromExercise);
-foreach ($question_list as $key=>$item) {
-    if ($objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-        if (!in_array($key, array(HOT_SPOT_DELINEATION, UNIQUE_ANSWER))) {
-            continue;
+if (!empty($_course)) {
+    $objExercise = new Exercise();
+    $objExercise->read($fromExercise);
+    foreach ($question_list as $key => $item) {
+        if ($objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            if (!in_array($key, array(HOT_SPOT_DELINEATION, UNIQUE_ANSWER))) {
+                continue;
+            }
+            $new_question_list[$key] = get_lang($item[1]);
+        } else {
+            if ($key == HOT_SPOT_DELINEATION) {
+                continue;
+            }
+            $new_question_list[$key] = get_lang($item[1]);
         }
-        $new_question_list[$key] = get_lang($item[1]);
-    } else {
-        if ($key == HOT_SPOT_DELINEATION) {
-            continue;
-        }
-        $new_question_list[$key] = get_lang($item[1]);
     }
 }
-
 // Answer type list
 $select_answer_html = Display::select(
     'answerType',
@@ -439,7 +435,7 @@ echo "<input type='hidden' id='exercice_id_changed' name='exercice_id_changed' v
 <form method="post" action="<?php echo $url.'?'.api_get_cidreq().'&fromExercise='.$fromExercise; ?>" >
 <?php
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
-$main_question_list = array();
+$mainQuestionList = array();
 
 // if we have selected an exercise in the list-box 'Filter'
 
@@ -475,7 +471,7 @@ if ($exerciseId > 0) {
 
     $result = Database::query($sql);
     while($row = Database::fetch_array($result, 'ASSOC')) {
-        $main_question_list[] = $row;
+        $mainQuestionList[] = $row;
     }
 } elseif ($exerciseId == -1) {
 	// If we have selected the option 'Orphan questions' in the list-box 'Filter'
@@ -532,7 +528,7 @@ if ($exerciseId > 0) {
              )";
     $result = Database::query($sql);
     while($row = Database::fetch_array($result, 'ASSOC')) {
-        $main_question_list[] = $row;
+        $mainQuestionList[] = $row;
     }
 } else {
 	// All tests for selected course
@@ -555,7 +551,7 @@ if ($exerciseId > 0) {
 	}
 
     if (!empty($session_id) && $session_id != '-1') {
-        $main_question_list = array();
+        $mainQuestionList = array();
         if (!empty($course_list)) {
             foreach ($course_list as $course_item) {
                 $courseItemId = $course_item['real_id'];
@@ -565,6 +561,7 @@ if ($exerciseId > 0) {
                         continue;
                     }
                 }
+
                 $exerciseList = get_all_exercises($course_item, $session_id);
 
                 if (!empty($exerciseList)) {
@@ -603,7 +600,9 @@ if ($exerciseId > 0) {
                                         continue;
                                     }
 
-                                    if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                                    if (!empty($objExercise) &&
+                                        $objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT
+                                    ) {
                                         if ($question_obj->type == HOT_SPOT_DELINEATION) {
                                             continue;
                                         }
@@ -615,9 +614,10 @@ if ($exerciseId > 0) {
                                         'type' => $question_obj->type,
                                         'level' => $question_obj->level,
                                         'exercise_id' => $exercise['id'],
+                                        'exercise_name' => $exercise['title'],
                                         'course_id' => $courseItemId,
                                     );
-                                    $main_question_list[] = $question_row;
+                                    $mainQuestionList[] = $question_row;
                                 }
                             }
                         }
@@ -626,7 +626,6 @@ if ($exerciseId > 0) {
             }
         }
     } else {
-
         if ($session_id == -1 or empty($session_id)) {
             $session_id = 0;
         }
@@ -648,14 +647,14 @@ if ($exerciseId > 0) {
                 ORDER BY session_id ASC";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $main_question_list[] = $row;
+            $mainQuestionList[] = $row;
         }
     }
 	// forces the value to 0
-	$exerciseId=0;
+    $exerciseId = 0;
 }
 
-$nbrQuestions = count($main_question_list);
+$nbrQuestions = count($mainQuestionList);
 
 // build the line of the array to display questions
 // Actions are different if you launch the question_pool page
@@ -715,38 +714,41 @@ $header = array(
 );
 
 $data = array();
-if (is_array($main_question_list)) {
-    foreach ($main_question_list as $tabQuestion) {
+
+if (is_array($mainQuestionList)) {
+    foreach ($mainQuestionList as $question) {
+
         $row = array();
 
         // This function checks if the question can be read
         $question_type = get_question_type_for_question(
             $selected_course,
-            $tabQuestion['id']
+            $question['id']
         );
 
         if (empty($question_type)) {
             continue;
         }
 
-        $sessionId = isset($tabQuestion['session_id']) ? $tabQuestion['session_id'] : null;
+        $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
+        //$exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
         $row[] = get_a_tag_for_question(
             $questionTagA,
             $fromExercise,
-            $tabQuestion['id'],
-            $tabQuestion['type'],
-            $tabQuestion['question'],
+            $question['id'],
+            $question['type'],
+            $question['question'],
             $sessionId
         );
         $row[] = $question_type;
-        $row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
-        $row[] = $tabQuestion['level'];
+        $row[] = get_question_categorie_for_question($selected_course, $question['id']);
+        $row[] = $question['level'];
         $row[] = get_action_icon_for_question(
                     $actionIcon1,
                     $fromExercise,
-                    $tabQuestion['id'],
-                    $tabQuestion['type'],
-                    $tabQuestion['question'],
+                    $question['id'],
+                    $question['type'],
+                    $question['question'],
                     $selected_course,
                     $courseCategoryId,
                     $exerciseLevel,
@@ -754,13 +756,13 @@ if (is_array($main_question_list)) {
                     $session_id,
                     $exerciseId
                 ).
-                    "&nbsp;".
+                "&nbsp;".
                 get_action_icon_for_question(
                     $actionIcon2,
                     $fromExercise,
-                    $tabQuestion['id'],
-                    $tabQuestion['type'],
-                    $tabQuestion['question'],
+                    $question['id'],
+                    $question['type'],
+                    $question['question'],
                     $selected_course,
                     $courseCategoryId,
                     $exerciseLevel,

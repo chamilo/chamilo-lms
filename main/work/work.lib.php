@@ -1191,8 +1191,8 @@ function updateWorkUrl($id, $new_path, $parent_id)
 
 /**
  * Update the url of a dir in the student_publication table
- * @param   array work original data
- * @param   string new path
+ * @param   array $work_data work original data
+ * @param   string $newPath
  * @return bool
  */
 function updateDirName($work_data, $newPath)
@@ -1203,7 +1203,7 @@ function updateDirName($work_data, $newPath)
 
     $work_id = intval($work_data['id']);
     $oldPath = $work_data['url'];
-    $path  = $work_data['url'];
+    $path = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
     $newPath = Database::escape_string($newPath);
     $newPath = replace_dangerous_char($newPath);
@@ -1214,6 +1214,7 @@ function updateDirName($work_data, $newPath)
     }
 
     if (!empty($newPath)) {
+        //$coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
         $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
         my_rename($base_work_dir.$oldPath, $newPath);
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -1223,20 +1224,21 @@ function updateDirName($work_data, $newPath)
                 WHERE
                     c_id = $course_id AND
                     parent_id = $work_id AND
-                    session_id = $sessionId";
+                    session_id = $sessionId AND
+                    url <> ''
+                ";
         $result = Database::query($sql);
-        $work_len = strlen('work/'.$path);
+        $oldPathWithWork = 'work'.$path;
 
         while ($work = Database :: fetch_array($result)) {
-            $new_dir = $work['url'];
-            $name_with_directory = substr($new_dir, $work_len, strlen($new_dir));
-            $name = Database::escape_string('work/'.$newPath.'/'.$name_with_directory);
-            $sql = 'UPDATE '.$table.'
-                    SET url= "'.$name.'"
+            $url = str_replace($oldPathWithWork, 'work/'.$newPath, $work['url']);
+            $sql = 'UPDATE ' . $table . '
+                    SET url = "' . $url . '"
                     WHERE
-                        c_id = '.$course_id.' AND
-                        id = '.$work['id'].' AND
-                        session_id = '.$sessionId;
+                        c_id = ' . $course_id . ' AND
+                        id = ' . $work['id'] . ' AND
+                        session_id = ' . $sessionId . '
+                    ';
             Database::query($sql);
         }
 
@@ -1246,7 +1248,8 @@ function updateDirName($work_data, $newPath)
                 WHERE
                     c_id = $course_id AND
                     id = $work_id AND
-                    session_id = $sessionId";
+                    session_id = $sessionId
+                ";
         Database::query($sql);
     }
 }
@@ -3477,6 +3480,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
     $saveWork = true;
     $message = null;
     $filename = null;
+    $url = null;
 
     if ($values['contains_file']) {
         $result = uploadWork($workInfo, $courseInfo);
@@ -3517,14 +3521,16 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         if ($workId) {
             if (array_key_exists('filename', $workInfo) && !empty($filename)) {
                 $filename = Database::escape_string($filename);
-                $sql = "UPDATE $work_table SET filename = '$filename'
+                $sql = "UPDATE $work_table SET
+                            filename = '$filename'
                         WHERE c_id = $courseId AND id = $workId";
                 Database::query($sql);
             }
 
             if (array_key_exists('document_id', $workInfo)) {
                 $documentId = isset($values['document_id']) ? intval($values['document_id']) : 0;
-                $sql = "UPDATE $work_table SET document_id = '$documentId'
+                $sql = "UPDATE $work_table SET
+                            document_id = '$documentId'
                         WHERE c_id = $courseId AND id = $workId";
                 Database::query($sql);
             }
@@ -3538,6 +3544,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             $message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
         }
     }
+
     return $message;
 }
 

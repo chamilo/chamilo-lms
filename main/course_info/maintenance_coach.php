@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Mauintenance for session coach
+ * Maintenance for session coach
  * @author Julio Montoya <julio.montoya@beeznest.com>
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.course_info
@@ -21,6 +21,11 @@ $nameTools = get_lang('Maintenance');
 
 api_protect_course_script(true);
 api_block_anonymous_users();
+
+if (!isset($_configuration['allow_session_course_copy_for_teachers'])
+     || !$_configuration['allow_session_course_copy_for_teachers']){
+    api_not_allowed(true);
+}
 
 Display :: display_header($nameTools);
 

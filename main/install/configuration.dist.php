@@ -249,3 +249,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['default_template'] = 'default'; // (main/template/default)
 // Show reduce LP report
 //$_configuration['lp_show_reduced_report'] = false;
+//Allow session-to-session copy
+//$_configuration['allow_session_course_copy_for_teachers'] = true;

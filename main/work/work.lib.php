@@ -806,8 +806,8 @@ function showStudentWorkGrid()
     $courseInfo = api_get_course_info();
     $columnModel = array(
         array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'left', 'sortable' => 'false'),
-        array('name'=>'title', 'index'=>'title', 'width'=>'80',   'align'=>'left'),
-        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'500',  'align'=>'left', 'sortable'=>'false')
+        array('name'=>'title', 'index'=>'title', 'width'=>'250',   'align'=>'left'),
+        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'250',  'align'=>'left', 'sortable'=>'false')
     );
 
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_student&'.api_get_cidreq();
@@ -1610,15 +1610,22 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
  * @param bool $getCount
  * @return array
  */
-function getWorkListStudent($start, $limit, $column, $direction, $where_condition, $getCount = false)
-{
+function getWorkListStudent(
+    $start,
+    $limit,
+    $column,
+    $direction,
+    $where_condition,
+    $getCount = false
+) {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-
-    $course_id          = api_get_course_int_id();
-    $session_id         = api_get_session_id();
-    $condition_session  = api_get_session_condition($session_id);
-    $group_id           = api_get_group_id();
+    $courseInfo = api_get_course_info();
+    $course_id = api_get_course_int_id();
+    $session_id = api_get_session_id();
+    $condition_session = api_get_session_condition($session_id);
+    $group_id = api_get_group_id();
+    $userId = api_get_user_id();
 
     if (!in_array($direction, array('asc','desc'))) {
         $direction = 'desc';
@@ -1673,7 +1680,7 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
     $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq();
     $urlOthers = api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id=';
     while ($work = Database::fetch_array($result, 'ASSOC')) {
-        $isSubscribed = userIsSubscribedToWork(api_get_user_id(), $work['id'], $course_id);
+        $isSubscribed = userIsSubscribedToWork($userId, $work['id'], $course_id);
         if ($isSubscribed == false) {
             continue;
         }
@@ -1682,6 +1689,31 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
         if (empty($work['title'])) {
             $work['title'] = basename($work['url']);
         }
+
+        $whereCondition = " AND u.user_id = ".intval($userId);
+
+        $workList = get_work_user_list(
+            0,
+            1000,
+            null,
+            null,
+            $work['id'],
+            $whereCondition
+        );
+
+        $count = getTotalWorkComment($workList, $courseInfo);
+
+        if (!is_null($count) && !empty($count)) {
+            $work['title'] .= ' '.Display::label($count.' '.get_lang('Feedback'), 'info');
+        }
+
+        $score = getTotalWorkScore($workList);
+
+        if (!is_null($score) && !empty($score)) {
+            $work['title'] .= ' '.Display::return_icon('rate_work.png', get_lang('Score'));
+        }
+
+
         $work['title'] = Display::url($work['title'], $url.'&id='.$work['id']);
         $work['others'] = Display::url(Display::return_icon('group.png', get_lang('Others')), $urlOthers.$work['id']);
         $works[] = $work;
@@ -2192,6 +2224,7 @@ function get_work_user_list(
                     );
                 }
             }
+            $work['qualification_score'] = $work['qualification'];
 
             $add_string = '';
             $time_expires = api_strtotime($work_assignment['expires_on'], 'UTC');
@@ -2237,7 +2270,7 @@ function get_work_user_list(
 
                 // Date.
                 $work_date = api_convert_and_format_date($work['sent_date']);
-                $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])).' '.$add_string.'<br />'.$work_date;
+                $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . '<br />' . $work_date;
 
                 // Actions.
 
@@ -2284,6 +2317,13 @@ function get_work_user_list(
                         $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
                             Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     }
+
+                    $count = getWorkCommentCount($item_id, $course_info);
+
+                    if (!is_null($count)) {
+                        $action .= ' <br /><a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                            Display::label($count.' '.get_lang('Feedback'), 'info').'</a> ';
+                    }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
@@ -2298,9 +2338,23 @@ function get_work_user_list(
                     } else {
                         $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                     }
+
+                    $count = getWorkCommentCount($item_id, $course_info);
+
+                    if (!is_null($count)) {
+                        $action .= ' <a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                            Display::label($count.' '.get_lang('Feedback'), 'info').'</a> ';
+                    }
+
                 } else {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
                     $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
+
+                    $count = getWorkCommentCount($item_id, $course_info);
+                    if (!is_null($count)) {
+                        $action .= ' <a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                            Display::label($count.' '.get_lang('Feedback'), 'info').'</a> ';
+                    }
                 }
 
                 // Status.
@@ -3064,6 +3118,77 @@ function getWorkComments($work)
     return $comments;
 }
 
+/**
+ * Get total score from a work list
+ * @param $workList
+ * @return int|null
+ */
+function getTotalWorkScore($workList)
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return null;
+    }
+
+    $count = 0;
+    foreach ($workList as $data) {
+        $count += $data['qualification_score'];
+    }
+    return $count;
+}
+
+
+/**
+ * Get comment count from a work list
+ * @param array $workList
+ * @param array $courseInfo
+ * @return int|null
+ */
+function getTotalWorkComment($workList, $courseInfo = array())
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return null;
+    }
+
+    if (empty($courseInfo)) {
+        $courseInfo = api_get_course_info();
+    }
+
+    $count = 0;
+    foreach ($workList as $data) {
+        $count += getWorkCommentCount($data['id'], $courseInfo);
+    }
+    return $count;
+}
+
+/**
+ * @param int $id
+ * @param array $courseInfo
+ * @return int
+ */
+function getWorkCommentCount($id, $courseInfo = array())
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return null;
+    }
+
+    if (empty($courseInfo)) {
+        $courseInfo = api_get_course_info();
+    }
+
+    $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
+    $id = intval($id);
+
+    $sql = "SELECT count(*) as count FROM $commentTable
+            WHERE work_id = $id AND c_id = ".$courseInfo['real_id'];
+
+    $result = Database::query($sql);
+    if (Database::num_rows($result)) {
+        $comment = Database::fetch_array($result);
+        return $comment['count'];
+    }
+
+    return 0;
+}
 
 /**
  * @param int $id comment id

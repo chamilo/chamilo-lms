@@ -4973,4 +4973,43 @@ class SessionManager
         }
     }
 
+    /**
+     * Get the session coached by a user
+     * @param int $coachId The coach id
+     * @param boolean $checkSessionRelUserVisibility Optional. Check the session visibility 
+     * @return array The session list
+     */
+    public static function getSessionsCoachedByUser($coachId, $checkSessionRelUserVisibility = false)
+    {
+        $sessions = self::get_sessions_by_general_coach($coachId);
+        $sessionsByCoach = self::get_sessions_by_coach($coachId);
+
+        if (!empty($sessionsByCoach)) {
+            $sessions = array_merge($sessions, $sessionsByCoach);
+        }
+        //Remove  repeated sessions
+        if (!empty($sessions)) {
+            $cleanSessions = array();
+            foreach ($sessions as $session) {
+                $cleanSessions[$session['id']] = $session;
+            }
+            $sessions = $cleanSessions;
+        }
+
+        if ($checkSessionRelUserVisibility) {
+            if (!empty($sessions)) {
+                $newSessions = array();
+                foreach ($sessions as $session) {
+                    $visibility = api_get_session_visibility($session['id']);
+                    if ($visibility == SESSION_INVISIBLE) {
+                        continue;
+                    }
+                    $newSessions[] = $session;
+                }
+                $sessions = $newSessions;
+            }
+        }
+        return $sessions;
+    }
+
 }

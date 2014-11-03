@@ -114,7 +114,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             }
         }
 
-		if (!$exists) {
+        $courseInfo = api_get_course_info($enreg_course);
+        $courseId = $courseInfo['real_id'];
+
+        if (!$exists) {
 			$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code) VALUES('$id_session','$enreg_course')";
 			Database::query($sql_insert_rel_course);
 

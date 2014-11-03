@@ -106,7 +106,10 @@ if (!empty($documentData)) {
     $newMp3DocumentId = DocumentManager::addAndConvertWavToMp3(
         $documentData,
         $courseInfo,
-        api_get_user_id()
+        api_get_session_id(),
+        api_get_user_id(),
+        'overwrite',
+        true
     );
 
     if ($newMp3DocumentId) {

@@ -195,17 +195,22 @@ function handle_uploaded_document(
     $what_if_file_exists = '',
     $output = true,
     $onlyUploadFile = false,
-    $comment = null
+    $comment = null,
+    $sessionId = null
 ) {
 	if (!$user_id) {
         return false;
     }
 
-	// Strip slashes
 	$uploaded_file['name'] = stripslashes($uploaded_file['name']);
 	// Add extension to files without one (if possible)
 	$uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']);
-	$current_session_id = api_get_session_id();
+
+    if (empty($sessionId)) {
+        $current_session_id = api_get_session_id();
+    } else {
+        $current_session_id = intval($sessionId);
+    }
 
     // Just in case process_uploaded_file is not called
     $max_filled_space = DocumentManager::get_course_quota();

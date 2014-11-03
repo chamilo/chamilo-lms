@@ -1241,7 +1241,6 @@ class DocumentManager
                 }
             }
         }
-
         // Checking inconsistency
         //error_log('Doc status: (1 del db :'.($file_deleted_from_db?'yes':'no').') - (2 del disk: '.($file_deleted_from_disk?'yes':'no').') - (3 ren disk: '.($file_renamed_from_disk?'yes':'no').')');
         if ($file_deleted_from_db && $file_deleted_from_disk ||
@@ -1363,6 +1362,7 @@ class DocumentManager
         $id = intval($id);
         $sql = "SELECT * FROM $TABLE_DOCUMENT
                 WHERE c_id = $course_id AND session_id = $session_id AND id = $id";
+
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -4203,11 +4203,12 @@ class DocumentManager
     /**
      * @param string $filePath
      * @param string $path
-     * @param $courseInfo
+     * @param array $courseInfo
+     * @param int $sessionId
      * @param string $whatIfFileExists overwrite|rename
-     * @param null $userId
-     * @param null $groupId
-     * @param null $toUserId
+     * @param int $userId
+     * @param int $groupId
+     * @param int $toUserId
      * @param string $comment
      * @return bool|path
      */
@@ -4215,6 +4216,7 @@ class DocumentManager
         $filePath,
         $path,
         $courseInfo,
+        $sessionId,
         $userId,
         $whatIfFileExists = 'overwrite',
         $groupId = null,
@@ -4249,11 +4251,16 @@ class DocumentManager
             $whatIfFileExists,
             false,
             false,
-            $comment
+            $comment,
+            $sessionId
         );
 
         if ($filePath) {
-            return DocumentManager::get_document_id($courseInfo, $filePath);
+            return DocumentManager::get_document_id(
+                $courseInfo,
+                $filePath,
+                $sessionId
+            );
         }
         return false;
     }
@@ -4292,16 +4299,21 @@ class DocumentManager
     }
 
     /**
-     * @param string $documentData
+     * @param string $documentData wav document information
      * @param array $courseInfo
+     * @param int $sessionId
+     * @param int $userId user that adds the document
      * @param string $whatIfFileExists
+     * @param bool $deleteWavFile
      * @return bool|path
      */
     public static function addAndConvertWavToMp3(
         $documentData,
         $courseInfo,
+        $sessionId,
         $userId,
-        $whatIfFileExists = 'overwrite'
+        $whatIfFileExists = 'overwrite',
+        $deleteWavFile = false
     ) {
         if (empty($documentData)) {
             return false;
@@ -4311,12 +4323,14 @@ class DocumentManager
             file_exists($documentData['absolute_path'])
         ) {
             $mp3FilePath = self::convertWavToMp3($documentData['absolute_path']);
-            if (!empty($mp3FilePath)) {
+
+            if (!empty($mp3FilePath) && file_exists($mp3FilePath)) {
 
                 $documentId = self::addFileToDocumentTool(
                     $mp3FilePath,
                     dirname($documentData['path']),
                     $courseInfo,
+                    $sessionId,
                     $userId,
                     $whatIfFileExists,
                     null,
@@ -4325,6 +4339,19 @@ class DocumentManager
                 );
 
                 if (!empty($documentId)) {
+
+                    if ($deleteWavFile) {
+                        $coursePath = $courseInfo['directory'].'/document';
+                        $documentPath = api_get_path(SYS_COURSE_PATH).$coursePath;
+                        self::delete_document(
+                            $courseInfo,
+                            null,
+                            $documentPath,
+                            $sessionId,
+                            $documentData['id']
+                        );
+                    }
+
                     return $documentId;
                 }
             }

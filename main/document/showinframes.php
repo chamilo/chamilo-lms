@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *	This file will show documents in a separate frame.
  *	We don't like frames, but it was the best of two bad things.
@@ -21,9 +22,7 @@
  *	@author Roan Embrechts (roan.embrechts@vub.ac.be)
  *	@package chamilo.document
  */
-/**
- * INITIALIZATION
- */
+
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
 

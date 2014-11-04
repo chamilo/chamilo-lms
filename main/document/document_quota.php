@@ -4,9 +4,6 @@
  * Document quota management script
  * @package chamilo.document
  */
-/**
- * Init
- */
 
 $language_file = array('document');
 
@@ -60,7 +57,10 @@ if (!empty($session_list)) {
             $session_data['name'] = $session_data['name'] . ' * ';
         }
         $used_quota_bytes += $quota_bytes;
-        $session[] = array(addslashes(get_lang('Session').': '.$session_data['name']).' ('.format_file_size($quota_bytes).')', $quota_percentage);
+        $session[] = array(
+            addslashes(get_lang('Session').': '.$session_data['name']).' ('.format_file_size($quota_bytes).')',
+            $quota_percentage
+        );
     }
 }
 $group_list = GroupManager::get_groups();
@@ -111,9 +111,7 @@ if (is_array($document_list)) {
 }
 
 $quota_percentage = round(($total_quota_bytes - $used_quota_bytes)/$total_quota_bytes, 2)*100;
-
 $session[] = array(addslashes(get_lang('ShowCourseQuotaUse')).' ('.format_file_size($total_quota_bytes - $used_quota_bytes).') ', $quota_percentage);
-
 $quota_data = json_encode($session);
 
 $htmlHeadXtra[] = "

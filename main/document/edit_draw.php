@@ -9,11 +9,6 @@
  * @author Juan Carlos Ra�a Trabado
  * @since 25/september/2010
 */
-/**
- * Code
- */
-
-/*	INIT SECTION */
 
 $language_file = array('document');
 
@@ -31,7 +26,7 @@ $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_c
 
 if (empty($document_data)) {
     api_not_allowed();
-} else {    
+} else {
     $document_id    = $document_data['id'];
     $file_path      = $document_data['path'];
     $dir            = dirname($document_data['path']);
@@ -106,7 +101,7 @@ else
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
-} else {    
+} else {
     foreach($document_data['parents'] as $document_sub_data) {
         if ($document_data['title'] == $document_sub_data['title']) {
             continue;
@@ -125,23 +120,23 @@ event_access_tool(TOOL_DOCUMENT);
 
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
-		echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';		
+		echo '<a href="document.php?id='.$parent_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.$req_gid.'&origin=editdraw">'.Display::return_icon('edit.png',get_lang('Rename').'/'.get_lang('Comments'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-if (api_browser_support('svg')) {	
+if (api_browser_support('svg')) {
 	//automatic loading the course language
 	$svgedit_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
 	$langsvgedit  = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'svg-edit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
-	
+
 	$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?url=../../../../courses/'.$courseDir.$dir.$file.'&amp;lang='.$langsvgedit;
-		
+
 	?>
 
 	<script type="text/javascript">
-	
+
 	document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
 	function resizeIframe() {
     	var height = window.innerHeight -50;
@@ -153,14 +148,14 @@ if (api_browser_support('svg')) {
 	};
 	document.getElementById('frame').onload = resizeIframe;
 	window.onresize = resizeIframe;
-	
+
 	</script>
 
     <?php
     echo '<noscript>';
 	echo '<iframe style="height: 550px; width: 100%;" scrolling="no" frameborder="0\' src="'.$svg_url.'"<noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';
 	echo '</noscript>';
-} else {	
+} else {
 	Display::display_error_message(get_lang('BrowserDontSupportsSVG'));
 }
 Display::display_footer();

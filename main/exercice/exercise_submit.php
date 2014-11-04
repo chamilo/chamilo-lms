@@ -648,7 +648,11 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     echo '</div>';
 }
 
-$is_visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+$is_visible_return = $objExercise->is_visible(
+    $learnpath_id,
+    $learnpath_item_id,
+    $learnpath_item_view_id
+);
 if ($is_visible_return['value'] == false) {
     echo $is_visible_return['message'];
     if ($origin != 'learnpath') {

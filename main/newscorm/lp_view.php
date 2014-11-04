@@ -213,8 +213,9 @@ if ($debug) {
     error_log('$_GET[lp_item_id]: '.intval($_GET['lp_item_id']));
 }
 
-if ($type_quiz && !empty($_REQUEST['exeId']) &&
-    isset($lp_id) && isset($_GET['lp_item_id'])
+if (!empty($_REQUEST['exeId']) &&
+    isset($lp_id) &&
+    isset($_GET['lp_item_id'])
 ) {
     global $src;
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();

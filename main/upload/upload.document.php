@@ -106,7 +106,7 @@ if (isset($_POST['submit_image'])) {
 		//we could also create a function for this, I'm not sure...
 		//create a directory for the missing files
 		$img_directory = str_replace('.','_',$_POST['related_file']."_files");
-        $missing_files_dir = create_unexisting_directory(
+        $folderData = create_unexisting_directory(
             $_course,
             $_user['user_id'],
             api_get_session_id(),
@@ -115,6 +115,7 @@ if (isset($_POST['submit_image'])) {
             $base_work_dir,
             $img_directory
         );
+        $missing_files_dir = $folderData['path'];
 		//put the uploaded files in the new directory and get the paths
 		$paths_to_replace_in_file = move_uploaded_file_collection_into_directory($_course, $_FILES['img_file'],$base_work_dir,$missing_files_dir,$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space);
 		//open the html file and replace the paths

@@ -210,6 +210,8 @@ Display::display_header($nameTools, 'Doc');
 
 /*    Here we do all the work */
 
+$unzip = isset($_POST['unzip']) ? $_POST['unzip'] : null;
+$index = isset($_POST['index_document']) ? $_POST['index_document'] : null;
 // User has submitted a file
 if (!empty($_FILES)) {
     DocumentManager::upload_document(
@@ -217,9 +219,9 @@ if (!empty($_FILES)) {
         $_POST['curdirpath'],
         $_POST['title'],
         $_POST['comment'],
-        $_POST['unzip'],
+        $unzip,
         $_POST['if_exists'],
-        $_POST['index_document'],
+        $index,
         true
     );
 }

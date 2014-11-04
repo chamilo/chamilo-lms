@@ -257,7 +257,6 @@ function handle_uploaded_document(
 			if ($upload_path != '/') {
 				$upload_path = $upload_path.'/';
 			}
-			$file_path = $upload_path.$clean_name;
 
 			// Full path to where we want to store the file with trailing slash
 			$where_to_save = $base_work_dir.$upload_path;
@@ -275,7 +274,13 @@ function handle_uploaded_document(
             }
 
 			// Full path of the destination
-			$store_path = $where_to_save.$clean_name;
+
+            $suffix = get_document_suffix($_course, $sessionId, $to_group_id);
+            $fileInfo = pathinfo($clean_name);
+            $fileSystemName = $fileInfo['filename'].$suffix.'.'.$fileInfo['extension'];
+
+			$store_path = $where_to_save.$fileSystemName;
+            $file_path = $upload_path.$fileSystemName;
 
 			// Name of the document without the extension (for the title)
 			$document_name = get_document_title($uploaded_file['name']);
@@ -283,7 +288,7 @@ function handle_uploaded_document(
 			$file_size = $uploaded_file['size'];
 			$files_perm = api_get_permissions_for_new_files();
 
-            // Just upload file.
+            // Just upload the file.
             if ($onlyUploadFile) {
                 $errorResult = moveUploadedFile($uploaded_file, $store_path);
                 if ($errorResult) {
@@ -324,7 +329,6 @@ function handle_uploaded_document(
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
 				case 'overwrite':
-
                     // Check if the target file exists, so we can give another message
 					$file_exists = file_exists($store_path);
 					if (moveUploadedFile($uploaded_file, $store_path)) {
@@ -391,12 +395,13 @@ function handle_uploaded_document(
                                     api_set_default_visibility(TOOL_DOCUMENT, $document_id);
                                 }
                             }
+
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course, $upload_path, $user_id);
 							// Display success message with extra info to user
 							if ($output) {
                                 Display::display_confirmation_message(
-                                    get_lang('UplUploadSucceeded') . '<br />' . $file_path . ' ' . get_lang('UplFileOverwritten'),
+                                    get_lang('UplUploadSucceeded') . '<br /> ' . $document_name . ' ' . get_lang('UplFileOverwritten'),
                                     false
                                 );
         					}
@@ -437,8 +442,8 @@ function handle_uploaded_document(
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course, $upload_path, $user_id);
 							// Display success message to user
-							if ($output){
-                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.$file_path, false);
+							if ($output) {
+                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br /> '.$document_name, false);
 							}
 							return $file_path;
 						}
@@ -449,20 +454,18 @@ function handle_uploaded_document(
 						return false;
 					}
 					break;
-
 				// Rename the file if it exists
 				case 'rename':
                     // Always rename.
-                    $new_name = unique_name($where_to_save, $clean_name);
-                    $document_name = $new_name;
-
+                    $new_name = unique_name($where_to_save, $fileSystemName);
+                    $softName = unique_name($where_to_save, $clean_name);
+                    $document_name = $softName;
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
 
 					if (moveUploadedFile($uploaded_file, $store_path)) {
 
 						chmod($store_path, $files_perm);
-
 						// Put the document data in the database
                         $document_id = add_document(
                             $_course,
@@ -502,7 +505,7 @@ function handle_uploaded_document(
 						// Display success message to user
 						if ($output) {
                             Display::display_confirmation_message(
-                                get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') . $new_file_path,
+                                get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') .' '.$document_name,
                                 false
                             );
 						}
@@ -565,8 +568,9 @@ function handle_uploaded_document(
 
 							// Display success message to user
 							if ($output){
-								Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.$file_path, false);
+								Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br /> '.$document_name, false);
 							}
+
 							return $file_path;
 						} else {
 						    if ($output) {
@@ -1116,15 +1120,16 @@ function add_document(
     $session_id = intval($session_id);
 
     if (empty($session_id)) {
-        $session_id    = api_get_session_id();
+        $session_id = api_get_session_id();
     }
-	$readonly      = intval($readonly);
-	$comment       = Database::escape_string($comment);
-	$path          = Database::escape_string($path);
-	$filetype      = Database::escape_string($filetype);
-	$filesize      = Database::escape_string($filesize);
-    $title         = Database::escape_string(htmlspecialchars($title));
-    $c_id          = $_course['real_id'];
+
+    $readonly = intval($readonly);
+    $comment = Database::escape_string($comment);
+    $path = Database::escape_string($path);
+    $filetype = Database::escape_string($filetype);
+    $filesize = Database::escape_string($filesize);
+    $title = Database::escape_string(htmlspecialchars($title));
+    $c_id = $_course['real_id'];
 
 	$table_document = Database::get_course_table(TABLE_DOCUMENT);
 	$sql = "INSERT INTO $table_document (c_id, path, filetype, size, title, comment, readonly, session_id)
@@ -1153,7 +1158,8 @@ function add_document(
  * @param int $readonly
  * @return boolean true /false
  */
-function update_existing_document($_course, $document_id, $filesize, $readonly = 0) {
+function update_existing_document($_course, $document_id, $filesize, $readonly = 0)
+{
 	$document_table = Database::get_course_table(TABLE_DOCUMENT);
 	$document_id 	= intval($document_id);
 	$filesize 		= intval($filesize);
@@ -1334,7 +1340,15 @@ function search_img_from_html($html_file) {
 	return $img_path_list;
 }
 
-function get_folder_suffix($courseInfo, $sessionId, $groupId)
+/**
+ * Get folder/file suffix
+ * @param array $courseInfo
+ * @param int $sessionId
+ * @param int $groupId
+ *
+ * @return string
+ */
+function get_document_suffix($courseInfo, $sessionId, $groupId)
 {
     return '_'.intval($sessionId).'_'.intval($groupId);
 }
@@ -1371,7 +1385,7 @@ function create_unexisting_directory(
 ) {
     $systemFolderName = $desired_dir_name;
     // Adding prefix folder prefix
-    $prefix = get_folder_suffix($_course, $session_id, $to_group_id);
+    $prefix = get_document_suffix($_course, $session_id, $to_group_id);
     $systemFolderName .= $prefix;
 
 	/*$nb = '';

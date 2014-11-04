@@ -2668,6 +2668,7 @@ class DocumentManager
         require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 
         $course_info = api_get_course_info();
+        $sessionId = api_get_session_id();
         $course_dir = $course_info['path'] . '/document';
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $base_work_dir = $sys_course_path . $course_dir;
@@ -2687,21 +2688,33 @@ class DocumentManager
                     null,
                     $unzip,
                     $if_exists,
-                    $show_output
+                    $show_output,
+                    false,
+                    null,
+                    $sessionId
                 );
 
                 if ($new_path) {
                     $documentId = DocumentManager::get_document_id(
                         $course_info,
                         $new_path,
-                        api_get_session_id()
+                        $sessionId
                     );
 
                     if (!empty($documentId)) {
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
                         $params = array();
                         if ($if_exists == 'rename') {
+                            // Remove prefix
+                            $suffix = get_document_suffix(
+                                $course_info,
+                                $sessionId,
+                                api_get_group_id()
+                            );
                             $new_path = basename($new_path);
+                            $new_path = str_replace($suffix, '', $new_path);
+                            error_log($suffix);
+                            error_log($new_path);
                             $params['title'] = get_document_title($new_path);
                         } else {
                             if (!empty($title)) {
@@ -2729,7 +2742,10 @@ class DocumentManager
 
                     // Showing message when sending zip files
                     if ($new_path === true && $unzip == 1 && $show_output) {
-                        Display::display_confirmation_message(get_lang('UplUploadSucceeded') . '<br />', false);
+                        Display::display_confirmation_message(
+                            get_lang('UplUploadSucceeded') . '<br />',
+                            false
+                        );
                     }
 
                     if ($index_document) {
@@ -2748,7 +2764,7 @@ class DocumentManager
                             $documentId,
                             $course_info['code'],
                             false,
-                            api_get_session_id()
+                            $sessionId
                         );
                         return $documentData;
                     }
@@ -2761,7 +2777,7 @@ class DocumentManager
     /**
      * Obtains the text inside the file with the right parser
      */
-    function get_text_content($doc_path, $doc_mime)
+    public static function get_text_content($doc_path, $doc_mime)
     {
         // TODO: review w$ compatibility
         // Use usual exec output lines array to store stdout instead of a temp file

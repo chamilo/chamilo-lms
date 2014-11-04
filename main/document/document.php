@@ -1123,7 +1123,7 @@ if ($is_allowed_to_edit ||
                             null,
                             $sessionId
                         )) {
-                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['path'], 'confirmation');
+                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation');
                         } else {
                             $messages .= Display::return_message(get_lang('ViModProb'), 'error');
                         }
@@ -1142,7 +1142,7 @@ if ($is_allowed_to_edit ||
                             null,
                             $sessionId
                         )) {
-                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['path'], 'confirmation');
+                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation');
                         } else {
                             $messages .= Display::return_message(get_lang('ViModProb'), 'error');
                         }
@@ -1163,7 +1163,10 @@ if ($is_allowed_to_edit ||
                                         $sessionId
                                     )
                                     ) {
-                                        $messages .= Display::return_message(get_lang('CantDeleteReadonlyFiles'), 'error');
+                                        $messages .= Display::return_message(
+                                            get_lang('CantDeleteReadonlyFiles'),
+                                            'error'
+                                        );
                                         break 2;
                                     }
                                 }
@@ -1180,7 +1183,10 @@ if ($is_allowed_to_edit ||
                             $groupId
                         );
                         if (!empty($deleteDocument)) {
-                            $messages .= Display::return_message(get_lang('DocDeleted').': '.$data['path'], 'confirmation');
+                            $messages .= Display::return_message(
+                                get_lang('DocDeleted').': '.$data['title'],
+                                'confirmation'
+                            );
                         }
                         break;
                 }

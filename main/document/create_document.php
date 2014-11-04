@@ -158,13 +158,32 @@ if ($is_certificate_mode) {
 
 $doc_table = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
+$courseCode = api_get_course_id();
+$sessionId = api_get_session_id();
 $userId = api_get_user_id();
+$_course = api_get_course_info();
+$groupId = api_get_group_id();
 
-$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
+$document_data = DocumentManager::get_document_data_by_id(
+    $_REQUEST['id'],
+    $courseCode,
+    true,
+    0
+);
+
+if (!empty($sessionId) && empty($document_data)) {
+    $document_data = DocumentManager::get_document_data_by_id(
+        $_REQUEST['id'],
+        $courseCode,
+        true,
+        $sessionId
+    );
+}
+
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
-        $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
+        $group_properties   = GroupManager::get_group_properties($groupId);
+        $document_id        = DocumentManager::get_document_id($_course, $group_properties['directory']);
         $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
         $dir = $document_data['path'];
         $folder_id = $document_data['id'];
@@ -481,10 +500,16 @@ if ($form->validate()) {
 	$filename = replace_dangerous_char($filename);
 	$filename = disable_dangerous_file($filename);
 
-    //Setting the title
-	$title 		= $values['title'];
+    $filename .= get_document_suffix(
+        $_course,
+        api_get_session_id(),
+        api_get_group_id()
+    );
 
-    //Setting the extension
+    // Setting the title
+	$title = $values['title'];
+
+    // Setting the extension
 	$extension = 'html';
 
 	$content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
@@ -492,6 +517,15 @@ if ($form->validate()) {
 	if (strpos($content, '/css/frames.css') == false) {
 		$content = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /><style> body{margin:50px;}</style></head>', $content);
 	}
+
+    // Don't create file with the same name.
+    if (file_exists($filepath.$filename.'.'.$extension)) {
+        Display:: display_header($nameTools, 'Doc');
+        Display:: display_error_message(get_lang('FileExists').' '.$title, false);
+        Display:: display_footer();
+        exit;
+    }
+
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
 
@@ -524,7 +558,15 @@ if ($form->validate()) {
 		$file_size = filesize($filepath.$filename.'.'.$extension);
 		$save_file_path = $dir.$filename.'.'.$extension;
 
-		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $title, null, $readonly);
+        $document_id = add_document(
+            $_course,
+            $save_file_path,
+            'file',
+            $file_size,
+            $title,
+            null,
+            $readonly
+        );
 
 		if ($document_id) {
 			api_item_property_update(

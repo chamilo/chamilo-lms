@@ -600,23 +600,28 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         if (in_array($path, DocumentManager::get_system_folders())) {
             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
         } else {
-            if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && DocumentManager::get_default_certificate_id(api_get_course_id()) == $id) {
-                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id.$req_gid.'&amp;' . $sort_params . 'delete_certificate_id=' . $id . '" onclick="return confirmation(\'' . basename($path) . '\');">' .
+            $titleToShow = addslashes(basename($document_data['title']));
+
+            if (isset($_GET['curdirpath']) &&
+                $_GET['curdirpath'] == '/certificates' &&
+                DocumentManager::get_default_certificate_id(api_get_course_id()) == $id
+            ) {
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id.$req_gid.'&amp;' . $sort_params . 'delete_certificate_id=' . $id . '" onclick="return confirmation(\'' . $titleToShow . '\');">' .
                     Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
             } else {
                 if ($is_certificate_mode) {
-                    $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid=' . $document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . basename($path) . '\');">' .
+                    $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid=' . $document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . $titleToShow . '\');">' .
                         Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
                 } else {
                     if (api_get_session_id()) {
                         if ($document_data['session_id'] == api_get_session_id()) {
-                            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . basename($path) . '\');">'.
+                            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . $titleToShow . '\');">'.
                                 Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
                         } else {
                             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
                         }
                     } else {
-                        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . basename($path) . '\');">' .
+                        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . $titleToShow. '\');">' .
                             Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
                     }
                 }

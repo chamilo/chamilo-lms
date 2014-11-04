@@ -1334,6 +1334,11 @@ function search_img_from_html($html_file) {
 	return $img_path_list;
 }
 
+function get_folder_suffix($courseInfo, $sessionId, $groupId)
+{
+    return '_'.intval($sessionId).'_'.intval($groupId);
+}
+
 /**
  * Creates a new directory trying to find a directory name
  * that doesn't already exist
@@ -1364,29 +1369,46 @@ function create_unexisting_directory(
     $title = null,
     $visibility = null
 ) {
-	$nb = '';
+    $systemFolderName = $desired_dir_name;
+    // Adding prefix folder prefix
+    $prefix = get_folder_suffix($_course, $session_id, $to_group_id);
+    $systemFolderName .= $prefix;
+
+	/*$nb = '';
     // add numerical suffix to directory if another one of the same number already exists
-	while (file_exists($base_work_dir.$desired_dir_name.$nb)) {
+	while (file_exists($base_work_dir.$systemFolderName.$nb)) {
 		$nb += 1;
-	}
+	}*/
 
 	if ($title == null) {
 		$title = basename($desired_dir_name);
 	}
-	$course_id = $_course['real_id'];
 
-	if (mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories(), true)) {
+	$course_id = $_course['real_id'];
+	if (!is_dir($base_work_dir.$systemFolderName)) {
+
+        mkdir(
+            $base_work_dir.$systemFolderName,
+            api_get_permissions_for_new_directories(),
+            true
+        );
+
 		// Check if pathname already exists inside document table
 		$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-		$sql = "SELECT path FROM $tbl_document
-		        WHERE c_id = $course_id AND path='".$desired_dir_name.$nb."'";
+		$sql = "SELECT id, path FROM $tbl_document
+		        WHERE
+		            c_id = $course_id AND
+		            (
+		                path = '".$systemFolderName."'
+                    )
+        ";
 
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) == 0) {
 
             $document_id = add_document(
                 $_course,
-                $desired_dir_name . $nb,
+                $systemFolderName,
                 'folder',
                 0,
                 $title,
@@ -1431,12 +1453,28 @@ function create_unexisting_directory(
                         $session_id
                     );
 				}
-				return $desired_dir_name.$nb;
-			}
+                $documentData = DocumentManager::get_document_data_by_id(
+                    $document_id,
+                    $_course['code'],
+                    false,
+                    $session_id
+                );
+				return $documentData;
+			} else {
+                return false;
+            }
 		} else {
+            $document = Database::fetch_array($rs);
+            $documentData = DocumentManager::get_document_data_by_id(
+                $document['id'],
+                $_course['code'],
+                false,
+                $session_id
+            );
+
 			/* This means the folder NOT exist in the filesystem
 			 (now this was created) but there is a record in the Database*/
-			return $desired_dir_name.$nb;
+			return $documentData;
 		}
 	} else {
 		return false;

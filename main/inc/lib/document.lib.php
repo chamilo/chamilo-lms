@@ -1890,7 +1890,7 @@ class DocumentManager
             $visibility_command = 'invisible';
 
             if (!is_dir($base_work_dir_test)) {
-                $created_dir = create_unexisting_directory(
+                create_unexisting_directory(
                     $course_info,
                     api_get_user_id(),
                     api_get_session_id(),

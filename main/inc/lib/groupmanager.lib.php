@@ -201,7 +201,7 @@ class GroupManager
             $desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
             $my_path = api_get_path(SYS_COURSE_PATH) . $currentCourseRepository . '/document';
 
-            $unique_name = create_unexisting_directory(
+            $newFolderData = create_unexisting_directory(
                 $_course,
                 api_get_user_id(),
                 $session_id,
@@ -212,6 +212,8 @@ class GroupManager
                 null,
                 1
             );
+
+            $unique_name = $newFolderData['path'];
 
             /* Stores the directory path into the group table */
             $sql = "UPDATE ".$table_group." SET

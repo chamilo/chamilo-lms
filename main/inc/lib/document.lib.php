@@ -2713,8 +2713,6 @@ class DocumentManager
                             );
                             $new_path = basename($new_path);
                             $new_path = str_replace($suffix, '', $new_path);
-                            error_log($suffix);
-                            error_log($new_path);
                             $params['title'] = get_document_title($new_path);
                         } else {
                             if (!empty($title)) {

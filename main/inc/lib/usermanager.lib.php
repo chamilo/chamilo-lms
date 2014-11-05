@@ -3640,10 +3640,14 @@ class UserManager
         if (is_array($extra_field_list)) {
             foreach ($extra_field_list as $extra_field) {
                 //if is enabled to filter and is a "<select>" field type
-                if ($extra_field[8]==1 && $extra_field[2]==4) { $extra_filtrabe_fields[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]); }
+                if ($extra_field[8]==1 && $extra_field[2]==4) { 
+                    $extra_filtrabe_fields[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
+                }
             }
         }    
-        if (is_array($extra_filtrabe_fields) && count($extra_filtrabe_fields)>0 ) return $extra_filtrabe_fields;
+        if (is_array($extra_filtrabe_fields) && count($extra_filtrabe_fields)>0 ) {
+            return $extra_filtrabe_fields;
+        }
     }
 
     /**
@@ -3678,16 +3682,14 @@ class UserManager
                         $final_result  = array_intersect($extra_field_result[$i], $extra_field_result[$i+1]);
                     }
                 }
-            }
-            else {
+            } else {
                 $final_result = $extra_field_result[0];
             }
 
             $where_filter ='';
             if (is_array($final_result) && count($final_result)>0) {
-                $where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
-            }
-            else {
+                $where_filter = " AND u.user_id IN  ('".implode("','", $final_result)."') ";
+            } else {
                 //no results
                 $where_filter = " AND u.user_id  = -1 ";
             }

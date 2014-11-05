@@ -135,9 +135,7 @@ if (Security::check_token('post') && (
     $course = CourseArchiver::read_course($filename, $delete_file);
 
     if ($course->has_resources() && ($filename !== false)) {
-        $hiddenFields = array(
-            'same_file_name_option' => $_POST['same_file_name_option'],
-        );
+        $hiddenFields['same_file_name_option'] = $_POST['same_file_name_option'];
         // Add token to Course select form
         $hiddenFields['sec_token'] = Security::get_token();
         CourseSelectForm::display_form($course, $hiddenFields);

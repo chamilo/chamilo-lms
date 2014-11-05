@@ -76,12 +76,12 @@ if (Security::check_token('post') && (
 
     $cb = new CourseBuilder();
     $course = $cb->build();
-    $hidden_fields = array();
-    $hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
-    $hidden_fields['destination_course']    = $_POST['destination_course'];
+    $hiddenFields = array();
+    $hiddenFields['same_file_name_option'] = $_POST['same_file_name_option'];
+    $hiddenFields['destination_course']    = $_POST['destination_course'];
     // Add token to Course select form
-    $hidden_fields['sec_token'] = Security::get_token();
-    CourseSelectForm::display_form($course, $hidden_fields, true);
+    $hiddenFields['sec_token'] = Security::get_token();
+    CourseSelectForm::display_form($course, $hiddenFields, true);
 } else {
     $table_c = Database :: get_main_table(TABLE_MAIN_COURSE);
     $table_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);

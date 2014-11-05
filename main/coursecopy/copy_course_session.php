@@ -386,15 +386,15 @@ if (Security::check_token('post') && (
         $course_origin = api_get_course_info($arr_course_origin[0]);
         $cb = new CourseBuilder('', $course_origin);
         $course = $cb->build($origin_session, $arr_course_origin[0], $with_base_content);
-        //$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
-        $hidden_fields['destination_course'] 	= $arr_course_destination[0];
-        $hidden_fields['origin_course'] 		= $arr_course_origin[0];
-        $hidden_fields['destination_session'] 	= $destination_session;
-        $hidden_fields['origin_session'] 		= $origin_session;
+        //$hiddenFields['same_file_name_option'] = $_POST['same_file_name_option'];
+        $hiddenFields['destination_course'] 	= $arr_course_destination[0];
+        $hiddenFields['origin_course'] 		= $arr_course_origin[0];
+        $hiddenFields['destination_session'] 	= $destination_session;
+        $hiddenFields['origin_session'] 		= $origin_session;
         // Add token to Course select form
-        $hidden_fields['sec_token'] = Security::get_token();
+        $hiddenFields['sec_token'] = Security::get_token();
 
-        CourseSelectForm :: display_form($course, $hidden_fields, true);
+        CourseSelectForm :: display_form($course, $hiddenFields, true);
         echo '<div style="float:right"><a href="javascript:window.back();">'.
             Display::return_icon(
                 'back.png',

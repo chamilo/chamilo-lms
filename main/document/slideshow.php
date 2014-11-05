@@ -15,7 +15,7 @@ api_protect_course_script();
 $noPHP_SELF = true;
 $path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);
-$slide_id = Security::remove_XSS($_GET['slide_id']);
+$slide_id = isset($_GET['slide_id']) ? Security::remove_XSS($_GET['slide_id']) : null;
 
 if (empty($slide_id)) {
 	$edit_slide_id = 1;
@@ -423,7 +423,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 		list($width, $height) = getimagesize($image);
 
 		//auto resize
-		if ($_SESSION["image_resizing"]!="noresizing" && $_SESSION["image_resizing"]!="resizing" ) {
+		if ($_SESSION["image_resizing"] !="noresizing" && $_SESSION["image_resizing"]!="resizing") {
 		?>
 
 		<script type="text/javascript">

@@ -212,7 +212,10 @@ function create_document_link(
     $send_to = null;
     if (!$show_as_icon) {
         if ($filetype == 'folder') {
-            if (api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true') {
+            if (api_is_allowed_to_edit() ||
+                api_is_platform_admin() ||
+                api_get_setting('students_download_folders') == 'true'
+            ) {
                 //filter when I am into shared folder, I can show for donwload only my shared folder
                 if (is_shared_folder($curdirpath, $current_session_id)) {
                     if (preg_match('/shared_folder\/sf_user_' . api_get_user_id() . '$/', urldecode($forcedownload_link)) ||

@@ -79,6 +79,8 @@ if (Security::check_token('post') && (
     $hidden_fields = array();
     $hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
     $hidden_fields['destination_course']    = $_POST['destination_course'];
+    // Add token to Course select form
+    $hidden_fields['sec_token'] = Security::get_token();
     CourseSelectForm::display_form($course, $hidden_fields, true);
 } else {
     $table_c = Database :: get_main_table(TABLE_MAIN_COURSE);

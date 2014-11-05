@@ -135,7 +135,12 @@ if (Security::check_token('post') && (
     $course = CourseArchiver::read_course($filename, $delete_file);
 
     if ($course->has_resources() && ($filename !== false)) {
-        CourseSelectForm::display_form($course, array('same_file_name_option' => $_POST['same_file_name_option']));
+        $hiddenFields = array(
+            'same_file_name_option' => $_POST['same_file_name_option'],
+        );
+        // Add token to Course select form
+        $hiddenFields['sec_token'] = Security::get_token();
+        CourseSelectForm::display_form($course, $hiddenFields);
     } elseif ($filename === false) {
         Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'));
         echo '<a class="btn" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';

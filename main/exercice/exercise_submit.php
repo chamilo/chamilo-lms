@@ -265,6 +265,7 @@ if (empty($exercise_stat_info)) {
 		$_SESSION['expired_time'][$current_expired_time_key] 	 = $clock_expired_time;
 		if ($debug) { error_log('5.4. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
 	}
+
     $exe_id = $objExercise->save_stat_track_exercise_info(
         $clock_expired_time,
         $learnpath_id,

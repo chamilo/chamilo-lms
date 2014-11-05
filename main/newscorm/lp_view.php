@@ -220,12 +220,12 @@ if (!empty($_REQUEST['exeId']) &&
     global $src;
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
 
-    $TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $TBL_LP_ITEM_VIEW       = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-    $TBL_LP_ITEM            = Database::get_course_table(TABLE_LP_ITEM);
-    $safe_item_id           = intval($_GET['lp_item_id']);
-    $safe_id                = $lp_id;
-    $safe_exe_id            = intval($_REQUEST['exeId']);
+    $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+    $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
+    $safe_item_id = intval($_GET['lp_item_id']);
+    $safe_id = $lp_id;
+    $safe_exe_id = intval($_REQUEST['exeId']);
 
     if ($safe_id == strval(intval($safe_id)) &&
         $safe_item_id == strval(intval($safe_item_id))
@@ -244,7 +244,7 @@ if (!empty($_REQUEST['exeId']) &&
         $max_score 	= (float)$row_dates['exe_weighting'];
 
         $sql = "UPDATE $TBL_LP_ITEM SET
-                max_score = '$max_score'
+                    max_score = '$max_score'
                 WHERE c_id = $course_id AND id = '".$safe_item_id."'";
         Database::query($sql);
 
@@ -272,7 +272,6 @@ if (!empty($_REQUEST['exeId']) &&
             $sql = "UPDATE $TBL_TRACK_EXERCICES SET
                         orig_lp_item_view_id = $lp_item_view_id
                     WHERE exe_id = ".$safe_exe_id;
-
             Database::query($sql);
         }
     }

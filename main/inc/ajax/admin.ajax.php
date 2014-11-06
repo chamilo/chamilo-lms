@@ -110,11 +110,25 @@ function check_system_version()
             'language' => api_get_setting('platformLanguage'),
             'adminname' => api_get_setting('administratorName').' '.api_get_setting('administratorSurname'),
         );
-
-        $res = _http_request('version.chamilo.org', 80, '/version.php', $data);
-
-        if ($res != 0) {
-            $version_info = $res;
+        $version = null;
+        // version.php has been updated to include the version in an HTTP header
+        // called "X-Chamilo-Version", so that we don't have to worry about
+        // issues with the content not being returned by fread for some reason
+        $res = _http_request('version.chamilo.org', 80, '/version.php', $data, 5, null, true);
+        $lines = preg_split('/\r\n/', $res);
+        foreach ($lines as $line) {
+            $elements = preg_split('/:/', $line);
+            // extract the X-Chamilo-Version header from the version.php response
+            if (strcmp(trim($elements[0]), 'X-Chamilo-Version') === 0) {
+                $version = trim($elements[1]);
+            }
+        }
+        if (substr($res, 0, 5) != 'Error') {
+            if (empty($version)) {
+                $version_info = $res;
+            } else {
+                $version_info = $version;
+            }
 
             if ($system_version != $version_info) {
                 $output = '<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>. '.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
@@ -170,14 +184,13 @@ function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout
     }
 
     stream_set_timeout($fp, $timeout);
-    $r = @fwrite($fp, $req);
-    $line = @fread($fp,512);
+    $r = fwrite($fp, $req);
+    $line = @fread($fp, 512);
     $ret .= $line;
     fclose($fp);
 
     if (!$res_hdr) {
         $ret = substr($ret, strpos($ret, "\r\n\r\n") + 4);
     }
-
     return trim($ret);
 }

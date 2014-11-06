@@ -59,7 +59,7 @@
         "ext-json": "*",
         "ext-mbstring": "*",
 
-        "twig/twig": "~1.12",
+        "twig/twig": "~1.0",
         "twig/extensions": "~1.0",
 
         "symfony/symfony": "~2.5",
@@ -85,7 +85,7 @@
 
         "symfony-cmf/routing-bundle": "~1.1",
 
-        "knplabs/gaufrette": "0.1.4",
+        "knplabs/gaufrette": "~0.1",
         "knplabs/knp-menu-bundle": "~2.0",
 
         "sonata-project/easy-extends-bundle": "~2.1@dev",
@@ -112,27 +112,23 @@
         "sonata-project/ecommerce": "dev-develop",
         "sonata-project/comment-bundle": "~2.2@dev",
 
-        "friendsofsymfony/comment-bundle": "~2.0@dev",
+        "friendsofsymfony/comment-bundle": "~2.0",
 
-        "dflydev/markdown": "~1.0",
         "simplethings/entity-audit-bundle": "~0.5",
         "willdurand/faker-bundle": "~1.0",
 
-        "mopa/bootstrap-bundle": "v3.0.0-beta3",
-        "twbs/bootstrap": "v3.0.0",
+        "mopa/bootstrap-bundle": "v3.0.0-beta4",
+        "twbs/bootstrap": "~3.0",
 
         "stof/doctrine-extensions-bundle": "~1.1",
-        "stephpy/TimelineBundle": "~2.0@dev",
-        "stephpy/timeline": "~1.0@dev",
+        "stephpy/timeline-bundle": "~2.0",
+        "stephpy/timeline": "~1.0",
 
         "incenteev/composer-parameter-handler": "~2.0",
 
         "friendsofsymfony/advanced-encoder-bundle": "~1.0",
-        "avanzu/admin-theme-bundle": "dev-master",
         "friendsofsymfony/message-bundle": "~1.2",
-        "jquery/jquery":  "1.10.*",
-        "oyejorge/less.php": "~1.5",
-
+        "oyejorge/less.php": "~1.0",
         "hwi/oauth-bundle": "0.4.*@dev",
         "gedmo/doctrine-extensions": "~2.3",
 
@@ -148,13 +144,13 @@
         "sylius/flow-bundle": "0.11",
         "sylius/settings-bundle": "0.11",
         "apy/datagrid-bundle": "dev-master",
-        "jms/translation-bundle": "dev-master",
+        "jms/translation-bundle": "~1.0",
 
         "sp/bower-bundle": "dev-master",
         "jmontoyaa/migration-bundle":"dev-master",
         "thrace/datagrid-bundle":"dev-master",
         "patchwork/utf8": "dev-master",
-        "vich/uploader-bundle": "~0.11.0"
+        "vich/uploader-bundle": "~0.11"
     },
     "require-dev": {
         "akeneo/crowdin-api": "1.0.*@dev",

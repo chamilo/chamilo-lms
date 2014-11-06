@@ -5,6 +5,8 @@
  * This script works only if 1 there's one attempt
  */
 
+exit;
+
 require_once '../../main/inc/global.inc.php';
 
 api_protect_admin_script();

@@ -200,7 +200,10 @@ switch ($action) {
             $work_to_delete = get_work_data_by_id($_REQUEST['id']);
             $result = deleteDirWork($_REQUEST['id']);
             if ($result) {
-                $message = Display::return_message(get_lang('DirDeleted') . ': '.$work_to_delete['title'], 'success');
+                $message = Display::return_message(
+                    get_lang('DirDeleted') . ': ' . $work_to_delete['title'],
+                    'success'
+                );
                 Session::write('message', $message);
                 header('Location: '.$currentUrl);
                 exit;

@@ -9,11 +9,6 @@
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net
  * @since 5/april/2012
 */
-/**
- * Code
- */
-
-/*	INIT SECTION */
 
 // Name of the language file that needs to be included
 $language_file = array('document');

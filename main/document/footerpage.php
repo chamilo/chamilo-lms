@@ -4,9 +4,7 @@
  *	@package chamilo.document
  *	TODO: There is no indication that this file us used for something.
  */
-/**
- * Code
- */
+
 require_once '../inc/global.inc.php';
 
 $my_style = api_get_visual_theme();

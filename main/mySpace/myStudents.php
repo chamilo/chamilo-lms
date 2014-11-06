@@ -4,9 +4,7 @@
  * Implements the tracking of students in the Reporting pages
  * @package chamilo.reporting
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = array(
     'registration',
@@ -36,7 +34,10 @@ api_block_anonymous_users();
 
 if (!api_is_allowed_to_create_course() && !api_is_session_admin() && !api_is_drh()) {
     // Check if the user is tutor of the course
-    $user_course_status = CourseManager::get_tutor_in_course_status(api_get_user_id(), api_get_course_id());
+    $user_course_status = CourseManager::get_tutor_in_course_status(
+        api_get_user_id(),
+        api_get_course_id()
+    );
     if ($user_course_status != 1) {
         api_not_allowed(true);
     }
@@ -85,11 +86,8 @@ if (isset($_GET['details'])) {
 	} else
 		if (!empty ($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
 			$course_info = CourseManager :: get_course_information($get_course_code);
-			if (empty ($cidReq)) {
-				//$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['title']);
-			}
 			$interbreadcrumb[] = array (
-				"url" => "../tracking/courseLog.php?cidReq=".$get_course_code.'&id_session=' . (empty ($_SESSION['id_session']) ? '' : $_SESSION['id_session']),
+				"url" => "../tracking/courseLog.php?cidReq=".$get_course_code.'&id_session=' . api_get_session_id(),
 				"name" => get_lang("Tracking")
 			);
 		} else
@@ -173,8 +171,8 @@ if (isset($_GET['details'])) {
 }
 
 // Database Table Definitions
-$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_stats_exercices 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 	$user_id = intval($_GET['user_id']);
@@ -195,15 +193,27 @@ $check = Security::check_token('get');
 if ($check) {
 	switch ($_GET['action']) {
 		case 'reset_lp' :
-                       $course		= isset($_GET['course']) ? $_GET['course']:"";
-			$lp_id		= isset($_GET['lp_id'])	 ? intval($_GET['lp_id']):"";
+            $course = isset($_GET['course']) ? $_GET['course'] : "";
+            $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : "";
 
-			if (api_is_allowed_to_edit() && !empty($course) && !empty($lp_id) && !empty($student_id)) {
-			    $course_info 	= api_get_course_info($course);
-                delete_student_lp_events($student_id, $lp_id, $course_info, $session_id);
+			if (api_is_allowed_to_edit() &&
+                !empty($course) &&
+                !empty($lp_id) &&
+                !empty($student_id)
+            ) {
+			    $course_info = api_get_course_info($course);
+                delete_student_lp_events(
+                    $student_id,
+                    $lp_id,
+                    $course_info,
+                    $session_id
+                );
 
 				//@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334
-				$message = Display::return_message(get_lang('LPWasReset'),'success');
+                $message = Display::return_message(
+                    get_lang('LPWasReset'),
+                    'success'
+                );
 			}
             break;
 		default:
@@ -251,8 +261,11 @@ if (!empty($sessions_coached_by_user)) {
 	}
 }
 
-$sql = "SELECT course_code FROM $tbl_course_user
-        WHERE relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND user_id = ".intval($user_info['user_id']);
+$sql = "SELECT course_code
+        FROM $tbl_course_user
+        WHERE
+            relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
+            user_id = ".intval($user_info['user_id']);
 $rs = Database::query($sql);
 
 while ($row = Database :: fetch_array($rs)) {
@@ -266,7 +279,8 @@ while ($row = Database :: fetch_array($rs)) {
 }
 
 // Get the list of sessions where the user is subscribed as student
-$sql = 'SELECT id_session, course_code FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
+$sql = 'SELECT id_session, course_code
+        FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
         WHERE id_user=' . intval($user_info['user_id']);
 $rs = Database::query($sql);
 $tmp_sessions = array();
@@ -353,9 +367,21 @@ if (!empty($student_id)) {
 	if (!CourseManager :: is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
 		unset($courses[$key]);
 	} else {
-		$avg_student_progress = Tracking::get_avg_student_progress($user_info['user_id'], $course_code, array(), $session_id);
+
+        $avg_student_progress = Tracking::get_avg_student_progress(
+            $user_info['user_id'],
+            $course_code,
+            array(),
+            $session_id
+        );
+
 		//the score inside the Reporting table
-		$avg_student_score 	  = Tracking::get_avg_student_score($user_info['user_id'], $course_code, array(), $session_id);
+        $avg_student_score = Tracking::get_avg_student_score(
+            $user_info['user_id'],
+            $course_code,
+            array(),
+            $session_id
+        );
 		//var_dump($avg_student_score);
 	}
 
@@ -363,7 +389,13 @@ if (!empty($student_id)) {
 
 	// time spent on the course
 
-	$time_spent_on_the_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($user_info['user_id'], $course_code, $session_id));
+	$time_spent_on_the_course = api_time_to_hms(
+        Tracking:: get_time_spent_on_the_course(
+            $user_info['user_id'],
+            $course_code,
+            $session_id
+        )
+    );
 
 	// get information about connections on the platform by student
 	$first_connection_date = Tracking :: get_first_connection_date($user_info['user_id']);
@@ -377,7 +409,7 @@ if (!empty($student_id)) {
 	}
 
 	// cvs informations
-	$csv_content[] = array (
+	$csv_content[] = array(
 		get_lang('Informations', '')
 	);
 	$csv_content[] = array (
@@ -385,33 +417,32 @@ if (!empty($student_id)) {
 		get_lang('Email', ''),
 		get_lang('Tel', '')
 	);
-	$csv_content[] = array (
+	$csv_content[] = array(
 		$user_info['complete_name'],
 		$user_info['email'],
 		$user_info['phone']
 	);
 
-	$csv_content[] = array ();
+	$csv_content[] = array();
 
 	// csv tracking
-	$csv_content[] = array (
+	$csv_content[] = array(
 		get_lang('Tracking', '')
 	);
-	$csv_content[] = array (
+	$csv_content[] = array(
 		get_lang('FirstLogin', ''),
 		get_lang('LatestLogin', ''),
 		get_lang('TimeSpentInTheCourse', ''),
 		get_lang('Progress', ''),
 		get_lang('Score', '')
 	);
-	$csv_content[] = array (
+	$csv_content[] = array(
 		strip_tags($first_connection_date),
 		strip_tags($last_connection_date),
 		$time_spent_on_the_course,
 		$avg_student_progress . '%',
 		$avg_student_score
 	);
-
 
     //Show title
     $info_course = CourseManager :: get_course_information($course_code);
@@ -547,11 +578,18 @@ if (!empty($student_id)) {
 						<td align="left"><?php echo  $time_spent_on_the_course ?></td>
 					</tr>
 					<tr>
-						<td align="right"><?php echo get_lang('Progress').' '; Display :: display_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));?></td>
+						<td align="right">
+                            <?php
+                            echo get_lang('Progress').' ';
+                            Display :: display_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));?>
+                        </td>
 						<td align="left"><?php echo $avg_student_progress.'%' ?></td>
 					</tr>
 					<tr>
-						<td align="right"><?php echo get_lang('Score').' '; Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
+						<td align="right">
+                            <?php
+                            echo get_lang('Score').' ';
+                            Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?>
 						</td>
 						<td align="left"><?php if (is_numeric($avg_student_score)) { echo $avg_student_score.'%';} else { echo $avg_student_score ;}  ?></td>
 					</tr>
@@ -578,7 +616,6 @@ if (!empty($session_id)) {
 if (!empty($info_course['title'])) {
 	$table_title .= ($info_course ? Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$info_course['title'].'  ':'');
 }
-
 
 echo Display::page_subheader($table_title);
 
@@ -761,7 +798,12 @@ if (empty($_GET['details'])) {
     		$any_result = false;
 
     		// Get progress in lp
-    		$progress = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
+            $progress = Tracking::get_avg_student_progress(
+                $student_id,
+                $course_code,
+                array($lp_id),
+                $session_id
+            );
 
     		if ($progress === null) {
     			$progress = '0%';
@@ -770,11 +812,21 @@ if (empty($_GET['details'])) {
     		}
 
     		// Get time in lp
-    		$total_time = Tracking::get_time_spent_in_lp($student_id, $course_code, array($lp_id),$session_id);
+            $total_time = Tracking::get_time_spent_in_lp(
+                $student_id,
+                $course_code,
+                array($lp_id),
+                $session_id
+            );
     		if (!empty($total_time)) $any_result = true;
 
     		// Get last connection time in lp
-    		$start_time = Tracking::get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $session_id);
+            $start_time = Tracking::get_last_connection_time_in_lp(
+                $student_id,
+                $course_code,
+                $lp_id,
+                $session_id
+            );
 
             if (!empty($start_time)) {
                 $start_time = api_convert_and_format_date($start_time, DATE_TIME_FORMAT_LONG);
@@ -784,11 +836,23 @@ if (empty($_GET['details'])) {
 
     		if (!empty($total_time)) $any_result = true;
 
-    		// Quizz in lp
-    		$score = Tracking::get_avg_student_score($student_id, $course_code, array($lp_id),$session_id);
+            // Quiz in lp
+            $score = Tracking::get_avg_student_score(
+                $student_id,
+                $course_code,
+                array($lp_id),
+                $session_id
+            );
 
-    		// Latest exercise results in a LP
-            $score_latest = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id, false, true);
+            // Latest exercise results in a LP
+            $score_latest = Tracking:: get_avg_student_score(
+                $student_id,
+                $course_code,
+                array($lp_id),
+                $session_id,
+                false,
+                true
+            );
 
     		if ($i % 2 == 0) $css_class = "row_even";
     		else $css_class = "row_odd";

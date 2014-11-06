@@ -1510,51 +1510,50 @@ function api_format_course_array($course_data) {
     }
 
     $_course = array();
-
-    $_course['id'           ]         = $course_data['code'           ];
-    $_course['real_id'      ]         = $course_data['id'              ];
+    $_course['id'] = $course_data['code'];
+    $_course['real_id'] = $course_data['id'];
 
     // Added
-    $_course['code'         ]         = $course_data['code'           ];
-    $_course['name'         ]         = $course_data['title'          ];
-    $_course['title'         ]        = $course_data['title'          ];
-    $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
-    $_course['visual_code']           = $course_data['visual_code'    ];
-    $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
-    $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
-    $_course['directory'    ]         = $course_data['directory'      ];
+    $_course['code'] = $course_data['code'];
+    $_course['name'] = $course_data['title'];
+    $_course['title'] = $course_data['title'];
+    $_course['official_code'] = $course_data['visual_code'];
+    $_course['visual_code'] = $course_data['visual_code'];
+    $_course['sysCode'] = $course_data['code'];
+    $_course['path'] = $course_data['directory']; // Use as key in path.
+    $_course['directory'] = $course_data['directory'];
 
     //@todo should be deprecated
     // Use as key in db list.
-    $_course['dbName'       ]         = $course_data['db_name'        ];
-    $_course['db_name'      ]         = $course_data['db_name'         ];
+    $_course['dbName'] = $course_data['db_name'];
+    $_course['db_name'] = $course_data['db_name'];
     // Use in all queries.
-    $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue'];
+    $_course['dbNameGlu'] = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue'];
 
-    $_course['titular'      ]         = $course_data['tutor_name'     ];
-    $_course['language'     ]         = $course_data['course_language'];
-    $_course['extLink'      ]['url' ] = $course_data['department_url' ];
-    $_course['extLink'      ]['name'] = $course_data['department_name'];
+    $_course['titular'] = $course_data['tutor_name'];
+    $_course['language'] = $course_data['course_language'];
+    $_course['extLink']['url'] = $course_data['department_url'];
+    $_course['extLink']['name'] = $course_data['department_name'];
 
-    $_course['categoryCode' ]         = $course_data['faCode'         ];
-    $_course['categoryName' ]         = $course_data['faName'         ];
+    $_course['categoryCode'] = $course_data['faCode'];
+    $_course['categoryName'] = $course_data['faName'];
 
-    $_course['visibility'   ]         = $course_data['visibility'      ];
-    $_course['subscribe_allowed']     = $course_data['subscribe'];
-    $_course['subscribe']             = $course_data['subscribe'];
-    $_course['unsubscribe']           = $course_data['unsubscribe'     ];
+    $_course['visibility'] = $course_data['visibility'];
+    $_course['subscribe_allowed'] = $course_data['subscribe'];
+    $_course['subscribe'] = $course_data['subscribe'];
+    $_course['unsubscribe'] = $course_data['unsubscribe'];
 
-    $_course['course_language']       = $course_data['course_language'];
-    $_course['activate_legal']        = isset($course_data['activate_legal']) ? $course_data['activate_legal'] : false;;
-    $_course['legal']                 = $course_data['legal' ];
-    $_course['show_score']            = $course_data['show_score']; //used in the work tool
-    $_course['department_name']       = $course_data['department_name'];
-    $_course['department_url']        = $course_data['department_url' ];
+    $_course['course_language'] = $course_data['course_language'];
+    $_course['activate_legal'] = isset($course_data['activate_legal']) ? $course_data['activate_legal'] : false;;
+    $_course['legal'] = $course_data['legal'];
+    $_course['show_score'] = $course_data['show_score']; //used in the work tool
+    $_course['department_name'] = $course_data['department_name'];
+    $_course['department_url'] = $course_data['department_url'];
 
     //Course password
-    $_course['registration_code']     = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
-    $_course['disk_quota']            = $course_data['disk_quota'];
-    $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+    $_course['registration_code'] = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
+    $_course['disk_quota'] = $course_data['disk_quota'];
+    $_course['course_public_url'] = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
 
     if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
         $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];

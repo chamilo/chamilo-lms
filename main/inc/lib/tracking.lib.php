@@ -2102,7 +2102,7 @@ class Tracking
             $lp_list = $use_max_score = array();
             while ($row_lp = Database::fetch_array($res_row_lp)) {
                 $lp_list[] = $row_lp['id'];
-                $use_max_score[$row_lp['id']]  = $row_lp['use_max_score'];
+                $use_max_score[$row_lp['id']] = $row_lp['use_max_score'];
             }
 
             if ($debug) {
@@ -2129,6 +2129,7 @@ class Tracking
                                 session_id = $session_id
                         GROUP BY lp_id, user_id";
                 if ($debug) echo $sql;
+
                 $rs_last_lp_view_id = Database::query($sql);
 
                 $global_result = 0;
@@ -2201,7 +2202,6 @@ class Tracking
                                          (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
                                       WHERE lp_view_id = $lp_view_id ";
                             if ($debug) echo $sql.'<br />';
-
                             $res_max_score = Database::query($sql);
 
                             while ($row_max_score = Database::fetch_array($res_max_score,'ASSOC')) {
@@ -2243,11 +2243,11 @@ class Tracking
                                 if ($debug) echo '<b>$lp_partial_total, $score, $max_score '.$lp_partial_total.' '.$score.' '.$max_score.'</b><br />';
                             } else {
                                 // Case of a TOOL_QUIZ element
-                                $item_id    = $row_max_score['iid'];
-                                $item_path  = $row_max_score['path'];
-                                $lp_item_view_id  = $row_max_score['lp_item_view_id'];
+                                $item_id = $row_max_score['iid'];
+                                $item_path = $row_max_score['path'];
+                                $lp_item_view_id = $row_max_score['lp_item_view_id'];
 
-                                // Get last attempt to this exercise  through
+                                // Get last attempt to this exercise through
                                 // the current lp for the current user
                                 $sql = "SELECT exe_id
                                         FROM $tbl_stats_exercices
@@ -2258,7 +2258,8 @@ class Tracking
                                             orig_lp_item_view_id = $lp_item_view_id AND
                                             exe_cours_id         = '$course_code'  AND
                                             session_id           = $session_id
-                                        ORDER BY exe_date DESC LIMIT 1";
+                                        ORDER BY exe_date DESC
+                                        LIMIT 1";
                                 if ($debug) echo $sql .'<br />';
                                 $result_last_attempt = Database::query($sql);
                                 $num = Database :: num_rows($result_last_attempt);

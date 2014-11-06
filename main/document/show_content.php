@@ -5,10 +5,6 @@
  *
  *	@package chamilo.document
  */
-/**
- * Code
- */
-/*   INITIALIZATION */
 
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';

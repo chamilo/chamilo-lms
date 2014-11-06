@@ -5,10 +5,6 @@
  *
  *	@package chamilo.document
  */
-/**
- * Code
- */
-/*	INIT SECTION */
 
 // Name of the language file that needs to be included
 $language_file = array('document', 'gradebook');
@@ -162,16 +158,35 @@ if ($is_certificate_mode) {
 
 $doc_table = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
+$courseCode = api_get_course_id();
+$sessionId = api_get_session_id();
+$userId = api_get_user_id();
+$_course = api_get_course_info();
+$groupId = api_get_group_id();
 
-$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
+$document_data = DocumentManager::get_document_data_by_id(
+    $_REQUEST['id'],
+    $courseCode,
+    true,
+    0
+);
+
+if (!empty($sessionId) && empty($document_data)) {
+    $document_data = DocumentManager::get_document_data_by_id(
+        $_REQUEST['id'],
+        $courseCode,
+        true,
+        $sessionId
+    );
+}
+
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
-        $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
+        $group_properties   = GroupManager::get_group_properties($groupId);
+        $document_id        = DocumentManager::get_document_id($_course, $group_properties['directory']);
         $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
-
-        $dir                = $document_data['path'];
-        $folder_id          = $document_data['id'];
+        $dir = $document_data['path'];
+        $folder_id = $document_data['id'];
     } else {
         $dir = '/';
         $folder_id = 0;
@@ -225,7 +240,9 @@ for ($i = 0; $i < ($count_dir); $i++) {
 	$relative_url .= '../';
 }
 
-// We do this in order to avoid the condition in html_editor.php ==> if ($this -> fck_editor->Config['CreateDocumentWebDir']=='' || $this -> fck_editor->Config['CreateDocumentDir']== '')
+/* We do this in order to avoid the condition in html_editor.php ==> if
+   ($this -> fck_editor->Config['CreateDocumentWebDir']=='' || $this -> fck_editor->Config['CreateDocumentDir']== '')*
+*/
 if ($relative_url== '') {
 	$relative_url = '/';
 }
@@ -283,7 +300,7 @@ if (!$is_allowed_in_course) {
 
 if (!($is_allowed_to_edit ||
     $_SESSION['group_member_with_upload_rights'] ||
-    is_my_shared_folder($_user['user_id'], $dir, api_get_session_id()))
+    is_my_shared_folder($userId, $dir, api_get_session_id()))
 ) {
 	api_not_allowed(true);
 }
@@ -364,7 +381,7 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 // If we are not in the certificates creation, display a folder chooser for the
 // new document created
 
-if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $current_session_id)) {
+if (!$is_certificate_mode && !is_my_shared_folder($userId, $dir, $current_session_id)) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 
 	$parent_select = $form->addElement('select', 'curdirpath', array(null, get_lang('DestinationDirectory')));
@@ -472,10 +489,6 @@ if ($form->validate()) {
 	$readonly = isset($values['readonly']) ? 1 : 0;
 	$values['title'] = trim($values['title']);
 
-	/*if (!empty($values['curdirpath'])) {
-		$dir = $values['curdirpath'];
-	}*/
-
     if ($dir[strlen($dir) - 1] != '/') {
 		$dir .= '/';
 	}
@@ -487,10 +500,16 @@ if ($form->validate()) {
 	$filename = replace_dangerous_char($filename);
 	$filename = disable_dangerous_file($filename);
 
-    //Setting the title
-	$title 		= $values['title'];
+    $filename .= get_document_suffix(
+        $_course,
+        api_get_session_id(),
+        api_get_group_id()
+    );
 
-    //Setting the extension
+    // Setting the title
+	$title = $values['title'];
+
+    // Setting the extension
 	$extension = 'html';
 
 	$content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
@@ -498,6 +517,15 @@ if ($form->validate()) {
 	if (strpos($content, '/css/frames.css') == false) {
 		$content = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /><style> body{margin:50px;}</style></head>', $content);
 	}
+
+    // Don't create file with the same name.
+    if (file_exists($filepath.$filename.'.'.$extension)) {
+        Display:: display_header($nameTools, 'Doc');
+        Display:: display_error_message(get_lang('FileExists').' '.$title, false);
+        Display:: display_footer();
+        exit;
+    }
+
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
 
@@ -511,25 +539,34 @@ if ($form->validate()) {
 		fputs($fp, $content);
 		fclose($fp);
 		chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
+
 		if (!is_dir($filepath.'css')) {
 			mkdir($filepath.'css', api_get_permissions_for_new_directories());
 			$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'], null, null, null, null, $current_session_id);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], null, null, null, null, $current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $userId, null, null, null, null, $current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $userId, null, null, null, null, $current_session_id);
 		}
 
 		if (!is_file($filepath.'css/frames.css')) {
 			// Make a copy of the current css for the new document
 			copy(api_get_path(SYS_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css', $filepath.'css/frames.css');
 			$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], null, null, null, null, $current_session_id);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], null, null, null, null, $current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $userId, null, null, null, null, $current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $userId, null, null, null, null, $current_session_id);
 		}
 
 		$file_size = filesize($filepath.$filename.'.'.$extension);
 		$save_file_path = $dir.$filename.'.'.$extension;
 
-		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $title, null, $readonly);
+        $document_id = add_document(
+            $_course,
+            $save_file_path,
+            'file',
+            $file_size,
+            $title,
+            null,
+            $readonly
+        );
 
 		if ($document_id) {
 			api_item_property_update(
@@ -537,7 +574,7 @@ if ($form->validate()) {
                 TOOL_DOCUMENT,
                 $document_id,
                 'DocumentAdded',
-                $_user['user_id'],
+                $userId,
                 $to_group_id,
                 null,
                 null,
@@ -545,7 +582,7 @@ if ($form->validate()) {
                 $current_session_id
             );
 			// Update parent folders
-			item_property_update_on_folder($_course, $dir, $_user['user_id']);
+			item_property_update_on_folder($_course, $dir, $userId);
 			$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
             $new_comment = Database::escape_string($new_comment);
 			$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
@@ -600,15 +637,16 @@ if ($form->validate()) {
 	}
 
 	Display :: display_header($nameTools, "Doc");
-	//api_display_tool_title($nameTools);
 	// actions
 	echo '<div class="actions">';
 
 	// link back to the documents overview
 	if ($is_certificate_mode)
-		echo '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
+            Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 	else
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
+            Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 	echo '</div>';
 
 	if ($is_certificate_mode) {

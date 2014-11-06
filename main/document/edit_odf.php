@@ -4,9 +4,7 @@
  * ODF document editor script (maybe unused)
  * @package chamilo.document
  */
-/**
- * Init
- */
+
 require_once '../inc/global.inc.php';
 //exit;
 $document_id = $_GET['id'];

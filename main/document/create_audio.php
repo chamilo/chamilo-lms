@@ -125,13 +125,9 @@ if (isset ($group)) {
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
-		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-
-		echo '<a href="create_audio.php?'.api_get_cidreq().'&amp;id='.$document_id.'&amp;dt2a=google">'.Display::return_icon('google.png',get_lang('GoogleAudio'),'',ICON_SIZE_MEDIUM).'</a>';
-
-		echo '<a href="create_audio.php?'.api_get_cidreq().'&amp;id='.$document_id.'&amp;dt2a=pediaphon">'.Display::return_icon('pediaphon.png', get_lang('Pediaphon'),'',ICON_SIZE_MEDIUM).'</a>';
-
-
+echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="create_audio.php?'.api_get_cidreq().'&amp;id='.$document_id.'&amp;dt2a=google">'.Display::return_icon('google.png',get_lang('GoogleAudio'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="create_audio.php?'.api_get_cidreq().'&amp;id='.$document_id.'&amp;dt2a=pediaphon">'.Display::return_icon('pediaphon.png', get_lang('Pediaphon'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 ?>
@@ -280,7 +276,6 @@ $(document).ready(function(){
 
 		<!--French -->
 		voices[3]=["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
-
 
 		function update_voices(selectedvoicegroup){
 		voiceslist.options.length=0

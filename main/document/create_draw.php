@@ -9,11 +9,6 @@
  * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
-/**
- * Code
- */
-
-/*	INIT SECTION */
 
 // Name of the language file that needs to be included
 $language_file = array('document');
@@ -114,33 +109,22 @@ if (isset ($group)) {
 }
 
 // Interbreadcrumb for the current directory root path
-	// Copied from document.php
-	$dir_array = explode('/', $dir);
-	$array_len = count($dir_array);
+// Copied from document.php
+$dir_array = explode('/', $dir);
+$array_len = count($dir_array);
 
-	/*
-	TODO:check and delete this code
-	if (!$is_certificate_mode) {
-		if ($array_len > 1) {
-			if (empty($_SESSION['_gid'])) {
-				$url_dir = 'document.php?&curdirpath=/';
-				$interbreadcrumb[] = array('url' => $url_dir, 'name' => get_lang('HomeDirectory'));
-			}
-		}
-	}
-	*/
-	// Interbreadcrumb for the current directory root path
-	if (empty($document_data['parents'])) {
-		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
-	} else {
-		foreach($document_data['parents'] as $document_sub_data) {
-			$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
-		}
-	}
+// Interbreadcrumb for the current directory root path
+if (empty($document_data['parents'])) {
+    $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+} else {
+    foreach($document_data['parents'] as $document_sub_data) {
+        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+    }
+}
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
-		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (api_browser_support('svg')) {

@@ -9,9 +9,6 @@
  * @since 30/January/2011
  * @todo clean all file
 */
-/**
- * Code
- */
 
 /*	INIT SECTION */
 $language_file = array('document');
@@ -33,7 +30,7 @@ if (api_get_setting('enabled_support_paint') == 'false') {
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
         $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
         $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
     }
@@ -100,7 +97,6 @@ if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_
 	api_not_allowed(true);
 }
 
-
 /*	Header */
 event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
@@ -122,14 +118,15 @@ if (empty($document_data['parents'])) {
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
-		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="document.php?id='.$document_id.'">'.
+    Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 ///pixlr
 // max size 1 Mb ??
-$title=urlencode(utf8_encode(get_lang('NewImage')));//TODO:check
+$title = urlencode(utf8_encode(get_lang('NewImage')));//TODO:check
 //
-$image=api_get_path(WEB_IMG_PATH).'canvas1024x768.png';
+$image = api_get_path(WEB_IMG_PATH) . 'canvas1024x768.png';
 //
 $pixlr_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
 $langpixlr  = api_get_language_isocode();
@@ -157,16 +154,11 @@ if ($_SERVER['HTTP_HOST']=="localhost") {
 		@file_put_contents($path_and_file, $crossdomain);
 	}
 	$credentials="true";
-}
-else {
+} else {
 	$credentials="false";
 }
-
 $pixlr_url = api_get_protocol().'://pixlr.com/editor/?title='.$title.'&amp;image='.$image.'&amp;loc='.$loc.'&amp;referrer='.$referrer.'&amp;target='.$target.'&amp;exit='.$exit_path.'&amp;locktarget='.$locktarget.'&amp;locktitle='.$locktitle.'&amp;credentials='.$credentials;
-
-
 ?>
-
 <script type="text/javascript">
 
 document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $pixlr_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe></div>');

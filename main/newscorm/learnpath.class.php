@@ -5679,14 +5679,15 @@ class learnpath
     /**
      * Creates the default learning path folder
      * @param array $course
-     * @return bool|string
+     * @return bool
      */
     public static function generate_learning_path_folder($course) {
         //Creating learning_path folder
     	$dir = '/learning_path';
     	$filepath = api_get_path(SYS_COURSE_PATH).$course['path'] . '/document';
+        $folder = false;
     	if (!is_dir($filepath.'/'.$dir)) {
-            $folder = create_unexisting_directory(
+            $folderData = create_unexisting_directory(
                 $course,
                 api_get_user_id(),
                 api_get_session_id(),
@@ -5697,6 +5698,9 @@ class learnpath
                 get_lang('LearningPaths'),
                 0
             );
+            if (!empty($folderData)) {
+                $folder = true;
+            }
     	} else {
     		$folder = true;
     	}
@@ -5708,7 +5712,8 @@ class learnpath
      * @param string $lp_name
      * @return array
      */
-    public function generate_lp_folder($course, $lp_name = null) {
+    public function generate_lp_folder($course, $lp_name = null)
+    {
     	$filepath = '';
     	$dir = '/learning_path/';
 
@@ -5717,14 +5722,26 @@ class learnpath
         }
 
         $folder = self::generate_learning_path_folder($course);
-    	//Creating LP folder
+    	// Creating LP folder
     	if ($folder) {
     		//Limits title size
     		$title = api_substr(replace_dangerous_char($lp_name), 0 , 80);
     		$dir   = $dir.$title;
     		$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
     		if (!is_dir($filepath.'/'.$dir)) {
-    			$folder = create_unexisting_directory($course, api_get_user_id(), 0, 0, 0, $filepath, $dir , $lp_name);
+                $folderData = create_unexisting_directory(
+                    $course,
+                    api_get_user_id(),
+                    0,
+                    0,
+                    0,
+                    $filepath,
+                    $dir,
+                    $lp_name
+                );
+                if (!empty($folderData)) {
+                    $folder = true;
+                }
     		} else {
     			$folder = true;
     		}
@@ -5733,7 +5750,11 @@ class learnpath
     			$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document'.$dir;
     		}
     	}
-    	$array =  array('dir' => $dir, 'filepath' => $filepath, 'folder' => $folder);
+        $array = array(
+            'dir' => $dir,
+            'filepath' => $filepath,
+            'folder' => $folder
+        );
     	return $array;
     }
 

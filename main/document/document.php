@@ -232,7 +232,10 @@ switch ($action) {
                     if ($deleteDocument) {
                         $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
                         DocumentManager::remove_attach_certificate(api_get_course_id(), $certificateId);
-                        $message = Display::return_message(get_lang('DocDeleted').': '.$documentInfo['path'], 'success');
+                        $message = Display::return_message(
+                            get_lang('DocDeleted') . ': ' . $documentInfo['title'],
+                            'success'
+                        );
                     } else {
                         $message = Display::return_message(get_lang('DocDeleteError'), 'warning');
                     }
@@ -1120,7 +1123,7 @@ if ($is_allowed_to_edit ||
                             null,
                             $sessionId
                         )) {
-                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['path'], 'confirmation');
+                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation');
                         } else {
                             $messages .= Display::return_message(get_lang('ViModProb'), 'error');
                         }
@@ -1139,7 +1142,7 @@ if ($is_allowed_to_edit ||
                             null,
                             $sessionId
                         )) {
-                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['path'], 'confirmation');
+                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation');
                         } else {
                             $messages .= Display::return_message(get_lang('ViModProb'), 'error');
                         }
@@ -1160,7 +1163,10 @@ if ($is_allowed_to_edit ||
                                         $sessionId
                                     )
                                     ) {
-                                        $messages .= Display::return_message(get_lang('CantDeleteReadonlyFiles'), 'error');
+                                        $messages .= Display::return_message(
+                                            get_lang('CantDeleteReadonlyFiles'),
+                                            'error'
+                                        );
                                         break 2;
                                     }
                                 }
@@ -1177,7 +1183,10 @@ if ($is_allowed_to_edit ||
                             $groupId
                         );
                         if (!empty($deleteDocument)) {
-                            $messages .= Display::return_message(get_lang('DocDeleted').': '.$data['path'], 'confirmation');
+                            $messages .= Display::return_message(
+                                get_lang('DocDeleted').': '.$data['title'],
+                                'confirmation'
+                            );
                         }
                         break;
                 }
@@ -1205,6 +1214,7 @@ if ($is_allowed_to_edit ||
         if ($post_dir_name == '../' || $post_dir_name == '.' || $post_dir_name == '..') {
             $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
         } else {
+            // dir_id is the parent folder id.
             if (!empty($_POST['dir_id'])) {
                 // Get the document data from the ID
                 $document_data = DocumentManager::get_document_data_by_id(
@@ -1232,7 +1242,7 @@ if ($is_allowed_to_edit ||
             $dir_check = $base_work_dir.$dir_name;
             $visibility = empty($groupId) ? null : 1;
 
-            $created_dir = create_unexisting_directory(
+            $newFolderData = create_unexisting_directory(
                 $courseInfo,
                 api_get_user_id(),
                 $sessionId,
@@ -1244,10 +1254,16 @@ if ($is_allowed_to_edit ||
                 $visibility
             );
 
-            if ($created_dir) {
-                $message = Display::return_message(get_lang('DirCr').' '.$created_dir, 'confirmation');
+            if (!empty($newFolderData)) {
+                $message = Display::return_message(
+                    get_lang('DirCr') . ' ' . $newFolderData['title'],
+                    'confirmation'
+                );
             } else {
-                $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
+                $message = Display::return_message(
+                    get_lang('CannotCreateDir'),
+                    'error'
+                );
             }
 
         }

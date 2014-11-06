@@ -7563,3 +7563,24 @@ function api_get_supported_image_extensions()
     }
     return $supportedImageExtensions;
 }
+
+/**
+ * This setting changes the registration status for the campus
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version August 2006
+ * @param   bool    $listCampus Whether we authorize
+ * @todo the $_settings should be reloaded here. => write api function for this and use this in global.inc.php also.
+ */
+function api_register_campus($listCampus = true) {
+    $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+
+    $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
+    Database::query($sql);
+
+    if (!$listCampus) {
+        $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
+        Database::query($sql);
+    }
+    // Reload the settings.
+}

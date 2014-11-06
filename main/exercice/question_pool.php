@@ -715,8 +715,21 @@ $header = array(
 
 $data = array();
 
+/*$hideDoubles = false;
+if (empty($exerciseId) && !empty($session_id) && $session_id != '-1') {
+    $hideDoubles = true;
+}
+$questionAdded = array();*/
+
 if (is_array($mainQuestionList)) {
     foreach ($mainQuestionList as $question) {
+
+        /*if ($hideDoubles) {
+            if (in_array($question['question'], $questionAdded)) {
+                continue;
+            }
+        }
+        $questionAdded[$question['question']] = $question;*/
 
         $row = array();
 
@@ -731,7 +744,7 @@ if (is_array($mainQuestionList)) {
         }
 
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
-        //$exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
+        $exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
         $row[] = get_a_tag_for_question(
             $questionTagA,
             $fromExercise,
@@ -739,7 +752,7 @@ if (is_array($mainQuestionList)) {
             $question['type'],
             $question['question'],
             $sessionId
-        );
+        ).$exerciseName;
         $row[] = $question_type;
         $row[] = get_question_categorie_for_question($selected_course, $question['id']);
         $row[] = $question['level'];

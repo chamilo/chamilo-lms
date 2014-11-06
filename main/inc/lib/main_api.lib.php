@@ -912,36 +912,48 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     $is_allowed_in_course = api_is_allowed_in_course();
     $is_visible = false;
 
+    $course_info = api_get_course_info();
+
+    if (empty($course_info)) {
+        api_not_allowed($print_headers);
+        return false;
+    }
+
     if (api_is_drh()) {
         return true;
     }
+
     if (api_is_platform_admin($allow_session_admins)) {
         return true;
     }
-    $course_info = api_get_course_info();
 
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:
-            case COURSE_VISIBILITY_CLOSED: //Completely closed: the course is only accessible to the teachers. - 0
+            case COURSE_VISIBILITY_CLOSED:
+                // Completely closed: the course is only accessible to the teachers. - 0
                 if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
                     $is_visible = true;
                 }
                 break;
-            case COURSE_VISIBILITY_REGISTERED: //Private - access authorized to course members only - 1
+            case COURSE_VISIBILITY_REGISTERED:
+                // Private - access authorized to course members only - 1
                 if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
                     $is_visible = true;
                 }
                 break;
-            case COURSE_VISIBILITY_OPEN_PLATFORM: // Open - access allowed for users registered on the platform - 2
+            case COURSE_VISIBILITY_OPEN_PLATFORM:
+                // Open - access allowed for users registered on the platform - 2
                 if (api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
-            case COURSE_VISIBILITY_OPEN_WORLD: //Open - access allowed for the whole world - 3
+            case COURSE_VISIBILITY_OPEN_WORLD:
+                //Open - access allowed for the whole world - 3
                 $is_visible = true;
                 break;
-            case COURSE_VISIBILITY_HIDDEN: //Completely closed: the course is only accessible to the teachers. - 0
+            case COURSE_VISIBILITY_HIDDEN:
+                //Completely closed: the course is only accessible to the teachers. - 0
                 if (api_is_platform_admin()) {
                     $is_visible = true;
                 }

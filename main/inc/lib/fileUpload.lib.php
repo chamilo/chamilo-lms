@@ -53,6 +53,8 @@ function disable_dangerous_file($filename) {
  * @param string $path
  * @param string $name
  *
+ * @deprecated
+ *
  * @return string new unique name
  */
 function unique_name($path, $name)
@@ -168,348 +170,422 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * If we decide to save ALL kinds of documents in one database,
  * we could extend this with a $type='document', 'scormdocument',...
  *
- * @param array $_course
- * @param array $uploaded_file ($_FILES)
- * @param string $base_work_dir
- * @param string $upload_path
- * @param int $user_id
- * @param int $to_group_id, 0 for everybody
- * @param int $to_user_id, NULL for everybody
+ * @param array $courseInfo
+ * @param array $uploadedFile ($_FILES)
+ * @param string $documentDir
+ * @param string $uploadPath
+ * @param int $userId
+ * @param int $groupId, 0 for everybody
+ * @param int $toUserId, NULL for everybody
  * @param int $unzip 1/0
- * @param string $what_if_file_exists overwrite, rename or warn if exists (default)
- * @param boolean Optional output parameter.
+ * @param string $whatIfFileExists overwrite, rename or warn if exists (default)
+ * @param boolean $output Optional output parameter.
+ * @param bool $onlyUploadFile
+ * @param string $comment
+ * @param int $sessionId
+ *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
  * @param string $comment
  * @return string path of the saved file
  */
 function handle_uploaded_document(
-    $_course,
-    $uploaded_file,
-    $base_work_dir,
-    $upload_path,
-    $user_id,
-    $to_group_id = 0,
-    $to_user_id = null,
+    $courseInfo,
+    $uploadedFile,
+    $documentDir,
+    $uploadPath,
+    $userId,
+    $groupId = 0,
+    $toUserId = null,
     $unzip = 0,
-    $what_if_file_exists = '',
+    $whatIfFileExists = '',
     $output = true,
     $onlyUploadFile = false,
     $comment = null,
     $sessionId = null
 ) {
-    if (!$user_id) {
+    if (!$userId) {
         return false;
     }
 
-    $uploaded_file['name'] = stripslashes($uploaded_file['name']);
+    $uploadedFile['name'] = stripslashes($uploadedFile['name']);
     // Add extension to files without one (if possible)
-    $uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']);
+    $uploadedFile['name'] = add_ext_on_mime($uploadedFile['name'], $uploadedFile['type']);
 
     if (empty($sessionId)) {
-        $current_session_id = api_get_session_id();
+        $sessionId = api_get_session_id();
     } else {
-        $current_session_id = intval($sessionId);
+        $sessionId = intval($sessionId);
     }
 
     // Just in case process_uploaded_file is not called
-    $max_filled_space = DocumentManager::get_course_quota();
+    $maxSpace = DocumentManager::get_course_quota();
 
     // Check if there is enough space to save the file
-    if (!DocumentManager::enough_space($uploaded_file['size'], $max_filled_space)) {
+    if (!DocumentManager::enough_space($uploadedFile['size'], $maxSpace)) {
         if ($output) {
             Display::display_error_message(get_lang('UplNotEnoughSpace'));
         }
+
         return false;
     }
 
     // If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
-    if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
+    if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         return unzip_uploaded_document(
-            $uploaded_file,
-            $upload_path,
-            $base_work_dir,
-            $max_filled_space,
+            $uploadedFile,
+            $uploadPath,
+            $documentDir,
+            $maxSpace,
             $output,
-            $to_group_id
+            $groupId
         );
-    } elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
+    } elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         // We can only unzip ZIP files (no gz, tar,...)
         if ($output) {
-            Display::display_error_message(get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain'));
+            Display::display_error_message(
+                get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain')
+            );
         }
+
         return false;
     } else {
         // Clean up the name, only ASCII characters should stay. (and strict)
-        $clean_name = replace_dangerous_char($uploaded_file['name'], 'strict');
+        $cleanName = replace_dangerous_char($uploadedFile['name'], 'strict');
 
         // No "dangerous" files
-        $clean_name = disable_dangerous_file($clean_name);
+        $cleanName = disable_dangerous_file($cleanName);
 
         // Checking file extension
-        if (!filter_extension($clean_name)) {
+        if (!filter_extension($cleanName)) {
             if ($output) {
-                Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+                Display::display_error_message(
+                    get_lang('UplUnableToSaveFileFilteredExtension')
+                );
             }
+
             return false;
         } else {
+
             // If the upload path differs from / (= root) it will need a slash at the end
-            if ($upload_path != '/') {
-                $upload_path = $upload_path.'/';
+            if ($uploadPath != '/') {
+                $uploadPath = $uploadPath.'/';
             }
 
             // Full path to where we want to store the file with trailing slash
-            $where_to_save = $base_work_dir.$upload_path;
+            $whereToSave = $documentDir.$uploadPath;
 
             // At least if the directory doesn't exist, tell so
-            if (!is_dir($where_to_save)) {
-                if (!mkdir($where_to_save, api_get_permissions_for_new_directories())) {
+            if (!is_dir($whereToSave)) {
+                if (!mkdir($whereToSave, api_get_permissions_for_new_directories())) {
                     if ($output) {
                         Display::display_error_message(
-                            get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')'
+                            get_lang('DestDirectoryDoesntExist').' ('.$uploadPath.')'
                         );
                     }
+
                     return false;
                 }
             }
 
-            // Full path of the destination
-
-            $suffix = get_document_suffix($_course, $sessionId, $to_group_id);
-            $fileInfo = pathinfo($clean_name);
-            $fileSystemName = $fileInfo['filename'].$suffix.'.'.$fileInfo['extension'];
-
-            $store_path = $where_to_save.$fileSystemName;
-            $file_path = $upload_path.$fileSystemName;
-
-            // Name of the document without the extension (for the title)
-            $document_name = get_document_title($uploaded_file['name']);
-            // Size of the uploaded file (in bytes)
-            $file_size = $uploaded_file['size'];
-            $files_perm = api_get_permissions_for_new_files();
-
-            // Just upload the file.
+            // Just upload the file "as is"
             if ($onlyUploadFile) {
-                $errorResult = moveUploadedFile($uploaded_file, $store_path);
+                $errorResult = moveUploadedFile($uploadedFile, $whereToSave.$cleanName);
                 if ($errorResult) {
-                    return $store_path;
+
+                    return $whereToSave.$cleanName;
                 } else {
+
                     return $errorResult;
                 }
             }
 
-            $docId = DocumentManager::get_document_id(
-                $_course,
-                $file_path,
-                $current_session_id
+            /*
+                Based in the clean name we generate a new filesystem name
+                Using the session_id and group_id if values are not empty
+            */
+
+            $fileExists = DocumentManager::documentExists(
+                $uploadPath.$cleanName,
+                $courseInfo,
+                $sessionId,
+                $groupId
+            );
+            error_log('ddd');
+            error_log($cleanName);
+            $fileSystemName = DocumentManager::fixDocumentName(
+                $cleanName,
+                'file',
+                $courseInfo,
+                $sessionId,
+                $groupId
             );
 
-            $documentList = DocumentManager::getDocumentByPathInCourse(
-                $_course,
-                $file_path
+            error_log($fileSystemName);
+
+            // Name of the document without the extension (for the title)
+            $documentTitle = get_document_title($uploadedFile['name']);
+
+            // Size of the uploaded file (in bytes)
+            $fileSize = $uploadedFile['size'];
+
+            // File permissions
+            $filePermissions = api_get_permissions_for_new_files();
+
+            // Example: /var/www/chamilo/courses/xxx/document/folder/picture.jpg
+            $fullPath = $whereToSave.$fileSystemName;
+            // Example: /folder/picture.jpg
+            $filePath = $uploadPath.$fileSystemName;
+
+            $docId = DocumentManager::get_document_id(
+                $courseInfo,
+                $filePath,
+                $sessionId
             );
+
+            error_log($docId);
+
+            $documentList = DocumentManager::getDocumentByPathInCourse(
+                $courseInfo,
+                $filePath //$filePath
+            );
+
+            //var_dump($documentList);
 
             // This means that the path already exists in this course.
             if (!empty($documentList)) {
-                $found = false;
+                //$found = false;
                 // Checking if we are talking about the same course + session
-                foreach ($documentList as $document) {
-                    if ($document['session_id'] == $current_session_id) {
+                /*foreach ($documentList as $document) {
+                    if ($document['session_id'] == $sessionId) {
                         $found = true;
                         break;
                     }
-                }
+                }*/
 
-                if ($found == false) {
-                    $what_if_file_exists = 'rename';
-                }
+                //if ($found == false) {
+                    $whatIfFileExists = 'rename';
+                //}
             }
 
+            error_log($whatIfFileExists);
             // What to do if the target file exists
-            switch ($what_if_file_exists) {
+            switch ($whatIfFileExists) {
                 // Overwrite the file if it exists
                 case 'overwrite':
                     // Check if the target file exists, so we can give another message
-                    $file_exists = file_exists($store_path);
-                    if (moveUploadedFile($uploaded_file, $store_path)) {
-                        chmod($store_path, $files_perm);
-                        if ($file_exists && $docId) {
+                    $fileExists = file_exists($fullPath);
+                    error_log('11');
+                    error_log($fileExists);
+                    if (moveUploadedFile($uploadedFile, $fullPath)) {
+                        chmod($fullPath, $filePermissions);
+                        error_log('222');
+                        if ($fileExists && $docId) {
+                            error_log('333');
                             // UPDATE DATABASE
-                            $document_id = DocumentManager::get_document_id($_course, $file_path);
-                            if (is_numeric($document_id)) {
+                            $documentId = DocumentManager::get_document_id(
+                                $courseInfo,
+                                $filePath
+                            );
+                            if (is_numeric($documentId)) {
                                 // Update file size
                                 update_existing_document(
-                                    $_course,
-                                    $document_id,
-                                    $uploaded_file['size']
+                                    $courseInfo,
+                                    $documentId,
+                                    $uploadedFile['size']
                                 );
 
                                 // Update document item_property
                                 api_item_property_update(
-                                    $_course,
+                                    $courseInfo,
                                     TOOL_DOCUMENT,
-                                    $document_id,
+                                    $documentId,
                                     'DocumentUpdated',
-                                    $user_id,
-                                    $to_group_id,
-                                    $to_user_id,
+                                    $userId,
+                                    $groupId,
+                                    $toUserId,
                                     null,
                                     null,
-                                    $current_session_id
+                                    $sessionId
                                 );
 
                                 // Redo visibility
-                                api_set_default_visibility(TOOL_DOCUMENT, $document_id);
+                                api_set_default_visibility(TOOL_DOCUMENT, $documentId);
                             } else {
                                 // There might be cases where the file exists on disk but there is no registration of that in the database
                                 // In this case, and if we are in overwrite mode, overwrite and create the db record
-                                $document_id = add_document(
-                                    $_course,
-                                    $file_path,
+                                $documentId = add_document(
+                                    $courseInfo,
+                                    $filePath,
                                     'file',
-                                    $file_size,
-                                    $document_name,
+                                    $fileSize,
+                                    $documentTitle,
                                     $comment,
                                     0,
                                     true,
-                                    $to_group_id,
-                                    $current_session_id
+                                    $groupId,
+                                    $sessionId
                                 );
 
-                                if ($document_id) {
+                                if ($documentId) {
                                     // Put the document in item_property update
                                     api_item_property_update(
-                                        $_course,
+                                        $courseInfo,
                                         TOOL_DOCUMENT,
-                                        $document_id,
+                                        $documentId,
                                         'DocumentAdded',
-                                        $user_id,
-                                        $to_group_id,
-                                        $to_user_id,
+                                        $userId,
+                                        $groupId,
+                                        $toUserId,
                                         null,
                                         null,
-                                        $current_session_id
+                                        $sessionId
                                     );
 
                                     // Redo visibility
-                                    api_set_default_visibility(TOOL_DOCUMENT, $document_id);
+                                    api_set_default_visibility(TOOL_DOCUMENT, $documentId);
                                 }
                             }
 
                             // If the file is in a folder, we need to update all parent folders
-                            item_property_update_on_folder($_course, $upload_path, $user_id);
+                            item_property_update_on_folder($courseInfo, $uploadPath, $userId);
                             // Display success message with extra info to user
                             if ($output) {
                                 Display::display_confirmation_message(
-                                    get_lang('UplUploadSucceeded') . '<br /> ' . $document_name . ' ' . get_lang('UplFileOverwritten'),
+                                    get_lang('UplUploadSucceeded') . '<br /> ' . $documentTitle . ' ' . get_lang('UplFileOverwritten'),
                                     false
                                 );
                             }
-                            return $file_path;
+
+                            return $filePath;
                         } else {
+
                             // Put the document data in the database
-                            $document_id = add_document(
-                                $_course,
-                                $file_path,
+                            $documentId = add_document(
+                                $courseInfo,
+                                $filePath,
                                 'file',
-                                $file_size,
-                                $document_name,
+                                $fileSize,
+                                $documentTitle,
                                 $comment,
                                 0,
                                 true,
-                                $to_group_id,
-                                $current_session_id
+                                $groupId,
+                                $sessionId
                             );
 
-                            if ($document_id) {
+                            if ($documentId) {
                                 // Put the document in item_property update
                                 api_item_property_update(
-                                    $_course,
+                                    $courseInfo,
                                     TOOL_DOCUMENT,
-                                    $document_id,
+                                    $documentId,
                                     'DocumentAdded',
-                                    $user_id,
-                                    $to_group_id,
-                                    $to_user_id,
+                                    $userId,
+                                    $groupId,
+                                    $toUserId,
                                     null,
                                     null,
-                                    $current_session_id
+                                    $sessionId
                                 );
 
                                 // Redo visibility
-                                api_set_default_visibility(TOOL_DOCUMENT, $document_id);
+                                api_set_default_visibility(TOOL_DOCUMENT, $documentId);
                             }
                             // If the file is in a folder, we need to update all parent folders
-                            item_property_update_on_folder($_course, $upload_path, $user_id);
+                            item_property_update_on_folder($courseInfo, $uploadPath, $userId);
                             // Display success message to user
                             if ($output) {
-                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br /> '.$document_name, false);
+                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br /> '.$documentTitle, false);
                             }
-                            return $file_path;
+
+                            return $filePath;
                         }
                     } else {
                         if ($output) {
                             Display::display_error_message(get_lang('UplUnableToSaveFile'));
                         }
+
                         return false;
                     }
                     break;
                 // Rename the file if it exists
                 case 'rename':
+
                     // Always rename.
-                    $new_name = unique_name($where_to_save, $fileSystemName);
-                    $softName = unique_name($where_to_save, $clean_name);
-                    $document_name = $softName;
-                    $store_path = $where_to_save.$new_name;
-                    $new_file_path = $upload_path.$new_name;
+                    $cleanName = DocumentManager::getUniqueFileName(
+                        $uploadPath,
+                        $cleanName,
+                        $courseInfo,
+                        $sessionId,
+                        $groupId
+                    );
 
-                    if (moveUploadedFile($uploaded_file, $store_path)) {
+                    $fileSystemName = DocumentManager::fixDocumentName(
+                        $cleanName,
+                        'file',
+                        $courseInfo,
+                        $sessionId,
+                        $groupId
+                    );
 
-                        chmod($store_path, $files_perm);
+                    $documentTitle = get_document_title($cleanName);
+
+                    error_log('---->fin');
+                    error_log($fileSystemName);
+                    error_log($cleanName);
+
+                    $fullPath = $whereToSave.$fileSystemName;
+                    $filePath = $uploadPath.$fileSystemName;
+
+                    if (moveUploadedFile($uploadedFile, $fullPath)) {
+
+                        chmod($fullPath, $filePermissions);
                         // Put the document data in the database
-                        $document_id = add_document(
-                            $_course,
-                            $new_file_path,
+                        $documentId = add_document(
+                            $courseInfo,
+                            $filePath,
                             'file',
-                            $file_size,
-                            $document_name,
+                            $fileSize,
+                            $documentTitle,
                             $comment, // comment
                             0, // read only
                             true, // save visibility
-                            $to_group_id,
-                            $current_session_id
+                            $groupId,
+                            $sessionId
                         );
 
-                        if ($document_id) {
+                        if ($documentId) {
                             // Update document item_property
                             api_item_property_update(
-                                $_course,
+                                $courseInfo,
                                 TOOL_DOCUMENT,
-                                $document_id,
+                                $documentId,
                                 'DocumentAdded',
-                                $user_id,
-                                $to_group_id,
-                                $to_user_id,
+                                $userId,
+                                $groupId,
+                                $toUserId,
                                 null,
                                 null,
-                                $current_session_id
+                                $sessionId
                             );
 
                             // Redo visibility
-                            api_set_default_visibility(TOOL_DOCUMENT, $document_id);
+                            api_set_default_visibility(TOOL_DOCUMENT, $documentId);
                         }
 
                         // If the file is in a folder, we need to update all parent folders
-                        item_property_update_on_folder($_course, $upload_path, $user_id);
+                        item_property_update_on_folder($courseInfo, $uploadPath, $userId);
 
                         // Display success message to user
                         if ($output) {
                             Display::display_confirmation_message(
-                                get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') .' '.$document_name,
+                                get_lang('UplUploadSucceeded') . '<br />' . get_lang('UplFileSavedAs') .' '.$documentTitle,
                                 false
                             );
                         }
-                        return $new_file_path;
+                        error_log($filePath);
+                        return $filePath;
                     } else {
                         if ($output) {
                             Display::display_error_message(get_lang('UplUnableToSaveFile'));
@@ -519,59 +595,59 @@ function handle_uploaded_document(
                     break;
                 default:
                     // Only save the file if it doesn't exist or warn user if it does exist
-                    if (file_exists($store_path) && $docId) {
+                    if (file_exists($fullPath) && $docId) {
                         if ($output) {
-                            Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
+                            Display::display_error_message($cleanName.' '.get_lang('UplAlreadyExists'));
                         }
                     } else {
-                        if (moveUploadedFile($uploaded_file, $store_path)) {
-                            chmod($store_path, $files_perm);
+                        if (moveUploadedFile($uploadedFile, $fullPath)) {
+                            chmod($fullPath, $filePermissions);
 
                             // Put the document data in the database
-                            $document_id = add_document(
-                                $_course,
-                                $file_path,
+                            $documentId = add_document(
+                                $courseInfo,
+                                $filePath,
                                 'file',
-                                $file_size,
-                                $document_name,
+                                $fileSize,
+                                $documentTitle,
                                 $comment,
                                 0,
                                 true,
-                                $to_group_id,
-                                $current_session_id
+                                $groupId,
+                                $sessionId
                             );
 
-                            if ($document_id) {
+                            if ($documentId) {
                                 // Update document item_property
                                 api_item_property_update(
-                                    $_course,
+                                    $courseInfo,
                                     TOOL_DOCUMENT,
-                                    $document_id,
+                                    $documentId,
                                     'DocumentAdded',
-                                    $user_id,
-                                    $to_group_id,
-                                    $to_user_id,
+                                    $userId,
+                                    $groupId,
+                                    $toUserId,
                                     null,
                                     null,
-                                    $current_session_id
+                                    $sessionId
                                 );
                                 // Redo visibility
-                                api_set_default_visibility(TOOL_DOCUMENT, $document_id);
+                                api_set_default_visibility(TOOL_DOCUMENT, $documentId);
                             }
 
                             // If the file is in a folder, we need to update all parent folders
                             item_property_update_on_folder(
-                                $_course,
-                                $upload_path,
-                                $user_id
+                                $courseInfo,
+                                $uploadPath,
+                                $userId
                             );
 
                             // Display success message to user
                             if ($output){
-                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br /> '.$document_name, false);
+                                Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br /> '.$documentTitle, false);
                             }
 
-                            return $file_path;
+                            return $filePath;
                         } else {
                             if ($output) {
                                 Display::display_error_message(get_lang('UplUnableToSaveFile'));
@@ -1136,13 +1212,13 @@ function add_document(
 	        VALUES ($c_id, '$path','$filetype','$filesize','$title', '$comment', $readonly, $session_id)";
 
     if (Database::query($sql)) {
-        $document_id = Database::insert_id();
-        if ($document_id) {
+        $documentId = Database::insert_id();
+        if ($documentId) {
             if ($save_visibility) {
-                api_set_default_visibility($document_id, TOOL_DOCUMENT, $group_id);
+                api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id);
             }
         }
-        return $document_id;
+        return $documentId;
     } else {
         return false;
     }
@@ -1153,21 +1229,21 @@ function add_document(
  * as the file exists, we only need to change the size
  *
  * @param array $_course
- * @param int $document_id
+ * @param int $documentId
  * @param int $filesize
  * @param int $readonly
  * @return boolean true /false
  */
-function update_existing_document($_course, $document_id, $filesize, $readonly = 0)
+function update_existing_document($_course, $documentId, $filesize, $readonly = 0)
 {
     $document_table = Database::get_course_table(TABLE_DOCUMENT);
-    $document_id 	= intval($document_id);
+    $documentId 	= intval($documentId);
     $filesize 		= intval($filesize);
     $readonly 		= intval($readonly);
     $course_id 		= $_course['real_id'];
 
     $sql = "UPDATE $document_table SET size = '$filesize' , readonly = '$readonly'
-			WHERE c_id = $course_id AND id = $document_id";
+			WHERE c_id = $course_id AND id = $documentId";
     if (Database::query($sql)) {
         return true;
     } else {
@@ -1341,19 +1417,6 @@ function search_img_from_html($html_file) {
 }
 
 /**
- * Get folder/file suffix
- * @param array $courseInfo
- * @param int $sessionId
- * @param int $groupId
- *
- * @return string
- */
-function get_document_suffix($courseInfo, $sessionId, $groupId)
-{
-    return '_'.intval($sessionId).'_'.intval($groupId);
-}
-
-/**
  * Creates a new directory trying to find a directory name
  * that doesn't already exist
  * (we could use unique_name() here...)
@@ -1383,22 +1446,34 @@ function create_unexisting_directory(
     $title = null,
     $visibility = null
 ) {
-    $systemFolderName = $desired_dir_name;
-    // Adding prefix folder prefix
-    $prefix = get_document_suffix($_course, $session_id, $to_group_id);
-    $systemFolderName .= $prefix;
+    $course_id = $_course['real_id'];
+    $session_id = intval($session_id);
 
-    /*$nb = '';
-    // add numerical suffix to directory if another one of the same number already exists
-    while (file_exists($base_work_dir.$systemFolderName.$nb)) {
-        $nb += 1;
-    }*/
+    $folderExists = DocumentManager::folderExists(
+        $desired_dir_name,
+        $_course,
+        $session_id,
+        $to_group_id
+    );
+
+    if ($folderExists == true) {
+        return false;
+    }
+
+    $systemFolderName = $desired_dir_name;
+    // Adding suffix
+    $suffix = DocumentManager::getDocumentSuffix(
+        $_course,
+        $session_id,
+        $to_group_id
+    );
+
+    $systemFolderName .= $suffix;
 
     if ($title == null) {
         $title = basename($desired_dir_name);
     }
 
-    $course_id = $_course['real_id'];
     if (!is_dir($base_work_dir.$systemFolderName)) {
 
         mkdir(

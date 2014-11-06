@@ -347,15 +347,21 @@ $defaults['id'] = $folder_id;
 $form->addElement('hidden', 'title_edited', 'false', 'id="title_edited"');
 
 /**
- * Check if a document width the choosen filename allready exists
+ * Check if a document width the chosen filename already exists
  */
 function document_exists($filename) {
-	global $filepath;
-	$filename = addslashes(trim($filename));
+    global $dir;
+    return DocumentManager::documentExists(
+        $dir.$filename.'.html',
+        api_get_course_info(),
+        api_get_session_id(),
+        api_get_group_id()
+    );
+	/*$filename = addslashes(trim($filename));
 	$filename = Security::remove_XSS($filename);
 	$filename = replace_dangerous_char($filename);
 	$filename = disable_dangerous_file($filename);
-	return !file_exists($filepath.$filename.'.html');
+	return !file_exists($filepath.$filename.'.html');*/
 }
 
 // Add group to the form
@@ -499,8 +505,7 @@ if ($form->validate()) {
 	$filename = Security::remove_XSS($filename);
 	$filename = replace_dangerous_char($filename);
 	$filename = disable_dangerous_file($filename);
-
-    $filename .= get_document_suffix(
+    $filename .= DocumentManager::getDocumentSuffix(
         $_course,
         api_get_session_id(),
         api_get_group_id()
@@ -519,6 +524,7 @@ if ($form->validate()) {
 	}
 
     // Don't create file with the same name.
+
     if (file_exists($filepath.$filename.'.'.$extension)) {
         Display:: display_header($nameTools, 'Doc');
         Display:: display_error_message(get_lang('FileExists').' '.$title, false);

@@ -315,7 +315,6 @@ class DocumentManager
         if (!is_file($full_file_name)) {
             return false;
         }
-
         $filename = ($name == '') ? basename($full_file_name) : replace_dangerous_char($name);
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
@@ -325,7 +324,8 @@ class DocumentManager
             // Force the browser to save the file instead of opening it
 
             global $_configuration;
-            if (isset($_configuration['enable_x_sendfile_headers']) && !empty($_configuration['enable_x_sendfile_headers'])) {
+            if (isset($_configuration['enable_x_sendfile_headers']) &&
+                !empty($_configuration['enable_x_sendfile_headers'])) {
                 header("X-Sendfile: $filename");
             }
 
@@ -1301,26 +1301,28 @@ class DocumentManager
      */
     public static function get_document_id($courseInfo, $path, $sessionId = null)
     {
-        $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
-        $course_id = $courseInfo['real_id'];
+        $table = Database :: get_course_table(TABLE_DOCUMENT);
+        $courseId = $courseInfo['real_id'];
+
         if (!isset($sessionId)) {
             $sessionId = api_get_session_id();
         } else {
             $sessionId = intval($sessionId);
         }
-        $path = Database::escape_string($path);
 
-        if (!empty($course_id) && !empty($path)) {
-            $sql = "SELECT id FROM $TABLE_DOCUMENT
+        $path = Database::escape_string($path);
+        if (!empty($courseId) && !empty($path)) {
+            $sql = "SELECT id FROM $table
                     WHERE
-                        c_id = $course_id AND
+                        c_id = $courseId AND
                         path LIKE BINARY '$path' AND
                         session_id = $sessionId
                     LIMIT 1";
             $result = Database::query($sql);
-            if ($result && Database::num_rows($result)) {
+            if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
-                return intval($row[0]);
+
+                return intval($row['id']);
             }
         }
 
@@ -2704,15 +2706,19 @@ class DocumentManager
                     if (!empty($documentId)) {
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
                         $params = array();
-                        if ($if_exists == 'rename') {
+                        error_log('dd');
+                        error_log($if_exists);
+                        /*if ($if_exists == 'rename') {
                             // Remove prefix
-                            $suffix = get_document_suffix(
+                            $suffix = DocumentManager::getDocumentSuffix(
                                 $course_info,
                                 $sessionId,
                                 api_get_group_id()
                             );
                             $new_path = basename($new_path);
                             $new_path = str_replace($suffix, '', $new_path);
+                            error_log('renamed');
+                            error_log($new_path);
                             $params['title'] = get_document_title($new_path);
                         } else {
                             if (!empty($title)) {
@@ -2720,7 +2726,7 @@ class DocumentManager
                             } else {
                                 $params['title'] = get_document_title($files['file']['name']);
                             }
-                        }
+                        }*/
 
                         if (!empty($comment)) {
                             $params['comment'] = trim($comment);
@@ -4448,7 +4454,7 @@ class DocumentManager
         if (empty($courseId)) {
             return false;
         }
-        $sql = "SELECT * FROM $table WHERE c_id = $courseId AND path = '$path' ";
+        $sql = "SELECT * FROM $table WHERE c_id = $courseId AND path = '$path'";
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');
     }
@@ -4487,8 +4493,9 @@ class DocumentManager
 
     /**
      * Generate a default certificate for a courses
+     *
      * @global string $css CSS directory
-     * @global string $img_dir Imgage direcory
+     * @global string $img_dir image directory
      * @global string $default_course_dir Course directory
      * @global string $js JS directory
      * @param array $courseData The course info
@@ -4537,6 +4544,250 @@ class DocumentManager
         if (!isset($defaultCertificateId)) {
             self::attach_gradebook_certificate($courseData['code'], $documentId);
         }
+    }
+
+    /**
+     * Get folder/file suffix
+     *
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @param int $groupId
+     *
+     * @return string
+     */
+    public static function getDocumentSuffix($courseInfo, $sessionId, $groupId)
+    {
+        // If no session or group, then no suffix.
+        if (empty($sessionId) && empty($groupId)) {
+
+            return '';
+        }
+
+        return '__'.intval($sessionId).'__'.intval($groupId);
+    }
+
+    /**
+     * Fix a document name adding session id and group id
+     * Turns picture.jpg -> picture__1__2.jpg
+     * Where 1 = session id and 2 group id
+     * Of session id and group id are empty then the function returns:
+     * picture.jpg ->  picture.jpg
+     *
+     * @param string $name folder or file name
+     * @param string $type 'folder' or 'file'
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @param int $groupId
+     *
+     * @return string
+     */
+    public static function fixDocumentName($name, $type, $courseInfo, $sessionId, $groupId)
+    {
+        $suffix = self::getDocumentSuffix($courseInfo, $sessionId, $groupId);
+
+        switch ($type) {
+            case 'folder':
+                $name = $name.$suffix;
+                break;
+            case 'file':
+                $name = self::addSuffixToFileName($name, $suffix);
+                break;
+        }
+
+        return $name;
+    }
+
+    /**
+     * Add a suffix to a file Example:
+     * /folder/picture.jpg => to /folder/picture_this.jpg
+     * where "_this" is the suffix
+     * @param string $name
+     * @param string $suffix
+     * @return string
+     */
+    public static function addSuffixToFileName($name, $suffix)
+    {
+        $extension = pathinfo($name, PATHINFO_EXTENSION);
+        $fileName = pathinfo($name, PATHINFO_FILENAME);
+        $dir = pathinfo($name, PATHINFO_DIRNAME);
+
+        if ($dir == '.') {
+            $dir = null;
+        }
+
+        if (!empty($dir)) {
+            $dir = $dir.'/';
+        }
+
+        $name = $dir.$fileName.$suffix.'.'.$extension;
+        return $name;
+    }
+
+    /**
+     * Check if folder exist in the course base or in the session course
+     * @param string $folder Example: /folder/folder2
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @param int $groupId
+     *
+     * @return bool
+     */
+    public static function folderExists(
+        $folder,
+        $courseInfo,
+        $sessionId,
+        $groupId
+    ) {
+        $courseId = $courseInfo['real_id'];
+
+        if (empty($courseId)) {
+            return false;
+        }
+
+        $sessionId = intval($sessionId);
+        $folder = Database::escape_string($folder);
+
+        $folderWithSuffix = self::fixDocumentName(
+            $folder,
+            'folder',
+            $courseInfo,
+            $sessionId,
+            $groupId
+        );
+
+        $folderWithSuffix = Database::escape_string($folderWithSuffix);
+
+        // Check if pathname already exists inside document table
+        $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
+        $sql = "SELECT id, path FROM $tbl_document
+                WHERE
+                    filetype = 'folder' AND
+                    c_id = $courseId AND
+                    (path = '".$folder."' OR path = '$folderWithSuffix') AND
+                    (session_id = 0 OR session_id = $sessionId)
+        ";
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if file exist in the course base or in the session course
+     * @param string $fileName Example: /folder/picture.jpg
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @param int $groupId
+     *
+     * @return bool
+     */
+    public static function documentExists(
+        $fileName,
+        $courseInfo,
+        $sessionId,
+        $groupId
+    ) {
+        $courseId = $courseInfo['real_id'];
+
+        if (empty($courseId)) {
+            return false;
+        }
+
+        $sessionId = intval($sessionId);
+        $fileNameEscape = Database::escape_string($fileName);
+
+        $fileNameWithSuffix = self::fixDocumentName(
+            $fileName,
+            'file',
+            $courseInfo,
+            $sessionId,
+            $groupId
+        );
+
+        $fileNameWithSuffix = Database::escape_string($fileNameWithSuffix);
+
+        // Check if pathname already exists inside document table
+        $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
+        $sql = "SELECT id, path FROM $tbl_document
+                WHERE
+                    filetype = 'file' AND
+                    c_id = $courseId AND
+                    (
+                        path = '".$fileNameEscape."' OR
+                        path ='$fileNameWithSuffix'
+                    ) AND
+                    (session_id = 0 OR session_id = $sessionId)
+        ";
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Undo the suffix applied to a file example:
+     * turns picture__1__1.jpg to picture.jpg
+     * @param string $name
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $groupId
+     *
+     * @return string
+     */
+    public static function undoFixDocumentName(
+        $name,
+        $courseId,
+        $sessionId,
+        $groupId
+    ) {
+        if (empty($sessionId) && empty($groupId)) {
+            return $name;
+        }
+
+        $suffix = self::getDocumentSuffix(
+            array('real_id' => $courseId),
+            $sessionId,
+            $groupId
+        );
+
+        $name = str_replace($suffix, '', $name);
+
+        return $name;
+    }
+
+    /**
+     * @param string $path
+     * @param string $name
+     * @param array $courseInfo
+     * @param int $sessionId
+     * @param int $groupId
+     *
+     * @return string
+     */
+    public static function getUniqueFileName($path, $name, $courseInfo, $sessionId, $groupId)
+    {
+        $counter = 1;
+        $filePath = $path.$name;
+        error_log('getUniqueFileName');
+        error_log($filePath);
+        $uniqueName = $name;
+        while($documentExists = self::documentExists(
+            $filePath,
+            $courseInfo,
+            $sessionId,
+            $groupId
+        )) {
+            $uniqueName = self::addSuffixToFileName($name, '_'.$counter);
+            $filePath = $path.$uniqueName;
+            error_log($filePath);
+            $counter++;
+        }
+        error_log($uniqueName);
+        return $uniqueName;
     }
 
 }

@@ -32,10 +32,17 @@ if (api_is_platform_admin() == false && $locked == true) {
 }
 
 $htmlHeadXtra[] = to_javascript_work();
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH) . 'work/work.php?' . api_get_cidreq(),
+    'name' => get_lang('StudentPublications')
+);
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
 
-$form = new FormValidator('edit_dir', 'post', api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'. api_get_cidreq());
+$form = new FormValidator(
+    'edit_dir',
+    'post',
+    api_get_path(WEB_CODE_PATH) . 'work/edit_work.php?id=' . $workId . '&' . api_get_cidreq()
+);
 $form->addElement('header', get_lang('Edit'));
 
 $title = !empty($workData['title']) ? $workData['title'] : basename($workData['url']);

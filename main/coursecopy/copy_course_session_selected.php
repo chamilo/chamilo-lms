@@ -386,7 +386,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         $hiddenFields['origin_course'] = api_get_course_id();
         $hiddenFields['origin_session'] = api_get_session_id();
 
-        CourseSelectForm :: displayForm($course, $hiddenFields, true);
+        CourseSelectForm :: display_form($course, $hiddenFields, true);
         echo '<div style="float:right"><a href="javascript:window.back();">' .
         Display::return_icon(
             'back.png', get_lang('Back') . ' ' . get_lang('To') . ' ' . get_lang(

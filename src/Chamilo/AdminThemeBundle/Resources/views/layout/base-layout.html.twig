@@ -1,0 +1,150 @@
+{% import "ChamiloAdminThemeBundle:layout:macros.html.twig" as macro %}
+<!doctype html>
+<!--[if lt IE 7 ]><html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]><html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}Chamilo{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+
+    {%- stylesheets '@chamilo_css' -%}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    {# Chamilo base #}
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/base.css') }}"/>
+
+    {% set theme = chamilo_settings_get('platform.theme') %}
+
+    <link rel="stylesheet" media="print" href="{{ asset('bundles/chamilocore/css/print.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/default.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/learnpath.css') }}"/>
+    <link rel="stylesheet" media="print" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/print.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/scorm.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/scormfs.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/js/tag/style.css') }}"/>
+
+    <script src="{{ asset('bundles/chamiloadmintheme/components/modernizr/modernizr.js') }}"></script>
+</head>
+
+<body class="{{ admin_skin|default('skin-blue')}}">
+
+{% block chamilo_admin_header %}
+
+    <header class="header">
+        {% block chamilo_logo %}
+        <a href="#" class="logo">
+            {{- chamilo_settings_get('platform.institution') -}}
+        </a>
+        {% endblock %}
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+            <div class="navbar-right">
+                <ul class="nav navbar-nav">
+                    {% block chamilo_navbar %}
+                        {{ render(controller('ChamiloAdminThemeBundle:Navbar:messages')) }}
+                        {{ render(controller('ChamiloAdminThemeBundle:Navbar:notifications')) }}
+                        {{ render(controller('ChamiloAdminThemeBundle:Navbar:tasks')) }}
+                        {{ render(controller('ChamiloAdminThemeBundle:Navbar:user')) }}
+                    {% endblock %}
+                </ul>
+            </div>
+            {% endif %}
+        </nav>
+    </header>
+
+{% endblock %}
+
+<div class="wrapper row-offcanvas row-offcanvas-left">
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="left-side sidebar-offcanvas">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            {% block chamilo_sidebar %}
+                {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {{ render(controller('ChamiloAdminThemeBundle:Sidebar:userPanel')) }}
+                    {{ render(controller('ChamiloAdminThemeBundle:Sidebar:searchForm')) }}
+                {% endif %}
+                {{ render(controller('ChamiloAdminThemeBundle:Sidebar:menu', {'request':app.request})) }}
+
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    {{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:mainMenu', {'automenu': 'pills', 'stacked':true}) }}
+                {% endif %}
+
+                {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
+                    <div class="user-panel">
+                    </div>
+                    <form action="{{ path("fos_user_security_check") }}" method="post" role="form" class="sidebar-form">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                        <div class="form-group">
+                            <label for="username">{{ 'security.login.username'|trans({}, 'SonataUserBundle') }}</label>
+                            <input type="text" class="form-control" id="username" name="_username" >
+                        </div>
+                        <div class="form-group">
+                            <label for="password">{{ 'security.login.password'|trans({}, 'SonataUserBundle') }}</label>
+                            <input type="password" class="form-control" id="password" name="_password">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    {{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:loginMenu', {'automenu': 'pills', 'stacked':true}) }}
+                {% endif %}
+                {#{{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:helpMenu', {'automenu': 'pills', 'stacked':true}) }}#}
+            {% endblock %}
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Right side column. Contains the navbar and content of the page -->
+    <aside class="right-side">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                {% block page_title %}Blank page{% endblock %}
+                <small>{% block page_subtitle %}Control panel{% endblock %}</small>
+            </h1>
+            {% block chamilo_breadcrumb %}
+            {{ render(controller('ChamiloAdminThemeBundle:Breadcrumb:breadcrumb', {'request':app.request, 'title' : block('page_title')})) }}
+            {% endblock %}
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            {% block page_content %}{% endblock %}
+        </section>
+        <!-- /.content -->
+    </aside>
+    <!-- /.right-side -->
+</div>
+<!-- ./wrapper -->
+
+{# JAVASCRIPTS #}
+{% block javascripts %}
+
+{%- javascripts '@chamilo_js' -%}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+{% endblock %}
+
+{# JAVASCRIPTS_INLINE #}
+{% block javascripts_inline %}
+{% endblock %}
+
+
+</body>
+</html>

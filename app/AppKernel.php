@@ -107,8 +107,8 @@ class AppKernel extends Kernel
             new Sonata\BlockBundle\SonataBlockBundle(),
             new Sonata\SeoBundle\SonataSeoBundle(),
             new Sonata\ClassificationBundle\SonataClassificationBundle(),
-            new Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle(),
             new Sonata\NotificationBundle\SonataNotificationBundle(),
+            new Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle(),
             new Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle(),
             new Application\Sonata\SeoBundle\ApplicationSonataSeoBundle(),
             new Sonata\DatagridBundle\SonataDatagridBundle(),
@@ -133,7 +133,6 @@ class AppKernel extends Kernel
             new FOS\AdvancedEncoderBundle\FOSAdvancedEncoderBundle(),
 
             //new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
-            new Avanzu\AdminThemeBundle\AvanzuAdminThemeBundle(),
             new FOS\MessageBundle\FOSMessageBundle(),
 
             // Chamilo
@@ -141,8 +140,12 @@ class AppKernel extends Kernel
             new Chamilo\CoreBundle\ChamiloCoreBundle(),
             new Chamilo\CourseBundle\ChamiloCourseBundle(),
             new Chamilo\MessageBundle\ChamiloMessageBundle(),
-            new Chamilo\NotebookBundle\ChamiloNotebookBundle(),
             new Chamilo\SettingsBundle\ChamiloSettingsBundle(),
+            new Chamilo\AdminThemeBundle\ChamiloAdminThemeBundle(),
+            //new Chamilo\ThemeBundle\ChamiloThemeBundle(),
+
+            // Chamilo course tool
+            new Chamilo\NotebookBundle\ChamiloNotebookBundle(),
 
             new APY\DataGridBundle\APYDataGridBundle(),
             new JMS\TranslationBundle\JMSTranslationBundle(),
@@ -152,6 +155,9 @@ class AppKernel extends Kernel
             //new JMS\SerializerBundle\JMSSerializerBundle($this),
             new Sp\BowerBundle\SpBowerBundle(),
             new Oro\Bundle\MigrationBundle\OroMigrationBundle(),
+            new Thrace\DataGridBundle\ThraceDataGridBundle(),
+
+            //new Vich\UploaderBundle\VichUploaderBundle(),
 
         );
 

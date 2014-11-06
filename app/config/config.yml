@@ -226,9 +226,6 @@ stof_doctrine_extensions:
             timestampable: true
             sluggable: true
 
-avanzu_admin_theme:
-    bower_bin: /usr/bin/bower # that's the default value
-
 sylius_resource:
     resources:
         chamilo.notebook:
@@ -267,7 +264,7 @@ sp_bower:
     assetic: true
     install_on_warmup: true
     bundles:
-        ChamiloCoreBundle: ~
+        ChamiloAdminThemeBundle: ~
 
 # Run to update js dependencies: app/console sp:bower:install
 
@@ -278,3 +275,15 @@ apy_data_grid:
 liip_theme:
     themes: ['web', 'tablet', 'phone']
     active_theme: 'web'
+
+#vich_uploader:
+#    db_driver: orm # or mongodb or propel or phpcr
+#
+#    mappings:
+#        user_image:
+#            uri_prefix:         /user/images
+#            upload_destination: %kernel.root_dir%/../web/uploads/user
+#            inject_on_load:     false
+#            delete_on_update:   true
+#            delete_on_remove:   true
+#            directory_namer:    chamilo_core.directory_namer.user_image

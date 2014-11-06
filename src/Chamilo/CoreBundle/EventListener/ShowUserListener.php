@@ -3,7 +3,7 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Avanzu\AdminThemeBundle\Event\ShowUserEvent;
+use Chamilo\AdminThemeBundle\Event\ShowUserEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 

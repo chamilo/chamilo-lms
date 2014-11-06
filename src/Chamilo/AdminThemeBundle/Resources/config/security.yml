@@ -1,0 +1,5 @@
+login:
+    path:     /login
+    defaults: { _controller: ChamiloAdminThemeBundle:Security:login }
+login_check:
+    path: /login_check

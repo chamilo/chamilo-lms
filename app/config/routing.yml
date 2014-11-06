@@ -1,3 +1,8 @@
+#chamilo_theme:
+#    resource: "@ChamiloThemeBundle/Controller/"
+#    type:     annotation
+#    prefix:   /
+
 chamilo_course:
     resource: "@ChamiloCourseBundle/Resources/config/routing.yml"
     prefix:   /
@@ -26,12 +31,6 @@ fos_comment_api:
     prefix: /api
     defaults: { _format: html }
 
-avanzu_admin_profile:
-    path: /profile
-avanzu_admin_all_messages:
-    path: /messages/
-avanzu_admin_show_message:
-    path: /messages/{messageid}
 avanzu_admin_all_notifications:
     path: /notifications/
 avanzu_admin_show_notification:
@@ -40,8 +39,6 @@ avanzu_admin_all_tasks:
     path: /tasks/
 avanzu_admin_show_task:
     path: /tasks/{taskid}
-avanzu_admin_logout:
-    path: /logout
 
 liip_theme:
     resource: "@LiipThemeBundle/Resources/config/routing.xml"
@@ -58,6 +55,10 @@ login_check:
 
 chamilo_installer:
     resource: "@ChamiloInstallerBundle/Resources/config/routing.yml"
+
+thrace_data_grid:
+    resource: "@ThraceDataGridBundle/Resources/config/routing.xml"
+    prefix:   /
 
 # Always at the end
 core_bundle:

@@ -13,15 +13,15 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Chamilo\CoreBundle\Component\Auth;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use FOS\MessageBundle\Model\ParticipantInterface;
-use Avanzu\AdminThemeBundle\Model\UserInterface as ThemeUser;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Chamilo\AdminThemeBundle\Model\UserInterface as ThemeUser;
+//use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Application\Sonata\MediaBundle\Entity\Media;
 
 /**
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user")
- * @Vich\Uploadable
+ * Vich\Uploadable
  * @UniqueEntity("username")
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
  * @ORM\AttributeOverrides({

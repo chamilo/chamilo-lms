@@ -112,7 +112,12 @@ $dir = '/';
 $currentDirPath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 
 if (isset($_GET['id'])) {
-    $document_data  = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
+    $document_data = DocumentManager::get_document_data_by_id(
+        $_GET['id'],
+        api_get_course_id(),
+        true
+    );
+
     $document_id    = $document_data['id'];
     $file           = $document_data['path'];
     $parent_id      = DocumentManager::get_document_id($course_info, dirname($file));
@@ -134,7 +139,7 @@ $call_from_tool = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin'])
 $slide_id = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
 $file_name = $doc;
 $group_document = false;
-$current_session_id = api_get_session_id();
+$sessionId = api_get_session_id();
 $user_id = api_get_user_id();
 $doc_tree = explode('/', $file);
 $count_dir = count($doc_tree) - 2; // "2" because at the begin and end there are 2 "/"
@@ -167,7 +172,7 @@ if ($is_certificate_mode) {
     $html_editor_config['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $sessionId);
 $noPHP_SELF = true;
 
 /*	Other initialization code */
@@ -274,8 +279,8 @@ if ($is_allowed_to_edit) {
 						if (!is_dir($filepath.'css')) {
 							mkdir($filepath.'css', api_get_permissions_for_new_directories());
 							$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(), null, null, null, null, $current_session_id);
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $current_session_id);
+							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(), null, null, null, null, $sessionId);
+							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $sessionId);
 						}
 
 						if (!is_file($filepath.'css/frames.css')) {
@@ -283,8 +288,8 @@ if ($is_allowed_to_edit) {
 							if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
 								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css', $filepath.'css/frames.css');
 								$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), null, null, null, null, $current_session_id);
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $current_session_id);
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), null, null, null, null, $sessionId);
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $sessionId);
 							}
 						}
 
@@ -293,7 +298,7 @@ if ($is_allowed_to_edit) {
 
 						if ($document_id) {
 							update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', api_get_user_id(), null, null, null, null, $current_session_id);
+							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', api_get_user_id(), null, null, null, null, $sessionId);
 							// Update parent folders
 							item_property_update_on_folder($_course, $dir, api_get_user_id());
 							header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq());
@@ -355,8 +360,24 @@ if (isset($info_message)) {
 }
 
 // Owner
-$document_info  = api_get_item_property_info(api_get_course_int_id(),'document', $document_id);
-$owner_id       = $document_info['insert_user_id'];
+
+$document_info = api_get_item_property_info(
+    api_get_course_int_id(),
+    'document',
+    $document_id,
+    0
+);
+// Try to find this document in the session
+if (!empty($sessionId)) {
+    $document_info = api_get_item_property_info(
+        api_get_course_int_id(),
+        'document',
+        $document_id,
+        $sessionId
+    );
+}
+
+$owner_id = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
 
 if ($owner_id == api_get_user_id() ||
@@ -406,7 +427,7 @@ if ($owner_id == api_get_user_id() ||
 		}
 	}
 
-	if (!$group_document && !is_my_shared_folder(api_get_user_id(), $currentDirPath, $current_session_id)) {
+	if (!$group_document && !is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
 		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$document_data['id']).'">'.get_lang('AddMetadata').'</a>';
 
 		//Updated on field
@@ -510,26 +531,34 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
 }
 
 //return button back to
-function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_certificate_mode=false) {
+function show_return($document_id, $path, $call_from_tool='', $slide_id=0, $is_certificate_mode=false)
+{
     global $parent_id;
-	$pathurl = urlencode($path);
 	echo '<div class="actions">';
 
+    $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parent_id;
+
 	if ($is_certificate_mode) {
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.
+            Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 	} elseif($call_from_tool=='slideshow') {
-		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'),'',ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.
+            Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'),'',ICON_SIZE_MEDIUM).'</a>';
 	} elseif($call_from_tool=='editdraw') {
-		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="'.$url.'">'.
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Draw'), array(), 32).'</a>';
 	} elseif($call_from_tool=='editodf') {
-        echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.$url.'">'.
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), array(), 32).'</a>';
     } elseif($call_from_tool=='editpaint'){
-		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="'.$url.'">'.
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), ICON_SIZE_MEDIUM).'</a>';
 		echo '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), array(), 32).'</a>';
 	} else {
-		echo '<a href="document.php?action=exit_slideshow&id='.$parent_id.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="'.$url.'">'.
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
 	echo '</div>';
 }

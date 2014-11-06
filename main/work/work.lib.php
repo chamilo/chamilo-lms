@@ -1074,8 +1074,9 @@ function is_subdir_of($subdir, $basedir)
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @author Bert Vanderkimpen
  * @author Yannick Warnier <ywarnier@beeznest.org> Adaptation for work tool
- * @param   string  Base work dir (.../work)
+ * @param   string $base_work_dir Base work dir (.../work)
  * @param   string $desiredDirName complete path of the desired name
+ *
  * @return  string actual directory name if it succeeds, boolean false otherwise
  */
 function create_unexisting_work_directory($base_work_dir, $desired_dir_name)
@@ -1085,6 +1086,7 @@ function create_unexisting_work_directory($base_work_dir, $desired_dir_name)
     while (file_exists($base_work_dir.$desired_dir_name.$nb)) {
         $nb += 1;
     }
+
     if (@mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories())) {
         return $desired_dir_name.$nb;
     } else {
@@ -1128,10 +1130,12 @@ function deleteDirWork($id)
     if (!empty($work_data['url'])) {
         if ($check) {
             // Deleting all contents inside the folder
-            $sql = "UPDATE $table SET active = 2 WHERE c_id = $course_id AND filetype = 'folder' AND id = $id";
+            $sql = "UPDATE $table SET active = 2
+                    WHERE c_id = $course_id AND filetype = 'folder' AND id = $id";
             Database::query($sql);
 
-            $sql = "UPDATE $table SET active = 2 WHERE c_id = $course_id AND parent_id = $id";
+            $sql = "UPDATE $table SET active = 2
+                    WHERE c_id = $course_id AND parent_id = $id";
             Database::query($sql);
 
             require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -1153,13 +1157,20 @@ function deleteDirWork($id)
 
             // delete from agenda if it exists
             if (!empty($calendar_id[0])) {
-                $sql = "DELETE FROM $t_agenda WHERE c_id = $course_id AND id = '".$calendar_id[0]."'";
+                $sql = "DELETE FROM $t_agenda
+                        WHERE c_id = $course_id AND id = '".$calendar_id[0]."'";
                 Database::query($sql);
             }
-            $sql = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id = $id";
+            $sql = "DELETE FROM $TSTDPUBASG
+                    WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
-            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3, $id, api_get_session_id());
+            $link_info = is_resource_in_course_gradebook(
+                api_get_course_id(),
+                3,
+                $id,
+                api_get_session_id()
+            );
             $link_id = $link_info['id'];
             if ($link_info !== false) {
                 remove_resource_from_course_gradebook($link_id);
@@ -1211,7 +1222,9 @@ function updateWorkUrl($id, $new_path, $parent_id)
         $filename = basename($row['url']);
         $new_url = $new_path.$filename;
         $new_url = Database::escape_string($new_url);
-        $sql2 = "UPDATE $table SET url = '$new_url', parent_id = '$parent_id'
+        $sql2 = "UPDATE $table SET
+                    url = '$new_url',
+                    parent_id = '$parent_id'
                  WHERE c_id = $course_id AND id = $id";
         $res2 = Database::query($sql2);
         return $res2;
@@ -1220,8 +1233,8 @@ function updateWorkUrl($id, $new_path, $parent_id)
 
 /**
  * Update the url of a dir in the student_publication table
- * @param   array $work_data work original data
- * @param   string $newPath
+ * @param  array $work_data work original data
+ * @param  string $newPath Example: "folder1"
  * @return bool
  */
 function updateDirName($work_data, $newPath)
@@ -1243,10 +1256,14 @@ function updateDirName($work_data, $newPath)
     }
 
     if (!empty($newPath)) {
-        $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
-        my_rename($base_work_dir.$oldPath, $newPath);
-        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        //$base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
 
+        //error_log('rename'.$base_work_dir.$oldPath.' - '.$newPath);
+
+        //my_rename($base_work_dir.$oldPath, $newPath);
+
+        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        /*
         // Update all the files in the other directories according with the next query
         $sql = "SELECT id, url FROM $table
                 WHERE
@@ -1268,10 +1285,9 @@ function updateDirName($work_data, $newPath)
                         session_id = ' . $sessionId . '
                     ';
             Database::query($sql);
-        }
-
+        }*/
+        //url= '/".$newPath."',
         $sql = "UPDATE $table SET
-                    url= '/".$newPath."',
                     title = '".$originalNewPath."'
                 WHERE
                     c_id = $course_id AND
@@ -3743,8 +3759,8 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
  * @note $params can have the following elements, but should at least have the 2 first ones: (
  *       'new_dir' => 'some-name',
  *       'description' => 'some-desc',
- *       'qualification' => someintvalue (e.g. 20),
- *       'weight' => someintweight (percentage) to add to gradebook (e.g. 50),
+ *       'qualification' => 20 (e.g. 20),
+ *       'weight' => 50 (percentage) to add to gradebook (e.g. 50),
  *       'allow_text_assignment' => 0/1/2,
  * @todo Rename createAssignment or createWork, or something like that
  */
@@ -3837,6 +3853,7 @@ function agendaExistsForWork($workId, $courseInfo)
 }
 
 /**
+ * Update work description, qualification, weight, allow_text_assignment
  * @param int $workId
  * @param array $params
  * @param array $courseInfo
@@ -3889,7 +3906,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
         if (!empty($params['enableExpiryDate'])) {
             $end_date = $params['expires_on'];
-            $date     = $end_date;
+            $date = $end_date;
         }
 
         $title = sprintf(get_lang('HandingOverOfTaskX'), $params['new_dir']);
@@ -3996,7 +4013,11 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                     api_get_session_id()
                 );
             } else {
-                update_resource_from_course_gradebook($linkId, $courseInfo['code'], $params['weight']);
+                update_resource_from_course_gradebook(
+                    $linkId,
+                    $courseInfo['code'],
+                    $params['weight']
+                );
             }
         } else {
             // Delete everything of the gradebook for this $linkId

@@ -117,16 +117,19 @@ if ($slide_id != 'all') {
 }
 
 // Exit the slideshow
-echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'&'.api_get_cidreq().'">'.
+    Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 
 // Show thumbnails
 if ($slide_id != 'all') {
-	echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'">'.Display::return_icon('thumbnails.png',get_lang('ShowThumbnails'),'',ICON_SIZE_MEDIUM).'</a>';
+	echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'&'.api_get_cidreq().'">'.
+        Display::return_icon('thumbnails.png',get_lang('ShowThumbnails'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
 	echo Display::return_icon('thumbnails_na.png',get_lang('ShowThumbnails'),'',ICON_SIZE_MEDIUM);
 }
 // Slideshow options
-echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'">'.Display::return_icon('settings.png',get_lang('SetSlideshowOptions'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'&'.api_get_cidreq().'">'.
+    Display::return_icon('settings.png',get_lang('SetSlideshowOptions'),'',ICON_SIZE_MEDIUM).'</a>';
 
 ?>
 </div>
@@ -184,26 +187,6 @@ if ($slide_id == 'all') {
 	if (!file_exists($directory_thumbnails)) {
 		@mkdir($directory_thumbnails, api_get_permissions_for_new_directories());
     }
-
-	/*
-	//
-	//disabled by now, because automatic mode is heavy for server (scandir), only manual
-	//
-
-	// Delete orphaned thumbnails
-	$directory_images=$sys_course_path.$_course['path'].'/document'.$folder;
-	$all_thumbnails  = scandir($directory_thumbnails);
-	$all_files  = scandir($directory_images);
-	foreach ($all_thumbnails as $check_thumb) {
-		$temp_filename=substr($check_thumb,1);//erase the first dot in file, and translate .. to .
-		if ($temp_filename=='.') {
-			 continue; //need because scandir also return . and .. simbols
-		}
-		if(in_array($filename, $all_files)==false) {
-			unlink($directory_thumbnails.'.'.$temp_filename);
-		}
-	}
-	*/
 
 	// check files and thumbnails
 	if (is_array($image_files_only)) {
@@ -338,40 +321,26 @@ if ($slide_id == 'all') {
 
 	// Creating the table
 	$html_table = '';
-	echo '<table align="center" width="760px" border="0" cellspacing="10">';
+
 	$i = 0;
 	$count_image = count($image_tag);
 	$number_iteration = ceil($count_image/$number_image);
 	$p = 0;
+    echo '<ul class="thumbnails">';
 	for ($k = 0; $k < $number_iteration; $k++) {
-		echo '<tr height="'.$thumbnail_height.'">';
 		for ($i = 0; $i < $number_image; $i++) {
-			if (!is_null($image_tag[$p])) {
-				echo '<td>';
-				//TODO:move styles to css files and center image vertical
-				?>
-
-				<style>
-				div.thumbnail:hover {
-				  border-color: #0088cc;
-				  background-color:#FBFFFF;
-				  -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-				  -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-				  box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-				}
-				</style>
-
-				<?php
-				echo '<div class="thumbnail" style="text-align: center; margin:5px; padding:9px; height:'.$thumbnail_height_frame.'px; width:'.$thumbnail_width_frame.'px">';
+			if (isset($image_tag[$p])) {
+				echo '<li class="span4">
+                      <div class="thumbnail">';
 				echo '<a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">'.$image_tag[$p].'</a>';
 				echo '</div>';
-				echo '</td>';
+                echo '</li>';
 			}
 			$p++;
 		}
-		echo '</tr>';
 	}
-	echo '</table>';
+    echo '</ul>';
+
 }//end slide==all
 
 /*	ONE AT A TIME VIEW */
@@ -405,11 +374,6 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 
 		echo '<table align="center" border="0" cellspacing="10">';
 		echo '<tr>';
-		echo '<td style="padding:10px;" align="center">';
-		echo Display::tag('h2',$row['title']);
-		echo '</td>';
-		echo '</tr>';
-		echo '<tr>';
 		echo '<td id="td_image" align="center">';
 		if ($slide < $total_slides - 1 && $slide_id != 'all') {
 			echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
@@ -421,9 +385,8 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
         }
 
 		list($width, $height) = getimagesize($image);
-
-		//auto resize
-		if ($_SESSION["image_resizing"] !="noresizing" && $_SESSION["image_resizing"]!="resizing") {
+		// Auto resize
+		if (isset($_SESSION["image_resizing"]) &&  $_SESSION["image_resizing"] == 'resizing') {
 		?>
 
 		<script type="text/javascript">
@@ -488,16 +451,37 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 		echo '<td>';
 		echo $row['comment'];
 		echo '</td>';
+
+        echo '<tr>';
+        echo '<td style="padding:10px;" align="center">';
+        echo Display::tag('h3', $row['title']);
+        echo '</td>';
+        echo '</tr>';
 		echo '</tr>';
 		echo '</table>';
+
 		echo '<table align="center" border="0">';
 		if (api_is_allowed_to_edit(null, true)) {
-			echo '<tr>';
-			echo '<td align="center">';
-			echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$row['id'].'&origin=slideshow&amp;origin_opt='.$edit_slide_id.'&amp;">
-			      <img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
 			$aux = explode('.', htmlspecialchars($image_files_only[$slide]));
 			$ext = $aux[count($aux) - 1];
+
+            if ($_SESSION['image_resizing'] == 'resizing') {
+                $resize_info = get_lang('Resizing').'<br />';
+                $resize_widht = $_SESSION["image_resizing_width"].' x ';
+                $resize_height = $_SESSION['image_resizing_height'];
+            } elseif($_SESSION['image_resizing'] != 'noresizing'){
+                $resize_info = get_lang('Resizing').'<br />';
+                $resize_widht = get_lang('Auto').' x ';
+                $resize_height = get_lang('Auto');
+            } else {
+                $resize_info = get_lang('NoResizing').'<br />';
+            }
+
+            echo '<tr>';
+            echo '<td align="center">';
+            echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$row['id'].'&origin=slideshow&amp;origin_opt='.$edit_slide_id.'&amp;">
+			      <img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
+
 			echo $image_files_only[$slide].' <br />';
 			echo $width.' x '.$height.' <br />';
 			echo round((filesize($image)/1024), 2).' KB';
@@ -506,17 +490,6 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 			echo '</tr>';
 			echo '<tr>';
 			echo '<td align="center">';
-			if ($_SESSION['image_resizing'] == 'resizing') {
-				$resize_info = get_lang('Resizing').'<br />';
-				$resize_widht = $_SESSION["image_resizing_width"].' x ';
-				$resize_height = $_SESSION['image_resizing_height'];
-			} elseif($_SESSION['image_resizing'] != 'noresizing'){
-				$resize_info = get_lang('Resizing').'<br />';
-				$resize_widht = get_lang('Auto').' x ';
-				$resize_height = get_lang('Auto');
-			} else {
-				$resize_info = get_lang('NoResizing').'<br />';
-			}
 			echo $resize_info;
 			echo $resize_widht;
 			echo $resize_height;
@@ -529,7 +502,9 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
 		Display::display_warning_message(get_lang('FileNotFound'));
 	}
 } else {
-    Display::display_warning_message(get_lang('NoDataAvailable'));
+    if ($slide_id != 'all') {
+        Display::display_warning_message(get_lang('NoDataAvailable'));
+    }
 }
 
 Display :: display_footer();

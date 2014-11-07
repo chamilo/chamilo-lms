@@ -652,7 +652,7 @@ if (isset($_GET['curdirpath']) &&
             $new_content_html
         );
         $new_content_html = str_replace(
-            '/main/img/',
+            SYS_CODE_PATH . 'img/',
             api_get_path(WEB_IMG_PATH),
             $new_content_html
         );

@@ -1,3 +1,14 @@
+* 1.16.2 (2014-10-17)
+
+ * fixed timezone on dates as strings
+ * fixed 2-words test names when a custom node class is not used
+ * fixed macros when using an argument named like a PHP super global (like GET or POST)
+ * fixed date_modify when working with DateTimeImmutable
+ * optimized for loops
+ * fixed multi-byte characters handling in the split filter
+ * fixed a regression in the in operator
+ * fixed a regression in the slice filter
+
 * 1.16.1 (2014-10-10)
 
  * improved error reporting in a sandboxed template

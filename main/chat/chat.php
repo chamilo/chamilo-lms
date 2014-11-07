@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Chat tool
  * @package chamilo.chat
@@ -8,8 +9,6 @@
 $language_file = array('chat');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_CHAT;
-
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolChat');
 

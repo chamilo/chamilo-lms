@@ -3129,7 +3129,7 @@ class learnpath
             $class_name = array (
                 'not attempted' => 'scorm_not_attempted',
                 'incomplete'    => 'scorm_not_attempted',
-                'failed'        => 'scorm_not_attempted',
+                'failed'        => 'scorm_failed',
                 'completed'     => 'scorm_completed',
                 'passed'        => 'scorm_completed',
                 'succeeded'     => 'scorm_completed',
@@ -3150,7 +3150,7 @@ class learnpath
             }
             if ($item['id'] == $this->current) {
                 $scorm_color_background .= ' scorm_item_highlight ';
-            } else {
+            } elseif (!in_array($item['type'], $dirTypes)) {
                 $scorm_color_background .= ' scorm_item_normal ';
             }
 

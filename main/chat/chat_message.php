@@ -104,9 +104,6 @@ if ($sent) {
                                     <button id="send" type="submit" value="<?php echo get_lang('Send'); ?>" class="btn btn-primary">
                                         <?php echo get_lang('Send'); ?>
                                     </button>
-                                    <button id="preview" type="submit" value="<?php echo get_lang('Preview'); ?>" class="btn  ">
-                                        <?php echo get_lang('Preview'); ?>
-                                    </button>
                                 </div>
                             </td>
                         </tr>

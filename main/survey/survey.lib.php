@@ -734,9 +734,9 @@ class survey_manager
 		$icon_question = array(
 			'yesno' 			=> 'yesno.gif',
 			'personality' 		=> 'yesno.gif',
-			'multiplechoice' 	=> 'mcua.gif',
-			'multipleresponse' 	=> 'mcma.gif',
-			'open' 				=> 'open_answer.gif',
+			'multiplechoice' 	=> 'mcua.png',
+			'multipleresponse' 	=> 'mcma.png',
+			'open' 				=> 'open_answer.png',
 			'dropdown' 			=> 'dropdown.gif',
 			'percentage' 		=> 'percentagequestion.gif',
 			'score' 			=> 'scorequestion.gif',

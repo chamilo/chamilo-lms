@@ -390,6 +390,9 @@
 .scorm_item_section .scorm_not_attempted {
     background-color: #333;
 }
+.scorm_item_section.scorm_item_normal.scorm_failed {
+    background-color: #333;
+}
 
 #learning_path_main #control {
     background-image: none;

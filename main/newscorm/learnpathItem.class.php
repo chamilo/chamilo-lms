@@ -3240,8 +3240,8 @@ class learnpathItem
     /**
      * Sets the score value. If the mastery_score is set and the score reaches
      * it, then set the status to 'passed'.
-     * @param    float    Score
-     * @return    boolean    True on success, false otherwise
+     * @param   float       Score
+     * @return    boolean   True on success, false otherwise
      */
     public function set_score($score)
     {
@@ -3252,21 +3252,23 @@ class learnpathItem
         }
         if (($this->max_score <= 0 || $score <= $this->max_score) && ($score >= $this->min_score)) {
             $this->current_score = $score;
-            $master = $this->get_mastery_score();
+            $masteryScore = $this->get_mastery_score();
             $current_status = $this->get_status(false);
 
             // Fixes bug when SCORM doesn't send a mastery score even if they sent a score!
-            if ($master == -1) {
-                $master = $this->max_score;
+            if ($masteryScore == -1) {
+                $masteryScore = $this->max_score;
             }
 
             if ($debug > 0) {
-                error_log('get_mastery_score: ' . $master);
+                error_log('get_mastery_score: ' . $masteryScore);
                 error_log('current_status: ' . $current_status);
                 error_log('current score : ' . $this->current_score);
             }
 
-            // If mastery_score is set AND the current score reaches the mastery score AND the current status is different from 'completed', then set it to 'passed'.
+            // If mastery_score is set AND the current score reaches the mastery
+            //  score AND the current status is different from 'completed', then
+            //  set it to 'passed'.
             /*
             if ($master != -1 && $this->current_score >= $master && $current_status != $this->possible_status[2]) {
                 if ($debug > 0) error_log('Status changed to: '.$this->possible_status[3]);
@@ -3307,10 +3309,9 @@ class learnpathItem
 
     /**
      * Sets the status for this item
-     * @param   string      $status must be one of the values defined
-     * in $this->possible_status
+     * @param    string      $status Status - must be one of the values defined in $this->possible_status
      * (this affects the status setting)
-     * @return  boolean True on success, false on error
+     * @return    boolean    True on success, false on error
      */
     public function set_status($status)
     {

@@ -122,7 +122,7 @@ class learnpath
                 $this->theme            = $row['theme'];
                 $this->maker            = $row['content_maker'];
                 $this->prevent_reinit   = $row['prevent_reinit'];
-    	        $this->seriousgame_mode = $row['seriousgame_mode'];
+                $this->seriousgame_mode = $row['seriousgame_mode'];
                 $this->license          = $row['content_license'];
                 $this->scorm_debug      = $row['debug'];
                 $this->js_lib           = $row['js_lib'];
@@ -240,7 +240,10 @@ class learnpath
                         $this->items[$my_item_id] = $oItem;
                         $this->refs_list[$oItem->ref] = $my_item_id;
                         if ($this->debug > 2) {
-                            error_log('New LP - learnpath::__construct() - aicc object with id ' . $my_item_id . ' set in items[]', 0);
+                            error_log(
+                                'New LP - learnpath::__construct() - ' .
+                                'aicc object with id ' . $my_item_id .
+                                ' set in items[]', 0);
                         }
                     }
                     break;
@@ -279,7 +282,10 @@ class learnpath
                         $this->items[$my_item_id] = $oItem;
                         $this->refs_list[$my_item_id] = $my_item_id;
                         if ($this->debug > 2) {
-                            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - object with id ' . $my_item_id . ' set in items[]', 0);
+                            error_log(
+                                'New LP - learnpath::__construct() ' . __LINE__ .
+                                ' - object with id ' . $my_item_id . ' set in items[]',
+                                0);
                         }
                     }
                     break;
@@ -5299,7 +5305,7 @@ class learnpath
         }
 
         // We need to close the form when we are updating the mp3 files.
-        if ($update_audio == 'true' && count($arrLP) != 0) {
+        if ($update_audio == 'true' && count($this->arrMenu) != 0) {
             $return .= '</form>';
         }
         return $return;
@@ -5364,23 +5370,23 @@ class learnpath
             }
 
             if (($i % 2) == 0) {
-                $oddclass = 'row_odd';
+                $oddClass = 'row_odd';
             } else {
-                $oddclass = 'row_even';
+                $oddClass = 'row_even';
             }
-            $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'] .'" class="' . $oddclass . '">';
+            $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'] .'" class="' . $oddClass . '">';
 
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
 
             $icon = '';
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
-            	$icon = '<img src="../img/lp_' . $icon_name . '.png" />';
+                $icon = '<img src="../img/lp_' . $icon_name . '.png" />';
             } else {
-            	if (file_exists('../img/lp_' . $icon_name . '.gif')) {
-            		$icon = '<img src="../img/lp_' . $icon_name . '.gif"  />';
-            	} else {
-            		$icon = '<img src="../img/folder_document.gif" />';
-            	}
+                if (file_exists('../img/lp_' . $icon_name . '.gif')) {
+                    $icon = '<img src="../img/lp_' . $icon_name . '.gif"  />';
+                } else {
+                    $icon = '<img src="../img/folder_document.gif" />';
+                }
             }
 
             // The audio column.
@@ -5652,7 +5658,6 @@ class learnpath
         $this->tree_array($arrLP);
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
-        $title = '';
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = addslashes($arrLP[$i]['title']);
             $menu_page = api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $_SESSION['oLP']->lp_id;
@@ -5683,10 +5688,10 @@ class learnpath
      */
     public static function generate_learning_path_folder($course) {
         //Creating learning_path folder
-    	$dir = '/learning_path';
-    	$filepath = api_get_path(SYS_COURSE_PATH).$course['path'] . '/document';
+        $dir = '/learning_path';
+        $filepath = api_get_path(SYS_COURSE_PATH).$course['path'] . '/document';
         $folder = false;
-    	if (!is_dir($filepath.'/'.$dir)) {
+        if (!is_dir($filepath.'/'.$dir)) {
             $folderData = create_unexisting_directory(
                 $course,
                 api_get_user_id(),
@@ -5701,9 +5706,9 @@ class learnpath
             if (!empty($folderData)) {
                 $folder = true;
             }
-    	} else {
-    		$folder = true;
-    	}
+        } else {
+            $folder = true;
+        }
         return $folder;
     }
 
@@ -5714,21 +5719,21 @@ class learnpath
      */
     public function generate_lp_folder($course, $lp_name = null)
     {
-    	$filepath = '';
-    	$dir = '/learning_path/';
+        $filepath = '';
+        $dir = '/learning_path/';
 
         if (empty($lp_name)) {
             $lp_name = $this->name;
         }
 
         $folder = self::generate_learning_path_folder($course);
-    	// Creating LP folder
-    	if ($folder) {
-    		//Limits title size
-    		$title = api_substr(replace_dangerous_char($lp_name), 0 , 80);
-    		$dir   = $dir.$title;
-    		$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
-    		if (!is_dir($filepath.'/'.$dir)) {
+        // Creating LP folder
+        if ($folder) {
+            //Limits title size
+            $title = api_substr(replace_dangerous_char($lp_name), 0 , 80);
+            $dir   = $dir.$title;
+            $filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
+            if (!is_dir($filepath.'/'.$dir)) {
                 $folderData = create_unexisting_directory(
                     $course,
                     api_get_user_id(),
@@ -5742,20 +5747,20 @@ class learnpath
                 if (!empty($folderData)) {
                     $folder = true;
                 }
-    		} else {
-    			$folder = true;
-    		}
-    		$dir = $dir.'/';
-    		if ($folder) {
-    			$filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document'.$dir;
-    		}
-    	}
+            } else {
+                $folder = true;
+            }
+            $dir = $dir.'/';
+            if ($folder) {
+                $filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document'.$dir;
+            }
+        }
         $array = array(
             'dir' => $dir,
             'filepath' => $filepath,
             'folder' => $folder
         );
-    	return $array;
+        return $array;
     }
 
     /**
@@ -6465,7 +6470,7 @@ class learnpath
         }
         $legend .= '</legend>';
 
-        $return .= '<form method="POST">';
+        $return = '<form method="POST">';
         $return .= $legend;
         $return .= '<table cellpadding="0" cellspacing="0" class="lp_form">';
         $return .= '<tr>';
@@ -6639,7 +6644,7 @@ class learnpath
             $legend .= get_lang('EditCurrentForum') . '&nbsp;:';
 
         $legend .= '</legend>';
-        $return .= '<div class="sectioncomment">';
+        $return = '<div class="sectioncomment">';
         $return .= '<form method="POST">';
         $return .= $legend;
         $return .= '<table class="lp_form">';
@@ -7505,10 +7510,11 @@ class learnpath
 
         $legend = '<legend>';
 
-        if ($id != 0 && is_array($extra_info))
+        if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        else
+        } else {
             $parent = 0;
+        }
 
         $sql = "SELECT * FROM " . $tbl_lp_item . "
                 WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
@@ -7545,7 +7551,7 @@ class learnpath
 
         $legend .= '</legend>';
 
-        $return .= '<div class="sectioncomment">';
+        $return = '<div class="sectioncomment">';
         $return .= '<form method="POST">';
         $return .= $legend;
         $return .= '<table>';
@@ -7729,14 +7735,16 @@ class learnpath
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
 
-        if ($action == 'add')
+        if ($action == 'add') {
             $legend .= get_lang('Student_publication') . '&nbsp;:' . "\n";
-        elseif ($action == 'move') $legend .= get_lang('MoveCurrentStudentPublication') . '&nbsp;:' . "\n";
-        else
+        } elseif ($action == 'move') {
+            $legend .= get_lang('MoveCurrentStudentPublication') . '&nbsp;:' . "\n";
+        } else {
             $legend .= get_lang('EditCurrentStudentPublication') . '&nbsp;:' . "\n";
+        }
         $legend .= '</legend>';
 
-        $return .= '<div class="sectioncomment">';
+        $return = '<div class="sectioncomment">';
         $return .= '<form method="POST">';
         $return .= $legend;
         $return .= '<table class="lp_form">';
@@ -8821,8 +8829,13 @@ class learnpath
                                     }*/
                                     $file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
                                     $file_path = str_replace('//', '/', $file_path);
+
+                                    $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
+                                    $current_dir = dirname($abs_path);
+                                    $current_dir = str_replace('\\', '/', $current_dir);
+
                                     if (file_exists($file_path)) {
-                                        $file_path = substr($file_path,strlen($current_dir)); // We get the relative path.
+                                        $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
                                         $zip_files[] = $my_sub_dir.'/'.$file_path;
                                         $link_updates[$my_file_path][] = array('orig' => $doc_info[0], 'dest' => $file_path);
                                         $my_dep_file->setAttribute('href','document/'.$file_path);
@@ -9216,12 +9229,12 @@ class learnpath
                     }
                     //Fix to avoid problems with default_course_document
                     if (strpos("main/default_course_document", $old_new['dest'] === false)) {
-                        $new_dest = str_replace('document/', $mult.'document/', $old_new['dest']);
+                        //$newDestination = str_replace('document/', $mult.'document/', $old_new['dest']);
+                        $newDestination = $old_new['dest'];
                     } else {
-                        //$new_dest = $old_new['dest'];
-                        $new_dest = str_replace('document/', '', $old_new['dest']);
+                        $newDestination = str_replace('document/', '', $old_new['dest']);
                     }
-                    $string = str_replace($old_new['orig'], $new_dest, $string);
+                    $string = str_replace($old_new['orig'], $newDestination, $string);
 
                     //Add files inside the HTMLs
                     $new_path = str_replace('/courses/', '', $old_new['orig']);

@@ -3143,7 +3143,7 @@ class learnpath
             );
 
             $scorm_color_background = 'scorm_item_2';
-            $style_item = 'scorm_item';
+            $style_item = '';
 
             if ($color_counter % 2 == 0) {
                 $scorm_color_background = 'scorm_item_1';
@@ -3153,11 +3153,12 @@ class learnpath
 
             if (in_array($item['type'], $dirTypes)) {
                 $scorm_color_background =' scorm_item_section ';
+                $style_item = '';
             }
             if ($item['id'] == $this->current) {
-                $scorm_color_background .= ' scorm_item_highlight ';
+                $scorm_color_background = 'scorm_item_normal scorm_highlight '.$scorm_color_background.' ';
             } elseif (!in_array($item['type'], $dirTypes)) {
-                $scorm_color_background .= ' scorm_item_normal ';
+                $scorm_color_background = 'scorm_item_normal '.$scorm_color_background.' ';
             }
 
             $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';
@@ -3172,11 +3173,15 @@ class learnpath
             // Learning path personalization
             // build the LP tree
             // The anchor atoc_ will let us center the TOC on the currently viewed item &^D
+            $description = $item['description'];
+            if (empty($description)) {
+                $description = $title;
+            }
             if (in_array($item['type'], $dirTypes)) {
                 // Chapters
-                $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$item['description'].'" >';
+                $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$description.'" >';
             } else {
-                $html .= '<div class="'.$style_item.' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$item['description'].'" >';
+                $html .= '<div class="'.$style_item.' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$description.'" >';
                 $html .= '<a name="atoc_'.$item['id'].'" />';
             }
 

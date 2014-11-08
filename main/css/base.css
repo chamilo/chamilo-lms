@@ -3542,6 +3542,122 @@ form .formw .freeze {
 /* ****************************************************
                      END SKILL
  **************************************************** */
+/*SCORM CSS BASE */
+#learning_path_left_zone .home{
+  display: inline-block;
+  width: 94%;
+  margin-bottom: .5em;
+  margin-top: .5em;
+  font-size: 12px;
+}
+#lp_navigation_elem {
+  float: left;
+}
+#lp_navigation_elem {
+  padding-left: 15px;
+  width: 160px;
+}
+#lp_navigation_elem .buttons {
+  margin-bottom: .5em;
+  text-align: center;
+}
+#author_image {
+  border: 2px solid #B9C9FF;
+  float: left;
+  margin-bottom: .5em;
+  padding: 8px;
+  position: relative;
+  background-color: #f0f1fa;
+  width: 94%;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+#author_image #author_icon{
+  border: 2px solid #FFFFFF;
+}
+#learning_path_left_zone .scorm_title{
+  font-size: 20px;
+  color: #666;
+  margin-bottom: .5em;
+  margin-top: .5em;
+}
+/* for section */
+.scorm_item_section.scorm_completed{
+  background:url("../img/icon_completed_section.png")no-repeat 280px center #606c88;
+  padding-right: 1.5em;
+}
+.scorm_item_section{
+  background: #606c88; /* Old browsers */
+  background: -moz-linear-gradient(top, #606c88 0%, #3f4c6b 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#606c88), color-stop(100%,#3f4c6b)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #606c88 0%,#3f4c6b 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #606c88 0%,#3f4c6b 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #606c88 0%,#3f4c6b 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #606c88 0%,#3f4c6b 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#606c88', endColorstr='#3f4c6b',GradientType=0 ); /* IE6-9 */
+  color: #FFFFFF;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 12px;
+}
+.scorm_item_section .scorm_section_level_0{
+  padding-left: .5em;
+  padding-right: .5em;
+}
+.scorm_item_section .scorm_section_level_1{
+  padding-left: 1.5em;
+  padding-right: .5em;
+}
+.scorm_item_section .scorm_section_level_2{
+  padding-left: 2.5em;
+  padding-right: .5em;
+}
+.scorm_item_section .scorm_section_level_3{
+  padding-left: 3.5em;
+  padding-right: .5em;
+}
+/* items scorm*/
+.scorm_item_normal.scorm_completed {
+  background:url("../img/icon_completed.png") no-repeat 280px center;
+}
+.scorm_item_normal.scorm_failed{
+  background:url("../img/icon_failed.png") no-repeat 280px center;
+}
+.scorm_item_normal .scorm_item_level_0{
+  padding-left: .5em;
+  padding-right: 1.5em;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.scorm_item_normal .scorm_item_level_1{
+  padding-left: 1.8em;
+  padding-right: 1.5em;
+  background:url("../img/level_one.png") no-repeat 0 top;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.scorm_item_normal .scorm_item_level_2{
+  padding-left: 2.5em;
+  padding-right: 1.5em;
+  background:url("../img/level_two.png") no-repeat 0 top;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.scorm_item_normal .scorm_item_level_3{
+  padding-left: 3.5em;
+  padding-right: 1.5em;
+  background:url("../img/level_tree.png") no-repeat 0 top;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.scorm_highlight a{
+  color: #000;
+  font-weight: bold;
+  background-color: #fffdd1;
+}
+
+/* END SCORM CSS BASE*/
 
 .skill_root {
     box-shadow: 2px 2px 19px #aaa;

@@ -1217,15 +1217,15 @@ function update_toc(update_action, update_id, change_ids) {
         // Switch function is broken
         if (update_action == "unhighlight" || update_action == "highlight") {
             if (update_action == "unhighlight") {
-                myelem.removeClass('scorm_item_highlight');
-                myelem.addClass('scorm_item_normal');
+                myelem.removeClass('scorm_highlight');
+                //myelem.addClass('scorm_item_normal');
             } else {
                 if (change_ids=='yes') {
                    olms.lms_next_item = update_id;
                    olms.lms_previous_item = update_id;
                 }
-                myelem.removeClass('scorm_item_normal');
-                myelem.addClass('scorm_item_highlight');
+                //myelem.removeClass('scorm_item_normal');
+                myelem.addClass('scorm_highlight');
             }
         } else {
             myelem.removeClass("scorm_not_attempted scorm_incomplete scorm_completed scorm_failed scorm_passed");

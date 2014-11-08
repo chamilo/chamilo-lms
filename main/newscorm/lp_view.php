@@ -359,15 +359,8 @@ if ($is_allowed_to_edit) {
     echo '</div>';
 }
     echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
-    echo '<div id="header">
-            <table>
-                <tr>
-                    <td>';
-                        echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                            <img src="../img/btn_home.png" />
-                        </a>
-                    </td>
-                    <td>';
+    echo '<div id="header">';
+    //echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();"></a>';
 
                     // Return to course home.
                     if ($is_allowed_to_edit) {
@@ -387,17 +380,14 @@ if ($is_allowed_to_edit) {
                         $name,
                         $url,
                         array(
-                            'class' => 'link no-border',
+                            'class' => 'home btn btn-small btn-info',
                             'target' => '_self',
                             'onclick' => 'javascript: window.parent.API.save_asset();'
                         )
                     );
 
 
-                    echo '</td>
-                </tr>
-            </table>
-        </div>';
+    echo '</div>';
 ?>
         <!-- end header -->
 

@@ -14,7 +14,6 @@ $language_file = array('chat');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $course = $_GET['cidReq'];
 $session_id = api_get_session_id();
@@ -45,9 +44,7 @@ if (!empty($course)) {
         $basepath_chat = '/chat_files';
     }
     $chat_path = $document_path.$basepath_chat.'/';
-
     $TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
     $course_id = api_get_course_int_id();
 
     if (!is_dir($chat_path)) {
@@ -137,22 +134,26 @@ if (!empty($course)) {
 	if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonlinejoin') {
 	    //the joiner (we have to delete the chat request to him when he joins the chat)
 		$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "UPDATE $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text=''
+		$sql = "UPDATE $track_user_table SET
+                    chatcall_user_id = '',
+                    chatcall_date = '',
+                    chatcall_text=''
 		        WHERE (user_id = ".$userId.")";
 		$result = Database::query($sql);
 	}
 
-	echo '<div id="content-chat">';
+	echo '<div id="content-chat markdown-body">';
 	foreach ($content as & $this_line) {
-		echo strip_tags(api_html_entity_decode($this_line), '<div> <br> <span> <b> <i> <img> <font>');
+		//echo strip_tags(api_html_entity_decode($this_line), '<div> <br> <span> <b> <i> <img> <font>');
+        echo $this_line;
 	}
 	echo '</div>';
 	echo '<a name="bottom" style="text-decoration:none;">&nbsp;</a>';
 	if ($isMaster || $is_courseCoach) {
 		$rand = mt_rand(1, 1000);
 		echo '<div id="clear-chat">';
-		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&'.api_get_cidreq().'#bottom" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmReset'), ENT_QUOTES)).'\')) return false;">'.
-            Display::return_icon('delete.png', get_lang('ClearList')).' '.get_lang('ClearList').
+		echo '<a class="btn btn-danger btn-small " href="'.api_get_self().'?rand='.$rand.'&reset=1&'.api_get_cidreq().'#bottom" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmReset'), ENT_QUOTES)).'\')) return false;">'.
+            get_lang('ClearList').
             '</a>';
 		echo '</div>';
 	}

@@ -3,6 +3,8 @@
         "php-ffmpeg/php-ffmpeg": "0.3.x-dev@dev",
         "sabre/vobject": "~3.1",
         "toin0u/digitalocean": "~1.4",
-        "twig/twig": "1.*"
+        "twig/twig": "1.*",
+        "michelf/php-markdown": "1.4.1",
+        "emojione/emojione": "1.3.0"
     }
 }

@@ -1236,7 +1236,7 @@ function update_toc(update_action, update_id, change_ids) {
             } else if (update_action == "completed") {
                 myelem.addClass('scorm_completed');
             } else if (update_action == "failed") {
-                myelem.addClass('scorm_not_attempted');
+                myelem.addClass('scorm_failed');
             } else if (update_action == "passed") {
                 myelem.addClass('scorm_completed');
             } else if (update_action == "browsed") {

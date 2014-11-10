@@ -173,8 +173,12 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  *
  * @param array $courseInfo
  * @param array $uploadedFile ($_FILES)
- * @param string $documentDir
- * @param string $uploadPath
+ * array(
+ *  'name' => 'picture.jpg',
+ *  'tmp_name' => '...', // absolute path
+ * );
+ * @param string $documentDir Example: /var/www/chamilo/courses/ABC/document
+ * @param string $uploadPath Example: /folder1/folder2/
  * @param int $userId
  * @param int $groupId, 0 for everybody
  * @param int $toUserId, NULL for everybody
@@ -209,6 +213,8 @@ function handle_uploaded_document(
         return false;
     }
 
+    $userInfo = api_get_user_info();
+
     $uploadedFile['name'] = stripslashes($uploadedFile['name']);
     // Add extension to files without one (if possible)
     $uploadedFile['name'] = add_ext_on_mime($uploadedFile['name'], $uploadedFile['type']);
@@ -234,12 +240,15 @@ function handle_uploaded_document(
     // If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
     if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         return unzip_uploaded_document(
+            $courseInfo,
+            $userInfo,
             $uploadedFile,
             $uploadPath,
             $documentDir,
             $maxSpace,
-            $output,
-            $groupId
+            $sessionId,
+            $groupId,
+            $output
         );
     } elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         // We can only unzip ZIP files (no gz, tar,...)
@@ -332,6 +341,7 @@ function handle_uploaded_document(
 
             // Example: /var/www/chamilo/courses/xxx/document/folder/picture.jpg
             $fullPath = $whereToSave.$fileSystemName;
+
             // Example: /folder/picture.jpg
             $filePath = $uploadPath.$fileSystemName;
 
@@ -661,6 +671,10 @@ function handle_uploaded_document(
 function moveUploadedFile($file, $storePath)
 {
     $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
+    $moveFile = isset($file['move_file']) && $file['move_file'] ? true : false;
+    if ($moveFile) {
+        copy($file['tmp_name'], $storePath);
+    }
     if ($handleFromFile) {
         return file_exists($file['tmp_name']);
     } else {
@@ -998,69 +1012,74 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @author Bert Vanderkimpen
  *
- * @param  array  $uploaded_file - follows the $_FILES Structure
- * @param  string $upload_path   - destination of the upload.
- *                                This path is to append to $base_work_dir
- * @param  string $base_work_dir  - base working directory of the module
- * @param  int $max_filled_space  - amount of bytes to not exceed in the base
+ * @param array  $courseInfo
+ * @param array  $userInfo
+ * @param array  $uploaded_file - follows the $_FILES Structure
+ * @param string $upload_path   - destination of the upload.
+ *                               This path is to append to $base_work_dir
+ * @param string $base_work_dir  - base working directory of the module
+ * @param int    $maxFilledSpace  - amount of bytes to not exceed in the base
  *                                working directory
- * @param		boolean	Output switch. Optional. If no output not wanted on success, set to false.
+ * @param int $sessionId
+ * @param int $groupId
+ * @param boolean $output Optional. If no output not wanted on success, set to false.
  *
  * @return boolean true if it succeeds false otherwise
  */
 function unzip_uploaded_document(
+    $courseInfo,
+    $userInfo,
     $uploaded_file,
     $upload_path,
     $base_work_dir,
-    $max_filled_space,
-    $output = true,
-    $to_group_id = 0
+    $maxFilledSpace,
+    $sessionId = 0,
+    $groupId = 0,
+    $output = true
 ) {
-    global $_course;
-    global $_user;
-    global $to_user_id;
-    global $to_group_id;
-
-    $zip_file = new PclZip($uploaded_file['tmp_name']);
+    $zip = new PclZip($uploaded_file['tmp_name']);
 
     // Check the zip content (real size and file extension)
-    $zip_content_array = (array)$zip_file->listContent();
+    $zip_content_array = (array)$zip->listContent();
 
-    $real_filesize = 0;
+    $realSize = 0;
     foreach ($zip_content_array as & $this_content) {
-        $real_filesize += $this_content['size'];
+        $realSize += $this_content['size'];
     }
 
-    if (!DocumentManager::enough_space($real_filesize, $max_filled_space)) {
+    if (!DocumentManager::enough_space($realSize, $maxFilledSpace)) {
         Display::display_error_message(get_lang('UplNotEnoughSpace'));
         return false;
     }
 
-    // It happens on Linux that $upload_path sometimes doesn't start with '/'
-    if ($upload_path[0] != '/') {
-        $upload_path='/'.$upload_path;
-    }
+    $folder = api_get_unique_id();
+    $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
+    mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
 
-    /*	Uncompressing phase */
-
-    // Get into the right directory
-    $save_dir = getcwd();
-
-    chdir($base_work_dir.$upload_path);
+    /*	Uncompress zip file*/
     // We extract using a callback function that "cleans" the path
-    $unzipping_state = $zip_file->extract(
+    $zip->extract(
+        PCLZIP_OPT_PATH,
+        $destinationDir,
         PCLZIP_CB_PRE_EXTRACT,
         'clean_up_files_in_zip',
         PCLZIP_OPT_REPLACE_NEWER
     );
+
     // Add all documents in the unzipped folder to the database
     add_all_documents_in_folder_to_database(
-        $_course,
-        $_user['user_id'],
+        $courseInfo,
+        $userInfo,
         $base_work_dir,
-        $upload_path == '/' ? '' : $upload_path,
-        $to_group_id
+        $destinationDir,
+        $sessionId,
+        $groupId,
+        $output
     );
+
+    if (is_dir($destinationDir)) {
+        rmdirr($destinationDir);
+    }
 
     return true;
 }
@@ -1427,10 +1446,12 @@ function search_img_from_html($html_file) {
  * @param   int     $session_id
  * @param   int     $to_group_id
  * @param   int     $to_user_id
- * @param   string  $base_work_dir
+ * @param   string  $base_work_dir /var/www/chamilo/courses/ABC/document
  * @param   string  $desired_dir_name complete path of the desired name
- * @param   string  $title
+ * Example: /folder1/folder2
+ * @param   string  $title "folder2"
  * @param   int     $visibility (0 for invisible, 1 for visible, 2 for deleted)
+ * @param   bool $generateNewNameIfExists
  * @return  string  actual directory name if it succeeds,
  *          boolean false otherwise
  */
@@ -1443,7 +1464,8 @@ function create_unexisting_directory(
     $base_work_dir,
     $desired_dir_name,
     $title = null,
-    $visibility = null
+    $visibility = null,
+    $generateNewNameIfExists = false
 ) {
     $course_id = $_course['real_id'];
     $session_id = intval($session_id);
@@ -1456,10 +1478,30 @@ function create_unexisting_directory(
     );
 
     if ($folderExists == true) {
-        return false;
+        if ($generateNewNameIfExists) {
+            $counter = 1;
+            while (1) {
+                $folderExists = DocumentManager::folderExists(
+                    $desired_dir_name.'_'.$counter,
+                    $_course,
+                    $session_id,
+                    $to_group_id
+                );
+
+                if ($folderExists == false) {
+                    break;
+                }
+                $counter++;
+            }
+            $desired_dir_name = $desired_dir_name.'_'.$counter;
+        } else {
+
+            return false;
+        }
     }
 
     $systemFolderName = $desired_dir_name;
+
     // Adding suffix
     $suffix = DocumentManager::getDocumentSuffix(
         $_course,
@@ -1474,7 +1516,6 @@ function create_unexisting_directory(
     }
 
     if (!is_dir($base_work_dir.$systemFolderName)) {
-
         mkdir(
             $base_work_dir.$systemFolderName,
             api_get_permissions_for_new_directories(),
@@ -1562,9 +1603,11 @@ function create_unexisting_directory(
 
             /* This means the folder NOT exist in the filesystem
              (now this was created) but there is a record in the Database*/
+
             return $documentData;
         }
     } else {
+
         return false;
     }
 }
@@ -1948,95 +1991,111 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
 }
 
 /**
- * This recursive function can be used during the upgrade process form older versions of Chamilo
- * It crawls the given directory, checks if the file is in the DB and adds it if it's not
+ * This recursive function can be used during the upgrade process form older
+ * versions of Chamilo
+ * It crawls the given directory, checks if the file is in the DB and adds
+ * it if it's not
  *
+ * @param array $courseInfo
+ * @param array $userInfo
  * @param string $base_work_dir
- * @param string $current_path, needed for recursivity
+ * @param string $folderPath
+ * @param int $sessionId
+ * @param int $groupId
+ * @param bool $output
+ * @param array $parent
+ *
  */
 function add_all_documents_in_folder_to_database(
-    $_course,
-    $user_id,
+    $courseInfo,
+    $userInfo,
     $base_work_dir,
-    $current_path = '',
-    $to_group_id = 0
+    $folderPath,
+    $sessionId = 0,
+    $groupId = 0,
+    $output = false,
+    $parent = array()
 ) {
-    $current_session_id = api_get_session_id();
-    $path = $base_work_dir.$current_path;
+    if (empty($userInfo) || empty($courseInfo)) {
+        return false;
+    }
+
+    $userId = $userInfo['user_id'];
+
     // Open dir
-    $handle = opendir($path);
-    if (is_dir($path)) {
+    $handle = opendir($folderPath);
+    $files = array();
+
+    if (is_dir($folderPath)) {
         // Run trough
         while ($file = readdir($handle)) {
-            if ($file == '.' || $file == '..') continue;
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
 
-            $completepath = "$path/$file";
-            // Directory?
-            if (is_dir($completepath)) {
-                $title = get_document_title($file);
-                $safe_file = replace_dangerous_char($file);
-                @rename($path.'/'.$file, $path.'/'.$safe_file);
-                // If we can't find the file, add it
-                if (!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file)) {
-                    $document_id = add_document($_course, $current_path.'/'.$safe_file, 'folder', 0, $title);
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $document_id,
-                        'DocumentAdded',
-                        $user_id,
-                        $to_group_id,
-                        null,
-                        null,
-                        null,
-                        $current_session_id
-                    );
-                    //echo $current_path.'/'.$safe_file.' added!<br />';
-                }
+            $parentPath = null;
+            if (!empty($parent)) {
+                $parentPath = $parent['path'];
+            }
+
+            $completePath = $parentPath.'/'.$file;
+            $sysFolderPath = $folderPath.'/'.$file;
+
+            // Is directory?
+            if (is_dir($sysFolderPath)) {
+                $newFolderData = create_unexisting_directory(
+                    $courseInfo,
+                    $userId,
+                    $sessionId,
+                    $groupId,
+                    null,
+                    $base_work_dir,
+                    $completePath,
+                    null,
+                    null,
+                    true
+                );
+
+                $files[$file] = $newFolderData;
+
                 // Recursive
                 add_all_documents_in_folder_to_database(
-                    $_course,
-                    $user_id,
+                    $courseInfo,
+                    $userInfo,
                     $base_work_dir,
-                    $current_path . '/' . $safe_file,
-                    $to_group_id
+                    $sysFolderPath,
+                    $sessionId,
+                    $groupId,
+                    $output,
+                    $newFolderData
                 );
             } else {
-                //Rename
-                $safe_file = disable_dangerous_file(replace_dangerous_char($file, 'strict'));
-                @rename($base_work_dir.$current_path.'/'.$file, $base_work_dir.$current_path.'/'.$safe_file);
-                $document_id = DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file);
-                if (!$document_id) {
-                    $title = get_document_title($file);
-                    $size = filesize($base_work_dir.$current_path.'/'.$safe_file);
-                    $document_id = add_document($_course, $current_path.'/'.$safe_file, 'file', $size, $title);
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $document_id,
-                        'DocumentAdded',
-                        $user_id,
-                        $to_group_id,
-                        null,
-                        null,
-                        null,
-                        $current_session_id
-                    );
 
-                } else {
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $document_id,
-                        'DocumentUpdated',
-                        $user_id,
-                        $to_group_id,
-                        null,
-                        null,
-                        null,
-                        $current_session_id
-                    );
-                }
+                // Rename
+                $uploadedFile = array(
+                    'name' => $file,
+                    'tmp_name' => $sysFolderPath,
+                    'size' => filesize($sysFolderPath),
+                    'type' => null,
+                    'from_file' => true,
+                    'move_file' => true
+                );
+
+                handle_uploaded_document(
+                    $courseInfo,
+                    $uploadedFile,
+                    $base_work_dir,
+                    $parentPath,
+                    $userId,
+                    $groupId,
+                    null,
+                    0,
+                    'overwrite',
+                    $output,
+                    false,
+                    null,
+                    $sessionId
+                );
             }
         }
     }

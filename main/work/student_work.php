@@ -69,8 +69,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) {
     case 'export_to_pdf':
         exportAllWork($studentId, $courseInfo, 'pdf');
+        exit;
         break;
-    exit;
     case 'download':
         if (api_is_allowed_to_edit()) {
             downloadAllFilesPerUser($studentId, $courseInfo);

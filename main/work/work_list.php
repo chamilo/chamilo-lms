@@ -49,15 +49,19 @@ if (!empty($group_id)) {
         $show_work = true;
     } else {
         // you are not a teacher
-        $show_work = GroupManager::user_has_access($user_id, $group_id, GroupManager::GROUP_TOOL_WORK);
+        $show_work = GroupManager::user_has_access(
+            $user_id,
+            $group_id,
+            GroupManager::GROUP_TOOL_WORK
+        );
     }
 
     if (!$show_work) {
         api_not_allowed();
     }
 
-    $interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group.php', 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
 $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
@@ -157,13 +161,13 @@ $extra_params['height'] = 'auto';
 $extra_params['sortname'] = 'firstname';
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$workId.'&type='.$type;
 ?>
-<script>
-$(function() {
-    <?php
-    echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
-?>
-});
-</script>
+    <script>
+        $(function() {
+            <?php
+            echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
+        ?>
+        });
+    </script>
 <?php
 echo Display::grid_html('results');
 

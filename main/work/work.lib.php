@@ -13,9 +13,7 @@ use ChamiloSession as Session;
  *  @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 LOTS of bug fixes
  *  @todo   this lib should be convert in a static class and moved to main/inc/lib
  */
-/**
- * Initialization
- */
+
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';

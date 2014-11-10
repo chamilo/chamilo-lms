@@ -20,13 +20,13 @@ api_protect_course_script(true);
 
 $id = intval($_GET['id']);
 
-$course_info = api_get_course_info();
+$courseInfo = api_get_course_info();
 
-if (empty($course_info)) {
+if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 
-$result = downloadFile($id, $course_info);
+$result = downloadFile($id, $courseInfo);
 if ($result == false) {
     api_not_allowed(true);
 }

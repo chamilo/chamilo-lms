@@ -53,7 +53,11 @@ $defaults['new_dir'] = Security::remove_XSS($title);
 $there_is_a_end_date = false;
 
 if (Gradebook::is_active()) {
-    $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $workId);
+    $link_info = is_resource_in_course_gradebook(
+        api_get_course_id(),
+        LINK_STUDENTPUBLICATION,
+        $workId
+    );
     if (!empty($link_info)) {
         $defaults['weight'] = $link_info['weight'];
         $defaults['category_id'] = $link_info['category_id'];

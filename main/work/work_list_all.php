@@ -45,19 +45,36 @@ if (!empty($group_id)) {
         $show_work = true;
     } else {
         // you are not a teacher
-        $show_work = GroupManager::user_has_access($user_id, $group_id, GroupManager::GROUP_TOOL_WORK);
+        $show_work = GroupManager::user_has_access(
+            $user_id,
+            $group_id,
+            GroupManager::GROUP_TOOL_WORK
+        );
     }
 
     if (!$show_work) {
         api_not_allowed();
     }
 
-    $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php',
+        'name' => get_lang('Groups')
+    );
+
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id,
+        'name' => get_lang('GroupSpace').' '.$group_properties['name']
+    );
 }
 
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId, 'name' =>  $my_folder_data['title']);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+    'name' => get_lang('StudentPublications')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
+    'name' =>  $my_folder_data['title']
+);
 
 $error_message = null;
 
@@ -102,7 +119,8 @@ if ($is_allowed_to_edit && $action == 'make_invisible') {
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
+    Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
     /*echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'">';
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';*/
@@ -140,7 +158,8 @@ if (!empty($error_message)) {
 }
 
 if (!empty($my_folder_data['description'])) {
-    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
+    echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.
+        Security::remove_XSS($my_folder_data['description']).'</p></div></p>';
 }
 
 $check_qualification = intval($my_folder_data['qualification']);
@@ -158,7 +177,8 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         get_lang('Status'),
         get_lang('Actions')
     );
-    $column_model   = array (
+
+    $column_model = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'8',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
@@ -180,7 +200,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         get_lang('Actions')
     );
 
-    $column_model   = array (
+    $column_model = array (
         array('name'=>'type',           'index'=>'file',            'width'=>'8',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),

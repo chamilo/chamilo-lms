@@ -3245,7 +3245,6 @@ class learnpathItem
      */
     public function set_score($score)
     {
-        //$possible_status = array('not attempted','incomplete','completed','passed','failed','browsed');
         $debug = self::debug;
         if ($debug > 0) {
             error_log('learnpathItem::set_score(' . $score . ')', 0);
@@ -3611,21 +3610,20 @@ class learnpathItem
             'browsed',
             'failed'
         ); //TODO COMPLETE
-        if ($this->seriousgame_mode != 1 || !in_array(
-                $row['status'],
-                $case_completed
-            )
+
+        if ($this->seriousgame_mode != 1 ||
+            !in_array($row['status'], $case_completed)
         ) {
-            $update_view_sql = "UPDATE $item_view_table
-                                  SET total_time = '$total_time'
-                               WHERE c_id = $course_id
-                                  AND lp_item_id = {$this->db_id}
-                                  AND lp_view_id = {$this->view_id}
-                                  AND view_count = {$this->attempt_id}";
+            $sql = "UPDATE $item_view_table
+                      SET total_time = '$total_time'
+                    WHERE c_id = $course_id
+                      AND lp_item_id = {$this->db_id}
+                      AND lp_view_id = {$this->view_id}
+                      AND view_count = {$this->attempt_id}";
             if (self::debug > 0) {
-                error_log($update_view_sql);
+                error_log($sql);
             }
-            $result = Database::query($update_view_sql);
+            Database::query($sql);
         }
     }
 
@@ -3636,13 +3634,13 @@ class learnpathItem
     {
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $course_id = api_get_course_int_id();
-        $update_view_sql = 'UPDATE ' . $item_view_table . '
-                            SET total_time = 0, start_time=' . time() . '
-                            WHERE c_id = ' . $course_id . '
-                                AND lp_item_id="' . $this->db_id . '"
-                                AND lp_view_id="' . $this->view_id . '"
-                                AND view_count="' . $this->attempt_id . '" ;';
-        Database::query($update_view_sql);
+        $sql = 'UPDATE ' . $item_view_table . '
+                SET total_time = 0, start_time=' . time() . '
+                WHERE c_id = ' . $course_id . '
+                    AND lp_item_id="' . $this->db_id . '"
+                    AND lp_view_id="' . $this->view_id . '"
+                    AND view_count="' . $this->attempt_id . '" ;';
+        Database::query($sql);
     }
 
     /**
@@ -3710,7 +3708,7 @@ class learnpathItem
                                 $objective[3]
                             ) . "' " .
                             "WHERE c_id = $course_id AND id = $iva_id";
-                        $ivau_res = Database::query($ivau_sql);
+                        Database::query($ivau_sql);
                         //error_log($ivau_sql, 0);
                     } else {
                         // Insert new one.
@@ -3729,13 +3727,10 @@ class learnpathItem
                             ) . "','" . Database::escape_string(
                                 $objective[3]
                             ) . "')";
-                        $ivai_res = Database::query($ivai_sql);
-                        //error_log($ivai_sql);
+                        Database::query($ivai_sql);
                     }
                 }
             }
-        } else {
-            //error_log('no objective to save: '.print_r($this->objectives, 1));
         }
     }
 

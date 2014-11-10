@@ -1645,10 +1645,24 @@ function xajax_save_item(
         item_type,
         session_id,
         course_id,
-        finishSignalReceived = 0,
-        userNavigatesAway = 0,
-        statusSignalReceived = 0) {
+        finishSignalReceived,
+        userNavigatesAway,
+        statusSignalReceived
+) {
     var params = '';
+
+    if (typeof(finishSignalReceived) == 'undefined') {
+        finishSignalReceived = 0;
+    }
+
+    if (typeof(userNavigatesAway) == 'undefined') {
+        userNavigatesAway = 0;
+    }
+
+    if (typeof(statusSignalReceived) == 'undefined') {
+        statusSignalReceived = 0;
+    }
+
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
     params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
     params += '&status='+lesson_status+'&t='+session_time;
@@ -1660,7 +1674,7 @@ function xajax_save_item(
     params += '&userNavigatesAway='+userNavigatesAway;
     params += '&statusSignalReceived='+statusSignalReceived;
 
-    //console.info(session_time);
+    // console.info(session_time);
     if (olms.lms_lp_type == 1 || item_type == 'document') {
         logit_lms('xajax_save_item with params:' + params,3);
         $.ajax({
@@ -1693,14 +1707,23 @@ function xajax_save_item_scorm(
     lms_item_id,
     session_id,
     course_id,
-    finishSignalReceived = 0,
-    userNavigatesAway = 0,
-    statusSignalReceived = 0
+    finishSignalReceived,
+    userNavigatesAway,
+    statusSignalReceived
     )
 {
-    if (typeof(finish) == 'undefined') {
-        finish = 0;
+    if (typeof(finishSignalReceived) == 'undefined') {
+        finishSignalReceived = 0;
     }
+
+    if (typeof(userNavigatesAway) == 'undefined') {
+        userNavigatesAway = 0;
+    }
+
+    if (typeof(statusSignalReceived) == 'undefined') {
+        statusSignalReceived = 0;
+    }
+
     var is_interactions='false';
     var params = 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
     // The missing arguments will be ignored by lp_ajax_save_item.php

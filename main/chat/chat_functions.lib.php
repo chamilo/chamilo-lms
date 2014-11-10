@@ -143,7 +143,7 @@ function saveMessage($message, $userId, $_course, $session_id, $group_id, $previ
     }
 
     $date_now = date('Y-m-d');
-    $message = Security::remove_XSS(trim($message));
+    $message = trim($message);
     $timeNow = date('d/m/y H:i:s');
 
     if (!empty($group_id)) {
@@ -156,12 +156,16 @@ function saveMessage($message, $userId, $_course, $session_id, $group_id, $previ
 
     if (!api_is_anonymous()) {
         if (!empty($message)) {
-
             Emojione\Emojione::$imagePathPNG = api_get_path(WEB_LIBRARY_PATH).'javascript/emojione/png/';
             Emojione\Emojione::$imagePathSVG = api_get_path(WEB_LIBRARY_PATH).'javascript/emojione/svg/';
             Emojione\Emojione::$ascii = true;
+
+            // Parsing emojis
             $message = Emojione\Emojione::toImage($message);
+            // Parsing text to understand markdown (code highlight)
             $message = MarkdownExtra::defaultTransform($message);
+            // Security XSS
+            $message = Security::remove_XSS($message);
 
             if ($preview == true) {
                 return $message;

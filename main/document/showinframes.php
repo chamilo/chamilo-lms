@@ -162,6 +162,7 @@ if ($is_courseAdmin) {
     $frameheight = 165;
 }
 $js_glossary_in_documents = '';
+
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
     $js_glossary_in_documents = '	//	    $(document).ready(function() {
                                     $.frameReady(function() {
@@ -216,7 +217,7 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
   </script>';
     */
     $htmlHeadXtra[] = '
-    <script charset="utf-8">
+    <script>
         resizeIframe = function() {
             var bodyHeight = $("body").height();
             var topbarHeight = $("#topbar").height();
@@ -227,6 +228,26 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
         });
     </script>'
     ;
+}
+
+// Activate code highlight.
+$isChatFolder = false;
+if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
+    $chatFolder = $document_data['parents'][0];
+    if (isset($chatFolder['path']) && $chatFolder['path'] == '/chat_files') {
+        $isChatFolder = true;
+    }
+}
+
+if ($isChatFolder) {
+    $htmlHeadXtra[] = api_get_js('highlight/highlight.pack.js');
+    $htmlHeadXtra[] = api_get_css(
+        api_get_path(WEB_LIBRARY_PATH) . 'javascript/highlight/styles/github.css'
+    );
+    $htmlHeadXtra[] = '
+    <script>
+        hljs.initHighlightingOnLoad();
+    </script>';
 }
 
 $execute_iframe = true;
@@ -297,6 +318,7 @@ if (!$jplayer_supported && $execute_iframe) {
         window.onload = function() {
             updateContentHeight();
             '.$js_glossary_in_documents.'
+
         }
     </script>';
 }
@@ -410,6 +432,11 @@ if ($is_nanogong_available) {
 }
 
 if ($execute_iframe) {
-    echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
+    if ($isChatFolder) {
+        $content = Security::remove_XSS(file_get_contents($file_url_sys));
+        echo $content;
+    } else {
+        echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
+    }
 }
 Display::display_footer();

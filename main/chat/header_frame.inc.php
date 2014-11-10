@@ -105,8 +105,9 @@ $iconNameToInclude = array(
     ':neutral_face:',
     ':no_mouth:',
     ':innocent:',
-    'alien:',
+    ':alien:',
 );
+
 foreach ($icons as $key => $icon) {
     if (in_array($key, $iconNameToInclude)) {
         $iconList[$key] = strtoupper($icon) . '.png';
@@ -129,7 +130,6 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-textcomplete/jquery.textcomplete.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/emojione/css/emojione.min.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/emojione/css/autocomplete.css">
-
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/highlight/styles/github.css">
 <?php echo api_get_js('jquery.min.js'); ?>
 <?php echo api_get_js('bootstrap/bootstrap.js'); ?>
@@ -159,14 +159,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
         $.emojiarea.icons = <?php echo $icons ?>;
 
         $('#preview').on('click', function() {
-            //var message = $('textarea').html();
             var params = $('#formMessage').serialize();
-            /*
-            console.log(params2);
-            var message = $('textarea').emojiarea().html()
-            console.log(message);
-            var params= 'message=' + message;
-*/
             $.ajax({
                 url: url + '&' + params,
                 success: function (data) {
@@ -186,7 +179,6 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
         });
 
         $('textarea').emojiarea({button: '#emojis'});
-
         $("textarea").textcomplete([ {
             match: /\B:([\-+\w]*)$/,
             search: function (term, callback) {
@@ -229,28 +221,33 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 		$('#user-online-scroll').tinyscrollbar();
 	});
 
-	function play_notification() {
+	function play_notification()
+    {
 		document.getElementById('audio').play();
 	}
 
-	function updateChat(){
+	function updateChat()
+    {
 		if ('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>') {
 			parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&'.api_get_cidreq(); ?>#bottom';
 			play_notification();
 		}
 	}
 
-	function updateConnected(){
+	function updateConnected()
+    {
 		if ('<?php echo $connected_old; ?>' != '<?php echo $connected_new; ?>'){
 			parent.chat_whoisonline.location.href='chat_whoisonline.php?size=<?php echo $connected_new; ?>';
 		}
 	}
 
-	function submitHiddenForm(){
+	function submitHiddenForm()
+    {
 		document.formHidden.submit();
 	}
 
-	function eventMessage(){
+	function eventMessage()
+    {
 		<?php if (isset($chat_size) && $chat_size): ?>
 		parent.chat_hidden.document.formHidden.chat_size_old.value='<?php echo $chat_size; ?>';
 		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size.'&'.api_get_cidreq(); ?>#bottom';
@@ -258,7 +255,8 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 		document.formMessage.message.focus();
 	}
 
-	function send_message(keyEvent) {
+	function send_message(keyEvent)
+    {
 		for (prop in keyEvent) {
 			if(prop == 'which') key = keyEvent.which; else key = keyEvent.keyCode;
 		}

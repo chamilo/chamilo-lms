@@ -2706,8 +2706,6 @@ class DocumentManager
                     if (!empty($documentId)) {
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
                         $params = array();
-                        error_log('dd');
-                        error_log($if_exists);
                         /*if ($if_exists == 'rename') {
                             // Remove prefix
                             $suffix = DocumentManager::getDocumentSuffix(

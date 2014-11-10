@@ -351,8 +351,14 @@ $form->addElement('hidden', 'title_edited', 'false', 'id="title_edited"');
  */
 function document_exists($filename) {
     global $dir;
-    return DocumentManager::documentExists(
-        $dir.$filename.'.html',
+    // Clean up the name, only ASCII characters should stay. (and strict)
+    $cleanName = replace_dangerous_char($filename, 'strict');
+
+    // No "dangerous" files
+    $cleanName = disable_dangerous_file($cleanName);
+
+    return !DocumentManager::documentExists(
+        $dir.$cleanName.'.html',
         api_get_course_info(),
         api_get_session_id(),
         api_get_group_id()

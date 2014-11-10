@@ -310,7 +310,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         displayForm();
     } else {
         $arr_course_origin = SessionManager::get_course_list_by_session_id(
-                api_get_session_id()
+            api_get_session_id()
         );
         $arrCourseDestination = array();
         $destinationSession = '';
@@ -325,8 +325,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destinationSession)) {
             //We need only one value
-            if (count($arr_course_origin) > 1 || count($arrCourseDestination) > 1
-            ) {
+            if (count($arr_course_origin) > 1 || count($arrCourseDestination) > 1) {
                 Display::display_error_message(
                     get_lang('YouMustSelectACourseFromOriginalSession')
                 );
@@ -388,18 +387,17 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         $hiddenFields['origin_session'] = api_get_session_id();
 
         CourseSelectForm :: display_form($course, $hiddenFields, true);
+
         echo '<div style="float:right"><a href="javascript:window.back();">' .
-        Display::return_icon(
-            'back.png', get_lang('Back') . ' ' . get_lang('To') . ' ' . get_lang(
-                'PlatformAdmin'
-            ), array('style' => 'vertical-align:middle')
-        ) .
-        get_lang('Back') . '</a></div>';
+            Display::return_icon(
+                'back.png', get_lang('Back') . ' ' . get_lang('To') . ' ' . get_lang(
+                    'PlatformAdmin'
+                ), array('style' => 'vertical-align:middle')
+            ) .
+            get_lang('Back') . '</a></div>';
     } else {
         Display::display_error_message(
-            get_lang(
-                'You must select a course from original session and select a destination session'
-            )
+            get_lang('You must select a course from original session and select a destination session')
         );
         displayForm();
     }

@@ -309,7 +309,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         displayForm();
     } else {
-        $arr_course_origin = SessionManager::get_course_list_by_session_id(
+        $arrCourseOrigin = SessionManager::get_course_list_by_session_id(
             api_get_session_id()
         );
         $arrCourseDestination = array();
@@ -323,25 +323,25 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
             $destinationSession = $_POST['sessions_list_destination'];
         }
 
-        if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destinationSession)) {
+        if ((is_array($arrCourseOrigin) && count($arrCourseOrigin) > 0) && !empty($destinationSession)) {
             //We need only one value
-            if (count($arr_course_origin) > 1 || count($arrCourseDestination) > 1) {
+            if (count($arrCourseOrigin) > 1 || count($arrCourseDestination) > 1) {
                 Display::display_error_message(
                     get_lang('YouMustSelectACourseFromOriginalSession')
                 );
             } else {
-                //foreach ($arr_course_origin as $courseOrigin) {
+                //foreach ($arrCourseOrigin as $courseOrigin) {
                 //first element of the array
-                $course_code = $arr_course_origin[0];
-                $course_destinatination = $arrCourseDestination[0];
+                $courseCode = $arrCourseOrigin[0];
+                $courseDestination = $arrCourseDestination[0];
 
-                $courseOrigin = api_get_course_info($course_code);
+                $courseOrigin = api_get_course_info($courseCode);
                 $cb = new CourseBuilder('', $courseOrigin);
                 $course = $cb->build(
-                    $originSession, $course_code, $withBaseContent
+                    $originSession, $courseCode, $withBaseContent
                 );
                 $cr = new CourseRestorer($course);
-                $cr->restore($course_destinatination, $destinationSession);
+                $cr->restore($courseDestination, $destinationSession);
 
                 Display::display_confirmation_message(get_lang('CopyFinished'));
             }

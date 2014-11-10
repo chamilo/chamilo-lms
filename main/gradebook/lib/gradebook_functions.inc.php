@@ -676,7 +676,7 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
 
     $path_image_in_default_course = api_get_path(WEB_CODE_PATH) . 'default_course_document';
     $new_content_html = str_replace('/main/default_course_document', $path_image_in_default_course, $new_content_html);
-    $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
+    $new_content_html = str_replace(SYS_CODE_PATH . 'img/', api_get_path(WEB_IMG_PATH), $new_content_html);
 
     //add print header
     if ($hide_print_button == false) {

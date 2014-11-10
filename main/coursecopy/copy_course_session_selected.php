@@ -299,7 +299,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         $destinationCourse = $_POST['destination_course'];
         $destinationSession = $_POST['destination_session'];
         $course = CourseSelectForm::get_posted_course(
-                'copy_course', $originSession, $originCourse
+            'copy_course', $originSession, $originCourse
         );
 
         $cr = new CourseRestorer($course);
@@ -323,8 +323,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
             $destinationSession = $_POST['sessions_list_destination'];
         }
 
-        if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destinationSession)
-        ) {
+        if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destinationSession)) {
             //We need only one value
             if (count($arr_course_origin) > 1 || count($arrCourseDestination) > 1
             ) {
@@ -344,8 +343,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
                 );
                 $cr = new CourseRestorer($course);
                 $cr->restore($course_destinatination, $destinationSession);
+
+                Display::display_confirmation_message(get_lang('CopyFinished'));
             }
-            Display::display_confirmation_message(get_lang('CopyFinished'));
+
             displayForm();
         } else {
             Display::display_error_message(

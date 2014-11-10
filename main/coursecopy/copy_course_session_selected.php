@@ -210,7 +210,7 @@ function searchCourses($idSession, $type)
         foreach ($courseList as $course) {
             $course_list_destination[] = $course['code'];
 
-            if ($course['code'] == $courseCode) {
+            if ($course['code'] != $courseCode) {
                 continue;
             }
 

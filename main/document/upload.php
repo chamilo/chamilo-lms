@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Main script for the documents tool
  *
@@ -56,8 +57,8 @@ function check_unzip() {
         document.upload.if_exists[0].checked=true;
         document.upload.if_exists[0].disabled=false;
         document.upload.if_exists[2].disabled=false;
-        }
     }
+}
 
 function advanced_parameters() {
     if (document.getElementById(\'options\').style.display == \'none\') {
@@ -100,7 +101,8 @@ $(function () {
 // Variables
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
+$_course = api_get_course_info();
+$groupId = api_get_group_id();
 $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
@@ -137,33 +139,26 @@ if (empty($document_data)) {
 $group_properties = array();
 
 // This needs cleaning!
-if (api_get_group_id()) {
+if (!empty($groupId)) {
     // If the group id is set, check if the user has the right to be here
-    // Needed for group related stuff
-    require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
     // Get group info
-    $group_properties = GroupManager::get_group_properties(api_get_group_id());
+    $group_properties = GroupManager::get_group_properties($groupId);
 
     // Only courseadmin or group members allowed
-    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())) {
-        $to_group_id = api_get_group_id();
-        $req_gid = '&amp;gidReq='.api_get_group_id();
-        $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace'));
+    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $groupId)) {
+        $interbreadcrumb[] = array('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace'));
     } else {
         api_not_allowed(true);
     }
 } elseif ($is_allowed_to_edit || is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
 
-    // Admin for "regular" upload, no group documents. And check if is my shared folder
-    $to_group_id = 0;
-    $req_gid = '';
 } else {
     // No course admin and no group member...
     api_not_allowed(true);
 }
 
 // Group docs can only be uploaded in the group directory
-if ($to_group_id != 0 && $path == '/') {
+if ($groupId != 0 && $path == '/') {
     $path = $group_properties['directory'];
 }
 
@@ -177,7 +172,7 @@ if ($is_certificate_array[0] == 'certificates') {
 
 // Title of the tool
 $add_group_to_title = null;
-if ($to_group_id != 0) {
+if ($groupId != 0) {
     // Add group name after for group documents
     $add_group_to_title = ' ('.$group_properties['name'].')';
 }
@@ -191,7 +186,7 @@ if (isset($_REQUEST['certificate'])) {
 if ($is_certificate_mode) {
     $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 } else {
-    $interbreadcrumb[] = array('url' => './document.php?id='.$document_id.$req_gid, 'name'=> get_lang('Documents'));
+    $interbreadcrumb[] = array('url' => './document.php?id='.$document_id.'&'.api_get_cidreq(), 'name'=> get_lang('Documents'));
 }
 
 // Interbreadcrumb for the current directory root path
@@ -241,7 +236,7 @@ if ($is_certificate_mode) {
 echo '</div>';
 
 // Form to select directory
-$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+$folders = DocumentManager::get_all_document_folders($_course, $groupId, $is_allowed_to_edit);
 if (!$is_certificate_mode) {
     echo build_directory_selector(
         $folders,

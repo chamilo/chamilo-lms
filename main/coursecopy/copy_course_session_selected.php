@@ -363,8 +363,6 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         );
     }
 
-    $originSession = api_get_session_id();
-    $courseCode = api_get_course_id();
     $arrCourseDestination = array();
     $destinationSession = '';
 
@@ -379,9 +377,9 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         Display::display_normal_message(
             get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz')
         );
-        $courseOrigin = api_get_course_info();
-        $cb = new CourseBuilder('', $courseOrigin);
-        $course = $cb->build($originSession, $courseCode, $withBaseContent);
+
+        $cb = new CourseBuilder('', $courseInfo);
+        $course = $cb->build($sessionId, $courseCode, $withBaseContent);
         $hiddenFields['destination_course'] = $arrCourseDestination[0];
         $hiddenFields['destination_session'] = $destinationSession;
         $hiddenFields['origin_course'] = api_get_course_id();

@@ -309,14 +309,19 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         displayForm();
     } else {
-        $arrCourseOrigin = SessionManager::get_course_list_by_session_id(
-            api_get_session_id()
-        );
+        $arrCourseOrigin = array();
         $arrCourseDestination = array();
         $destinationSession = '';
 
         if (isset($_POST['SessionCoursesListDestination'])) {
             $arrCourseDestination = $_POST['SessionCoursesListDestination'];
+
+            if (!empty($arrCourseDestination)) {
+                $arrCourseOrigin = SessionManager::get_course_list_by_session_id(
+                    api_get_session_id(),
+                    $courseInfo['title']
+                );
+            }
         }
 
         if (isset($_POST['sessions_list_destination'])) {
@@ -330,13 +335,9 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
                     get_lang('YouMustSelectACourseFromOriginalSession')
                 );
             } else {
-                //foreach ($arrCourseOrigin as $courseOrigin) {
-                //first element of the array
-                $courseCode = $arrCourseOrigin[0];
                 $courseDestination = $arrCourseDestination[0];
 
-                $courseOrigin = api_get_course_info($courseCode);
-                $cb = new CourseBuilder('', $courseOrigin);
+                $cb = new CourseBuilder('', $courseInfo);
                 $course = $cb->build(
                     $originSession, $courseCode, $withBaseContent
                 );

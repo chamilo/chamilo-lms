@@ -112,10 +112,11 @@ function make_select_session_list($name, $sessions, $attr = array())
 /**
  * Show the form to copy courses
  * @global string $returnLink
+ * @global string $courseCode
  */
 function displayForm()
 {
-    global $returnLink;
+    global $returnLink, $courseCode;
 
     $courseInfo = api_get_course_info();
     $sessionId = api_get_session_id();
@@ -167,6 +168,11 @@ function displayForm()
             if ($session['id'] == $sessionId) {
                 continue;
             }
+
+            if (!SessionManager::sessionHasCourse($session['id'], $courseCode)) {
+                continue;
+            }
+
             $html .= '<option value="' . $session['id'] . '">' . $session['name'] . '</option>';
         }
     }

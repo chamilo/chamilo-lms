@@ -5012,4 +5012,34 @@ class SessionManager
         return $sessions;
     }
 
+    /**
+     * Check if the course belongs to the session
+     * @param int $sessionId The session id
+     * @param string $courseCode The course code
+     */
+    public static function sessionHasCourse($sessionId, $courseCode) {
+        $sessionId = intval($sessionId);
+        $courseCode = Database::escape_string($courseCode);
+
+        $courseTablee = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sessionRelCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+
+        $sql = "SELECT COUNT(1) AS qty FROM $courseTablee c "
+            . "INNER JOIN $sessionRelCourseTable src "
+            . "ON c.code = src.course_code "
+            . "WHERE src.id_session = $sessionId "
+            . "AND c.code = '$courseCode'";
+
+        $result = Database::query($sql);
+
+        if ($result !== false) {
+            $data = Database::fetch_assoc($result);
+
+            if ($data['qty'] > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

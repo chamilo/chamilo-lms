@@ -551,11 +551,28 @@ switch ($action) {
         }
         break;
     case 'get_work_teacher':
-        $columns = array('type', 'title', 'sent_date', 'expires_on', 'amount', 'actions');
+        $columns = array(
+            'type',
+            'title',
+            'sent_date',
+            'expires_on',
+            'amount',
+            'actions'
+        );
         $result = getWorkListTeacher($start, $limit, $sidx, $sord, $whereCondition);
         break;
     case 'get_work_student':
-        $columns = array('type', 'title', 'expires_on', 'others', 'actions');
+        $columns = array('type', 'title', 'expires_on', 'others');
+        if (ALLOW_USER_COMMENTS) {
+            $columns = array(
+                'type',
+                'title',
+                'expires_on',
+                'feedback',
+                'last_upload',
+                'others'
+            );
+        }
         $result = getWorkListStudent($start, $limit, $sidx, $sord, $whereCondition);
         break;
     case 'get_work_user_list_all':

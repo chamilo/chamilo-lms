@@ -999,7 +999,12 @@ if ($is_allowed_to_edit ||
                 );
             } else {
                 $moveForm .= '<legend>'.get_lang('Move').'</legend>';
-                $moveForm .= build_move_to_selector($folders, $move_path, $my_get_move, $group_properties['directory']);
+                $moveForm .= build_move_to_selector(
+                    $folders,
+                    $move_path,
+                    $my_get_move,
+                    $group_properties['directory']
+                );
             }
         }
     }
@@ -1035,7 +1040,11 @@ if ($is_allowed_to_edit ||
                 $fileExist = true;
             }
             if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$moveTo)) {
-                update_db_info('update', $document_to_move['path'], $moveTo.'/'.basename($document_to_move['path']));
+                update_db_info(
+                    'update',
+                    $document_to_move['path'],
+                    $moveTo . '/' . basename($document_to_move['path'])
+                );
 
                 //update database item property
                 $doc_id = $_POST['move_file'];
@@ -1101,8 +1110,16 @@ if ($is_allowed_to_edit ||
         $files = $_POST['ids'];
         $readonlyAlreadyChecked = false;
         $messages = null;
+        $items = array(
+            '/audio',
+            '/flash',
+            '/images',
+            '/shared_folder',
+            '/video',
+            '/chat_files',
+            '/certificates'
+        );
         foreach ($files as $documentId) {
-            $items = array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates');
             $data = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
             if (in_array($data['path'], $items)) {
                 // exclude system directories (do not allow deletion)
@@ -1633,7 +1650,13 @@ $total_size = 0;
 $sortable_data = array();
 
 if (isset($documentAndFolders) && is_array($documentAndFolders)) {
-    if ($groupId == 0 || GroupManager::user_has_access($userId, $groupId, GroupManager::GROUP_TOOL_DOCUMENTS)) {
+    if ($groupId == 0 ||
+        GroupManager::user_has_access(
+            $userId,
+            $groupId,
+            GroupManager::GROUP_TOOL_DOCUMENTS
+        )
+    ) {
         $count = 1;
         $countedPaths = array();
         $countedPaths = array();
@@ -1723,13 +1746,27 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
 
             // Admins get an edit column
-            if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)) {
+            if ($is_allowed_to_edit || $group_member_with_upload_rights ||
+                is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+            ) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
                 // If readonly, check if it the owner of the file or if the user is an admin
                 if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {
-                    $edit_icons = build_edit_icons($document_data, $key, $is_template, 0, $is_visible);
+                    $edit_icons = build_edit_icons(
+                        $document_data,
+                        $key,
+                        $is_template,
+                        0,
+                        $is_visible
+                    );
                 } else {
-                    $edit_icons = build_edit_icons($document_data, $key, $is_template, $document_data['readonly'], $is_visible);
+                    $edit_icons = build_edit_icons(
+                        $document_data,
+                        $key,
+                        $is_template,
+                        $document_data['readonly'],
+                        $is_visible
+                    );
                 }
                 $row[] = $edit_icons;
             }
@@ -1772,7 +1809,12 @@ if (!is_null($documentAndFolders)) {
             || api_is_platform_admin()
         ) {
             $actions .= Display::url(
-                Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)', '', ICON_SIZE_MEDIUM),
+                Display::return_icon(
+                    'save_pack.png',
+                    get_lang('Save').' (ZIP)',
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&action=downloadfolder&id='.$document_id
             );
         }
@@ -1814,7 +1856,9 @@ if (!$is_certificate_mode) {
     );
 }
 
-if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($documentAndFolders) > 1) {
+if (($is_allowed_to_edit || $group_member_with_upload_rights) &&
+    count($documentAndFolders) > 1
+) {
     $column_show[] = 1;
 }
 
@@ -1938,10 +1982,15 @@ if (count($documentAndFolders) > 1) {
         $course_quota = DocumentManager::get_course_quota();
 
         // Calculating the total space
-        $already_consumed_space_course = DocumentManager::documents_total_space(api_get_course_int_id());
+        $already_consumed_space_course = DocumentManager::documents_total_space(
+            api_get_course_int_id()
+        );
 
         // Displaying the quota
-        DocumentManager::display_simple_quota($course_quota, $already_consumed_space_course);
+        DocumentManager::display_simple_quota(
+            $course_quota,
+            $already_consumed_space_course
+        );
     }
 }
 if (!empty($table_footer)) {

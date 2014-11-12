@@ -164,7 +164,9 @@ if (!empty($my_folder_data['description'])) {
 
 $check_qualification = intval($my_folder_data['qualification']);
 
-if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
+if (!empty($work_data['enable_qualification']) &&
+    !empty($check_qualification)
+) {
     $type = 'simple';
 
     $columns = array(
@@ -172,13 +174,13 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('Title'),
-        get_lang('Qualification'),
+        get_lang('Feedback'),
         get_lang('Date'),
         get_lang('Status'),
         get_lang('Actions')
     );
 
-    $column_model = array (
+    $column_model = array(
         array('name'=>'type',           'index'=>'file',            'width'=>'8',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
@@ -200,7 +202,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         get_lang('Actions')
     );
 
-    $column_model = array (
+    $column_model = array(
         array('name'=>'type',           'index'=>'file',            'width'=>'8',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),

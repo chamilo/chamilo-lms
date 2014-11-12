@@ -254,4 +254,16 @@ class sso {
     {
         return unserialize(base64_decode($cookie));
     }
+
+    /**
+     * Generate the URL for profile editing
+     * @return string The SSO URL
+     */
+    public function generateProfileEditingURL()
+    {
+        $url = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+        return $url;
+    }
+
 }

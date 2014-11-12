@@ -103,9 +103,28 @@ $list = array(
 );
 // information current user
 $socialRightContent .= '<div>' . Display::description($list) . '</div>';
+
+$editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+if (api_get_setting('sso_authentication') === 'true') {
+    $subSSOClass = api_get_setting('sso_authentication_subclass');
+    $objSSO = null;
+
+    if (!empty($subSSOClass)) {
+        require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
+
+        $subSSOClass = 'sso' . $subSSOClass;
+        $objSSO = new $subSSOClass();
+    } else {
+        $objSSO = new sso();
+    }
+
+    $editProfileUrl = $objSSO->generateProfileEditingURL();
+}
+
 $socialRightContent .= '
     <div class="form-actions">
-    <a class="btn" href="' . api_get_path(WEB_PATH) . 'main/auth/profile.php">
+    <a class="btn" href="' . $editProfileUrl . '">
         ' . get_lang('EditProfile') . '
     </a>
     </div></div></div>';

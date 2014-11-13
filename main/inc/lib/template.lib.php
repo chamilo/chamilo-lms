@@ -737,10 +737,10 @@ class Template
         //Preparing values for the menu
 
         //Logout link
-        if (isset($_configuration['hide_logout_boton']) && $_configuration['hide_logout_boton'] == false) {
-            $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id());
-        } else {
+        if (isset($_configuration['hide_logout_button']) && $_configuration['hide_logout_button'] == 'true') {
             $this->assign('logout_link', null);
+        } else {
+            $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id());
         }
 
         //Profile link

@@ -250,4 +250,4 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // Show reduce LP report
 //$_configuration['lp_show_reduced_report'] = false;
 // Hide the logout button
-//$_configuration['hide_logout_boton'] = true;
+//$_configuration['hide_logout_button'] = true;

@@ -34,11 +34,13 @@
                             </li>
                         </ul>
                         {% endif %}
+                        {% if logout_link is not null %}
                     <li>
                         <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
                             <img src="{{ "exit.png"|icon(22) }}">
                         </a>
                     </li>
+                        {% endif %}
                 </ul>
                 {% else %}
                     {# Direct login to course - no visible if logged and on the index page #}

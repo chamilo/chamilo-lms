@@ -36,11 +36,11 @@
             {% if is_allowed_to_edit %}
                 <td>
                     {% if event.visibility == 1 %}
-                        <a class="btn" href="{{ url }}&action=change_visibility&visibility=0&id={{ event.real_id }}">
+                        <a class="btn" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=0&id={{ event.real_id }}">
                             <img title="{{ 'Invisible' }}" src="{{'visible.png'|icon(32)}} ">
                         </a>
                     {% else %}
-                        <a class="btn" href="{{ url }}&action=change_visibility&visibility=1&id={{ event.real_id }}">
+                        <a class="btn" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=1&id={{ event.real_id }}">
                             <img title="{{ 'Visible' }}" src="{{'invisible.png'|icon(32)}} ">
                         </a>
                     {% endif %}

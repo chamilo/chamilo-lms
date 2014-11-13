@@ -31,19 +31,40 @@ $events = $agenda->get_events(
     null,
     'array'
 );
-$url = api_get_path(WEB_CODE_PATH).'calendar/agenda_list.php?'.api_get_cidreq();
-$tpl->assign('url', $url);
+if (!empty($GLOBALS['_cid']) && $GLOBALS['_cid'] != -1) {
+    // Agenda is inside a course tool
+    $url = api_get_self() . '?' . api_get_cidreq();
+
+} else {
+    // Agenda is out of the course tool (e.g personal agenda)
+    $url = false;
+    foreach ($events as &$event) {
+        $event['url'] = api_get_self() . '?course_id=' . $event['course_id'];
+    }
+}
+
 $tpl->assign('agenda_events', $events);
 
 $actions = $agenda->displayActions('list');
+$tpl->assign('url', $url);
 $tpl->assign('actions', $actions);
 $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
 if (api_is_allowed_to_edit()) {
     if (isset($_GET['action']) && $_GET['action'] == 'change_visibility') {
         $courseInfo = api_get_course_info();
+        if (empty($courseInfo)) {
+            // This happens when list agenda is not inside a course
+            if (
+                isset($_GET['course_id']) &&
+                intval($_GET['course_id']) !== 0
+            ) {
+                // Just needs course ID
+                $courseInfo = array('real_id' => intval($_GET['course_id']));
+            }
+        }
         $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);
-        header('Location: '.$url);
+        header('Location: '. api_get_self());
         exit;
     }
 }

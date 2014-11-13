@@ -225,4 +225,30 @@ class ssoDrupal {
     private function decode_cookie($cookie) {
         return unserialize(base64_decode($cookie));
     }
+
+    /**
+     * Generate the URL for profile editing
+     * @global array $_user
+     * @return string If the URL is obtained return the drupal_user_id. Otherwise return false 
+     */
+    public function generateProfileEditingURL()
+    {
+        global $_user;
+
+        $userId = $_user['user_id'];
+
+        $userExtraFieldValue = new ExtraFieldValue('user');
+        $drupalUserIdData = $userExtraFieldValue->get_values_by_handler_and_field_variable($userId, 'drupal_user_id');
+
+        if ($drupalUserIdData === false) {
+            return false;
+        }
+
+        $drupalUserId = $drupalUserIdData['field_value'];
+
+        $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
+
+        return $url;
+    }
+
 }

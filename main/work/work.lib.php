@@ -187,6 +187,7 @@ function create_group_date_select($form, $prefix = '')
 /**
  * @param string $path
  * @param int $courseId
+ *
  * @return array
  */
 function get_work_data_by_path($path, $courseId = null)
@@ -199,11 +200,12 @@ function get_work_data_by_path($path, $courseId = null)
     }
 
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sql = "SELECT *  FROM  ".$work_table." WHERE url = '$path' AND c_id = $courseId ";
+    $sql = "SELECT *  FROM  ".$work_table."
+            WHERE url = '$path' AND c_id = $courseId ";
     $result = Database::query($sql);
     $return = array();
     if (Database::num_rows($result)) {
-        $return = Database::fetch_array($result,'ASSOC');
+        $return = Database::fetch_array($result, 'ASSOC');
     }
 
     return $return;
@@ -211,6 +213,7 @@ function get_work_data_by_path($path, $courseId = null)
 
 /**
  * @param int $id
+ *
  * @return array
  */
 function get_work_data_by_id($id, $courseId = null, $sessionId = null)
@@ -261,6 +264,7 @@ function get_work_data_by_id($id, $courseId = null, $sessionId = null)
 /**
  * @param int $user_id
  * @param int $work_id
+ *
  * @return int
  */
 function get_work_count_by_student($user_id, $work_id)
@@ -270,8 +274,9 @@ function get_work_count_by_student($user_id, $work_id)
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
 
-    $table  = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sql = "SELECT COUNT(*) as count FROM  $table
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $sql = "SELECT COUNT(*) as count
+            FROM  $table
             WHERE
                 c_id = $course_id AND
                 parent_id = $work_id AND
@@ -290,6 +295,7 @@ function get_work_count_by_student($user_id, $work_id)
 /**
  * @param int $id
  * @param int $courseId
+ *
  * @return array
  */
 function get_work_assignment_by_id($id, $courseId = null)
@@ -309,6 +315,7 @@ function get_work_assignment_by_id($id, $courseId = null)
     if (Database::num_rows($result)) {
         $return = Database::fetch_array($result,'ASSOC');
     }
+
     return $return;
 }
 
@@ -316,6 +323,7 @@ function get_work_assignment_by_id($id, $courseId = null)
  * @param int $id
  * @param array $my_folder_data
  * @param string $add_in_where_query
+ *
  * @return array
  */
 function getWorkList($id, $my_folder_data, $add_in_where_query = null)
@@ -2873,8 +2881,8 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     return $workInfo;
 }
 
-
 /**
+ *
  * @param int $workId
  * @param int $courseId
  * @return array
@@ -3503,7 +3511,7 @@ function deleteCommentFile($id, $courseInfo = array())
  * @param array $data
  * @return int
  */
-function addWorkComment($courseInfo, $userId, $work, $data)
+function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 {
     if (ADD_DOCUMENT_TO_WORK == false) {
         return null;
@@ -3520,14 +3528,57 @@ function addWorkComment($courseInfo, $userId, $work, $data)
     );
 
     $commentId = Database::insert($commentTable, $params);
+
+    $userIdListToSend = array();
+
+    if (api_is_allowed_to_edit()) {
+        if (isset($data['send_mail']) && $data['send_mail']) {
+            // Teacher sends a feedback
+            $userIdListToSend = array($work['user_id']);
+        }
+    } else {
+        $sessionId = api_get_session_id();
+        if (empty($sessionId)) {
+            $teachers = CourseManager::get_teacher_list_from_course_code(
+                $courseInfo['code']
+            );
+            if (!empty($teachers)) {
+                $userIdListToSend = array_keys($teachers);
+            }
+        } else {
+            $teachers = SessionManager::getCoachesByCourseSession(
+                $sessionId,
+                $courseInfo['code']
+            );
+
+            if (!empty($teachers)) {
+                $userIdListToSend = array_values($teachers);
+            }
+        }
+    }
+
+    $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$work['id'];
+    $subject = sprintf(get_lang('ThereIsANewWorkFeedback'), $parentWork['title']);
+    $content = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $work['title'], $url);
+
+    if (!empty($userIdListToSend)) {
+        foreach ($userIdListToSend as $userId) {
+            MessageManager::send_message_simple(
+                $userId,
+                $subject,
+                $content
+            );
+        }
+    }
+
     $fileData = isset($data['file']) ? $data['file'] : null;
     if (!empty($commentId) && !empty($fileData)) {
         $workParent = get_work_data_by_id($work['parent_id']);
         if (!empty($workParent)) {
             $uploadDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work'.$workParent['url'];
             $newFileName = 'comment_'.$commentId.'_'.php2phps(
-                    replace_dangerous_char($fileData['name'], 'strict')
-                );
+                replace_dangerous_char($fileData['name'], 'strict')
+            );
             $newFilePath = $uploadDir.'/'.$newFileName;
             $result = move_uploaded_file($fileData['tmp_name'], $newFilePath);
             if ($result) {
@@ -3560,6 +3611,9 @@ function getWorkCommentForm($work)
     $form->addElement('file', 'file', get_lang('Attachment'));
     $form->addElement('textarea', 'comment', get_lang('Comment'), array('class' => 'span5', 'rows' => '8'));
     $form->addElement('hidden', 'id', $work['id']);
+    if (api_is_allowed_to_edit()) {
+        $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
+    }
     $form->addElement('button', 'button', get_lang('Send'));
     return $form->return_form();
 }

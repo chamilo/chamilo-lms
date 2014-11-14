@@ -2,6 +2,13 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ThereIsANewWorkFeedbackInWorkXHere = "There's a new feedback in work: %s <a href='%s'>Click here</a> to see it.";
+$ThereIsANewWorkFeedback = "There's a new feedback in work: %s";
+$LastUpload = "Last upload";
+$EditUserListCSV = "Edit users list";
+$NumberOfCoursesHidden = "Number of hidden courses";
+$Post = "Post";
+$Write = "Write";
 $YouHaveNotYetAchievedSkills = "You have not yet achieved skills";
 $Corn = "Corn";
 $Gray = "Gray";

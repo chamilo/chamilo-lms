@@ -88,7 +88,11 @@ if (!empty($group_id)) {
         $show_work = true;
     } else {
         // you are not a teacher
-        $show_work = GroupManager::user_has_access($user_id, $group_id, GroupManager::GROUP_TOOL_WORK);
+        $show_work = GroupManager::user_has_access(
+            $user_id,
+            $group_id,
+            GroupManager::GROUP_TOOL_WORK
+        );
     }
 
     if (!$show_work) {
@@ -154,7 +158,11 @@ switch ($action) {
     case 'settings':
         //if posts
         if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
-            updateSettings($course, $_POST['show_score'], $_POST['student_delete_own_publication']);
+            updateSettings(
+                $course,
+                $_POST['show_score'],
+                $_POST['student_delete_own_publication']
+            );
             Session::write('message', Display::return_message(get_lang('Saved'), 'success'));
             header('Location: '.$currentUrl);
             exit;
@@ -173,7 +181,11 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed();
         }
-        $form = new FormValidator('form1', 'post', api_get_path(WEB_CODE_PATH).'work/work.php?action=create_dir&'. api_get_cidreq());
+        $form = new FormValidator(
+            'form1',
+            'post',
+            api_get_path(WEB_CODE_PATH) . 'work/work.php?action=create_dir&' . api_get_cidreq()
+        );
         $form->addElement('header', get_lang('CreateAssignment'));
         $form->addElement('hidden', 'action', 'add');
         $defaults = isset($_POST) ? $_POST : array();
@@ -181,7 +193,13 @@ switch ($action) {
         $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
 
         if ($form->validate()) {
-            $result = addDir($_POST, $user_id, $_course, $group_id, $id_session);
+            $result = addDir(
+                $_POST,
+                $user_id,
+                $_course,
+                $group_id,
+                $id_session
+            );
             if ($result) {
                 $message = Display::return_message(get_lang('DirectoryCreated'), 'success');
             } else {
@@ -214,7 +232,13 @@ switch ($action) {
         /*	Move file form request */
         if ($is_allowed_to_edit) {
             if (!empty($item_id)) {
-                $content = generateMoveForm($item_id, $curdirpath, $course_info, $group_id, $session_id);
+                $content = generateMoveForm(
+                    $item_id,
+                    $curdirpath,
+                    $course_info,
+                    $group_id,
+                    $session_id
+                );
             }
         }
         break;
@@ -233,8 +257,18 @@ switch ($action) {
             if ($path = get_work_path($item_id)) {
                 if (move($course_dir.'/'.$path, $base_work_dir . $move_to_path)) {
                     // Update db
-                    updateWorkUrl($item_id, 'work' . $move_to_path, $_REQUEST['move_to_id']);
-                    api_item_property_update($_course, 'work', $_REQUEST['move_to_id'], 'FolderUpdated', $user_id);
+                    updateWorkUrl(
+                        $item_id,
+                        'work' . $move_to_path,
+                        $_REQUEST['move_to_id']
+                    );
+                    api_item_property_update(
+                        $_course,
+                        'work',
+                        $_REQUEST['move_to_id'],
+                        'FolderUpdated',
+                        $user_id
+                    );
 
                     $message = Display::return_message(get_lang('DirMv'), 'success');
                 } else {
@@ -267,7 +301,7 @@ switch ($action) {
         } else {
             $content .= showStudentWorkGrid();
         }
-    break;
+        break;
 }
 
 Display :: display_header(null);

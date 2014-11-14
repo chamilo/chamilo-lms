@@ -241,6 +241,7 @@ if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
 
 if ($isChatFolder) {
     $htmlHeadXtra[] = api_get_js('highlight/highlight.pack.js');
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH).'chat.css');
     $htmlHeadXtra[] = api_get_css(
         api_get_path(WEB_LIBRARY_PATH) . 'javascript/highlight/styles/github.css'
     );
@@ -309,9 +310,11 @@ if (!$jplayer_supported && $execute_iframe) {
     $htmlHeadXtra[] = '<script>
         var updateContentHeight = function() {
             my_iframe = document.getElementById("mainFrame");
-            //this doesnt seem to work in IE 7,8,9
-            new_height = my_iframe.contentWindow.document.body.scrollHeight;
-            my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
+            if (my_iframe) {
+                //this doesnt seem to work in IE 7,8,9
+                new_height = my_iframe.contentWindow.document.body.scrollHeight;
+                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
+            }
         };
 
         // Fixes the content height of the frame

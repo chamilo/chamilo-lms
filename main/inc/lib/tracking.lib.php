@@ -2123,10 +2123,11 @@ class Tracking
                 //@todo problem when a  course have more than 1500 users
                 $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id
                         FROM $lp_view_table
-                        WHERE 	c_id = $course_id AND
-                                lp_id IN (".implode(',',$lp_list).")
-                                $condition_user1 AND
-                                session_id = $session_id
+                        WHERE
+                            c_id = $course_id AND
+                            lp_id IN (".implode(',', $lp_list).")
+                            $condition_user1 AND
+                            session_id = $session_id
                         GROUP BY lp_id, user_id";
                 if ($debug) echo $sql;
 
@@ -2256,10 +2257,12 @@ class Tracking
                                             exe_user_id          = $user_id AND
                                             orig_lp_item_id      = $item_id AND
                                             orig_lp_item_view_id = $lp_item_view_id AND
-                                            exe_cours_id         = '$course_code'  AND
-                                            session_id           = $session_id
+                                            exe_cours_id         = '$course_code' AND
+                                            session_id           = $session_id AND
+                                            status = ''
                                         ORDER BY exe_date DESC
                                         LIMIT 1";
+
                                 if ($debug) echo $sql .'<br />';
                                 $result_last_attempt = Database::query($sql);
                                 $num = Database :: num_rows($result_last_attempt);

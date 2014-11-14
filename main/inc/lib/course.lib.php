@@ -169,7 +169,6 @@ class CourseManager
         $alsoSearchCode = false,
         $conditionsLike = array()
     ) {
-
         $sql = "SELECT course.* FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course ";
 
         if (!empty($urlId)) {
@@ -1749,11 +1748,11 @@ class CourseManager
     }
 
     /**
-     *    Return user info array of all teacher-users registered in the specified real or virtual course
-     *    This only returns the users that are registered in this actual course, not linked courses.
+     * Return user info array of all teacher-users registered in the specified real or virtual course
+     * This only returns the users that are registered in this actual course, not linked courses.
      *
-     *    @param string $course_code
-     *    @return array with user id
+     * @param string $course_code
+     * @return array with user id
      */
     public static function get_teacher_list_from_course_code($course_code)
     {
@@ -1774,9 +1773,9 @@ class CourseManager
 
     /**
      * Returns a string list of teachers assigned to the given course
-     * @param string Course code
-     * @param string Separator between teachers names
-     * @param bool Whether to add a link to the teacher's profile
+     * @param string $course_code
+     * @param string $separator between teachers names
+     * @param bool $add_link_to_profile Whether to add a link to the teacher's profile
      * @return string List of teachers teaching the course
      */
     public static function get_teacher_list_from_course_code_to_string(
@@ -1789,12 +1788,19 @@ class CourseManager
         $list = array();
         if (!empty($teacher_list)) {
             foreach($teacher_list as $teacher) {
-                $teacher_name = api_get_person_name($teacher['firstname'], $teacher['lastname']);
+                $teacher_name = api_get_person_name(
+                    $teacher['firstname'],
+                    $teacher['lastname']
+                );
                 if ($add_link_to_profile) {
                     $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&resizable=0&height=300&user_id='.$teacher['user_id'];
-                    $teacher_name = Display::url($teacher_name, $url, array('class' => 'ajax'));
+                    $teacher_name = Display::url(
+                        $teacher_name,
+                        $url,
+                        array('class' => 'ajax')
+                    );
                 }
-                 $list[]= $teacher_name;
+                $list[]= $teacher_name;
             }
             if (!empty($list)) {
                 $teacher_string = array_to_string($list, $separator);
@@ -4965,5 +4971,4 @@ class CourseManager
         $row = Database::fetch_array($result);
         return $row['count'];
     }
-
 }

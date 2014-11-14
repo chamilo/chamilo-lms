@@ -34,7 +34,9 @@ $language_file[] = 'exercice';
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LEARNPATH;
-if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
+if (api_get_setting('show_glossary_in_documents') == 'ismanual' ||
+    api_get_setting('show_glossary_in_documents') == 'isautomatic'
+) {
     $htmlHeadXtra[] = '<script>
 <!--
     var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';

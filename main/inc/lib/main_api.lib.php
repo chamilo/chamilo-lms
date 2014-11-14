@@ -3247,59 +3247,45 @@ function api_not_allowed($print_headers = false, $message = null)
     }
 
     $msg = null;
-    /* Check if the cookies are enabled. If are enabled and if no course Id was
-       included in the requested URL, then the user has either lost his session
-       or is anonymous, so redirect to homepage
-    */
-    if (!isset($_COOKIE['TestCookie']) ||
-        isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie'])
-    ) {
+
+    // The session is over and we were not in a course,
+    // or we try to get directly to a private course without being logged
+    if (!is_null(api_get_course_int_id())) {
+        api_set_firstpage_parameter(api_get_course_id());
+        $tpl->setLoginBodyClass();
+        $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
+        $action = str_replace('&amp;', '&', $action);
+        $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
+        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
+        $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
+        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
+
+        // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
+        $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
+        $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
+        if (api_is_cas_activated()) {
+            $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
+            $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
+            $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
+            $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
+            $msg .= "<div style='display:none;'>";
+        }
+        $msg .= '<div class="well_login">';
+        $msg .= $form->return_form();
+        $msg .='</div>';
+        if (api_is_cas_activated()) {
+            $msg .= "</div>";
+        }
+        $msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
+    } else {
+        // we were not in a course, return to home page
         $msg = Display::return_message(
-            get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.
-            get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error',
+            get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a><br />',
+            'error',
             false
         );
-        // Set cookie again.
-        setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
-    } else {
-        // The session is over and we were not in a course,
-        // or we try to get directly to a private course without being logged
-        if (!is_null(api_get_course_int_id())) {
-            api_set_firstpage_parameter(api_get_course_id());
-            $tpl->setLoginBodyClass();
-            $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
-            $action = str_replace('&amp;', '&', $action);
-            $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-            $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
-            $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
-            $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
-
-            // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
-            $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
-            $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
-            if (api_is_cas_activated()) {
-                $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-                $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
-                $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
-                $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
-                $msg .= "<div style='display:none;'>";
-            }
-            $msg .= '<div class="well_login">';
-            $msg .= $form->return_form();
-            $msg .='</div>';
-            if (api_is_cas_activated()) {
-                $msg .= "</div>";
-            }
-            $msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
-        } else {
-            // we were not in a course, return to home page
-            $msg = Display::return_message(
-                get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a><br />',
-                'error',
-                false
-            );
-        }
     }
+
     $tpl->assign('content', $msg);
     $tpl->display_one_col_template();
     exit;

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  * Class Display
  * Contains several public functions dealing with the display of
@@ -1904,5 +1906,51 @@ class Display
         }
 
         return null;
+    }
+
+    /**
+     * Adds a message in the queue
+     * @param string $message
+     */
+    public static function addFlash($message)
+    {
+        $messages = Session::read('flash_messages');
+        if (empty($messages)) {
+            $messages[] = $message;
+        } else {
+            array_push($messages, $message);
+        }
+        Session::write('flash_messages', $messages);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getFlashToString()
+    {
+        $messages = Session::read('flash_messages');
+        $messageToString = '';
+        if (!empty($messages)) {
+            foreach ($messages as $message) {
+                $messageToString .= $message;
+            }
+        }
+        return $messageToString;
+    }
+
+    /**
+     * Shows the message from the session
+     */
+    public static function showFlash()
+    {
+        echo self::getFlashToString();
+    }
+
+    /**
+     * Destroys the message session
+     */
+    public static function cleanFlashMessages()
+    {
+        Session::erase('flash_messages');
     }
 }

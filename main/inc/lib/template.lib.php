@@ -6,6 +6,7 @@ require_once api_get_path(SYS_PATH).'vendor/twig/twig/lib/Twig/Autoloader.php';
 
 /**
  * Class Template
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  * @todo better organization of the class, methods and variables
  *
@@ -150,8 +151,6 @@ class Template
         if (!empty($defaultStyle)) {
             $this->templateFolder = $defaultStyle;
         }
-
-
 
         $this->assign('template', $this->templateFolder);
         $this->assign('css_styles', $this->theme);
@@ -965,6 +964,8 @@ class Template
      */
     public function display($template)
     {
+        $this->assign('flash_messages', Display::getFlashToString());
+        Display::cleanFlashMessages();
         echo $this->twig->render($template, $this->params);
     }
 

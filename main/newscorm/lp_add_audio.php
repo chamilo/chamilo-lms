@@ -5,9 +5,6 @@
  * @author Julio Montoya  - Improving the list of templates
  * @package chamilo.learnpath
  */
-/**
- * INIT SECTION
- */
 
 $this_section = SECTION_COURSES;
 
@@ -54,14 +51,14 @@ $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpa
 
 switch ($type) {
     case 'chapter':
-        $interbreadcrumb[]= array ('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id(), 'name' => get_lang('NewStep'));
-        $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewChapter'));
+        $interbreadcrumb[]= array('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id(), 'name' => get_lang('NewStep'));
+        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewChapter'));
         break;
     case 'document':
-        $interbreadcrumb[]= array ('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id(), 'name' => get_lang('NewStep'));
+        $interbreadcrumb[]= array('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$_SESSION['oLP']->get_id(), 'name' => get_lang('NewStep'));
         break;
     default:
-        $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewStep'));
+        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewStep'));
         break;
 }
 
@@ -76,8 +73,8 @@ if (empty($lp_item_id)) {
     api_not_allowed();
 }
 
+$courseInfo = api_get_course_info();
 $lp_item = new learnpathItem($lp_item_id);
-$tpl = new Template(null);
 $form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
 $suredel = trim(get_lang('AreYouSureToDelete'));
 
@@ -85,12 +82,12 @@ $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
 
 $file = null;
 if (isset($lp_item->audio) && !empty($lp_item->audio)) {
-    $file = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/audio/'.$lp_item->audio;
-    $urlFile = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/audio/'.$lp_item->audio.'?'.api_get_cidreq();
+    $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio;
+    $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio.'?'.api_get_cidreq();
 
     if (!file_exists($file)) {
-        $file = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio;
-        $urlFile = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio.'?'.api_get_cidreq();
+        $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio;
+        $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio.'?'.api_get_cidreq();
     }
 }
 
@@ -105,6 +102,8 @@ $page .= '</div>';
 $recordVoiceForm = Display::page_subheader(get_lang('RecordYourVoice'));
 
 $page .= '<div id="doc_form" class="span8">';
+
+$tpl = new Template(null);
 $tpl->assign('unique_file_id', api_get_unique_id());
 $tpl->assign('course_code', api_get_course_id());
 $tpl->assign('php_session_id', session_id());

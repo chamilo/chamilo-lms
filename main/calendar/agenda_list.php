@@ -14,11 +14,9 @@ require_once 'agenda.lib.php';
 require_once 'agenda.inc.php';
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?".api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH) . "calendar/agenda_js.php",
     'name' => get_lang('Agenda')
 );
-
-$tpl = new Template(get_lang('Events'));
 
 $agenda = new Agenda();
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
@@ -31,10 +29,13 @@ $events = $agenda->get_events(
     null,
     'array'
 );
+
+$this_section = SECTION_MYAGENDA;
+
 if (!empty($GLOBALS['_cid']) && $GLOBALS['_cid'] != -1) {
     // Agenda is inside a course tool
     $url = api_get_self() . '?' . api_get_cidreq();
-
+    $this_section = SECTION_COURSES;
 } else {
     // Agenda is out of the course tool (e.g personal agenda)
     $url = false;
@@ -42,6 +43,8 @@ if (!empty($GLOBALS['_cid']) && $GLOBALS['_cid'] != -1) {
         $event['url'] = api_get_self() . '?course_id=' . $event['course_id'];
     }
 }
+
+$tpl = new Template(get_lang('Events'));
 
 $tpl->assign('agenda_events', $events);
 

@@ -187,13 +187,10 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 
     // Displaying the correct title and the form for adding a category or link. This is only shown when nothing
     // has been submitted yet, hence !isset($submit_link)
-    if (($_GET['action'] == 'addlink' || $_GET['action'] == 'editlink') && empty($_POST['submitLink'])) {
-
-
-
-        if ($category == '') {
-            $category = 0;
-        }
+    if (($_GET['action'] == 'addlink' || $_GET['action'] == 'editlink') &&
+        empty($_POST['submitLink'])
+    ) {
+        $category = 0;
         echo '<form class="form-horizontal" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&amp;urlview='.Security::remove_XSS($urlview).'">';
         if ($_GET['action'] == 'addlink') {
             echo '<legend>'.get_lang('LinkAdd').'</legend>';
@@ -201,7 +198,9 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
             echo '<legend>'.get_lang('LinkMod').'</legend>';
         }
         echo '<input type="hidden" name="sec_token" value="'.$token.'" />';
-
+        $clean_link_id = null;
+        $onhomepage = null;
+        $lpId = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
         if ($_GET['action'] == 'editlink') {
             $clean_link_id = intval($_GET['id']);
             $link_info = get_link_info($_GET['id']);
@@ -220,7 +219,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
         } else {
             $target_link = "_blank";
         }
-        
+
         echo '	<div class="control-group url">
                     <label class="control-label">
                         <span class="form_required">*</span> URL
@@ -344,8 +343,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
                 echo sprintf($sf_textbox, $specific_field['name'], $specific_field['code'], $default_values);
             }
         }
-        //echo '<input type="hidden" name="origin"  value="' . Security::remove_XSS($_GET['origin']) . '" />';
-        echo '<input type="hidden" name="lp_id"  value="' . Security::remove_XSS($_GET['lp_id']) . '" />';
+        echo '<input type="hidden" name="lp_id"  value="' . $lpId. '" />';
         echo '<div class="control-group">
                     <label class="control-label">
                     </label>

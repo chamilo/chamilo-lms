@@ -17,9 +17,6 @@
  * @author René Haentjens, CSV file import (October 2004)
  * @package chamilo.link
  */
-
-/* FUNCTIONS */
-
 class Link extends Model
 {
     public $table;
@@ -38,6 +35,9 @@ class Link extends Model
     );
     public $required = array('url', 'title');
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->table = Database::get_course_table(TABLE_LINK);
@@ -47,7 +47,9 @@ class Link extends Model
      * Organize the saving of a link, using the parent's save method and
      * updating the item_property table
      * @param array $params
-     * @param boolean $show_query Whether to show the query in logs when calling parent's save method
+     * @param boolean $show_query Whether to show the query in logs when
+     * calling parent's save method
+     *
      * @return bool True if link could be saved, false otherwise
      */
     public function save($params, $show_query = null)
@@ -66,6 +68,7 @@ class Link extends Model
                 api_get_user_id()
             );
         }
+
         return $id;
     }
 
@@ -91,14 +94,16 @@ class Link extends Model
         }
         $sessionId = intval($sessionId);
         if ($linkUrl != '') {
-            $query = "UPDATE $tblLink SET url = '$linkUrl' WHERE id = $linkId AND c_id = $courseId AND session_id = $sessionId";
-            $resLink = Database::query($query);
+            $sql = "UPDATE $tblLink SET url = '$linkUrl'
+                    WHERE id = $linkId AND c_id = $courseId AND session_id = $sessionId";
+            $resLink = Database::query($sql);
+
             return $resLink;
         }
+
         return false;
     }
 }
-
 
 /**
  * Used to add a link or a category
@@ -151,8 +156,6 @@ function addlinkcategory($type)
         }
 
         // If the URL is invalid, an error occurs.
-        // Ivan, 13-OCT-2010, Chamilo 1.8.8: Let us still tolerate PHP 5.1.x and avoid a specific bug in filter_var(), see http://bugs.php.net/51192
-        //if (!filter_var($urllink, FILTER_VALIDATE_URL)) {
         if (!api_valid_url($urllink, true)) { // A check against an absolute URL
             $msgErr = get_lang('GiveURL');
             Display :: display_error_message(get_lang('GiveURL'));
@@ -160,9 +163,10 @@ function addlinkcategory($type)
         } else {
             // Looking for the largest order number for this category.
             $result = Database :: query(
-                "SELECT MAX(display_order) FROM  " . $tbl_link . " WHERE c_id = $course_id AND category_id = '" . intval(
-                    $_POST['selectcategory']
-                ) . "'"
+                "SELECT MAX(display_order) FROM  " . $tbl_link . "
+                WHERE
+                    c_id = $course_id AND
+                    category_id = '" . intval($_POST['selectcategory']) . "'"
             );
             list ($orderMax) = Database :: fetch_row($result);
             $order = $orderMax + 1;
@@ -190,13 +194,14 @@ function addlinkcategory($type)
                 api_set_default_visibility($link_id, TOOL_LINK);
             }
 
-            if ((api_get_setting('search_enabled') == 'true') && $link_id && extension_loaded('xapian')) {
+            if ((api_get_setting('search_enabled') == 'true') &&
+                $link_id && extension_loaded('xapian')
+            ) {
                 require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
                 require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
                 require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
                 $course_int_id = api_get_course_int_id();
-
                 $courseid = api_get_course_id();
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
@@ -347,6 +352,7 @@ function addlinkcategory($type)
             $_user['user_id']
         );
     }
+
     return $ok;
 }
 
@@ -360,10 +366,8 @@ function deletelinkcategory($type)
 {
     global $catlinkstatus;
     global $_course;
-    $session_id = api_get_session_id();
     $tbl_link = Database :: get_course_table(TABLE_LINK);
     $tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-    $TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
     $course_id = api_get_course_int_id();
 
@@ -449,22 +453,21 @@ function delete_link_from_search_engine($course_id, $link_id)
     }
 }
 
-
 /**
  *
  * Get link info
  * @param int link id
  * @return array link info
  *
- * */
-
+ **/
 function get_link_info($id)
 {
     $tbl_link = Database :: get_course_table(TABLE_LINK);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT * FROM " . $tbl_link . " WHERE c_id = $course_id AND id='" . intval($id) . "' ";
+    $sql = "SELECT * FROM " . $tbl_link . "
+            WHERE c_id = $course_id AND id='" . intval($id) . "' ";
     $result = Database::query($sql);
-
+    $data = array();
     if (Database::num_rows($result)) {
         $data = Database::fetch_array($result);
     }
@@ -481,7 +484,6 @@ function get_link_info($id)
  */
 function editlinkcategory($type)
 {
-
     global $catlinkstatus;
     global $id;
     global $submit_link;
@@ -508,7 +510,8 @@ function editlinkcategory($type)
 
         // This is used to populate the link-form with the info found in the database.
         if (!empty ($_GET['id'])) {
-            $sql = "SELECT * FROM " . $tbl_link . " WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
+            $sql = "SELECT * FROM " . $tbl_link . "
+                    WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
             $result = Database :: query($sql);
             if ($myrow = Database :: fetch_array($result)) {
                 $urllink = $myrow['url'];
@@ -545,13 +548,8 @@ function editlinkcategory($type)
             }
 
             // If the URL is invalid, an error occurs.
-            // Ivan, 13-OCT-2010, Chamilo 1.8.8: Let us still tolerate PHP 5.1.x and avoid a specific bug in filter_var(), see http://bugs.php.net/51192
-            //if (!filter_var($urllink, FILTER_VALIDATE_URL)) {
-            if (!api_valid_url(
-                $urllink,
-                true
-            )
-            ) { // A check against an absolute URL.
+            if (!api_valid_url($urllink, true)) {
+                // A check against an absolute URL.
                 $msgErr = get_lang('GiveURL');
                 Display :: display_error_message(get_lang('GiveURL'));
                 return false;
@@ -565,7 +563,8 @@ function editlinkcategory($type)
             $mytarget = ",target='" . $target . "'";
 
             // Finding the old category_id.
-            $sql = "SELECT * FROM " . $tbl_link . " WHERE c_id = $course_id AND id='" . intval($_POST['id']) . "'";
+            $sql = "SELECT * FROM " . $tbl_link . "
+                    WHERE c_id = $course_id AND id='" . intval($_POST['id']) . "'";
             $result = Database :: query($sql);
             $row = Database :: fetch_array($result);
             $category_id = $row['category_id'];
@@ -772,6 +771,7 @@ function editlinkcategory($type)
             Display :: display_confirmation_message(get_lang('CategoryModded'));
         }
     }
+
     return true; // On errors before this statement, exit from this function by returning false value.
 }
 
@@ -832,15 +832,17 @@ function getLinkCategories($courseId, $sessionId)
     // Condition for the session.
     $sessionCondition = api_get_session_condition($sessionId, true, true);
 
-    $sql = "SELECT *, linkcat.id FROM $tblLinkCategory linkcat,
+    $sql = "SELECT *, linkcat.id
+            FROM $tblLinkCategory linkcat,
                  $tblItemProperty itemproperties
-             WHERE  itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
-                    linkcat.id = itemproperties.ref AND
-                    (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
-                    $sessionCondition AND
-                    linkcat.c_id = " . $courseId . " AND
-                    itemproperties.c_id = " . $courseId . "
-                    ORDER BY linkcat.display_order DESC";
+            WHERE
+                itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
+                linkcat.id = itemproperties.ref AND
+                (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
+                $sessionCondition AND
+                linkcat.c_id = " . $courseId . " AND
+                itemproperties.c_id = " . $courseId . "
+            ORDER BY linkcat.display_order DESC";
     return Database::query($sql);
 }
 
@@ -863,7 +865,8 @@ function showlinksofcategory($catid)
     $course_id = api_get_course_int_id();
 
     $sqlLinks = "SELECT *, link.id FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties
-                 WHERE  itemproperties.tool='" . TOOL_LINK . "' AND
+                 WHERE
+                    itemproperties.tool='" . TOOL_LINK . "' AND
                     link.id=itemproperties.ref AND
                     link.category_id='" . $catid . "' AND
                     (itemproperties.visibility='0' OR itemproperties.visibility='1')
@@ -877,9 +880,7 @@ function showlinksofcategory($catid)
         echo '<table class="data_table" width="100%">';
         $i = 1;
         while ($myrow = Database :: fetch_array($result)) {
-
-
-            // Validacion when belongs to a session.
+            // Validation when belongs to a session.
             $session_img = api_get_session_image(
                 $myrow['session_id'],
                 $_user['status']
@@ -1133,7 +1134,8 @@ function movecatlink($catlinkid, $courseId = null, $sessionId = null)
         $sortDirection = 'ASC';
     }
 
-    // We check if it is a category we are moving or a link. If it is a category, a querystring catmove = true is present in the url.
+    // We check if it is a category we are moving or a link.
+    // If it is a category, a querystring catmove = true is present in the url.
     if ($catmove == 'true') {
         $movetable = $tbl_categories;
         $catid = $catlinkid;
@@ -1155,7 +1157,8 @@ function movecatlink($catlinkid, $courseId = null, $sessionId = null)
         }
 
         if ($catmove == 'true') {
-            $sqlcatlinks = "SELECT id, display_order FROM " . $movetable . " WHERE c_id = $courseId  ORDER BY display_order $sortDirection";
+            $sqlcatlinks = "SELECT id, display_order FROM " . $movetable . "
+                            WHERE c_id = $courseId  ORDER BY display_order $sortDirection";
         } else {
             $sqlcatlinks = "SELECT id, display_order FROM " . $movetable . "
                             WHERE c_id = $courseId AND category_id='" . $catid[0] . "'
@@ -1205,7 +1208,8 @@ function get_cat($catname)
     $course_id = api_get_course_int_id();
 
     $result = Database :: query(
-        "SELECT id FROM " . $tbl_categories . " WHERE c_id = $course_id AND category_title='" . Database::escape_string(
+        "SELECT id FROM " . $tbl_categories . "
+        WHERE c_id = $course_id AND category_title='" . Database::escape_string(
             $catname
         ) . "'"
     );
@@ -1310,6 +1314,7 @@ function import_link($linkdata)
         'on_homepage',
         'hidden'
     );
+
     $hide_fields = array(
         'kw',
         'kwd',
@@ -1371,7 +1376,6 @@ function import_link($linkdata)
  */
 function import_csvfile()
 {
-
     global $catlinkstatus; // Feedback message to user.
 
     if (is_uploaded_file($filespec = $_FILES['import_file']['tmp_name'])
@@ -1393,8 +1397,6 @@ function import_csvfile()
                     0
                 ); // fails, updates, inserts
 
-                // Modified by Ivan Tcholakov, 01-FEB-2010.
-                //while (($data = fgetcsv($myFile, 32768, $listsep))) {
                 while (($data = api_fgetcsv($myFile, null, $listsep))) {
                     //
                     foreach ($data as $i => & $text) {
@@ -1439,6 +1441,11 @@ function isVimeoLink($url)
     return $isLink;
 }
 
+/**
+ * Get vimeo id from URL
+ * @param string $url
+ * @return bool|mixed
+ */
 function getVimeoLinkId($url)
 {
     $possibleUrls = array(
@@ -1467,6 +1474,11 @@ function is_youtube_link($url)
     return $is_youtube_link;
 }
 
+/**
+ * Get youtube id from an URL
+ * @param string $url
+ * @return string
+ */
 function get_youtube_video_id($url)
 {
     // This is the length of YouTube's video IDs

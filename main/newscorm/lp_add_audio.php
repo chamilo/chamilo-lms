@@ -123,7 +123,7 @@ $tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
 $recordVoiceForm .= $tpl->fetch('default/learnpath/record_voice.tpl');
 $form->addElement('header', get_lang('Or'));
 $form->addElement('header', get_lang('AudioFile'));
-$form->addElement('html', get_lang('AudioFilefor').' '.$lp_item->get_title());
+$form->addElement('html', sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()));
 
 if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.

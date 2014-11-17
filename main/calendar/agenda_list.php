@@ -14,7 +14,7 @@ require_once 'agenda.lib.php';
 require_once 'agenda.inc.php';
 
 $interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?".api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH) . "calendar/agenda_js.php",
     'name' => get_lang('Agenda')
 );
 

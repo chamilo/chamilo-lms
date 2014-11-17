@@ -40,7 +40,7 @@ if (!empty($GLOBALS['_cid']) && $GLOBALS['_cid'] != -1) {
     // Agenda is out of the course tool (e.g personal agenda)
     $url = false;
     foreach ($events as &$event) {
-        $event['url'] = api_get_self() . '?cid=' . $event['cid'];
+        $event['url'] = api_get_self() . '?cid=' . $event['course_id'];
     }
 }
 

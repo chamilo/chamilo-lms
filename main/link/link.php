@@ -156,10 +156,10 @@ if (isset($_GET['action'])) {
                 editlinkcategory('category'); // Here we edit a category
                 break;
             case 'visible':
-                change_visibility($_GET['id'], $_GET['scope']); // Here we edit a category
+                change_visibility_link($_GET['id'], $_GET['scope']); // Here we edit a category
                 break;
             case 'invisible':
-                change_visibility($_GET['id'], $_GET['scope']); // Here we edit a category
+                change_visibility_link($_GET['id'], $_GET['scope']); // Here we edit a category
                 break;
         }
         Security::clear_token();

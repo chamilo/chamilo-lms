@@ -798,7 +798,7 @@ function makedefaultviewcode($locatie)
  * @todo add the changing of the visibility of a course
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function change_visibility($id, $scope)
+function change_visibility_link($id, $scope)
 {
     global $_course, $_user;
     if ($scope == TOOL_LINK) {
@@ -825,8 +825,8 @@ function change_visibility($id, $scope)
 /**
  * Generate SQL to select all the links categories in the current course and
  * session
- * @param   int Course ID
- * @param   int Session ID
+ * @param   int $courseId
+ * @param   int $sessionId
  * @return string SQL query (to be executed)
  */
 function getLinkCategories($courseId, $sessionId)
@@ -838,17 +838,35 @@ function getLinkCategories($courseId, $sessionId)
     $sessionCondition = api_get_session_condition($sessionId, true, true);
 
     $sql = "SELECT *, linkcat.id
-            FROM $tblLinkCategory linkcat,
-                 $tblItemProperty itemproperties
+            FROM $tblLinkCategory linkcat
+            INNER JOIN $tblItemProperty itemproperties
+            ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
             WHERE
                 itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
-                linkcat.id = itemproperties.ref AND
                 (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
                 $sessionCondition AND
                 linkcat.c_id = " . $courseId . " AND
                 itemproperties.c_id = " . $courseId . "
             ORDER BY linkcat.display_order DESC";
+
     return Database::query($sql);
+}
+
+/**
+ * Get links categories in the current course and
+ * session
+ * @param  int $courseId
+ * @param  int $sessionId
+ * @return array
+ */
+function getLinkCategoriesResult($courseId, $sessionId)
+{
+    $result = getLinkCategories($courseId, $sessionId);
+    $list = array();
+    if (Database::num_rows($result)) {
+        $list = Database::store_result($result, 'ASSOC');
+    }
+    return $list;
 }
 
 /**

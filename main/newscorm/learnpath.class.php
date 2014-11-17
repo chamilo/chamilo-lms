@@ -8442,13 +8442,15 @@ class learnpath
      */
     public function get_links()
     {
+        require_once api_get_path(LIBRARY_PATH).'link.lib.php';
+
         $course_id = api_get_course_int_id();
         $tbl_link = Database::get_course_table(TABLE_LINK);
 
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
 
-        $sql = "SELECT id, title FROM $tbl_link
+        $sql = "SELECT id, title, category_id FROM $tbl_link
                 WHERE c_id = ".$course_id." $condition_session
                 ORDER BY title ASC";
         $res_link = Database::query($sql);
@@ -8460,8 +8462,30 @@ class learnpath
         $return .= '</li>';
         $course_info = api_get_course_info();
 
+        $linkCategories = getLinkCategoriesResult($course_id, $session_id);
+        $categoryIdList = array();
+        if (!empty($linkCategories)) {
+            foreach ($linkCategories as $categoryInfo) {
+                $categoryIdList[] = $categoryInfo['id'];
+            }
+        }
+
         while ($row_link = Database :: fetch_array($res_link)) {
-            $item_visibility = api_get_item_visibility($course_info, TOOL_LINK, $row_link['id'], $session_id);
+
+            // Check if category exists if not then consider as deleted.
+            if (!empty($row_link['category_id'])) {
+                $categoryId = $row_link['category_id'];
+                if (!in_array($categoryId, $categoryIdList)) {
+                    continue;
+                }
+            }
+
+            $item_visibility = api_get_item_visibility(
+                $course_info,
+                TOOL_LINK,
+                $row_link['id'],
+                $session_id
+            );
             if ($item_visibility != 2)  {
                 $return .= '<li class="lp_resource_element" data_id="'.$row_link['id'].'" data_type="'.TOOL_LINK.'" title="'.$row_link['title'].'" >';
                 $return .= '<a class="moved" href="#">';

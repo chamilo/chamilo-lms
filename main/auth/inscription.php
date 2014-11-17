@@ -642,7 +642,9 @@ if ($form->validate()) {
                     );
 
                     $exercise_redirect = intval(Session::read('exercise_redirect'));
-                    $objExercise = new Exercise();
+                    // Specifiy course ID as the current context does not 
+                    // hold a global $_course array
+                    $objExercise = new Exercise($course_info['real_id']);
                     $result = $objExercise->read($exercise_redirect);
 
                     if (!empty($exercise_redirect) && !empty($result)) {

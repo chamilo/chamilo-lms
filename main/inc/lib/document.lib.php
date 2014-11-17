@@ -2857,7 +2857,10 @@ class DocumentManager
      * Calculates the total size of all documents in a course
      *
      * @author Bert vanderkimpen
-     * @param  int $to_group_id (to calculate group document space)
+     * @param  int $course_id
+     * @param  int $group_id (to calculate group document space)
+     * @param  int $session_id
+     *
      * @return int total size
      */
     static function documents_total_space($course_id = null, $group_id = null, $session_id = null)
@@ -2886,15 +2889,16 @@ class DocumentManager
         }
 
         $sql = "SELECT SUM(size)
-                FROM $TABLE_ITEMPROPERTY  AS props,
-                     $TABLE_DOCUMENT AS docs
-		        WHERE 	props.c_id 	= $course_id AND
-		        		docs.c_id 	= $course_id AND
-		        		docs.id 	= props.ref AND
-		        		props.tool 	= '" . TOOL_DOCUMENT . "' AND
-                        props.visibility <> 2
-                        $group_condition
-                        $session_condition
+                FROM $TABLE_ITEMPROPERTY AS props
+                INNER JOIN $TABLE_DOCUMENT AS docs
+                ON (docs.id = props.ref AND props.c_id = docs.c_id)
+		        WHERE
+                    props.c_id 	= $course_id AND
+                    docs.c_id 	= $course_id AND
+                    props.tool 	= '" . TOOL_DOCUMENT . "' AND
+                    props.visibility <> 2
+                    $group_condition
+                    $session_condition
                 ";
         $result = Database::query($sql);
 
@@ -4323,7 +4327,8 @@ class DocumentManager
      * @param int $userId user that adds the document
      * @param string $whatIfFileExists
      * @param bool $deleteWavFile
-     * @return bool|path
+     *
+     * @return bool
      */
     public static function addAndConvertWavToMp3(
         $documentData,

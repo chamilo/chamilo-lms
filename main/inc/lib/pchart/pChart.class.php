@@ -586,6 +586,7 @@
      /* Horizontal Axis */
      $XPos = $this->GArea_X1 + $this->GAreaXOffset;
      $ID = 1; $YMax = NULL;
+     $maxTextHeight = 0;
      foreach ( $Data as $Key => $Values )
       {
        if ( $ID % $SkipLabels == 0 )
@@ -607,6 +608,10 @@
          $TextWidth  = abs($Position[2])+abs($Position[0]);
          $TextHeight = abs($Position[1])+abs($Position[3]);
 
+            // Save max text height
+            if ($maxTextHeight < $TextHeight) {
+                $maxTextHeight = $TextHeight;
+            }
          if ( $Angle == 0 )
           {
            $YPos = $this->GArea_Y2+18;
@@ -614,7 +619,9 @@
           }
          else
           {
-           $YPos = $this->GArea_Y2+10+$TextHeight;
+           $YPos = $this->GArea_Y2+10;
+              // If rotation is top down, then add TextHeight;
+              $YPos = (sin($Angle) < 0) ? $YPos + $TextHeight : $YPos;
            if ( $Angle <= 90 )
             imagettftext($this->Picture,$this->FontSize,$Angle,floor($XPos)-$TextWidth+5,$YPos,$C_TextColor,$this->FontName,$Value);
            else
@@ -633,7 +640,7 @@
        $Position   = imageftbbox($this->FontSize,90,$this->FontName,$DataDescription["Axis"]["X"]);
        $TextWidth  = abs($Position[2])+abs($Position[0]);
        $TextLeft   = (($this->GArea_X2 - $this->GArea_X1) / 2) + $this->GArea_X1 + ($TextWidth/2);
-       imagettftext($this->Picture,$this->FontSize,0,$TextLeft,$YMax+$this->FontSize+5,$C_TextColor,$this->FontName,$DataDescription["Axis"]["X"]);
+       imagettftext($this->Picture,$this->FontSize,0,$TextLeft,$YMax+$this->FontSize+5+$maxTextHeight,$C_TextColor,$this->FontName,$DataDescription["Axis"]["X"]);
       }
     }
 
@@ -3555,6 +3562,45 @@
       return(TRUE);
      return(FALSE);
     }
+
+     /**
+      * Return a new pChart object fixing its height by legend rotations
+      * Must be set fonts before call this method
+      * @param array $data
+      * @param array $dataDescription
+      * @param float $angle
+      * @return pChart
+      */
+     function fixHeightByRotation ($data, $dataDescription, $angle)
+     {
+         $maxTextHeight = 0;
+         foreach ( $data as $key => $values )
+         {
+             // Get legend value
+             $value = $data[$key][$dataDescription["Position"]];
+             if ( $dataDescription["Format"]["X"] == "number" )
+                 $value = $value.$dataDescription["Unit"]["X"];
+             if ( $dataDescription["Format"]["X"] == "time" )
+                 $value = $this->ToTime($value);
+             if ( $dataDescription["Format"]["X"] == "date" )
+                 $value = $this->ToDate($value);
+             if ( $dataDescription["Format"]["X"] == "metric" )
+                 $value = $this->ToMetric($value);
+             if ( $dataDescription["Format"]["X"] == "currency" )
+                 $value = $this->ToCurrency($value);
+             $Position   = imageftbbox($this->FontSize,$angle,$this->FontName,$value);
+             $TextHeight = abs($Position[1])+abs($Position[3]);
+             if ($maxTextHeight < $TextHeight) {
+                 $maxTextHeight = $TextHeight;
+             }
+         }
+         $this->YSize += $maxTextHeight;
+         $pChart = new pChart($this->XSize, $this->YSize);
+         // set font of the axes
+         $pChart->setFontProperties($this->FontName, $this->FontSize);
+
+         return $pChart;
+     }
   }
 
  function RaiseFatal($Message)

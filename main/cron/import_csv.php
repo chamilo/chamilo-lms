@@ -135,7 +135,13 @@ class ImportCsv
 
             $this->prepareImport();
 
-            $sections = array('students', 'teachers', 'courses', 'sessions', 'unsubscribe-static');
+            $sections = array(
+                'students',
+                'teachers',
+                'courses',
+                'sessions',
+                'unsubscribe-static'
+            );
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import $section --");
 
@@ -152,11 +158,19 @@ class ImportCsv
                 }
             }
 
-            $sections = array('students-static', 'teachers-static', 'courses-static', 'sessions-static', 'calendar-static');
+            $sections = array(
+                'students-static',
+                'teachers-static',
+                'courses-static',
+                'sessions-static',
+                'calendar-static'
+            );
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import static files $section --");
 
-                if (isset($fileToProcessStatic[$section]) && !empty($fileToProcessStatic[$section])) {
+                if (isset($fileToProcessStatic[$section]) &&
+                    !empty($fileToProcessStatic[$section])
+                ) {
                     $files = $fileToProcessStatic[$section];
                     foreach ($files as $fileInfo) {
                         $method = $fileInfo['method'];
@@ -176,11 +190,24 @@ class ImportCsv
     private function prepareImport()
     {
         // Create user extra field: extra_external_user_id
-        UserManager::create_extra_field($this->extraFieldIdNameList['user'], 1, 'External user id', null);
+        UserManager::create_extra_field(
+            $this->extraFieldIdNameList['user'],
+            1,
+            'External user id',
+            null
+        );
         // Create course extra field: extra_external_course_id
-        CourseManager::create_course_extra_field($this->extraFieldIdNameList['course'], 1, 'External course id');
+        CourseManager::create_course_extra_field(
+            $this->extraFieldIdNameList['course'],
+            1,
+            'External course id'
+        );
         // Create session extra field extra_external_session_id
-        SessionManager::create_session_extra_field($this->extraFieldIdNameList['session'], 1, 'External session id');
+        SessionManager::create_session_extra_field(
+            $this->extraFieldIdNameList['session'],
+            1,
+            'External session id'
+        );
     }
 
     /**
@@ -232,6 +259,7 @@ class ImportCsv
 
     /**
      * @param array $row
+     *
      * @return array
      */
     private function cleanCourseRow($row)
@@ -296,13 +324,15 @@ class ImportCsv
             foreach ($data as $row) {
                 $row = $this->cleanUserRow($row);
 
-                $user_id = UserManager::get_user_id_from_original_id($row['extra_'.$this->extraFieldIdNameList['user']], $this->extraFieldIdNameList['user']);
+                $user_id = UserManager::get_user_id_from_original_id(
+                    $row['extra_' . $this->extraFieldIdNameList['user']],
+                    $this->extraFieldIdNameList['user']
+                );
                 $userInfo  = array();
                 $userInfoByOfficialCode  = null;
 
                 if (!empty($user_id)) {
                     $userInfo = api_get_user_info($user_id);
-                    //$userInfo = api_get_user_info_from_username($row['username']);
                     $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
                 }
 
@@ -332,7 +362,8 @@ class ImportCsv
 
                     if ($userId) {
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                            if (substr($key, 0, 6) == 'extra_') {
+                                //an extra field
                                 UserManager::update_extra_field_value($userId, substr($key, 6), $value);
                             }
                         }
@@ -374,8 +405,13 @@ class ImportCsv
 
                     if ($result) {
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) == 'extra_') { //an extra field
-                                UserManager::update_extra_field_value($userInfo['user_id'], substr($key, 6), $value);
+                            if (substr($key, 0, 6) == 'extra_') {
+                                //an extra field
+                                UserManager::update_extra_field_value(
+                                    $userInfo['user_id'],
+                                    substr($key, 6),
+                                    $value
+                                );
                             }
                         }
                         $this->logger->addInfo("Teachers - User updated: ".$row['username']);
@@ -461,7 +497,8 @@ class ImportCsv
 
                     if ($result) {
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                            if (substr($key, 0, 6) == 'extra_') {
+                                //an extra field
                                 UserManager::update_extra_field_value($result, substr($key, 6), $value);
                             }
                         }
@@ -488,7 +525,9 @@ class ImportCsv
                     // Conditions that disables the update of password and email:
 
                     if (isset($this->conditions['importStudents'])) {
-                        if (isset($this->conditions['importStudents']['update']) && isset($this->conditions['importStudents']['update']['avoid'])) {
+                        if (isset($this->conditions['importStudents']['update']) &&
+                            isset($this->conditions['importStudents']['update']['avoid'])
+                        ) {
                             // Blocking email update -
                             // 1. Condition
                             $avoidUsersWithEmail = $this->conditions['importStudents']['update']['avoid']['email'];
@@ -550,8 +589,13 @@ class ImportCsv
                             $this->logger->addInfo("Students - Username was changes from '".$userInfo['username']."' to '".$row['username']."' ");
                         }
                         foreach ($row as $key => $value) {
-                            if (substr($key, 0, 6) == 'extra_') { //an extra field
-                                UserManager::update_extra_field_value($userInfo['user_id'], substr($key, 6), $value);
+                            if (substr($key, 0, 6) == 'extra_') {
+                                //an extra field
+                                UserManager::update_extra_field_value(
+                                    $userInfo['user_id'],
+                                    substr($key, 6),
+                                    $value
+                                );
                             }
                         }
 
@@ -576,6 +620,10 @@ class ImportCsv
         $this->importCourses($file, false);
     }
 
+    /**
+     * @param string $file
+     * @param bool $moveFile
+     */
     private function importCalendarStatic($file, $moveFile = true)
     {
         $data = Import::csv_to_array($file);
@@ -743,12 +791,12 @@ class ImportCsv
                 if (empty($courseInfo)) {
                     // Create
                     $params = array();
-                    $params['title']                = $row['title'];
-                    $params['exemplary_content']    = false;
-                    $params['wanted_code']          = $row['course_code'];
-                    $params['course_category']      = $row['course_category'];
-                    $params['course_language']      = $row['language'];
-                    $params['teachers']             = $row['teachers'];
+                    $params['title'] = $row['title'];
+                    $params['exemplary_content'] = false;
+                    $params['wanted_code'] = $row['course_code'];
+                    $params['course_category'] = $row['course_category'];
+                    $params['course_language'] = $row['language'];
+                    $params['teachers'] = $row['teachers'];
 
                     $courseInfo = CourseManager::create_course($params);
 
@@ -792,7 +840,6 @@ class ImportCsv
             $this->moveFile($file);
         }
     }
-
 
     /**
      * @param string $file
@@ -894,7 +941,9 @@ class ImportCsv
     private function importSessions($file, $moveFile = true)
     {
         $avoid =  null;
-        if (isset($this->conditions['importSessions']) && isset($this->conditions['importSessions']['update'])) {
+        if (isset($this->conditions['importSessions']) &&
+            isset($this->conditions['importSessions']['update'])
+        ) {
             $avoid = $this->conditions['importSessions']['update'];
         }
         $result = SessionManager::importCSV(
@@ -973,8 +1022,8 @@ class ImportCsv
         // User
         $table = Database::get_main_table(TABLE_MAIN_USER);
         $tableAdmin = Database::get_main_table(TABLE_MAIN_ADMIN);
-        //$sql = "DELETE FROM $table WHERE username NOT IN ('admin') AND lastname <> 'Anonymous' ";
-        $sql = "DELETE FROM $table WHERE user_id not in (select user_id from $tableAdmin) and status <> ".ANONYMOUS;
+        $sql = "DELETE FROM $table
+                WHERE user_id not in (select user_id from $tableAdmin) and status <> ".ANONYMOUS;
         Database::query($sql);
         echo $sql.PHP_EOL;
 

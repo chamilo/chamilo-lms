@@ -144,10 +144,10 @@ if (isset($_GET['action'])) {
                 }
                 break;
             case 'deletelink':
-                deletelinkcategory('link'); // Here we delete a link
+                deletelinkcategory($_GET['id'], 'link'); // Here we delete a link
                 break;
             case 'deletecategory':
-                deletelinkcategory('category'); // Here we delete a category
+                deletelinkcategory($_GET['id'], 'category'); // Here we delete a category
                 break;
             case 'editlink':
                 editlinkcategory('link'); // Here we edit a link

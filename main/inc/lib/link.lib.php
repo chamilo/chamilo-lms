@@ -359,68 +359,73 @@ function addlinkcategory($type)
 /**
  * Used to delete a link or a category
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @param int $id
  * @param string    $type   The type of item to delete
- * @return void
+ * @return bool
  */
-function deletelinkcategory($type)
+function deletelinkcategory($id, $type)
 {
-    global $catlinkstatus;
-    global $_course;
+    $courseInfo = api_get_course_info();
     $tbl_link = Database :: get_course_table(TABLE_LINK);
     $tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
     $course_id = api_get_course_int_id();
+    $id = intval($id);
 
-    if ($type == 'link') {
-        global $id;
-        // -> Items are no longer fysically deleted, but the visibility is set to 2 (in item_property).
-        // This will make a restore function possible for the platform administrator.
-        if (isset ($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
-            $sql = "UPDATE $tbl_link
-                    SET on_homepage='0'
-                    WHERE c_id = $course_id
-                    AND id='" . intval($_GET['id']) . "'";
-            Database :: query($sql);
-        }
-        api_item_property_update(
-            $_course,
-            TOOL_LINK,
-            $id,
-            'delete',
-            api_get_user_id()
-        );
-        delete_link_from_search_engine(api_get_course_id(), $id);
-        $catlinkstatus = get_lang('LinkDeleted');
-        unset ($id);
-        Display :: display_confirmation_message(get_lang('LinkDeleted'));
+    if (empty($id)) {
+
+        return false;
     }
 
-    if ($type == 'category') {
-        global $id;
-        if (isset ($_GET['id']) && !empty ($_GET['id'])) {
-            // First we delete the category itself and afterwards all the links of this category.
-            $sql = "DELETE FROM " . $tbl_categories . "
-                    WHERE c_id = $course_id
-                    AND id='" . intval($_GET['id']) . "'";
+    $result = false;
+
+    switch ($type) {
+        case 'link':
+            // -> Items are no longer physically deleted,
+            // but the visibility is set to 2 (in item_property).
+            // This will make a restore function possible for the platform administrator.
+
+            $sql = "UPDATE $tbl_link SET on_homepage='0'
+                    WHERE c_id = $course_id AND id='" . $id . "'";
             Database :: query($sql);
-            $sql = "DELETE FROM " . $tbl_link . "
-                    WHERE c_id = $course_id
-                    AND category_id='" . intval($_GET['id']) . "'";
-            $catlinkstatus = get_lang('CategoryDeleted');
-            unset ($id);
-            Database :: query($sql);
+
             api_item_property_update(
-                $_course,
-                TOOL_LINK_CATEGORY,
-                $_GET['id'],
+                $courseInfo,
+                TOOL_LINK,
+                $id,
                 'delete',
                 api_get_user_id()
             );
+            delete_link_from_search_engine(api_get_course_id(), $id);
+            Display :: display_confirmation_message(get_lang('LinkDeleted'));
+            $result = true;
+            break;
+        case 'category':
+            // First we delete the category itself and afterwards all the links of this category.
+            $sql = "DELETE FROM " . $tbl_categories . "
+                    WHERE c_id = $course_id AND id='" . $id. "'";
+            Database :: query($sql);
+
+            $sql = "DELETE FROM " . $tbl_link . "
+                    WHERE c_id = $course_id AND category_id='" . $id . "'";
+            Database :: query($sql);
+
+            api_item_property_update(
+                $courseInfo,
+                TOOL_LINK_CATEGORY,
+                $id,
+                'delete',
+                api_get_user_id()
+            );
+
             Display :: display_confirmation_message(
                 get_lang('CategoryDeleted')
             );
-        }
+            $result = true;
+            break;
     }
+
+    return $result;
 }
 
 /**

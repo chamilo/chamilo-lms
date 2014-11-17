@@ -47,6 +47,7 @@ if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
         exit;
     } else {
         $type = 'course';
+        $this_section = SECTION_COURSES;
     }
 }
 

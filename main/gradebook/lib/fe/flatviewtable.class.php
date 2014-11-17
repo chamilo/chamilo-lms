@@ -147,7 +147,13 @@ class FlatViewTable extends SortableTable
                 } else {
                     // if the image does not exist in the archive/ folder
                     // Initialise the graph
+                    $angle = -30;
                     $Test = new pChart(760, 360);
+
+                    // set font of the axes
+                    $Test->setFontProperties(api_get_path(LIBRARY_PATH) . "pchart/fonts/tahoma.ttf", 8);
+
+                    $Test = $Test->fixHeightByRotation($DataSet->GetData(), $DataSet->GetDataDescription(), $angle);
 
                     //which schema of color will be used
                     $quant_resources = count($data[0]) - 1;
@@ -158,11 +164,9 @@ class FlatViewTable extends SortableTable
                         $Test->loadColorPalette(api_get_path(LIBRARY_PATH) . "pchart/palette/default.txt");
                     }
 
-                    // set font of the axes
-                    $Test->setFontProperties(api_get_path(LIBRARY_PATH) . "pchart/fonts/tahoma.ttf", 8);
                     $Test->setGraphArea(50, 30, 610, 300);
 
-                    $Test->drawFilledRoundedRectangle(7, 7, 780, 330, 5, 240, 240, 240);
+                    $Test->drawFilledRoundedRectangle(7, 7, $Test->XSize + 20, $Test->YSize - 30, 5, 240, 240, 240);
                     //$Test->drawRoundedRectangle(5,5,790,330,5,230,230,230);
                     //background color area & stripe or not
                     $Test->drawGraphArea(255, 255, 255, TRUE);
@@ -316,6 +320,7 @@ class FlatViewTable extends SortableTable
                             // Initialise the graph
                             $chart_size_w = 480;
                             $chart_size_h = 250;
+                            $angle = -30;
 
                             $Test = new pChart($chart_size_w, $chart_size_h);
 

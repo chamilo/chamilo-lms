@@ -3574,22 +3574,24 @@
      function fixHeightByRotation ($data, $dataDescription, $angle)
      {
          $maxTextHeight = 0;
-         foreach ( $data as $key => $values )
-         {
+         foreach ($data as $key => $values) {
              // Get legend value
              $value = $data[$key][$dataDescription["Position"]];
-             if ( $dataDescription["Format"]["X"] == "number" )
+             if ($dataDescription["Format"]["X"] == "number") {
                  $value = $value.$dataDescription["Unit"]["X"];
-             if ( $dataDescription["Format"]["X"] == "time" )
+             } elseif ($dataDescription["Format"]["X"] == "time") {
                  $value = $this->ToTime($value);
-             if ( $dataDescription["Format"]["X"] == "date" )
+             } elseif ($dataDescription["Format"]["X"] == "date") {
                  $value = $this->ToDate($value);
-             if ( $dataDescription["Format"]["X"] == "metric" )
+             } elseif ($dataDescription["Format"]["X"] == "metric") {
                  $value = $this->ToMetric($value);
-             if ( $dataDescription["Format"]["X"] == "currency" )
+             } elseif ($dataDescription["Format"]["X"] == "currency") {
                  $value = $this->ToCurrency($value);
-             $Position   = imageftbbox($this->FontSize,$angle,$this->FontName,$value);
-             $TextHeight = abs($Position[1])+abs($Position[3]);
+             }
+             // Get positions array from label generated
+             $Position = imageftbbox($this->FontSize, $angle, $this->FontName, $value);
+             $TextHeight = abs($Position[1]) + abs($Position[3]);
+             // Save max height
              if ($maxTextHeight < $TextHeight) {
                  $maxTextHeight = $TextHeight;
              }

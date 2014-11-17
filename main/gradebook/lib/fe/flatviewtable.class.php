@@ -327,7 +327,11 @@ class FlatViewTable extends SortableTable
                             // set font of the axes
                             $Test->setFontProperties(api_get_path(LIBRARY_PATH) . "pchart/fonts/tahoma.ttf", 8);
 
-                            $Test = $Test->fixHeightByRotation($DataSet->GetData(), $DataSet->GetDataDescription(), $angle);
+                            $Test = $Test->fixHeightByRotation(
+                                $DataSet->GetData(),
+                                $DataSet->GetDataDescription(),
+                                $angle
+                            );
 
                             // Adding the color schemma
                             $Test->loadColorPalette(api_get_path(LIBRARY_PATH) . "pchart/palette/pastel.txt");
@@ -335,7 +339,16 @@ class FlatViewTable extends SortableTable
                             $area_graph_w = $chart_size_w - 130;
                             $Test->setGraphArea(50, 30, $area_graph_w, $chart_size_h - 50);
 
-                            $Test->drawFilledRoundedRectangle(5, 5, $chart_size_w - 1, $Test->YSize - 20, 5, 240, 240, 240);
+                            $Test->drawFilledRoundedRectangle(
+                                5,
+                                5,
+                                $chart_size_w - 1,
+                                $Test->YSize - 20,
+                                5,
+                                240,
+                                240,
+                                240
+                            );
                             //$Test->drawRoundedRectangle(5,5,790,330,5,230,230,230);
                             //background color area & stripe or not
                             $Test->drawGraphArea(255, 255, 255, TRUE);
@@ -349,7 +362,18 @@ class FlatViewTable extends SortableTable
                                 }
                             }
 
-                            $Test->drawScale($DataSet->GetData(), $DataSet->GetDataDescription(), SCALE_ADDALLSTART0, 150, 150, 150, TRUE, 0, 1, FALSE);
+                            $Test->drawScale(
+                                $DataSet->GetData(),
+                                $DataSet->GetDataDescription(),
+                                SCALE_ADDALLSTART0,
+                                150,
+                                150,
+                                150,
+                                TRUE,
+                                0,
+                                1,
+                                FALSE
+                            );
 
                             //background grid
                             $Test->drawGrid(4, TRUE, 230, 230, 230, 50);

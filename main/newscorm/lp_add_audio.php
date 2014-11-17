@@ -69,13 +69,20 @@ if ($action == 'add_item' && $type == 'document') {
 // Theme calls.
 $show_learn_path = true;
 $lp_item_id = isset($_GET['id']) ? intval($_GET['id']) : null;
+
 if (empty($lp_item_id)) {
     api_not_allowed();
 }
 
 $courseInfo = api_get_course_info();
 $lp_item = new learnpathItem($lp_item_id);
-$form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
+$form = new FormValidator(
+    'add_audio',
+    'post',
+    api_get_self() . '?action=add_audio&id=' . $lp_item_id . '&' . api_get_cidreq().'&lp_id='.$learnpath_id,
+    null,
+    array('enctype' => 'multipart/form-data')
+);
 $suredel = trim(get_lang('AreYouSureToDelete'));
 
 $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
@@ -114,25 +121,24 @@ $tpl->assign('cur_dir_path', '/audio');
 $tpl->assign('lp_item_id', $lp_item_id);
 $tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
 $recordVoiceForm .= $tpl->fetch('default/learnpath/record_voice.tpl');
-
+$form->addElement('header', get_lang('Or'));
+$form->addElement('header', get_lang('AudioFile'));
+$form->addElement('html', get_lang('AudioFilefor').' '.$lp_item->get_title());
 $form->addElement('header', get_lang('UplUpload'));
 $form->addElement('html', $lp_item->get_title());
-$form->addElement('file', 'file', get_lang('AudioFile'), 'style="width: 250px"');
-if (!empty($file)) {
-    $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?lp_id='.$_SESSION['oLP']->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
-    $form->addElement('label', null, Display::url(get_lang('RemoveAudio'), $url, array('class' => 'btn btn-danger')));
-}
-
-$form->addElement('hidden', 'id', $lp_item_id);
 
 if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.
         Display::getMediaPlayer($file, array('url' => $urlFile)).
         "</div>";
-    $form->addElement('label', get_lang('Preview'), $audioPlayer);
+    $form->addElement('label', get_lang('Listen'), $audioPlayer);
+    $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?lp_id='.$_SESSION['oLP']->get_id().'&action=add_audio&id='.$lp_item_id.'&delete_file=1&'.api_get_cidreq();
+    $form->addElement('label', null, Display::url(get_lang('RemoveAudio'), $url, array('class' => 'btn btn-danger')));
+} else {
+    $form->addElement('file', 'file');
+    $form->addElement('hidden', 'id', $lp_item_id);
+    $form->addElement('button', 'submit', get_lang('Ok'));
 }
-
-$form->addElement('button', 'submit', get_lang('Edit'));
 
 $courseInfo = api_get_course_info();
 $documentTree = DocumentManager::get_document_preview(

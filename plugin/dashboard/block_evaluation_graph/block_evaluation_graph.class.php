@@ -166,14 +166,16 @@ class BlockEvaluationGraph extends Block
 							$img_file = $cache->GetHash($graph_id, $data);
 						} else {
 							// Initialise the graph
+                            $angle = -30;
 						    $test = new pChart($this->bg_width,$this->bg_height);
 						    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-						    $test->setGraphArea(50,30,$this->bg_width-75,$this->bg_height-75);
-						    $test->drawFilledRoundedRectangle(7,7,$this->bg_width-20,$this->bg_height-20,5,240,240,240);
-						    $test->drawRoundedRectangle(5,5,$this->bg_width-18,$this->bg_height-18,5,230,230,230);
+                            $test = $test->fixHeightByRotation($data_set->GetData(),$data_set->GetDataDescription(), $angle);
+						    $test->setGraphArea(50,30,$this->bg_width-75,$test->YSize - 75);
+						    $test->drawFilledRoundedRectangle(7,7,$this->bg_width-20,$test->YSize - 20,5,240,240,240);
+						    $test->drawRoundedRectangle(5,5,$this->bg_width-18,$test->YSize - 18,5,230,230,230);
 						    $test->drawGraphArea(255,255,255,TRUE);
 						    $test->setFixedScale(0,100,5);
-						    $test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALL,150,150,150,TRUE,0,2,TRUE);
+						    $test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALL,150,150,150,TRUE,$angle,2,TRUE);
 						    $test->setColorPalette(0,105,221,34);
 							$test->setColorPalette(1,255,135,30);
 							$test->setColorPalette(2,255,0,0);
@@ -258,14 +260,16 @@ class BlockEvaluationGraph extends Block
 								$img_file = $cache->GetHash($graph_id, $data);
 							} else {
 								// Initialise the graph
+                                $angle = -30;
 							    $test = new pChart($this->bg_width,$this->bg_height);
 							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-							    $test->setGraphArea(50,30,$this->bg_width-75,$this->bg_height-75);
-							    $test->drawFilledRoundedRectangle(7,7,$this->bg_width-20,$this->bg_height-20,5,240,240,240);
-							    $test->drawRoundedRectangle(5,5,$this->bg_width-18,$this->bg_height-18,5,230,230,230);
+                                $test->fixHeightByRotation($data_set->GetData(),$data_set->GetDataDescription(), $angle);
+							    $test->setGraphArea(50,30,$this->bg_width-75,$test->YSize-75);
+							    $test->drawFilledRoundedRectangle(7,7,$this->bg_width-20,$test->YSize-20,5,240,240,240);
+							    $test->drawRoundedRectangle(5,5,$this->bg_width-18,$test->YSize-18,5,230,230,230);
 							    $test->drawGraphArea(255,255,255,TRUE);
 							    $test->setFixedScale(0,100,5);
-							    $test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALL,150,150,150,TRUE,0,2,TRUE);
+							    $test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALL,150,150,150,TRUE,$angle,2,TRUE);
 							    $test->setColorPalette(0,105,221,34);
 								$test->setColorPalette(1,255,135,30);
 								$test->setColorPalette(2,255,0,0);

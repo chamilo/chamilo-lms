@@ -2,6 +2,15 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$Listen = "Écouter";
+$AudioFileForItemX = "Fichier audio pour l'élément %s";
+$ThereIsANewWorkFeedbackInWorkXHere = "Nouveau commentaire pour le travail: %s. <a href=\"%s\">Cliquez ici</a> pour y accéder.";
+$ThereIsANewWorkFeedback = "Nouveau commentaire pour le travail: %s";
+$LastUpload = "Dernier envoi";
+$EditUserListCSV = "Éditer utilisateurs par CSV";
+$NumberOfCoursesHidden = "Nombre de cours cachés";
+$Post = "Poster";
+$Write = "Écrire";
 $YouHaveNotYetAchievedSkills = "Vous n'avez pas encore acquis de compétence";
 $Corn = "Maïs";
 $Gray = "Gris";

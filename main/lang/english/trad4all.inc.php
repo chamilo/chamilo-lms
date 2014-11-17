@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$Listen = "Listen";
+$AudioFileForItemX = "Audio file for item %s";
 $ThereIsANewWorkFeedbackInWorkXHere = "There's a new feedback in work: %s <a href='%s'>Click here</a> to see it.";
 $ThereIsANewWorkFeedback = "There's a new feedback in work: %s";
 $LastUpload = "Last upload";

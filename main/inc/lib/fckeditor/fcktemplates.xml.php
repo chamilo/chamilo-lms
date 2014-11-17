@@ -147,8 +147,15 @@ function load_platform_templates() {
     $sql = "SELECT title, image, comment, content FROM $table_template";
     $result = Database::query($sql);
 
-    $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{WEB_PATH}');
-    $replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir, api_get_path(WEB_PATH));
+    $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{WEB_PATH}', '{REL_CODE_PATH}');
+    $replace = array(
+        $css.$js,
+        $img_dir,
+        api_get_path(REL_PATH),
+        $default_course_dir,
+        api_get_path(WEB_PATH),
+        api_get_path(REL_CODE_PATH)
+    );
     $template_thumb = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/';
 
     while ($row = Database::fetch_array($result)) {

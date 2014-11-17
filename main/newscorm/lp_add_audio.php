@@ -124,8 +124,6 @@ $recordVoiceForm .= $tpl->fetch('default/learnpath/record_voice.tpl');
 $form->addElement('header', get_lang('Or'));
 $form->addElement('header', get_lang('AudioFile'));
 $form->addElement('html', get_lang('AudioFilefor').' '.$lp_item->get_title());
-$form->addElement('header', get_lang('UplUpload'));
-$form->addElement('html', $lp_item->get_title());
 
 if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.
@@ -139,6 +137,7 @@ if (!empty($file)) {
     $form->addElement('hidden', 'id', $lp_item_id);
     $form->addElement('button', 'submit', get_lang('Ok'));
 }
+$form->addElement('header', get_lang('Or'));
 
 $courseInfo = api_get_course_info();
 $documentTree = DocumentManager::get_document_preview(

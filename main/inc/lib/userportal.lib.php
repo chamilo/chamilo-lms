@@ -848,7 +848,26 @@ class IndexManager
                 $profile_content .= '<li class="myfiles-social"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
             }
         }
-        $profile_content .= '<li class="profile-social"><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';
+
+        $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+        if (api_get_setting('sso_authentication') === 'true') {
+            $subSSOClass = api_get_setting('sso_authentication_subclass');
+            $objSSO = null;
+
+            if (!empty($subSSOClass)) {
+                require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
+
+                $subSSOClass = 'sso' . $subSSOClass;
+                $objSSO = new $subSSOClass();
+            } else {
+                $objSSO = new sso();
+            }
+
+            $editProfileUrl = $objSSO->generateProfileEditingURL();
+        }
+
+        $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';
         $html = self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
         return $html;

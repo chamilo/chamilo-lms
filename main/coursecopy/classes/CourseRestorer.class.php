@@ -1675,8 +1675,9 @@ class CourseRestorer
     }
 
     /**
-	 * Restore surveys
-	 */
+     * Restore surveys
+     * @param int $sessionId Optional. The session id
+     */
     public function restore_surveys($sessionId = 0)
     {
         $sessionId = intval($sessionId);

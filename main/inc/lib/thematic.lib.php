@@ -904,6 +904,7 @@ class Thematic
         $thematic_id = intval($thematic_id);
         $description_type = intval($description_type);
         $user_id = api_get_user_id();
+        $course_info = api_get_course_info();
         $course_id = $course_info['real_id'];
 
         // get thematic plan id
@@ -939,13 +940,14 @@ class Thematic
 
         // protect data
         $thematic_id = intval($thematic_id);
-        $description_type = intval($description_type);
-        $next_description_type = 0;
-
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT MAX(description_type) as max FROM $tbl_thematic_plan
-		        WHERE c_id = $course_id AND thematic_id = $thematic_id AND description_type >= ".ADD_THEMATIC_PLAN." ";
+        $sql = "SELECT MAX(description_type) as max
+                FROM $tbl_thematic_plan
+		        WHERE
+		            c_id = $course_id AND
+		            thematic_id = $thematic_id AND
+		            description_type >= ".ADD_THEMATIC_PLAN." ";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
         $last_description_type = $row['max'];
@@ -1294,7 +1296,8 @@ class Thematic
      * Get questions by default for help
      * @return array
      */
-    public function get_default_question() {
+    public function get_default_question()
+    {
         $question = array();
         $question[1]= get_lang('ObjectivesQuestions');
         $question[2]= get_lang('SkillToAcquireQuestions');
@@ -1309,7 +1312,8 @@ class Thematic
      * @param	array	array containing data e.g: $array('Y'=>'2010',  'F' => '02', 'd' => '10', 'H' => '12', 'i' => '30')
      * @return	string	date and time e.g: '2010-02-10 12:30:00'
      */
-    public function build_datetime_from_array($array) {
+    public function build_datetime_from_array($array)
+    {
         return return_datetime_from_array($array);
     }
 }

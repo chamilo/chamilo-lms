@@ -728,7 +728,7 @@ class CourseBuilder
         $table_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $course_id = api_get_course_int_id();
 
-        $sql = 'SELECT * FROM '.$table_survey.' WHERE c_id = '.$course_id.' AND session_id = 0 ';
+        $sql = 'SELECT * FROM '.$table_survey.' WHERE c_id = '.$course_id.' AND session_id = ' . $session_id;
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $survey = new Survey($obj->survey_id, $obj->code,$obj->title,

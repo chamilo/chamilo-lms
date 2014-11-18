@@ -1677,9 +1677,11 @@ class CourseRestorer
     /**
 	 * Restore surveys
 	 */
-    public function restore_surveys()
+    public function restore_surveys($sessionId = 0)
     {
-		if ($this->course->has_resources(RESOURCE_SURVEY)) {
+        $sessionId = intval($sessionId);
+
+        if ($this->course->has_resources(RESOURCE_SURVEY)) {
 			$table_sur = Database :: get_course_table(TABLE_SURVEY);
 			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -1743,7 +1745,8 @@ class CourseRestorer
 						"invited = '0', " .
 						"answered = '0', " .
 						"invite_mail = '".self::DBUTF8escapestring($survey->invite_mail)."', " .
-						"reminder_mail = '".self::DBUTF8escapestring($survey->reminder_mail)."'";
+						"reminder_mail = '".self::DBUTF8escapestring($survey->reminder_mail)."', ".
+                        "session_id = $sessionId";
 
 				//An existing survey exists with the same code and the same language
 				if (Database::num_rows($result_check) == 1) {
@@ -1777,7 +1780,8 @@ class CourseRestorer
 									"invited = '0', " .
 									"answered = '0', " .
 									"invite_mail = '".self::DBUTF8escapestring($survey->invite_mail)."', " .
-									"reminder_mail = '".self::DBUTF8escapestring($survey->reminder_mail)."'";
+									"reminder_mail = '".self::DBUTF8escapestring($survey->reminder_mail)."', ".
+                                    "session_id = $sessionId";
 
 							//Insert the new source survey
 							Database::query($sql);

@@ -294,15 +294,19 @@ class BlockEvaluationGraph extends Block
 							} else {
 								// Initialise the graph
                                 $angle = -30;
-							    $test = new pChart($this->bg_width,$this->bg_height);
-							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-                                $test->fixHeightByRotation($data_set->GetData(), $data_set->GetDataDescription(), $angle);
-                                $test->setGraphArea(50, 30, $this->bg_width-75, $this->bg_height-75);
+							    $test = new pChart($this->bg_width, $this->bg_height);
+							    $test->setFontProperties(api_get_path(LIBRARY_PATH) . 'pchart/fonts/tahoma.ttf', 8);
+                                $test->fixHeightByRotation(
+                                    $data_set->GetData(),
+                                    $data_set->GetDataDescription(),
+                                    $angle
+                                );
+                                $test->setGraphArea(50, 30, $this->bg_width - 75, $this->bg_height - 75);
                                 $test->drawFilledRoundedRectangle(
                                     7,
                                     7,
-                                    $this->bg_width-20,
-                                    $test->YSize-20,
+                                    $this->bg_width - 20,
+                                    $test->YSize - 20,
                                     5,
                                     240,
                                     240,
@@ -311,8 +315,8 @@ class BlockEvaluationGraph extends Block
                                 $test->drawRoundedRectangle(
                                     5,
                                     5,
-                                    $this->bg_width-18,
-                                    $test->YSize-18,
+                                    $this->bg_width - 18,
+                                    $test->YSize - 18,
                                     5,
                                     230,
                                     230,

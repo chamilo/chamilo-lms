@@ -619,8 +619,7 @@
               // e.g 60 degree is in Quadrant I, 120 degree is Quadrant II
               $isYpositive = sin(deg2rad($Angle)) >= 0;
               $isXpositive = cos(deg2rad($Angle)) >= 0;
-              $YPos = $this->GArea_Y2+10;
-
+              $YPos = $this->GArea_Y2 + 10;
               if ($isYpositive && $isXpositive) {
                   // For Quadrant I
                   $YPos += $TextHeight;
@@ -636,7 +635,16 @@
                   // For Quadrant IV
                   // Nothing to do
               }
-              imagettftext($this->Picture,$this->FontSize,$Angle,$XPos,$YPos,$C_TextColor,$this->FontName,$Value);
+              imagettftext(
+                  $this->Picture,
+                  $this->FontSize,
+                  $Angle,
+                  $XPos,
+                  $YPos,
+                  $C_TextColor,
+                  $this->FontName,
+                  $Value
+              );
               // post update XY position
               if ($isYpositive && $isXpositive) {
                   // For Quadrant I
@@ -660,12 +668,21 @@
       }
 
     /* Write the X Axis caption if set */
-    if ( isset($DataDescription["Axis"]["X"]) )
+    if (isset($DataDescription["Axis"]["X"]))
       {
-       $Position   = imageftbbox($this->FontSize, 0,$this->FontName,$DataDescription["Axis"]["X"]);
-       $TextWidth  = abs($Position[2])+abs($Position[0]);
+       $Position   = imageftbbox($this->FontSize, 0, $this->FontName, $DataDescription["Axis"]["X"]);
+       $TextWidth  = abs($Position[2]) + abs($Position[0]);
        $TextLeft   = (($this->GArea_X2 + $this->GArea_X1) / 2) - ($TextWidth/2);
-       imagettftext($this->Picture,$this->FontSize,0,$TextLeft,$YMax+$this->FontSize+5,$C_TextColor,$this->FontName,$DataDescription["Axis"]["X"]);
+       imagettftext(
+           $this->Picture,
+           $this->FontSize,
+           0,
+           $TextLeft,
+           $YMax+$this->FontSize+5,
+           $C_TextColor,
+           $this->FontName,
+           $DataDescription["Axis"]["X"]
+       );
       }
     }
 

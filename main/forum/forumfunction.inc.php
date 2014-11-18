@@ -1744,10 +1744,11 @@ function get_threads($forum_id, $course_code = null)
                     thread.locked as locked
                 FROM $table_threads thread
                 INNER JOIN $table_item_property item_properties
-                    ON  thread.thread_id=item_properties.ref AND
-                        item_properties.c_id = $course_id AND
-                        thread.c_id = $course_id AND
-                        item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
+                ON
+                    thread.thread_id=item_properties.ref AND
+                    item_properties.c_id = $course_id AND
+                    thread.c_id = $course_id AND
+                    item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
                 LEFT JOIN $table_users users
                     ON thread.thread_poster_id=users.user_id
                 WHERE
@@ -1767,7 +1768,7 @@ function get_threads($forum_id, $course_code = null)
 /**
  * Retrieve all posts of a given thread
  *
- * @return an array containing all the information about the posts of a given thread
+ * @return array containing all the information about the posts of a given thread
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
@@ -1807,6 +1808,7 @@ function get_posts($thread_id)
                 ORDER BY posts.post_id ASC";
     }
     $result = Database::query($sql);
+    $post_list = array();
     while ($row = Database::fetch_array($result)) {
         $post_list[] = $row;
     }
@@ -2796,13 +2798,11 @@ function store_reply($current_forum, $values)
  */
 function show_edit_post_form($forum_setting, $current_post, $current_thread, $current_forum, $form_values = '', $id_attach = 0)
 {
-    $gradebook = Security::remove_XSS($_GET['gradebook']);
-
     // Initialize the object.
     $form = new FormValidator(
         'edit_post',
         'post',
-        api_get_self().'?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post'])
+        api_get_self().'?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&post='.Security::remove_XSS($_GET['post'])
     );
     $form->addElement('header', get_lang('EditPost'));
     // Setting the form elements.
@@ -3914,9 +3914,9 @@ function search_link()
 
 /**
  * This function adds an attachment file into a forum
- * @param string  a comment about file
- * @param int last id from forum_post table
- * @return void
+ * @param string $file_comment  a comment about file
+ * @param int $last_id from forum_post table
+ * @return int|bool
  */
 function add_forum_attachment_file($file_comment, $last_id)
 {
@@ -3935,7 +3935,10 @@ function add_forum_attachment_file($file_comment, $last_id)
         $updir = $sys_course_path.$course_dir;
 
         // Try to add an extension to the file if it hasn't one.
-        $new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+        $new_file_name = add_ext_on_mime(
+            stripslashes($_FILES['user_upload']['name']),
+            $_FILES['user_upload']['type']
+        );
         // User's file name
         $file_name = $_FILES['user_upload']['name'];
 
@@ -3954,10 +3957,15 @@ function add_forum_attachment_file($file_comment, $last_id)
                 $sql = "INSERT INTO $agenda_forum_attachment (c_id, filename, comment, path, post_id, size)
                         VALUES (".api_get_course_int_id().", '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$last_id', '".intval($_FILES['user_upload']['size'])."' )";
                 Database::query($sql);
-                $message .= ' / '.get_lang('FileUploadSucces').'<br />';
 
                 $last_id_file = Database::insert_id();
-                api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id_file, 'ForumAttachmentAdded', api_get_user_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_FORUM_ATTACH,
+                    $last_id_file,
+                    'ForumAttachmentAdded',
+                    api_get_user_id()
+                );
 
                 return $last_id_file;
             }
@@ -4965,8 +4973,7 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
                 // Set result as succes and bring delete URL
                 $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded'));
                 $json['delete'] = '<a class="deleteLink" href="'.api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php' .
-                    '?' . api_get_cidreq() . '&amp;origin=' . Security::remove_XSS($_GET['origin']) .
-                    '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId .
+                    '?' . api_get_cidreq() . '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId .
                     '&amp;id_attach=' . $row['id'] . '">' .
                     Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
             } else {

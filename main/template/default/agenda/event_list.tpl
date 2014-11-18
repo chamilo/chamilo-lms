@@ -40,9 +40,11 @@
                             <img title="{{ 'Invisible' }}" src="{{'visible.png'|icon(32)}} ">
                         </a>
                     {% else %}
-                        <a class="btn" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=1&id={{ event.real_id }}">
-                            <img title="{{ 'Visible' }}" src="{{'invisible.png'|icon(32)}} ">
-                        </a>
+                        {% if event.type == 'course' or event.type == 'session' %}
+                            <a class="btn" href="{% if url %}{{ url }}{% else %}{{ event.url }}{% endif %}&action=change_visibility&visibility=1&id={{ event.real_id }}">
+                                <img title="{{ 'Visible' }}" src="{{'invisible.png'|icon(32)}} ">
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </td>
             {% endif %}

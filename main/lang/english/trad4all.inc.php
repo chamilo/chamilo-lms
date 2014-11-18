@@ -2,6 +2,25 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$Listen = "Listen";
+$AudioFileForItemX = "Audio file for item %s";
+$ThereIsANewWorkFeedbackInWorkXHere = "There's a new feedback in work: %s <a href='%s'>Click here</a> to see it.";
+$ThereIsANewWorkFeedback = "There's a new feedback in work: %s";
+$LastUpload = "Last upload";
+$EditUserListCSV = "Edit users list";
+$NumberOfCoursesHidden = "Number of hidden courses";
+$Post = "Post";
+$Write = "Write";
+$YouHaveNotYetAchievedSkills = "You have not yet achieved skills";
+$Corn = "Corn";
+$Gray = "Gray";
+$LightBlue = "Light blue";
+$Black = "Black";
+$White = "White";
+$DisplayOptions = "Display options";
+$EnterTheSkillNameToSearch = "Enter the skill name to search";
+$SkillsSearch = "Skills search";
+$ChooseABackgroundColor = "Choose a background color";
 $SocialWriteNewComment = "Write new comment";
 $SocialWallWhatAreYouThinkingAbout = "What are you thinking about?";
 $SocialMessageDelete = "Delete comment";

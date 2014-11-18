@@ -4,9 +4,9 @@
 
 /**
  * This file contains class used like controller for thematic, it should be included inside a dispatcher file (e.g: index.php)
- * 
+ *
  * !!! WARNING !!! : ALL DATES IN THIS MODULE ARE STORED IN UTC ! DO NOT CONVERT DURING THE TRANSITION FROM CHAMILO 1.8.x TO 2.0
- * 
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> token support improving UI
  * @package chamilo.course_progress
@@ -15,7 +15,7 @@
 /**
  * Thematic Controller script. Prepares the common background variables to give to the scripts corresponding to
  * the requested action
- * @package chamilo.course_progress 
+ * @package chamilo.course_progress
  */
 class ThematicController
 {
@@ -34,7 +34,7 @@ class ThematicController
      * @param 	string	Action
      * render to thematic.php
      */
-    public function thematic($action) 
+    public function thematic($action)
     {
         $thematic = new Thematic();
         $data = array();
@@ -44,12 +44,12 @@ class ThematicController
         $check = Security::check_token('request');
         $thematic_id = isset($_REQUEST['thematic_id']) ? intval($_REQUEST['thematic_id']) : null;
         $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
- 
+
         if ($check) {
             switch ($action) {
                 case 'thematic_add':
                 case 'thematic_edit':
-                    // insert or update a thematic		
+                    // insert or update a thematic
                     if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
                         if (trim($_POST['title']) !== '') {
                             if (api_is_allowed_to_edit(null, true)) {
@@ -250,7 +250,7 @@ class ThematicController
 
         $data['action'] = $action;
         $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
-       
+
         // render to the view
         $this->view->set_data($data);
         $this->view->set_layout($layoutName);
@@ -286,7 +286,7 @@ class ThematicController
                             }
                             unset($_SESSION['thematic_plan_token']);
                             $data['message'] = 'ok';
-                            
+
                             $saveRedirect = api_get_path(WEB_PATH) . 'main/course_progress/index.php?';
                             $saveRedirect.= api_get_cidreq() . '&';
                             $saveRedirect.= 'thematic_plan_save_message=ok';
@@ -360,7 +360,7 @@ class ThematicController
 
     /**
      * This method is used for thematic advance control (update, insert or listing)
-     * @param 	string	Action
+     * @param 	string	$action
      * render to thematic_advance.php
      */
     public function thematic_advance($action)
@@ -368,20 +368,19 @@ class ThematicController
         $thematic = new Thematic();
         $attendance = new Attendance();
         $data = array();
-        
+
         $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
-  
-        // get data for attendance input select		
+
+        // get data for attendance input select
         $attendance_list = $attendance->get_attendances_list();
         $attendance_select = array();
         $attendance_select[0] = get_lang('SelectAnAttendance');
         foreach ($attendance_list as $attendance_id => $attendance_data) {
             $attendance_select[$attendance_id] = $attendance_data['name'];
         }
-       
+
         $thematic_id = intval($_REQUEST['thematic_id']);
         $thematic_advance_id = intval($_REQUEST['thematic_advance_id']);
-
         $thematic_advance_data = array();
 
         switch ($action) {
@@ -421,8 +420,9 @@ class ThematicController
                         $data['thematic_advance_data'] = $thematic_advance_data;
                     }
                 } else {
-                    if ($_REQUEST['thematic_advance_token'] == $_SESSION['thematic_advance_token'] && api_is_allowed_to_edit(null, true)) {
-
+                    if ($_REQUEST['thematic_advance_token'] == $_SESSION['thematic_advance_token'] &&
+                        api_is_allowed_to_edit(null, true)
+                    ) {
                         $thematic_advance_id = $_REQUEST['thematic_advance_id'];
                         $thematic_id = $_REQUEST['thematic_id'];
                         $content = $_REQUEST['content'];
@@ -434,14 +434,23 @@ class ThematicController
                             $start_date = $_REQUEST['start_date_by_attendance'];
                             $attendance_id = $_REQUEST['attendance_select'];
                         }
-                        $thematic->set_thematic_advance_attributes($thematic_advance_id, $thematic_id, $attendance_id, $content, $start_date, $duration);
+                        $thematic->set_thematic_advance_attributes(
+                            $thematic_advance_id,
+                            $thematic_id,
+                            $attendance_id,
+                            $content,
+                            $start_date,
+                            $duration
+                        );
+
                         $affected_rows = $thematic->thematic_advance_save();
+
                         if ($affected_rows) {
                             // get last done thematic advance before move thematic list
                             $last_done_thematic_advance = $thematic->get_last_done_thematic_advance();
                             // update done advances with de current thematic list
                             if (!empty($last_done_thematic_advance)) {
-                                $update_done_advances = $thematic->update_done_thematic_advances($last_done_thematic_advance);
+                                $thematic->update_done_thematic_advances($last_done_thematic_advance);
                             }
                         }
                     }
@@ -451,7 +460,6 @@ class ThematicController
                 $thematic_advance_data = $thematic->get_thematic_advance_list($thematic_advance_id);
                 break;
         }
-
 
         // get calendar select by attendance id
         $calendar_select = array();
@@ -473,7 +481,7 @@ class ThematicController
         $data['thematic_advance_data'] = $thematic_advance_data;
         $data['calendar_select'] = $calendar_select;
         $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
-        
+
         // render to the view
         $this->view->set_data($data);
         $this->view->set_layout($layoutName);

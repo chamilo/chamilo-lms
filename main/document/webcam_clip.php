@@ -9,11 +9,6 @@
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net
  * @since 7/jun/2012
 */
-/**
- * Code
- */
-
-/*	INIT SECTION */
 
 // Name of the language file that needs to be included
 $language_file = array('document');
@@ -34,7 +29,7 @@ api_block_anonymous_users();
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
         $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
         $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
     }
@@ -113,14 +108,14 @@ if (isset ($group)) {
 }
 
 // Interbreadcrumb for the current directory root path
-$counter = 0;   
+$counter = 0;
 if (isset($document_data['parents'])) {
     foreach($document_data['parents'] as $document_sub_data) {
         //fixing double group folder in breadcrumb
         if (api_get_group_id()) {
             if ($counter == 0) {
                 $counter++;
-                continue;  
+                continue;
             }
         }
         $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
@@ -145,7 +140,7 @@ echo '</div>';
 <h3><?php echo get_lang('LocalInputImage'); ?></h3>
 <!-- First, include the JPEGCam JavaScript Library -->
 	<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam/webcam.js"></script>
-	
+
 	<!-- Configure a few settings -->
 	<script language="JavaScript">
 		var clip_filename='video_clip.jpg';
@@ -154,14 +149,14 @@ echo '</div>';
 		webcam.set_shutter_sound( true,'<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam/shutter.mp3' ); // true play shutter click sound
 		webcam.set_quality( 90 ); // JPEG quality (1 - 100)
 		webcam.set_api_url( '<?php echo api_get_path(WEB_LIBRARY_PATH); ?>jpegcam/webcam_receiver.php?webcamname='+escape(clip_filename)+'&webcamdir=<?php echo $webcamdir; ?>&webcamuserid=<?php echo $webcamuserid; ?>' );
-		
+
 	</script>
-	
+
 	<!-- Next, write the movie to the page at 320x240 -->
 	<script language="JavaScript">
 		document.write( webcam.get_html(320, 240) );
 	</script>
-	
+
 	<!-- Some buttons for controlling things -->
 	<br/>
     <form>
@@ -171,16 +166,16 @@ echo '</div>';
         <input type=button value="<?php echo get_lang('Send'); ?>" onClick="do_upload()">
         &nbsp;&nbsp;||&nbsp;&nbsp;
         <input type=button value="<?php echo get_lang('Auto'); ?>" onClick="start_video();">
-		<input type=button value="<?php echo get_lang('Stop'); ?>" onClick="stop_video()"> 
+		<input type=button value="<?php echo get_lang('Stop'); ?>" onClick="stop_video()">
         <br/>
         <input type=button value="<?php echo get_lang('Configure'); ?>" onClick="webcam.configure()">
-		 
+
 	</form>
-    
+
 	<!-- Code to handle the server response (see webcam_receiver.php) -->
 	<script language="JavaScript">
 		webcam.set_hook( 'onComplete', 'my_completion_handler' );
-		
+
 		function do_upload() {
 			// upload to server
 			if (this.loaded){
@@ -188,19 +183,19 @@ echo '</div>';
 			}
 			webcam.upload();
 		}
-		
+
 		function my_completion_handler(msg) {
 			// extract URL out of PHP output
 			if (msg.match(/(http\:\/\/\S+)/)) {
 				var image_url = RegExp.$1;
-				
+
 				image_url=image_url.replace(/\\/g,'/').replace( /.*\//, '' );// extract basename
 				image_url='<?php echo api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'.$dir;?>'+image_url+'<?php echo '?'.api_get_cidreq(); ?>';
-			
+
 				// show JPEG image in page
-				document.getElementById('upload_results').innerHTML = 
+				document.getElementById('upload_results').innerHTML =
 				'<div style="width: 320px;">' +
-					'<h3><?php echo get_lang('ClipSent'); ?></h3>' + 
+					'<h3><?php echo get_lang('ClipSent'); ?></h3>' +
 					'<img src="' + image_url + '">' +
 					'</div>';
 				// reset camera for another shot
@@ -209,7 +204,7 @@ echo '</div>';
 			else alert("PHP Error: " + msg);
 		}
 	</script>
-	
+
      <script language=javascript>
 	   var internaval=null;
 	   var timeout=null;
@@ -217,7 +212,7 @@ echo '</div>';
 	   var fps=1000;//one frame per second
 	   var maxclip=25;//maximum number of clips
 	   var maxtime=60000;//stop after one minute
-	
+
 	   function stop_video() {
 			interval=window.clearInterval(interval);
 	   }
@@ -226,7 +221,7 @@ echo '</div>';
 		   	webcam.set_stealth( true ); // do not freeze image upon capture
 		 	interval=window.setInterval("clip_send_video()",fps);
 	   }
-	   
+
 	   function clip_send_video() {
 		   counter++
 		   timeout=setTimeout('stop_video()',maxtime);
@@ -238,8 +233,8 @@ echo '</div>';
 		   }
 	   }
  </script>
-    
-    
+
+
 	</td><td width=50>&nbsp;</td><td valign=top>
 		<div id="upload_results" style="background-color:#ffffff;"></div>
 	</td></tr></table>

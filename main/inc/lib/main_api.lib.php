@@ -912,36 +912,48 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     $is_allowed_in_course = api_is_allowed_in_course();
     $is_visible = false;
 
+    $course_info = api_get_course_info();
+
+    if (empty($course_info)) {
+        api_not_allowed($print_headers);
+        return false;
+    }
+
     if (api_is_drh()) {
         return true;
     }
+
     if (api_is_platform_admin($allow_session_admins)) {
         return true;
     }
-    $course_info = api_get_course_info();
 
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:
-            case COURSE_VISIBILITY_CLOSED: //Completely closed: the course is only accessible to the teachers. - 0
+            case COURSE_VISIBILITY_CLOSED:
+                // Completely closed: the course is only accessible to the teachers. - 0
                 if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
                     $is_visible = true;
                 }
                 break;
-            case COURSE_VISIBILITY_REGISTERED: //Private - access authorized to course members only - 1
+            case COURSE_VISIBILITY_REGISTERED:
+                // Private - access authorized to course members only - 1
                 if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
                     $is_visible = true;
                 }
                 break;
-            case COURSE_VISIBILITY_OPEN_PLATFORM: // Open - access allowed for users registered on the platform - 2
+            case COURSE_VISIBILITY_OPEN_PLATFORM:
+                // Open - access allowed for users registered on the platform - 2
                 if (api_get_user_id() && !api_is_anonymous()) {
                     $is_visible = true;
                 }
                 break;
-            case COURSE_VISIBILITY_OPEN_WORLD: //Open - access allowed for the whole world - 3
+            case COURSE_VISIBILITY_OPEN_WORLD:
+                //Open - access allowed for the whole world - 3
                 $is_visible = true;
                 break;
-            case COURSE_VISIBILITY_HIDDEN: //Completely closed: the course is only accessible to the teachers. - 0
+            case COURSE_VISIBILITY_HIDDEN:
+                //Completely closed: the course is only accessible to the teachers. - 0
                 if (api_is_platform_admin()) {
                     $is_visible = true;
                 }
@@ -1405,19 +1417,24 @@ function api_get_anonymous_id() {
 /**
  * Returns the cidreq parameter name + current course id taken from
  * $GLOBALS['_cid'] and returns a string like 'cidReq=ABC&id_session=123
+ *
+ * @param bool $addSessionId
+ * @param bool $addGroupId
  * @return  string  Course & session references to add to a URL
  *
- * @see Uri.course_params
  */
-function api_get_cidreq($add_session_id = true, $add_group_id = true) {
+function api_get_cidreq($addSessionId = true, $addGroupId = true)
+{
     $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
     $origin = api_get_origin();
-    if ($add_session_id) {
+
+    if ($addSessionId) {
         if (!empty($url)) {
             $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
         }
     }
-    if ($add_group_id) {
+
+    if ($addGroupId) {
         if (!empty($url)) {
             $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
         }
@@ -1510,51 +1527,50 @@ function api_format_course_array($course_data) {
     }
 
     $_course = array();
-
-    $_course['id'           ]         = $course_data['code'           ];
-    $_course['real_id'      ]         = $course_data['id'              ];
+    $_course['id'] = $course_data['code'];
+    $_course['real_id'] = $course_data['id'];
 
     // Added
-    $_course['code'         ]         = $course_data['code'           ];
-    $_course['name'         ]         = $course_data['title'          ];
-    $_course['title'         ]        = $course_data['title'          ];
-    $_course['official_code']         = $course_data['visual_code'    ]; // Use in echo statements.
-    $_course['visual_code']           = $course_data['visual_code'    ];
-    $_course['sysCode'      ]         = $course_data['code'           ]; // Use as key in db.
-    $_course['path'         ]         = $course_data['directory'      ]; // Use as key in path.
-    $_course['directory'    ]         = $course_data['directory'      ];
+    $_course['code'] = $course_data['code'];
+    $_course['name'] = $course_data['title'];
+    $_course['title'] = $course_data['title'];
+    $_course['official_code'] = $course_data['visual_code'];
+    $_course['visual_code'] = $course_data['visual_code'];
+    $_course['sysCode'] = $course_data['code'];
+    $_course['path'] = $course_data['directory']; // Use as key in path.
+    $_course['directory'] = $course_data['directory'];
 
     //@todo should be deprecated
     // Use as key in db list.
-    $_course['dbName'       ]         = $course_data['db_name'        ];
-    $_course['db_name'      ]         = $course_data['db_name'         ];
+    $_course['dbName'] = $course_data['db_name'];
+    $_course['db_name'] = $course_data['db_name'];
     // Use in all queries.
-    $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue'];
+    $_course['dbNameGlu'] = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue'];
 
-    $_course['titular'      ]         = $course_data['tutor_name'     ];
-    $_course['language'     ]         = $course_data['course_language'];
-    $_course['extLink'      ]['url' ] = $course_data['department_url' ];
-    $_course['extLink'      ]['name'] = $course_data['department_name'];
+    $_course['titular'] = $course_data['tutor_name'];
+    $_course['language'] = $course_data['course_language'];
+    $_course['extLink']['url'] = $course_data['department_url'];
+    $_course['extLink']['name'] = $course_data['department_name'];
 
-    $_course['categoryCode' ]         = $course_data['faCode'         ];
-    $_course['categoryName' ]         = $course_data['faName'         ];
+    $_course['categoryCode'] = $course_data['faCode'];
+    $_course['categoryName'] = $course_data['faName'];
 
-    $_course['visibility'   ]         = $course_data['visibility'      ];
-    $_course['subscribe_allowed']     = $course_data['subscribe'];
-    $_course['subscribe']             = $course_data['subscribe'];
-    $_course['unsubscribe']           = $course_data['unsubscribe'     ];
+    $_course['visibility'] = $course_data['visibility'];
+    $_course['subscribe_allowed'] = $course_data['subscribe'];
+    $_course['subscribe'] = $course_data['subscribe'];
+    $_course['unsubscribe'] = $course_data['unsubscribe'];
 
-    $_course['course_language']       = $course_data['course_language'];
-    $_course['activate_legal']        = isset($course_data['activate_legal']) ? $course_data['activate_legal'] : false;;
-    $_course['legal']                 = $course_data['legal' ];
-    $_course['show_score']            = $course_data['show_score']; //used in the work tool
-    $_course['department_name']       = $course_data['department_name'];
-    $_course['department_url']        = $course_data['department_url' ];
+    $_course['course_language'] = $course_data['course_language'];
+    $_course['activate_legal'] = isset($course_data['activate_legal']) ? $course_data['activate_legal'] : false;;
+    $_course['legal'] = $course_data['legal'];
+    $_course['show_score'] = $course_data['show_score']; //used in the work tool
+    $_course['department_name'] = $course_data['department_name'];
+    $_course['department_url'] = $course_data['department_url'];
 
     //Course password
-    $_course['registration_code']     = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
-    $_course['disk_quota']            = $course_data['disk_quota'];
-    $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+    $_course['registration_code'] = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
+    $_course['disk_quota'] = $course_data['disk_quota'];
+    $_course['course_public_url'] = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
 
     if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
         $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
@@ -3236,59 +3252,45 @@ function api_not_allowed($print_headers = false, $message = null)
     }
 
     $msg = null;
-    /* Check if the cookies are enabled. If are enabled and if no course Id was
-       included in the requested URL, then the user has either lost his session
-       or is anonymous, so redirect to homepage
-    */
-    if (!isset($_COOKIE['TestCookie']) ||
-        isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie'])
-    ) {
+
+    // The session is over and we were not in a course,
+    // or we try to get directly to a private course without being logged
+    if (!is_null(api_get_course_int_id())) {
+        api_set_firstpage_parameter(api_get_course_id());
+        $tpl->setLoginBodyClass();
+        $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
+        $action = str_replace('&amp;', '&', $action);
+        $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
+        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
+        $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
+        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
+
+        // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
+        $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
+        $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
+        if (api_is_cas_activated()) {
+            $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
+            $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
+            $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
+            $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
+            $msg .= "<div style='display:none;'>";
+        }
+        $msg .= '<div class="well_login">';
+        $msg .= $form->return_form();
+        $msg .='</div>';
+        if (api_is_cas_activated()) {
+            $msg .= "</div>";
+        }
+        $msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
+    } else {
+        // we were not in a course, return to home page
         $msg = Display::return_message(
-            get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.
-            get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error',
+            get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a><br />',
+            'error',
             false
         );
-        // Set cookie again.
-        setcookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
-    } else {
-        // The session is over and we were not in a course,
-        // or we try to get directly to a private course without being logged
-        if (!is_null(api_get_course_int_id())) {
-            api_set_firstpage_parameter(api_get_course_id());
-            $tpl->setLoginBodyClass();
-            $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
-            $action = str_replace('&amp;', '&', $action);
-            $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-            $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
-            $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
-            $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
-
-            // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
-            $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
-            $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
-            if (api_is_cas_activated()) {
-                $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-                $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
-                $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
-                $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
-                $msg .= "<div style='display:none;'>";
-            }
-            $msg .= '<div class="well_login">';
-            $msg .= $form->return_form();
-            $msg .='</div>';
-            if (api_is_cas_activated()) {
-                $msg .= "</div>";
-            }
-            $msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
-        } else {
-            // we were not in a course, return to home page
-            $msg = Display::return_message(
-                get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a><br />',
-                'error',
-                false
-            );
-        }
     }
+
     $tpl->assign('content', $msg);
     $tpl->display_one_col_template();
     exit;
@@ -7563,4 +7565,25 @@ function api_get_supported_image_extensions()
         array_push($supportedImageExtensions, 'webp');
     }
     return $supportedImageExtensions;
+}
+
+/**
+ * This setting changes the registration status for the campus
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version August 2006
+ * @param   bool    $listCampus Whether we authorize
+ * @todo the $_settings should be reloaded here. => write api function for this and use this in global.inc.php also.
+ */
+function api_register_campus($listCampus = true) {
+    $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+
+    $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
+    Database::query($sql);
+
+    if (!$listCampus) {
+        $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
+        Database::query($sql);
+    }
+    // Reload the settings.
 }

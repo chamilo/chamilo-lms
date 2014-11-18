@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Exercise library
  * @todo convert this lib into a static class
@@ -941,21 +942,21 @@ function get_exercise_track_exercise_info($exe_id)
     $exe_id = intval($exe_id);
     $result = array();
     if (!empty($exe_id)) {
-       $sql_fb_type = "SELECT q.*, tee.*
-                        FROM $TBL_EXERCICES as q
-                        INNER JOIN $TBL_TRACK_EXERCICES as tee
-                        ON q.id=tee.exe_exo_id
-                        INNER JOIN $TBL_COURSE c
-                        ON c.code = tee.exe_cours_id
-                        WHERE tee.exe_id=$exe_id
-                        AND q.c_id=c.id";
+       $sql = " SELECT q.*, tee.*
+                FROM $TBL_EXERCICES as q
+                INNER JOIN $TBL_TRACK_EXERCICES as tee
+                ON q.id=tee.exe_exo_id
+                INNER JOIN $TBL_COURSE c
+                ON c.code = tee.exe_cours_id
+                WHERE tee.exe_id=$exe_id
+                AND q.c_id=c.id";
 
-       $res_fb_type = Database::query($sql_fb_type);
+       $res_fb_type = Database::query($sql);
        $result      = Database::fetch_array($res_fb_type, 'ASSOC');
     }
+
     return $result;
 }
-
 
 /**
  * Validates the time control key
@@ -965,7 +966,8 @@ function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id =
     $course_id = api_get_course_int_id();
     $exercise_id = intval($exercise_id);
     $TBL_EXERCICES =  Database::get_course_table(TABLE_QUIZ_TEST);
-    $sql 	= "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $exercise_id";
+    $sql = "SELECT expired_time FROM $TBL_EXERCICES
+            WHERE c_id = $course_id AND id = $exercise_id";
     $result = Database::query($sql);
     $row	= Database::fetch_array($result, 'ASSOC');
     if (!empty($row['expired_time'])) {
@@ -1122,8 +1124,8 @@ function getLatestHotPotatoResult(
     $exercisePath,
     $userId,
     $courseId,
-    $sessionId)
-{
+    $sessionId
+) {
     $table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 
     $courseInfo = api_get_course_info_by_id($courseId);
@@ -1165,7 +1167,7 @@ function get_exam_results_data(
     $course_id = api_get_course_int_id();
     $course_code = api_get_course_id();
 
-   	$is_allowedToEdit           = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh();
+   	$is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh();
 
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
     $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
@@ -1678,11 +1680,10 @@ function get_all_exercises(
     $course_info = null,
     $session_id = 0,
     $check_publication_dates = false,
-    $search_exercise = '',
+    $search = '',
     $search_all_sessions = false,
     $active = 2
 ) {
-    $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
     $course_id = api_get_course_int_id();
 
     if (!empty($course_info) && !empty($course_info['real_id'])) {
@@ -1703,8 +1704,8 @@ function get_all_exercises(
         $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time =  '0000-00-00 00:00:00'))  "; // nothing is set
     }
 
-    $needle_where   = (!empty($search_exercise)) ? " AND title LIKE '?' "       : '';
-    $needle         = (!empty($search_exercise)) ? "%" . $search_exercise . "%" : '';
+    $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
+    $needle = !empty($search) ? "%" . $search . "%" : '';
 
     //Show courses by active status
     $active_sql = '';
@@ -1733,8 +1734,11 @@ function get_all_exercises(
         }
     }
 
-    return Database::select('*',$TBL_EXERCICES, $conditions);
+    $table = Database :: get_course_table(TABLE_QUIZ_TEST);
+
+    return Database::select('*', $table, $conditions);
 }
+
 /**
  * Get exercise information by id
  * @param int $exerciseId Exercise Id

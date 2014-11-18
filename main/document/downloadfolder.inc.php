@@ -6,9 +6,12 @@
  *	@package chamilo.document
  */
 
+use \ChamiloSession as Session;
+
 set_time_limit(0);
 
 require_once '../inc/global.inc.php';
+
 api_protect_course_script();
 
 $sysCoursePath = api_get_path(SYS_COURSE_PATH);
@@ -72,7 +75,28 @@ $remove_dir = ($path != '/') ? substr($path, 0, strlen($path) - strlen(basename(
 // Put the files in the zip
 // 2 possibilities: Admins get all files and folders in the selected folder (except for the deleted ones)
 // Normal users get only visible files that are in visible folders
+function fixDocumentNameCallback($p_event, &$p_header)
+{
+    global $remove_dir;
+    $files = Session::read('doc_files_to_download');
+    $storedFile = $remove_dir.$p_header['stored_filename'];
 
+    if (!isset($files[$storedFile])) {
+        return 0;
+    }
+
+    $documentData = $files[$storedFile];
+    $documentNameFixed = DocumentManager::undoFixDocumentName(
+        $documentData['path'],
+        $documentData['c_id'],
+        $documentData['id_session'],
+        $documentData['to_group_id']
+    );
+
+    $p_header['stored_filename'] = $documentNameFixed;
+
+    return 1;
+}
 // Admins are allowed to download invisible files
 if (api_is_allowed_to_edit()) {
     // Set the path that will be used in the query
@@ -83,7 +107,7 @@ if (api_is_allowed_to_edit()) {
     }
     $querypath = Database::escape_string($querypath);
     // Search for all files that are not deleted => visibility != 2
-    $sql = "SELECT path, id_session
+    $sql = "SELECT path, id_session, docs.id, props.to_group_id, docs.c_id
             FROM $doc_table AS docs INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
@@ -98,25 +122,38 @@ if (api_is_allowed_to_edit()) {
                 docs.c_id = ".$courseId." ";
 
     $sql.= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
-    $query = Database::query($sql);
-    // Add tem to the zip file
-    while ($not_deleted_file = Database::fetch_assoc($query)) {
+
+    $result = Database::query($sql);
+
+    $files = array();
+    while ($row = Database::fetch_array($result)) {
+        $files[$row['path']] = $row;
+    }
+
+    Session::write('doc_files_to_download', $files);
+
+    foreach ($files as $not_deleted_file) {
         // Filtering folders and
         if (strpos($not_deleted_file['path'], 'chat_files') > 0 ||
             strpos($not_deleted_file['path'], 'shared_folder') > 0
         ) {
             if (!empty($sessionId)) {
-               if ($not_deleted_file['id_session'] != $sessionId) {
-                   continue;
-               }
+                if ($not_deleted_file['id_session'] != $sessionId) {
+                    continue;
+                }
             }
         }
+
         $zip->add(
             $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'],
             PCLZIP_OPT_REMOVE_PATH,
-            $sysCoursePath.$courseInfo['path'].'/document'.$remove_dir
+            $sysCoursePath.$courseInfo['path'].'/document'.$remove_dir,
+            PCLZIP_CB_PRE_ADD,
+            'fixDocumentNameCallback'
         );
     }
+
+    Session::erase('doc_files_to_download');
 } else {
     // For other users, we need to create a zip  file with only visible files and folders
 
@@ -132,7 +169,7 @@ if (api_is_allowed_to_edit()) {
        1st: Get all files that are visible in the given path
     */
     $querypath = Database::escape_string($querypath);
-    $sql = "SELECT path, id_session
+    $sql = "SELECT path, id_session, docs.id, props.to_group_id, docs.c_id
             FROM $doc_table AS docs INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
@@ -147,10 +184,12 @@ if (api_is_allowed_to_edit()) {
                 props.to_group_id       = ".$groupId;
 
     $sql.= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
+    $result = Database::query($sql);
 
-    $query = Database::query($sql);
+    $files = array();
+
     // Add them to an array
-    while ($all_visible_files = Database::fetch_assoc($query)) {
+    while ($all_visible_files = Database::fetch_assoc($result)) {
         if (strpos($all_visible_files['path'], 'chat_files') > 0 ||
             strpos($all_visible_files['path'], 'shared_folder') > 0
         ) {
@@ -161,10 +200,11 @@ if (api_is_allowed_to_edit()) {
             }
         }
         $all_visible_files_path[] = $all_visible_files['path'];
+        $files[$all_visible_files['path']] = $all_visible_files;
     }
 
     // 2nd: Get all folders that are invisible in the given path
-    $sql = "SELECT path
+    $sql = "SELECT path, id_session, docs.id, props.to_group_id, docs.c_id
             FROM $doc_table AS docs INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
@@ -179,13 +219,16 @@ if (api_is_allowed_to_edit()) {
     $query2 = Database::query($sql);
 
     // If we get invisible folders, we have to filter out these results from all visible files we found
+
     if (Database::num_rows($query2) > 0) {
+        $files = array();
         // Add item to an array
         while ($invisible_folders = Database::fetch_assoc($query2)) {
             //3rd: Get all files that are in the found invisible folder (these are "invisible" too)
-            $sql = "SELECT path
-                    FROM $doc_table AS docs INNER JOIN $prop_table AS props
-                     ON
+            $sql = "SELECT path, docs.id, props.to_group_id, docs.c_id
+                    FROM $doc_table AS docs
+                    INNER JOIN $prop_table AS props
+                    ON
                         docs.id = props.ref AND
                         docs.c_id = props.c_id
                     WHERE
@@ -199,25 +242,36 @@ if (api_is_allowed_to_edit()) {
             // Add tem to an array
             while ($files_in_invisible_folder = Database::fetch_assoc($query3)) {
                 $files_in_invisible_folder_path[] = $files_in_invisible_folder['path'];
+                $files[$files_in_invisible_folder['path']] = $files_in_invisible_folder;
             }
         }
+
         // Compare the array with visible files and the array with files in invisible folders
         // and keep the difference (= all visible files that are not in an invisible folder)
-        $files_for_zipfile = diff((array)$all_visible_files_path, (array)$files_in_invisible_folder_path);
+        $files_for_zipfile = diff(
+            (array) $all_visible_files_path,
+            (array) $files_in_invisible_folder_path
+        );
+
     } else {
         // No invisible folders found, so all visible files can be added to the zipfile
         $files_for_zipfile = $all_visible_files_path;
     }
+
+    Session::write('doc_files_to_download', $files);
 
     // Add all files in our final array to the zipfile
     for ($i = 0; $i < count($files_for_zipfile); $i++) {
         $zip->add(
             $sysCoursePath . $courseInfo['path'] . '/document' . $files_for_zipfile[$i],
             PCLZIP_OPT_REMOVE_PATH,
-            $sysCoursePath . $courseInfo['path'] . '/document' . $remove_dir
+            $sysCoursePath . $courseInfo['path'] . '/document' . $remove_dir,
+            PCLZIP_CB_PRE_ADD,
+            'fixDocumentNameCallback'
         );
     }
-} // end for other users
+    Session::erase('doc_files_to_download');
+}
 
 // Launch event
 event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)');
@@ -226,9 +280,11 @@ event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip
 $name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';
 
 if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
-   DocumentManager::file_send_for_download($tempZipFile, true, $name);
-   @unlink($tempZipFile);
-   exit;
+    $result = DocumentManager::file_send_for_download($tempZipFile, true, $name);
+    @unlink($tempZipFile);
+    exit;
+} else {
+    api_not_allowed(true);
 }
 
 /**
@@ -240,7 +296,8 @@ if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
  *
  * @return array difference between the two arrays
  */
-function diff($arr1, $arr2) {
+function diff($arr1, $arr2)
+{
     $res = array();
     $r = 0;
     foreach ($arr1 as & $av) {

@@ -3334,6 +3334,330 @@ form .formw .freeze {
 }
 
 /* jsPlumb */
+/* ****************************************************
+                     CSS SKILL
+ **************************************************** */
+.skill-options .legend{
+  border: 1px dashed #cccccc;
+  padding: 1em;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  background-color: #FFFFFF;
+}
+.skill-options .legend .title-skill,
+.skill-options .saved_profiles .title-skill
+{
+  color: #666655;
+  padding-bottom: 1em;
+  font-size: 16px;
+}
+.skill-options .skill-profile .title-skill{
+  color: #666655;
+  padding-bottom: .5em;
+  font-size: 18px;
+}
+.skill-options .skill-home{
+  margin-top: 1em;
+}
+.skill-options .btn-block {
+  box-sizing: border-box;
+  display: block;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+}
+.skill-options .accordion-heading {
+  border-bottom: 0px none;
+  background: #3FA5C3;
+}
+.skill-options .accordion-heading a{
+  color: #FFFFFF;
+}
+.skill-options .button-skill{
+  margin-top: 1em;
+}
+.skill-options .form-search .holder{
+  border: 1px solid #cccccc;
+  padding-left: .5em;
+  padding-right: .5em;
+}
+.skill-options .accordion-inner {
+  padding: 9px 15px;
+  /*border: 1px solid #dadada;*/
+  background-color: #FFFFFF;
+}
+.skill-options .items_save{
+  margin-top: .5em;
+  margin-bottom: .5em;
+  display: inline-block;
+  height: auto !important;
+  clear: both;
+  width: 100%;
+}
+.skill-options .accordion-group {
+  margin-bottom: 2px;
+  border: 1px solid #3FA5C3;
+  border-radius: 4px;
+}
+.skill-options .accordion-inner {
+  padding: 9px 15px;
+  border-top: 1px solid #3FA5C3;
+}
+.skill-options .load_wheel{
+  -moz-border-radius:6px;
+  -webkit-border-radius:6px;
+  border-radius:6px;
+  border:1px solid #C09853;
+  background:#FCF8E3;
+  padding:1px 5px 2px;
+  color:#333;
+}
+.skill-options .skill-items{
+  padding-bottom: 1em;
+  margin-bottom: .5em;
+  margin-top: .5em;
+}
+.skill-options .skill-winner{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.skill-options .skill-winner li{
+  float: left;
+  margin-right: 1em;
+  padding-bottom: 1em;
+}
+.skill-options .skill-winner li a{
+  background: url("../img/icons/16/winner.png") no-repeat;
+  padding-left: 1.5em;
+  padding-bottom: 1em;
+}
+.skill-options .skill-profile{
+  width: 100%;
+  display: block;
+  border: 1px solid #CCC;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  margin-top: 1em;
+  background-color: #FFFFFF;
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+.skill-options .section-info-skill{
+  display: inline-block;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  width: 100%;
+  clear: both;
+}
+.skill-options .skill-profile .avatar{
+  display: block;
+  width: auto;
+  text-align: center;
+}
+.skill-options .skill-profile .info-user{
+  display: block;
+  width: auto;
+  margin-left: 1em;
+  padding: 1em;
+}
+.skill-options .button-skill{
+  margin-bottom: .5em;
+}
+.page-items-profile{
+  padding-top: 2em;
+  padding-bottom: 2em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.page-items-profile .title-skill{
+  margin-bottom: 1em;
+  font-size: 18px;
+  color: #333333;
+  margin-top: 1em;
+}
+.page-items-profile .block-items{
+  display: block;
+  width: 22.5%;
+  margin:10px;
+  float: left;
+}
+.page-items-profile .award-items{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.page-items-profile .number-skill{
+  background-color: #FFFFFF;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  padding-left: .5em;
+  margin-bottom: 1em;
+  border: 1px solid #cccccc;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.page-items-profile .block-items .border-items{
+  background-color: #EFEFEF;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: 1px solid #cccccc;
+}
+.page-items-profile .items-info{
+  padding:1em;
+}
+.page-items-profile .info-profile{
+  margin-top: 1em;
+  margin-bottom: .5em;
+}
+.page-items-profile .items-info .avatar-profile{
+  text-align: center;
+  background: #FFFFFF;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border: 1px solid #cccccc;
+}
+.skill_partition {
+  cursor: pointer;
+  stroke: #000000;
+  stroke-width: 0.5px;
+}
+
+#skill_holder li {
+  float:left;
+  padding-right: 10px;
+  margin-bottom: .5em;
+}
+
+
+/* ****************************************************
+                     END SKILL
+ **************************************************** */
+/*SCORM CSS BASE */
+#learning_path_left_zone .home{
+  display: inline-block;
+  width: 94%;
+  margin-bottom: .5em;
+  margin-top: .5em;
+  font-size: 12px;
+}
+#lp_navigation_elem {
+  float: left;
+}
+#lp_navigation_elem {
+  padding-left: 15px;
+  width: 160px;
+}
+#lp_navigation_elem .buttons {
+  margin-bottom: .5em;
+  text-align: center;
+}
+#author_image {
+  border: 2px solid #B9C9FF;
+  float: left;
+  margin-bottom: .5em;
+  padding: 8px;
+  position: relative;
+  background-color: #f0f1fa;
+  width: 94%;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+#author_image #author_icon{
+  border: 2px solid #FFFFFF;
+}
+#learning_path_left_zone .scorm_title{
+  font-size: 20px;
+  color: #666;
+  margin-bottom: .5em;
+  margin-top: .5em;
+}
+/* for section */
+.scorm_item_section.scorm_completed{
+  background:url("../img/icon_completed_section.png")no-repeat 280px center #606c88;
+  padding-right: 1.5em;
+}
+.scorm_item_section{
+  background: #606c88; /* Old browsers */
+  background: -moz-linear-gradient(top, #606c88 0%, #3f4c6b 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#606c88), color-stop(100%,#3f4c6b)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #606c88 0%,#3f4c6b 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #606c88 0%,#3f4c6b 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #606c88 0%,#3f4c6b 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #606c88 0%,#3f4c6b 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#606c88', endColorstr='#3f4c6b',GradientType=0 ); /* IE6-9 */
+  color: #FFFFFF;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 12px;
+}
+.scorm_item_section .scorm_section_level_0{
+  padding-left: .5em;
+  padding-right: .5em;
+}
+.scorm_item_section .scorm_section_level_1{
+  padding-left: 1.5em;
+  padding-right: .5em;
+}
+.scorm_item_section .scorm_section_level_2{
+  padding-left: 2.5em;
+  padding-right: .5em;
+}
+.scorm_item_section .scorm_section_level_3{
+  padding-left: 3.5em;
+  padding-right: .5em;
+}
+/* items scorm*/
+.scorm_item_normal.scorm_completed {
+  background:url("../img/icon_completed.png") no-repeat 280px center;
+}
+.scorm_item_normal.scorm_failed{
+  background:url("../img/icon_failed.png") no-repeat 280px center;
+}
+.scorm_item_normal .scorm_item_level_0{
+  padding-left: .5em;
+  padding-right: 1.5em;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.scorm_item_normal .scorm_item_level_1{
+  padding-left: 1.8em;
+  padding-right: 1.5em;
+  background:url("../img/level_one.png") no-repeat 0 top;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.scorm_item_normal .scorm_item_level_2{
+  padding-left: 2.5em;
+  padding-right: 1.5em;
+  background:url("../img/level_two.png") no-repeat 0 top;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.scorm_item_normal .scorm_item_level_3{
+  padding-left: 3.5em;
+  padding-right: 1.5em;
+  background:url("../img/level_tree.png") no-repeat 0 top;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.scorm_highlight a{
+  color: #000;
+  font-weight: bold;
+  background-color: #fffdd1;
+}
+
+/* END SCORM CSS BASE*/
 
 .skill_root {
     box-shadow: 2px 2px 19px #aaa;
@@ -4839,16 +5163,6 @@ i.size-32.icon-new-work{
 }
 
 /* Default skill partition colors */
-.skill_partition {
-    cursor: pointer;
-    stroke: #000000;
-    stroke-width: 1.5;
-}
-
-#skill_holder li {
-    float:left;
-    /*width: 120px;*/
-}
 
 #filepaths input{
     margin-bottom:5px;

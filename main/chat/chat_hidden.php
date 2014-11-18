@@ -13,7 +13,6 @@ define('FRAME', 'hidden');
 $language_file = array('chat');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once 'chat_functions.lib.php';
 
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);

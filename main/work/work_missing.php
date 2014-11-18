@@ -66,15 +66,19 @@ if (!empty($group_id)) {
         $show_work = true;
     } else {
         // you are not a teacher
-        $show_work = GroupManager::user_has_access($user_id, $group_id, GroupManager::GROUP_TOOL_WORK);
+        $show_work = GroupManager::user_has_access(
+            $user_id,
+            $group_id,
+            GroupManager::GROUP_TOOL_WORK
+        );
     }
 
     if (!$show_work) {
         api_not_allowed();
     }
 
-    $interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group.php', 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
 $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
@@ -94,11 +98,11 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$workI
 if (!empty($workId)) {
     if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
         $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$workId.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
-        Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>";
+            Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>";
     } else {
         if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
             $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$workId.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$token.'">'.
-            Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM)."</a>";
+                Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM)."</a>";
         } else {
             $display_output .= Display::return_icon('mail_send_na.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM);
         }

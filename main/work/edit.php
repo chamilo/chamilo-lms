@@ -20,7 +20,6 @@ $this_section = SECTION_COURSES;
 
 $work_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
 $item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
-
 $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
@@ -40,7 +39,12 @@ if (empty($parent_data)) {
     api_not_allowed(true);
 }
 
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id);
+$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
+    $user_id,
+    $course_code,
+    $session_id
+);
+
 $is_course_member = $is_course_member || api_is_platform_admin();
 
 if ($is_course_member == false) {
@@ -72,10 +76,14 @@ if (!api_is_allowed_to_edit()) {
 if (!empty($my_folder_data)) {
     $homework = get_work_assignment_by_id($my_folder_data['id']);
 
-    if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
+    if ($homework['expires_on'] != '0000-00-00 00:00:00' ||
+        $homework['ends_on'] != '0000-00-00 00:00:00'
+    ) {
         $time_now = time();
 
-        if (!empty($homework['expires_on']) && $homework['expires_on'] != '0000-00-00 00:00:00') {
+        if (!empty($homework['expires_on']) &&
+            $homework['expires_on'] != '0000-00-00 00:00:00'
+        ) {
             $time_expires 	= api_strtotime($homework['expires_on'], 'UTC');
             $difference 	= $time_expires - $time_now;
             if ($difference < 0) {
@@ -83,11 +91,15 @@ if (!empty($my_folder_data)) {
             }
         }
 
-        if (empty($homework['expires_on']) || $homework['expires_on'] == '0000-00-00 00:00:00') {
+        if (empty($homework['expires_on']) ||
+            $homework['expires_on'] == '0000-00-00 00:00:00'
+        ) {
             $has_expired = false;
         }
 
-        if (!empty($homework['ends_on']) && $homework['ends_on'] != '0000-00-00 00:00:00') {
+        if (!empty($homework['ends_on']) &&
+            $homework['ends_on'] != '0000-00-00 00:00:00'
+        ) {
             $time_ends 		= api_strtotime($homework['ends_on'], 'UTC');
             $difference2 	= $time_ends - $time_now;
             if ($difference2 < 0) {
@@ -148,12 +160,22 @@ $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'item_id', $item_id);
 $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
 if ($is_allowed_to_edit && !empty($item_id)) {
-    $sql = "SELECT contains_file, url FROM $work_table WHERE c_id = $course_id AND id ='$item_id' ";
+    $sql = "SELECT contains_file, url
+            FROM $work_table
+            WHERE c_id = $course_id AND id ='$item_id' ";
     $result = Database::query($sql);
     if ($result !== false && Database::num_rows($result) > 0) {
         $row = Database::fetch_array($result);
         if ($row['contains_file'] || !empty($row['url'])) {
-            $form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('Download').'</label><div class="controls"><a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_MEDIUM).'</a></div></div>');
+            $form->addElement(
+                'html',
+                '<div class="control-group">
+                    <label class="control-label">'.get_lang('Download').'</label>
+                    <div class="controls"><a href="'.api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
+                    Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_MEDIUM).'</a>
+                    </div>
+                </div>'
+            );
         }
     }
 }
@@ -211,6 +233,7 @@ if ($form->validate()) {
                 }
                 $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
 
+                $add_to_update = null;
                 if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
                     $add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
                     $add_to_update .= ' qualification = '."'".Database::escape_string($_POST['qualification'])."',";

@@ -66,6 +66,22 @@ class SkillProfile extends Model
         }
         return false;
     }
+
+    /**
+     * Delete a skill profile
+     * @param int $id The skill profile id
+     * @return boolean Whether delete a skill profile
+     */
+    public function delete($id) {
+        Database::delete(
+            $this->table_rel_profile,
+            array(
+                'profile_id' => $id
+            )
+        );
+
+        return parent::delete($id);
+    }
 }
 
 class SkillRelProfile extends Model
@@ -853,6 +869,7 @@ class Skill extends Model
                 $tmp = array();
                 $tmp['name'] = $elem['name'];
                 $tmp['id'] = $elem['id'];
+                $tmp['isSearched'] = self::isSearched($elem['id']);
 
                 if (is_array($elem['children'])) {
                     $tmp['children'] = $this->get_skill_json($elem['children'], $depth + 1, $max_depth);
@@ -971,4 +988,42 @@ class Skill extends Model
         }
         return false;
     }
+
+    /**
+     * Check if a skill is searched
+     * @param int $id The skill id
+     * @return boolean Whether el skill is searched return true. Otherwise return false
+     */
+    public static function isSearched($id)
+    {
+        $id = intval($id);
+
+        if (empty($id)) {
+            return false;
+        }
+
+        $skillRelProfileTable = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
+
+        $result = Database::select(
+            'COUNT( DISTINCT `skill_id`) AS qty',
+            $skillRelProfileTable,
+            array(
+                'where' => array(
+                    'skill_id = ?' => $id
+                )
+            ),
+            'first'
+        );
+
+        if ($result === false) {
+            return false;
+        }
+
+        if ($result['qty'] > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
 }

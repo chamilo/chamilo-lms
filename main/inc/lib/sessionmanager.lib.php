@@ -3638,6 +3638,9 @@ class SessionManager
                         }
 
                         if (isset($sessionId) && !empty($sessionId)) {
+                            if (!empty($enreg['SessionName'])) {
+                                $params['name'] = $enreg['SessionName'];
+                            }
                             Database::update($tbl_session, $params, array('id = ?' => $sessionId));
                             $session_id = $sessionId;
                         } else {

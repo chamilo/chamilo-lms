@@ -32,10 +32,17 @@ if (api_is_platform_admin() == false && $locked == true) {
 }
 
 $htmlHeadXtra[] = to_javascript_work();
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH) . 'work/work.php?' . api_get_cidreq(),
+    'name' => get_lang('StudentPublications')
+);
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
 
-$form = new FormValidator('edit_dir', 'post', api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'. api_get_cidreq());
+$form = new FormValidator(
+    'edit_dir',
+    'post',
+    api_get_path(WEB_CODE_PATH) . 'work/edit_work.php?id=' . $workId . '&' . api_get_cidreq()
+);
 $form->addElement('header', get_lang('Edit'));
 
 $title = !empty($workData['title']) ? $workData['title'] : basename($workData['url']);
@@ -46,7 +53,11 @@ $defaults['new_dir'] = Security::remove_XSS($title);
 $there_is_a_end_date = false;
 
 if (Gradebook::is_active()) {
-    $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $workId);
+    $link_info = is_resource_in_course_gradebook(
+        api_get_course_id(),
+        LINK_STUDENTPUBLICATION,
+        $workId
+    );
     if (!empty($link_info)) {
         $defaults['weight'] = $link_info['weight'];
         $defaults['category_id'] = $link_info['category_id'];

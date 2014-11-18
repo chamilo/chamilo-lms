@@ -284,7 +284,7 @@ $(document).ready(function() {
     update_my_saved_profiles();
     
     /* Click in profile */
-    $("#saved_profiles").on("click", "a.load_profile", function() {
+    $("#saved_profiles").on("click", "li.load_profile", function() {
         profile_id = $(this).attr('rel');
         $('#profile_id').attr('value',profile_id);        
         $.ajax({
@@ -304,8 +304,19 @@ $(document).ready(function() {
             }                           
         });        
     });
-    
-    
+    $("#saved_profiles").on('click', 'li.load_profile button.close', function () {
+        var $parent = $(this).parent();
+        var profileId = $parent.attr('rel');
+
+        $.getJSON('{{ url }}&a=delete_profile', {
+            profile: profileId
+        }, function (response) {
+            if (response.status) {
+                $parent.remove();
+            }
+        });
+    });
+
     /* Wheel skill popup form */
     
     /* Close button in gradebook select */
@@ -429,7 +440,24 @@ $(document).ready(function() {
             }                           
         });
     }
-
+/* change background color */
+    $(document).ready(function () {
+        $("#celestial").click(function () {
+            $("#page-back").css("background","#A9E2F3");
+        });
+        $("#white").click(function () {
+            $("#page-back").css("background","#FFFFFF");
+        });
+        $("#black").click(function () {
+            $("#page-back").css("background","#000000");
+        });
+        $("#lead").click(function () {
+            $("#page-back").css("background","#848484");
+        });
+        $("#light-yellow").click(function () {
+            $("#page-back").css("background","#F7F8E0");
+        });
+    });
     /* Generated random colour */
     /*
     function colour(d) {
@@ -446,59 +474,98 @@ $(document).ready(function() {
     }*/
 });
 </script>
-
+<div id="page-back">
 <div class="container-fluid">
     <div class="row-fluid">
-        
-        <div class="span3">
-            <div class="well sidebar-nav-skill-wheel">
-                <div class="page-header">
-                    <h3>{{ 'Skills'|get_lang }}</h3>
+
+        <div class="span3 skill-options">
+            <div class="skill-home">
+                <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a>
+            </div>
+            <!-- Legend -->
+            <div class="legend">
+                <h4 class="title-skill">{{ "Legend"|get_lang }}</h4>
+                <p><span class="label-warning">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
+                <p><span class="label-important">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>
+            </div>
+            <!-- End Legend -->
+
+            <!-- ACCORDION -->
+
+            <div class="accordion" id="accordion2">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                        <h4 class="title-skill">{{ 'SkillsSearch' | get_lang }}</h4>
+                    </a>
                 </div>
-                
-                <form id="skill_search" class="form-search">
-                    <select id="skill_id" name="skill_id" />
-                    </select>
-                    <br /><br />
-                    <div class="btn-group">
-                        <a class="btn load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
-                        <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->	
+                <div id="collapseOne" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <!-- SEARCH -->
+                        <div class="search-skill">
+                            <p>{{ 'EnterTheSkillNameToSearch' | get_lang }}</p>
+                            <form id="skill_search" class="form-search">
+                                <select id="skill_id" name="skill_id" /></select>
+                                <div class="button-skill">
+                                    <a class="btn btn-block btn-large btn-danger load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
+                                    <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->
+                                </div>
+                                <ul id="skill_holder" class="holder_simple border"></ul>
+                            </form>
+                        </div>
+                        <!-- END SEARCH -->
                     </div>
-                    <ul id="skill_holder" class="holder holder_simple">
-                    </ul>
-                </form>
-                
-                <div class="page-header">
-                    <h3>{{ 'ProfileSearch'|get_lang }}</h3>
                 </div>
-                {{ 'WhatSkillsAreYouLookingFor'|get_lang }}
-                
-                <ul id="profile_search" class="holder holder_simple">
-                </ul>
-                
-                <form id="search_profile_form" class="form-search">
-                    <input class="btn" type="submit" value="{{ "SearchProfileMatches"|get_lang }}">
-                </form>
-                
-                <div id="profile-options-container" style="display:none">                
-                    {{ 'IsThisWhatYouWereLookingFor'|get_lang }}
-                    <form id="save_profile_form_button" class="form-search">
-                        <input class="btn" type="submit" value="{{ "SaveThisSearch"|get_lang }}">
-                    </form>                  
-                </div>                
-                 
-                <div id="saved_profiles">
+            </div>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                        <h4 class="title-skill">{{ 'ProfileSearch'|get_lang }}</h4>
+                    </a>
                 </div>
-                
-                <div class="page-header">            
-                    <h3>{{ "Legend"|get_lang }}</h3>                
+                <div id="collapseTwo" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <!-- SEARCH PROFILE -->
+                        <div class="search-profile-skill">
+
+                            <p class="description">{{ 'WhatSkillsAreYouLookingFor'|get_lang }}</p>
+                            <ul id="profile_search" class="holder holder_simple"></ul>
+                            <form id="search_profile_form" class="form-search">
+                                <input class="btn btn-block" type="submit" value="{{ "SearchProfileMatches"|get_lang }}">
+                            </form>
+                            <p class="description">{{ 'IsThisWhatYouWereLookingFor'|get_lang }}</p>
+                            <form id="save_profile_form_button" class="form-search">
+                                <input class="btn btn-block" type="submit" value="{{ "SaveThisSearch"|get_lang }}">
+                            </form>
+                        </div>
+                        <!-- END SEARCH PROFILE-->
+                        <div id="saved_profiles"></div>
+                    </div>
                 </div>
-                <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br /><br />
-                <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br /><br />
-                <div><a class="btn btn-small" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a></div>
-            </div>                
+            </div>
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                            <h4 class="title-skill">{{ 'DisplayOptions' | get_lang }}</h4>
+                        </a>
+                    </div>
+                    <div id="collapseThree" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <p>{{ 'ChooseABackgroundColor' | get_lang }}</p>
+                            <ul>
+                                <li><a href="#" id="white">{{ 'White' | get_lang }}</a></li>
+                                <li><a href="#" id="black">{{ 'Black' | get_lang }}</a></li>
+                                <li><a href="#" id="celestial">{{ 'LightBlue' }}</a></li>
+                                <li><a href="#" id="lead">{{ 'Gray' | get_lang }}</a></li>
+                                <li><a href="#" id="light-yellow">{{ 'Corn' | get_lang }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END ACCORDEON -->
         </div>
-            
         <div id="wheel_container" class="span9">
             <div id="skill_wheel">
                 <img src="">
@@ -559,8 +626,6 @@ $(document).ready(function() {
         </fieldset>
     </form>     
 </div>
-        
-        
 <div id="dialog-form-profile" style="display:none;">
     <form id="save_profile_form" class="form-horizontal" name="form">
         <input type="hidden" id="profile_id" name="profile_id"/>
@@ -579,4 +644,6 @@ $(document).ready(function() {
             </div>
         </fieldset>
     </form>
+</div>
+</div>
 </div>

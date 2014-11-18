@@ -89,7 +89,7 @@ if (isset($current_thread['thread_id'])) {
                     $my_forum_id = $info_thread['forum_id'];
                 }
                 if ($increment > 0 && $locked == false) {
-                     echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;forum=".$my_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&amp;user_id=".$row['poster_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."&amp;gradebook=".Security::remove_XSS($_GET['gradebook'])."\" >".
+                     echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;forum=".$my_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$row['post_id']."&amp;user=".$row['poster_id']."&amp;user_id=".$row['poster_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."\" >".
                             Display::return_icon('quiz.gif',get_lang('Qualify'))."</a> ";
                 }
             }

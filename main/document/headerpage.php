@@ -4,9 +4,6 @@
 /**
  *	@package chamilo.document
  */
-/**
- * Code
- */
 
 // Name of the language file that needs to be included
 exit;

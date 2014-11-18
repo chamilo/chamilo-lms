@@ -270,9 +270,10 @@ if (api_is_allowed_to_edit(false,true) OR
 			$rs 	= Database::query($sql);
 			$myrow  = Database::fetch_array($rs);
 			$last_id = $id;
+            $userUpload = isset($_FILES['user_upload']) ? $_FILES['user_upload'] : null;
 			$edit_attachment = AnnouncementManager::edit_announcement_attachment_file(
                 $last_id,
-                $_FILES['user_upload'],
+                $userUpload,
                 $file_comment
             );
 

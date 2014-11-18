@@ -15,6 +15,7 @@ require_once '../inc/global.inc.php';
 $course = api_get_course_id();
 $group_id = api_get_group_id();
 $session_id = api_get_session_id();
+$user_id = api_get_user_id();
 $session_condition = api_get_session_condition($session_id);
 $group_condition = " AND to_group_id = '$group_id'";
 
@@ -25,16 +26,14 @@ if (!empty($group_id)) {
     $extra_condition = $session_condition;
 }
 
-$user_id = api_get_user_id();
-
 if (!empty($course)) {
     $showPic = isset($_GET['showPic']) ? intval($_GET['showPic']) : null;
-    $tbl_course_user			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $tbl_session_course_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_session				= Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_course			= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
-    $tbl_chat_connected			= Database::get_course_table(TABLE_CHAT_CONNECTED);
+    $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+    $tbl_chat_connected = Database::get_course_table(TABLE_CHAT_CONNECTED);
 
     $query = "SELECT username FROM $tbl_user WHERE user_id='".$user_id."'";
     $result = Database::query($query);

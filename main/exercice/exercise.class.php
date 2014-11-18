@@ -1760,9 +1760,10 @@ class Exercise
      * Saves a test attempt
      *
      * @param int  clock_expired_time
-     * @param int  lp id
-     * @param int  lp item id
-     * @param int  lp item_view id
+     * @param int  int lp id
+     * @param int  int lp item id
+     * @param int  int lp item_view id
+     * @param float $weight
      * @param array question list
      */
     public function save_stat_track_exercise_info(
@@ -1774,9 +1775,9 @@ class Exercise
         $weight = 0
     ) {
         $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $safe_lp_id 			= intval($safe_lp_id);
-        $safe_lp_item_id 		= intval($safe_lp_item_id);
-        $safe_lp_item_view_id 	= intval($safe_lp_item_view_id);
+        $safe_lp_id = intval($safe_lp_id);
+        $safe_lp_item_id = intval($safe_lp_item_id);
+        $safe_lp_item_view_id = intval($safe_lp_item_view_id);
 
         if (empty($safe_lp_id)) {
             $safe_lp_id = 0;
@@ -1797,9 +1798,8 @@ class Exercise
         $questionList = array_map('intval', $questionList);
 
         $weight = Database::escape_string($weight);
-        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting)
-                VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "', '" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id', '$weight' )";
-
+        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, orig_lp_item_view_id, exe_weighting)
+                VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "', '" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id', '$safe_lp_item_view_id', '$weight')";
         Database::query($sql);
         $id = Database::insert_id();
         return $id;

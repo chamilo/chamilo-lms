@@ -85,7 +85,9 @@ if (Security::check_token('post') && (
 
     $cb = new CourseBuilder();
     $course = $cb->build();
-    CourseSelectForm::display_form($course);
+    // Add token to Course select form
+    $hiddenFields['sec_token'] = Security::get_token();
+    CourseSelectForm::display_form($course, $hiddenFields);
 } else {
     $cb = new CourseBuilder();
     $course = $cb->build();

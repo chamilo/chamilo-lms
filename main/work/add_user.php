@@ -79,7 +79,13 @@ if (!empty($items)) {
     echo '</div>';
 }
 
-$userList = CourseManager::get_user_list_from_course_code($courseInfo['code'], api_get_session_id(), null, null, STUDENT);
+$userList = CourseManager::get_user_list_from_course_code(
+    $courseInfo['code'],
+    api_get_session_id(),
+    null,
+    null,
+    STUDENT
+);
 
 $userToAddList = array();
 foreach ($userList as $user) {

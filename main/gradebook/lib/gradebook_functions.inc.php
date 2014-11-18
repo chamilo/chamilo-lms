@@ -239,14 +239,44 @@ function build_edit_icons_cat($cat, $selectcat)
                 if ($cat->is_locked() && !api_is_platform_admin()) {
                     $modify_icons .= Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
                 } else {
-                    $modify_icons .= '<a href="gradebook_edit_cat.php?editcat=' . $cat->get_id() . '&amp;cidReq=' . $cat->get_course_code() . '">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
+                    $modify_icons .= '<a href="gradebook_edit_cat.php?' .
+                        'editcat=' . $cat->get_id() . '&cidReq=' .
+                        $cat->get_course_code() . '">' .
+                        Display::return_icon(
+                            'edit.png',
+                            get_lang('Modify'),
+                            '',
+                            ICON_SIZE_SMALL
+                        ) . '</a>';
                 }
             }
 
-            $modify_icons .= '<a href="gradebook_edit_all.php?&selectcat=' . $cat->get_id() . '">' . Display::return_icon('percentage.png', get_lang('EditAllWeights'), '', ICON_SIZE_SMALL) . '</a>';
-            $modify_icons .= '<a href="gradebook_flatview.php?selectcat=' . $cat->get_id() . '">' . Display::return_icon('stats.png', get_lang('FlatView'), '', ICON_SIZE_SMALL) . '</a>';
-            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">' . Display::return_icon($visibility_icon . '.png', get_lang('Visible'), '', ICON_SIZE_SMALL) . '</a>';
-
+            $modify_icons .= '<a href="gradebook_edit_all.php?selectcat=' .
+                $cat->get_id() . '&cidReq=' . $cat->get_course_code() . '">' .
+                Display::return_icon(
+                    'percentage.png',
+                    get_lang('EditAllWeights'),
+                    '',
+                    ICON_SIZE_SMALL
+                ) . '</a>';
+            $modify_icons .= '<a href="gradebook_flatview.php?selectcat=' .
+                $cat->get_id() . '&cidReq=' . $cat->get_course_code() . '">' .
+                Display::return_icon(
+                    'stats.png',
+                    get_lang('FlatView'),
+                    '',
+                    ICON_SIZE_SMALL
+                ) . '</a>';
+            $modify_icons .= '&nbsp;<a href="' . api_get_self() .
+                '?visiblecat=' . $cat->get_id() . '&' .
+                $visibility_command . '=&selectcat=' . $selectcat .
+                '&cidReq=' . $cat->get_course_code() . '">' .
+                Display::return_icon(
+                    $visibility_icon . '.png',
+                    get_lang('Visible'),
+                    '',
+                    ICON_SIZE_SMALL
+                ) . '</a>';
             //no move ability for root categories
             if ($cat->is_movable()) {
                 /* $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$cat->get_course_code().'">
@@ -676,7 +706,7 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
 
     $path_image_in_default_course = api_get_path(WEB_CODE_PATH) . 'default_course_document';
     $new_content_html = str_replace('/main/default_course_document', $path_image_in_default_course, $new_content_html);
-    $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
+    $new_content_html = str_replace(SYS_CODE_PATH . 'img/', api_get_path(WEB_IMG_PATH), $new_content_html);
 
     //add print header
     if ($hide_print_button == false) {

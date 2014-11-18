@@ -251,3 +251,11 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['lp_show_reduced_report'] = false;
 //Allow session-to-session copy
 //$_configuration['allow_session_course_copy_for_teachers'] = true;
+// Hide the logout button
+//$_configuration['hide_logout_button'] = true;
+
+// Aspell Settings
+//$_configuration['aspell_bin'] = '/usr/bin/hunspell';
+//$_configuration['aspell_lang'] = 'en_US';
+//$_configuration['aspell_opts'] = '-a --lang=$lang --encoding=utf-8 -H --rem-sgml-check=alt';
+//$_configuration['aspell_temp_dir'] = './';

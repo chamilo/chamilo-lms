@@ -3240,33 +3240,34 @@ class learnpathItem
     /**
      * Sets the score value. If the mastery_score is set and the score reaches
      * it, then set the status to 'passed'.
-     * @param    float    Score
-     * @return    boolean    True on success, false otherwise
+     * @param   float       Score
+     * @return    boolean   True on success, false otherwise
      */
     public function set_score($score)
     {
-        //$possible_status = array('not attempted','incomplete','completed','passed','failed','browsed');
         $debug = self::debug;
         if ($debug > 0) {
             error_log('learnpathItem::set_score(' . $score . ')', 0);
         }
         if (($this->max_score <= 0 || $score <= $this->max_score) && ($score >= $this->min_score)) {
             $this->current_score = $score;
-            $master = $this->get_mastery_score();
+            $masteryScore = $this->get_mastery_score();
             $current_status = $this->get_status(false);
 
             // Fixes bug when SCORM doesn't send a mastery score even if they sent a score!
-            if ($master == -1) {
-                $master = $this->max_score;
+            if ($masteryScore == -1) {
+                $masteryScore = $this->max_score;
             }
 
             if ($debug > 0) {
-                error_log('get_mastery_score: ' . $master);
+                error_log('get_mastery_score: ' . $masteryScore);
                 error_log('current_status: ' . $current_status);
                 error_log('current score : ' . $this->current_score);
             }
 
-            // If mastery_score is set AND the current score reaches the mastery score AND the current status is different from 'completed', then set it to 'passed'.
+            // If mastery_score is set AND the current score reaches the mastery
+            //  score AND the current status is different from 'completed', then
+            //  set it to 'passed'.
             /*
             if ($master != -1 && $this->current_score >= $master && $current_status != $this->possible_status[2]) {
                 if ($debug > 0) error_log('Status changed to: '.$this->possible_status[3]);
@@ -3307,10 +3308,9 @@ class learnpathItem
 
     /**
      * Sets the status for this item
-     * @param   string      $status must be one of the values defined
-     * in $this->possible_status
+     * @param    string      $status Status - must be one of the values defined in $this->possible_status
      * (this affects the status setting)
-     * @return  boolean True on success, false on error
+     * @return    boolean    True on success, false on error
      */
     public function set_status($status)
     {
@@ -3611,21 +3611,20 @@ class learnpathItem
             'browsed',
             'failed'
         ); //TODO COMPLETE
-        if ($this->seriousgame_mode != 1 || !in_array(
-                $row['status'],
-                $case_completed
-            )
+
+        if ($this->seriousgame_mode != 1 ||
+            !in_array($row['status'], $case_completed)
         ) {
-            $update_view_sql = "UPDATE $item_view_table
-                                  SET total_time = '$total_time'
-                               WHERE c_id = $course_id
-                                  AND lp_item_id = {$this->db_id}
-                                  AND lp_view_id = {$this->view_id}
-                                  AND view_count = {$this->attempt_id}";
+            $sql = "UPDATE $item_view_table
+                      SET total_time = '$total_time'
+                    WHERE c_id = $course_id
+                      AND lp_item_id = {$this->db_id}
+                      AND lp_view_id = {$this->view_id}
+                      AND view_count = {$this->attempt_id}";
             if (self::debug > 0) {
-                error_log($update_view_sql);
+                error_log($sql);
             }
-            $result = Database::query($update_view_sql);
+            Database::query($sql);
         }
     }
 
@@ -3636,13 +3635,13 @@ class learnpathItem
     {
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $course_id = api_get_course_int_id();
-        $update_view_sql = 'UPDATE ' . $item_view_table . '
-                            SET total_time = 0, start_time=' . time() . '
-                            WHERE c_id = ' . $course_id . '
-                                AND lp_item_id="' . $this->db_id . '"
-                                AND lp_view_id="' . $this->view_id . '"
-                                AND view_count="' . $this->attempt_id . '" ;';
-        Database::query($update_view_sql);
+        $sql = 'UPDATE ' . $item_view_table . '
+                SET total_time = 0, start_time=' . time() . '
+                WHERE c_id = ' . $course_id . '
+                    AND lp_item_id="' . $this->db_id . '"
+                    AND lp_view_id="' . $this->view_id . '"
+                    AND view_count="' . $this->attempt_id . '" ;';
+        Database::query($sql);
     }
 
     /**
@@ -3710,7 +3709,7 @@ class learnpathItem
                                 $objective[3]
                             ) . "' " .
                             "WHERE c_id = $course_id AND id = $iva_id";
-                        $ivau_res = Database::query($ivau_sql);
+                        Database::query($ivau_sql);
                         //error_log($ivau_sql, 0);
                     } else {
                         // Insert new one.
@@ -3729,13 +3728,10 @@ class learnpathItem
                             ) . "','" . Database::escape_string(
                                 $objective[3]
                             ) . "')";
-                        $ivai_res = Database::query($ivai_sql);
-                        //error_log($ivai_sql);
+                        Database::query($ivai_sql);
                     }
                 }
             }
-        } else {
-            //error_log('no objective to save: '.print_r($this->objectives, 1));
         }
     }
 

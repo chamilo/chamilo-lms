@@ -9,10 +9,6 @@
  * @package chamilo.document
  */
 
-/*
-        MAIN CODE
-*/
-
 session_cache_limiter('public');
 
 require_once '../inc/global.inc.php';
@@ -44,11 +40,12 @@ $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/f
 //if the rewrite rule asks for a directory, we redirect to the document explorer
 if (is_dir($full_file_name)) {
     //remove last slash if present
-    //$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
     //mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
-    while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
+    while ($doc_url{$dul = strlen($doc_url) - 1} == '/') {
+        $doc_url = substr($doc_url, 0, $dul);
+    }
     //create the path
-    $document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
+    $document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path();
     //redirect
     header('Location: '.$document_explorer);
 }
@@ -61,19 +58,41 @@ $course_id = api_get_course_int_id();
 // launch event
 event_download($doc_url);
 
-$sql='SELECT thread_id, forum_id,filename FROM '.$tbl_forum_post.'  f  INNER JOIN '.$tbl_forum_attachment.' a
-        ON a.post_id=f.post_id 
-      WHERE f.c_id = '.$course_id.' AND a.c_id = '.$course_id.' AND path LIKE BINARY "'.$doc_url.'"';
+$sql = 'SELECT thread_id, forum_id,filename
+        FROM '.$tbl_forum_post.'  f
+        INNER JOIN '.$tbl_forum_attachment.' a
+        ON a.post_id=f.post_id
+        WHERE
+            f.c_id = '.$course_id.' AND
+            a.c_id = '.$course_id.' AND
+            path LIKE BINARY "'.$doc_url.'"';
 
 $result = Database::query($sql);
-$row    = Database::fetch_array($result);
+$row = Database::fetch_array($result);
 
-$forum_thread_visibility = api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM_THREAD,$row['thread_id'], api_get_session_id());
-$forum_forum_visibility  = api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM,$row['forum_id'], api_get_session_id());
+$forum_thread_visibility = api_get_item_visibility(
+    api_get_course_info($course_code),
+    TOOL_FORUM_THREAD,
+    $row['thread_id'],
+    api_get_session_id()
+);
+$forum_forum_visibility = api_get_item_visibility(
+    api_get_course_info($course_code),
+    TOOL_FORUM,
+    $row['forum_id'],
+    api_get_session_id()
+);
 
 if ($forum_thread_visibility==1 && $forum_forum_visibility==1) {
-    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/')) {
-       DocumentManager::file_send_for_download($full_file_name, TRUE, $row['filename']);
+    if (Security::check_abs_path(
+        $full_file_name,
+        api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/')
+    ) {
+        DocumentManager::file_send_for_download(
+            $full_file_name,
+            true,
+            $row['filename']
+        );
     }
 }
 exit;

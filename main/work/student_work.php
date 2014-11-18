@@ -69,8 +69,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 switch ($action) {
     case 'export_to_pdf':
         exportAllWork($studentId, $courseInfo, 'pdf');
+        exit;
         break;
-    exit;
     case 'download':
         if (api_is_allowed_to_edit()) {
             downloadAllFilesPerUser($studentId, $courseInfo);
@@ -179,7 +179,7 @@ foreach ($workPerUser as $work) {
             $links .= Display::url(Display::return_icon('save.png', get_lang('Download')), $url);
         }
         $url = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq().'&item_id='.$userResult['id'].'&id='.$workId.'&parent_id='.$workId;
-        $links .= Display::url(Display::return_icon('edit.png', get_lang('Comment')), $url);
+        $links .= Display::url(Display::return_icon('rate_work.png', get_lang('Comment')), $url);
 
         $table->setCellContents($row, $column, $links);
 

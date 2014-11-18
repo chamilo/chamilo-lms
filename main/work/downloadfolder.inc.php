@@ -61,8 +61,16 @@ if (array_key_exists('filename', $work_data)) {
 
 if (api_is_allowed_to_edit()) {
     //Search for all files that are not deleted => visibility != 2
-    $sql = "SELECT DISTINCT url, title, description, insert_user_id, insert_date, contains_file $filenameCondition
-            FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
+    $sql = "SELECT DISTINCT
+                url,
+                title,
+                description,
+                insert_user_id,
+                insert_date,
+                contains_file
+                $filenameCondition
+            FROM $tbl_student_publication AS work
+            INNER JOIN $prop_table AS props
             INNER JOIN $tableUser as u
             ON (
                 props.c_id = $course_id AND
@@ -96,20 +104,28 @@ if (api_is_allowed_to_edit()) {
     }
 
     //for other users, we need to create a zipfile with only visible files and folders
-    $sql = "SELECT DISTINCT url, title, description, insert_user_id, insert_date, contains_file $filenameCondition
-            FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
+    $sql = "SELECT DISTINCT
+                url,
+                title,
+                description,
+                insert_user_id,
+                insert_date,
+                contains_file
+                $filenameCondition
+            FROM $tbl_student_publication AS work
+            INNER JOIN $prop_table AS props
                 ON (props.c_id = $course_id AND
                     work.c_id = $course_id AND
                     work.id = props.ref)
-           WHERE
-                    props.tool='work' AND
-                    work.accepted = 1 AND
-                    work.active = 1 AND
-                    work.parent_id = $work_id AND
-                    work.filetype = 'file' AND
-                    props.visibility = '1' AND
-                    work.post_group_id = $groupId
-                    $userCondition
+            WHERE
+                props.tool='work' AND
+                work.accepted = 1 AND
+                work.active = 1 AND
+                work.parent_id = $work_id AND
+                work.filetype = 'file' AND
+                props.visibility = '1' AND
+                work.post_group_id = $groupId
+                $userCondition
             ";
 }
 $query = Database::query($sql);
@@ -130,7 +146,9 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
 
     $filename = $insert_date.'_'.$user_info['username'].'_'.$title;
     // File exists
-    if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url']) && !empty($not_deleted_file['url'])) {
+    if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url']) &&
+        !empty($not_deleted_file['url'])
+    ) {
         $files[basename($not_deleted_file['url'])] = $filename;
         $addStatus = $zip_folder->add(
             $sys_course_path.$_course['path'].'/'.$not_deleted_file['url'],
@@ -179,8 +197,10 @@ function my_pre_add_callback($p_event, &$p_header)
     global $files;
     if (isset($files[basename($p_header['stored_filename'])])) {
         $p_header['stored_filename'] = $files[basename($p_header['stored_filename'])];
+
         return 1;
     }
+
     return 0;
 }
 
@@ -190,7 +210,8 @@ function my_pre_add_callback($p_event, &$p_header)
  *
  * @param array $arr1 first array
  * @param array $arr2 second array
- * @return difference between the two arrays
+ *
+ * @return array difference between the two arrays
  */
 function diff($arr1, $arr2)
 {
@@ -202,5 +223,6 @@ function diff($arr1, $arr2)
             $r++;
         }
     }
+
     return $res;
 }

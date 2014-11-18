@@ -1,18 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action  
+* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.dashboard
 */
-/**
- * Init
- */
 // name of the language file that needs to be included
-$language_file = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
+$language_file = array('index', 'tracking', 'userInfo', 'admin', 'gradebook');
 $cidReset = true;
 
-// including files 
+// including files
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'dashboard.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
@@ -44,7 +41,6 @@ $htmlHeadXtra[] = $dashboar_plugin_styles;
 
 // course description controller object
 $dashboard_controller = new DashboardController();
-
 
 if (isset($_GET['path'])) {
 	$path = $_GET['path'];

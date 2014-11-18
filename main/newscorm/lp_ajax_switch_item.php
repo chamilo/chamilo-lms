@@ -171,7 +171,8 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         "olms.interactions = new Array(".$myistring.");".
         "olms.item_objectives = new Array();".
         "olms.G_lastError = 0;".
-        "olms.G_LastErrorMessage = 'No error';";
+        "olms.G_LastErrorMessage = 'No error';".
+        "olms.finishSignalReceived = 0;";
     /*
      * and re-initialise the rest
      * -lms_lp_id

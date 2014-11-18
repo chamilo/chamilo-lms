@@ -93,7 +93,14 @@ if ($form->validate()) {
     if ($student_can_edit_in_session && $check) {
         $values = $form->getSubmitValues();
         // Process work
-        $error_message = processWorkForm($workInfo, $values, $course_info, $session_id, $group_id, $user_id);
+        $error_message = processWorkForm(
+            $workInfo,
+            $values,
+            $course_info,
+            $session_id,
+            $group_id,
+            $user_id
+        );
         $script = 'work_list.php';
         if ($is_allowed_to_edit) {
             $script = 'work_list_all.php';

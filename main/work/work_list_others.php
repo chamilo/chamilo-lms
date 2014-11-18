@@ -45,15 +45,19 @@ if (!empty($group_id)) {
         $show_work = true;
     } else {
         // you are not a teacher
-        $show_work = GroupManager::user_has_access($user_id, $group_id, GroupManager::GROUP_TOOL_WORK);
+        $show_work = GroupManager::user_has_access(
+            $user_id,
+            $group_id,
+            GroupManager::GROUP_TOOL_WORK
+        );
     }
 
     if (!$show_work) {
         api_not_allowed();
     }
 
-    $interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group.php', 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
 $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
@@ -63,7 +67,7 @@ Display :: display_header(null);
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'>'.
-        Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($my_folder_data['description'])) {
@@ -99,7 +103,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     $columns  = array(
         get_lang('Type'), get_lang('FirstName'), get_lang('LastName'), get_lang('Title'), get_lang('Date'),  get_lang('Actions')
     );
-    $column_model = array (
+    $column_model = array(
         array('name'=>'type',           'index'=>'file',            'width'=>'12',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
@@ -115,13 +119,13 @@ $extra_params['height'] = 'auto';
 $extra_params['sortname'] = 'firstname';
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list_others&work_id='.$workId.'&type='.$type;
 ?>
-<script>
-$(function() {
-    <?php
-    echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
-?>
-});
-</script>
+    <script>
+        $(function() {
+            <?php
+            echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
+        ?>
+        });
+    </script>
 <?php
 echo Display::grid_html('results');
 

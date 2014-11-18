@@ -614,11 +614,51 @@
           }
          else
           {
-           $YPos = $this->GArea_Y2+10+$TextHeight;
-           if ( $Angle <= 90 )
-            imagettftext($this->Picture,$this->FontSize,$Angle,floor($XPos)-$TextWidth+5,$YPos,$C_TextColor,$this->FontName,$Value);
-           else
-            imagettftext($this->Picture,$this->FontSize,$Angle,floor($XPos)+$TextWidth+5,$YPos,$C_TextColor,$this->FontName,$Value);
+              // Will change XY positions to show the right label position
+              // To detect side of cartesian plane XY where angles ends
+              // e.g 60 degree is in Quadrant I, 120 degree is Quadrant II
+              $isYpositive = sin(deg2rad($Angle)) >= 0;
+              $isXpositive = cos(deg2rad($Angle)) >= 0;
+              $YPos = $this->GArea_Y2 + 10;
+              if ($isYpositive && $isXpositive) {
+                  // For Quadrant I
+                  $YPos += $TextHeight;
+                  $XPos -= $TextWidth;
+              } elseif ($isYpositive && !$isXpositive) {
+                  // For Quadrant II
+                  $YPos += $TextHeight;
+                  $XPos += $TextWidth;
+              } elseif (!$isYpositive && !$isXpositive) {
+                  // For Quadrant III
+                  // Nothing to do
+              } else {
+                  // For Quadrant IV
+                  // Nothing to do
+              }
+              imagettftext(
+                  $this->Picture,
+                  $this->FontSize,
+                  $Angle,
+                  $XPos,
+                  $YPos,
+                  $C_TextColor,
+                  $this->FontName,
+                  $Value
+              );
+              // post update XY position
+              if ($isYpositive && $isXpositive) {
+                  // For Quadrant I
+                  $XPos += $TextWidth;
+              } elseif ($isYpositive && !$isXpositive) {
+                  // For Quadrant II
+                  $XPos -= $TextWidth;
+              } elseif (!$isYpositive && !$isXpositive) {
+                  // For Quadrant III
+                  $YPos += $TextHeight;
+              } else {
+                  // For Quadrant IV
+                  $YPos += $TextHeight;
+              }
           }
          if ( $YMax < $YPos || $YMax == NULL ) { $YMax = $YPos; }
         }
@@ -628,12 +668,21 @@
       }
 
     /* Write the X Axis caption if set */
-    if ( isset($DataDescription["Axis"]["X"]) )
+    if (isset($DataDescription["Axis"]["X"]))
       {
-       $Position   = imageftbbox($this->FontSize,90,$this->FontName,$DataDescription["Axis"]["X"]);
-       $TextWidth  = abs($Position[2])+abs($Position[0]);
-       $TextLeft   = (($this->GArea_X2 - $this->GArea_X1) / 2) + $this->GArea_X1 + ($TextWidth/2);
-       imagettftext($this->Picture,$this->FontSize,0,$TextLeft,$YMax+$this->FontSize+5,$C_TextColor,$this->FontName,$DataDescription["Axis"]["X"]);
+       $Position   = imageftbbox($this->FontSize, 0, $this->FontName, $DataDescription["Axis"]["X"]);
+       $TextWidth  = abs($Position[2]) + abs($Position[0]);
+       $TextLeft   = (($this->GArea_X2 + $this->GArea_X1) / 2) - ($TextWidth/2);
+       imagettftext(
+           $this->Picture,
+           $this->FontSize,
+           0,
+           $TextLeft,
+           $YMax+$this->FontSize+5,
+           $C_TextColor,
+           $this->FontName,
+           $DataDescription["Axis"]["X"]
+       );
       }
     }
 
@@ -3555,6 +3604,47 @@
       return(TRUE);
      return(FALSE);
     }
+
+     /**
+      * Return a new pChart object fixing its height by legend rotations
+      * Must be set fonts before call this method
+      * @param array $data
+      * @param array $dataDescription
+      * @param float $angle
+      * @return pChart
+      */
+     function fixHeightByRotation ($data, $dataDescription, $angle)
+     {
+         $maxTextHeight = 0;
+         foreach ($data as $key => $values) {
+             // Get legend value
+             $value = $data[$key][$dataDescription["Position"]];
+             if ($dataDescription["Format"]["X"] == "number") {
+                 $value = $value.$dataDescription["Unit"]["X"];
+             } elseif ($dataDescription["Format"]["X"] == "time") {
+                 $value = $this->ToTime($value);
+             } elseif ($dataDescription["Format"]["X"] == "date") {
+                 $value = $this->ToDate($value);
+             } elseif ($dataDescription["Format"]["X"] == "metric") {
+                 $value = $this->ToMetric($value);
+             } elseif ($dataDescription["Format"]["X"] == "currency") {
+                 $value = $this->ToCurrency($value);
+             }
+             // Get positions array from label generated
+             $Position = imageftbbox($this->FontSize, $angle, $this->FontName, $value);
+             $TextHeight = abs($Position[1]) + abs($Position[3]);
+             // Save max height
+             if ($maxTextHeight < $TextHeight) {
+                 $maxTextHeight = $TextHeight;
+             }
+         }
+         $this->YSize += $maxTextHeight;
+         $pChart = new pChart($this->XSize, $this->YSize);
+         // set font of the axes
+         $pChart->setFontProperties($this->FontName, $this->FontSize);
+
+         return $pChart;
+     }
   }
 
  function RaiseFatal($Message)

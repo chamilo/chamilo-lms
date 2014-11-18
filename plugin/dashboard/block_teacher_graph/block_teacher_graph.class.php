@@ -144,13 +144,26 @@ class BlockTeacherGraph extends Block
 				// Initializing the graph
 				$bg_width = 440;
 				$bg_height = 350;
+                $angle = -30;
 				$test = new pChart($bg_width+10,$bg_height+20);
 				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
+                $test = $test->fixHeightByRotation($data_set->GetData(), $data_set->GetDataDescription(), $angle);
 				$test->setGraphArea(65,30,$bg_width-70,$bg_height-50);
 				$test->drawFilledRoundedRectangle(7,7,$bg_width,$bg_height,5,240,240,240);
 				$test->drawRoundedRectangle(5,5,$bg_width+2,$bg_height+2,5,230,230,230);
 				$test->drawGraphArea(255,255,255,TRUE);
-				$test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);
+                $test->drawScale(
+                    $data_set->GetData(),
+                    $data_set->GetDataDescription(),
+                    SCALE_NORMAL,
+                    150,
+                    150,
+                    150,
+                    TRUE,
+                    $angle,
+                    2,
+                    TRUE
+                );
 				$test->drawGrid(4,TRUE,230,230,230,50);
 
 				// Drawing lines

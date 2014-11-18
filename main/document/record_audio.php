@@ -9,11 +9,6 @@
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net
  * @since 5/mar/2011
 */
-/**
- * Code
- */
-
-/*	INIT SECTION */
 
 // Name of the language file that needs to be included
 $language_file = array('document');
@@ -34,7 +29,7 @@ api_block_anonymous_users();
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
         $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
         $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
     }
@@ -106,14 +101,14 @@ if (isset ($group)) {
 }
 
 // Interbreadcrumb for the current directory root path
-$counter = 0;   
+$counter = 0;
 if (isset($document_data['parents'])) {
     foreach($document_data['parents'] as $document_sub_data) {
         //fixing double group folder in breadcrumb
         if (api_get_group_id()) {
             if ($counter == 0) {
                 $counter++;
-                continue;  
+                continue;
             }
         }
         $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
@@ -127,8 +122,8 @@ echo '<div class="actions">';
 echo '</div>';
 
 ?>
-<script type="text/javascript"> 
-function submitVoice() { 
+<script type="text/javascript">
+function submitVoice() {
 	//lang vars
 	var lang_no_applet="<?php echo get_lang('NanogongNoApplet'); ?>";
 	var lang_record_before_save="<?php echo get_lang('NanogongRecordBeforeSave'); ?>";
@@ -142,15 +137,15 @@ function submitVoice() {
 	//path, url and filename
 	var filename = document.getElementById("audio_title").value+"_chnano_.wav";//adding name file, tag and extension
 	var filename = filename.replace(/\s/g, "_");//replace spaces by _
-	var filename = encodeURIComponent(filename);	
+	var filename = encodeURIComponent(filename);
 	var filepath="<?php echo urlencode($filepath); ?>";
 	var dir="<?php echo urlencode($dir); ?>";
 	var course_code="<?php echo urlencode($course_code); ?>";
 	//
 	var urlnanogong="../inc/lib/nanogong/receiver.php?filename="+filename+"&filepath="+filepath+"&dir="+dir+"&course_code="+course_code+"&nano_group_id="+nano_group_id+"&nano_session_id="+nano_session_id+"&nano_user_id="+nano_user_id;
 	var cookie="<?php  echo 'ch_sid='.session_id(); ?>";
-	
-	//check	
+
+	//check
 	var recorder
 	if (!(recorder = document.getElementById("nanogong"))) {
     	alert(lang_no_applet)
@@ -160,17 +155,17 @@ function submitVoice() {
 	if (duration <= 0) {
 	  	alert(lang_record_before_save)
 	  	return
-	}	
+	}
 	if (!document.getElementById("audio_title").value) {
 		alert(lang_give_a_title)
 		return
 	}
-	//	
-	var applet = document.getElementById("nanogong");	
+	//
+	var applet = document.getElementById("nanogong");
 	var ret = applet.sendGongRequest( "PostToForm", urlnanogong, "voicefile", cookie, "temp");//'PostToForm', postURL, inputname, cookie, filename
 
-	if (ret == null)  { 
-	    alert(lang_failled_to_submit); 
+	if (ret == null)  {
+	    alert(lang_failled_to_submit);
 	} else {
 	    alert(lang_submitted+"\n"+ret);
 	    $("#status").attr('value', '1');
@@ -191,14 +186,14 @@ echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/
 	echo '<param name="ShowTime" value="true" />'; // default false
 	//echo '<param name="Color" value="#C0E0FF" />'; // default #FFFFFF
 	//echo '<param name="StartTime" value="10.5" />';
-	//echo '<param name="EndTime" value="65" />';	
+	//echo '<param name="EndTime" value="65" />';
 	echo '<param name="AudioFormat" value="ImaADPCM" />';// ImaADPCM (more speed), Speex (more compression)|(default Speex)
 	//echo '<param name="SamplingRate" value="32000" />';//Quality for ImaADPCM (low 8000, medium 11025, normal 22050, hight 44100) OR Quality for Speex (low 8000, medium 16000, normal 32000, hight 44100) | (default 44100)
 	//echo '<param name="MaxDuration" value="60" />';
-	//echo '<param name="SoundFileURL" value="http://somewhere.com/mysoundfile.wav" />';//load a file |(default "")	
+	//echo '<param name="SoundFileURL" value="http://somewhere.com/mysoundfile.wav" />';//load a file |(default "")
 echo '</applet>';
- 
-echo '<form name="form_nanogong">';	
+
+echo '<form name="form_nanogong">';
 	echo '<input placeholder="'.get_lang('InputNameHere').'" type="text" id="audio_title">';
 	echo '<input id="status" type="hidden" name="status" value="0">';
 	echo '<button class="upload" type="submit" value="'.get_lang('Send').'" onClick="submitVoice()" />'.get_lang('Send').'</button>';

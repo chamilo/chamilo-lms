@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+$language_file = array('document');
 require_once '../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -89,6 +90,7 @@ $file = array(
     )
 );
 $output = true;
+ob_start();
 $documentData = DocumentManager::upload_document(
     $file,
     $wamidir,
@@ -99,6 +101,7 @@ $documentData = DocumentManager::upload_document(
     false,
     $output
 );
+$contents = ob_get_contents();
 
 if (!empty($documentData)) {
     $newDocId = $documentData['id'];
@@ -106,7 +109,10 @@ if (!empty($documentData)) {
     $newMp3DocumentId = DocumentManager::addAndConvertWavToMp3(
         $documentData,
         $courseInfo,
-        api_get_user_id()
+        api_get_session_id(),
+        api_get_user_id(),
+        'overwrite',
+        true
     );
 
     if ($newMp3DocumentId) {
@@ -122,6 +128,11 @@ if (!empty($documentData)) {
             $lp->set_modified_on();
             $lpItem = new learnpathItem($lpItemId);
             $lpItem->add_audio_from_documents($newDocId);
+            Display::addFlash(
+                Display::return_message(get_lang('Updated'), 'info')
+            );
         }
     }
+} else {
+    Display::addFlash($contents);
 }

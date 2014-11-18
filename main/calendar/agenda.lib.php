@@ -393,6 +393,8 @@ class Agenda
 
         $typeList = array('daily', 'weekly', 'monthlyByDate', 'monthlyByDay', 'monthlyByDayR', 'yearly');
 
+        // The event has to repeat *in the future*. We don't allow repeated
+        // events in the past
         if ($end > $now && in_array($type, $typeList)) {
             $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
                     VALUES ($course_id, '$eventId', '$type', '$end')";
@@ -1090,12 +1092,23 @@ class Agenda
      */
     public function get_personal_events($start, $end)
     {
-        $start = api_get_utc_datetime(intval($start));
-        $end = api_get_utc_datetime(intval($end));
+        $start = intval($start);
+        $end = intval($end);
+        $startCondition = '';
+        $endCondition = '';
+
+        if ($start !== 0) {
+            $start = api_get_utc_datetime($start);
+            $startCondition = "AND date >= '".$start."'";
+        }
+        if ($start !== 0) {
+            $end = api_get_utc_datetime($end);
+            $endCondition = "AND (enddate <= '".$end."' OR enddate IS NULL)";
+        }
         $user_id = api_get_user_id();
 
         $sql = "SELECT * FROM ".$this->tbl_personal_agenda."
-                WHERE date >= '".$start."' AND (enddate <='".$end."' OR enddate IS NULL) AND user = $user_id";
+                WHERE user = $user_id $startCondition $endCondition";
 
         $result = Database::query($sql);
         $my_events = array();
@@ -1432,13 +1445,22 @@ class Agenda
         $start = intval($start);
         $end = intval($end);
 
-        $start = api_get_utc_datetime($start);
-        $end = api_get_utc_datetime($end);
+        $startCondition = '';
+        $endCondition = '';
+
+        if ($start !== 0) {
+            $start = api_get_utc_datetime($start);
+            $startCondition = "AND start_date >= '".$start."'";
+        }
+        if ($start !== 0) {
+            $end = api_get_utc_datetime($end);
+            $endCondition = "AND end_date <= '".$end."'";
+        }
 
         $access_url_id = api_get_current_access_url_id();
 
         $sql = "SELECT * FROM ".$this->tbl_global_agenda."
-               WHERE start_date >= '".$start."' AND end_date <= '".$end."' AND access_url_id = $access_url_id ";
+               WHERE access_url_id = $access_url_id $startCondition $endCondition";
 
         $result = Database::query($sql);
         $my_events = array();
@@ -2275,6 +2297,11 @@ class Agenda
                     $freq = $trans[$repeat['FREQ']];
 
                     if (isset($repeat['UNTIL']) && !empty($repeat['UNTIL'])) {
+                        // Check if datetime or just date (strlen == 8)
+                        if (strlen($repeat['UNTIL']) == 8) {
+                            // Fix the datetime format to avoid exception in the next step
+                            $repeat['UNTIL'] .= 'T000000';
+                        }
                         $until = Sabre\VObject\DateTimeParser::parseDateTime($repeat['UNTIL'], new DateTimeZone($currentTimeZone));
                         $until = $until->format('Y-m-d H:i');
                         //$res = agenda_add_repeat_item($courseInfo, $id, $freq, $until, $attendee);
@@ -2318,6 +2345,9 @@ class Agenda
 
         if (!empty($messages)) {
             $messages = implode('<br /> ', $messages);
+        } else {
+            $messages = get_lang('NoAgendaItems');
+                    
         }
 
         return $messages;

@@ -40,7 +40,8 @@ if (!empty($GLOBALS['_cid']) && $GLOBALS['_cid'] != -1) {
     // Agenda is out of the course tool (e.g personal agenda)
     $url = false;
     foreach ($events as &$event) {
-        $event['url'] = api_get_self() . '?cid=' . $event['course_id'];
+        $event['url'] = api_get_self() . '?cid=' . $event['course_id'] .
+        '&type=' . $event['type'];
     }
 }
 
@@ -59,14 +60,18 @@ if (api_is_allowed_to_edit()) {
         if (empty($courseInfo)) {
             // This happens when list agenda is not inside a course
             if (
+                ($type == 'course' || $type == 'session') &&
                 isset($_GET['cid']) &&
                 intval($_GET['cid']) !== 0
             ) {
+                // For course and session event types
                 // Just needs course ID
                 $courseInfo = array('real_id' => intval($_GET['cid']));
+                $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);
+            } else {
+                // personal and admin do not have visibility property
             }
         }
-        $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);
         header('Location: '. api_get_self());
         exit;
     }

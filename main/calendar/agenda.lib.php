@@ -1092,12 +1092,23 @@ class Agenda
      */
     public function get_personal_events($start, $end)
     {
-        $start = api_get_utc_datetime(intval($start));
-        $end = api_get_utc_datetime(intval($end));
+        $start = intval($start);
+        $end = intval($end);
+        $startCondition = '';
+        $endCondition = '';
+
+        if ($start !== 0) {
+            $start = api_get_utc_datetime($start);
+            $startCondition = "AND date >= '".$start."'";
+        }
+        if ($start !== 0) {
+            $end = api_get_utc_datetime($end);
+            $endCondition = "AND (enddate <= '".$end."' OR enddate IS NULL)";
+        }
         $user_id = api_get_user_id();
 
         $sql = "SELECT * FROM ".$this->tbl_personal_agenda."
-                WHERE date >= '".$start."' AND (enddate <='".$end."' OR enddate IS NULL) AND user = $user_id";
+                WHERE user = $user_id $startCondition $endCondition";
 
         $result = Database::query($sql);
         $my_events = array();
@@ -1434,13 +1445,22 @@ class Agenda
         $start = intval($start);
         $end = intval($end);
 
-        $start = api_get_utc_datetime($start);
-        $end = api_get_utc_datetime($end);
+        $startCondition = '';
+        $endCondition = '';
+
+        if ($start !== 0) {
+            $start = api_get_utc_datetime($start);
+            $startCondition = "AND start_date >= '".$start."'";
+        }
+        if ($start !== 0) {
+            $end = api_get_utc_datetime($end);
+            $endCondition = "AND end_date <= '".$end."'";
+        }
 
         $access_url_id = api_get_current_access_url_id();
 
         $sql = "SELECT * FROM ".$this->tbl_global_agenda."
-               WHERE start_date >= '".$start."' AND end_date <= '".$end."' AND access_url_id = $access_url_id ";
+               WHERE access_url_id = $access_url_id $startCondition $endCondition";
 
         $result = Database::query($sql);
         $my_events = array();

@@ -174,7 +174,7 @@ class BlockEvaluationGraph extends Block
                                 $data_set->GetDataDescription(),
                                 $angle
                             );
-                            $test->setGraphArea(50, 30, $this->bg_width-75, $test->YSize - 75);
+                            $test->setGraphArea(50, 30, $this->bg_width-75, $this->bg_height - 75);
                             $test->drawFilledRoundedRectangle(
                                 7,
                                 7,
@@ -297,7 +297,7 @@ class BlockEvaluationGraph extends Block
 							    $test = new pChart($this->bg_width,$this->bg_height);
 							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
                                 $test->fixHeightByRotation($data_set->GetData(), $data_set->GetDataDescription(), $angle);
-                                $test->setGraphArea(50, 30, $this->bg_width-75, $test->YSize-75);
+                                $test->setGraphArea(50, 30, $this->bg_width-75, $this->bg_height-75);
                                 $test->drawFilledRoundedRectangle(
                                     7,
                                     7,

@@ -1417,19 +1417,24 @@ function api_get_anonymous_id() {
 /**
  * Returns the cidreq parameter name + current course id taken from
  * $GLOBALS['_cid'] and returns a string like 'cidReq=ABC&id_session=123
+ *
+ * @param bool $addSessionId
+ * @param bool $addGroupId
  * @return  string  Course & session references to add to a URL
  *
- * @see Uri.course_params
  */
-function api_get_cidreq($add_session_id = true, $add_group_id = true) {
+function api_get_cidreq($addSessionId = true, $addGroupId = true)
+{
     $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
     $origin = api_get_origin();
-    if ($add_session_id) {
+
+    if ($addSessionId) {
         if (!empty($url)) {
             $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
         }
     }
-    if ($add_group_id) {
+
+    if ($addGroupId) {
         if (!empty($url)) {
             $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
         }

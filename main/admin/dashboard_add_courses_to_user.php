@@ -214,7 +214,7 @@ if (api_is_multiple_url_enabled()) {
 $result	= Database::query($sql);
 
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1" />
 <?php
 if(!empty($msg)) {
@@ -268,21 +268,9 @@ if(!empty($msg)) {
   </td>
 
   <td width="10%" valign="middle" align="center">
-  <?php
-  if ($ajax_search) {
-  ?>
-  	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
-  <?php
-  }
-  else
-  {
-  ?>
   	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
 	<br /><br />
 	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
-  <?php
-  }
-  ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
 		echo '<button class="save" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';

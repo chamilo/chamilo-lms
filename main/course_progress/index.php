@@ -1,16 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
-* @author Christian Fasanando <christian1827@gmail.com>
-* @author Julio Montoya <gugli100@gmail.com> Bugfixes session support
-* @package chamilo.course_progress
-*/
-/**
- * Code
+ * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
+ * @author Christian Fasanando <christian1827@gmail.com>
+ * @author Julio Montoya <gugli100@gmail.com> Bugfixes session support
+ * @package chamilo.course_progress
  */
+
 // name of the language file that needs to be included
-$language_file = array ('course_description', 'userInfo', 'admin');
+$language_file = array('course_description', 'userInfo', 'admin');
 
 // including files
 require_once '../inc/global.inc.php';
@@ -33,36 +31,54 @@ api_protect_course_script(true);
 define('ADD_THEMATIC_PLAN', 6);
 
 // get actions
-$actions = array('thematic_details', 'thematic_list', 'thematic_add', 'thematic_edit', 'thematic_copy', 'thematic_delete', 'moveup', 'movedown',
-                'thematic_import_select', 'thematic_import', 'thematic_export', 'thematic_export_pdf',
-				 'thematic_plan_list', 'thematic_plan_add', 'thematic_plan_edit', 'thematic_plan_delete',
-				 'thematic_advance_list', 'thematic_advance_add', 'thematic_advance_edit', 'thematic_advance_delete');
+$actions = array(
+    'thematic_details',
+    'thematic_list',
+    'thematic_add',
+    'thematic_edit',
+    'thematic_copy',
+    'thematic_delete',
+    'moveup',
+    'movedown',
+    'thematic_import_select',
+    'thematic_import',
+    'thematic_export',
+    'thematic_export_pdf',
+    'thematic_plan_list',
+    'thematic_plan_add',
+    'thematic_plan_edit',
+    'thematic_plan_delete',
+    'thematic_advance_list',
+    'thematic_advance_add',
+    'thematic_advance_edit',
+    'thematic_advance_delete'
+);
 
 $action  = 'thematic_details';
 if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
-	$action = $_GET['action'];
+    $action = $_GET['action'];
 }
 
 if (isset($_POST['action']) && $_POST['action'] == 'thematic_delete_select') {
-	$action = 'thematic_delete_select';
+    $action = 'thematic_delete_select';
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
-	$action = 'thematic_details';
+    $action = 'thematic_details';
 }
 
 if ($action == 'thematic_details' || $action == 'thematic_list') {
-	$_SESSION['thematic_control'] = $action;
+    $_SESSION['thematic_control'] = $action;
 }
 
 // get thematic id
 if (isset($_GET['thematic_id'])) {
-	$thematic_id = intval($_GET['thematic_id']);
+    $thematic_id = intval($_GET['thematic_id']);
 }
 
 // get thematic plan description type
 if (isset($_GET['description_type'])) {
-	$description_type = intval($_GET['description_type']);
+    $description_type = intval($_GET['description_type']);
 }
 
 // instance thematic object for using like library here
@@ -72,8 +88,8 @@ $thematic = new Thematic();
 $thematic_controller = new ThematicController();
 
 if (!empty($thematic_id)) {
-	// thematic data by id
-	$thematic_data = $thematic->get_thematic_list($thematic_id);
+    // thematic data by id
+    $thematic_data = $thematic->get_thematic_list($thematic_id);
 }
 
 // get default thematic plan title
@@ -82,9 +98,7 @@ $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 // Only when I see the 3 columns. Avoids double or triple click binding for onclick event
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-
 $(document).ready(function() {
-
 	//Second col
      /*
     $("#thematic_plan_add").live("submit", function() {
@@ -149,7 +163,6 @@ $(document).ready(function() {
         return false;
 	});*/
 
-
     $(".thematic_advance_actions, .thematic_tools ").hide();
 
 	$(".thematic_content").mouseover(function() {
@@ -185,11 +198,9 @@ $(document).ready(function() {
 });
 </script>';
 
-
 $htmlHeadXtra[] = '<script type="text/javascript">
 
 function datetime_by_attendance(attendance_id, thematic_advance_id) {
-
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {},
@@ -218,7 +229,6 @@ function update_done_thematic_advance(selected_value) {
 	});
 
 	// clean all radios
-
 	for (var i=0; i< $(".done_thematic").length;i++) {
 		var id_radio_thematic = $(".done_thematic").get(i).id;
 		$("#td_"+id_radio_thematic).css({"background-color":"#FFF"});
@@ -253,45 +263,43 @@ function check_per_custom_date(obj) {
         $("#div_datetime_by_attendance").show();
 	}
 }
-
 </script>';
 
 if ($action == 'thematic_list') {
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));
 }
 if ($action == 'thematic_add') {
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicSection'));
+    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicSection'));
 }
 if ($action == 'thematic_edit') {
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditThematicSection'));
+    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditThematicSection'));
 }
 if ($action == 'thematic_details') {
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));
 }
 if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].') ');
+    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].') ');
 }
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].')');
-	if ($description_type >= ADD_THEMATIC_PLAN) {
-		$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewBloc'));
-	} else {
-		$interbreadcrumb[] = array ('url' => '#', 'name' => $default_thematic_plan_title[$description_type]);
-	}
+    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].')');
+    if ($description_type >= ADD_THEMATIC_PLAN) {
+        $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewBloc'));
+    } else {
+        $interbreadcrumb[] = array ('url' => '#', 'name' => $default_thematic_plan_title[$description_type]);
+    }
 }
 if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicAdvance').' ('.$thematic_data['title'].')');
-
+    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicAdvance').' ('.$thematic_data['title'].')');
 }
 if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicAdvance').' ('.$thematic_data['title'].')');
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicAdvance'));
+    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicAdvance').' ('.$thematic_data['title'].')');
+    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicAdvance'));
 }
 
 // Distpacher actions to controller
@@ -306,7 +314,7 @@ switch ($action) {
     case 'moveup':
     case 'movedown':
         if (!api_is_allowed_to_edit(null,true)) {
-                api_not_allowed();
+            api_not_allowed();
         }
     case 'thematic_list':
     case 'thematic_export':

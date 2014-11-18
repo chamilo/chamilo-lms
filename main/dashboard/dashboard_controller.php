@@ -2,18 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Controller script. Prepares the common background variables to give to the scripts corresponding to
+ * the requested action
  * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.dashboard
  */
-
-/**
- * Controller script. Prepares the common background variables to give to the scripts corresponding to
- * the requested action
- */
-class DashboardController { // extends Controller {
-
-	private $toolname;
+class DashboardController
+{
+ 	private $toolname;
 	private $view;
 	private $user_id;
 
@@ -42,7 +39,7 @@ class DashboardController { // extends Controller {
 		$user_blocks_id = array_keys($user_block_data);
 
         $data_block = null;
-        
+
 		if (!empty($dashboard_blocks)) {
 			foreach ($dashboard_blocks as $block) {
 
@@ -119,6 +116,4 @@ class DashboardController { // extends Controller {
 		$result = DashboardManager::close_user_block($user_id, $path);
 		$this->display($result);
 	}
-
 }
-?>

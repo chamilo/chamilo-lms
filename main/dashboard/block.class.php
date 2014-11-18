@@ -3,15 +3,10 @@
 
 /**
  * This file contains class used parent class for blocks plugins
+ * Parent class for controller Blocks from dashboard plugin
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.dashboard
  */
-
-/**
- * Parent class for controller Blocks from dashboard plugin
- * @package chamilo.dashboard
- */
-
 class Block
 {
 	/**
@@ -45,5 +40,3 @@ class Block
         return $result;
     }
 }
-
-?>

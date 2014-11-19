@@ -3468,20 +3468,32 @@ class SessionManager
     }
 
     /**
+     * Protect a session to be edited.
      * @param int $id
      */
     static function protect_session_edit($id)
     {
         api_protect_admin_script(true);
         $session_info = self::fetch($id);
-        if (!api_is_platform_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {
+
+        if (empty($session_info)) {
+            api_not_allowed(true);
+        }
+        if (!api_is_platform_admin() &&
+            api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true'
+        ) {
             if ($session_info['session_admin_id'] != api_get_user_id()) {
                 api_not_allowed(true);
             }
         }
     }
 
-    static function protect_teacher_session_edit($id) {
+    /**
+     * @param $id
+     * @return bool
+     */
+    static function protect_teacher_session_edit($id)
+    {
         if (!api_is_coach($id) && !api_is_platform_admin()) {
             api_not_allowed(true);
         } else {

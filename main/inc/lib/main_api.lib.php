@@ -1446,28 +1446,17 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true)
 }
 
 /**
- * Returns the current course info array.
- * Note: this array is only defined if the user is inside a course.
- * Array elements:
- * ['name']
- * ['official_code']
- * ['sysCode']
- * ['path']
- * ['dbName']
- * ['dbNameGlu']
- * ['titular']
- * ['language']
- * ['extLink']['url' ]
- * ['extLink']['name']
- * ['categoryCode']
- * ['categoryName']
+ * Returns the current course info array see api_format_course_array()
+ * If the course_code is given, the returned array gives info about that
+ * particular course, if none given it gets the course info from the session.
  *
- * Now if the course_code is given, the returned array gives info about that
- * particular course, not specially the current one.
- * @param string Course code
- * @todo    Same behaviour as api_get_user_info so that api_get_course_id becomes obsolete too.
+ * @param string $course_code
+ * @param bool $strict
+ *
+ * @return array
  */
-function api_get_course_info($course_code = null, $strict = false) {
+function api_get_course_info($course_code = null, $strict = false)
+{
     if (!empty($course_code)) {
         $course_code        = Database::escape_string($course_code);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1486,7 +1475,9 @@ function api_get_course_info($course_code = null, $strict = false) {
         return $_course;
     }
     global $_course;
-    if ($_course == '-1') $_course = array();
+    if ($_course == '-1') {
+        $_course = array();
+    }
     return $_course;
 }
 

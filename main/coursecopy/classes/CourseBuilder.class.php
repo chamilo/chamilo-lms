@@ -284,7 +284,9 @@ class CourseBuilder
 
         $table = Database :: get_course_table(TABLE_FORUM);
 
-        $sql = "SELECT * FROM $table WHERE c_id = $course_id ";
+        $sessionCodition = api_get_session_condition($session_id, true, $with_base_content);
+
+        $sql = "SELECT * FROM $table WHERE c_id = $course_id $sessionCodition";
         $sql .= " ORDER BY forum_title, forum_category";
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
@@ -302,7 +304,10 @@ class CourseBuilder
         $course_info     = api_get_course_info($course_code);
         $course_id         = $course_info['real_id'];
 
-        $sql = "SELECT * FROM $table WHERE c_id = $course_id ORDER BY cat_title";
+        $sessionCodition = api_get_session_condition($session_id, true, $with_base_content);
+
+        $sql = "SELECT * FROM $table WHERE c_id = $course_id $sessionCodition ORDER BY cat_title";
+
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $forum_category = new ForumCategory($obj);
@@ -318,7 +323,11 @@ class CourseBuilder
         $table = Database :: get_course_table(TABLE_FORUM_THREAD);
         $course_info     = api_get_course_info($course_code);
         $course_id         = $course_info['real_id'];
+
+        $sessionCodition = api_get_session_condition($session_id, true, $with_base_content);
+
         $sql = "SELECT * FROM $table WHERE c_id = $course_id
+                $sessionCodition
                 ORDER BY thread_title ";
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
@@ -403,7 +412,11 @@ class CourseBuilder
     {
         $table = Database :: get_course_table(TABLE_TOOL_INTRO);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM $table WHERE c_id = $course_id ";
+
+        $sessionCodition = api_get_session_condition($session_id, true, $with_base_content);
+
+        $sql = "SELECT * FROM $table WHERE c_id = $course_id $sessionCodition";
+
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $tool_intro = new ToolIntro($obj->id, $obj->intro_text);
@@ -728,7 +741,9 @@ class CourseBuilder
         $table_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $course_id = api_get_course_int_id();
 
-        $sql = 'SELECT * FROM '.$table_survey.' WHERE c_id = '.$course_id.' AND session_id = ' . $session_id;
+        $sessionCondition = api_get_session_condition($session_id, true, $with_base_content);
+
+        $sql = 'SELECT * FROM '.$table_survey.' WHERE c_id = '.$course_id.' ' . $sessionCondition;
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $survey = new Survey($obj->survey_id, $obj->code,$obj->title,
@@ -787,7 +802,9 @@ class CourseBuilder
         $table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
         $course_id = api_get_course_int_id();
 
-        $sql = 'SELECT * FROM '.$table.' WHERE c_id = '.$course_id.' AND session_id = 0';
+        $sessionCondition = api_get_session_condition($session_id, true, $with_base_content);
+
+        $sql = 'SELECT * FROM '.$table.' WHERE c_id = '.$course_id.' ' . $sessionCondition;
         $db_result = Database::query($sql);
         $table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         while ($obj = Database::fetch_object($db_result)) {
@@ -826,7 +843,9 @@ class CourseBuilder
         $table = Database :: get_course_table(TABLE_AGENDA);
         $course_id = api_get_course_int_id();
 
-        $sql = 'SELECT * FROM '.$table.' WHERE c_id = '.$course_id.' AND session_id = 0';
+        $sessionCondition = api_get_session_condition($session_id, true, $with_base_content);
+
+        $sql = 'SELECT * FROM '.$table.' WHERE c_id = '.$course_id.' ' . $sessionCondition;
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
@@ -1159,7 +1178,9 @@ class CourseBuilder
 
         $course_id = api_get_course_int_id();
 
-        $sql = 'SELECT * FROM '.$table_attendance.' WHERE c_id = '.$course_id.' AND session_id = 0 ';
+        $sessionCondition = api_get_session_condition($session_id, true, $with_base_content);
+
+        $sql = 'SELECT * FROM '.$table_attendance.' WHERE c_id = '.$course_id.' ' . $sessionCondition;
         $db_result = Database::query($sql);
         while ($row = Database::fetch_array($db_result,'ASSOC')) {
             $obj = new Attendance($row);
@@ -1183,13 +1204,15 @@ class CourseBuilder
 
         $course_id = api_get_course_int_id();
 
-        $sql = 'SELECT * FROM '.$table_work.'
+        $sessionCondition = api_get_session_condition($session_id, true, $with_base_content);
+
+        $sql = "SELECT * FROM $table_work
                 WHERE
-                    c_id = '.$course_id.' AND
-                    session_id = 0 AND
+                    c_id = $course_id 
+                    $sessionCondition AND
                     filetype = \'folder\' AND
                     parent_id = 0 AND
-                    active = 1';
+                    active = 1";
         $db_result = Database::query($sql);
         while ($row = Database::fetch_array($db_result,'ASSOC')) {
             $obj = new Work($row);

@@ -885,9 +885,10 @@ class CourseRestorer
 	/**
 	 * Restore forums
 	 */
-	public function restore_forums()
+	public function restore_forums($sessionId = 0)
     {
 		if ($this->course->has_resources(RESOURCE_FORUM)) {
+            $sessionId = intval($sessionId);
 			$table_forum = Database::get_course_table(TABLE_FORUM);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
@@ -901,6 +902,7 @@ class CourseRestorer
                 $params = self::DBUTF8_array($params);
                 $params['c_id'] = $this->destination_course_id;
                 $params['forum_category'] = $cat_id;
+                $params['session_id'] = $sessionId;
                 unset($params['forum_id']);
 
                 $params['forum_comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
@@ -1075,9 +1077,10 @@ class CourseRestorer
 	/**
 	 * Restore tool intro
 	 */
-    public function restore_tool_intro()
+    public function restore_tool_intro($sessionId = 0)
     {
 		if ($this->course->has_resources(RESOURCE_TOOL_INTRO)) {
+            $sessionId = intval($sessionId);
 			$tool_intro_table = Database :: get_course_table(TABLE_TOOL_INTRO);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
@@ -1085,7 +1088,8 @@ class CourseRestorer
 				Database::query($sql);
                 $tool_intro->intro_text = DocumentManager::replace_urls_inside_content_html_from_copy_course($tool_intro->intro_text,$this->course->code, $this->course->destination_path, $this->course->backup_path, $this->course->info['path']);
 				$sql = "INSERT INTO ".$tool_intro_table." SET c_id = ".$this->destination_course_id." , id='".self::DBUTF8escapestring($tool_intro->id)."', intro_text = '".self::DBUTF8escapestring($tool_intro->intro_text)."'";
-				Database::query($sql);
+				$sql.= ", session_id = $sessionId";
+                Database::query($sql);
 
 				$this->course->resources[RESOURCE_TOOL_INTRO][$id]->destination_id = Database::insert_id();
 			}
@@ -1125,9 +1129,10 @@ class CourseRestorer
 	/**
 	 * Restore events
 	 */
-    public function restore_events()
+    public function restore_events($sessionId = 0)
     {
 		if ($this->course->has_resources(RESOURCE_EVENT)) {
+            $sessionId = intval($sessionId);
 			$table = Database :: get_course_table(TABLE_AGENDA);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_EVENT] as $id => $event) {
@@ -1141,6 +1146,7 @@ class CourseRestorer
                         all_day = '".$event->all_day."',
         				start_date = '".$event->start_date."',
         				end_date = '".$event->end_date."'";
+                $sql.= ", session_id = $sessionId";
 
 				Database::query($sql);
 				$new_event_id = Database::insert_id();
@@ -1219,9 +1225,10 @@ class CourseRestorer
 	/**
 	 * Restore announcements
 	 */
-    public function restore_announcements()
+    public function restore_announcements($sessionId = 0)
     {
 		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
+            $sessionId = intval($sessionId);
 			$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement) {
@@ -1235,7 +1242,8 @@ class CourseRestorer
 							"content = '".self::DBUTF8escapestring($announcement->content)."', " .
 							"end_date = '".$announcement->date."', " .
 							"display_order = '".$announcement->display_order."', " .
-							"email_sent = '".$announcement->email_sent."'";
+							"email_sent = '".$announcement->email_sent."', "
+                    . "session_id = $sessionId";
 				Database::query($sql);
 				$new_announcement_id = Database::insert_id();
 				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = $new_announcement_id;
@@ -2202,8 +2210,9 @@ class CourseRestorer
      * @deprecated use restore_works
      *
 	 */
-	public function restore_student_publication()
+	public function restore_student_publication($sessionId = 0)
     {
+        $sessionId = intval($sessionId);
 		$work_assignment_table  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 		$work_table    			= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 		$item_property_table  	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -2220,6 +2229,7 @@ class CourseRestorer
             unset($folder['id']);
 			$folder['c_id'] = $this->destination_course_id;
             $folder['parent_id'] = 0;
+            $folder['session_id'] = $sessionId;
 			$new_id = Database::insert($work_table, $folder);
 
             if ($new_id) {
@@ -2249,6 +2259,7 @@ class CourseRestorer
                 foreach ($sub_folders  as $sub_folder) {
                     $sub_folder['c_id'] = $this->destination_course_id;
                     $sub_folder['ref'] = $new_id;
+                    $sub_folder['session_id'] = $sessionId;
                     $new_item_id = Database::insert($item_property_table, $sub_folder);
                 }
 

@@ -190,9 +190,7 @@ function displayForm()
     $html .= '<label class="radio"><input type="radio" id="copy_option_2" name="copy_option" value="select_items"/>';
     $html .= ' ' . get_lang('LetMeSelectItems') . '</label><br/>';
 
-    $html .= '<label class="checkbox"><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />' . get_lang(
-            'CopyOnlySessionItems'
-        ) . '</label><br /><br/>';
+    $html .= '<p>' . get_lang('CopyOnlySessionItems') . '</p>';
 
     $html .= '<button class="save" type="submit" onclick="javascript:if(!confirm(' . "'" . addslashes(
             api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)
@@ -285,11 +283,6 @@ $htmlHeadXtra[] = '<script>
 
 Display::display_header($nameTools);
 
-$withBaseContent = true;
-if (isset($_POST['copy_only_session_items']) && $_POST['copy_only_session_items']) {
-    $withBaseContent = false;
-}
-
 /* MAIN CODE */
 
 if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
@@ -345,7 +338,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
                 $cb = new CourseBuilder('', $courseInfo);
                 $course = $cb->build(
-                    $originSession, $courseCode, $withBaseContent
+                    $originSession, $courseCode
                 );
                 $cr = new CourseRestorer($course);
                 $cr->restore($courseDestination, $destinationSession);
@@ -385,7 +378,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         );
 
         $cb = new CourseBuilder('', $courseInfo);
-        $course = $cb->build($sessionId, $courseCode, $withBaseContent);
+        $course = $cb->build($sessionId, $courseCode);
         $hiddenFields['destination_course'] = $arrCourseDestination[0];
         $hiddenFields['destination_session'] = $destinationSession;
         $hiddenFields['origin_course'] = api_get_course_id();

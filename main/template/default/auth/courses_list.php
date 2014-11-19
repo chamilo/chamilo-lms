@@ -10,7 +10,7 @@
 // Access rights: anonymous users can't do anything usefull here.
 api_block_anonymous_users();
 $stok = Security::get_token();
-$courses_without_category = $courses_in_category[0];
+$courses_without_category = isset($courses_in_category[0]) ? $courses_in_category[0] : null;
 
 ?>
 

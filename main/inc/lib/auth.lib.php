@@ -24,7 +24,7 @@ class Auth
 
     /**
      * retrieves all the courses that the user has already subscribed to
-     * @param   int User id
+     * @param   int $user_id
      * @return  array an array containing all the information of the courses of the given user
      */
     public function get_courses_of_user($user_id)
@@ -36,7 +36,7 @@ class Auth
 
         // get course list auto-register
         $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
-                " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
+            " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 
         $special_course_result = Database::query($sql);
         if (Database::num_rows($special_course_result) > 0) {
@@ -61,6 +61,7 @@ class Auth
                 AND   course_rel_user.user_id = '" . $user_id . "' $without_special_courses
                 ORDER BY course_rel_user.sort ASC";
         $result = Database::query($sql);
+        $courses = array();
         while ($row = Database::fetch_array($result)) {
             //we only need the database name of the course
             $courses[] = array(
@@ -77,6 +78,7 @@ class Auth
                 'user_course_category' => $row['user_course_cat']
             );
         }
+
         return $courses;
     }
 
@@ -94,12 +96,12 @@ class Auth
         while ($row = Database::fetch_array($result)) {
             $output[] = $row;
         }
+
         return $output;
     }
 
     /**
      * This function get all the courses in the particular user category;
-     * @param  int   User category id
      * @return string: the name of the user defined course category
      */
     public function get_courses_in_category()
@@ -109,13 +111,17 @@ class Auth
         // table definitions
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_USER_COURSE_CATEGORY = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
         $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         // get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
-                " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
+        $sql = "SELECT course_code
+                FROM $TABLE_COURSE_FIELD_VALUE tcfv
+                INNER JOIN $TABLE_COURSE_FIELD tcf
+                ON tcfv.field_id =  tcf.id
+                WHERE
+                    tcf.field_variable = 'special_course' AND
+                    tcfv.field_value = 1 ";
 
         $special_course_result = Database::query($sql);
         if (Database::num_rows($special_course_result) > 0) {
@@ -133,11 +139,12 @@ class Auth
                     course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
                     course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
                     course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                FROM    $TABLECOURS       course,
-                                                        $TABLECOURSUSER  course_rel_user
-                WHERE course.code = course_rel_user.course_code
-                AND  course_rel_user.user_id = '" . $user_id . "'
-                AND  course_rel_user.relation_type <> " . COURSE_RELATION_TYPE_RRHH . "
+                FROM $TABLECOURS course,
+                $TABLECOURSUSER  course_rel_user
+                WHERE
+                    course.code = course_rel_user.course_code AND
+                    course_rel_user.user_id = '" . $user_id . "' AND
+                    course_rel_user.relation_type <> " . COURSE_RELATION_TYPE_RRHH . "
                     $without_special_courses
                 ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql);
@@ -146,6 +153,7 @@ class Auth
         while ($course = Database::fetch_array($result)) {
             $data[$course['user_course_cat']][] = $course;
         }
+
         return $data;
     }
 
@@ -163,13 +171,14 @@ class Auth
         $result = false;
 
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-        $max_sort_value = api_max_sort_value($newcategory, $current_user); // max_sort_value($newcategory);
+        // max_sort_value($newcategory);
+        $max_sort_value = api_max_sort_value($newcategory, $current_user);
         Database::query("UPDATE $TABLECOURSUSER SET user_course_cat='" . $newcategory . "', sort='" . ($max_sort_value + 1) . "' WHERE course_code='" . $course_code . "' AND user_id='" . $current_user . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ");
 
         if (Database::affected_rows()) {
             $result = true;
         }
+
         return $result;
     }
 
@@ -213,8 +222,10 @@ class Auth
         }
 
         if (count($target_course) > 0 && count($source_course) > 0) {
-            $sql_update1 = "UPDATE $TABLECOURSUSER SET sort='" . $target_course['sort'] . "' WHERE course_code='" . $source_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
-            $sql_update2 = "UPDATE $TABLECOURSUSER SET sort='" . $source_course['sort'] . "' WHERE course_code='" . $target_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
+            $sql_update1 = "UPDATE $TABLECOURSUSER SET sort='" . $target_course['sort'] . "'
+                            WHERE course_code='" . $source_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
+            $sql_update2 = "UPDATE $TABLECOURSUSER SET sort='" . $source_course['sort'] . "'
+                            WHERE course_code='" . $target_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
             Database::query($sql_update2);
             Database::query($sql_update1);
             if (Database::affected_rows()) {
@@ -255,8 +266,10 @@ class Auth
         }
 
         if (count($target_category) > 0 && count($source_category) > 0) {
-            $sql_update1 = "UPDATE $table_user_defined_category SET sort='" . Database::escape_string($target_category['sort']) . "' WHERE id='" . intval($source_category['id']) . "' AND user_id='" . $current_user_id . "'";
-            $sql_update2 = "UPDATE $table_user_defined_category SET sort='" . Database::escape_string($source_category['sort']) . "' WHERE id='" . intval($target_category['id']) . "' AND user_id='" . $current_user_id . "'";
+            $sql_update1 = "UPDATE $table_user_defined_category SET sort='" . Database::escape_string($target_category['sort']) . "'
+                            WHERE id='" . intval($source_category['id']) . "' AND user_id='" . $current_user_id . "'";
+            $sql_update2 = "UPDATE $table_user_defined_category SET sort='" . Database::escape_string($source_category['sort']) . "'
+                            WHERE id='" . intval($target_category['id']) . "' AND user_id='" . $current_user_id . "'";
             Database::query($sql_update2);
             Database::query($sql_update1);
             if (Database::affected_rows()) {
@@ -274,7 +287,9 @@ class Auth
     {
         $current_user_id = api_get_user_id();
         $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT * FROM " . $table_category . " WHERE user_id='" . $current_user_id . "' ORDER BY sort ASC";
+        $sql = "SELECT * FROM " . $table_category . "
+                WHERE user_id='" . $current_user_id . "'
+                ORDER BY sort ASC";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $output[$row['id']] = $row;
@@ -295,7 +310,9 @@ class Auth
         $category_id = intval($category_id);
         $result = false;
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "UPDATE $tucc SET title='" . api_htmlentities($title, ENT_QUOTES, api_get_system_encoding()) . "' WHERE id='" . $category_id . "'";
+        $sql = "UPDATE $tucc
+                SET title='" . api_htmlentities($title, ENT_QUOTES, api_get_system_encoding()) . "'
+                WHERE id='" . $category_id . "'";
         Database::query($sql);
         if (Database::affected_rows()) {
             $result = true;
@@ -315,13 +332,16 @@ class Auth
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $category_id = intval($category_id);
         $result = false;
-        $sql_delete = "DELETE FROM $tucc WHERE id='" . $category_id . "' and user_id='" . $current_user_id . "'";
+        $sql_delete = "DELETE FROM $tucc
+                       WHERE id='" . $category_id . "' and user_id='" . $current_user_id . "'";
         Database::query($sql_delete);
         if (Database::affected_rows()) {
             $result = true;
         }
-        $sql_update = "UPDATE $TABLECOURSUSER SET user_course_cat='0' WHERE user_course_cat='" . $category_id . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
-        Database::query($sql_update);
+        $sql = "UPDATE $TABLECOURSUSER
+                SET user_course_cat='0'
+                WHERE user_course_cat='" . $category_id . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
+        Database::query($sql);
         return $result;
     }
 
@@ -378,7 +398,8 @@ class Auth
         $sql = "SELECT * FROM $tucc WHERE user_id='" . $current_user_id . "' AND title='" . $category_title . "'ORDER BY sort DESC";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) == 0) {
-            $sql_insert = "INSERT INTO $tucc (user_id, title,sort) VALUES ('" . $current_user_id . "', '" . api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding()) . "', '" . $nextsort . "')";
+            $sql_insert = "INSERT INTO $tucc (user_id, title,sort)
+                           VALUES ('" . $current_user_id . "', '" . api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding()) . "', '" . $nextsort . "')";
             Database::query($sql_insert);
             if (Database::affected_rows()) {
                 $result = true;
@@ -438,7 +459,8 @@ class Auth
         $limitFilter = getLimitFilterFromArray($limit);
 
         // get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id =  tcf.id
+        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv
+                INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id =  tcf.id
                 WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 
         $special_course_result = Database::query($sql);
@@ -554,7 +576,7 @@ class Auth
 
     /**
      * List the sessions
-     * @param date $date (optional) The date of sessions
+     * @param string $date (optional) The date of sessions
      * @param array $limit
      * @return array The session list
      */
@@ -567,21 +589,20 @@ class Auth
 
         $sessionsToBrowse = array();
         $userId = api_get_user_id();
-
         $limitFilter = getLimitFilterFromArray($limit);
 
         $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username "
-                . "FROM $sessionTable AS s "
-                . "INNER JOIN $userTable AS u "
-                . "ON s.id_coach = u.user_id "
-                . "WHERE 1 = 1 ";
+            . "FROM $sessionTable AS s "
+            . "INNER JOIN $userTable AS u "
+            . "ON s.id_coach = u.user_id "
+            . "WHERE 1 = 1 ";
 
         if (!is_null($date)) {
             $date = Database::escape_string($date);
-            
+
             $sql .= "AND ('$date' BETWEEN s.date_start AND s.date_end) "
-                    . "OR (s.date_end = '0000-00-00') "
-                    . "OR (s.date_start = '0000-00-00' AND s.date_end != '0000-00-00' AND s.date_end > '$date')";
+                . "OR (s.date_end = '0000-00-00') "
+                . "OR (s.date_start = '0000-00-00' AND s.date_end != '0000-00-00' AND s.date_end > '$date')";
         }
 
         // Add limit filter to do pagination
@@ -606,7 +627,7 @@ class Auth
 
     /**
      * Return a COUNT from Session table
-     * @param date $date in Y-m-d format
+     * @param string $date in Y-m-d format
      * @return int
      */
     function countSessions($date = null)

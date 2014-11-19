@@ -4,7 +4,6 @@
 *	@author Bart Mollet, Julio Montoya lot of fixes
 *	@package chamilo.admin
 */
-/*		INIT SECTION */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
@@ -14,7 +13,11 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = (int)$_GET['id_session'];
+$id_session = isset($_GET['id_session']) ? $_GET['id_session'] : null;
+
+if (empty($id_session)) {
+    api_not_allowed(true);
+}
 
 SessionManager::protect_session_edit($id_session);
 
@@ -284,6 +287,7 @@ if ($session['nbr_courses'] == 0) {
     $result = Database::query($sql);
     $courses = Database::store_result($result);
     $count = 0;
+
 	foreach ($courses as $course) {
 		//select the number of users
 

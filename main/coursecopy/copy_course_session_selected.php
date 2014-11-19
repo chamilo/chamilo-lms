@@ -148,7 +148,7 @@ function displayForm()
             $sessionId
         ) . '</td>';
     $html .= '<td width="50%">';
-    $html .= $courseInfo['title'] . '</td></tr>';
+    $html .= "{$courseInfo['title']} ({$courseInfo['code']})" . '</td></tr>';
 
     // Destination
     $html .= '<tr><td width="15%"><b>' . get_lang(
@@ -184,13 +184,14 @@ function displayForm()
     $html .= '<select id="destination" name="SessionCoursesListDestination[]" style="width:380px;" ></select></div></td>';
     $html .= '</tr></table>';
 
-    $html .= '<h3>' . get_lang('TypeOfCopy') . '</h3>';
+    $html .= "<fieldset>";
+    $html .= '<legend>' . get_lang('TypeOfCopy') . ' <small>(' . get_lang('CopyOnlySessionItems') . ')</small></legend>';
     $html .= '<label class="radio"><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
-    $html .= get_lang('FullCopy') . '</label><br/>';
+    $html .= get_lang('FullCopy') . '</label>';
     $html .= '<label class="radio"><input type="radio" id="copy_option_2" name="copy_option" value="select_items"/>';
     $html .= ' ' . get_lang('LetMeSelectItems') . '</label><br/>';
 
-    $html .= '<p>' . get_lang('CopyOnlySessionItems') . '</p>';
+    $html .= "</fieldset>";
 
     $html .= '<button class="save" type="submit" onclick="javascript:if(!confirm(' . "'" . addslashes(
             api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)

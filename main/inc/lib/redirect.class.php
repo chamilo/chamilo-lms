@@ -6,13 +6,16 @@
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
-class Redirect {
+class Redirect
+{
 
-    static function www() {
+    public static function www()
+    {
         return Uri::www();
     }
 
-    static function go($url = '') {
+    public static function go($url = '')
+    {
         if (empty($url)) {
             Redirect::session_request_uri();
             $www = self::www();
@@ -32,7 +35,8 @@ class Redirect {
      * Redirect to the session "request uri" if it exists.
      * @param bool Whether the user just logged in (in this case, use page_after_login rules)
      */
-    static function session_request_uri($logging_in = false, $user_id = null) {
+    public static function session_request_uri($logging_in = false, $user_id = null)
+    {
         $no_redirection = isset($_SESSION['noredirection']) ? $_SESSION['noredirection'] : false;
 
         if ($no_redirection) {
@@ -85,12 +89,14 @@ class Redirect {
         }
     }
 
-    static function home() {
+    public static function home()
+    {
         $www = self::www();
         self::navigate($www);
     }
 
-    static function user_home() {
+    public static function user_home()
+    {
         $www = self::www();
         self::navigate("$www/user_portal.php");
     }

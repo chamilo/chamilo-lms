@@ -25,7 +25,7 @@ $isNotAllowedHere = api_get_setting('allow_terms_conditions') === 'false' &&
     api_get_setting('allow_registration') === 'false';
 
 if ($isNotAllowedHere) {
-    api_not_allowed(true,get_lang('RegistrationDisabled'));
+    api_not_allowed(true, get_lang('RegistrationDisabled'));
 }
 
 if (!empty($_SESSION['user_language_choice'])) {
@@ -49,7 +49,7 @@ $course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQU
 $exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? $_REQUEST['e'] : null;
 
 if (!empty($course_code_redirect)) {
-    Session::write('course_redirect',   $course_code_redirect);
+    Session::write('course_redirect', $course_code_redirect);
     Session::write('exercise_redirect', $exercise_redirect);
 }
 
@@ -65,7 +65,7 @@ if ($user_already_registered_show_terms == false) {
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
     }
     $form->applyFilter(array('lastname', 'firstname'), 'trim');
-    $form->addRule('lastname',  get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
     // EMAIL
@@ -91,14 +91,19 @@ if ($user_already_registered_show_terms == false) {
     // OFFICIAL CODE
     if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
         $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
-        if (api_get_setting('registration', 'officialcode') == 'true')
-            $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
+        if (api_get_setting('registration', 'officialcode') == 'true') {
+            $form->addRule(
+                'official_code',
+                get_lang('ThisFieldIsRequired'),
+                'required'
+            );
+        }
     }
 
     // USERNAME
     if (api_get_setting('login_is_email') != 'true') {
         $form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'size' => USERNAME_MAX_LENGTH));
-        $form->applyFilter('username','trim');
+        $form->applyFilter('username', 'trim');
         $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
         $form->addRule('username', get_lang('UsernameWrong'), 'username');
@@ -117,13 +122,20 @@ if ($user_already_registered_show_terms == false) {
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
 
-    if (CHECK_PASS_EASY_TO_FIND)
-        $form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+    if (CHECK_PASS_EASY_TO_FIND) {
+        $form->addRule(
+            'password1',
+            get_lang('PassTooEasy') . ': ' . api_generate_password(),
+            'callback',
+            'api_check_password'
+        );
+    }
 
     // PHONE
     $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
-    if (api_get_setting('registration', 'phone') == 'true')
+    if (api_get_setting('registration', 'phone') == 'true') {
         $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
+    }
 
     // PICTURE
     /*if (api_get_setting('profile', 'picture') == 'true') {
@@ -193,7 +205,7 @@ if ($user_already_registered_show_terms == false) {
         if (api_get_setting('extendedprofile_registration', 'myteach') == 'true' && api_get_setting('extendedprofile_registrationrequired', 'myteach') == 'true') {
             $form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true' && api_get_setting('extendedprofile_registrationrequired','mypersonalopenarea') == 'true') {
+        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true' && api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') == 'true') {
             $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
@@ -291,7 +303,7 @@ if (!CustomPages::enabled()) {
 
     // Forbidden to self-register
     if ($isNotAllowedHere) {
-        api_not_allowed(true,get_lang('RegistrationDisabled'));
+        api_not_allowed(true, get_lang('RegistrationDisabled'));
     }
 
     if (api_get_setting('allow_registration') == 'approval') {
@@ -329,7 +341,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 
     if ($term_preview['type'] == 1) {
         $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
-        $form->addRule('legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('legal_accept', get_lang('ThisFieldIsRequired'), 'required');
     } else {
         $preview = LegalManager::show_last_condition($term_preview);
         $form->addElement('label', null, $preview);
@@ -375,7 +387,7 @@ if ($form->validate()) {
                 // To remove from user_field_value and folder
                 UserManager::update_extra_field_value(
                     $user_id,
-                    substr($key,13),
+                    substr($key, 13),
                     $extra_value
                 );
             }
@@ -490,26 +502,26 @@ if ($form->validate()) {
                 Database::query($sql);
 
                 // 2. Send mail to all platform admin
-                $emailsubject  = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
-                $emailbody = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
-                $emailbody .= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
+                $emailsubject  = get_lang('ApprovalForNewAccount', null, $values['language']).': '.$values['username'];
+                $emailbody = get_lang('ApprovalForNewAccount', null, $values['language'])."\n";
+                $emailbody .= get_lang('UserName', null, $values['language']).': '.$values['username']."\n";
 
                 if (api_is_western_name_order()) {
-                    $emailbody .= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
-                    $emailbody .= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
+                    $emailbody .= get_lang('FirstName', null, $values['language']).': '.$values['firstname']."\n";
+                    $emailbody .= get_lang('LastName', null, $values['language']).': '.$values['lastname']."\n";
                 } else {
-                    $emailbody .= get_lang('LastName',null,$values['language']).': '.$values['lastname']."\n";
-                    $emailbody .= get_lang('FirstName',null,$values['language']).': '.$values['firstname']."\n";
+                    $emailbody .= get_lang('LastName', null, $values['language']).': '.$values['lastname']."\n";
+                    $emailbody .= get_lang('FirstName', null, $values['language']).': '.$values['firstname']."\n";
                 }
-                $emailbody .= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
-                $emailbody .= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
+                $emailbody .= get_lang('Email', null, $values['language']).': '.$values['email']."\n";
+                $emailbody .= get_lang('Status', null, $values['language']).': '.$values['status']."\n\n";
 
                 $url_edit = Display::url(
                     api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id,
                     api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
                 );
 
-                $emailbody .= get_lang('ManageUser',null,$values['language']).": $url_edit";
+                $emailbody .= get_lang('ManageUser', null, $values['language']).": $url_edit";
 
                 $admins = UserManager::get_all_administrators();
                 foreach ($admins as $admin_info) {
@@ -592,7 +604,7 @@ if ($form->validate()) {
 
         if ($is_allowedCreateCourse) {
             if ($usersCanCreateCourse) {
-                $form_data['message'] = '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). "</p>";
+                $form_data['message'] = '<p>'. get_lang('NowGoCreateYourCourse', null, $_user['language']). "</p>";
             }
             $form_data['action']  = '../create_course/add_course.php';
 
@@ -605,7 +617,7 @@ if ($form->validate()) {
         } else {
             if (api_get_setting('allow_students_to_browse_courses') == 'true') {
                 $form_data['action']    = 'courses.php?action=subscribe';
-                $form_data['message']   = '<p>'. get_lang('NowGoChooseYourCourses',null,$_user['language']). ".</p>";
+                $form_data['message']   = '<p>'. get_lang('NowGoChooseYourCourses', null, $_user['language']). ".</p>";
             } else {
                 $form_data['action']  = api_get_path(WEB_PATH).'user_portal.php';
             }
@@ -627,9 +639,7 @@ if ($form->validate()) {
     if (!empty($course_code_redirect)) {
         $course_info = api_get_course_info($course_code_redirect);
         if (!empty($course_info)) {
-            if (in_array($course_info['visibility'],
-                array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))
-            ) {
+            if (in_array($course_info['visibility'], array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))) {
                 $user_id = api_get_user_id();
                 if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
 
@@ -642,7 +652,7 @@ if ($form->validate()) {
                     );
 
                     $exercise_redirect = intval(Session::read('exercise_redirect'));
-                    // Specifiy course ID as the current context does not 
+                    // Specifiy course ID as the current context does not
                     // hold a global $_course array
                     $objExercise = new Exercise($course_info['real_id']);
                     $result = $objExercise->read($exercise_redirect);
@@ -702,4 +712,3 @@ if ($form->validate()) {
     }
 }
 Display :: display_footer();
-

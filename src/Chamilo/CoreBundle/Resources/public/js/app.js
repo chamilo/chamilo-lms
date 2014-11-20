@@ -1,3 +1,5 @@
+
+
 jQuery.fn.filterByText = function(textbox) {
     return this.each(function() {
         var select = this;
@@ -107,7 +109,7 @@ function sizeContent() {
 
 $(window).resize(sizeContent);
 
-$(document).ready( function() {
+$(function() {
 
     sizeContent();
 
@@ -186,13 +188,13 @@ $(document).ready( function() {
     });
 
     // Tooltip.
-    $(function() {
+    /*$(function() {
         $('a').tooltip({
             placement: 'right',
             show: 500,
             hide: 500
         });
-    });
+    });*/
 
     $('.minify').click(function(e) {
         $('body').toggleClass("minified");

@@ -39,8 +39,6 @@ class ThemeManager
         $this->resolverClass = $resolverClass?: 'Chamilo\AdminThemeBundle\Util\DependencyResolver';
     }
 
-
-
     public function registerScript($id, $src, $deps = array(), $location = "bottom")
     {
 

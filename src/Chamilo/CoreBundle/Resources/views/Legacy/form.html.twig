@@ -1,9 +1,8 @@
-<div class="col-md-12">
-    <div class="box box-primary">
-        <form action="{{ url }}" method="POST" {{ form_enctype(form) }} class="form-horizontal" role="form">
-            <div class="box-body">
-            {{ form_widget(form) }}
-            </div>
-        </form>
-    </div>
+
+<div class="box box-primary">
+    <form action="{{ url }}" method="POST" {{ form_enctype(form) }} role="form">
+        <div class="box-body">
+        {{ form_widget(form) }}
+        </div>
+    </form>
 </div>

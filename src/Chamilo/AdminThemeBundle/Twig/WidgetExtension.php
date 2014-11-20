@@ -17,20 +17,18 @@ class WidgetExtension extends \Twig_Extension {
      */
     protected $env;
 
-
-
     public function renderWidget() {
 
     }
 
     public function getFunctions()
     {
-
-
         return array(
-            'widget_box' => new \Twig_SimpleFunction('widget_box',
-                                                     array($this, 'renderWidget'),
-                                                     array('is_safe' => array('html'))),
+            'widget_box' => new \Twig_SimpleFunction(
+                'widget_box',
+                array($this, 'renderWidget'),
+                array('is_safe' => array('html'))
+            ),
         );
     }
 
@@ -42,6 +40,6 @@ class WidgetExtension extends \Twig_Extension {
 
     public function getName()
     {
-        return 'avanzu_widget';
+        return 'chamilo_widget';
     }
 }

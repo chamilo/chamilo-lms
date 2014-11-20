@@ -34,7 +34,7 @@
  *
  *		load: (object or array of objects)  jquery is loaded by default. You can pass a single object to
  *			frameReady, or an array of objects that will be loaded and tested in order.  2 types
- *			of files can be loaded.  Scripts	and stylesheets:
+ *			of files can be loaded.  Scripts	and stylesheets:carousel
  *
  *			scripts: {type:"script", src:"/js/myscript.js", id:"_ms", test:"afunction"}
  *			stylesheets: {type:"stylesheet", src:"/css/mycss.css", id:"_ss"}
@@ -200,19 +200,19 @@ jQuery.isFrameReady = function(fn){
     var frs = fr["settings"];
 
     if (fr.done) { return false; };
-    
+
     var fx = eval(fr.target);
-    
+
     $d.log(fn, ": New Pass. Checking target");
     // make sure we have a target
     if (typeof fx !== "undefined") {
-        
+
         $d.log(fn, ": Found target.  Checking DOM");
-        
+
         try {
             var fd = fx.document;
         } catch (ex) { }
-        
+
         // make sure we have a DOM
         if (fd && fd.getElementsByTagName && fd.getElementById && fd.body && fd.body.innerHTML.length) {
 
@@ -239,11 +239,11 @@ jQuery.isFrameReady = function(fn){
                                     var ele=fd.createElement('script');
                                     ele.setAttribute('id', id);
                                     ele.setAttribute('src', s.src);
-                                    
+
                                     if (fd.getElementsByTagName("body") && fd.getElementsByTagName("body")[0]) {
                                         fd.getElementsByTagName("body")[0].appendChild(ele);
                                     }
-                                    
+
                                     frs.loadInit[i] = true;
                                     break;
                                 case "stylesheet" :

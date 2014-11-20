@@ -27,11 +27,6 @@ class CourseType extends AbstractType
             ->add('disk_quota', 'text')
             ->add('expiration_date', 'sonata_type_datetime_picker')
 
-
-
-
-
-
            /* ->add('general_coach', 'entity', array(
                 'class' => 'ChamiloUserBundle:User',
                 'property' => 'username',

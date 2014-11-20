@@ -40,15 +40,15 @@ class ChamiloAdminThemeExtension extends Extension implements PrependExtensionIn
 
         if (isset($bundles['TwigBundle'])) {
             $container->prependExtensionConfig('twig', array(
-                    'form' => array(
-                        'resources' => array(
-                            'ChamiloAdminThemeBundle:layout:form-theme.html.twig'
-                        )
-                    ),
-                    'globals' => array(
-                        'admin_theme' => 'chamilo_admin_theme.theme_manager'
+                'form' => array(
+                    'resources' => array(
+                        'ChamiloAdminThemeBundle:layout:form-theme.html.twig'
                     )
-                ));
+                ),
+                'globals' => array(
+                    'admin_theme' => 'chamilo_admin_theme.theme_manager'
+                )
+            ));
         }
 
         return

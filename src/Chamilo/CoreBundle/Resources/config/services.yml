@@ -8,6 +8,9 @@ services:
         tags:
             - { name: twig.extension }
 
+    chamilo_core.directory_namer.user_image:
+        class: Chamilo\CoreBundle\Naming\UserImage
+
     chamilo_core.manager.course:
         class: %chamilo_core.manager.course.class%
         arguments: [%chamilo_core.manager.course.entity%, @doctrine]
@@ -17,22 +20,28 @@ services:
         tags:
             - { name: form.type, alias: yes_no }
 
-#    chamilo.doctrine.entity_listener_resolver:
-#        class: Chamilo\CoreBundle\Doctrine\EntityListenerResolver
-#        arguments: [ "@service_container" ]
-
-    chamilo_core.entity_listener.course:
-        class: Chamilo\CoreBundle\Entity\Listener\CourseListener
-        arguments: [ @chamilo_course.tool_chain ]
-        tags:
-            - { name: doctrine.orm.entity_listener }
-#            - { name: doctrine.event_listener, event: prePersist }
-
     chamilo_core.html_editor:
         class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
         arguments: [@translator, @router]
 
     # Listeners
+
+#    chamilo.doctrine.entity_listener_resolver:
+#        class: Chamilo\CoreBundle\Doctrine\EntityListenerResolver
+#        arguments: [ "@service_container" ]
+
+    chamilo_core.listener.online:
+        class: Chamilo\CoreBundle\EventListener\OnlineListener
+        arguments: [@security.context, @doctrine.orm.entity_manager ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onCoreController }
+
+    chamilo_core.listener.course:
+        class: Chamilo\CoreBundle\Entity\Listener\CourseListener
+        arguments: [ @chamilo_course.tool_chain ]
+        tags:
+            - { name: doctrine.orm.entity_listener }
+#            - { name: doctrine.event_listener, event: prePersist }
 
     chamilo_core.listener.legacy:
         class: Chamilo\CoreBundle\EventListener\LegacyListener

@@ -33,10 +33,14 @@
         <!-- Menu Footer-->
         <li class="user-footer">
             <div class="pull-left">
-                <a href="{{ path('chamilo_core_user_user_profile', {'username' : user.identifier}) }}" class="btn btn-default btn-flat">{{'Profile'|trans({}, 'ChamiloAdminTheme')}}</a>
+                <a href="{{ path('chamilo_core_user_user_profile', {'username' : user.identifier}) }}" class="btn btn-default btn-flat">
+                    {{'Profile'|trans({}, 'ChamiloAdminTheme')}}
+                </a>
             </div>
             <div class="pull-right">
-                <a href="{{ path('logout') }}" class="btn btn-default btn-flat">{{ 'Sign out'|trans({}, 'ChamiloAdminTheme') }}</a>
+                <a href="{{ path('logout') }}" class="btn btn-default btn-flat">
+                    {{ 'Sign out'|trans({}, 'ChamiloAdminTheme') }}
+                </a>
             </div>
         </li>
     </ul>

@@ -138,7 +138,7 @@
 {% endblock %}
 
 {% block form_label %}
-    
+
     {% if help is defined %}
         &nbsp; <a href="#" data-toggle="tooltip" data-original-title="{{ help }}"><i class="fa fa-question-circle"></i></a>
     {% endif %}
@@ -162,10 +162,3 @@
     {% endspaceless %}
 {% endblock form_errors %}
 
-{# % block form_widget_simple %}
-    {{ parent() }}
-
-    {% if help is defined %}
-        <p class="help-block">{{ help }}</p>
-    {% endif %}
-{% endblock % #}

@@ -29,7 +29,7 @@ class FormValidator extends HTML_QuickForm
     ) {
         // Default form class
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
-            $attributes['class'] = 'form-horizontal';
+            $attributes['class'] = '';
         }
 
         // Fixing form search
@@ -135,10 +135,16 @@ EOT;
      */
     private function getFormTemplate()
     {
-        return '<form{attributes}>
-                <fieldset>{content}</fieldset>
-                {hidden}
-                </form>';
+        return '
+            <div class="box box-primary">
+                <form{attributes}>
+                    <div class="box-body">
+                        <fieldset>{content}</fieldset>
+                        {hidden}
+                    </div>
+                </form>
+            </div>
+            ';
     }
 
     /**
@@ -148,12 +154,11 @@ EOT;
     {
         return '
             <div class="form-group {error_class}">
-                <label class="col-sm-2 control-label">
+                <label class="control-label">
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
 
-                <div class="col-sm-10">
                     {element}
 
                     <!-- BEGIN label_3 -->
@@ -161,15 +166,15 @@ EOT;
                     <!-- END label_3 -->
 
                     <!-- BEGIN label_2 -->
-                        <span class="help-block">
-                            {label_2}
-                        </span>
+                    <span class="help-block">
+                        {label_2}
+                    </span>
                     <!-- END label_2 -->
 
                     <!-- BEGIN error -->
-                        <span class=" col-sm-2 help-block">{error}</span>
+                    <span class=" col-sm-2 help-block">{error}</span>
                     <!-- END error -->
-                </div>
+
             </div>';
     }
 
@@ -502,6 +507,7 @@ EOT;
         $return_value = '';
         $js = null;
         if ($addDateLibraries) {
+            /*
             $js = api_get_js('jquery-ui/jquery-ui-i18n.min.js');
             $js .= '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
             $js .= '<link href="'.api_get_path(WEB_LIBRARY_JS_PATH).'datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
@@ -518,7 +524,7 @@ EOT;
                      moment.lang("'.$isocode.'");
                 });
                 </script>';
-            }
+            }*/
         }
 
         if ($error) {

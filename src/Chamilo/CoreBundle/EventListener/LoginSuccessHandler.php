@@ -40,15 +40,20 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         /** @var User $user */
         $user = $token->getUser();
         $userId = $user->getId();
-
         $session = $request->getSession();
 
         $userInfo = api_get_user_info($user->getId());
         $userInfo['is_anonymous'] = false;
 
+        // Backward compatibility.
+
+        $ip = $request->getClientIp();
+
+
+        // Setting user info.
         $request->getSession()->set('_user', $userInfo);
 
-        // Setting admin permissions.
+        // Setting admin permissions for.
         if ($this->security->isGranted('ROLE_ADMIN')) {
             $request->getSession()->set('is_platformAdmin', true);
         }
@@ -80,7 +85,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             }
         }
 
-        // Redirecting to a course or a session
+        // Redirecting to a course or a session.
         if (api_get_setting('course.go_to_course_after_login') == 'true') {
 
             // Get the courses list

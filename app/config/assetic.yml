@@ -33,7 +33,13 @@ assetic:
                 - @chamilo_bootstrap
                 - @chamilo_font_awesome
                 - @chamilo_ionicons
+                - @ChamiloAdminThemeBundle/Resources/public/components/fullcalendar/dist/fullcalendar.min.css
                 - @ChamiloAdminThemeBundle/Resources/public/components/chosen-bower/chosen.css
+                - @ChamiloAdminThemeBundle/Resources/public/components/jquery-ui/themes/cupertino/jquery-ui.min.css
+                - @ChamiloAdminThemeBundle/Resources/public/components/bootflat/css/bootflat.css
+                - @ChamiloAdminThemeBundle/Resources/public/components/jqgrid/css/ui.jqgrid.css
+                - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.css
+
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/jvectormap/*
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/morris/*
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.css
@@ -41,14 +47,9 @@ assetic:
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/colorpicker/bootstrap-colorpicker.css
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/datatables/dataTables.bootstrap.css
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/daterangepicker/daterangepicker-bs3.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/fullcalendar/*
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/iCheck/all.css
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/ionslider/ion.rangeSlider.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/jQueryUI/jquery-ui-1.10.3.custom.css
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/timepicker/bootstrap-timepicker.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/bootflat/css/bootflat.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/jqgrid/css/ui.jqgrid.css
-                - @select2_css
                 - @ChamiloAdminThemeBundle/Resources/public/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/AdminLTE.css
 
@@ -56,21 +57,22 @@ assetic:
             inputs:
                 - @ChamiloAdminThemeBundle/Resources/public/components/jquery/dist/jquery.js
                 - @bootstrap_js
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/jquery-ui-1.10.3.js
+                - @ChamiloAdminThemeBundle/Resources/public/components/jquery-ui/jquery-ui.min.js
                 - @ChamiloAdminThemeBundle/Resources/public/components/chosen-bower/chosen.jquery.js
                 - @moment_js
+                - @ChamiloAdminThemeBundle/Resources/public/components/fullcalendar/dist/fullcalendar.min.js
                 - @ChamiloAdminThemeBundle/Resources/public/components/jqgrid/js/jquery.jqGrid.js
                 - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.js
                 - @ChamiloAdminThemeBundle/Resources/public/components/ckeditor/ckeditor.js
                 - @ChamiloAdminThemeBundle/Resources/public/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
+                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/daterangepicker/daterangepicker.js
+
                 - @ChamiloCoreBundle/Resources/public/js/app.js
 #                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/bootstrap-slider/bootstrap-slider.js
 #                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.js
 #                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/colorpicker/bootstrap-colorpicker.js
 #                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/datatables/jquery.dataTables.js
 #                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/datatables/dataTables.bootstrap.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/daterangepicker/daterangepicker.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/fullcalendar/fullcalendar.js
 #                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/ionslider/ion.rangeSlider.min.js
 #                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/slimScroll/jquery.slimscroll.js
 #                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/sparkline/jquery.sparkline.js
@@ -92,32 +94,32 @@ assetic:
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.selectable.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.sortable.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.accordion.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.autocomplete.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.button.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.datepicker.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.dialog.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-blind.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-bounce.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-clip.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-drop.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-explode.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-fade.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-fold.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-highlight.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-pulsate.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-scale.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-shake.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-slide.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-transfer.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.menu.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.accordion.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.autocomplete.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.button.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.datepicker.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.dialog.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-blind.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-bounce.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-clip.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-drop.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-explode.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-fade.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-fold.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-highlight.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-pulsate.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-scale.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-shake.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-slide.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.effect-transfer.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.menu.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.position.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.progressbar.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.slider.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.spinner.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.tabs.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.progressbar.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.slider.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.spinner.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.tabs.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/jquery.ui.tooltip.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/i18n/jquery-ui-i18n.js
+                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/ui/i18n/jquery-ui-i18n.js
 
             filters:
                 - yui_js

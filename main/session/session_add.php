@@ -278,7 +278,6 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">'.
      '</a>';
 echo '</div>';
 
-//$form->display();
 $em = Container::getEntityManager();
 $request = Container::getRequest();
 

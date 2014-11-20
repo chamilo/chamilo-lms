@@ -239,7 +239,7 @@ $html_results_enabled[] = $form-> createElement ('style_submit_button', 'submit'
 $form->addGroup($html_results_enabled);
 
 // Validate form
-if( $form->validate()) {
+if ($form->validate()) {
 	$check = Security::check_token('post');
 	if ($check) {
 		$user = $form->exportValues();
@@ -368,8 +368,6 @@ if (!empty($message)){
 }
 $content = $form->return_form();
 
-$app['title'] = $tool_name;
-//$tpl = $app['template'];
-echo $message;
 
+echo $message;
 echo $content;

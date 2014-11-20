@@ -13,7 +13,6 @@
     <title>{% block title %}Chamilo{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
-
     {%- stylesheets '@chamilo_css' -%}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -32,12 +31,13 @@
     <link rel="stylesheet" href="{{ asset('bundles/chamilocore/js/tag/style.css') }}"/>
 
     <script src="{{ asset('bundles/chamiloadmintheme/components/modernizr/modernizr.js') }}"></script>
+    {% block javascripts %}
+    {%- javascripts '@chamilo_js' -%}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 </head>
-
 <body class="{{ admin_skin|default('skin-blue')}}">
-
 {% block chamilo_admin_header %}
-
     <header class="header">
         {% block chamilo_logo %}
         <a href="#" class="logo">
@@ -132,19 +132,6 @@
 </div>
 <!-- ./wrapper -->
 
-{# JAVASCRIPTS #}
-{% block javascripts %}
-
-{%- javascripts '@chamilo_js' -%}
-<script src="{{ asset_url }}"></script>
-{% endjavascripts %}
-
 {% endblock %}
-
-{# JAVASCRIPTS_INLINE #}
-{% block javascripts_inline %}
-{% endblock %}
-
-
 </body>
 </html>

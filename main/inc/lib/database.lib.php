@@ -1164,6 +1164,7 @@ class Database
             self::query($sql);
             if ($show_query) {
                 var_dump($sql);
+                error_log($sql);
             }
             return self::insert_id();
         }

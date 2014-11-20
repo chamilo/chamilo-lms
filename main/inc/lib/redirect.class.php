@@ -91,6 +91,20 @@ class Redirect
                         break;
                 }
             }
+            // If the user is a platform admin, redirect to the main admin page
+            if (api_is_multiple_url_enabled()) {
+                // if multiple URLs are enabled, make sure he's admin of the
+                // current URL before redirecting
+                $url = api_get_current_access_url_id();
+                if (api_is_platform_admin_by_id($user_id, $url)) {
+                    self::navigate(api_get_path(WEB_CODE_PATH).'admin/index.php');
+                }
+            } else {
+                // if no multiple URL, then it's enough to be platform admin
+                if (api_is_platform_admin_by_id($user_id)) {
+                    self::navigate(api_get_path(WEB_CODE_PATH).'admin/index.php');
+                }
+            }
             $page_after_login = api_get_setting('page_after_login');
             if (!empty($page_after_login)) {
                 self::navigate(api_get_path(WEB_PATH) . $page_after_login);

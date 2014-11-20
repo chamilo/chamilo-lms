@@ -1,19 +1,25 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 /**
  * Send a redirect to the user agent and exist
- *
- * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 class Redirect
 {
-
+    /**
+     * Returns the result of api_get_path() (a web path to the root of Chamilo)
+     * @return string
+     */
     public static function www()
     {
         return Uri::www();
     }
 
+    /**
+     * Checks whether the given URL contains "http". If not, prepend the web
+     * root of Chamilo and send the browser there (HTTP redirect)
+     * @param string $url
+     */
     public static function go($url = '')
     {
         if (empty($url)) {
@@ -32,8 +38,11 @@ class Redirect
     }
 
     /**
-     * Redirect to the session "request uri" if it exists.
+     * Redirect to the current session's "request uri" if it is defined, or
+     * check sso_referer, user's role and page_after_login settings to send
+     * the user to some predefined URL
      * @param bool Whether the user just logged in (in this case, use page_after_login rules)
+     * @param int  The user_id, if defined. Otherwise just send to where the page_after_login setting says
      */
     public static function session_request_uri($logging_in = false, $user_id = null)
     {
@@ -89,18 +98,28 @@ class Redirect
         }
     }
 
+    /**
+     * Sends the user to the web root of Chamilo (e.g. http://my.chamiloportal.com/ )
+     */
     public static function home()
     {
         $www = self::www();
         self::navigate($www);
     }
 
+    /**
+     * Sends the user to the user_portal.php page
+     */
     public static function user_home()
     {
         $www = self::www();
         self::navigate("$www/user_portal.php");
     }
 
+    /**
+     * Redirects the user to a given URL through the header('location: ...') function
+     * @param $url
+     */
     protected static function navigate($url)
     {
         $url = Security::remove_XSS($url);

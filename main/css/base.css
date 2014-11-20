@@ -386,9 +386,12 @@ header {
 
 .breadcrumb a, .breadcrumb li {
     text-shadow:none;
-    font-size: 13px;
 }
-
+.breadcrumb a.btn-mini{
+  line-height: 22px;
+  text-transform: none;
+  margin-top: -5px;
+}
 .breadcrumb li img {
   width: 0%;
  }
@@ -3242,9 +3245,7 @@ form .formw .freeze {
 .data_table th, .data_table td {
     border-top: 1px solid #DDDDDD;
     line-height: 18px;
-    padding: 6px;
-    text-align: left;
-    vertical-align: top;
+    padding-top: 6px;
 }
 
 .data_table th {
@@ -4575,9 +4576,27 @@ footer {
     margin:0;
 }
 
+.progress .bar {
+  font-weight: bold;
+  text-shadow: 0px 1px 1px rgba(0,0,0,1);
+}
+.progress {
+  text-align:center;
+  position: relative;
+  background: #98bede; /* Old browsers */
+  background: -moz-linear-gradient(top, #98bede 1%, #deefff 98%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#98bede), color-stop(98%,#deefff)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #98bede 1%,#deefff 98%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #98bede 1%,#deefff 98%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #98bede 1%,#deefff 98%); /* IE10+ */
+  background: linear-gradient(to bottom, #98bede 1%,#deefff 98%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#98bede', endColorstr='#deefff',GradientType=0 ); /* IE6-9 */
 
-.progresstext {
-    text-align: center;
+}
+.bar span {
+  position:absolute;
+  display: block;
+  width: 100%;
 }
 
 .ui-state-highlight_lp {

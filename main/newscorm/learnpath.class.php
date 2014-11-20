@@ -2429,10 +2429,9 @@ class learnpath
     public static function get_progress_bar($percentage = -1, $text_add = '')
     {
         $text = $percentage . $text_add;
-        $output = '<div class="progress progress-striped">
-                        <div id="progress_bar_value" class="bar" style="width: '.$text.';"></div>
-                    </div>
-                    <div class="progresstext" id="progress_text">' . $text . '</div>';
+        $output = '<div class="progress">
+                        <div id="progress_bar_value" class="bar" style="width: '.$text.';"><span>'. $text .'</span></div>
+                    </div>';
 
         return $output;
     }

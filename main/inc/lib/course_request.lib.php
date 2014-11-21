@@ -147,7 +147,7 @@ class CourseRequestManager {
 
         $userInfo = api_get_user_info($user_id);
         $additionalParameters = array(
-            'smsType' => NEW_COURSE_SUGGESTED_TEACHER,
+            'smsType' => ClockworksmsPlugin::NEW_COURSE_SUGGESTED_TEACHER,
             'userId' => $user_id,
             'userUsername' => $userInfo['username']
         );
@@ -184,7 +184,7 @@ class CourseRequestManager {
         $recipient_email_teacher = $sender_email_teacher;
 
         $additionalParameters = array(
-            'smsType' => COURSE_OPENING_REQUEST_CODE_REGISTERED,
+            'smsType' => ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED,
             'userId' => $user_info['user_id'],
             'courseCode' => $wanted_code
         );
@@ -452,7 +452,7 @@ class CourseRequestManager {
             $extra_headers = 'Bcc: '.$sender_email;
 
             $additionalParameters = array(
-                'smsType' => COURSE_OPENING_REQUEST_CODE_APPROVED,
+                'smsType' => ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED,
                 'userId' => $user_id,
                 'courseCode' => $course_info['code']
             );
@@ -482,9 +482,7 @@ class CourseRequestManager {
      */
     public static function reject_course_request($id)
     {
-
         $id = (int)$id;
-
         // Retrieve request's data
         $course_request_info = self::get_course_request_info($id);
         if (!is_array($course_request_info)) {
@@ -534,7 +532,7 @@ class CourseRequestManager {
         $extra_headers = 'Bcc: '.$sender_email;
 
         $additionalParameters = array(
-            'smsType' => COURSE_OPENING_REQUEST_CODE_REJECTED,
+            'smsType' => ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED,
             'userId' => $user_id,
             'courseCode' => $code
         );
@@ -614,7 +612,7 @@ class CourseRequestManager {
         $extra_headers = 'Bcc: '.$sender_email;
 
         $additionalParameters = array(
-            'smsType' => COURSE_OPENING_REQUEST_CODE,
+            'smsType' => ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE,
             'userId' => $user_id,
             'courseCode' => $code
         );

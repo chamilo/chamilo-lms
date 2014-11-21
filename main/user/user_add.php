@@ -204,7 +204,7 @@ if($register) {
         }
 
         $additionalParameters = array(
-            'smsType' => BEEN_SUBSCRIBED_COURSE,
+            'smsType' => ClockworksmsPlugin::BEEN_SUBSCRIBED_COURSE,
             'userId' => $user_id,
             'courseTitle' => $currentCourseName
         );

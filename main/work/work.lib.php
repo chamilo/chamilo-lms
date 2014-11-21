@@ -2504,7 +2504,7 @@ function send_email_on_homework_creation($course_id)
                 $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
 
                 $additionalParameters = array(
-                    'smsType' => ASSIGNMENT_BEEN_CREATED_COURSE,
+                    'smsType' => ClockworksmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
                     'userId' => $student["user_id"],
                     'courseTitle' => $course_id
                 );

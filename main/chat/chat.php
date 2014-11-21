@@ -78,9 +78,9 @@ if (empty($open_chat_window)) {
 $url = api_get_path(WEB_CODE_PATH).'chat/';
 
 echo '<div class="page-chat">';
-echo '<iframe src="'.$url.'chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="no" style="height:500px; width:35%; border: 0px none; float:left"></iframe>';
+echo '<iframe src="'.$url.'chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="no" style="height:550px; width:35%; border: 0px none; float:left"></iframe>';
 echo '<iframe src="'.$url.'chat_chat.php?origin='.$origin.'&target='.$target.'&amp;cidReq='.$cidreq.'" name="chat_chat" id="chat_chat" scrolling="auto" height="380" style="width:65%; border: 0px none; float:right"></iframe>';
-echo '<iframe src="'.$url.'chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no" height="260px" style="width:65%; border: 0px none; float:right"></iframe>';
+echo '<iframe src="'.$url.'chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no" height="182px" style="width:65%; border: 0px none; float:right"></iframe>';
 echo '<iframe src="'.$url.'chat_hidden.php?cidReq='.$cidreq.'" name="chat_hidden" height="0" style="border: 0px none"></iframe>';
 echo '</div>';
 

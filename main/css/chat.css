@@ -8,14 +8,13 @@ body{
 }
 .page-chat{
 	padding: 10px;
-	background: #e5e5e5; /* Old browsers */
-	background: -moz-linear-gradient(top, #e5e5e5 0%, #ffffff 99%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5e5e5), color-stop(99%,#ffffff)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #e5e5e5 0%,#ffffff 99%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #e5e5e5 0%,#ffffff 99%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #e5e5e5 0%,#ffffff 99%); /* IE10+ */
-	background: linear-gradient(to bottom, #e5e5e5 0%,#ffffff 99%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+	background:#ffffff;
+}
+.message-form-chat .nav{
+  margin-bottom: 0;
+}
+.message-form-chat .nav-tabs .active a{
+  background-color: #f6f6f6;
 }
 #clear-chat{
 	width:140px;
@@ -176,7 +175,10 @@ textarea {
 .list-group-item {
   position: relative;
   display: block;
-  padding: 10px 15px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
   margin-bottom: -1px;
   background-color: #EEEEEE;
   border: 1px solid #E2E2E2;
@@ -185,7 +187,10 @@ textarea {
 	border-radius: 10px;
 	color: #666;
 }
-
+.user-connected{
+  border-right: 1px dashed #cccccc;
+  margin-right: 5px;
+}
 li.list-group-item:hover, li.list-group-item:focus {
   text-decoration: none;
   background-color: #E2E2E2;
@@ -211,7 +216,8 @@ li.list-group-item:hover a{
 
 #user-online-scroll .viewport {
     width: 260px;
-    height: 450px;
+    height: 550px;
+    min-height: 550px;
     overflow: hidden;
     position: relative;
     padding-left: 8px;
@@ -328,7 +334,7 @@ li.list-group-item:hover a{
 .emoji-wysiwyg-editor {
     width: 454px;
     padding: 3%;
-    height: 100px;
+    height: 50px;
     float: left;
     border: 0;
     background-color: #ffffff;

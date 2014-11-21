@@ -32,11 +32,11 @@ $noPHP_SELF = true;
 $header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
 
-$course_info = api_get_course_info();
+$courseInfo = api_get_course_info();
 $course_code = api_get_course_id();
 $session_id = api_get_session_id();
 
-if (empty($course_info)) {
+if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 
@@ -44,7 +44,7 @@ $show_web_odf = false;
 
 // Generate path
 if (!$document_id) {
-    $document_id = DocumentManager::get_document_id($course_info, $header_file);
+    $document_id = DocumentManager::get_document_id($courseInfo, $header_file);
 }
 $document_data = DocumentManager::get_document_data_by_id(
     $document_id,
@@ -74,7 +74,7 @@ $path_array = array_map('urldecode', $path_array);
 $header_file = implode('/', $path_array);
 
 $file = Security::remove_XSS(urldecode($document_data['path']));
-$file_root = $course_info['path'].'/document'.str_replace('%2F', '/', $file);
+$file_root = $courseInfo['path'].'/document'.str_replace('%2F', '/', $file);
 $file_url_sys = api_get_path(SYS_COURSE_PATH).$file_root;
 $file_url_web = api_get_path(WEB_COURSE_PATH).$file_root;
 
@@ -330,7 +330,7 @@ Display::display_header('');
 
 echo '<div align="center">';
 
-$file_url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file;
+$file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
 
 if (!$is_nanogong_available) {
@@ -340,9 +340,14 @@ if (!$is_nanogong_available) {
 }
 
 if ($show_web_odf) {
+    $browser = api_get_navigator();
+    $pdfUrl = api_get_path(WEB_LIBRARY_PATH) . 'javascript/ViewerJS/index.html#' . $file_url;
+    if ($browser['name'] == 'Mozilla') {
+        $pdfUrl = $file_url;
+    }
     echo '<div id="viewerJS">';
-    echo '<iframe id="viewerJSContent" frameborder="0" allowfullscreen="allowfullscreen" style="width:100%;"
-        src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url.'">
+    echo '<iframe id="viewerJSContent" frameborder="0" allowfullscreen="allowfullscreen" webkitallowfullscreen style="width:100%;"
+            src="' . $pdfUrl. '">
         </iframe>';
     echo '</div>';
 } else {

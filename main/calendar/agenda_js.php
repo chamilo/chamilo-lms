@@ -3,9 +3,7 @@
 /**
  * @package chamilo.calendar
  */
-/**
- * INIT SECTION
- */
+
 use \ChamiloSession as Session;
 
 // name of the language file that needs to be included
@@ -21,7 +19,6 @@ $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 if ($type == 'personal') {
     $cidReset = true; // fixes #5162
 }
-
 require_once '../inc/global.inc.php';
 require_once 'agenda.lib.php';
 require_once 'agenda.inc.php';

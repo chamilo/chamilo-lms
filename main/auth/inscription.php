@@ -412,17 +412,20 @@ if ($form->validate()) {
             }
         }
 
+        $status = isset($values['status']) ? $values['status'] : null;
+        $phone = isset($values['phone']) ? $values['phone'] : null;
+
         // Creates a new user
         $user_id = UserManager::create_user(
             $values['firstname'],
             $values['lastname'],
-            $values['status'],
+            $status,
             $values['email'],
             $values['username'],
             $values['pass1'],
             $values['official_code'],
             $values['language'],
-            $values['phone'],
+            $phone,
             null,
             PLATFORM_AUTH_SOURCE,
             null,
@@ -593,7 +596,7 @@ if ($form->validate()) {
     $_user['mail'] = $values['email'];
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
-    $is_allowedCreateCourse = $values['status'] == 1;
+    $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;
     $usersCanCreateCourse = (api_get_setting('allow_users_to_create_courses') == 'true');
 
     Session::write('_user', $_user);

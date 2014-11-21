@@ -115,7 +115,7 @@ if (in_array(strtolower($pathinfo['extension']), $jplayer_supported_files)) {
 
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
-$current_group_name=$current_group['name'];
+$current_group_name = $current_group['name'];
 
 if (isset($group_id) && $group_id != '') {
     $req_gid = '&amp;gidReq='.$group_id;

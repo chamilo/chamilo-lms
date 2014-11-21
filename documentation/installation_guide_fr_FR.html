@@ -376,40 +376,55 @@ Avant de mettre à jour, nous recommandons chaudement la prise d'une copie de
 sauvegarde de votre installation (répertoires et bases de données).
 Si vous ne savez pas comment faire, consultez votre fournisseur d'hébergement
 ou un administrateur système qualifié.<br />
-<em>Chamilo LMS 1.9 comes with a new database structure in comparison to 1.8. 
-Although the upgrade script takes the migration in charge, it might be generating
-a very heavy load on your server during the upgrade, and will change your 
-database completely, preserving the data as well as possible (we have tested 
-the procedure many times, but remember this is GNU/GPLv3 and we cannot be held 
-responsible for what would happen to your data without professional supervision).
-This is why we *really* recommend you take a full backup of your system before 
-you upgrade.</em>
+<em>Chamilo LMS 1.9 est livré avec une nouvelle structure de bases de données
+  en comparaison avec 1.8. Bien que le script de migration la prenne
+  complètement en charge, il pourrait générer une surcharge sur votre serveur
+  durant la mise à jour, et il changera la base de données de façon assez
+  profonde, préservant les données le mieux possible (nous avons testé la
+  procédure de nombreuses fois, mais rappelez-vous qu'il s'agit d'un logiciel
+  GNU/GPLv3 et que nous ne saurions être tenus pour responsables de ce qui
+  pourrait arriver à vos données sans la supervision d'un professionnel).
+  C'est pour cela que nous recommandons *vraiment* de faire un backup complet de
+  votre système avant la mise à jour.</em>
 <br />
-<div class="muted"> NOTE: For very heavy Chamilo databases, some of our official 
-providers have developed improved migration procedures that use more memory but
-process the upgrades up to 20 times faster. If this is the kind of thing you
-need, we highly recommend you contact them (see reference below).</div>
-<div class="muted"> NOTE: This version of Chamilo can only be used to upgrade from
-smaller versions of Chamilo or Dok€os. For example, you cannot use the normal
-upgrade scripts from Chamilo 1.9 to upgrade from Dok€os 2.0. If you need this,
-please contact one of the Chamilo Association's official providers &lt;providers@chamilo.org&gt;)</div>
+<div class="muted"> NOTE: Pour les bases de données très lourdes de Chamilo,
+  certains de nos fournisseurs officiels ont dévelopé des procédures de
+  migration optimisées qui utilisent plus de mémoire mais exécutent les
+  migrations jusqu'à 20 fois plus rapidement. Si c'est le genre de choses qui
+  vous intéresse, nous vous recommandons chaudement de les contacter (voir
+  références ci-dessous).</div>
+<div class="muted"> NOTE: Cette version de Chamilo peut uniquement etre utilisée
+  uniquement pour mettre à jour des versions antérieures (chronologiquement) de
+  Chamilo ou Dok€os. Par exemple, vous ne pourrez pas l'utiliser pour mettre à
+  jour depuis Dok€os 2.0 (du moins pas officiellement). Si vous avez besoin de
+  ce genre de choses, nous vous conseillons de contacter les fournisseurs
+  officiels de l'Association Chamilo &lt;providers@chamilo.org&gt;)</div>
 
 <p></p>
 
-<h3>3.1 Upgrading from Chamilo 1.9.x (minor upgrade)</h3>
-As this is only a minor version change from previous 1.9.* versions of Chamilo, the only thing you need to do is:
+<h3>3.1 Mettre à jour depuis Chmailo 1.9.x (upgrade mineure)</h3>
+Comme cette version est une version mineure de Chamilo par rapport à une
+quelconque version 1.9.*, les seuls pas à suivre sont:
 <ul>
-  <li> check that you haven't left any customised stylesheet or image <span class="muted">(if you have, make sure you keep a copy on the side*)</span></li>
-  <li> download the Chamilo 1.9 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.9 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
-  <li> edit the main/inc/conf/configuration.php file: at the en of the file, locate the previous version number (e.g. '1.9.4') and change it to this new version (e.g. '1.9.8')</li>
-  <li> you're done! No other upgrade procedure is required</li>
+  <li> vérifier que vous n'avez pas créé une version modifiée d'une feuille de
+    style en utilisant un répertoire css existant. Si c'est le cas, elle sera
+    écrasée par la mise à jour. Gardez-en une copie que vous renommerez au
+    moment de la replacer dans le répertoire main/css/</li>
+  <li> téléchargez le paquet d'installation de Chamilo 1.9 depuis la
+    <a href="http://www.chamilo.org/download">page de téléchargement de Chamilo</a></li>
+  <li> dézippez les nouveaux fichiers de Chamilo 1.9 par dessus les fichiers de
+    l'ancienne version (ou dézippez les fichiers dans un répertoire et copiez-les ensuite
+    là où se trouve votre version actuelle de Chamilo)</li>
+  <li> éditez le fichier main/inc/conf/configuration.php: à la fin du fichier,
+    localisez le numéro de version antérieur (p.ex. '1.9.4') et remplacez-le
+    par le numéro de la nouvelle version (p.ex. '1.9.8')</li>
+  <li> fini! Il n'y a pas d'autre procédure requise</li>
 </ul>
 
 <br />
 
 
-<h3>3.2 Upgrading from Chamilo 1.8.x</h3>
+<h3>3.2 Mettre à jour depuis Chamilo 1.8.x</h3>
 <ul>
   <li> check that you haven't left any customised stylesheet or image <span class="muted">(if you have, make sure you keep a copy on the side*)</span></li>
   <li> download the Chamilo 1.9 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
@@ -420,7 +435,7 @@ As this is only a minor version change from previous 1.9.* versions of Chamilo, 
 
 <br />
 
-<h3>3.3 Upgrading from Dok€os 1.8.x</h3>
+<h3>3.3 Mettre à jour depuis Dok€os 1.8.x</h3>
 
 <em>If you upgrade from Dok€os 1.8.x</em> :&nbsp;
 <ul>
@@ -452,7 +467,7 @@ to the old ones which will be deprecated shortly (not maintained).</span>
 
 <p></p>
 
-<h3>3.4 Upgrading from Dok€os 1.6.x</h3>
+<h3>3.4 Mettre à jour depuis Dok€os 1.6.x</h3>
 
 
 <em>If you upgrade from a lower version of Dok€os (1.6.x)</em>, the first
@@ -506,9 +521,10 @@ Do not modify the home_*.html files directly. Instead,
 choose "Configure the homepage" in the Chamilo administration section.</p>
 
 <p></p>
-<h3>3.5 In both last cases</h3>
+<h3>3.5 Dans les deux derniers cas</h3>
 
-The following directories need to be readable, writeable and executable for the web server:
+Les répertoires suivants doivent être accessibles en lecture, écriture et
+exécution pour le serveur web:
 <ul>
   <li>chamilo/main/inc/conf/</li>
   <li>chamilo/main/upload/users/</li>
@@ -523,7 +539,7 @@ On Linux, Mac OS X and BSD operating systems you can quick-fix this using the
 your own OS on <a href="http://www.chamilo.org/forum">our forum</a>.
 In Windows, you may need to check the properties of the folders.
 <p></p>
-<h3>3.6 Quick-upgrade from 1.8.x guide for Linux</h3>
+<h3>3.6 Guide de mise à jour rapide depuis 1.8.x sous Linux</h3>
 
 
 The following quick-upgrade guide assumes that:
@@ -536,7 +552,7 @@ The following quick-upgrade guide assumes that:
 <br />
 
 
-On the command-line, type:
+Sur la ligne de commande, tapez:
 <ul>
   <li>cd /tmp</li>
   <li>mysqldump -u chamilo_db_user -p --all-databases --result-file=/home/chamilo_user/chamilo_old.sql</li>
@@ -553,11 +569,11 @@ On the command-line, type:
 
 <br />
 
-Then:
+Ensuite:
 <ul>
-  <li>Direct your browser to http://www.portalurl.com/main/install/</li>
-  <li>Proceed with the installation</li>
-  <li>Review the directories permissions</li>
+  <li>Dirigez votre navigateur sur http://www.portalurl.com/main/install/</li>
+  <li>Continuez avec le système d'instalation</li>
+  <li>Révisez les permissions des répertoires</li>
 </ul>
 
 <p></p>
@@ -567,7 +583,7 @@ Then:
 
 <hr style="width: 100%; height: 2px;" />
 
-<h2><a name="4._Troubleshooting"></a>4. Troubleshooting</h2>
+<h2><a name="4._Troubleshooting"></a>4. Problèmes</h2>
 
 
 <p>If you have&nbsp;problems, go to the <a href="http://www.chamilo.org">Chamilo website</a> and ask a question on the
@@ -579,7 +595,7 @@ already an answer to your question.</p>
 
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="5._Administration_section"></a>5. Administration section</h2>
+<h2><a name="5._Administration_section"></a>5. Section d'administration</h2>
 
 <p>To access the Chamilo administration section, open browser,
 go to your Chamilo adress and log in with the admin user.
@@ -597,14 +613,14 @@ and feel, homepage content, course categories etc.&nbsp;</p>
 An LDAP module is already provided in Chamilo, but it has to be configured to make it work.</p>
 
 
-<h3><b>Compiling</b></h3>
+<h3><b>Compiler</b></h3>
 
 <p>
 Linux servers: It's possible that you have to recompile php with ldap support.
 Newer distributions also allow downloading rpms for additional packages.</p>
 
 
-<h3><b>Activating LDAP in Chamilo</b></h3>
+<h3><b>Activer LDAP dans Chamilo</b></h3>
 
 <p class="muted">Note: The LDAP mechanism has been changed in 1.9. As a result, some of the following information might not be correct. Please check
 the configuration settings inside Chamilo to learn the details.</p>
@@ -703,7 +719,7 @@ that criteria</li>
 
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="7._Mathematical_formulas"></a>7. Mathematical formulas with LaTeX</h2>
+<h2><a name="7._Mathematical_formulas"></a>7. Formules mathématiques avec LaTeX</h2>
 
 <i>This part is optional, only organisations planning to use mathematical formulas inside the online editor might want to read this.</i><br /><br />
 
@@ -821,12 +837,12 @@ You may need to alter the setting to be for example:</p>
 <p>For testing how the variable <strong>AMTcgiloc</strong> may be set, there are some examples (as comments) inside the script.</p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="9._WIRIS_mathematical_formulas"></a>9. Mathematical formulas with WIRIS</h2>
+<h2><a name="9._WIRIS_mathematical_formulas"></a>9. Formules mathématiques avec WIRIS</h2>
 <p>Installing this plugin you get WIRIS editor and WIRIS CAS. <br/>
 This activation will not be completed unless you have previously downloaded the <a href="http://www.wiris.com/plugins/editors/download?filter=fckeditor" target="_blank">PHP plugin for FCKeditor WIRIS</a> and unzipped its contents into the main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/ directory. <br/>This is necessary because Wiris is proprietary software and its services are <a href="http://www.wiris.com/store/who-pays" target="_blank">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by configuration.ini.default Chamilo file.</p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="10._Xapian_fulltext_indexing"></a>Full-text indexation with Xapian</h2>
+<h2><a name="10._Xapian_fulltext_indexing"></a>Indexation full-text avec Xapian</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
 On Debian or Ubuntu 10.04 and superior, you will simply need to install the php5-xapian package and restart your web server:
@@ -844,7 +860,7 @@ Provider</a> for) include a full review of the full-text search feature.
 </p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="11._Chamilo_rapid_ppt_conversion"></a>Chamilo Rapid - PPT conversion system</h2>
+<h2><a name="11._Chamilo_rapid_ppt_conversion"></a>Chamilo Rapide - Conversion de PPT</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
 On Debian or Ubuntu 11.10 and superior, install LibreOffice.org v3 and start it as a headless server:
@@ -857,7 +873,7 @@ Then go to your administration page -&gt; <i>Chamilo Rapid</i> and set the host 
 </p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="12._Setting_cron_up"></a>Setting chronological tasks</h2>
+<h2><a name="12._Setting_cron_up"></a>Configurer les tâches chronologiques</h2>
 <p>
 Since Chamilo 1.8.8, a few tasks need to be executed regularly in order to get
 the best out of your server resources. One of such tasks (and the only one
@@ -880,7 +896,7 @@ settings there.
 </p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="13._Changing_language_names_order"></a>Changing the language's firstname/lastname order</h2>
+<h2><a name="13._Changing_language_names_order"></a>Changer l'ordre nom/prénom des langues</h2>
 <p>
 As Chamilo becomes more popular and crosses many borders now, it frequently happens that administrators want to re-order the firstname and lastname fields in tables, and also on which field it is sorted first.<br/><br />
 This can easily be modified by editing the main/inc/lib/internationalization_database/name_order_conventions.php file, finding your language and changing the fields. It is pretty self-explanatory and looks like this:<br />
@@ -890,7 +906,7 @@ Feel free to change this to<br />
 for example. The effect should be immediate.
 </p>
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="14._Improving_files_download"></a>Improving files download efficiency</h2>
+<h2><a name="14._Improving_files_download"></a>Améliorer la performance des téléchargements de fichiers</h2>
 <p>
 File download can be very slow when passing through a PHP script to control permissions. One solution to this
     is to use the X-Sendfile header, which depends on a module on the webserver. <a href="http://stackoverflow.com/a/3731639/1406662">Check http://stackoverflow.com/a/3731639/1406662 for more details on implementing Sendfile</a>.

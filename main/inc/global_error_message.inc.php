@@ -165,7 +165,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
 	$global_error_message['encoding'] = 'UTF-8';
 	$global_error_message['css'] = $css_def;
-	$global_error_message['chamilo_logo'] = $root_rel.$css_path.$theme.'images/header-logo.png';
+	$global_error_message['chamilo_logo'] = $root_rel.$css_path.$theme.'/images/header-logo.png';
 
 
 // {ORGANISATION}	moved from the header

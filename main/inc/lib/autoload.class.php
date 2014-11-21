@@ -110,6 +110,7 @@ class Autoload
         $result['ChamiloSession'] = '/main/inc/lib/chamilo_session.class.php';
         $result['Chat'] = '/main/inc/lib/chat.lib.php';
         $result['ClassManager'] = '/main/inc/lib/classmanager.lib.php';
+        $result['ClockworksmsPlugin'] = '/plugin/clockworksms/lib/clockworksms_plugin.class.php';
         $result['ClosureCompiler'] = '/main/inc/lib/system/closure_compiler.class.php';
         $result['ConditionalLogin'] = '/main/inc/lib/conditional_login.class.php';
         $result['Controller'] = '/main/inc/lib/controller.class.php';

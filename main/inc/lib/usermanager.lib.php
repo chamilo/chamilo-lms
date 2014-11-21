@@ -207,10 +207,11 @@ class UserManager
                     $values["prior_lang"] = null;
                     EventsDispatcher::events('user_registration', $values);
                 } else {
+                    $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
                     $additionalParameters = array(
-                        'smsType' => WELCOME_LOGIN_PASSWORD,
+                        'smsType' => ClockworksmsPlugin::WELCOME_LOGIN_PASSWORD,
                         'userId' => $return,
-                        'mobilePhoneNumber' => $extra['mobile_phone_number'],
+                        'mobilePhoneNumber' => $phoneNumber,
                         'password' => $original_password
                     );
                     api_mail_html(

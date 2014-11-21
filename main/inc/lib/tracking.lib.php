@@ -1822,14 +1822,19 @@ class Tracking
         if (!empty($exercise_list)) {
             foreach ($exercise_list as $exercise_data) {
                 $exercise_id = $exercise_data['id'];
-                $best_attempt = get_best_attempt_exercise_results_per_user($user_id, $exercise_id , $course_code, $session_id);
+                $best_attempt = get_best_attempt_exercise_results_per_user(
+                    $user_id,
+                    $exercise_id,
+                    $course_code,
+                    $session_id
+                );
 
-                if (!empty($best_attempt)) {
+                if (!empty($best_attempt) && !empty($best_attempt['exe_weighting'])) {
                     $result += $best_attempt['exe_result']/$best_attempt['exe_weighting'];
                 }
             }
-            $result = $result/ count($exercise_list);
-            $result = round($result, 2)*100;
+            $result = $result / count($exercise_list);
+            $result = round($result, 2) * 100;
         }
 
         return $result.'%';
@@ -1979,7 +1984,7 @@ class Tracking
                 $row = Database::fetch_row($rs);
                 $totalAnnouncements = $row[0];
             }
-            $tutor = get_user_info_by_id($teacher['id_user']);
+            $tutor = api_get_user_info($teacher['id_user']);
             $data[] = array(
                 'course'        => $course['title'],
                 'session'       => $teacher['name'],

@@ -2179,7 +2179,6 @@ function get_work_user_list(
     $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
 
     if (!empty($work_data)) {
-
         if (!empty($group_id)) {
             $extra_conditions = " work.post_group_id = '".intval($group_id)."' ";
             // set to select only messages posted by the user's group
@@ -2343,11 +2342,13 @@ function get_work_user_list(
 
                 $send_to = Portfolio::share('work', $work['id'],  array('style' => 'white-space:nowrap;'));
 
-                $count = getWorkCommentCount($item_id, $course_info);
                 $feedback = null;
-
-                if (!is_null($count)) {
-                    $feedback = ' <br /><a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                $count = getWorkCommentCount($item_id, $course_info);
+                if (!is_null($count) && !empty($count)) {
+                    if ($qualification_exists) {
+                        $feedback .= "<br />";
+                    }
+                    $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::label($count.' '.get_lang('Feedback'), 'info').'</a> ';
                 }
 
@@ -2503,7 +2504,7 @@ function send_email_on_homework_creation($course_id)
                 $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
 
                 $additionalParameters = array(
-                    'smsType' => ASSIGNMENT_BEEN_CREATED_COURSE,
+                    'smsType' => ClockworksmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
                     'userId' => $student["user_id"],
                     'courseTitle' => $course_id
                 );

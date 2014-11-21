@@ -96,7 +96,7 @@ switch ($action) {
                     $emailbody.=api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 
                      $additionalParameters = array(
-                        'smsType' => ACCOUNT_APPROVED_CONNECT,
+                        'smsType' => ClockworksmsPlugin::ACCOUNT_APPROVED_CONNECT,
                         'userId' => $user_id
                     );
 

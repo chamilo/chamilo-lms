@@ -880,7 +880,7 @@ function store_add_dropbox()
         foreach ($new_work_recipients as $recipient_id) {
             $recipent_temp = UserManager :: get_user_info_by_id($recipient_id);
             $additionalParameters = array(
-                'smsType' => NEW_FILE_SHARED_COURSE_BY,
+                'smsType' => ClockworksmsPlugin::NEW_FILE_SHARED_COURSE_BY,
                 'userId' => $recipient_id,
                 'courseTitle' => $_course['title'],
                 'userUsername' => $recipent_temp['username']
@@ -890,7 +890,7 @@ function store_add_dropbox()
                     $recipent_temp['firstname'].' '.$recipent_temp['lastname'],
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
-                ), 
+                ),
                 $recipent_temp['email'],
                 get_lang('NewDropboxFileUploaded'),
                 get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).

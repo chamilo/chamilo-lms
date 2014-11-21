@@ -2512,7 +2512,7 @@ class CourseManager
             $email_admin = api_get_setting('emailAdministrator');
 
             $additionalParameters = array(
-                'smsType' => NEW_USER_SUBSCRIBED_COURSE,
+                'smsType' => ClockworksmsPlugin::NEW_USER_SUBSCRIBED_COURSE,
                 'userId' => $tutor['user_id'],
                 'userUsername' => $student['username'],
                 'courseCode' => $course_code

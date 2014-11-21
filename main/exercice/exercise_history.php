@@ -26,7 +26,6 @@ $show=(isset($_GET['show']) && $_GET['show'] == 'result')?'result':'test'; // mo
  */
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-//include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 /* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
@@ -65,7 +64,7 @@ echo '</div>';
 	<tr class="row_odd">
 		<th><?php echo get_lang('Question'); ?></th>
 		<th width="50px"><?php echo get_lang('Value'); ?></th>
-		<th><?php echo get_lang('Feedback'); ?></th>		  
+		<th><?php echo get_lang('Feedback'); ?></th>
 		<th><?php echo get_lang('Author'); ?></th>
 		<th width="160px"><?php echo get_lang('Date'); ?></th>
 	</tr>

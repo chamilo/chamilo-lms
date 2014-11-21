@@ -2916,7 +2916,7 @@ function register_course($params)
 
                 $userInfo = api_get_user_info($user_id);
                 $additionalParameters = array(
-                    'smsType' => NEW_COURSE_BEEN_CREATED,
+                    'smsType' => ClockworksmsPlugin::NEW_COURSE_BEEN_CREATED,
                     'userId' => $user_id,
                     'courseName' => $title,
                     'creatorUsername' => $userInfo['username']

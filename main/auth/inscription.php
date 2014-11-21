@@ -10,7 +10,8 @@ use \ChamiloSession as Session;
 
 $language_file = array('registration', 'admin');
 
-if (!empty($_POST['language'])) { //quick hack to adapt the registration form result to the selected registration language
+//quick hack to adapt the registration form result to the selected registration language
+if (!empty($_POST['language'])) {
     $_GET['language'] = $_POST['language'];
 }
 require_once '../inc/global.inc.php';
@@ -44,7 +45,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = false;
 }
 
-//Direct Link Subscription feature #5299
+// Direct Link Subscription feature #5299
 $course_code_redirect = isset($_REQUEST['c']) && !empty($_REQUEST['c']) ? $_REQUEST['c'] : null;
 $exercise_redirect = isset($_REQUEST['e']) && !empty($_REQUEST['e']) ? $_REQUEST['e'] : null;
 
@@ -54,7 +55,6 @@ if (!empty($course_code_redirect)) {
 }
 
 if ($user_already_registered_show_terms == false) {
-
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
@@ -157,20 +157,18 @@ if ($user_already_registered_show_terms == false) {
     $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
 
     if ($allowCaptcha) {
-
         $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
-
         $options = array(
-                'width'        => 220,
-                'height'       => 90,
-                'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
-                'sessionVar'   => basename(__FILE__, '.php'),
-                'imageOptions' => array(
-                    'font_size' => 20,
-                    'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
-                    'font_file' => 'tahoma.ttf',
-                        //'output' => 'gif'
-                )
+            'width'        => 220,
+            'height'       => 90,
+            'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
+            'sessionVar'   => basename(__FILE__, '.php'),
+            'imageOptions' => array(
+                'font_size' => 20,
+                'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
+                'font_file' => 'tahoma.ttf',
+                    //'output' => 'gif'
+            )
         );
 
         $captcha_question =  $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
@@ -183,29 +181,45 @@ if ($user_already_registered_show_terms == false) {
     }
 
     // EXTENDED FIELDS
-    if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
+    ) {
         $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
     }
-    if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true') {
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
+    ) {
         $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
     }
-    if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'myteach') == 'true') {
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration', 'myteach') == 'true'
+    ) {
         $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
     }
-    if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true') {
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
+    ) {
         $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true') {
-        if (api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true' && api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') == 'true') {
+        if (api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') == 'true'
+        ) {
             $form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true' && api_get_setting('extendedprofile_registrationrequired', 'mydiplomas') == 'true') {
+        if (api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'mydiplomas') == 'true'
+        ) {
             $form->addRule('diplomas', get_lang('ThisFieldIsRequired'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'myteach') == 'true' && api_get_setting('extendedprofile_registrationrequired', 'myteach') == 'true') {
+        if (api_get_setting('extendedprofile_registration', 'myteach') == 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'myteach') == 'true'
+        ) {
             $form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
         }
-        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true' && api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') == 'true') {
+        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') == 'true'
+        ) {
             $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
@@ -340,8 +354,13 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     $form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
 
     if ($term_preview['type'] == 1) {
-        $form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
-        $form->addRule('legal_accept', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addElement(
+            'checkbox',
+            'legal_accept',
+            null,
+            get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>'
+        );
+        $form->addRule('legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
     } else {
         $preview = LegalManager::show_last_condition($term_preview);
         $form->addElement('label', null, $preview);
@@ -466,7 +485,9 @@ if ($form->validate()) {
 
             // if there is a default duration of a valid account then we have to change the expiration_date accordingly
             if (api_get_setting('account_valid_duration') != '') {
-                $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET expiration_date='registration_date+1' WHERE user_id='".$user_id."'";
+                $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
+                        SET expiration_date='registration_date+1'
+                        WHERE user_id='".$user_id."'";
                 Database::query($sql);
             }
 
@@ -692,7 +713,10 @@ if ($form->validate()) {
     Session::erase('exercise_redirect');
 
     if (CustomPages::enabled()) {
-        CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $text_after_registration));
+        CustomPages::display(
+            CustomPages::REGISTRATION_FEEDBACK,
+            array('info' => $text_after_registration)
+        );
     } else {
         Display :: display_header($tool_name);
         echo Display::page_header($tool_name);

@@ -188,9 +188,14 @@ if (api_is_allowed_to_edit(false, true) OR
         );
     }
     if ($current_group['calendar_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
+
+        $groupFilter = null;
+        if (!empty($group_id)) {
+            $groupFilter = "&type=course&user_id=GROUP:$group_id";
+        }
         // Link to a group-specific part of agenda
         $actions_array[] = array(
-            'url' => '../calendar/agenda.php?'.api_get_cidreq(),
+            'url' => '../calendar/agenda_js.php?'.api_get_cidreq().$groupFilter,
             'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), 32)
         );
     }

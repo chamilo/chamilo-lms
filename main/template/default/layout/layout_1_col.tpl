@@ -2,7 +2,6 @@
 
 {#  1 column  #}
 {% block body %}
-
     {# Plugin main top #}
     {% if plugin_main_top %}
         <div id="plugin_main_top" class="span12">
@@ -19,7 +18,6 @@
 
     <div class="span12">
         {% include "default/layout/page_body.tpl" %}
-
         {% block content %}
             {% if content is not null %}
                 <section id="main_content">

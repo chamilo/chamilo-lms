@@ -223,9 +223,9 @@ switch ($action) {
                     'success'
                 );
                 Session::write('message', $message);
-                header('Location: '.$currentUrl);
-                exit;
             }
+            header('Location: '.$currentUrl);
+            exit;
         }
         break;
     case 'move':

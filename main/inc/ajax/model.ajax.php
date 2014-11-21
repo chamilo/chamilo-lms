@@ -578,10 +578,36 @@ switch ($action) {
     case 'get_work_user_list_all':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
             $columns = array(
-                'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions'
+                'type',
+                'firstname',
+                'lastname',
+                'title',
+                'qualification',
+                'sent_date',
+                'qualificator_id',
+                'actions'
             );
         } else {
-            $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
+
+            $columns = array(
+                'type',
+                'firstname',
+                'lastname',
+                'title',
+                'sent_date',
+                'actions'
+            );
+            if (ALLOW_USER_COMMENTS) {
+                $columns = array(
+                    'type',
+                    'firstname',
+                    'lastname',
+                    'title',
+                    'qualification',
+                    'sent_date',
+                    'actions'
+                );
+            }
         }
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $whereCondition);
         break;
@@ -603,6 +629,9 @@ switch ($action) {
             );
         } else {
             $columns = array('type', 'title', 'sent_date', 'actions');
+            if (ALLOW_USER_COMMENTS) {
+                $columns = array('type', 'title', 'qualification', 'sent_date', 'actions');
+            }
         }
 
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());

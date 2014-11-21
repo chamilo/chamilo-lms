@@ -162,7 +162,7 @@ foreach ($workPerUser as $work) {
         $column++;
         $score = '-';
         if (!empty($scoreWeight)) {
-            $score = strip_tags($userResult['qualification']);
+            $score = $userResult['qualification'];
         }
         $table->setCellContents($row, $column, $score);
         $column++;

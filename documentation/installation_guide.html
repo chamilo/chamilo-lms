@@ -351,7 +351,11 @@ As this is only a minor version change from previous 1.9.* versions of Chamilo, 
 <ul>
   <li> check that you haven't left any customised stylesheet or image <span class="muted">(if you have, make sure you keep a copy on the side*)</span></li>
   <li> download the Chamilo 1.9 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
-  <li> unzip the new files of Chamilo 1.9 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
+  <li> unzip the new files of Chamilo 1.9 over the files of the older version
+    (or unzip the files in one folder and then copy the files from there to the
+    older version's directory). Note that you should remove the "home" and
+    "searchdb" directories from the package before you overwrite the previous
+    files.</li>
   <li> edit the main/inc/conf/configuration.php file: at the en of the file, locate the previous version number (e.g. '1.9.4') and change it to this new version (e.g. '1.9.8')</li>
   <li> you're done! No other upgrade procedure is required</li>
 </ul>

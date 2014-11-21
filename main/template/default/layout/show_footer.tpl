@@ -20,7 +20,9 @@
         </div> <!-- end of #row" -->
     </div> <!-- end of #main" -->
     <div class="push"></div>
+    </div> <!-- end of #page section -->
 </div> <!-- end of #wrapper section -->
+
 {% endif %}
 
 {% include "default/layout/main_footer.tpl" %}

@@ -153,11 +153,11 @@ function create_document_link(
         $is_browser_viewable_file = is_browser_viewable($ext);
 
         if ($is_browser_viewable_file) {
-            /*if ($ext == 'pdf') {
+            if ($ext == 'pdf') {
                 $url = api_get_self() . '?' . api_get_cidreq() . '&amp;action=download&amp;id=' . $document_data['id'];
-            } else {*/
+            } else {
                 $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
-            //}
+            }
         } else {
             // url-encode for problematic characters (we may not call them dangerous characters...)
             $path = str_replace('%2F', '/', $url_path) . '?' . api_get_cidreq();
@@ -293,17 +293,27 @@ function create_document_link(
                 if ($visibility == false) {
                     $class = "ajax invisible";
                 }
-                return '<a href="' . $url . '" class="' . $class . '" title="' . $tooltip_title_alt . '" style="float:left">' . $title . '</a>' . $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
+                return '<a href="' . $url . '" class="' . $class . '" title="' . $tooltip_title_alt . '" style="float:left">' . $title . '</a>' .
+                $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
             } else {
-
-                //if ($ext != 'pdf') {
+                // For PDF Download the file.
+                $pdfPreview = null;
+                if ($ext != 'pdf') {
                     $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
-                //}
+                } else {
+                    $pdfPreview = Display::url(
+                        Display::return_icon('preview.gif', get_lang('Preview')),
+                        api_get_path(WEB_CODE_PATH).'document/showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'],
+                        array('style' => 'float:right')
+                    );
+                }
                 // No plugin just the old and good showinframes.php page
-                return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" style="float:left" ' . $visibility_class . ' >' . $title . '</a>' . $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
+                return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" style="float:left" ' . $visibility_class . ' >' . $title . '</a>' .
+                        $pdfPreview.$force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
             }
         } else {
-            return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' . $title . '</a>' . $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
+            return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' . $title . '</a>' .
+            $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
         }
         // end copy files to users myfiles
     } else {

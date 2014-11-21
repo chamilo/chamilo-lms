@@ -268,7 +268,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                 </div>
                             </div>';
         $thematic_description_html .=
-                            '<div class="accordion-body collapse in" id="pross" style="height: auto;">
+                            '<div class="accordion-body collapse in" id="pross" style="height: auto !important;">
                                 <div class="accordion-inner">
                                     <div class="row-fluid">
                                         <div class="span4">

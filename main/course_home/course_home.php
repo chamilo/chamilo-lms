@@ -55,10 +55,12 @@ $(document).ready(function(){
     $("#thematic-show").click(function(){
         $(".btn-hide-thematic").hide();
         $(".btn-show-thematic").show(); //show using class
+        $("#pross").fadeToggle(); //Not working collapse for Chrome
     });
     $("#thematic-hide").click(function(){
         $(".btn-show-thematic").hide(); //show using class
         $(".btn-hide-thematic").show();
+        $("#pross").fadeToggle(); //Not working collapse for Chrome
     });
 });
 

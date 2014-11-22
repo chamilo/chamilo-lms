@@ -256,6 +256,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 
 // Aspell Settings
 //$_configuration['aspell_bin'] = '/usr/bin/hunspell';
-//$_configuration['aspell_lang'] = 'en_US';
 //$_configuration['aspell_opts'] = '-a -d en_GB -H -i utf-8';
 //$_configuration['aspell_temp_dir'] = './';

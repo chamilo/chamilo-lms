@@ -6,12 +6,11 @@ header('Content-type: text/html; charset=utf-8');
 require_once '../../../../../../../../inc/global.inc.php';
 
 $aspellBinary = api_get_configuration_value('aspell_bin');
-$aspellLanguage = api_get_configuration_value('aspell_lang');
 $aspellOptions = api_get_configuration_value('aspell_opts');
 $aspellTempDir = api_get_configuration_value('aspell_temp_dir');
 
 $aspell_prog	= !empty($aspellBinary) ? $aspellBinary : '"C:\Program Files\Aspell\bin\aspell.exe"';
-$lang			= !empty($aspellLanguage) ? $aspellLanguage : 'en_US';
+$lang			= 'en_US';
 $aspell_opts	= !empty($aspellOptions) ? $aspellOptions : "-a --lang=$lang --encoding=utf-8 -H --rem-sgml-check=alt";
 $tempfiledir	= !empty($aspellTempDir) ? $aspellTempDir : "./";
 

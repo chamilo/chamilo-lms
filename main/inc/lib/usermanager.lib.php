@@ -3607,7 +3607,7 @@ class UserManager
                         concat(u.firstname,' ',u.lastname) LIKE '%".$tag."%' OR
                         concat(u.lastname,' ',u.firstname) LIKE '%".$tag."%'
                      )
-                     ".(!empty($where_extra_fields)?$where_extra_fields:'')."
+                     ".(!empty($where_extra_fields) ? $where_extra_fields : '')."
                      AND
                      url_rel_user.access_url_id=".api_get_current_access_url_id();
 
@@ -3647,18 +3647,18 @@ class UserManager
       */
     public static function get_extra_filtrable_fields()
     {
-        $extra_field_list = UserManager::get_extra_fields();
-        $extra_filtrabe_fields = array();
-        if (is_array($extra_field_list)) {
-            foreach ($extra_field_list as $extra_field) {
+        $extraFieldList = UserManager::get_extra_fields();
+        $extraFiltrableFields = array();
+        if (is_array($extraFieldList)) {
+            foreach ($extraFieldList as $extraField) {
                 //if is enabled to filter and is a "<select>" field type
-                if ($extra_field[8]==1 && $extra_field[2]==4) { 
-                    $extra_filtrabe_fields[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
+                if ($extraField[8] == 1 && $extraField[2] == 4) {
+                    $extraFiltrableFields[] = array('name'=> $extraField[3], 'variable'=>$extraField[1], 'data'=> $extraField[9]);
                 }
             }
         }    
-        if (is_array($extra_filtrabe_fields) && count($extra_filtrabe_fields)>0 ) {
-            return $extra_filtrabe_fields;
+        if (is_array($extraFiltrableFields) && count($extraFiltrableFields) > 0 ) {
+            return $extraFiltrableFields;
         }
     }
 
@@ -3669,43 +3669,43 @@ class UserManager
     public static function get_search_form_where_extra_fields()
     {
     
-        $use_extra_fields = false;
+        $useExtraFields = false;
       
-        $extra_fields = UserManager::get_extra_filtrable_fields();
+        $extraFields = UserManager::get_extra_filtrable_fields();
       
-        if (is_array($extra_fields) && count($extra_fields)>0 ) {
-            $result_list=array();
-            foreach ($extra_fields as $extra_field) {
-                $varname = 'field_'.$extra_field['variable'];
-                if (UserManager::is_extra_field_available($extra_field['variable'])) {
-                    if (isset($_GET[$varname]) && $_GET[$varname]!='0') {
-                        $use_extra_fields = true;
-                        $extra_field_result[]= UserManager::get_extra_user_data_by_value($extra_field['variable'], $_GET[$varname]);
+        if (is_array($extraFields) && count($extraFields)>0 ) {
+            $resultList=array();
+            foreach ($extraFields as $extraField) {
+                $varName = 'field_'.$extraField['variable'];
+                if (UserManager::is_extra_field_available($extraField['variable'])) {
+                    if (isset($_GET[$varName]) && $_GET[$varName]!='0') {
+                        $useExtraFields = true;
+                        $extraFieldResult[]= UserManager::get_extra_user_data_by_value($extraField['variable'], $_GET[$varName]);
                     }
                 }
             }
         }
 
-        if ($use_extra_fields) {
-            $final_result = array();
-            if (count($extra_field_result)>1) {
-                for ($i=0; $i < count($extra_field_result) -1; $i++) {
-                    if (is_array($extra_field_result[$i+1])) {
-                        $final_result  = array_intersect($extra_field_result[$i], $extra_field_result[$i+1]);
+        if ($useExtraFields) {
+            $finalResult = array();
+            if (count($extraFieldResult)>1) {
+                for ($i=0; $i < count($extraFieldResult) -1; $i++) {
+                    if (is_array($extraFieldResult[$i+1])) {
+                        $finalResult  = array_intersect($extraFieldResult[$i], $extraFieldResult[$i+1]);
                     }
                 }
             } else {
-                $final_result = $extra_field_result[0];
+                $finalResult = $extraFieldResult[0];
             }
 
-            $where_filter ='';
-            if (is_array($final_result) && count($final_result)>0) {
-                $where_filter = " AND u.user_id IN  ('".implode("','", $final_result)."') ";
+            $whereFilter ='';
+            if (is_array($finalResult) && count($finalResult)>0) {
+                $whereFilter = " AND u.user_id IN  ('".implode("','", $finalResult)."') ";
             } else {
                 //no results
-                $where_filter = " AND u.user_id  = -1 ";
+                $whereFilter = " AND u.user_id  = -1 ";
             }
-            return $where_filter;
+            return $whereFilter;
         }
     }
     
@@ -3717,41 +3717,41 @@ class UserManager
     public static function get_search_form($query)
     {
     
-        $extra_filtrable_fields = UserManager::get_extra_filtrable_fields();
+        $extraFiltrableFields = UserManager::get_extra_filtrable_fields();
         
-        if (is_array($extra_filtrable_fields) && count($extra_filtrable_fields)>0 ) {
-            $extra_fields = '';
-            foreach ($extra_filtrable_fields as $extra_field) {
-                $extra_fields .=  '<label class="extra_field">'.$extra_field['name'].'</label>';
-                $varname = 'field_'.$extra_field['variable'];
-                $extra_fields .=  '&nbsp;<select name="'.$varname.'" class="extra_field">';
-                $extra_fields .=  '<option value="0">--'.get_lang('Select').'--</option>';
-                foreach ($extra_field['data'] as $option) {
+        if (is_array($extraFiltrableFields) && count($extraFiltrableFields)>0 ) {
+            $extraFields = '';
+            foreach ($extraFiltrableFields as $extraField) {
+                $extraFields .=  '<label class="extra_field">'.$extraField['name'].'</label>';
+                $varName = 'field_'.$extraField['variable'];
+                $extraFields .=  '&nbsp;<select name="'.$varName.'" class="extra_field">';
+                $extraFields .=  '<option value="0">--'.get_lang('Select').'--</option>';
+                foreach ($extraField['data'] as $option) {
                     $checked='';
-                    if (isset($_GET[$varname])) {
-                        if ($_GET[$varname]==$option[1]) {
+                    if (isset($_GET[$varName])) {
+                        if ($_GET[$varName]==$option[1]) {
                             $checked = 'selected="true"';
                         }
                     }
-                    $extra_fields .=  '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
+                    $extraFields .=  '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
                 }
-                $extra_fields .=  '</select>';
-                $extra_fields .=  '&nbsp;&nbsp;';
+                $extraFields .=  '</select>';
+                $extraFields .=  '&nbsp;&nbsp;';
             }
         }
         
-        $search_type = isset($_GET['search_type']) ? $_GET['search_type'] : null;
+        $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
 
         return '
         <form method="GET" class="well form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">
-                <input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-medium" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
+                <input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-small" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
                 ' . get_lang('Type') .' 
                 <select name="search_type" onchange="javascript: extra_field_toogle();">
                 <option value="0">--'.get_lang('Select').'--</option>
-                <option value="1"' . (($search_type=='1')?'selected="selected"':"") . '>--' . get_lang('User') .'--</option>
-                <option value="2"' . (($search_type=='2')?'selected="selected"':"") . '>--' . get_lang('Group') . '--</option>
+                <option value="1"' . (($searchType=='1')?'selected="selected"':"") . '>--' . get_lang('User') .'--</option>
+                <option value="2"' . (($searchType=='2')?'selected="selected"':"") . '>--' . get_lang('Group') . '--</option>
                 </select>
-                '.$extra_fields.'
+                '.$extraFields.'
                 <button class="btn" type="submit" value="search">'.get_lang('Search').'</button>
         </form>
         <script>

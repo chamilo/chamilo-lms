@@ -112,6 +112,7 @@ function create_document_link(
     global $dbl_click_id;
     $course_info = api_get_course_info();
     $www = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/document';
+    $webOdflist = DocumentManager::get_web_odf_extension_list();
 
     // Get the title or the basename depending on what we're using
     if ($document_data['title'] != '') {
@@ -153,7 +154,7 @@ function create_document_link(
         $is_browser_viewable_file = is_browser_viewable($ext);
 
         if ($is_browser_viewable_file) {
-            if ($ext == 'pdf') {
+            if ($ext == 'pdf' || in_array($ext, $webOdflist)) {
                 $url = api_get_self() . '?' . api_get_cidreq() . '&amp;action=download&amp;id=' . $document_data['id'];
             } else {
                 $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
@@ -298,7 +299,7 @@ function create_document_link(
             } else {
                 // For PDF Download the file.
                 $pdfPreview = null;
-                if ($ext != 'pdf') {
+                if ($ext != 'pdf' && !in_array($ext, $webOdflist)) {
                     $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
                 } else {
                     $pdfPreview = Display::url(

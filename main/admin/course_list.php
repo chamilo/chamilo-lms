@@ -193,7 +193,7 @@ function modify_filter($code)
  * Return an icon representing the visibility of the course
  */
 function get_course_visibility_icon($v) {
-    $style = 'margin-bottom:-5px;margin-right:5px;';
+    $style = 'margin-bottom:0;margin-right:5px;';
     switch($v) {
         case 0:
             return Display::return_icon('bullet_red.gif', get_lang('CourseVisibilityClosed'), array('style' => $style));

@@ -25,8 +25,10 @@ $content['form']->removeElement('extra_mail_notify_group_message');
 $content['form']->removeElement('official_code');
 $content['form']->removeElement('phone');
 $content['form']->removeElement('submit');
-$content['form']->removeElement('status');
-$content['form']->removeElement('status');
+if (isset($content['form']->_elementIndex['status'])) {
+    $content['form']->removeElement('status');
+    $content['form']->removeElement('status');
+}
 /**
  * Code to change the way QuickForm render html
  */

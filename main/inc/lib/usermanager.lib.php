@@ -3580,6 +3580,7 @@ class UserManager
         $number_of_items = intval($number_of_items);
 
         $where_field = "";
+        $where_extra_fields = UserManager::get_search_form_where_extra_fields();
         if ($field_id != 0) {
             $where_field = " field_id = $field_id AND ";
         }
@@ -3606,6 +3607,7 @@ class UserManager
                         concat(u.firstname,' ',u.lastname) LIKE '%".$tag."%' OR
                         concat(u.lastname,' ',u.firstname) LIKE '%".$tag."%'
                      )
+                     ".(!empty($where_extra_fields) ? $where_extra_fields : '')."
                      AND
                      url_rel_user.access_url_id=".api_get_current_access_url_id();
 
@@ -3638,20 +3640,130 @@ class UserManager
         return $return;
     }
 
+
+    /**
+      * Get extra filtrable user fields (type select)
+      * @return array
+      */
+    public static function get_extra_filtrable_fields()
+    {
+        $extraFieldList = UserManager::get_extra_fields();
+        $extraFiltrableFields = array();
+        if (is_array($extraFieldList)) {
+            foreach ($extraFieldList as $extraField) {
+                //if is enabled to filter and is a "<select>" field type
+                if ($extraField[8] == 1 && $extraField[2] == 4) {
+                    $extraFiltrableFields[] = array('name'=> $extraField[3], 'variable'=>$extraField[1], 'data'=> $extraField[9]);
+                }
+            }
+        }    
+        if (is_array($extraFiltrableFields) && count($extraFiltrableFields) > 0 ) {
+            return $extraFiltrableFields;
+        }
+    }
+
+    /**
+      * Get extra where clauses for finding users based on extra filtrable user fields (type select)
+      * @return string With AND clauses based on user's ID which have the values to search in extra user fields
+      */
+    public static function get_search_form_where_extra_fields()
+    {
+    
+        $useExtraFields = false;
+      
+        $extraFields = UserManager::get_extra_filtrable_fields();
+      
+        if (is_array($extraFields) && count($extraFields)>0 ) {
+            $resultList=array();
+            foreach ($extraFields as $extraField) {
+                $varName = 'field_'.$extraField['variable'];
+                if (UserManager::is_extra_field_available($extraField['variable'])) {
+                    if (isset($_GET[$varName]) && $_GET[$varName]!='0') {
+                        $useExtraFields = true;
+                        $extraFieldResult[]= UserManager::get_extra_user_data_by_value($extraField['variable'], $_GET[$varName]);
+                    }
+                }
+            }
+        }
+
+        if ($useExtraFields) {
+            $finalResult = array();
+            if (count($extraFieldResult)>1) {
+                for ($i=0; $i < count($extraFieldResult) -1; $i++) {
+                    if (is_array($extraFieldResult[$i+1])) {
+                        $finalResult  = array_intersect($extraFieldResult[$i], $extraFieldResult[$i+1]);
+                    }
+                }
+            } else {
+                $finalResult = $extraFieldResult[0];
+            }
+
+            $whereFilter ='';
+            if (is_array($finalResult) && count($finalResult)>0) {
+                $whereFilter = " AND u.user_id IN  ('".implode("','", $finalResult)."') ";
+            } else {
+                //no results
+                $whereFilter = " AND u.user_id  = -1 ";
+            }
+            return $whereFilter;
+        }
+    }
+    
     /**
      * Show the search form
      * @param string the value of the search box
-     *
+     * @return string HTML form
      */
     public static function get_search_form($query)
     {
+    
+        $extraFiltrableFields = UserManager::get_extra_filtrable_fields();
+        
+        if (is_array($extraFiltrableFields) && count($extraFiltrableFields)>0 ) {
+            $extraFields = '';
+            foreach ($extraFiltrableFields as $extraField) {
+                $extraFields .=  '<label class="extra_field">'.$extraField['name'].'</label>';
+                $varName = 'field_'.$extraField['variable'];
+                $extraFields .=  '&nbsp;<select name="'.$varName.'" class="extra_field">';
+                $extraFields .=  '<option value="0">--'.get_lang('Select').'--</option>';
+                foreach ($extraField['data'] as $option) {
+                    $checked='';
+                    if (isset($_GET[$varName])) {
+                        if ($_GET[$varName]==$option[1]) {
+                            $checked = 'selected="true"';
+                        }
+                    }
+                    $extraFields .=  '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
+                }
+                $extraFields .=  '</select>';
+                $extraFields .=  '&nbsp;&nbsp;';
+            }
+        }
+        
+        $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
+
         return '
         <form method="GET" class="well form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">
-                <input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-medium" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
+                <input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-small" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
+                ' . get_lang('Type') .' 
+                <select name="search_type" onchange="javascript: extra_field_toogle();">
+                <option value="0">--'.get_lang('Select').'--</option>
+                <option value="1"' . (($searchType=='1')?'selected="selected"':"") . '>--' . get_lang('User') .'--</option>
+                <option value="2"' . (($searchType=='2')?'selected="selected"':"") . '>--' . get_lang('Group') . '--</option>
+                </select>
+                '.$extraFields.'
                 <button class="btn" type="submit" value="search">'.get_lang('Search').'</button>
-        </form>';
+        </form>
+        <script>
+        extra_field_toogle();
+        function extra_field_toogle()
+        {
+            if (jQuery("select[name=search_type]").val() != "1") { jQuery(".extra_field").hide(); } else { jQuery(".extra_field").show(); }
+        }
+        </script>
+        ';
     }
-
+    
     /**
      * Shows the user menu
      */

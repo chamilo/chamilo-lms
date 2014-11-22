@@ -35,7 +35,7 @@ ul.holder li.bit-input input {
   width:auto;
   overflow:visible;
   margin:0;
-  border:0;
+  border:1px solid #CCC;
   outline:0;
   padding:3px 0 2px
 }
@@ -84,7 +84,7 @@ form ol li.input-text input {
 }
 
 ul.holder input[type="text"]:focus,ul.holder input-text input[type="password"]:focus {
-  background-image:none
+  background-image:none;
 }
 
 form ul {
@@ -114,7 +114,7 @@ ul.holder li.bit-hover {
 ul.holder li.bit-box-focus {
   border-color:#598BEC;
   background:#598BEC;
-  color:#fff
+  color:#fff;
 }
 
 ul.holder li.bit-box a.closebutton {

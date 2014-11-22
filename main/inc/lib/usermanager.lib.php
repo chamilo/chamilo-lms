@@ -3712,7 +3712,7 @@ class UserManager
     /**
      * Show the search form
      * @param string the value of the search box
-     *
+     * @return string HTML form
      */
     public static function get_search_form($query)
     {

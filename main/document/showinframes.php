@@ -342,7 +342,7 @@ if (!$is_nanogong_available) {
 if ($show_web_odf) {
     $browser = api_get_navigator();
     $pdfUrl = api_get_path(WEB_LIBRARY_PATH) . 'javascript/ViewerJS/index.html#' . $file_url;
-    if ($browser['name'] == 'Mozilla') {
+    if ($browser['name'] == 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
         $pdfUrl = $file_url;
     }
     echo '<div id="viewerJS">';

@@ -20,6 +20,18 @@ services:
         tags:
             - { name: form.type, alias: yes_no }
 
+    chamilo_user_extra_field_value:
+        class: Chamilo\UserBundle\Form\Type\AttributeValueType
+        arguments: [Chamilo\CoreBundle\Entity\UserFieldValues, ["registration"], 'user']
+        tags:
+            - { name: form.type }
+
+    chamilo_user_extra_field_choice:
+        class: Chamilo\UserBundle\Form\Type\AttributeEntityChoiceType
+        arguments: [ 'user', Chamilo\CoreBundle\Entity\UserField]
+        tags:
+            - { name: form.type }
+
     chamilo_core.html_editor:
         class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
         arguments: [@translator, @router]

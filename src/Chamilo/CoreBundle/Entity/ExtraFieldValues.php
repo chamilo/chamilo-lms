@@ -56,6 +56,11 @@ class ExtraFieldValues
      */
     protected $user;
 
+    public function __construct()
+    {
+        $this->tms = new \DateTime();
+    }
+
     /**
      * @param $user
      * @return $this

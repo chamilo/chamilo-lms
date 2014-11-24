@@ -17,6 +17,14 @@ use Chamilo\AdminThemeBundle\Model\UserInterface as ThemeUser;
 //use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Application\Sonata\MediaBundle\Entity\Media;
+use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
+
+use Doctrine\Common\Collections\Collection;
+use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
+use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
+use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
+
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -310,7 +318,8 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     protected $sessionAsGeneralCoach;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user")
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"all"})
      **/
     protected $extraFields;
 
@@ -1352,5 +1361,99 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     public function getImageName()
     {
         return $this->imageName;
+    }
+
+    // Model
+
+    public function getSlug()
+    {
+        return $this->getUsername();
+    }
+
+    public function setSlug($slug)
+    {
+        return $this->setUsername($slug);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtraFields()
+    {
+        return $this->extraFields;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtraFields(Collection $attributes)
+    {
+        foreach ($attributes as $attribute) {
+            $this->addExtraField($attribute);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addExtraField(ExtraFieldValues $attribute)
+    {
+        if (!$this->hasExtraField($attribute)) {
+            $attribute->setUser($this);
+            $this->extraFields->add($attribute);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeExtraField(ExtraFieldValues $attribute)
+    {
+        if ($this->hasExtraField($attribute)) {
+            $this->extraFields->removeElement($attribute);
+            $attribute->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasExtraField($attribute)
+    {
+        return $this->extraFields->contains($attribute);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasExtraFieldByName($attributeName)
+    {
+        foreach ($this->extraFields as $attribute) {
+            if ($attribute->getName() === $attributeName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtraFieldByName($attributeName)
+    {
+        foreach ($this->extraFields as $attribute) {
+            if ($attribute->getName() === $attributeName) {
+                return $attribute;
+            }
+        }
+
+        return null;
     }
 }

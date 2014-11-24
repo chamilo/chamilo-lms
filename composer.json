@@ -143,6 +143,8 @@
         "sylius/resource": "0.11",
         "sylius/flow-bundle": "0.11",
         "sylius/settings-bundle": "0.11",
+        "sylius/attribute-bundle": "0.11",
+        "sylius/variation": "0.11",
         "apy/datagrid-bundle": "dev-master",
         "jms/translation-bundle": "~1.0",
 

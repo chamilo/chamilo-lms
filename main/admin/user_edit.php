@@ -11,48 +11,6 @@ $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['u
 
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
-
-$htmlHeadXtra[] = '<script>
-
-var is_platform_id = "'.$is_platform_admin.'";
-function enable_expiration_date() {
-	document.user_edit.radio_expiration_date[0].checked=false;
-	document.user_edit.radio_expiration_date[1].checked=true;
-}
-
-function password_switch_radio_button(){
-	var input_elements = document.getElementsByTagName("input");
-	for (var i = 0; i < input_elements.length; i++) {
-		if(input_elements.item(i).name == "reset_password" && input_elements.item(i).value == "2") {
-			input_elements.item(i).checked = true;
-		}
-	}
-}
-
-function display_drh_list(){
-    var $radios = $("input:radio[name=platform_admin]");
-	if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
-        if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="block";
-	} else if (document.getElementById("status_select").value=='.STUDENT.') {
-        if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="none";
-        $radios.filter("[value=0]").attr("checked", true);
-	} else {
-        if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="none";
-        $radios.filter("[value=0]").attr("checked", true);
-	}
-}
-
-function show_image(image,width,height) {
-	width = parseInt(width) + 20;
-	height = parseInt(height) + 20;
-	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \' , resizable=0\');
-}
-</script>';
-
-$noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 
 $interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
@@ -405,10 +363,6 @@ $url_big_image = $big_image.'?rnd='.time();
 // Display form
 $content = $form->return_form();
 
-$app['title'] = $tool_name;
-//echo $message;
-//echo $content;
-
 $em = Container::getEntityManager();
 $request = Container::getRequest();
 
@@ -418,7 +372,7 @@ if (!empty($user_id)) {
 }
 
 $builder = Container::getFormFactory()->createBuilder(
-    new UserType(),
+    new UserType(Container::getSecurity()),
     $user
 );
 
@@ -438,7 +392,7 @@ if ($form->isValid()) {
 $urlAction = api_get_self().'?user_id='.$user_id;
 
 echo Container::getTemplate()->render(
-    'ChamiloCoreBundle:Legacy:form.html.twig',
+    'ChamiloCoreBundle:User:create.html.twig',
     array(
         'form' => $form->createView(),
         'url' => $urlAction

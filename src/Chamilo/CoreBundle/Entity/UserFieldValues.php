@@ -4,6 +4,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+//use Chamilo\UserBundle\Model\AttributeValueInterface;
 
 /**
  * UserFieldValues
@@ -14,8 +15,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class UserFieldValues extends ExtraFieldValues
 {
-
     /**
+     * The current user
      * @var integer
      *
      * @ORM\Column(name="author_id", type="string", precision=0, scale=0, nullable=false, unique=false)
@@ -62,7 +63,8 @@ class UserFieldValues extends ExtraFieldValues
     /**
      * Set questionId
      *
-     * @param integer $questionId
+     * @param integer $id
+     *
      * @return QuestionFieldValues
      */
     public function setAuthorId($id)
@@ -79,5 +81,55 @@ class UserFieldValues extends ExtraFieldValues
     public function getAuthorId()
     {
         return $this->authorId;
+    }
+
+    /**
+     * @return ExtraField
+     */
+    public function getExtraField()
+    {
+        return $this->field;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtraField($attribute)
+    {
+        $this->field = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue()
+    {
+        if ($this->fieldValue && AttributeTypes::CHECKBOX === $this->getExtraField()->getType()) {
+            return (Boolean) $this->fieldValue;
+        }
+
+        return $this->fieldValue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValue($value)
+    {
+        $this->setFieldValue($value);
+
+        return $this;
+    }
+
+    public function getName()
+    {
+        return $this->getExtraField()->getFieldVariable();
+
+    }
+    public function getConfiguration()
+    {
+        return $this->getExtraField()->getConfiguration();
     }
 }

@@ -530,7 +530,8 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     $is_certificate_mode = DocumentManager::is_certificate_mode($path);
     $curdirpath = urlencode($curdirpath);
     $extension = pathinfo($path, PATHINFO_EXTENSION);
-    $usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
+    //@todo Implement remote support for converter
+    $usePpt2lp = (api_get_setting('service_ppt2lp', 'active') == 'true' && api_get_setting('service_ppt2lp', 'host') == 'localhost');
     $formatTypeList = DocumentManager::getFormatTypeListConvertor('from', $extension);
     $formatType = current($formatTypeList);
 

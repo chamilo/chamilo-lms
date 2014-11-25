@@ -9,9 +9,6 @@
  * @author Bert Steppé
  * @package chamilo.gradebook
  */
-/**
- * Init
- */
 
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
@@ -39,12 +36,12 @@ $_course['name'] = $course_title;
 $_course['official_code'] = $course_code;
 
 if (isset($_GET['doexercise'])) {
-	header('Location: '.$doExerciseUrl);
-	exit;
+    header('Location: '.$doExerciseUrl);
+    exit;
 } else {
-	if (isset($_GET['gradebook'])) {
-		$add_url = '&gradebook=view&exerciseId='.intval($_GET['exerciseId']);
-	}
-	header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/overview.php?session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq).'&'.$add_url);
-	exit;
+    if (isset($_GET['gradebook'])) {
+        $add_url = '&gradebook=view&exerciseId='.intval($_GET['exerciseId']);
+    }
+    header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/overview.php?session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq).'&'.$add_url);
+    exit;
 }

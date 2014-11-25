@@ -1,12 +1,9 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * Script
  * @package chamilo.gradebook
- */
-/**
- * Init
  */
 $language_file[] = 'gradebook';
 
@@ -34,7 +31,7 @@ block_students();
 $interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'],
     'name' => get_lang('Gradebook'
-        ));
+    ));
 
 //load the evaluation & category
 $select_eval = Security::remove_XSS($_GET['selecteval']);
@@ -321,12 +318,14 @@ if (isset($_GET['export'])) {
         }
     }
 }
+
 if (isset($_GET['resultdelete'])) {
     $result = Result :: load($_GET['resultdelete']);
     $result[0]->delete();
     header('Location: gradebook_view_result.php?deleteresult=&selecteval=' . Security::remove_XSS($_GET['selecteval']));
     exit;
 }
+
 if (isset($_POST['action'])) {
     $number_of_selected_items = count($_POST['id']);
     if ($number_of_selected_items == '0') {
@@ -380,7 +379,7 @@ if (isset($_GET['print'])) {
 }
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-	
+
 function confirmationuser() {
     if (confirm("' . get_lang('DeleteUser') . '?"))
     	{return true;}

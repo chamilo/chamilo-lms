@@ -224,12 +224,12 @@ class AnnouncementManager
                 global $stok;
 
                 $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&origin=" . (!empty($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '') . "&action=showhide&id=" . $announcement_id . "&sec_token=" . $stok . "\">" .
-                        Display::return_icon($image_visibility . '.png', $alt_visibility, '', ICON_SIZE_SMALL) . "</a>";
+                    Display::return_icon($image_visibility . '.png', $alt_visibility, '', ICON_SIZE_SMALL) . "</a>";
 
                 if (api_is_allowed_to_edit(false, true)) {
                     $modify_icons .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete&id=" . $announcement_id . "&sec_token=" . $stok . "\" onclick=\"javascript:if(!confirm('" . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)) . "')) return false;\">" .
-                            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) .
-                            "</a>";
+                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) .
+                        "</a>";
                 }
                 echo "<tr><th style='text-align:right'>$modify_icons</th></tr>";
             }
@@ -522,8 +522,8 @@ class AnnouncementManager
     }
 
     /**
-    * @param int $announcementId
-    */
+     * @param int $announcementId
+     */
     public static function addAnnouncementToAllUsersInSessions($announcementId)
     {
         $courseCode = api_get_course_id();
@@ -720,7 +720,7 @@ class AnnouncementManager
                         $user_disabled = ($this_group['userNb'] > 0) ? "" : "disabled=disabled" ;
                         echo "<option $user_disabled value=\"GROUP:" . $this_group['id'] . "\">",
                         "G: ", $this_group['name'], " - " . $this_group['userNb'] . " " . $user_label .
-                        "</option>";
+                            "</option>";
                     }
                 }
             }
@@ -786,7 +786,7 @@ class AnnouncementManager
                         if (!is_array($to_already_selected) || !in_array("GROUP:" . $this_group['id'], $to_already_selected)) { // $to_already_selected is the array containing the groups (and users) that are already selected
                             echo "<option value=\"GROUP:" . $this_group['id'] . "\">",
                             "G: ", $this_group['name'], " &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-                            "</option>";
+                                "</option>";
                         }
                     }
                 }
@@ -1138,7 +1138,7 @@ class AnnouncementManager
                 $safe_new_file_name = Database::escape_string($new_file_name);
                 // Storing the attachments if any
                 $sql = 'INSERT INTO ' . $tbl_announcement_attachment . ' (c_id, filename, comment, path, announcement_id, size) ' .
-                        "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '" . intval($file['size']) . "' )";
+                    "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '" . intval($file['size']) . "' )";
                 $result = Database::query($sql);
                 $return = 1;
             }

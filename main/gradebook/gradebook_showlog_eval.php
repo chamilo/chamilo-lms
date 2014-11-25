@@ -1,12 +1,10 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * Script
  * @package chamilo.gradebook
  */
-/**
- * Init
- */
+
 $language_file = 'gradebook';
 //$cidReset = true;
 require_once '../inc/global.inc.php';
@@ -18,16 +16,16 @@ api_block_anonymous_users();
 block_students();
 
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?',
-	'name' => get_lang('Gradebook'
+    'url' => $_SESSION['gradebook_dest'].'?',
+    'name' => get_lang('Gradebook'
 ));
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
-	'name' => get_lang('Details'
+    'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+    'name' => get_lang('Details'
 ));
 $interbreadcrumb[] = array (
-	'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),
-	'name' => get_lang('GradebookQualifyLog')
+    'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),
+    'name' => get_lang('GradebookQualifyLog')
 );
 $this_section = SECTION_COURSES;
 Display :: display_header('');
@@ -39,17 +37,17 @@ $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
 $visible_log=Security::remove_XSS($_GET['visiblelog']);
 
 $evaledit = Evaluation :: load($visible_log);
-$sql="SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at,us.username FROM ".$t_linkeval_log." le INNER JOIN ".$t_user." us 
+$sql="SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at,us.username FROM ".$t_linkeval_log." le INNER JOIN ".$t_user." us
       ON le.user_id_log=us.user_id where id_linkeval_log=".$evaledit[0]->get_id()." and type='evaluation';";
 $result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
-	$list_info[]=$row; 
+    $list_info[]=$row;
 }
 
-foreach($list_info as $key => $info_log) {	
-	$list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
-	$list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
+foreach($list_info as $key => $info_log) {
+    $list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
+    $list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 
 $parameters=array('visiblelog'=>$visible_log,'selectcat'=>intval($_GET['selectcat']));

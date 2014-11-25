@@ -1,11 +1,8 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * Script
  * @package chamilo.gradebook
- */
-/**
- * Init
  */
 
 $language_file = 'gradebook';
@@ -28,18 +25,18 @@ $catcourse = Category :: load ($_GET['selectcat']);
 $form = new CatForm(CatForm :: TYPE_SELECT_COURSE, $catadd, 'add_cat_form', null, api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']));
 
 if ($form->validate()) {
-	$values = $form->exportValues();
-	$cat = new Category();
-	$cat->set_course_code($values['select_course']);
-	$cat->set_name($values['name']);
-	header('location: gradebook_add_link.php?selectcat=' .Security::remove_XSS($_GET['selectcat']).'&course_code='.Security::remove_XSS($values['select_course']));
-	exit;
+    $values = $form->exportValues();
+    $cat = new Category();
+    $cat->set_course_code($values['select_course']);
+    $cat->set_name($values['name']);
+    header('location: gradebook_add_link.php?selectcat=' .Security::remove_XSS($_GET['selectcat']).'&course_code='.Security::remove_XSS($values['select_course']));
+    exit;
 }
 
 $interbreadcrumb[] = array (
-	'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.Security::remove_XSS($_GET['selectcat']),
-	'name' => get_lang('Gradebook'
-));
+    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.Security::remove_XSS($_GET['selectcat']),
+    'name' => get_lang('Gradebook'
+    ));
 Display :: display_header(get_lang('NewCategory'));
 $form->display();
 Display :: display_footer();

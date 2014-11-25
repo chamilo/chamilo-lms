@@ -4,9 +4,6 @@
  * Script
  * @package chamilo.gradebook
  */
-/**
- * Init
- */
 
 $language_file = 'gradebook';
 
@@ -20,19 +17,19 @@ require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_data_generator.class.php';
 
 //extra javascript functions for in html head:
-$htmlHeadXtra[] =
-"<script>
+$htmlHeadXtra[] ="<script>
 function confirmation() {
-	if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." ?\"))
-		{return true;}
-	else
-		{return false;}
+	if (confirm(\" " . trim(get_lang('AreYouSureToDelete')) . " ?\")) {
+	    return true;
+	} else {
+	    return false;
+	}
 }
 </script>";
 api_block_anonymous_users();
 
 if (!api_is_allowed_to_edit()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 $cat_id = isset($_GET['cat_id']) ? (int)$_GET['cat_id'] : null;
@@ -182,25 +179,25 @@ if (count($certificate_list)==0) {
     foreach ($certificate_list as $index=>$value) {
         echo '<tr>
                 <td width="100%" class="actions">'.get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')</td>';
-		echo '</tr>';
+        echo '</tr>';
         echo '<tr><td>
             <table class="data_table">';
 
-		$list_certificate = get_list_gradebook_certificates_by_user_id($value['user_id'], $cat_id);
-		foreach ($list_certificate as $value_certificate) {
-			echo '<tr>';
-			echo '<td width="50%">'.get_lang('Score').' : '.$value_certificate['score_certificate'].'</td>';
-			echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($value_certificate['created_at']).'</td>';
-			echo '<td width="20%">';
+        $list_certificate = get_list_gradebook_certificates_by_user_id($value['user_id'], $cat_id);
+        foreach ($list_certificate as $value_certificate) {
+            echo '<tr>';
+            echo '<td width="50%">'.get_lang('Score').' : '.$value_certificate['score_certificate'].'</td>';
+            echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($value_certificate['created_at']).'</td>';
+            echo '<td width="20%">';
             $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$value_certificate['id'];
             $certificates = Display::url(get_lang('Certificate'), $url, array('target'=>'_blank', 'class' => 'btn'));
             echo $certificates;
-			echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&cidReq='.$course_code.'&action=delete&cat_id='.$cat_id.'&certificate_id='.$value_certificate['id'].'">
+            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&cidReq='.$course_code.'&action=delete&cat_id='.$cat_id.'&certificate_id='.$value_certificate['id'].'">
                     '.Display::return_icon('delete.png',get_lang('Delete')).'
                   </a>';
-			echo '</td></tr>';
-		}
-		echo '</table>';
+            echo '</td></tr>';
+        }
+        echo '</table>';
         echo '</td></tr>';
     }
     echo '</table>';

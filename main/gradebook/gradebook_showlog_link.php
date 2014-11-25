@@ -1,12 +1,11 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Script
  * @package chamilo.gradebook
  */
-/**
- * Init
- */
+
 $language_file = 'gradebook';
 //$cidReset = true;
 require_once '../inc/global.inc.php';
@@ -35,16 +34,15 @@ $sql="SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at,u
 $result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
-	$list_info[]=$row;
+    $list_info[] = $row;
 }
 
 foreach($list_info as $key => $info_log) {
-	$list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
-	$list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
+    $list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
+    $list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 
 $parameters=array('visiblelink'=>Security::remove_XSS($_GET['visiblelink']),'selectcat'=>Security::remove_XSS($_GET['selectcat']));
-
 
 $table = new SortableTableFromArrayConfig($list_info, 1,20,'gradebooklink');
 $table->set_additional_parameters($parameters);

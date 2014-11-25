@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Script
  * @package chamilo.gradebook
  */
-/**
- * Init
- */
+
 $language_file = 'gradebook';
 
 require_once '../inc/global.inc.php';
@@ -80,13 +79,11 @@ function check_skills() {
 }
 </script>';
 
-
 $catedit = Category::load($edit_cat);
-
 $form = new CatForm(CatForm::TYPE_EDIT, $catedit[0], 'edit_cat_form');
 
 if ($form->validate()) {
-	$values = $form->getSubmitValues();
+    $values = $form->getSubmitValues();
 
     $cat = new Category();
 
@@ -97,36 +94,36 @@ if ($form->validate()) {
         }
     }
 
-	$cat->set_id($values['hid_id']);
-	$cat->set_name($values['name']);
+    $cat->set_id($values['hid_id']);
+    $cat->set_name($values['name']);
 
-	if (empty ($values['course_code'])) {
-		$cat->set_course_code(null);
-	}else {
-		$cat->set_course_code($values['course_code']);
-	}
+    if (empty ($values['course_code'])) {
+        $cat->set_course_code(null);
+    }else {
+        $cat->set_course_code($values['course_code']);
+    }
 
     $cat->set_grade_model_id($values['grade_model_id']);
-	$cat->set_description($values['description']);
-	$cat->set_skills($values['skills']);
-	$cat->set_user_id($values['hid_user_id']);
-	$cat->set_parent_id($values['hid_parent_id']);
-	$cat->set_weight($values['weight']);
+    $cat->set_description($values['description']);
+    $cat->set_skills($values['skills']);
+    $cat->set_user_id($values['hid_user_id']);
+    $cat->set_parent_id($values['hid_parent_id']);
+    $cat->set_weight($values['weight']);
 
-	if ($values['hid_parent_id'] == 0 ) {
-		$cat->set_certificate_min_score($values['certif_min_score']);
-	}
+    if ($values['hid_parent_id'] == 0 ) {
+        $cat->set_certificate_min_score($values['certif_min_score']);
+    }
 
     if (empty ($values['visible'])) {
-		$visible = 0;
-	} else {
-		$visible = 1;
-	}
+        $visible = 0;
+    } else {
+        $visible = 1;
+    }
 
     $cat->set_visible($visible);
-	$cat->save();
-	header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id());
-	exit;
+    $cat->save();
+    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id());
+    exit;
 }
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectcat,'name' => get_lang('Gradebook'));

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Script
  * @package chamilo.gradebook
@@ -26,8 +27,8 @@ api_block_anonymous_users();
 block_students();
 
 if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
-	header('Location: '.api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&search='.Security::remove_XSS($_POST['keyword']));
-	exit;
+    header('Location: '.api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&search='.Security::remove_XSS($_POST['keyword']));
+    exit;
 }
 
 $interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('ToolGradebook'));
@@ -35,38 +36,38 @@ $interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1',
 $showeval = isset($_POST['showeval']) ? '1' : '0';
 $showlink = isset($_POST['showlink']) ? '1' : '0';
 if (($showlink == '0') && ($showeval == '0')) {
-	$showlink = '1';
-	$showeval = '1';
+    $showlink = '1';
+    $showeval = '1';
 }
 
 $cat = Category::load($_REQUEST['selectcat']);
 
 if (isset($_GET['userid'])) {
-	$userid = Security::remove_XSS($_GET['userid']);
+    $userid = Security::remove_XSS($_GET['userid']);
 } else {
-	$userid = '';
+    $userid = '';
 }
 
 if ($showeval) {
-	$alleval = $cat[0]->get_evaluations($userid, true);
+    $alleval = $cat[0]->get_evaluations($userid, true);
 } else {
-	$alleval = null;
+    $alleval = null;
 }
 
 if ($showlink) {
-	$alllinks = $cat[0]->get_links($userid, true);
+    $alllinks = $cat[0]->get_links($userid, true);
 } else {
-	$alllinks = null;
+    $alllinks = null;
 }
 
 if (isset($export_flatview_form) && (!$file_type == 'pdf')) {
-	Display :: display_normal_message($export_flatview_form->toHtml(), false);
+    Display :: display_normal_message($export_flatview_form->toHtml(), false);
 }
 
 if (isset($_GET['selectcat'])) {
-	$category_id = Security::remove_XSS($_GET['selectcat']);
+    $category_id = Security::remove_XSS($_GET['selectcat']);
 } else {
-	$category_id = '';
+    $category_id = '';
 }
 
 $simple_search_form = new UserForm(
@@ -80,21 +81,21 @@ $values = $simple_search_form->exportValues();
 
 $keyword = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
-	$keyword = Security::remove_XSS($_GET['search']);
+    $keyword = Security::remove_XSS($_GET['search']);
 }
 if ($simple_search_form->validate() && (empty($keyword))) {
-	$keyword = $values['keyword'];
+    $keyword = $values['keyword'];
 }
 
 if (!empty($keyword)) {
-	$users = find_students($keyword);
+    $users = find_students($keyword);
 
 } else {
-	if (isset($alleval) && isset($alllinks)) {
-		$users = get_all_users($alleval, $alllinks);
-	} else {
-		$users = null;
-	}
+    if (isset($alleval) && isset($alllinks)) {
+        $users = get_all_users($alleval, $alllinks);
+    } else {
+        $users = null;
+    }
 }
 
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
@@ -129,10 +130,10 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
 }
 
 if (isset($_GET['exportpdf']))	{
-	$interbreadcrumb[] = array (
-		'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-		'name' => get_lang('FlatView')
-	);
+    $interbreadcrumb[] = array (
+        'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
+        'name' => get_lang('FlatView')
+    );
 
     $export_pdf_form = new DataForm(
         DataForm::TYPE_EXPORT_PDF,
@@ -143,18 +144,18 @@ if (isset($_GET['exportpdf']))	{
         ''
     );
 
-	if ($export_pdf_form->validate()) {
+    if ($export_pdf_form->validate()) {
         $params = $export_pdf_form->exportValues();
         Display :: set_header(null, false, false);
         $params['join_firstname_lastname'] = true;
         $params['show_official_code'] = true;
         $params['export_pdf'] = true;
         $params['only_total_category'] = false;
-		export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
+        export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
 
-	} else {
-		Display :: display_header(get_lang('ExportPDF'));
-	}
+    } else {
+        Display :: display_header(get_lang('ExportPDF'));
+    }
 }
 
 if (isset($_GET['print']))	{
@@ -166,13 +167,13 @@ if (isset($_GET['print']))	{
         $params,
         $mainCourseCategory[0]
     );
-	echo print_table(
+    echo print_table(
         $printable_data[1],
         $printable_data[0],
         get_lang('FlatView'),
         $cat[0]->get_name()
     );
-	exit;
+    exit;
 }
 
 if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report') {

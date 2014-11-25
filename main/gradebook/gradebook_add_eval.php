@@ -5,9 +5,7 @@
  * Script
  * @package chamilo.gradebook
  */
-/**
- * Init
- */
+
 $language_file = 'gradebook';
 require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';
@@ -50,7 +48,7 @@ if ($form->validate()) {
 
     $parent_cat = Category :: load($values['hid_category_id']);
     $global_weight = $cat[0]->get_weight();
-    //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
+    //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
     $values['weight'] = $values['weight_mask'];
 
 
@@ -88,25 +86,25 @@ if ($form->validate()) {
 $interbreadcrumb[] = array(
     'url' => Security::remove_XSS($_SESSION['gradebook_dest']) . '?selectcat=' . $select_cat,
     'name' => get_lang('Gradebook'
-        ));
+    ));
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 
     $("#hid_category_id").change(function(){
-        
+
        $("#hid_category_id option:selected").each(function () {
            var cat_id = $(this).val();
-            $.ajax({ 
-                url: "' . api_get_path(WEB_AJAX_PATH) . 'gradebook.ajax.php?a=get_gradebook_weight", 
+            $.ajax({
+                url: "' . api_get_path(WEB_AJAX_PATH) . 'gradebook.ajax.php?a=get_gradebook_weight",
                 data: "cat_id="+cat_id,
                 success: function(return_value) {
                     if (return_value != 0 ) {
-                        $("#max_weight").html(return_value);                                             
-                    }                    
-                },            
-            });    
+                        $("#max_weight").html(return_value);
+                    }
+                },
+            });
        });
     });
 });

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Announcement Email
  *
@@ -245,9 +246,9 @@ class AnnouncementEmail
         if (!empty($attachment)) {
             $result .= '<br />';
             $result .= Display::url(
-                $attachment['filename'],
-                api_get_path(WEB_CODE_PATH).'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param
-            ).'<br />';
+                    $attachment['filename'],
+                    api_get_path(WEB_CODE_PATH).'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param
+                ).'<br />';
         }
 
         $result .= '<hr />';

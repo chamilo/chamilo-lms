@@ -1577,144 +1577,6 @@ function api_format_course_array($course_data) {
     return $_course;
 }
 
-/* SESSION MANAGEMENT */
-/*
- * DEPRECATED: @see Session
- */
-
-/**
- * Starts the Chamilo session.
- *
- * The default lifetime for session is set here. It is not possible to have it
- * as a database setting as it is used before the database connection has been made.
- * It is taken from the configuration file, and if it doesn't exist there, it is set
- * to 360000 seconds
- *
- * @author Olivier Brouckaert
- * @param  string variable - the variable name to save into the session
- */
-//function api_session_start($already_installed = true) {
-//    global $_configuration;
-//
-//    /* Causes too many problems and is not configurable dynamically.
-//    if ($already_installed) {
-//        $session_lifetime = 360000;
-//        if (isset($_configuration['session_lifetime'])) {
-//            $session_lifetime = $_configuration['session_lifetime'];
-//        }
-//        //session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
-//    }
-//    */
-//
-//    if (!isset($_configuration['session_stored_in_db'])) {
-//        $_configuration['session_stored_in_db'] = false;
-//    }
-//    if ($_configuration['session_stored_in_db'] && function_exists('session_set_save_handler')) {
-//        require_once api_get_path(LIBRARY_PATH).'session_handler.class.php';
-//        $session_handler = new session_handler();
-//        @session_set_save_handler(array(& $session_handler, 'open'), array(& $session_handler, 'close'), array(& $session_handler, 'read'), array(& $session_handler, 'write'), array(& $session_handler, 'destroy'), array(& $session_handler, 'garbage'));
-//    }
-//
-//    /*
-//     * Prevent Session fixation bug fixes
-//     * See http://support.chamilo.org/issues/3600
-//     * http://php.net/manual/en/session.configuration.php
-//     * @todo use session_set_cookie_params with some custom admin parameters
-//     */
-//
-//    //session.cookie_lifetime
-//
-//    //the session ID is only accepted from a cookie
-//    ini_set('session.use_only_cookies', 1);
-//
-//    //HTTPS only if possible
-//    //ini_set('session.cookie_secure', 1);
-//
-//    //session ID in the cookie is only readable by the server
-//    ini_set('session.cookie_httponly', 1);
-//
-//    //Use entropy file
-//    //session.entropy_file
-//    //ini_set('session.entropy_length', 128);
-//
-//    //Do not include the identifier in the URL, and not to read the URL for identifiers.
-//    ini_set('session.use_trans_sid', 0);
-//
-//    session_name('ch_sid');
-//    session_start();
-//
-//    if (!isset($_SESSION['starttime'])) {
-//        $_SESSION['starttime'] = time();
-//    }
-//
-//    if ($already_installed) {
-//        if (empty($_SESSION['checkDokeosURL'])) {
-//            $_SESSION['checkDokeosURL'] = api_get_path(WEB_PATH);
-//            //$_SESSION['session_expiry'] = time() + $session_lifetime; // It is useless at the moment.
-//        } elseif ($_SESSION['checkDokeosURL'] != api_get_path(WEB_PATH)) {
-//            Session::clear();
-//            //$_SESSION['session_expiry'] = time() + $session_lifetime;
-//        }
-//    }
-//    if ( isset($_SESSION['starttime']) && $_SESSION['starttime'] < time() - $_configuration['session_lifetime'] ) {
-//        $_SESSION['starttime'] = time();
-//    }
-//}
-
-/**
- * Saves a variable into the session
- *
- * BUG: function works only with global variables
- *
- * @author Olivier Brouckaert
- * @param  string variable - the variable name to save into the session
- */
-//function api_session_register($variable) {
-//    global $$variable;
-//    $_SESSION[$variable] = $$variable;
-//}
-
-/**
- * Removes a variable from the session.
- *
- * @author Olivier Brouckaert
- * @param  string variable - the variable name to remove from the session
- */
-//function api_session_unregister($variable) {
-//    $variable = strval($variable);
-//    if (isset($GLOBALS[$variable])) {
-//        unset ($GLOBALS[$variable]);
-//    }
-//    if (isset($_SESSION[$variable])) {
-//        unset($_SESSION[$variable]);
-//    }
-//}
-
-/**
- * Clears the session
- *
- * @author Olivier Brouckaert
- */
-//function api_session_clear() {
-//    session_regenerate_id();
-//    session_unset();
-//    $_SESSION = array();
-//}
-
-/**
- * Destroys the session
- *
- * @author Olivier Brouckaert
- */
-//function api_session_destroy() {
-//    session_unset();
-//    $_SESSION = array();
-//    session_destroy();
-//}
-
-
-/* STRING MANAGEMENT */
-
 /**
  * Add a parameter to the existing URL. If this parameter already exists,
  * just replace it with the new value
@@ -1856,7 +1718,6 @@ function get_status_from_code($status_code) {
     }
 }
 
-
 /* FAILURE MANAGEMENT */
 
 /**
@@ -1878,7 +1739,7 @@ $api_failureList = array();
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  string $failure_type - the type of failure
  * global: array $api_failureList
- * @return bolean false to stay consistent with the main script
+ * @return boolean false to stay consistent with the main script
  */
 function api_set_failure($failure_type) {
     global $api_failureList;
@@ -1925,9 +1786,9 @@ function api_get_last_failure() {
 }
 
 /**
- * Collects and manages failures occuring during script execution
- * The main purpose is allowing to manage the display messages externaly
- * from functions or objects. This strengthens encupsalation principle
+ * Collects and manages failures occurring during script execution
+ * The main purpose is allowing to manage the display messages externally
+ * from functions or objects. This strengthens encapsulation principle
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @package chamilo.library
@@ -2198,8 +2059,8 @@ function api_get_session_visibility(
 /**
  * This function returns a (star) session icon if the session is not null and
  * the user is not a student
- * @param int       Session id
- * @param int       User status id - if 5 (student), will return empty
+ * @param int   $session_id
+ * @param int   $status_id User status id - if 5 (student), will return empty
  * @return string   Session icon
  */
 function api_get_session_image($session_id, $status_id)
@@ -2401,11 +2262,12 @@ function api_is_platform_admin($allow_sessions_admins = false, $allow_drh = fals
 
 /**
  * Checks whether the user given as user id is in the admin table.
- * @param int User ID. If none provided, will use current user
- * @param int URL ID. If provided, also check if the user is active on given URL
+ * @param int $user_id. If none provided, will use current user
+ * @param int $url URL ID. If provided, also check if the user is active on given URL
  * @result bool True if the user is admin, false otherwise
  */
-function api_is_platform_admin_by_id($user_id = null, $url = null) {
+function api_is_platform_admin_by_id($user_id = null, $url = null)
+{
     $user_id = intval($user_id);
     if (empty($user_id)) {
         $user_id = api_get_user_id();
@@ -2429,10 +2291,11 @@ function api_is_platform_admin_by_id($user_id = null, $url = null) {
 
 /**
  * Returns the user's numeric status ID from the users table
- * @param int User ID. If none provided, will use current user
+ * @param int $user_id. If none provided, will use current user
  * @result int User's status (1 for teacher, 5 for student, etc)
  */
-function api_get_user_status($user_id = null) {
+function api_get_user_status($user_id = null)
+{
     $user_id = intval($user_id);
     if (empty($user_id)) {
         $user_id = api_get_user_id();
@@ -2484,7 +2347,12 @@ function api_is_course_tutor() {
     return Session::read('is_courseTutor');
 }
 
-function api_get_user_platform_status($user_id = false) {
+/**
+ * @param int $user_id
+ *
+ * @return array
+ */
+function api_get_user_platform_status($user_id = null) {
     $status     = array();
     $user_id    = intval($user_id);
     if (empty($user_id)) {
@@ -2578,12 +2446,14 @@ function api_is_course_session_coach($user_id, $course_code, $session_id)
     $course_code = Database::escape_string($course_code);
 
     $sql = "SELECT DISTINCT id
-                FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-                ON session.id = session_rc_ru.id_session
-                WHERE   session_rc_ru.id_user = '".$user_id."'  AND
-                        session_rc_ru.course_code = '$course_code' AND
-                        session_rc_ru.status = 2 AND
-                        session_rc_ru.id_session = '$session_id'";
+            FROM $session_table
+            INNER JOIN $session_rel_course_rel_user_table session_rc_ru
+            ON session.id = session_rc_ru.id_session
+            WHERE
+                session_rc_ru.id_user = '".$user_id."'  AND
+                session_rc_ru.course_code = '$course_code' AND
+                session_rc_ru.status = 2 AND
+                session_rc_ru.id_session = '$session_id'";
     $result = Database::query($sql);
     return Database::num_rows($result) > 0;
 }
@@ -2888,14 +2758,17 @@ function api_display_debug_info($debug_info) {
 
 function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true)
 {
-    $my_session_id              = api_get_session_id();
-    $is_allowed_coach_to_edit   = api_is_coach(null, null, $check_student_view);
-    $session_visibility         = api_get_session_visibility($my_session_id);
+    $my_session_id = api_get_session_id();
+    $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
+    $session_visibility = api_get_session_visibility($my_session_id);
 
     // Admins can edit anything.
     if (api_is_platform_admin(false)) {
         //The student preview was on
-        if ($check_student_view && isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
+        if ($check_student_view &&
+            isset($_SESSION['studentview']) &&
+            $_SESSION['studentview'] == "studentview"
+        ) {
             return false;
         } else {
             return true;
@@ -2961,11 +2834,12 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 /**
 * Checks if a student can edit contents in a session depending
 * on the session visibility
-* @param bool       Whether to check if the user has the tutor role
-* @param bool       Whether to check if the user has the coach role
+* @param bool $tutor  Whether to check if the user has the tutor role
+* @param bool  $coach Whether to check if the user has the coach role
 * @return boolean, true: the user has the rights to edit, false: he does not
 */
-function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
+function api_is_allowed_to_session_edit($tutor = false, $coach = false)
+{
     if (api_is_allowed_to_edit($tutor, $coach)) {
         // If I'm a teacher, I will return true in order to not affect the normal behaviour of Chamilo tools.
         return true;
@@ -3078,8 +2952,8 @@ function api_is_allowed($tool, $action, $task_id = 0) {
 
 /**
  * Tells whether this user is an anonymous user
- * @param int       User ID (optional, will take session ID if not provided)
- * @param bool      Whether to check in the database (true) or simply in
+ * @param int  $user_id      User ID (optional, will take session ID if not provided)
+ * @param bool $db_check     Whether to check in the database (true) or simply in
  * the session (false) to see if the current user is the anonymous user
  * @return bool     true if this user is anonymous, false otherwise
  */
@@ -3110,7 +2984,8 @@ function api_is_anonymous($user_id = null, $db_check = false) {
  * Returns a not found page
  * @todo use templates to customize the not found page
  */
-function api_not_found($print_headers = false) {
+function api_not_found($print_headers = false)
+{
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
     $show_headers = 0;
     if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
@@ -3124,7 +2999,7 @@ function api_not_found($print_headers = false) {
 
 /**
  * Displays message "You are not allowed here..." and exits the entire script.
- * @param bool      Whether or not to print headers (default = false -> does not print them)
+ * @param bool  $print_headers    Whether or not to print headers (default = false -> does not print them)
  *
  * @author Roan Embrechts
  * @author Yannick Warnier

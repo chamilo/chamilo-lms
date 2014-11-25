@@ -2,26 +2,26 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for editing an attendance
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.attendance
-*/
+ * View (MVC patter) for editing an attendance
+ * @author Christian Fasanando <christian1827@gmail.com>
+ * @package chamilo.attendance
+ */
 
 // protect a course script
 api_protect_course_script(true);
 
 // error messages
 if ($error) {
-	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
+    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
 }
 
 $param_gradebook = '';
 if (isset($_SESSION['gradebook'])) {
-	$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
+    $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 }
 
 if (!$error) {
-	$token = Security::get_token();
+    $token = Security::get_token();
 }
 
 $attendance_weight = floatval($attendance_weight);
@@ -42,15 +42,15 @@ if (Gradebook::is_active()) {
         $advanced = '<a href="javascript://" class="advanced_parameters"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
         $form->addElement('advanced_settings',$advanced);
 
-	$form->addElement('html','<div id="id_qualify" style="display:block">');
-	$form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),array('checked'=>'true','onclick'=>'javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}'));
-	$form->addElement('html','<div id="options_field" style="display:block">');
+        $form->addElement('html','<div id="id_qualify" style="display:block">');
+        $form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),array('checked'=>'true','onclick'=>'javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}'));
+        $form->addElement('html','<div id="options_field" style="display:block">');
     } else {
-	$advanced = '<a href="javascript://" class="advanced_parameters"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
+        $advanced = '<a href="javascript://" class="advanced_parameters"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
         $form->addElement('advanced_settings',$advanced);
-	$form->addElement('html','<div id="id_qualify" style="display:none">');
-	$form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
-	$form->addElement('html','<div id="options_field" style="display:none">');
+        $form->addElement('html','<div id="id_qualify" style="display:none">');
+        $form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+        $form->addElement('html','<div id="options_field" style="display:none">');
     }
     load_gradebook_select_in_tool($form);
     $form->addElement('text', 'attendance_qualify_title', get_lang('TitleColumnGradebook'));

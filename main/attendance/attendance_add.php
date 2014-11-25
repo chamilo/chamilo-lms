@@ -2,26 +2,26 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for adding a attendance
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.attendance
-*/
+ * View (MVC patter) for adding a attendance
+ * @author Christian Fasanando <christian1827@gmail.com>
+ * @package chamilo.attendance
+ */
 
 // protect a course script
 api_protect_course_script(true);
 
 // error messages
 if ($error) {
-	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
+    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
 }
 
 $param_gradebook = '';
 if (isset($_SESSION['gradebook'])) {
-	$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
+    $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 }
 
 if (!$error) {
-	$token = Security::get_token();
+    $token = Security::get_token();
 }
 // display form
 $form = new FormValidator('attendance_add','POST','index.php?action=attendance_add&'.api_get_cidreq().$param_gradebook);
@@ -35,7 +35,7 @@ $form->add_html_editor('description', get_lang('Description'), false, false, arr
 // Adavanced Parameters
 
 $advanced = '<a href="javascript://" class = "advanced_parameters" ><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
-if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {   
+if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {
     $form -> addElement('advanced_settings',$advanced);
 
     $form->addElement('html','<div id="id_qualify" style="display:none">');

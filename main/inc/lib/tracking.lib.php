@@ -1774,16 +1774,17 @@ class Tracking
 
     /**
      * Get count student's exercise progress
-     * @param    int       user id
-     * @param    string    course code
-     * @param    int       session id
+     *
+     * @param array  $exercise_list
+     * @param int    $user_id
+     * @param string $course_code
+     * @param int    $session_id
     */
-
     public static function get_exercise_student_progress($exercise_list, $user_id, $course_code, $session_id)
     {
-        $course_code    = Database::escape_string($course_code);
-        $user_id        = intval($user_id);
-        $session_id     = intval($session_id);
+        $course_code = Database::escape_string($course_code);
+        $user_id = intval($user_id);
+        $session_id = intval($session_id);
 
         if (empty($exercise_list)) {
             return '0%';
@@ -1794,10 +1795,13 @@ class Tracking
 
         $exercise_list_imploded = implode("' ,'", $exercise_list);
 
-        $sql = "SELECT COUNT(DISTINCT ex.exe_exo_id) FROM $tbl_stats_exercices AS ex
-                WHERE ex.exe_cours_id = '$course_code' AND
-                      ex.session_id  = $session_id AND
-                      ex.exe_user_id = $user_id AND ex.exe_exo_id IN ('$exercise_list_imploded') ";
+        $sql = "SELECT COUNT(DISTINCT ex.exe_exo_id)
+                FROM $tbl_stats_exercices AS ex
+                WHERE
+                    ex.exe_cours_id = '$course_code' AND
+                    ex.session_id  = $session_id AND
+                    ex.exe_user_id = $user_id AND
+                    ex.exe_exo_id IN ('$exercise_list_imploded') ";
 
         $rs = Database::query($sql);
         $count = 0;
@@ -5704,7 +5708,7 @@ class TrackingCourseLog
      */
     public static function get_user_data($from, $number_of_items, $column, $direction)
     {
-    	global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id, $_configuration;
+        global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id;
 
     	$course_code        = Database::escape_string($course_code);
     	$tbl_user           = Database::get_main_table(TABLE_MAIN_USER);
@@ -5713,7 +5717,6 @@ class TrackingCourseLog
     	$access_url_id      = api_get_current_access_url_id();
 
     	// get all users data from a course for sortable with limit
-    	$condition_user = "";
     	if (is_array($user_ids)) {
     		$user_ids = array_map('intval', $user_ids);
     		$condition_user = " WHERE user.user_id IN (".implode(',',$user_ids).") ";
@@ -5724,19 +5727,26 @@ class TrackingCourseLog
 
     	if (!empty($_GET['user_keyword'])) {
     		$keyword = trim(Database::escape_string($_GET['user_keyword']));
-    		$condition_user .=  " AND (user.firstname LIKE '%".$keyword."%' OR user.lastname LIKE '%".$keyword."%'  OR user.username LIKE '%".$keyword."%'  OR user.email LIKE '%".$keyword."%' ) ";
+    		$condition_user .=  " AND (
+                user.firstname LIKE '%".$keyword."%' OR
+                user.lastname LIKE '%".$keyword."%'  OR
+                user.username LIKE '%".$keyword."%'  OR
+                user.email LIKE '%".$keyword."%'
+             ) ";
     	}
 
+        $url_table = null;
+        $url_condition = null;
     	if (api_is_multiple_url_enabled()) {
     		$url_table = ", ".$tbl_url_rel_user."as url_users";
     		$url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
     	}
 
     	$sql = "SELECT  user.user_id as user_id,
-                        user.official_code  as col0,
-                        user.lastname       as col1,
-                        user.firstname      as col2,
-                        user.username       as col3
+                    user.official_code  as col0,
+                    user.lastname       as col1,
+                    user.firstname      as col2,
+                    user.username       as col3
                 FROM $tbl_user as user $url_table
     	        $condition_user $url_condition";
 
@@ -5746,7 +5756,7 @@ class TrackingCourseLog
 
     	$column = intval($column);
 
-    	$from            = intval($from);
+    	$from = intval($from);
     	$number_of_items = intval($number_of_items);
 
     	$sql .= " ORDER BY col$column $direction ";
@@ -5754,20 +5764,25 @@ class TrackingCourseLog
 
     	$res      = Database::query($sql);
     	$users    = array();
-    	$t        = time();
 
         $course_info = api_get_course_info($course_code);
         $total_surveys = 0;
-        $total_exercises = get_all_exercises($course_info, $session_id);
+        $total_exercises = get_all_exercises(
+            $course_info,
+            $session_id
+        );
 
         if (empty($session_id)) {
             $survey_user_list = array();
             $survey_list = survey_manager::get_surveys($course_code, $session_id);
 
             $total_surveys = count($survey_list);
-            $survey_data = array();
             foreach ($survey_list as $survey) {
-                $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $course_info['real_id']);
+                $user_list = survey_manager::get_people_who_filled_survey(
+                    $survey['survey_id'],
+                    false,
+                    $course_info['real_id']
+                );
 
                 foreach ($user_list as $user_id) {
                     isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
@@ -5782,18 +5797,40 @@ class TrackingCourseLog
     		$user['username']       = $user['col3'];
     		$user['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, $session_id));
 
-    		$avg_student_score = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), $session_id);
+            $avg_student_score = Tracking::get_avg_student_score(
+                $user['user_id'],
+                $course_code,
+                array(),
+                $session_id
+            );
 
-    		$avg_student_progress = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), $session_id);
+            $avg_student_progress = Tracking::get_avg_student_progress(
+                $user['user_id'],
+                $course_code,
+                array(),
+                $session_id
+            );
     		if (empty($avg_student_progress)) {
     			$avg_student_progress=0;
     		}
     		$user['average_progress']   = $avg_student_progress.'%';
 
-            $total_user_exercise = Tracking::get_exercise_student_progress($total_exercises, $user['user_id'], $course_code, $session_id);
+            $total_user_exercise = Tracking::get_exercise_student_progress(
+                $total_exercises,
+                $user['user_id'],
+                $course_code,
+                $session_id
+            );
+
             $user['exercise_progress']  = $total_user_exercise;
 
-            $total_user_exercise = Tracking::get_exercise_student_average_best_attempt($total_exercises, $user['user_id'], $course_code, $session_id);
+            $total_user_exercise = Tracking::get_exercise_student_average_best_attempt(
+                $total_exercises,
+                $user['user_id'],
+                $course_code,
+                $session_id
+            );
+
             $user['exercise_average_best_attempt']  = $total_user_exercise;
 
     		if (is_numeric($avg_student_score)) {
@@ -5811,7 +5848,9 @@ class TrackingCourseLog
     		$user['additional'] = '';
 
     		if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-    			if (isset($additional_user_profile_info[$user['user_id']]) && is_array($additional_user_profile_info[$user['user_id']])) {
+    			if (isset($additional_user_profile_info[$user['user_id']]) &&
+                    is_array($additional_user_profile_info[$user['user_id']])
+                ) {
     				$user['additional'] = implode(', ', $additional_user_profile_info[$user['user_id']]);
     			}
     		}

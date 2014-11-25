@@ -4368,17 +4368,18 @@ class CourseManager
     /**
      * Remove course ranking + user votes
      *
-     * @param   int course id
-     * @param   int session id
-     * @param   int url id
+     * @param int $course_id
+     * @param int $session_id
+     * @param int $url_id
      *
      */
-    public function remove_course_ranking($course_id, $session_id, $url_id = null) {
-        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
-        $table_user_course_vote     = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
-        if (!empty($course_id) && isset($session_id)) {
+    public function remove_course_ranking($course_id, $session_id, $url_id = null)
+    {
+        $table_course_ranking = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        $table_user_course_vote = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
 
-            $url_id     = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
+        if (!empty($course_id) && isset($session_id)) {
+            $url_id = empty($url_id) ? api_get_current_access_url_id() : intval($url_id);
             $params = array(
                 'c_id'          => $course_id,
                 'session_id'    => $session_id,
@@ -4391,14 +4392,15 @@ class CourseManager
 
     /**
      * Returns an array with the hottest courses
-     * @param   int number of days
-     * @param   int number of hottest courses
+     * @param   int $days number of days
+     * @param   int $limit number of hottest courses
      */
-    public static function return_hot_courses($days = 30, $limit = 5) {
+    public static function return_hot_courses($days = 30, $limit = 5)
+    {
         global $_configuration;
         $limit  = intval($limit);
 
-        //Getting my courses
+        // Getting my courses
         $my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id());
 
         $my_course_code_list = array();
@@ -4448,7 +4450,13 @@ class CourseManager
         return $courses;
     }
 
-    public static function process_hot_course_item($courses, $my_course_code_list = array()) {
+    /**
+     * @param array $courses
+     * @param array $my_course_code_list
+     * @return mixed
+     */
+    public static function process_hot_course_item($courses, $my_course_code_list = array())
+    {
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
 
         $stok = Security::get_existing_token();
@@ -4488,11 +4496,22 @@ class CourseManager
         return $courses;
     }
 
-    public static function return_most_accessed_courses($limit = 5) {
-        $table_course_ranking    = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
-        $params['url_id']        = api_get_current_access_url_id();
+    /**
+     * @param int $limit
+     * @return array
+     */
+    public static function return_most_accessed_courses($limit = 5)
+    {
+        $table_course_ranking = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        $params['url_id'] = api_get_current_access_url_id();
 
-        $result = Database::select('c_id, accesses, total_score, users', $table_course_ranking, array('where' => array('url_id = ?' => $params), 'order' => 'accesses DESC', 'limit' => $limit), 'all', true);
+        $result = Database::select(
+            'c_id, accesses, total_score, users',
+            $table_course_ranking,
+            array('where' => array('url_id = ?' => $params), 'order' => 'accesses DESC', 'limit' => $limit),
+            'all',
+            true
+        );
         return $result;
     }
 
@@ -4529,7 +4548,8 @@ class CourseManager
      * @param int Access URL ID (optional)
      * @return int Number of courses
      */
-    public static function count_courses($access_url_id = null) {
+    public static function count_courses($access_url_id = null)
+    {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "SELECT count(id) FROM $table_course c";
@@ -4542,7 +4562,7 @@ class CourseManager
     }
 
     /**
-     * Get availab le courses count
+     * Get available le courses count
      * @param int Access URL ID (optional)
      * @return int Number of courses
      */
@@ -4565,7 +4585,8 @@ class CourseManager
             }
         }
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
-            $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND c.visibility != 0 AND c.visibility != 4 $withoutSpecialCourses $visibilityCondition";
+            $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u
+                    WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND c.visibility != 0 AND c.visibility != 4 $withoutSpecialCourses $visibilityCondition";
         }
         $res = Database::query($sql);
         $row = Database::fetch_row($res);

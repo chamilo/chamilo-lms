@@ -150,16 +150,21 @@ function remove_item(origin) {
 </script>';
 
 $formSent=0;
-$errorMsg = $firstLetterSession = '';
+$firstLetterSession = isset($_POST['firstLetterSession']) ? $_POST['firstLetterSession'] : null;
+$errorMsg = '';
 $UserList = array();
 
-$msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     $sessions_list = $_POST['SessionsList'];
     $userInfo = api_get_user_info($user_id);
-    $affected_rows = SessionManager::suscribe_sessions_to_hr_manager($userInfo, $sessions_list);
+    $affected_rows = SessionManager::suscribe_sessions_to_hr_manager(
+        $userInfo,
+        $sessions_list
+    );
     if ($affected_rows) {
-        $msg = get_lang('AssignedSessionsHaveBeenUpdatedSuccessfully');
+        Display::addFlash(
+            Display::return_message(get_lang('AssignedSessionsHaveBeenUpdatedSuccessfully'))
+        );
     }
 }
 
@@ -186,8 +191,8 @@ if (count($assigned_sessions_id) > 0) {
 }
 
 $needle = '%';
-if (isset($_POST['firstLetterSession'])) {
-    $needle = Database::escape_string($_POST['firstLetterSession']);
+if (!empty($firstLetterSession)) {
+    $needle = Database::escape_string($firstLetterSession);
     $needle = "$needle%";
 }
 
@@ -208,11 +213,6 @@ $result	= Database::query($sql);
 ?>
     <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){ echo ' onsubmit="valide();"';}?>>
         <input type="hidden" name="formSent" value="1" />
-        <?php
-        if(!empty($msg)) {
-            Display::display_normal_message($msg); //main API
-        }
-        ?>
         <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
             <tr>
                 <td align="left"></td>
@@ -241,7 +241,7 @@ $result	= Database::query($sql);
                         <select name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
                             <option value="%">--</option>
                             <?php
-                            echo Display :: get_alphabet_options($_POST['firstLetterSession']);
+                            echo Display :: get_alphabet_options($firstLetterSession);
                             ?>
                         </select>
                     </td>

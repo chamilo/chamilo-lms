@@ -621,7 +621,6 @@ if (!empty($student_id)) {
     echo Display::page_subheader($table_title);
 
     if (empty($_GET['details'])) {
-
         $csv_content[] = array();
         $csv_content[] = array(
             get_lang('Session', ''),
@@ -948,12 +947,14 @@ if (!empty($student_id)) {
         );
 
         $t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
-        $sql_exercices = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
-						  WHERE quiz.c_id =  ".$info_course['real_id']." AND
-								(quiz.session_id = $session_id OR quiz.session_id = 0)
-							ORDER BY quiz.title ASC ";
+        $sql = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
+                WHERE
+                    quiz.c_id =  ".$info_course['real_id']." AND
+                    (quiz.session_id = $session_id OR quiz.session_id = 0) AND
+                    active IN (0, 1)
+                ORDER BY quiz.title ASC ";
 
-        $result_exercices = Database::query($sql_exercices);
+        $result_exercices = Database::query($sql);
         $i = 0;
         if (Database :: num_rows($result_exercices) > 0) {
             while ($exercices = Database :: fetch_array($result_exercices)) {

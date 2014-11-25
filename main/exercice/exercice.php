@@ -47,6 +47,8 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $is_tutor = api_is_allowed_to_edit(true);
 $is_tutor_course = api_is_course_tutor();
+$courseInfo = api_get_course_info();
+$courseId = api_get_course_int_id();
 
 $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
 $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -55,7 +57,7 @@ $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
 $TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 // document path
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
+$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
 // picture path
 $picturePath = $documentPath.'/images';
 // audio path
@@ -97,9 +99,6 @@ $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : 
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
 $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : null;
-
-$course_info = api_get_course_info();
-$course_id = api_get_course_int_id();
 
 if ($page < 0) {
     $page = 1;
@@ -154,36 +153,6 @@ if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
     }
 }
 
-$htmlHeadXtra[] = '<script>
-    $(document).ready(function() {
-        //this makes google chrome to crash ...
-       /* $(".link_tooltip").each(function(){
-            $(this).qtip({
-                content: $(this).find(".exercise_tooltip"),
-                position: { at:"top right", my:"bottom left"},
-                show: {
-                   event: false,
-                   ready: true // ... but show the tooltip when ready
-                },
-                hide: true, //
-            });
-        });*/
-        /*
-        $(".data_table tbody").sortable({
-            cursor: "move", // works?
-            update: function(event, ui) {
-                var order = $(this).sortable("serialize") + "&a=update_exercise_list_order";
-                $.get("'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php", order, function(reponse) {
-                    $("#message").html(reponse);
-                });
-            },
-            axis: "y",
-            placeholder: "ui-state-highlight", //defines the yellow highlight
-            handle: ".moved", //only the class "moved"
-        }); */
-});
-</script>';
-
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
     Display :: display_header($nameTools, get_lang('Exercise'));
@@ -207,7 +176,7 @@ if (!empty($errorXmlExport)) {
 
 HotPotGCt($documentPath, 1, api_get_user_id());
 
-// only for administrator
+// Only for administrator
 
 if ($is_allowedToEdit) {
     if (!empty($choice)) {
@@ -216,10 +185,15 @@ if ($is_allowedToEdit) {
             $check = Security::check_token('get');
             if ($check) {
                 // list des exercices dans un test
-                // we got variable $course_id $course_info session api_get_session_id()
-                $tab_exercise_list = get_all_exercises_for_course_id($course_info, api_get_session_id(), $course_id, false);
+                // we got variable $courseId $courseInfo session api_get_session_id()
+                $exerciseList = get_all_exercises_for_course_id(
+                    $courseInfo,
+                    api_get_session_id(),
+                    $courseId,
+                    false
+                );
                 $quantity_results_deleted = 0;
-                foreach ($tab_exercise_list as $exeItem) {
+                foreach ($exerciseList as $exeItem) {
                     // delete result for test, if not in a gradebook
                     $exercise_action_locked = api_resource_is_locked_by_gradebook($exeItem['id'], LINK_EXERCISE);
                     if ($exercise_action_locked == false) {
@@ -229,7 +203,12 @@ if ($is_allowedToEdit) {
                         }
                     }
                 }
-                Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $quantity_results_deleted));
+                Display:: display_confirmation_message(
+                    sprintf(
+                        get_lang('XResultsCleaned'),
+                        $quantity_results_deleted
+                    )
+                );
             }
         }
 
@@ -237,7 +216,10 @@ if ($is_allowedToEdit) {
         // construction of Exercise
         $objExerciseTmp = new Exercise();
         $check = Security::check_token('get');
-        $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
+        $exercise_action_locked = api_resource_is_locked_by_gradebook(
+            $exerciseId,
+            LINK_EXERCISE
+        );
 
         if ($objExerciseTmp->read($exerciseId)) {
             if ($check) {
@@ -258,7 +240,7 @@ if ($is_allowedToEdit) {
                         // enables an exercise
                         $objExerciseTmp->enable();
                         $objExerciseTmp->save();
-                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id, 'visible', api_get_user_id());
+                        api_item_property_update($courseInfo, TOOL_QUIZ, $objExerciseTmp->id, 'visible', api_get_user_id());
                         // "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
@@ -266,7 +248,7 @@ if ($is_allowedToEdit) {
                         // disables an exercise
                         $objExerciseTmp->disable();
                         $objExerciseTmp->save();
-                        api_item_property_update($course_info, TOOL_QUIZ, $objExerciseTmp->id, 'invisible', api_get_user_id());
+                        api_item_property_update($courseInfo, TOOL_QUIZ, $objExerciseTmp->id, 'invisible', api_get_user_id());
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
                     case 'disable_results' :
@@ -335,20 +317,32 @@ if ($is_allowedToEdit) {
             case 'enable' : // enables an exercise
                 $newVisibilityStatus = "1"; //"visible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
-                          WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";
+                          WHERE c_id = $courseId AND path='".Database :: escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
-                api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_user['user_id']);
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_DOCUMENT,
+                    $row['id'],
+                    'visible',
+                    api_get_user_id()
+                );
                 //$dialogBox = get_lang('ViMod');
 
                 break;
             case 'disable' : // disables an exercise
                 $newVisibilityStatus = "0"; //"invisible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
-                          WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";
+                          WHERE c_id = $courseId AND path='".Database :: escape_string($file)."'";
                 $res = Database::query($query);
                 $row = Database :: fetch_array($res, 'ASSOC');
-                api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_user['user_id']);
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_DOCUMENT,
+                    $row['id'],
+                    'invisible',
+                    api_get_user_id()
+                );
                 break;
             default :
                 break;
@@ -377,16 +371,16 @@ $condition_session = api_get_session_condition($session_id, true, true);
 // Only for administrators
 if ($is_allowedToEdit) {
     $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES
-                  WHERE c_id = $course_id AND active<>'-1' $condition_session ";
+                  WHERE c_id = $courseId AND active<>'-1' $condition_session ";
     $sql = "SELECT * FROM $TBL_EXERCICES
-            WHERE c_id = $course_id AND active<>'-1' $condition_session
+            WHERE c_id = $courseId AND active<>'-1' $condition_session
             ORDER BY title LIMIT ".$from.",".$limit;
 } else {
     // Only for students
     $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES
-                  WHERE c_id = $course_id AND active = '1' $condition_session ";
+                  WHERE c_id = $courseId AND active = '1' $condition_session ";
     $sql = "SELECT * FROM $TBL_EXERCICES
-            WHERE c_id = $course_id AND
+            WHERE c_id = $courseId AND
                   active='1' $condition_session
             ORDER BY title LIMIT ".$from.",".$limit;
 }
@@ -405,7 +399,7 @@ if (Database :: num_rows($result_total)) {
 //get HotPotatoes files (active and inactive)
 if ($is_allowedToEdit) {
     $sql = "SELECT * FROM $TBL_DOCUMENT
-            WHERE c_id = $course_id AND path LIKE '".Database :: escape_string($uploadPath)."/%/%'";
+            WHERE c_id = $courseId AND path LIKE '".Database :: escape_string($uploadPath)."/%/%'";
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 } else {
@@ -415,13 +409,12 @@ if ($is_allowedToEdit) {
                 ip.tool = '".TOOL_DOCUMENT."' AND
                 d.path LIKE '".Database :: escape_string($uploadPath)."/%/%' AND
                 ip.visibility ='1' AND
-                d.c_id      = ".$course_id." AND
-                ip.c_id     = ".$course_id;
+                d.c_id      = ".$courseId." AND
+                ip.c_id     = ".$courseId;
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 }
 $total = $total_exercises + $hp_count;
-
 
 $token = Security::get_token();
 if ($is_allowedToEdit && $origin != 'learnpath') {
@@ -458,7 +451,6 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 
 if ($is_allowedToEdit) {
     echo '</div>'; // closing the actions div
-    //echo '<div id="message"></div>';
 }
 
 if ($total > $limit) {
@@ -536,84 +528,81 @@ if (!empty($exercise_list)) {
         echo Display::tag('tr', $header_list);
 
         $count = 0;
-        if (!empty($exercise_list))
-            foreach ($exercise_list as $row) {
-                $my_exercise_id = $row['id'];
+        foreach ($exercise_list as $row) {
+            $my_exercise_id = $row['id'];
 
-                $exercise_obj = new Exercise();
-                $exercise_obj->read($my_exercise_id);
+            $exercise_obj = new Exercise();
+            $exercise_obj->read($my_exercise_id);
 
-                if (empty($exercise_obj->id)) {
-                    continue;
+            if (empty($exercise_obj->id)) {
+                continue;
+            }
+
+            $locked = $exercise_obj->is_gradebook_locked;
+            $i++;
+            //validacion when belongs to a session
+            $session_img = api_get_session_image($row['session_id'], $_user['status']);
+
+            $time_limits = false;
+            if ($row['start_time'] != '0000-00-00 00:00:00' || $row['end_time'] != '0000-00-00 00:00:00') {
+                $time_limits = true;
+            }
+
+            if ($time_limits) {
+                // check if start time
+                $start_time = false;
+                if ($row['start_time'] != '0000-00-00 00:00:00') {
+                    $start_time = api_strtotime($row['start_time'], 'UTC');
                 }
-
-                $locked = $exercise_obj->is_gradebook_locked;
-
-                //echo '<div  id="tabs-'.$i.'">';
-                $i++;
-                //validacion when belongs to a session
-                $session_img = api_get_session_image($row['session_id'], $_user['status']);
-
-                $time_limits = false;
-                if ($row['start_time'] != '0000-00-00 00:00:00' || $row['end_time'] != '0000-00-00 00:00:00') {
-                    $time_limits = true;
+                $end_time = false;
+                if ($row['end_time'] != '0000-00-00 00:00:00') {
+                    $end_time = api_strtotime($row['end_time'], 'UTC');
                 }
+                $now = time();
+                $is_actived_time = false;
 
-                if ($time_limits) {
-                    // check if start time
-                    $start_time = false;
-                    if ($row['start_time'] != '0000-00-00 00:00:00') {
-                        $start_time = api_strtotime($row['start_time'], 'UTC');
+                //If both "clocks" are enable
+                if ($start_time && $end_time) {
+                    if ($now > $start_time && $end_time > $now) {
+                        $is_actived_time = true;
                     }
-                    $end_time = false;
-                    if ($row['end_time'] != '0000-00-00 00:00:00') {
-                        $end_time = api_strtotime($row['end_time'], 'UTC');
-                    }
-                    $now = time();
-                    $is_actived_time = false;
-
-                    //If both "clocks" are enable
-                    if ($start_time && $end_time) {
-                        if ($now > $start_time && $end_time > $now) {
+                } else {
+                    //we check the start and end
+                    if ($start_time) {
+                        if ($now > $start_time) {
                             $is_actived_time = true;
                         }
-                    } else {
-                        //we check the start and end
-                        if ($start_time) {
-                            if ($now > $start_time) {
-                                $is_actived_time = true;
-                            }
-                        }
-                        if ($end_time) {
-                            if ($end_time > $now) {
-                                $is_actived_time = true;
-                            }
+                    }
+                    if ($end_time) {
+                        if ($end_time > $now) {
+                            $is_actived_time = true;
                         }
                     }
                 }
+            }
 
-                //Blocking empty start times see BT#2800
-                global $_custom;
-                if (isset($_custom['exercises_hidden_when_no_start_date']) &&
-                    $_custom['exercises_hidden_when_no_start_date']
+            // Blocking empty start times see BT#2800
+            global $_custom;
+            if (isset($_custom['exercises_hidden_when_no_start_date']) &&
+                $_custom['exercises_hidden_when_no_start_date']
+            ) {
+                if (empty($row['start_time']) ||
+                    $row['start_time'] == '0000-00-00 00:00:00'
                 ) {
-                    if (empty($row['start_time']) ||
-                        $row['start_time'] == '0000-00-00 00:00:00'
-                    ) {
-                        $time_limits = true;
-                        $is_actived_time = false;
-                    }
+                    $time_limits = true;
+                    $is_actived_time = false;
                 }
+            }
 
-                $cut_title = $exercise_obj->getCutTitle();
-                $alt_title = '';
-                if ($cut_title != $row['title']) {
-                    $alt_title = ' title = "'.$row['title'].'" ';
-                }
+            $cut_title = $exercise_obj->getCutTitle();
+            $alt_title = '';
+            if ($cut_title != $row['title']) {
+                $alt_title = ' title = "'.$row['title'].'" ';
+            }
 
-                // Teacher only
-                if ($is_allowedToEdit) {
-                    $lp_blocked = null;
+            // Teacher only
+            if ($is_allowedToEdit) {
+                $lp_blocked = null;
                 if ($exercise_obj->exercise_was_added_in_lp == true) {
                     $lp_blocked = Display::div(
                         get_lang('AddedToLPCannotBeAccessed'),
@@ -621,7 +610,7 @@ if (!empty($exercise_list)) {
                     );
                 }
 
-                $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
+                $visibility = api_get_item_visibility($courseInfo, TOOL_QUIZ, $my_exercise_id);
 
                 if ($row['active'] == 0 || $visibility == 0) {
                     $title = Display::tag('font', $cut_title, array('style' => 'color:grey'));
@@ -648,22 +637,22 @@ if (!empty($exercise_list)) {
 
                 // Count number exercise - teacher
                 $sql = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION
-                             WHERE c_id = $course_id AND exercice_id = $my_exercise_id";
+                        WHERE c_id = $courseId AND exercice_id = $my_exercise_id";
                 $sqlresult = Database::query($sql);
                 $rowi = Database :: result($sqlresult, 0);
 
                 if ($session_id == $row['session_id']) {
-                    //Settings
+                    // Settings
                     $actions = Display::url(
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
                         'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']
                     );
 
-                    //Exercise results
+                    // Exercise results
                     $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                         Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
 
-                    //Export
+                    // Export
                     $actions .= Display::url(
                         Display::return_icon('cd.gif', get_lang('CopyExercise')),
                         '',
@@ -673,7 +662,7 @@ if (!empty($exercise_list)) {
                         )
                     );
 
-                    //Clean exercise
+                    // Clean exercise
                     if ($locked == false) {
                         $actions .= Display::url(
                             Display::return_icon('clean.png', get_lang('CleanStudentResults'), '', ICON_SIZE_SMALL),
@@ -687,8 +676,8 @@ if (!empty($exercise_list)) {
                         $actions .= Display::return_icon('clean_na.png', get_lang('ResourceLockedByGradebook'), '', ICON_SIZE_SMALL);
                     }
 
-                    //Visible / invisible
-                    //Check if this exercise was added in a LP
+                    // Visible / invisible
+                    // Check if this exercise was added in a LP
                     if ($exercise_obj->exercise_was_added_in_lp == true) {
                         $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
                     } else {
@@ -708,7 +697,7 @@ if (!empty($exercise_list)) {
                     $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
                 }
 
-                //Delete
+                // Delete
                 if ($session_id == $row['session_id']) {
                     if ($locked == false) {
                         $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));
@@ -749,7 +738,7 @@ if (!empty($exercise_list)) {
                 $item .= Display::tag('td', $number_of_questions);
             } else {
                 // Student only.
-                $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
+                $visibility = api_get_item_visibility($courseInfo, TOOL_QUIZ, $my_exercise_id);
 
                 if ($visibility == 0) {
                     continue;
@@ -763,7 +752,7 @@ if (!empty($exercise_list)) {
 
                 // Count number exercise questions.
                 /*$sql = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION
-                        WHERE c_id = $course_id AND exercice_id = ".$row['id'];
+                        WHERE c_id = $courseId AND exercice_id = ".$row['id'];
                 $sqlresult = Database::query($sql);
                 $rowi = Database::result($sqlresult, 0);
 
@@ -900,8 +889,8 @@ if ($is_allowedToEdit) {
     $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
             FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
             WHERE
-                d.c_id = $course_id AND
-                ip.c_id = $course_id AND
+                d.c_id = $courseId AND
+                ip.c_id = $courseId AND
                 d.id = ip.ref AND
                 ip.tool = '".TOOL_DOCUMENT."' AND
                 (d.path LIKE '%htm%') AND
@@ -911,8 +900,8 @@ if ($is_allowedToEdit) {
     $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
             FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
             WHERE
-                d.c_id = $course_id AND
-                ip.c_id = $course_id AND
+                d.c_id = $courseId AND
+                ip.c_id = $courseId AND
                 d.id = ip.ref AND
                 ip.tool = '".TOOL_DOCUMENT."' AND
                 (d.path LIKE '%htm%') AND

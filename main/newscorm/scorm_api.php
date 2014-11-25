@@ -167,6 +167,11 @@ olms.info_lms_item = new Array();
 olms.lms_lp_id = <?php echo $oLP->get_id();?>;
 olms.lms_item_id = <?php echo $oItem->get_id();?>;
 olms.lms_initialized = 0;
+// switch_finished indicates if the switch process is finished (if it has gone
+// through LMSInitialize() for the new item. Until then, all LMSSetValue()
+// commands received are executed on the *previous/current* item
+// This flag is updated in LMSInitialize() and in switch_item()
+olms.switch_finished = 0;
 
 //olms.lms_total_lessons = <?php echo $oLP->get_total_items_count(); ?>;
 //olms.lms_complete_lessons = <?php echo $oLP->get_complete_items_count();?>;
@@ -260,6 +265,7 @@ function LMSInitialize() {
     olms.lms_initialized = 0;
     olms.finishSignalReceived = 0;
     olms.statusSignalReceived = 0;
+    olms.switch_finished = 0;
     // if there are more parameters than ""
     if (arguments.length > 1) {
         olms.G_LastError        = G_InvalidArgumentError;
@@ -290,6 +296,7 @@ function LMSInitialize() {
         });
 
         olms.lms_initialized = 1;
+        olms.switch_finished = 1;
 
         // log a more complete object dump when initializing, so we know what data hasn't been cleaned
         var log = '\nitem             : '+ olms.lms_item_id
@@ -819,9 +826,9 @@ function SetValue(param, val) {
 /**
  * Saves the current data from JS memory to the LMS database
  */
-function savedata() {
+function savedata(item_id) {
     //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
-    logit_lms('function savedata()', 3);
+    logit_lms('function savedata(' + item_id + ')', 3);
 
     //Status is NOT modified here see the lp_ajax_save_item.php file
 
@@ -832,15 +839,15 @@ function savedata() {
     old_item_id = olms.info_lms_item[0];
 
     var item_to_save = olms.lms_item_id;
-    logit_lms('item_to_save original: ' + item_to_save, 3);
+    logit_lms('item_to_save (original value): ' + item_to_save, 3);
 
-    //If saving session_time value we asume that is from the old item not the current one
-    if (olms.session_time != '' && olms.session_time != '0') {
-        logit_lms('item_to_save changed to: ' + old_item_id, 3);
+    //If saving session_time value, we assume that all the new info is about
+    // the old item, not the current one
+    //if (olms.session_time != '' && olms.session_time != '0') {
+    if (olms.switch_finished == 0) {
+        logit_lms('item_to_save (changed to): ' + old_item_id, 3);
         item_to_save = old_item_id;
     }
-
-    logit_lms('item_to_save final: ' + item_to_save, 3);
 
     //Original behaviour
     //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
@@ -886,7 +893,7 @@ function LMSCommit(val) {
 
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
-    savedata();
+    savedata(olms.lms_item_id);
 
     reinit_updatable_vars_list();
     //now changes have been commited, no need to update until next SetValue()
@@ -920,8 +927,10 @@ function LMSFinish(val) {
         logit_scorm('LMSFinish() (no LMSCommit())',1);
     }
 
-    logit_scorm('LMSFinish() called',1);
-    savedata();
+    logit_scorm('LMSFinish() called on item ' + olms.lms_item_id, 0);
+    savedata(olms.lms_item_id);
+
+    //reinit the commit detector flag
     olms.commit = false;
 
     //reinit the list of modified variables
@@ -1003,7 +1012,7 @@ function Terminate() {
         olms.G_LastError = G_NoError ;
         olms.G_LastErrorMessage = 'No error';
         olms.commit = true;
-        savedata();
+        savedata(olms.lms_item_id);
         return ('true');
     }
 }
@@ -1496,7 +1505,7 @@ function switch_item(current_item, next_item){
         // savedata() with olms.finishSignalReceived == 1 treats the special
         // condition and saves the new status to the database, so
         // switch_item_details() enjoys the new status
-        savedata();
+        savedata(olms.lms_item_id);
     }
     xajax_save_item(
         olms.lms_lp_id,
@@ -1601,6 +1610,7 @@ function switch_item(current_item, next_item){
             }
         }
     });
+    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
     return true;
 }

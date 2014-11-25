@@ -2015,13 +2015,20 @@ class SessionManager
         if ($removeExistingCoursesWithUsers === true) {
             foreach ($existingCourses as $existingCourse) {
                 if (!in_array($existingCourse['course_code'], $courseList)) {
+                    $courseInfo = api_get_course_info($existingCourse['course_code']);
+
                     $sql = "DELETE FROM $tbl_session_rel_course
                             WHERE course_code='" . $existingCourse['course_code'] . "' AND id_session=$sessionId";
-
                     Database::query($sql);
+
                     $sql = "DELETE FROM $tbl_session_rel_course_rel_user
                             WHERE course_code='" . $existingCourse['course_code'] . "' AND id_session=$sessionId";
                     Database::query($sql);
+
+                    CourseManager::remove_course_ranking(
+                        $courseInfo['real_id'],
+                        $sessionId
+                    );
 
                     $nbr_courses--;
                 }
@@ -2650,6 +2657,7 @@ class SessionManager
         }
 
         $userId = $userInfo['user_id'];
+
         // Only subscribe DRH users.
         if ($userInfo['status'] != DRH) {
             return 0;
@@ -2695,7 +2703,17 @@ class SessionManager
                 $affected_rows++;
             }
         }
+
         return $affected_rows;
+    }
+
+    /**
+     * @param int $sessionId
+     * @return array
+     */
+    public static function getDrhUsersInSession($sessionId)
+    {
+        return self::get_users_by_session($sessionId, SESSION_RELATION_TYPE_RRHH);
     }
 
     /**
@@ -3144,17 +3162,26 @@ class SessionManager
         $id = intval($id);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-        $sql = "SELECT $tbl_user.user_id, lastname, firstname, username
-                FROM $tbl_user INNER JOIN $tbl_session_rel_user
-                    ON $tbl_user.user_id = $tbl_session_rel_user.id_user
-                    AND $tbl_session_rel_user.id_session = $id";
+        $sql = "SELECT u.user_id, lastname, firstname, username, relation_type, access_url_id
+                FROM $tbl_user u
+                INNER JOIN $tbl_session_rel_user
+                ON u.user_id = $tbl_session_rel_user.id_user AND
+                $tbl_session_rel_user.id_session = $id
+                LEFT OUTER JOIN $table_access_url_user uu ON (uu.user_id = u.user_id)
+                ";
 
+        $urlId = api_get_current_access_url_id();
         if (isset($status) && $status != '') {
             $status = intval($status);
-            $sql .= " WHERE relation_type = $status ";
+            $sql .= " WHERE relation_type = $status (access_url_id = $urlId OR access_url_id is null )";
+        } else {
+            $sql .= " WHERE (access_url_id = $urlId OR access_url_id is null )";
         }
 
+        $sql .= " ORDER BY relation_type, ";
+        $sql .= api_sort_by_first_name() ? ' firstname, lastname' : '  lastname, firstname';
         $result = Database::query($sql);
         $return_array = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -5200,7 +5227,7 @@ class SessionManager
     /**
      * Get the session coached by a user
      * @param int $coachId The coach id
-     * @param boolean $checkSessionRelUserVisibility Optional. Check the session visibility 
+     * @param boolean $checkSessionRelUserVisibility Optional. Check the session visibility
      * @return array The session list
      */
     public static function getSessionsCoachedByUser($coachId, $checkSessionRelUserVisibility = false)

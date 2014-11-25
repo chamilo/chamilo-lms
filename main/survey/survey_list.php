@@ -147,8 +147,8 @@ if (isset($_POST['action']) && $_POST['action']) {
 
 echo '<div class="actions">';
 if (!api_is_course_coach() || $extend_rights_for_coachs == 'true') {
-	// Action links
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'),'',ICON_SIZE_MEDIUM).'</a> ';
+    // Action links
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'),'',ICON_SIZE_MEDIUM).'</a> ';
 }
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.Display::return_icon('search.png', get_lang('Search'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
@@ -167,34 +167,34 @@ Display :: display_footer();
 
 function get_number_of_surveys()
 {
-	return SurveyUtil::get_number_of_surveys();
+    return SurveyUtil::get_number_of_surveys();
 }
 
 function get_survey_data($from, $number_of_items, $column, $direction)
 {
-	return SurveyUtil::get_survey_data($from, $number_of_items, $column, $direction);
+    return SurveyUtil::get_survey_data($from, $number_of_items, $column, $direction);
 }
 
 function modify_filter($survey_id)
 {
-	return SurveyUtil::modify_filter($survey_id);
+    return SurveyUtil::modify_filter($survey_id);
 }
 
 function get_number_of_surveys_for_coach()
 {
-	return SurveyUtil::get_number_of_surveys_for_coach();
+    return SurveyUtil::get_number_of_surveys_for_coach();
 }
 function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
 {
-	return SurveyUtil::get_survey_data_for_coach($from, $number_of_items, $column, $direction);
+    return SurveyUtil::get_survey_data_for_coach($from, $number_of_items, $column, $direction);
 }
 
 function modify_filter_for_coach($survey_id)
 {
-	return SurveyUtil::modify_filter_for_coach($survey_id);
+    return SurveyUtil::modify_filter_for_coach($survey_id);
 }
 
 function anonymous_filter($anonymous)
 {
-	return SurveyUtil::anonymous_filter($anonymous);
+    return SurveyUtil::anonymous_filter($anonymous);
 }

@@ -5769,7 +5769,11 @@ class TrackingCourseLog
         $total_surveys = 0;
         $total_exercises = get_all_exercises(
             $course_info,
-            $session_id
+            $session_id,
+            false,
+            null,
+            false,
+            3
         );
 
         if (empty($session_id)) {

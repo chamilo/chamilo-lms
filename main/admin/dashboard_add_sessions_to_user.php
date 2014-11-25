@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	Interface for assigning sessions to Human Resources Manager
-*	@package chamilo.admin
-*/
+ *	Interface for assigning sessions to Human Resources Manager
+ *	@package chamilo.admin
+ */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
@@ -43,7 +43,7 @@ $ajax_search = false;
 
 // Setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-	$tool_name = get_lang('AssignSessionsToPlatformAdministrator');
+    $tool_name = get_lang('AssignSessionsToPlatformAdministrator');
 } else if ($user_info['status'] == SESSIONADMIN) {
     $tool_name = get_lang('AssignSessionsToSessionsAdministrator');
 } else {
@@ -169,7 +169,7 @@ Display::display_header($tool_name);
 // actions
 echo '<div class="actions">';
 if ($user_info['status'] != SESSIONADMIN) {
-	echo '<span style="float: right;margin:0px;padding:0px;">
+    echo '<span style="float: right;margin:0px;padding:0px;">
 		    <a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
 			<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
          </span>';
@@ -192,7 +192,7 @@ if (isset($_POST['firstLetterSession'])) {
 }
 
 if (api_is_multiple_url_enabled()) {
-	$sql = "SELECT s.id, s.name
+    $sql = "SELECT s.id, s.name
 	        FROM $tbl_session s
             LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
             WHERE
@@ -206,97 +206,97 @@ if (api_is_multiple_url_enabled()) {
 }
 $result	= Database::query($sql);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){ echo ' onsubmit="valide();"';}?>>
-<input type="hidden" name="formSent" value="1" />
-<?php
-if(!empty($msg)) {
-	Display::display_normal_message($msg); //main API
-}
-?>
-<table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
-<tr>
-	<td align="left"></td>
-	<td align="left"></td>
-	<td width="" align="center"> &nbsp;	</td>
-</tr>
-<tr>
-  <td width="45%" align="center"><b><?php echo get_lang('SessionsListInPlatform') ?> :</b></td>
-  <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b>
-  <?php
-  	if (UserManager::is_admin($user_id)) {
-		echo get_lang('AssignedSessionsListToPlatformAdministrator');
-	} else if ($user_info['status'] == SESSIONADMIN) {
-		echo get_lang('AssignedSessionsListToSessionsAdministrator');
-	} else {
-		echo get_lang('AssignedSessionsListToHumanResourcesManager');
-	}
-  ?>
-  : </b></td>
-</tr>
+    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){ echo ' onsubmit="valide();"';}?>>
+        <input type="hidden" name="formSent" value="1" />
+        <?php
+        if(!empty($msg)) {
+            Display::display_normal_message($msg); //main API
+        }
+        ?>
+        <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
+            <tr>
+                <td align="left"></td>
+                <td align="left"></td>
+                <td width="" align="center"> &nbsp;	</td>
+            </tr>
+            <tr>
+                <td width="45%" align="center"><b><?php echo get_lang('SessionsListInPlatform') ?> :</b></td>
+                <td width="10%">&nbsp;</td>
+                <td align="center" width="45%"><b>
+                        <?php
+                        if (UserManager::is_admin($user_id)) {
+                            echo get_lang('AssignedSessionsListToPlatformAdministrator');
+                        } else if ($user_info['status'] == SESSIONADMIN) {
+                            echo get_lang('AssignedSessionsListToSessionsAdministrator');
+                        } else {
+                            echo get_lang('AssignedSessionsListToHumanResourcesManager');
+                        }
+                        ?>
+                        : </b></td>
+            </tr>
 
-<?php if($add_type == 'multiple') { ?>
-<tr><td width="45%" align="center">
- <?php echo get_lang('FirstLetterSession');?> :
-     <select name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
-      <option value="%">--</option>
-      <?php
-      echo Display :: get_alphabet_options($_POST['firstLetterSession']);
-      ?>
-     </select>
-</td>
-<td>&nbsp;</td></tr>
-<?php } ?>
-<tr>
-  <td width="45%" align="center">
-	<div id="ajax_list_sessions_multiple">
-	<select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">
-	<?php
-	while ($enreg = Database::fetch_array($result)) {
-	?>
-		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"';?>>
-            <?php echo $enreg['name']; ?>
-        </option>
-	<?php } ?>
-	</select></div>
-  </td>
+            <?php if($add_type == 'multiple') { ?>
+                <tr><td width="45%" align="center">
+                        <?php echo get_lang('FirstLetterSession');?> :
+                        <select name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
+                            <option value="%">--</option>
+                            <?php
+                            echo Display :: get_alphabet_options($_POST['firstLetterSession']);
+                            ?>
+                        </select>
+                    </td>
+                    <td>&nbsp;</td></tr>
+            <?php } ?>
+            <tr>
+                <td width="45%" align="center">
+                    <div id="ajax_list_sessions_multiple">
+                        <select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">
+                            <?php
+                            while ($enreg = Database::fetch_array($result)) {
+                                ?>
+                                <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"';?>>
+                                    <?php echo $enreg['name']; ?>
+                                </option>
+                            <?php } ?>
+                        </select></div>
+                </td>
 
-  <td width="10%" valign="middle" align="center">
-  <?php
-  if ($ajax_search) {
-  ?>
-  	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
-  <?php
-  }
-  else
-  {
-  ?>
-  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
-	<br /><br />
-	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
-  <?php
-  }
-  ?>
-	<br /><br /><br /><br /><br /><br />
-	<?php
-		echo '<button class="save" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
-	?>
-  </td>
-  <td width="45%" align="center">
-  <select id='destination' name="SessionsList[]" multiple="multiple" size="20" style="width:320px;">
-	<?php
-	if (is_array($assigned_sessions_to_hrm)) {
-		foreach($assigned_sessions_to_hrm as $enreg) {
-	?>
-		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; ?>>
-            <?php echo $enreg['name'] ?>
-        </option>
-	<?php }
-	}?>
-  </select></td>
-</tr>
-</table>
-</form>
+                <td width="10%" valign="middle" align="center">
+                    <?php
+                    if ($ajax_search) {
+                        ?>
+                        <button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
+                    <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
+                        <br /><br />
+                        <button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
+                    <?php
+                    }
+                    ?>
+                    <br /><br /><br /><br /><br /><br />
+                    <?php
+                    echo '<button class="save" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
+                    ?>
+                </td>
+                <td width="45%" align="center">
+                    <select id='destination' name="SessionsList[]" multiple="multiple" size="20" style="width:320px;">
+                        <?php
+                        if (is_array($assigned_sessions_to_hrm)) {
+                            foreach($assigned_sessions_to_hrm as $enreg) {
+                                ?>
+                                <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; ?>>
+                                    <?php echo $enreg['name'] ?>
+                                </option>
+                            <?php }
+                        }?>
+                    </select></td>
+            </tr>
+        </table>
+    </form>
 
 <?php
 Display::display_footer();

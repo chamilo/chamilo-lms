@@ -28,7 +28,7 @@ $tool_name = get_lang('ImportUsers');
 $session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 
 if (empty($session_id)) {
-    api_not_allowed(true);    
+    api_not_allowed(true);
 }
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -69,14 +69,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 // Display the header.
 Display::display_header($tool_name);
 
-if (count($inserted_in_course) > 1) {
+/*if (count($inserted_in_course) > 1) {
     $msg = get_lang('SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode').': ';
     foreach ($inserted_in_course as $code => $title) {
         $msg .= ' '.$title.' ('.$title.'),';
     }
     $msg = substr($msg, 0, -1);
     Display::display_warning_message($msg);
-}
+}*/
 
 echo '<div class="actions">';
 echo '<a href="resume_session.php?id_session='.$session_id.'">'.
@@ -94,8 +94,6 @@ $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
 $form->addElement('button', 'submit', get_lang('Import'));
 
-//$defaults = array('sendMail' => 'true');
-//$form->setDefaults($defaults);
 $form->display();
 
 ?>

@@ -9,7 +9,15 @@
  * @package chamilo.attendance
  */
 // name of the language file that needs to be included
-$language_file = array('course_description', 'course_info', 'userInfo', 'admin', 'agenda', 'tracking', 'gradebook');
+$language_file = array(
+    'course_description',
+    'course_info',
+    'userInfo',
+    'admin',
+    'agenda',
+    'tracking',
+    'gradebook'
+);
 
 // including files
 require_once '../inc/global.inc.php';
@@ -29,7 +37,7 @@ $this_section = SECTION_COURSES;
 // protect a course script
 api_protect_course_script(true);
 
-// get actions
+// Get actions
 $actions = array(
     'attendance_list',
     'attendance_sheet_list',
@@ -43,7 +51,14 @@ $actions = array(
     'attendance_sheet_list_no_edit'
 );
 
-$actions_calendar = array('calendar_list', 'calendar_add', 'calendar_edit', 'calendar_delete', 'calendar_all_delete');
+$actions_calendar = array(
+    'calendar_list',
+    'calendar_add',
+    'calendar_edit',
+    'calendar_delete',
+    'calendar_all_delete'
+);
+
 $action = 'attendance_list';
 
 $course_id = '';
@@ -51,7 +66,9 @@ if (isset($_GET['cidReq'])) {
     $course_id = $_GET['cidReq'];
 }
 
-if (isset($_GET['action']) && (in_array($_GET['action'], $actions) || in_array($_GET['action'], $actions_calendar))) {
+if (isset($_GET['action']) &&
+    (in_array($_GET['action'], $actions) || in_array($_GET['action'], $actions_calendar))
+) {
     $action = $_GET['action'];
 }
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {

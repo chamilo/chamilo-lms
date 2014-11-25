@@ -3656,7 +3656,7 @@ class UserManager
                     $extraFiltrableFields[] = array('name'=> $extraField[3], 'variable'=>$extraField[1], 'data'=> $extraField[9]);
                 }
             }
-        }    
+        }
         if (is_array($extraFiltrableFields) && count($extraFiltrableFields) > 0 ) {
             return $extraFiltrableFields;
         }
@@ -3668,13 +3668,10 @@ class UserManager
       */
     public static function get_search_form_where_extra_fields()
     {
-    
         $useExtraFields = false;
-      
         $extraFields = UserManager::get_extra_filtrable_fields();
-      
+        $extraFieldResult = array();
         if (is_array($extraFields) && count($extraFields)>0 ) {
-            $resultList=array();
             foreach ($extraFields as $extraField) {
                 $varName = 'field_'.$extraField['variable'];
                 if (UserManager::is_extra_field_available($extraField['variable'])) {
@@ -3698,29 +3695,27 @@ class UserManager
                 $finalResult = $extraFieldResult[0];
             }
 
-            $whereFilter ='';
             if (is_array($finalResult) && count($finalResult)>0) {
                 $whereFilter = " AND u.user_id IN  ('".implode("','", $finalResult)."') ";
             } else {
                 //no results
                 $whereFilter = " AND u.user_id  = -1 ";
             }
+
             return $whereFilter;
         }
     }
-    
+
     /**
      * Show the search form
-     * @param string the value of the search box
+     * @param string $query the value of the search box
      * @return string HTML form
      */
     public static function get_search_form($query)
     {
-    
         $extraFiltrableFields = UserManager::get_extra_filtrable_fields();
-        
+        $extraFields = null;
         if (is_array($extraFiltrableFields) && count($extraFiltrableFields)>0 ) {
-            $extraFields = '';
             foreach ($extraFiltrableFields as $extraField) {
                 $extraFields .=  '<label class="extra_field">'.$extraField['name'].'</label>';
                 $varName = 'field_'.$extraField['variable'];
@@ -3739,13 +3734,13 @@ class UserManager
                 $extraFields .=  '&nbsp;&nbsp;';
             }
         }
-        
+
         $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
 
         return '
         <form method="GET" class="well form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">
                 <input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-small" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
-                ' . get_lang('Type') .' 
+                ' . get_lang('Type') .'
                 <select name="search_type" onchange="javascript: extra_field_toogle();">
                 <option value="0">--'.get_lang('Select').'--</option>
                 <option value="1"' . (($searchType=='1')?'selected="selected"':"") . '>--' . get_lang('User') .'--</option>
@@ -3763,7 +3758,7 @@ class UserManager
         </script>
         ';
     }
-    
+
     /**
      * Shows the user menu
      */
@@ -3819,8 +3814,6 @@ class UserManager
             $code_special_courses = ' course.code IN ('.join($special_course_list, ',').') ';
         }
 
-        // variable initialisation
-        $course_list_sql = '';
         $course_list = array();
         if (!empty($code_special_courses)) {
             $course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
@@ -3843,9 +3836,9 @@ class UserManager
 
     /**
      * Allow to register contact to social network
-     * @param int user friend id
-     * @param int user id
-     * @param int relation between users see constants definition
+     * @param int $friend_id user friend id
+     * @param int $my_user_id user id
+     * @param int $relation_type relation between users see constants definition
      */
     public static function relate_users($friend_id, $my_user_id, $relation_type)
     {

@@ -975,11 +975,17 @@ class IndexManager
 
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
         if ($load_history) {
-            //Load sessions in category in *history*
-            $session_categories = UserManager::get_sessions_by_category($user_id, true);
+            // Load sessions in category in *history*
+            $session_categories = UserManager::get_sessions_by_category(
+                $user_id,
+                true
+            );
         } else {
-            //Load sessions in category
-            $session_categories = UserManager::get_sessions_by_category($user_id, false);
+            // Load sessions in category
+            $session_categories = UserManager::get_sessions_by_category(
+                $user_id,
+                false
+            );
         }
 
         $html = '';

@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * ExtraFieldValues
@@ -18,7 +19,7 @@ class ExtraFieldValues extends BaseAttributeValue
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
@@ -27,7 +28,7 @@ class ExtraFieldValues extends BaseAttributeValue
      *
      * @ORM\Column(name="field_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    protected $fieldId;
+    //protected $fieldId;
 
     /**
      * @var \DateTime
@@ -41,21 +42,16 @@ class ExtraFieldValues extends BaseAttributeValue
      *
      * @ORM\Column(name="user_id", type="string", precision=0, scale=0, nullable=false, unique=false)
      */
-    protected $userId;
+    //protected $userId;
 
     /**
      * @var string
      * @Gedmo\Versioned
-     *
      * @ORM\Column(name="comment", type="string", precision=0, scale=0, nullable=true, unique=false)
      */
     protected $comment;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    protected $user;
+
 
     /**
      *
@@ -66,10 +62,18 @@ class ExtraFieldValues extends BaseAttributeValue
     }
 
     /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
      * @param $user
      * @return $this
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user  = $user;
 

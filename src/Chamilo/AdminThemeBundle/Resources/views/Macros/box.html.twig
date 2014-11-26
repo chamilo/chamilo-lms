@@ -26,15 +26,7 @@
 {% endmacro %}
 
 
-{% macro avatar(image, alt, class) %}
-    {% if image %}
-        <img src="{{ asset(image) }}" class="{{class|default('img-circle')}}" alt="{{ alt }}" />
-    {% else %}
-        {#{% image '@avatar_img' %}#}
-        {#<img src="{{ asset_url }}" class="{{ class|default('img-circle') }}" alt="{{alt}}" />#}
-        {#{% endimage %}#}
-    {% endif %}
-{% endmacro %}
+
 
 {% macro menu_item(item) %}
     <li id="{{ item.identifier }}" class=" {{ item.isActive ? 'active' : '' }} {{ item.hasChildren? 'treeview' : '' }}">

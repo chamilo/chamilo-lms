@@ -114,7 +114,7 @@
 
         "friendsofsymfony/comment-bundle": "~2.0",
 
-        "simplethings/entity-audit-bundle": "~0.5",
+        "simplethings/entity-audit-bundle": "~0.7",
         "willdurand/faker-bundle": "~1.0",
 
         "mopa/bootstrap-bundle": "v3.0.0-beta4",
@@ -189,7 +189,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "10.0.x-dev"
+            "dev-master": "2.0.x-dev"
         }
     }
 }

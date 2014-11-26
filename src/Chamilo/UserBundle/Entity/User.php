@@ -343,6 +343,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
         $this->portals = new ArrayCollection();
         $this->dropBoxSentFiles = new ArrayCollection();
         $this->dropBoxReceivedFiles = new ArrayCollection();
+        $this->extraFields = new ArrayCollection();
         //$this->userId = 0;
         //$this->createdAt = new \DateTime();
         //$this->updatedAt = new \DateTime();
@@ -1400,10 +1401,10 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
      */
     public function addExtraField(ExtraFieldValues $attribute)
     {
-        if (!$this->hasExtraField($attribute)) {
+        //if (!$this->hasExtraField($attribute)) {
             $attribute->setUser($this);
             $this->extraFields->add($attribute);
-        }
+        //}
 
         return $this;
     }
@@ -1413,10 +1414,10 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
      */
     public function removeExtraField(ExtraFieldValues $attribute)
     {
-        if ($this->hasExtraField($attribute)) {
+        //if ($this->hasExtraField($attribute)) {
             $this->extraFields->removeElement($attribute);
             $attribute->setUser($this);
-        }
+        //}
 
         return $this;
     }
@@ -1426,6 +1427,9 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
      */
     public function hasExtraField($attribute)
     {
+        if (!$this->extraFields) {
+            return false;
+        }
         return $this->extraFields->contains($attribute);
     }
 

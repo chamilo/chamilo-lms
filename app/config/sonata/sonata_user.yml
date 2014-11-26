@@ -8,9 +8,9 @@ doctrine:
                     ChamiloUserBundle: ~
                     SonataUserBundle: ~
 sonata_user:
-    #admin:
-      #user:
-        #class:      Chamilo\UserBundle\Admin\UserAdmin
+    admin:
+      user:
+        class: Chamilo\UserBundle\Admin\UserAdmin
 
     class:                  # Entity Classes
         user:               Chamilo\UserBundle\Entity\User

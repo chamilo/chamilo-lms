@@ -23,46 +23,67 @@ services:
             - [ setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.course_rel_user:
-          class: Chamilo\CoreBundle\Admin\CourseRelUserAdmin
-          tags:
-              - { name: sonata.admin, manager_type: orm, group: "LMS", label: "CourseRelUser" }
-          arguments:
-              - ~
-              - Chamilo\CoreBundle\Entity\CourseRelUser
-              - ~
-          calls:
-              - [ setTranslationDomain, [ChamiloCoreBundle]]
+        class: Chamilo\CoreBundle\Admin\CourseRelUserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "CourseRelUser" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\CourseRelUser
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.session_rel_course:
-          class: Chamilo\CoreBundle\Admin\SessionRelCourseAdmin
-          tags:
-              - { name: sonata.admin, manager_type: orm, group: "LMS", label: "SessionRelCourseAdmin" }
-          arguments:
-              - ~
-              - Chamilo\CoreBundle\Entity\SessionRelCourse
-              - ~
-          calls:
-              - [ setTranslationDomain, [ChamiloCoreBundle]]
+        class: Chamilo\CoreBundle\Admin\SessionRelCourseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "SessionRelCourseAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\SessionRelCourse
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.access_url:
-          class: Chamilo\CoreBundle\Admin\AccessUrlAdmin
-          tags:
-              - { name: sonata.admin, manager_type: orm, group: "LMS", label: "AccessUrlAdmin" }
-          arguments:
-              - ~
-              - Chamilo\CoreBundle\Entity\AccessUrl
-              - ~
-          calls:
-              - [ setTranslationDomain, [ChamiloCoreBundle]]
+        class: Chamilo\CoreBundle\Admin\AccessUrlAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "AccessUrlAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\AccessUrl
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.access_url_rel_course:
-          class: Chamilo\CoreBundle\Admin\AccessUrlRelCourseAdmin
-          tags:
-              - { name: sonata.admin, manager_type: orm, group: "LMS", label: "AccessUrlRelCourseAdmin" }
-          arguments:
-              - ~
-              - Chamilo\CoreBundle\Entity\AccessUrlRelCourse
-              - ~
-          calls:
-              - [ setTranslationDomain, [ChamiloCoreBundle]]
+        class: Chamilo\CoreBundle\Admin\AccessUrlRelCourseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "AccessUrlRelCourseAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\AccessUrlRelCourse
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
 
+    sonata.admin.user_field:
+        class: Chamilo\UserBundle\Admin\UserField
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "UserField" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\UserField
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.user_field_values:
+        class: Chamilo\UserBundle\Admin\UserFieldValuesAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "UserFieldValues" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\UserFieldValues
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]

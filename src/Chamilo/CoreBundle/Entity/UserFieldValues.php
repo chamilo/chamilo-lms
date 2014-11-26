@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Attribute\Model\AttributeTypes;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * UserFieldValues
@@ -21,7 +22,7 @@ class UserFieldValues extends ExtraFieldValues
      *
      * @ORM\Column(name="author_id", type="string", precision=0, scale=0, nullable=false, unique=false)
      */
-    protected $authorId;
+    //protected $authorId;
 
     /**
      * @var string
@@ -36,6 +37,18 @@ class UserFieldValues extends ExtraFieldValues
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
     protected $field;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+     */
+    protected $author;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
 
     /**
      * Set fieldValue
@@ -74,6 +87,29 @@ class UserFieldValues extends ExtraFieldValues
     }
 
     /**
+     * Get author
+     *
+     * @return User
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Get author
+     *
+     * @return User
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+
+    /**
      * Get questionId
      *
      * @return integer
@@ -89,6 +125,18 @@ class UserFieldValues extends ExtraFieldValues
     public function getExtraField()
     {
         return $this->field;
+    }
+
+    /**
+     * @param $user
+     * @return $this
+     */
+    public function setUser(User $user)
+    {
+        $this->user  = $user;
+        $this->setUserId($user->getId());
+
+        return $this;
     }
 
     /**
@@ -113,6 +161,9 @@ class UserFieldValues extends ExtraFieldValues
         return $this->fieldValue;
     }
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->getExtraField()->getFieldTypeToString();

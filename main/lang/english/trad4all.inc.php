@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$MultipleConnectionsAreNotAllow = "This user is already logged in";
 $Listen = "Listen";
 $AudioFileForItemX = "Audio file for item %s";
 $ThereIsANewWorkFeedbackInWorkXHere = "There's a new feedback in work: %s <a href='%s'>Click here</a> to see it.";
@@ -1045,7 +1046,7 @@ $HumanAndTechnicalResourcesInformation = "Identify and describe the different co
 $Assessment = "Assessment";
 $AssessmentQuestions = "How will learners be assessed? Are there strategies to develop in order to master the topic?";
 $AssessmentInformation = "Criteria for skills acquisition.";
-$UploadADocument = "Submit paper";
+$UploadADocument = "Upload a document";
 $langNameOfLang['bosnian'] = "bosnian";
 $langNameOfLang['czech'] = "czech";
 $langNameOfLang['dari'] = "dari";

@@ -2430,7 +2430,7 @@ class learnpath
     {
         $text = $percentage . $text_add;
         $output = '<div class="progress">
-                        <div id="progress_bar_value" class="bar" style="width: '.$text.';"><span>'. $text .'</span></div>
+                        <div id="progress_bar_value" class="bar" style="width: '.$text.';"><span id="progress_text">'. $text .'</span></div>
                     </div>';
 
         return $output;

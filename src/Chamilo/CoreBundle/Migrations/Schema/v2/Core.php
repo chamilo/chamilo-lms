@@ -1,7 +1,7 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Migrations\Schema\v10;
+namespace Chamilo\CoreBundle\Migrations\Schema\v2;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\CourseBundle\Migrations\Schema\v10;
+namespace Chamilo\CourseBundle\Migrations\Schema\v2;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;

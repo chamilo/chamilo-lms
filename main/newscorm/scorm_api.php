@@ -167,6 +167,11 @@ olms.info_lms_item = new Array();
 olms.lms_lp_id = <?php echo $oLP->get_id();?>;
 olms.lms_item_id = <?php echo $oItem->get_id();?>;
 olms.lms_initialized = 0;
+// switch_finished indicates if the switch process is finished (if it has gone
+// through LMSInitialize() for the new item. Until then, all LMSSetValue()
+// commands received are executed on the *previous/current* item
+// This flag is updated in LMSInitialize() and in switch_item()
+olms.switch_finished = 0;
 
 //olms.lms_total_lessons = <?php echo $oLP->get_total_items_count(); ?>;
 //olms.lms_complete_lessons = <?php echo $oLP->get_complete_items_count();?>;
@@ -189,6 +194,16 @@ olms.lms_session_id = '<?php echo api_get_session_id(); ?>';
 olms.lms_course_code = '<?php echo $oLP->getCourseCode(); ?>';
 olms.lms_course_id =  '<?php echo $oLP->get_course_int_id(); ?>';
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types');?>
+
+// Following definition of cmi.core.score.raw in SCORM 1.2, "LMS should
+// initialize this to an empty string ("") upon initial launch of a SCO. The
+// SCO is responsible for setting this value. If an LMSGetValue() is requested
+// before the SCO has set this value, then the LMS should return an empty
+// string ("")
+// As Chamilo initializes this to 0 for non-sco, we need a little hack here.
+if (olms.score == 0 && olms.lms_item_type == 'sco' && olms.lesson_status == 'not attempted') {
+    olms.score = "";
+}
 
 olms.asset_timer = 0;
 olms.userfname = '<?php echo str_replace("'", "\\'", $user['firstname']); ?>';
@@ -260,6 +275,7 @@ function LMSInitialize() {
     olms.lms_initialized = 0;
     olms.finishSignalReceived = 0;
     olms.statusSignalReceived = 0;
+    olms.switch_finished = 0;
     // if there are more parameters than ""
     if (arguments.length > 1) {
         olms.G_LastError        = G_InvalidArgumentError;
@@ -290,6 +306,7 @@ function LMSInitialize() {
         });
 
         olms.lms_initialized = 1;
+        olms.switch_finished = 1;
 
         // log a more complete object dump when initializing, so we know what data hasn't been cleaned
         var log = '\nitem             : '+ olms.lms_item_id
@@ -355,9 +372,12 @@ function LMSGetValue(param) {
 
     // the LMSInitialize is missing
     if (olms.lms_initialized == 0) {
+         if (param == 'cmi.core.score.raw') {
+             return '';
+         }
          olms.G_LastError 		= G_NotInitialized;
          olms.G_LastErrorMessage = G_NotInitializedMessage;
-         logit_scorm('LMSGetValue('+param+'):<br />=> Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage, 0);
+         logit_scorm('LMSGetValue('+param+') on item id '+olms.lms_item_id+':<br />=> Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage, 0);
          return '';
     }
 
@@ -819,9 +839,9 @@ function SetValue(param, val) {
 /**
  * Saves the current data from JS memory to the LMS database
  */
-function savedata() {
+function savedata(item_id) {
     //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
-    logit_lms('function savedata()', 3);
+    logit_lms('function savedata(' + item_id + ')', 3);
 
     //Status is NOT modified here see the lp_ajax_save_item.php file
 
@@ -832,15 +852,15 @@ function savedata() {
     old_item_id = olms.info_lms_item[0];
 
     var item_to_save = olms.lms_item_id;
-    logit_lms('item_to_save original: ' + item_to_save, 3);
+    logit_lms('item_to_save (original value): ' + item_to_save, 3);
 
-    //If saving session_time value we asume that is from the old item not the current one
-    if (olms.session_time != '' && olms.session_time != '0') {
-        logit_lms('item_to_save changed to: ' + old_item_id, 3);
+    //If saving session_time value, we assume that all the new info is about
+    // the old item, not the current one
+    //if (olms.session_time != '' && olms.session_time != '0') {
+    if (olms.switch_finished == 0) {
+        logit_lms('item_to_save (changed to): ' + old_item_id, 3);
         item_to_save = old_item_id;
     }
-
-    logit_lms('item_to_save final: ' + item_to_save, 3);
 
     //Original behaviour
     //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
@@ -886,7 +906,7 @@ function LMSCommit(val) {
 
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
-    savedata();
+    savedata(olms.lms_item_id);
 
     reinit_updatable_vars_list();
     //now changes have been commited, no need to update until next SetValue()
@@ -920,8 +940,10 @@ function LMSFinish(val) {
         logit_scorm('LMSFinish() (no LMSCommit())',1);
     }
 
-    logit_scorm('LMSFinish() called',1);
-    savedata();
+    logit_scorm('LMSFinish() called on item ' + olms.lms_item_id, 0);
+    savedata(olms.lms_item_id);
+
+    //reinit the commit detector flag
     olms.commit = false;
 
     //reinit the list of modified variables
@@ -1003,7 +1025,7 @@ function Terminate() {
         olms.G_LastError = G_NoError ;
         olms.G_LastErrorMessage = 'No error';
         olms.commit = true;
-        savedata();
+        savedata(olms.lms_item_id);
         return ('true');
     }
 }
@@ -1376,6 +1398,11 @@ function switch_item(current_item, next_item){
     var orig_lesson_status  = olms.lesson_status;
     var orig_item_type      = olms.lms_item_types['i'+current_item];
     var next_item_type      = olms.lms_item_types['i'+next_item];
+    if (olms.statusSignalReceived == 0 && olms.lesson_status != 'not attempted') {
+        // In this situation, the status can be considered set as it was clearly
+        // set in a previous stage
+        olms.statusSignalReceived = 1;
+    }
 
     logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
 
@@ -1496,7 +1523,7 @@ function switch_item(current_item, next_item){
         // savedata() with olms.finishSignalReceived == 1 treats the special
         // condition and saves the new status to the database, so
         // switch_item_details() enjoys the new status
-        savedata();
+        savedata(olms.lms_item_id);
     }
     xajax_save_item(
         olms.lms_lp_id,
@@ -1601,6 +1628,7 @@ function switch_item(current_item, next_item){
             }
         }
     });
+    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
     return true;
 }

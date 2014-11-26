@@ -28,7 +28,7 @@ services:
 
     chamilo_user_extra_field_choice:
         class: Chamilo\UserBundle\Form\Type\AttributeEntityChoiceType
-        arguments: [ 'user', Chamilo\CoreBundle\Entity\UserField]
+        arguments: ['user', Chamilo\CoreBundle\Entity\UserField]
         tags:
             - { name: form.type }
 

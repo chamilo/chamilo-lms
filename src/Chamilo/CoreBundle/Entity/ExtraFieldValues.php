@@ -4,13 +4,14 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
 
 /**
  * ExtraFieldValues
  *
  * @ORM\MappedSuperclass
  */
-class ExtraFieldValues
+class ExtraFieldValues extends BaseAttributeValue
 {
     /**
      * @var integer
@@ -19,28 +20,28 @@ class ExtraFieldValues
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="field_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $fieldId;
+    protected $fieldId;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="tms", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $tms;
+    protected $tms;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="user_id", type="string", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $userId;
+    protected $userId;
 
     /**
      * @var string
@@ -48,7 +49,7 @@ class ExtraFieldValues
      *
      * @ORM\Column(name="comment", type="string", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $comment;
+    protected $comment;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\UserBundle\Entity\User")
@@ -56,6 +57,9 @@ class ExtraFieldValues
      */
     protected $user;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->tms = new \DateTime();
@@ -183,4 +187,5 @@ class ExtraFieldValues
     {
         return $this->userId;
     }
+
 }

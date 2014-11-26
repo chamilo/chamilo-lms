@@ -38,6 +38,8 @@ class UserType extends AbstractType
             ->add('email', 'email')
             ->add('username', 'text')
             ->add('phone', 'text')
+            ->add('password', 'password')
+            ->add('groups')
             ->add('timezone', 'timezone')
             ->add('locale', 'locale', array('preferred_choices' => array('en', 'fr', 'es')))
             ->add('picture_uri', 'sonata_media_type', array(

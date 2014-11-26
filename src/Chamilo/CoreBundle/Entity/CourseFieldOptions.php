@@ -19,57 +19,56 @@ class CourseFieldOptions
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="field_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $fieldId;
+    protected $fieldId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="option_value", type="text", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $optionValue;
+    protected $optionValue;
 
     /**
      * @var string
      *
      * @ORM\Column(name="option_display_text", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
      */
-    private $optionDisplayText;
+    protected $optionDisplayText;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="option_order", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $optionOrder;
+    protected $optionOrder;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="priority", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $priority;
+    protected $priority;
 
     /**
      * @var string
      *
      * @ORM\Column(name="priority_message", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
      */
-    private $priorityMessage;
+    protected $priorityMessage;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="tms", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $tms;
-
+    protected $tms;
 
     /**
      * Get id

@@ -1,8 +1,8 @@
-{% from 'SyliusResourceBundle:Macros:actions.html.twig' import create %}
+{% from '@ChamiloAdminTheme/Macros/actions.html.twig' import create %}
 
 {{ form_errors(form) }}
 
 <form action="{{ url }}" method="post" class="form-horizontal" {{ form_enctype(form) }} novalidate>
     {% include '@ChamiloCore/User/_form.html.twig' %}
-    {{ create() }}
+    {{ create(url) }}
 </form>

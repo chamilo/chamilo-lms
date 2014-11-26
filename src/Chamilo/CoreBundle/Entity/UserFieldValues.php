@@ -4,7 +4,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-//use Chamilo\UserBundle\Model\AttributeValueInterface;
+use Sylius\Component\Attribute\Model\AttributeTypes;
 
 /**
  * UserFieldValues
@@ -21,7 +21,7 @@ class UserFieldValues extends ExtraFieldValues
      *
      * @ORM\Column(name="author_id", type="string", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $authorId;
+    protected $authorId;
 
     /**
      * @var string
@@ -29,7 +29,7 @@ class UserFieldValues extends ExtraFieldValues
      *
      * @ORM\Column(name="field_value", type="text", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldValue;
+    protected $fieldValue;
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\UserField")
@@ -113,6 +113,11 @@ class UserFieldValues extends ExtraFieldValues
         return $this->fieldValue;
     }
 
+    public function getType()
+    {
+        return $this->getExtraField()->getFieldTypeToString();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -123,13 +128,42 @@ class UserFieldValues extends ExtraFieldValues
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->getExtraField()->getFieldVariable();
-
     }
+
+    /**
+     * @return array
+     */
     public function getConfiguration()
     {
         return $this->getExtraField()->getConfiguration();
+    }
+
+    /**
+     * @return UserField
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    /**
+     * @param UserField $field
+     * @return $this
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+        return $this;
+    }
+
+    public function getAttribute()
+    {
+        return $this->getField();
     }
 }

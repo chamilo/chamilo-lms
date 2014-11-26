@@ -13,13 +13,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class CourseFieldValues extends ExtraFieldValues
 {
-
     /**
      * @var integer
      *
      * @ORM\Column(name="course_code", type="string", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $courseCode;
+    protected $courseCode;
 
     /**
      * @var string
@@ -27,7 +26,7 @@ class CourseFieldValues extends ExtraFieldValues
      *
      * @ORM\Column(name="field_value", type="text", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldValue;
+    protected $fieldValue;
 
     /**
      * Set fieldValue
@@ -56,6 +55,7 @@ class CourseFieldValues extends ExtraFieldValues
      * Set questionId
      *
      * @param integer $questionId
+     *
      * @return QuestionFieldValues
      */
     public function setCourseCode($code)

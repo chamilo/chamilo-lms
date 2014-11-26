@@ -20,7 +20,7 @@ class SessionFieldValues extends ExtraFieldValues
      *
      * @ORM\Column(name="session_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $sessionId;
+    protected $sessionId;
 
     /**
      * @var string
@@ -28,7 +28,7 @@ class SessionFieldValues extends ExtraFieldValues
      *
      * @ORM\Column(name="field_value", type="text", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldValue;
+    protected $fieldValue;
 
     /**
      * Set fieldValue

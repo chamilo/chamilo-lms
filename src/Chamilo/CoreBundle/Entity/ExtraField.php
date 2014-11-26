@@ -3,13 +3,14 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Attribute\Model\Attribute as BaseAttribute;
 
 /**
  * ExtraField
  *
  * @ORM\MappedSuperclass
  */
-class ExtraField
+class ExtraField extends BaseAttribute
 {
     /**
      * @var integer
@@ -18,71 +19,70 @@ class ExtraField
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="field_type", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $fieldType;
+    protected $fieldType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="field_variable", type="string", length=64, precision=0, scale=0, nullable=false, unique=false)
      */
-    private $fieldVariable;
+    protected $fieldVariable;
 
     /**
      * @var string
      *
      * @ORM\Column(name="field_display_text", type="string", length=64, precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldDisplayText;
+    protected $fieldDisplayText;
 
     /**
      * @var string
      *
      * @ORM\Column(name="field_default_value", type="text", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldDefaultValue;
+    protected $fieldDefaultValue;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="field_order", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldOrder;
+    protected $fieldOrder;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="field_visible", type="boolean", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldVisible;
+    protected $fieldVisible;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="field_changeable", type="boolean", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldChangeable;
+    protected $fieldChangeable;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="field_filter", type="boolean", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $fieldFilter;
+    protected $fieldFilter;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="tms", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $tms;
-
+    protected $tms;
 
     /**
      * Get id
@@ -300,4 +300,38 @@ class ExtraField
     {
         return $this->tms;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getType()
+    {
+        return $this->getFieldType();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setType($type)
+    {
+        return $this->setFieldType($type);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFieldTypeToString()
+    {
+        switch ($this->fieldType) {
+            case \ExtraField::FIELD_TYPE_TEXT:
+            case \ExtraField::FIELD_TYPE_TEXTAREA:
+                return 'text';
+            case \ExtraField::FIELD_TYPE_RADIO:
+            case \ExtraField::FIELD_TYPE_SELECT:
+                return 'choice';
+            default:
+                return 'text';
+        }
+    }
+
 }

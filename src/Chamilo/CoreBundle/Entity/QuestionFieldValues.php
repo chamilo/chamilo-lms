@@ -20,7 +20,7 @@ class QuestionFieldValues extends ExtraFieldValues
      *
      * @ORM\Column(name="question_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $questionId;
+    protected $questionId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", inversedBy="extraFields")

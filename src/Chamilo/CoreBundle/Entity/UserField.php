@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user_field")
  * @ORM\Entity
  */
-class UserField
+class UserField extends ExtraField
 {
     /**
      * @var integer
@@ -98,6 +98,9 @@ class UserField
      */
     protected $configuration = array();
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->tms = new \DateTime();
@@ -160,20 +163,6 @@ class UserField
     public function getFieldType()
     {
         return $this->fieldType;
-    }
-
-    public function getFieldTypeToString()
-    {
-        switch ($this->fieldType) {
-            case \ExtraField::FIELD_TYPE_TEXT:
-            case \ExtraField::FIELD_TYPE_TEXTAREA:
-                return 'text';
-            case \ExtraField::FIELD_TYPE_RADIO:
-            case \ExtraField::FIELD_TYPE_SELECT:
-
-                return 'choice';
-                break;
-        }
     }
 
     /**

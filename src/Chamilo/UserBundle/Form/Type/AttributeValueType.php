@@ -2,7 +2,8 @@
 
 namespace Chamilo\UserBundle\Form\Type;
 
-use Sylius\Bundle\AttributeBundle\Form\EventListener\BuildAttributeValueFormListener;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\UserBundle\Form\EventListener\BuildAttributeValueFormListener;
 use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
 //use Sylius\Component\Product\Model\AttributeInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,7 +49,9 @@ class AttributeValueType extends AbstractResourceType
         ;
 
         $prototypes = array();
+        /** @var \Chamilo\CoreBundle\Entity\UserField $attribute */
         foreach ($this->getAttributes($builder) as $attribute) {
+
             $configuration = $attribute->getConfiguration();
             $type = $attribute->getFieldTypeToString();
 
@@ -87,8 +90,8 @@ class AttributeValueType extends AbstractResourceType
      */
     public function getName()
     {
-        return sprintf('chamilo_%s_extra_field_value', $this->subjectName);
         //return 'chamilo_user_extra_field_value';
+        return sprintf('chamilo_%s_extra_field_value', $this->subjectName);
     }
 
     /**

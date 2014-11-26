@@ -1601,7 +1601,8 @@ class MessageManager
                 . "ON m.user_receiver_id = u.user_id "
                 . "WHERE u.user_id = $userId "
                 . "AND m.msg_status = " . MESSAGE_STATUS_UNREAD . " "
-                . "AND m.id > $lastId";
+                . "AND m.id > $lastId "
+                . "ORDER BY m.send_date DESC";
 
         $result = Database::query($sql);
 

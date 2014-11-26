@@ -113,6 +113,7 @@ class MessagesWebService extends WebService
                     'firstname' => $message['firstname'],
                     'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
                 ),
+                'sendDate' => $message['send_date'],
                 'content' => $message['content'],
                 'hasAttachments' => $hasAttachments,
                 'platform' => array(

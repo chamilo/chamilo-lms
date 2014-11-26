@@ -195,6 +195,16 @@ olms.lms_course_code = '<?php echo $oLP->getCourseCode(); ?>';
 olms.lms_course_id =  '<?php echo $oLP->get_course_int_id(); ?>';
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types');?>
 
+// Following definition of cmi.core.score.raw in SCORM 1.2, "LMS should
+// initialize this to an empty string ("") upon initial launch of a SCO. The
+// SCO is responsible for setting this value. If an LMSGetValue() is requested
+// before the SCO has set this value, then the LMS should return an empty
+// string ("")
+// As Chamilo initializes this to 0 for non-sco, we need a little hack here.
+if (olms.score == 0 && olms.lms_item_type == 'sco' && olms.lesson_status == 'not attempted') {
+    olms.score = "";
+}
+
 olms.asset_timer = 0;
 olms.userfname = '<?php echo str_replace("'", "\\'", $user['firstname']); ?>';
 olms.userlname = '<?php echo str_replace("'", "\\'", $user['lastname']); ?>';
@@ -362,9 +372,12 @@ function LMSGetValue(param) {
 
     // the LMSInitialize is missing
     if (olms.lms_initialized == 0) {
+         if (param == 'cmi.core.score.raw') {
+             return '';
+         }
          olms.G_LastError 		= G_NotInitialized;
          olms.G_LastErrorMessage = G_NotInitializedMessage;
-         logit_scorm('LMSGetValue('+param+'):<br />=> Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage, 0);
+         logit_scorm('LMSGetValue('+param+') on item id '+olms.lms_item_id+':<br />=> Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage, 0);
          return '';
     }
 
@@ -1385,6 +1398,11 @@ function switch_item(current_item, next_item){
     var orig_lesson_status  = olms.lesson_status;
     var orig_item_type      = olms.lms_item_types['i'+current_item];
     var next_item_type      = olms.lms_item_types['i'+next_item];
+    if (olms.statusSignalReceived == 0 && olms.lesson_status != 'not attempted') {
+        // In this situation, the status can be considered set as it was clearly
+        // set in a previous stage
+        olms.statusSignalReceived = 1;
+    }
 
     logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
 

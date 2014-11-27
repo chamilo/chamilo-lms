@@ -1,8 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * CourseCategory
@@ -36,11 +38,15 @@ class CourseCategory
     private $code;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="parent_id", type="string", length=40, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
      */
-    private $parentId;
+    protected $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CourseCategory", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent;
 
     /**
      * @var integer
@@ -70,11 +76,22 @@ class CourseCategory
      */
     private $authCatChild;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->childrenCount = 0;
+        $this->children = new ArrayCollection();
     }
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getName();
+    }
 
     /**
      * Get id
@@ -84,6 +101,39 @@ class CourseCategory
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return CourseCategory
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param CourseCategory $child
+     */
+    public function addChild(CourseCategory $child)
+    {
+        $this->children[] = $child;
+        $child->setParent($this);
+    }
+
+    /**
+     * @param CourseCategory $parent
+     */
+    public function setParent(CourseCategory $parent)
+    {
+        $this->parent = $parent;
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Admin;
 
@@ -22,12 +23,10 @@ class SessionAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('id', 'text', array('label' => 'Session'))
             ->add('name') //if no type is specified, SonataAdminBundle tries to guess it
-            ->add('display_start_date', 'sonata_type_datetime_picker')
             ->add('generalCoach')
+            ->add('displayStartDate', 'sonata_type_datetime_picker')
             ->add('visibility')
-            //->add('courses')
             ->add('courses', 'sonata_type_collection', array(
                     'cascade_validation' => true,
                 ), array(
@@ -36,6 +35,16 @@ class SessionAdmin extends Admin
                     //'sortable'          => 'position',
                     //'link_parameters'   => array('context' => $context),
                     'admin_code'        => 'sonata.admin.session_rel_course'
+                )
+            )
+            ->add('users', 'sonata_type_collection', array(
+                    'cascade_validation' => true,
+                ), array(
+                    'edit'              => 'inline',
+                    'inline'            => 'table',
+                    //'sortable'          => 'position',
+                    //'link_parameters'   => array('context' => $context),
+                    //'admin_code'        => 'sonata.admin.session_rel_user'
                 )
             )
         ;

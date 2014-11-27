@@ -17,14 +17,6 @@ use Chamilo\UserBundle\Entity\User;
 class UserFieldValues extends ExtraFieldValues
 {
     /**
-     * The current user
-     * @var integer
-     *
-     * @ORM\Column(name="author_id", type="string", precision=0, scale=0, nullable=false, unique=false)
-     */
-    //protected $authorId;
-
-    /**
      * @var string
      * @Gedmo\Versioned
      *
@@ -39,16 +31,35 @@ class UserFieldValues extends ExtraFieldValues
     protected $field;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     protected $author;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param $user
+     * @return $this
+     */
+    public function setUser(User $user)
+    {
+        $this->user  = $user;
+
+        return $this;
+    }
 
     /**
      * Set fieldValue
@@ -74,19 +85,6 @@ class UserFieldValues extends ExtraFieldValues
     }
 
     /**
-     * Set questionId
-     *
-     * @param integer $id
-     *
-     * @return QuestionFieldValues
-     */
-    public function setAuthorId($id)
-    {
-        $this->authorId = $id;
-        return $this;
-    }
-
-    /**
      * Get author
      *
      * @return User
@@ -99,9 +97,11 @@ class UserFieldValues extends ExtraFieldValues
     /**
      * Get author
      *
-     * @return User
+     * @param $author User
+     *
+     * @return $this
      */
-    public function setAuthor($author)
+    public function setAuthor(User $author)
     {
         $this->author = $author;
 
@@ -110,33 +110,11 @@ class UserFieldValues extends ExtraFieldValues
 
 
     /**
-     * Get questionId
-     *
-     * @return integer
-     */
-    public function getAuthorId()
-    {
-        return $this->authorId;
-    }
-
-    /**
      * @return ExtraField
      */
     public function getExtraField()
     {
         return $this->field;
-    }
-
-    /**
-     * @param $user
-     * @return $this
-     */
-    public function setUser(User $user)
-    {
-        $this->user  = $user;
-        $this->setUserId($user->getId());
-
-        return $this;
     }
 
     /**

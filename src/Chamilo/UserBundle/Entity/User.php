@@ -3,6 +3,7 @@
 
 namespace Chamilo\UserBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -318,8 +319,8 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     protected $sessionAsGeneralCoach;
 
     /**
-     * @var Collection
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"all"})
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      **/
     protected $extraFields;
 
@@ -343,7 +344,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
         $this->portals = new ArrayCollection();
         $this->dropBoxSentFiles = new ArrayCollection();
         $this->dropBoxReceivedFiles = new ArrayCollection();
-        $this->extraFields = new ArrayCollection();
+        //$this->extraFields = new ArrayCollection();
         //$this->userId = 0;
         //$this->createdAt = new \DateTime();
         //$this->updatedAt = new \DateTime();
@@ -1387,10 +1388,11 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * {@inheritdoc}
      */
-    public function setExtraFields(Collection $attributes)
+    public function setExtraFields($extraFields)
     {
-        foreach ($attributes as $attribute) {
-            $this->addExtraField($attribute);
+        $this->extraFields = new ArrayCollection();
+        foreach ($extraFields as $extraField) {
+            $this->addExtraFields($extraField);
         }
 
         return $this;
@@ -1399,11 +1401,22 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * {@inheritdoc}
      */
-    public function addExtraField(ExtraFieldValues $attribute)
+    /*public function addExtraFields(ExtraFieldValues $extraFieldValue)
+    {
+        $extraFieldValue->setUser($this);
+        $this->extraFields[] = $extraFieldValue;
+
+        return $this;
+    }*/
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addExtraFields(UserFieldValues $extraFieldValue)
     {
         //if (!$this->hasExtraField($attribute)) {
-            $attribute->setUser($this);
-            $this->extraFields->add($attribute);
+        $extraFieldValue->setUser($this);
+        $this->extraFields[] = $extraFieldValue;
         //}
 
         return $this;
@@ -1415,8 +1428,8 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     public function removeExtraField(ExtraFieldValues $attribute)
     {
         //if ($this->hasExtraField($attribute)) {
-            $this->extraFields->removeElement($attribute);
-            $attribute->setUser($this);
+            //$this->extraFields->removeElement($attribute);
+            //$attribute->setUser($this);
         //}
 
         return $this;
@@ -1425,13 +1438,13 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * {@inheritdoc}
      */
-    public function hasExtraField($attribute)
+    /*public function hasExtraField($attribute)
     {
         if (!$this->extraFields) {
             return false;
         }
         return $this->extraFields->contains($attribute);
-    }
+    }*/
 
     /**
      * {@inheritdoc}

@@ -13,22 +13,16 @@ use Doctrine\ORM\Mapping as ORM;
 class SessionRelUser
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_session", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_session", referencedColumnName="id")
      */
-    private $idSession;
+    private $session;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_user", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="users", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
      */
-    private $idUser;
+    private $user;
 
     /**
      * @var integer
@@ -56,43 +50,53 @@ class SessionRelUser
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="moved_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="moved_at", type="datetime", precision=0, scale=0, nullable=true, unique=false)
      */
     private $movedAt;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->moved_to = null;
+        $this->movedStatus = null;
+        $this->movedAt = null;
+    }
 
 
     /**
      * Set idSession
      *
-     * @param integer $idSession
+     * @param Session $session
+     *
      * @return SessionRelUser
      */
-    public function setIdSession($idSession)
+    public function setSession($session)
     {
-        $this->idSession = $idSession;
-
+        $this->session = $session;
         return $this;
     }
 
     /**
-     * Get idSession
+     * Get Session
      *
-     * @return integer
+     * @return Session
      */
-    public function getIdSession()
+    public function getSession()
     {
-        return $this->idSession;
+        return $this->session;
     }
 
     /**
      * Set idUser
      *
-     * @param integer $idUser
+     * @param integer $user
      * @return SessionRelUser
      */
-    public function setIdUser($idUser)
+    public function setUser($user)
     {
-        $this->idUser = $idUser;
+        $this->user = $user;
 
         return $this;
     }
@@ -102,9 +106,9 @@ class SessionRelUser
      *
      * @return integer
      */
-    public function getIdUser()
+    public function getUser()
     {
-        return $this->idUser;
+        return $this->user;
     }
 
     /**

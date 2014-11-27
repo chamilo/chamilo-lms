@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  */
 class AdminController extends BaseController
 {
-    /**
+    /**M
      * @Route("/", name="administration")
      * @Method({"GET"})
      *

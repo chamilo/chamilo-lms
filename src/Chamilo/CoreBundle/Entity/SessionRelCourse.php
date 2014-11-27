@@ -24,20 +24,6 @@ class SessionRelCourse
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_session", type="integer")
-     */
-    //private $idSession;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    //private $cId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="nbr_users", type="integer")
      */
     private $nbrUsers;

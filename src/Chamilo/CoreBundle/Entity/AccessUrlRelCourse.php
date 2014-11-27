@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -20,20 +21,6 @@ class AccessUrlRelCourse
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="access_url_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    //private $accessUrlId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    //private $cId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Course", inversedBy="urls", cascade={"persist"})
@@ -66,7 +53,7 @@ class AccessUrlRelCourse
     }
 
     /**
-     * Set accessUrlId
+     * Set url
      *
      * @param $url
      * @return AccessUrlRelCourse
@@ -86,28 +73,6 @@ class AccessUrlRelCourse
         return $this->url;
     }
 
-    /**
-     * Set accessUrlId
-     *
-     * @param integer $accessUrlId
-     * @return AccessUrlRelCourse
-     */
-    public function setAccessUrlId($accessUrlId)
-    {
-        $this->accessUrlId = $accessUrlId;
-
-        return $this;
-    }
-
-    /**
-     * Get accessUrlId
-     *
-     * @return integer
-     */
-    public function getAccessUrlId()
-    {
-        return $this->accessUrlId;
-    }
 
     /**
      * @param $course
@@ -123,28 +88,5 @@ class AccessUrlRelCourse
     public function getCourse()
     {
         return $this->course;
-    }
-
-    /**
-     * Set cId
-     *
-     * @param integer $cId
-     * @return AccessUrlRelCourse
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId
-     *
-     * @return integer
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 }

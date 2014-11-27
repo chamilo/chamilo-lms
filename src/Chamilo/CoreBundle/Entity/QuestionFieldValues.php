@@ -14,6 +14,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class QuestionFieldValues extends ExtraFieldValues
 {
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\QuestionField")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
+     */
+    protected $field;
 
     /**
      * @var integer

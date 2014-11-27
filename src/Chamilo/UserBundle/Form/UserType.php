@@ -63,7 +63,7 @@ class UserType extends AbstractType
             $user = $event->getData();
             $extraFields = $user->getExtrafields();
             foreach ($extraFields as $extraField) {
-                $extraField->setAuthorId($currentUser->getId());
+                $extraField->setAuthor($currentUser);
             }
         });
     }

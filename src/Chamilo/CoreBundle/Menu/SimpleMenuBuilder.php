@@ -106,22 +106,18 @@ class SimpleMenuBuilder extends ContainerAware
                 'route' => 'admin'
             )
         );*/
-
-
-
         $admin = $menu->addChild(
             'Administration',
             array(
-                'route' => 'administration',
-
+                'route' => 'sonata_admin_dashboard',
             )
         );
 
         $admin->addChild(
             'Users',
             array(
-                'route' => 'main',
-                'routeParameters' => array('name' => 'admin/user_list.php'),
+                'route' => 'admin_chamilo_user_user_list',
+                'routeParameters' => array(),
                 array("attributes" => array("id" => 'nav'))
             )
         );
@@ -129,8 +125,8 @@ class SimpleMenuBuilder extends ContainerAware
         $admin->addChild(
             'Courses',
             array(
-                'route' => 'main',
-                'routeParameters' => array('name' => 'admin/course_list.php'),
+                'route' => 'admin_chamilo_core_course_list',
+                'routeParameters' => array(),
                 array("attributes" => array("id" => 'nav'))
             )
         );
@@ -138,18 +134,12 @@ class SimpleMenuBuilder extends ContainerAware
         $admin->addChild(
             'Sessions',
             array(
-                'route' => 'main',
-                'routeParameters' => array('name' => 'session/session_list.php'),
+                'route' => 'admin_chamilo_core_session_list',
+                'routeParameters' => array(),
                 array("attributes" => array("id" => 'nav'))
             )
         );
 
-        $menu->addChild(
-            'Sonata Admin',
-            array(
-                'route' => 'sonata_admin_dashboard'
-            )
-        );
 
         // Sonata admin
         //$menu->addChild('Administration', array('route' => 'administration'));

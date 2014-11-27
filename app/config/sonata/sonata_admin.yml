@@ -1,5 +1,3 @@
-# more information can be found here http://sonata-project.org/bundles/admin
-
 sonata_admin:
     # default value, change it to sonata.admin.security.handler.acl to use ACL
     security:
@@ -63,14 +61,14 @@ sonata_admin:
                  #   - sonata.invoice.admin.invoice
                  #   - sonata.order.admin.order
                   #  - sonata.product.admin.product
-#            sonata.admin.group.classification:
-#                label:           sonata_classification
-#                label_catalogue: SonataClassificationBundle
-#                icon:            '<i class="fa fa-sitemap"></i>'
-#                items:
-#                    - sonata.classification.admin.category
-#                    - sonata.classification.admin.tag
-#                    - sonata.classification.admin.collection
+            sonata.admin.group.classification:
+                label:           sonata_classification
+                label_catalogue: SonataClassificationBundle
+                icon:            '<i class="fa fa-sitemap"></i>'
+                items:
+                    - sonata.classification.admin.category
+                    - sonata.classification.admin.tag
+                    - sonata.classification.admin.collection
             sonata.admin.group.site_builder:
                 label:           Site Builder
                 label_catalogue: SonataDemoBundle
@@ -83,48 +81,72 @@ sonata_admin:
                 label_catalogue: SonataAdminBundle
                 icon:            '<i class="fa fa-cogs"></i>'
                 items:
-                    - sonata.user.admin.user
-                    - sonata.user.admin.group
                     #- sonata.page.admin.site
                     - sonata.page.admin.site
                     - sonata.notification.admin.message
-            sonata.admin.group.lms:
-                label: LMS
+                    - sonata.admin.settings_current
+            sonata.admin.group.user:
+                label: Users
+                icon:  '<i class="fa fa-play-circle"></i>'
+                label_catalogue: SonataAdminBundle
+                items:
+                    - sonata.user.admin.user
+                    - sonata.user.admin.group
+                    - sonata.admin.user_group
+                    - sonata.admin.user_field
+                    - sonata.admin.user_field_values
+            sonata.admin.group.course:
+                label: Courses
                 icon:  '<i class="fa fa-play-circle"></i>'
                 label_catalogue: SonataAdminBundle
                 items:
                     - sonata.admin.course
-                    - sonata.admin.session
-                    - sonata.admin.access_url
+                    - sonata.admin.course_category
+                    - sonata.admin.course_request
+            sonata.admin.group.session:
+                  label: Sessions
+                  icon:  '<i class="fa fa-play-circle"></i>'
+                  label_catalogue: SonataAdminBundle
+                  items:
+                      - sonata.admin.session
+                      - sonata.admin.session_category
+                      - sonata.admin.career
+                      - sonata.admin.promotion
+            sonata.admin.group.url:
+                  label: URLs
+                  icon:  '<i class="fa fa-play-circle"></i>'
+                  label_catalogue: SonataAdminBundle
+                  items:
+                      - sonata.admin.access_url
 
-    assets:
-        stylesheets:
-            # The sandbox includes default pre-optimized version of some css and js
-            # So you can either use them, and add your custom assets here
-            #   ~ or ~
-            # tweak the assetic.yml and the following lines
-            - assetic/sonata_admin_css.css
-            - assetic/sonata_formatter_css.css
-            - assetic/sonata_jqueryui_css.css
-            #- bundles/sonatademo/css/demo.css
-
-            - bundles/sonataformatter/markitup/skins/sonata/style.css
-            - bundles/sonataformatter/markitup/sets/markdown/style.css
-            - bundles/sonataformatter/markitup/sets/html/style.css
-            - bundles/sonataformatter/markitup/sets/textile/style.css
-#            - bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css
-#            - bundles/sonataadmin/vendor/AdminLTE/css/font-awesome.min.css
-#            - bundles/sonataadmin/vendor/AdminLTE/css/ionicons.min.css
-#            - bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
-#            - bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
-#            - bundles/sonataadmin/vendor/select2/select2.css
-#            - bundles/sonataadmin/vendor/select2/select2-bootstrap.css
-#            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
-#            - bundles/sonataadmin/css/styles.css
-#            - bundles/sonataadmin/css/layout.css
-
-        javascripts:
-            - assetic/sonata_admin_js.js
-            - assetic/sonata_jqueryui_js.js
-            - assetic/sonata_formatter_js.js
-            - bundles/sonataformatter/vendor/ckeditor/ckeditor.js
+#    assets:
+#        stylesheets:
+#            # The sandbox includes default pre-optimized version of some css and js
+#            # So you can either use them, and add your custom assets here
+#            #   ~ or ~
+#            # tweak the assetic.yml and the following lines
+#            - assetic/sonata_admin_css.css
+#            - assetic/sonata_formatter_css.css
+#            - assetic/sonata_jqueryui_css.css
+#            #- bundles/sonatademo/css/demo.css
+#
+#            - bundles/sonataformatter/markitup/skins/sonata/style.css
+#            - bundles/sonataformatter/markitup/sets/markdown/style.css
+#            - bundles/sonataformatter/markitup/sets/html/style.css
+#            - bundles/sonataformatter/markitup/sets/textile/style.css
+##            - bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css
+##            - bundles/sonataadmin/vendor/AdminLTE/css/font-awesome.min.css
+##            - bundles/sonataadmin/vendor/AdminLTE/css/ionicons.min.css
+##            - bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
+##            - bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
+##            - bundles/sonataadmin/vendor/select2/select2.css
+##            - bundles/sonataadmin/vendor/select2/select2-bootstrap.css
+##            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
+##            - bundles/sonataadmin/css/styles.css
+##            - bundles/sonataadmin/css/layout.css
+#
+#        javascripts:
+#            - assetic/sonata_admin_js.js
+#            - assetic/sonata_jqueryui_js.js
+#            - assetic/sonata_formatter_js.js
+#            - bundles/sonataformatter/vendor/ckeditor/ckeditor.js

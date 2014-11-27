@@ -1,6 +1,6 @@
 sonata_block:
     context_manager: sonata.page.block.context_manager
-    default_contexts: [sonata_page_bundle]
+    default_contexts: [cms, sonata_page_bundle]
 
     http_cache:
             listener: true

@@ -42,7 +42,7 @@ class ChamiloAdminThemeExtension extends Extension implements PrependExtensionIn
             $container->prependExtensionConfig('twig', array(
                 'form' => array(
                     'resources' => array(
-                        'ChamiloAdminThemeBundle:layout:form-theme.html.twig'
+                        'ChamiloAdminThemeBundle:Layout:form-theme.html.twig'
                     )
                 ),
                 'globals' => array(

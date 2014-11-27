@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
-use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CoreBundle\Entity\Course;
 use Sonata\AdminBundle\Admin\Admin;
@@ -16,10 +15,10 @@ use Chamilo\CourseBundle\ToolChain;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
 /**
- * Class CourseAdmin
+ * Class SettingsCurrentAdmin
  * @package Chamilo\CoreBundle\Admin
  */
-class CourseAdmin extends Admin
+class SettingsCurrentAdmin extends Admin
 {
     /**
      * @param FormMapper $formMapper
@@ -27,14 +26,13 @@ class CourseAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('variable')
+            ->add('subkey')
+            ->add('type')
+            ->add('category')
+            ->add('selectedValue')
             ->add('title')
-            ->add('code','text', array(
-                //'read_only' => true,
-            ))
-            ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
-            ->add('departmentName')
-            ->add('visibility')
-            ->add('departmentUrl')
+            ->add('comment', 'textarea', array('attr' => array('class'=> 'ckeditor')))
             ->add('urls', 'sonata_type_collection', array(
                     'cascade_validation' => true,
                 ), array(
@@ -73,8 +71,8 @@ class CourseAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('title')
-            ->add('code')
+            ->add('variable')
+            ->add('title')//->add('users')
         ;
     }
 
@@ -85,79 +83,8 @@ class CourseAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            ->addIdentifier('title')
-            ->addIdentifier('code')
+            ->addIdentifier('variable')
+            ->addIdentifier('selected_value')
         ;
-    }
-
-    /**
-     * Very important in order to save the related entities!
-     * @param \Chamilo\CoreBundle\Entity\Course $course
-     * @return mixed|void
-     */
-    public function preUpdate($course)
-    {
-        $course->setUsers($course->getUsers());
-        $course->setUrls($course->getUrls());
-        $this->updateTools($course);
-    }
-
-    /**
-     * @param Course $course
-     * @return mixed|void
-     */
-    public function prePersist($course)
-    {
-        $this->updateTools($course);
-    }
-
-    /***
-     * @param Course $course
-     */
-    public function updateTools($course)
-    {
-        $toolChain = $this->getToolChain();
-        $tools = $toolChain->getTools();
-
-        $currentTools = $course->getTools();
-
-        $addedTools = array();
-        if (!empty($currentTools)) {
-            foreach ($currentTools as $tool) {
-                $addedTools[] = $tool->getName();
-            }
-        }
-
-        foreach ($tools as $tool) {
-            $toolName = $tool->getName();
-            if (!in_array($toolName, $addedTools)) {
-
-                $toolEntity = new CTool();
-                $toolEntity->setCId($course->getId());
-                $toolEntity->setImage($tool->getImage());
-                $toolEntity->setName($tool->getName());
-                $toolEntity->setLink($tool->getLink());
-                $toolEntity->setTarget($tool->getTarget());
-                $toolEntity->setCategory($tool->getCategory());
-
-                $course->addTools($toolEntity);
-            }
-        }
-    }
-
-    /**
-     * @param ToolChain $chainTool
-     */
-    public function setToolChain(ToolChain $chainTool)
-    {
-        $this->toolChain = $chainTool;
-    }
-
-    /**
-     * @return ToolChain
-     */
-    public function getToolChain()
-    {
-        return $this->toolChain;
     }
 }

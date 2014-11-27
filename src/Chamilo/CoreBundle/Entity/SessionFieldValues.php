@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -14,13 +15,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class SessionFieldValues extends ExtraFieldValues
 {
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\SessionField")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
+     */
+    protected $field;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="session_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    protected $sessionId;
+    protected $session;
 
     /**
      * @var string

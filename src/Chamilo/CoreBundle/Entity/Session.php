@@ -30,13 +30,6 @@ class Session
     private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_coach", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    //private $idCoach;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=150, precision=0, scale=0, nullable=false, unique=false)
@@ -151,6 +144,11 @@ class Session
     protected $courses;
 
     /**
+     * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     **/
+    protected $users;
+
+    /**
      *
      */
     public function __construct()
@@ -195,6 +193,35 @@ class Session
     /**
      * @return
      */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param $users
+     */
+    public function setUsers($users)
+    {
+        $this->users = new ArrayCollection();
+
+        foreach ($users as $user) {
+            $this->addUser($user);
+        }
+    }
+
+    /**
+     * @param SessionRelUser $user
+     */
+    public function addUser(SessionRelUser $user)
+    {
+        $user->setSession($this);
+        $this->users[] = $user;
+    }
+
+    /**
+     * @return
+     */
     public function getCourses()
     {
         return $this->courses;
@@ -233,29 +260,6 @@ class Session
                 unset($this->courses[$key]);
             }
         }
-    }
-
-    /**
-     * Set idCoach
-     *
-     * @param integer $idCoach
-     * @return Session
-     */
-    public function setIdCoach($idCoach)
-    {
-        $this->idCoach = $idCoach;
-
-        return $this;
-    }
-
-    /**
-     * Get idCoach
-     *
-     * @return integer
-     */
-    public function getIdCoach()
-    {
-        return $this->idCoach;
     }
 
     /**

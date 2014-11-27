@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -20,28 +21,23 @@ class UsergroupRelUser
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
-     * @var \User
+     * @var User
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="classes")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
-     * })
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="classes", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $user;
+    protected $user;
 
     /**
      * @var Usergroup
      *
-     * @ORM\ManyToOne(targetEntity="Usergroup")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
-     * })
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup", inversedBy="users", cascade={"persist"})
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id")
      */
-    private $usergroup;
-
+    protected $usergroup;
 
     /**
      * Get id
@@ -59,7 +55,7 @@ class UsergroupRelUser
      * @param User $user
      * @return UsergroupRelUser
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user)
     {
         $this->user = $user;
 
@@ -80,9 +76,10 @@ class UsergroupRelUser
      * Set usergroup
      *
      * @param Usergroup $usergroup
+     *
      * @return UsergroupRelUser
      */
-    public function setUsergroup(Usergroup $usergroup = null)
+    public function setUsergroup(Usergroup $usergroup)
     {
         $this->usergroup = $usergroup;
 

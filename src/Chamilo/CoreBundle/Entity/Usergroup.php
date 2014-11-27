@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -21,42 +22,84 @@ class Usergroup
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $description;
+    protected $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="class")
+     * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="usergroup", cascade={"persist"}, orphanRemoval=true)
      **/
-    private $users;
+    protected $users;
 
     /**
      *
      */
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        //$this->users = new ArrayCollection();
     }
 
     /**
-     * Get users
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getName();
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * @param $users
+     */
+    public function setUsers($users)
+    {
+        $this->users = new ArrayCollection();
+
+        foreach ($users as $user) {
+            $this->addUsers($user);
+        }
+    }
+
+    /**
+     * @param UsergroupRelUser $user
+     */
+    public function addUsers(UsergroupRelUser $user)
+    {
+        $user->setUsergroup($this);
+        $this->users[] = $user;
+    }
+
+    /**
+     * Remove $user
+     *
+     * @param UsergroupRelUser $user
+     */
+    public function removeUsers(UsergroupRelUser $user)
+    {
+        foreach ($this->users as $key => $value) {
+            if ($value->getId() == $user->getId()) {
+                unset($this->users[$key]);
+            }
+        }
     }
 
     /**

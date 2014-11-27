@@ -1,9 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Admin;
 
 use Sonata\UserBundle\Admin\Model\UserAdmin as BaseUserAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 
 /**
  * Class UserAdmin
@@ -111,13 +113,12 @@ class UserAdmin extends BaseUserAdmin
             ->end()
             ->end()
         ;
-
         $formMapper
             ->tab('ExtraFields')
             ->with('ExtraFields')
             ->add('extraFields', 'sonata_type_collection', array(
                     'cascade_validation' => true,
-                    'type_options' => array(
+                    /*'type_options' => array(
                         // Prevents the "Delete" option from being displayed
                         'delete' => false,
                         'delete_options' => array(
@@ -129,17 +130,17 @@ class UserAdmin extends BaseUserAdmin
                                 'required' => false,
                             )
                         )
-                    )
+                    )*/
                 ), array(
                     'allow_delete' => true,
                     'by_reference' => false,
                     'edit'              => 'inline',
                     'inline'            => 'table',
-                    'admin_code'        => 'sonata.admin.user_extra_field_values'
+                    'admin_code'        => 'sonata.admin.user_field_values'
                    /* 'edit' => 'inline',
                     'inline' => 'table',
                     'sortable' => 'position',*/
-                )
+               )
             )
             ->end()
             ->end()
@@ -147,4 +148,23 @@ class UserAdmin extends BaseUserAdmin
 
     }
 
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper
+            ->add('username')
+            ->add('firstname')
+            ->add('lastname')
+            ->add('email')
+            ->add('officialCode')
+            ->add('groups')
+            ->add('active')
+            //->add('registrationDate', 'sonata_type_filter_datetime', array('input_type' => 'timestamp'))
+        ;
+    }
+
+
 }
+

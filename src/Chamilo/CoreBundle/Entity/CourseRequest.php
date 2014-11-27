@@ -1,8 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * CourseRequest
@@ -29,11 +32,12 @@ class CourseRequest
     private $code;
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    protected $user;
 
     /**
      * @var string
@@ -133,6 +137,13 @@ class CourseRequest
      */
     private $exemplaryContent;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->requestDate = new \DateTime();
+    }
 
     /**
      * Get id
@@ -142,6 +153,29 @@ class CourseRequest
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set user
+     *
+     * @param User $user
+     * @return UsergroupRelUser
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**

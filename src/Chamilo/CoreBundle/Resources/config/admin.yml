@@ -22,6 +22,37 @@ services:
         calls:
             - [ setTranslationDomain, [ChamiloCoreBundle]]
 
+    sonata.admin.session_category:
+        class: Chamilo\CoreBundle\Admin\SessionCategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Session category" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\SessionCategory
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.career:
+        class: Chamilo\CoreBundle\Admin\SessionCategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Session category" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\SessionCategory
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+    sonata.admin.promotion:
+        class: Chamilo\CoreBundle\Admin\SessionCategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Session category" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\SessionCategory
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
     sonata.admin.course_rel_user:
         class: Chamilo\CoreBundle\Admin\CourseRelUserAdmin
         tags:
@@ -43,6 +74,17 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.session_rel_user:
+            class: Chamilo\CoreBundle\Admin\SessionRelUserAdmin
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: "LMS", label: "SessionRelUserAdmin" }
+            arguments:
+                - ~
+                - Chamilo\CoreBundle\Entity\SessionRelUser
+                - ~
+            calls:
+                - [ setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.access_url:
         class: Chamilo\CoreBundle\Admin\AccessUrlAdmin
@@ -84,6 +126,61 @@ services:
         arguments:
             - ~
             - Chamilo\CoreBundle\Entity\UserFieldValues
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.settings_current:
+        class: Chamilo\CoreBundle\Admin\SettingsCurrentAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Settings" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\SettingsCurrent
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.user_group:
+        class: Chamilo\CoreBundle\Admin\UserGroupAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "UserGroupAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\UserGroup
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.user_group_rel_user:
+        class: Chamilo\CoreBundle\Admin\UsergroupRelUser
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "UsergroupRelUser" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\UsergroupRelUser
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.course_category:
+        class: Chamilo\CoreBundle\Admin\CourseCategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "CourseCategoryAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\CourseCategory
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.course_request:
+        class: Chamilo\CoreBundle\Admin\CourseRequestAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "CourseRequestAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\CourseRequest
             - ~
         calls:
             - [ setTranslationDomain, [ChamiloCoreBundle]]

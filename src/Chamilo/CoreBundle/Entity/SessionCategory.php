@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -43,12 +44,31 @@ class SessionCategory
     private $dateEnd;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="access_url_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategory", cascade={"persist"})
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
-    private $accessUrlId;
+    protected $url;
 
+    /**
+     * Set url
+     *
+     * @param $url
+     * @return AccessUrlRelCourse
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
 
     /**
      * Get id

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -40,7 +41,13 @@ class Promotion
      *
      * @ORM\Column(name="career_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $careerId;
+    //private $careerId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career", inversedBy="promotions")
+     * @ORM\JoinColumn(name="career_id", referencedColumnName="id")
+     **/
+    private $career;
 
     /**
      * @var integer
@@ -62,7 +69,6 @@ class Promotion
      * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $updatedAt;
-
 
     /**
      * Get id

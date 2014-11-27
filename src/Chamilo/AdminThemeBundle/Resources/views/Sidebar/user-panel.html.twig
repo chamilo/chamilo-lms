@@ -1,8 +1,8 @@
-{% import "ChamiloAdminThemeBundle:layout:macros.html.twig" as macro %}
+{% import "ChamiloAdminThemeBundle:Macros:image.html.twig" as macro_image %}
 <!-- Sidebar user panel -->
 <div class="user-panel">
     <div class="pull-left image">
-{{ macro.avatar(user.avatar, user.username)  }}
+    {{ macro_image.avatar(user.avatar, user.username)  }}
 {#% if user.avatar %}
     <img src="{{ asset(user.avatar) }}" class="img-circle" alt="User Image" />
 {% else %}

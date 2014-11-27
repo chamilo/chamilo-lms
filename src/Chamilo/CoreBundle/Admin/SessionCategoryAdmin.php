@@ -1,6 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-namespace Chamilo\UserBundle\Admin;
+namespace Chamilo\CoreBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -8,12 +9,13 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+use Knp\Menu\ItemInterface as MenuItemInterface;
 
 /**
- * Class UserAdmin
- * @package Chamilo\UserBundle\Admin
+ * Class CourseRequestAdmin
+ * @package Chamilo\CoreBundle\Admin
  */
-class UserFieldValuesAdmin extends Admin
+class SessionCategoryAdmin extends Admin
 {
     /**
      * @param FormMapper $formMapper
@@ -21,11 +23,10 @@ class UserFieldValuesAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('field')
-            ->add('user')
-            ->add('field_value', 'text')
-            ->add('comment', 'textarea')
-            ->add('author')
+            ->add('name')
+            ->add('url')
+            ->add('dateStart', 'sonata_type_datetime_picker')
+            ->add('dateEnd', 'sonata_type_datetime_picker')
         ;
     }
 
@@ -35,7 +36,8 @@ class UserFieldValuesAdmin extends Admin
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('id', 'text')
+            ->add('id')
+            ->add('name')
         ;
     }
 
@@ -46,7 +48,7 @@ class UserFieldValuesAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('field')
+            ->add('name')
         ;
     }
 
@@ -57,8 +59,7 @@ class UserFieldValuesAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            ->addIdentifier('field')
-            ->addIdentifier('user')
+            ->addIdentifier('name')
         ;
     }
 }

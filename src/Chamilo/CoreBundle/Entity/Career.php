@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -56,6 +57,10 @@ class Career
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Promotion", mappedBy="career", cascade={"persist"}, orphanRemoval=true)
+     **/
+    protected $promotions;
 
     /**
      * Get id

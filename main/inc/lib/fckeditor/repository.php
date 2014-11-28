@@ -52,6 +52,8 @@ if (api_is_platform_admin()) {
     }
 }
 
+$to_user_id = isset($to_user_id) ? $to_user_id : null;
+
 // Create course shared folders
 if (api_is_in_course()) {
     $course_dir      = $_course['path'].'/document';

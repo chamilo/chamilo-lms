@@ -98,8 +98,8 @@ function iterateRequirements(array $collection)
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><?php echo $translator->trans('title'); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="bundles/avanzuadmintheme/vendor/AdminLTE/css/bootstrap.css" />
-    <script type="text/javascript" src="bundles/avanzuadmintheme/vendor/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="bundles/chamiloadmintheme/components/adminlte/css/bootstrap.css" />
+    <script type="text/javascript" src="bundles/chamiloadmintheme/components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript">
         $(function() {
             $('.progress-bar li:last-child em.fix-bg').width($('.progress-bar li:last-child').width() / 2);

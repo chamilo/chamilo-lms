@@ -12,15 +12,18 @@
     {% block stylesheets %}
     {% endblock %}
 
-    {% stylesheets
-    "@bootstrap_css" %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+    {#{% stylesheets#}
+    {#"@bootstrap_css" %}#}
+    {#<link rel="stylesheet" href="{{ asset_url }}" />#}
+    {#{% endstylesheets %}#}
 
-    {% javascripts "@bootstrap_js" %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    {#{% javascripts "@bootstrap_js" %}#}
+    {#<script src="{{ asset_url }}"></script>#}
+    {#{% endjavascripts %}#}
 
+    <link rel="stylesheet" href="{{ asset('bundles/chamiloadmintheme/components/bootstrap/dist/css/bootstrap.css') }}" />
+    <script type="text/javascript" src="{{ asset('bundles/chamiloadmintheme/components/jquery/dist/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/chamiloadmintheme/components/bootstrap/dist/js/bootstrap.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/chamiloadmintheme/components/ajaxQueue/dist/jquery.ajaxQueue.js') }}"></script>
 
     {% block javascript %}

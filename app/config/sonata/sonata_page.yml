@@ -27,7 +27,7 @@ sonata_page:
         - home
         - homepage
         - _settings
-        - avanzu_admin_(.*)
+        - fos_user(.*)
 
     ignore_routes:
         - sonata_page_cache_esi

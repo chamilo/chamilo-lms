@@ -101,7 +101,7 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_UPLOAD) {
                     $doc_id,
                     'DocumentAdded',
                     api_get_user_id(),
-                    $to_group_id,
+                    api_get_group_id(),
                     null,
                     null,
                     null,

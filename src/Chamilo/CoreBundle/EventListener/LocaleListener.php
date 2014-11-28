@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\EventListener;
 
@@ -6,6 +7,10 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Class LocaleListener
+ * @package Chamilo\CoreBundle\EventListener
+ */
 class LocaleListener implements EventSubscriberInterface
 {
     private $defaultLocale;

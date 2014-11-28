@@ -56,8 +56,7 @@ class InstallationStep extends AbstractStep
                 $settingsManager->installSchemas();
 
                 return $this->handleAjaxAction(
-                  'assets:install',
-                  array('target' => '../web')
+                  'assets:install'
                 );
             case 'assetic':
                 return $this->handleAjaxAction('assetic:dump');

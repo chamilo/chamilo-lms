@@ -265,7 +265,7 @@ sp_bower:
     bundles:
         ChamiloAdminThemeBundle:
             cache:
-                directory: ../../../../public/components/cache
+                directory: ../../../../../../app/cache/public/components/cache
 
 # Run to update js dependencies: app/console sp:bower:install
 

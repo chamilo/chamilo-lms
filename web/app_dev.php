@@ -26,6 +26,7 @@ require_once __DIR__.'/legacy.php';
 Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();*/
 $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals('host_with_path_by_locale');
+$request->enableHttpMethodParameterOverride();
 
 $kernel = new AppKernel('dev', true);
 

@@ -44,7 +44,9 @@ app/config/parameters*.yml
 app/cache/*
 app/logs/*
 app/*.cache
+web/assetic/*
 web/bundles/*
+web/images/*
 web/uploads/*
 web/js/*
 web/css/*

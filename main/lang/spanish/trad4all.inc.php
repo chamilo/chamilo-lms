@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$MultipleConnectionsAreNotAllow = "Este usuario ya está conectado";
 $Listen = "Escuchar";
 $AudioFileForItemX = "Audio para el item %s";
 $ThereIsANewWorkFeedbackInWorkXHere = "Hay un nuevo comentario en la tarea %s. Para verlo, <a href=\"%s\">haga clic aquí</a>";

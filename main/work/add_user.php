@@ -47,14 +47,14 @@ switch ($action) {
         if (empty($data)) {
             addUserToWork($userId, $workId, api_get_course_int_id());
         }
-        $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?id='.$workId;
+        $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?id='.$workId.'&'.api_get_cidreq();
         header('Location: '.$url);
         exit;
         break;
     case 'delete':
         if (!empty($workId) && !empty($userId)) {
             deleteUserToWork($userId, $workId, api_get_course_int_id());
-            $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?id='.$workId;
+            $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?id='.$workId.'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
         }

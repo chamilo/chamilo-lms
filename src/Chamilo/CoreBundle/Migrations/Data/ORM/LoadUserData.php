@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Data\ORM;
 
@@ -11,6 +12,10 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
+/**
+ * Class LoadUserData
+ * @package Chamilo\CoreBundle\Migrations\Data\ORM
+ */
 class LoadUserData extends AbstractFixture implements
     ContainerAwareInterface,
     OrderedFixtureInterface,

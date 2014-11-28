@@ -120,7 +120,7 @@ if (api_get_setting('allow_group_categories') == 'true') {
         $form->createElement('select', 'groups_per_user', null, $possible_values),
         $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartAfterNumber'))
     );
-    $form->addGroup($group, 'limit_group', get_lang('GroupLimit'), ' ', false);
+    $form->addGroup($group, 'limit_group', get_lang('QtyOfUserCanSubscribe_PartBeforeNumber'), ' ', false);
     $form->addRule('limit_group', get_lang('MaxGroupsPerUserInvalid'), 'callback', 'check_groups_per_user');
 
     // Members per group

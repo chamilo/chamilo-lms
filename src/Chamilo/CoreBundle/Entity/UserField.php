@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -94,7 +95,7 @@ class UserField extends ExtraField
     /**
      * @var array
      *
-     * @ORM\Column(name="configuration", type="text")
+     * @ORM\Column(name="configuration", type="array")
      */
     protected $configuration = array();
 

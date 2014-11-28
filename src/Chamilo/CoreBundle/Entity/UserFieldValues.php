@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -37,7 +38,7 @@ class UserFieldValues extends ExtraFieldValues
     protected $author;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"}, inversedBy="extraFields")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;

@@ -9,7 +9,7 @@ class PhpExecutableFinder extends BasePhpExecutableFinder
     /**
      * {@inheritdoc}
      */
-    public function find()
+    public function find($includeArgs = true)
     {
         if ($php = getenv('CHAMILO_PHP_PATH')) {
             if (is_executable($php)) {
@@ -17,6 +17,6 @@ class PhpExecutableFinder extends BasePhpExecutableFinder
             }
         }
 
-        return parent::find();
+        return parent::find($includeArgs);
     }
 }

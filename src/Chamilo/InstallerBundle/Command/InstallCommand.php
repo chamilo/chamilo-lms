@@ -235,8 +235,8 @@ class InstallCommand extends ContainerAwareCommand
 
         $this->setupAdmin($output);
 
-        $this->runCommand('sonata:page:update-core-routes', $output, array('--site' => 'all'));
-        $this->runCommand('sonata:page:create-snapshots', $output, array('--site' => 'all'));
+        $this->runCommand('sonata:page:update-core-routes', $output, array('--site' => array('all')));
+        $this->runCommand('sonata:page:create-snapshots', $output, array('--site' => array('all')));
 
         $output->writeln('');
 
@@ -280,14 +280,12 @@ class InstallCommand extends ContainerAwareCommand
     protected function setupAdmin(OutputInterface $output)
     {
         $dialog = $this->getHelperSet()->get('dialog');
-        //$user = new \Chamilo\UserBundle\Entity\User();
         $em = $this->getApplication()->getKernel()->getContainer()->get('doctrine')->getManager();
         /** @var \Chamilo\UserBundle\Entity\User $user */
         $user = $em->getRepository('ChamiloUserBundle:User')->findOneById(1);
 
         $user->setUsername($dialog->ask($output, '<question>Username</question>(admin):', 'admin'));
         $user->setPlainPassword($dialog->ask($output, '<question>Password</question>(admin):', 'admin'));
-
         $user->setFirstname($dialog->ask($output, '<question>Firstname</question>(Jane):', 'Jane'));
         $user->setLastname($dialog->ask($output, '<question>Lastname</question>(Doe):', 'Doe'));
         $user->setEmail($dialog->ask($output, '<question>Email</question>(admin@example.org):', 'admin@example.org'));

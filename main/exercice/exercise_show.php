@@ -10,9 +10,7 @@
  * @todo small letters for table variables
  *
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 
 use \ChamiloSession as Session;
@@ -46,16 +44,16 @@ $TBL_TRACK_ATTEMPT		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 // General parameters passed via POST/GET
 if ($debug) { error_log('Entered exercise_show.php: '.print_r($_POST,1)); }
 
-if ( empty ( $formSent ) ) {            $formSent       = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null; }
-if ( empty ( $exerciseResult ) ) {      $exerciseResult = isset($_SESSION['exerciseResult']) ? $_SESSION['exerciseResult'] : null; }
-if ( empty ( $questionId ) ) {          $questionId     = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;}
-if ( empty ( $choice ) ) {              $choice         = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;}
-if ( empty ( $questionNum ) ) {         $questionNum    = isset($_REQUEST['num']) ? $_REQUEST['num'] : null;}
-if ( empty ( $nbrQuestions ) ) {        $nbrQuestions   = isset($_REQUEST['nbrQuestions']) ? $_REQUEST['nbrQuestions'] : null;}
-if ( empty ( $questionList ) ) {        $questionList   = isset($_SESSION['questionList']) ? $_SESSION['questionList'] : null;}
-if ( empty ( $objExercise ) ) {         $objExercise    = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;}
-if ( empty ( $exeId ) ) {               $exeId          = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;}
-if ( empty ( $action ) ) {              $action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;}
+if (empty($formSent)) {            $formSent       = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null; }
+if (empty($exerciseResult)) {      $exerciseResult = isset($_SESSION['exerciseResult']) ? $_SESSION['exerciseResult'] : null; }
+if (empty($questionId)) {          $questionId     = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;}
+if (empty($choice)) {              $choice         = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;}
+if (empty($questionNum)) {         $questionNum    = isset($_REQUEST['num']) ? $_REQUEST['num'] : null;}
+if (empty($nbrQuestions)) {        $nbrQuestions   = isset($_REQUEST['nbrQuestions']) ? $_REQUEST['nbrQuestions'] : null;}
+if (empty($questionList)) {        $questionList   = isset($_SESSION['questionList']) ? $_SESSION['questionList'] : null;}
+if (empty($objExercise)) {         $objExercise    = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;}
+if (empty($exeId)) {               $exeId          = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;}
+if (empty($action)) {              $action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;}
 
 $id = intval($_REQUEST['id']); //exe id
 

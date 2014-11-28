@@ -29,6 +29,7 @@
         "select2": "*",
         "chosen-bower": "*",
         "ckeditor": "*",
+        "iCheck": "*",
         "eonasdan-bootstrap-datetimepicker": "*",
         "bootstrap": "latest",
         "ajaxQueue": "https://github.com/gnarf/jquery-ajaxQueue.git"

@@ -51,7 +51,7 @@ class ChamiloAdminThemeExtension extends Extension implements PrependExtensionIn
             ));
         }
 
-        return
+        return;
 
         $jsAssets  = '@ChamiloAdminThemeBundle/Resources/';
         $lteJs     = $jsAssets . 'public/vendor/adminlte/js/';

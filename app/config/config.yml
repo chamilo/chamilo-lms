@@ -263,7 +263,9 @@ sp_bower:
     assetic: true
     install_on_warmup: true
     bundles:
-        ChamiloAdminThemeBundle: ~
+        ChamiloAdminThemeBundle:
+            cache:
+                directory: ../../../../public/components/cache
 
 # Run to update js dependencies: app/console sp:bower:install
 

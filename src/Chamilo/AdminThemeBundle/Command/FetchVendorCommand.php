@@ -1,7 +1,7 @@
 <?php
 /**
  * FetchVendorCommand.php
- * avanzu-admin
+ *
  * Date: 15.02.14
  */
 

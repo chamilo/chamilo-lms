@@ -991,6 +991,7 @@ class ExtraField extends Model
                         newel: true
                     });
 EOF;
+                        $jquery_ready_content = null;
                         break;
                     case ExtraField::FIELD_TYPE_TIMEZONE:
                         $form->addElement(

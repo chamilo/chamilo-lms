@@ -11,7 +11,7 @@
             <ul class="menu">
                 {% for task in tasks %}
                 <li>
-                    <a href="{{ path('avanzu_admin_show_task', {'taskid': task.identifier}) }}">
+                    <a href="{{ path('chamilo_admin_show_task', {'taskid': task.identifier}) }}">
                         <h3>
                             {{ task.title }}
                             <small>{{ task.progress }}%</small>
@@ -31,7 +31,7 @@
                 {%  endfor  %}
             </ul>
         <li class="footer">
-            <a href="{{ path('avanzu_admin_all_tasks') }}">{{'View all tasks'|trans({}, 'ChamiloAdminTheme')}}</a>
+            <a href="{{ path('chamilo_admin_all_tasks') }}">{{'View all tasks'|trans({}, 'ChamiloAdminTheme')}}</a>
         </li>
     </ul>
 </li>

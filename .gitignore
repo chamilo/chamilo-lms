@@ -40,12 +40,15 @@ tests/doctrine_console/Proxies
 # Symfony
 
 behat.yml
+app/config/parameters*.yml
 app/cache/*
 app/logs/*
 app/*.cache
+web/bundles/*
 web/uploads/*
+web/js/*
+web/css/*
 web/sitemap*.xml
-app/config/parameters*.yml
 vendor/*
 
 build

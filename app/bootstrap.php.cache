@@ -1387,7 +1387,6 @@ if (function_exists('fastcgi_finish_request')) {
 fastcgi_finish_request();
 } elseif ('cli'!== PHP_SAPI) {
 static::closeOutputBuffers(0, true);
-flush();
 }
 return $this;
 }
@@ -2264,11 +2263,11 @@ protected $booted = false;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.5.6';
-const VERSION_ID ='20506';
+const VERSION ='2.5.7';
+const VERSION_ID ='20507';
 const MAJOR_VERSION ='2';
 const MINOR_VERSION ='5';
-const RELEASE_VERSION ='6';
+const RELEASE_VERSION ='7';
 const EXTRA_VERSION ='';
 public function __construct($environment, $debug)
 {

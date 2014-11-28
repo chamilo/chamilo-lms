@@ -1,7 +1,7 @@
 <?php
 /**
  * CompactVendorCommand.php
- * avanzu-admin
+ *
  * Date: 15.02.14
  */
 

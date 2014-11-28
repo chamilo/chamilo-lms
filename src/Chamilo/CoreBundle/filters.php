@@ -13,7 +13,7 @@ use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\MessageCatalogue;
 
 use Chamilo\CoreBundle\Component\DataFilesystem\DataFilesystem;
-use Application\Sonata\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 
 /** Application Middlewares/Filters. */
 

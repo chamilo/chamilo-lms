@@ -29,11 +29,11 @@ class InstallationStep extends AbstractStep
         switch ($action) {
             case 'pages':
                 $this->handleAjaxAction(
-                    'sonata:page:update-core-routes', array('--site' => 'all')
+                    'sonata:page:update-core-routes', array('--site' => array('all'))
                 );
                 return $this->handleAjaxAction(
                     'sonata:page:create-snapshots',
-                    array('--site' => 'all')
+                    array('--site' => array('all'))
                 );
             case 'fixtures':
                 return $this->handleAjaxAction(
@@ -76,7 +76,11 @@ class InstallationStep extends AbstractStep
                 // suppress warning: ini_set(): A session is active. You cannot change the session
                 // module's ini settings at this time
                 error_reporting(E_ALL ^ E_WARNING);
-                return $this->handleAjaxAction('cache:clear');
+                return $this->handleAjaxAction(
+                    'cache:clear',
+                    array('--env' => 'prod', '--no-debug' => true)
+                );
+
         }
 
         // check if we have package installation step

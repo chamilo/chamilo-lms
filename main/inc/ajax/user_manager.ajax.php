@@ -92,7 +92,7 @@ switch ($action) {
                     $emailbody.=sprintf(get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'), api_get_setting('siteName'))."\n";
                     $emailbody.=sprintf(get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'), api_get_path(WEB_PATH)).",\n\n";
                     $emailbody.=get_lang('HaveFun')."\n\n";
-                    //$emailbody.=get_lang('Problem'). "\n\n". get_lang('Formula');
+                    //$emailbody.=get_lang('Problem'). "\n\n". get_lang('SignatureFormula');
                     $emailbody.=api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 
                      $additionalParameters = array(

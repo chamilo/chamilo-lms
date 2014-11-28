@@ -53,7 +53,7 @@ class TestLogin extends UnitTestCase {
 		$emailBody = get_lang('DearUser')." :\n".get_lang("password_request")."\n\n";
 		$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
 		$emailBody .=get_lang('PasswordEncryptedForSecurity');
-		$emailBody .="\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
+		$emailBody .="\n\n".get_lang('SignatureFormula').",\n".get_lang('PlataformAdmin');
 		$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
     	$email_admin = api_get_setting('emailAdministrator');
 		$res=Login::handle_encrypted_password($user);

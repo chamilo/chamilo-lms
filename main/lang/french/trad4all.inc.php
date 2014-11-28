@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$Formula = "Formule";
 $MultipleConnectionsAreNotAllow = "Cet utilisateur est déjà connecté";
 $Listen = "Écouter";
 $AudioFileForItemX = "Fichier audio pour l'élément %s";
@@ -68,7 +69,7 @@ $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "Si vous souhaitez s
 $GiveAnswerVariations = "Veuillez indiquer le nombre de variantes à générer";
 $AnswerVariations = "Variantes";
 $GiveFormula = "Merci d'écrire la formule";
-$Formula = "Formule";
+$SignatureFormula = "Cordialement";
 $FormulaExample = "Exemple de formule";
 $VariableRanges = "Plages de valeurs des variables";
 $ExampleValue = "Plage de valeurs";

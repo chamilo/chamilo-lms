@@ -1592,7 +1592,7 @@ class SessionManager
                     if (!in_array($user_id, $existingUsers)) {
                         $subject = '[' . get_setting('siteName') . '] ' . get_lang('YourReg') . ' ' . get_setting('siteName');
                         $user_info = api_get_user_info($user_id);
-                        $content = get_lang('Dear') . " " . stripslashes($user_info['complete_name']) . ",\n\n" . sprintf(get_lang('YouAreRegisterToSessionX'), $session_name) . " \n\n" . get_lang('Address') . " " . get_setting('siteName') . " " . get_lang('Is') . " : " . api_get_path(WEB_PATH) . "\n\n" . get_lang('Problem') . "\n\n" . get_lang('Formula') . ",\n\n" . get_setting('administratorName') . " " . get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . get_setting('siteName') . "\nT. " . get_setting('administratorTelephone') . "\n" . get_lang('Email') . " : " . get_setting('emailAdministrator');
+                        $content = get_lang('Dear') . " " . stripslashes($user_info['complete_name']) . ",\n\n" . sprintf(get_lang('YouAreRegisterToSessionX'), $session_name) . " \n\n" . get_lang('Address') . " " . get_setting('siteName') . " " . get_lang('Is') . " : " . api_get_path(WEB_PATH) . "\n\n" . get_lang('Problem') . "\n\n" . get_lang('SignatureFormula') . ",\n\n" . get_setting('administratorName') . " " . get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . get_setting('siteName') . "\nT. " . get_setting('administratorTelephone') . "\n" . get_lang('Email') . " : " . get_setting('emailAdministrator');
                         MessageManager::send_message(
                             $user_id,
                             $subject,

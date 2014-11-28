@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SignatureFormula = "Groetjes";
 $HereIsYourFeedback = "In onderstaande bijlage kan je feedback vinden.";
 $LoginToGoToThisCourse = "Gelieve in te loggen om het document te bekijken";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Dit item is onzichtbaar voor cursisten, maar u hebt toegang als leerkracht.";

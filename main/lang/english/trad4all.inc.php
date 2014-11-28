@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$Formula = "Formula";
 $MultipleConnectionsAreNotAllow = "This user is already logged in";
 $Listen = "Listen";
 $AudioFileForItemX = "Audio file for item %s";
@@ -68,7 +69,7 @@ $IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals = "If you want only in
 $GiveAnswerVariations = "Please, write how many question variations you want";
 $AnswerVariations = "Question variations";
 $GiveFormula = "Please, write the formula";
-$Formula = "Formula";
+$SignatureFormula = "Sincerely";
 $FormulaExample = "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )";
 $VariableRanges = "Variable ranges";
 $ExampleValue = "Range value";

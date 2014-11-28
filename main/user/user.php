@@ -842,26 +842,46 @@ $parameters['sec_token'] = Security::get_token();
 
 $table->set_additional_parameters($parameters);
 $header_nr = 0;
-
+$indexList = array();
 $table->set_header($header_nr++, '', false);
+
+$indexList['photo'] = $header_nr;
 $table->set_header($header_nr++, get_lang('Photo'), false);
+
 $table->set_header($header_nr++, get_lang('OfficialCode'));
+$indexList['official_code'] = $header_nr;
 
 if ($is_western_name_order) {
+    $indexList['firstname'] = $header_nr;
     $table->set_header($header_nr++, get_lang('FirstName'));
+    $indexList['lastname'] = $header_nr;
     $table->set_header($header_nr++, get_lang('LastName'));
 } else {
+    $indexList['lastname'] = $header_nr;
     $table->set_header($header_nr++, get_lang('LastName'));
+    $indexList['firstname'] = $header_nr;
     $table->set_header($header_nr++, get_lang('FirstName'));
 }
-$table->set_header($header_nr++, get_lang('LoginName'));  //
+$indexList['username'] = $header_nr;
+$table->set_header($header_nr++, get_lang('LoginName'));
+$indexList['description'] = $header_nr;
 $table->set_header($header_nr++, get_lang('Description'), false);
+$indexList['groups'] = $header_nr;
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
 
 if (api_is_allowed_to_edit(null, true) && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
 
 } else {
     $table->set_column_filter(0, 'hide_field');
+}
+
+$hideFields = api_get_configuration_value('hide_user_field_from_list');
+if (!empty($hideFields)) {
+    foreach ($hideFields as $fieldToHide) {
+        if (isset($indexList[$fieldToHide])) {
+            $table->setHideColumn($indexList[$fieldToHide]);
+        }
+    }
 }
 
 if (api_is_allowed_to_edit(null, true)) {

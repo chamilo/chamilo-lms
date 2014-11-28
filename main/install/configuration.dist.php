@@ -253,7 +253,8 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['allow_session_course_copy_for_teachers'] = true;
 // Hide the logout button
 //$_configuration['hide_logout_button'] = true;
-
+// Hide fields in the main/user/user.php page
+//$_configuration['hide_user_field_from_list'] = array('username');
 // Aspell Settings
 //$_configuration['aspell_bin'] = '/usr/bin/hunspell';
 //$_configuration['aspell_opts'] = '-a -d en_GB -H -i utf-8';

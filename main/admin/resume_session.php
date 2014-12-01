@@ -10,6 +10,12 @@ $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
+$advancedSessionsPluginFilePath = api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
+
+if (file_exists($advancedSessionsPluginFilePath)) {
+    require_once api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
+}
+
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -243,6 +249,12 @@ if (SessionManager::durationPerUserIsEnabled()) {
 
 }
 ?>
+<?php if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) { ?>
+    <tr>
+        <td><?php echo get_lang('Description'); ?></td>
+        <td><?php echo AdvancedSessionsPlugin::getSessionDescription($sessionId) ?></td>
+    </tr>
+<?php } ?>
 </table>
 <br />
 

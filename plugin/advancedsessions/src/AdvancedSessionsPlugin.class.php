@@ -101,4 +101,12 @@ class AdvancedSessionsPlugin extends Plugin
         Database::insert($fieldValuesTable, $attributes);
     }
 
+    public static function getSessionDescription($sessionId) {
+        $sessionId = intval($sessionId);
+
+        $fieldValue = new ExtraFieldValue('session');
+        $description = $fieldValue->get_values_by_handler_and_field_variable($sessionId, self::FIELD_NAME, false);
+
+        return $description !== false ? $description['field_value'] : get_lang('None');
+    }
 }

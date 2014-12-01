@@ -259,3 +259,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['aspell_bin'] = '/usr/bin/hunspell';
 //$_configuration['aspell_opts'] = '-a -d en_GB -H -i utf-8';
 //$_configuration['aspell_temp_dir'] = './';
+// Prevent redirecting admin to admin page
+//$_configuration['redirect_admin_to_courses_list'] = true;

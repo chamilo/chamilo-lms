@@ -17,6 +17,12 @@ require_once '../inc/global.inc.php';
 // including additional libraries
 require_once '../inc/lib/xajax/xajax.inc.php';
 
+$advancedSessionsPluginFilePath = api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
+
+if (file_exists($advancedSessionsPluginFilePath)) {
+    require_once api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
+}
+
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_coachs');
@@ -139,6 +145,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     );
 
 	if ($return == strval(intval($return))) {
+        if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
+            AdvancedSessionsPlugin::saveSessionFieldValue($return, $_POST['description']);
+        }
+
 		// integer => no error on session creation
 		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');
 		exit();
@@ -227,6 +237,16 @@ $Categories = SessionManager::get_all_session_category();
 ?>
         </div>
     </div>
+    <?php if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) { ?>
+        <div class="control-group">
+            <label class="control-label" for="description"><?php echo get_lang('Description') ?></label>
+            <div class="controls">
+                <?php $fckEditor = new FCKeditor('description'); ?>
+                <?php $fckEditor->ToolbarSet = 'TrainingDescription'; ?>
+                <?php echo $fckEditor->CreateHtml(); ?>
+            </div>
+        </div>
+    <?php } ?>
     <div class="control-group">
         <label class="control-label">
             <?php echo get_lang('SessionCategory') ?>

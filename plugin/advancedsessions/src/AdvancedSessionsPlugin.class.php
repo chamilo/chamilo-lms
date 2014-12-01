@@ -65,4 +65,40 @@ class AdvancedSessionsPlugin extends Plugin
         }
     }
 
+    public static function getFieldInfo()
+    {
+        $sessionField = new ExtraField('session');
+        $fieldInfo = $sessionField->get_handler_field_info_by_field_variable(self::FIELD_NAME);
+
+        return $fieldInfo;
+    }
+
+    public static function hasDescriptionField()
+    {
+        $fieldInfo = self::getFieldInfo();
+
+        return empty($fieldInfo) ? false : true;
+    }
+
+    public static function saveSessionFieldValue($id, $description)
+    {
+        $id = intval($id);
+        $fieldInfo = self::getFieldInfo();
+
+        if (empty($fieldInfo)) {
+            return;
+        }
+
+        $fieldValuesTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+
+        $attributes = array(
+            'session_id' => $id,
+            'field_id' => $fieldInfo['id'],
+            'field_value' => $description,
+            'tms' => api_get_utc_datetime()
+        );
+
+        Database::insert($fieldValuesTable, $attributes);
+    }
+
 }

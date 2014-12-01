@@ -578,6 +578,7 @@ class DocumentManager
                 WHERE
                     docs.path LIKE '" . $path . $added_slash . "%' AND
                     docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
+                    docs.path NOT LIKE '%_DELETED_%' AND
                     $to_field = $to_value AND
                     last.visibility
                     $visibility_bit
@@ -2401,8 +2402,6 @@ class DocumentManager
                         if (strpos($real_orig_path, $document_file) !== false) {
                             $origin_filepath = $orig_course_path.$document_file;
                             $destination_filepath = $dest_course_path.$document_file;
-
-                            //var_dump($origin_filepath, $destination_filepath);
 
                             // copy origin file inside destination course
                             if (file_exists($origin_filepath)) {
@@ -4776,14 +4775,14 @@ class DocumentManager
         $counter = 1;
         $filePath = $path.$name;
         $uniqueName = $name;
-        while($documentExists = self::documentExists(
+        while ($documentExists = self::documentExists(
             $filePath,
             $courseInfo,
             $sessionId,
             $groupId
         )) {
-            $uniqueName = self::addSuffixToFileName($name, '_'.$counter);
-            $filePath = $path.$uniqueName;
+            $uniqueName = self::addSuffixToFileName($name, '_' . $counter);
+            $filePath = $path . $uniqueName;
             $counter++;
         }
 

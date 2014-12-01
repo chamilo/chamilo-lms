@@ -92,7 +92,7 @@ class Redirect
                 }
             }
             global $_configuration;
-            if (empty($_configuration['redirect_admin_to_courses_list']) or $_configuration['redirect_admin_to_courses_list'] === 'false') {
+            if (!isset($_configuration['redirect_admin_to_courses_list']) or $_configuration['redirect_admin_to_courses_list'] === 'false') {
                 // If the user is a platform admin, redirect to the main admin page
                 if (api_is_multiple_url_enabled()) {
                     // if multiple URLs are enabled, make sure he's admin of the

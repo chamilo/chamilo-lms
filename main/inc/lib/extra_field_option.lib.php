@@ -8,7 +8,14 @@
 class ExtraFieldOption extends Model
 {
     public $columns = array(
-        'id', 'field_id', 'option_value', 'option_display_text', 'option_order', 'priority', 'priority_message', 'tms'
+        'id',
+        'field_id',
+        'option_value',
+        'option_display_text',
+        'option_order',
+        'priority',
+        'priority_message',
+        'tms'
     );
 
     /**
@@ -51,7 +58,7 @@ class ExtraFieldOption extends Model
 
     /**
      * Gets the number of options available for this field
-     * @param int Field ID
+     * @param int $field_id
      * @return int Number of options
      * @assert ('') === false
      * @assert (-1) == 0
@@ -98,7 +105,7 @@ class ExtraFieldOption extends Model
 
     /**
      * Delete all the options of a specific field
-     * @param int Field ID
+     * @param int $field_id
      * @result void
      * @assert (-1) === false
      */
@@ -383,7 +390,8 @@ class ExtraFieldOption extends Model
     {
         $field_id = intval($field_id);
 
-        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id ";
+        $sql = "SELECT * FROM {$this->table}
+                WHERE field_id = $field_id ";
 
         if (!empty($ordered_by)) {
             $sql .= " ORDER BY $ordered_by ";
@@ -511,7 +519,6 @@ class ExtraFieldOption extends Model
     {
         // action links
         echo '<div class="actions">';
-        //echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'', ICON_SIZE_MEDIUM).'</a>';
         $field_id = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : null;
         echo '<a href="'.api_get_self(
         ).'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.Display::return_icon(

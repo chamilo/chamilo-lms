@@ -80,7 +80,7 @@ class ExtraField extends Model
                 $this->table_field_values  = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
                 //Used for the model
-                $this->table      = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+                $this->table = Database::get_main_table(TABLE_MAIN_USER_FIELD);
                 $this->handler_id = 'user_id';
                 $this->handlerEntityId = 'userId';
                 $this->primaryKey = 'user_id';
@@ -110,7 +110,7 @@ class ExtraField extends Model
                 $this->table_field_values  = Database::get_main_table(TABLE_MAIN_LP_FIELD_VALUES);
 
                 // Used for the model
-                $this->table      = Database::get_main_table(TABLE_MAIN_LP_FIELD);
+                $this->table = Database::get_main_table(TABLE_MAIN_LP_FIELD);
                 $this->handler_id = 'lp_id';
                 $this->handlerEntityId = 'lpId';
                 $this->primaryKey = 'id';
@@ -121,6 +121,9 @@ class ExtraField extends Model
         $this->pageName = get_lang(ucwords($this->type).'Fields');
     }
 
+    /**
+     * @return array
+     */
     static function getValidExtraFieldTypes()
     {
         return array(
@@ -132,6 +135,9 @@ class ExtraField extends Model
         );
     }
 
+    /**
+     * @return int
+     */
     public function get_count()
     {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
@@ -139,6 +145,12 @@ class ExtraField extends Model
         return $row['count'];
     }
 
+    /**
+     * @param array $where_conditions
+     * @param null $order_field_options_by
+     *
+     * @return array
+     */
     public function get_all($where_conditions = array(), $order_field_options_by = null)
     {
         $options = Database::select(
@@ -161,7 +173,10 @@ class ExtraField extends Model
         return $options;
     }
 
-
+    /**
+     * @param $field_variable
+     * @return array|bool
+     */
     public function get_handler_field_info_by_field_variable($field_variable)
     {
         $field_variable = Database::escape_string($field_variable);
@@ -176,6 +191,9 @@ class ExtraField extends Model
         }
     }
 
+    /**
+     * @return int
+     */
     public function get_max_field_order()
     {
         $sql = "SELECT MAX(field_order) FROM {$this->table}";
@@ -190,6 +208,10 @@ class ExtraField extends Model
         return $order;
     }
 
+    /**
+     * @param $handler
+     * @return array
+     */
     public static function get_extra_fields_by_handler($handler)
     {
         $types                                   = array();
@@ -222,6 +244,7 @@ class ExtraField extends Model
      *
      * @param FormValidator $form
      * @param int $item_id
+     *
      * @return array|bool
      */
     public function addElements($form, $item_id = null)
@@ -253,8 +276,8 @@ class ExtraField extends Model
     }
 
     /**
-     *
      * @param int $item_id (session_id, question_id, course id)
+     *
      * @return array
      */
     public function get_handler_extra_data($item_id)
@@ -275,11 +298,11 @@ class ExtraField extends Model
 
                     switch ($field['field_type']) {
                         case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
-                            $selected_options                                                                           = explode(
+                            $selected_options = explode(
                                 '::',
                                 $field_value
                             );
-                            $extra_data['extra_'.$field['field_variable']]['extra_'.$field['field_variable']]           = $selected_options[0];
+                            $extra_data['extra_'.$field['field_variable']]['extra_'.$field['field_variable']] = $selected_options[0];
                             $extra_data['extra_'.$field['field_variable']]['extra_'.$field['field_variable'].'_second'] = $selected_options[1];
                             break;
                         case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
@@ -303,10 +326,16 @@ class ExtraField extends Model
         return $extra_data;
     }
 
+    /**
+     * @param string $field_type
+     *
+     * @return array
+     */
     public function get_all_extra_field_by_type($field_type)
     {
         // all the information of the field
-        $sql    = "SELECT * FROM  {$this->table} WHERE field_type='".Database::escape_string($field_type)."'";
+        $sql = "SELECT * FROM  {$this->table}
+                WHERE field_type = '".Database::escape_string($field_type)."'";
         $result = Database::query($sql);
         $return = array();
         while ($row = Database::fetch_array($result)) {
@@ -316,12 +345,19 @@ class ExtraField extends Model
         return $return;
     }
 
-
+    /**
+     * @return array
+     */
     public function get_field_types()
     {
         return self::get_extra_fields_by_handler($this->type);
     }
 
+    /**
+     * @param int $id
+     *
+     * @return null
+     */
     public function get_field_type_by_id($id)
     {
         $types = self::get_field_types();
@@ -338,13 +374,14 @@ class ExtraField extends Model
      * into
      * array('France' => array('Paris', 'Bregtane', 'Marseilles'), 'Belgique' => array('Namur', 'Liège', etc
      * @param string $string
+     *
      * @return array
      */
     static function extra_field_double_select_convert_string_to_array($string)
     {
-        $options        = explode('|', $string);
+        $options = explode('|', $string);
         $options_parsed = array();
-        $id             = 0;
+        $id = 0;
         if (!empty($options)) {
             foreach ($options as $sub_options) {
                 $options             = explode(':', $sub_options);
@@ -357,6 +394,10 @@ class ExtraField extends Model
         return $options_parsed;
     }
 
+    /**
+     * @param array $options
+     * @return array
+     */
     static function extra_field_double_select_convert_array_to_ordered_array($options)
     {
         $options_parsed = array();
@@ -374,11 +415,13 @@ class ExtraField extends Model
     }
 
     /**
-     * @param array options the result of the get_field_options_by_field() array
+     * @param array $options the result of the get_field_options_by_field() array
+     *
+     * @return string
      */
     static function extra_field_double_select_convert_array_to_string($options)
     {
-        $string         = null;
+        $string = null;
         $options_parsed = self::extra_field_double_select_convert_array_to_ordered_array($options);
 
         if (!empty($options_parsed)) {
@@ -406,6 +449,7 @@ class ExtraField extends Model
 
     /**
      * @param array $params
+     *
      * @return array
      */
     public function clean_parameters($params)
@@ -425,6 +469,7 @@ class ExtraField extends Model
     /**
      * @param array $params
      * @param bool $show_query
+     *
      * @return bool
      */
     public function save($params, $show_query = false)
@@ -448,7 +493,10 @@ class ExtraField extends Model
         }
     }
 
-
+    /**
+     * @param $params
+     * @return bool|void
+     */
     public function update($params)
     {
         $params = self::clean_parameters($params);
@@ -460,6 +508,10 @@ class ExtraField extends Model
         parent::update($params);
     }
 
+    /**
+     * @param $id
+     * @return bool|void
+     */
     public function delete($id)
     {
         parent::delete($id);
@@ -1103,6 +1155,9 @@ EOF;
         echo Display::grid_html($this->type.'_fields');
     }
 
+    /**
+     * @return array
+     */
     public function getJqgridColumnNames()
     {
         return array(
@@ -1117,6 +1172,9 @@ EOF;
         );
     }
 
+    /**
+     * @return array
+     */
     public function getJqgridColumnModel()
     {
         return array(
@@ -1305,26 +1363,30 @@ EOF;
         return $form;
     }
 
+    /**
+     * @param $token
+     * @return string
+     */
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
         return 'function action_formatter(cellvalue, options, rowObject) {
-     return \'<a href="?action=edit&type='.$this->type.'&id=\'+options.rowId+\'">'.Display::return_icon(
-            'edit.png',
-            get_lang('Edit'),
-            '',
-            ICON_SIZE_SMALL
-        ).'</a>'.
-        '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(
-            api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
-        )."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon(
-            'delete.png',
-            get_lang('Delete'),
-            '',
-            ICON_SIZE_SMALL
-        ).'</a>'.
-        '\';
-    }';
+         return \'<a href="?action=edit&type='.$this->type.'&id=\'+options.rowId+\'">'.Display::return_icon(
+                'edit.png',
+                get_lang('Edit'),
+                '',
+                ICON_SIZE_SMALL
+            ).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(
+                api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
+            )."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon(
+                'delete.png',
+                get_lang('Delete'),
+                '',
+                ICON_SIZE_SMALL
+            ).'</a>'.
+            '\';
+        }';
     }
 
     /**
@@ -1559,7 +1621,6 @@ EOF;
         );
     }
 
-
     //@todo move this in the display_class or somewhere else
     /**
      * @param $col
@@ -1587,6 +1648,11 @@ EOF;
         return " $col {$this->ops[$oper]} '$val' ";
     }
 
+    /**
+     * @param $filters
+     * @param string $stringToSearch
+     * @return array
+     */
     public function getExtraFieldRules($filters, $stringToSearch = 'extra_')
     {
         $extra_fields = array();

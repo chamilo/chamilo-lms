@@ -553,7 +553,7 @@ class CoursesController
         }
 
         foreach ($sessions as $session) {
-            $sessionsBlocks[] = array(
+            $sessionsBlock = array(
                 'id' => $session['id'],
                 'name' => $session['name'],
                 'nbr_courses' => $session['nbr_courses'],
@@ -562,8 +562,19 @@ class CoursesController
                 'is_subscribed' => $session['is_subscribed'],
                 'icon' => $this->getSessionIcon($session['name']),
                 'date' => SessionManager::getSessionFormattedDate($session),
-                'subscribe_button' => $this->getRegisterInSessionButton($session['name'])
+                'subscribe_button' => $this->getRegisterInSessionButton($session['name']),
+                'hasDescription' => false
             );
+
+            if ($showDescription) {
+                $sessionDescription = AdvancedSessionsPlugin::getSessionDescription($session['id']);
+
+                if (!empty($sessionDescription)) {
+                    $sessionsBlock['hasDescription'] = true;
+                }
+            }
+
+            $sessionsBlocks[] = $sessionsBlock;
         }
 
         $tpl = new Template();
@@ -585,8 +596,6 @@ class CoursesController
         $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');
         $tpl->assign('sessions_blocks', $sessionsBlocks);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisterInSessionLabel());
-
-        $tpl->assign('showDescription', $showDescription);
 
         $contentTemplate = $tpl->get_template('auth/sessions_catalog.tpl');
 

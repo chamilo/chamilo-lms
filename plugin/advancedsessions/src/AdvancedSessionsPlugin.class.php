@@ -138,7 +138,7 @@ class AdvancedSessionsPlugin extends Plugin
     /**
      * Get the session description
      * @param int $sessionId The session id
-     * @return string
+     * @return string The session description. Otherwise return null
      */
     public static function getSessionDescription($sessionId) {
         $sessionId = intval($sessionId);
@@ -146,6 +146,6 @@ class AdvancedSessionsPlugin extends Plugin
         $fieldValue = new ExtraFieldValue('session');
         $description = $fieldValue->get_values_by_handler_and_field_variable($sessionId, self::FIELD_NAME, false);
 
-        return $description !== false ? $description['field_value'] : get_lang('None');
+        return $description !== false ? trim($description['field_value']) : '';
     }
 }

@@ -220,6 +220,8 @@ if (api_is_platform_admin()) {
     $items[] = array('url'=>'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
 }
 
+$items[] = array('url'=>'session_fields.php', 	'label' => get_lang('ManageSessionFields'));
+
 $blocks['sessions']['items'] = $items;
 $blocks['sessions']['extra'] = null;
 

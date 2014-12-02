@@ -546,6 +546,12 @@ class CoursesController
         // Get session search catalogue URL
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
+        $showDescription = false;
+
+        if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
+            $showDescription = true;
+        }
+
         foreach ($sessions as $session) {
             $sessionsBlocks[] = array(
                 'id' => $session['id'],
@@ -579,6 +585,8 @@ class CoursesController
         $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');
         $tpl->assign('sessions_blocks', $sessionsBlocks);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisterInSessionLabel());
+
+        $tpl->assign('showDescription', $showDescription);
 
         $contentTemplate = $tpl->get_template('auth/sessions_catalog.tpl');
 

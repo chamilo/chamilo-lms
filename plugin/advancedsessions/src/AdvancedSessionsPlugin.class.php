@@ -50,11 +50,17 @@ class AdvancedSessionsPlugin extends Plugin
         $this->removeSessionFields();
     }
 
+    /**
+     * Create the extra field for session description
+     */
     private function createSessionFields()
     {
         SessionManager::create_session_extra_field(self::FIELD_NAME, ExtraField::FIELD_TYPE_TEXTAREA, self::FIELD_TITLE);
     }
 
+    /**
+     * Remove the extra field for session description
+     */
     private function removeSessionFields()
     {
         $sessionField = new ExtraField('session');
@@ -65,6 +71,10 @@ class AdvancedSessionsPlugin extends Plugin
         }
     }
 
+    /**
+     * Get the extra field information
+     * @return array
+     */
     public static function getFieldInfo()
     {
         $sessionField = new ExtraField('session');
@@ -73,6 +83,10 @@ class AdvancedSessionsPlugin extends Plugin
         return $fieldInfo;
     }
 
+    /**
+     * Check whether the session extra field for description exists
+     * @return boolean
+     */
     public static function hasDescriptionField()
     {
         $fieldInfo = self::getFieldInfo();
@@ -80,6 +94,12 @@ class AdvancedSessionsPlugin extends Plugin
         return empty($fieldInfo) ? false : true;
     }
 
+    /**
+     * Whether the session has not description extra field insert a new record. Otherwise update the record
+     * @param int $id The session id
+     * @param string $description The session description
+     * @return void
+     */
     public static function saveSessionFieldValue($id, $description)
     {
         $id = intval($id);
@@ -115,6 +135,11 @@ class AdvancedSessionsPlugin extends Plugin
         }
     }
 
+    /**
+     * Get the session description
+     * @param int $sessionId The session id
+     * @return string
+     */
     public static function getSessionDescription($sessionId) {
         $sessionId = intval($sessionId);
 

@@ -20,6 +20,12 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 
+$advancedSessionsPluginFilePath = api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
+
+if (file_exists($advancedSessionsPluginFilePath)) {
+    require_once api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
+}
+
 // Only users who are logged in can proceed.
 api_block_anonymous_users();
 
@@ -353,6 +359,18 @@ if (!empty($start) && !empty($end)) {
 
 echo Display::tag('h1', $session_info['name']);
 echo $dates.'<br />';
+
+if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
+    ?>
+        <div class="home-course-intro">
+            <div class="page-course">
+                <div class="page-course-intro">
+                    <p><?php echo AdvancedSessionsPlugin::getSessionDescription($session_id) ?></p>
+                </div>
+            </div>
+        </div>
+    <?php
+}
 
 // All Learnpaths grid settings (First tab, first subtab)
 

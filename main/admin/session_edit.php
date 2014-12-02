@@ -13,6 +13,12 @@ $language_file ='admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
+$advancedSessionsPluginFilePath = api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
+
+if (file_exists($advancedSessionsPluginFilePath)) {
+    require_once api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
+}
+
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -102,6 +108,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     );
 
 	if ($return == strval(intval($return))) {
+        if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
+            AdvancedSessionsPlugin::saveSessionFieldValue($return, $_POST['description']);
+        }
+
 		header('Location: resume_session.php?id_session='.$return);
 		exit();
 	}
@@ -161,6 +171,17 @@ if (!empty($return)) {
         </select>
         </div>
     </div>
+    <?php if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) { ?>
+        <div class="control-group">
+            <label class="control-label" for="description"><?php echo get_lang('Description') ?></label>
+            <div class="controls">
+                <?php $fckEditor = new FCKeditor('description'); ?>
+                <?php $fckEditor->ToolbarSet = 'TrainingDescription'; ?>
+                <?php $fckEditor->Value = AdvancedSessionsPlugin::getSessionDescription($id) ; ?>
+                <?php echo $fckEditor->CreateHtml(); ?>
+            </div>
+        </div>
+    <?php } ?>
     <div class="control-group">
         <label class="control-label">
             <?php echo get_lang('SessionCategory') ?>

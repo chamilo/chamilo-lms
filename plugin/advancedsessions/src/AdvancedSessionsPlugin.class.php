@@ -83,22 +83,36 @@ class AdvancedSessionsPlugin extends Plugin
     public static function saveSessionFieldValue($id, $description)
     {
         $id = intval($id);
-        $fieldInfo = self::getFieldInfo();
-
-        if (empty($fieldInfo)) {
-            return;
-        }
-
         $fieldValuesTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 
-        $attributes = array(
-            'session_id' => $id,
-            'field_id' => $fieldInfo['id'],
-            'field_value' => $description,
-            'tms' => api_get_utc_datetime()
-        );
+        $fieldValue = new ExtraFieldValue('session');
+        $descriptionValue = $fieldValue->get_values_by_handler_and_field_variable($id, self::FIELD_NAME, false);
 
-        Database::insert($fieldValuesTable, $attributes);
+        if ($descriptionValue === false) {
+            $fieldInfo = self::getFieldInfo();
+
+            if (empty($fieldInfo)) {
+                return;
+            }
+
+            $attributes = array(
+                'session_id' => $id,
+                'field_id' => $fieldInfo['id'],
+                'field_value' => $description,
+                'tms' => api_get_utc_datetime()
+            );
+
+            Database::insert($fieldValuesTable, $attributes);
+        } else {
+            $attributes = array(
+                'field_value' => $description,
+                'tms' => api_get_utc_datetime()
+            );
+
+            Database::update($fieldValuesTable, $attributes, array(
+                'id = ?' => $descriptionValue['id']
+            ));
+        }
     }
 
     public static function getSessionDescription($sessionId) {

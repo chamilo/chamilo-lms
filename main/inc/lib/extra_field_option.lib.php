@@ -241,7 +241,7 @@ class ExtraFieldOption extends Model
                 foreach ($list as $option) {
                     $option_info = self::get_field_option_by_field_and_option($field_id, $option);
                     // Use URLify only for new items
-                    $optionValue = URLify::filter($option);
+                    $optionValue = $option;
                     $option = trim($option);
 
                     if ($option_info == false) {

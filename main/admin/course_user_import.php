@@ -211,19 +211,19 @@ if (count($errors) != 0) {
 // Displaying the form.
 $form->display();
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-<blockquote>
+    <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+    <blockquote>
 <pre>
 <b>UserName</b>;<b>CourseCode</b>;<b>Status</b>
 jdoe;course01;<?php echo COURSEMANAGER; ?>
 
-adam;course01;<?php echo STUDENT; ?>
+    adam;course01;<?php echo STUDENT; ?>
 </pre>
-<?php
-echo COURSEMANAGER.': '.get_lang('Teacher').'<br />';
-echo STUDENT.': '.get_lang('Student').'<br />';
-?>
-</blockquote>
+        <?php
+        echo COURSEMANAGER.': '.get_lang('Teacher').'<br />';
+        echo STUDENT.': '.get_lang('Student').'<br />';
+        ?>
+    </blockquote>
 <?php
 
 Display :: display_footer();

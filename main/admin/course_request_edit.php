@@ -7,8 +7,6 @@
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
 
-// Initialization section.
-
 // Language files that need to be included.
 $language_file = array('admin', 'create_course');
 
@@ -161,9 +159,9 @@ if ($course_validation_feature) {
             // Detection which submit button has been pressed.
             $submit_button = isset($_POST['save_button']) ? 'save_button'
                 : (isset($_POST['accept_button']) ? 'accept_button'
-                : (isset($_POST['reject_button']) ? 'reject_button'
-                : (isset($_POST['ask_info_button']) ? 'ask_info_button'
-                : 'submit_button')));
+                    : (isset($_POST['reject_button']) ? 'reject_button'
+                        : (isset($_POST['ask_info_button']) ? 'ask_info_button'
+                            : 'submit_button')));
 
             // Check the course code for avoiding duplication.
             $course_code_ok = $course_request_values['wanted_code'] == $course_request_info['code']
@@ -226,7 +224,6 @@ if ($course_validation_feature) {
                 }
 
                 $message = implode(' ', $message);
-
                 $back_url = get_caller_name($caller);
                 if ($message != '') {
                     $back_url = api_add_url_param($back_url, 'message='.urlencode(Security::remove_XSS($message)), false);
@@ -259,6 +256,7 @@ function get_caller_name($caller_id) {
         case 2:
             return 'course_request_rejected.php';
     }
+
     return 'course_request_review.php';
 }
 

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * A list containig the rejected course requests
+ * A list containing the rejected course requests
  * @package chamilo.admin
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * @author Bruno Rubio Gayo <brubio@cesga.es>, 2010
@@ -10,8 +10,6 @@
  *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com> (technical adaptation for Chamilo 1.8.8), 2010
  */
-
-/* INIT SECTION */
 
 // Language files that need to be included.
 $language_file = array('admin', 'create_course');
@@ -62,12 +60,10 @@ if ($course_validation_feature) {
             $message = sprintf(get_lang('CourseRequestAcceptanceFailed'), $course_request_code);
             $is_error_message = true;
         }
-    }
-
-    /**
-     * Sending to the teacher a request for additional information about the proposed course.
-     */
-    elseif (!empty($request_info)) {
+    } elseif (!empty($request_info)) {
+        /**
+         * Sending to the teacher a request for additional information about the proposed course.
+         */
         $course_request_code = CourseRequestManager::get_course_request_code($request_info);
         $result = CourseRequestManager::ask_for_additional_info($request_info);
         if ($result) {
@@ -77,12 +73,10 @@ if ($course_validation_feature) {
             $message = sprintf(get_lang('CourseRequestInfoFailed'), $course_request_code);
             $is_error_message = true;
         }
-    }
-
-    /**
-     * Deletion of a course request.
-     */
-    elseif (!empty($delete_course_request)) {
+    } elseif (!empty($delete_course_request)) {
+        /**
+         * Deletion of a course request.
+         */
         $course_request_code = CourseRequestManager::get_course_request_code($delete_course_request);
         $result = CourseRequestManager::delete_course_request($delete_course_request);
         if ($result) {
@@ -92,12 +86,10 @@ if ($course_validation_feature) {
             $message = sprintf(get_lang('CourseRequestDeletionFailed'), $course_request_code);
             $is_error_message = true;
         }
-    }
-
-    /**
-     * Form actions: delete.
-     */
-    elseif (isset($_POST['action'])) {
+    } elseif (isset($_POST['action'])) {
+        /**
+         * Form actions: delete.
+         */
         switch ($_POST['action']) {
             // Delete selected courses
             case 'delete_course_requests' :
@@ -113,13 +105,10 @@ if ($course_validation_feature) {
                 break;
         }
     }
-
 } else {
-
-   $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
-   $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
-   $is_error_message = true;
-
+    $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
+    $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
+    $is_error_message = true;
 }
 
 /**
@@ -136,8 +125,6 @@ function get_request_data($from, $number_of_items, $column, $direction) {
     global $keyword;
 
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
-    $users_table = Database :: get_main_table(TABLE_MAIN_USER);
-    $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
     $sql = "SELECT id AS col0,
                    code AS col1,
@@ -219,7 +206,7 @@ echo '</div>';
 
 // Create a sortable table with the course data.
 $table = new SortableTable('course_requests_rejected', 'get_number_of_requests', 'get_request_data', 5, 20, 'DESC');
-$table->set_additional_parameters($parameters);
+//$table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Code'));
 $table->set_header(2, get_lang('Title'));

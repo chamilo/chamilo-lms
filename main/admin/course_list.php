@@ -7,8 +7,6 @@
  * @package chamilo.admin
  */
 
-/*	INIT SECTION	*/
-
 // Language files that need to be included.
 $language_file = array('admin', 'courses');
 $cidReset = true;
@@ -48,7 +46,7 @@ function get_number_of_courses() {
         $sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
     }
 
-     // adding the filter to see the user's only of the current access_url
+    // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
         $sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
@@ -178,8 +176,8 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
  */
 function modify_filter($code)
 {
-	$icourse = api_get_course_info($code);
-        return
+    $icourse = api_get_course_info($code);
+    return
         '<a href="course_information.php?code='.$code.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;'.
         //'<a href="../course_home/course_home.php?cidReq='.$code.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'. // This is not the preferable way to go to the homepage.
         '<a href="'.api_get_path(WEB_COURSE_PATH).$icourse['path'].'/index.php">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.

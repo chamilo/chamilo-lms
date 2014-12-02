@@ -5,15 +5,14 @@
  * uploaded in each course
  * @package chamilo.admin
  */
-/**
- * Initialization
- */
+
 $language_file = array('admin', 'document');
 $cidReset = true;
 require '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-// temporary configuration of in which folder to upload the file in each course. Should default to '', and start with a '/' and end without it, if defined
+// temporary configuration of in which folder to upload the file in each course.
+// Should default to '', and start with a '/' and end without it, if defined
 $subDir = '';
 
 //require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -41,7 +40,7 @@ if ($_POST['formSent']) {
         } else {
             $errors = import_pdfs($courses, $subDir);
             if (count($errors) == 0) {
-                error_log('Course intros imported successfully in '.__FILE__.', line '.__LINE__); 
+                error_log('Course intros imported successfully in '.__FILE__.', line '.__LINE__);
             }
         }
     }
@@ -58,25 +57,25 @@ if (count($errors) != 0) {
     Display :: display_confirmation_message('CourseIntroductionsAllImportesSuccessfully', false);
 }
 ?>
-<form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin: 0px;">
-<legend><?php echo $tool_name; ?></legend>
-<div class="control-group">
-    <label><?php echo get_lang('ImportZipFileLocation'); ?></label>
-    <div class="control">
-        <input type="file" name="import_file"/>
-    </div>
-</div>
-<div class="control-group">
-    <div class="control">
-        <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
-    </div>
-</div>
-<input type="hidden" name="formSent" value="1"/>
-</form>
-<div style="clear: both;"></div>
-<p><?php echo get_lang('PDFsMustLookLike'); ?></p>
+    <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin: 0px;">
+        <legend><?php echo $tool_name; ?></legend>
+        <div class="control-group">
+            <label><?php echo get_lang('ImportZipFileLocation'); ?></label>
+            <div class="control">
+                <input type="file" name="import_file"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="control">
+                <button type="submit" class="save" value="<?php echo get_lang('Import'); ?>"><?php echo get_lang('Import'); ?></button>
+            </div>
+        </div>
+        <input type="hidden" name="formSent" value="1"/>
+    </form>
+    <div style="clear: both;"></div>
+    <p><?php echo get_lang('PDFsMustLookLike'); ?></p>
 
-<blockquote>
+    <blockquote>
 <pre>
 <strong>CourseCode</strong>_<strong>NameOfDocument</strong>_<strong>CourseName</strong>.pdf
 e.g.
@@ -84,7 +83,7 @@ MAT101_Introduction_Mathematics-101.pdf
 MAT102_Introduction_Mathematics-102.pdf
 ENG101_Introduction_English-101.pdf
 </pre>
-</blockquote>
+    </blockquote>
 
 <?php
 Display :: display_footer();
@@ -99,7 +98,7 @@ function import_pdfs($file, $subDir = '/') {
     $baseDir = api_get_path(SYS_ARCHIVE_PATH);
     $uploadPath = 'pdfimport/';
     $errors = array ();
-        if (!is_dir($baseDir.$uploadPath)) {
+    if (!is_dir($baseDir.$uploadPath)) {
         @mkdir($baseDir.$uploadPath);
     }
     if (!unzip_uploaded_file($_FILES['import_file'], $uploadPath, $baseDir, 1024*1024*1024)) {

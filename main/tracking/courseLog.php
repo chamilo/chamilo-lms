@@ -5,8 +5,6 @@
  *	@package chamilo.tracking
  */
 
-/* INIT SECTION */
-
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 
 // Language files that need to be included.
@@ -183,17 +181,25 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
-    $a_students = CourseManager::get_student_list_from_course_code(api_get_course_id());
+    $a_students = CourseManager::get_student_list_from_course_code(
+        api_get_course_id()
+    );
 } else {
     // Registered students in session.
-    $a_students = CourseManager::get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());
+    $a_students = CourseManager::get_student_list_from_course_code(
+        api_get_course_id(),
+        true,
+        api_get_session_id()
+    );
 }
 
 $nbStudents = count($a_students);
 $extra_info = array();
 
 // Getting all the additional information of an additional profile field.
-if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
+if (isset($_GET['additional_profile_field']) &&
+    is_numeric($_GET['additional_profile_field'])
+) {
     $user_array = array();
     foreach ($a_students as $key => $item) {
         $user_array[] = $key;
@@ -203,20 +209,24 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
         $_GET['additional_profile_field'],
         $user_array
     );
-    $extra_info = UserManager::get_extra_field_information($_GET['additional_profile_field']);
+
+    $extra_info = UserManager::get_extra_field_information(
+        $_GET['additional_profile_field']
+    );
 }
 
 /* MAIN CODE */
 
 echo '<div class="actions">';
 
-echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), 32);
-echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'course_log_tools.php?'.api_get_cidreq());
-echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32), 'course_log_resources.php?'.api_get_cidreq());
-echo Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq());
+echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM);
+echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM), 'course_log_tools.php?'.api_get_cidreq());
+echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM), 'course_log_resources.php?'.api_get_cidreq());
+echo Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq());
 
 echo '<span style="float:right; padding-top:0px;">';
-echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
+    Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 
 $addional_param = '';
 if (isset($_GET['additional_profile_field'])) {
@@ -292,7 +302,6 @@ if (!empty($coaches)) {
     echo $coaches;
 }
 
-
 $sessionList = SessionManager::get_session_by_course($courseInfo['code']);
 if (!empty($sessionList)) {
     echo Display::page_subheader2(get_lang('SessionList'));
@@ -312,7 +321,10 @@ $is_western_name_order = api_is_western_name_order();
 if (count($a_students) > 0) {
     $form = new FormValidator('reminder_form', 'get', api_get_path(REL_CODE_PATH).'announcements/announcements.php');
     $renderer = $form->defaultRenderer();
-    $renderer->setElementTemplate('<span>{label} {element}</span>&nbsp;<button class="save" type="submit">'.get_lang('SendNotification').'</button>','since');
+    $renderer->setElementTemplate(
+        '<span>{label} {element}</span>&nbsp;<button class="save" type="submit">'.get_lang('SendNotification').'</button>',
+        'since'
+    );
     $options = array (
         2 => '2 '.get_lang('Days'),
         3 => '3 '.get_lang('Days'),
@@ -325,7 +337,12 @@ if (count($a_students) > 0) {
         'never' => get_lang('Never')
     );
 
-    $el = $form->addElement('select', 'since', '<img width="ICON_SIZE_SMALL" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'), $options);
+    $el = $form->addElement(
+        'select',
+        'since',
+        '<img width="ICON_SIZE_SMALL" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'),
+        $options
+    );
     $el->setSelected(7);
 
     $form->addElement('hidden', 'action', 'add');

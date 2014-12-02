@@ -149,7 +149,6 @@ class Tracking
         }
 
         $result_disabled_ext_all = true;
-
         $chapterTypes = learnpath::getChapterTypes();
 
         // Show lp items
@@ -884,17 +883,23 @@ class Tracking
                                         if ($action == 'classic') {
                                             if ($origin != 'tracking') {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                                    $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></td>';
+                                                    $output .= '<td>
+                                                            <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
+                                                            </td>';
                                                 } else {
-                                                    $output .= '<td><a href="../exercice/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
-                                                <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></a></td>';
+                                                    $output .= '<td>
+                                                            <a href="../exercice/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $courseCode . '" target="_parent">
+                                                            <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '">
+                                                            </a></td>';
                                                 }
                                             } else {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                                    $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
+                                                    $output .= '<td>
+                                                                <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
                                                 } else {
-                                                    $output .= '<td><a href="../exercice/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
-                                                 <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
+                                                    $output .= '<td>
+                                                                    <a href="../exercice/exercise_show.php?cidReq=' . $courseCode . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
+                                                                    <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
                                                 }
                                             }
                                         }
@@ -5592,12 +5597,14 @@ class TrackingCourseLog
     public function get_addtional_profile_information_of_field($field_id)
     {
     	// Database table definition
-    	$table_user             = Database::get_main_table(TABLE_MAIN_USER);
-    	$table_user_field_values     = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $table_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
-    	$sql = "SELECT user.user_id, field.field_value FROM $table_user user, $table_user_field_values field
-            WHERE user.user_id = field.user_id
-            AND field.field_id='".intval($field_id)."'";
+    	$sql = "SELECT user.user_id, field.field_value
+    	        FROM $table_user user, $table_user_field_values field
+                WHERE
+                    user.user_id = field.user_id AND
+                    field.field_id='".intval($field_id)."'";
     	$result = Database::query($sql);
     	while($row = Database::fetch_array($result)) {
     		$return[$row['user_id']][] = $row['field_value'];
@@ -5619,7 +5626,7 @@ class TrackingCourseLog
      * @since    Nov 2009
      * @version    1.8.6.2
      */
-    public function get_addtional_profile_information_of_field_by_user($field_id, $users)
+    public static function get_addtional_profile_information_of_field_by_user($field_id, $users)
     {
     	// Database table definition
     	$table_user                 = Database::get_main_table(TABLE_MAIN_USER);
@@ -5627,7 +5634,7 @@ class TrackingCourseLog
     	$result_extra_field         = UserManager::get_extra_field_information($field_id);
 
     	if (!empty($users)) {
-    		if ($result_extra_field['field_type'] == USER_FIELD_TYPE_TAG ) {
+    		if ($result_extra_field['field_type'] == UserManager::USER_FIELD_TYPE_TAG ) {
     			foreach($users as $user_id) {
     				$user_result = UserManager::get_user_tags($user_id, $field_id);
     				$tag_list = array();

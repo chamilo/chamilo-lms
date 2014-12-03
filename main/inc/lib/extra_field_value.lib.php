@@ -156,9 +156,13 @@ class ExtraFieldValue extends Model
                             $new_params = array(
                                 $this->handler_id   => $params[$this->handler_id],
                                 'field_id'          => $extra_field_info['id'],
-                                'field_value'       => $value,
-                                'comment'           => $comment
+                                'field_value'       => $value
                             );
+
+                            if ($this->handler_id !== 'session_id') {
+                                $new_params['comment'] = $comment;
+                            }
+
                             self::save($new_params);
                     }
                 }
@@ -248,7 +252,10 @@ class ExtraFieldValue extends Model
 
             $params['field_value'] = $value_to_insert;
             $params['tms'] = api_get_utc_datetime();
-            $params[$this->author_id] = api_get_user_id();
+
+            if ($this->handler_id !== 'session_id') {
+                $params[$this->author_id] = api_get_user_id();
+            }
 
             // Insert
             if (empty($field_values)) {

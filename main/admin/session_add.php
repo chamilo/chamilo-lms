@@ -86,361 +86,27 @@ $xajax -> processRequests();
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = "
+<script type=\"text/javascript\">
 function fill_coach_field (username) {
-	document.getElementById("coach_username").value = username;
-	document.getElementById("ajax_list_coachs").innerHTML = "";
-}
-</script>';
-
-
-if (isset($_POST['formSent']) && $_POST['formSent']) {
-	$formSent = 1;
-    $name = $_POST['name'];
-    $year_start = $_POST['year_start'];
-    $month_start = $_POST['month_start'];
-    $day_start = $_POST['day_start'];
-    $year_end = $_POST['year_end'];
-    $month_end = $_POST['month_end'];
-    $day_end = $_POST['day_end'];
-    $nb_days_acess_before = $_POST['nb_days_acess_before'];
-    $nb_days_acess_after = $_POST['nb_days_acess_after'];
-    $coach_username = $_POST['coach_username'];
-    $id_session_category = $_POST['session_category'];
-    $id_visibility = $_POST['session_visibility'];
-    $end_limit = $_POST['end_limit'];
-    $start_limit = $_POST['start_limit'];
-    $duration = isset($_POST['duration']) ? $_POST['duration'] : null;
-
-    if (empty($end_limit) && empty($start_limit)) {
-        $nolimit = 1;
-    } else {
-    	$nolimit = null;
-    }
-
-    $return = SessionManager::create_session(
-        $name,
-        $year_start,
-        $month_start,
-        $day_start,
-        $year_end,
-        $month_end,
-        $day_end,
-        $nb_days_acess_before,
-        $nb_days_acess_after,
-        $nolimit,
-        $coach_username,
-        $id_session_category,
-        $id_visibility,
-        $start_limit,
-        $end_limit,
-        $duration
-    );
-
-	if ($return == strval(intval($return))) {
-		// integer => no error on session creation
-		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');
-		exit();
-	}
+	document.getElementById('coach_username').value = username;
+	document.getElementById('ajax_list_coachs').innerHTML = '';
 }
 
-global $_configuration;
-$defaultBeforeDays = isset($_configuration['session_days_before_coach_access']) ?
-    $_configuration['session_days_before_coach_access'] : 0;
-$defaultAfterDays = isset($_configuration['session_days_after_coach_access'])
-    ? $_configuration['session_days_after_coach_access'] : 0;
-
-$nb_days_acess_before = $defaultBeforeDays;
-$nb_days_acess_after = $defaultAfterDays;
-
-$thisYear=date('Y');
-$thisMonth=date('m');
-$thisDay=date('d');
-
-$tool_name = get_lang('AddSession');
-
-Display::display_header($tool_name);
-
-if (!empty($return)) {
-	Display::display_error_message($return,false);
-}
-echo '<div class="actions">';
-echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
-
-?>
-<form class="form-horizontal" method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
-    <input type="hidden" name="formSent" value="1">
-    <div class="control-group">
-        <label class="control-label">
-            <?php echo get_lang('SessionName') ?>
-        </label>
-        <div class="controls">
-            <input type="text" name="name" class="span4" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>">
-        </div>
-    </div>
-
-    <div class="control-group">
-        <label class="control-label">
-            <?php echo get_lang('CoachName') ?>
-        </label>
-        <div class="controls">
-
-<?php
-
-$sql = 'SELECT COUNT(1) FROM '.$tbl_user.' WHERE status=1';
-$rs = Database::query($sql);
-$count_users = Database::result($rs, 0, 0);
-
-if (intval($count_users)<50) {
-	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-	$sql="SELECT user_id, lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
-
-	if (api_is_multiple_url_enabled()) {
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1){
-			$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-			INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-			WHERE access_url_id = '.$access_url_id.'  AND status=1'.$order_clause;
-		}
-	}
-	$result = Database::query($sql);
-	$Coaches = Database::store_result($result);
-
-	?>
-	<select id="coach_username" class="chzn-select" name="coach_username" style="width:350px;" title="<?php echo get_lang('Select'); ?>" >
-		<option value="0"><?php get_lang('None'); ?></option>
-		<?php foreach($Coaches as $enreg): ?>
-		<option value="<?php echo $enreg['username']; ?>"> <?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
-		<?php endforeach; ?>
-	</select>
-	<?php
-	echo Display::return_icon('synthese_view.gif',get_lang('ActivityCoach'));
-} else {
-	?>
-	<input type="text" name="coach_username" id="coach_username" onkeyup="xajax_search_coachs(document.getElementById('coach_username').value)" /><div id="ajax_list_coachs"></div>
-	<?php
-}
-$Categories = SessionManager::get_all_session_category();
-?>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">
-            <?php echo get_lang('SessionCategory') ?>
-        </label>
-        <div class="controls">
-            <select id="session_category" class="chzn-select" name="session_category" style="width:350px;" title="<?php echo get_lang('Select'); ?>">
-                <option value="0"><?php get_lang('None'); ?></option>
-            <?php
-            if (!empty($Categories)) {
-                foreach($Categories as $Rows) { ?>
-                    <option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
-                <?php }
+$(document).on('ready', function () {
+    var value = 1;
+    $('#advanced_parameters').on('click', function() {
+        $('#options').toggle(function() {
+            if (value == 1) {
+                $('#advanced_parameters').addClass('btn-hide');
+                value = 0;
+            } else {
+                $('#advanced_parameters').removeClass('btn-hide');
+                value = 1;
             }
-            ?>
-        </select>
-        </div>
-    </div>
-
- <div class="control-group">
-        <div class="controls">
-            <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
-        <div style="display: <?php if($formSent && ($nb_days_acess_before!=0 || $nb_days_acess_after!=0)) echo 'block'; else echo 'none'; ?>;" id="options">
-            <br />
-            <input type="text" name="nb_days_acess_before" value="<?php echo $nb_days_acess_before; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysBefore') ?><br /><br />
-            <input type="text" name="nb_days_acess_after" value="<?php echo $nb_days_acess_after; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
-            <br />
-        </div>
-        </div>
-</div>
-
- <div class="control-group">
-        <div class="controls">
-    <label for="start_limit">
-        <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" />
-    <?php echo get_lang('DateStartSession');?>
-    </label>
-
-    <div id="start_date" style="display:none">
-       <br />
-
-  <select name="day_start">
-	<option value="1">01</option>
-	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_start == 2)) echo 'selected="selected"'; ?> >02</option>
-	<option value="3" <?php if((!$formSent && $thisDay == 3) || ($formSent && $day_start == 3)) echo 'selected="selected"'; ?> >03</option>
-	<option value="4" <?php if((!$formSent && $thisDay == 4) || ($formSent && $day_start == 4)) echo 'selected="selected"'; ?> >04</option>
-	<option value="5" <?php if((!$formSent && $thisDay == 5) || ($formSent && $day_start == 5)) echo 'selected="selected"'; ?> >05</option>
-	<option value="6" <?php if((!$formSent && $thisDay == 6) || ($formSent && $day_start == 6)) echo 'selected="selected"'; ?> >06</option>
-	<option value="7" <?php if((!$formSent && $thisDay == 7) || ($formSent && $day_start == 7)) echo 'selected="selected"'; ?> >07</option>
-	<option value="8" <?php if((!$formSent && $thisDay == 8) || ($formSent && $day_start == 8)) echo 'selected="selected"'; ?> >08</option>
-	<option value="9" <?php if((!$formSent && $thisDay == 9) || ($formSent && $day_start == 9)) echo 'selected="selected"'; ?> >09</option>
-	<option value="10" <?php if((!$formSent && $thisDay == 10) || ($formSent && $day_start == 10)) echo 'selected="selected"'; ?> >10</option>
-	<option value="11" <?php if((!$formSent && $thisDay == 11) || ($formSent && $day_start == 11)) echo 'selected="selected"'; ?> >11</option>
-	<option value="12" <?php if((!$formSent && $thisDay == 12) || ($formSent && $day_start == 12)) echo 'selected="selected"'; ?> >12</option>
-	<option value="13" <?php if((!$formSent && $thisDay == 13) || ($formSent && $day_start == 13)) echo 'selected="selected"'; ?> >13</option>
-	<option value="14" <?php if((!$formSent && $thisDay == 14) || ($formSent && $day_start == 14)) echo 'selected="selected"'; ?> >14</option>
-	<option value="15" <?php if((!$formSent && $thisDay == 15) || ($formSent && $day_start == 15)) echo 'selected="selected"'; ?> >15</option>
-	<option value="16" <?php if((!$formSent && $thisDay == 16) || ($formSent && $day_start == 16)) echo 'selected="selected"'; ?> >16</option>
-	<option value="17" <?php if((!$formSent && $thisDay == 17) || ($formSent && $day_start == 17)) echo 'selected="selected"'; ?> >17</option>
-	<option value="18" <?php if((!$formSent && $thisDay == 18) || ($formSent && $day_start == 18)) echo 'selected="selected"'; ?> >18</option>
-	<option value="19" <?php if((!$formSent && $thisDay == 19) || ($formSent && $day_start == 19)) echo 'selected="selected"'; ?> >19</option>
-	<option value="20" <?php if((!$formSent && $thisDay == 20) || ($formSent && $day_start == 20)) echo 'selected="selected"'; ?> >20</option>
-	<option value="21" <?php if((!$formSent && $thisDay == 21) || ($formSent && $day_start == 21)) echo 'selected="selected"'; ?> >21</option>
-	<option value="22" <?php if((!$formSent && $thisDay == 22) || ($formSent && $day_start == 22)) echo 'selected="selected"'; ?> >22</option>
-	<option value="23" <?php if((!$formSent && $thisDay == 23) || ($formSent && $day_start == 23)) echo 'selected="selected"'; ?> >23</option>
-	<option value="24" <?php if((!$formSent && $thisDay == 24) || ($formSent && $day_start == 24)) echo 'selected="selected"'; ?> >24</option>
-	<option value="25" <?php if((!$formSent && $thisDay == 25) || ($formSent && $day_start == 25)) echo 'selected="selected"'; ?> >25</option>
-	<option value="26" <?php if((!$formSent && $thisDay == 26) || ($formSent && $day_start == 26)) echo 'selected="selected"'; ?> >26</option>
-	<option value="27" <?php if((!$formSent && $thisDay == 27) || ($formSent && $day_start == 27)) echo 'selected="selected"'; ?> >27</option>
-	<option value="28" <?php if((!$formSent && $thisDay == 28) || ($formSent && $day_start == 28)) echo 'selected="selected"'; ?> >28</option>
-	<option value="29" <?php if((!$formSent && $thisDay == 29) || ($formSent && $day_start == 29)) echo 'selected="selected"'; ?> >29</option>
-	<option value="30" <?php if((!$formSent && $thisDay == 30) || ($formSent && $day_start == 30)) echo 'selected="selected"'; ?> >30</option>
-	<option value="31" <?php if((!$formSent && $thisDay == 31) || ($formSent && $day_start == 31)) echo 'selected="selected"'; ?> >31</option>
-  </select>
-  /
-  <select name="month_start">
-	<option value="1">01</option>
-	<option value="2" <?php if((!$formSent && $thisMonth == 2) || ($formSent && $month_start == 2)) echo 'selected="selected"'; ?> >02</option>
-	<option value="3" <?php if((!$formSent && $thisMonth == 3) || ($formSent && $month_start == 3)) echo 'selected="selected"'; ?> >03</option>
-	<option value="4" <?php if((!$formSent && $thisMonth == 4) || ($formSent && $month_start == 4)) echo 'selected="selected"'; ?> >04</option>
-	<option value="5" <?php if((!$formSent && $thisMonth == 5) || ($formSent && $month_start == 5)) echo 'selected="selected"'; ?> >05</option>
-	<option value="6" <?php if((!$formSent && $thisMonth == 6) || ($formSent && $month_start == 6)) echo 'selected="selected"'; ?> >06</option>
-	<option value="7" <?php if((!$formSent && $thisMonth == 7) || ($formSent && $month_start == 7)) echo 'selected="selected"'; ?> >07</option>
-	<option value="8" <?php if((!$formSent && $thisMonth == 8) || ($formSent && $month_start == 8)) echo 'selected="selected"'; ?> >08</option>
-	<option value="9" <?php if((!$formSent && $thisMonth == 9) || ($formSent && $month_start == 9)) echo 'selected="selected"'; ?> >09</option>
-	<option value="10" <?php if((!$formSent && $thisMonth == 10) || ($formSent && $month_start == 10)) echo 'selected="selected"'; ?> >10</option>
-	<option value="11" <?php if((!$formSent && $thisMonth == 11) || ($formSent && $month_start == 11)) echo 'selected="selected"'; ?> >11</option>
-	<option value="12" <?php if((!$formSent && $thisMonth == 12) || ($formSent && $month_start == 12)) echo 'selected="selected"'; ?> >12</option>
-  </select>
-  /
-  <select name="year_start">
-<?php
-for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
-?>
-	<option value="<?php echo $i; ?>" <?php if((!$formSent && $thisYear == $i) || ($formSent && $year_start == $i)) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
-<?php
-}
-?>
-    </select>
-    </div>
-
-        </div>
-    </div>
-
-
-
- <div class="control-group">
-        <div class="controls">
-            <label for="end_limit">
-                <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" />
-                <?php echo get_lang('DateEndSession') ?>
-            </label>
-  <div id="end_date" style="display:none">
-  <br />
-
-  <select name="day_end">
-	<option value="1">01</option>
-	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_end == 2)) echo 'selected="selected"'; ?> >02</option>
-	<option value="3" <?php if((!$formSent && $thisDay == 3) || ($formSent && $day_end == 3)) echo 'selected="selected"'; ?> >03</option>
-	<option value="4" <?php if((!$formSent && $thisDay == 4) || ($formSent && $day_end == 4)) echo 'selected="selected"'; ?> >04</option>
-	<option value="5" <?php if((!$formSent && $thisDay == 5) || ($formSent && $day_end == 5)) echo 'selected="selected"'; ?> >05</option>
-	<option value="6" <?php if((!$formSent && $thisDay == 6) || ($formSent && $day_end == 6)) echo 'selected="selected"'; ?> >06</option>
-	<option value="7" <?php if((!$formSent && $thisDay == 7) || ($formSent && $day_end == 7)) echo 'selected="selected"'; ?> >07</option>
-	<option value="8" <?php if((!$formSent && $thisDay == 8) || ($formSent && $day_end == 8)) echo 'selected="selected"'; ?> >08</option>
-	<option value="9" <?php if((!$formSent && $thisDay == 9) || ($formSent && $day_end == 9)) echo 'selected="selected"'; ?> >09</option>
-	<option value="10" <?php if((!$formSent && $thisDay == 10) || ($formSent && $day_end == 10)) echo 'selected="selected"'; ?> >10</option>
-	<option value="11" <?php if((!$formSent && $thisDay == 11) || ($formSent && $day_end == 11)) echo 'selected="selected"'; ?> >11</option>
-	<option value="12" <?php if((!$formSent && $thisDay == 12) || ($formSent && $day_end == 12)) echo 'selected="selected"'; ?> >12</option>
-	<option value="13" <?php if((!$formSent && $thisDay == 13) || ($formSent && $day_end == 13)) echo 'selected="selected"'; ?> >13</option>
-	<option value="14" <?php if((!$formSent && $thisDay == 14) || ($formSent && $day_end == 14)) echo 'selected="selected"'; ?> >14</option>
-	<option value="15" <?php if((!$formSent && $thisDay == 15) || ($formSent && $day_end == 15)) echo 'selected="selected"'; ?> >15</option>
-	<option value="16" <?php if((!$formSent && $thisDay == 16) || ($formSent && $day_end == 16)) echo 'selected="selected"'; ?> >16</option>
-	<option value="17" <?php if((!$formSent && $thisDay == 17) || ($formSent && $day_end == 17)) echo 'selected="selected"'; ?> >17</option>
-	<option value="18" <?php if((!$formSent && $thisDay == 18) || ($formSent && $day_end == 18)) echo 'selected="selected"'; ?> >18</option>
-	<option value="19" <?php if((!$formSent && $thisDay == 19) || ($formSent && $day_end == 19)) echo 'selected="selected"'; ?> >19</option>
-	<option value="20" <?php if((!$formSent && $thisDay == 20) || ($formSent && $day_end == 20)) echo 'selected="selected"'; ?> >20</option>
-	<option value="21" <?php if((!$formSent && $thisDay == 21) || ($formSent && $day_end == 21)) echo 'selected="selected"'; ?> >21</option>
-	<option value="22" <?php if((!$formSent && $thisDay == 22) || ($formSent && $day_end == 22)) echo 'selected="selected"'; ?> >22</option>
-	<option value="23" <?php if((!$formSent && $thisDay == 23) || ($formSent && $day_end == 23)) echo 'selected="selected"'; ?> >23</option>
-	<option value="24" <?php if((!$formSent && $thisDay == 24) || ($formSent && $day_end == 24)) echo 'selected="selected"'; ?> >24</option>
-	<option value="25" <?php if((!$formSent && $thisDay == 25) || ($formSent && $day_end == 25)) echo 'selected="selected"'; ?> >25</option>
-	<option value="26" <?php if((!$formSent && $thisDay == 26) || ($formSent && $day_end == 26)) echo 'selected="selected"'; ?> >26</option>
-	<option value="27" <?php if((!$formSent && $thisDay == 27) || ($formSent && $day_end == 27)) echo 'selected="selected"'; ?> >27</option>
-	<option value="28" <?php if((!$formSent && $thisDay == 28) || ($formSent && $day_end == 28)) echo 'selected="selected"'; ?> >28</option>
-	<option value="29" <?php if((!$formSent && $thisDay == 29) || ($formSent && $day_end == 29)) echo 'selected="selected"'; ?> >29</option>
-	<option value="30" <?php if((!$formSent && $thisDay == 30) || ($formSent && $day_end == 30)) echo 'selected="selected"'; ?> >30</option>
-	<option value="31" <?php if((!$formSent && $thisDay == 31) || ($formSent && $day_end == 31)) echo 'selected="selected"'; ?> >31</option>
-  </select>
-  /
-  <select name="month_end">
-	<option value="1">01</option>
-	<option value="2" <?php if((!$formSent && $thisMonth == 2) || ($formSent && $month_end == 2)) echo 'selected="selected"'; ?> >02</option>
-	<option value="3" <?php if((!$formSent && $thisMonth == 3) || ($formSent && $month_end == 3)) echo 'selected="selected"'; ?> >03</option>
-	<option value="4" <?php if((!$formSent && $thisMonth == 4) || ($formSent && $month_end == 4)) echo 'selected="selected"'; ?> >04</option>
-	<option value="5" <?php if((!$formSent && $thisMonth == 5) || ($formSent && $month_end == 5)) echo 'selected="selected"'; ?> >05</option>
-	<option value="6" <?php if((!$formSent && $thisMonth == 6) || ($formSent && $month_end == 6)) echo 'selected="selected"'; ?> >06</option>
-	<option value="7" <?php if((!$formSent && $thisMonth == 7) || ($formSent && $month_end == 7)) echo 'selected="selected"'; ?> >07</option>
-	<option value="8" <?php if((!$formSent && $thisMonth == 8) || ($formSent && $month_end == 8)) echo 'selected="selected"'; ?> >08</option>
-	<option value="9" <?php if((!$formSent && $thisMonth == 9) || ($formSent && $month_end == 9)) echo 'selected="selected"'; ?> >09</option>
-	<option value="10" <?php if((!$formSent && $thisMonth == 10) || ($formSent && $month_end == 10)) echo 'selected="selected"'; ?> >10</option>
-	<option value="11" <?php if((!$formSent && $thisMonth == 11) || ($formSent && $month_end == 11)) echo 'selected="selected"'; ?> >11</option>
-	<option value="12" <?php if((!$formSent && $thisMonth == 12) || ($formSent && $month_end == 12)) echo 'selected="selected"'; ?> >12</option>
-  </select>
-  /
-  <select name="year_end">
-<?php
-for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
-?>
-	<option value="<?php echo $i; ?>" <?php if((!$formSent && ($thisYear+1) == $i) || ($formSent && $year_end == $i)) echo 'selected="selected"'; ?> ><?php echo $i; ?></option>
-<?php
-}
-?>
-    </select>
-    <br />    <br />
-    <?php echo get_lang('SessionVisibility') ?>
-    <select name="session_visibility" style="width:250px;">
-        <?php
-        $visibility_list = array(
-            SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
-            SESSION_VISIBLE => get_lang('SessionAccessible'),
-            SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible'))
-        );
-        foreach($visibility_list as $key=>$item): ?>
-        <option value="<?php echo $key; ?>"><?php echo $item; ?></option>
-        <?php endforeach; ?>
-    </select>
-     </div>
-        </div>
-    </div>
-
-    <?php
-    if (SessionManager::durationPerUserIsEnabled()) {
-        ?>
-        <div class="control-group">
-            <label class="control-label">
-                <?php echo get_lang('SessionDurationTitle') ?> <br />
-            </label>
-            <div class="controls">
-                <input id="duration" type="text" name="duration" class="span1" maxlength="50" value="">
-                <br />
-                <?php echo get_lang('SessionDurationDescription') ?>
-            </div>
-        </div>
-
-    <?php
-    }
-    ?>
-
- <div class="control-group">
-    <div class="controls">
-        <button class="save" type="submit" value="<?php echo get_lang('NextStep') ?>"><?php echo get_lang('NextStep') ?></button>
-    </div>
-</div>
-</form>
-<script type="text/javascript">
+        });
+    });
+});
 
 function setDisable(select){
 	document.form.day_start.disabled = (select.checked) ? true : false;
@@ -491,6 +157,298 @@ function emptyDuration() {
         $('#duration').val('');
     }
 }
-</script>
-<?php
+</script>";
+
+if (isset($_POST['formSent']) && $_POST['formSent']) {
+	$formSent = 1;
+}
+
+global $_configuration;
+$defaultBeforeDays = isset($_configuration['session_days_before_coach_access']) ?
+    $_configuration['session_days_before_coach_access'] : 0;
+$defaultAfterDays = isset($_configuration['session_days_after_coach_access'])
+    ? $_configuration['session_days_after_coach_access'] : 0;
+
+$nb_days_acess_before = $defaultBeforeDays;
+$nb_days_acess_after = $defaultAfterDays;
+
+$thisYear=date('Y');
+$thisMonth=date('m');
+$thisDay=date('d');
+
+$dayList = array();
+
+for ($i = 1; $i <= 31; $i++) {
+    $day = sprintf("%02d", $i);
+    $dayList[$day] = $day;
+}
+
+$monthList = array();
+
+for ($i = 1; $i <= 12; $i++) {
+    $month = sprintf("%02d", $i);
+    
+    $monthList[$month] = $month;
+}
+
+$yearList = array();
+
+for ($i = $thisYear - 5; $i <= ($thisYear + 5); $i++) {
+    $yearList[$i] = $i;
+}
+
+$tool_name = get_lang('AddSession');
+
+$urlAction = api_get_self();
+
+$categoriesList = SessionManager::get_all_session_category();
+
+$categoriesOptions = array(
+    '0' => get_lang('None')
+);
+
+if ($categoriesList != false) {
+    foreach ($categoriesList as $categoryItem) {
+        $categoriesOptions[$categoryItem['id']] = $categoryItem['name'];
+    }
+}
+
+function check_session_name($name) {
+    $session = SessionManager::get_session_by_name($name);
+
+    return empty($session) ? true : false;
+}
+
+$form = new FormValidator('add_session', 'post', $urlAction);
+
+$form->addElement('header', $tool_name);
+
+$form->addElement('text', 'name', get_lang('SessionName'), array(
+    'class' => 'span4',
+    'maxlength' => 50,
+    'value' => $formSent ? api_htmlentities($name,ENT_QUOTES,$charset) : ''
+));
+$form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
+
+$sql = "SELECT COUNT(1) FROM $tbl_user WHERE status = 1";
+$rs = Database::query($sql);
+$countUsers = Database::result($rs, 0, 0);
+
+if (intval($countUsers) < 50) {
+    $orderClause = "ORDER BY ";
+    $orderClause .= api_sort_by_first_name() ? "firstname, lastname, username"  : "lastname, firstname, username";
+
+    $sql="SELECT user_id, lastname, firstname, username FROM $tbl_user "
+        . "WHERE status = '1' "
+        . $orderClause;
+
+    if (api_is_multiple_url_enabled()) {
+        $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlId = api_get_current_access_url_id();
+        
+        if ($accessUrlId != -1) {
+            $sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user "
+                . "INNER JOIN $userRelAccessUrlTable url_user ON (url_user.user_id = user.user_id) "
+                . "WHERE access_url_id = $accessUrlId AND status = 1 "
+                . $orderClause;
+        }
+    }
+
+    $result = Database::query($sql);
+	$coachesList = Database::store_result($result);
+
+    $coachesOptions = array();
+
+    foreach($coachesList as $coachItem){
+        $coachesOptions[$coachItem['username']] = api_get_person_name(
+            $coachItem['firstname'],
+            $coachItem['lastname']
+        ).' ('.$coachItem['username'].')';
+    }
+
+    $form->addElement('select', 'coach_username', get_lang('CoachName'), $coachesOptions, array(
+        'id' => 'coach_username',
+        'class' => 'chzn-select',
+        'style' => 'width:350px;'
+    ));
+    $form->addElement('advanced_settings', Display::return_icon('synthese_view.gif') . ' ' . get_lang('ActivityCoach'));
+} else {
+    $form->addElement('text', 'coach_username', get_lang('CoachName'), array(
+        'class' => 'span4',
+        'maxlength' => 50,
+        'onkeyup' => "xajax_search_coachs(document.getElementById('coach_username').value)",
+        'id' => 'coach_username'
+    ));
+}
+
+$form->addRule('coach_username', get_lang('ThisFieldIsRequired'), 'required');
+$form->add_html('<div id="ajax_list_coachs"></div>');
+
+$form->add_select('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
+    'id' => 'session_category',
+    'class' => 'chzn-select',
+    'style' => 'width:350px;'
+));
+
+$form->addElement('advanced_settings','<a class="btn-show" id="advanced_parameters" href="javascript://">'.get_lang('DefineSessionOptions').'</a>');
+
+$form->addElement('html','<div id="options" style="display:none">');
+
+$form->addElement('text', 'nb_days_acess_before', get_lang('DaysBefore'), array(
+    'style' => 'width: 30px;',
+    'value' => $nb_days_acess_before
+));
+
+$form->addElement('text', 'nb_days_acess_after', get_lang('DaysAfter'), array(
+    'style' => 'width: 30px;',
+    'value' => $nb_days_acess_after
+));
+
+$form->addElement('html','</div>');
+
+$form->addElement('checkbox', 'start_limit', '', get_lang('DateStartSession'), array(
+    'onchange' => 'disable_starttime(this)',
+    'id' => 'start_limit'
+));
+
+$form->addElement('html','<div id="start_date" style="display:none">');
+
+$startDateGroup = array ();
+$startDateGroup[] = $form->createElement('select', 'day_start', null, $dayList);
+$startDateGroup[] = $form->createElement('select', 'month_start', null, $monthList);
+$startDateGroup[] = $form->createElement('select', 'year_start', null, $yearList);
+
+$form->addGroup($startDateGroup, 'start_date_group', null, ' / ', true);
+
+$form->addElement('html','</div>');
+
+$form->addElement('checkbox', 'end_limit', '', get_lang('DateEndSession'), array(
+    'onchange' => 'disable_endtime(this)',
+    'id' => 'end_limit'
+));
+
+$form->addElement('html','<div id="end_date" style="display:none">');
+
+$endDateGroup = array();
+$endDateGroup[] = $form->createElement('select', 'day_end', null, $dayList);
+$endDateGroup[] = $form->createElement('select', 'month_end', null, $monthList);
+$endDateGroup[] = $form->createElement('select', 'year_end', null, $yearList);
+
+$form->addGroup($endDateGroup, 'end_date_group', null, ' / ', true);
+
+$visibilityGroup = array();
+$visibilityGroup[] = $form->createElement('advanced_settings', get_lang('SessionVisibility'));
+$visibilityGroup[] = $form->createElement('select', 'session_visibility', null, array(
+    SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
+    SESSION_VISIBLE => get_lang('SessionAccessible'),
+    SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible'))
+));
+
+$form->addGroup($visibilityGroup, 'visibility_group', null, null, false);
+
+$form->addElement('html','</div>');
+
+if (SessionManager::durationPerUserIsEnabled()) {
+    $form->addElement('text', 'duration', get_lang('SessionDurationTitle'),
+        array(
+        'class' => 'span1',
+        'maxlength' => 50
+    ));
+    $form->addElement('advanced_settings', get_lang('SessionDurationDescription'));
+}
+
+//Extra fields
+$extra_field = new ExtraField('session');
+$extra = $extra_field->addElements($form, null);
+
+$htmlHeadXtra[] ='
+<script>
+
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
+
+$form->addElement('button', 'submit', get_lang('NextStep'), array(
+    'class' => 'save'
+));
+
+$formDefaults = array(
+    'nb_days_acess_before' => $nb_days_acess_before,
+    'nb_days_acess_after' => $nb_days_acess_after
+);
+
+if (!$formSent) {
+    $formDefaults['start_date_group[day_start]'] = $thisDay;
+    $formDefaults['start_date_group[month_start]'] = $thisMonth;
+    $formDefaults['start_date_group[year_start]'] = $thisYear;
+
+    $formDefaults['end_date_group[day_end]'] = $thisDay;
+    $formDefaults['end_date_group[month_end]'] = $thisMonth;
+    $formDefaults['end_date_group[year_end]'] = $thisYear + 1;
+} else {
+    $formDefaults['name'] = api_htmlentities($name,ENT_QUOTES,$charset);
+}
+
+$form->setDefaults($formDefaults);
+
+if ($form->validate()) {
+    $params = $form->getSubmitValues();
+ 
+    $name = $params['name'];
+    $year_start = $params['start_date_group']['year_start'];
+    $month_start = $params['start_date_group']['month_start'];
+    $day_start = $params['start_date_group']['day_start'];
+    $year_end = $params['end_date_group']['year_end'];
+    $month_end = $params['end_date_group']['month_end'];
+    $day_end = $params['end_date_group']['day_end'];
+    $nb_days_acess_before = $params['nb_days_acess_before'];
+    $nb_days_acess_after = $params['nb_days_acess_after'];
+    $coach_username = $params['coach_username'];
+    $id_session_category = $params['session_category'];
+    $id_visibility = $params['session_visibility'];
+    $end_limit = isset($params['end_limit']) ? true : false;
+    $start_limit = isset($params['start_limit']) ? true : false;
+    $duration = isset($params['duration']) ? $params['duration'] : null;
+
+    if (empty($end_limit) && empty($start_limit)) {
+        $nolimit = 1;
+    } else {
+        $nolimit = null;
+    }
+
+    $extraFields = array();
+
+    foreach ($params as $key => $value) {
+        if (strpos($key, 'extra_') === 0) {
+            $extraFields[$key] = $value;
+        }
+    }
+
+    $return = SessionManager::create_session(
+        $name, $year_start, $month_start, $day_start, $year_end, $month_end, $day_end, $nb_days_acess_before,
+        $nb_days_acess_after, $nolimit, $coach_username, $id_session_category, $id_visibility, $start_limit,
+        $end_limit, false, $duration, $extraFields
+    );
+
+    if ($return == strval(intval($return))) {
+        // integer => no error on session creation
+        header('Location: add_courses_to_session.php?id_session=' . $return . '&add=true&msg=');
+        exit();
+    }
+}
+
+Display::display_header($tool_name);
+
+if (!empty($return)) {
+	Display::display_error_message($return,false);
+}
+
+echo '<div class="actions">';
+echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '</div>';
+
+$form->display();
+
 Display::display_footer();

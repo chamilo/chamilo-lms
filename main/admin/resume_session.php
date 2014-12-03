@@ -216,6 +216,23 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 </tr>
 
 <?php
+$sessionField = new SessionField();
+$sessionFields = $sessionField->get_all();
+
+foreach ($sessionFields as $sessionField) {
+    if ($sessionField['field_visible'] != '1') {
+        continue;
+    }
+
+    $sesionFieldValue = new SessionFieldValue();
+    $sesionValueData = $sesionFieldValue->get_values_by_handler_and_field_id($sessionId, $sessionField['id'], true);
+?>
+<tr>
+    <td><?php echo $sessionField['field_display_text'] ?></td>
+    <td><?php echo $sesionValueData ? $sesionValueData['field_value'] : '' ?></td>
+</tr>
+<?php
+}
 
 $multiple_url_is_on = api_get_multiple_access_url();
 

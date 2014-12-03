@@ -979,7 +979,8 @@ class DocumentManager
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = $_course['real_id'];
         $document_id = Database::escape_string($document_id);
-        $sql = "SELECT filetype FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id= $document_id";
+        $sql = "SELECT filetype FROM $TABLE_DOCUMENT
+                WHERE c_id = $course_id AND id= $document_id";
         $result = Database::fetch_array(Database::query($sql), 'ASSOC');
         return $result['filetype'] == 'folder';
     }
@@ -1048,7 +1049,7 @@ class DocumentManager
      */
     public static function delete_document_metadata($document_id)
     {
-        //needed to deleted medadata
+        // needed to deleted medadata
         require_once api_get_path(SYS_CODE_PATH) . 'metadata/md_funcs.php';
         require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
         $mdStore = new mdstore(true);
@@ -1484,7 +1485,10 @@ class DocumentManager
         $document_id = Database::escape_string($document_id);
 
         $sql = 'SELECT id FROM ' . $table_template . '
-                WHERE course_code="' . $course_code . '" AND user_id="' . $user_id . '" AND ref_doc="' . $document_id . '"';
+                WHERE
+                    course_code="' . $course_code . '" AND
+                    user_id="' . $user_id . '" AND
+                    ref_doc="' . $document_id . '"';
         $result = Database::query($sql);
         $template_id = Database::result($result, 0, 0);
 
@@ -1492,7 +1496,10 @@ class DocumentManager
         my_delete(api_get_path(SYS_CODE_PATH) . 'upload/template_thumbnails/' . $template_id . '.jpg');
 
         $sql = 'DELETE FROM ' . $table_template . '
-                WHERE course_code="' . $course_code . '" AND user_id="' . $user_id . '" AND ref_doc="' . $document_id . '"';
+                WHERE
+                    course_code="' . $course_code . '" AND
+                    user_id="' . $user_id . '" AND
+                    ref_doc="' . $document_id . '"';
 
         Database::query($sql);
     }
@@ -1606,7 +1613,12 @@ class DocumentManager
         //3. Checking if user exist in course/session
 
         if ($session_id == 0) {
-            if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']) || api_is_platform_admin()) {
+            if (CourseManager::is_user_subscribed_in_course(
+                    $user_id,
+                    $course_info['code']
+                ) ||
+                api_is_platform_admin()
+            ) {
                 $user_in_course = true;
             }
             // Check if course is open then we can consider that the student is registered to the course

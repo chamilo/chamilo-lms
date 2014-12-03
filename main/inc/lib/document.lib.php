@@ -733,7 +733,7 @@ class DocumentManager
         }
 
         if ($can_see_invisible) {
-            //condition for the session
+            // condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             $show_users_condition = "";
@@ -743,7 +743,8 @@ class DocumentManager
 
             if ($to_group_id <> 0) {
                 $sql = "SELECT DISTINCT docs.id, path
-                       FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
+                       FROM $TABLE_ITEMPROPERTY  AS last
+                       INNER JOIN $TABLE_DOCUMENT  AS docs
                        ON (
                             docs.id = last.ref AND
                             last.tool = '" . TOOL_DOCUMENT . "' AND
@@ -754,10 +755,12 @@ class DocumentManager
                             docs.filetype 		= 'folder' AND
                             last.to_group_id	= " . $to_group_id . " AND
                             docs.path NOT LIKE '%shared_folder%' AND
+                            docs.path NOT LIKE '%_DELETED_%' AND
                             last.visibility 	<> 2 $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
-                        FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
+                        FROM $TABLE_ITEMPROPERTY  AS last
+                        INNER JOIN $TABLE_DOCUMENT  AS docs
                         ON (
                             docs.id = last.ref AND
                             last.tool = '" . TOOL_DOCUMENT . "' AND
@@ -766,6 +769,7 @@ class DocumentManager
                         )
                         WHERE
                             docs.filetype 		= 'folder' AND
+                            docs.path NOT LIKE '%_DELETED_%' AND
                             last.to_group_id	= 0  AND
                             last.visibility 	<> 2
                             $show_users_condition $condition_session ";

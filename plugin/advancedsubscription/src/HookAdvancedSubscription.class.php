@@ -146,6 +146,175 @@ class HookAdvancedSubscription extends HookObserver implements
                 )
             );
 
+            /** WSListSessionsDetailsByCategory **/
+
+            $server->wsdl->addComplexType(
+                'listSessionsDetailsByCategory',
+                'complexType',
+                'struct',
+                'all',
+                '',
+                array(
+                    'id' => array('name' => 'id', 'type' => 'xsd:string'), // session_category.id
+                    'category_name' => array('name' => 'category_name', 'type' => 'xsd:string'), // session_category.name
+                    'access_url_id' => array('name' => 'access_url_id', 'type' => 'xsd:int'), // session_category.access_url_id
+                    'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string') // secret key
+                ),
+                array(),
+                'tns:listSessionsDetailsByCategory'
+            );
+
+            $server->wsdl->addComplexType(
+                'sessionDetailsCourse',
+                'complexType',
+                'struct',
+                'all',
+                '',
+                array(
+                    'course_id' => array('name' => 'course_id', 'type' => 'xsd:int'), // course.id
+                    'course_code' => array('name' => 'course_code', 'type' => 'xsd:string'), // course.code
+                    'course_title' => array('name' => 'course_title', 'type' => 'xsd:string'), // course.title
+                    'coach_username' => array('name' => 'coach_username', 'type' => 'xsd:string'), // user.username
+                    'coach_firstname' => array('name' => 'coach_firstname', 'type' => 'xsd:string'), // user.firstname
+                    'coach_lastname' => array('name' => 'coach_lastname', 'type' => 'xsd:string'), // user.lastname
+                )
+            );
+
+
+            $server->wsdl->addComplexType(
+                'sessionDetailsCourseList',
+                'complexType',
+                'array',
+                '',
+                'SOAP-ENC:Array',
+                array(),
+                array(
+                    array(
+                        'ref' => 'SOAP-ENC:arrayType',
+                        'wsdl:arrayType' => 'tns:sessionDetailsCourse[]',
+                    )
+                ),
+                'tns:sessionDetailsCourse'
+            );
+
+            $server->wsdl->addComplexType(
+                'sessionDetails',
+                'complexType',
+                'struct',
+                'all',
+                '',
+                array(
+                    // session.id
+                    'id' => array(
+                        'name' => 'id',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.id_coach
+                    'coach_id' => array(
+                        'name' => 'coach_id',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.name
+                    'name' => array(
+                        'name' => 'name',
+                        'type' => 'xsd:string'
+                    ),
+                    // session.nbr_courses
+                    'courses_num' => array(
+                        'name' => 'courses_num',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.nbr_users
+                    'users_num' => array(
+                        'name' => 'users_num',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.nbr_classes
+                    'classes_num' => array(
+                        'name' => 'classes_num',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.date_start
+                    'date_start' => array(
+                        'name' => 'date_start',
+                        'type' => 'xsd:string'
+                    ),
+                    // session.date_end
+                    'date_end' => array(
+                        'name' => 'date_end',
+                        'type' => 'xsd:string'
+                    ),
+                    // session.nb_days_access_before_beginning
+                    'access_days_before_num' => array(
+                        'name' => 'access_days_before_num',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.nb_days_access_after_end
+                    'access_days_after_num' => array(
+                        'name' => 'access_days_after_num',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.session_admin_id
+                    'session_admin_id' => array(
+                        'name' => 'session_admin_id',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.visibility
+                    'visibility' => array(
+                        'name' => 'visibility',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.session_category_id
+                    'session_category_id' => array(
+                        'name' => 'session_category_id',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.promotion_id
+                    'promotion_id' => array(
+                        'name' => 'promotion_id',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.number of registered users validated
+                    'validated_user_num' => array(
+                        'name' => 'validated_user_num',
+                        'type' => 'xsd:int'
+                    ),
+                    // session.number of registered users from waiting queue
+                    'waiting_user_num' => array(
+                        'name' => 'waiting_user_num',
+                        'type' => 'xsd:int'
+                    ),
+                    // extra fields
+                    // Array(field_name, field_value)
+                    'extra' => array(
+                        'name' => 'extra',
+                        'type' => 'tns:extrasList'
+                    ),
+                    // course and coaches data
+                    // Array(course_id, course_code, course_title, coach_username, coach_firstname, coach_lastname)
+                    'course' => array(
+                        'name' => 'courses',
+                        'type' => 'tns:sessionDetailsCourseList'
+                    ),
+                )
+            );
+
+            $server->wsdl->addComplexType(
+                'sessionDetailsList',
+                'complexType',
+                'array',
+                '',
+                'SOAP-ENC:Array',
+                array(),
+                array(
+                    array(
+                        'ref' => 'SOAP-ENC:arrayType',
+                        'wsdl:arrayType' => 'tns:sessionDetails[]',
+                    )
+                ),
+                'tns:sessionDetails'
+            );
+
             // Register the method to expose
             $server->register('HookAdvancedSubscription..WSSessionListInCategory', // method name
                 array('sessionCategoryInput' => 'tns:sessionCategoryInput'), // input parameters
@@ -175,6 +344,17 @@ class HookAdvancedSubscription extends HookObserver implements
                 'rpc', // style
                 'encoded', // use
                 'This service encrypt data to be used later in urls' // documentation
+            );
+
+            $server->register(
+                'HookAdvancedSubscription..WSListSessionsDetailsByCategory', // method name
+                array('name' => 'tns:listSessionsDetailsByCategory'), // input parameters
+                array('return' => 'tns:sessionDetailsList'), // output parameters
+                'urn:WSRegistration', // namespace
+                'urn:WSRegistration#WSListSessionsDetailsByCategory', // soapaction
+                'rpc', // style
+                'encoded', // use
+                'This service returns a list of detailed sessions by a category' // documentation
             );
 
             return $data;
@@ -332,6 +512,73 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         return $result;
+    }
+
+    /**
+     * Get a list of sessions (id, coach_id, name, courses_num, users_num, classes_num,
+     * date_start, date_end, access_days_before_num, session_admin_id, visibility,
+     * session_category_id, promotion_id,
+     * validated_user_num, waiting_user_num,
+     * extra, course) the validated_usernum and waiting_user_num are
+     * used when have the plugin for advance incsription enables.
+     * The extra data (field_name, field_value)
+     * The course data (course_id, course_code, course_title,
+     * coach_username, coach_firstname, coach_lastname)
+     * @param array List of parameters (id, category_name, access_url_id, secret_key)
+     * @return array|soap_fault Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
+     */
+    function WSListSessionsDetailsByCategory($params)
+    {
+        global $debug;
+
+        if ($debug) error_log('WSListSessionsDetailsByCategory');
+        if ($debug) error_log('Params '. print_r($params, 1));
+        $secretKey = $params['secret_key'];
+
+        // Check if secret key is valid
+        if(!WSHelperVerifyKey($secretKey)) {
+
+            //return return_error(WS_ERROR_SECRET_KEY);
+        }
+
+        // Check if category ID is set
+        if (!empty($params['id']) && empty($params['category_name'])) {
+            $sessionCategoryId = $params['id'];
+        } elseif (!empty($params['category_name'])) {
+            // Check if category name is set
+            $sessionCategoryId = SessionManager::getSessionCategoryIdByName($params['category_name']);
+            if (is_array($sessionCategoryId)) {
+                $sessionCategoryId = current($sessionCategoryId);
+            }
+        } else {
+            // Return soap fault Not valid input params
+
+            return return_error(WS_ERROR_INVALID_INPUT);
+        }
+
+        // Get the session List by category
+        $sessionList = SessionManager::getSessionListAndExtraByCategoryId($sessionCategoryId);
+
+        if (empty($sessionList)) {
+            // If not found any session, return error
+
+            return return_error(WS_ERROR_NOT_FOUND_RESULT);
+        }
+        //@TODO: Not implemented yet, see BT#9092
+        // Check if advanced inscription plugin is enabled
+        $isAdvancedInscriptionEnabled = false;
+        if ($isAdvancedInscriptionEnabled) {
+            // Get validated and waiting queue users count for each session
+            foreach ($sessionList as &$session) {;
+                // Add validated and queue users count
+                $session['validated_user_num'] = 0;
+                $session['waiting_user_num'] = 0;
+            }
+        } else {
+            // Set -1 to validated and waiting queue users count
+        }
+
+        return $sessionList;
     }
 
 }

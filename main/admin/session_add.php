@@ -3,7 +3,6 @@
 
 /**
 *	@package chamilo.admin
-* 	@todo use formvalidator for the form, remove all the select harcoded values
 */
 
 // name of the language file that needs to be included

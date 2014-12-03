@@ -28,6 +28,8 @@ sonata_page:
         - homepage
         - _settings
         - fos_user(.*)
+        - chamilo_installer_flow
+        - sylius_flow(.*)
 
     ignore_routes:
         - sonata_page_cache_esi

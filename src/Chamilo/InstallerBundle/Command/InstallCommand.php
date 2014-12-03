@@ -323,7 +323,13 @@ class InstallCommand extends ContainerAwareCommand
             )
             ->runCommand('oro:localization:dump')
             */
-            ->runCommand('assets:install')
+            ->runCommand('assets:install',
+                array(
+                    'target'=> './',
+                    '--symlink' => true,
+                    '--relative'=> true
+                )
+            )
             ->runCommand(
                 'assetic:dump',
                 array(

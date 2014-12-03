@@ -52,6 +52,7 @@ web/js/*
 web/css/*
 web/sitemap*.xml
 vendor/*
+/vendor/
 
 build
 composer.lock

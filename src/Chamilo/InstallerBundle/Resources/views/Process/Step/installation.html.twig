@@ -1,6 +1,6 @@
 {% extends 'ChamiloInstallerBundle::layout.html.twig' %}
 {#{% set step, platformSteps = 'administration', ['navigation', 'js-routing', 'localization', 'assets', 'assetic', 'translation', 'requirejs'] %}#}
-{% set step, platformSteps = 'installation', [ 'assets', 'assetic', 'fixtures', 'pages' ] %}
+{% set step, platformSteps = 'installation', ['assets', 'assetic', 'fixtures', 'pages'] %}
 {% use 'ChamiloInstallerBundle::progress.html.twig' %}
 
 {% if loadFixtures %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace { $loader = require_once __DIR__.'/autoload.php'; }
+namespace { $loader = require_once __DIR__.'/./autoload.php'; }
 
  
 namespace Symfony\Component\HttpFoundation
@@ -94,6 +94,10 @@ return str_replace(array('-','+'),'', $this->filter($key, $default, $deep, FILTE
 public function getInt($key, $default = 0, $deep = false)
 {
 return (int) $this->get($key, $default, $deep);
+}
+public function getBoolean($key, $default = false, $deep = false)
+{
+return $this->filter($key, $default, $deep, FILTER_VALIDATE_BOOLEAN);
 }
 public function filter($key, $default = null, $deep = false, $filter = FILTER_DEFAULT, $options = array())
 {
@@ -396,6 +400,16 @@ const HEADER_CLIENT_IP ='client_ip';
 const HEADER_CLIENT_HOST ='client_host';
 const HEADER_CLIENT_PROTO ='client_proto';
 const HEADER_CLIENT_PORT ='client_port';
+const METHOD_HEAD ='HEAD';
+const METHOD_GET ='GET';
+const METHOD_POST ='POST';
+const METHOD_PUT ='PUT';
+const METHOD_PATCH ='PATCH';
+const METHOD_DELETE ='DELETE';
+const METHOD_PURGE ='PURGE';
+const METHOD_OPTIONS ='OPTIONS';
+const METHOD_TRACE ='TRACE';
+const METHOD_CONNECT ='CONNECT';
 protected static $trustedProxies = array();
 protected static $trustedHostPatterns = array();
 protected static $trustedHosts = array();
@@ -678,7 +692,16 @@ return self::$httpMethodParameterOverride;
 }
 public function get($key, $default = null, $deep = false)
 {
-return $this->query->get($key, $this->attributes->get($key, $this->request->get($key, $default, $deep), $deep), $deep);
+if ($this !== $result = $this->query->get($key, $this, $deep)) {
+return $result;
+}
+if ($this !== $result = $this->attributes->get($key, $this, $deep)) {
+return $result;
+}
+if ($this !== $result = $this->request->get($key, $this, $deep)) {
+return $result;
+}
+return $default;
 }
 public function getSession()
 {
@@ -1161,7 +1184,7 @@ return (string) $pathInfo;
 }
 protected static function initializeFormats()
 {
-static::$formats = array('html'=> array('text/html','application/xhtml+xml'),'txt'=> array('text/plain'),'js'=> array('application/javascript','application/x-javascript','text/javascript'),'css'=> array('text/css'),'json'=> array('application/json','application/x-json'),'xml'=> array('text/xml','application/xml','application/x-xml'),'rdf'=> array('application/rdf+xml'),'atom'=> array('application/atom+xml'),'rss'=> array('application/rss+xml'),
+static::$formats = array('html'=> array('text/html','application/xhtml+xml'),'txt'=> array('text/plain'),'js'=> array('application/javascript','application/x-javascript','text/javascript'),'css'=> array('text/css'),'json'=> array('application/json','application/x-json'),'xml'=> array('text/xml','application/xml','application/x-xml'),'rdf'=> array('application/rdf+xml'),'atom'=> array('application/atom+xml'),'rss'=> array('application/rss+xml'),'form'=> array('application/x-www-form-urlencoded'),
 );
 }
 private function setPhpDefaultLocale($locale)
@@ -1845,9 +1868,9 @@ $flattenedCookies[] = $cookie;
 }
 return $flattenedCookies;
 }
-public function clearCookie($name, $path ='/', $domain = null)
+public function clearCookie($name, $path ='/', $domain = null, $secure = false, $httpOnly = true)
 {
-$this->setCookie(new Cookie($name, null, 1, $path, $domain));
+$this->setCookie(new Cookie($name, null, 1, $path, $domain, $secure, $httpOnly));
 }
 public function makeDisposition($disposition, $filename, $filenameFallback ='')
 {
@@ -2000,10 +2023,10 @@ $this->services[$id] = $service;
 if (method_exists($this, $method ='synchronize'.strtr($id, array('_'=>'','.'=>'_','\\'=>'_')).'Service')) {
 $this->$method();
 }
-if (self::SCOPE_CONTAINER !== $scope && null === $service) {
+if (null === $service) {
+if (self::SCOPE_CONTAINER !== $scope) {
 unset($this->scopedServices[$scope][$id]);
 }
-if (null === $service) {
 unset($this->services[$id]);
 }
 }
@@ -2079,6 +2102,9 @@ $id = strtolower($id);
 if ('service_container'=== $id) {
 return true;
 }
+if (isset($this->aliases[$id])) {
+$id = $this->aliases[$id];
+}
 return isset($this->services[$id]) || array_key_exists($id, $this->services);
 }
 public function getServiceIds()
@@ -2127,16 +2153,18 @@ throw new InvalidArgumentException(sprintf('The scope "%s" is not active.', $nam
 $services = array($this->services, $this->scopedServices[$name]);
 unset($this->scopedServices[$name]);
 foreach ($this->scopeChildren[$name] as $child) {
-if (!isset($this->scopedServices[$child])) {
-continue;
-}
+if (isset($this->scopedServices[$child])) {
 $services[] = $this->scopedServices[$child];
 unset($this->scopedServices[$child]);
+}
 }
 $this->services = call_user_func_array('array_diff_key', $services);
 if (isset($this->scopeStacks[$name]) && count($this->scopeStacks[$name]) > 0) {
 $services = $this->scopeStacks[$name]->pop();
 $this->scopedServices += $services;
+if ($this->scopeStacks[$name]->isEmpty()) {
+unset($this->scopeStacks[$name]);
+}
 foreach ($services as $array) {
 foreach ($array as $id => $service) {
 $this->set($id, $service, $name);
@@ -2263,11 +2291,11 @@ protected $booted = false;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.5.7';
-const VERSION_ID ='20507';
+const VERSION ='2.6.1';
+const VERSION_ID ='20601';
 const MAJOR_VERSION ='2';
-const MINOR_VERSION ='5';
-const RELEASE_VERSION ='7';
+const MINOR_VERSION ='6';
+const RELEASE_VERSION ='1';
 const EXTRA_VERSION ='';
 public function __construct($environment, $debug)
 {
@@ -2605,7 +2633,7 @@ $dumper = new PhpDumper($container);
 if (class_exists('ProxyManager\Configuration')) {
 $dumper->setProxyDumper(new ProxyDumper());
 }
-$content = $dumper->dump(array('class'=> $class,'base_class'=> $baseClass));
+$content = $dumper->dump(array('class'=> $class,'base_class'=> $baseClass,'file'=> (string) $cache));
 if (!$this->debug) {
 $content = static::stripComments($content);
 }
@@ -2769,13 +2797,13 @@ public function build(ContainerBuilder $container)
 public function getContainerExtension()
 {
 if (null === $this->extension) {
-$basename = preg_replace('/Bundle$/','', $this->getName());
-$class = $this->getNamespace().'\\DependencyInjection\\'.$basename.'Extension';
+$class = $this->getContainerExtensionClass();
 if (class_exists($class)) {
 $extension = new $class();
+$basename = preg_replace('/Bundle$/','', $this->getName());
 $expectedAlias = Container::underscore($basename);
 if ($expectedAlias != $extension->getAlias()) {
-throw new \LogicException(sprintf('The extension alias for the default extension of a '.'bundle must be the underscored version of the '.'bundle name ("%s" instead of "%s")',
+throw new \LogicException(sprintf('Users will expect the alias of the default extension of a bundle to be the underscored version of the bundle name ("%s"). You can override "Bundle::getContainerExtension()" if you want to use "%s" or another alias.',
 $expectedAlias, $extension->getAlias()
 ));
 }
@@ -2838,6 +2866,11 @@ if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->is
 $application->add($r->newInstance());
 }
 }
+}
+protected function getContainerExtensionClass()
+{
+$basename = preg_replace('/Bundle$/','', $this->getName());
+return $this->getNamespace().'\\DependencyInjection\\'.$basename.'Extension';
 }
 }
 }
@@ -2966,7 +2999,7 @@ if ($event->hasResponse()) {
 return $this->filterResponse($event->getResponse(), $request, $type);
 }
 if (false === $controller = $this->resolver->getController($request)) {
-throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s". Maybe you forgot to add the matching route in your routing configuration?', $request->getPathInfo()));
+throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s". The route is wrongly configured.', $request->getPathInfo()));
 }
 $event = new FilterControllerEvent($this, $controller, $request, $type);
 $this->dispatcher->dispatch(KernelEvents::CONTROLLER, $event);

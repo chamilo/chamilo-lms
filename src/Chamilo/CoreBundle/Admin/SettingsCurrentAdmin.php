@@ -26,42 +26,14 @@ class SettingsCurrentAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('title')
             ->add('variable')
             ->add('subkey')
             ->add('type')
             ->add('category')
             ->add('selectedValue')
-            ->add('title')
             ->add('comment', 'textarea', array('attr' => array('class'=> 'ckeditor')))
-            ->add('urls', 'sonata_type_collection', array(
-                    'cascade_validation' => true,
-                ), array(
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                    'edit'              => 'inline',
-                    'inline'            => 'table',
-                    //'btn_add' => true,
-                    //'multiple' => true
-                    //'sortable'          => 'position',
-                    //'link_parameters'   => array('content' => $users),
-                    'admin_code'        => 'sonata.admin.access_url_rel_course'
-                )
-            )
-            ->add('users', 'sonata_type_collection', array(
-                    'cascade_validation' => true,
-                ), array(
-                    'allow_delete' => true,
-                    'by_reference' => false,
-                    'edit'              => 'inline',
-                    'inline'            => 'table',
-                    //'btn_add' => true,
-                    //'multiple' => true
-                    //'sortable'          => 'position',
-                    //'link_parameters'   => array('content' => $users),
-                    'admin_code'        => 'sonata.admin.course_rel_user'
-                )
-            )
-            //->add('users', 'entity', array('class' => 'Chamilo\UserBundle\Entity\User', 'label' => 'Cliente'))
+            ->add('url')
         ;
     }
 
@@ -71,8 +43,9 @@ class SettingsCurrentAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
+            ->add('title')
             ->add('variable')
-            ->add('title')//->add('users')
+            ->add('category')
         ;
     }
 
@@ -83,6 +56,7 @@ class SettingsCurrentAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
+            ->add('category')
             ->addIdentifier('variable')
             ->addIdentifier('selected_value')
         ;

@@ -27,7 +27,6 @@ use Chamilo\NotebookBundle\Entity\CNotebook;
  */
 class CNotebookController extends ResourceController
 {
-
     /**
      * @Route("/")
      */

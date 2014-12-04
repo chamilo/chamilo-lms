@@ -15,8 +15,8 @@ use Chamilo\CourseBundle\ToolChain;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
 /**
- * Class CourseAdmin (Sonata)
- * @package Chamilo\CoreBundle\Admin
+ * Class CNotebookAdmin (Sonata)
+ * @package Chamilo\NotebookBundle\Admin
  */
 class CNotebookAdmin extends Admin
 {
@@ -26,13 +26,12 @@ class CNotebookAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('title')
-            ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
-            ->add('cId')
-            ->add('notebookId')
-            ->add('userId')
-            ->add('course')
-            ->add('sessionId')
+            ->add('name', 'text')
+            ->add(
+                'description',
+                'textarea',
+                array('attr' => array('class' => 'ckeditor'))
+            )
         ;
     }
 
@@ -42,7 +41,7 @@ class CNotebookAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('title')
+            ->add('name')
         ;
     }
 
@@ -53,7 +52,7 @@ class CNotebookAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            ->addIdentifier('title')
+            ->addIdentifier('name')
         ;
     }
 }

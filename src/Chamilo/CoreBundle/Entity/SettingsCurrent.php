@@ -89,13 +89,6 @@ class SettingsCurrent implements ParameterInterface
     /**
      * @var integer
      *
-     * @ORM\Column(name="access_url", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $accessUrl;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="access_url_changeable", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $accessUrlChangeable;
@@ -107,9 +100,17 @@ class SettingsCurrent implements ParameterInterface
      */
     private $accessUrlLocked;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="settings", cascade={"persist"})
+     * @ORM\JoinColumn(name="access_url", referencedColumnName="id")
+     */
+    protected $url;
+
+    /**
+     * Construct
+     */
     public function __construct()
     {
-        $this->accessUrl = 1;
         $this->accessUrlLocked = 0;
         $this->access_url_changeable = 1;
     }
@@ -337,9 +338,9 @@ class SettingsCurrent implements ParameterInterface
      * @param integer $accessUrl
      * @return SettingsCurrent
      */
-    public function setAccessUrl($accessUrl)
+    public function setUrl($accessUrl)
     {
-        $this->accessUrl = $accessUrl;
+        $this->url = $accessUrl;
 
         return $this;
     }
@@ -349,9 +350,9 @@ class SettingsCurrent implements ParameterInterface
      *
      * @return integer
      */
-    public function getAccessUrl()
+    public function getUrl()
     {
-        return $this->accessUrl;
+        return $this->url;
     }
 
     /**

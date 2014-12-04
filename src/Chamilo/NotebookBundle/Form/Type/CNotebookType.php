@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\NotebookBundle\Form\Type;
 
@@ -12,7 +13,11 @@ class CNotebookType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('description', 'textarea')
+            ->add(
+                'description',
+                'textarea',
+                array('attr' => array('class' => 'ckeditor'))
+            )
             /*->add('cId')
             ->add('notebookId')
             ->add('userId')

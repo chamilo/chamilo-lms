@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
+use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CoreBundle\Entity\Course;
 use Sonata\AdminBundle\Admin\Admin;
@@ -29,7 +30,7 @@ class PromotionAdmin extends Admin
         $formMapper
             ->add('name')
             ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
-            ->add('status')
+            ->add('status', 'choice', array('choices' => Promotion::getStatusList()))
             ->add('career')
         ;
     }

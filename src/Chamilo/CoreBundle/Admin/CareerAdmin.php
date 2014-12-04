@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
+use Chamilo\CoreBundle\Entity\Career;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CoreBundle\Entity\Course;
@@ -29,7 +30,7 @@ class CareerAdmin extends Admin
         $formMapper
             ->add('name')
             ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
-            ->add('status')
+            ->add('status', 'choice', array('choices' => Career::getStatusList()))
         ;
     }
 

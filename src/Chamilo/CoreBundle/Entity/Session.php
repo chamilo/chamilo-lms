@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Session
@@ -74,13 +75,6 @@ class Session
     /**
      * @var integer
      *
-     * @ORM\Column(name="session_category_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $sessionCategoryId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="promotion_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $promotionId;
@@ -137,6 +131,12 @@ class Session
      * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
      **/
     private $generalCoach;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", inversedBy="session")
+     * @ORM\JoinColumn(name="session_category_id", referencedColumnName="id")
+     **/
+    private $category;
 
     /**
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
@@ -600,6 +600,18 @@ class Session
     public function setGeneralCoach($coach)
     {
         $this->generalCoach = $coach;
+    }
+
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
     }
 
     /**

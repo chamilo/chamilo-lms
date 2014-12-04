@@ -50,6 +50,16 @@ class SessionCategory
     protected $url;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
+     **/
+    protected $session;
+
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
+
+    /**
      * Set url
      *
      * @param $url

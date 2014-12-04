@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Promotion
@@ -13,6 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Promotion
 {
+    const PROMOTION_STATUS_ACTIVE = 1;
+    const PROMOTION_STATUS_INACTIVE = 0;
+
     /**
      * @var integer
      *
@@ -37,13 +41,6 @@ class Promotion
     private $description;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="career_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    //private $careerId;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Career", inversedBy="promotions")
      * @ORM\JoinColumn(name="career_id", referencedColumnName="id")
      **/
@@ -58,17 +55,36 @@ class Promotion
 
     /**
      * @var \DateTime
-     *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $updatedAt;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatusList()
+    {
+        return array(
+            self::PROMOTION_STATUS_ACTIVE => 'Active',
+            self::PROMOTION_STATUS_INACTIVE => 'Inactive'
+        );
+    }
 
     /**
      * Get id
@@ -127,26 +143,26 @@ class Promotion
     }
 
     /**
-     * Set careerId
+     * Set Career
      *
-     * @param integer $careerId
+     * @param Career $career
      * @return Promotion
      */
-    public function setCareerId($careerId)
+    public function setCareer($career)
     {
-        $this->careerId = $careerId;
+        $this->career = $career;
 
         return $this;
     }
 
     /**
-     * Get careerId
+     * Get Career
      *
-     * @return integer
+     * @return Career
      */
-    public function getCareerId()
+    public function getCareer()
     {
-        return $this->careerId;
+        return $this->career;
     }
 
     /**

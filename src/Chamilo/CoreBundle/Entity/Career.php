@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Career
@@ -13,6 +14,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Career
 {
+    const CAREER_STATUS_ACTIVE = 1;
+    const CAREER_STATUS_INACTIVE = 0;
+
     /**
      * @var integer
      *
@@ -45,14 +49,14 @@ class Career
 
     /**
      * @var \DateTime
-     *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $createdAt;
 
     /**
      * @var \DateTime
-     *
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $updatedAt;
@@ -61,6 +65,25 @@ class Career
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Promotion", mappedBy="career", cascade={"persist"}, orphanRemoval=true)
      **/
     protected $promotions;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatusList()
+    {
+        return array(
+            self::CAREER_STATUS_ACTIVE => 'Unarchived',
+            self::CAREER_STATUS_INACTIVE => 'Archived'
+        );
+    }
 
     /**
      * Get id

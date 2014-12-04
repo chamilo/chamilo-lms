@@ -3,13 +3,12 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
+use Chamilo\CoreBundle\Entity\Session;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-
-use Knp\Menu\ItemInterface as MenuItemInterface;
 
 /**
  * Class SessionAdmin
@@ -25,8 +24,13 @@ class SessionAdmin extends Admin
         $formMapper
             ->add('name') //if no type is specified, SonataAdminBundle tries to guess it
             ->add('generalCoach')
+            ->add('category')
             ->add('displayStartDate', 'sonata_type_datetime_picker')
-            ->add('visibility')
+            ->add(
+                'visibility',
+                'choice',
+                array('choices' => Session::getStatusList())
+            )
             ->add('courses', 'sonata_type_collection', array(
                     'cascade_validation' => true,
                 ), array(
@@ -37,22 +41,19 @@ class SessionAdmin extends Admin
                     'admin_code'        => 'sonata.admin.session_rel_course'
                 )
             )
-            ->add('users', 'sonata_type_collection', array(
+            /*->add('users', 'sonata_type_collection', array(
                     'cascade_validation' => true,
                 ), array(
-                    'edit'              => 'inline',
-                    'inline'            => 'table',
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    //'edit'              => 'inline',
+
                     //'sortable'          => 'position',
                     //'link_parameters'   => array('context' => $context),
                     //'admin_code'        => 'sonata.admin.session_rel_user'
                 )
-            )
+            )*/
         ;
-
-        /*->add('student', 'sonata_type_model', array(),
-        array(
-            'admin_code' => 'application.subscriber.admin.student'
-        ))*/
     }
 
     /**

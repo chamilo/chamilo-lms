@@ -22,22 +22,23 @@ services:
             - [ setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.career:
-        class: Chamilo\CoreBundle\Admin\SessionCategoryAdmin
+        class: Chamilo\CoreBundle\Admin\CareerAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Session category" }
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Career" }
         arguments:
             - ~
-            - Chamilo\CoreBundle\Entity\SessionCategory
+            - Chamilo\CoreBundle\Entity\Career
             - ~
         calls:
             - [ setTranslationDomain, [ChamiloCoreBundle]]
+
     sonata.admin.promotion:
-        class: Chamilo\CoreBundle\Admin\SessionCategoryAdmin
+        class: Chamilo\CoreBundle\Admin\PromotionAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Session category" }
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Promotion" }
         arguments:
             - ~
-            - Chamilo\CoreBundle\Entity\SessionCategory
+            - Chamilo\CoreBundle\Entity\Promotion
             - ~
         calls:
             - [ setTranslationDomain, [ChamiloCoreBundle]]

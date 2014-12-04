@@ -238,6 +238,19 @@ foreach ($list_course_extra_field as $extra_field) {
             break;
     }
 }
+
+//Extra fields
+$extra_field = new CourseField();
+$extra = $extra_field->addElements($form, $course_code);
+
+$htmlHeadXtra[] ='
+<script>
+
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
+
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'), 'onclick="valide()"; class="save"');
 
 // Set some default values

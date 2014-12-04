@@ -22,6 +22,7 @@ class ChamiloCourseExtension extends AbstractResourceExtension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('admin.yml');
 
         list($config) = $this->configure($config, new Configuration(), $container, self::CONFIGURE_LOADER | self::CONFIGURE_DATABASE);
 
@@ -41,6 +42,5 @@ class ChamiloCourseExtension extends AbstractResourceExtension
         }
 
         $container->setParameter('chamilo_course.config.classes', $classes);
-
     }
 }

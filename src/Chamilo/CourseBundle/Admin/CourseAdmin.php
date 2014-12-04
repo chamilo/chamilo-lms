@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Admin;
+namespace Chamilo\CourseBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -28,12 +28,23 @@ class CourseAdmin extends Admin
     {
         $formMapper
             ->add('title')
-            ->add('code','text', array(
+            ->add('code', 'text', array(
                 //'read_only' => true,
             ))
-            ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
+            ->add(
+                'description',
+                'textarea',
+                array('attr' => array('class' => 'ckeditor'))
+            )
             ->add('departmentName')
-            ->add('visibility')
+            ->add(
+                'visibility',
+                'choice',
+                array(
+                    'choices' => Course::getStatusList(),
+                    'translation_domain' => 'ChamiloCoreBundle'
+                )
+            )
             ->add('departmentUrl')
             ->add('urls', 'sonata_type_collection', array(
                     'cascade_validation' => true,
@@ -63,7 +74,6 @@ class CourseAdmin extends Admin
                     'admin_code'        => 'sonata.admin.course_rel_user'
                 )
             )
-            //->add('users', 'entity', array('class' => 'Chamilo\UserBundle\Entity\User', 'label' => 'Cliente'))
         ;
     }
 

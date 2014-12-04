@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Admin;
+namespace Chamilo\CourseBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -12,10 +12,10 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
 /**
- * Class CourseCategoryAdmin
+ * Class CourseRequestAdmin
  * @package Chamilo\CoreBundle\Admin
  */
-class CourseCategoryAdmin extends Admin
+class CourseRequestAdmin extends Admin
 {
     /**
      * @param FormMapper $formMapper
@@ -23,9 +23,15 @@ class CourseCategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
+            ->add('title')
+            ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
             ->add('code')
-            ->add('parent')
+            ->add('user')
+            ->add('status')
+            ->add('info')
+            ->add('directory')
+            ->add('exemplaryContent', 'checkbox')
+            ->add('courseLanguage', 'language')
         ;
     }
 
@@ -36,7 +42,7 @@ class CourseCategoryAdmin extends Admin
     {
         $showMapper
             ->add('id')
-            ->add('name')
+            ->add('title')
         ;
     }
 
@@ -47,7 +53,7 @@ class CourseCategoryAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('name')
+            ->add('title')
         ;
     }
 
@@ -58,7 +64,7 @@ class CourseCategoryAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            ->addIdentifier('name')
+            ->addIdentifier('title')
         ;
     }
 }

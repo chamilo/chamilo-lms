@@ -1,6 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Admin;
+namespace Chamilo\CourseBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -38,7 +39,7 @@ class CourseRelUserAdmin extends Admin
         $formMapper
             ->add('user')
             ->add('group')
-            ->add('status', 'sonata_type_translatable_choice', array(
+            ->add('status', 'choice', array(
                     'choices' => CourseRelUser::getStatusList()
                 )
             )

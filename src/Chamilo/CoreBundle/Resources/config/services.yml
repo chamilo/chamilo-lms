@@ -116,7 +116,6 @@ services:
             - { name: sonata.block }
 
     # Menus
-
     chamilo_core.menu.simple_menu:
         class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder
         arguments: [@service_container]

@@ -612,7 +612,9 @@ class DocumentManager
                     $doc_list[] = $row;
                 }
 
-                if ($row['filetype'] == 'file' && pathinfo($row['path'], PATHINFO_EXTENSION) == 'html') {
+                if ($row['filetype'] == 'file' &&
+                    pathinfo($row['path'], PATHINFO_EXTENSION) == 'html'
+                ) {
                     // Templates management
                     $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
                     $sql = "SELECT id FROM $table_template
@@ -731,7 +733,7 @@ class DocumentManager
         }
 
         if ($can_see_invisible) {
-            //condition for the session
+            // condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             $show_users_condition = "";
@@ -740,8 +742,9 @@ class DocumentManager
             }
 
             if ($to_group_id <> 0) {
-               $sql = "SELECT DISTINCT docs.id, path
-                       FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
+                $sql = "SELECT DISTINCT docs.id, path
+                       FROM $TABLE_ITEMPROPERTY  AS last
+                       INNER JOIN $TABLE_DOCUMENT  AS docs
                        ON (
                             docs.id = last.ref AND
                             last.tool = '" . TOOL_DOCUMENT . "' AND
@@ -752,10 +755,12 @@ class DocumentManager
                             docs.filetype 		= 'folder' AND
                             last.to_group_id	= " . $to_group_id . " AND
                             docs.path NOT LIKE '%shared_folder%' AND
+                            docs.path NOT LIKE '%_DELETED_%' AND
                             last.visibility 	<> 2 $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
-                        FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
+                        FROM $TABLE_ITEMPROPERTY  AS last
+                        INNER JOIN $TABLE_DOCUMENT  AS docs
                         ON (
                             docs.id = last.ref AND
                             last.tool = '" . TOOL_DOCUMENT . "' AND
@@ -764,6 +769,7 @@ class DocumentManager
                         )
                         WHERE
                             docs.filetype 		= 'folder' AND
+                            docs.path NOT LIKE '%_DELETED_%' AND
                             last.to_group_id	= 0  AND
                             last.visibility 	<> 2
                             $show_users_condition $condition_session ";
@@ -914,7 +920,8 @@ class DocumentManager
                     // Check
                     $sql = "SELECT td.id, readonly, tp.insert_user_id
                             FROM $TABLE_DOCUMENT td, $TABLE_PROPERTY tp
-                            WHERE td.c_id = $course_id AND
+                            WHERE
+                                td.c_id = $course_id AND
                                 tp.c_id = $course_id AND
                                 td.session_id = $sessionId AND
                                 tp.ref= td.id AND
@@ -1466,7 +1473,7 @@ class DocumentManager
      * Unset a document as template
      *
      * @param int $document_id
-     * @param string $couse_code
+     * @param string $course_code
      * @param int $user_id
      */
     public static function unset_document_as_template($document_id, $course_code, $user_id)
@@ -1491,7 +1498,8 @@ class DocumentManager
     }
 
     /**
-     * Return true if the documentpath have visibility=1 as item_property (you should use the is_visible_by_id)
+     * Return true if the documentpath have visibility=1 as
+     * item_property (you should use the is_visible_by_id)
      *
      * @param string $document_path the relative complete path of the document
      * @param array  $course the _course array info of the document's course
@@ -2264,21 +2272,21 @@ class DocumentManager
             // then possible closing brackets if we were in the opening bracket case
             // OR something like @import()
             $res = preg_match_all(
-                    '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]*))' .
-                    // '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]|[^\x00-\x7F])*)' . -> seems to be taking too much
-                    // '/(((([A-Za-z_:])([^\x00-\x7F])*)' . -> takes only last letter of parameter name
-                    '([ \n\t\r]+)?(' .
-                    // '(=([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+))' . -> doesn't restrict close enough to the url itself
-                    '(=([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+))' .
-                    '|' .
-                    // '(\(([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)\))' . -> doesn't restrict close enough to the url itself
-                    '(\(([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+)\))' .
-                    '))' .
-                    '|' .
-                    // '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))?/', -> takes a lot (like 100's of thousands of empty possibilities)
-                    '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/',
-                    $attrString,
-                    $regs
+                '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]*))' .
+                // '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]|[^\x00-\x7F])*)' . -> seems to be taking too much
+                // '/(((([A-Za-z_:])([^\x00-\x7F])*)' . -> takes only last letter of parameter name
+                '([ \n\t\r]+)?(' .
+                // '(=([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+))' . -> doesn't restrict close enough to the url itself
+                '(=([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+))' .
+                '|' .
+                // '(\(([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)\))' . -> doesn't restrict close enough to the url itself
+                '(\(([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+)\))' .
+                '))' .
+                '|' .
+                // '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))?/', -> takes a lot (like 100's of thousands of empty possibilities)
+                '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/',
+                $attrString,
+                $regs
             );
         } catch (Exception $e) {
             error_log('Caught exception: ' . $e->getMessage(), 0);
@@ -2947,12 +2955,12 @@ class DocumentManager
         $visual_other_percentage = 4 * $other_percentage;
 
         $message .= get_lang('PercentageQuotaInUse') . ': <strong>' . $percentage . '%</strong>.<br />' .
-                get_lang('PercentageQuotaFree') . ': <strong>' . $other_percentage . '%</strong>.<br />';
+            get_lang('PercentageQuotaFree') . ': <strong>' . $other_percentage . '%</strong>.<br />';
 
         $show_percentage = '&nbsp;' . $percentage . '%';
         $message .= '<div style="width: 80%; text-align: center; -moz-border-radius: 5px 5px 5px 5px; border: 1px solid #aaa; background-image: url(\'' . api_get_path(WEB_CODE_PATH) . 'css/' . api_get_visual_theme() . '/images/bg-header4.png\');" class="document-quota-bar">' .
-                '<div style="width:' . $percentage . '%; background-color: #bbb; border-right:3px groove #bbb; -moz-border-radius:5px;">&nbsp;</div>' .
-                '<span style="margin-top: -15px; margin-left:-15px; position: absolute;font-weight:bold;">' . $show_percentage . '</span></div>';
+            '<div style="width:' . $percentage . '%; background-color: #bbb; border-right:3px groove #bbb; -moz-border-radius:5px;">&nbsp;</div>' .
+            '<span style="margin-top: -15px; margin-left:-15px; position: absolute;font-weight:bold;">' . $show_percentage . '</span></div>';
         echo $message;
     }
 
@@ -4059,10 +4067,10 @@ class DocumentManager
         $formatTypes = array('text', 'spreadsheet', 'presentation', 'drawing');
         foreach ($formatTypes as $formatType) {
             if (
-                in_array(
-                    $extension,
-                    self::getJodconverterExtensionList($mode, $formatType)
-                )
+            in_array(
+                $extension,
+                self::getJodconverterExtensionList($mode, $formatType)
+            )
             ) {
                 $formatTypesList[] = $formatType;
             }
@@ -4213,10 +4221,10 @@ class DocumentManager
     {
         $nanoGongJarFile = api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar';
         $html = '<applet id="applet" archive="'.$nanoGongJarFile.'" code="gong.NanoGong" width="160" height="95">';
-            $html .= '<param name="SoundFileURL" value="'.$file.'" />';
-            $html .= '<param name="ShowSaveButton" value="false" />';
-            $html .= '<param name="ShowTime" value="true" />';
-            $html .= '<param name="ShowRecordButton" value="false" />';
+        $html .= '<param name="SoundFileURL" value="'.$file.'" />';
+        $html .= '<param name="ShowSaveButton" value="false" />';
+        $html .= '<param name="ShowTime" value="true" />';
+        $html .= '<param name="ShowRecordButton" value="false" />';
         $html .= '</applet>';
         return $html;
     }
@@ -4668,6 +4676,7 @@ class DocumentManager
                     (path = '".$folder."' OR path = '$folderWithSuffix') AND
                     (session_id = 0 OR session_id = $sessionId)
         ";
+
         $rs = Database::query($sql);
         if (Database::num_rows($rs)) {
             return true;

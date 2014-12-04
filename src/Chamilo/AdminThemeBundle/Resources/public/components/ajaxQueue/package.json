@@ -1,0 +1,40 @@
+{
+  "name": "jquery.ajaxQueue",
+  "title": "jQuery Ajax Queue",
+  "description": "A simple queue for ajax requests",
+  "version": "0.1.1",
+  "homepage": "https://github.com/gnarf37/jquery-ajaxQueue",
+  "author": {
+    "name": "Corey Frang",
+    "email": "gnarf37@gmail.com",
+    "url": "https://github.com/gnarf37"
+  },
+  "maintainers": [
+    {
+      "name": "Corey Frang",
+      "email": "gnarf37@gmail.com",
+      "url": "https://github.com/gnarf37"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gnarf37/jquery-ajaxQueue.git"
+  },
+  "bugs": "https://github.com/gnarf37/jquery-ajaxQueue/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/jquery/gnarf37/jquery-ajaxQueue/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "grunt-contrib-concat": "~0.1.1",
+    "grunt-contrib-watch": "~0.1.0",
+    "grunt-contrib-qunit": "~0.1.0",
+    "grunt-contrib-jshint": "git://github.com/gruntjs/grunt-contrib-jshint.git#7fd70e86c5a8d489095fa81589d95dccb8eb3a46",
+    "grunt-contrib-uglify": "git://github.com/gruntjs/grunt-contrib-uglify.git#f8da4ff90c7e8f74c81d8e5d3834e6011a90611c",
+    "grunt": "0.4.0rc4"
+  },
+  "keywords": [ "ajax", "queue" ]
+}

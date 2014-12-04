@@ -31,10 +31,14 @@ class CourseAdmin extends Admin
             ->add('code', 'text', array(
                 //'read_only' => true,
             ))
-            ->add(
+            /*->add(
                 'description',
                 'textarea',
                 array('attr' => array('class' => 'ckeditor'))
+            )*/
+            ->add(
+                'description',
+                'ckeditor'
             )
             ->add('departmentName')
             ->add(

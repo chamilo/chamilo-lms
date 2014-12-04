@@ -13,7 +13,7 @@ sonata_admin:
         # default global templates
         # the layout template include javascript/stylesheet to the formatter bundle,
         # if you don't need it use the default one: SonataAdminBundle::standard_layout.html.
-        layout: ApplicationSonataAdminBundle::standard_layout.html.twig
+        layout: ApplicationSonataAdminBundle::layout.html.twig
         #layout:  ApplicationSonataAdminBundle::standard_layout.html.twig
         #layout:  ApplicationSonataAdminBundle::demo_layout.html.twig
 

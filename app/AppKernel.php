@@ -66,6 +66,7 @@ class AppKernel extends Kernel
             //new Presta\CMSMediaBundle\PrestaCMSMediaBundle(),
 
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
+            new CoopTilleuls\Bundle\CKEditorSonataMediaBundle\CoopTilleulsCKEditorSonataMediaBundle(),
 
             new Sonata\AdminBundle\SonataAdminBundle(),
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
@@ -179,6 +180,16 @@ class AppKernel extends Kernel
     {
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
     }
+
+    /*public function getCacheDir()
+    {
+        return dirname(dirname(__DIR__)).'/cache/'.$this->environment;
+    }
+
+    public function getLogDir()
+    {
+        return dirname(dirname(__DIR__)).'/log/';
+    }*/
 
     /*public function getLogDir()
     {

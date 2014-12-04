@@ -44,7 +44,7 @@ framework:
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
-    form:            ~
+    form: ~
     csrf_protection: ~
     validation:      { enable_annotations: true }
     templating:
@@ -68,11 +68,11 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-
     base_template_class: Sonata\CacheBundle\Twig\TwigTemplate14
 
     form:
         resources:
+            - 'bootstrap_3_layout.html.twig'
             - 'SonataFormatterBundle:Form:formatter.html.twig'
             - 'SonataMediaBundle:Form:media_widgets.html.twig'
             - 'SonataCoreBundle:Form:datepicker.html.twig'
@@ -261,7 +261,7 @@ doctrine_cache:
 # Bower configuration
 sp_bower:
     assetic: true
-    install_on_warmup: true
+    install_on_warmup: false
     bundles:
         ChamiloAdminThemeBundle:
             cache:

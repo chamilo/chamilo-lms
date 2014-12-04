@@ -116,6 +116,18 @@ $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
 
+//Extra fields
+$extra_field = new ExtraField('course');
+$extra = $extra_field->addElements($form);
+
+$htmlHeadXtra[] ='
+<script>
+
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
+
 $form->add_progress_bar();
 $form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');
 

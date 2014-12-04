@@ -159,7 +159,7 @@ class ExtraFieldValue extends Model
                                 'field_value'       => $value
                             );
 
-                            if ($this->handler_id !== 'session_id') {
+                            if ($this->handler_id !== 'session_id' && $this->handler_id !== 'course_code') {
                                 $new_params['comment'] = $comment;
                             }
 
@@ -253,7 +253,7 @@ class ExtraFieldValue extends Model
             $params['field_value'] = $value_to_insert;
             $params['tms'] = api_get_utc_datetime();
 
-            if ($this->handler_id !== 'session_id') {
+            if ($this->handler_id !== 'session_id' && $this->handler_id !== 'course_code') {
                 $params[$this->author_id] = api_get_user_id();
             }
 

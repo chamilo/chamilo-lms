@@ -1,0 +1,14 @@
+{
+  "name": "ajaxQueue",
+  "homepage": "https://github.com/gnarf/jquery-ajaxQueue",
+  "version": "0.1.1",
+  "_release": "0.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.1",
+    "commit": "d0206b3089d519172593900a6686cc24fa9e545c"
+  },
+  "_source": "https://github.com/gnarf/jquery-ajaxQueue.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/gnarf/jquery-ajaxQueue.git"
+}

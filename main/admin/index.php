@@ -140,6 +140,9 @@ if (api_is_platform_admin()) {
     if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
         $items[] = array('url'=>'ldap_import_students.php', 'label' => get_lang('ImportLDAPUsersIntoCourse'));
     }
+
+    $items[] = array('url'=>'course_fields.php', 	'label' => get_lang('ManageCourseFields'));
+
     $blocks['courses']['items'] = $items;
     $blocks['courses']['extra'] = null;
 

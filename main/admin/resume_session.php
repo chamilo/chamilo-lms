@@ -219,19 +219,37 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 $sessionField = new SessionField();
 $sessionFields = $sessionField->get_all();
 
-foreach ($sessionFields as $sessionField) {
-    if ($sessionField['field_visible'] != '1') {
+foreach ($sessionFields as $field) {
+    if ($field['field_visible'] != '1') {
         continue;
     }
 
     $sesionFieldValue = new SessionFieldValue();
-    $sesionValueData = $sesionFieldValue->get_values_by_handler_and_field_id($sessionId, $sessionField['id'], true);
-?>
-<tr>
-    <td><?php echo $sessionField['field_display_text'] ?></td>
-    <td><?php echo $sesionValueData ? $sesionValueData['field_value'] : '' ?></td>
-</tr>
-<?php
+    $sesionValueData = $sesionFieldValue->get_values_by_handler_and_field_id($sessionId, $field['id'], true);
+    ?>
+        <tr>
+            <td><?php echo $field['field_display_text'] ?></td>
+            <td>
+                <?php
+                if ($sesionValueData) {
+                    switch ($field['field_type']) {
+                        case ExtraField::FIELD_TYPE_CHECKBOX:
+                            echo $sesionValueData['field_value'] == '1' ? get_lang('Yes') : get_lang('No');
+                            break;
+                        case ExtraField::FIELD_TYPE_DATE:
+                            $extraFieldDate = str_replace(';', '-', $sesionValueData['field_value']);
+
+                            echo api_format_date($extraFieldDate, DATE_FORMAT_LONG_NO_DAY);
+                            break;
+                        default:
+                            echo $sesionValueData['field_value'];
+                            break;
+                    }
+                }
+                ?>
+            </td>
+        </tr>
+    <?php
 }
 
 $multiple_url_is_on = api_get_multiple_access_url();

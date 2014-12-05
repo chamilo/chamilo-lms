@@ -16,6 +16,8 @@ api_protect_admin_script();
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+
 $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -227,16 +229,23 @@ $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 $list_course_extra_field = CourseManager::get_course_extra_field_list($course_code);
 
-//@todo this is wrong
-foreach ($list_course_extra_field as $extra_field) {
-    switch ($extra_field['field_type']) {
-        case CourseManager::COURSE_FIELD_TYPE_CHECKBOX:
-            $checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
-            $form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
-            $field_display_text = $extra_field['field_display_text'];
-            $form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(null, get_lang('AllUsersAreAutomaticallyRegistered')), get_lang('SpecialCourse'), $checked);
-            break;
+$specialCourseField = new CourseField();
+$specialCourseFieldInfo = $specialCourseField->get_handler_field_info_by_field_variable('special_course');
+
+if (!empty($specialCourseFieldInfo)) {
+    $specialCourseValue = new CourseFieldValue();
+    $specialCourseValueInfo = $specialCourseValue->get_values_by_handler_and_field_variable($course_code, 'special_course');
+
+    $specialCourseAttributes = array();
+
+    if (!empty($specialCourseValueInfo) && $specialCourseValueInfo['field_value'] == 1) {
+        $specialCourseAttributes['checked'] = '';
     }
+
+    $form->addElement('hidden', '_extra_special_course', 0);
+    $form->addElement('checkbox', 'extra_special_course', array(
+        null, get_lang('AllUsersAreAutomaticallyRegistered')
+    ), get_lang('SpecialCourse'), $specialCourseAttributes);
 }
 
 //Extra fields

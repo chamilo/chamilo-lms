@@ -4,6 +4,8 @@
 
 class CourseField extends ExtraField {
 
+    const SPECIAL_COURSE_FIELD = 'special_course';
+
     public function __construct() {
         parent::__construct('course');
     }
@@ -101,5 +103,55 @@ class CourseField extends ExtraField {
         $form->addRule('field_type', get_lang('ThisFieldIsRequired'), 'required');
 
         return $form;
+    }
+
+    /**
+     * Add elements to a form
+     *
+     * @param FormValidator $form
+     * @param int $courseCode
+     *
+     * @return array|bool
+     */
+    public function addElements($form, $courseCode = null)
+    {
+        if (empty($form)) {
+            return false;
+        }
+
+        $extra_data = false;
+        if (!empty($courseCode)) {
+            $extra_data = self::get_handler_extra_data($courseCode);
+
+            if ($form) {
+                $form->setDefaults($extra_data);
+            }
+        }
+
+        $extra_fields = $this->get_all(null, 'option_order');
+
+        $specilCourseFieldId = -1;
+
+        foreach ($extra_fields as $id => $extraField) {
+            if ($extraField['field_variable'] === self::SPECIAL_COURSE_FIELD) {
+                $specilCourseFieldId = $id;
+            }
+        }
+
+        if (isset($extra_fields[$specilCourseFieldId])) {
+            unset($extra_fields[$specilCourseFieldId]);
+        }
+
+        $extra = $this->set_extra_fields_in_form(
+            $form,
+            $extra_data,
+            $this->type.'_field',
+            false,
+            false,
+            $extra_fields,
+            $courseCode
+        );
+
+        return $extra;
     }
 }

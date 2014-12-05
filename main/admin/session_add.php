@@ -294,12 +294,12 @@ $form->addElement('advanced_settings','<a class="btn-show" id="advanced_paramete
 
 $form->addElement('html','<div id="options" style="display:none">');
 
-$form->addElement('text', 'nb_days_acess_before', get_lang('DaysBefore'), array(
+$form->addElement('text', 'nb_days_acess_before', array('', '', get_lang('DaysBefore')), array(
     'style' => 'width: 30px;',
     'value' => $nb_days_acess_before
 ));
 
-$form->addElement('text', 'nb_days_acess_after', get_lang('DaysAfter'), array(
+$form->addElement('text', 'nb_days_acess_after', array('', '', get_lang('DaysAfter')), array(
     'style' => 'width: 30px;',
     'value' => $nb_days_acess_after
 ));

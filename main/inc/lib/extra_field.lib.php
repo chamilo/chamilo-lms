@@ -52,6 +52,8 @@ class ExtraField extends Model
     const FIELD_TYPE_SOCIAL_PROFILE  = 12;
     const FIELD_TYPE_CHECKBOX        = 13;
     const FIELD_TYPE_MOBILE_PHONE_NUMBER       = 14;
+    const FIELD_TYPE_INTEGER        = 15;
+    const FIELD_TYPE_FILE        = 16;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
@@ -228,6 +230,9 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
         $types[self::FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
         $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
+        $types[self::FIELD_TYPE_CHECKBOX]       = get_lang('FieldTypeCheckbox');
+        $types[self::FIELD_TYPE_INTEGER]           = get_lang('FieldTypeInteger');
+        $types[self::FIELD_TYPE_FILE]           = get_lang('FieldTypeFile');
 
         switch ($handler) {
             case 'course':
@@ -986,6 +991,44 @@ EOF;
                         );
                         if ($field_details['field_visible'] == 0) {
                             $form->freeze('extra_'.$field_details['field_variable']);
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_INTEGER:
+                        $form->addElement(
+                            'number',
+                            'extra_'.$field_details['field_variable'],
+                            $field_details['field_display_text'],
+                            array('class' => 'span1')
+                        );
+
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+
+                        if (!$admin_permissions) {
+                            if ($field_details['field_visible'] == 0) {
+                                $form->freeze(
+                                    'extra_'.$field_details['field_variable']
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_FILE:
+                        $form->addElement(
+                            'file',
+                            'extra_'.$field_details['field_variable'],
+                            $field_details['field_display_text'],
+                            array('class' => 'span8')
+                        );
+
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+
+                        if (!$admin_permissions) {
+                            if ($field_details['field_visible'] == 0) {
+                                $form->freeze(
+                                    'extra_'.$field_details['field_variable']
+                                );
+                            }
                         }
                         break;
                 }

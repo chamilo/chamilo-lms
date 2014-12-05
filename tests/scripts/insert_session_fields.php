@@ -11,7 +11,7 @@ api_protect_admin_script();
 
 $horasLectivas = new ExtraField('session');
 $horasLectivas->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'field_variable' => 'horas_lectivas',
     'field_display_text' => 'Horas lectivas',
     'field_visible' => 1,
@@ -20,7 +20,7 @@ $horasLectivas->save(array(
 
 $costo = new ExtraField('session');
 $costo->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'field_variable' => 'costo',
     'field_display_text' => 'Costo',
     'field_visible' => 1,
@@ -29,7 +29,7 @@ $costo->save(array(
 
 $vacantes = new ExtraField('session');
 $vacantes->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'field_variable' => 'vacantes',
     'field_display_text' => 'Vacantes',
     'field_visible' => 1,
@@ -38,7 +38,7 @@ $vacantes->save(array(
 
 $numeroRecomendadoParticipantes = new ExtraField('session');
 $numeroRecomendadoParticipantes->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'field_variable' => 'numero_recomendado_participantes',
     'field_display_text' => 'Número recomendado de participantes',
     'field_visible' => 1,
@@ -102,7 +102,7 @@ $esSesionAbierta->save(array(
 
 $duracion = new ExtraField('session');
 $duracion->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'field_variable' => 'duracion',
     'field_display_text' => 'Duración',
     'field_visible' => 1,
@@ -139,9 +139,9 @@ $finPublicacion->save(array(
 
 $banner = new ExtraField('session');
 $banner->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_TEXT,
-    'field_variable' => 'fin_publicacion',
-    'field_display_text' => 'Fin de publicación',
+    'field_type' => ExtraField::FIELD_TYPE_FILE,
+    'field_variable' => 'banner',
+    'field_display_text' => 'Banner de la sesión',
     'field_visible' => 1,
     'field_changeable' => 1
 ));

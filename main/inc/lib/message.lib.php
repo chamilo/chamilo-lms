@@ -1598,8 +1598,8 @@ class MessageManager
         $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname "
                 . "FROM $messagesTable as m "
                 . "INNER JOIN $userTable as u "
-                . "ON m.user_receiver_id = u.user_id "
-                . "WHERE u.user_id = $userId "
+                . "ON m.user_sender_id = u.user_id "
+                . "WHERE m.user_receiver_id = $userId "
                 . "AND m.msg_status = " . MESSAGE_STATUS_UNREAD . " "
                 . "AND m.id > $lastId "
                 . "ORDER BY m.send_date DESC";

@@ -201,7 +201,11 @@ echo '</div></div></div>';
 /* End new display forum */
 
 // Set forum attachment data into $_SESSION
-getAttachedFiles($current_forum['forum_id'], $current_thread['thread_id'], $current_post['post_id']);
+getAttachedFiles(
+    $current_forum['forum_id'],
+    $current_thread['thread_id'],
+    $current_post['post_id']
+);
 // The form for the reply
 echo '<div class="row">';
 echo '<div class="span12">';

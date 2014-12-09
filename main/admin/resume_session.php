@@ -231,29 +231,31 @@ foreach ($sessionFields as $field) {
             <td><?php echo $field['field_display_text'] ?></td>
             <td>
                 <?php
-                if ($sesionValueData) {
-                    switch ($field['field_type']) {
-                        case ExtraField::FIELD_TYPE_CHECKBOX:
-                            echo $sesionValueData['field_value'] == '1' ? get_lang('Yes') : get_lang('No');
-                            break;
-                        case ExtraField::FIELD_TYPE_DATE:
-                            $extraFieldDate = str_replace(';', '-', $sesionValueData['field_value']);
+                switch ($field['field_type']) {
+                    case ExtraField::FIELD_TYPE_CHECKBOX:
+                        if ($sesionValueData !== false && $sesionValueData['field_value'] == '1') {
+                            echo get_lang('Yes');
+                        } else {
+                            echo get_lang('No');
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_DATE:
+                        $extraFieldDate = str_replace(';', '-', $sesionValueData['field_value']);
 
-                            echo api_format_date($extraFieldDate, DATE_FORMAT_LONG_NO_DAY);
-                            break;
-                        case ExtraField::FIELD_TYPE_FILE_IMAGE:
-                            if (file_exists(WEB_CODE_PATH) . $sesionValueData['field_value']) {
-                                echo Display::img(
-                                    api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
-                                    $field['field_display_text'],
-                                    array('width' => '300')
-                                );
-                            }
-                            break;
-                        default:
-                            echo $sesionValueData['field_value'];
-                            break;
-                    }
+                        echo api_format_date($extraFieldDate, DATE_FORMAT_LONG_NO_DAY);
+                        break;
+                    case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                        if (file_exists(WEB_CODE_PATH) . $sesionValueData['field_value']) {
+                            echo Display::img(
+                                api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
+                                $field['field_display_text'],
+                                array('width' => '300')
+                            );
+                        }
+                        break;
+                    default:
+                        echo $sesionValueData['field_value'];
+                        break;
                 }
                 ?>
             </td>

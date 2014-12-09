@@ -155,7 +155,7 @@ if ($infos['nb_days_access_before_beginning'] != 0 || $infos['nb_days_access_aft
     $form->addElement('html','<div id="options" style="display:none;">');
 }
 
-$form->addElement('text', 'nb_days_access_before', arra('', '', get_lang('DaysBefore')), array(
+$form->addElement('text', 'nb_days_access_before', array('', '', get_lang('DaysBefore')), array(
     'style' => 'width: 30px;'
 ));
 

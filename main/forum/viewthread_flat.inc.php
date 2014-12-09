@@ -18,7 +18,7 @@ if (isset($current_thread['thread_id'])) {
     if (!empty($rows)) {
         foreach ($rows as $row) {
 
-            echo '<table width="100%" height="100%" class="forum_table" cellspacing="5" border="0">';
+            echo '<table width="100%" class="forum_table" cellspacing="5" border="0">';
             // the style depends on the status of the message: approved or not
             if ($row['visible']=='0') {
                 $titleclass='forum_message_post_title_2_be_approved';

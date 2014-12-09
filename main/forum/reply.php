@@ -175,7 +175,11 @@ if (!empty($values) AND isset($_POST['SubmitPost'])) {
 } else {
     // Only show Forum attachment ajax form when do not pass form submit
     echo '<div class="row"><div class="span12">';
-    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], 0);
+    $attachmentAjaxForm = getAttachmentAjaxForm(
+        $current_forum['forum_id'],
+        $current_thread['thread_id'],
+        0
+    );
     echo $attachmentAjaxForm;
     echo '</div></div>';
 }

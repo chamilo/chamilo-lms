@@ -152,6 +152,32 @@ class ExtraFieldValue extends Model
                                 }
                             }
                             break;
+                        case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                            $dirPermissions = api_get_permissions_for_new_directories();
+                            $sysCodePath = api_get_path(SYS_CODE_PATH);
+
+                            $fileDir = "upload/extrafields/{$this->type}/";
+                            $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE . "_{$params[$this->handler_id]}.png";
+
+                            if (!file_exists($sysCodePath . $fileDir)) {
+                                mkdir($sysCodePath . $fileDir, $dirPermissions, true);
+                            }
+
+                            $imageExtraField = new Image($value['tmp_name']);
+                            $imageExtraField->send_image($sysCodePath . $fileDir . $fileName, -1, 'png');
+
+                            $new_params = array(
+                                $this->handler_id => $params[$this->handler_id],
+                                'field_id' => $extra_field_info['id'],
+                                'field_value' => $fileDir . $fileName
+                            );
+
+                            if ($this->handler_id !== 'session_id' && $this->handler_id !== 'course_code') {
+                                $new_params['comment'] = $comment;
+                            }
+
+                            self::save($new_params);
+                            break;
                         default;
                             $new_params = array(
                                 $this->handler_id   => $params[$this->handler_id],

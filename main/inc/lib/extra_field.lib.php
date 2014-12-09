@@ -53,7 +53,7 @@ class ExtraField extends Model
     const FIELD_TYPE_CHECKBOX        = 13;
     const FIELD_TYPE_MOBILE_PHONE_NUMBER       = 14;
     const FIELD_TYPE_INTEGER        = 15;
-    const FIELD_TYPE_FILE        = 16;
+    const FIELD_TYPE_FILE_IMAGE     = 16;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
@@ -232,7 +232,7 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
         $types[self::FIELD_TYPE_CHECKBOX]       = get_lang('FieldTypeCheckbox');
         $types[self::FIELD_TYPE_INTEGER]           = get_lang('FieldTypeInteger');
-        $types[self::FIELD_TYPE_FILE]           = get_lang('FieldTypeFile');
+        $types[self::FIELD_TYPE_FILE_IMAGE]           = get_lang('FieldTypeFile');
 
         switch ($handler) {
             case 'course':
@@ -1013,16 +1013,24 @@ EOF;
                             }
                         }
                         break;
-                    case ExtraField::FIELD_TYPE_FILE:
+                    case ExtraField::FIELD_TYPE_FILE_IMAGE:
                         $form->addElement(
                             'file',
                             'extra_'.$field_details['field_variable'],
                             $field_details['field_display_text'],
-                            array('class' => 'span8')
+                            array('class' => 'span8', 'accept' => 'image/*')
                         );
 
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+
+                        $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+                        $form->addRule(
+                            'extra_'.$field_details['field_variable'],
+                            get_lang('OnlyImagesAllowed') . ' ('.implode(',', $allowed_picture_types).')',
+                            'filetype',
+                            $allowed_picture_types
+                        );
 
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {

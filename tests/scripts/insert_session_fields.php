@@ -20,7 +20,7 @@ $horasLectivas->save(array(
 
 $costo = new ExtraField('session');
 $costo->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
+    'field_type' => ExtraField::FIELD_TYPE_FLOAT,
     'field_variable' => 'costo',
     'field_display_text' => 'Costo',
     'field_visible' => 1,

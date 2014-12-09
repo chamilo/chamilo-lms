@@ -998,11 +998,12 @@ EOF;
                             'number',
                             'extra_'.$field_details['field_variable'],
                             $field_details['field_display_text'],
-                            array('class' => 'span1')
+                            array('class' => 'span1', 'step' => 1)
                         );
 
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'intval');
 
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {

@@ -88,43 +88,42 @@ $(function () {
     enableDeleteFile();
 });
 </script>";
+
 // Recover Thread ID, will be used to generate delete attachment URL to do ajax
 $threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : 0;
 // The next javascript script is to delete file by ajax
-$htmlHeadXtra[] =
-    '<script>
-        function enableDeleteFile() {
-            $(document).on("click", ".deleteLink", function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var l = $(this);
-                var id = l.closest("tr").attr("id");
-                var filename = l.closest("tr").find(".attachFilename").html();
-                if (confirm("' . get_lang('AreYouSureToDeleteFileX') . '".replace("%s", filename))) {
-                    $.ajax({
-                        type: "POST",
-                        url: "' . api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?a=delete_file&attachId=" + id +"&thread=" + ' .
-                            $threadId . ',
-                        dataType: "json",
-                        success: function(data) {
-                                if (data.error == false) {
-                                    l.closest("tr").remove();
-                                    if ($(".files td").length < 1) {
-                                        $(".files").closest(".control-group").hide();
-                                    }
-                                }
+$htmlHeadXtra[] = '<script>
+    function enableDeleteFile() {
+        $(document).on("click", ".deleteLink", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var l = $(this);
+            var id = l.closest("tr").attr("id");
+            var filename = l.closest("tr").find(".attachFilename").html();
+            if (confirm("' . get_lang('AreYouSureToDeleteFileX') . '".replace("%s", filename))) {
+                $.ajax({
+                    type: "POST",
+                    url: "' . api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId .'",                    dataType: "json",
+                    success: function(data) {
+                        if (data.error == false) {
+                            l.closest("tr").remove();
+                            if ($(".files td").length < 1) {
+                                $(".files").closest(".control-group").hide();
                             }
-                    })
-                }
-            });
-        }
-    </script>';
+                        }
+                    }
+                })
+            }
+        });
+    }
+</script>';
 
 /**
- * This function handles all the forum and forumcategories actions. This is a wrapper for the
+ * This function handles all the forum and forum categories actions. This is a wrapper for the
  * forum and forum categories. All this code code could go into the section where this function is
  * called but this make the code there cleaner.
- * @param int $lp_id Learning path ID
+ * @param int $lp_id Learning path Id
+ *
  * @return void
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Juan Carlos Raña Trabado (return to lp_id)
@@ -4844,29 +4843,31 @@ function editAttachedFile($array, $id, $courseId = null) {
 
 /**
  * Return a form to upload asynchronously attachments to forum post.
- * @param $forumId Forum ID from where the post are
- * @param $threadId Thread ID where forum post are
- * @param $postId Post ID to identify Post
+ * @param int $forumId Forum ID from where the post are
+ * @param int $threadId Thread ID where forum post are
+ * @param int $postId Post ID to identify Post
  * @return string The Forum Attachment Ajax Form
  */
 function getAttachmentAjaxForm($forumId, $threadId, $postId)
 {
-    // Init variables
     $forumId = intval($forumId);
     $postId = intval($postId);
     $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
     if ($forumId === 0) {
-        // Forum ID must be defined
+        // Forum Id must be defined
 
         return '';
     }
-    $url = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?forum=' . $forumId . '&thread=' . $threadId . '&postId=' . $postId . '&a=upload_file';
+
+    $url = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&forum=' . $forumId . '&thread=' . $threadId . '&postId=' . $postId . '&a=upload_file';
     // Form
     $formFileUpload = '<div class="form-ajax">
         <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
             <input type="file" name="user_upload" multiple>
-            <button type="submit">Upload</button><div class="button-load">
-            '.get_lang('UploadFiles').'</div>
+            <button type="submit">Upload</button>
+            <div class="button-load">
+                '.get_lang('UploadFiles').'
+            </div>
         </form></div>
         ';
 
@@ -4889,14 +4890,18 @@ function getAttachmentsAjaxTable($postId = null)
     if (!empty($_REQUEST['file_ids']) && is_array($_REQUEST['file_ids'])) {
         // 'file_ids is the name from forum attachment ajax form
         foreach ($_REQUEST['file_ids'] as $key => $attachId) {
-            if (!empty($_SESSION['forum']['upload_file'][$courseId][$attachId]) && is_array($_SESSION['forum']['upload_file'][$courseId][$attachId])) {
+            if (!empty($_SESSION['forum']['upload_file'][$courseId][$attachId]) &&
+                is_array($_SESSION['forum']['upload_file'][$courseId][$attachId])
+            ) {
                 // If exist forum attachment then update into $_SESSION data
                 $_SESSION['forum']['upload_file'][$courseId][$attachId]['comment'] = $_POST['file_comments'][$key];
             }
         }
     }
     // Get data to fill into attachment files table
-    if (!empty($_SESSION['forum']['upload_file'][$courseId]) && is_array($_SESSION['forum']['upload_file'][$courseId])) {
+    if (!empty($_SESSION['forum']['upload_file'][$courseId]) &&
+        is_array($_SESSION['forum']['upload_file'][$courseId])
+    ) {
         $uploadedFiles = $_SESSION['forum']['upload_file'][$courseId];
         foreach ($uploadedFiles as $k => $uploadedFile) {
             if (!empty($uploadedFile) && in_array($uploadedFile['id'], $attachIds)) {

@@ -665,6 +665,14 @@ class ExtraField extends Model
                                 );
                             }
                         } else {
+                            $fieldVariable = "extra_{$field_details['field_variable']}";
+
+                            $checkboxAttributes = array();
+
+                            if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
+                                $checkboxAttributes['checked'] = true;
+                            }
+
                             // We assume that is a switch on/off with 1 and 0 as values
                             $group[] = $form->createElement(
                                 'checkbox',
@@ -672,7 +680,7 @@ class ExtraField extends Model
                                 null,
                                 //$field_details['field_display_text'].'<br />',
                                 get_lang('Yes'),
-                                null
+                                $checkboxAttributes
                             );
                         }
                         $form->addGroup(
@@ -1016,10 +1024,24 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                        $fieldVariable = "extra_{$field_details['field_variable']}";
+
+                        $fieldTexts = array(
+                            $field_details['field_display_text']
+                        );
+
+                        if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
+                            $fieldTexts[] = Display::img(
+                                api_get_path(WEB_CODE_PATH) . $extraData[$fieldVariable],
+                                '',
+                                array('width' => '300')
+                            );
+                        }
+
                         $form->addElement(
                             'file',
-                            'extra_'.$field_details['field_variable'],
-                            $field_details['field_display_text'],
+                            $fieldVariable,
+                            $fieldTexts,
                             array('class' => 'span8', 'accept' => 'image/*')
                         );
 

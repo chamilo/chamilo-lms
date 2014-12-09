@@ -241,6 +241,15 @@ foreach ($sessionFields as $field) {
 
                             echo api_format_date($extraFieldDate, DATE_FORMAT_LONG_NO_DAY);
                             break;
+                        case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                            if (file_exists(WEB_CODE_PATH) . $sesionValueData['field_value']) {
+                                echo Display::img(
+                                    api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
+                                    $field['field_display_text'],
+                                    array('width' => '300')
+                                );
+                            }
+                            break;
                         default:
                             echo $sesionValueData['field_value'];
                             break;

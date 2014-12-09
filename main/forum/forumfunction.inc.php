@@ -1349,9 +1349,11 @@ function get_forums_in_category($cat_id)
  * The forums are sorted according to the forum_order.
  * Since it does not take the forum category into account there probably
  * will be two or more forums that have forum_order=1, ...
- * @param int forum id
- * @param string course db name
- * @return an array containing all the information about the forums (regardless of their category)
+ * @param int $id forum id
+ * @param string $course_code
+ * @param bool $includeGroupsForum
+ * @param int $sessionId
+ * @return array an array containing all the information about the forums (regardless of their category)
  * @todo check $sql4 because this one really looks fishy.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1392,9 +1394,14 @@ function get_forums(
     if ($id == '') {
         // Student
         // Select all the forum information of all forums (that are visible to students).
-        $sql = "SELECT * FROM $table_forums forum, ".$table_item_property." item_properties
-                WHERE
+        $sql = "SELECT * FROM $table_forums forum
+                INNER JOIN ".$table_item_property." item_properties
+                ON (
                     forum.forum_id=item_properties.ref AND
+                    forum.c_id = item_properties.c_id AND
+                    forum.session_id = item_properties.id_session
+                )
+                WHERE
                     item_properties.visibility=1 AND
                     item_properties.tool='".TOOL_FORUM."'
                     $condition_session AND
@@ -1405,9 +1412,14 @@ function get_forums(
 
         // Select the number of threads of the forums (only the threads that are visible).
         $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
-                FROM $table_threads threads, ".$table_item_property." item_properties
-                WHERE
+                FROM $table_threads threads
+                INNER JOIN ".$table_item_property." item_properties
+                ON (
                     threads.thread_id=item_properties.ref AND
+                    threads.c_id = item_properties.c_id AND
+                    threads.session_id = item_properties.id_session
+                )
+                WHERE
                     item_properties.visibility=1 AND
                     item_properties.tool='".TOOL_FORUM_THREAD."' AND
                     threads.c_id = $course_id AND
@@ -1421,6 +1433,7 @@ function get_forums(
                     posts.visible=1 AND
                     posts.thread_id=threads.thread_id AND
                     threads.thread_id=item_properties.ref AND
+                    threads.session_id = item_properties.id_session AND
                     item_properties.visibility=1 AND
                     item_properties.tool='".TOOL_FORUM_THREAD."' AND
                     threads.c_id = $course_id AND
@@ -1431,9 +1444,14 @@ function get_forums(
         // Course Admin
         if (is_allowed_to_edit()) {
             // Select all the forum information of all forums (that are not deleted).
-            $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
-                    WHERE
+            $sql = "SELECT * FROM ".$table_forums." forum
+                    INNER JOIN ".$table_item_property." item_properties
+                    ON (
                         forum.forum_id = item_properties.ref AND
+                        forum.c_id = item_properties.c_id AND
+                        forum.session_id = item_properties.id_session
+                    )
+                    WHERE
                         item_properties.visibility<>2 AND
                         item_properties.tool='".TOOL_FORUM."'
                         $condition_session AND
@@ -1444,11 +1462,16 @@ function get_forums(
 
             // Select the number of threads of the forums (only the threads that are not deleted).
             $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
-                    FROM $table_threads threads, ".$table_item_property." item_properties
+                    FROM $table_threads threads
+                    INNER JOIN ".$table_item_property." item_properties
+                    ON (
+                        threads.thread_id=item_properties.ref AND
+                        threads.c_id = item_properties.c_id AND
+                        threads.session_id = item_properties.id_session
+                    )
                     WHERE
-                        threads.thread_id=item_properties.ref
-                        AND item_properties.visibility<>2
-                        AND item_properties.tool='".TOOL_FORUM_THREAD."' AND
+                        item_properties.visibility<>2 AND
+                        item_properties.tool='".TOOL_FORUM_THREAD."' AND
                         threads.c_id = $course_id AND
                         item_properties.c_id = $course_id
                     GROUP BY threads.forum_id";
@@ -1458,6 +1481,7 @@ function get_forums(
                     WHERE
                         posts.thread_id=threads.thread_id AND
                         threads.thread_id=item_properties.ref AND
+                        threads.session_id = item_properties.id_session AND
                         item_properties.visibility=1 AND
                         item_properties.tool='".TOOL_FORUM_THREAD."' AND
                         posts.c_id = $course_id AND
@@ -1718,10 +1742,11 @@ function get_threads($forum_id, $course_code = null)
                 thread.locked as locked
             FROM $table_threads thread
             INNER JOIN $table_item_property item_properties
-                ON  thread.thread_id=item_properties.ref AND
-                    item_properties.c_id = $course_id AND
-                    thread.c_id = $course_id AND
-                    item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
+            ON
+                thread.thread_id=item_properties.ref AND
+                item_properties.c_id = $course_id AND
+                thread.c_id = $course_id AND
+                item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
             LEFT JOIN $table_users users
                 ON thread.thread_poster_id=users.user_id
             WHERE
@@ -1745,10 +1770,10 @@ function get_threads($forum_id, $course_code = null)
                 FROM $table_threads thread
                 INNER JOIN $table_item_property item_properties
                 ON
-                    thread.thread_id=item_properties.ref AND
+                    thread.thread_id = item_properties.ref AND
                     item_properties.c_id = $course_id AND
                     thread.c_id = $course_id AND
-                    item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
+                    item_properties.tool = '".TABLE_FORUM_THREAD."' $groupCondition
                 LEFT JOIN $table_users users
                     ON thread.thread_poster_id=users.user_id
                 WHERE
@@ -2386,14 +2411,13 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
 
     $form->addElement('text', 'post_title', get_lang('Title'));
 
-    $form->addElement('html_editor', 'post_text', get_lang('Text'), true, api_is_allowed_to_edit(null, true) ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300') : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
-    );
+    $form->addElement('html_editor', 'post_text', get_lang('Text'), true, api_is_allowed_to_edit(null, true) ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300') : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student'));
 
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
     $iframe = null;
     $myThread = Security::remove_XSS($myThread);
     if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
-        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
+        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&amp;thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
     }
     if (!empty($iframe)) {
         $form->addElement('label', get_lang('Thread'), $iframe);

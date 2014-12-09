@@ -54,6 +54,7 @@ class ExtraField extends Model
     const FIELD_TYPE_MOBILE_PHONE_NUMBER       = 14;
     const FIELD_TYPE_INTEGER        = 15;
     const FIELD_TYPE_FILE_IMAGE     = 16;
+    const FIELD_TYPE_FLOAT          = 17;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
@@ -233,6 +234,7 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_CHECKBOX]       = get_lang('FieldTypeCheckbox');
         $types[self::FIELD_TYPE_INTEGER]           = get_lang('FieldTypeInteger');
         $types[self::FIELD_TYPE_FILE_IMAGE]           = get_lang('FieldTypeFile');
+        $types[self::FIELD_TYPE_FLOAT]           = get_lang('FieldTypeFloat');
 
         switch ($handler) {
             case 'course':
@@ -1031,6 +1033,26 @@ EOF;
                             'filetype',
                             $allowed_picture_types
                         );
+
+                        if (!$admin_permissions) {
+                            if ($field_details['field_visible'] == 0) {
+                                $form->freeze(
+                                    'extra_'.$field_details['field_variable']
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_FLOAT:
+                        $form->addElement(
+                            'number',
+                            'extra_'.$field_details['field_variable'],
+                            $field_details['field_display_text'],
+                            array('class' => 'span1', 'step' => '0.01')
+                        );
+
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'floatval');
 
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {

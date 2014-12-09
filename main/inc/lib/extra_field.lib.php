@@ -669,7 +669,7 @@ class ExtraField extends Model
                                 'extra_'.$field_details['field_variable'],
                                 null,
                                 //$field_details['field_display_text'].'<br />',
-                                'Yes <br />',
+                                get_lang('Yes'),
                                 null
                             );
                         }

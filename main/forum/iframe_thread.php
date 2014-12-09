@@ -21,14 +21,8 @@
  * @package chamilo.forum
  */
 
-/* INIT SECTION */
-
-/* Language Initialisation */
-
 // Name of the language file that needs to be included
 $language_file = 'forum';
-
-//$this_section = SECTION_COURSES;
 
 require_once '../inc/global.inc.php';
 
@@ -77,13 +71,13 @@ $course_id = api_get_course_int_id();
 
 $sql = "SELECT * FROM $table_posts posts, $table_users users
         WHERE
-        posts.c_id = $course_id AND
-        posts.thread_id='".$current_thread['thread_id']."'
-        AND posts.poster_id=users.user_id
+            posts.c_id = $course_id AND
+            posts.thread_id='".$current_thread['thread_id']."' AND
+            posts.poster_id=users.user_id
         ORDER BY posts.post_id ASC";
 $result = Database::query($sql);
 
-echo "<table width=\"100%\" cellspacing=\"5\" border=\"0\">";
+echo "<table width=\"100%\" height=\"100%\" cellspacing=\"5\" border=\"0\">";
 while ($row = Database::fetch_array($result)) {
     echo "<tr>";
     echo "<td rowspan=\"2\" class=\"forum_message_left\">";

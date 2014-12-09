@@ -13,12 +13,21 @@ require_once $libpath.'add_course.lib.inc.php';
 $debug = false;
 
 define('WS_ERROR_SECRET_KEY', 1);
+define('WS_ERROR_NOT_FOUND_RESULT', 2);
+define('WS_ERROR_INVALID_INPUT', 3);
+
 
 function return_error($code) {
     $fault = null;
     switch ($code) {
         case WS_ERROR_SECRET_KEY:
             $fault = new soap_fault('Server', '', 'Secret key is not correct or params are not correctly set');
+        break;
+        case WS_ERROR_NOT_FOUND_RESULT:
+            $fault = new soap_fault('Server', '', 'Not found any result from the query');
+        break;
+        case WS_ERROR_INVALID_INPUT:
+            $fault = new soap_fault('Server', '', 'The input variables are invalid o are not correctly set');
         break;
     }
     return $fault;
@@ -5437,7 +5446,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(
-        array('ref'=>'SOAP:ENC:arrayType',
+        array('ref'=>'SOAP-ENC:arrayType',
             'wsdl:arrayType'=>'tns:session[]')
     ),
     'tns:session'
@@ -5540,6 +5549,103 @@ function WSUserSubscribedInCourse ($params)
     $userId      = $params['user_id']; //chamilo user id
 
     return (CourseManager::is_user_subscribed_in_course($userId,$courseCode));
+}
+
+/** WSSessionListInCategory */
+
+// Output params for WSSessionListInCategory
+$server->wsdl->addComplexType(
+    'sessionBrief',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'name' => array('name' => 'name', 'type' => 'xsd:string'), //Course string code
+        'description' => array('name' => 'description', 'type' => 'xsd:string'), //Chamilo user_id
+        'date_start' => array('name' => 'start_date', 'type' => 'xsd:string'),
+        'date_end' => array('name' => 'end_date', 'type' => 'xsd:string'),
+    )
+);
+
+$server->wsdl->addComplexType(
+    'sessionBriefList',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+        array('ref'=>'SOAP-ENC:arrayType',
+            'wsdl:arrayType'=>'tns:sessionBrief[]')
+    ),
+    'tns:sessionBrief'
+);
+
+// Input params for editing users
+$server->wsdl->addComplexType(
+    'sessionCategoryInput',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'id' => array('name' => 'id', 'type' => 'xsd:string'), //Course string code
+        'name' => array('name' => 'name', 'type' => 'xsd:string'), //Chamilo user_id
+        'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+// Register the method to expose
+$server->register('WSSessionListInCategory', // method name
+    array('sessionCategoryInput' => 'tns:sessionCategoryInput'), // input parameters
+    array('return' => 'tns:sessionBriefList'), // output parameters
+    'urn:WSRegistration', // namespace
+    'urn:WSRegistration#WSSessionListInCategory', // soapaction
+    'rpc', // style
+    'encoded', // use
+    'This service checks if user assigned to course' // documentation
+);
+
+
+/**
+ * @param $params
+ * @return null|soap_fault
+ */
+function WSSessionListInCategory($params) {
+    global $debug;
+
+    if ($debug) error_log('WSUserSubscribedInCourse');
+    if ($debug) error_log('Params '. print_r($params, 1));
+    if (!WSHelperVerifyKey($params)) {
+
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+    // Check if category ID is set
+    if (!empty($params['id']) && empty($params['category_name'])) {
+        $sessionCategoryId = $params['id'];
+    } elseif (!empty($params['category_name'])) {
+        // Check if category name is set
+        $sessionCategoryId = SessionManager::getSessionCategoryIdByName($params['category_name']);
+        if (is_array($sessionCategoryId)) {
+            $sessionCategoryId = current($sessionCategoryId);
+        }
+    } else {
+        // Return soap fault Not valid input params
+
+        return return_error(WS_ERROR_INVALID_INPUT);
+    }
+
+    // Get the session brief List by category
+
+    $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId);
+
+    if (empty($sessionList)) {
+
+        return return_error(WS_ERROR_NOT_FOUND_RESULT);
+    }
+
+    return $sessionList;
 }
 
 // Add more webservices by Hooks

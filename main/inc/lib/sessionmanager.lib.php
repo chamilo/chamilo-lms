@@ -5438,4 +5438,48 @@ class SessionManager
         ));
     }
 
+    /**
+     * Returns the list of session (name, short description, start date, end date) from category.
+     * The short description is an extra field value
+     * @param $categoryId
+     * @return mixed
+     */
+    public static function getSessionBriefListByCategory($categoryId)
+    {
+        $categoryId = (int) $categoryId;
+        $sessionList = array();
+        if ($categoryId > 0) {
+            $sTable = Database::get_main_table(TABLE_MAIN_SESSION);
+            $sfTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+            $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+            $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
+            $sessionList = Database::select(
+                'id, name, date_start, date_end',
+                $sTable,
+                array(
+                    'where' => array(
+                        'session_category_id = ?' => $categoryId
+                    )
+                )
+            );
+            $sessionFieldValueList = Database::select(
+                'sfv.session_id AS id, sfv.field_value AS description',
+                $joinTable,
+                array(
+                    'where' => array(
+                        'sf.field_variable = ?' => 'as_description'
+                    )
+                )
+            );
+
+        }
+
+        foreach ($sessionList as $id => &$session) {
+            $session['description'] = isset($sessionFieldValueList[$id]) ?
+                $sessionFieldValueList[$id]['description'] :
+                '';
+        }
+
+        return $sessionList;
+    }
 }

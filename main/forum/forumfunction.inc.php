@@ -85,15 +85,16 @@ $(function () {
             }
         }
     });
-    enableDeleteFile();
 });
 </script>";
 
 // Recover Thread ID, will be used to generate delete attachment URL to do ajax
 $threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : 0;
+$forumId = isset($_REQUEST['forum']) ? intval($_REQUEST['forum']) : 0;
+
 // The next javascript script is to delete file by ajax
 $htmlHeadXtra[] = '<script>
-    function enableDeleteFile() {
+    $(function () {
         $(document).on("click", ".deleteLink", function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -103,7 +104,8 @@ $htmlHeadXtra[] = '<script>
             if (confirm("' . get_lang('AreYouSureToDeleteFileX') . '".replace("%s", filename))) {
                 $.ajax({
                     type: "POST",
-                    url: "' . api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId .'",                    dataType: "json",
+                    url: "'.api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId .'&forum='.$forumId .'",
+                    dataType: "json",
                     success: function(data) {
                         if (data.error == false) {
                             l.closest("tr").remove();
@@ -115,7 +117,7 @@ $htmlHeadXtra[] = '<script>
                 })
             }
         });
-    }
+    });
 </script>';
 
 /**
@@ -219,8 +221,6 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
     // Setting the form elements.
     $form->addElement('header', '', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), 'class="input_titles" id="category_title"');
-
-    //$form->applyFilter('forum_category_title', 'html_filter');
     $form->addElement('html_editor', 'forum_category_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 
     //$form->applyFilter('forum_category_comment', 'html_filter');
@@ -4951,8 +4951,8 @@ function getAttachmentsAjaxTable($postId = null)
  * @param null $courseId
  * @return array
  */
-function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null, $courseId = null) {
-    // Init values
+function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null, $courseId = null)
+{
     $forumId = intval($forumId);
     $courseId = intval($courseId);
     $attachId = intval($attachId);
@@ -4983,14 +4983,17 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
         $filter = "AND post_id = $postId AND id = $attachId";
     }
     $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-    $sql = "SELECT id, comment, filename, path, size FROM $forumAttachmentTable WHERE c_id = $courseId $filter";
+    $sql = "SELECT id, comment, filename, path, size
+            FROM $forumAttachmentTable
+            WHERE c_id = $courseId $filter";
     $result = Database::query($sql);
+    $json = array();
     if ($result !== false && Database::num_rows($result) > 0) {
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             // name contains an URL to download attachment file and its filename
             $json['name'] = Display::url(
                 api_htmlentities($row['filename']),
-                api_get_path(WEB_CODE_PATH) . 'forum/download.php?file='.$row['path'],
+                api_get_path(WEB_CODE_PATH) . 'forum/download.php?file='.$row['path'].'&'.api_get_cidreq(),
                 array('target'=>'_blank', 'class' => 'attachFilename')
             );
             $json['id'] = $row['id'];
@@ -4999,12 +5002,14 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
             $json['size'] = format_file_size($row['size']);
             // Check if $row is consistent
             if (!empty($row) && is_array($row)) {
-                // Set result as succes and bring delete URL
+                // Set result as success and bring delete URL
                 $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded'));
-                $json['delete'] = '<a class="deleteLink" href="'.api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php' .
-                    '?' . api_get_cidreq() . '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId .
-                    '&amp;id_attach=' . $row['id'] . '">' .
-                    Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+                $url = api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq() . '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId.'&amp;id_attach=' . $row['id'];
+                $json['delete'] = Display::url(
+                    Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL),
+                    $url,
+                    array('class' => 'deleteLink')
+                );
             } else {
                 // If not, set an exclamation result
                 $json['result'] = Display::return_icon('exclamation.png', get_lang('Error'));

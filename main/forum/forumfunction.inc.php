@@ -44,7 +44,7 @@ $(document).ready(function () {
 $htmlHeadXtra[] = '<script>
 
 function check_unzip() {
-    if(document.upload.unzip.checked){
+    if (document.upload.unzip.checked){
         document.upload.if_exists[0].disabled=true;
         document.upload.if_exists[1].checked=true;
         document.upload.if_exists[2].disabled=true;
@@ -1252,7 +1252,7 @@ function get_forum_categories($id = '')
     $session_id = api_get_session_id();
     $course_id = api_get_course_int_id();
 
-    $condition_session = api_get_session_condition($session_id, true, false);
+    $condition_session = api_get_session_condition($session_id, true, true);
     $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if (empty($id)) {
@@ -1381,7 +1381,7 @@ function get_forums(
         $session_id = $sessionId;
     }
 
-    $condition_session = api_get_session_condition($session_id, true, false);
+    $condition_session = api_get_session_condition($session_id, true, false, 'id_session');
     $course_id = $course_info['real_id'];
 
     $forum_list = array();
@@ -1397,8 +1397,7 @@ function get_forums(
                 INNER JOIN ".$table_item_property." item_properties
                 ON (
                     forum.forum_id=item_properties.ref AND
-                    forum.c_id = item_properties.c_id AND
-                    forum.session_id = item_properties.id_session
+                    forum.c_id = item_properties.c_id
                 )
                 WHERE
                     item_properties.visibility=1 AND
@@ -1447,11 +1446,10 @@ function get_forums(
                     INNER JOIN ".$table_item_property." item_properties
                     ON (
                         forum.forum_id = item_properties.ref AND
-                        forum.c_id = item_properties.c_id AND
-                        forum.session_id = item_properties.id_session
+                        forum.c_id = item_properties.c_id
                     )
                     WHERE
-                        item_properties.visibility<>2 AND
+                        item_properties.visibility <> 2 AND
                         item_properties.tool='".TOOL_FORUM."'
                         $condition_session AND
                         forum.c_id = $course_id AND
@@ -2732,7 +2730,6 @@ function current_qualify_of_thread($thread_id, $session_id)
 function store_reply($current_forum, $values)
 {
     $_course = api_get_course_info();
-    $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
 
     $post_date = api_get_utc_datetime();

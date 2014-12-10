@@ -2087,13 +2087,17 @@ function api_get_session_image($session_id, $status_id)
 
 /**
  * This function add an additional condition according to the session of the course
- * @param int       session id
- * @param bool      optional, true if more than one condition false if the only condition in the query
- * @param bool      optional, true to accept content with session=0 as well, false for strict session condition
+ * @param int       $session_id session id
+ * @param bool      $and optional, true if more than one condition false if the only condition in the query
+ * @param bool      $with_base_content optional, true to accept content with session=0 as well, false for strict session condition
  * @return string   condition of the session
  */
-function api_get_session_condition($session_id, $and = true, $with_base_content = false, $session_field = "session_id")
-{
+function api_get_session_condition(
+    $session_id,
+    $and = true,
+    $with_base_content = false,
+    $session_field = "session_id"
+) {
     $session_id = intval($session_id);
 
     if (empty($session_field)) {
@@ -2161,8 +2165,8 @@ function api_get_coachs_from_course($session_id=0,$course_code='')
  * if (api_get_setting('show_navigation_menu') == 'true') //CORRECT
  * instead of
  * if (api_get_setting('show_navigation_menu') == true) //INCORRECT
- * @param string    The variable name
- * @param string    The subkey (sub-variable) if any. Defaults to NULL
+ * @param string    $variable The variable name
+ * @param string    $key The subkey (sub-variable) if any. Defaults to NULL
  * @author René Haentjens
  * @author Bart Mollet
  */

@@ -270,18 +270,22 @@ if (is_array($forumCategories)) {
             foreach ($forum_list as $forum) {
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we
                 // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
-                if (!empty($whatsnew_post_info)) {
-                    if (is_array(isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']] : null)) {
-                        foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array) {
-                            if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id]))	{
-                                unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
-                                unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
+                if (isset($forum['forum_id'])) {
+                    if (!empty($whatsnew_post_info)) {
+                        if (isset($whatsnew_post_info[$forum['forum_id']]) &&
+                            is_array($whatsnew_post_info[$forum['forum_id']])
+                        ) {
+                            foreach ($whatsnew_post_info[$forum['forum_id']] as $key_thread_id => $new_post_array) {
+                                if (empty($whatsnew_post_info[$forum['forum_id']][$key_thread_id])) {
+                                    unset($whatsnew_post_info[$forum['forum_id']][$key_thread_id]);
+                                    unset($_SESSION['whatsnew_post_info'][$forum['forum_id']][$key_thread_id]);
+                                }
                             }
                         }
                     }
                 }
 
-                // Note: This can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
+                // Note: This can be speed up if we transform the $forum_list to an array that uses the forum_category as the key.
                 if (isset($forum['forum_category']) &&
                     $forum['forum_category'] == $forumCategory['cat_id']
                 ) {

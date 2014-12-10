@@ -1739,9 +1739,10 @@ class DocumentManager
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = $course_info['real_id'];
         $document_id = self::get_default_certificate_id($course_code);
-
+        $my_content_html = null;
         if ($document_id) {
-            $sql = "SELECT path FROM $tbl_document WHERE c_id = $course_id AND id = $document_id";
+            $sql = "SELECT path FROM $tbl_document
+                    WHERE c_id = $course_id AND id = $document_id";
             $rs = Database::query($sql);
             $new_content = '';
             $all_user_info = array();
@@ -1766,7 +1767,11 @@ class DocumentManager
     }
 
     /**
-     * return all content to replace and all content to be replace
+     * Return all content to replace and all content to be replace
+     * @param int $user_id
+     * @param int $course_id
+     * @param bool $is_preview
+     * @return array
      */
     static function get_all_info_to_certificate($user_id, $course_id, $is_preview = false)
     {
@@ -1812,7 +1817,6 @@ class DocumentManager
         }
 
         $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $info_grade_certificate['id'];
-
 
         //replace content
         $info_to_replace_in_content_html = array($first_name,
@@ -1952,7 +1956,7 @@ class DocumentManager
 
     /**
      * Check if a directory given is for certificate
-     * @param string path of directory
+     * @param string $dir path of directory
      * @return bool  true if is a certificate or false otherwise
      */
     public static function is_certificate_mode($dir)

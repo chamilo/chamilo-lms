@@ -2935,7 +2935,7 @@ class SessionManager
         // select the courses
         $sql = "SELECT * FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code
-		        WHERE src.id_session = '$session_id'";
+		        WHERE src.id_session = '$session_id' ";
 
         if (!empty($course_name)) {
             $course_name = Database::escape_string($course_name);
@@ -2944,7 +2944,7 @@ class SessionManager
 
         if (!empty($orderBy)) {
             $orderBy = Database::escape_string($orderBy);
-            $orderBy = "ORDER BY $orderBy";
+            $orderBy = " ORDER BY $orderBy";
         } else {
             if (SessionManager::orderCourseIsEnabled()) {
                 $orderBy .= " ORDER BY position ";
@@ -2954,7 +2954,6 @@ class SessionManager
         }
 
         $sql .= Database::escape_string($orderBy);
-
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
         $courses = array();

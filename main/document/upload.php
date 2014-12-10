@@ -208,6 +208,7 @@ Display::display_header($nameTools, 'Doc');
 $unzip = isset($_POST['unzip']) ? $_POST['unzip'] : null;
 $index = isset($_POST['index_document']) ? $_POST['index_document'] : null;
 // User has submitted a file
+
 if (!empty($_FILES)) {
     DocumentManager::upload_document(
         $_FILES,

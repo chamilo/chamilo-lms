@@ -139,7 +139,7 @@ $finPublicacion->save(array(
 
 $banner = new ExtraField('session');
 $banner->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_FILE,
+    'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
     'field_variable' => 'banner',
     'field_display_text' => 'Banner de la sesión',
     'field_visible' => 1,

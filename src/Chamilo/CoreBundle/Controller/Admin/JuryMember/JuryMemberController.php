@@ -184,10 +184,8 @@ class JuryMemberController
             $this->createNotFoundException('You are not assigned to this user.');
         }
 
-        $security = $this->getSecurity();
-
         // Setting member only for president.
-        if ($security->isGranted('ROLE_JURY_PRESIDENT')) {
+        if ($this->isGranted('ROLE_JURY_PRESIDENT')) {
             // Relating user with president
             if ($member) {
                 $this->getManager()->getRepository('Chamilo\CoreBundle\Entity\JuryMembers')->assignUserToJuryMember(

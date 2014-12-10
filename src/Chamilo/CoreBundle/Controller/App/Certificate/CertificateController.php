@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Controller\App\Certificate;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CertificateController
@@ -18,7 +19,7 @@ class CertificateController extends BaseController
      * @param $id
      * @return string
      */
-    public function indexAction($id)
+    public function showCertificateAction($id)
     {
         $certificate = new \Certificate($id);
 

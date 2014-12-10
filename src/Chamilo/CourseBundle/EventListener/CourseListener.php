@@ -8,10 +8,14 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Chamilo\CourseBundle\Controller\ToolBaseController;
+use Chamilo\CourseBundle\Controller\ToolInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 
+/**
+ * Class CourseListener
+ * @package Chamilo\CourseBundle\EventListener
+ */
 class CourseListener
 {
     /** @var ContainerInterface */
@@ -51,7 +55,9 @@ class CourseListener
             return;
         }
 
-        if ($controller[0] instanceof ToolBaseController) {
+        // This controller implements ToolInterface? Then set the course/session
+        if ($controller[0] instanceof ToolInterface) {
+        //if ($controller[0] instanceof ToolBaseController) {
             //$token = $event->getRequest()->query->get('token');
             $kernel = $event->getKernel();
             $request = $event->getRequest();
@@ -93,7 +99,7 @@ class CourseListener
                     if (!empty($sessionId)) {
                         $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
                         if (!empty($session)) {
-                            $controller[0]->setSession($session);
+                            //$controller[0]->setSession($session);
                         }
                     }
                 }

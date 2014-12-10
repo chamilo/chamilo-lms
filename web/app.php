@@ -27,7 +27,7 @@ use Sonata\PageBundle\Request\RequestFactory;
 $request = RequestFactory::createFromGlobals('host_with_path_by_locale');
 
 // When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
-//Request::enableHttpMethodParameterOverride();
+$request->enableHttpMethodParameterOverride();
 
 $kernel = new AppKernel('prod', false);
 $response = $kernel->handle($request);

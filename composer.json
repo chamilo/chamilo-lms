@@ -154,7 +154,7 @@
         "patchwork/utf8": "dev-master",
         "vich/uploader-bundle": "~0.11",
         "tilleuls/ckeditor-sonata-media-bundle": "dev-master",
-        "egeloen/ckeditor-bundle": "2.*"
+        "egeloen/ckeditor-bundle": "~2.0"
     },
     "require-dev": {
         "akeneo/crowdin-api": "1.0.*@dev",

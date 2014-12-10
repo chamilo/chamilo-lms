@@ -21,7 +21,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     protected $security;
 
     /**
-     * @param Router $urlGenerator
+     * @param UrlGeneratorInterface $urlGenerator
      * @param SecurityContext $security
      */
     public function __construct(UrlGeneratorInterface $urlGenerator, SecurityContext $security)
@@ -48,7 +48,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         // Backward compatibility.
 
         $ip = $request->getClientIp();
-
 
         // Setting user info.
         $request->getSession()->set('_user', $userInfo);

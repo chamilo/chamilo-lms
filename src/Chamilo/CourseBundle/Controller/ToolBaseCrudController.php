@@ -4,6 +4,7 @@
 namespace Chamilo\CourseBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Controller\BaseResourceController;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Knp\Menu\Renderer\ListRenderer;
@@ -17,7 +18,7 @@ use Chamilo\CourseBundle\Controller\ToolInterface;
  *
  * @abstract
  */
-abstract class ToolBaseController extends BaseController implements ToolInterface
+abstract class ToolBaseCrudController extends BaseResourceController implements ToolInterface
 {
     protected $course;
     protected $session;
@@ -39,7 +40,6 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
     }
 
     /**
-     *
      * @inheritdoc
      */
     public function setSession(Session $session)
@@ -48,7 +48,7 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
     }
 
     /**
-     * @return Session
+     * @inheritdoc
      */
     public function getSession()
     {

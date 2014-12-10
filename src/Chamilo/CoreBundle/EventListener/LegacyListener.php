@@ -91,7 +91,6 @@ class LegacyListener
             define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
         }
 
-
         // Access URL (multiple URL)
         /** @var \Sonata\PageBundle\Model\SnapshotPageProxy $page */
         $page = $request->get('page');

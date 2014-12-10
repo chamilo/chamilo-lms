@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Controller\App\News;
 
 use Chamilo\CoreBundle\Controller\BaseController;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +23,7 @@ class NewsController extends BaseController
      * @Method({"GET"})
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         if (api_is_anonymous()) {
             $visibility = \SystemAnnouncementManager::VISIBLE_GUEST;

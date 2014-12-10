@@ -4,13 +4,13 @@
 namespace Chamilo\CourseBundle\Controller\Curriculum;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
 use Entity;
 use Chamilo\CoreBundle\Form\CurriculumItemType;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CurriculumController
@@ -25,7 +25,7 @@ class CurriculumController extends BaseController
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         // Redirecting to curriculum user
         // @todo Fix redirection

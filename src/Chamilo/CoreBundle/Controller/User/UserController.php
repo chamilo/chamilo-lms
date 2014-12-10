@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Controller\User;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,7 +21,7 @@ class UserController extends BaseController
      * @Route("/me")
      * @Method({"GET"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $userInfo = api_get_user_info($this->getUser()->getUserId());
 

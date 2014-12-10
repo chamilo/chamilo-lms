@@ -18,12 +18,14 @@ use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Knp\Menu\Renderer\ListRenderer;
 
+use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
+
 /**
  * Each entity controller must extends this class.
  *
  * @abstract
  */
-abstract class BaseController extends Controller
+abstract class BaseResourceController extends ResourceController
 {
     /**
      * @return \Symfony\Component\Security\Core\SecurityContextInterface
@@ -173,7 +175,7 @@ abstract class BaseController extends Controller
             case 'edit':
                 $menu->addChild(
                     $this->trans($this->getClassnameLabel().ucfirst($action))
-                    //array('uri' => $this->generateControllerUrl($action.'Action'))
+                //array('uri' => $this->generateControllerUrl($action.'Action'))
                 );
                 break;
         }
@@ -219,11 +221,4 @@ abstract class BaseController extends Controller
         return $this->getTemplate()->renderTemplate($name, $elements);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCourse()
-    {
-        return $this->getRequest()->getSession()->get('course');
-    }
 }

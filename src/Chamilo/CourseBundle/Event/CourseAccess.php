@@ -4,6 +4,8 @@
 namespace Chamilo\CourseBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Class CourseAccess

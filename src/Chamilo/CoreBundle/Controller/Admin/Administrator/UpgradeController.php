@@ -4,7 +4,8 @@
 namespace Chamilo\CoreBundle\Controller\Admin\Administrator;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Silex\Application;
+
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Chamilo\CoreBundle\Component\Console\Output\BufferedOutput;
@@ -26,12 +27,10 @@ class UpgradeController extends BaseController
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         //$version = api_http_request('version.chamilo.org', 80, '/version.php');
-        $version = '11';
-
-        $request = $this->getRequest();
+        $version = '2';
         $builder = $this->createFormBuilder();
         $builder->add('upgrade_chamilo', 'submit');
         $form = $builder->getForm();

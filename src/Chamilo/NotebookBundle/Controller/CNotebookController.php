@@ -15,17 +15,17 @@ use APY\DataGridBundle\Grid\Export\PHPExcelPDFExport;
 
 use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Action\RowAction;
-use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Symfony\Component\HttpFoundation\Request;
 use Chamilo\NotebookBundle\Entity\CNotebookRepository;
 use Chamilo\NotebookBundle\Entity\CNotebookManager;
 use Chamilo\NotebookBundle\Entity\CNotebook;
+use Chamilo\CourseBundle\Controller\ToolBaseCrudController;
 
 /**
  * Class CNotebookController
  * @package Chamilo\NotebookBundle\Controller
  */
-class CNotebookController extends ResourceController
+class CNotebookController extends ToolBaseCrudController
 {
     /**
      * @Route("/")
@@ -56,25 +56,60 @@ class CNotebookController extends ResourceController
         );*/
 
         //$deleteMassAction = new MassAction('Delete', 'ChamiloNotebookBundle:CNotebook:deleteMass');
-        $deleteMassAction = new MassAction('Delete', 'chamilo.controller.notebook:deleteMassAction', true, array('course' => $request->get('course')));
+        $deleteMassAction = new MassAction(
+            'Delete',
+            'chamilo.controller.notebook:deleteMassAction',
+            true,
+            array('course' => $request->get('course'))
+        );
         $grid->addMassAction($deleteMassAction);
 
-        $myRowAction = new RowAction('View', 'chamilo_notebook_show', false, '_self', array('class' => 'btn btn-default'));
+        $myRowAction = new RowAction(
+            'View',
+            'chamilo_notebook_show',
+            false,
+            '_self',
+            array('class' => 'btn btn-default')
+        );
         $myRowAction->setRouteParameters(array('course' => $courseCode, 'id'));
         $grid->addRowAction($myRowAction);
 
-        $myRowAction = new RowAction('Edit', 'chamilo_notebook_edit', false, '_self', array('class' => 'btn btn-info'));
+        $myRowAction = new RowAction(
+            'Edit',
+            'chamilo_notebook_edit',
+            false,
+            '_self',
+            array('class' => 'btn btn-info')
+        );
         $myRowAction->setRouteParameters(array('course' => $courseCode, 'id'));
         $grid->addRowAction($myRowAction);
 
-        $myRowAction = new RowAction('Delete', 'chamilo_notebook_delete', false, '_self', array('class' => 'btn btn-danger', 'form_delete' => true));
+        $myRowAction = new RowAction(
+            'Delete',
+            'chamilo_notebook_delete',
+            false,
+            '_self',
+            array('class' => 'btn btn-danger', 'form_delete' => true)
+        );
         $myRowAction->setRouteParameters(array('course' => $courseCode, 'id'));
         $grid->addRowAction($myRowAction);
 
-        $grid->addExport(new CSVExport('CSV Export', 'export', array('course' => $courseCode)));
-        $grid->addExport(new ExcelExport('Excel Export', 'export', array('course' => $courseCode)));
+        $grid->addExport(
+            new CSVExport(
+                'CSV Export', 'export', array('course' => $courseCode)
+            )
+        );
+        $grid->addExport(
+            new ExcelExport(
+                'Excel Export',
+                'export',
+                array('course' => $courseCode)
+            )
+        );
 
-        return $grid->getGridResponse('ChamiloNotebookBundle:Notebook:index.html.twig');
+        return $grid->getGridResponse(
+            'ChamiloNotebookBundle:Notebook:index.html.twig'
+        );
     }
 
     /**
@@ -102,7 +137,10 @@ class CNotebookController extends ResourceController
                 $this->domainManager->delete($resource);
             }
         }
-        return $this->routeRedirectView('chamilo_notebook_index', array('course' => $request->get('course')));
+        return $this->routeRedirectView(
+            'chamilo_notebook_index',
+            array('course' => $request->get('course'))
+        );
     }
 
     /**
@@ -114,9 +152,11 @@ class CNotebookController extends ResourceController
         $courseCode = $request->get('course');
         $course = $this->get('chamilo_core.manager.course')->findOneByCode($courseCode);
         /** @var CNotebook $notebook */
-        $notebook = $this->getNotebookRepository()->createNewWithCourse($this->getUser(), $course);
+        $notebook = $this->getNotebookRepository()->createNewWithCourse(
+            $this->getUser(),
+            $course
+        );
 
-        //$notebook->setSession();
         return $notebook;
     }
 

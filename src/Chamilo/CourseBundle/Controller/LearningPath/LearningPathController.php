@@ -5,6 +5,7 @@ namespace Chamilo\CourseBundle\Controller\LearningPath;
 
 use Chamilo\CoreBundle\Controller\BaseController;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -24,9 +25,10 @@ class LearningPathController extends BaseController
      *
      * @return Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Application $app, $lpId)
+    public function indexAction(Request $request)
     {
-        $request    = $app['request'];
+
+        ///$lpId
 
         $courseId = api_get_course_int_id();
 

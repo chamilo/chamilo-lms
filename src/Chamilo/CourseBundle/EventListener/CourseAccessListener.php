@@ -7,6 +7,10 @@ use Chamilo\CourseBundle\Event\CourseAccess;
 use Doctrine\ORM\EntityManager;
 use Chamilo\CoreBundle\Entity\TrackEAccess;
 
+/**
+ * Class CourseAccessListener
+ * @package Chamilo\CourseBundle\EventListener
+ */
 class CourseAccessListener
 {
     protected $em;

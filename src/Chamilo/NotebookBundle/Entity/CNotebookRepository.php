@@ -21,6 +21,7 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 class CNotebookRepository extends EntityRepository
 {
     /**
+     * @param User $user
      * @param Course $course
      * @return mixed
      */
@@ -38,6 +39,11 @@ class CNotebookRepository extends EntityRepository
         //var_dump($course);
     }
 
+    /**
+     * @param AbstractResource $resource
+     * @param User $creator
+     * @return ResourceNode
+     */
     public function addResource(AbstractResource $resource, User $creator)
     {
         $resourceNode = new ResourceNode();
@@ -65,6 +71,12 @@ class CNotebookRepository extends EntityRepository
         return $resourceLink;
     }
 
+    /**
+     * @param AbstractResource $resource
+     * @param User $user
+     * @param Course $course
+     * @return ResourceLink
+     */
     public function addResourceToCourse(AbstractResource $resource, User $user, Course $course)
     {
         $resourceNode = $this->addResource($resource, $user);
@@ -78,6 +90,12 @@ class CNotebookRepository extends EntityRepository
         return $resourceLink;
     }
 
+    /**
+     * @param AbstractResource $resource
+     * @param User $user
+     * @param Course $course
+     * @param Session $session
+     */
     public function addResourceToSession(AbstractResource $resource, User $user, Course $course, Session $session)
     {
         $resourceLink = $this->addResourceToCourse($resource, $user, $course);

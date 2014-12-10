@@ -179,7 +179,7 @@ class IndexController extends BaseController
         $pageController->returnSkillsLinks();
 
         // Deleting the session_id.
-        $this->getSessionHandler()->remove('session_id');
+        $request->getSession()->remove('session_id');
 
         return $this->render(
             'ChamiloCoreBundle:Index:userportal.html.twig',

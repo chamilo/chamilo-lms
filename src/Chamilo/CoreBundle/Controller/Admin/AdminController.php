@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Request;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Response;
 use Entity;
@@ -22,15 +23,14 @@ class AdminController extends BaseController
      *
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $security = $this->getSecurity();
         // Already filter by the router
         /*if (!$security->isGranted('ROLE_ADMIN')) {
             return $this->abort(403, 'Access denied');
         }*/
 
-        if ($security->isGranted('ROLE_ADMIN')) {
+        if ($this->isGranted('ROLE_ADMIN')) {
             return $this->loadAdminMenu();
         }
     }

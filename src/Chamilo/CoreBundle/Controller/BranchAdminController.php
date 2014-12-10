@@ -239,9 +239,10 @@ class BranchAdminController extends Controller
         if (count($children) == 0) {
             return parent::deleteAction($id);
         } else {
-            $this->addMessage(
+            $this->addFlash(
+                'warning',
                 'Please remove all children of this node before you try to delete it.',
-                'warning'
+
             );
             $url = $this->generateControllerUrl('listingAction');
             return $this->redirect($url);

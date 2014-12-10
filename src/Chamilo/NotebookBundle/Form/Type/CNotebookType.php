@@ -13,11 +13,7 @@ class CNotebookType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add(
-                'description',
-                'textarea',
-                array('attr' => array('class' => 'ckeditor'))
-            )
+            ->add('description', 'ckeditor')
             /*->add('cId')
             ->add('notebookId')
             ->add('userId')

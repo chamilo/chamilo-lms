@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Controller\Admin\QuestionManager;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -24,7 +24,7 @@ class QuestionManagerController extends BaseController
      * @Method({"GET"})
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $response = $this->renderTemplate('questionmanager.tpl');
 
@@ -67,7 +67,7 @@ class QuestionManagerController extends BaseController
             $this->getTemplate()->assign('question', $question);
             $this->getTemplate()->assign('form', $form->toHtml());
         } else {
-            $this->addMessage(get_lang('ThereAreNotExtrafieldsAvailable'), 'warning');
+            $this->addFlash('warning', get_lang('ThereAreNotExtrafieldsAvailable'));
         }
 
         // If form was submitted.
@@ -76,7 +76,7 @@ class QuestionManagerController extends BaseController
             $params = $form->exportValues();
             $params['question_id'] = $id;
             $field_value->save_field_values($params);
-            $this->addMessage(get_lang('ItemUpdated'), 'success');
+            $this->addFlash('success', get_lang('ItemUpdated'));
             $url = $this->generateControllerUrl('editQuestionAction', array('id' => $id));
 
             return $this->redirect($url);
@@ -327,13 +327,13 @@ class QuestionManagerController extends BaseController
             $categoryId = $category->addCategoryInBDD();
 
             if ($categoryId) {
-                $this->addMessage(get_lang('AddCategoryDone'), 'confirmation');
+                $this->addFlash('confirmation', get_lang('AddCategoryDone'));
                 //$message = \Display::return_message(get_lang('AddCategoryDone'), 'confirmation');
                 //$url = $this->generateUrl('admin_category_show', array('id' => $categoryId));
                 $url = $this->generateUrl('question_manager.controller:indexAction');
                 return $this->redirect($url);
             } else {
-                $this->addMessage(get_lang('AddCategoryNameAlreadyExists'), 'warning');
+                $this->addFlash('warning', get_lang('AddCategoryNameAlreadyExists'));
             }
         }
         $this->getTemplate()->assign('form', $form->toHtml());
@@ -372,9 +372,9 @@ class QuestionManagerController extends BaseController
                 'global'
             );
             if ($objcat->modifyCategory()) {
-                $this->addMessage(get_lang('MofidfyCategoryDone'), 'confirmation');
+                $this->addFlash('confirmation', get_lang('MofidfyCategoryDone'));
             } else {
-                $this->addMessage(get_lang('ModifyCategoryError'), 'warning');
+                $this->addFlash('warning', get_lang('ModifyCategoryError'));
             }
             $url = $this->generateUrl('admin_questions');
             return $this->redirect($url);

@@ -1,3 +1,8 @@
+#chamilo_notebook:
+#    resource: "@ChamiloNotebookBundle/Controller/CNotebookController.php"
+#    type:     annotation
+#    prefix:   courses/{course}/notebook/
+
 chamilo_notebook_index:
     pattern: courses/{course}/notebook
     methods: [GET, POST, HEAD, DELETE]

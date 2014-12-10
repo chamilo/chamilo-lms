@@ -27,11 +27,7 @@ class CNotebookAdmin extends Admin
     {
         $formMapper
             ->add('name', 'text')
-            ->add(
-                'description',
-                'textarea',
-                array('attr' => array('class' => 'ckeditor'))
-            )
+            ->add('description', 'ckeditor')
         ;
     }
 

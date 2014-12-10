@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Chamilo\CoreBundle\Controller\CrudController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class IntroductionToolController
@@ -41,7 +42,7 @@ class IntroductionController extends ToolBaseController
             array('tool' => $tool, 'course' => api_get_course_id())
         );
 
-        $form = $this->getForm($url, $tool);
+        $form = $this->getFormValidator($url, $tool);
 
         if ($form->validate()) {
             $values  = $form->exportValues();
@@ -87,8 +88,9 @@ class IntroductionController extends ToolBaseController
      * @param string $tool
      * @return Response
      */
-    public function deleteAction($tool)
+    public function deleteAction(Request $request)
     {
+        //$tool
         $request = $this->getRequest();
         $courseId = $request->get('courseId');
         $sessionId = $request->get('sessionId');
@@ -114,7 +116,7 @@ class IntroductionController extends ToolBaseController
      * @param string
      * @return \FormValidator
      */
-    private function getForm($url, $tool)
+    public function getFormValidator($url, $tool)
     {
         $toolbar_set = 'IntroductionTool';
         $width = '100%';

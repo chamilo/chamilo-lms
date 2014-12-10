@@ -12,9 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Chamilo\CoreBundle\Entity\CTool;
 use Display;
 use CourseHome;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
-
+use Symfony\Component\HttpFoundation\Request;
 use Chamilo\CourseBundle\Event\CourseAccess;
 use Chamilo\CourseBundle\Event\SessionAccess;
 
@@ -33,15 +31,15 @@ class HomeController extends ToolBaseController
 
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $course = $this->getCourse();
-        $session= $this->getSession();
+        $session = $this->getSession();
 
-        $courseCode = api_get_course_id();
+        $courseCode = $course->getId();
         $sessionId = api_get_session_id();
-
-        $coursesAlreadyVisited = $this->getSessionHandler()->get('coursesAlreadyVisited');
+        $sessionHandler = $request->getSession();
+        $coursesAlreadyVisited = $sessionHandler->get('coursesAlreadyVisited');
 
         $result = $this->autolaunch();
 
@@ -49,11 +47,11 @@ class HomeController extends ToolBaseController
         $showAutoLaunchExerciseWarning = $result['show_autolaunch_exercise_warning'];
 
         if ($showAutoLaunchLpWarning) {
-            $this->addMessage('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP', 'warning');
+            $this->addFlash('warning', 'TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP');
         }
 
         if ($showAutoLaunchExerciseWarning) {
-            $this->addMessage('TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise', 'warning');
+            $this->addFlash('warning', 'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise');
         }
 
         if (true) {
@@ -89,13 +87,12 @@ class HomeController extends ToolBaseController
                     new SessionAccess($this->getUser(), $course, $session)
                 );
             }
-
             $coursesAlreadyVisited[$courseCode] = 1;
-            $this->getSessionHandler()->set('coursesAlreadyVisited', $coursesAlreadyVisited);
+            $sessionHandler->set('coursesAlreadyVisited', $coursesAlreadyVisited);
         }
 
-        $this->getSessionHandler()->remove('toolgroup');
-        $this->getSessionHandler()->remove('_gid');
+        $sessionHandler->remove('toolgroup');
+        $sessionHandler->remove('_gid');
 
         $isSpecialCourse = \CourseManager::is_special_course($courseCode);
 

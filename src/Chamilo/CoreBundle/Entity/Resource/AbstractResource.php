@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Chamilo\UserBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -27,7 +26,7 @@ abstract class AbstractResource
      *
      * @ORM\Column(name="name", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * Returns the resource id.

@@ -30,8 +30,10 @@ class CourseInfoController extends ToolBaseController
      * @Template
      * @return Response
      */
-    public function indexAction(Request $request, Course $course)
+    public function indexAction(Request $request)
     {
+        $course = $this->getCourse();
+
         $form = $this->createFormBuilder($course)
             ->add('title', 'text')
             ->add('description', 'textarea')

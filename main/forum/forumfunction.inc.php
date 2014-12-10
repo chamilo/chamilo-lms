@@ -440,9 +440,10 @@ function delete_forum_image($forum_id)
 {
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $course_id = api_get_course_int_id();
+    $forum_id = intval($forum_id);
 
-    $forum_id = Database::escape_string($forum_id);
-    $sql = "SELECT forum_image FROM $table_forums WHERE forum_id = '".$forum_id."' AND c_id = $course_id";
+    $sql = "SELECT forum_image FROM $table_forums
+            WHERE forum_id = '".$forum_id."' AND c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if ($row['forum_image'] != '') {
@@ -1133,6 +1134,7 @@ function move_up_down($content, $direction, $id)
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
+    $id = intval($id);
 
     // Determine which field holds the sort order.
     if ($content == 'forumcategory') {
@@ -2302,9 +2304,6 @@ function store_thread($current_forum, $values)
         $message = get_lang('NewThreadStored');
         // Storing the attachments if any.
         if ($has_attachment) {
-            $course_dir = $_course['path'].'/upload/forum';
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $updir = $sys_course_path.$course_dir;
 
             // Try to add an extension to the file if it hasn't one.
             $new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);

@@ -8,8 +8,8 @@
  * @todo clean code - structure is unclear and difficult to modify
  */
 
-$uInfo = $_REQUEST['uInfo'];
-$view  = $_REQUEST['view'];
+$uInfo = intval($_REQUEST['uInfo']);
+$view  = Security::remove_XSS($_REQUEST['view']);
 
 // name of the language file that needs to be included
 $language_file = 'tracking';
@@ -299,12 +299,13 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     echo "</td></tr>";
                     if ($ar['id'] == $scormcontopen) {
                         //have to list the students here
-                        $contentId=$ar['id'];
+                        $contentId = intval($ar['id']);
                         $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
                                 "FROM $tbl_learnpath_item i " .
                                 "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
                                 "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
-                                "WHERE (v.user_id=".Database::escape_string($uInfo)." and v.lp_id=$contentId) ORDER BY v.id, i.id";
+                                "WHERE (v.user_id=".Database::escape_string($uInfo)." and v.lp_id=$contentId)
+                                ORDER BY v.id, i.id";
                         $result3=Database::query($sql3);
                         $ar3=Database::fetch_array($result3);
                         if (is_array($ar3)) {

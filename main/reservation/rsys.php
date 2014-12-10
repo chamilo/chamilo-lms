@@ -176,6 +176,7 @@ class Rsys {
 	 *  @param  -   int     $id     The id
 	 */
 	function delete_category($id) {
+        $id = intval($id);
 		$sql = "SELECT id FROM ".Rsys :: getTable("item")." WHERE category_id=".Database::escape_string($id)."";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) == 0) {
@@ -196,6 +197,7 @@ class Rsys {
 	 *  @return -   Array               One or all rows of the category-table
 	 */
 	function get_category($id = null, $orderby = "name ASC") {
+        $id = intval($id);
 		$sql = "SELECT * FROM ".Rsys :: getTable("category");
 		if (!empty ($id))
 			$sql .= " WHERE id = ".Database::escape_string($id)."";

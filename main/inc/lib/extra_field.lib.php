@@ -1023,11 +1023,13 @@ EOF;
                         );
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
-                            $fieldTexts[] = Display::img(
-                                api_get_path(WEB_CODE_PATH) . $extraData[$fieldVariable],
-                                '',
-                                array('width' => '300')
-                            );
+                            if (file_exists(api_get_path(SYS_CODE_PATH) . $extraData[$fieldVariable])) {
+                                $fieldTexts[] = Display::img(
+                                    api_get_path(WEB_CODE_PATH) . $extraData[$fieldVariable],
+                                    'ASDASD',
+                                    array('width' => '300')
+                                );
+                            }
                         }
 
                         $form->addElement(

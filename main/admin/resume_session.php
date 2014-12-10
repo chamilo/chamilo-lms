@@ -240,17 +240,21 @@ foreach ($sessionFields as $field) {
                         }
                         break;
                     case ExtraField::FIELD_TYPE_DATE:
-                        $extraFieldDate = str_replace(';', '-', $sesionValueData['field_value']);
-
-                        echo api_format_date($extraFieldDate, DATE_FORMAT_LONG_NO_DAY);
+                        if ($sesionValueData !== false && !empty($sesionValueData['field_value'])) {
+                            echo api_format_date($sesionValueData['field_value'], DATE_FORMAT_LONG_NO_DAY);
+                        } else {
+                            echo get_lang('None');
+                        }
                         break;
                     case ExtraField::FIELD_TYPE_FILE_IMAGE:
-                        if (file_exists(WEB_CODE_PATH) . $sesionValueData['field_value']) {
-                            echo Display::img(
-                                api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
-                                $field['field_display_text'],
-                                array('width' => '300')
-                            );
+                        if ($sesionValueData !== false && !empty($sesionValueData['field_value'])) {
+                            if (file_exists(api_get_path(SYS_CODE_PATH) . $sesionValueData['field_value'])) {
+                                echo Display::img(
+                                    api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
+                                    $field['field_display_text'],
+                                    array('width' => '300')
+                                );
+                            }
                         }
                         break;
                     default:

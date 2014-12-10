@@ -163,20 +163,22 @@ class ExtraFieldValue extends Model
                                 mkdir($sysCodePath . $fileDir, $dirPermissions, true);
                             }
 
-                            $imageExtraField = new Image($value['tmp_name']);
-                            $imageExtraField->send_image($sysCodePath . $fileDir . $fileName, -1, 'png');
+                            if ($value['error'] == 0) {
+                                $imageExtraField = new Image($value['tmp_name']);
+                                $imageExtraField->send_image($sysCodePath . $fileDir . $fileName, -1, 'png');
 
-                            $new_params = array(
-                                $this->handler_id => $params[$this->handler_id],
-                                'field_id' => $extra_field_info['id'],
-                                'field_value' => $fileDir . $fileName
-                            );
+                                $new_params = array(
+                                    $this->handler_id => $params[$this->handler_id],
+                                    'field_id' => $extra_field_info['id'],
+                                    'field_value' => $fileDir . $fileName
+                                );
 
-                            if ($this->handler_id !== 'session_id' && $this->handler_id !== 'course_code') {
-                                $new_params['comment'] = $comment;
+                                if ($this->type !== 'session' && $this->type !== 'course') {
+                                    $new_params['comment'] = $comment;
+                                }
+
+                                self::save($new_params);
                             }
-
-                            self::save($new_params);
                             break;
                         default;
                             $new_params = array(

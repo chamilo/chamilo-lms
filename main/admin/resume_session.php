@@ -13,7 +13,7 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$sessionId = isset($_GET['id_session']) ? $_GET['id_session'] : null;
+$sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 
 if (empty($sessionId)) {
     api_not_allowed(true);
@@ -114,7 +114,8 @@ switch ($action) {
         }
 
         if (!empty($_GET['class'])) {
-            Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$sessionId' AND class_id=".Database::escape_string($_GET['class']));
+            Database::query("DELETE FROM $tbl_session_rel_class
+                             WHERE session_id='$sessionId' AND class_id=".intval($_GET['class']));
             $nbr_affected_rows=Database::affected_rows();
             Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$sessionId'");
         }

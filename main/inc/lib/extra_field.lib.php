@@ -751,25 +751,17 @@ class ExtraField extends Model
                         }
                         break;
                     case ExtraField::FIELD_TYPE_DATE:
-                        $form->addElement(
-                            'datepickerdate',
-                            'extra_'.$field_details['field_variable'],
-                            $field_details['field_display_text'],
-                            array('form_name' => $form_name)
-                        );
-                        $form->_elements[$form->_elementIndex['extra_'.$field_details['field_variable']]]->setLocalOption(
-                            'minYear',
-                            1900
-                        );
-                        $defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
-                        if (!isset($form->_defaultValues['extra_'.$field_details['field_variable']])) {
-                            $form->setDefaults($defaults);
-                        }
+                        $form->addElement('date_picker', 'extra_'.$field_details['field_variable'], $field_details['field_display_text']);
+                        //$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                        //$defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
+                        //$form->setDefaults($defaults);
+
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {
                                 $form->freeze('extra_'.$field_details['field_variable']);
                             }
                         }
+
                         $form->applyFilter('theme', 'trim');
                         break;
                     case ExtraField::FIELD_TYPE_DATETIME:

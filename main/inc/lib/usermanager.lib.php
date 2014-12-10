@@ -4130,6 +4130,10 @@ class UserManager
                     )"
                 ;
                 break;
+            case STUDENT_BOSS :
+                $drhConditions = " AND friend_user_id = $userId AND "
+                . "relation_type = " . USER_RELATION_TYPE_BOSS;
+                break;
         }
 
         $join = null;
@@ -4197,51 +4201,64 @@ class UserManager
      * */
     public static function suscribe_users_to_hr_manager($hr_dept_id, $users_id)
     {
-        // Database Table Definitions
-        $tbl_user_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        return self::subscribeUsersToUser($hr_dept_id, $users_id, USER_RELATION_TYPE_RRHH);
+    }
 
-        $hr_dept_id = intval($hr_dept_id);
-        $affected_rows = 0;
+    /**
+     * Add subscribed users to a user by relation type
+     * @param int $userId The user id
+     * @param array $subscribedUsersId The id of suscribed users
+     * @param action $relationType The relation type
+     */
+    public static function subscribeUsersToUser($userId, $subscribedUsersId, $relationType)
+    {
+        $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        $userId = intval($userId);
+        $affectedRows = 0;
 
         if (api_get_multiple_access_url()) {
             //Deleting assigned users to hrm_id
-            $sql = "SELECT s.user_id FROM $tbl_user_rel_user s
-                    INNER JOIN $tbl_user_rel_access_url a
-                    ON (a.user_id = s.user_id)
-                    WHERE
-                        friend_user_id = $hr_dept_id AND
-                        relation_type = '".USER_RELATION_TYPE_RRHH."' AND
-                        access_url_id = ".api_get_current_access_url_id()."";
+            $sql = "SELECT s.user_id FROM $userRelUserTable s "
+                . "INNER JOIN $userRelAccessUrlTable a ON (a.user_id = s.user_id) "
+                . "WHERE friend_user_id = $userId "
+                . "AND relation_type = $relationType "
+                . "AND access_url_id = " . api_get_current_access_url_id() . "";
         } else {
-            $sql = "SELECT user_id FROM $tbl_user_rel_user
-                    WHERE
-                        friend_user_id = $hr_dept_id AND
-                        relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+            $sql = "SELECT user_id FROM $userRelUserTable "
+                . "WHERE friend_user_id = $userId "
+                . "AND relation_type = $relationType";
         }
+
         $result = Database::query($sql);
+
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
-                $sql = "DELETE FROM $tbl_user_rel_user
-                        WHERE
-                            user_id = '{$row['user_id']}' AND
-                            friend_user_id = $hr_dept_id AND
-                            relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+                $sql = "DELETE FROM $userRelUserTable "
+                    . "WHERE user_id = {$row['user_id']} "
+                    . "AND friend_user_id = $userId "
+                    . "AND relation_type = $relationType";
+
                 Database::query($sql);
             }
         }
 
         // Inserting new user list
-        if (is_array($users_id)) {
-            foreach ($users_id as $user_id) {
-                $user_id = intval($user_id);
-                $sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type)
-                               VALUES ('$user_id', $hr_dept_id, '".USER_RELATION_TYPE_RRHH."')";
+        if (is_array($subscribedUsersId)) {
+            foreach ($subscribedUsersId as $subscribedUserId) {
+                $subscribedUserId = intval($subscribedUserId);
+
+                $sql = "INSERT IGNORE INTO $userRelUserTable(user_id, friend_user_id, relation_type) "
+                    . "VALUES ($subscribedUserId, $userId, $relationType)";
+
                 Database::query($sql);
-                $affected_rows = Database::affected_rows();
+
+                $affectedRows = Database::affected_rows();
             }
         }
-        return $affected_rows;
+
+        return $affectedRows;
     }
 
     /**
@@ -4857,4 +4874,50 @@ EOF;
             Database::query($sql);
         }
     }
+
+    /**
+     * Subscribe users to student boss
+     * @param int $bossId The boss id
+     * @param array $usersId The users array
+     * @return int Affected rows
+     */
+    public static function subscribeUsersToBoss($bossId, $usersId)
+    {
+        return self::subscribeUsersToUser($bossId, $usersId, USER_RELATION_TYPE_BOSS);
+    }
+
+    /**
+     * Get users followed by student boss
+     * @param int $userId
+     * @param int $userStatus (STUDENT, COURSEMANAGER, etc)
+     * @param bool $getOnlyUserId
+     * @param bool $getSql
+     * @param bool $getCount
+     * @param int $from
+     * @param int $numberItems
+     * @param int $column
+     * @param string $direction
+     * @param int $active
+     * @param string $lastConnectionDate
+     * @return array     users
+     */
+    public static function getUsersFollowedByStudentBoss(
+        $userId,
+        $userStatus = 0,
+        $getOnlyUserId = false,
+        $getSql = false,
+        $getCount = false,
+        $from = null,
+        $numberItems = null,
+        $column = null,
+        $direction = null,
+        $active = null,
+        $lastConnectionDate = null
+    ){
+        return self::getUsersFollowedByUser(
+                $userId, $userStatus, $getOnlyUserId, $getSql, $getCount, $from, $numberItems, $column, $direction,
+                $active, $lastConnectionDate, STUDENT_BOSS
+        );
+    }
+
 }

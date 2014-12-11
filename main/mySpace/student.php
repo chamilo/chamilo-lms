@@ -49,7 +49,7 @@ function get_count_users()
         $lastConnectionDate,
         null,
         null,
-        STUDENT
+        api_is_student_boss() ? null : STUDENT
     );
     return $count;
 }
@@ -85,7 +85,7 @@ function get_users($from, $limit, $column, $direction)
                 $lastConnectionDate,
                 null,
                 null,
-                STUDENT
+                api_is_student_boss() ? null : STUDENT
             );
             $drhLoaded = true;
         }
@@ -94,7 +94,7 @@ function get_users($from, $limit, $column, $direction)
     if ($drhLoaded == false) {
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
-            STUDENT,
+            api_is_student_boss() ? null : STUDENT,
             false,
             false,
             false,
@@ -104,7 +104,7 @@ function get_users($from, $limit, $column, $direction)
             $direction,
             $active,
             $lastConnectionDate,
-            COURSEMANAGER,
+            api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
             $keyword
         );
     }
@@ -195,6 +195,15 @@ if (api_is_drh()) {
             $actions .= $item;
         }
     }
+} else if (api_is_student_boss()) {
+    $actions .= Display::url(
+        Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+    );
+    $actions .= Display::url(
+        Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
+        '#'
+    );
 }
 
 $actions .= '<span style="float:right">';

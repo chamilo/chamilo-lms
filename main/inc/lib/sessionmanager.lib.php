@@ -4663,7 +4663,7 @@ class SessionManager
                 null,
                 $active,
                 $lastConnectionDate,
-                COURSEMANAGER,
+                api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
                 $keyword
             );
         }

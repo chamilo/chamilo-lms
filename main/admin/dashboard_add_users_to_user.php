@@ -423,6 +423,8 @@ if(!empty($msg)) {
 		echo get_lang('AssignedUsersListToPlatformAdministrator');
 	} else if ($user_info['status'] == SESSIONADMIN) {
 		echo get_lang('AssignedUsersListToSessionsAdministrator');
+	} else if ($user_info['status'] == STUDENT_BOSS) {
+		echo get_lang('AssignedUsersListToStudentBoss');
 	} else {
 		echo get_lang('AssignedUsersListToHumanResourcesManager');
 	}

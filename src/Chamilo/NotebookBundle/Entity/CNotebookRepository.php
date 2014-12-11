@@ -8,8 +8,6 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
-use Chamilo\NotebookBundle\Entity\CNotebook;
-use Chamilo\CourseBundle\Tool\BaseTool;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
@@ -21,25 +19,6 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 class CNotebookRepository extends EntityRepository
 {
     /**
-     * @param User $user
-     * @param Course $course
-     * @return mixed
-     */
-    public function createNewWithCourse(User $user, Course $course)
-    {
-        /** @var CNotebook $notebook */
-        $notebook = parent::createNew();
-        //$notebook->setCourse($course);
-
-        $this->addResourceToCourse($notebook, $user, $course);
-
-        return $notebook;
-        //$notebook->save();
-
-        //var_dump($course);
-    }
-
-    /**
      * @param AbstractResource $resource
      * @param User $creator
      * @return ResourceNode
@@ -47,28 +26,15 @@ class CNotebookRepository extends EntityRepository
     public function addResource(AbstractResource $resource, User $creator)
     {
         $resourceNode = new ResourceNode();
-        $resourceNode->setName($resource->getName());
-        $resourceNode->setCreator($creator);
-
-        $resourceNode->setResourceId($resource->getId());
-        $resourceNode->setTool('notebook');
+        $resourceNode
+            ->setName($resource->getName())
+            ->setCreator($creator)
+            ->setTool($this->getToolName());
 
         $this->getEntityManager()->persist($resourceNode);
+        $this->getEntityManager()->flush();
 
         return $resourceNode;
-    }
-
-    public function addResourceToUser(AbstractResource $resource, User $user, User $toUser)
-    {
-        $resourceNode = $this->addResource($resource, $user);
-
-        $resourceLink = new ResourceLink();
-        $resourceLink->setResourceNode($resourceNode);
-
-        $resourceLink->setUser($toUser);
-        $this->getEntityManager()->persist($resourceLink);
-
-        return $resourceLink;
     }
 
     /**
@@ -85,6 +51,70 @@ class CNotebookRepository extends EntityRepository
         $resourceLink->setResourceNode($resourceNode);
         $resourceLink->setCourse($course);
 
+        $this->getEntityManager()->persist($resourceLink);
+        $this->getEntityManager()->flush();
+
+        return $resourceNode;
+    }
+
+    /**
+     * @param AbstractResource $resource
+     * @param User $user
+     * @param Course $course
+     * @return ResourceLink
+     */
+    public function getResourceByCourse(Course $course)
+    {
+        $query = $this->getEntityManager()->createQueryBuilder()
+            ->select('resource')
+            ->from('Chamilo\CoreBundle\Entity\Resource\ResourceNode', 'node')
+            ->innerJoin('node.links', 'links')
+            ->innerJoin($this->getClassName(), 'resource')
+            ->where('node.tool = :tool')
+            ->andWhere('links.course = :courseId')
+            //->where('link.cId = ?', $course->getId())
+            //->where('node.cId = 0')
+            //->orderBy('node');
+            ->setParameters(array(
+                'tool'=> $this->getToolName(),
+                'courseId' => $course->getId()
+                )
+            )
+            ->getQuery()
+        ;
+
+        /*$query = $this->getEntityManager()->createQueryBuilder()
+            ->select('notebook')
+            ->from('ChamiloNotebookBundle:CNotebook', 'notebook')
+            ->innerJoin('notebook.resourceNodes', 'node')
+            //->innerJoin('node.links', 'link')
+            ->where('node.tool = :tool')
+            //->where('link.cId = ?', $course->getId())
+            //->where('node.cId = 0')
+            //->orderBy('node');
+            ->setParameters(array(
+                    'tool'=> 'notebook'
+                )
+            )
+            ->getQuery()
+        ;*/
+        return $query->getResult();
+    }
+
+    /**
+     * @param AbstractResource $resource
+     * @param User $user
+     * @param User $toUser
+     * @return ResourceLink
+     */
+    public function addResourceToUser(AbstractResource $resource, User $user, User $toUser)
+    {
+        $resourceNode = $this->addResource($resource, $user);
+
+        $resourceLink = new ResourceLink();
+        $resourceLink->setResourceNode($resourceNode);
+
+        $resourceLink->setUser($toUser);
         $this->getEntityManager()->persist($resourceLink);
 
         return $resourceLink;
@@ -103,6 +133,12 @@ class CNotebookRepository extends EntityRepository
         $this->getEntityManager()->persist($resourceLink);
     }
 
+    /**
+     * @param AbstractResource $resource
+     * @param User $user
+     * @param Course $course
+     * @param CGroupInfo $group
+     */
     public function addResourceToGroup(AbstractResource $resource, User $user, Course $course, CGroupInfo $group)
     {
         $resourceLink = $this->addResourceToCourse($resource, $user, $course);
@@ -110,6 +146,11 @@ class CNotebookRepository extends EntityRepository
         $this->getEntityManager()->persist($resourceLink);
     }
 
-
-
+    /**
+     * @return string
+     */
+    public function getToolName()
+    {
+        return 'notebook';
+    }
 }

@@ -8,11 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Chamilo\UserBundle\Entity\User;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 
 /**
  * Base entity for all resources.
- *
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  * @ORM\Table(name="resource_node")
  * @Gedmo\Tree(type="materializedPath")
@@ -34,14 +32,18 @@ class ResourceNode
      *
      * @ORM\Column(name="tool", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
      */
-    private $tool;
+    protected $tool;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="resource_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    protected $resourceId;
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode")
+     **/
+    protected $links;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\AbstractResource", inversedBy="resourceNodes", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="resource_id", referencedColumnName="id")
+     **/
+    //protected $resource;
 
     /**
      * @ORM\ManyToOne(
@@ -93,12 +95,28 @@ class ResourceNode
      */
     protected $path;
 
+
+    /**
+     * @ORM\Column(name="created_at", type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    protected $updatedAt;
+
     //private $pathForCreationLog = '';
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        //$this->rights = new ArrayCollection();
-        //$this->children = new ArrayCollection();
+        $this->rights = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -112,33 +130,13 @@ class ResourceNode
     }
 
     /**
-     * Sets the resource id.
-     *
-     * @param integer $id
+     * @param int $id
+     * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    /**
-     * Returns the resource id.
-     *
-     * @return integer
-     */
-    public function getResourceId()
-    {
-        return $this->resourceId;
-    }
-
-    /**
-     * Sets the resource id.
-     *
-     * @param integer $id
-     */
-    public function setResourceId($id)
-    {
-        $this->resourceId = $id;
+        return $this;
     }
 
     /**
@@ -187,10 +185,14 @@ class ResourceNode
      * Returns the resource type.
      *
      * @return string
+     *
+     * @return $this
      */
     public function setTool($tool)
     {
         $this->tool = $tool;
+
+        return $this;
     }
 
     /**
@@ -207,10 +209,14 @@ class ResourceNode
      * Sets the resource creator.
      *
      * @param User $creator
+     *
+     * @return $this
      */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
+
+        return $this;
     }
 
     /**
@@ -227,10 +233,13 @@ class ResourceNode
      * Sets the parent resource.
      *
      * @param ResourceNode $parent
+     *
+     * @return $this
      */
     public function setParent(ResourceNode $parent = null)
     {
         $this->parent = $parent;
+        return $this;
     }
 
     /**
@@ -279,6 +288,8 @@ class ResourceNode
      *
      * @param  string $name
      * @throws an     exception if the name contains the path separator ('/').
+     *
+     * @return $this
      */
     public function setName($name)
     {
@@ -289,6 +300,8 @@ class ResourceNode
         }
 
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -340,5 +353,48 @@ class ResourceNode
     public function getPathForCreationLog()
     {
         return $this->pathForCreationLog;
+    }
+
+    /**
+     * @param $resource
+     * @return $this
+     */
+    public function setResource($resource)
+    {
+        $this->resource = $resource;
+
+        return $this;
+    }
+
+    /**
+     * @return AbstractResource
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * Returns the resource id.
+     *
+     * @return integer
+     */
+    public function getResourceId()
+    {
+        return $this->resourceId;
+    }
+
+    /**
+     * Sets the resource id.
+     *
+     * @param integer $id
+     *
+     * @param $this
+     */
+    public function setResourceId($id)
+    {
+        $this->resourceId = $id;
+
+        return $this;
     }
 }

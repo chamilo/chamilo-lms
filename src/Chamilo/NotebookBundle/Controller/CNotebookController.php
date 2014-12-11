@@ -3,6 +3,8 @@
 
 namespace Chamilo\NotebookBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,23 +36,35 @@ class CNotebookController extends ToolBaseCrudController
     {
         $source = new Entity('ChamiloNotebookBundle:CNotebook');
 
-        $courseCode = $request->get('course');
+        $course = $this->getCourse();
 
         /* @var $grid \APY\DataGridBundle\Grid\Grid */
         $grid = $this->get('grid');
+
+        /*$tableAlias = $source->getTableAlias();
+        $source->manipulateQuery(function (QueryBuilder $query) use ($tableAlias, $course) {
+                $query->andWhere($tableAlias . '.cId = '.$course->getId());
+                //$query->resetDQLPart('orderBy');
+            }
+        );*/
+
+        $resources = $this->getNotebookRepository()->getResourceByCourse($course);
+
+        $source->setData($resources);
         $grid->setSource($source);
+
         //$grid->hideFilters();
-        $grid->setLimits(2);
+        $grid->setLimits(5);
         //$grid->isReadyForRedirect();
 
         //$grid->setMaxResults(1);
         //$grid->setLimits(2);
         /*$grid->getColumn('id')->manipulateRenderCell(
-            function ($value, $row, $router) use ($courseCode) {
+            function ($value, $row, $router) use ($course) {
                 //$router = $this->get('router');
                 return $router->generate(
                     'chamilo_notebook_show',
-                    array('id' => $row->getField('id'), 'course' => $courseCode)
+                    array('id' => $row->getField('id'), 'course' => $course)
                 );
             }
         );*/
@@ -71,7 +85,7 @@ class CNotebookController extends ToolBaseCrudController
             '_self',
             array('class' => 'btn btn-default')
         );
-        $myRowAction->setRouteParameters(array('course' => $courseCode, 'id'));
+        $myRowAction->setRouteParameters(array('course' => $course, 'id'));
         $grid->addRowAction($myRowAction);
 
         $myRowAction = new RowAction(
@@ -81,7 +95,7 @@ class CNotebookController extends ToolBaseCrudController
             '_self',
             array('class' => 'btn btn-info')
         );
-        $myRowAction->setRouteParameters(array('course' => $courseCode, 'id'));
+        $myRowAction->setRouteParameters(array('course' => $course, 'id'));
         $grid->addRowAction($myRowAction);
 
         $myRowAction = new RowAction(
@@ -91,19 +105,20 @@ class CNotebookController extends ToolBaseCrudController
             '_self',
             array('class' => 'btn btn-danger', 'form_delete' => true)
         );
-        $myRowAction->setRouteParameters(array('course' => $courseCode, 'id'));
+        $myRowAction->setRouteParameters(array('course' => $course, 'id'));
         $grid->addRowAction($myRowAction);
 
         $grid->addExport(
             new CSVExport(
-                'CSV Export', 'export', array('course' => $courseCode)
+                'CSV Export', 'export', array('course' => $course)
             )
         );
+
         $grid->addExport(
             new ExcelExport(
                 'Excel Export',
                 'export',
-                array('course' => $courseCode)
+                array('course' => $course)
             )
         );
 
@@ -117,11 +132,58 @@ class CNotebookController extends ToolBaseCrudController
      *
      * @return RedirectResponse|Response
      */
+    public function createAction(Request $request)
+    {
+        /** @var AbstractResource $resource */
+        $resource = $this->createNew();
+        $form = $this->getForm($resource);
+
+        if ($form->handleRequest($request)->isValid()) {
+
+            $resourceNode = $this->getRepository()->addResourceToCourse(
+                $resource,
+                $this->getUser(),
+                $this->getCourse()
+            );
+
+            $resource->setResourceNode($resourceNode);
+
+            $resource = $this->domainManager->create($resource);
+
+            if ($this->config->isApiRequest()) {
+                return $this->handleView($this->view($resource));
+            }
+
+            if (null === $resource) {
+                //return $this->redirectHandler->redirectToIndex();
+            }
+
+            //return $this->redirectHandler->redirectTo($resource);
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('create.html'))
+            ->setData(array(
+                    $this->config->getResourceName() => $resource,
+                    'form'                           => $form->createView()
+                ))
+        ;
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
     public function updateAction(Request $request)
     {
-        $resource = $this->findOr404($request);
-
-        parent::updateAction($request);
+        return parent::updateAction($request);
     }
 
     /**
@@ -133,37 +195,44 @@ class CNotebookController extends ToolBaseCrudController
         $primaryKeys = $request->get('primaryKeys');
         if (!empty($primaryKeys)) {
             foreach ($primaryKeys as $id) {
-                $resource = $this->getRepository()->find($id);
-                $this->domainManager->delete($resource);
+                $this->deleteResource($id);
             }
         }
         return $this->routeRedirectView(
             'chamilo_notebook_index',
-            array('course' => $request->get('course'))
+            array('course' => $this->getCourse())
         );
+    }
+
+    /**
+     * @param int $id
+     */
+    public function deleteResource($id)
+    {
+        /** @var AbstractResource $resource */
+        $resource = $this->getRepository()->find($id);
+        $this->domainManager->delete($resource);
+
+        //$this->getManager()->
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createNew()
+    /*public function createNew()
     {
-        $request = $this->getRequest();
-        $courseCode = $request->get('course');
-        $course = $this->get('chamilo_core.manager.course')->findOneByCode($courseCode);
-        /** @var CNotebook $notebook */
         $notebook = $this->getNotebookRepository()->createNewWithCourse(
             $this->getUser(),
-            $course
+            $this->getCourse()
         );
 
         return $notebook;
-    }
+    }*/
 
     /**
      * @return CNotebookManager
      */
-    protected function getNotebookManager()
+    protected function getManager()
     {
         return $this->get('chamilo_notebook.notebook_manager');
     }

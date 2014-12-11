@@ -245,7 +245,7 @@ class Course
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\NotebookBundle\Entity\CNotebook", mappedBy="course")
      **/
-    private $notebooks;
+    //private $notebooks;
 
     /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course")

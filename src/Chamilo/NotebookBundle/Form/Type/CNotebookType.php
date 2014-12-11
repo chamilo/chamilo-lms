@@ -5,8 +5,12 @@ namespace Chamilo\NotebookBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class CNotebookType
+ * @package Chamilo\NotebookBundle\Form\Type
+ */
 class CNotebookType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -22,7 +26,7 @@ class CNotebookType extends AbstractType
             ->add('save', 'submit');
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Chamilo\NotebookBundle\Entity\CNotebook'

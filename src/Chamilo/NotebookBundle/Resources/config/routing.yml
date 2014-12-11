@@ -18,9 +18,10 @@ chamilo_notebook_new:
             redirect:
                 route: chamilo_notebook_index
                 parameters: { course: $course }
-            factory:
-                method: createNewWithCourse
-                arguments: [$course]
+#            factory:
+#                # The method of the repository used to create the new resource
+#                method: createNewWithCourse
+#                arguments: [$course]
 
 chamilo_notebook_show:
     pattern: courses/{course}/notebook/{id}

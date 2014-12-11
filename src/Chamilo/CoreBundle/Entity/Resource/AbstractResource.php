@@ -29,6 +29,12 @@ abstract class AbstractResource
     protected $name;
 
     /**
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode")
+     * @ORM\JoinColumn(name="resource_node_id", onDelete="CASCADE")
+     */
+    protected $resourceNode;
+
+    /**
      * Returns the resource id.
      *
      * @return integer
@@ -84,4 +90,21 @@ abstract class AbstractResource
     {
 
     }
+
+    /**
+     * @param ResourceNode $resourceNode
+     */
+    public function setResourceNode(ResourceNode $resourceNode)
+    {
+        $this->resourceNode = $resourceNode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResourceNode()
+    {
+        return $this->resourceNode;
+    }
+
 }

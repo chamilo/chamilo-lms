@@ -325,6 +325,11 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     protected $extraFields;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator")
+     **/
+    protected $resourceNodes;
+
+    /**
      *
      */
     public function __construct()

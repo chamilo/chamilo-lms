@@ -29,42 +29,10 @@ class ResourceLink
      */
     protected $resourceNode;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $createdAt;
-
-    /**
-     * @ORM\Column(name="updated_at", type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updatedAt;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    protected $cId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    protected $userId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="session_id", type="integer", precision=0, scale=0, unique=false)
-     */
-    protected $sessionId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      **/
     protected $session;
 
@@ -82,7 +50,7 @@ class ResourceLink
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true)
      */
     protected $group;
 

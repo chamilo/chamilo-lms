@@ -1167,7 +1167,7 @@ function get_exam_results_data(
     $course_id = api_get_course_int_id();
     $course_code = api_get_course_id();
 
-   	$is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh();
+   	$is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
 
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
     $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
@@ -1470,7 +1470,7 @@ function get_exam_results_data(
                         }
 
                         //Admin can always delete the attempt
-                        if ($locked == false || api_is_platform_admin()) {
+                        if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
                             $ip = TrackingUserLog::get_ip_from_user_event($results[$i]['exe_user_id'], date('Y-m-d h:i:s'), false);
                             $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank"><img src="'.api_get_path(WEB_CODE_PATH).'img/icons/22/info.png" title="'.$ip.'" /></a>';
 

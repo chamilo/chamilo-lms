@@ -427,7 +427,7 @@ if (isset($_REQUEST['oper']) && $_REQUEST['oper'] == 'del') {
     $obj->delete($_REQUEST['id']);
 }
 
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
 
 //5. Querying the DB for the elements
 $columns = array();

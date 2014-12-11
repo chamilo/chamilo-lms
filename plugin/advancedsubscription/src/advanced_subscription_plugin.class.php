@@ -4,7 +4,7 @@
  * @TODO: Improve description
  * This class is used to add an advanced subscription allowing the admin to
  * create user queues requesting a subscribe to a session
- * @package chamilo.plugin.advanced_subscription
+ * @package chamilo.plugin.advancedsubscription
  */
 
 class AdvancedSubscriptionPlugin extends Plugin
@@ -15,17 +15,19 @@ class AdvancedSubscriptionPlugin extends Plugin
     function __construct()
     {
         $parameters = array(
-            'uit_value' => 'boolean',
+            'tool_enable' => 'boolean',
+            'yearly_cost_limit' => 'text',
+            'yearly_hours_limit' => 'text',
+            'yearly_cost_unit_converter' => 'text',
+            'courses_count_limit' => 'text',
+            'course_session_credit_year_start_date' => 'text',
             'ws_url' => 'text',
             'min_profile_percentage' => 'text',
-            'max_expended_uit' => 'text',
-            'max_expended_num' => 'text',
-            'max_course_times' => 'text',
             'check_induction' => 'boolean',
             'confirmation_message' => 'wysiwyg'
         );
 
-        parent::__construct('1.0', 'Daniel Alejandro Barreto Alva', $parameters);
+        parent::__construct('1.0', 'Imanol Losada, Daniel Barreto', $parameters);
     }
 
     /**
@@ -103,8 +105,9 @@ class AdvancedSubscriptionPlugin extends Plugin
      * Drop the database tables for the plugin
      * @return void
      */
-    private function unistallDatabase()
+    private function uninstallDatabase()
     {
+        /* Drop plugin tables */
         $pAdvSubQueueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
         $pAdvSubMailTable = Database::get_main_table(TABLE_ADV_SUB_MAIL);
         $pAdvSubMailTypeTable = Database::get_main_table(TABLE_ADV_SUB_MAIL_TYPE);
@@ -116,6 +119,10 @@ class AdvancedSubscriptionPlugin extends Plugin
         $sql .= "DROP TABLE IF EXISTS $pAdvSubMailStatusTable; ";
 
         Database::query($sql);
+
+        /* Delete settings */
+        $tSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        Database::query("DELETE FROM $tSettings WHERE subkey = 'advancedsubscription'");
     }
 
     /**
@@ -140,16 +147,16 @@ class AdvancedSubscriptionPlugin extends Plugin
                 // @TODO: check if user have completed at least one induction session
                 $completedInduction = true;
                 if (!$checkInduction || $completedInduction) {
-                    $uitMax = $advSubPlugin->get('uit_value');
-                    $uitMax *= $advSubPlugin->get('max_expended_uit');
+                    $uitMax = $advSubPlugin->get('yearly_cost_unit_converter');
+                    $uitMax *= $advSubPlugin->get('yearly_cost_limit');
                     // @TODO: Get UIT completed by user this year by WS
                     $uitUser = 0;
                     if ($uitMax > $uitUser) {
-                        $expendedTimeMax = $advSubPlugin->get('max_expended_time');
+                        $expendedTimeMax = $advSubPlugin->get('yearly_hours_limit');
                         // @TODO: Get Expended time from user data
                         $expendedTime = 0;
                         if ($expendedTimeMax > $expendedTime) {
-                            $expendedNumMax = $advSubPlugin->get('max_expended_num');
+                            $expendedNumMax = $advSubPlugin->get('courses_count_limit');
                             // @TODO: Get Expended num from user
                             $expendedNum = 0;
                             if ($expendedNumMax > $expendedNum) {

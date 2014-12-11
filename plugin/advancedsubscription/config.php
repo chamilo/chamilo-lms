@@ -3,7 +3,7 @@
 /**
  * Config the plugin
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
- * @package chamilo.plugin.advanced_subscription
+ * @package chamilo.plugin.advancedsubscription
  */
 
 define('TABLE_ADV_SUB_QUEUE', 'plugin_advsub_queue');

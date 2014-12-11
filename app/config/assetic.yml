@@ -51,6 +51,7 @@ assetic:
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/timepicker/bootstrap-timepicker.css
                 - @ChamiloAdminThemeBundle/Resources/public/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/AdminLTE.css
+#            output: web/js/chamilo.js
 
         chamilo_js:
             inputs:
@@ -62,7 +63,7 @@ assetic:
                 - @ChamiloAdminThemeBundle/Resources/public/components/fullcalendar/dist/fullcalendar.min.js
                 - @ChamiloAdminThemeBundle/Resources/public/components/jqgrid/js/jquery.jqGrid.js
                 - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/ckeditor/ckeditor.js
+#                - @ChamiloAdminThemeBundle/Resources/public/components/ckeditor/ckeditor.js
                 - @ChamiloAdminThemeBundle/Resources/public/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/daterangepicker/daterangepicker.js
 
@@ -135,7 +136,7 @@ assetic:
             inputs:
                 # do not uncomment this, ckeditor behave badly when compacted...
                 #- %kernel.root_dir%/../web/bundles/sonataformatter/vendor/ckeditor/ckeditor.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/ckeditor/ckeditor.js
+#                - @ChamiloAdminThemeBundle/Resources/public/components/ckeditor/ckeditor.js
                 - %kernel.root_dir%/../web/bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
                 - %kernel.root_dir%/../web/bundles/sonataformatter/markitup/sets/markdown/set.js
                 - %kernel.root_dir%/../web/bundles/sonataformatter/markitup/sets/html/set.js

@@ -2,7 +2,6 @@
 {% import "ChamiloAdminThemeBundle:Macros:actions.html.twig" as macro_actions %}
 {% import "ChamiloAdminThemeBundle:Macros:buttons.html.twig" as macro_buttons %}
 {% import "ChamiloAdminThemeBundle:Macros:image.html.twig" as macro_image %}
-
 <!doctype html>
 <!--[if lt IE 7 ]><html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]><html lang="en" class="no-js ie7"> <![endif]-->
@@ -22,10 +21,8 @@
     {% endstylesheets %}
 
     {# Chamilo base #}
-    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/base.css') }}"/>
-
     {% set theme = chamilo_settings_get('platform.theme') %}
-
+    <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/base.css') }}"/>
     <link rel="stylesheet" media="print" href="{{ asset('bundles/chamilocore/css/print.css') }}"/>
     <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/default.css') }}"/>
     <link rel="stylesheet" href="{{ asset('bundles/chamilocore/css/themes/'~ theme ~'/learnpath.css') }}"/>
@@ -39,6 +36,8 @@
     {%- javascripts '@chamilo_js' -%}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script src="{{ asset('bundles/ivoryckeditor/ckeditor.js') }}" type="text/javascript"></script>
 </head>
 <body class="{{ admin_skin|default('skin-blue')}}">
 {% block chamilo_admin_header %}
@@ -112,7 +111,6 @@
         </section>
         <!-- /.sidebar -->
     </aside>
-
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">
         <!-- Content Header (Page header) -->

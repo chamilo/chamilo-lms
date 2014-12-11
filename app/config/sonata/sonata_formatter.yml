@@ -40,6 +40,9 @@ sonata_formatter:
 #  => http://sonata-project.org/bundles/media/master/doc/reference/extra.html#ckeditor-integration
 #  there is also a configuration in the sonata_formatter section (see sonata_formatter.yml)
 ivory_ck_editor:
+    autoload: false
+    base_path: "bundles/ivoryckeditor"
+    js_path:   "bundles/ivoryckeditor/ckeditor.js"
     default_config: default
     configs:
         default:

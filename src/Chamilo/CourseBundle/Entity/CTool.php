@@ -1,14 +1,18 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Chamilo\CoreBundle\Entity\Course;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * CTool
+ * @GRID\Source(columns="iid, name")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="c_tool", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
  * @ORM\Entity

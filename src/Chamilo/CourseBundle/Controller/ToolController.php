@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\NotebookBundle\Controller;
+namespace Chamilo\CourseBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Doctrine\ORM\QueryBuilder;
@@ -18,65 +18,36 @@ use APY\DataGridBundle\Grid\Export\PHPExcelPDFExport;
 use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Action\RowAction;
 use Symfony\Component\HttpFoundation\Request;
-use Chamilo\NotebookBundle\Entity\CNotebookRepository;
-use Chamilo\NotebookBundle\Entity\CNotebookManager;
-use Chamilo\NotebookBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Controller\ToolBaseCrudController;
 
 /**
- * Class CNotebookController
+ * Class ToolController
  * @package Chamilo\NotebookBundle\Controller
  */
-class CNotebookController extends ToolBaseCrudController
+class ToolController extends ToolBaseCrudController
 {
     /**
      * @Route("/")
      */
     public function indexAction(Request $request)
     {
-        $source = new Entity('ChamiloNotebookBundle:CNotebook');
+        $source = new Entity('ChamiloCourseBundle:CTool');
 
         $course = $this->getCourse();
 
         /* @var $grid \APY\DataGridBundle\Grid\Grid */
         $grid = $this->get('grid');
 
-        /*$tableAlias = $source->getTableAlias();
-        $source->manipulateQuery(function (QueryBuilder $query) use ($tableAlias, $course) {
-                $query->andWhere($tableAlias . '.cId = '.$course->getId());
-                //$query->resetDQLPart('orderBy');
-            }
-        );*/
-
-        $resources = $this->getNotebookRepository()->getResourceByCourse($course);
-
-        $source->setData($resources);
         $grid->setSource($source);
+        //$grid->setLimits(5);
 
-        //$grid->hideFilters();
-        $grid->setLimits(5);
-        //$grid->isReadyForRedirect();
-
-        //$grid->setMaxResults(1);
-        //$grid->setLimits(2);
-        /*$grid->getColumn('id')->manipulateRenderCell(
-            function ($value, $row, $router) use ($course) {
-                //$router = $this->get('router');
-                return $router->generate(
-                    'chamilo_notebook_show',
-                    array('id' => $row->getField('id'), 'course' => $course)
-                );
-            }
-        );*/
-
-        //$deleteMassAction = new MassAction('Delete', 'ChamiloNotebookBundle:CNotebook:deleteMass');
-        $deleteMassAction = new MassAction(
+        /*$deleteMassAction = new MassAction(
             'Delete',
             'chamilo.controller.notebook:deleteMassAction',
             true,
             array('course' => $request->get('course'))
         );
-        $grid->addMassAction($deleteMassAction);
+        $grid->addMassAction($deleteMassAction);*/
 
         $myRowAction = new RowAction(
             'View',
@@ -88,7 +59,7 @@ class CNotebookController extends ToolBaseCrudController
         $myRowAction->setRouteParameters(array('course' => $course, 'id'));
         $grid->addRowAction($myRowAction);
 
-        $myRowAction = new RowAction(
+        /*$myRowAction = new RowAction(
             'Edit',
             'chamilo_notebook_edit',
             false,
@@ -96,8 +67,9 @@ class CNotebookController extends ToolBaseCrudController
             array('class' => 'btn btn-info')
         );
         $myRowAction->setRouteParameters(array('course' => $course, 'id'));
-        $grid->addRowAction($myRowAction);
-
+        */
+        //$grid->addRowAction($myRowAction);
+        /*
         $myRowAction = new RowAction(
             'Delete',
             'chamilo_notebook_delete',
@@ -107,20 +79,19 @@ class CNotebookController extends ToolBaseCrudController
         );
         $myRowAction->setRouteParameters(array('course' => $course, 'id'));
         $grid->addRowAction($myRowAction);
-
-        $grid->addExport(
+    */
+        /*$grid->addExport(
             new CSVExport(
                 'CSV Export', 'export', array('course' => $course)
             )
         );
-
         $grid->addExport(
             new ExcelExport(
                 'Excel Export',
                 'export',
                 array('course' => $course)
             )
-        );
+        );*/
 
         return $grid->getGridResponse(
             'ChamiloNotebookBundle:Notebook:index.html.twig'
@@ -155,10 +126,10 @@ class CNotebookController extends ToolBaseCrudController
             }
 
             if (null === $resource) {
-                //return $this->redirectHandler->redirectToIndex();
+                return $this->redirectHandler->redirectToIndex();
             }
 
-            //return $this->redirectHandler->redirectTo($resource);
+            return $this->redirectHandler->redirectTo($resource);
         }
 
         if ($this->config->isApiRequest()) {
@@ -230,18 +201,18 @@ class CNotebookController extends ToolBaseCrudController
     }*/
 
     /**
-     * @return CNotebookManager
+     * @return NotebookManager
      */
     protected function getManager()
     {
-        return $this->get('chamilo_notebook.notebook_manager');
+        return $this->get('chamilo_notebook.entity.notebook_manager');
     }
 
     /**
-     * @return CNotebookRepository
+     * @return NotebookRepository
      */
-    protected function getNotebookRepository()
+    protected function getRepositorys()
     {
-        return $this->get('chamilo.repository.notebook');
+        return $this->get('chamilo_notebook.repository.resource');
     }
 }

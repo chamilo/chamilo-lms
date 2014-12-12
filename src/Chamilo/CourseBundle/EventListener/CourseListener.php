@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Chamilo\CourseBundle\Controller\ToolInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class CourseListener
@@ -83,6 +84,12 @@ class CourseListener
                 /** @var Course $course */
                 $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
                 if ($course) {
+
+                    // Security
+                    if (false === $container->get('security.authorization_checker')->isGranted('view', $course)) {
+                        throw new AccessDeniedException('Unauthorised access!');
+                    }
+
                     $courseInfo = api_get_course_info($course->getCode());
                     $container->get('twig')->addGlobal('course', $course);
                     $request->getSession()->set('_real_cid', $course->getId());

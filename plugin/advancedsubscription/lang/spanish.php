@@ -7,8 +7,8 @@ $strings['ws_url'] = 'URL del Webservice';
 $strings['ws_url_help'] = 'La URL de la cual se solicitará información para el proceso de la inscripción avanzada';
 $strings['check_induction'] = 'Activar requerimiento de curso inducción';
 $strings['check_induction_help'] = 'Escoja si se requiere que se complete los cursos de inducción';
-$strings['tool_enable'] = 'Suscripción avanzada activada';
-$strings['tool_enable_help'] = "Escoja si desea activar la suscripción avanzada.";
+$strings['tool_enable'] = 'Inscripción avanzada activada';
+$strings['tool_enable_help'] = "Escoja si desea activar la inscripción avanzada.";
 $strings['yearly_cost_limit'] = 'Límite de UITs';
 $strings['yearly_cost_limit_help'] = "El límite de UITs de cursos que se pueden llevar en un año calendario del año actual.";
 $strings['yearly_hours_limit'] = 'Límite de horas lectivas';
@@ -29,5 +29,8 @@ $strings['AdvancedSubscriptionCostXLimitReached'] = "Lo sentimos, usted ya ha al
 $strings['AdvancedSubscriptionTimeXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s horas para los cursos que ha seguido este año";
 $strings['AdvancedSubscriptionCourseXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s cursos que ha seguido este año";
 $strings['AdvancedSubscriptionNotMoreAble'] = "Lo sentimos, usted ya no cumple con las condiciones iniciales para poder inscribirse al curso";
+$strings['AdvancedSubscriptionIncompleteParams'] = "Los parámetros enviados no están completos o no son los correctos.";
+
+$strings['AdvancedSubscriptionIsNotEnabled'] = "La inscripción avanzada no está activada";
 
 //Needed in order to show the plugin title

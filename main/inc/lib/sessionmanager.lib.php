@@ -5292,4 +5292,116 @@ class SessionManager
 
         return false;
     }
+
+    /**
+     * Get the list of course coaches
+     * @return array The list
+     */
+    public static function getAllCourseCoaches()
+    {
+        $coaches = array();
+
+        $scuTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $idResult = Database::select('DISTINCT id_user', $scuTable, array(
+            'where' => array(
+                'status = ?' => 2
+            )
+        ));
+
+        if ($idResult != false) {
+            foreach ($idResult as $idData) {
+                $userResult = Database::select('user_id, lastname, firstname, username', $userTable, array(
+                    'where' => array(
+                        'user_id = ?' => $idData['id_user']
+                    )
+                ), 'first');
+
+                if ($userResult != false) {
+                    $coaches[] = array(
+                        'id' => $userResult['user_id'],
+                        'lastname' => $userResult['lastname'],
+                        'firstname' => $userResult['firstname'],
+                        'username' => $userResult['username'],
+                        'completeName' => api_get_person_name($userResult['firstname'], $userResult['lastname'])
+                    );
+                }
+            }
+        }
+
+        return $coaches;
+    }
+
+    /**
+     * Calculate the total user time in the platform 
+     * @param int $userId The user id
+     * @return string The time (hh:mm:ss)
+     */
+    public static function getTotalUserTimeInPlatform($userId)
+    {
+        $userId = intval($userId);
+
+        $trackLoginTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+
+        $trackResult = Database::select(
+            'SEC_TO_TIME(SUM(UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date))) as total_time',
+            $trackLoginTable,
+            array(
+                'where' => array(
+                    'login_user_id = ?' => $userId
+                )
+            ), 'first'
+        );
+
+        if ($trackResult != false) {
+            return $trackResult['total_time'] ? $trackResult['total_time'] : '00:00:00';
+        }
+
+        return '00:00:00';
+    }
+
+    public static function getUserTimeInCourse($userId, $courseCode, $sessionId = 0)
+    {
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+
+        $trackCourseAccessTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $trackResult = Database::select(
+            'SEC_TO_TIME(SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date))) as total_time',
+            $trackCourseAccessTable,
+            array(
+                'where' => array(
+                    'user_id = ? AND ' => $userId,
+                    "course_code = '?' AND " => $courseCode,
+                    'session_id = ?' => $sessionId
+                )
+            ), 'first'
+        );
+
+        if ($trackResult != false) {
+            return $trackResult['total_time'] ? $trackResult['total_time'] : '00:00:00';
+        }
+
+        return '00:00:00';
+    }
+
+    /**
+     * Get the courses list by a course coach
+     * @param int $coachId The coach id
+     * @return array
+     */
+    public static function getCoursesListByCourseCoach($coachId)
+    {
+        $srcruTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        return  Database::select('*', $srcruTable, array(
+            'where' => array(
+                'id_user = ? AND ' => $coachId,
+                'status = ?' => 2
+            )
+        ));
+    }
+
 }

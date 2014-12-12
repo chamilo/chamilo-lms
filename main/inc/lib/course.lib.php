@@ -44,16 +44,36 @@ class CourseManager
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
-        if (is_array($_configuration[$access_url_id]) &&
-            isset($_configuration[$access_url_id]['hosting_limit_courses']) &&
-            $_configuration[$access_url_id]['hosting_limit_courses'] > 0
-        ) {
-            $num = self::count_courses();
-            if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
-                api_warn_hosting_contact('hosting_limit_courses');
-                return api_set_failure('PortalCoursesLimitReached');
+
+        if (isset($_configuration[$access_url_id]) &&
+            is_array($_configuration[$access_url_id])
+        ){
+            if (isset($_configuration[$access_url_id]['hosting_limit_courses']) &&
+                $_configuration[$access_url_id]['hosting_limit_courses'] > 0
+            ) {
+                $num = self::count_courses($access_url_id);
+                if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
+                    api_warn_hosting_contact('hosting_limit_courses');
+
+                    return api_set_failure(get_lang('PortalCoursesLimitReached'));
+                }
+            }
+
+            if (isset($_configuration[$access_url_id]['hosting_limit_active_courses']) &&
+                $_configuration[$access_url_id]['hosting_limit_active_courses'] > 0
+            ) {
+                $num = self::countActiveCourses($access_url_id);
+                if ($num >= $_configuration[$access_url_id]['hosting_limit_active_courses']) {
+                    api_warn_hosting_contact('hosting_limit_active_courses');
+
+                    return api_set_failure(
+                        get_lang('PortalActiveCoursesLimitReached')
+                    );
+                }
             }
         }
+
+
         if (empty($params['title'])) {
             return false;
         }
@@ -1018,6 +1038,7 @@ class CourseManager
      * @param boolean $user_is_registered_in_real_course
      * @param string $real_course_name, the title of the real course
      * @param array $virtual_course_list, the list of virtual courses
+     * @deprecated
      */
     public static function create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
     {
@@ -1039,6 +1060,7 @@ class CourseManager
 
     /**
      *    Create a course code based on all real and virtual courses the user is registered in.
+     * @deprecated
      */
     public static function create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
     {
@@ -1128,7 +1150,7 @@ class CourseManager
     /**
      * This function returns the course code of the real course
      * to which a virtual course is linked.
-     *
+     * @deprecated
      * @param the course code of the virtual course
      * @return the course code of the real course
      */
@@ -1139,16 +1161,45 @@ class CourseManager
         return $result['target_course_code'];
     }
 
-    /*
-        USER FUNCTIONS
-    */
+    /**
+     * @param int $userId
+     * @param array $courseInfo
+     * @return bool
+     */
+    public static function isUserSubscribedInCourseAsDrh($userId, $courseInfo)
+    {
+        $userId = intval($userId);
+
+        if (!api_is_drh()) {
+            return false;
+        }
+
+        if (empty($courseInfo) || empty($userId)) {
+            return false;
+        }
+        $courseCode = Database::escape_string($courseInfo['code']);
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $sql = "SELECT * FROM $table
+                WHERE
+                    user_id = $userId AND
+                    relation_type = ".COURSE_RELATION_TYPE_RRHH." AND
+                    course_code = $courseCode ";
+
+        $result = Database::fetch_array(Database::query($sql));
+
+        if (!empty($result)) {
+            // The user has been registered in this course.
+            return true;
+        }
+    }
 
     /**
      * Check if user is subscribed inside a course
-     * @param     int        User id
-     * @param    string    Course code, if this parameter is null, it'll check for all courses
-     * @param    bool    True for checking inside sessions too, by default is not checked
-     * @return     bool     true if the user is registered in the course, false otherwise
+     * @param  int    $user_id
+     * @param  string $course_code, if this parameter is null, it'll check for all courses
+     * @param  bool   $in_a_session True for checking inside sessions too, by default is not checked
+     * @return bool   $session_id true if the user is registered in the course, false otherwise
      */
     public static function is_user_subscribed_in_course(
         $user_id,
@@ -1156,7 +1207,6 @@ class CourseManager
         $in_a_session = false,
         $session_id = null
     ) {
-
         $user_id = intval($user_id);
 
         if (empty($session_id)) {
@@ -1186,13 +1236,14 @@ class CourseManager
             return false;
         }
 
-        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+        $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.
                ' WHERE id_user = '.$user_id.' '.$condition_course;
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.
                ' WHERE id_user = '.$user_id.' AND status=2 '.$condition_course;
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
@@ -4546,20 +4597,61 @@ class CourseManager
     /**
      * Get courses count
      * @param int Access URL ID (optional)
+     * @param int $visibility
+     *
      * @return int Number of courses
      */
-    public static function count_courses($access_url_id = null)
+    public static function count_courses($access_url_id = null, $visibility = null)
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "SELECT count(id) FROM $table_course c";
         if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
-            $sql .= ", $table_course_rel_access_url u WHERE c.code = u.course_code AND u.access_url_id = $access_url_id";
+            $sql .= ", $table_course_rel_access_url u
+                    WHERE c.code = u.course_code AND u.access_url_id = $access_url_id";
+            if (!empty($visibility)) {
+                $visibility = intval($visibility);
+                $sql .= " AND visibility = $visibility ";
+            }
+        } else {
+            if (!empty($visibility)) {
+                $visibility = intval($visibility);
+                $sql .= " WHERE visibility = $visibility ";
+            }
+        }
+
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+        return $row[0];
+    }
+
+    /**
+     * Get active courses count.
+     * Active = all courses except the ones with hidden visibility.
+     *
+     * @param int $urlId Access URL ID (optional)
+     * @return int Number of courses
+     */
+    public static function countActiveCourses($urlId = null)
+    {
+        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT count(id) FROM $table_course c";
+        if (!empty($urlId) && $urlId == intval($urlId)) {
+            $sql .= ", $table_course_rel_access_url u
+                    WHERE
+                        c.code = u.course_code AND
+                        u.access_url_id = $urlId AND
+                        visibility <> ".COURSE_VISIBILITY_HIDDEN
+                    ;
+        } else {
+            $sql .= " WHERE visibility <> ".COURSE_VISIBILITY_HIDDEN;
         }
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         return $row[0];
     }
+
 
     /**
      * Get available le courses count

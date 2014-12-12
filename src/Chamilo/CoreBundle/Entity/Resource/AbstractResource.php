@@ -29,8 +29,8 @@ abstract class AbstractResource
     protected $name;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode")
-     * @ORM\JoinColumn(name="resource_node_id", onDelete="CASCADE")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"})
+     * @ORM\JoinColumn(name="resource_node_id")
      */
     protected $resourceNode;
 

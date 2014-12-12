@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
  * CNotebook
  *
  * @ORM\Table(name="c_notebook")
- * @ORM\Entity(repositoryClass="Chamilo\NotebookBundle\Entity\CNotebookRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\NotebookBundle\Entity\NotebookRepository")
  * @GRID\Source(columns="id, name")
  *
  */

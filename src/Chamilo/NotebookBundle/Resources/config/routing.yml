@@ -1,5 +1,5 @@
 #chamilo_notebook:
-#    resource: "@ChamiloNotebookBundle/Controller/CNotebookController.php"
+#    resource: "@ChamiloNotebookBundle/Controller/NotebookController.php"
 #    type:     annotation
 #    prefix:   courses/{course}/notebook/
 
@@ -7,13 +7,13 @@ chamilo_notebook_index:
     pattern: courses/{course}/notebook
     methods: [GET, POST, HEAD, DELETE]
     defaults:
-        _controller: chamilo.controller.notebook:indexAction
+        _controller: chamilo_notebook.controller.resource:indexAction
 
 chamilo_notebook_new:
     pattern: courses/{course}/notebook/new
     methods: [GET, POST]
     defaults:
-        _controller: chamilo.controller.notebook:createAction
+        _controller: chamilo_notebook.controller.resource:createAction
         _sylius:
             redirect:
                 route: chamilo_notebook_index
@@ -29,7 +29,7 @@ chamilo_notebook_show:
     requirements:
             id:  \d+
     defaults:
-        _controller: chamilo.controller.notebook:showAction
+        _controller: chamilo_notebook.controller.resource:showAction
         _sylius:
             criteria: { id: $id }
 
@@ -39,7 +39,7 @@ chamilo_notebook_edit:
     requirements:
         id:  \d+
     defaults:
-        _controller: chamilo.controller.notebook:updateAction
+        _controller: chamilo_notebook.controller.resource:updateAction
         _sylius:
             redirect:
                 route: chamilo_notebook_show
@@ -51,7 +51,7 @@ chamilo_notebook_delete:
     requirements:
         id:  \d+
     defaults:
-        _controller: chamilo.controller.notebook:deleteAction
+        _controller: chamilo_notebook.controller.resource:deleteAction
         _sylius:
             redirect:
                 route: chamilo_notebook_index
@@ -59,6 +59,6 @@ chamilo_notebook_delete:
 
 chamilo_notebook_delete_many:
     pattern: courses/{course}/notebook/delete_many
-    methods: [GET, POST]
+    methods: [GET, POST, DELETE]
     defaults:
-        _controller: chamilo.controller.notebook:deleteMassAction
+        _controller: chamilo_notebook.controller.resource:deleteMassAction

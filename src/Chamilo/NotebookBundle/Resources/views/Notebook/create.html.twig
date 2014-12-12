@@ -1,3 +1,11 @@
-<form method="post" action="{{ path('chamilo_notebook_new', {'course': course } ) }}">
-{{ form_widget(form) }}
-</form>
+<div class="box box-primary">
+    <div class="box-header">
+        <h3 class="box-title">Create</h3>
+    </div>
+    <form method="post" action="{{ path('chamilo_notebook_new', {'course': course } ) }}">
+        <div class="box-body">
+        {{ form_widget(form) }}
+        </div>
+    </form>
+    </div>
+</div>

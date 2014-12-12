@@ -35,7 +35,7 @@ class ResourceNode
     protected $tool;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode")
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode", cascade={"remove"})
      **/
     protected $links;
 
@@ -367,34 +367,10 @@ class ResourceNode
     }
 
     /**
-     * @return AbstractResource
+     * @return ArrayCollection
      */
-    public function getResource()
+    public function getLinks()
     {
-        return $this->resource;
-    }
-
-    /**
-     * Returns the resource id.
-     *
-     * @return integer
-     */
-    public function getResourceId()
-    {
-        return $this->resourceId;
-    }
-
-    /**
-     * Sets the resource id.
-     *
-     * @param integer $id
-     *
-     * @param $this
-     */
-    public function setResourceId($id)
-    {
-        $this->resourceId = $id;
-
-        return $this;
+        return $this->links;
     }
 }

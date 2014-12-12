@@ -227,13 +227,21 @@ stof_doctrine_extensions:
 
 sylius_resource:
     resources:
-        chamilo.notebook:
+        chamilo_notebook.resource:
             driver: doctrine/orm
             templates: ChamiloNotebookBundle:Notebook
             classes:
                 model: Chamilo\NotebookBundle\Entity\CNotebook
-                repository: Chamilo\NotebookBundle\Entity\CNotebookRepository
-                controller: Chamilo\NotebookBundle\Controller\CNotebookController
+                repository: Chamilo\NotebookBundle\Entity\NotebookRepository
+                controller: Chamilo\NotebookBundle\Controller\NotebookController
+
+        chamilo_course.tool.resource:
+            driver: doctrine/orm
+            templates: ChamiloCourseBundle:Tool
+            classes:
+                model: Chamilo\CourseBundle\Entity\CTool
+                repository: Chamilo\CourseBundle\Entity\Repository\ToolRepository
+                controller: Chamilo\CourseBundle\Controller\ToolController
 
 # Platform settings
 sylius_settings:

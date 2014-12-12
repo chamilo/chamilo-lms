@@ -36,7 +36,7 @@ class CourseInfoController extends ToolBaseController
 
         $form = $this->createFormBuilder($course)
             ->add('title', 'text')
-            ->add('description', 'textarea')
+            ->add('description', 'ckeditor')
             ->add('category_code', 'text')
             ->add('course_language', 'language')
             ->add('department_name', 'text')

@@ -63,7 +63,7 @@ class SessionAdmin extends Admin
     {
         $showMapper
             ->add('id', 'text', array('label' => 'Session'))
-            ->add('name') //if no type is specified, SonataAdminBundle tries to guess it
+            ->add('name')
             ->add('display_start_date', 'sonata_type_date_picker')
         ;
     }
@@ -76,6 +76,13 @@ class SessionAdmin extends Admin
         $datagridMapper
             ->add('id')
             ->add('name')
+            ->add(
+                'visibility',
+                null,
+                array(),
+                'choice',
+                array('choices' => Session::getStatusList())
+            )
             //->add('display_start_date', 'sonata_type_date_picker')
         ;
     }
@@ -86,9 +93,11 @@ class SessionAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
             ->addIdentifier('name')
-            //->add('display_start_date', 'sonata_type_date_picker')
+            ->add('generalCoach')
+            ->add('visibility', 'choice', array(
+                'choices' => Session::getStatusList()
+            ))
         ;
     }
 

@@ -25,10 +25,9 @@ class ResourceLink
 
     /**
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode")
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id")
      */
     protected $resourceNode;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")

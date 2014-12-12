@@ -40,6 +40,7 @@ class CourseAdmin extends Admin
                 'description',
                 'ckeditor'
             )
+            ->add('courseLanguage', 'language')
             ->add('departmentName')
             ->add(
                 'visibility',
@@ -89,6 +90,13 @@ class CourseAdmin extends Admin
         $datagridMapper
             ->add('title')
             ->add('code')
+            ->add(
+                'visibility',
+                null,
+                array(),
+                'choice',
+                array('choices' => Course::getStatusList())
+            )
         ;
     }
 
@@ -98,9 +106,12 @@ class CourseAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
             ->addIdentifier('title')
             ->addIdentifier('code')
+            ->add('courseLanguage')
+            ->add('visibility', 'choice', array(
+                'choices' => Course::getStatusList()
+            ))
         ;
     }
 

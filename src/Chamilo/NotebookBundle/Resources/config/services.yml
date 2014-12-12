@@ -7,33 +7,33 @@ services:
             - interaction
             - notebook/index.php
             - notebook.gif
-            - @chamilo_notebook.course_settings_schema.notebook
-            - @chamilo_notebook.notebook_manager
+            - @chamilo_notebook.settings.notebook_course_settings_schema
+            - @chamilo_notebook.entity.notebook_manager
 
         tags:
             - { name: chamilo_course.tool }
 
     # Form (add/edit)
-    chamilo_notebook:
+    chamilo_notebook.form.type.c_notebook_type:
         class: Chamilo\NotebookBundle\Form\Type\CNotebookType
         tags:
            -  { name: form.type }
 
     # Database manager
-    chamilo_notebook.notebook_manager:
-        class: Chamilo\NotebookBundle\Entity\CNotebookManager
+    chamilo_notebook.entity.notebook_manager:
+        class: Chamilo\NotebookBundle\Entity\NotebookManager
         arguments:
             - Chamilo\NotebookBundle\Entity\CNotebook
             - @doctrine
 
     # Global course settings
-    chamilo_notebook.settings_schema.notebook:
+    chamilo_notebook.settings.notebook_settings_schema:
         class: Chamilo\NotebookBundle\Settings\NotebookSettingsSchema
         tags:
             - { name: sylius.settings_schema, namespace: notebook }
 
     # Local course settings
-    chamilo_notebook.course_settings_schema.notebook:
+    chamilo_notebook.settings.notebook_course_settings_schema:
         class: Chamilo\NotebookBundle\Settings\NotebookCourseSettingsSchema
         tags:
             - { name: chamilo_course.settings_schema, namespace: notebook }

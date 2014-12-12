@@ -71,3 +71,8 @@ chamilo_course_settings:
         _controller: ChamiloCourseBundle:Settings:update
         template: ChamiloCourseBundle:Settings:default.html.twig
 
+chamilo_course_tool_index:
+    pattern: courses/{course}/tools
+    methods: [GET, POST, HEAD, DELETE]
+    defaults:
+        _controller: chamilo_course.controller.tool:indexAction

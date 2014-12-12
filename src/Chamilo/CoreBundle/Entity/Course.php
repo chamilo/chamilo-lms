@@ -84,7 +84,7 @@ class Course
     /**
      * @var boolean
      * @Assert\NotBlank()
-     * @ORM\Column(name="visibility", type="boolean", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="visibility", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $visibility;
 
@@ -972,6 +972,20 @@ class Course
     public function getAbsoluteSysCoursePath()
     {
         return realpath(__DIR__.'/../../../data/courses/'.$this->getDirectory()).'/';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        $activeVisibilityList = array(
+            self::REGISTERED,
+            self::OPEN_PLATFORM,
+            self::OPEN_WORLD,
+        );
+
+        return in_array($this->visibility, $activeVisibilityList);
     }
 
     /**

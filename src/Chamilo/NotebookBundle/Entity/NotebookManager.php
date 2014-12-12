@@ -9,7 +9,7 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
  * Class NotebookManager
  * @package Chamilo\NotebookBundle\Entity
  */
-class CNotebookManager extends BaseEntityManager
+class NotebookManager extends BaseEntityManager
 {
 
 }

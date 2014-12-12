@@ -1,4 +1,29 @@
 <h2>{{ notebook.name }}</h2>
 
-{{ notebook.description }}
+{{ notebook.description | raw  }}
 
+<div class="box box-solid">
+    <div class="box-header">
+        <i class="fa fa-info-circle"></i>
+        <h3 class="box-title">Description</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        <dl class="dl-horizontal">
+            <dt>Creator</dt>
+            <dd>{{ notebook.resourceNode.creator.username }}</dd>
+            <dt>Created at</dt>
+            <dd>{{ notebook.resourceNode.createdAt | format_datetime }}</dd>
+            <dt>Updated at</dt>
+            <dd>{{ notebook.resourceNode.updatedAt | format_datetime }}</dd>
+            <dt>Links</dt>
+            {% for link in notebook.resourceNode.links %}
+            <dd> Course : {{ link.course.title }} - ({{ link.course.code }})</dd>
+            {% endfor %}
+            <dd>Donec id elit non mi porta gravida at eget metus.</dd>
+            <dt>Malesuada porta</dt>
+            <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+            <dt>Felis euismod semper eget lacinia</dt>
+            <dd>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</dd>
+        </dl>
+    </div><!-- /.box-body -->
+</div>

@@ -1,13 +1,13 @@
 <div class="actions">
-<a class="btn btn-default" href="{{ url('chamilo_notebook_new', { 'course': course }) }}">
-    {{ 'Add' | trans }}
-</a>
-
+    <a class="btn btn-default" href="{{ url('chamilo_notebook_new', { 'course': course }) }}">
+        {{ 'Add' | trans }}
+    </a>
 </div>
 
+<div class="row">
 {{ grid_search(grid) }}
-
 {{ grid(grid, 'ChamiloNotebookBundle:Notebook:grid.html.twig') }}
+</div>
 
 {# ajax #}
 {#{{ grid_search(grid, 'APYDataGridBundle::blocks.html.twig') }}#}

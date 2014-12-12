@@ -13,10 +13,10 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
- * Class CNotebookRepository
+ * Class NotebookRepository
  * @package Chamilo\NotebookBundle\Entity
  */
-class CNotebookRepository extends EntityRepository
+class NotebookRepository extends EntityRepository
 {
     /**
      * @param AbstractResource $resource

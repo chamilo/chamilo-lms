@@ -1,5 +1,32 @@
 {% extends 'APYDataGridBundle::blocks.html.twig' %}
 
+{% block grid_actions %}
+    <div class="mass-actions">
+    <div class="btn-group" role="group">
+        <span class="grid_massactions_helper">
+            <a class="btn btn-default" href="#" onclick="return {{ grid.hash }}_markVisible(true);">{{ 'Select visible'|trans }}</a>
+            <a class="btn btn-default" href="#" onclick="return {{ grid.hash }}_markVisible(false);">{{ 'Deselect visible'|trans }}</a>
+            <a class="btn btn-default" href="#" onclick="return {{ grid.hash }}_markAll(true);">{{ 'Select all'|trans }}</a>
+            <a class="btn btn-default" href="#" onclick="return {{ grid.hash }}_markAll(false);">{{ 'Deselect all'|trans }}</a>
+            <span class="mass-actions-selected" id="{{ grid.hash }}_mass_action_selected"></span>
+        </span>
+    </div>
+        {% spaceless %}
+            <div style="float:right;" class="grid_massactions">
+                {{ 'Action'|trans }}
+                <input type="hidden" id="{{ grid.hash }}_mass_action_all" name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION_ALL_KEYS_SELECTED') }}]" value="0"/>
+                <select name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION') }}]">
+                    <option value="-1"></option>
+                    {% for key, massAction in grid.massActions %}
+                        <option value="{{ key }}">{{ massAction.title|trans }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit"  value="{{ 'Submit Action'|trans }}"/>
+            </div>
+        {% endspaceless %}
+    </div>
+{% endblock grid_actions %}
+
 {# Bootstrap changes #}
 {% block grid_column_actions_cell %}
     {% set actions = column.getActionsToRender(row) %}
@@ -15,7 +42,7 @@
                 </form>
                 </div>
             {% else %}
-                <a href="{{ url(action.route, column.routeParameters(row, action), false) }}" target="{{ action.target }}"{% if action.confirm %} onclick="return confirm('{{ action.confirmMessage }}')"{% endif %}{% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %}>
+                <a class="btn btn-default" href="{{ url(action.route, column.routeParameters(row, action), false) }}" target="{{ action.target }}"{% if action.confirm %} onclick="return confirm('{{ action.confirmMessage }}')"{% endif %}{% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %}>
                 {{ action.title|trans }}
                 </a>
             {% endif %}
@@ -77,7 +104,6 @@
             </div>
 
             <div class="box-body">
-
             <form id="{{ grid.hash }}_search" action="{{ grid.routeUrl }}" method="post">
                 {% for column in grid.columns %}
                     {% if column.isFilterable and column.type not in ['actions', 'massaction'] %}

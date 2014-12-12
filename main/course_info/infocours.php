@@ -413,6 +413,33 @@ $form->setDefaults($values);
 if ($form->validate() && is_settings_editable()) {
     $updateValues = $form->exportValues();
 
+    $visibility = $updateValues['visibility'];
+
+    global $_configuration;
+    $urlId = api_get_current_access_url_id();
+    if (isset($_configuration[$urlId]) &&
+        isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
+        $_configuration[$urlId]['hosting_limit_active_courses'] > 0
+    ) {
+        $courseInfo = api_get_course_info($course_code);
+
+        // Check if
+        if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN &&
+            $visibility != $courseInfo['visibility']
+        ) {
+            $num = CourseManager::countActiveCourses($urlId);
+            if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
+                api_warn_hosting_contact('hosting_limit_active_courses');
+
+                api_set_failure(get_lang('PortalActiveCoursesLimitReached'));
+
+                $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=course_active_warning&cidReq='.$course_code;
+                header("Location: $url");
+                exit;
+            }
+        }
+    }
+
     $pdf_export_watermark_path = isset($_FILES['pdf_export_watermark_path']) ? $_FILES['pdf_export_watermark_path'] : null;
 
     if (!empty($pdf_export_watermark_path['name'])) {
@@ -486,9 +513,12 @@ Display :: display_header($nameTools, MODULE_HELP_NAME);
 if ($show_delete_watermark_text_message) {
     Display :: display_normal_message(get_lang('FileDeleted'));
 }
-//api_display_tool_title($nameTools);
+
 if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
     Display :: display_normal_message(get_lang('ModifDone'));
+}
+if (isset($_GET['action']) && $_GET['action'] == 'course_active_warning') {
+    Display :: display_warning_message(get_lang('PortalActiveCoursesLimitReached'));
 }
 
 echo '<script>

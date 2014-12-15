@@ -45,8 +45,8 @@ $limitDate = new DateTime(api_get_datetime());
 $selectedCourse = isset($_POST['course']) ? $_POST['course'] : null;
 $selectedSession = isset($_POST['session']) ? $_POST['session'] : 0;
 $selectedTeacher = isset($_POST['teacher']) ? $_POST['teacher'] : 0;
-$selectedFrom = isset($_POST['from']) ? $_POST['from'] : $startDate->format('Y-m-d');
-$selectedUntil = isset($_POST['from']) ? $_POST['from'] : $limitDate->format('Y-m-d');
+$selectedFrom = isset($_POST['from']) && !empty($_POST['from']) ? $_POST['from'] : $startDate->format('Y-m-d');
+$selectedUntil = isset($_POST['from']) && !empty($_POST['until']) ? $_POST['until'] : $limitDate->format('Y-m-d');
 
 $courseList = CourseManager::get_courses_list(0, 0, 'title');
 $sessionsList = SessionManager::get_sessions_list(array(), array('name'));
@@ -77,7 +77,13 @@ if (!empty($selectedCourse)) {
         $coaches = CourseManager::get_coachs_from_course($session['id'], $selectedCourse);
 
         foreach ($coaches as $coach) {
-            $totalTime = SessionManager::getUserTimeInCourse($coach['user_id'], $selectedCourse, $session['id']);
+            $totalTime = SessionManager::getUserTimeInCourse(
+                $coach['user_id'],
+                $selectedCourse,
+                $session['id'],
+                $selectedFrom,
+                $selectedUntil
+            );
 
             $rows[] = array(
                 'session' => array(
@@ -112,7 +118,13 @@ if (!empty($selectedSession)) {
         $coaches = CourseManager::get_coachs_from_course($selectedSession, $course['code']);
 
         foreach ($coaches as $coach) {
-            $totalTime = SessionManager::getUserTimeInCourse($coach['user_id'], $course['code'], $selectedSession);
+            $totalTime = SessionManager::getUserTimeInCourse(
+                $coach['user_id'],
+                $course['code'],
+                $selectedSession,
+                $selectedFrom,
+                $selectedUntil
+            );
 
             $rows[] = array(
                 'session' => array(
@@ -148,7 +160,13 @@ if (!empty($selectedTeacher)) {
 
         $courseInfo = api_get_course_info($course['course_code']);
 
-        $totalTime = SessionManager::getUserTimeInCourse($selectedTeacher, $course['course_code'], $session['id']);
+        $totalTime = SessionManager::getUserTimeInCourse(
+            $selectedTeacher,
+            $course['course_code'],
+            $session['id'],
+            $selectedFrom,
+            $selectedUntil
+        );
         
         $rows[] = array(
             'session' => array(
@@ -184,6 +202,8 @@ $tpl->assign('filterMaxDate', $limitDate->format('Y-m-d'));
 $tpl->assign('selectedCourse', $selectedCourse);
 $tpl->assign('selectedSession', $selectedSession);
 $tpl->assign('selectedTeacher', $selectedTeacher);
+$tpl->assign('selectedFrom', $selectedFrom);
+$tpl->assign('selectedUntil', $selectedUntil);
 
 $tpl->assign('withFilter', $withFilter);
 

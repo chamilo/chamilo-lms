@@ -19,7 +19,7 @@
             });
 
             $('#daterange').daterangepicker({
-                format: 'DD-MM-YYYY',
+                format: 'YYYY-MM-DD',
                 startDate: new Date('{{ filterStartDate }}'),
                 endDate: new Date('{{ filterEndDate }}'),
                 maxDate: new Date('{{ filterMaxDate }}'),
@@ -35,6 +35,8 @@
             $('#daterange').on('apply.daterangepicker', function (ev, picker) {
                 $('#from').val(picker.startDate.format('YYYY-MM-DD'));
                 $('#until').val(picker.endDate.format('YYYY-MM-DD'));
+            }).on('cancel.daterangepicker', function (ev, picker) {
+                $('#daterange, #from, #until').val('');
             });
         });
     </script>
@@ -76,9 +78,9 @@
             <div class="control-group">
                 <label class="control-label" for="inputPassword">{{ 'Date' | get_lang }}</label>
                 <div class="controls">
-                    <input type="text" id="daterange" readonly>
-                    <input type="hidden" id="from" name="from">
-                    <input type="hidden" id="until" name="until">
+                    <input type="text" id="daterange"  value="{{ selectedFrom }} / {{ selectedUntil }}">
+                    <input type="hidden" id="from" name="from" value="{{ selectedFrom }}">
+                    <input type="hidden" id="until" name="until" value="{{ selectedUntil }}">
                 </div>
             </div>
             <div class="control-group">

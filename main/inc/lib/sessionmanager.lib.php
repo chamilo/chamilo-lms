@@ -5361,22 +5361,29 @@ class SessionManager
         return '00:00:00';
     }
 
-    public static function getUserTimeInCourse($userId, $courseCode, $sessionId = 0)
+    public static function getUserTimeInCourse($userId, $courseCode, $sessionId = 0, $from = '', $until = '')
     {
         $userId = intval($userId);
         $sessionId = intval($sessionId);
 
         $trackCourseAccessTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
+        $whereConditions = array(
+            'user_id = ? ' => $userId,
+            "AND course_code = '?' " => $courseCode,
+            'AND session_id = ? ' => $sessionId
+        );
+
+        if (!empty($from) && !empty($until)) {
+            $whereConditions["AND (login_course_date >= '?' "] = $from;
+            $whereConditions["AND logout_course_date <= '?') "] = $until;
+        }
+
         $trackResult = Database::select(
             'SEC_TO_TIME(SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date))) as total_time',
             $trackCourseAccessTable,
             array(
-                'where' => array(
-                    'user_id = ? AND ' => $userId,
-                    "course_code = '?' AND " => $courseCode,
-                    'session_id = ?' => $sessionId
-                )
+                'where' => $whereConditions
             ), 'first'
         );
 

@@ -507,7 +507,7 @@ class DocumentManager
      * @param boolean $search
      * @return array with all document data
      */
-    public static function get_all_document_data(
+    public static function get_all_document_data2(
         $_course,
         $path = '/',
         $to_group_id = 0,
@@ -590,10 +590,10 @@ class DocumentManager
         $doc_list = array();
         $document_data = array();
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
+        $isCoach = api_is_coach();
         if ($result !== false && Database::num_rows($result) != 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if (api_is_coach()) {
+                if ($isCoach) {
                     // Looking for course items that are invisible to hide it in the session
                     if (in_array($row['id'], array_keys($doc_list))) {
                         if ($doc_list[$row['id']]['item_property_session_id'] == 0 &&
@@ -608,7 +608,7 @@ class DocumentManager
                     $doc_list[$row['id']] = $row;
                 }
 
-                if (!api_is_coach() && !$is_allowed_to_edit) {
+                if (!$isCoach && !$is_allowed_to_edit) {
                     $doc_list[] = $row;
                 }
 
@@ -630,7 +630,7 @@ class DocumentManager
             }
 
             // Only for the student we filter the results see BT#1652
-            if (!api_is_coach() && !$is_allowed_to_edit) {
+            if (!$isCoach && !$is_allowed_to_edit) {
                 $ids_to_remove = array();
                 $my_repeat_ids = $temp = array();
 

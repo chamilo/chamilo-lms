@@ -2473,7 +2473,8 @@ function api_is_course_session_coach($user_id, $course_code, $session_id)
  * @param string - optional, course code
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $course_code = null, $check_student_view = true) {
+function api_is_coach($session_id = 0, $course_code = null, $check_student_view = true)
+{
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
@@ -2492,17 +2493,19 @@ function api_is_coach($session_id = 0, $course_code = null, $check_student_view 
     } else {
         $course_code = api_get_course_id();
     }
-    $session_table                      = Database::get_main_table(TABLE_MAIN_SESSION);
-    $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+    $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $sessionIsCoach = null;
 
     if (!empty($course_code)) {
         $sql = "SELECT DISTINCT id, name, date_start, date_end
-                FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-                ON session_rc_ru.id_user = '".api_get_user_id()."'
-                WHERE   session_rc_ru.course_code = '$course_code' AND
-                        session_rc_ru.status = 2 AND
-                        session_rc_ru.id_session = '$session_id'";
+                FROM $session_table
+                INNER JOIN $session_rel_course_rel_user_table session_rc_ru
+                ON session_rc_ru.id_session = id AND session_rc_ru.id_user = '".api_get_user_id()."'
+                WHERE
+                    session_rc_ru.course_code = '$course_code' AND
+                    session_rc_ru.status = 2 AND
+                    session_rc_ru.id_session = '$session_id'";
         $result = Database::query($sql);
         $sessionIsCoach = Database::store_result($result);
     }

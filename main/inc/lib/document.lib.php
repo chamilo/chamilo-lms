@@ -12,6 +12,9 @@
  */
 class DocumentManager
 {
+    /**
+     * Construct
+     */
     private function __construct()
     {
     }
@@ -247,6 +250,7 @@ class DocumentManager
         );
 
         if ($filename === true) {
+
             return $mime_types;
         }
 
@@ -264,6 +268,7 @@ class DocumentManager
 
         //if the extension is found, return the content type
         if (isset($mime_types[$extension])) {
+
             return $mime_types[$extension];
         }
         //else return octet-stream
@@ -425,10 +430,8 @@ class DocumentManager
             }
             header('Content-Description: ' . $filename);
             header('Content-transfer-encoding: binary');
-
-            //$fp = fopen($full_string, 'r');
-            //fpassthru($fp);
             echo $full_string;
+
             return true;
             //You have to ensure that the calling script then stops processing (exit();)
             //otherwise it may cause subsequent use of the page to want to download
@@ -507,7 +510,7 @@ class DocumentManager
      * @param boolean $search
      * @return array with all document data
      */
-    public static function get_all_document_data2(
+    public static function get_all_document_data(
         $_course,
         $path = '/',
         $to_group_id = 0,
@@ -1622,11 +1625,20 @@ class DocumentManager
                 $user_in_course = true;
             }
             // Check if course is open then we can consider that the student is registered to the course
-            if (isset($course_info) && in_array($course_info['visibility'], array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))) {
+            if (isset($course_info) &&
+                in_array(
+                    $course_info['visibility'],
+                    array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD)
+                )
+            ) {
                 $user_in_course = true;
             }
         } else {
-            $user_status = SessionManager::get_user_status_in_course_session($user_id, $course_info['code'], $session_id);
+            $user_status = SessionManager::get_user_status_in_course_session(
+                $user_id,
+                $course_info['code'],
+                $session_id
+            );
             if (in_array($user_status, array('0', '2', '6'))) {
                 //is true if is an student, course session teacher or coach
                 $user_in_course = true;
@@ -1653,8 +1665,18 @@ class DocumentManager
                 }
             } else {
                 // 4.2 Checking document visibility for a Course in a Session
-                $item_info = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, 0);
-                $item_info_in_session = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, $session_id);
+                $item_info = api_get_item_property_info(
+                    $course_info['real_id'],
+                    'document',
+                    $doc_id,
+                    0
+                );
+                $item_info_in_session = api_get_item_property_info(
+                    $course_info['real_id'],
+                    'document',
+                    $doc_id,
+                    $session_id
+                );
 
                 // True for admins if document exists
                 if (isset($item_info['visibility'])) {
@@ -1705,7 +1727,7 @@ class DocumentManager
      * @param string $course_id
      * @return int The default certificate id
      */
-    static function get_default_certificate_id($course_id)
+    public static function get_default_certificate_id($course_id)
     {
         $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = api_get_session_id();
@@ -1732,7 +1754,7 @@ class DocumentManager
      * @param string The course code
      * @return string The html content of the certificate
      */
-    static function replace_user_info_into_html($user_id, $course_code, $is_preview = false)
+    public static function replace_user_info_into_html($user_id, $course_code, $is_preview = false)
     {
         $user_id = intval($user_id);
         $course_info = api_get_course_info($course_code);
@@ -1867,8 +1889,8 @@ class DocumentManager
 
     /**
      * Remove default certificate
-     * @param string The course code
-     * @param int The document id of the default certificate
+     * @param string $course_id The course code
+     * @param int $default_certificate_id The document id of the default certificate
      * @return void()
      */
     public static function remove_attach_certificate($course_id, $default_certificate_id)
@@ -1899,7 +1921,7 @@ class DocumentManager
 
     /**
      * Create directory certificate
-     * @param string The course code
+     * @param string $course_id The course code
      * @return void()
      */
     public static function create_directory_certificate_in_course($course_id)
@@ -1941,7 +1963,6 @@ class DocumentManager
 
     /**
      * Get the document id of the directory certificate
-     * @param string The course id
      * @return int The document id of the directory certificate
      */
     public static function get_document_id_of_directory_certificate()

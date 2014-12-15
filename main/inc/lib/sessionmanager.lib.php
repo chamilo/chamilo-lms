@@ -5347,12 +5347,12 @@ class SessionManager
         $trackLoginTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $whereConditions = array(
-            'login_user_id = ?' => $userId
+            'login_user_id = ? ' => $userId
         );
 
         if (!empty($from) && !empty($until)) {
             $whereConditions["AND (login_date >= '?' "] = $from;
-            $whereConditions["AND logout_date <= '?') "] = $until;
+            $whereConditions["AND logout_date <= DATE_ADD('?', INTERVAL 1 DAY)) "] = $until;
         }
 
         $trackResult = Database::select(
@@ -5394,7 +5394,7 @@ class SessionManager
 
         if (!empty($from) && !empty($until)) {
             $whereConditions["AND (login_course_date >= '?' "] = $from;
-            $whereConditions["AND logout_course_date <= '?') "] = $until;
+            $whereConditions["AND logout_course_date <= DATE_ADD('?', INTERVAL 1 DAY)) "] = $until;
         }
 
         $trackResult = Database::select(

@@ -14,8 +14,6 @@
  * @package chamilo.course_info
  */
 
-/*	   INIT SECTION */
-
 // Language files that need to be included
 $language_file = array('create_course', 'course_info', 'admin', 'gradebook', 'document');
 require_once '../inc/global.inc.php';
@@ -32,20 +30,21 @@ require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 api_protect_course_script(true);
 api_block_anonymous_users();
+$_course = api_get_course_info();
 
 /*	Constants and variables */
 define('MODULE_HELP_NAME', 'Settings');
 define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
-$currentCourseRepository    = $_course['path'];
-$is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
+$currentCourseRepository = $_course['path'];
+$is_allowedToEdit = $is_courseAdmin || $is_platformAdmin;
 
-$course_code 				= api_get_course_id();
-$course_access_settings 	= CourseManager :: get_access_settings($course_code);
+$course_code = api_get_course_id();
+$course_access_settings = CourseManager:: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
 function is_settings_editable() {
-	return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
+    return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
 }
 
 /* MAIN CODE */
@@ -60,10 +59,10 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
         $show_delete_watermark_text_message = true;
     }
 }
-$tbl_user              = Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_admin             = Database :: get_main_table(TABLE_MAIN_ADMIN);
-$tbl_course_user       = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_course            = Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
+$tbl_admin = Database:: get_main_table(TABLE_MAIN_ADMIN);
+$tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 
 $s_select_course_tutor_name = "SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
 $q_tutor = Database::query($s_select_course_tutor_name);
@@ -79,7 +78,7 @@ $q_result_titulars = Database::query($s_sql_course_titular);
 if (Database::num_rows($q_result_titulars) == 0) {
     $sql = "SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin
             WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
-	$q_result_titulars = Database::query($sql);
+    $q_result_titulars = Database::query($sql);
 }
 
 $a_profs[0] = '-- '.get_lang('NoManager').' --';

@@ -60,12 +60,17 @@ $htmlHeadXtra[] = '
 
 $withFilter = false;
 
+$reportTitle = 'TimeReportIncludingAllCoursesAndSessionsByTeacher';
+$reportSubTitle = sprintf(get_lang('TimeSpentBetweenXAndY'), $selectedFrom, $selectedUntil);
+
 $rows = array();
 
 if (!empty($selectedCourse)) {
     $withFilter = true;
 
     $course = api_get_course_info($selectedCourse);
+
+    $reportTitle = sprintf(get_lang('TimeReportByCourseX'), $course['title']);
 
     $sessionsByCourse = SessionManager::get_session_by_course($selectedCourse);
 
@@ -108,6 +113,8 @@ if (!empty($selectedSession)) {
 
     $session = api_get_session_info($selectedSession);
 
+    $reportTitle = sprintf(get_lang('TimeReportBySessionX'), $session['name']);
+
     $courses = SessionManager::get_course_list_by_session_id($selectedSession);
 
     foreach ($courses as $course) {
@@ -148,6 +155,8 @@ if (!empty($selectedTeacher)) {
     $withFilter = true;
 
     $coach = api_get_user_info($selectedTeacher);
+
+    $reportTitle = sprintf(get_lang('TimeReportByTeacherX'), $coach['complete_name']);
 
     $courses = SessionManager::getCoursesListByCourseCoach($selectedTeacher);
 
@@ -203,6 +212,9 @@ $startDate->modify('+1 day');
 $limitDate->modify('+1 day');
 
 $tpl = new Template($toolName);
+$tpl->assign('reportTitle', $reportTitle);
+$tpl->assign('reportSubTitle', $reportSubTitle);
+
 $tpl->assign('filterStartDate', $startDate->format('Y-m-d'));
 $tpl->assign('filterEndDate', $limitDate->format('Y-m-d'));
 $tpl->assign('filterMaxDate', $limitDate->format('Y-m-d'));

@@ -41,6 +41,7 @@
         });
     </script>
     <div class="span12">
+        <h1 class="page-header">{{ 'TeacherTimeReport' | get_lang }}</h1>
         <form class="form-horizontal" method="post">
             <div class="control-group">
                 <label class="control-label" for="course">{{ 'Course' | get_lang }}</label>
@@ -89,7 +90,7 @@
                 </div>
             </div>
         </form>
-        <h1 class="page-header">{{ 'GlobalTeacherTimeReport' | get_lang }}</h1>
+        <h2 class="page-header">{{ reportTitle }} <small>{{ reportSubTitle }}</small></h2>
         <table class="table">
             <thead>
                 <tr>

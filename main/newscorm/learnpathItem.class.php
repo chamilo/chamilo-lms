@@ -5,8 +5,8 @@
  * lp_item defines items belonging to a learnpath. Each item has a name,
  * a score, a use time and additional information that enables tracking a user's
  * progress in a learning path
- * @package    chamilo.learnpath
- * @author    Yannick Warnier <ywarnier@beeznest.org>
+ * @package chamilo.learnpath
+ * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
 class learnpathItem
 {
@@ -2823,8 +2823,9 @@ class learnpathItem
 
     /**
      * Saves data in the database
-     * @param    boolean    Save from URL params (1) or from object attributes (0)
-     * @param    boolean    The results of a check on prerequisites for this item. True if prerequisites are completed, false otherwise. Defaults to false. Only used if not sco or au
+     * @param boolean $from_outside Save from URL params (1) or from object attributes (0)
+     * @param boolean $prereqs_complete The results of a check on prerequisites for this item.
+     * True if prerequisites are completed, false otherwise. Defaults to false. Only used if not sco or au
      * @return    boolean    True on success, false on failure
      */
     public function save($from_outside = true, $prereqs_complete = false)
@@ -2992,19 +2993,20 @@ class learnpathItem
                     break;
             }
         }
-        //$time = $this->time
+
         if (self::debug > 1) {
             error_log(
                 'New LP - End of learnpathItem::save() - Calling write_to_db()',
                 0
             );
         }
+
         return $this->write_to_db();
     }
 
     /**
      * Sets the number of attempt_id to a given value
-     * @param    integer    The given value to set attempt_id to
+     * @param    integer  $num  The given value to set attempt_id to
      * @return    boolean    TRUE on success, FALSE otherwise
      */
     public function set_attempt_id($num)
@@ -3021,7 +3023,7 @@ class learnpathItem
 
     /**
      * Sets the core_exit value to the one given
-     * @return  bool    True (always)
+     * @return  bool  $value  True (always)
      */
     public function set_core_exit($value)
     {
@@ -3041,7 +3043,8 @@ class learnpathItem
 
     /**
      * Sets the item's description
-     * @param    string    Description
+     * @param    string  $string  Description
+     *
      * @return  void
      */
     public function set_description($string = '')
@@ -3056,7 +3059,7 @@ class learnpathItem
 
     /**
      * Sets the lesson_location value
-     * @param    string    lesson_location as provided by the SCO
+     * @param    string  $location  lesson_location as provided by the SCO
      * @return    boolean    True on success, false otherwise
      */
     public function set_lesson_location($location)
@@ -3073,7 +3076,7 @@ class learnpathItem
 
     /**
      * Sets the item's depth level in the LP tree (0 is at root)
-     * @param    integer    Level
+     * @param    integer $int   Level
      * @return  void
      */
     public function set_level($int = 0)
@@ -3088,7 +3091,7 @@ class learnpathItem
 
     /**
      * Sets the lp_view id this item view is registered to
-     * @param    integer    lp_view DB ID
+     * @param int $lp_view_id   lp_view DB ID
      * @param int $course_id
      * @return  void
      * @todo //todo insert into lp_item_view if lp_view not exists
@@ -3174,7 +3177,7 @@ class learnpathItem
                     WHERE
                         c_id = $course_id AND
                         lp_iv_id = '" . $this->db_item_view_id . "'";
-            //error_log('sql10->'.$sql);
+
             $res = Database::query($sql);
             if ($res !== false) {
                 $this->interactions_count = Database::num_rows($res);
@@ -3189,7 +3192,7 @@ class learnpathItem
                     WHERE
                         c_id = $course_id AND
                         lp_iv_id = '" . $this->db_item_view_id . "'";
-            //error_log('sql11->'.$sql);
+
             $res = Database::query($sql);
             if ($res !== false) {
                 $this->objectives_count = Database::num_rows($res);
@@ -3222,7 +3225,7 @@ class learnpathItem
     /**
      * Sets the prevent_reinit attribute. This is based on the LP value and is set at creation time for
      * each learnpathItem. It is a (bad?) way of avoiding a reference to the LP when saving an item.
-     * @param    integer    1 for "prevent", 0 for "don't prevent" saving freshened values (new "not attempted" status etc)
+     * @param   integer 1 for "prevent", 0 for "don't prevent" saving freshened values (new "not attempted" status etc)
      * @return  void
      */
     public function set_prevent_reinit($prevent)
@@ -3240,7 +3243,7 @@ class learnpathItem
     /**
      * Sets the score value. If the mastery_score is set and the score reaches
      * it, then set the status to 'passed'.
-     * @param   float       Score
+     * @param   float    $score   Score
      * @return    boolean   True on success, false otherwise
      */
     public function set_score($score)
@@ -3283,8 +3286,9 @@ class learnpathItem
 
     /**
      * Sets the maximum score for this item
-     * @param    int        Maximum score - must be a decimal or an empty string
-     * @return    boolean    True on success, false on error
+     * @param  int $score Maximum score - must be a decimal or an empty string
+     *
+     * @return boolean    True on success, false on error
      */
     public function set_max_score($score)
     {
@@ -3308,7 +3312,7 @@ class learnpathItem
 
     /**
      * Sets the status for this item
-     * @param    string      $status Status - must be one of the values defined in $this->possible_status
+     * @param    string $status Status - must be one of the values defined in $this->possible_status
      * (this affects the status setting)
      * @return    boolean    True on success, false on error
      */
@@ -3345,7 +3349,7 @@ class learnpathItem
 
     /**
      * Set the (indexing) terms for this learnpath item
-     * @param   string  Terms, as a comma-split list
+     * @param   string  $terms Terms, as a comma-split list
      * @return  boolean Always return true
      */
     public function set_terms($terms)
@@ -3475,8 +3479,10 @@ class learnpathItem
 
     /**
      * Checks if the current status is part of the list of status given
-     * @param    strings_array  $list  An array of status to check for. If the current status is one of the strings, return true
-     * @return    boolean            True if the status was one of the given strings, false otherwise
+     * @param  array  $list  An array of status to check for.
+     * If the current status is one of the strings, return true
+     *
+     * @return    boolean True if the status was one of the given strings, false otherwise
      */
     public function status_is($list = array())
     {
@@ -3519,7 +3525,7 @@ class learnpathItem
 
     /**
      * Updates the time info according to the given session_time
-     * @param    integer    Time in seconds
+     * @param    integer  $total_sec  Time in seconds
      * @return  void
      * TODO: Make this method better by allowing better/multiple time slices.
      */
@@ -3658,10 +3664,13 @@ class learnpathItem
         if (is_array($this->objectives) && count($this->objectives) > 0) {
             // Save objectives.
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $sql = "SELECT id FROM $tbl " .
-                "WHERE c_id = $course_id AND lp_item_id = " . $this->db_id . " " .
-                "AND   lp_view_id = " . $this->view_id . " " .
-                "AND   view_count = " . $this->attempt_id;
+            $sql = "SELECT id
+                    FROM $tbl
+                    WHERE
+                        c_id = $course_id AND
+                        lp_item_id = " . $this->db_id . " AND
+                        lp_view_id = " . $this->view_id . " AND
+                        view_count = " . $this->attempt_id;
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
@@ -3677,13 +3686,11 @@ class learnpathItem
                     $iva_table = Database::get_course_table(
                         TABLE_LP_IV_OBJECTIVE
                     );
-                    $iva_sql = "SELECT id FROM $iva_table " .
-                        "WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id " .
-                        //"AND order_id = $index";
-                        //also check for the objective ID as it must be unique for this SCO view
-                        "AND objective_id = '" . Database::escape_string(
-                            $objective[0]
-                        ) . "'";
+                    $iva_sql = "SELECT id FROM $iva_table
+                                WHERE
+                                    c_id = $course_id AND
+                                    lp_iv_id = $lp_iv_id AND
+                                    objective_id = '" . Database::escape_string($objective[0]) . "'";
                     $iva_res = Database::query($iva_sql);
                     // id(0), type(1), time(2), weighting(3),
                     // correct_responses(4), student_response(5),
@@ -3710,7 +3717,6 @@ class learnpathItem
                             ) . "' " .
                             "WHERE c_id = $course_id AND id = $iva_id";
                         Database::query($ivau_sql);
-                        //error_log($ivau_sql, 0);
                     } else {
                         // Insert new one.
                         $ivai_sql = "INSERT INTO $iva_table " .
@@ -3762,7 +3768,7 @@ class learnpathItem
                     c_id = ' . $course_id . ' AND
                     lp_item_id="' . $this->db_id . '" AND
                     lp_view_id="' . $this->view_id . '" AND
-                    view_count="' . $this->get_attempt_id() . '" ;';
+                    view_count="' . $this->get_attempt_id() . '" ';
         $rs_verified = Database::query($sql);
         $row_verified = Database::fetch_array($rs_verified);
 
@@ -3855,7 +3861,6 @@ class learnpathItem
             $check_res = Database::query($check);
             // Depending on what we want (really), we'll update or insert a new row
             // now save into DB.
-            $res = 0;
             if (!$inserted && Database::num_rows($check_res) < 1) {
                 $sql = "INSERT INTO $item_view_table " .
                     "(c_id, total_time, " .

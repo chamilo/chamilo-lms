@@ -44,16 +44,36 @@ class CourseManager
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
-        if (is_array($_configuration[$access_url_id]) &&
-            isset($_configuration[$access_url_id]['hosting_limit_courses']) &&
-            $_configuration[$access_url_id]['hosting_limit_courses'] > 0
-        ) {
-            $num = self::count_courses();
-            if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
-                api_warn_hosting_contact('hosting_limit_courses');
-                return api_set_failure('PortalCoursesLimitReached');
+
+        if (isset($_configuration[$access_url_id]) &&
+            is_array($_configuration[$access_url_id])
+        ){
+            if (isset($_configuration[$access_url_id]['hosting_limit_courses']) &&
+                $_configuration[$access_url_id]['hosting_limit_courses'] > 0
+            ) {
+                $num = self::count_courses($access_url_id);
+                if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
+                    api_warn_hosting_contact('hosting_limit_courses');
+
+                    return api_set_failure(get_lang('PortalCoursesLimitReached'));
+                }
+            }
+
+            if (isset($_configuration[$access_url_id]['hosting_limit_active_courses']) &&
+                $_configuration[$access_url_id]['hosting_limit_active_courses'] > 0
+            ) {
+                $num = self::countActiveCourses($access_url_id);
+                if ($num >= $_configuration[$access_url_id]['hosting_limit_active_courses']) {
+                    api_warn_hosting_contact('hosting_limit_active_courses');
+
+                    return api_set_failure(
+                        get_lang('PortalActiveCoursesLimitReached')
+                    );
+                }
             }
         }
+
+
         if (empty($params['title'])) {
             return false;
         }
@@ -1018,6 +1038,7 @@ class CourseManager
      * @param boolean $user_is_registered_in_real_course
      * @param string $real_course_name, the title of the real course
      * @param array $virtual_course_list, the list of virtual courses
+     * @deprecated
      */
     public static function create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
     {
@@ -1039,6 +1060,7 @@ class CourseManager
 
     /**
      *    Create a course code based on all real and virtual courses the user is registered in.
+     * @deprecated
      */
     public static function create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
     {
@@ -1128,7 +1150,7 @@ class CourseManager
     /**
      * This function returns the course code of the real course
      * to which a virtual course is linked.
-     *
+     * @deprecated
      * @param the course code of the virtual course
      * @return the course code of the real course
      */
@@ -1139,16 +1161,45 @@ class CourseManager
         return $result['target_course_code'];
     }
 
-    /*
-        USER FUNCTIONS
-    */
+    /**
+     * @param int $userId
+     * @param array $courseInfo
+     * @return bool
+     */
+    public static function isUserSubscribedInCourseAsDrh($userId, $courseInfo)
+    {
+        $userId = intval($userId);
+
+        if (!api_is_drh()) {
+            return false;
+        }
+
+        if (empty($courseInfo) || empty($userId)) {
+            return false;
+        }
+        $courseCode = Database::escape_string($courseInfo['code']);
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $sql = "SELECT * FROM $table
+                WHERE
+                    user_id = $userId AND
+                    relation_type = ".COURSE_RELATION_TYPE_RRHH." AND
+                    course_code = $courseCode ";
+
+        $result = Database::fetch_array(Database::query($sql));
+
+        if (!empty($result)) {
+            // The user has been registered in this course.
+            return true;
+        }
+    }
 
     /**
      * Check if user is subscribed inside a course
-     * @param     int        User id
-     * @param    string    Course code, if this parameter is null, it'll check for all courses
-     * @param    bool    True for checking inside sessions too, by default is not checked
-     * @return     bool     true if the user is registered in the course, false otherwise
+     * @param  int    $user_id
+     * @param  string $course_code, if this parameter is null, it'll check for all courses
+     * @param  bool   $in_a_session True for checking inside sessions too, by default is not checked
+     * @return bool   $session_id true if the user is registered in the course, false otherwise
      */
     public static function is_user_subscribed_in_course(
         $user_id,
@@ -1156,7 +1207,6 @@ class CourseManager
         $in_a_session = false,
         $session_id = null
     ) {
-
         $user_id = intval($user_id);
 
         if (empty($session_id)) {
@@ -1186,13 +1236,14 @@ class CourseManager
             return false;
         }
 
-        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+        $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.
                ' WHERE id_user = '.$user_id.' '.$condition_course;
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+        $sql = 'SELECT 1 FROM '.$tableSessionCourseUser.
                ' WHERE id_user = '.$user_id.' AND status=2 '.$condition_course;
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
@@ -3327,22 +3378,23 @@ class CourseManager
      */
     public static function update_course_picture($course_code, $filename, $source_file = null)
     {
-        $course_info          = api_get_course_info($course_code);
-        $store_path           = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
-        $course_image         = $store_path.'/course-pic.png';                      // image name for courses
-        $course_medium_image  = $store_path.'/course-pic85x85.png';
-        //$extension            = strtolower(substr(strrchr($filename, '.'), 1));
+        $course_info = api_get_course_info($course_code);
+        // course path
+        $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'];
+        // image name for courses
+        $course_image = $store_path.'/course-pic.png';
+        $course_medium_image = $store_path.'/course-pic85x85.png';
 
         if (file_exists($course_image)) {
-            @unlink($course_image);
+            unlink($course_image);
         }
         if (file_exists($course_medium_image)) {
-            @unlink($course_medium_image);
+            unlink($course_medium_image);
         }
 
         $my_course_image = new Image($source_file);
         $result = $my_course_image->send_image($course_image, -1, 'png');
-        //Redimension image to 100x85 (should be 85x85 but 100x85 visually gives
+        // Redimension image to 100x85 (should be 85x85 but 100x85 visually gives
         // better results for most images people put as course icon)
         if ($result) {
             $medium = new Image($course_image);
@@ -3351,6 +3403,27 @@ class CourseManager
             $medium->send_image($store_path.'/course-pic85x85.png', -1, 'png');
         }
         return $result;
+    }
+
+    /**
+     * Deletes the course picture
+     * @param string $courseCode
+     */
+    public static function deleteCoursePicture($courseCode)
+    {
+        $course_info = api_get_course_info($courseCode);
+        // course path
+        $storePath = api_get_path(SYS_COURSE_PATH).$course_info['path'];
+        // image name for courses
+        $courseImage = $storePath.'/course-pic.png';
+        $courseMediumImage = $storePath.'/course-pic85x85.png';
+
+        if (file_exists($courseImage)) {
+            unlink($courseImage);
+        }
+        if (file_exists($courseMediumImage)) {
+            unlink($courseMediumImage);
+        }
     }
 
     /**
@@ -3658,6 +3731,8 @@ class CourseManager
 
         $course_list = array();
 
+        $showCustomIcon = api_get_configuration_value('course_images_in_courses_list');
+
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             $course_info = api_get_course_info($course['code']);
@@ -3678,8 +3753,21 @@ class CourseManager
             // (something that would have changed since the user's last visit).
             $show_notification = Display::show_notification($course_info);
 
-            // New code displaying the user's status in respect to this course.
-            $status_icon = Display::return_icon('blackboard.png', api_htmlentities($course_info['title']), array(), ICON_SIZE_LARGE);
+            $status_icon = Display::return_icon(
+                'blackboard.png',
+                api_htmlentities($course_info['title']),
+                array(),
+                ICON_SIZE_LARGE
+            );
+
+            $iconName = basename($course_info['course_image']);
+            if ($showCustomIcon == true && $iconName != 'course.png') {
+                $status_icon = Display::img(
+                    $course_info['course_image'],
+                    api_htmlentities($course_info['title']),
+                    array()
+                );
+            }
 
             $params = array();
             $params['right_actions'] = '';
@@ -3878,7 +3966,23 @@ class CourseManager
         }
 
         $params = array();
-        $params['icon'] = Display::return_icon('blackboard_blue.png', api_htmlentities($course_info['name']), array(), ICON_SIZE_LARGE);
+        $params['icon'] = Display::return_icon(
+            'blackboard_blue.png',
+            api_htmlentities($course_info['name']),
+            array(),
+            ICON_SIZE_LARGE
+        );
+
+        $showCustomIcon = api_get_configuration_value('course_images_in_courses_list');
+        $iconName = basename($course_info['course_image']);
+        if ($showCustomIcon && $iconName != 'course.png') {
+            $params['icon'] = Display::img(
+                $course_info['course_image'],
+                api_htmlentities($course_info['name']),
+                array()
+            );
+        }
+
         $params['link'] = $session_url;
         $params['title'] = $session_title;
 
@@ -4546,20 +4650,61 @@ class CourseManager
     /**
      * Get courses count
      * @param int Access URL ID (optional)
+     * @param int $visibility
+     *
      * @return int Number of courses
      */
-    public static function count_courses($access_url_id = null)
+    public static function count_courses($access_url_id = null, $visibility = null)
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "SELECT count(id) FROM $table_course c";
         if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
-            $sql .= ", $table_course_rel_access_url u WHERE c.code = u.course_code AND u.access_url_id = $access_url_id";
+            $sql .= ", $table_course_rel_access_url u
+                    WHERE c.code = u.course_code AND u.access_url_id = $access_url_id";
+            if (!empty($visibility)) {
+                $visibility = intval($visibility);
+                $sql .= " AND visibility = $visibility ";
+            }
+        } else {
+            if (!empty($visibility)) {
+                $visibility = intval($visibility);
+                $sql .= " WHERE visibility = $visibility ";
+            }
+        }
+
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+        return $row[0];
+    }
+
+    /**
+     * Get active courses count.
+     * Active = all courses except the ones with hidden visibility.
+     *
+     * @param int $urlId Access URL ID (optional)
+     * @return int Number of courses
+     */
+    public static function countActiveCourses($urlId = null)
+    {
+        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT count(id) FROM $table_course c";
+        if (!empty($urlId) && $urlId == intval($urlId)) {
+            $sql .= ", $table_course_rel_access_url u
+                    WHERE
+                        c.code = u.course_code AND
+                        u.access_url_id = $urlId AND
+                        visibility <> ".COURSE_VISIBILITY_HIDDEN
+                    ;
+        } else {
+            $sql .= " WHERE visibility <> ".COURSE_VISIBILITY_HIDDEN;
         }
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         return $row[0];
     }
+
 
     /**
      * Get available le courses count

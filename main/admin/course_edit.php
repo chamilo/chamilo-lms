@@ -251,6 +251,31 @@ $form->setDefaults($course);
 // Validate form
 if ($form->validate()) {
     $course = $form->getSubmitValues();
+
+    $visibility = $course['visibility'];
+
+    global $_configuration;
+    $urlId = api_get_current_access_url_id();
+    if (isset($_configuration[$urlId]) &&
+        isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
+        $_configuration[$urlId]['hosting_limit_active_courses'] > 0
+    ) {
+        // Check if
+        if ($course_info['visibility'] == COURSE_VISIBILITY_HIDDEN &&
+            $visibility != $course_info['visibility']
+        ) {
+            $num = CourseManager::countActiveCourses($urlId);
+            if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
+                api_warn_hosting_contact('hosting_limit_active_courses');
+
+                api_set_failure(get_lang('PortalActiveCoursesLimitReached'));
+
+                header('Location: course_list.php?action=show_msg&warn=' . urlencode(get_lang('PortalActiveCoursesLimitReached')));
+                exit;
+            }
+        }
+    }
+
     $course_code = $course['code'];
     $visual_code = $course['visual_code'];
     $visual_code = generate_course_code($visual_code);
@@ -295,7 +320,6 @@ if ($form->validate()) {
 	$course_language = $course['course_language'];
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
 	$disk_quota = $course['disk_quota'];
-	$visibility = $course['visibility'];
 	$subscribe = $course['subscribe'];
 	$unsubscribe = $course['unsubscribe'];
 

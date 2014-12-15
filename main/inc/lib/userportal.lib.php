@@ -3,6 +3,9 @@
 
 use \ChamiloSession as Session;
 
+/**
+ * Class IndexManager
+ */
 class IndexManager
 {
     //An instance of the template engine

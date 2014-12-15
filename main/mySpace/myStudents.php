@@ -383,7 +383,6 @@ if (!empty($student_id)) {
             array(),
             $session_id
         );
-        //var_dump($avg_student_score);
     }
 
     $avg_student_progress = round($avg_student_progress, 2);

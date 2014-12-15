@@ -42,11 +42,11 @@ $startDate->modify('first day of this month');
 
 $limitDate = new DateTime(api_get_datetime());
 
-$selectedCourse = isset($_POST['course']) ? $_POST['course'] : null;
-$selectedSession = isset($_POST['session']) ? $_POST['session'] : 0;
-$selectedTeacher = isset($_POST['teacher']) ? $_POST['teacher'] : 0;
-$selectedFrom = isset($_POST['from']) && !empty($_POST['from']) ? $_POST['from'] : $startDate->format('Y-m-d');
-$selectedUntil = isset($_POST['from']) && !empty($_POST['until']) ? $_POST['until'] : $limitDate->format('Y-m-d');
+$selectedCourse = isset($_REQUEST['course']) ? $_REQUEST['course'] : null;
+$selectedSession = isset($_REQUEST['session']) ? $_REQUEST['session'] : 0;
+$selectedTeacher = isset($_REQUEST['teacher']) ? $_REQUEST['teacher'] : 0;
+$selectedFrom = isset($_REQUEST['from']) && !empty($_REQUEST['from']) ? $_REQUEST['from'] : $startDate->format('Y-m-d');
+$selectedUntil = isset($_REQUEST['from']) && !empty($_REQUEST['until']) ? $_REQUEST['until'] : $limitDate->format('Y-m-d');
 
 $courseList = CourseManager::get_courses_list(0, 0, 'title');
 $sessionsList = SessionManager::get_sessions_list(array(), array('name'));
@@ -204,6 +204,71 @@ if (empty($selectedCourse) && empty($selectedSession) && empty($selectedTeacher)
             'totalTime' => SessionManager::getTotalUserTimeInPlatform($teacher['id'], $selectedFrom, $selectedUntil)
         );
     }
+}
+
+if (isset($_GET['export'])) {
+    require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
+
+    $dataToExport = array();
+    
+    if ($withFilter) {
+        $dataToExport[] = array(
+            get_lang('Session'),
+            get_lang('Course'),
+            get_lang('Coach'),
+            get_lang('TotalTime')
+        );
+    } else {
+        $dataToExport[] = array(
+            get_lang('Coach'),
+            get_lang('TotalTime')
+        );
+    }
+
+    foreach ($rows as $row) {
+        $data = array();
+
+        if ($withFilter) {
+            $data[] = $row['session']['name'];
+            $data[] = $row['course']['name'];
+        }
+
+        $data[] = $row['coach']['completeName'];
+        $data[] = $row['totalTime'];
+
+        $dataToExport[] = $data;
+    }
+
+    $fileName = get_lang('TeacherTimeReport') . ' ' . api_get_local_time();
+
+    switch ($_GET['export']) {
+        case 'pdf':
+            $params = array(
+                'add_signatures' => false,
+                'filename' => $fileName,
+                'pdf_title' => "$reportTitle - $reportSubTitle",
+                'pdf_description' => get_lang('TeacherTimeReport'),
+                'format' => 'A4-L',
+                'orientation' => 'L'
+            );
+
+            $pdfContent = Export::convert_array_to_html($dataToExport);
+
+            Export::export_html_to_pdf($pdfContent, $params);
+            break;
+        case 'xls':
+
+            array_unshift($dataToExport, array(
+                $reportTitle
+            ), array(
+                $reportSubTitle
+            ), array());
+            
+            Export::export_table_xls_html($dataToExport, $fileName);
+            break;
+    }
+
+    die;
 }
 
 // view

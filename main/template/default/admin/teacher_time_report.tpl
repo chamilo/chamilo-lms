@@ -41,6 +41,16 @@
         });
     </script>
     <div class="span12">
+        <div class="actions">
+            <span class="pull-right">
+                <a href="{{ _p.web_self }}?export=pdf&from={{ selectedFrom }}&until={{ selectedUntil }}&course={{ selectedCourse }}&session={{ selectedSession }}&teacher={{ selectedTeacher }}">
+                    <img src="{{ _p.web_img }}icons/32/pdf.png">
+                </a>
+                <a href="{{ _p.web_self }}?export=xls&from={{ selectedFrom }}&until={{ selectedUntil }}&course={{ selectedCourse }}&session={{ selectedSession }}&teacher={{ selectedTeacher }}">
+                    <img src="{{ _p.web_img }}icons/32/export_excel.png">
+                </a>
+            </span>
+        </div>
         <h1 class="page-header">{{ 'TeacherTimeReport' | get_lang }}</h1>
         <form class="form-horizontal" method="post">
             <div class="control-group">

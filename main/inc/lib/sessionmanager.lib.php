@@ -1754,11 +1754,7 @@ class SessionManager
     ) {
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tableSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-
         $sessionId = intval($sessionId);
-        if ($sessionId == 118 && $courseInfo['code'] == 'C1') {
-            var_dump($userList);
-        }
 
         if (empty($sessionId) || empty($userList) || empty($courseInfo)) {
             return false;

@@ -4157,7 +4157,6 @@ class UserManager
         if ($getCount) {
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
-            //var_dump($sql);
             return $row['count'];
         }
 

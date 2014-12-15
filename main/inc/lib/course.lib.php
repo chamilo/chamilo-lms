@@ -3709,6 +3709,8 @@ class CourseManager
 
         $course_list = array();
 
+        $showCustomIcon = api_get_configuration_value('course_images_in_courses_list');
+
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             $course_info = api_get_course_info($course['code']);
@@ -3729,8 +3731,21 @@ class CourseManager
             // (something that would have changed since the user's last visit).
             $show_notification = Display::show_notification($course_info);
 
-            // New code displaying the user's status in respect to this course.
-            $status_icon = Display::return_icon('blackboard.png', api_htmlentities($course_info['title']), array(), ICON_SIZE_LARGE);
+            $status_icon = Display::return_icon(
+                'blackboard.png',
+                api_htmlentities($course_info['title']),
+                array(),
+                ICON_SIZE_LARGE
+            );
+
+            $iconName = basename($course_info['course_image']);
+            if ($showCustomIcon == true && $iconName != 'course.png') {
+                $status_icon = Display::img(
+                    $course_info['course_image'],
+                    api_htmlentities($course_info['title']),
+                    array()
+                );
+            }
 
             $params = array();
             $params['right_actions'] = '';
@@ -3929,7 +3944,23 @@ class CourseManager
         }
 
         $params = array();
-        $params['icon'] = Display::return_icon('blackboard_blue.png', api_htmlentities($course_info['name']), array(), ICON_SIZE_LARGE);
+        $params['icon'] = Display::return_icon(
+            'blackboard_blue.png',
+            api_htmlentities($course_info['name']),
+            array(),
+            ICON_SIZE_LARGE
+        );
+
+        $showCustomIcon = api_get_configuration_value('course_images_in_courses_list');
+        $iconName = basename($course_info['course_image']);
+        if ($showCustomIcon && $iconName != 'course.png') {
+            $params['icon'] = Display::img(
+                $course_info['course_image'],
+                api_htmlentities($course_info['name']),
+                array()
+            );
+        }
+
         $params['link'] = $session_url;
         $params['title'] = $session_title;
 

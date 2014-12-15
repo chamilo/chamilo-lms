@@ -5336,21 +5336,30 @@ class SessionManager
     /**
      * Calculate the total user time in the platform 
      * @param int $userId The user id
+     * @param string $from Optional. From date
+     * @param string $until Optional. Until date
      * @return string The time (hh:mm:ss)
      */
-    public static function getTotalUserTimeInPlatform($userId)
+    public static function getTotalUserTimeInPlatform($userId, $from = '', $until = '')
     {
         $userId = intval($userId);
 
         $trackLoginTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
+        $whereConditions = array(
+            'login_user_id = ?' => $userId
+        );
+
+        if (!empty($from) && !empty($until)) {
+            $whereConditions["AND (login_date >= '?' "] = $from;
+            $whereConditions["AND logout_date <= '?') "] = $until;
+        }
+
         $trackResult = Database::select(
             'SEC_TO_TIME(SUM(UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date))) as total_time',
             $trackLoginTable,
             array(
-                'where' => array(
-                    'login_user_id = ?' => $userId
-                )
+                'where' => $whereConditions
             ), 'first'
         );
 

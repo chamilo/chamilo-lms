@@ -53,10 +53,6 @@ $sessionsList = SessionManager::get_sessions_list(array(), array('name'));
 
 $teacherList = SessionManager::getAllCourseCoaches();
 
-foreach ($courseCoaches as &$coach) {
-    $coach['totalTime'] = SessionManager::getTotalUserTimeInPlatform($coach['id']);
-}
-
 $htmlHeadXtra[] = '
 <script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/daterange/moment.min.js"></script>
 <link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/daterange/daterangepicker-bs2.css">
@@ -185,6 +181,18 @@ if (!empty($selectedTeacher)) {
                 'completeName' => $coach['complete_name']
             ),
             'totalTime' => $totalTime
+        );
+    }
+}
+
+if (empty($selectedCourse) && empty($selectedSession) && empty($selectedTeacher)) {
+    foreach ($teacherList as &$teacher) {
+        $rows[] = array(
+            'coach' => array(
+                'username' => $teacher['username'],
+                'completeName' => $teacher['completeName'],
+            ),
+            'totalTime' => SessionManager::getTotalUserTimeInPlatform($teacher['id'], $selectedFrom, $selectedUntil)
         );
     }
 }

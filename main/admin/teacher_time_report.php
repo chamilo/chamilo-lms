@@ -150,7 +150,7 @@ if (!empty($selectedSession)) {
 
 if (!empty($selectedTeacher)) {
     $withFilter = true;
-    
+
     $coach = api_get_user_info($selectedTeacher);
 
     $courses = SessionManager::getCoursesListByCourseCoach($selectedTeacher);
@@ -167,7 +167,7 @@ if (!empty($selectedTeacher)) {
             $selectedFrom,
             $selectedUntil
         );
-        
+
         $rows[] = array(
             'session' => array(
                 'id' => $session['id'],

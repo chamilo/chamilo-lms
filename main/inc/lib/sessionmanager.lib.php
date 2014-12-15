@@ -5361,6 +5361,15 @@ class SessionManager
         return '00:00:00';
     }
 
+    /**
+     * Calc the expended time (hh::mm:ss) by a user in a course
+     * @param int $userId The user id
+     * @param string $courseCode The course id
+     * @param int $sessionId Optional. The session id
+     * @param string $from Optional. From date
+     * @param string $until Optional. Until date
+     * @return string The time
+     */
     public static function getUserTimeInCourse($userId, $courseCode, $sessionId = 0, $from = '', $until = '')
     {
         $userId = intval($userId);

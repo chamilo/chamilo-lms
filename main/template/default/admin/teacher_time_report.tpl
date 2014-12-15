@@ -81,7 +81,7 @@
                     <select name="teacher" id="teacher">
                         <option value="0">{{ 'None' | get_lang }}</option>
                         {% for teacher in courseCoaches %}
-                            <option value="{{ teacher.id }}" {{ (teacher.id == selectedTeacher) ? 'selected' : '' }}>{{ teacher.completeName }}</option>
+                            <option value="{{ teacher.user_id }}" {{ (teacher.user_id == selectedTeacher) ? 'selected' : '' }}>{{ teacher.completeName }}</option>
                         {% endfor %}
                     </select>
                 </div>

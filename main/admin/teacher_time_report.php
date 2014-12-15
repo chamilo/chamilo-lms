@@ -2,11 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * With this tool you can easily adjust non critical configuration settings.
- * Non critical means that changing them will not result in a broken campus.
+ * Generate a teacher time report in platform or sessions/courses
  *
- * @author Patrick Cool
- * @author Julio Montoya - Multiple URL site
+ * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.admin
  */
 /* INIT SECTION */
@@ -26,6 +24,7 @@ $cidReset = true;
 
 // Including some necessary library files.
 require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'TeacherTimeReport.class.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -51,7 +50,7 @@ $selectedUntil = isset($_REQUEST['from']) && !empty($_REQUEST['until']) ? $_REQU
 $courseList = CourseManager::get_courses_list(0, 0, 'title');
 $sessionsList = SessionManager::get_sessions_list(array(), array('name'));
 
-$teacherList = SessionManager::getAllCourseCoaches();
+$teacherList = UserManager::getTeachersList();
 
 $htmlHeadXtra[] = '
 <script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/daterange/moment.min.js"></script>
@@ -63,7 +62,7 @@ $withFilter = false;
 $reportTitle = 'TimeReportIncludingAllCoursesAndSessionsByTeacher';
 $reportSubTitle = sprintf(get_lang('TimeSpentBetweenXAndY'), $selectedFrom, $selectedUntil);
 
-$rows = array();
+$timeReport = new TeacherTimeReport();
 
 if (!empty($selectedCourse)) {
     $withFilter = true;
@@ -86,7 +85,7 @@ if (!empty($selectedCourse)) {
                 $selectedUntil
             );
 
-            $rows[] = array(
+            $timeReport->data[] = array(
                 'session' => array(
                     'id' => $session['id'],
                     'name' => $session['name']
@@ -129,13 +128,13 @@ if (!empty($selectedSession)) {
                 $selectedUntil
             );
 
-            $rows[] = array(
+            $timeReport->data[] = array(
                 'session' => array(
                     'id' => $session['id'],
                     'name' => $session['name']
                 ),
                 'course' => array(
-                    'id' => $course['real_id'],
+                    'id' => $course['id'],
                     'name' => $course['title']
                 ),
                 'coach' => array(
@@ -173,7 +172,7 @@ if (!empty($selectedTeacher)) {
             $selectedUntil
         );
 
-        $rows[] = array(
+        $timeReport->data[] = array(
             'session' => array(
                 'id' => $session['id'],
                 'name' => $session['name']
@@ -196,48 +195,22 @@ if (!empty($selectedTeacher)) {
 
 if (empty($selectedCourse) && empty($selectedSession) && empty($selectedTeacher)) {
     foreach ($teacherList as &$teacher) {
-        $rows[] = array(
+        $timeReport->data[] = array(
             'coach' => array(
                 'username' => $teacher['username'],
                 'completeName' => $teacher['completeName'],
             ),
-            'totalTime' => SessionManager::getTotalUserTimeInPlatform($teacher['id'], $selectedFrom, $selectedUntil)
+            'totalTime' => SessionManager::getTotalUserTimeInPlatform($teacher['user_id'], $selectedFrom, $selectedUntil)
         );
     }
 }
 
+$timeReport->sortData($withFilter);
+
 if (isset($_GET['export'])) {
     require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
 
-    $dataToExport = array();
-    
-    if ($withFilter) {
-        $dataToExport[] = array(
-            get_lang('Session'),
-            get_lang('Course'),
-            get_lang('Coach'),
-            get_lang('TotalTime')
-        );
-    } else {
-        $dataToExport[] = array(
-            get_lang('Coach'),
-            get_lang('TotalTime')
-        );
-    }
-
-    foreach ($rows as $row) {
-        $data = array();
-
-        if ($withFilter) {
-            $data[] = $row['session']['name'];
-            $data[] = $row['course']['name'];
-        }
-
-        $data[] = $row['coach']['completeName'];
-        $data[] = $row['totalTime'];
-
-        $dataToExport[] = $data;
-    }
+    $dataToExport = $timeReport->prepareDataToExport($withFilter);
 
     $fileName = get_lang('TeacherTimeReport') . ' ' . api_get_local_time();
 
@@ -296,7 +269,7 @@ $tpl->assign('courses', $courseList);
 $tpl->assign('sessions', $sessionsList);
 $tpl->assign('courseCoaches', $teacherList);
 
-$tpl->assign('rows', $rows);
+$tpl->assign('rows', $timeReport->data);
 
 $contentTemplate = $tpl->get_template('admin/teacher_time_report.tpl');
 

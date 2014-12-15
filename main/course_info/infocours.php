@@ -114,7 +114,11 @@ if ($form->validate() && is_settings_editable()) {
     // update course picture
     $picture = $_FILES['picture'];
     if (!empty($picture['name'])) {
-        $picture_uri = CourseManager::update_course_picture($course_code, $picture['name'], $picture['tmp_name']);
+        $picture_uri = CourseManager::update_course_picture(
+            $course_code,
+            $picture['name'],
+            $picture['tmp_name']
+        );
     }
 }
 
@@ -145,6 +149,8 @@ $form->applyFilter('department_url', 'html_filter');
 $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+
+$form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
 
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     $url =  PDF::get_watermark($course_code);
@@ -413,6 +419,11 @@ if ($form->validate() && is_settings_editable()) {
     $updateValues = $form->exportValues();
 
     $visibility = $updateValues['visibility'];
+    $deletePicture = $updateValues['delete_picture'];
+
+    if ($deletePicture) {
+        CourseManager::deleteCoursePicture($course_code);
+    }
 
     global $_configuration;
     $urlId = api_get_current_access_url_id();

@@ -3378,22 +3378,23 @@ class CourseManager
      */
     public static function update_course_picture($course_code, $filename, $source_file = null)
     {
-        $course_info          = api_get_course_info($course_code);
-        $store_path           = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
-        $course_image         = $store_path.'/course-pic.png';                      // image name for courses
-        $course_medium_image  = $store_path.'/course-pic85x85.png';
-        //$extension            = strtolower(substr(strrchr($filename, '.'), 1));
+        $course_info = api_get_course_info($course_code);
+        // course path
+        $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'];
+        // image name for courses
+        $course_image = $store_path.'/course-pic.png';
+        $course_medium_image = $store_path.'/course-pic85x85.png';
 
         if (file_exists($course_image)) {
-            @unlink($course_image);
+            unlink($course_image);
         }
         if (file_exists($course_medium_image)) {
-            @unlink($course_medium_image);
+            unlink($course_medium_image);
         }
 
         $my_course_image = new Image($source_file);
         $result = $my_course_image->send_image($course_image, -1, 'png');
-        //Redimension image to 100x85 (should be 85x85 but 100x85 visually gives
+        // Redimension image to 100x85 (should be 85x85 but 100x85 visually gives
         // better results for most images people put as course icon)
         if ($result) {
             $medium = new Image($course_image);
@@ -3402,6 +3403,27 @@ class CourseManager
             $medium->send_image($store_path.'/course-pic85x85.png', -1, 'png');
         }
         return $result;
+    }
+
+    /**
+     * Deletes the course picture
+     * @param string $courseCode
+     */
+    public static function deleteCoursePicture($courseCode)
+    {
+        $course_info = api_get_course_info($courseCode);
+        // course path
+        $storePath = api_get_path(SYS_COURSE_PATH).$course_info['path'];
+        // image name for courses
+        $courseImage = $storePath.'/course-pic.png';
+        $courseMediumImage = $storePath.'/course-pic85x85.png';
+
+        if (file_exists($courseImage)) {
+            unlink($courseImage);
+        }
+        if (file_exists($courseMediumImage)) {
+            unlink($courseMediumImage);
+        }
     }
 
     /**

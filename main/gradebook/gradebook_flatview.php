@@ -31,7 +31,10 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
     exit;
 }
 
-$interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('ToolGradebook'));
+$interbreadcrumb[] = array(
+    'url' => $_SESSION['gradebook_dest'].'?selectcat=1',
+    'name' => get_lang('ToolGradebook')
+);
 
 $showeval = isset($_POST['showeval']) ? '1' : '0';
 $showlink = isset($_POST['showlink']) ? '1' : '0';
@@ -101,7 +104,14 @@ if (!empty($keyword)) {
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
 // Main course category
-$mainCourseCategory = Category::load(null, null, api_get_course_id(), null, null, api_get_session_id());
+$mainCourseCategory = Category::load(
+    null,
+    null,
+    api_get_course_id(),
+    null,
+    null,
+    api_get_session_id()
+);
 
 $flatviewtable = new FlatViewTable(
     $cat[0],
@@ -125,7 +135,15 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     $params['export_pdf'] = true;
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
         Display :: set_header(null, false, false);
-        export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
+        export_pdf_flatview(
+            $flatviewtable,
+            $cat,
+            $users,
+            $alleval,
+            $alllinks,
+            $params,
+            $mainCourseCategory[0]
+        );
     }
 }
 
@@ -151,7 +169,15 @@ if (isset($_GET['exportpdf']))	{
         $params['show_official_code'] = true;
         $params['export_pdf'] = true;
         $params['only_total_category'] = false;
-        export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
+        export_pdf_flatview(
+            $flatviewtable,
+            $cat,
+            $users,
+            $alleval,
+            $alllinks,
+            $params,
+            $mainCourseCategory[0]
+        );
 
     } else {
         Display :: display_header(get_lang('ExportPDF'));
@@ -233,10 +259,20 @@ if (isset($_GET['exportpdf'])) {
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
-    DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
+    DisplayGradebook:: display_header_reduce_flatview(
+        $cat[0],
+        $showeval,
+        $showlink,
+        $simple_search_form
+    );
     $flatviewtable->display();
 } elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
-    DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
+    DisplayGradebook:: display_header_reduce_flatview(
+        $cat[0],
+        $showeval,
+        $showlink,
+        $simple_search_form
+    );
 
     // main graph
     $flatviewtable->display();

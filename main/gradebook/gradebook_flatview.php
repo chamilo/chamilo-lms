@@ -24,7 +24,14 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.
 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
 api_block_anonymous_users();
-block_students();
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    api_get_course_info()
+);
+
+if (!$isDrhOfCourse) {
+    block_students();
+}
 
 if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
     header('Location: '.api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&search='.Security::remove_XSS($_POST['keyword']));
@@ -157,7 +164,7 @@ if (isset($_GET['exportpdf']))	{
         DataForm::TYPE_EXPORT_PDF,
         'export_pdf_form',
         null,
-        api_get_self() . '?exportpdf=&offset=' . intval($_GET['offset']) . '&selectcat=' . intval($_GET['selectcat']),
+        api_get_self() . '?exportpdf=&offset=' . intval($_GET['offset']) . '&selectcat=' . intval($_GET['selectcat']).'&'.api_get_cidreq(),
         '_blank',
         ''
     );
@@ -203,7 +210,7 @@ if (isset($_GET['print']))	{
 }
 
 if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report') {
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) {
+    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_coach() || $isDrhOfCourse) {
         $user_id = null;
 
         if (empty($_SESSION['export_user_fields'])) {
@@ -267,6 +274,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
     );
     $flatviewtable->display();
 } elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
+
     DisplayGradebook:: display_header_reduce_flatview(
         $cat[0],
         $showeval,

@@ -25,8 +25,14 @@ require_once api_get_path(LIBRARY_PATH) . 'ezpdf/class.ezpdf.php';
 require_once api_get_path(SYS_CODE_PATH) . 'gradebook/lib/gradebook_functions.inc.php';
 
 api_block_anonymous_users();
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    api_get_course_info()
+);
 
-block_students();
+if (!$isDrhOfCourse) {
+    block_students();
+}
 
 $interbreadcrumb[] = array(
     'url' => $_SESSION['gradebook_dest'],

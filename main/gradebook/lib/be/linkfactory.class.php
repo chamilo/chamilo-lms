@@ -20,16 +20,16 @@ require_once 'surveylink.class.php';
  */
 class LinkFactory
 {
-	/**
-	 * Retrieve links and return them as an array of extensions of AbstractLink.
-	 * @param int $id link id
-	 * @param int $type link type
-	 * @param int $ref_id reference id
-	 * @param int $user_id user id (link owner)
-	 * @param string $course_code course code
-	 * @param int $category_id parent category
-	 * @param int $visible visible
-	 */
+    /**
+     * Retrieve links and return them as an array of extensions of AbstractLink.
+     * @param int $id link id
+     * @param int $type link type
+     * @param int $ref_id reference id
+     * @param int $user_id user id (link owner)
+     * @param string $course_code course code
+     * @param int $category_id parent category
+     * @param int $visible visible
+     */
     public static function load(
         $id = null,
         $type = null,
@@ -48,21 +48,21 @@ class LinkFactory
             $category_id,
             $visible
         );
-	}
+    }
 
-	/**
-	 * Get the link object referring to an evaluation
-	 */
-	public function get_evaluation_link ($eval_id)
+    /**
+     * Get the link object referring to an evaluation
+     */
+    public function get_evaluation_link ($eval_id)
     {
-		$links = AbstractLink :: load(null, null, $eval_id);
-		foreach ($links as $link) {
-			if (is_a($link, 'EvalLink')) {
-				return $link;
-			}
-		}
-		return null;
-	}
+        $links = AbstractLink :: load(null, null, $eval_id);
+        foreach ($links as $link) {
+            if (is_a($link, 'EvalLink')) {
+                return $link;
+            }
+        }
+        return null;
+    }
 
     /**
      * Find links by name
@@ -71,45 +71,45 @@ class LinkFactory
      */
     public function find_links ($name_mask,$selectcat)
     {
-    	return AbstractLink::find_links($name_mask, $selectcat);
+        return AbstractLink::find_links($name_mask, $selectcat);
     }
 
-	/**
-	 * Static method to create specific link objects
-	 * @param $type link type
-	 */
-	public static function create ($type)
+    /**
+     * Static method to create specific link objects
+     * @param $type link type
+     */
+    public static function create ($type)
     {
         $type = intval($type);
-		switch ($type) {
-			case LINK_EXERCISE:
-				return new ExerciseLink();
+        switch ($type) {
+            case LINK_EXERCISE:
+                return new ExerciseLink();
             case LINK_HOTPOTATOES:
                 return new ExerciseLink(1);
-			case LINK_DROPBOX:
-				return new DropboxLink();
-			case LINK_STUDENTPUBLICATION:
-				return new StudentPublicationLink();
-			case LINK_LEARNPATH:
-				return new LearnpathLink();
-			case LINK_FORUM_THREAD:
-				return new ForumThreadLink();
-			case LINK_ATTENDANCE:
-				return new AttendanceLink();
-			case LINK_SURVEY:
-				return new SurveyLink();
-		}
-		return null;
-	}
+            case LINK_DROPBOX:
+                return new DropboxLink();
+            case LINK_STUDENTPUBLICATION:
+                return new StudentPublicationLink();
+            case LINK_LEARNPATH:
+                return new LearnpathLink();
+            case LINK_FORUM_THREAD:
+                return new ForumThreadLink();
+            case LINK_ATTENDANCE:
+                return new AttendanceLink();
+            case LINK_SURVEY:
+                return new SurveyLink();
+        }
+        return null;
+    }
 
-	/**
-	 * Return an array of all known link types
+    /**
+     * Return an array of all known link types
      * @return array
-	 */
-	public static function get_all_types ()
+     */
+    public static function get_all_types ()
     {
-		//LINK_DROPBOX,
-		return array (
+        //LINK_DROPBOX,
+        return array (
             LINK_EXERCISE,
             //LINK_DROPBOX,
             LINK_HOTPOTATOES,
@@ -119,7 +119,7 @@ class LinkFactory
             LINK_ATTENDANCE,
             LINK_SURVEY
         );
-	}
+    }
 
     public function delete()
     {

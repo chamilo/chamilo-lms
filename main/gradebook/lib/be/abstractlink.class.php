@@ -198,9 +198,9 @@ abstract class AbstractLink implements GradebookItem
         }
         if (isset ($course_code)) {
             if ($paramcount != 0) {
-             $sql .= ' AND';
+                $sql .= ' AND';
             } else {
-             $sql .= ' WHERE';
+                $sql .= ' WHERE';
             }
             $sql .= " course_code = '".Database::escape_string($course_code)."'";
             $paramcount ++;
@@ -218,7 +218,7 @@ abstract class AbstractLink implements GradebookItem
             if ($paramcount != 0) {
                 $sql .= ' AND';
             } else {
-                 $sql .= ' WHERE';
+                $sql .= ' WHERE';
             }
             $sql .= ' visible = '.intval($visible);
         }

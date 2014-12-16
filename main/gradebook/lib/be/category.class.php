@@ -338,7 +338,10 @@ class Category implements GradebookItem
         return $allcat;
     }
 
-    private function create_root_category()
+    /**
+     * @return Category
+     */
+    private static function create_root_category()
     {
         $cat = new Category();
         $cat->set_id(0);
@@ -349,9 +352,14 @@ class Category implements GradebookItem
         $cat->set_parent_id(null);
         $cat->set_weight(0);
         $cat->set_visible(1);
+
         return $cat;
     }
 
+    /**
+     * @param $result
+     * @return array
+     */
     private static function create_category_objects_from_sql_result($result)
     {
         $allcat = array();

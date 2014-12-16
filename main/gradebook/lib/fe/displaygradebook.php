@@ -372,7 +372,8 @@ class DisplayGradebook
         $is_platform_admin,
         $simple_search_form,
         $show_add_qualification = true,
-        $show_add_link = true
+        $show_add_link = true,
+        $certificateLinkInfo = null
     ) {
         // Student.
         $status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
@@ -434,7 +435,13 @@ class DisplayGradebook
             $total_score = array($item_value_total, $item_total);
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
-                $scoreinfo .= '<h2>' . get_lang('Total') . ' : ' . $scorecourse_display . '</h2>';
+                $certificateLink = null;
+                if (!empty($certificateLinkInfo) && isset($certificateLinkInfo['certificate_link'])) {
+                    $certificateLink .= '<span style="float:right"> ' . $certificateLinkInfo['certificate_link']."</span>";
+                }
+
+                $scoreinfo .= '<h2>' . get_lang('Total') . ' : ' . $scorecourse_display . $certificateLink. '</h2>';
+
             }
             Display :: display_normal_message($scoreinfo, false);
         }

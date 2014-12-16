@@ -1615,10 +1615,10 @@ class Category implements GradebookItem
                 register_user_info_about_certificate($category_id, $user_id, $my_score_in_gradebook, api_get_utc_datetime());
                 $my_certificate = get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
             }
+            $html = array();
             if (!empty($my_certificate)) {
                 $certificate_obj = new Certificate($my_certificate['id']);
                 $fileWasGenerated = $certificate_obj->html_file_is_generated();
-                $html = null;
                 if (!empty($fileWasGenerated)) {
                     $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
                     $certificates = Display::url(
@@ -1640,9 +1640,10 @@ class Category implements GradebookItem
                         ),
                         "$url&action=export"
                     );
-                    $html = '<div class="actions" align="right">';
-                    $html .= $certificates . $exportToPDF;
-                    $html .= '</div>';
+                    $html = array(
+                        'certificate_link' => $certificates,
+                        'pdf_link' => $exportToPDF
+                    );
                 }
                 return $html;
             }

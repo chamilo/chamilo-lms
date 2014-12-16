@@ -44,8 +44,8 @@ class DataForm extends FormValidator
 		$this->setDefaults();
 	}
 
-
-	protected function build_pdf_export_form() {
+	protected function build_pdf_export_form()
+	{
 		$renderer =& $this->defaultRenderer();
 		$renderer->setElementTemplate('<span>{element}</span>');
 		$this->addElement('header', get_lang('ChooseOrientation'));
@@ -57,7 +57,8 @@ class DataForm extends FormValidator
 		));
 	}
 
-	protected function build_export_form() {
+	protected function build_export_form()
+	{
 		$this->addElement('header', get_lang('ChooseFormat'));
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
@@ -68,7 +69,8 @@ class DataForm extends FormValidator
 		));
 	}
 
-	protected function build_export_form_option($show_pdf=true) {
+	protected function build_export_form_option($show_pdf=true)
+	{
 		$this->addElement('header', get_lang('ChooseFormat'));
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
@@ -79,7 +81,8 @@ class DataForm extends FormValidator
 		));
 	}
 
-	protected function build_import_form() {
+	protected function build_import_form()
+	{
 		$this->addElement('hidden', 'formSent');
 		$this->addElement('header', get_lang('ImportFileLocation'));
 		$this->addElement('file', 'import_file',get_lang('Location'));
@@ -99,11 +102,13 @@ class DataForm extends FormValidator
 		));
 	}
 
-	function display() {
+	public function display()
+	{
 		parent :: display();
 	}
 
-	function setDefaults($defaults = array(), $filter = null) {
+	public function setDefaults($defaults = array(), $filter = null)
+	{
 		parent :: setDefaults($defaults, $filter);
 	}
 }

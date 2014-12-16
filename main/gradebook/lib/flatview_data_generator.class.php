@@ -26,7 +26,11 @@ class FlatViewDataGenerator
     private $mainCourseCategory;
 
     /**
-     * Constructor
+     * @param array $users
+     * @param array $evals
+     * @param array $links
+     * @param array $params
+     * @param null $mainCourseCategory
      */
     public function FlatViewDataGenerator(
         $users = array(),
@@ -50,6 +54,7 @@ class FlatViewDataGenerator
     {
         return $this->mainCourseCategory;
     }
+
     /**
      * Get total number of users (rows)
      */
@@ -59,8 +64,8 @@ class FlatViewDataGenerator
     }
 
     /**
-     * Get total number of evaluations/links (columns) (the 2 users columns not included)
-     */
+    * Get total number of evaluations/links (columns) (the 2 users columns not included)
+    */
     public function get_total_items_count()
     {
         return count($this->evals_links);
@@ -160,14 +165,14 @@ class FlatViewDataGenerator
                    $add_weight = null;
                 }*/
                 $headers[] = Display::url(
-                    $sub_cat->get_name(),
-                    api_get_self().'?selectcat='.$sub_cat->get_id()
-                ).$add_weight;
+                        $sub_cat->get_name(),
+                        api_get_self().'?selectcat='.$sub_cat->get_id()
+                    ).$add_weight;
             }
         } else {
             if (!isset($this->params['only_total_category']) ||
                 (isset($this->params['only_total_category']) &&
-                $this->params['only_total_category'] == false)
+                    $this->params['only_total_category'] == false)
             ) {
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
                     /** @var AbstractLink $item */
@@ -401,14 +406,14 @@ class FlatViewDataGenerator
                     $percentage = $sub_cat->get_weight()/($sub_cat_percentage) * $sub_cat_percentage/$this->category->get_weight();
                     $item_value = $percentage*$item_value;
                     $item_total += $sub_cat->get_weight();
-/*
-                    if ($convert_using_the_global_weight) {
-                        $score[0] = $score[0]/$main_weight*$sub_cat->get_weight();
-                        $score[1] = $main_weight ;
-                    }
-*/
+                    /*
+                                        if ($convert_using_the_global_weight) {
+                                            $score[0] = $score[0]/$main_weight*$sub_cat->get_weight();
+                                            $score[1] = $main_weight ;
+                                        }
+                    */
                     if (api_get_setting('gradebook_show_percentage_in_reports') == 'false') {
-                    //if (true)
+                        //if (true)
                         $real_score = $scoredisplay->display_score($real_score, SCORE_SIMPLE);
                         $temp_score = $scoredisplay->display_score($score, SCORE_DIV_SIMPLE_WITH_CUSTOM);
                         $temp_score = Display::tip($real_score, $temp_score);
@@ -420,12 +425,12 @@ class FlatViewDataGenerator
 
                     if (!isset($this->params['only_total_category']) ||
                         (isset($this->params['only_total_category']) &&
-                        $this->params['only_total_category'] == false)
+                            $this->params['only_total_category'] == false)
                     ) {
                         if (!$show_all) {
-                           $row[] = $temp_score.' ';
+                            $row[] = $temp_score.' ';
                         } else {
-                           $row[] = $temp_score;
+                            $row[] = $temp_score;
                         }
                     }
                     $item_value_total +=$item_value;

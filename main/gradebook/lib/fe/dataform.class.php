@@ -1,24 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
+
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
 
 /**
- * Extends formvalidator with import and export forms
+ * Extends FormValidator with import and export forms
  * @author Stijn Konings
  * @package chamilo.gradebook
  */
-class DataForm extends FormValidator {
-
+class DataForm extends FormValidator
+{
 	const TYPE_IMPORT = 1;
 	const TYPE_EXPORT = 2;
 	const TYPE_EXPORT_PDF = 3;
@@ -32,20 +26,19 @@ class DataForm extends FormValidator {
 	 * @param method
 	 * @param action
 	 */
-	function DataForm($form_type, $form_name, $method = 'post', $action = null, $target='', $locked_status) {
+	public function DataForm($form_type, $form_name, $method = 'post', $action = null, $target='', $locked_status)
+	{
 		parent :: __construct($form_name, $method, $action,$target);
 		$this->form_type = $form_type;
 		if ($this->form_type == self :: TYPE_IMPORT) {
 			$this->build_import_form();
-		}
-		elseif ($this->form_type == self :: TYPE_EXPORT) {
+		} elseif ($this->form_type == self :: TYPE_EXPORT) {
 			if ($locked_status == 0) {
 				$this->build_export_form_option(false);
 			} else {
 				$this->build_export_form();
-			}			
-		}
-		elseif ($this->form_type == self :: TYPE_EXPORT_PDF) {
+			}
+		} elseif ($this->form_type == self :: TYPE_EXPORT_PDF) {
 			$this->build_pdf_export_form();
 		}
 		$this->setDefaults();
@@ -64,7 +57,6 @@ class DataForm extends FormValidator {
 		));
 	}
 
-
 	protected function build_export_form() {
 		$this->addElement('header', get_lang('ChooseFormat'));
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
@@ -80,7 +72,7 @@ class DataForm extends FormValidator {
 		$this->addElement('header', get_lang('ChooseFormat'));
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
-		$this->addElement('radio', 'file_type', Display::return_icon('info3.gif',get_lang('ToExportMustLockEvaluation')), 'PDF (Portable Document Format)', 'pdf', array('disabled'));			
+		$this->addElement('radio', 'file_type', Display::return_icon('info3.gif',get_lang('ToExportMustLockEvaluation')), 'PDF (Portable Document Format)', 'pdf', array('disabled'));
 		$this->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="upload"');
 		$this->setDefaults(array (
 			'file_type' => 'csv'
@@ -102,8 +94,8 @@ class DataForm extends FormValidator {
 		$this->addElement('checkbox','ignoreerrors',null,get_lang('IgnoreErrors'));
 		$this->addElement('style_submit_button', 'submit', get_lang('Ok'));
 		$this->setDefaults(array(
-		'formSent' => '1',
-		'file_type' => 'csv'
+			'formSent' => '1',
+			'file_type' => 'csv'
 		));
 	}
 

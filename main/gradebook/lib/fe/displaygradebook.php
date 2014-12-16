@@ -1,11 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Class
+ * Class DisplayGradebook
  * @package chamilo.gradebook
  */
 class DisplayGradebook

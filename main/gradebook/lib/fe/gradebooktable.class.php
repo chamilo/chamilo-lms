@@ -530,7 +530,7 @@ class GradebookTable extends SortableTable
 	 * @param unknown_type $item
 	 * @return string
 	 */
-	private function build_name_link ($item)
+	private function build_name_link($item)
     {
         $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 		switch ($item->get_item_type()) {

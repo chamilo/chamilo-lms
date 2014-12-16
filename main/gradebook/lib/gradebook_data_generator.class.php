@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * GradebookDataGenerator Class
+ * Class GradebookDataGenerator
  * Class to select, sort and transform object data into array data,
  * used for the general gradebook view
  * @author Bert Steppé

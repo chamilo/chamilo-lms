@@ -10,7 +10,6 @@
 // protect a course script
 api_protect_course_script(true);
 
-
 // Header
 $tool = TOOL_ATTENDANCE;
 Display :: display_header('');

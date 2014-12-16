@@ -92,7 +92,7 @@ $attendance = new Attendance();
 
 // attendance controller object
 $attendance_controller = new AttendanceController();
-
+$attendance_data = array();
 // get attendance data
 if (!empty($attendance_id)) {
     // attendance data by id
@@ -205,8 +205,10 @@ if (api_is_drh() && isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
     $student_param = '&student_id='.$student_id;
     $student_info = api_get_user_info($student_id);
-    $student_name = api_get_person_name($student_info['firstname'], $student_info['lastname']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id, 'name' => $student_name);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id,
+        'name' => $student_info['complete_name']
+    );
 }
 if (!empty($gradebook)) {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php', 'name' => get_lang('ToolGradebook'));

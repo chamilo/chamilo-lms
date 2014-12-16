@@ -167,8 +167,11 @@ class Certificate extends Model
 
             //If the gradebook is related to skills we added the skills to the user
 
+            $courseId = api_get_real_course_id();
+            $sessionId = api_get_session_id();
+
             $skill = new Skill();
-            $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id']);
+            $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id'], $courseId, $sessionId);
 
             if (is_dir($this->certification_user_path)) {
                 if (!empty($this->certificate_data)) {

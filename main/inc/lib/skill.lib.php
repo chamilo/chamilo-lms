@@ -335,7 +335,7 @@ class SkillRelGradebook extends Model
  */
 class SkillRelUser extends Model
 {
-    public $columns = array('id', 'user_id', 'skill_id', 'acquired_skill_at', 'assigned_by');
+    public $columns = array('id', 'course_id', 'session_id', 'user_id', 'skill_id', 'acquired_skill_at', 'assigned_by');
 
     public function __construct()
     {
@@ -602,7 +602,7 @@ class Skill extends Model
         return null;
     }
 
-    public function add_skill_to_user($user_id, $gradebook_id)
+    public function add_skill_to_user($user_id, $gradebook_id, $courseId = 0, $sessionId = 0)
     {
         $skill_gradebook = new SkillRelGradebook();
         $skill_rel_user  = new SkillRelUser();
@@ -613,6 +613,8 @@ class Skill extends Model
                 $user_has_skill = $this->user_has_skill($user_id, $skill_gradebook['skill_id']);
                 if (!$user_has_skill) {
                     $params = array(
+                        'course_id' => intval($courseId),
+                        'session_id' => intval($sessionId),
                         'user_id'           => $user_id,
                         'skill_id'          => $skill_gradebook['skill_id'],
                         'acquired_skill_at' => api_get_utc_datetime(),

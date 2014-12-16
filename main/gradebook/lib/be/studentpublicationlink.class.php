@@ -183,8 +183,19 @@ class StudentPublicationLink extends AbstractLink
 			$sql .= " AND user_id = $stud_id ";
 		}
 
-		// order by id, that way the student's first attempt is accessed first
-		$sql .= ' ORDER BY id';
+		$order = api_get_configuration_value('student_publication_to_take_in_gradebook');
+
+		switch ($order) {
+			case 'last':
+				// latest attempt
+				$sql .= ' ORDER BY sent_date DESC';
+				break;
+			case 'first':
+			default:
+				// first attempt
+				$sql .= ' ORDER BY id';
+				break;
+		}
 
 		$scores = Database::query($sql);
 

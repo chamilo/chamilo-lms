@@ -267,3 +267,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['redirect_admin_to_courses_list'] = true;
 // Shows the custom course icon instead of the classic green board icon
 //$_configuration['course_images_in_courses_list'] = false;
+// Which student publication will be taken when connected to the gradebook: first|last
+//$_configuration['student_publication_to_take_in_gradebook'] = 'first';

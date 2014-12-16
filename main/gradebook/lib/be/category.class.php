@@ -1623,11 +1623,11 @@ class Category implements GradebookItem
                     $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
                     $certificates = Display::url(
                         Display::return_icon(
-                            'certificate.png',
-                            get_lang('Certificates'),
+                            'certificate_download.png',
+                            get_lang('DownloadCertificate'),
                             array(),
                             ICON_SIZE_MEDIUM
-                        ),
+                        ).'&nbsp;'.get_lang('DownloadCertificate'),
                         $url,
                         array('target' => '_blank')
                     );

@@ -66,7 +66,15 @@ if (isset($_GET['editres'])) {
     $edit_res_xml = Security::remove_XSS($_GET['editres']);
     $select_eval_edit = Security::remove_XSS($_GET['selecteval']);
     $resultedit = Result :: load($edit_res_xml);
-    $edit_res_form = new EvalForm(EvalForm :: TYPE_RESULT_EDIT, $eval[0], $resultedit[0], 'edit_result_form', null, api_get_self() . '?editres=' . $resultedit[0]->get_id() . '&selecteval=' . $select_eval_edit);
+    $edit_res_form = new EvalForm(
+        EvalForm :: TYPE_RESULT_EDIT,
+        $eval[0],
+        $resultedit[0],
+        'edit_result_form',
+        null,
+        api_get_self() . '?editres=' . $resultedit[0]->get_id(
+        ) . '&selecteval=' . $select_eval_edit
+    );
     if ($edit_res_form->validate()) {
 
         $values = $edit_res_form->exportValues();
@@ -88,9 +96,15 @@ if (isset($_GET['editres'])) {
 }
 
 if (isset($_GET['import'])) {
-
     $interbreadcrumb[] = array('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']), 'name' => get_lang('ViewResult'));
-    $import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']), '_blank', '');
+    $import_result_form = new DataForm(
+        DataForm :: TYPE_IMPORT,
+        'import_result_form',
+        null,
+        api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']),
+        '_blank',
+        ''
+    );
     if (!$import_result_form->validate()) {
         Display :: display_header(get_lang('Import'));
     }
@@ -135,7 +149,10 @@ if (isset($_GET['import'])) {
                     exit;
                 }
                 $userinfo = get_user_info_from_id($importedresult['user_id']);
-                if ($userinfo['lastname'] != $importedresult['lastname'] || $userinfo['firstname'] != $importedresult['firstname'] || $userinfo['official_code'] != $importedresult['official_code']) {
+                if ($userinfo['lastname'] != $importedresult['lastname'] ||
+                    $userinfo['firstname'] != $importedresult['firstname'] ||
+                    $userinfo['official_code'] != $importedresult['official_code']
+                ) {
                     if (!isset($values['ignoreerrors'])) {
                         header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&import_user_error=' . $importedresult['user_id']);
                         exit;
@@ -181,7 +198,14 @@ if (isset($_GET['import'])) {
 if (isset($_GET['export'])) {
     $interbreadcrumb[] = array('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']), 'name' => get_lang('ViewResult'));
     $locked_status = $eval[0]->get_locked();
-    $export_result_form = new DataForm(DataForm :: TYPE_EXPORT, 'export_result_form', null, api_get_self() . '?export=&selecteval=' . $_GET['selecteval'], '_blank', $locked_status);
+    $export_result_form = new DataForm(
+        DataForm :: TYPE_EXPORT,
+        'export_result_form',
+        null,
+        api_get_self() . '?export=&selecteval=' . $_GET['selecteval'],
+        '_blank',
+        $locked_status
+    );
     if (!$export_result_form->validate()) {
         Display :: display_header(get_lang('Export'));
     }
@@ -291,7 +315,13 @@ if (isset($_GET['export'])) {
                 }
                 $data_table[] = $result;
             }
-            export_pdf_with_html($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);
+            export_pdf_with_html(
+                $head_table,
+                $data_table,
+                $header_pdf,
+                $footer_pdf,
+                $title_pdf
+            );
         }
 
         // export results to xml or csv file

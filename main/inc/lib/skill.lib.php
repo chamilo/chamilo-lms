@@ -1028,4 +1028,64 @@ class Skill extends Model
         return false;
     }
 
+    public function listAchievedByCourse($courseId)
+    {
+        $courseId = intval($courseId);
+
+        if ($courseId == 0) {
+            return array();
+        }
+
+        $list = array();
+
+        $sql = "SELECT course.id c_id, course.title c_name, user.user_id, user.lastname, "
+            . "user.firstname, user.username, skill.id skill_id, skill.name skill_name, sru.acquired_skill_at "
+            . "FROM {$this->table_skill_rel_user} AS sru "
+            . "INNER JOIN {$this->table_course} "
+            . "ON sru.course_id = course.id "
+            . "INNER JOIN {$this->table_user} "
+            . "ON sru.user_id = user.user_id "
+            . "INNER JOIN {$this->table} "
+            . "ON sru.skill_id = skill.id "
+            . "WHERE course.id = $courseId";
+            
+        $result = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($result)) {
+            $list[] = $row;
+        }
+
+        return $list;
+    }
+
+    public function listUsersWhoAchieved($skillId)
+    {
+        $skillId = intval($skillId);
+
+        if ($skillId == 0) {
+            return array();
+        }
+
+        $list = array();
+
+        $sql = "SELECT course.id c_id, course.title c_name, user.user_id, user.lastname, "
+            . "user.firstname, user.username, skill.id skill_id, skill.name skill_name, sru.acquired_skill_at "
+            . "FROM {$this->table_skill_rel_user} AS sru "
+            . "INNER JOIN {$this->table_course} "
+            . "ON sru.course_id = course.id "
+            . "INNER JOIN {$this->table_user} "
+            . "ON sru.user_id = user.user_id "
+            . "INNER JOIN {$this->table} "
+            . "ON sru.skill_id = skill.id "
+            . "WHERE skill.id = $skillId";
+            
+        $result = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($result)) {
+            $list[] = $row;
+        }
+
+        return $list;
+    }
+
 }

@@ -12,6 +12,9 @@ if (file_exists('multiple_url_fix.php')) {
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';
 
+ini_set('memory_limit', -1);
+ini_set('max_execution_time', 0);
+
 /**
  * Class ImportCsv
  */
@@ -623,6 +626,8 @@ class ImportCsv
     /**
      * @param string $file
      * @param bool $moveFile
+     *
+     * @return int
      */
     private function importCalendarStatic($file, $moveFile = true)
     {
@@ -646,7 +651,7 @@ class ImportCsv
                 }
 
                 if (empty($sessionId)) {
-                    $this->logger->addInfo("Session '$sessionId' does not exists.");
+                    $this->logger->addInfo("external_sessionID: ".$row['external_sessionID']." does not exists.");
                 }
                 $teacherId = null;
 
@@ -684,7 +689,7 @@ class ImportCsv
                     $errorFound = true;
 
                     $this->logger->addInfo(
-                        "No teacher found in  '$courseCode' and session: $sessionId"
+                        "No teacher found in course code : '$courseCode' and session: '$sessionId'"
                     );
                 }
 
@@ -756,7 +761,7 @@ class ImportCsv
                     );
                 }
             } else {
-                echo 'There was an error check the logs in archive/import_csv.log ';
+                echo 'There was an error check the logs in '.api_get_path(SYS_ARCHIVE_PATH).'import_csv.log'."\n";
 
                 return 0;
             }

@@ -21,7 +21,6 @@ if (empty($studentId)) {
 
 $tool_name = get_lang('StudentPublications');
 $group_id = api_get_group_id();
-
 $userInfo = api_get_user_info($studentId);
 $courseInfo = api_get_course_info();
 
@@ -135,7 +134,7 @@ $headers = array(
     get_lang('Title'),
     get_lang('HandedOutDate'),
     get_lang('HandOutDateLimit'),
-    get_lang('Score'),
+    get_lang('Feedback'),
     get_lang('Actions')
 );
 foreach ($headers as $header) {
@@ -144,6 +143,7 @@ foreach ($headers as $header) {
 }
 $row++;
 $column = 0;
+$url = api_get_path(WEB_CODE_PATH).'work/';
 
 foreach ($workPerUser as $work) {
     $work = $work['work'];
@@ -152,6 +152,7 @@ foreach ($workPerUser as $work) {
     $workExtraData = get_work_assignment_by_id($workId);
 
     foreach ($work->user_results as $userResult) {
+        $itemId = $userResult['id'];
         $table->setCellContents($row, $column, $work->title.' ['.trim(strip_tags($userResult['title'])).']');
         $table->setCellAttributes($row, $column, array('width' => '300px'));
         $column++;
@@ -160,10 +161,9 @@ foreach ($workPerUser as $work) {
         $dateQualification = !empty($workExtraData['expires_on']) && $workExtraData['expires_on'] != '0000-00-00 00:00:00' ? api_get_local_time($workExtraData['expires_on']) : '-';
         $table->setCellContents($row, $column, $dateQualification);
         $column++;
-        $score = '-';
-        if (!empty($scoreWeight)) {
-            $score = $userResult['qualification'];
-        }
+
+        $score = null;
+        $score = $userResult['qualification'];
         $table->setCellContents($row, $column, $score);
         $column++;
 
@@ -171,14 +171,14 @@ foreach ($workPerUser as $work) {
         $links = null;
 
         // is a text
-        $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$userResult['id'];
-        $links .= Display::url(Display::return_icon('default.png'), $url);
+        $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$itemId;
+        $links .= Display::url(Display::return_icon('default.png', get_lang('View')), $url);
 
         if (!empty($userResult['url'])) {
-            $url = api_get_path(WEB_CODE_PATH).'work/download.php?'.api_get_cidreq().'&id='.$userResult['id'];
+            $url = api_get_path(WEB_CODE_PATH).'work/download.php?'.api_get_cidreq().'&id='.$itemId;
             $links .= Display::url(Display::return_icon('save.png', get_lang('Download')), $url);
         }
-        $url = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq().'&item_id='.$userResult['id'].'&id='.$workId.'&parent_id='.$workId;
+        $url = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq().'&item_id='.$itemId.'&id='.$workId.'&parent_id='.$workId;
         $links .= Display::url(Display::return_icon('rate_work.png', get_lang('Comment')), $url);
 
         $table->setCellContents($row, $column, $links);

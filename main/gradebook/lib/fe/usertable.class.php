@@ -19,7 +19,7 @@ class UserTable extends SortableTable
 	/**
 	 * Constructor
 	 */
-	public function UserTable ($userid, $evals = array(), $links = array(), $addparams = null)
+	public function UserTable($userid, $evals = array(), $links = array(), $addparams = null)
 	{
 		parent :: __construct ('userlist', null, null, 0);
 		$this->userid = $userid;
@@ -41,11 +41,10 @@ class UserTable extends SortableTable
 		}
 	}
 
-
 	/**
 	 * Function used by SortableTable to get total number of items in the table
 	 */
-	function get_total_number_of_items ()
+	function get_total_number_of_items()
 	{
 		return $this->datagen->get_total_items_count();
 	}
@@ -53,7 +52,7 @@ class UserTable extends SortableTable
 	/**
 	 * Function used by SortableTable to generate the data to display
 	 */
-	function get_table_data ($from = 1)
+	public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
 	{
 		$scoredisplay = ScoreDisplay :: instance();
 
@@ -104,14 +103,23 @@ class UserTable extends SortableTable
 				$sortable_data[] = $row;
 			}
 		}
+
 		return $sortable_data;
 	}
 
+	/**
+	 * @param $item
+	 * @return string
+	 */
 	private function build_type_column($item)
 	{
 		return build_type_icon_tag($item->get_icon_name());
 	}
 
+	/**
+	 * @param $item
+	 * @return string
+	 */
 	private function build_name_link($item)
 	{
 		switch ($item->get_item_type()) {

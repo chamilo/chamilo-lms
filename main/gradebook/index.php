@@ -612,11 +612,11 @@ if (isset ($move_form)){
 
 // LOAD DATA & DISPLAY TABLE
 
-$is_platform_admin  = api_is_platform_admin();
-$is_course_admin    = api_is_allowed_to_edit(null, true);
+$is_platform_admin = api_is_platform_admin();
+$is_course_admin = api_is_allowed_to_edit(null, true);
 
 //load data for category, evaluation and links
-if (empty ($_GET['selectcat'])) {
+if (empty($_GET['selectcat'])) {
     $category= 0;
 } else {
     $category= $_GET['selectcat'];
@@ -834,7 +834,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 
                             $gradebook->save($params);
                         }
-                        //Reloading cats
+                        // Reloading cats
                         $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
                     } else {
                         $form_grade->display();
@@ -856,6 +856,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             } else {
                 // This is the father
                 // Create gradebook/add gradebook links.
+
                 DisplayGradebook::display_header_gradebook(
                     $cat,
                     0,

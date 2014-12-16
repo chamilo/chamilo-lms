@@ -91,6 +91,7 @@ function update_resource_from_course_gradebook($link_id, $course_code, $weight)
                 WHERE course_code = "' . $course_code . '" AND id = ' . $link_id;
         Database::query($sql);
     }
+
     return true;
 }
 

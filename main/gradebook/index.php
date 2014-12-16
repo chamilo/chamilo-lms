@@ -744,7 +744,10 @@ if ($category != '0') {
     if ($show_message == '') {
         // Student
         if (!api_is_allowed_to_edit()) {
-            $certificate_html = Category::register_user_certificate($category_id, $stud_id);
+            $certificate_html = Category::register_user_certificate(
+                $category_id,
+                $stud_id
+            );
             if ($certificate_html) {
                 echo $certificate_html;
             }

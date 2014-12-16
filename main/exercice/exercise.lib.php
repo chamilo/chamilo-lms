@@ -1151,6 +1151,14 @@ function getLatestHotPotatoResult(
 /**
  * Gets the exam'data results
  * @todo this function should be moved in a library  + no global calls
+ * @param int $from
+ * @param int $number_of_items
+ * @param int $column
+ * @param string $direction
+ * @param int $exercise_id
+ * @param null $extra_where_conditions
+ * @param bool $get_count
+ * @return array
  */
 function get_exam_results_data(
     $from,
@@ -1166,6 +1174,7 @@ function get_exam_results_data(
 
     $course_id = api_get_course_int_id();
     $course_code = api_get_course_id();
+    $sessionId = api_get_session_id();
 
    	$is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh();
 
@@ -1177,7 +1186,7 @@ function get_exam_results_data(
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
     $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
-    $session_id_and = ' AND te.session_id = '.api_get_session_id().' ';
+    $session_id_and = ' AND te.session_id = '.$sessionId.' ';
 
     $exercise_id = intval($exercise_id);
 
@@ -1194,13 +1203,14 @@ function get_exam_results_data(
 
     // sql for chamilo-type tests for teacher / tutor view
     $sql_inner_join_tbl_track_exercices = " (
-                                            SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
-                                            FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
-                                            ON (ttte.exe_id = tr.exe_id)
-                                            WHERE exe_cours_id = '$course_code' AND
-                                                  exe_exo_id = $exercise_id AND
-                                                  ttte.session_id = ".api_get_session_id()."
-                                            )";
+        SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
+        FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
+        ON (ttte.exe_id = tr.exe_id)
+        WHERE
+            exe_cours_id = '$course_code' AND
+            exe_exo_id = $exercise_id AND
+            ttte.session_id = ".$sessionId."
+    )";
     if ($is_allowedToEdit) {
         //Teacher view
         if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -1437,12 +1447,11 @@ function get_exam_results_data(
                 }
 
                 if ($result_disabled == 0) {
+                    $my_res = $results[$i]['exe_result'];
+                    $my_total = $results[$i]['exe_weighting'];
 
-                    $my_res     = $results[$i]['exe_result'];
-                    $my_total   = $results[$i]['exe_weighting'];
-
-                    $results[$i]['start_date']  =   api_get_local_time($results[$i]['start_date']);
-                    $results[$i]['exe_date']    =   api_get_local_time($results[$i]['exe_date']);
+                    $results[$i]['start_date'] = api_get_local_time($results[$i]['start_date']);
+                    $results[$i]['exe_date'] = api_get_local_time($results[$i]['exe_date']);
 
                     if (!$results[$i]['propagate_neg'] && $my_res < 0) {
                         $my_res = 0;
@@ -1457,19 +1466,22 @@ function get_exam_results_data(
                             }
                         }
                         if ($revised) {
-                            $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
+                            $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".
+                                Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
                             $actions .= '&nbsp;';
                         } else {
-                            $actions .="<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".Display :: return_icon('quiz.gif', get_lang('Qualify'));
+                            $actions .="<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
+                                Display :: return_icon('quiz.gif', get_lang('Qualify'));
                             $actions .='&nbsp;';
                         }
                         $actions .="</a>";
 
                         if ($filter == 2) {
-                            $actions .=' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
+                            $actions .=' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .
+                                Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
                         }
 
-                        //Admin can always delete the attempt
+                        // Admin can always delete the attempt
                         if ($locked == false || api_is_platform_admin()) {
                             $ip = TrackingUserLog::get_ip_from_user_event($results[$i]['exe_user_id'], date('Y-m-d h:i:s'), false);
                             $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank"><img src="'.api_get_path(WEB_CODE_PATH).'img/icons/22/info.png" title="'.$ip.'" /></a>';
@@ -1477,12 +1489,16 @@ function get_exam_results_data(
                             $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '"
                                 onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $results[$i]['username'], $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';
                             $delete_link = utf8_encode($delete_link);
+
+                            if (api_is_drh() && !api_is_platform_admin()) {
+                                $delete_link = null;
+                            }
                             $actions .= $delete_link.'&nbsp;';
                         }
 
                     } else {
-                    	$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=750';
-                    	$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'ajax btn'));
+                    	$attempt_url = api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$results[$i]['exe_id'].'&id_session='.$sessionId.'&height=500&width=750';
+                    	$attempt_link = Display::url(get_lang('Show'), $attempt_url, array('class'=>'ajax btn'));
                     	$actions .= $attempt_link;
                     }
 
@@ -1512,7 +1528,6 @@ function get_exam_results_data(
 
         // Print HotPotatoes test results.
         if (is_array($hpresults)) {
-
             for ($i = 0; $i < sizeof($hpresults); $i++) {
                 $hp_title = GetQuizName($hpresults[$i][3], $documentPath);
                 if ($hp_title == '') {
@@ -1665,11 +1680,11 @@ function convert_score($score, $weight) {
  * Getting all active exercises from a course from a session
  * (if a session_id is provided we will show all the exercises in the course +
  * all exercises in the session)
- * @param   array   course data
- * @param   int     session id
- * @param   boolean Check publications dates
- * @param   string  Search exercise name
- * @param   boolean Search exercises in all sessions
+ * @param   array   $course_info
+ * @param   int     $session_id
+ * @param   boolean $check_publication_dates
+ * @param   string  $search Search exercise name
+ * @param   boolean $search_all_sessions Search exercises in all sessions
  * @param   int     0 = only inactive exercises
  *                  1 = only active exercises,
  *                  2 = all exercises
@@ -1698,16 +1713,20 @@ function get_all_exercises(
     $time_conditions = '';
 
     if ($check_publication_dates) {
-        $time_conditions = " AND ((start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now' )  OR "; //start and end are set
-        $time_conditions .= " (start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time = '0000-00-00 00:00:00') OR "; // only start is set
-        $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time <> '0000-00-00 00:00:00'  AND end_time > '$now') OR   "; // only end is set
-        $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time =  '0000-00-00 00:00:00'))  "; // nothing is set
+        //start and end are set
+        $time_conditions = " AND ((start_time <> '0000-00-00 00:00:00' AND start_time < '$now' AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now' )  OR ";
+        // only start is set
+        $time_conditions .= " (start_time <> '0000-00-00 00:00:00' AND start_time < '$now' AND end_time = '0000-00-00 00:00:00') OR ";
+        // only end is set
+        $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now') OR ";
+        // nothing is set
+        $time_conditions .= " (start_time = '0000-00-00 00:00:00' AND end_time =  '0000-00-00 00:00:00'))  ";
     }
 
     $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
     $needle = !empty($search) ? "%" . $search . "%" : '';
 
-    //Show courses by active status
+    // Show courses by active status
     $active_sql = '';
     if ($active == 3) {
         $active_sql = ' active <> -1 AND';
@@ -2433,7 +2452,6 @@ function delete_chat_exercise_session($exe_id) {
         $_SESSION['current_exercises'][$exe_id] = false;
     }
 }
-
 
 /**
  * Display the exercise results

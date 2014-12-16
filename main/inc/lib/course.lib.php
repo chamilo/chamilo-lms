@@ -1184,7 +1184,7 @@ class CourseManager
                 WHERE
                     user_id = $userId AND
                     relation_type = ".COURSE_RELATION_TYPE_RRHH." AND
-                    course_code = $courseCode ";
+                    course_code = '$courseCode'";
 
         $result = Database::fetch_array(Database::query($sql));
 

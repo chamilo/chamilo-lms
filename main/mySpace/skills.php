@@ -61,6 +61,12 @@ switch ($action) {
 foreach ($tableRows as &$row) {
     $row['completeName'] = api_get_person_name($row['firstname'], $row['lastname']);
     $row['achievedAt'] = api_format_date($row['acquired_skill_at'], DATE_FORMAT_NUMBER);
+
+    if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['c_directory'] . '/course-pic85x85.png')) {
+        $row['courseImage'] = api_get_path(WEB_COURSE_PATH) . $row['c_directory'] . '/course-pic85x85.png';
+    } else {
+        $row['courseImage'] = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true);
+    }
 }
 
 /*

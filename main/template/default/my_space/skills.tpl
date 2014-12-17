@@ -67,7 +67,7 @@
                 <tbody>
                     {% for row in rows %}
                         <tr>
-                            <td>{{ row.c_name }}</td>
+                            <td><img src="{{ row.courseImage }}" alt="{{ row.c_name }}" width="64"> {{ row.c_name }}</td>
                             <td>{{ row.skill_name }}</td>
                             <td>{{ row.completeName }}</td>
                             <td>{{ row.achievedAt }}</td>

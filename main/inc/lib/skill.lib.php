@@ -1038,7 +1038,7 @@ class Skill extends Model
 
         $list = array();
 
-        $sql = "SELECT course.id c_id, course.title c_name, user.user_id, user.lastname, "
+        $sql = "SELECT course.id c_id, course.title c_name, course.directory c_directory, user.user_id, user.lastname, "
             . "user.firstname, user.username, skill.id skill_id, skill.name skill_name, sru.acquired_skill_at "
             . "FROM {$this->table_skill_rel_user} AS sru "
             . "INNER JOIN {$this->table_course} "
@@ -1068,7 +1068,7 @@ class Skill extends Model
 
         $list = array();
 
-        $sql = "SELECT course.id c_id, course.title c_name, user.user_id, user.lastname, "
+        $sql = "SELECT course.id c_id, course.title c_name, course.directory c_directory, user.user_id, user.lastname, "
             . "user.firstname, user.username, skill.id skill_id, skill.name skill_name, sru.acquired_skill_at "
             . "FROM {$this->table_skill_rel_user} AS sru "
             . "INNER JOIN {$this->table_course} "

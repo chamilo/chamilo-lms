@@ -118,16 +118,17 @@ switch ($action) {
         // The validation or display
         if ($form->validate()) {
             //if ($check) {
-                $values = $form->exportValues();
-                $res    = $obj->save($values);
-                if ($res) {
-                    Display::display_confirmation_message(get_lang('ItemAdded'));
-                }
+            $values = $form->exportValues();
+            $res    = $obj->save($values);
+            if ($res) {
+                Display::display_confirmation_message(get_lang('ItemAdded'));
+            }
             //}
             $obj->display();
         } else {
             echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'?type='.$obj->type.'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="'.api_get_self().'?type='.$obj->type.'">'.
+                Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
@@ -142,14 +143,15 @@ switch ($action) {
         // The validation or display
         if ($form->validate()) {
             //if ($check) {
-                $values = $form->exportValues();
-                $res    = $obj->update($values);
-                Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['field_variable']), false);
+            $values = $form->exportValues();
+            $res    = $obj->update($values);
+            Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['field_variable']), false);
             //}
             $obj->display();
         } else {
             echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'?type='.$obj->type.'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="'.api_get_self().'?type='.$obj->type.'">'.
+                Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
@@ -159,10 +161,10 @@ switch ($action) {
     case 'delete':
         // Action handling: delete
         //if ($check) {
-            $res = $obj->delete($_GET['id']);
-            if ($res) {
-                Display::display_confirmation_message(get_lang('ItemDeleted'));
-            }
+        $res = $obj->delete($_GET['id']);
+        if ($res) {
+            Display::display_confirmation_message(get_lang('ItemDeleted'));
+        }
         //}
         $obj->display();
         break;
@@ -212,6 +214,46 @@ CREATE TABLE IF NOT EXISTS lp_field_values(
 );
 
 ALTER TABLE lp_field_values ADD INDEX (lp_id, field_id);
+
+
+
+CREATE TABLE IF NOT EXISTS calendar_event_field(
+    id INT NOT NULL auto_increment,
+    field_type int NOT NULL DEFAULT 1,
+    field_variable	varchar(64) NOT NULL,
+    field_display_text	varchar(64),
+    field_default_value text,
+    field_order int,
+    field_visible tinyint default 0,
+    field_changeable tinyint default 0,
+    field_filter tinyint default 0,
+    tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
+    PRIMARY KEY(id)
+);
+
+DROP TABLE IF EXISTS calendar_event_options;
+CREATE TABLE IF NOT EXISTS calendar_event_options (
+    id int NOT NULL auto_increment,
+    field_id int NOT NULL,
+    option_value text,
+    option_display_text varchar(64),
+    option_order int,
+    tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
+    priority VARCHAR(255),
+    priority_message VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS calendar_event_values;
+CREATE TABLE IF NOT EXISTS calendar_event_values(
+    id bigint NOT NULL auto_increment,
+    calendar_event_id int unsigned NOT NULL,
+    field_id int NOT NULL,
+    field_value	text,
+    comment VARCHAR(100) default '',
+    tms DATETIME NOT NULL default '0000-00-00 00:00:00',
+    PRIMARY KEY(id)
+);
 
 
 

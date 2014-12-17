@@ -28,6 +28,7 @@ class ImportCsv
         'session' => 'external_session_id',
         'course' => 'external_course_id',
         'user' => 'external_user_id',
+        'calendar_event' => 'external_calendar_event_id'
     );
     public $defaultAdminId = 1;
     public $defaultSessionVisibility = 1;
@@ -199,18 +200,28 @@ class ImportCsv
             'External user id',
             null
         );
+
         // Create course extra field: extra_external_course_id
         CourseManager::create_course_extra_field(
             $this->extraFieldIdNameList['course'],
             1,
             'External course id'
         );
+
         // Create session extra field extra_external_session_id
         SessionManager::create_session_extra_field(
             $this->extraFieldIdNameList['session'],
             1,
             'External session id'
         );
+
+        // Create calendar_event extra field extra_external_session_id
+        $extraField = new ExtraField('calendar_event');
+        $extraField->save(array(
+            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+            'field_variable' => $this->extraFieldIdNameList['calendar_event'],
+            'field_display_text' => 'External calendar event id'
+        ));
     }
 
     /**
@@ -625,7 +636,7 @@ class ImportCsv
 
     /**
      * @param string $file
-     * @param bool $moveFile
+     * @param bool   $moveFile
      *
      * @return int
      */
@@ -719,7 +730,8 @@ class ImportCsv
                         'title' => $title,
                         'sender_id' => $teacherId,
                         'course_id' => $courseInfo['real_id'],
-                        'session_id' => $sessionId
+                        'session_id' => $sessionId,
+                        $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID']
                     );
                 }
             }
@@ -732,38 +744,87 @@ class ImportCsv
                 return 0;
             }
 
-            if ($errorFound == false) {
+            $this->logger->addInfo(
+                "Ready to insert events"
+            );
+
+            $content = null;
+            $agenda = new Agenda();
+
+            $extraFieldValue = new ExtraFieldValue('calendar_event');
+            $extraFieldName = $this->extraFieldIdNameList['calendar_event'];
+            $externalEventId = null;
+
+            $extraField = new ExtraField('calendar_event');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
+
+            if (empty($extraFieldInfo)) {
                 $this->logger->addInfo(
-                    "Ready to insert events"
+                    "No calendar event extra field created: $extraFieldName"
                 );
 
-                $content = null;
-                $agenda = new Agenda();
-
-                foreach ($eventsToCreate as $event) {
-                    $courseInfo = api_get_course_info_by_id($event['course_id']);
-                    $agenda->set_course($courseInfo);
-                    $agenda->setType('course');
-                    $agenda->setSessionId($event['session_id']);
-                    $agenda->setSenderId($event['sender_id']);
-                    $eventId = $agenda->add_event(
-                        $event['start'],
-                        $event['end'],
-                        false,
-                        $event['title'],
-                        $content,
-                        array('everyone'), // send to
-                        false //$addAsAnnouncement = false
-                    );
-
-                    $this->logger->addInfo(
-                        "Event added: #$eventId"
-                    );
-                }
-            } else {
-                echo 'There was an error check the logs in '.api_get_path(SYS_ARCHIVE_PATH).'import_csv.log'."\n";
-
                 return 0;
+            }
+
+            foreach ($eventsToCreate as $event) {
+                if (!isset($event[$extraFieldName])) {
+                    $this->logger->addInfo(
+                        "No external_calendar_itemID found. Skipping ..."
+                    );
+                    continue;
+                } else {
+                    $externalEventId = $event[$extraFieldName];
+                    $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                        $extraFieldName,
+                        $externalEventId
+                    );
+
+                    if (!empty($item) || empty($externalEventId)) {
+                        $this->logger->addInfo(
+                            "Event #$externalEventId was already added . Skipping ..."
+                        );
+                        continue;
+                    }
+                }
+
+                $courseInfo = api_get_course_info_by_id($event['course_id']);
+                $agenda->set_course($courseInfo);
+                $agenda->setType('course');
+                $agenda->setSessionId($event['session_id']);
+                $agenda->setSenderId($event['sender_id']);
+
+                if (empty($courseInfo)) {
+                    $this->logger->addInfo(
+                        "No course found for added: #".$event['course_id']." Skipping ..."
+                    );
+                    continue;
+                }
+
+                if (empty($event['sender_id'])) {
+                    $this->logger->addInfo(
+                        "No sender found: #".$event['sender_id']." Skipping ..."
+                    );
+                    continue;
+                }
+
+                $eventId = $agenda->add_event(
+                    $event['start'],
+                    $event['end'],
+                    false,
+                    $event['title'],
+                    $content,
+                    array('everyone'), // send to
+                    false //$addAsAnnouncement = false
+                );
+
+                $extraFieldValue->save(array(
+                    'field_value' => $externalEventId,
+                    'field_id' => $extraFieldInfo['id']
+                ));
+
+                $this->logger->addInfo(
+                    "Event added: #$eventId"
+                );
             }
         }
 
@@ -1236,6 +1297,8 @@ $logger->pushHandler(new BufferHandler($stream, 0, $minLevel));
 $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
 $cronImportCSVConditions = isset($_configuration['cron_import_csv_conditions']) ? $_configuration['cron_import_csv_conditions'] : null;
+
+echo 'To check error in '.api_get_path(SYS_ARCHIVE_PATH).'import_csv.log'."\n";
 
 $import = new ImportCsv($logger, $cronImportCSVConditions);
 

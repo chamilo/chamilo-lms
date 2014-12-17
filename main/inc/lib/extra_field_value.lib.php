@@ -18,7 +18,8 @@ class ExtraFieldValue extends Model
 
     /**
      * Formats the necessary elements for the given datatype
-     * @param string The type of data to which this extra field applies (user, course, session, ...)
+     * @param string $type The type of data to which this extra field
+     * applies (user, course, session, ...)
      * @return void (or false if unmanaged datatype)
      * @assert (-1) === false
      */
@@ -29,6 +30,12 @@ class ExtraFieldValue extends Model
         $this->handler_id = $extra_field->handler_id;
 
         switch ($this->type) {
+            case 'calendar_event':
+                $this->table = Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_FIELD);
+                $this->table_field_values = Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_FIELD);
+                $this->table_field_values  = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+                $this->author_id = 'user_id';
+                break;
             case 'course':
                 $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
@@ -168,8 +175,8 @@ class ExtraFieldValue extends Model
 
     /**
      * Save values in the *_field_values table
-     * @param array Structured array with the values to save
-     * @param boolean Whether to show the insert query (passed to the parent save() method)
+     * @param array $params Structured array with the values to save
+     * @param boolean $show_query Whether to show the insert query (passed to the parent save() method)
      * @result mixed The result sent from the parent method
      * @assert (array()) === false
      */
@@ -198,22 +205,22 @@ class ExtraFieldValue extends Model
                 case ExtraField::FIELD_TYPE_SELECT:
                 case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     //$field_options = $session_field_option->get_field_options_by_field($params['field_id']);
-					//$params['field_value'] = split(';', $value_to_insert);
-               /*
-                   if ($field_options) {
-                       $check = false;
-                       foreach ($field_options as $option) {
-                           if (in_array($option['option_value'], $values)) {
-                               $check = true;
-                               break;
+                    //$params['field_value'] = split(';', $value_to_insert);
+                    /*
+                        if ($field_options) {
+                            $check = false;
+                            foreach ($field_options as $option) {
+                                if (in_array($option['option_value'], $values)) {
+                                    $check = true;
+                                    break;
+                                }
                            }
-                      }
-                      if (!$check) {
-                          return false; //option value not found
-                      }
-                  } else {
-                      return false; //enumerated type but no option found
-                  }*/
+                           if (!$check) {
+                               return false; //option value not found
+                           }
+                       } else {
+                           return false; //enumerated type but no option found
+                       }*/
                     break;
                 case ExtraField::FIELD_TYPE_TEXT:
                 case ExtraField::FIELD_TYPE_TEXTAREA:
@@ -222,7 +229,7 @@ class ExtraFieldValue extends Model
                     if (is_array($value)) {
                         if (isset($value['extra_'.$extra_field_info['field_variable']]) &&
                             isset($value['extra_'.$extra_field_info['field_variable'].'_second'])
-                             ) {
+                        ) {
                             $value_to_insert = $value['extra_'.$extra_field_info['field_variable']].'::'.$value['extra_'.$extra_field_info['field_variable'].'_second'];
                         } else {
                             $value_to_insert = null;

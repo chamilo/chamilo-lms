@@ -335,12 +335,24 @@ class SkillRelGradebook extends Model
  */
 class SkillRelUser extends Model
 {
-    public $columns = array('id', 'course_id', 'session_id', 'user_id', 'skill_id', 'acquired_skill_at', 'assigned_by');
+    public $columns = array('id', 'user_id', 'skill_id', 'acquired_skill_at', 'assigned_by');
 
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
         //$this->table_user   = Database::get_main_table(TABLE_MAIN_USER);
+
+        if (!class_exists('AdvancedSkills')) {
+            require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
+            require_once api_get_path(PLUGIN_PATH) . 'advancedskills/src/AdvancedSkills.php';
+        }
+
+        if (class_exists('AdvancedSkills')) {
+            if (AdvancedSkills::extraColumnsExists()) {
+                $this->columns[] = 'course_id';
+                $this->columns[] = 'session_id';
+            }
+        }
     }
 
     public function get_user_by_skills($skill_list)
@@ -604,21 +616,35 @@ class Skill extends Model
 
     public function add_skill_to_user($user_id, $gradebook_id, $courseId = 0, $sessionId = 0)
     {
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
         $skill_gradebook = new SkillRelGradebook();
         $skill_rel_user  = new SkillRelUser();
 
         $skill_gradebooks = $skill_gradebook->get_all(array('where' => array('gradebook_id = ?' => $gradebook_id)));
         if (!empty($skill_gradebooks)) {
+            if (!class_exists('AdvancedSkills')) {
+                require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
+                require_once api_get_path(PLUGIN_PATH) . 'advancedskills/src/AdvancedSkills.php';
+            }
+
             foreach ($skill_gradebooks as $skill_gradebook) {
-                $user_has_skill = $this->user_has_skill($user_id, $skill_gradebook['skill_id']);
+                $user_has_skill = $this->user_has_skill($user_id, $skill_gradebook['skill_id'], $courseId, $sessionId);
                 if (!$user_has_skill) {
                     $params = array(
-                        'course_id' => intval($courseId),
-                        'session_id' => intval($sessionId),
                         'user_id'           => $user_id,
                         'skill_id'          => $skill_gradebook['skill_id'],
                         'acquired_skill_at' => api_get_utc_datetime(),
                     );
+
+                    if (class_exists('AdvancedSkills')) {
+                        if (AdvancedSkills::extraColumnsExists()) {
+                            $params['course_id'] = $courseId;
+                            $params['session_id'] = $sessionId;
+                        }
+                    }
+
                     $skill_rel_user->save($params);
                 }
             }
@@ -980,11 +1006,34 @@ class Skill extends Model
      *
      * @return bool
      */
-    public function user_has_skill($user_id, $skill_id)
-    {
-        $skills = $this->get_user_skills($user_id);
-        foreach ($skills as $my_skill_id) {
-            if ($my_skill_id == $skill_id) {
+    public function user_has_skill($user_id, $skill_id, $courseId = 0, $sessionId = 0)
+    {        
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $whereConditions = array(
+            'user_id = ? ' => $user_id,
+            'AND skill_id = ? ' => $skill_id
+        );
+
+        if (!class_exists('AdvancedSkills')) {
+            require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
+            require_once api_get_path(PLUGIN_PATH) . 'advancedskills/src/AdvancedSkills.php';
+        }
+
+        if (class_exists('AdvancedSkills')) {
+            if (AdvancedSkills::extraColumnsExists()) {
+                $whereConditions['AND course_id = ? '] = $courseId;
+                $whereConditions['AND session_id = ? '] = $sessionId;
+            }
+        }
+
+        $result = Database::select('COUNT(1) AS qty', $this->table_skill_rel_user, array(
+            'where' => $whereConditions
+        ), 'first');
+
+        if ($result != false) {
+            if ($result['qty'] > 0) {
                 return true;
             }
         }

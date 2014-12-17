@@ -108,4 +108,23 @@ class AdvancedSkills extends Plugin
         Database::query($sql);
     }
 
+    /**
+     * 
+     * @return boolean
+     */
+    public static function extraColumnsExists()
+    {
+        $skillUserTable = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
+
+        $sql = "SHOW COLUMNS FROM $skillUserTable";
+
+        $result = Database::query($sql);
+
+        while ($resultData = Database::fetch_assoc($result)) {
+            if ($resultData['Field'] == 'course_id' || $resultData['Field'] == 'session_id') {
+                return true;
+            }
+        }
+    }
+
 }

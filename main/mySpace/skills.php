@@ -74,6 +74,8 @@ foreach ($tableRows as &$row) {
  */
 $tpl = new Template($toolName);
 
+$tpl->assign('action', $action);
+
 $tpl->assign('courses', $courses);
 $tpl->assign('skills', $skills);
 

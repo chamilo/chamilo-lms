@@ -58,19 +58,33 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>{{ 'Course' | get_lang }}</th>
-                        <th>{{ 'Skill' | get_lang }}</th>
-                        <th>{{ 'Student' | get_lang }}</th>
-                        <th>{{ 'Date' | get_lang }}</th>
+                        {% if action == 'filterByCourse' %}
+                            <th>{{ 'Course' | get_lang }}</th>
+                            <th>{{ 'Skill' | get_lang }}</th>
+                            <th>{{ 'Student' | get_lang }}</th>
+                            <th>{{ 'Date' | get_lang }}</th>
+                            {% elseif action == 'filterBySkill' %}
+                            <th>{{ 'Skill' | get_lang }}</th>
+                            <th>{{ 'Student' | get_lang }}</th>
+                            <th>{{ 'Date' | get_lang }}</th>
+                            <th>{{ 'Course' | get_lang }}</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for row in rows %}
                         <tr>
-                            <td><img src="{{ row.courseImage }}" alt="{{ row.c_name }}" width="64"> {{ row.c_name }}</td>
-                            <td>{{ row.skill_name }}</td>
-                            <td>{{ row.completeName }}</td>
-                            <td>{{ row.achievedAt }}</td>
+                            {% if action == 'filterByCourse' %}
+                                <td><img src="{{ row.courseImage }}" alt="{{ row.c_name }}" width="64"> {{ row.c_name }}</td>
+                                <td>{{ row.skill_name }}</td>
+                                <td>{{ row.completeName }}</td>
+                                <td>{{ row.achievedAt }}</td>
+                            {% elseif action == 'filterBySkill' %}
+                                <td>{{ row.skill_name }}</td>
+                                <td>{{ row.completeName }}</td>
+                                <td>{{ row.achievedAt }}</td>
+                                <td><img src="{{ row.courseImage }}" alt="{{ row.c_name }}" width="64"> {{ row.c_name }}</td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -209,6 +209,7 @@ CREATE TABLE IF NOT EXISTS lp_field_values(
     field_id int NOT NULL,
     field_value	text,
     comment VARCHAR(100) default '',
+    user_id int,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -248,6 +249,7 @@ DROP TABLE IF EXISTS calendar_event_values;
 CREATE TABLE IF NOT EXISTS calendar_event_values(
     id bigint NOT NULL auto_increment,
     calendar_event_id int unsigned NOT NULL,
+    user_id int,
     field_id int NOT NULL,
     field_value	text,
     comment VARCHAR(100) default '',

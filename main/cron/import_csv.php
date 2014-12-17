@@ -817,14 +817,22 @@ class ImportCsv
                     false //$addAsAnnouncement = false
                 );
 
-                $extraFieldValue->save(array(
-                    'field_value' => $externalEventId,
-                    'field_id' => $extraFieldInfo['id']
-                ));
-
-                $this->logger->addInfo(
-                    "Event added: #$eventId"
-                );
+                if (!empty($eventId)) {
+                    $extraFieldValue->save(
+                        array(
+                            'field_value' => $externalEventId,
+                            'field_id' => $extraFieldInfo['id'],
+                            'calendar_event_id' => $eventId
+                        )
+                    );
+                    $this->logger->addInfo(
+                        "Event added: #$eventId"
+                    );
+                } else {
+                    $this->logger->addInfo(
+                        "Error while creating event."
+                    );
+                }
             }
         }
 
@@ -1298,7 +1306,7 @@ $logger->pushHandler(new RotatingFileHandler('import_csv', 5, $minLevel));
 
 $cronImportCSVConditions = isset($_configuration['cron_import_csv_conditions']) ? $_configuration['cron_import_csv_conditions'] : null;
 
-echo 'To check error in '.api_get_path(SYS_ARCHIVE_PATH).'import_csv.log'."\n";
+echo 'See the error log here: '.api_get_path(SYS_ARCHIVE_PATH).'import_csv.log'."\n";
 
 $import = new ImportCsv($logger, $cronImportCSVConditions);
 

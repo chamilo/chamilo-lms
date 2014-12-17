@@ -120,7 +120,7 @@ $_configuration[1]['hosting_limit_teachers'] = 0;
 $_configuration[1]['hosting_limit_courses'] = 0;
 // Set a maximum number of sessions. Default (0) = no limit
 $_configuration[1]['hosting_limit_sessions'] = 0;
-// Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB).
+// Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB, etc)
 // Default (0) = no limit
 $_configuration[1]['hosting_limit_disk_space'] = 0;
 // Set a maximum number of usable courses. Default (0) = no limit. Should always be lower than the hosting_limit_courses.
@@ -129,6 +129,8 @@ $_configuration[1]['hosting_limit_disk_space'] = 0;
 $_configuration[1]['hosting_limit_active_courses'] = 0;
 // Email to warn if limit was reached.
 //$_configuration[1]['hosting_contact_mail'] = 'example@example.org';
+// Portal size limit in MB (set to 1024 for 1GB, 5120 for 5GB, etc).
+$_configuration['hosting_total_size_limit'] = 0;
 
 /**
  * Content Delivery Network (CDN) settings. Only use if you need a separate

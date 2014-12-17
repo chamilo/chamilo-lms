@@ -17,7 +17,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
 $this_section = SECTION_TRACKING;
 
-$nameTools = get_lang('MyProgress');
+$tool_name = get_lang('MyProgress');
 
 api_block_anonymous_users();
 
@@ -49,6 +49,9 @@ require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 $user_id = api_get_user_id();
 $course_user_list = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
+
+$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+$courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
 
 if (!empty($course_user_list)) {
     $items = MySpace::get_connections_from_course_list($user_id, $course_user_list);
@@ -82,8 +85,10 @@ if (!empty($course_user_list)) {
     }
 }
 
-$content .= Tracking::show_user_progress(api_get_user_id(), $_GET['session_id']);
-$content .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
+$content = '';
+
+$content .= Tracking::show_user_progress(api_get_user_id(), $sessionId);
+$content .= Tracking::show_course_detail(api_get_user_id(), $courseCode, $sessionId);
 
 if (!empty($dates)) {
     if (!empty($content)) {
@@ -103,6 +108,8 @@ if (!empty($dates)) {
     </ul>
     </div></div>';
 }
+
+$message = null;
 
 if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');

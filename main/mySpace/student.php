@@ -14,6 +14,8 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
+$nameTools = get_lang('Students');
+
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
@@ -178,7 +180,7 @@ if ($export_csv) {
 }
 
 $sort_by_first_name = api_sort_by_first_name();
-$actions .= '<div class="actions">';
+$actions = '<div class="actions">';
 
 if (api_is_drh()) {
     $menu_items = array(

@@ -1028,6 +1028,11 @@ class Skill extends Model
         return false;
     }
 
+    /**
+     * Get the achieved skills by course
+     * @param int $courseId The course id
+     * @return array The skills list
+     */
     public function listAchievedByCourse($courseId)
     {
         $courseId = intval($courseId);
@@ -1058,6 +1063,11 @@ class Skill extends Model
         return $list;
     }
 
+    /**
+     * Get the users list who achieved a skill
+     * @param int $skillId The skill id
+     * @return array The users list
+     */
     public function listUsersWhoAchieved($skillId)
     {
         $skillId = intval($skillId);

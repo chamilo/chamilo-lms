@@ -184,19 +184,19 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      * -lms_view_id
      * -lms_user_id
      */
-    $mytotal              = $mylp->get_total_items_count_without_chapters();
-    $mycomplete           = $mylp->get_complete_items_count();
-    $myprogress_mode      = $mylp->get_progress_bar_mode();
-    $myprogress_mode      = ($myprogress_mode == '' ? '%' : $myprogress_mode);
-    $mynext               = $mylp->get_next_item_id();
-    $myprevious           = $mylp->get_previous_item_id();
-    $myitemtype           = $mylpi->get_type();
-    $mylesson_mode        = $mylpi->get_lesson_mode();
-    $mycredit             = $mylpi->get_credit();
-    $mylaunch_data        = $mylpi->get_launch_data();
+    $mytotal = $mylp->get_total_items_count_without_chapters();
+    $mycomplete = $mylp->get_complete_items_count();
+    $myprogress_mode = $mylp->get_progress_bar_mode();
+    $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
+    $mynext = $mylp->get_next_item_id();
+    $myprevious = $mylp->get_previous_item_id();
+    $myitemtype = $mylpi->get_type();
+    $mylesson_mode = $mylpi->get_lesson_mode();
+    $mycredit = $mylpi->get_credit();
+    $mylaunch_data = $mylpi->get_launch_data();
     $myinteractions_count = $mylpi->get_interactions_count();
-    $myobjectives_count   = $mylpi->get_objectives_count();
-    $mycore_exit          = $mylpi->get_core_exit();
+    $myobjectives_count = $mylpi->get_objectives_count();
+    $mycore_exit = $mylpi->get_core_exit();
 
     $return .=
         //"saved_lesson_status='not attempted';" .
@@ -237,4 +237,10 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     return $return;
 }
 
-echo switch_item_details($_REQUEST['lid'], $_REQUEST['uid'], $_REQUEST['vid'], $_REQUEST['iid'], $_REQUEST['next']);
+echo switch_item_details(
+    $_REQUEST['lid'],
+    $_REQUEST['uid'],
+    $_REQUEST['vid'],
+    $_REQUEST['iid'],
+    $_REQUEST['next']
+);

@@ -74,26 +74,29 @@ class learnpath
     public $course_info = array();
 
     /**
-     * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
+     * Constructor.
+     * Needs a database handler, a course code and a learnpath id from the database.
      * Also builds the list of items into $this->items.
-     * @param	string		$course Course code
-     * @param	integer		$lp_id
-     * @param	integer		$user_id
-     * @return	boolean		True on success, false on error
+     * @param	string	$course Course code
+     * @param	integer	$lp_id
+     * @param	integer	$user_id
+     * @return	boolean	True on success, false on error
      */
     public function __construct($course, $lp_id, $user_id)
     {
         $this->encoding = api_get_system_encoding();
-        if ($this->debug > 0) { error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')', 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')', 0);
+        }
         if (empty($course)) {
             $this->error = 'Course code is empty';
             return false;
         } else {
             $course_info = api_get_course_info($course);
             if (!empty($course_info)) {
-                $this->cc 			= $course_info['code'];
-                $this->course_info  = $course_info;
-                $course_id 	        = $course_info['real_id'];
+                $this->cc = $course_info['code'];
+                $this->course_info = $course_info;
+                $course_id = $course_info['real_id'];
             } else {
                 $this->error = 'Course code does not exist in database.';
                 return false;
@@ -110,31 +113,34 @@ class learnpath
             // TODO: Make it flexible to use any course_code (still using env course code here).
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
             $lp_id = intval($lp_id);
-            $sql = "SELECT * FROM $lp_table WHERE id = '$lp_id' AND c_id = $course_id";
-            if ($this->debug > 2) { error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0); }
+            $sql = "SELECT * FROM $lp_table
+                    WHERE id = '$lp_id' AND c_id = $course_id";
+            if ($this->debug > 2) {
+                error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0);
+            }
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
-                $this->lp_id            = $lp_id;
-                $row                    = Database::fetch_array($res);
-                $this->type             = $row['lp_type'];
-                $this->name             = stripslashes($row['name']);
-                $this->proximity        = $row['content_local'];
-                $this->theme            = $row['theme'];
-                $this->maker            = $row['content_maker'];
-                $this->prevent_reinit   = $row['prevent_reinit'];
+                $this->lp_id = $lp_id;
+                $row = Database::fetch_array($res);
+                $this->type = $row['lp_type'];
+                $this->name = stripslashes($row['name']);
+                $this->proximity = $row['content_local'];
+                $this->theme = $row['theme'];
+                $this->maker = $row['content_maker'];
+                $this->prevent_reinit = $row['prevent_reinit'];
                 $this->seriousgame_mode = $row['seriousgame_mode'];
-                $this->license          = $row['content_license'];
-                $this->scorm_debug      = $row['debug'];
-                $this->js_lib           = $row['js_lib'];
-                $this->path             = $row['path'];
-                $this->preview_image    = $row['preview_image'];
-                $this->author           = $row['author'];
-                $this->hide_toc_frame   = $row['hide_toc_frame'];
-                $this->lp_session_id    = $row['session_id'];
-                $this->use_max_score    = $row['use_max_score'];
-                $this->created_on       = $row['created_on'];
-                $this->modified_on      = $row['modified_on'];
-                $this->ref              = $row['ref'];
+                $this->license = $row['content_license'];
+                $this->scorm_debug = $row['debug'];
+                $this->js_lib = $row['js_lib'];
+                $this->path = $row['path'];
+                $this->preview_image = $row['preview_image'];
+                $this->author = $row['author'];
+                $this->hide_toc_frame = $row['hide_toc_frame'];
+                $this->lp_session_id = $row['session_id'];
+                $this->use_max_score = $row['use_max_score'];
+                $this->created_on = $row['created_on'];
+                $this->modified_on = $row['modified_on'];
+                $this->ref = $row['ref'];
 
                 if ($row['publicated_on'] != '0000-00-00 00:00:00') {
                     $this->publicated_on   = $row['publicated_on'];
@@ -173,7 +179,6 @@ class learnpath
         }
 
         // End of variables checking.
-
         $session_id = api_get_session_id();
         //  Get the session condition for learning paths of the base + session.
         $session = api_get_session_condition($session_id);
@@ -194,11 +199,11 @@ class learnpath
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Found previous view', 0);
             }
             $row = Database :: fetch_array($res);
-            $this->attempt              = $row['view_count'];
-            $this->lp_view_id           = $row['id'];
-            $this->last_item_seen       = $row['last_item'];
-            $this->progress_db          = $row['progress'];
-            $this->lp_view_session_id   = $row['session_id'];
+            $this->attempt = $row['view_count'];
+            $this->lp_view_id = $row['id'];
+            $this->last_item_seen = $row['last_item'];
+            $this->progress_db = $row['progress'];
+            $this->lp_view_session_id = $row['session_id'];
         } else {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
@@ -358,7 +363,11 @@ class learnpath
             }
         }
 
-        $this->ordered_items = self::get_flat_ordered_items_list($this->get_id(), 0, $course_id);
+        $this->ordered_items = self::get_flat_ordered_items_list(
+            $this->get_id(),
+            0,
+            $course_id
+        );
         $this->max_ordered_items = 0;
         foreach ($this->ordered_items as $index => $dummy) {
             if ($index > $this->max_ordered_items && !empty($dummy)) {
@@ -866,12 +875,12 @@ class learnpath
                         //if($this->items[$child]->status_is(array('completed','passed','succeeded')))
                         // Trying completing parents of failed and browsed items as well.
                         if ($this->items[$child]->status_is(array(
-                                'completed',
-                                'passed',
-                                'succeeded',
-                                'browsed',
-                                'failed'
-                            ))) {
+                            'completed',
+                            'passed',
+                            'succeeded',
+                            'browsed',
+                            'failed'
+                        ))) {
                             // Keep completion status to true.
                         } else {
                             if ($this->debug > 2) {
@@ -2001,15 +2010,15 @@ class learnpath
         $extension = $file_info['extension']; // Extension only.
 
         if (!empty($_POST['ppt2lp']) && !in_array(strtolower($extension), array(
-                    'dll',
-                    'exe'
-                ))) {
+                'dll',
+                'exe'
+            ))) {
             return 'oogie';
         }
         if (!empty($_POST['woogie']) && !in_array(strtolower($extension), array(
-                    'dll',
-                    'exe'
-                ))) {
+                'dll',
+                'exe'
+            ))) {
             return 'woogie';
         }
 
@@ -6044,16 +6053,16 @@ class learnpath
                         $path_parts   = pathinfo($path_file);
                         // TODO: Correct the following naive comparisons, also, htm extension is missing.
                         if (in_array($path_parts['extension'], array(
-                                'html',
-                                'txt',
-                                'png',
-                                'jpg',
-                                'JPG',
-                                'jpeg',
-                                'JPEG',
-                                'gif',
-                                'swf'
-                            ))) {
+                            'html',
+                            'txt',
+                            'png',
+                            'jpg',
+                            'JPG',
+                            'jpeg',
+                            'JPEG',
+                            'gif',
+                            'swf'
+                        ))) {
                             $return .= $this->display_document($row['path'], true, true);
                         }
                         break;
@@ -8559,7 +8568,7 @@ class learnpath
                                 <img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" />
                             </a>
                             <a href="' . api_get_self() . '?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' .
-                            Security :: remove_XSS($forum['forum_title']) . '</a>';
+                    Security :: remove_XSS($forum['forum_title']) . '</a>';
 
                 $return .= '</li>';
 
@@ -8573,7 +8582,7 @@ class learnpath
                         $return .= ' </a>';
                         $return .= Display::return_icon('forumthread.png', get_lang('Thread'), array(), ICON_SIZE_TINY);
                         $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_THREAD . '&amp;thread_id=' . $thread['thread_id'] . '&amp;lp_id=' . $this->lp_id . '">' .
-                                    Security :: remove_XSS($thread['thread_title']) . '</a>';
+                            Security :: remove_XSS($thread['thread_title']) . '</a>';
                         $return .= '</li>';
                     }
                 }

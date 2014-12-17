@@ -24,7 +24,6 @@
  * @todo remove code duplication
  */
 
-
 use \ChamiloSession as Session;
 
 /**
@@ -33,9 +32,9 @@ use \ChamiloSession as Session;
  * @return boolean	True if item was deleted, false if not found or error
  */
 function deleteitem($id) {
-    
+
     $course_id = api_get_course_int_id();
-    
+
     $tbl_learnpath_item     = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $tbl_learnpath_chapter  = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
     // Get the display order for this item before it is deleted.
@@ -54,10 +53,12 @@ function deleteitem($id) {
         return false;
     }
     // Update the other items and chapters.
-    $sql = "UPDATE $tbl_learnpath_item SET display_order = display_order-1 WHERE c_id = $course_id AND display_order > $display_order AND parent_item_id = $parent_item_id";
-    $result = Database::query($sql);
-    $sql = "UPDATE $tbl_learnpath_chapter SET display_order = display_order-1 WHERE c_id = $course_id AND display_order > $display_order AND parent_item_id = $parent_item_id";
-    $result = Database::query($sql);
+    $sql = "UPDATE $tbl_learnpath_item SET display_order = display_order-1
+            WHERE c_id = $course_id AND display_order > $display_order AND parent_item_id = $parent_item_id";
+    Database::query($sql);
+    $sql = "UPDATE $tbl_learnpath_chapter SET display_order = display_order-1
+            WHERE c_id = $course_id AND display_order > $display_order AND parent_item_id = $parent_item_id";
+    Database::query($sql);
 
     return true;
 }
@@ -87,7 +88,7 @@ function deletemodule($parent_item_id) {
     }
 
     // Get this chapter's display order.
-    $sql = "SELECT display_order, parent_item_id FROM $tbl_learnpath_chapter 
+    $sql = "SELECT display_order, parent_item_id FROM $tbl_learnpath_chapter
     		WHERE c_id = $course_id AND id=$parent_item_id and lp_id=$learnpath_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) == 0) {
@@ -124,7 +125,7 @@ function deletepath($path_id) {
     $tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-    
+
     $course_id = api_get_course_int_id();
 
     $sql = "DELETE FROM $tbl_learnpath_main WHERE c_id = $course_id AND lp_id='$path_id'";
@@ -151,7 +152,7 @@ function deletepath($path_id) {
 function moveitem($direction, $id, $moduleid, $type = 'item') {
     global $learnpath_id;
     $course_id = api_get_course_int_id();
-    
+
     $tbl_learnpath_item     = Database::get_course_table(TABLE_LEARNPATH_ITEM);
     $tbl_learnpath_chapter  = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
 
@@ -221,7 +222,7 @@ function moveitem($direction, $id, $moduleid, $type = 'item') {
 function movemodule($direction, $id) {
     global $learnpath_id;
     $course_id = api_get_course_int_id();
-    
+
     $tbl_learnpath_chapter  = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
     if ($direction == 'up') {
         $sortDirection = 'DESC';
@@ -276,7 +277,7 @@ function movemodule($direction, $id) {
 function insert_item($type = 'item', $name, $chapter_description = '', $parent_id = 0, $learnpath_id = 0, $params = null) {
     $tbl_learnpath_chapter	= Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
     $tbl_learnpath_item 	= Database :: get_course_table(TABLE_LEARNPATH_ITEM);
-    
+
     $course_id = api_get_course_int_id();
 
     // Getting the last order number from the chapters table, in this learnpath, for the parent chapter given.
@@ -295,10 +296,10 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
     $row = Database::fetch_array($result);
     $last_item_order = $row['display_order'];
     $new_order = max($last_chapter_order, $last_item_order) + 1;
-	
+
     if ($type === 'chapter') {
         $sql = "INSERT INTO $tbl_learnpath_chapter (c_id, lp_id, chapter_name, chapter_description, display_order)
-				VALUES ( $course_id, 
+				VALUES ( $course_id,
 						'".domesticate($learnpath_id)."',
                         '".domesticate(htmlspecialchars($name))."',
                         '".domesticate(htmlspecialchars($chapter_description))."',
@@ -309,7 +310,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
         }
         $id = Database :: insert_id();
     } elseif ($type === 'item') {
-        $sql = "INSERT INTO $tbl_learnpath_item (c_id, parent_item_id, item_type, display_order) VALUES 
+        $sql = "INSERT INTO $tbl_learnpath_item (c_id, parent_item_id, item_type, display_order) VALUES
         		($course_id, '".domesticate($parent_id)."','".domesticate(htmlspecialchars($type))."', $new_order )";
         $result = Database::query($sql);
         if ($result === false) {
@@ -325,7 +326,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
  * @return array List of learnpath chapter titles
  */
 function array_learnpath_categories() {
-    $course_id = api_get_course_int_id();    
+    $course_id = api_get_course_int_id();
     global $learnpath_id;
     $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
@@ -645,7 +646,7 @@ function learnpath_items($itemid) {
     global $xml_output;
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $course_id = api_get_course_int_id();
-    
+
 
     $sql_items = "SELECT parent_item_id FROM $tbl_lp_item WHERE c_id = $course_id AND id='$itemid'";
     $moduleid_sql = Database::query($sql_items);
@@ -668,10 +669,10 @@ function learnpath_items($itemid) {
  * @return array		Table containing the chapters
  */
 function learnpath_chapters($learnpath_id) {
-    global $xml_output, $learnpath_id;    
+    global $xml_output, $learnpath_id;
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     $course_id = api_get_course_int_id();
-    
+
 
     $sql_items = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id='$learnpath_id' AND item_type='dokeos_chapter' ORDER BY display_order ASC";
     //$sql_items = "SELECT * FROM $tbl_learnpath_chapter WHERE lp_id='$learnpath_id' ORDER BY display_order ASC";
@@ -723,7 +724,7 @@ function prereqcheck($id_in_path) {
     $tbl_learnpath_user = Database :: get_course_table(TABLE_LEARNPATH_USER);
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-    
+
     $course_id = api_get_course_int_id();
 
     // 2. Initialise return value.
@@ -848,10 +849,10 @@ function get_learnpath_tree($learnpath_id) {
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
     $tree = array();
-    $chapters = array();    
+    $chapters = array();
     $all_items_by_chapter = array();
     $course_id = api_get_course_int_id();
-    
+
     $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = ".$learnpath_id." AND item_type='dokeos_chapter' ORDER BY display_order";
     //error_log('New LP - learnpath_functions - get_learnpath_tree: '.$sql,0);
     $res = Database::query($sql);
@@ -1139,13 +1140,13 @@ function export_exercise($item_id) {
     global $expdir, $_course, $_configuration, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk, $origin, $questionNum;
 
     $exerciseId = $item_id;
-    
+
     require_once '../exercice/testcategory.class.php';
-    require_once '../exercice/exercise.class.php';    
+    require_once '../exercice/exercise.class.php';
     require_once '../exercice/question.class.php';
     require_once '../exercice/answer.class.php';
     require_once '../exercice/exercise.lib.php';
-    
+
     $TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
 
     /* Clears the exercise session */
@@ -1827,7 +1828,7 @@ function deldir($dir) {
  * Basically, all this function does is put the scorm directory back into a zip file (like the one
  * that was most probably used to import the course at first)
  * @deprecated this function is only called in the newscorm/scorm_admin.php which is deprecated
- * 
+ *
  * @param	string	Name of the SCORM path (or the directory under which it resides)
  * @param	array		Not used right now. Should replace the use of global $_course
  * @return	void
@@ -1942,7 +1943,7 @@ function createimsmanifest($circle1_files, $learnpath_id) {
     // Items list.
     $i = 0;
     $course_id = api_get_course_int_id();
-    
+
     $previous_item_id = '00';
     while ($circle1_files[0][$i]) {
         // Check whether we are in the border of two chapters.

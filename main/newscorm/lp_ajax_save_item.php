@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This script contains the server part of the AJAX interaction process. The client part is located
- * in lp_api.php or other api's.
+ * This script contains the server part of the AJAX interaction process.
+ * The client part is located * in lp_api.php or other api's.
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -415,8 +415,8 @@ function save_item(
         $myStatus = $myStatusInDB;
     }
 
-    $myTotal         = $myLP->get_total_items_count_without_chapters();
-    $myComplete      = $myLP->get_complete_items_count();
+    $myTotal = $myLP->get_total_items_count_without_chapters();
+    $myComplete = $myLP->get_complete_items_count();
     $myProgressMode = $myLP->get_progress_bar_mode();
     $myProgressMode = $myProgressMode == '' ? '%' : $myProgressMode;
 

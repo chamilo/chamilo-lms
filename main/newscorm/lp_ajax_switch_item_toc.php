@@ -7,9 +7,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
@@ -134,33 +132,33 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
     $mycore_exit = $mylpi->get_core_exit();
 
     $return .=
-            //"saved_lesson_status='not attempted';" .
-            "olms.lms_lp_id=".$lp_id.";" .
-            "olms.lms_item_id=".$new_item_id.";" .
-            "olms.lms_old_item_id=0;" .
-            //"lms_been_synchronized=0;" .
-            "olms.lms_initialized=0;" .
-            //"lms_total_lessons=".$mytotal.";" .
-            //"lms_complete_lessons=".$mycomplete.";" .
-            //"lms_progress_bar_mode='".$myprogress_mode."';" .
-            "olms.lms_view_id=".$view_id.";" .
-            "olms.lms_user_id=".$user_id.";" .
-            "olms.next_item=".$new_item_id.";" . // This one is very important to replace possible literal strings.
-            "olms.lms_next_item=".$mynext.";" .
-            "olms.lms_previous_item=".$myprevious.";" .
-            "olms.lms_item_type = '".$myitemtype."';" .
-            "olms.lms_item_credit = '".$mycredit."';" .
-            "olms.lms_item_lesson_mode = '".$mylesson_mode."';" .
-            "olms.lms_item_launch_data = '".$mylaunch_data."';" .
-            "olms.lms_item_interactions_count = '".$myinteractions_count."';" .
-            "olms.lms_item_objectives_count = '".$myinteractions_count."';" .
-            "olms.lms_item_core_exit = '".$mycore_exit."';" .
-            "olms.asset_timer = 0;";
+        //"saved_lesson_status='not attempted';" .
+        "olms.lms_lp_id=".$lp_id.";" .
+        "olms.lms_item_id=".$new_item_id.";" .
+        "olms.lms_old_item_id=0;" .
+        //"lms_been_synchronized=0;" .
+        "olms.lms_initialized=0;" .
+        //"lms_total_lessons=".$mytotal.";" .
+        //"lms_complete_lessons=".$mycomplete.";" .
+        //"lms_progress_bar_mode='".$myprogress_mode."';" .
+        "olms.lms_view_id=".$view_id.";" .
+        "olms.lms_user_id=".$user_id.";" .
+        "olms.next_item=".$new_item_id.";" . // This one is very important to replace possible literal strings.
+        "olms.lms_next_item=".$mynext.";" .
+        "olms.lms_previous_item=".$myprevious.";" .
+        "olms.lms_item_type = '".$myitemtype."';" .
+        "olms.lms_item_credit = '".$mycredit."';" .
+        "olms.lms_item_lesson_mode = '".$mylesson_mode."';" .
+        "olms.lms_item_launch_data = '".$mylaunch_data."';" .
+        "olms.lms_item_interactions_count = '".$myinteractions_count."';" .
+        "olms.lms_item_objectives_count = '".$myinteractions_count."';" .
+        "olms.lms_item_core_exit = '".$mycore_exit."';" .
+        "olms.asset_timer = 0;";
 
     $return .= "update_toc('unhighlight','".$current_item."');".
-                "update_toc('highlight','".$new_item_id."');".
-                "update_toc('$mylesson_status','".$new_item_id."');".
-                "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
+        "update_toc('highlight','".$new_item_id."');".
+        "update_toc('$mylesson_status','".$new_item_id."');".
+        "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
 
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.

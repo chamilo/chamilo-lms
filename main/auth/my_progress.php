@@ -87,6 +87,15 @@ if (!empty($course_user_list)) {
 
 $content = '';
 
+if (api_is_student()) {
+    $content .= '<div class="actions">';
+    $content .= Display::url(
+        Display::return_icon('skills.png', get_lang('Skills'), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) .  'auth/skills.php'
+    );
+    $content .= '</div>';
+}
+
 $content .= Tracking::show_user_progress(api_get_user_id(), $sessionId);
 $content .= Tracking::show_course_detail(api_get_user_id(), $courseCode, $sessionId);
 

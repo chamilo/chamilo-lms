@@ -71,7 +71,7 @@ function isTotalPortalSizeBiggerThanLimit($debug = true)
     $result = true;
 
     if ($totalSize > $sizeLimit) {
-        $log .= "Total size is bigger than limit: $sizeLimit MB \n";
+        $log .= "Current total size of $totalSize MB is bigger than limit: $sizeLimit MB \n";
         $result = false;
     }
 
@@ -85,7 +85,7 @@ function isTotalPortalSizeBiggerThanLimit($debug = true)
 /**
  * @param bool $debug
  *
- * @return int
+ * @return int total size in MB
  */
 function calculateTotalPortalSize($debug)
 {
@@ -110,6 +110,8 @@ function calculateTotalPortalSize($debug)
     if ($debug) {
         echo "Total size in table $table " . (round($subTotal / 1024)) . " MB \n";
     }
+
+    $totalSize = $totalSize / 1024;
 
     return $totalSize;
 }

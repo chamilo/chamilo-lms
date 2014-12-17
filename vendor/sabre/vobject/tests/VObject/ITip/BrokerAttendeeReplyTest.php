@@ -11,6 +11,7 @@ BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
 UID:foobar
+SUMMARY:B-day party
 SEQUENCE:1
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;CN=One:mailto:one@example.org
@@ -25,6 +26,7 @@ BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
 UID:foobar
+SUMMARY:B-day party
 SEQUENCE:1
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;PARTSTAT=ACCEPTED;CN=One:mailto:one@example.org
@@ -54,6 +56,7 @@ BEGIN:VEVENT
 UID:foobar
 SEQUENCE:1
 DTSTART:20140716T120000Z
+SUMMARY:B-day party
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;PARTSTAT=ACCEPTED;CN=One:mailto:one@example.org
 END:VEVENT
@@ -79,6 +82,7 @@ SEQUENCE:1
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;CN=One:mailto:one@example.org
 DTSTART:20140724T120000Z
+SUMMARY:Daily sprint
 RRULE;FREQ=DAILY
 END:VEVENT
 END:VCALENDAR
@@ -94,6 +98,7 @@ SEQUENCE:1
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;PARTSTAT=NEEDS-ACTION;CN=One:mailto:one@example.org
 DTSTART:20140724T120000Z
+SUMMARY:Daily sprint
 END:VEVENT
 BEGIN:VEVENT
 UID:foobar
@@ -159,6 +164,7 @@ BEGIN:VEVENT
 UID:foobar
 SEQUENCE:1
 DTSTART:20140726T120000Z
+SUMMARY:Daily sprint
 RECURRENCE-ID:20140726T120000Z
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;PARTSTAT=ACCEPTED;CN=One:mailto:one@example.org
@@ -167,6 +173,7 @@ BEGIN:VEVENT
 UID:foobar
 SEQUENCE:1
 DTSTART:20140724T120000Z
+SUMMARY:Daily sprint
 RECURRENCE-ID:20140724T120000Z
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;PARTSTAT=DECLINED;CN=One:mailto:one@example.org
@@ -175,6 +182,7 @@ BEGIN:VEVENT
 UID:foobar
 SEQUENCE:1
 DTSTART:20140728T120000Z
+SUMMARY:Daily sprint
 RECURRENCE-ID:20140728T120000Z
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;PARTSTAT=TENTATIVE;CN=One:mailto:one@example.org
@@ -183,6 +191,7 @@ BEGIN:VEVENT
 UID:foobar
 SEQUENCE:1
 DTSTART:20140729T120000Z
+SUMMARY:Daily sprint
 RECURRENCE-ID:20140729T120000Z
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;PARTSTAT=ACCEPTED;CN=One:mailto:one@example.org
@@ -191,6 +200,7 @@ BEGIN:VEVENT
 UID:foobar
 SEQUENCE:1
 DTSTART:20140725T120000Z
+SUMMARY:Daily sprint
 RECURRENCE-ID:20140725T120000Z
 ORGANIZER;CN=Strunk:mailto:strunk@example.org
 ATTENDEE;PARTSTAT=DECLINED;CN=One:mailto:one@example.org
@@ -618,6 +628,77 @@ ICS
 
     }
 
+    /**
+     * @depends testCreateReplyByException
+     */
+    function testCreateReplyByExceptionAllDay() {
+
+
+        $oldMessage = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:Weekly meeting
+UID:foobar
+SEQUENCE:1
+DTSTART;VALUE=DATE:20140811
+RRULE:FREQ=WEEKLY
+ORGANIZER:mailto:organizer@example.org
+ATTENDEE:mailto:one@example.org
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $newMessage = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:Weekly meeting
+UID:foobar
+SEQUENCE:1
+DTSTART;VALUE=DATE:20140811
+RRULE:FREQ=WEEKLY
+ORGANIZER:mailto:organizer@example.org
+ATTENDEE:mailto:one@example.org
+EXDATE;VALUE=DATE:20140818
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $version = \Sabre\VObject\Version::VERSION;
+        $expected = array(
+            array(
+                'uid' => 'foobar',
+                'method' => 'REPLY',
+                'component' => 'VEVENT',
+                'sender' => 'mailto:one@example.org',
+                'senderName' => null,
+                'recipient' => 'mailto:organizer@example.org',
+                'recipientName' => null,
+                'message' => <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Sabre//Sabre VObject $version//EN
+CALSCALE:GREGORIAN
+METHOD:REPLY
+BEGIN:VEVENT
+UID:foobar
+SEQUENCE:1
+DTSTART;VALUE=DATE:20140818
+SUMMARY:Weekly meeting
+RECURRENCE-ID;VALUE=DATE:20140818
+ORGANIZER:mailto:organizer@example.org
+ATTENDEE;PARTSTAT=DECLINED:mailto:one@example.org
+END:VEVENT
+END:VCALENDAR
+ICS
+
+            ),
+        );
+        $result = $this->parse($oldMessage, $newMessage, $expected);
+
+    }
+
     function testDeclined() {
 
         $oldMessage = <<<ICS
@@ -810,6 +891,70 @@ ICS;
         $version = \Sabre\VObject\Version::VERSION;
 
         $expected = array();
+        $result = $this->parse($oldMessage, $newMessage, $expected);
+
+    }
+
+    function testAcceptedAllDay() {
+
+        $oldMessage = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+UID:foobar
+SEQUENCE:1
+ORGANIZER;CN=Strunk:mailto:strunk@example.org
+ATTENDEE;CN=One:mailto:one@example.org
+DTSTART;VALUE=DATE:20140716
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+
+        $newMessage = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+UID:foobar
+SEQUENCE:1
+ORGANIZER;CN=Strunk:mailto:strunk@example.org
+ATTENDEE;PARTSTAT=ACCEPTED;CN=One:mailto:one@example.org
+DTSTART;VALUE=DATE:20140716
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $version = \Sabre\VObject\Version::VERSION;
+
+        $expected = array(
+            array(
+                'uid' => 'foobar',
+                'method' => 'REPLY',
+                'component' => 'VEVENT',
+                'sender' => 'mailto:one@example.org',
+                'senderName' => 'One',
+                'recipient' => 'mailto:strunk@example.org',
+                'recipientName' => 'Strunk',
+                'message' => <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Sabre//Sabre VObject $version//EN
+CALSCALE:GREGORIAN
+METHOD:REPLY
+BEGIN:VEVENT
+UID:foobar
+SEQUENCE:1
+DTSTART;VALUE=DATE:20140716
+ORGANIZER;CN=Strunk:mailto:strunk@example.org
+ATTENDEE;PARTSTAT=ACCEPTED;CN=One:mailto:one@example.org
+END:VEVENT
+END:VCALENDAR
+ICS
+
+            ),
+
+        );
+
         $result = $this->parse($oldMessage, $newMessage, $expected);
 
     }

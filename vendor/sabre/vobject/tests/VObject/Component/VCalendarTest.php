@@ -2,6 +2,7 @@
 
 namespace Sabre\VObject\Component;
 
+use DateTimeZone;
 use Sabre\VObject;
 
 class VCalendarTest extends \PHPUnit_Framework_TestCase {
@@ -9,13 +10,16 @@ class VCalendarTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider expandData
      */
-    public function testExpand($input, $output) {
+    public function testExpand($input, $output, $timeZone = 'UTC', $start = '2011-12-01', $end = '2011-12-31') {
 
         $vcal = VObject\Reader::read($input);
 
+        $timeZone = new DateTimeZone($timeZone);
+
         $vcal->expand(
-            new \DateTime('2011-12-01'),
-            new \DateTime('2011-12-31')
+            new \DateTime($start),
+            new \DateTime($end),
+            $timeZone
         );
 
         // This will normalize the output
@@ -218,6 +222,52 @@ END:VCALENDAR
 ';
 
         $tests[] = array($input, $output);
+
+        // Floating dates and times.
+        $input = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+UID:bla1
+DTSTART:20141112T195000
+END:VEVENT
+BEGIN:VEVENT
+UID:bla2
+DTSTART;VALUE=DATE:20141112
+END:VEVENT
+BEGIN:VEVENT
+UID:bla3
+DTSTART;VALUE=DATE:20141112
+RRULE:FREQ=DAILY;COUNT=2
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $output = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+UID:bla1
+DTSTART:20141112T225000Z
+END:VEVENT
+BEGIN:VEVENT
+UID:bla2
+DTSTART;VALUE=DATE:20141112
+END:VEVENT
+BEGIN:VEVENT
+UID:bla3
+DTSTART;VALUE=DATE:20141112
+END:VEVENT
+BEGIN:VEVENT
+UID:bla3
+DTSTART;VALUE=DATE:20141113
+RECURRENCE-ID;VALUE=DATE:20141113
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $tests[] = array($input, $output, 'America/Argentina/Buenos_Aires', '2014-01-01', '2015-01-01');
+
         return $tests;
 
     }

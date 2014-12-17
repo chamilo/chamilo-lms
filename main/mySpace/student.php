@@ -210,6 +210,10 @@ if (api_is_drh()) {
         Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
         '#'
     );
+    $actions .= Display::url(
+        Display::return_icon('skills.png', get_lang('Skills'), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . 'mySpace/team_skills.php'
+    );
 }
 
 $actions .= '<span style="float:right">';

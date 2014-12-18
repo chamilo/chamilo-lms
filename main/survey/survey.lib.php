@@ -322,6 +322,7 @@ class survey_manager
 						'".Database::escape_string($values['survey_thanks'])."',
 						'".api_get_utc_datetime()."',
 						'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
+						'".Database::escape_string($values['visible_results'])."',
 						".api_get_session_id()."
 						)";
             Database::query($sql);
@@ -403,7 +404,8 @@ class survey_manager
                         template 		= '".Database::escape_string('template')."',
                         intro			= '".Database::escape_string($values['survey_introduction'])."',
                         surveythanks	= '".Database::escape_string($values['survey_thanks'])."',
-                        anonymous       = '".Database::escape_string($values['anonymous'])."'".$additionalsets."
+                        anonymous       = '".Database::escape_string($values['anonymous'])."'".$additionalsets.",
+                        visible_results	= '".Database::escape_string($values['visible_results'])."'
 					WHERE c_id = $course_id AND survey_id = '".Database::escape_string($values['survey_id'])."'";
             Database::query($sql);
 
@@ -4979,7 +4981,8 @@ class SurveyUtil
             if ($row['answered'] == 0) {
                 echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'&amp;cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
             } else {
-                echo '<td>'.$row['title'].'</td>';
+                //echo '<td>'.$row['title'].'</td>';
+                echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;cidReq='.$_course['sysCode'].'&amp;id_session='.$row['session_id'].'&amp;gidReq='.'0'.'&amp;origin='.''.'&amp;survey_id='.$row['survey_id'].'">'.$row['title'].'</a></td>';
             }
             echo '<td>';
             echo ($row['anonymous'] == 1) ? get_lang('Yes') : get_lang('No');

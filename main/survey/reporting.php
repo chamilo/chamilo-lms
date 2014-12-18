@@ -70,11 +70,16 @@ $people_filled = survey_manager::get_people_who_filled_survey(
 
 // Checking the parameters
 SurveyUtil::check_parameters($people_filled);
-
+$survey_data = survey_manager::get_survey($survey_id);
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) {
 	Display :: display_header(get_lang('ToolSurvey'));
-	Display :: display_error_message(get_lang('NotAllowed'), false);
+    // Show error message if the survey can be seen only by tutors
+    if ($survey_data['visible_results'] != SURVEY_VISIBLE_TUTOR) {
+        SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
+    } else {
+        Display :: display_error_message(get_lang('NotAllowed'), false);
+    }
 	Display :: display_footer();
 	exit;
 }
@@ -85,7 +90,7 @@ $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 // Getting the survey information
 
-$survey_data = survey_manager::get_survey($survey_id);
+//$survey_data = survey_manager::get_survey($survey_id);
 if (empty($survey_data)) {
 	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);

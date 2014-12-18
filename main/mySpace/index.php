@@ -107,10 +107,6 @@ if ($is_drh) {
     $menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php');
     $menu_items[] = Display::url(Display::return_icon('empty_evaluation.png', get_lang('CompanyReport'), array(), ICON_SIZE_MEDIUM), 'company_reports.php');
     $menu_items[] = Display::url(Display::return_icon('evaluation_rate.png', get_lang('CompanyReportResumed'), array(), ICON_SIZE_MEDIUM), 'company_reports_resumed.php');
-    $menu_items[] = Display::url(
-        Display::return_icon('skills.png', get_lang('Skills'), array(), ICON_SIZE_MEDIUM),
-        'skills.php'
-    );
 }
 
 echo '<div id="actions" class="actions">';

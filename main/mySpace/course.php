@@ -113,13 +113,6 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
         }
     }
 
-    if (api_is_drh()) {
-        $menu_items[] = Display::url(
-            Display::return_icon('skills.png', get_lang('Skills'), array(), ICON_SIZE_MEDIUM),
-            'skills.php'
-        );
-    }
-
     echo '<div class="actions">';
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {

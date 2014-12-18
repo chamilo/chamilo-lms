@@ -36,6 +36,7 @@ class AdvancedSkills extends Plugin
     {
         $this->addTableColumns();
         $this->addIndex();
+        $this->addTab(get_lang('Skills'), 'plugin/advancedskills/report.php');
     }
 
     /**
@@ -45,6 +46,7 @@ class AdvancedSkills extends Plugin
     {
         $this->removeTableColumns();
         $this->removeIndex();
+        $this->removeTab();
     }
 
     /**
@@ -124,6 +126,23 @@ class AdvancedSkills extends Plugin
             if ($resultData['Field'] == 'course_id' || $resultData['Field'] == 'session_id') {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove the plugin tab
+     */
+    private function removeTab() {
+        $data = Database::select('comment', Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT), array(
+            'where' => array(
+                "variable = '?' AND title = '?'" => array('status', 'advancedskills')
+            )
+        ), 'first');
+
+        if (!empty($data)) {
+            $this->deleteTab($data['comment']);
         }
     }
 

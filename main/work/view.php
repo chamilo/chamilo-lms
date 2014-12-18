@@ -12,7 +12,7 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $work = get_work_data_by_id($id);
 
 if (empty($id) || empty($work)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 if ($work['active'] != 1) {
@@ -22,24 +22,40 @@ if ($work['active'] != 1) {
 $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));
 
 $my_folder_data = get_work_data_by_id($work['parent_id']);
-$course_info = api_get_course_info();
+$courseInfo = api_get_course_info();
 
-allowOnlySubscribedUser(api_get_user_id(), $work['parent_id'], $course_info['real_id']);
+allowOnlySubscribedUser(
+    api_get_user_id(),
+    $work['parent_id'],
+    $courseInfo['real_id']
+);
 
-if (user_is_author($id) || $course_info['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) {
-    if (api_is_allowed_to_edit(null, true)) {
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    $courseInfo
+);
+
+if ((user_is_author($id) || $isDrhOfCourse) ||
+    (
+        $courseInfo['show_score'] == 0 &&
+        $work['active'] == 1 &&
+        $work['accepted'] == 1
+    )
+) {
+    if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
         $url_dir = 'work_list_all.php?id='.$my_folder_data['id'];
     } else {
         $url_dir = 'work_list.php?id='.$my_folder_data['id'];
     }
+
     $interbreadcrumb[] = array('url' => $url_dir, 'name' => $my_folder_data['title']);
     $interbreadcrumb[] = array('url' => '#','name' => $work['title']);
-
-    if (($course_info['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) ||
-        api_is_allowed_to_edit() || user_is_author($id)
+    //|| api_is_drh()
+    if (($courseInfo['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) ||
+        (api_is_allowed_to_edit()) || user_is_author($id) || $isDrhOfCourse
     ) {
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-        switch($action) {
+        switch ($action) {
             case 'send_comment':
                 if (isset($_FILES["file"])) {
                     $_POST['file'] = $_FILES["file"];

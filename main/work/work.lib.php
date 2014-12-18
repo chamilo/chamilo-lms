@@ -1691,6 +1691,11 @@ function getWorkListStudent(
     $group_id = api_get_group_id();
     $userId = api_get_user_id();
 
+    $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+        api_get_user_id(),
+        $courseInfo
+    );
+
     if (!in_array($direction, array('asc','desc'))) {
         $direction = 'desc';
     }
@@ -1742,7 +1747,12 @@ function getWorkListStudent(
     }
 
     $works = array();
+
     $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq();
+    if ($isDrhOfCourse) {
+        $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
+    }
+
     $urlOthers = api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id=';
     while ($work = Database::fetch_array($result, 'ASSOC')) {
         $isSubscribed = userIsSubscribedToWork($userId, $work['id'], $course_id);
@@ -1751,6 +1761,7 @@ function getWorkListStudent(
         }
         $work['type'] = Display::return_icon('work.png');
         $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
+
         if (empty($work['title'])) {
             $work['title'] = basename($work['url']);
         }
@@ -1765,7 +1776,6 @@ function getWorkListStudent(
             $work['id'],
             $whereCondition
         );
-
 
         if (ADD_DOCUMENT_TO_WORK) {
            $count = getTotalWorkComment($workList, $courseInfo);
@@ -2178,6 +2188,11 @@ function get_work_user_list(
     $condition_session  = api_get_session_condition($session_id);
     $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
 
+    $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+        api_get_user_id(),
+        $course_info
+    );
+
     if (!empty($work_data)) {
         if (!empty($group_id)) {
             $extra_conditions = " work.post_group_id = '".intval($group_id)."' ";
@@ -2186,10 +2201,12 @@ function get_work_user_list(
             $extra_conditions = " work.post_group_id = '0' ";
         }
 
-        if ($is_allowed_to_edit) {
+        if ($is_allowed_to_edit || $isDrhOfCourse) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
-            if (isset($course_info['show_score']) &&  $course_info['show_score'] == 1) {
+            if (isset($course_info['show_score']) &&
+                $course_info['show_score'] == 1
+            ) {
                 $extra_conditions .= " AND (u.user_id = ".api_get_user_id()." AND work.active IN (0, 1)) ";
             } else {
                 $extra_conditions .= ' AND work.active IN (0, 1) ';
@@ -2239,7 +2256,6 @@ function get_work_user_list(
         if (!empty($start) && !empty($limit)) {
             $sql .= "LIMIT $start, $limit";
         }
-
         $result = Database::query($sql);
         $works = array();
 
@@ -2252,7 +2268,6 @@ function get_work_user_list(
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
-            //$workItem = get_work_data_by_id($item_id);
 
             // Get the author ID for that document from the item_property table
             $is_author  = false;
@@ -2278,7 +2293,9 @@ function get_work_user_list(
             }
 
             $qualification_exists = false;
-            if (!empty($work_data['qualification']) && intval($work_data['qualification']) > 0) {
+            if (!empty($work_data['qualification']) &&
+                intval($work_data['qualification']) > 0
+            ) {
                 $qualification_exists = true;
             }
 
@@ -2314,9 +2331,8 @@ function get_work_user_list(
 
             if (($can_read && $work['accepted'] == '1') ||
                 ($is_author && in_array($work['accepted'], array('1', '0'))) ||
-                $is_allowed_to_edit
+                ($is_allowed_to_edit || api_is_drh())
             ) {
-
                 // Firstname, lastname, username
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));

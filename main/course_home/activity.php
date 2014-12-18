@@ -133,15 +133,63 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
         }
     }
 } else {
-    $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-    if (count($my_list) > 0) {
+    $tools = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
+
+    $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+        api_get_user_id(),
+        api_get_course_info()
+    );
+
+    // Force user icon for DRH
+    if ($isDrhOfCourse) {
+        $addUserTool = true;
+        foreach ($tools as $tool) {
+            if ($tool['name'] == 'user') {
+                $addUserTool = false;
+                break;
+            }
+        }
+
+        if ($addUserTool) {
+            $tools[] = array(
+                'c_id' => api_get_course_int_id(),
+                'name' => 'user',
+                'link' => 'user/user.php',
+                'image' => 'members.gif',
+                'visibility' => '1',
+                'admin' => '0',
+                'address' => 'squaregrey.gif',
+                'added_tool' => '0',
+                'target' => '_self',
+                'category' => 'interaction',
+                'session_id' => api_get_session_id()
+            );
+        }
+    }
+
+    if (count($tools) > 0) {
         $content .= '<div class="row">';
-        $content .= CourseHome::show_tools_category($my_list);
+        $content .= CourseHome::show_tools_category($tools);
         $content .= '</div>';
     }
 }
+/**
+ * @param string $title
+ * @param string $content
+ * @param string $class
+ *
+ * @return string
+ */
+function return_block($title, $content, $class = null)
+{
+    $html = '<div class="row course-title-tools">
+                <div class="span12">
+                    <div class="page-header">
+                        <h3>'.$title.'</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row '.$class.'">'.$content.'</div>';
 
-function return_block($title, $content, $class) {
-    $html = '<div class="row course-title-tools"><div class="span12"><div class="page-header"><h3>'.$title.'</h3></div></div></div><div class="row '.$class.'">'.$content.'</div>';
     return $html;
 }

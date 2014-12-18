@@ -27,6 +27,7 @@ class survey_manager
 {
     /**
      * @param $code
+     *
      * @return string
      */
     public static function generate_unique_code($code)
@@ -56,6 +57,7 @@ class survey_manager
     /**
      * Deletes all survey invitations of a user
      * @param int $user_id
+     *
      * @return boolean
      * @assert ('') === false
      */
@@ -72,15 +74,15 @@ class survey_manager
         $sql = "SELECT survey_invitation_id, survey_code
                 FROM $table_survey_invitation WHERE user = '$user_id' AND c_id <> 0 ";
         $result = Database::query($sql);
-        $deleted = array();
         while ($row = Database::fetch_array($result ,'ASSOC')){
             $survey_invitation_id = $row['survey_invitation_id'];
             $survey_code = $row['survey_code'];
             $sql2 = "DELETE FROM $table_survey_invitation
                     WHERE survey_invitation_id = '$survey_invitation_id' AND c_id <> 0";
             if (Database::query($sql2)) {
-                $sql3 = "UPDATE $table_survey SET invited = invited-1 ".
-                    " WHERE c_id  <> 0 AND code ='$survey_code'";
+                $sql3 = "UPDATE $table_survey SET
+                            invited = invited-1
+                        WHERE c_id <> 0 AND code ='$survey_code'";
                 Database::query($sql3);
             }
         }
@@ -88,8 +90,8 @@ class survey_manager
 
     /**
      *
-     * @param type $course_code
-     * @param type $session_id
+     * @param string $course_code
+     * @param int $session_id
      * @return type
      * @assert ('') === false
      */
@@ -102,7 +104,8 @@ class survey_manager
         $course_info = api_get_course_info($course_code);
         $session_condition = api_get_session_condition($session_id, true, true);
 
-        $sql = "SELECT * FROM $table_survey WHERE c_id = {$course_info['real_id']} $session_condition ";
+        $sql = "SELECT * FROM $table_survey
+                WHERE c_id = {$course_info['real_id']} $session_condition ";
         $result = Database::query($sql);
         $result = Database::store_result($result, 'ASSOC');
         return $result;
@@ -182,6 +185,7 @@ class survey_manager
      * This function stores a survey in the database.
      *
      * @param array $values
+     *
      * @return array $return the type of return message that has to be displayed and the message in it
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -214,7 +218,6 @@ class survey_manager
             }
 
             $values['anonymous'] = intval($values['anonymous']);
-
             $additional['columns'] = '';
             $additional['values'] = '';
 
@@ -267,11 +270,13 @@ class survey_manager
                 // Logic for versioning surveys
                 if (!empty($values['parent_id'])) {
                     $additional['columns'] .= ', survey_version';
-                    $sql = 'SELECT survey_version FROM '.$table_survey.'
+                    $sql = 'SELECT survey_version
+                            FROM '.$table_survey.'
 					        WHERE
 					            c_id = '.$course_id.' AND
 					            parent_id = '.Database::escape_string($values['parent_id']).'
-                            ORDER BY survey_version DESC LIMIT 1';
+                            ORDER BY survey_version DESC
+                            LIMIT 1';
                     $rs = Database::query($sql);
                     if (Database::num_rows($rs) === 0) {
                         $sql = 'SELECT survey_version FROM '.$table_survey.'
@@ -2920,7 +2925,8 @@ class SurveyUtil
 
             // Navigate through the questions (next and previous)
             if ($currentQuestion != 0 ) {
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.Security::remove_XSS($offset-1).'">'.Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
+                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.Security::remove_XSS($offset-1).'">'.
+                    Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
             } else {
                 echo Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').' ';
             }

@@ -649,7 +649,7 @@ class CourseHome
      */
     public static function show_tools_category($all_tools_list, $rows = false)
     {
-        global $_user;
+        $_user = api_get_user_info();
         $theme = api_get_setting('homepage_view');
         if ($theme == 'vertical_activity') {
             //ordering by get_lang name
@@ -786,28 +786,36 @@ class CourseHome
                 //$tool['link'] = htmlspecialchars($tool['link']) ;
                 //@todo this visio stuff should be removed
                 if (strpos($tool['name'], 'visio_') !== false) {
-                    $tool_link_params = array('id' => 'tooldesc_'.$tool["id"],
+                    $tool_link_params = array(
+                        'id' => 'tooldesc_'.$tool["id"],
                         'href' => '"javascript: void(0);"',
                         'class' => $class,
                         'onclick' => 'javascript: window.open(\''.$tool['link'].'\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
-                        'target' => $tool['target']);
+                        'target' => $tool['target']
+                    );
                 } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
-                    $tool_link_params = array('id' => 'tooldesc_'.$tool["id"],
+                    $tool_link_params = array(
+                        'id' => 'tooldesc_'.$tool["id"],
                         'class' => $class,
                         'href' => 'javascript: void(0);',
                         'onclick' => 'javascript: window.open(\''.$tool['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')', //Chat Open Windows
-                        'target' => $tool['target']);
+                        'target' => $tool['target']
+                    );
                 } else {
                     if (count(explode('type=classroom', $tool['link'])) == 2 || count(explode('type=conference', $tool['link'])) == 2) {
-                        $tool_link_params = array('id' => 'tooldesc_'.$tool["id"],
+                        $tool_link_params = array(
+                            'id' => 'tooldesc_'.$tool["id"],
                             'href' => $tool['link'],
                             'class' => $class,
-                            'target' => '_blank');
+                            'target' => '_blank'
+                        );
                     } else {
-                        $tool_link_params = array('id' => 'tooldesc_'.$tool["id"],
+                        $tool_link_params = array(
+                            'id' => 'tooldesc_'.$tool["id"],
                             'href' => $tool['link'],
                             'class' => $class,
-                            'target' => $tool['target']);
+                            'target' => $tool['target']
+                        );
                     }
                 }
 

@@ -8,24 +8,25 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class CNotebookType
+ * Class NotebookType
  * @package Chamilo\NotebookBundle\Form\Type
  */
-class CNotebookType extends AbstractType
+class NotebookType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')
             ->add('description', 'ckeditor')
-            /*->add('cId')
-            ->add('notebookId')
-            ->add('userId')
-            ->add('course')
-            ->add('sessionId')*/
             ->add('save', 'submit');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -33,8 +34,11 @@ class CNotebookType extends AbstractType
         ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
-        return 'chamilo_notebook';
+        return 'chamilo_notebook_notebook';
     }
 }

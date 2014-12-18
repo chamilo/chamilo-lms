@@ -216,22 +216,7 @@ class NotebookController extends ToolBaseCrudController
         /** @var AbstractResource $resource */
         $resource = $this->getRepository()->find($id);
         $this->domainManager->delete($resource);
-
-        //$this->getManager()->
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    /*public function createNew()
-    {
-        $notebook = $this->getNotebookRepository()->createNewWithCourse(
-            $this->getUser(),
-            $this->getCourse()
-        );
-
-        return $notebook;
-    }*/
 
     /**
      * @return NotebookManager
@@ -239,13 +224,5 @@ class NotebookController extends ToolBaseCrudController
     protected function getManager()
     {
         return $this->get('chamilo_notebook.entity.notebook_manager');
-    }
-
-    /**
-     * @return NotebookRepository
-     */
-    protected function getNotebookRepository()
-    {
-        return $this->get('chamilo.repository.notebook');
     }
 }

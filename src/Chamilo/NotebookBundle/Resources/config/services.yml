@@ -14,8 +14,8 @@ services:
             - { name: chamilo_course.tool }
 
     # Form (add/edit)
-    chamilo_notebook.form.type.c_notebook_type:
-        class: Chamilo\NotebookBundle\Form\Type\CNotebookType
+    chamilo_notebook_notebook:
+        class: Chamilo\NotebookBundle\Form\Type\NotebookType
         tags:
            -  { name: form.type }
 

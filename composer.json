@@ -117,7 +117,7 @@
         "simplethings/entity-audit-bundle": "~0.7",
         "willdurand/faker-bundle": "~1.0",
 
-        "mopa/bootstrap-bundle": "v3.0.0-beta4",
+        "mopa/bootstrap-bundle": "dev-master",
         "twbs/bootstrap": "~3.0",
 
         "stof/doctrine-extensions-bundle": "~1.1",
@@ -125,7 +125,6 @@
         "stephpy/timeline": "~1.0",
 
         "incenteev/composer-parameter-handler": "~2.0",
-
         "friendsofsymfony/advanced-encoder-bundle": "~1.0",
         "friendsofsymfony/message-bundle": "~1.2",
         "oyejorge/less.php": "~1.0",
@@ -139,12 +138,12 @@
         "liip/theme-bundle": "dev-master",
         "chamilo/chash" : "dev-master",
         "white-october/pagerfanta-bundle": "dev-master",
-        "sylius/resource-bundle": "0.11",
-        "sylius/resource": "0.11",
-        "sylius/flow-bundle": "0.11",
-        "sylius/settings-bundle": "0.11",
-        "sylius/attribute-bundle": "0.11",
-        "sylius/variation": "0.11",
+        "sylius/resource-bundle": "~0.1",
+        "sylius/resource": "~0.1",
+        "sylius/flow-bundle": "~0.1",
+        "sylius/settings-bundle": "~0.1",
+        "sylius/attribute-bundle": "~0.1",
+        "sylius/variation": "~0.1",
         "apy/datagrid-bundle": "dev-master",
         "jms/translation-bundle": "~1.0",
 

@@ -1,6 +1,6 @@
-<?php //$id: $
-/**
- * See license terms in /dokeos_license.txt
+<?php
+/*
+ * See license terms in /license.txt
  * @author Eric Marguin <eric.marguin@dokeos.com>
  */
 require_once '../../inc/global.inc.php';

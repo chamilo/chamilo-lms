@@ -1,5 +1,5 @@
-<?php //$id:$
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 *	This file saves every click in the hotspot tool into track_e_hotspots
 *	@package chamilo.exercise

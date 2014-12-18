@@ -4,9 +4,7 @@
  * Script for sub-language administration
  * @package chamilo.admin.sub_language
  */
-/**
- * Init section
- */
+
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
@@ -25,7 +23,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		button_name=button_array[1];
 		file_id=button_array[2];
 		is_variable_language="$"+button_name;
-			
+
 		is_new_language=$("#txtid_"+file_id+"_"+button_name).attr("value");
    		if (is_new_language=="undefined") {
 			is_new_language="_";
@@ -39,13 +37,13 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 				type: "POST",
 				url: "../admin/sub_language_ajax.inc.php",
 				data: "new_language="+is_new_language+"&variable_language="+is_variable_language+"&file_id="+file_id+"&id="+'.intval($_REQUEST['id']).'+"&sub="+'.intval($_REQUEST['sub_language_id']).',
-				success: function(datos) { 	
+				success: function(datos) {
 					if (datos == "1") {
 						$("#div_message_information_id").html("<div class=\"confirmation-message\">'.get_lang('TheNewWordHasBeenAdded').'</div>");
 					} else {
 						$("#div_message_information_id").html("<div class=\"warning-message\">" + datos +"</div>");
 					}
-				} 
+				}
 			});
 		} else {
 			$("#div_message_information_id").html("<div class=\"error-message\">'.get_lang('FormHasErrorsPleaseComplete').'</div>");
@@ -66,15 +64,15 @@ $sublanguage_folder_error = false;
 
 if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 	$language_name              = SubLanguageManager::get_name_of_language_by_id ($_GET['id']);
-	$sub_language_name          = SubLanguageManager::get_name_of_language_by_id ($_GET['sub_language_id']);	
+	$sub_language_name          = SubLanguageManager::get_name_of_language_by_id ($_GET['sub_language_id']);
 	$all_data_of_language       = SubLanguageManager::get_all_information_of_language($_GET['id']);
 	$all_data_of_sublanguage    = SubLanguageManager::get_all_information_of_language($_GET['sub_language_id']);
-	$sub_language_file          = api_get_path(SYS_LANG_PATH).$all_data_of_sublanguage['dokeos_folder'];		
-	
+	$sub_language_file          = api_get_path(SYS_LANG_PATH).$all_data_of_sublanguage['dokeos_folder'];
+
 	if (!file_exists($sub_language_file) || !is_writable($sub_language_file)) {
-	    $sublanguage_folder_error = $sub_language_file.' '.get_lang('IsNotWritable');
-	}		
-	if (SubLanguageManager::check_if_exist_language_by_id($_GET['id'])===true) {		
+		$sublanguage_folder_error = $sub_language_file.' '.get_lang('IsNotWritable');
+	}
+	if (SubLanguageManager::check_if_exist_language_by_id($_GET['id'])===true) {
 		$language_id_exist = true;
 	} else {
 		$language_id_exist = false;
@@ -98,10 +96,10 @@ echo $language_name;
 echo '</div>';
 
 if (!empty($_SESSION['msg'])) {
-    echo $_SESSION['msg'];
-    unset($_SESSION['msg']);
+	echo $_SESSION['msg'];
+	unset($_SESSION['msg']);
 } else {
-    echo '<br />';
+	echo '<br />';
 }
 
 $txt_search_word = Security::remove_XSS($_REQUEST['txt_search_word']);
@@ -118,7 +116,7 @@ $html.='</div>';
 echo $html;
 echo '<br /><br /><br />';
 if (!empty($sublanguage_folder_error)) {
-    Display::display_warning_message($sublanguage_folder_error);
+	Display::display_warning_message($sublanguage_folder_error);
 }
 echo '<div id="div_message_information_id">&nbsp;</div>';
 
@@ -183,9 +181,9 @@ function search_language_term($term, $search_in_variable = true , $search_in_eng
 					$obj_button='<button class="save" type="button" name="btn|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$parent_name_variable.'"  />'.get_lang('Save').'</button>';
 
 					$list_info[]=array($lang_file.'.inc.php',
-									   $parent_name_variable,
-									   $english_name_variable,
-									   $parent_variable_value,$obj_text,$obj_button);
+						$parent_name_variable,
+						$english_name_variable,
+						$parent_variable_value,$obj_text,$obj_button);
 				}
 			}
 		}
@@ -197,7 +195,7 @@ function search_language_term($term, $search_in_variable = true , $search_in_eng
 				if (is_array($variable_value)) {
 					continue;
 				}
-				
+
 				if (is_array($variable_value))
 					echo $lang_file;
 				$founded = false;
@@ -230,9 +228,9 @@ function search_language_term($term, $search_in_variable = true , $search_in_eng
 					$english_name_variable = $english_language_array[$lang_file][$name_variable];
 
 					$list_info[]=array($lang_file.'.inc.php',
-									   $name_variable,
-									   $english_name_variable,
-									   $parent_variable_value,$obj_text,$obj_button);
+						$name_variable,
+						$english_name_variable,
+						$parent_variable_value,$obj_text,$obj_button);
 				}
 			}
 		}
@@ -262,9 +260,9 @@ function search_language_term($term, $search_in_variable = true , $search_in_eng
 					//loading variable from the english array
 					$english_name_variable = $english_language_array[$lang_file][$name_variable];
 					$list_info[]=array($lang_file.'.inc.php',
-									   $name_variable,
-									   $english_name_variable,
-									   $parent_variable_value,$obj_text,$obj_button);
+						$name_variable,
+						$english_name_variable,
+						$parent_variable_value,$obj_text,$obj_button);
 				}
 			}
 		}

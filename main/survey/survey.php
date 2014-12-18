@@ -26,7 +26,18 @@ require_once 'survey.lib.php';
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 // Coach can't view this page
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
-if (!api_is_allowed_to_edit(false, true) || (api_is_course_coach() && $extend_rights_for_coachs == 'false')) {
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+	api_get_user_id(),
+	api_get_course_info()
+);
+
+if ($isDrhOfCourse) {
+    header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq());
+    exit;
+}
+if (!api_is_allowed_to_edit(false, true) ||
+    (api_is_course_coach() && $extend_rights_for_coachs == 'false')
+) {
 	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();

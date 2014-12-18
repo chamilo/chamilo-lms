@@ -37,6 +37,19 @@ event_access_tool(TOOL_SURVEY);
  * This has to be moved to a more appropriate place (after the display_header
  * of the code)
  */
+
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    $courseInfo
+);
+
+if ($isDrhOfCourse) {
+    Display::display_header(get_lang('SurveyList'));
+    SurveyUtil::displaySurveyListForDrh();
+    Display::display_footer();
+    exit;
+}
+
 if (!api_is_allowed_to_edit(false, true)) {
     // Coach can see this
     Display::display_header(get_lang('SurveyList'));
@@ -48,10 +61,10 @@ if (!api_is_allowed_to_edit(false, true)) {
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
 
 // Database table definitions
-$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
-$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
+$table_survey = Database:: get_course_table(TABLE_SURVEY);
+$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
 // Language variables
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
@@ -148,9 +161,11 @@ if (isset($_POST['action']) && $_POST['action']) {
 echo '<div class="actions">';
 if (!api_is_course_coach() || $extend_rights_for_coachs == 'true') {
     // Action links
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'),'',ICON_SIZE_MEDIUM).'</a> ';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
+        Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'),'',ICON_SIZE_MEDIUM).'</a> ';
 }
-echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.Display::return_icon('search.png', get_lang('Search'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
+    Display::return_icon('search.png', get_lang('Search'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Load main content
@@ -180,6 +195,11 @@ function modify_filter($survey_id)
     return SurveyUtil::modify_filter($survey_id);
 }
 
+function modify_filter_drh($survey_id)
+{
+    return SurveyUtil::modify_filter($survey_id, true);
+}
+
 function get_number_of_surveys_for_coach()
 {
     return SurveyUtil::get_number_of_surveys_for_coach();
@@ -198,3 +218,10 @@ function anonymous_filter($anonymous)
 {
     return SurveyUtil::anonymous_filter($anonymous);
 }
+
+function get_survey_data_drh($from, $number_of_items, $column, $direction)
+{
+    return SurveyUtil::get_survey_data($from, $number_of_items, $column, $direction, true);
+}
+
+

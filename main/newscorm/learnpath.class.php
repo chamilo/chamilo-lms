@@ -3373,8 +3373,12 @@ class learnpath
                         $file = 'lp_content.php?type=dir';
                     } else {
                         require_once 'resourcelinker.inc.php';
-                        $file = rl_get_resource_link_for_learnpath($course_id, $this->get_id(), $item_id);
-
+                        $file = rl_get_resource_link_for_learnpath(
+                            $course_id,
+                            $this->get_id(),
+                            $item_id,
+                            $this->get_view_id()
+                        );
 
                         if ($this->debug > 0) {
                             error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
@@ -3489,7 +3493,12 @@ class learnpath
                                 list ($decoded) = explode('?', $decoded);
                                 if (!is_file(realpath($sys_course_path . '/scorm/' . $lp_path . '/' . $decoded))) {
                                     require_once 'resourcelinker.inc.php';
-                                    $file = rl_get_resource_link_for_learnpath($course_id, $this->get_id(), $item_id);
+                                    $file = rl_get_resource_link_for_learnpath(
+                                        $course_id,
+                                        $this->get_id(),
+                                        $item_id,
+                                        $this->get_view_id()
+                                    );
                                     if (empty($file)) {
                                         $file = 'blank.php?error=document_not_found';
                                     } else {

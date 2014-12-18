@@ -35,12 +35,12 @@ my_delete($full_file_path.$_user['user_id'].".t.html");
 $TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-$_cid = api_get_course_id();
-
 $score = $_REQUEST['score'];
 $origin = $_REQUEST['origin'];
 $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
+$lpViewId = isset($_REQUEST['lp_view_id']) ? intval($_REQUEST['lp_view_id']) : null;
 $course_id = $courseInfo['real_id'];
+$_cid = api_get_course_id();
 $jscript2run = '';
 
 /**
@@ -103,10 +103,19 @@ if ($origin != 'learnpath') {
 } else {
     $htmlHeadXtra[] = $jscript2run;
     Display::display_reduced_header();
-    $sql = "UPDATE $TABLE_LP_ITEM_VIEW SET
-                status = 'completed'
-            WHERE c_id = $course_id AND lp_item_id= $learnpath_item_id";
-    Database::query($sql);
-    Display::display_confirmation_message(get_lang('HotPotatoesFinished'));
+    if (!empty($course_id) && !empty($learnpath_item_id) && !empty($lpViewId)) {
+        $sql = "UPDATE $TABLE_LP_ITEM_VIEW SET
+                    status = 'completed'
+                WHERE
+                    c_id = $course_id AND
+                    lp_item_id= $learnpath_item_id AND
+                    lp_view_id = $lpViewId
+                ";
+        Database::query($sql);
+        Display::display_confirmation_message(get_lang('HotPotatoesFinished'));
+    } else {
+        Display::display_error_message(get_lang('Error'));
+    }
+
     Display::display_footer();
 }

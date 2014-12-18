@@ -172,7 +172,15 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
         $content .= CourseHome::show_tools_category($tools);
         $content .= '</div>';
     }
+
+    if ($isDrhOfCourse) {
+        $drhTool = CourseHome::get_tools_category(TOOL_DRH);
+        $content .= '<div class="row">';
+        $content .= CourseHome::show_tools_category($drhTool);
+        $content .= '</div>';
+    }
 }
+
 /**
  * @param string $title
  * @param string $content

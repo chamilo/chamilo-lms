@@ -127,18 +127,18 @@ $this_section = SECTION_COURSES;
 
 /*	Constants */
 
-define('TOOL_PUBLIC',                   'Public');
-define('TOOL_PUBLIC_BUT_HIDDEN',        'PublicButHide');
-define('TOOL_COURSE_ADMIN',             'courseAdmin');
-define('TOOL_PLATFORM_ADMIN',           'platformAdmin');
-define('TOOL_AUTHORING',                'toolauthoring');
-define('TOOL_INTERACTION',              'toolinteraction');
-define('TOOL_COURSE_PLUGIN',            'toolcourseplugin'); //all plugins that can be enabled in courses
-define('TOOL_ADMIN',                    'tooladmin');
-define('TOOL_ADMIN_PLATFORM',           'tooladminplatform');
-
-define('TOOL_STUDENT_VIEW',              'toolstudentview');
-define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
+define('TOOL_PUBLIC', 'Public');
+define('TOOL_PUBLIC_BUT_HIDDEN', 'PublicButHide');
+define('TOOL_COURSE_ADMIN', 'courseAdmin');
+define('TOOL_PLATFORM_ADMIN', 'platformAdmin');
+define('TOOL_AUTHORING', 'toolauthoring');
+define('TOOL_INTERACTION', 'toolinteraction');
+define('TOOL_COURSE_PLUGIN', 'toolcourseplugin'); //all plugins that can be enabled in courses
+define('TOOL_ADMIN', 'tooladmin');
+define('TOOL_ADMIN_PLATFORM', 'tooladminplatform');
+define('TOOL_DRH', 'tool_drh');
+define('TOOL_STUDENT_VIEW', 'toolstudentview');
+define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
 
 $user_id 		= api_get_user_id();
 $course_code 	= api_get_course_id();

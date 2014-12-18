@@ -4314,14 +4314,15 @@ class Wiki
         // menu home
         echo '<ul class="dropdown-menu">';
         echo '<li><a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('Home').'</a></li>';
-        if (api_is_allowed_to_session_edit(false,true)) {
-            //menu add page
-            echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=addnew&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a>';
+        if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit()) {
+            // menu add page
+            echo '<li><a href="index.php?cidReq=' . $_course['id'] . '&action=addnew&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('addnew').'>' . get_lang('AddNew') . '</a>';
         }
+
         $lock_unlock_addnew = null;
         $protect_addnewpage = null;
 
-        if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+        if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             // page action: enable or disable the adding of new pages
             if (self::check_addnewpagelock()==0) {
                 $protect_addnewpage = Display::return_icon('off.png', get_lang('AddOptionProtected'));
@@ -4340,7 +4341,7 @@ class Wiki
         // menu recent changes
         echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.get_lang('RecentChanges').'</a></li>';
         // menu delete all wiki
-        if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+        if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             echo '<li><a href="index.php?action=deletewiki&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('deletewiki').'>'.get_lang('DeleteWiki').'</a></li>';
         }
         ///menu more
@@ -4352,11 +4353,16 @@ class Wiki
         echo '<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('showpage').'>'.
             Display::return_icon('page.png',get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
 
-        if (api_is_allowed_to_session_edit(false,true) ) {
-            //menu edit page
-            echo '<a href="index.php?cidReq='.$_course['id'].'&action=edit&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('edit').'>'.
-                Display::return_icon('edit.png',get_lang('EditThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
+        if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit()) {
+            // menu edit page
 
+            echo '<a href="index.php?cidReq=' . $_course['id'] . '&action=edit&amp;title=' . api_htmlentities(urlencode($page)) . '&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('edit') . '>' .
+                Display::return_icon(
+                    'edit.png',
+                    get_lang('EditThisPage'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ) . '</a>';
             //menu discuss page
             echo '<a href="index.php?action=discuss&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('discuss').'>'.
                 Display::return_icon('discuss.png',get_lang('DiscussThisPage'),'',ICON_SIZE_MEDIUM).'</a>';

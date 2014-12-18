@@ -17,16 +17,16 @@ class SessionManager
     public static $_debug = false;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
-
     }
 
     /**
      * Fetches a session from the database
-     * @param   int     Session ID
+     * @param   int  $id   Session Id
+     *
      * @return  array   Session details
      */
     public static function fetch($id)
@@ -40,6 +40,7 @@ class SessionManager
         if (Database::num_rows($r) != 1) {
             return array();
         }
+
         return Database::fetch_array($r, 'ASSOC');
     }
 

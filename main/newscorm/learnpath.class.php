@@ -322,7 +322,8 @@ class learnpath
             // Get last viewing vars.
             $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
             // This query should only return one or zero result.
-            $sql = "SELECT lp_item_id, status FROM $lp_item_view_table
+            $sql = "SELECT lp_item_id, status
+                    FROM $lp_item_view_table
                     WHERE
                         c_id = $course_id AND
                         lp_view_id = ".$this->lp_view_id." AND
@@ -2391,6 +2392,7 @@ class learnpath
                     }
                 }
             }
+
             return $is_visible;
         }
 

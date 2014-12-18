@@ -4,7 +4,7 @@ namespace System;
 
 /**
  * Session Management
- * 
+ *
  * @see ChamiloSession
  *
  * @license see /license.txt
@@ -36,8 +36,8 @@ class Session implements \ArrayAccess
 
     /**
      * Returns true if session has variable set up, false otherwise.
-     * 
-     * @param string $variable 
+     *
+     * @param string $variable
      */
     static function has($variable)
     {
@@ -57,7 +57,7 @@ class Session implements \ArrayAccess
         $_SESSION = array();
         session_destroy();
     }
-    
+
     /*
      * ArrayAccess
      */
@@ -70,7 +70,7 @@ class Session implements \ArrayAccess
     /**
      * It it exists returns the value stored at the specified offset.
      * If offset does not exists returns null. Do not trigger a warning.
-     * 
+     *
      * @param string $offset
      * @return any
      */
@@ -88,10 +88,10 @@ class Session implements \ArrayAccess
     {
         unset($_SESSION[$offset]);
     }
-    
+
     /**
      * Magical methods
-     * 
+     *
      */
 
     public function __unset($name)
@@ -107,10 +107,10 @@ class Session implements \ArrayAccess
     /**
      * It it exists returns the value stored at the specified offset.
      * If offset does not exists returns null. Do not trigger a warning.
-     * 
+     *
      * @param string $name
      * @return any
-     * 
+     *
      */
     function __get($name)
     {
@@ -120,7 +120,7 @@ class Session implements \ArrayAccess
     /**
      *
      * @param string $name
-     * @param any $value 
+     * @param any $value
      */
     function __set($name, $value)
     {

@@ -98,6 +98,7 @@ function save_item(
         if ($debug > 0) {
             error_log("item #$item_id not found in the items array: ".print_r($myLP->items, 1));
         }
+
         return false;
     }
 
@@ -110,6 +111,7 @@ function save_item(
         if ($debug) {
             error_log("prereq_check: ".intval($prerequisitesCheck));
         }
+
         return $return;
     } else {
         if ($debug > 1) {

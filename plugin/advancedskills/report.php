@@ -132,9 +132,13 @@ if ($isStudent) {
                 $userId, STUDENT, false, false, false, null, null, null, null, null, null, DRH
             );
 
+            $usersFilter = array();
+
             foreach ($students as $student) {
-                $tableRows = $objSkill->listUsersWhoAchieved($selectedSkill, $student['user_id']);
+                $usersFilter[] = $student['user_id'];
             }
+
+            $tableRows = $objSkill->listUsersWhoAchieved($selectedSkill, $usersFilter);
 
             break;
     }

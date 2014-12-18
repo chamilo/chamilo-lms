@@ -142,7 +142,7 @@ class Attendance
 		while ($attendance = Database::fetch_row($res)) {
 
 			$student_param = '';
-			if (api_is_drh() && ($_GET['student_id'])) {
+			if (api_is_drh() && $_GET['student_id']) {
 				$student_param = '&student_id='.Security::remove_XSS($_GET['student_id']);
 			}
 
@@ -152,11 +152,17 @@ class Attendance
 				$session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
 			}
 			if ($attendance[5] == 1) {
-				if (api_is_allowed_to_edit(null, true)) {
-					//Link to edit
+
+				$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+					api_get_user_id(),
+					api_get_course_info()
+				);
+
+				if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
+					// Link to edit
 					$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
 				} else {
-					//Link to view
+					// Link to view
 					$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
 				}
 

@@ -25,7 +25,12 @@ if ($attendance->get_number_of_attendances() == 0) {
     $attendance->set_description(get_lang('Attendances'));
     $attendance->attendance_add();
 }
-$table = new SortableTable('attendance_list', array('Attendance', 'get_number_of_attendances'), array('Attendance', 'get_attendance_data'), $default_column);
+$table = new SortableTable(
+    'attendance_list',
+    array('Attendance', 'get_number_of_attendances'),
+    array('Attendance', 'get_attendance_data'),
+    $default_column
+);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, array('style'=>'width:20px;'));
 $table->set_header(1, get_lang('Name'), true );

@@ -212,10 +212,12 @@ class AttendanceController
     }
 
     /**
-     * It's used for controlling attendace sheet (list, add),
+     * It's used for controlling attendance sheet (list, add),
      * render to attendance_sheet view
-     * @param string action
-     * @param int	 attendance id
+     * @param string $action
+     * @param int	 $attendance_id
+     * @param int $student_id
+     * @param bool $edit
      */
     public function attendance_sheet($action, $attendance_id, $student_id = 0, $edit = true)
     {
@@ -230,8 +232,14 @@ class AttendanceController
             $filter_type = $_REQUEST['filter'];
         }
 
+        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+            api_get_user_id(),
+            api_get_course_info()
+        );
+
         if ($edit == true) {
-            if (api_is_allowed_to_edit(null, true)) {
+
+            if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                 $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
             }
         } else {
@@ -242,11 +250,12 @@ class AttendanceController
             }
 
             if (api_is_allowed_to_edit(null, true) ||
-                api_is_coach(api_get_session_id(), api_get_course_id())
+                api_is_coach(api_get_session_id(), api_get_course_id()) ||
+                $isDrhOfCourse
             ) {
-                $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id);
+                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
             } else {
-                $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id, $user_id);
+                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, $user_id);
             }
 
             $data['faults']  = $attendance->get_faults_of_user($user_id, $attendance_id);
@@ -257,7 +266,6 @@ class AttendanceController
         $data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
-
             if (isset($_POST['hidden_input'])) {
                 foreach ($_POST['hidden_input'] as $cal_id) {
                     $users_present = array();

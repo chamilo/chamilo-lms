@@ -1614,8 +1614,8 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
              WHERE
                 c_id = $course_id AND
                 lp_id = $learnpath_id AND
-                id = $id_in_path AND
-                lp_view_id = $lpViewId";
+                id = $id_in_path
+            ";
     $res_item = Database::query($sql);
     if (Database::num_rows($res_item) < 1) {
         return -1;
@@ -1627,9 +1627,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
     $origin = 'learnpath';
     $main_dir_path = api_get_path(WEB_CODE_PATH);
     $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
-
     $link = '';
-
     switch ($type) {
         case 'dokeos_chapter':
             $link .= $main_dir_path.'newscorm/blank.php';
@@ -1660,7 +1658,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             break;
         case 'hotpotatoes': //lowercase because of strtolower above
             $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-            $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND  id=$id");
+            $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $path = $myrow['path'];
             $link .= $main_dir_path.'exercice/showinframes.php?file='.$path.'' .

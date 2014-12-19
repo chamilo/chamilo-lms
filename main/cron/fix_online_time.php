@@ -38,11 +38,10 @@ function getTeachersInCourseIds() {
 function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds) {
     $timeLimit = '- 30 minute';
     $extraTime = '+ 5 minute';
-    $dataBaseCurrentHour = array_shift(
-        Database::fetch_array(
-            Database::query('SELECT UTC_TIMESTAMP')
-        )
+    $utcResult = Database::fetch_array(
+        Database::query('SELECT UTC_TIMESTAMP')
     );
+    $dataBaseCurrentHour = array_shift($utcResult);
     $maximumIdleTimeInCourse = date(
         'Y-m-d H:i:s',
         strtotime($dataBaseCurrentHour.' '.$timeLimit)
@@ -50,21 +49,19 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds) {
     $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
     foreach ($teachersInCourseIds as $key => $value) {
         $value = array_shift($value);
-        $currentTeacherData = array_shift(
-            Database::select(
-                'course_access_id,logout_course_date',
-                $table,
-                array(
-                    'where'=> array(
-                        'user_id = ?' => array(
-                            $value,
-                        )
-                    ),
-                    'order'=> 'course_access_id DESC',
-                    'limit'=> '1'
-                )
+        $logResult = Database::select(
+            'course_access_id,logout_course_date', $table,
+            array(
+                'where' => array(
+                    'user_id = ?' => array(
+                        $value,
+                    )
+                ),
+                'order' => 'course_access_id DESC',
+                'limit' => '1'
             )
         );
+        $currentTeacherData = array_shift($logResult);
         Database::update(
             $table,
             array(

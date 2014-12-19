@@ -78,6 +78,12 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds) {
                 )
             )
         );
+        Database::update(
+            Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE),
+            array(
+                'course' => 'NULL'
+            )
+        );
     }
 }
 

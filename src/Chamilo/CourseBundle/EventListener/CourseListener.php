@@ -62,7 +62,6 @@ class CourseListener
             //$token = $event->getRequest()->query->get('token');
             $kernel = $event->getKernel();
             $request = $event->getRequest();
-            $session = $request->getSession();
 
             /** @var ContainerInterface $container */
             $container = $this->container;
@@ -80,15 +79,29 @@ class CourseListener
             /** @var EntityManager $em */
             $em = $container->get('doctrine')->getManager();
 
+            $securityChecker = $container->get('security.authorization_checker');
+
             if (!empty($courseCode)) {
                 /** @var Course $course */
                 $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
                 if ($course) {
+                    // Session
+                    $sessionId = $request->get('id_session');
 
-                    // Security
-                    if (false === $container->get('security.authorization_checker')->isGranted('view', $course)) {
+                    if (!empty($sessionId)) {
+                        $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+                        if ($session) {
+                            $course->setCurrentSession($session);
+                            $controller[0]->setSession($session);
+                        }
+                    }
+
+                    // Check if user is allowed to this course / course-session
+                    if (false === $securityChecker->isGranted('view', $course)) {
                         throw new AccessDeniedException('Unauthorised access!');
                     }
+
+                    // Legacy code
 
                     $courseInfo = api_get_course_info($course->getCode());
                     $container->get('twig')->addGlobal('course', $course);
@@ -96,22 +109,12 @@ class CourseListener
                     $request->getSession()->set('_cid', $course->getCode());
                     $request->getSession()->set('_course', $courseInfo);
 
+                    /*
+                    Sets the controller course in order to use $this->getCourse()
+                    */
                     $controller[0]->setCourse($course);
-
-                    // Session
-                    $sessionId = $request->get('id_session');
-
-                    $contains = $course->getSessions()->containsKey($sessionId);
-                    //var_dump($contains);
-                    if (!empty($sessionId)) {
-                        $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-                        if (!empty($session)) {
-                            //$controller[0]->setSession($session);
-                        }
-                    }
                 }
             }
-
         }
     }
 }

@@ -4,17 +4,10 @@
 namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Career;
-use Chamilo\CoreBundle\Entity\Listener\CourseListener;
-use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CoreBundle\Entity\Course;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
-use Chamilo\CourseBundle\ToolChain;
-
-use Knp\Menu\ItemInterface as MenuItemInterface;
 
 /**
  * Class CareerAdmin
@@ -29,7 +22,7 @@ class CareerAdmin extends Admin
     {
         $formMapper
             ->add('name')
-            ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
+            ->add('description', 'ckeditor')
             ->add('status', 'choice', array('choices' => Career::getStatusList()))
         ;
     }

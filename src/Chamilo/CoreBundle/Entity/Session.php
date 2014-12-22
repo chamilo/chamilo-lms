@@ -11,7 +11,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Session
  * @UniqueEntity("name")
- * @ORM\Table(name="session", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})}, indexes={@ORM\Index(name="idx_id_coach", columns={"id_coach"}), @ORM\Index(name="idx_id_session_admin_id", columns={"session_admin_id"})})
+ * @ORM\Table(
+ *      name="session",
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})},
+ *      indexes={
+ *          @ORM\Index(name="idx_id_coach", columns={"id_coach"}),
+ *          @ORM\Index(name="idx_id_session_admin_id", columns={"session_admin_id"})
+ *      }
+ * )
  * @ORM\Entity
  */
 class Session
@@ -149,7 +156,7 @@ class Session
     protected $users;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
@@ -185,6 +192,9 @@ class Session
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     */
     public function setId($id)
     {
         $this->id = $id;
@@ -602,11 +612,18 @@ class Session
         $this->generalCoach = $coach;
     }
 
+    /**
+     * @return mixed
+     */
     public function getCategory()
     {
         return $this->category;
     }
 
+    /**
+     * @param $category
+     * @return $this
+     */
     public function setCategory($category)
     {
         $this->category = $category;
@@ -625,5 +642,21 @@ class Session
             self::INVISIBLE => 'status_invisible',
             self::AVAILABLE => 'status_available',
         );
+    }
+
+    /**
+     * Check if session is visible
+     * @return bool
+     */
+    public function isActive()
+    {
+        $now = new \Datetime('now');
+
+        if ($now > $this->getAccessStartDate()) {
+
+            return true;
+        }
+
+        return false;
     }
 }

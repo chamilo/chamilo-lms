@@ -3,41 +3,58 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
+use Chamilo\CoreBundle\Entity\ToolResourceRights;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-use Knp\Menu\ItemInterface as MenuItemInterface;
-
 /**
- * Class BranchAdmin
+ * Class ToolResourceRightsAdmin
  * @package Chamilo\CoreBundle\Admin
  */
-class BranchAdmin extends Admin
+class ToolResourceRightsAdmin extends Admin
 {
-    // Fields to be shown on create/edit forms
+    /**
+     * @inheritdoc
+     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('id')
+            ->add('tool')
+            ->add(
+                'role',
+                'choice',
+                array('choices' => ToolResourceRights::getDefaultRoles())
+            )
+            ->add(
+                'mask',
+                'choice',
+                array('choices' => ToolResourceRights::getMaskList())
+            )
         ;
     }
 
-    // Fields to be shown on filter forms
+    /**
+     * @inheritdoc
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
+            ->add('role')
         ;
     }
 
-    // Fields to be shown on lists
+    /**
+     * @inheritdoc
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
             ->addIdentifier('id')
+            ->addIdentifier('role')
+            ->addIdentifier('mask')
         ;
     }
 }

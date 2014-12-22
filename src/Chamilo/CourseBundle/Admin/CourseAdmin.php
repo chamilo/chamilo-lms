@@ -31,15 +31,7 @@ class CourseAdmin extends Admin
             ->add('code', 'text', array(
                 //'read_only' => true,
             ))
-            /*->add(
-                'description',
-                'textarea',
-                array('attr' => array('class' => 'ckeditor'))
-            )*/
-            ->add(
-                'description',
-                'ckeditor'
-            )
+            ->add('description', 'ckeditor')
             ->add('courseLanguage', 'language')
             ->add('departmentName')
             ->add(
@@ -50,7 +42,7 @@ class CourseAdmin extends Admin
                     'translation_domain' => 'ChamiloCoreBundle'
                 )
             )
-            ->add('departmentUrl')
+            ->add('departmentUrl', 'url')
             ->add('urls', 'sonata_type_collection', array(
                     'cascade_validation' => true,
                 ), array(

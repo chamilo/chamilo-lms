@@ -6,6 +6,7 @@ namespace Chamilo\NotebookBundle\Entity;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
@@ -29,7 +30,7 @@ class NotebookRepository extends EntityRepository
         $resourceNode
             ->setName($resource->getName())
             ->setCreator($creator)
-            ->setTool($this->getToolName());
+            ->setTool($this->getTool());
 
         $this->getEntityManager()->persist($resourceNode);
         $this->getEntityManager()->flush();
@@ -58,8 +59,6 @@ class NotebookRepository extends EntityRepository
     }
 
     /**
-     * @param AbstractResource $resource
-     * @param User $user
      * @param Course $course
      * @return ResourceLink
      */
@@ -71,13 +70,13 @@ class NotebookRepository extends EntityRepository
             ->innerJoin('node.links', 'links')
             ->innerJoin($this->getClassName(), 'resource')
             ->where('node.tool = :tool')
-            ->andWhere('links.course = :courseId')
+            ->andWhere('links.course = :course')
             //->where('link.cId = ?', $course->getId())
             //->where('node.cId = 0')
             //->orderBy('node');
             ->setParameters(array(
-                'tool'=> $this->getToolName(),
-                'courseId' => $course->getId()
+                'tool'=> $this->getTool(),
+                'course' => $course
                 )
             )
             ->getQuery()
@@ -145,6 +144,17 @@ class NotebookRepository extends EntityRepository
         $resourceLink->setGroup($group);
         $this->getEntityManager()->persist($resourceLink);
     }
+
+    /**
+     * @return Tool
+     */
+    public function getTool()
+    {
+        return $this->getEntityManager()
+            ->getRepository('ChamiloCoreBundle:Tool')
+            ->findOneByName($this->getToolName());
+    }
+
 
     /**
      * @return string

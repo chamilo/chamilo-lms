@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Chamilo\CoreBundle\Entity\Tool;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,10 +29,9 @@ class ResourceNode
     protected $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="tool", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
-     */
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")
+     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
+     **/
     protected $tool;
 
     /**
@@ -94,7 +94,6 @@ class ResourceNode
      *
      */
     protected $path;
-
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
@@ -172,9 +171,9 @@ class ResourceNode
     }
 
     /**
-     * Returns the resource type.
+     * Returns the tool.
      *
-     * @return string
+     * @return Tool
      */
     public function getTool()
     {
@@ -183,12 +182,11 @@ class ResourceNode
 
     /**
      * Returns the resource type.
-     *
-     * @return string
+     * @param Tool $tool
      *
      * @return $this
      */
-    public function setTool($tool)
+    public function setTool(Tool $tool)
     {
         $this->tool = $tool;
 

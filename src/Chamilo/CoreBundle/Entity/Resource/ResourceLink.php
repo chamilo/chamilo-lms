@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity\Resource;
 
 use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Chamilo\UserBundle\Entity\User;
@@ -54,6 +55,35 @@ class ResourceLink
     protected $group;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRights", mappedBy="resourceLink", cascade={"remove"})
+     **/
+    protected $rights;
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRights()
+    {
+        return $this->rights;
+    }
+
+    /**
+     * @param mixed $rights
+     */
+    public function setRights($rights)
+    {
+        $this->rights = $rights;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -102,49 +132,13 @@ class ResourceLink
     }
 
     /**
-     * Set cId
+     * Get user
      *
-     * @param integer $cId
-     * @return AbstractResource
+     * @return User
      */
-    public function setCId($cId)
+    public function getUser()
     {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId
-     *
-     * @return integer
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return AbstractResource
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
@@ -158,26 +152,13 @@ class ResourceLink
     }
 
     /**
-     * Set sessionId
+     * Get session
      *
-     * @param integer $sessionId
-     * @return AbstractResource
+     * @return Session
      */
-    public function setSessionId($sessionId)
+    public function getSession()
     {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId
-     *
-     * @return integer
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
+        return $this->session;
     }
 
     /**

@@ -14,6 +14,13 @@ services:
         tags:
            - { name: security.voter }
 
+    chamilo_core.security.authorization.voter.resource_link:
+       class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceLinkVoter
+       public: false
+       tags:
+          - { name: security.voter }
+
+
     chamilo_core.directory_namer.user_image:
         class: Chamilo\CoreBundle\Naming\UserImage
 

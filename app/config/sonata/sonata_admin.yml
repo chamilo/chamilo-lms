@@ -85,6 +85,7 @@ sonata_admin:
                     - sonata.page.admin.site
                     - sonata.notification.admin.message
                     - sonata.admin.settings_current
+                    - sonata.admin.tool
             sonata.admin.group.user:
                 label: Users
                 icon:  '<i class="fa fa-play-circle"></i>'

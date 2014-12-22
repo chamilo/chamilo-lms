@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -35,7 +36,7 @@ class CourseVoter extends AbstractVoter
     /**
      * @param string $attribute
      * @param Course $course
-     * @param null $user
+     * @param User $user
      * @return bool
      */
     protected function isGranted($attribute, $course, $user = null)
@@ -45,14 +46,25 @@ class CourseVoter extends AbstractVoter
             return false;
         }
 
-        // custom business logic to decide if the given user can view
-        // and/or edit the given post
-        if ($attribute == self::VIEW && $course->isActive()) {
-            return true;
-        }
-
-        if ($attribute == self::EDIT && $user->getId() === $course->getOwner()->getId()) {
-            return true;
+        switch ($attribute) {
+            case self::VIEW:
+                $session = $course->getCurrentSession();
+                if (empty($session)) {
+                    if ($course->isActive()) {
+                        return true;
+                    }
+                } else {
+                    if ($session->isActive() && $course->isActive()) {
+                        return true;
+                    }
+                }
+                return false;
+            case self::EDIT:
+                // Teacher
+                if ($user->getId() === $course->getOwner()->getId()) {
+                    return true;
+                }
+                return false;
         }
 
         return false;

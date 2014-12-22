@@ -65,9 +65,8 @@ class SessionRelUser
         $this->movedAt = null;
     }
 
-
     /**
-     * Set idSession
+     * Set Session
      *
      * @param Session $session
      *
@@ -76,6 +75,7 @@ class SessionRelUser
     public function setSession($session)
     {
         $this->session = $session;
+
         return $this;
     }
 
@@ -90,9 +90,9 @@ class SessionRelUser
     }
 
     /**
-     * Set idUser
+     * Set User
      *
-     * @param integer $user
+     * @param User $user
      * @return SessionRelUser
      */
     public function setUser($user)
@@ -105,7 +105,7 @@ class SessionRelUser
     /**
      * Get idUser
      *
-     * @return integer
+     * @return User
      */
     public function getUser()
     {

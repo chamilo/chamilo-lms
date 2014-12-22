@@ -32,7 +32,7 @@ class SettingsCurrentAdmin extends Admin
             ->add('type')
             ->add('category')
             ->add('selectedValue')
-            ->add('comment', 'textarea', array('attr' => array('class'=> 'ckeditor')))
+            ->add('comment', 'ckeditor')
             ->add('url')
         ;
     }

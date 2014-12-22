@@ -225,32 +225,37 @@ class Course
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      **/
-    private $urls;
+    protected $urls;
 
     /**
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="course", cascade={"persist"})
      **/
-    private $sessions;
+    protected $sessions;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="course")
      **/
-    //private $items;
+    //protected $items;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist"})
      **/
-    private $tools;
+    protected $tools;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\NotebookBundle\Entity\CNotebook", mappedBy="course")
      **/
-    //private $notebooks;
+    //protected $notebooks;
 
     /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course")
      **/
-    //private $curriculumCategories;
+    //protected $curriculumCategories;
+
+    /**
+     * @var Session
+     **/
+    protected $currentSession;
 
     /**
      *
@@ -994,11 +999,32 @@ class Course
     public static function getStatusList()
     {
         return array(
-            self::CLOSED      => 'status_closed',
-            self::REGISTERED   => 'status_registered',
+            self::CLOSED => 'status_closed',
+            self::REGISTERED => 'status_registered',
             self::OPEN_PLATFORM => 'status_open_platform',
             self::OPEN_WORLD => 'status_open_world',
-            self::HIDDEN     => 'status_hidden',
+            self::HIDDEN => 'status_hidden',
         );
+    }
+
+    /**
+     * @return Session
+     */
+    public function getCurrentSession()
+    {
+        return $this->currentSession;
+    }
+
+    /**
+     * @param Session $session
+     * @return $this
+     */
+    public function setCurrentSession(Session $session)
+    {
+        // If the session is registered in the course session list.
+        if ($this->getSessions()->contains($session->getId())) {
+            $this->currentSession = $session;
+        }
+        return $this;
     }
 }

@@ -4,9 +4,14 @@
 namespace Chamilo\NotebookBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\NotebookBundle\Tool\Notebook;
 use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use APY\DataGridBundle\Grid\Source\Entity;
@@ -22,6 +27,8 @@ use Chamilo\NotebookBundle\Entity\NotebookRepository;
 use Chamilo\NotebookBundle\Entity\NotebookManager;
 use Chamilo\NotebookBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Controller\ToolBaseCrudController;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 /**
  * Class NotebookController
@@ -52,7 +59,11 @@ class NotebookController extends ToolBaseCrudController
             }
         );*/
 
-        $resources = $this->getRepository()->getResourceByCourse($course);
+        $this->createNew();
+        /** @var NotebookRepository $repository */
+        $repository = $this->getRepository();
+
+        $resources = $repository->getResourceByCourse($course);
 
         $source->setData($resources);
         $grid->setSource($source);
@@ -129,6 +140,90 @@ class NotebookController extends ToolBaseCrudController
         return $grid->getGridResponse(
             'ChamiloNotebookBundle:Notebook:index.html.twig'
         );
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function showAction(Request $request)
+    {
+        $builder = new MaskBuilder();
+        $builder
+            ->add('view')
+        ;
+        $mask = $builder->get(); // int(29)"
+        /** @var AbstractResource $resource */
+
+        $resource = $this->findOr404($request);
+        $resourceNode = $resource->getResourceNode();
+        $link = $this->detectLink($resourceNode);
+
+        if (false === $this->get('security.authorization_checker')->isGranted('view', $link)) {
+            //throw new AccessDeniedException('Unauthorised access!');
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('show.html'))
+            ->setTemplateVar($this->config->getResourceName())
+            ->setData($resource)
+        ;
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * @param ResourceNode $resourceNode
+     * @return ResourceLink|null
+     */
+    public function detectLink(ResourceNode $resourceNode)
+    {
+        $user = $this->getUser();
+        $session = $this->getSession();
+        $course = $this->getCourse();
+
+        $links = $resourceNode->getLinks();
+
+        $linkFound = null;
+
+        if (!empty($links)) {
+            /** @var ResourceLink $link */
+            foreach ($links as $link) {
+                $linkCourse = $link->getCourse();
+                $linkSession = $link->getSession();
+                $linkUser = $link->getUser();
+
+                if (isset($course) && isset($session)) {
+                    if ($linkCourse->getId() == $course->getId() &&
+                        $linkSession->getId() == $session->getId()
+                    ) {
+                        $linkFound = $link;
+                        break;
+                    }
+                }
+
+                if (isset($course)) {
+                    if ($linkCourse->getId() == $course->getId()) {
+                        $linkFound = $link;
+                        break;
+                    }
+                }
+
+                if (isset($linkUser)) {
+                    if ($linkUser->getId() == $user->getId()) {
+                        $linkFound = $link;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (empty($linkFound)) {
+            throw new NotFoundResourceException('Link not found');
+        }
+        return $linkFound;
     }
 
     /**
@@ -225,4 +320,5 @@ class NotebookController extends ToolBaseCrudController
     {
         return $this->get('chamilo_notebook.entity.notebook_manager');
     }
+
 }

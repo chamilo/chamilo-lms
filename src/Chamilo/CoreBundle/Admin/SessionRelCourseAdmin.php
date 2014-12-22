@@ -18,6 +18,9 @@ use Knp\Menu\ItemInterface as MenuItemInterface;
  */
 class SessionRelCourseAdmin extends Admin
 {
+    /**
+     * @inheritdoc
+     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -25,6 +28,9 @@ class SessionRelCourseAdmin extends Admin
         ;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -34,6 +40,9 @@ class SessionRelCourseAdmin extends Admin
         ;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -41,6 +50,9 @@ class SessionRelCourseAdmin extends Admin
         ;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

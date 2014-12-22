@@ -1,7 +1,9 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,7 +26,7 @@ class Tool
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="name", type="string", nullable=false, unique=false)
      */
     private $name;
 
@@ -38,9 +40,72 @@ class Tool
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="tool", cascade={"persist", "remove"})
+     **/
+    protected $resourceNodes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ToolResourceRights", mappedBy="tool", cascade={"persist", "remove"})
+     **/
+    protected $toolResourceRights;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getToolResourceRights()
+    {
+        return $this->toolResourceRights;
+    }
+
+    /**
+     * @param ArrayCollection $toolResourceRights
+     */
+    public function setToolResourceRights($toolResourceRights)
+    {
+        $this->toolResourceRights = new ArrayCollection();
+
+        foreach ($toolResourceRights as $toolResourceRight) {
+            $this->addToolResourceRights($toolResourceRight);
+        }
+    }
+
+    /**
+     * @param ToolResourceRights $toolResourceRight
+     */
+    public function addToolResourceRights(ToolResourceRights $toolResourceRight)
+    {
+        $toolResourceRight->setTool($this);
+        $this->toolResourceRights[] = $toolResourceRight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResourceNodes()
+    {
+        return $this->resourceNodes;
+    }
+
+    /**
+     * @param mixed $resourceNodes
+     */
+    public function setResourceNodes($resourceNodes)
+    {
+        $this->resourceNodes = $resourceNodes;
+    }
 
     /**
      * Get id

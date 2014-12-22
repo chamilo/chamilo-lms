@@ -100,11 +100,10 @@ abstract class AbstractResource
     }
 
     /**
-     * @return mixed
+     * @return ResourceNode
      */
     public function getResourceNode()
     {
         return $this->resourceNode;
     }
-
 }

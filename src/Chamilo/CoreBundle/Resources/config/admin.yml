@@ -141,3 +141,25 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.tool:
+        class: Chamilo\CoreBundle\Admin\ToolAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Tool" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\Tool
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.tool_resource_rights:
+        class: Chamilo\CoreBundle\Admin\ToolResourceRightsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "ToolResourceRights" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\ToolResourceRights
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]

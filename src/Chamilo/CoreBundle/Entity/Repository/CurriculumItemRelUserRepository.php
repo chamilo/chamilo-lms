@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
@@ -6,8 +7,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Criteria;
 
 /**
- * CurriculumItemRelUserRepository
- *
+ * Class CurriculumItemRelUserRepository
+ * @package Chamilo\CoreBundle\Entity\Repository
  */
 class CurriculumItemRelUserRepository extends EntityRepository
 {

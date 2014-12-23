@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
@@ -6,8 +7,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Criteria;
 
 /**
- * JuryRepository
- *
+ * Class JuryRepository
+ * @package Chamilo\CoreBundle\Entity\Repository
  */
 class JuryRepository extends EntityRepository
 {

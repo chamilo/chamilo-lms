@@ -100,11 +100,9 @@ class IndexController extends BaseController
 
         $settingsManager = $this->get('chamilo.settings.manager');
         $setting = $settingsManager->getSetting('platform.institution');
-        error_log($setting);
 
         $settingsManagerCourse = $this->get('chamilo_course.settings.manager');
-        $course = $this->getDoctrine()->getRepository
-            ('ChamiloCoreBundle:Course')->find(1);
+        $course = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Course')->find(1);
         if ($course) {
             $settingsManagerCourse->setCourse($course);
             $agenda = $settingsManagerCourse->getSetting(

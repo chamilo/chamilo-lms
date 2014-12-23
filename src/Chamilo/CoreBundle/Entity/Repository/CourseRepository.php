@@ -1,15 +1,18 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\ChamiloUserBundle;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use \Entity\Course;
 use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
- * CourseRepository
- *
+ * Class CourseRepository
+ * @package Chamilo\CoreBundle\Entity\Repository
  */
 class CourseRepository extends EntityRepository
 {
@@ -17,6 +20,7 @@ class CourseRepository extends EntityRepository
      * Get all users that are registered in the course. No matter the status
      *
      * @param Course $course
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getSubscribedUsers(Course $course)
@@ -57,21 +61,19 @@ class CourseRepository extends EntityRepository
      */
     public function getSubscribedStudents(Course $course)
     {
-        $queryBuilder = $this->getSubscribedUsers($course);
-        $wherePart = $queryBuilder->expr()->andx();
-        $wherePart->add($queryBuilder->expr()->eq('c.status', STUDENT));
-        return $queryBuilder;
+        return self::getSubscribedUsersByStatus($course, STUDENT);
     }
 
     /**
      * Gets the students subscribed in the course
-     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @param Course $course
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getSubscribedCoaches(\Chamilo\CoreBundle\Entity\Course $course)
+    public function getSubscribedCoaches(Course $course)
     {
         $queryBuilder = $this->getSubscribedUsers($course);
+        //@todo add criterias
         return $queryBuilder;
     }
 
@@ -84,12 +86,43 @@ class CourseRepository extends EntityRepository
      */
     public function getSubscribedTeachers(Course $course)
     {
+        return self::getSubscribedUsersByStatus($course, COURSEMANAGER);
+    }
+
+    /**
+     * @param Course $course
+     * @param int $status use legacy chamilo constants COURSEMANAGER|STUDENT
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getSubscribedUsersByStatus(Course $course, $status)
+    {
         $queryBuilder = $this->getSubscribedUsers($course);
         $wherePart = $queryBuilder->expr()->andx();
-        $wherePart->add($queryBuilder->expr()->eq('c.status', COURSEMANAGER));
+        $wherePart->add($queryBuilder->expr()->eq('c.status', $status));
 
         return $queryBuilder;
     }
 
+    /**
+     * @param User $user
+     * @param Course $course
+     * @return bool
+     */
+    public function isUserSubscribedInCourse(User $user, Course $course)
+    {
+        // $queryBuilder = $this->getSubscribedUsers($course);
 
+        $userCollection = $course->getUsers();
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq("user", $user));
+
+        $userCollection = $userCollection->matching($criteria);
+
+        if ($userCollection->count()) {
+            return true;
+        }
+
+        return false;
+
+    }
 }

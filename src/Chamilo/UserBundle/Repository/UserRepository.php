@@ -47,47 +47,10 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param string $username
-     * @return User
-     * @throws UsernameNotFoundException
-     */
-    /*public function loadUserByUsername($username)
-    {
-        $query = $this
-            ->createQueryBuilder('u')
-            ->where('u.username = :username OR u.email = :email')
-            ->leftJoin('u.roles', 'r')
-            ->setParameter('username', $username)
-            ->setParameter('email', $username)
-            ->getQuery();
-
-        try {
-            $user = $query->getSingleResult();
-        } catch (NoResultException $e) {
-            throw new UsernameNotFoundException(
-                sprintf('Unable to find an active admin User identified by "%s".', $username),
-                0,
-                $e
-            );
-        }
-        return $user;
-    }*/
-
-
-    /**
-     * @param string $class
-     * @return bool
-     */
-    /*public function supportsClass($class)
-    {
-        return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
-    }*/
-
-    /**
      * Get course user relationship based in the course_rel_user table.
      * @return array
      */
-    public function getCourses(User $user)
+    /*public function getCourses(User $user)
     {
         $queryBuilder = $this->createQueryBuilder('user');
 
@@ -127,12 +90,9 @@ class UserRepository extends EntityRepository
         $query = $queryBuilder->getQuery();
 
         return $query->execute();
+    }*/
 
-        /*$studentGroup = $this->findOneBy(array('name' => 'students'));
-        return $this->getUsers($studentGroup);*/
-    }
-
-    public function getUsers($group)
+    /*public function getUsers($group)
     {
         $queryBuilder = $this->createQueryBuilder('u');
 
@@ -145,5 +105,5 @@ class UserRepository extends EntityRepository
         $query = $queryBuilder->getQuery();
 
         return $query->execute();
-    }
+    }*/
 }

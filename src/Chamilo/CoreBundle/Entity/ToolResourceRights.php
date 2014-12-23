@@ -129,8 +129,8 @@ class ToolResourceRights
     public static function getDefaultRoles()
     {
         return array(
-            'ROLE_STUDENT' => 'student',
-            'ROLE_TEACHER' => 'teacher'
+            'ROLE_STUDENT' => 'ROLE_STUDENT',
+            'ROLE_TEACHER' => 'ROLE_TEACHER'
         );
     }
 
@@ -142,7 +142,6 @@ class ToolResourceRights
         $builder = new MaskBuilder();
         $builder
             ->add('view')
-            ->add('edit')
         ;
 
         $readerMask = $builder->get();
@@ -152,6 +151,7 @@ class ToolResourceRights
             ->add('view')
             ->add('edit')
         ;
+
         $editorMask = $builder->get();
 
         $builder = new MaskBuilder();

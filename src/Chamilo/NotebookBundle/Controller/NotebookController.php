@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceLinkVoter;
 use Chamilo\NotebookBundle\Tool\Notebook;
 use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -149,19 +150,13 @@ class NotebookController extends ToolBaseCrudController
      */
     public function showAction(Request $request)
     {
-        $builder = new MaskBuilder();
-        $builder
-            ->add('view')
-        ;
-        $mask = $builder->get(); // int(29)"
         /** @var AbstractResource $resource */
 
         $resource = $this->findOr404($request);
         $resourceNode = $resource->getResourceNode();
         $link = $this->detectLink($resourceNode);
-
-        if (false === $this->get('security.authorization_checker')->isGranted('view', $link)) {
-            //throw new AccessDeniedException('Unauthorised access!');
+        if (false === $this->get('security.authorization_checker')->isGranted(ResourceLinkVoter::VIEW, $link)) {
+            throw new AccessDeniedException('Unauthorised access!');
         }
 
         $view = $this

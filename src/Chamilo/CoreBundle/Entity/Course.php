@@ -994,6 +994,16 @@ class Course
     }
 
     /**
+     * Anybody can see this course
+     *
+     * @return bool
+     */
+    public function isPublic()
+    {
+        return $this->visibility == self::OPEN_WORLD;
+    }
+
+    /**
      * @return array
      */
     public static function getStatusList()

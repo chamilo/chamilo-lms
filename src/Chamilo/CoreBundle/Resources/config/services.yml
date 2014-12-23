@@ -10,16 +10,17 @@ services:
 
     chamilo_core.security.authorization.voter.course:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter
+        arguments: [ @doctrine.orm.entity_manager ]
         public: false
         tags:
            - { name: security.voter }
 
     chamilo_core.security.authorization.voter.resource_link:
-       class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceLinkVoter
-       public: false
-       tags:
-          - { name: security.voter }
-
+        class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceLinkVoter
+        public: false
+        arguments: [ @service_container ]
+        tags:
+            - { name: security.voter }
 
     chamilo_core.directory_namer.user_image:
         class: Chamilo\CoreBundle\Naming\UserImage

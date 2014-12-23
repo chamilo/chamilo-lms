@@ -6,7 +6,8 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
 use Chamilo\CoreBundle\Entity\ToolResourceRights;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -16,16 +17,31 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ResourceLinkVoter extends AbstractVoter
 {
+    private $container;
+
     const VIEW = 'view';
     const EDIT = 'edit';
     const DELETE = 'delete';
+
+    /**
+     * Constructor
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * {@inheritdoc}
      */
     protected function getSupportedAttributes()
     {
-        return array(self::VIEW, self::EDIT, self::DELETE);
+        return array(
+            self::VIEW,
+            self::EDIT,
+            self::DELETE
+        );
     }
 
     /**
@@ -40,7 +56,7 @@ class ResourceLinkVoter extends AbstractVoter
      * @param string $attribute
      * @param ResourceLink $resourceLink
      * @param null $user
-     * .
+     *
      * @return bool
      */
     protected function isGranted($attribute, $resourceLink, $user = null)
@@ -50,26 +66,43 @@ class ResourceLinkVoter extends AbstractVoter
             return false;
         }
 
+        // Checking admin roles
+        $authChecker = $this->container->get('security.authorization_checker');
+        $adminRoles = array(
+            'ROLE_SUPER_ADMIN',
+            'ROLE_ADMIN'
+        );
+
+        foreach ($adminRoles as $adminRole) {
+            if ($authChecker->isGranted($adminRole)) {
+                //return true;
+            }
+        }
+
         $userSent = $resourceLink->getUser();
 
         // Owner.
-        if (isset($userSent) &&
+        if ($userSent instanceof UserInterface &&
             $user->getUsername() == $userSent->getUsername()) {
+
             return true;
         }
 
+        // Getting user rights
         $rightFromResourceLink = $resourceLink->getRights();
 
         if ($rightFromResourceLink->count()) {
+            // Taken rights of the link
             /** @var ResourceRights $right */
             $rights = $rightFromResourceLink;
         } else {
+            // Taken the rights from the default tool
             $rights = $resourceLink->getResourceNode()->getTool()->getToolResourceRights();
         }
 
         $roles = array();
         foreach ($rights as $right) {
-            $roles[$right->getRole()] = $right->getMask() ;
+            $roles[$right->getRole()] = $right->getMask();
         }
 
         $mask = new MaskBuilder();
@@ -78,11 +111,14 @@ class ResourceLinkVoter extends AbstractVoter
 
         switch ($attribute) {
             case self::VIEW:
-
-                if ($user->getRoles())
-                var_dump($code);
-                exit;
-                break;
+                foreach ($user->getRoles() as $role) {
+                    if (isset($roles[$role]) && $roles[$role] == $code) {
+                        dump('return true');
+                        return true;
+                    }
+                }
+                dump('return false');
+                return false;
             case self::EDIT:
                 break;
         }
@@ -91,7 +127,6 @@ class ResourceLinkVoter extends AbstractVoter
         if ($attribute == self::VIEW) {
             return true;
         }
-
 
         return false;
     }

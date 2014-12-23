@@ -221,4 +221,13 @@ abstract class BaseResourceController extends ResourceController
         return $this->getTemplate()->renderTemplate($name, $elements);
     }
 
+    /**
+     * @inheritdoc
+     **/
+    public function isGranted($attributes, $object)
+    {
+        return $this->get('security.authorization_checker')->isGranted($attributes, $object);
+    }
+
+
 }

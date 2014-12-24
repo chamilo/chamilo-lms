@@ -228,6 +228,4 @@ abstract class BaseResourceController extends ResourceController
     {
         return $this->get('security.authorization_checker')->isGranted($attributes, $object);
     }
-
-
 }

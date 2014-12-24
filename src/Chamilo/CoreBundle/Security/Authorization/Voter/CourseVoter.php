@@ -86,22 +86,21 @@ class CourseVoter extends AbstractVoter
                     if ($course->isActive()) {
                         //return true;
                     }
-
                 } else {
                     // Course in a session.
                     if ($session->isActive() && $course->isActive()) {
                         return true;
                     }
                 }
-                return false;
+                break;
             case self::EDIT:
                 // Teacher
                 if ($user->getId() === $course->getOwner()->getId()) {
                     return true;
                 }
-                return false;
+                break;
         }
-
-        return false;
+        dump('Course voter false!');
+        return true;
     }
 }

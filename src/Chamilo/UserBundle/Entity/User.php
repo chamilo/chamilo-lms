@@ -55,6 +55,13 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
  */
 class User extends BaseUser implements ParticipantInterface, ThemeUser
 {
+    const COURSE_MANAGER = 1;
+    const TEACHER = 1;
+    const SESSION_ADMIN = 3;
+    const DRH = 4;
+    const STUDENT = 5;
+    const ANONYMOUS = 6;
+
     /**
      * @var integer
      *

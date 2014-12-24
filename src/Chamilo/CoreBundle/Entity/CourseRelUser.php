@@ -1,7 +1,9 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -171,7 +173,7 @@ class CourseRelUser
     /**
      * Get User
      *
-     * @return string
+     * @return User
      */
     public function getUser()
     {

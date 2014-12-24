@@ -60,10 +60,8 @@ class NotebookController extends ToolBaseCrudController
             }
         );*/
 
-        $this->createNew();
         /** @var NotebookRepository $repository */
         $repository = $this->getRepository();
-
         $resources = $repository->getResourceByCourse($course);
 
         $source->setData($resources);
@@ -155,7 +153,7 @@ class NotebookController extends ToolBaseCrudController
         $resource = $this->findOr404($request);
         $resourceNode = $resource->getResourceNode();
         $link = $this->detectLink($resourceNode);
-        if (false === $this->get('security.authorization_checker')->isGranted(ResourceLinkVoter::VIEW, $link)) {
+        if (false === $this->isGranted(ResourceLinkVoter::VIEW, $link)) {
             throw new AccessDeniedException('Unauthorised access!');
         }
 

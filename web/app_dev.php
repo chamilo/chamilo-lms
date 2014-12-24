@@ -25,12 +25,11 @@ require_once __DIR__.'/legacy.php';
 /*use Symfony\Component\HttpFoundation\Request;
 Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();*/
-$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals('host_with_path_by_locale');
+use Sonata\PageBundle\Request\RequestFactory;
+$request = RequestFactory::createFromGlobals('host_with_path_by_locale');
 $request->enableHttpMethodParameterOverride();
 
 $kernel = new AppKernel('dev', true);
-
 $response = $kernel->handle($request);
 $response->send();
-
 $kernel->terminate($request, $response);

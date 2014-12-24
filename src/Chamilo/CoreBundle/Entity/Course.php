@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Course
@@ -394,6 +395,36 @@ class Course
                 unset($this->users[$key]);
             }
         }
+    }
+
+    /**
+     * @param User $user
+     */
+    public function addUser(User $user, $relationType, $role, $status)
+    {
+        $courseRelUser = new CourseRelUser();
+        $courseRelUser->setCourse($this);
+        $courseRelUser->setUser($user);
+        $courseRelUser->setRelationType($relationType);
+        $courseRelUser->setRole($role);
+        $courseRelUser->setStatus($status);
+        $this->addUsers($courseRelUser);
+    }
+
+    /**
+     * @param User $user
+     */
+    public function addTeacher(User $user)
+    {
+        $this->addUser($user, User::COURSE_MANAGER, "ROLE_TEACHER", "");
+    }
+
+    /**
+     * @param User $user
+     */
+    public function addStudent(User $user)
+    {
+        $this->addUser($user, User::STUDENT, "ROLE_STUDENT", "");
     }
 
     /**

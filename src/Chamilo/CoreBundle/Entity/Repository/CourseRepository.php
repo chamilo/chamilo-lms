@@ -5,13 +5,12 @@ namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
-use Chamilo\UserBundle\ChamiloUserBundle;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Common\Collections\Criteria;
-use Sonata\CoreBundle\Model\BaseEntityManager;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class CourseRepository
+ * The functions inside this class must return an instance of QueryBuilder
  * @package Chamilo\CoreBundle\Entity\Repository
  */
 class CourseRepository extends EntityRepository
@@ -57,7 +56,7 @@ class CourseRepository extends EntityRepository
      *
      * @param Course $course
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getSubscribedStudents(Course $course)
     {
@@ -68,7 +67,7 @@ class CourseRepository extends EntityRepository
      * Gets the students subscribed in the course
      * @param Course $course
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getSubscribedCoaches(Course $course)
     {
@@ -82,7 +81,7 @@ class CourseRepository extends EntityRepository
      * Gets the teachers subscribed in the course
      * @param Course $course
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getSubscribedTeachers(Course $course)
     {
@@ -92,7 +91,7 @@ class CourseRepository extends EntityRepository
     /**
      * @param Course $course
      * @param int $status use legacy chamilo constants COURSEMANAGER|STUDENT
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getSubscribedUsersByStatus(Course $course, $status)
     {
@@ -101,28 +100,5 @@ class CourseRepository extends EntityRepository
         $wherePart->add($queryBuilder->expr()->eq('c.status', $status));
 
         return $queryBuilder;
-    }
-
-    /**
-     * @param User $user
-     * @param Course $course
-     * @return bool
-     */
-    public function isUserSubscribedInCourse(User $user, Course $course)
-    {
-        // $queryBuilder = $this->getSubscribedUsers($course);
-
-        $userCollection = $course->getUsers();
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq("user", $user));
-
-        $userCollection = $userCollection->matching($criteria);
-
-        if ($userCollection->count()) {
-            return true;
-        }
-
-        return false;
-
     }
 }

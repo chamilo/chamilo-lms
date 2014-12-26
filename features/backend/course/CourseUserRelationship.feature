@@ -1,19 +1,20 @@
-Feature: Course User Relationship
-  In order to setup a course subscription
+@course
+Feature: Course user relationship
+  In order to setup add a user to a course
   As a teacher
   I need a working relationship
 
   Background:
-    Given there are following users:
-      | username | email       | plain_password | enabled |
-      | student  | student@example.com | student | yes     |
-      | teacher  | teacher@example.com | teacher | yes     |
+#    Given there are following users:
+#      | username | email                 | plain_password | enabled |
+#      | student  | student@example.com | student | yes     |
+#      | teacher  | teacher@example.com | teacher | yes     |
     Given I have a course "My course"
 
-  Scenario: A course contains a user
+  Scenario: A course contains a student
     When I add student "student" to course "My course"
-    Then I should find a user "student" in course "My course"
+    Then I should find a student "student" in course "My course"
 
-  Scenario: A course contains a user
+  Scenario: A course contains a teacher
     When I add teacher "teacher" to course "My course"
-    Then I should find a user "teacher" in course "My course"
+    Then I should find a teacher "teacher" in course "My course"

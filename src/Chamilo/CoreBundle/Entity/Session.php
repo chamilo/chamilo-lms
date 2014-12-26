@@ -172,6 +172,7 @@ class Session
         $this->accessEndDate = new \DateTime();
         $this->coachAccessStartDate = new \DateTime();
         $this->coachAccessEndDate = new \DateTime();
+        $this->visibility = 1;
     }
 
     /**
@@ -658,5 +659,16 @@ class Session
         }
 
         return false;
+    }
+
+    /**
+     * @param Course $course
+     */
+    public function addCourse(Course $course)
+    {
+        $entity = new SessionRelCourse();
+        $entity->setCourse($course);
+
+        $this->addCourses($entity);
     }
 }

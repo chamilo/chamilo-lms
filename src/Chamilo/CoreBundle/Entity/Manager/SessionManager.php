@@ -34,4 +34,5 @@ class SessionManager extends BaseEntityManager
     {
         return $this->getRepository()->findOneByName($name);
     }
+
 }

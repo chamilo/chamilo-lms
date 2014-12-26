@@ -40,7 +40,9 @@ class SessionRelCourse
      */
     protected $course;
 
-
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->nbrUsers = 0;
@@ -68,9 +70,9 @@ class SessionRelCourse
     }
 
     /**
-     * Get Session
+     * Get course
      *
-     * @return string
+     * @return Course
      */
     public function getCourse()
     {
@@ -78,7 +80,7 @@ class SessionRelCourse
     }
 
     /**
-     * @param $course
+     * @param Course $course
      * @return $this
      */
     public function setCourse($course)
@@ -91,7 +93,7 @@ class SessionRelCourse
     /**
      * Get Session
      *
-     * @return string
+     * @return Session
      */
     public function getSession()
     {

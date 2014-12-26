@@ -112,7 +112,7 @@ class SettingsCurrent implements ParameterInterface
     public function __construct()
     {
         $this->accessUrlLocked = 0;
-        $this->access_url_changeable = 1;
+        $this->accessUrlChangeable = 1;
     }
 
     /**
@@ -335,7 +335,7 @@ class SettingsCurrent implements ParameterInterface
     /**
      * Set accessUrl
      *
-     * @param integer $accessUrl
+     * @param AccessUrl $accessUrl
      * @return SettingsCurrent
      */
     public function setUrl($accessUrl)

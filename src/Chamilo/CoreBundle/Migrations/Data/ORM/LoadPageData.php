@@ -16,6 +16,10 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
+/**
+ * Class LoadPageData
+ * @package Chamilo\CoreBundle\Migrations\Data\ORM
+ */
 class LoadPageData extends AbstractFixture implements
     ContainerAwareInterface,
     OrderedFixtureInterface,

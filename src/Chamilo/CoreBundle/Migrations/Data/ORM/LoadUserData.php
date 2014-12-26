@@ -72,6 +72,21 @@ class LoadUserData extends AbstractFixture implements
         $user->setEnabled(true);
         $user->setLocked(false);
         $user->addGroup($studentGroup);
+        $manager->updateUser($user);
+
+        // Creating teacher.
+
+        $user = $manager->createUser();
+        $user->setUserId(3);
+        $user->setFirstname('teacher');
+        $user->setLastname('teacher');
+        //$user->setPhone($faker->phoneNumber);
+        $user->setUsername('teacher');
+        $user->setEmail($faker->safeEmail);
+        $user->setPlainPassword('teacher');
+        $user->setEnabled(true);
+        $user->setLocked(false);
+        $user->addGroup($teacherGroup);
 
         $manager->updateUser($user);
 

@@ -156,6 +156,7 @@ class LoadPortalData extends AbstractFixture implements
         $accessUrl->setDescription(' ');
         $accessUrl->setCreatedBy($adminUserId);
         $manager->persist($accessUrl);
+        $this->setReference('access_url', $accessUrl);
 
         $accessUrlRelUser = new AccessUrlRelUser();
         $accessUrlRelUser->setUserId($adminUserId);

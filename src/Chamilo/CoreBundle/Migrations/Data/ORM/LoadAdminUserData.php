@@ -13,6 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
+/**
+ * Class LoadAdminUserData
+ * @package Chamilo\CoreBundle\Migrations\Data\ORM
+ */
 class LoadAdminUserData extends AbstractFixture implements
     ContainerAwareInterface,
     OrderedFixtureInterface,
@@ -53,7 +57,6 @@ class LoadAdminUserData extends AbstractFixture implements
     public function load(ObjectManager $manager)
     {
         $manager = $this->getUserManager();
-        $groupManager = $this->getGroupManager();
         $faker = $this->getFaker();
 
         // Creating admin user.

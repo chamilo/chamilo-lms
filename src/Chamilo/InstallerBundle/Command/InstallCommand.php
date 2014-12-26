@@ -228,7 +228,8 @@ class InstallCommand extends ContainerAwareCommand
 
         // Installing platform settings
         $settingsManager = $this->getContainer()->get('chamilo.settings.manager');
-        $settingsManager->installSchemas();
+        $url = $this->getContainer()->get('doctrine')->getRepository('ChamiloCoreBundle:AccessUrl')->find(1);
+        $settingsManager->installSchemas($url);
 
         $output->writeln('');
         $output->writeln('<info>Administration setup.</info>');

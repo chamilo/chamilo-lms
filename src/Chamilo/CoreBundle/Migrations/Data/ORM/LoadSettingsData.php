@@ -6,18 +6,16 @@ namespace Chamilo\CoreBundle\Migrations\Data\ORM;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Intl\Intl;
-use Symfony\Component\Finder\Finder;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
 /**
+ * @deprecated we use the Chamilo\SettingsBundle\Manager\SettingsManager class
  * Class LoadSettingsData
  * @package Chamilo\CoreBundle\DataFixtures\ORM
  */
@@ -89,8 +87,9 @@ class LoadSettingsData extends AbstractFixture implements
     {
         //$this->generateSettingsCode($manager);
         $this->createSettings($manager);
+        //$this->createOptions($manager);
         return;
-        $this->createOptions($manager);
+
     }
 
     /**
@@ -98,6 +97,8 @@ class LoadSettingsData extends AbstractFixture implements
      */
     public function createSettings(ObjectManager $manager)
     {
+        $accessUrl = $this->getReference('access_url');
+
         $setting = new SettingsCurrent();
         $setting->setVariable('institution');
         $setting->setSubkey('');
@@ -109,6 +110,9 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('platform');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
         $setting = new SettingsCurrent();
@@ -122,6 +126,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
         $setting = new SettingsCurrent();
@@ -135,6 +141,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
         $setting = new SettingsCurrent();
@@ -148,6 +156,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
 
@@ -162,6 +172,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
 
@@ -176,6 +188,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
 
@@ -190,6 +204,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
         return;
@@ -205,6 +221,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -219,6 +236,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
 
@@ -233,6 +252,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
 
@@ -247,6 +268,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -261,6 +284,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+
         $manager->persist($setting);
 
 
@@ -275,6 +300,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -289,6 +315,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -303,6 +330,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -317,6 +345,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('ShowOnlineWorld');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -331,6 +360,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('ShowOnlineUsers');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -345,6 +375,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('ShowOnlineCourse');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -359,6 +390,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('ShowOnlineSession');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -373,6 +405,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('name');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -387,6 +420,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('officialcode');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -401,6 +435,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Email');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -415,6 +450,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('UserPicture');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -429,6 +465,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Login');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -443,6 +480,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('UserPassword');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -457,6 +495,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Language');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -471,6 +510,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -485,6 +525,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('OfficialCode');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -499,6 +540,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Email');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -513,6 +555,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Language');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -527,6 +570,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -541,6 +585,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -555,6 +600,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -569,6 +615,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -583,6 +630,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -597,6 +645,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('CourseDescription');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -611,6 +660,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Agenda');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -625,6 +675,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Documents');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -639,6 +690,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('LearningPath');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -653,6 +705,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Links');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -667,6 +720,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Announcements');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -681,6 +735,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Forums');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -695,6 +750,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Dropbox');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -709,6 +765,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Quiz');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -723,6 +780,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Users');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -737,6 +795,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Groups');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -751,6 +810,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Chat');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -765,6 +825,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('OnlineConference');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -779,6 +840,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('StudentPublications');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -793,6 +855,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -807,6 +870,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -821,6 +885,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -835,6 +900,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -849,6 +915,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -863,6 +930,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -877,6 +945,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -891,6 +960,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -905,6 +975,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -919,6 +990,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -933,6 +1005,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -947,6 +1020,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -961,6 +1035,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -975,6 +1050,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -989,6 +1065,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1003,6 +1080,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1017,6 +1095,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1031,6 +1110,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1045,6 +1125,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1059,6 +1140,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1073,6 +1155,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1087,6 +1170,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1101,6 +1185,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1115,6 +1200,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1129,6 +1216,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('phone');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1143,6 +1231,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1157,6 +1246,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1171,6 +1261,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1185,6 +1276,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1199,6 +1291,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1213,6 +1306,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1227,6 +1321,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1241,6 +1336,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1255,6 +1351,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1269,6 +1366,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1283,6 +1381,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1297,6 +1396,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1311,6 +1411,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1325,6 +1427,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
             //aqui
@@ -1340,6 +1443,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1354,6 +1458,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1368,6 +1473,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1382,6 +1488,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1396,6 +1503,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1410,6 +1518,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1424,6 +1533,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1438,6 +1548,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1452,6 +1564,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1466,6 +1579,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1480,6 +1594,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1494,6 +1610,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1508,6 +1625,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1522,6 +1640,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsCampusHomepage');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1536,6 +1656,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsMyCourses');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1550,6 +1672,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsReporting');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1564,6 +1688,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsPlatformAdministration');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1578,6 +1704,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsMyAgenda');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1592,6 +1720,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsMyProfile');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1606,6 +1736,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1620,6 +1751,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('platform');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1634,6 +1766,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1648,6 +1781,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1662,6 +1796,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('OpenIDURL');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1676,6 +1811,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1690,6 +1826,8 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsMyGradebook');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1704,6 +1842,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsGradebookEnableColoring');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1718,6 +1857,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsGradebookEnableCustom');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1732,6 +1872,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1746,6 +1887,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsGradebookEnableUpperLimit');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1760,6 +1902,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1774,6 +1917,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1788,6 +1932,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('UserTheme');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1802,6 +1947,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1816,6 +1962,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1830,6 +1977,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1844,6 +1992,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1858,6 +2007,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1872,6 +2022,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1886,6 +2037,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('MyCompetences');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1900,6 +2052,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('MyDiplomas');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1914,6 +2067,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('MyTeach');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1928,6 +2082,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('MyPersonalOpenArea');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1942,6 +2097,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('MyCompetences');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1956,6 +2112,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('MyDiplomas');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1970,6 +2127,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('MyTeach');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1984,6 +2142,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('MyPersonalOpenArea');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -1998,6 +2157,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Phone');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2012,6 +2172,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2026,6 +2187,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2040,6 +2202,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2054,6 +2217,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Wiki');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2068,6 +2232,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2082,6 +2247,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Gradebook');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2096,6 +2262,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2110,6 +2277,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Survey');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2124,6 +2292,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Glossary');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2138,6 +2307,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Notebook');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2152,6 +2322,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Attendances');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2166,6 +2337,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('CourseProgress');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2180,6 +2352,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2194,6 +2367,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2208,6 +2382,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('ApiKeys');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2222,6 +2397,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2236,6 +2412,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2250,6 +2427,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2264,6 +2442,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2278,6 +2457,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2292,6 +2472,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2306,6 +2487,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2320,6 +2502,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Search');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2334,6 +2517,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2348,6 +2532,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2362,6 +2547,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2376,6 +2562,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2390,6 +2577,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2404,6 +2592,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 */
 
@@ -2418,6 +2607,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2432,6 +2622,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2446,6 +2637,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2460,6 +2652,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2474,6 +2667,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2488,6 +2682,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2502,6 +2697,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2516,6 +2712,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2530,6 +2727,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2544,6 +2742,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2558,6 +2757,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2572,6 +2772,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsSocial');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2586,6 +2787,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2600,6 +2802,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2614,6 +2817,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2628,6 +2832,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('TabsDashboard');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2642,6 +2847,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Timezones');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2656,6 +2862,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Timezones');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2670,6 +2877,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2684,6 +2892,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2698,6 +2907,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2712,6 +2922,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2726,6 +2937,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2740,6 +2952,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2754,6 +2967,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2768,6 +2982,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2782,6 +2997,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2796,6 +3012,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2810,6 +3027,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2824,6 +3042,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2838,6 +3057,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2852,6 +3072,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2866,6 +3087,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2880,6 +3102,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('platform');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2894,6 +3117,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('platform');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2908,6 +3132,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('platform');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2922,6 +3147,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2936,6 +3162,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2950,6 +3177,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('platform');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2964,6 +3192,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('platform');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2978,6 +3207,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -2992,6 +3222,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3006,6 +3237,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3020,6 +3252,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3034,6 +3267,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('CourseDescription');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3048,6 +3282,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Agenda');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3062,6 +3297,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Documents');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3076,6 +3312,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('LearningPath');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3090,6 +3327,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Links');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3104,6 +3342,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Announcements');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3118,6 +3357,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Forums');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3132,6 +3372,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Dropbox');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3146,6 +3387,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Quiz');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3160,6 +3402,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Users');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3174,6 +3417,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Groups');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3188,6 +3432,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Chat');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3202,6 +3447,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('StudentPublications');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3216,6 +3462,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Wiki');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3230,6 +3477,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Gradebook');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3244,6 +3492,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Survey');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3258,6 +3507,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Glossary');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3272,6 +3522,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Notebook');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3286,6 +3537,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Attendances');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3300,6 +3552,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('CourseProgress');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3314,6 +3567,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Blog');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3328,6 +3582,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Stats');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3342,6 +3597,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Maintenance');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3356,6 +3612,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('CourseSettings');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3370,6 +3627,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3384,6 +3642,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3398,6 +3657,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3412,6 +3672,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('platform');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3426,6 +3687,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3440,6 +3702,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3454,6 +3717,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3468,6 +3732,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3482,6 +3747,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3496,6 +3762,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3510,6 +3777,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3524,6 +3792,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3538,6 +3807,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3552,6 +3822,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3566,6 +3837,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3580,6 +3852,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3594,6 +3867,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3608,6 +3882,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3622,6 +3897,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3636,6 +3912,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3650,6 +3927,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3664,6 +3942,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3678,6 +3957,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3692,6 +3972,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3706,6 +3987,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3720,6 +4002,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3734,6 +4017,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3748,6 +4032,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3762,6 +4047,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3776,6 +4062,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3790,6 +4077,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3804,6 +4092,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3818,6 +4107,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3832,6 +4122,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3846,6 +4137,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3860,6 +4152,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3874,6 +4167,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3888,6 +4182,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3902,6 +4197,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3916,6 +4212,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3930,6 +4227,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3944,6 +4242,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3960,6 +4259,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3974,6 +4274,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -3988,6 +4289,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4002,6 +4304,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4016,6 +4319,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4030,6 +4334,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4044,6 +4349,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4058,6 +4364,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4072,6 +4379,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4086,6 +4394,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4100,6 +4409,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4114,6 +4424,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4128,6 +4439,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4142,6 +4454,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4156,6 +4469,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4170,6 +4484,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Documents');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4184,6 +4499,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('LearningPath');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4198,6 +4514,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Links');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4212,6 +4529,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Announcements');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4226,6 +4544,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Forums');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4240,6 +4559,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Quiz');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4254,6 +4574,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('Gradebook');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4268,6 +4589,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4282,6 +4604,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4296,6 +4619,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4310,6 +4634,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4324,6 +4649,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4338,6 +4664,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4352,6 +4679,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4366,6 +4694,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4380,6 +4709,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4394,6 +4724,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('1');
         $setting->setSubkeytext('0');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4408,6 +4739,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('1');
         $setting->setSubkeytext('0');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4422,6 +4754,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4436,6 +4769,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4450,6 +4784,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4464,6 +4799,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4478,6 +4814,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4492,6 +4829,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('1');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 
@@ -4506,6 +4844,7 @@ class LoadSettingsData extends AbstractFixture implements
         $setting->setScope('');
         $setting->setSubkeytext('');
         $setting->setAccessUrlChangeable('0');
+        $setting->setUrl($accessUrl);
         $manager->persist($setting);
 
 

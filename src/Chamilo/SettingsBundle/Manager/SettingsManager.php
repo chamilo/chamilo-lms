@@ -3,6 +3,7 @@
 
 namespace Chamilo\SettingsBundle\Manager;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
@@ -21,11 +22,24 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
  */
 class SettingsManager extends SyliusSettingsManager
 {
+
+    protected $url;
+
     /**
-     *
+     * @return AccessUrl
      */
-    public function installSchemas()
+    public function getUrl()
     {
+        return $this->url;
+    }
+
+    /**
+     * @param AccessUrl $url
+     */
+    public function installSchemas(AccessUrl $url)
+    {
+        $this->url = $url;
+
         $schemas = $this->getSchemas();
         $schemas = array_keys($schemas);
         /**
@@ -136,6 +150,7 @@ class SettingsManager extends SyliusSettingsManager
                     ->setNamespace($namespace)
                     ->setName($name)
                     ->setValue($value)
+                    ->setUrl($this->getUrl())
                     ->setAccessUrlChangeable(1)
                 ;
 

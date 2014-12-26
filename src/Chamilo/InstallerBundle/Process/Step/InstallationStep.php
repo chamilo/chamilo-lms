@@ -53,7 +53,8 @@ class InstallationStep extends AbstractStep
                 );*/
 
                 $settingsManager = $this->container->get('chamilo.settings.manager');
-                $settingsManager->installSchemas();
+                $url = $this->container->get('doctrine')->getRepository('ChamiloCoreBundle:AccessUrl')->find(1);
+                $settingsManager->installSchemas($url);
 
                 return $this->handleAjaxAction(
                       'assets:install',

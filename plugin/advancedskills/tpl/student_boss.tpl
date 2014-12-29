@@ -1,3 +1,9 @@
+{% if allowSkillsTool %}
+    <div class="btn-group">
+        <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">{{ 'MySkills' | get_lang }}</a>
+    </div>
+{% endif %}
+
 <h1 class="page-header">{{ 'SkillsAcquired' | get_lang }}</h1>
 
 <form class="form-inline" method="post" action="{{ _p.web_self }}">

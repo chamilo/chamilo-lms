@@ -1,3 +1,12 @@
+{% if allowSkillsTool %}
+    <div class="btn-group">
+        <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">{{ 'MySkills' | get_lang }}</a>
+        {% if allowDrhSkillsManagement %}
+            <a class="btn btn-default" href="{{ _p.web_main }}admin/skills_wheel.php">{{ 'ManageSkills' | get_lang }}</a>
+        {% endif %}
+    </div>
+{% endif %}
+
 <h1 class="page-header">{{ 'Skills' | get_lang }}</h1>
 
 <div class="row">

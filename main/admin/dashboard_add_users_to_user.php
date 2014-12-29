@@ -49,6 +49,8 @@ if (UserManager::is_admin($user_id)) {
     $tool_name= get_lang('AssignUsersToPlatformAdministrator');
 } else if ($user_info['status'] == SESSIONADMIN) {
     $tool_name= get_lang('AssignUsersToSessionsAdministrator');
+} else if  ($user_info['status'] == STUDENT_BOSS) {
+    $tool_name= get_lang('AssignUsersToBoss');
 } else {
     $tool_name= get_lang('AssignUsersToHumanResourcesManager');
 }

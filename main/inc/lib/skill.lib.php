@@ -1117,7 +1117,7 @@ class Skill extends Model
      * @param int $skillId The skill id
      * @return array The users list
      */
-    public function listUsersWhoAchieved($skillId, $filterByUsers = array())
+    public function listUsersWhoAchieved($skillId)
     {
         $skillId = intval($skillId);
 
@@ -1137,10 +1137,6 @@ class Skill extends Model
             . "INNER JOIN {$this->table} "
             . "ON sru.skill_id = skill.id "
             . "WHERE skill.id = $skillId ";
-
-        if (!empty($filterByUsers)) {
-            $sql .= "AND user.user_id IN (" . implode(', ', $filterByUsers) . ")";
-        }
 
         $result = Database::query($sql);
 

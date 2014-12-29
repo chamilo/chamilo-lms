@@ -433,7 +433,7 @@ if ($form->validate()) {
 
     if ($return == strval(intval($return))) {
         // integer => no error on session creation
-//        header('Location: add_courses_to_session.php?id_session=' . $return . '&add=true&msg=');
+        header('Location: add_courses_to_session.php?id_session=' . $return . '&add=true&msg=');
         exit();
     }
 }

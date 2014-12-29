@@ -73,7 +73,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         if ($this->security->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
             switch ($pageAfterLogin) {
                 case 'index.php':
-                    $url = $this->router->generate('index');
+                    $url = $this->router->generate('home');
                     break;
                 case 'user_portal.php':
                     $url = $this->router->generate('userportal');
@@ -126,8 +126,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
         // Redirect the user to where they were before the login process begun.
         if (empty($response)) {
-            $refererUrl = $request->headers->get('referer');
-            $response = new RedirectResponse($refererUrl);
+            $url = $request->headers->get('referer');
+            /*// if the referer is the login use the home.
+            if (strpos($url, 'login') !== false) {
+                $url = $this->router->generate('home');
+            }*/
+            $response = new RedirectResponse($url);
         }
 
         return $response;

@@ -25,6 +25,7 @@ class LoadAdminUserData extends AbstractFixture implements
     const DEFAULT_ADMIN_USERNAME = 'admin';
     const DEFAULT_ADMIN_EMAIL = 'admin@example.com';
 
+    /** @var ContainerInterface */
     private $container;
 
     /**

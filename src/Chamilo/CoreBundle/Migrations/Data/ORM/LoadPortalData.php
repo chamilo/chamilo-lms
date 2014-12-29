@@ -37,6 +37,7 @@ class LoadPortalData extends AbstractFixture implements
     OrderedFixtureInterface,
     VersionedFixtureInterface
 {
+    /** @var ContainerInterface */
     private $container;
 
     /**

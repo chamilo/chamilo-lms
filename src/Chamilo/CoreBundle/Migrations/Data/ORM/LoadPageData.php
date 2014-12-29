@@ -12,6 +12,7 @@ use Sonata\PageBundle\Model\SiteInterface;
 use Sonata\PageBundle\Model\PageInterface;
 
 use Symfony\Cmf\Bundle\RoutingBundle\Tests\Unit\Doctrine\Orm\ContentRepositoryTest;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
@@ -25,6 +26,7 @@ class LoadPageData extends AbstractFixture implements
     OrderedFixtureInterface,
     VersionedFixtureInterface
 {
+    /** @var ContainerInterface */
     private $container;
 
     /**
@@ -43,15 +45,35 @@ class LoadPageData extends AbstractFixture implements
         return 6;
     }
 
+    /**
+     * @param ContainerInterface $container
+     */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
     }
 
+    /**
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $site = $this->createSite();
         $this->createGlobalPage($site);
+
+        $generator = $this->container->get('sonata.page.route.page.generator');
+        $output = new ConsoleOutput();
+        $generator->update($site, $output);
+
+        $this->container->get('sonata.notification.backend')
+            ->createAndPublish(
+                'sonata.page.create_snapshots',
+                array(
+                    'siteId' => $site->getId(),
+                    'mode' => 'normal'
+                )
+            );
+
 
         // app/console sonata:page:update-core-routes --site=all
         // app/console sonata:page:create-snapshots --site=all

@@ -21,6 +21,7 @@ class LoadUserData extends AbstractFixture implements
     OrderedFixtureInterface,
     VersionedFixtureInterface
 {
+    /** @var ContainerInterface */
     private $container;
 
     /**

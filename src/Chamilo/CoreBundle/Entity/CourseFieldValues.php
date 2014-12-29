@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -13,6 +14,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class CourseFieldValues extends ExtraFieldValues
 {
+    /**
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\SessionField")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
+     */
+    protected $field;
+
     /**
      * @var integer
      *

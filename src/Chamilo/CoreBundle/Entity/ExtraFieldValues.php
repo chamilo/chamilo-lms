@@ -37,13 +37,12 @@ class ExtraFieldValues extends BaseAttributeValue
     protected $comment;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
         $this->tms = new \DateTime();
     }
-
 
      /**
      * Set comment
@@ -101,6 +100,4 @@ class ExtraFieldValues extends BaseAttributeValue
     {
         return $this->tms;
     }
-
-
 }

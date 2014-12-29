@@ -110,7 +110,7 @@ if ($isStudent) {
         $action = 'filterBySkill';
     }
 
-    $courses = CourseManager::getCoursesFollowedByUser($userId, DRH);
+    $courses = CourseManager::get_courses_list();
 
     $tableRows = array();
     $reportTitle = null;

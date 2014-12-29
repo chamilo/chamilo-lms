@@ -39,26 +39,6 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
     {
     }
 
-     /**
-     * @Given there are following users:
-     */
-    public function thereAreFollowingUsers(TableNode $userTable)
-    {
-        $userManager = $this->getContainer()->get('fos_user.user_manager');
-        $em = $this->getEntityManager();
-
-        foreach ($userTable as $userHash) {
-            $user = $userManager->createUser();
-            $user->setUsername($userHash['username']);
-            $user->setEmail($userHash['email']);
-            $user->setPlainPassword($userHash['plain_password']);
-            $user->setEnabled(true);
-            $user->setLocked(false);
-            $em->persist($user);
-        }
-        $em->flush();
-    }
-
     /**
     * @Given I have a course :arg1
     */
@@ -140,7 +120,7 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
      */
     public function iAddUserToCourse($username, $courseTitle)
     {
-        $user = $this->getContainer()->get('fos_user.user_manager')->findUserByUsername($username);
+        $user = $this->getUserManager()->findUserByUsername($username);
 
         /** @var Course $course */
         $course = $this->getContainer()->get('chamilo_core.manager.course')->findOneByTitle($courseTitle);
@@ -157,7 +137,7 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
      */
     public function iAddTeacherToCourse($username, $courseTitle)
     {
-        $user = $this->getContainer()->get('fos_user.user_manager')->findUserByUsername($username);
+        $user = $this->getUserManager()->findUserByUsername($username);
 
         /** @var Course $course */
         $course = $this->getContainer()->get('chamilo_core.manager.course')->findOneByTitle($courseTitle);
@@ -174,7 +154,7 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
      */
     public function iAddStudentToCourse($username, $courseTitle)
     {
-        $user = $this->getContainer()->get('fos_user.user_manager')->findUserByUsername($username);
+        $user = $this->getUserManager()->findUserByUsername($username);
 
         /** @var Course $course */
         $course = $this->getContainer()->get('chamilo_core.manager.course')->findOneByTitle($courseTitle);
@@ -241,25 +221,5 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
         }
 
         PHPUnit_Framework_TestCase::assertTrue($found);
-    }
-
-    /**
-     * @return \Doctrine\Common\Persistence\ObjectManager|object
-     */
-    public function getEntityManager()
-    {
-        return $this->getContainer()->get('doctrine')->getManager();
-    }
-
-    /**
-     * Returns the Doctrine repository manager for a given entity.
-     *
-     * @param string $entityName The name of the entity.
-     *
-     * @return EntityRepository
-     */
-    protected function getRepository($entityName)
-    {
-        return $this->getEntityManager()->getRepository($entityName);
     }
 }

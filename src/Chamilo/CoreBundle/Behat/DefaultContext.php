@@ -15,11 +15,16 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Sylius\Bundle\ResourceBundle\Behat\DefaultContext as BaseDefaultContext;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 /**
  * Class DefaultContext
@@ -70,18 +75,38 @@ abstract class DefaultContext extends BaseDefaultContext
      */
     public function purgeDatabase(BeforeScenarioScope $scope)
     {
-        $entityManager = $this->getService('doctrine.orm.entity_manager');
+        //$output = new ConsoleOutput();
+
+        /*$generator = $this->getContainer()->get('sonata.page.route.page.generator');
+        $siteManager = $this->getContainer()->get('sonata.page.manager.site');
+
+        $defaultSite = $siteManager->find(1);
+
+        $generator->update($defaultSite, $output);*/
+
+        /*$entityManager = $this->getService('doctrine.orm.entity_manager');
         $entityManager->getConnection()->executeUpdate("SET foreign_key_checks = 0;");
 
         $purger = new ORMPurger($entityManager);
         $purger->purge();
 
-        $entityManager->getConnection()->executeUpdate("SET foreign_key_checks = 1;");
+        $entityManager->getConnection()->executeUpdate("SET foreign_key_checks = 1;");*/
     }
 
-    /** @BeforeFeature */
+    /**
+     * @BeforeFeature
+     */
     public static function setupFeature(BeforeFeatureScope $event)
     {
+//
+//        $output = new ConsoleOutput();
+//
+//        $generator = self::getContainer()->get('sonata.page.route.page.generator');
+//        $siteManager = self::getContainer()->get('sonata.page.manager.site');
+//
+//        $defaultSite = $siteManager->find(1);
+//
+//        $generator->update($defaultSite, $output);
 
     }
 
@@ -131,10 +156,10 @@ abstract class DefaultContext extends BaseDefaultContext
      *
      * @return RepositoryInterface
      */
-    protected function getRepository($resource)
+    /*protected function getRepository($resource)
     {
         return $this->getService('sylius.repository.'.$resource);
-    }
+    }*/
 
     /**
      * Get entity manager.
@@ -324,4 +349,33 @@ abstract class DefaultContext extends BaseDefaultContext
     {
         return str_replace('\\"', '"', $argument);
     }
+
+    /**
+     * @return \Sonata\UserBundle\Entity\UserManager
+     */
+    public function getUserManager()
+    {
+        return $this->getContainer()->get('fos_user.user_manager');
+    }
+
+    /**
+     * @return \Sonata\UserBundle\Entity\GroupManager
+     */
+    public function getGroupManager()
+    {
+        return $this->getContainer()->get('fos_user.group_manager');
+    }
+
+    /**
+     * Returns the Doctrine repository manager for a given entity.
+     *
+     * @param string $entityName The name of the entity.
+     *
+     * @return EntityRepository
+     */
+    protected function getRepository($entityName)
+    {
+        return $this->getEntityManager()->getRepository($entityName);
+    }
+
 }

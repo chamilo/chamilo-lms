@@ -6,7 +6,7 @@ Feature: User login
 
   Background:
     Given there are following users:
-      | username        | email                       |plain_password| enabled | group |
+      | username        | email                       |plain_password| enabled | groups |
       | student_behat  | student_behat@example.com |student_behat|    yes    | students |
 
   @javascript
@@ -19,5 +19,5 @@ Feature: User login
 
     Examples:
       | username        | password       | message |
-      | student_behat  | student_behat  | Logout |
+      | student_behat  | student_behat  | Hello, student_behat |
       | pirate          | pirate          | Bad credentials |

@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use PHPUnit_Framework_TestCase;
+use Chamilo\CoreBundle\Behat\DefaultContext;
 
 
 /**

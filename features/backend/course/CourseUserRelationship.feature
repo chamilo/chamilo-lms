@@ -5,10 +5,10 @@ Feature: Course user relationship
   I need a working relationship
 
   Background:
-#    Given there are following users:
-#      | username | email                 | plain_password | enabled |
-#      | student  | student@example.com | student | yes     |
-#      | teacher  | teacher@example.com | teacher | yes     |
+    Given there are following users:
+      | username | email                 | plain_password  | enabled | groups |
+      | student  | student@example.com | student          | yes      | students |
+      | teacher  | teacher@example.com | teacher          | yes      | teachers |
     Given I have a course "My course"
 
   Scenario: A course contains a student

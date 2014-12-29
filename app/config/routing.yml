@@ -47,6 +47,9 @@ liip_theme:
 home:
     path: /
 
+login:
+    path: /login
+
 logout:
     path: /logout
 

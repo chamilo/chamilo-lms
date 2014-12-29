@@ -59,6 +59,7 @@ security:
                 use_forward:    false
                 check_path:     /login_check
                 failure_path:   null
+                default_target_path: /
                 success_handler: chamilo_core.listener.login_success_handler
             logout:
                 path:   /logout

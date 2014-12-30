@@ -98,7 +98,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $elements_posted = array();
     }
     if ($form_sent == 1) {
-        //added a parameter to send emails when registering a user        
+        //added a parameter to send emails when registering a user
         $usergroup->subscribe_sessions_to_usergroup($id, $elements_posted);
         header('Location: usergroups.php');
         exit;
@@ -145,9 +145,13 @@ function search_sessions($needle,$type) {
                 $order_clause.
                 ' LIMIT 11';*/
         } else if ($type == 'searchbox') {
-            $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "%$needle%"));
+            $session_list = SessionManager::get_sessions_list(
+                array('s.name' => array('operator' => 'LIKE', 'value' => "%$needle%"))
+            );
         } else {
-            $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "$needle%"));
+            $session_list = SessionManager::get_sessions_list(
+                array('s.name' => array('operator' => 'LIKE', 'value' => "$needle%"))
+            );
         }
         $i=0;
         if ($type=='single') {
@@ -189,13 +193,10 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>'; 
+echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="javascript://" class="advanced_parameters" style="margin-top: 8px" onclick="display_advanced_search();"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>';
 echo '</div>';
-
-?>
-
-<?php echo '<div id="advancedSearch" style="display: none">'. get_lang('SearchSessions'); ?> :
+echo '<div id="advancedSearch" style="display: none">'. get_lang('SearchSessions'); ?> :
      <input name="SearchSession" onchange = "xajax_search_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
      </div>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
@@ -262,8 +263,8 @@ if(!empty($errorMsg)) {
 <tr>
   <td align="center">
   <div id="content_source">
-      <?php           
-      if (!($add_type=='multiple')) {        
+      <?php
+      if (!($add_type=='multiple')) {
         ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
@@ -313,9 +314,7 @@ if(!empty($errorMsg)) {
 </form>
 
 <script type="text/javascript">
-<!--
-function moveItem(origin , destination){
-
+function moveItem(origin , destination) {
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {
             destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
@@ -325,11 +324,9 @@ function moveItem(origin , destination){
     }
     destination.selectedIndex = -1;
     sortOptions(destination.options);
-
 }
 
 function sortOptions(options) {
-
     newOptions = new Array();
     for (i = 0 ; i<options.length ; i++)
         newOptions[i] = options[i];
@@ -338,7 +335,6 @@ function sortOptions(options) {
     options.length = 0;
     for(i = 0 ; i < newOptions.length ; i++)
         options[i] = newOptions[i];
-
 }
 
 function mysort(a, b){
@@ -358,10 +354,8 @@ function valide(){
     document.forms.formulaire.submit();
 }
 
-function loadUsersInSelect(select){
-
+function loadUsersInSelect(select) {
     var xhr_object = null;
-
     if(window.XMLHttpRequest) // Firefox
         xhr_object = new XMLHttpRequest();
     else if(window.ActiveXObject) // Internet Explorer
@@ -370,10 +364,7 @@ function loadUsersInSelect(select){
     alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-
     xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-
     nosessionUsers = makepost(document.getElementById('elements_not_in'));
     sessionUsers = makepost(document.getElementById('elements_in'));
     nosessionClasses = makepost(document.getElementById('origin_classes'));

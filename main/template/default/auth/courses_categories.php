@@ -7,7 +7,7 @@
 * @package chamilo.auth
 */
 
-if (Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
+if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
     $stok = Security::get_token();
 } else {
     $stok = $_SESSION['sec_token'];
@@ -33,6 +33,8 @@ if ($showSessions && isset($_POST['date'])) {
 }
 
 $userInfo = api_get_user_info();
+$code = isset($code) ? $code : null;
+
 ?>
 <script>
     $(document).ready( function() {
@@ -52,7 +54,7 @@ $userInfo = api_get_user_info();
                 }
             });
         });
-    
+
         $('.courses-list-btn').toggle(function (e) {
             e.preventDefault();
 
@@ -72,10 +74,8 @@ $userInfo = api_get_user_info();
                 },
                 success: function (response){
                     var $container = $el.prev('.course-list');
-
                     var $courseList = $('<ul>');
-
-                    $.each(response, function (index, course){
+                    $.each(response, function (index, course) {
                         $courseList.append('<li><div><strong>' + course.name + '</strong><br>' + course.coachName + '</div></li>');
                     });
 
@@ -84,21 +84,18 @@ $userInfo = api_get_user_info();
             });
         }, function (e) {
             e.preventDefault();
-
             var $el = $(this);
             var $container = $el.prev('.course-list');
             $container.hide(250).empty();
-            
             $el.children('img').remove();
             $el.prepend('<?php echo Display::display_icon('nolines_plus.gif'); ?>');
         });
-        
-        var getSessionId = function (el){
+
+        var getSessionId = function (el) {
             var parts = el.id.split('_');
-            
             return parseInt(parts[1], 10);
         };
-        
+
         <?php if ($showSessions) { ?>
         $('#date').datepicker({
             dateFormat: 'yy-mm-dd'

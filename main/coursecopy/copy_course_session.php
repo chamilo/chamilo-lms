@@ -90,7 +90,7 @@ function make_select_session_list($name, $sessions, $attr = array())
 function display_form()
 {
     $html  = '';
-    $sessions = SessionManager::get_sessions_list(null, array('name ASC'));
+    $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
     // Actions
     $html .= '<div class="actions">';
@@ -166,7 +166,7 @@ function search_courses($id_session, $type)
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {
 
-                $sessions = SessionManager::get_sessions_list(null, array('name ASC'));
+                $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
                 $select_destination .= '<select name="sessions_list_destination" width="380px" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';

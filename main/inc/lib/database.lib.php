@@ -455,21 +455,29 @@ class Database
      * @param string            The string to escape
      * @return string           The escaped string
      */
-    public static function escape_sql_wildcards($in_txt) {
+    public static function escape_sql_wildcards($in_txt)
+    {
         $out_txt = api_preg_replace("/_/", "\_", $in_txt);
         $out_txt = api_preg_replace("/%/", "\%", $out_txt);
+
         return $out_txt;
     }
 
     /**
      * Escapes a string to insert into the database as text
-     * @param string                            The string to escape
-     * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
-     * @return string                           The escaped string
+     * @param string    $string The string to escape
+     * @param resource  $connection (optional)   The database server connection, for detailed description see the method query().
+     * @param bool $addFix
+     * @return string   he escaped string
      * @author Yannick Warnier <yannick.warnier@dokeos.com>
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
-    public static function escape_string($string, $connection = null) {
+    public static function escape_string($string, $connection = null, $addFix = true)
+    {
+        // Fixes security problem when there's no "" or '' between a variable.
+        if ($addFix) {
+            $string = "__@$string@__";
+        }
         return get_magic_quotes_gpc()
             ? (self::use_default_connection($connection)
                 ? mysql_real_escape_string(stripslashes($string))
@@ -479,6 +487,7 @@ class Database
                 : mysql_real_escape_string($string, $connection));
     }
 
+
     /**
      * Gets the array from a SQL result (as returned by Database::query) - help achieving database independence
      * @param resource      The result from a call to sql_query (e.g. Database::query)
@@ -486,8 +495,9 @@ class Database
      * @return array        Array of results as returned by php
      * @author Yannick Warnier <yannick.warnier@beeznest.com>
      */
-    public static function fetch_array($result, $option = 'BOTH') {
-    if ($result === false) { return array(); }
+    public static function fetch_array($result, $option = 'BOTH')
+    {
+        if ($result === false) { return array(); }
         return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array($result, MYSQL_NUM) : mysql_fetch_array($result));
     }
 
@@ -675,18 +685,46 @@ class Database
     }
 
     /**
+     * Removes "__@" prefix and @__ suffix added by Database::escape_string()
+     * @param string $query
+     * @return mixed
+     */
+    public static function fixQuery($query)
+    {
+        // LIKE condition
+        $query = str_replace("'%__@", "'%", $query);
+        $query = str_replace("@__%'", "%'", $query);
+
+        // Fixing doubles
+        $query = str_replace("__@__@", "__@", $query);
+        $query = str_replace("@__@__", "@__", $query);
+
+        $query = str_replace("'__@", "'", $query);
+        $query = str_replace('"__@', "'", $query);
+        $query = str_replace("__@", "'", $query);
+
+        $query = str_replace("@__'", "'", $query);
+        $query = str_replace('@__"', "'", $query);
+        $query = str_replace("@__", "'", $query);
+
+        return $query;
+    }
+
+    /**
      * This method returns a resource
      * Documentation has been added by Arthur Portugal
      * Some adaptations have been implemented by Ivan Tcholakov, 2009, 2010
      * @author Olivier Brouckaert
      * @param string $query                     The SQL query
      * @param resource $connection (optional)   The database server (MySQL) connection.
-     *                                          If it is not specified, the connection opened by mysql_connect() is assumed.
-     *                                          If no connection is found, the server will try to create one as if mysql_connect() was called with no arguments.
-     *                                          If no connection is found or established, an E_WARNING level error is generated.
+     * If it is not specified, the connection opened by mysql_connect() is assumed.
+     * If no connection is found, the server will try to create one as if mysql_connect() was called with no arguments.
+     * If no connection is found or established, an E_WARNING level error is generated.
      * @param string $file (optional)           On error it shows the file in which the error has been trigerred (use the "magic" constant __FILE__ as input parameter)
      * @param string $line (optional)           On error it shows the line in which the error has been trigerred (use the "magic" constant __LINE__ as input parameter)
+     *
      * @return resource                         The returned result from the query
+     *
      * Note: The parameter $connection could be skipped. Here are examples of this method usage:
      * Database::query($query);
      * $result = Database::query($query);
@@ -698,7 +736,8 @@ class Database
      * Database::query($query, $connection, __FILE__, __LINE__);
      * $result = Database::query($query, $connection, __FILE__, __LINE__);
      */
-    public static function query($query, $connection = null, $file = null, $line = null) {
+    public static function query($query, $connection = null, $file = null, $line = null)
+    {
         $use_default_connection = self::use_default_connection($connection);
         if ($use_default_connection) {
             // Let us do parameter shifting, thus the method would be similar
@@ -707,10 +746,11 @@ class Database
             $file = $connection;
             $connection = null;
         }
-        //@todo remove this before the stable release
 
-        //Check if the table contains a c_ (means a course id)
-        if (api_get_setting('server_type')==='test' && strpos($query, 'c_')) {
+        $query = self::fixQuery($query);
+
+        // Check if the table contains a c_ (means a course id)
+        if (api_get_setting('server_type') === 'test' && strpos($query, 'c_')) {
             //Check if the table contains inner joins
             if (
                 strpos($query, 'assoc_handle') === false &&
@@ -1179,13 +1219,11 @@ class Database
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"'))
     */
-
     public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC')
     {
         $conditions = self::parse_conditions($conditions);
 
         //@todo we could do a describe here to check the columns ...
-        $clean_columns = '';
         if (is_array($columns)) {
             $clean_columns = implode(',', $columns);
         } else {
@@ -1199,7 +1237,7 @@ class Database
         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
         $result = self::query($sql);
         $array = array();
-        //if (self::num_rows($result) > 0 ) {
+
         if ($type_result == 'all') {
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {
@@ -1216,11 +1254,12 @@ class Database
 
     /**
      * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
-     * @todo known issues, it doesn't work when using LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
-     * @param   array
-     * @todo lot of stuff to do here
+     * @todo known issues, it doesn't work when using
+     * LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
+     * @param   array $conditions
     */
-    static function parse_conditions($conditions) {
+    public static function parse_conditions($conditions)
+    {
         if (empty($conditions)) {
             return '';
         }
@@ -1232,7 +1271,6 @@ class Database
             $type_condition = strtolower($type_condition);
             switch ($type_condition) {
                 case 'where':
-
                     foreach ($condition_data as $condition => $value_array) {
                         if (is_array($value_array)) {
                             $clean_values = array();
@@ -1254,13 +1292,12 @@ class Database
                             $condition = str_replace("%s","'%s'", $condition);
                             $condition = str_replace("@-@","@%s@", $condition);
 
-                            //Treat conditons as string
+                            // Treat conditions as string
                             $condition = vsprintf($condition, $clean_values);
                             $condition = str_replace('@percentage@','%', $condition); //replace "%"
                             $where_return .= $condition;
                         }
                     }
-
 
                     if (!empty($where_return)) {
                         $return_value = " WHERE $where_return" ;
@@ -1271,7 +1308,7 @@ class Database
 
                     if (!empty($order_array)) {
                         // 'order' => 'id desc, name desc'
-                        $order_array = self::escape_string($order_array);
+                        $order_array = self::escape_string($order_array, null, false);
                         $new_order_array = explode(',', $order_array);
                         $temp_value = array();
 
@@ -1301,7 +1338,6 @@ class Database
                     break;
                 case 'limit':
                     $limit_array = explode(',', $condition_data);
-
                     if (!empty($limit_array)) {
                         if (count($limit_array) > 1) {
                             $return_value .= ' LIMIT '.intval($limit_array[0]).' , '.intval($limit_array[1]);
@@ -1312,23 +1348,29 @@ class Database
                     break;
             }
         }
+
         return $return_value;
     }
 
-    public static function parse_where_conditions($coditions) {
-        return self::parse_conditions(array('where'=>$coditions));
+    /**
+     * @param array $conditions
+     * @return string
+     */
+    public static function parse_where_conditions($conditions)
+    {
+        return self::parse_conditions(array('where'=>$conditions));
     }
 
     /**
      * Experimental useful database update
      * @todo lot of stuff to do here
      */
-    public static function delete($table_name, $where_conditions, $show_query = false) {
-        $result = false;
+    public static function delete($table_name, $where_conditions, $show_query = false)
+    {
         $where_return = self::parse_where_conditions($where_conditions);
         $sql    = "DELETE FROM $table_name $where_return ";
         if ($show_query) { echo $sql; echo '<br />'; }
-        $result = self::query($sql);
+        self::query($sql);
         $affected_rows = self::affected_rows();
         //@todo should return affected_rows for
         return $affected_rows;

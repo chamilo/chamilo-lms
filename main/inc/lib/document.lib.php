@@ -531,7 +531,7 @@ class DocumentManager
 
         // Escape underscores in the path so they don't act as a wildcard
         $originalPath = $path;
-        $path = Database::escape_string(str_replace('_', '\_', $path));
+        $path = str_replace('_', '\_', $path);
         $to_value = Database::escape_string($to_value);
 
         $visibility_bit = ' <> 2';
@@ -579,8 +579,8 @@ class DocumentManager
                     last.c_id = {$_course['real_id']}
                 )
                 WHERE
-                    docs.path LIKE '" . $path . $added_slash . "%' AND
-                    docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
+                    docs.path LIKE '" . Database::escape_string($path . $added_slash.'%'). "' AND
+                    docs.path NOT LIKE '" . Database::escape_string($path . $added_slash.'%/%')."' AND
                     docs.path NOT LIKE '%_DELETED_%' AND
                     $to_field = $to_value AND
                     last.visibility
@@ -588,6 +588,7 @@ class DocumentManager
                     $condition_session
                     $sharedCondition
                 ";
+
         $result = Database::query($sql);
 
         $doc_list = array();
@@ -726,6 +727,7 @@ class DocumentManager
             $_course['code'],
             api_get_session_id()
         );
+
         $sharedCondition = null;
 
         if (!empty($students)) {
@@ -849,7 +851,7 @@ class DocumentManager
                         FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
                         WHERE
                             docs.id = last.ref AND
-                            docs.path LIKE '" . Database::escape_string($row['path']) . "/%' AND
+                            docs.path LIKE '" . Database::escape_string($row['path'].'/%') . "' AND
                             docs.filetype = 'folder' AND
                             last.tool = '" . TOOL_DOCUMENT . "' AND
                             last.to_group_id = " . $to_group_id . " AND
@@ -1523,7 +1525,6 @@ class DocumentManager
 
         $course_id = $course['real_id'];
         //note the extra / at the end of doc_path to match every path in the document table that is part of the document path
-        $doc_path = Database::escape_string($doc_path);
 
         $session_id = intval($session_id);
         $condition = "AND id_session IN  ('$session_id', '0') ";
@@ -1548,6 +1549,7 @@ class DocumentManager
           omega.jpg
           theta.jpg
          */
+
         if (strpos($doc_path, 'HotPotatoes_files') && preg_match("/\.t\.html$/", $doc_path)) {
             $doc_path = substr($doc_path, 0, strlen($doc_path) - 7 - strlen(api_get_user_id()));
         }
@@ -1556,10 +1558,15 @@ class DocumentManager
             $file_type = 'file';
         }
 
-        $sql = "SELECT visibility FROM $docTable d INNER JOIN $propTable ip
-                ON (d.id = ip.ref AND d.c_id  = $course_id  AND ip.c_id = $course_id)
-        		 WHERE ip.tool = '" . TOOL_DOCUMENT . "' $condition AND
-        			   filetype = '$file_type' AND locate(concat(path,'/'),'" . $doc_path . "/')=1";
+        $sql = "SELECT visibility
+                FROM $docTable d
+                INNER JOIN $propTable ip
+                ON (d.id = ip.ref AND d.c_id  = $course_id AND ip.c_id = $course_id)
+        		WHERE
+        		    ip.tool = '" . TOOL_DOCUMENT . "' $condition AND
+        			filetype = '$file_type' AND
+        			locate(concat(path,'/'), '" . Database::escape_string($doc_path.'/'). "')=1
+                ";
 
         $result = Database::query($sql);
         $is_visible = false;
@@ -3195,7 +3202,6 @@ class DocumentManager
         }
 
         $overwrite_url = Security::remove_XSS($overwrite_url);
-
         $user_id = api_get_user_id();
         $user_in_course = false;
 
@@ -3232,11 +3238,6 @@ class DocumentManager
 
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_item_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-        $path = '/';
-        $path = Database::escape_string(str_replace('_', '\_', $path));
-        $added_slash = ($path == '/') ? '' : '/';
-
         $condition_session = " AND (id_session = '$session_id' OR  id_session = '0' )";
 
         $add_folder_filter = null;
@@ -3258,18 +3259,18 @@ class DocumentManager
             //$showOnlyFoldersCondition = " AND docs.filetype = 'folder' ";
         }
 
-        $folderCondition = " AND docs.path LIKE '" . $path . $added_slash . "%' ";
+        $folderCondition = " AND docs.path LIKE '/%' ";
 
         if ($folderId !== false) {
             $parentData = self::get_document_data_by_id($folderId, $course_info['code']);
             if (!empty($parentData)) {
-                $cleanedPath = Database::escape_string($parentData['path']);
+                $cleanedPath = $parentData['path'];
                 $num = substr_count($cleanedPath, '/');
 
                 $notLikeCondition = null;
                 for ($i = 1; $i <= $num; $i++) {
                     $repeat = str_repeat('/%', $i+1);
-                    $notLikeCondition .= " AND docs.path NOT LIKE '".$cleanedPath.$repeat."' ";
+                    $notLikeCondition .= " AND docs.path NOT LIKE '".Database::escape_string($cleanedPath.$repeat)."' ";
                 }
 
                 $folderCondition = " AND
@@ -4692,8 +4693,6 @@ class DocumentManager
         }
 
         $sessionId = intval($sessionId);
-        $folder = Database::escape_string($folder);
-
         $folderWithSuffix = self::fixDocumentName(
             $folder,
             'folder',
@@ -4702,6 +4701,7 @@ class DocumentManager
             $groupId
         );
 
+        $folder = Database::escape_string($folder);
         $folderWithSuffix = Database::escape_string($folderWithSuffix);
 
         // Check if pathname already exists inside document table
@@ -4710,7 +4710,7 @@ class DocumentManager
                 WHERE
                     filetype = 'folder' AND
                     c_id = $courseId AND
-                    (path = '".$folder."' OR path = '$folderWithSuffix') AND
+                    (path = '$folder' OR path = '$folderWithSuffix') AND
                     (session_id = 0 OR session_id = $sessionId)
         ";
 

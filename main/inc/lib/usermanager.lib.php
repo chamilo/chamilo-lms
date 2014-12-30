@@ -1643,8 +1643,14 @@ class UserManager
      * @param    int        Optional. Whether we get all the fields with field_filter 1 or 0 or everything
      * @return    array    Extra fields details (e.g. $list[2]['type'], $list[4]['options'][2]['title']
      */
-    public static function get_extra_fields($from = 0, $number_of_items = 0, $column = 5, $direction = 'ASC', $all_visibility = true, $field_filter = null)
-    {
+    public static function get_extra_fields(
+        $from = 0,
+        $number_of_items = 0,
+        $column = 5,
+        $direction = 'ASC',
+        $all_visibility = true,
+        $field_filter = null
+    ) {
         $fields = array();
         $t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -1664,7 +1670,7 @@ class UserManager
         }
         $sqlf .= " ORDER BY ".$columns[$column]." $sort_direction ";
         if ($number_of_items != 0) {
-            $sqlf .= " LIMIT ".Database::escape_string($from).','.Database::escape_string($number_of_items);
+            $sqlf .= " LIMIT ".intval($from).','.intval($number_of_items);
         }
 
         $resf = Database::query($sqlf);
@@ -3560,11 +3566,11 @@ class UserManager
 
     /**
      * Search an user (tags, first name, last name and email )
-     * @param string the tag
-     * @param int field id of the tag
-     * @param int where to start in the query
-     * @param int number of items
-     * @param bool get count or not
+     * @param string $tag
+     * @param int $field_id field id of the tag
+     * @param int $from where to start in the query
+     * @param int $number_of_items
+     * @param bool $getCount get count or not
      * @return array
      */
     public static function get_all_user_tags($tag, $field_id = 0, $from = 0, $number_of_items = 10, $getCount = false)
@@ -3574,7 +3580,6 @@ class UserManager
         $table_user_tag_values = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
         $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-        $tag = Database::escape_string($tag);
         $field_id = intval($field_id);
         $from = intval($from);
         $number_of_items = intval($number_of_items);
@@ -3599,13 +3604,13 @@ class UserManager
                 LEFT JOIN $table_user_tag_values uv ON (u.user_id AND uv.user_id AND  uv.user_id = url_rel_user.user_id)
                 LEFT JOIN $table_user_tag ut ON (uv.tag_id = ut.id)
                 WHERE
-                    ($where_field tag LIKE '$tag%') OR
+                    ($where_field tag LIKE '".Database::escape_string($tag."%")."') OR
                     (
-                        u.firstname LIKE '%".$tag."%' OR
-                        u.lastname LIKE '%".$tag."%' OR
-                        u.username LIKE '%".$tag."%' OR
-                        concat(u.firstname,' ',u.lastname) LIKE '%".$tag."%' OR
-                        concat(u.lastname,' ',u.firstname) LIKE '%".$tag."%'
+                        u.firstname LIKE '".Database::escape_string("%".$tag."%")."' OR
+                        u.lastname LIKE '".Database::escape_string("%".$tag."%")."' OR
+                        u.username LIKE '".Database::escape_string("%".$tag."%")."' OR
+                        concat(u.firstname,' ',u.lastname) LIKE '".Database::escape_string("%".$tag."%")."' OR
+                        concat(u.lastname,' ',u.firstname) LIKE '".Database::escape_string("%".$tag."%")."'
                      )
                      ".(!empty($where_extra_fields) ? $where_extra_fields : '')."
                      AND
@@ -3637,9 +3642,9 @@ class UserManager
                 $return[$row['user_id']] = $row;
             }
         }
+
         return $return;
     }
-
 
     /**
       * Get extra filtrable user fields (type select)
@@ -3653,10 +3658,15 @@ class UserManager
             foreach ($extraFieldList as $extraField) {
                 //if is enabled to filter and is a "<select>" field type
                 if ($extraField[8] == 1 && $extraField[2] == 4) {
-                    $extraFiltrableFields[] = array('name'=> $extraField[3], 'variable'=>$extraField[1], 'data'=> $extraField[9]);
+                    $extraFiltrableFields[] = array(
+                        'name' => $extraField[3],
+                        'variable' => $extraField[1],
+                        'data' => $extraField[9]
+                    );
                 }
             }
         }
+
         if (is_array($extraFiltrableFields) && count($extraFiltrableFields) > 0 ) {
             return $extraFiltrableFields;
         }

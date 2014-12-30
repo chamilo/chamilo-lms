@@ -10,7 +10,6 @@ require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
  * Defines a gradebook Category object
  * @package chamilo.gradebook
  */
-
 class Category implements GradebookItem
 {
     private $id;
@@ -206,8 +205,9 @@ class Category implements GradebookItem
 
         if (!empty($session_id)) {
             $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'SELECT id, course_code FROM '.$tbl_grade_categories. '
-                     WHERE session_id = '.$session_id;
+            $sql = 'SELECT id, course_code
+                    FROM '.$tbl_grade_categories. '
+                    WHERE session_id = '.$session_id;
             $result_session = Database::query($sql);
             if (Database::num_rows($result_session) > 0) {
                 $categoryList = array();
@@ -219,6 +219,7 @@ class Category implements GradebookItem
                         //$allSubCategories = Category::load(null,null,null, $parent_id, null, $session_id, null);
                     }
                 }
+
                 return $categoryList;
             }
         }
@@ -226,13 +227,13 @@ class Category implements GradebookItem
 
     /**
      * Retrieve categories and return them as an array of Category objects
-     * @param int      category id
-     * @param int      user id (category owner)
-     * @param string   course code
-     * @param int      parent category
-     * @param bool     visible
-     * @param int      session id (in case we are in a session)
-     * @param bool     Whether to show all "session" categories (true) or hide them (false) in case there is no session id
+     * @param int      $id category id
+     * @param int      $user_id (category owner)
+     * @param string   $course_code
+     * @param int      $parent_id parent category
+     * @param bool     $visible
+     * @param int      $session_id (in case we are in a session)
+     * @param bool     $order_by Whether to show all "session" categories (true) or hide them (false) in case there is no session id
      */
     public static function load(
         $id = null,
@@ -256,7 +257,6 @@ class Category implements GradebookItem
         $sql = 'SELECT * FROM '.$tbl_grade_categories;
         $paramcount = 0;
         if (isset($id)) {
-            $id = Database::escape_string($id);
             $sql.= ' WHERE id = '.intval($id);
             $paramcount ++;
         }
@@ -273,7 +273,6 @@ class Category implements GradebookItem
         }
 
         if (isset($course_code)) {
-            $course_code = Database::escape_string($course_code);
             if ($paramcount != 0) {
                 $sql .= ' AND';
             } else {
@@ -303,7 +302,6 @@ class Category implements GradebookItem
         }
 
         if (isset($parent_id)) {
-            $parent_id = Database::escape_string($parent_id);
             if ($paramcount != 0) {
                 $sql .= ' AND ';
             } else {
@@ -314,7 +312,6 @@ class Category implements GradebookItem
         }
 
         if (isset($visible)) {
-            $visible = Database::escape_string($visible);
             if ($paramcount != 0) {
                 $sql .= ' AND';
             } else {

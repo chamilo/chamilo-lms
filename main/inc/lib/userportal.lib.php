@@ -1079,7 +1079,7 @@ class IndexManager
                                         true,
                                         $this->load_directories_preview
                                     );
-                                    $html_courses_session .= $c[1];
+                                    $html_courses_session .= isset($c[1]) ? $c[1] : null;
                                 }
                                 $count_courses_session++;
                             }

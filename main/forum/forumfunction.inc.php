@@ -527,7 +527,7 @@ function store_forumcategory($values)
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
-    $sql = "SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string($table_categories)."
+    $sql = "SELECT MAX(cat_order) as sort_max FROM ".$table_categories."
             WHERE c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);

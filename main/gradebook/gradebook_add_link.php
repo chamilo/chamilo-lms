@@ -34,7 +34,7 @@ if ($session_id == 0) {
     $all_categories = Category::load_session_categories(null, $session_id);
 }
 $category = Category :: load($_GET['selectcat']);
-$url = api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id();
+$url = api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
 $typeform = new LinkForm(LinkForm :: TYPE_CREATE, $category[0], null, 'create_link', null, $url, $typeSelected);
 
 // if user selected a link type
@@ -87,8 +87,10 @@ if (isset($typeSelected) && $typeSelected != '0') {
         $link->set_visible(empty($addvalues['visible']) ? 0 : 1);
 
         // Update view_properties
-        if (isset($typeSelected) && 5 == $typeSelected && (isset($addvalues['select_link']) && $addvalues['select_link'] <> "")) {
-
+        if (isset($typeSelected) &&
+            5 == $typeSelected &&
+            (isset($addvalues['select_link']) && $addvalues['select_link'] <> "")
+        ) {
             $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.'
 					 WHERE c_id = '.$course_info['real_id'].' AND thread_id='.$addvalues['select_link'];
             $res1 = Database::query($sql1);
@@ -100,32 +102,35 @@ if (isset($typeSelected) && $typeSelected != '0') {
             $row = Database::fetch_row($res_l);
             if ($row[0] == 0) {
                 $link->add();
-                $sql = 'UPDATE '.$tbl_forum_thread.' SET thread_qualify_max='.$addvalues['weight'].',thread_weight='.$addvalues['weight'].',thread_title_qualify="'.$rowtit[0].'"
+                $sql = 'UPDATE '.$tbl_forum_thread.' SET
+                            thread_qualify_max='.$addvalues['weight'].',
+                            thread_weight='.$addvalues['weight'].',
+                            thread_title_qualify="'.$rowtit[0].'"
 						WHERE thread_id='.$addvalues['select_link'].' AND c_id = '.$course_info['real_id'].' ';
                 Database::query($sql);
             }
         }
 
         $link->add();
-
         $addvalue_result = !empty($addvalues['addresult']) ? $addvalues['addresult'] : array();
         if ($addvalue_result == 1) {
-            header('Location: gradebook_add_result.php?selecteval='.$link->get_ref_id());
+            header('Location: gradebook_add_result.php?selecteval='.$link->get_ref_id().'&'.api_get_cidreq());
             exit;
         } else {
-            header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?linkadded=&selectcat='.Security::remove_XSS($_GET['selectcat']));
+            header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?linkadded=&selectcat='.Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq());
             exit;
         }
     }
 }
 
-
-$interbreadcrumb[] = array('url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('Gradebook'));
+$interbreadcrumb[] = array(
+    'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq(),
+    'name' => get_lang('Gradebook')
+);
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {
-
     $("#hide_category_id").change(function() {
        $("#hide_category_id option:selected").each(function () {
            var cat_id = $(this).val();
@@ -136,7 +141,7 @@ $(document).ready( function() {
                     if (return_value != 0 ) {
                         $("#max_weight").html(return_value);
                     }
-                },
+                }
             });
        });
     });

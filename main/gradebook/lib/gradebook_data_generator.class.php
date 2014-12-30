@@ -57,6 +57,7 @@ class GradebookDataGenerator
 
     /**
      * Get total number of items (rows)
+     * @return int
      */
     public function get_total_items_count()
     {
@@ -196,7 +197,7 @@ class GradebookDataGenerator
         } else {
             $date = $item1->get_date();
             if (!empty($date)) {
-             $timestamp1 = api_strtotime($date, 'UTC');
+                $timestamp1 = api_strtotime($date, 'UTC');
             } else {
                 $timestamp1 = null;
             }

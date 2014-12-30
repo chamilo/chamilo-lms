@@ -9,7 +9,7 @@ $language_file = array('gradebook', 'exercice');
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
-$cidReset= false;
+//$cidReset = false;
 $_in_course = true;
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
@@ -702,7 +702,7 @@ if (isset($_GET['studentoverview'])) {
         }
         unset($cats);
     }
-    $cats = Category :: load ($category, null, null, null, null, null, false);
+    $cats = Category::load($category, null, null, null, null, null, false);
 
     //with this fix the teacher only can view 1 gradebook
     if (api_is_platform_admin()) {

@@ -4,12 +4,11 @@
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-/**
- * Initialization
- */
+
 // name of the language file that needs to be included
 $language_file = array('registration', 'admin', 'userInfo');
-$cidReset      = true;
+$cidReset = true;
+
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'magpierss/rss_fetch.inc';
@@ -140,22 +139,23 @@ $query = isset($_GET['q']) ? Database::escape_string($_GET['q']) : null;
 $query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], array('0','1','2')) ? $_GET['search_type'] : null;
 $extra_fields = UserManager::get_extra_filtrable_fields();
 $query_vars = array('q' => $query, 'search_type' => $query_search_type);
-foreach ($extra_fields as $extra_field) {
-    $field_name = 'field_'.$extra_field['variable'];
-    if (isset($_GET[$field_name]) && $_GET[$field_name]!='0') {
-        $query_vars[$field_name]=$_GET[$field_name];
+if (!empty($extra_fields)) {
+    foreach ($extra_fields as $extra_field) {
+        $field_name = 'field_' . $extra_field['variable'];
+        if (isset($_GET[$field_name]) && $_GET[$field_name] != '0') {
+            $query_vars[$field_name] = $_GET[$field_name];
+        }
     }
 }
 
 $social_avatar_block = SocialManager::show_social_avatar_block('search');
 $social_menu_block = SocialManager::show_social_menu('search');
-
 $social_right_content = '<div class="span9">'.UserManager::get_search_form($query).'</div>';
 
 // I'm searching something
 if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) {
     $itemPerPage = 9;
-    
+
     if ($_GET['search_type']=='0' || $_GET['search_type']=='1') {
         $page = isset($_GET['users_page_nr']) ? intval($_GET['users_page_nr']) : 1;
         $totalUsers = UserManager::get_all_user_tags($_GET['q'], 0, 0, $itemPerPage, true);
@@ -216,9 +216,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             }
 
             $tag = isset($user['tag']) ? ' <br /><br />'.$user['tag'] : null;
-
             $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url);
-
             $invitations = $user['tag'].$send_inv.$send_msg;
 
             $results .= '<li class="span3">

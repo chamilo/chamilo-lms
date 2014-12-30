@@ -57,7 +57,7 @@ $(document).ready(function () {
 });
 
 function check_skills() {
-    //selecting only selected users
+    // selecting only selected users
     $("#skills option:selected").each(function() {
         var skill_id = $(this).val();
         if (skill_id != "" ) {
@@ -76,7 +76,7 @@ function check_skills() {
                             }
                         });
                     }
-                },
+                }
             });
         }
     });
@@ -98,7 +98,6 @@ if ($_in_course) {
 }
 
 $catadd->set_course_code(api_get_course_id());
-
 $form = new CatForm(
     CatForm :: TYPE_ADD,
     $catadd,
@@ -140,14 +139,17 @@ if ($form->validate()) {
     }
     $cat->set_visible($visible);
     $result = $cat->add();
-    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?addcat=&selectcat=' . $cat->get_parent_id());
+    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?addcat=&selectcat=' . $cat->get_parent_id().'&'.api_get_cidreq());
     exit;
 }
 
-if ( !$_in_course ) {
-    $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$get_select_cat,'name' => get_lang('Gradebook'));
+if (!$_in_course) {
+    $interbreadcrumb[] = array (
+        'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$get_select_cat.'&'.api_get_cidreq(),
+        'name' => get_lang('Gradebook')
+    );
 }
-$interbreadcrumb[]= array (	'url' =>'index.php','name' => get_lang('ToolGradebook'));
+$interbreadcrumb[]= array(	'url' =>'index.php','name' => get_lang('ToolGradebook'));
 Display :: display_header(get_lang('NewCategory'));
 
 $display_form = true;

@@ -199,8 +199,8 @@ function get_icon_file_name($type)
 
 /**
  * Builds the course or platform admin icons to edit a category
- * @param object $cat category object
- * @param int $selectcat id of selected category
+ * @param Category $cat category
+ * @param Category $selectcat id of selected category
  */
 function build_edit_icons_cat($cat, $selectcat)
 {
@@ -213,11 +213,12 @@ function build_edit_icons_cat($cat, $selectcat)
         $visibility_icon = ($cat->is_visible() == 0) ? 'invisible' : 'visible';
         $visibility_command = ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 
-        $modify_icons .= '<a class="view_children" data-cat-id="' . $cat->get_id() . '" href="javascript:void(0);">' . Display::return_icon('view_more_stats.gif', get_lang('Show'), '', ICON_SIZE_SMALL) . '</a>';
+        $modify_icons .= '<a class="view_children" data-cat-id="' . $cat->get_id() . '" href="javascript:void(0);">' .
+            Display::return_icon('view_more_stats.gif', get_lang('Show'), '', ICON_SIZE_SMALL) . '</a>';
 
         if (api_is_allowed_to_edit(null, true)) {
 
-            //Locking button
+            // Locking button
             if (api_get_setting('gradebook_locking_enabled') == 'true') {
 
                 if ($cat->is_locked()) {
@@ -240,9 +241,7 @@ function build_edit_icons_cat($cat, $selectcat)
                 if ($cat->is_locked() && !api_is_platform_admin()) {
                     $modify_icons .= Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
                 } else {
-                    $modify_icons .= '<a href="gradebook_edit_cat.php?' .
-                        'editcat=' . $cat->get_id() . '&cidReq=' .
-                        $cat->get_course_code() . '">' .
+                    $modify_icons .= '<a href="gradebook_edit_cat.php?' .'editcat=' . $cat->get_id() . '&cidReq=' .$cat->get_course_code() . '">' .
                         Display::return_icon(
                             'edit.png',
                             get_lang('Modify'),
@@ -252,26 +251,21 @@ function build_edit_icons_cat($cat, $selectcat)
                 }
             }
 
-            $modify_icons .= '<a href="gradebook_edit_all.php?selectcat=' .
-                $cat->get_id() . '&cidReq=' . $cat->get_course_code() . '">' .
+            $modify_icons .= '<a href="gradebook_edit_all.php?selectcat=' .$cat->get_id() . '&cidReq=' . $cat->get_course_code() . '">' .
                 Display::return_icon(
                     'percentage.png',
                     get_lang('EditAllWeights'),
                     '',
                     ICON_SIZE_SMALL
                 ) . '</a>';
-            $modify_icons .= '<a href="gradebook_flatview.php?selectcat=' .
-                $cat->get_id() . '&cidReq=' . $cat->get_course_code() . '">' .
+            $modify_icons .= '<a href="gradebook_flatview.php?selectcat=' .$cat->get_id() . '&cidReq=' . $cat->get_course_code() . '">' .
                 Display::return_icon(
                     'stats.png',
                     get_lang('FlatView'),
                     '',
                     ICON_SIZE_SMALL
                 ) . '</a>';
-            $modify_icons .= '&nbsp;<a href="' . api_get_self() .
-                '?visiblecat=' . $cat->get_id() . '&' .
-                $visibility_command . '=&selectcat=' . $selectcat .
-                '&cidReq=' . $cat->get_course_code() . '">' .
+            $modify_icons .= '&nbsp;<a href="' . api_get_self() .'?visiblecat=' . $cat->get_id() . '&' .$visibility_command . '=&selectcat=' . $selectcat .'&cidReq=' . $cat->get_course_code() . '">' .
                 Display::return_icon(
                     $visibility_icon . '.png',
                     get_lang('Visible'),
@@ -289,7 +283,8 @@ function build_edit_icons_cat($cat, $selectcat)
             if ($cat->is_locked() && !api_is_platform_admin()) {
                 $modify_icons .= Display::return_icon('delete_na.png', get_lang('DeleteAll'), '', ICON_SIZE_SMALL);
             } else {
-                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq=' . $cat->get_course_code() . '" onclick="return confirmation();">' . Display::return_icon('delete.png', get_lang('DeleteAll'), '', ICON_SIZE_SMALL) . '</a>';
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq=' . $cat->get_course_code() . '" onclick="return confirmation();">' .
+                    Display::return_icon('delete.png', get_lang('DeleteAll'), '', ICON_SIZE_SMALL) . '</a>';
             }
         }
 

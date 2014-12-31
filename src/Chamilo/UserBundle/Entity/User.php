@@ -337,7 +337,12 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     protected $resourceNodes;
 
     /**
-     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="user", cascade={"persist"})
+     **/
+    protected $sessionCourseSubscriptions;
+
+    /**
+     * Constructor
      */
     public function __construct()
     {

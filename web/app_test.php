@@ -16,8 +16,7 @@ $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 require_once __DIR__.'/../app/AppKernel.php';
 require_once __DIR__.'/legacy.php';
 
-// Initialize kernel and run the application.
-$kernel = new AppKernel('test', true);
+
 
 /*$request = Request::createFromGlobals();
 Request::enableHttpMethodParameterOverride();*/
@@ -25,7 +24,8 @@ use Sonata\PageBundle\Request\RequestFactory;
 $request = RequestFactory::createFromGlobals('host_with_path_by_locale');
 $request->enableHttpMethodParameterOverride();
 
+// Initialize kernel and run the application.
+$kernel = new AppKernel('test', true);
 $response = $kernel->handle($request);
 $response->send();
-
 $kernel->terminate($request, $response);

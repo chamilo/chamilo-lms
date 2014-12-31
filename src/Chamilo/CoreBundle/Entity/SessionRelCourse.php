@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -19,23 +20,23 @@ class SessionRelCourse
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="nbr_users", type="integer")
      */
-    private $nbrUsers;
+    protected $nbrUsers;
 
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="id_session", referencedColumnName="id")
      */
-    private $session;
+    protected $session;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Course", inversedBy="sessions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
@@ -98,52 +99,6 @@ class SessionRelCourse
     public function getSession()
     {
         return $this->session;
-    }
-
-    /**
-     * Set idSession
-     *
-     * @param integer $idSession
-     * @return SessionRelCourse
-     */
-    public function setIdSession($idSession)
-    {
-        $this->idSession = $idSession;
-
-        return $this;
-    }
-
-    /**
-     * Get idSession
-     *
-     * @return integer
-     */
-    public function getIdSession()
-    {
-        return $this->idSession;
-    }
-
-    /**
-     * Set cId
-     *
-     * @param integer $cId
-     * @return SessionRelCourse
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId
-     *
-     * @return integer
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

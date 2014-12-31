@@ -53,6 +53,9 @@ login:
 logout:
     path: /logout
 
+admin_dashboard:
+    path: /administration/dashboard
+
 login_check:
     path: /administration/login_check
 

@@ -102,20 +102,6 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
     }
 
     /**
-     * @Given I have a user :arg1
-     */
-    /*public function iHaveAUser($arg1)
-    {
-        $userManager = $this->getContainer()->get('fos_user.user_manager');
-        $em = $this->getEntityManager();
-        $user = $userManager->createUser();
-        $user->setUsername($arg1);
-
-        $em->persist($user);
-        $em->flush();
-    }*/
-
-    /**
      * @When I add user :arg1 to course :arg2
      */
     public function iAddUserToCourse($username, $courseTitle)
@@ -221,5 +207,45 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
         }
 
         PHPUnit_Framework_TestCase::assertTrue($found);
+    }
+
+     /**
+     * @When I add student :arg1 to course :arg2 in session :arg3
+     */
+    public function iAddStudentToCourseInSession($username, $courseTitle, $sessionTitle)
+    {
+        $user = $this->getUserManager()->findUserByUsername($username);
+        $course = $this->getCourseManager()->findOneByTitle($courseTitle);
+        $session = $this->getSessionManager()->findOneByName($sessionTitle);
+
+        $session->addUserInCourse($user, $course);
+    }
+
+    /**
+     * @Then I should find a user :arg1 in course :arg2 in session :arg3
+     */
+    public function iShouldFindAUserInCourseInSession($username, $courseTitle, $sessionTitle)
+    {
+        $user = $this->getUserManager()->findUserByUsername($username);
+        $course = $this->getCourseManager()->findOneByTitle($courseTitle);
+        $session = $this->getSessionManager()->findOneByName($sessionTitle);
+
+        return $session->hasUserInCourse($user, $course);
+    }
+
+    /**
+    * @When I add user with status :arg1 with username :arg2 in course :arg3 in session :arg4
+    */
+    public function iAddUserWithStatusWithUsernameInCourseInSession($status, $username, $courseTitle, $sessionTitle)
+    {
+        switch ($status) {
+            case 'student':
+                break;
+            case 'teacher':
+                break;
+            case 'coach':
+                break;
+
+        }
     }
 }

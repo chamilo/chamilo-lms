@@ -367,6 +367,22 @@ abstract class DefaultContext extends BaseDefaultContext
     }
 
     /**
+     * @return \Chamilo\CoreBundle\Entity\Manager\CourseManager
+     */
+    public function getCourseManager()
+    {
+        return $this->getContainer()->get('chamilo_core.manager.course');
+    }
+
+    /**
+     * @return \Chamilo\CoreBundle\Entity\Manager\SessionManager
+     */
+    public function getSessionManager()
+    {
+        return $this->getContainer()->get('chamilo_core.manager.session');
+    }
+
+    /**
      * Returns the Doctrine repository manager for a given entity.
      *
      * @param string $entityName The name of the entity.
@@ -377,5 +393,4 @@ abstract class DefaultContext extends BaseDefaultContext
     {
         return $this->getEntityManager()->getRepository($entityName);
     }
-
 }

@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,6 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SessionRelUser
 {
+    public $relationTypeList = array(
+        0 => 'student'
+    );
+
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="id_session", referencedColumnName="id")

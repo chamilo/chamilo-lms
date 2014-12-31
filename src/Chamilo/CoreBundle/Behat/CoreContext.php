@@ -4,7 +4,6 @@
 namespace Chamilo\CoreBundle\Behat;
 
 use Behat\Gherkin\Node\TableNode;
-//use Sylius\Bundle\ResourceBundle\Behat\DefaultContext;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -126,26 +125,6 @@ class CoreContext extends DefaultContext
 
         $manager->flush();
     }
-
-    /**
-     * @Given /^the following addresses exist:$/
-     */
-    public function theFollowingAddressesExist(TableNode $table)
-    {
-        $manager = $this->getEntityManager();
-
-        foreach ($table->getHash() as $data) {
-            $address = $this->createAddress($data['address']);
-            $user = $this->thereIsUser($data['user'], 'sylius', null, 'yes', null, array(), false);
-            $user->addAddress($address);
-            $manager->persist($address);
-            $manager->persist($user);
-        }
-
-        $manager->flush();
-    }
-
-
 
     /**
      * @Given /^product "([^""]*)" has the following volume based pricing:$/
@@ -411,7 +390,14 @@ class CoreContext extends DefaultContext
      */
     public function iAmLoggedInAsAdministrator()
     {
-        $this->iAmLoggedInAsRole('ROLE_ADMIN');
+        $this->iAmLoggedInAsRole(
+            'ROLE_ADMIN',
+            'admin_behat',
+            'admin_behat@example.org',
+            'admin_behat',
+            'yes',
+            array('admins')
+        );
     }
 
     /**
@@ -426,7 +412,6 @@ class CoreContext extends DefaultContext
             $email,
             'student',
             'yes',
-            null,
             array('students')
         );
     }
@@ -443,7 +428,6 @@ class CoreContext extends DefaultContext
             $email,
             'teacher',
             'yes',
-            null,
             array('teachers')
         );
     }
@@ -465,7 +449,6 @@ class CoreContext extends DefaultContext
         $this->getSession()->visit($this->generatePageUrl('fos_user_security_logout'));
     }
 
-
     /**
      * @Given /^there are following users:$/
      */
@@ -478,7 +461,6 @@ class CoreContext extends DefaultContext
                 isset($data['plain_password']) ? $data['plain_password'] : $this->faker->word(),
                 'ROLE_USER',
                 isset($data['enabled']) ? $data['enabled'] : true,
-                isset($data['address']) && !empty($data['address']) ? $data['address'] : null,
                 isset($data['groups']) && !empty($data['groups']) ? explode(',', $data['groups']) : array(),
                 false
             );
@@ -495,7 +477,6 @@ class CoreContext extends DefaultContext
      * @param string $email
      * @param string $password
      * @param string $enabled
-     * @param string $address
      * @param array $groups
      */
     private function iAmLoggedInAsRole(
@@ -504,18 +485,16 @@ class CoreContext extends DefaultContext
         $email = 'chamilo@example.com',
         $password = 'chamilo',
         $enabled = 'yes',
-        $address = null,
         $groups = array()
     ) {
-        $this->thereIsUser($username, $email, $password, $role, $enabled, $address, $groups);
-
         $this->getSession()->visit($this->generatePageUrl('fos_user_security_login'));
 
-        $this->fillField('_username', $email);
-        $this->fillField('_password', $password);
-        $this->pressButton('login');
-    }
+        $this->thereIsUser($username, $email, $password, $role, $enabled, $groups);
 
+        $this->fillField('_username', $username);
+        $this->fillField('_password', $password);
+        $this->pressButton('_submit');
+    }
 
     /**
      * @param string $username
@@ -523,7 +502,6 @@ class CoreContext extends DefaultContext
      * @param string $password
      * @param string  $role
      * @param string $enabled
-     * @param string  $address
      * @param array $groups
      * @param bool $flush
      * @return User|\FOS\UserBundle\Model\UserInterface|object
@@ -534,21 +512,20 @@ class CoreContext extends DefaultContext
         $password,
         $role = null,
         $enabled = 'yes',
-        $address = null,
         $groups = array(),
         $flush = true
     ) {
         $userManager = $this->getUserManager();
         $groupManager = $this->getGroupManager();
-        if (null === $user = $userManager->findOneBy(array('email' => $email))) {
+        $user = $userManager->findOneBy(array('email' => $email));
+
+        if (null === $user) {
 
             /** @var User $user */
             $user = $userManager->createUser();
             $user->setUsername($username);
             $user->setFirstname($this->faker->firstName);
             $user->setLastname($this->faker->lastName);
-            //$user->setFirstname(null === $address ? $this->faker->firstName : $addressData[0]);
-            //$user->setLastname(null === $address ? $this->faker->lastName : $addressData[1]);
             $user->setEmail($email);
             $user->setEnabled('yes' === $enabled);
             $user->setPlainPassword($password);
@@ -576,35 +553,4 @@ class CoreContext extends DefaultContext
         return $user;
     }
 
-    /**
-     * @Given I am a student
-     */
-    public function iAmAStudent()
-    {
-        $this->thereIsUser(
-            'student',
-            'student@example.org',
-            'student',
-            'ROLE_USER',
-            'yes',
-            null,
-            array('students')
-        );
-    }
-
-    /**
-     * @Given I am an administrator
-     */
-    public function iAmAnAdministrator()
-    {
-        $this->thereIsUser(
-            'admin',
-            'admin@example.org',
-            'admin',
-            'ROLE_ADMIN',
-            'yes',
-            null,
-            array('admins')
-        );
-    }
 }

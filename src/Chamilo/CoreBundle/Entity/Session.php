@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -146,14 +148,22 @@ class Session
     private $category;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      **/
     protected $courses;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      **/
     protected $users;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     **/
+    protected $userCourseSubscriptions;
 
     /**
      * Constructor
@@ -173,6 +183,10 @@ class Session
         $this->coachAccessStartDate = new \DateTime();
         $this->coachAccessEndDate = new \DateTime();
         $this->visibility = 1;
+
+        $this->courses = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->userCourseSubscriptions = new ArrayCollection();
     }
 
     /**
@@ -202,7 +216,7 @@ class Session
     }
 
     /**
-     * @return
+     * @return ArrayCollection
      */
     public function getUsers()
     {
@@ -231,7 +245,7 @@ class Session
     }
 
     /**
-     * @return
+     * @return ArrayCollection
      */
     public function getCourses()
     {
@@ -260,7 +274,7 @@ class Session
     }
 
     /**
-     * Remove $user
+     * Remove $course
      *
      * @param SessionRelCourse $course
      */
@@ -271,6 +285,102 @@ class Session
                 unset($this->courses[$key]);
             }
         }
+    }
+
+    /**
+     * @param User $user
+     * @param Course $course
+     */
+    public function addUserInCourse(User $user, Course $course)
+    {
+        if ($this->hasCourse($course)) {
+            // Adding session/user relationship
+            $sessionRelUser = new SessionRelUser();
+            $sessionRelUser->setSession($this);
+            $sessionRelUser->setUser($user);
+
+            $this->addUser($sessionRelUser);
+
+            // Adding session/course/user relationship
+            $userRelCourseRelSession = new SessionRelCourseRelUser();
+            $userRelCourseRelSession->setCourse($course);
+            $userRelCourseRelSession->setUser($user);
+            $userRelCourseRelSession->setSession($this);
+            $this->addUserCourseSubscription($userRelCourseRelSession);
+        }
+    }
+
+    /**
+     * @param User $user
+     * @param Course $course
+     *
+     * @return bool
+     */
+    public function hasUserInCourse(User $user, Course $course)
+    {
+        $relation = $this->getUserInCourse($user, $course);
+
+        return $relation->count() > 0;
+    }
+
+    /**
+     * @param User $user
+     * @param Course $course
+     * @param string $status teacher|student|coach
+     *
+     * @return bool
+     */
+    public function hasUserInCourseWithStatus(User $user, Course $course, $status)
+    {
+        $usersInCourse = $this->getUserInCourse($user, $course);
+
+        if ($usersInCourse->count() > 0) {
+            /** @var SessionRelCourseRelUser $userInCourse */
+            foreach ($usersInCourse as $userInCourse) {
+                /*if ($userInCourse->getStatus() == ) {
+
+                }*/
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param User $user
+     * @param Course $course
+     *
+     * @return \Doctrine\Common\Collections\Collection|static
+     */
+    public function getUserInCourse(User $user, Course $course)
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq("course", $course)
+        )->andWhere(
+            Criteria::expr()->eq("user", $user)
+        );
+
+        return $this->getUserCourseSubscriptions()->matching($criteria);
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return bool
+     */
+    public function hasCourse(Course $course)
+    {
+        if ($this->getCourses()->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq("course", $course)
+            );
+            $relation = $this->getCourses()->matching($criteria);
+            error_log($relation->count());
+            return $relation->count() > 0;
+        }
+
+        return false;
     }
 
     /**
@@ -409,29 +519,6 @@ class Session
     public function getVisibility()
     {
         return $this->visibility;
-    }
-
-    /**
-     * Set sessionCategoryId
-     *
-     * @param integer $sessionCategoryId
-     * @return Session
-     */
-    public function setSessionCategoryId($sessionCategoryId)
-    {
-        $this->sessionCategoryId = $sessionCategoryId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionCategoryId
-     *
-     * @return integer
-     */
-    public function getSessionCategoryId()
-    {
-        return $this->sessionCategoryId;
     }
 
     /**
@@ -668,7 +755,35 @@ class Session
     {
         $entity = new SessionRelCourse();
         $entity->setCourse($course);
-
         $this->addCourses($entity);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getUserCourseSubscriptions()
+    {
+        return $this->userCourseSubscriptions;
+    }
+
+    /**
+     * @param ArrayCollection $userCourseSubscriptions
+     */
+    public function setUserCourseSubscriptions($userCourseSubscriptions)
+    {
+        $this->userCourseSubscriptions = new ArrayCollection();
+
+        foreach ($userCourseSubscriptions as $item) {
+            $this->addUserCourseSubscription($item);
+        }
+    }
+
+    /**
+     * @param SessionRelCourseRelUser $subscription
+     */
+    public function addUserCourseSubscription(SessionRelCourseRelUser $subscription)
+    {
+        $subscription->setSession($this);
+        $this->userCourseSubscriptions[] = $subscription;
     }
 }

@@ -1,17 +1,28 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SessionRelCourseRelUser
+ * Class SessionRelCourseRelUser
  *
- * @ORM\Table(name="session_rel_course_rel_user", indexes={@ORM\Index(name="idx_session_rel_course_rel_user_id_user", columns={"id_user"}), @ORM\Index(name="idx_session_rel_course_rel_user_course_id", columns={"c_id"})})
+ * @ORM\Table(
+ *      name="session_rel_course_rel_user",
+ *      indexes={@ORM\Index(
+ *          name="idx_session_rel_course_rel_user_id_user", columns={"id_user"}
+ *          ),
+ *       @ORM\Index(name="idx_session_rel_course_rel_user_course_id", columns={"c_id"})})
  * @ORM\Entity
  */
 class SessionRelCourseRelUser
 {
+    public $statusList = array(
+
+    );
+
     /**
      * @var integer
      *
@@ -20,27 +31,6 @@ class SessionRelCourseRelUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_session", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $idSession;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $cId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_user", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $idUser;
 
     /**
      * @var integer
@@ -63,6 +53,74 @@ class SessionRelCourseRelUser
      */
     private $legalAgreement;
 
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sessionCourseSubscriptions", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
+     */
+    protected $user;
+
+    /**
+     * @var Session
+     * @ORM\ManyToOne(targetEntity="Session", inversedBy="userCourseSubscriptions", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_session", referencedColumnName="id")
+     */
+    protected $session;
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * @param mixed $session
+     */
+    public function setSession($session)
+    {
+        $this->session = $session;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param mixed $course
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+    }
+
+    /**
+     * @var Course
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
 
     /**
      * Get id
@@ -72,75 +130,6 @@ class SessionRelCourseRelUser
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set idSession
-     *
-     * @param integer $idSession
-     * @return SessionRelCourseRelUser
-     */
-    public function setIdSession($idSession)
-    {
-        $this->idSession = $idSession;
-
-        return $this;
-    }
-
-    /**
-     * Get idSession
-     *
-     * @return integer
-     */
-    public function getIdSession()
-    {
-        return $this->idSession;
-    }
-
-    /**
-     * Set cId
-     *
-     * @param integer $cId
-     * @return SessionRelCourseRelUser
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId
-     *
-     * @return integer
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * Set idUser
-     *
-     * @param integer $idUser
-     * @return SessionRelCourseRelUser
-     */
-    public function setIdUser($idUser)
-    {
-        $this->idUser = $idUser;
-
-        return $this;
-    }
-
-    /**
-     * Get idUser
-     *
-     * @return integer
-     */
-    public function getIdUser()
-    {
-        return $this->idUser;
     }
 
     /**

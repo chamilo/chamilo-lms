@@ -234,6 +234,11 @@ class Course
     protected $sessions;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="course", cascade={"persist"})
+     **/
+    protected $sessionUserSubscriptions;
+
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="course")
      **/
     //protected $items;

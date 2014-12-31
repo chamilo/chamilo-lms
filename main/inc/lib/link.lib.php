@@ -565,7 +565,7 @@ function editlinkcategory($type)
             if (empty ($mytarget)) {
                 $mytarget = '_self';
             }
-            $mytarget = ",target='" . $target . "'";
+            $mytarget = ", target='" . $target . "'";
 
             // Finding the old category_id.
             $sql = "SELECT * FROM " . $tbl_link . "
@@ -592,7 +592,7 @@ function editlinkcategory($type)
                 "description='" . Database :: escape_string($_POST['description']) . "', " .
                 "category_id='" . Database :: escape_string($_POST['selectcategory']) . "', " .
                 "display_order='" . $max_display_order . "', " .
-                "on_homepage='" . Database :: escape_string($onhomepage) . " ' $mytarget " .
+                "on_homepage= '" . Database :: escape_string($onhomepage) ."' $mytarget " .
                 " WHERE c_id = $course_id AND id='" . intval($_POST['id']) . "'";
             Database :: query($sql);
 

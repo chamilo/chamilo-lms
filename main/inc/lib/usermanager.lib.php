@@ -1303,7 +1303,7 @@ class UserManager
 
     /**
      * Update User extra field file type into {user_folder}/{$extra_field}
-     * @param $user_id              The user internal identification number
+     * @param int $user_id          The user internal identification number
      * @param string $extra_field   The $extra_field The extra field name
      * @param null $file            The filename
      * @param null $source_file     The temporal filename
@@ -1318,6 +1318,7 @@ class UserManager
         if (empty($user_id)) {
             return false;
         }
+
         if (empty($source_file)) {
             $source_file = $file;
         }
@@ -1495,9 +1496,10 @@ class UserManager
 
     /**
      * Update an extra field value for a given user
-     * @param    integer    User ID
-     * @param    string    Field variable name
-     * @param    string    Field value
+     * @param    integer   $user_id User ID
+     * @param    string    $fname Field variable name
+     * @param    string    $fvalue Field value
+     *
      * @return    boolean    true if field updated, false otherwise
      */
     public static function update_extra_field_value($user_id, $fname, $fvalue = '')
@@ -1508,24 +1510,28 @@ class UserManager
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         $fname = Database::escape_string($fname);
 
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return false;
-        if ($user_id === false)
+        }
+
+        if ($user_id === false) {
             return false;
+        }
 
         $fvalues = '';
-
-        //echo '<pre>'; print_r($fvalue);
         if (is_array($fvalue)) {
             foreach ($fvalue as $val) {
-                $fvalues .= Database::escape_string($val).';';
+                $fvalues .= $val.';';
             }
             if (!empty($fvalues)) {
                 $fvalues = substr($fvalues, 0, -1);
             }
         } else {
-            $fvalues = Database::escape_string($fvalue);
+            $fvalues = $fvalue;
         }
+
+        $fvalues = Database::escape_string($fvalues);
+
         $sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
         $resuf = Database::query($sqluf);
         $is_extra_file = false;
@@ -1571,7 +1577,12 @@ class UserManager
                         $fvalue['name'] = Security::filter_filename($fvalue['name']);
                         $fvalue['tmp_name'] = Security::filter_filename($fvalue['tmp_name']);
                         // Update and recover the filename
-                        $fvalues = UserManager::update_user_extra_file($user_id, $rowuf['field_variable'], $fvalue['name'], $fvalue['tmp_name']);
+                        $fvalues = UserManager::update_user_extra_file(
+                            $user_id,
+                            $rowuf['field_variable'],
+                            $fvalue['name'],
+                            $fvalue['tmp_name']
+                        );
                     } else {
                         // Set empty string to $fvalues to delete it
                         $fvalues = '';
@@ -1583,7 +1594,9 @@ class UserManager
                     break;
             }
             $tms = time();
-            $sqlufv = "SELECT * FROM $t_ufv WHERE user_id = $user_id AND field_id = ".$rowuf['id']." ORDER BY id";
+            $sqlufv = "SELECT * FROM $t_ufv
+                       WHERE user_id = $user_id AND field_id = ".$rowuf['id']."
+                       ORDER BY id";
             $resufv = Database::query($sqlufv);
             $n = Database::num_rows($resufv);
             if ($n > 1) {
@@ -1596,9 +1609,12 @@ class UserManager
                     }
                     $rowufv = Database::fetch_array($resufv);
                     if ($rowufv['field_value'] != $fvalues) {
-                        $sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
+                        $sqlu = "UPDATE $t_ufv SET
+                                    field_value = '$fvalues',
+                                    tms = FROM_UNIXTIME($tms)
+                                WHERE id = ".$rowufv['id'];
                         $resu = Database::query($sqlu);
-                        return($resu ? true : false);
+                        return ($resu ? true : false);
                     }
                     return true;
                 }
@@ -1612,29 +1628,35 @@ class UserManager
                     }
                     // If the new field is empty, delete it
                     if ($fvalues == '') {
-                        $sql_query = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'].";";
+                        $sql_query = "DELETE FROM $t_ufv
+                                      WHERE id = ".$rowufv['id'].";";
                     } else {
                         // Otherwise update it
-                        $sql_query = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
+                        $sql_query = "UPDATE $t_ufv SET
+                                        field_value = '$fvalues',
+                                        tms = FROM_UNIXTIME($tms)
+                                      WHERE id = ".$rowufv['id'];
                     }
 
                     $resu = Database::query($sql_query);
-                    return($resu ? true : false);
+                    return ($resu ? true : false);
                 }
+
                 return true;
             } else {
-                $sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) ".
-                    "VALUES ($user_id,".$rowuf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
+                $sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms)
+                         VALUES ( $user_id, ".$rowuf['id'].", '$fvalues', FROM_UNIXTIME($tms))";
                 $resi = Database::query($sqli);
-                return($resi ? true : false);
+                return ($resi ? true : false);
             }
         } else {
-            return false; //field not found
+            // Field not found
+            return false;
         }
     }
 
     /**
-     * Get an array of extra fieds with field details (type, default value and options)
+     * Get an array of extra fields with field details (type, default value and options)
      * @param    integer    Offset (from which row)
      * @param    integer    Number of items
      * @param    integer    Column on which sorting is made
@@ -3573,8 +3595,13 @@ class UserManager
      * @param bool $getCount get count or not
      * @return array
      */
-    public static function get_all_user_tags($tag, $field_id = 0, $from = 0, $number_of_items = 10, $getCount = false)
-    {
+    public static function get_all_user_tags(
+        $tag,
+        $field_id = 0,
+        $from = 0,
+        $number_of_items = 10,
+        $getCount = false
+    ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
@@ -3609,8 +3636,8 @@ class UserManager
                         u.firstname LIKE '".Database::escape_string("%".$tag."%")."' OR
                         u.lastname LIKE '".Database::escape_string("%".$tag."%")."' OR
                         u.username LIKE '".Database::escape_string("%".$tag."%")."' OR
-                        concat(u.firstname,' ',u.lastname) LIKE '".Database::escape_string("%".$tag."%")."' OR
-                        concat(u.lastname,' ',u.firstname) LIKE '".Database::escape_string("%".$tag."%")."'
+                        concat(u.firstname, ' ', u.lastname) LIKE '".Database::escape_string("%".$tag."%")."' OR
+                        concat(u.lastname, ' ', u.firstname) LIKE '".Database::escape_string("%".$tag."%")."'
                      )
                      ".(!empty($where_extra_fields) ? $where_extra_fields : '')."
                      AND
@@ -3635,8 +3662,14 @@ class UserManager
                 return $row['count'];
             }
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if (isset($return[$row['user_id']]) && !empty($return[$row['user_id']]['tag'])) {
-                    $url = Display::url($row['tag'], api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'], array('class' => 'tag'));
+                if (isset($return[$row['user_id']]) &&
+                    !empty($return[$row['user_id']]['tag'])
+                ) {
+                    $url = Display::url(
+                        $row['tag'],
+                        api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'],
+                        array('class' => 'tag')
+                    );
                     $row['tag'] = $url;
                 }
                 $return[$row['user_id']] = $row;

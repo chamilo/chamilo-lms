@@ -3348,6 +3348,7 @@ function api_item_property_update(
     // Definition of variables.
     $tool = Database::escape_string($tool);
     $item_id = intval($item_id);
+    $lastEditTypeNoFilter = $lastedit_type;
     $lastedit_type = Database::escape_string($lastedit_type);
     $user_id = intval($user_id);
     $to_group_id = intval($to_group_id);
@@ -3415,7 +3416,7 @@ function api_item_property_update(
 
     // Update if possible
     $set_type = '';
-    switch ($lastedit_type) {
+    switch ($lastEditTypeNoFilter) {
         case 'delete':
             // delete = make item only visible for the platform admin.
             $visibility = '2';
@@ -3448,17 +3449,18 @@ function api_item_property_update(
                             lastedit_user_id = '$user_id',
                             visibility='$visibility' $set_type
                         WHERE $filter";
-
             }
             break;
         case 'visible' : // Change item to visible.
             $visibility = '1';
-
             if (!empty($session_id)) {
-
                 // Check whether session id already exist into item_properties for updating visibility or add it.
                 $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY
-                        WHERE c_id = $course_id AND tool = '$tool' AND ref = '$item_id' AND id_session = '$session_id'";
+                        WHERE
+                            c_id = $course_id AND
+                            tool = '$tool' AND
+                            ref = '$item_id' AND
+                            id_session = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3488,7 +3490,11 @@ function api_item_property_update(
             if (!empty($session_id)) {
                 // Check whether session id already exist into item_properties for updating visibility or add it
                 $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY
-                        WHERE c_id=$course_id AND tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+                        WHERE
+                            c_id = $course_id AND
+                            tool = '$tool' AND
+                            ref='$item_id' AND
+                            id_session = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY

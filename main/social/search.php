@@ -135,7 +135,7 @@ $this_section      = SECTION_SOCIAL;
 $tool_name         = get_lang('Search');
 $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
 
-$query = isset($_GET['q']) ? Database::escape_string($_GET['q']) : null;
+$query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']): null;
 $query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], array('0','1','2')) ? $_GET['search_type'] : null;
 $extra_fields = UserManager::get_extra_filtrable_fields();
 $query_vars = array('q' => $query, 'search_type' => $query_search_type);
@@ -151,6 +151,9 @@ if (!empty($extra_fields)) {
 $social_avatar_block = SocialManager::show_social_avatar_block('search');
 $social_menu_block = SocialManager::show_social_menu('search');
 $social_right_content = '<div class="span9">'.UserManager::get_search_form($query).'</div>';
+
+$groups = array();
+$totalGroups = array();
 
 // I'm searching something
 if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) {
@@ -169,7 +172,6 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $pageGroup = isset($_GET['groups_page_nr']) ? intval($_GET['groups_page_nr']) : 1;
         // Groups
         $fromGroups = intval(($pageGroup - 1) * $itemPerPage);
-
         $totalGroups = GroupPortalManager::get_all_group_tags($_GET['q'], 0, $itemPerPage, true);
         $groups = GroupPortalManager::get_all_group_tags($_GET['q'], $fromGroups, $itemPerPage);
     }

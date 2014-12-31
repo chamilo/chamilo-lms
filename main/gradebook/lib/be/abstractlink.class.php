@@ -300,9 +300,9 @@ abstract class AbstractLink implements GradebookItem
     /**
      * Update the properties of this link in the database
      */
-    public function save() {
+    public function save()
+    {
         $this->save_linked_data();
-
         $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sql = "UPDATE $tbl_grade_links SET
                     type        = ".intval($this->get_type()).",
@@ -322,7 +322,7 @@ abstract class AbstractLink implements GradebookItem
     /**
      * @param int $idevaluation
      */
-    public function add_link_log($idevaluation)
+    public static function add_link_log($idevaluation)
     {
         $tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
         $dateobject=AbstractLink::load ($idevaluation,null,null,null,null);
@@ -345,7 +345,8 @@ abstract class AbstractLink implements GradebookItem
     /**
      * Delete this link from the database
      */
-    public function delete() {
+    public function delete()
+    {
         $this->delete_linked_data();
         $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sql = 'DELETE FROM '.$tbl_grade_links.' WHERE id = '.intval($this->id);
@@ -361,7 +362,6 @@ abstract class AbstractLink implements GradebookItem
     public function get_target_categories()
     {
         // links can only be moved to categories inside this course
-
         $targets = array();
         $level = 0;
 
@@ -416,21 +416,25 @@ abstract class AbstractLink implements GradebookItem
                 $foundlinks[] = $link;
             }
         }
+
         return $foundlinks;
     }
 
-
-    // Other methods implementing GradebookItem
+    /**
+     * @return string
+     */
     public function get_item_type()
     {
         return 'L';
     }
 
-    public function get_icon_name() {
+    /**
+     * @return string
+     */
+    public function get_icon_name()
+    {
         return 'link';
     }
-
-    // ABSTRACT FUNCTIONS - to be implemented by subclass
 
     abstract function has_results();
     abstract function get_link();
@@ -469,19 +473,31 @@ abstract class AbstractLink implements GradebookItem
     {
     }
 
+    /**
+     *
+     */
     public function delete_linked_data()
     {
     }
 
-    public function set_name ($name)
+    /**
+     * @param $name
+     */
+    public function set_name($name)
     {
     }
 
-    public function set_description ($description)
+    /**
+     * @param $description
+     */
+    public function set_description($description)
     {
     }
 
-    public function set_max ($max)
+    /**
+     * @param $max
+     */
+    public function set_max($max)
     {
     }
 
@@ -495,7 +511,7 @@ abstract class AbstractLink implements GradebookItem
      * @param int locked 1 or unlocked 0
      *
      * */
-    function lock($locked)
+    public function lock($locked)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".$this->id."'";

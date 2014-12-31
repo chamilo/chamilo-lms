@@ -344,7 +344,7 @@ if (!isset($_POST['compose'])) {
         // post
         if ($restrict) {
             if (!isset($_POST['group_id'])) {
-                $default['users']	 = $_POST['users'];
+                $default['users'] = isset($_POST['users']) ? $_POST['users'] : null;
             } else {
                 $default['group_id'] = $_POST['group_id'];
             }

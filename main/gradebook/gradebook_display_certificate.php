@@ -97,7 +97,7 @@ $this_section = SECTION_COURSES;
 
 Display::display_header('');
 
-if ($_GET['action'] == 'delete') {
+if (isset($_GET['action']) && $_GET['action'] == 'delete') {
     $check = Security::check_token('get');
     if ($check) {
         $certificate = new Certificate($_GET['certificate_id']);

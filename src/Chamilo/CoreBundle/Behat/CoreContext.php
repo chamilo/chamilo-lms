@@ -396,7 +396,7 @@ class CoreContext extends DefaultContext
             'admin_behat@example.org',
             'admin_behat',
             'yes',
-            array('admins')
+            array('Administrators')
         );
     }
 
@@ -412,7 +412,7 @@ class CoreContext extends DefaultContext
             $email,
             'student',
             'yes',
-            array('students')
+            array('Students')
         );
     }
 
@@ -423,12 +423,12 @@ class CoreContext extends DefaultContext
     public function iAmLoggedInTeacher($email = 'teacher@example.com')
     {
         $this->iAmLoggedInAsRole(
-            'ROLE_USER',
+            'ROLE_TEACHER',
             'teacher',
             $email,
             'teacher',
             'yes',
-            array('teachers')
+            array('Teachers')
         );
     }
 

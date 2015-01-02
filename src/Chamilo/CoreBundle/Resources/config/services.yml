@@ -6,7 +6,6 @@ parameters:
     chamilo_core.entity.session: Chamilo\CoreBundle\Entity\Session
 
 services:
-
     chamilo_core.manager.course:
         class: %chamilo_core.entity.manager.course_manager.class%
         arguments: [%chamilo_core.entity.course%, @doctrine]
@@ -58,7 +57,7 @@ services:
 
     chamilo_core.html_editor:
         class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
-        arguments: [@translator, @router]
+        arguments: [@translator.default, @router]
 
     # Listeners
 

@@ -60,7 +60,7 @@ class LoadPageData extends AbstractFixture implements
     {
         $site = $this->createSite();
         $this->createGlobalPage($site);
-
+        error_log('sonata.page.route.page.generator');
         $generator = $this->container->get('sonata.page.route.page.generator');
         $output = new ConsoleOutput();
         $generator->update($site, $output);

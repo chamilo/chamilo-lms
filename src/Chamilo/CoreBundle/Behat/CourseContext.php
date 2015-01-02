@@ -266,15 +266,51 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
 
         switch ($status) {
             case 'student':
-                $this->getSessionManager()->hasStudentInCourse($user, $course, $session);
+                $this->getSessionManager()->hasStudentInCourse(
+                    $user,
+                    $course,
+                    $session
+                );
                 break;
             case 'drh':
                 $this->getSessionManager()->hasDrh($user, $session);
                 break;
             case 'coach':
-                $this->getSessionManager()->hasCoachInCourse($user, $course, $session);
+                $this->getSessionManager()->hasCoachInCourse(
+                    $user,
+                    $course,
+                    $session
+                );
                 break;
         }
+    }
+
+     /**
+     * @When I add course :arg1 as user :arg2
+     */
+    public function iAddCourseAsUser($courseTitle, $username)
+    {
+        $course = $this->getCourseManager()->findOneByTitle($courseTitle);
+        $user = $this->getUserManager()->findUserByUsername($username);
+        $course->addTeacher($user);
+    }
+
+    /**
+     * @Then I should find a course :arg1 in the portal
+     */
+    public function iShouldFindACourseInThePortal($courseTitle)
+    {
+        $course = $this->getCourseManager()->findOneByTitle($courseTitle);
+        assertTrue($course instanceof Course);
+    }
+
+    /**
+     * @Then I should not find a course :arg1 in the portal
+     */
+    public function iShouldNotFindACourseInThePortal($courseTitle)
+    {
+        $course = $this->getCourseManager()->findOneByTitle($courseTitle);
+        assertNull($course);
     }
 
 }

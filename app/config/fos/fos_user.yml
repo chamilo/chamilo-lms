@@ -18,6 +18,7 @@ fos_user:
             handler:            fos_user.profile.form.handler.default
             name:               fos_user_profile_form
             validation_groups: [ProfileCustom]
+
     profile:
         form:
             type:               fos_user_profile

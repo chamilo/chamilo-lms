@@ -62,7 +62,7 @@
         "twig/twig": "~1.0",
         "twig/extensions": "~1.0",
 
-        "symfony/symfony": "~2.5",
+        "symfony/symfony": "~2.6",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",

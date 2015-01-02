@@ -6,6 +6,10 @@ namespace Chamilo\CoreBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class YesNoType
+ * @package Chamilo\CoreBundle\Form\Type
+ */
 class YesNoType extends AbstractType
 {
     /**

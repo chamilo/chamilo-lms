@@ -1,13 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Form;
+namespace Chamilo\CoreBundle\Form\type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Chamilo\CoreBundle\Entity\Course;
 
+/**
+ * Class CourseType
+ * @package Chamilo\CoreBundle\Form\type
+ */
 class CourseType extends AbstractType
 {
     /**
@@ -17,15 +21,15 @@ class CourseType extends AbstractType
     {
         $builder
             ->add('title', 'text')
-            ->add('code', 'text')
+            //->add('code', 'text')
             ->add('course_language', 'locale')
             ->add('visibility', 'choice',
                 array('choices' => Course::getStatusList())
             )
-            ->add('department_name', 'text')
-            ->add('department_url', 'url')
-            ->add('disk_quota', 'text')
-            ->add('expiration_date', 'sonata_type_datetime_picker')
+            ->add('department_name', 'text', array('required' => false))
+            ->add('department_url', 'url', array('required' => false))
+            //->add('disk_quota', 'text')
+            ->add('expiration_date', 'sonata_type_datetime_picker', array('required' => false))
 
            /* ->add('general_coach', 'entity', array(
                 'class' => 'ChamiloUserBundle:User',

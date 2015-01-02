@@ -56,6 +56,9 @@ abstract class DefaultContext extends BaseDefaultContext
      */
     protected $kernel;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->faker = FakerFactory::create();
@@ -246,20 +249,7 @@ abstract class DefaultContext extends BaseDefaultContext
         if (is_object($page)) {
             return $this->generateUrl($page, $parameters);
         }
-
         $route  = str_replace(' ', '_', trim($page));
-        //$routes = $this->getContainer()->get('router')->getRouteCollection();
-
-        /*if (null === $routes->get($route)) {
-            $route = 'sylius_'.$route;
-        }
-
-        if (null === $routes->get($route)) {
-            $route = str_replace('sylius_', 'sylius_backend_', $route);
-        }
-
-        $route = str_replace(array_keys($this->actions), array_values($this->actions), $route);
-        $route = str_replace(' ', '_', $route);*/
 
         return $this->generateUrl($route, $parameters);
     }

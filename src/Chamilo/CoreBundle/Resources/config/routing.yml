@@ -8,6 +8,12 @@ user:
     type:     annotation
     prefix:   /user
 
+course:
+    resource: "@ChamiloCoreBundle/Controller/CourseController.php"
+    type:     annotation
+    prefix:   /course
+
+
 # Legacy routes
 main:
     path:     /main/{name}

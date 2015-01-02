@@ -37,7 +37,7 @@ class Session
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -46,91 +46,91 @@ class Session
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=150, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="name", type="string", length=150, nullable=false, unique=false)
      */
     private $name;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbr_courses", type="smallint", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="nbr_courses", type="smallint", nullable=true, unique=false)
      */
     private $nbrCourses;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbr_users", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="nbr_users", type="integer", nullable=true, unique=false)
      */
     private $nbrUsers;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbr_classes", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="nbr_classes", type="integer", nullable=true, unique=false)
      */
     private $nbrClasses;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="session_admin_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="session_admin_id", type="integer", nullable=true, unique=false)
      */
     private $sessionAdminId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="visibility", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="visibility", type="integer", nullable=false, unique=false)
      */
     private $visibility;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="promotion_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="promotion_id", type="integer", nullable=true, unique=false)
      */
     private $promotionId;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="display_start_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="display_start_date", type="datetime", nullable=false, unique=false)
      */
     private $displayStartDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="display_end_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="display_end_date", type="datetime", nullable=false, unique=false)
      */
     private $displayEndDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="access_start_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="access_start_date", type="datetime", nullable=false, unique=false)
      */
     private $accessStartDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="access_end_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="access_end_date", type="datetime", nullable=false, unique=false)
      */
     private $accessEndDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="coach_access_start_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="coach_access_start_date", type="datetime", nullable=false, unique=false)
      */
     private $coachAccessStartDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="coach_access_end_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="coach_access_end_date", type="datetime", nullable=false, unique=false)
      */
     private $coachAccessEndDate;
 

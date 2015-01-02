@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CourseBundle\Entity\CTool;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -31,7 +32,7 @@ class Course
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -42,162 +43,165 @@ class Course
      *
      * @Assert\NotBlank()
      *
-     * @ORM\Column(name="title", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
     private $title;
 
     /**
      * @var string
-     * @Assert\NotBlank()
-     * @Gedmo\Slug(fields={"title"})
-     * @ORM\Column(name="code", type="string", length=40, precision=0, scale=0, nullable=false, unique=true)
+     * @Gedmo\Slug(
+     *      fields={"title"},
+     *      updatable = false,
+     *      unique = true
+     * )
+     * @ORM\Column(name="code", type="string", length=40, nullable=false, unique=true)
      */
     private $code;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="directory", type="string", length=40, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="directory", type="string", length=40, nullable=true, unique=false)
      */
     private $directory;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="course_language", type="string", length=20, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="course_language", type="string", length=20, nullable=true, unique=false)
      */
     private $courseLanguage;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description", type="text", nullable=true, unique=false)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="category_code", type="string", length=40, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="category_code", type="string", length=40, nullable=true, unique=false)
      */
     private $categoryCode;
 
     /**
      * @var boolean
      * @Assert\NotBlank()
-     * @ORM\Column(name="visibility", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="visibility", type="integer", nullable=true, unique=false)
      */
     private $visibility;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="show_score", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="show_score", type="integer", nullable=true, unique=false)
      */
     private $showScore;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tutor_name", type="string", length=200, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="tutor_name", type="string", length=200, nullable=true, unique=false)
      */
     private $tutorName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="visual_code", type="string", length=40, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="visual_code", type="string", length=40, nullable=true, unique=false)
      */
     private $visualCode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="department_name", type="string", length=30, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="department_name", type="string", length=30, nullable=true, unique=false)
      */
     private $departmentName;
 
     /**
      * @var string
      * @Assert\Url()
-     * @ORM\Column(name="department_url", type="string", length=180, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="department_url", type="string", length=180, nullable=true, unique=false)
      */
     private $departmentUrl;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="disk_quota", type="bigint", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="disk_quota", type="bigint", nullable=true, unique=false)
      */
     private $diskQuota;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="last_visit", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="last_visit", type="datetime", nullable=true, unique=false)
      */
     private $lastVisit;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="last_edit", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="last_edit", type="datetime", nullable=true, unique=false)
      */
     private $lastEdit;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="creation_date", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="creation_date", type="datetime", nullable=true, unique=false)
      */
     private $creationDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expiration_date", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
     private $expirationDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="target_course_code", type="string", length=40, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="target_course_code", type="string", length=40, nullable=true, unique=false)
      */
     private $targetCourseCode;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="subscribe", type="boolean", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="subscribe", type="boolean", nullable=true, unique=false)
      */
     private $subscribe;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="unsubscribe", type="boolean", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="unsubscribe", type="boolean", nullable=true, unique=false)
      */
     private $unsubscribe;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="registration_code", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="registration_code", type="string", length=255, nullable=true, unique=false)
      */
     private $registrationCode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="legal", type="text", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="legal", type="text", nullable=true, unique=false)
      */
     private $legal;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="activate_legal", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="activate_legal", type="integer", nullable=true, unique=false)
      */
     private $activateLegal;
 
@@ -211,7 +215,7 @@ class Course
     /**
      * @var integer
      *
-     * @ORM\Column(name="course_type_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="course_type_id", type="integer", nullable=true, unique=false)
      */
     private $courseTypeId;
 
@@ -221,7 +225,7 @@ class Course
      * addUsers methods need to be added.
      * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      **/
-    private $users;
+    protected $users;
 
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
@@ -269,6 +273,7 @@ class Course
     public function __construct()
     {
         $this->creationDate = new \DateTime();
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -368,9 +373,9 @@ class Course
     }
 
     /**
-     * @param $users
+     * @param CourseRelUser $users
      */
-    public function setUsers($users)
+    public function setUsers(CourseRelUser $users)
     {
         $this->users = new ArrayCollection();
 
@@ -385,7 +390,33 @@ class Course
     public function addUsers(CourseRelUser $user)
     {
         $user->setCourse($this);
-        $this->users[] = $user;
+
+        if (!$this->hasUser($user)) {
+            $this->users[] = $user;
+        }
+    }
+
+    /**
+     * @param CourseRelUser $subscription
+     * @return bool
+     */
+    public function hasUser(CourseRelUser $subscription)
+    {
+        if ($this->getUsers()->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq("user", $subscription->getUser())
+            )->andWhere(
+                Criteria::expr()->eq("status", $subscription->getStatus())
+            )->andWhere(
+                Criteria::expr()->eq("relationType", $subscription->getRelationType())
+            );
+
+            $relation = $this->getUsers()->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
     }
 
     /**
@@ -404,8 +435,11 @@ class Course
 
     /**
      * @param User $user
+     * @param string $relationType
+     * @param string $role
+     * @param string $status
      */
-    public function addUser(User $user, $relationType, $role, $status)
+    private function addUser(User $user, $relationType, $role, $status)
     {
         $courseRelUser = new CourseRelUser();
         $courseRelUser->setCourse($this);
@@ -421,7 +455,7 @@ class Course
      */
     public function addTeacher(User $user)
     {
-        $this->addUser($user, User::COURSE_MANAGER, "ROLE_TEACHER", "");
+        $this->addUser($user, 0, "Trainer", User::COURSE_MANAGER);
     }
 
     /**
@@ -429,7 +463,7 @@ class Course
      */
     public function addStudent(User $user)
     {
-        $this->addUser($user, User::STUDENT, "ROLE_STUDENT", "");
+        $this->addUser($user, 0, "", User::STUDENT);
     }
 
     /**

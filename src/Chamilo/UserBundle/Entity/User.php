@@ -81,28 +81,28 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=60, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
      */
     //protected $lastname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=60, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
      */
     //protected $firstname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="password", type="string", length=50, nullable=false, unique=false)
      */
     //protected $password;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="auth_source", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="auth_source", type="string", length=50, nullable=true, unique=false)
      */
     private $authSource;
 
@@ -116,14 +116,14 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * @var string
      *
-     * @ORM\Column(name="official_code", type="string", length=40, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="official_code", type="string", length=40, nullable=true, unique=false)
      */
     private $officialCode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=30, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="phone", type="string", length=30, nullable=true, unique=false)
      */
     //protected $phone;
 
@@ -138,7 +138,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
 
     /**
      * @var string
-     * @ORM\Column(name="picture_uri", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true, unique=false)
      */
     //private $pictureUri;
 
@@ -151,112 +151,112 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="creator_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="creator_id", type="integer", nullable=true, unique=false)
      */
     private $creatorId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="competences", type="text", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="competences", type="text", nullable=true, unique=false)
      */
     private $competences;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="diplomas", type="text", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="diplomas", type="text", nullable=true, unique=false)
      */
     private $diplomas;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="openarea", type="text", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="openarea", type="text", nullable=true, unique=false)
      */
     private $openarea;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="teach", type="text", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="teach", type="text", nullable=true, unique=false)
      */
     private $teach;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="productions", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="productions", type="string", length=250, nullable=true, unique=false)
      */
     private $productions;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="chatcall_user_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="chatcall_user_id", type="integer", nullable=true, unique=false)
      */
     private $chatcallUserId;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="chatcall_date", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="chatcall_date", type="datetime", nullable=true, unique=false)
      */
     private $chatcallDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="chatcall_text", type="string", length=50, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="chatcall_text", type="string", length=50, nullable=true, unique=false)
      */
     private $chatcallText;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="language", type="string", length=40, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="language", type="string", length=40, nullable=true, unique=false)
      */
     private $language;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="registration_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="registration_date", type="datetime", nullable=false, unique=false)
      */
     private $registrationDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expiration_date", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
     private $expirationDate;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="active", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="active", type="boolean", nullable=false, unique=false)
      */
     private $active;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="openid", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="openid", type="string", length=255, nullable=true, unique=false)
      */
     private $openid;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="theme", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="theme", type="string", length=255, nullable=true, unique=false)
      */
     private $theme;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="hr_dept_id", type="smallint", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
     private $hrDeptId;
 

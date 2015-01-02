@@ -44,7 +44,7 @@ class Editor
     /** @var Translator */
     public $translator;
 
-    /** @var Router */
+    /** @var RouterInterface */
     public $urlGenerator;
 
     /** @var \Template */
@@ -52,9 +52,7 @@ class Editor
 
     /**
      * @param Translator $translator
-     * @param Router $urlGenerator
-     * @param Template $template
-     * @param Course $course
+     * @param RouterInterface $urlGenerator
      */
     public function __construct(
         Translator $translator,

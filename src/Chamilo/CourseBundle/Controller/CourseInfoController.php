@@ -33,7 +33,7 @@ class CourseInfoController extends ToolBaseController
     public function indexAction(Request $request)
     {
         $course = $this->getCourse();
-
+        // @todo use Form\Type\CourseType
         $form = $this->createFormBuilder($course)
             ->add('title', 'text')
             ->add('description', 'ckeditor')
@@ -53,6 +53,7 @@ class CourseInfoController extends ToolBaseController
             $em->persist($course);
             $em->flush();
         }
+
         return array(
             'form' => $form->createView(),
         );

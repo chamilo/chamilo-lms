@@ -159,7 +159,6 @@ class AppKernel extends Kernel
             new Thrace\DataGridBundle\ThraceDataGridBundle(),
 
             //new Vich\UploaderBundle\VichUploaderBundle(),
-
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

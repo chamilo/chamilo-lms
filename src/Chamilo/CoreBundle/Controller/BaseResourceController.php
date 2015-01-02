@@ -224,7 +224,7 @@ abstract class BaseResourceController extends ResourceController
     /**
      * @inheritdoc
      **/
-    public function isGranted($attributes, $object)
+    public function isGranted($attributes, $object = null)
     {
         return $this->get('security.authorization_checker')->isGranted($attributes, $object);
     }

@@ -695,6 +695,9 @@ class Database
         $query = str_replace("'%__@", "'%", $query);
         $query = str_replace("@__%'", "%'", $query);
 
+        $query = str_replace('@__%"', "%'", $query);
+        $query = str_replace('"%__@', "'%", $query);
+
         // Fixing doubles
         $query = str_replace("__@__@", "__@", $query);
         $query = str_replace("@__@__", "@__", $query);

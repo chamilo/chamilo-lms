@@ -55,21 +55,34 @@ class LoadGroupData extends AbstractFixture implements
         $groupManager = $this->getGroupManager();
 
         // Creating groups
-        $group = $groupManager->createGroup('admins');
+        $group = $groupManager->createGroup('Administrators');
         $group->addRole('ROLE_ADMIN');
         $manager->persist($group);
         $groupManager->updateGroup($group);
         $this->setReference('group_admin', $group);
 
-        $group = $groupManager->createGroup('students');
+        $group = $groupManager->createGroup('Students');
         $group->addRole('ROLE_STUDENT');
         $groupManager->updateGroup($group);
         $this->setReference('group_student', $group);
 
-        $group = $groupManager->createGroup('teachers');
+        $group = $groupManager->createGroup('Teachers');
         $group->addRole('ROLE_TEACHER');
         $groupManager->updateGroup($group);
         $this->setReference('group_teacher', $group);
+
+        $group = $groupManager->createGroup('Human resources manager');
+        $group->addRole('ROLE_RRHH');
+        $groupManager->updateGroup($group);
+        $this->setReference('group_drh', $group);
+
+        $group = $groupManager->createGroup('Session manager');
+        $group->addRole('ROLE_SESSION_MANAGER');
+        $groupManager->updateGroup($group);
+
+        $group = $groupManager->createGroup('Question manager');
+        $group->addRole('ROLE_QUESTION_MANAGER');
+        $groupManager->updateGroup($group);
 
         $manager->flush();
     }

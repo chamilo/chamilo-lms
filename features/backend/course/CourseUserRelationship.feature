@@ -6,9 +6,9 @@ Feature: Course user relationship
 
   Background:
     Given there are following users:
-      | username | email                 | plain_password  | enabled | groups |
-      | student  | student@example.com | student          | yes      | students |
-      | teacher  | teacher@example.com | teacher          | yes      | teachers |
+      | username | email               | plain_password | enabled | groups   |
+      | student  | student@example.com | student        | yes     | Students |
+      | teacher  | teacher@example.com | teacher        | yes     | Teachers |
     Given I have a course "My course"
 
   Scenario: A course contains a student

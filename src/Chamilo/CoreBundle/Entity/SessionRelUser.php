@@ -9,13 +9,19 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SessionRelUser
  *
- * @ORM\Table(name="session_rel_user", indexes={@ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"id_user", "moved_to"})})
+ * @ORM\Table(
+ *    name="session_rel_user",
+ *      indexes={
+ *          @ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"id_user", "moved_to"})
+ *      }
+ * )
  * @ORM\Entity
  */
 class SessionRelUser
 {
     public $relationTypeList = array(
-        0 => 'student'
+        0 => 'student',
+        1 => 'drh'
     );
 
     /**
@@ -126,6 +132,21 @@ class SessionRelUser
     public function setRelationType($relationType)
     {
         $this->relationType = $relationType;
+
+        return $this;
+    }
+
+    /**
+     * Set relationTypeByName
+     *
+     * @param string $relationType
+     * @return SessionRelUser
+     */
+    public function setRelationTypeByName($relationType)
+    {
+        if (isset($this->relationTypeList[$relationType])) {
+            $this->setRelationType($this->relationTypeList[$relationType]);
+        }
 
         return $this;
     }

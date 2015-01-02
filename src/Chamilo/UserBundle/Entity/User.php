@@ -569,6 +569,14 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->getIsActive();
+    }
+
+    /**
      * @inheritDoc
      */
     public function isAccountNonExpired()
@@ -1382,13 +1390,18 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
         return $this->imageName;
     }
 
-    // Model
-
+    /**
+     * @return string
+     */
     public function getSlug()
     {
         return $this->getUsername();
     }
 
+    /**
+     * @param $slug
+     * @return User
+     */
     public function setSlug($slug)
     {
         return $this->setUsername($slug);

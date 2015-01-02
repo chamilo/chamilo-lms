@@ -218,7 +218,7 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
         $course = $this->getCourseManager()->findOneByTitle($courseTitle);
         $session = $this->getSessionManager()->findOneByName($sessionTitle);
 
-        $session->addUserInCourse($user, $course);
+        $this->getSessionManager()->addStudentInCourse($user, $course, $session);
     }
 
     /**
@@ -230,7 +230,7 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
         $course = $this->getCourseManager()->findOneByTitle($courseTitle);
         $session = $this->getSessionManager()->findOneByName($sessionTitle);
 
-        return $session->hasUserInCourse($user, $course);
+        return $session->hasUserInCourse($user, $course, $session::STUDENT);
     }
 
     /**
@@ -238,14 +238,43 @@ class CourseContext extends DefaultContext implements Context, SnippetAcceptingC
     */
     public function iAddUserWithStatusWithUsernameInCourseInSession($status, $username, $courseTitle, $sessionTitle)
     {
+        $user = $this->getUserManager()->findUserByUsername($username);
+        $course = $this->getCourseManager()->findOneByTitle($courseTitle);
+        $session = $this->getSessionManager()->findOneByName($sessionTitle);
+
         switch ($status) {
             case 'student':
+                $this->getSessionManager()->addStudentInCourse($user, $course, $session);
                 break;
-            case 'teacher':
+            case 'drh':
+                $this->getSessionManager()->addDrh($user, $session);
                 break;
             case 'coach':
+                $this->getSessionManager()->addCoachInCourse($user, $course, $session);
                 break;
-
         }
     }
+
+    /**
+     * @Then I should find a user :arg1 with status :arg2 in course :arg3 in session :arg4
+     */
+    public function iShouldFindAUserInCourseInSessionWithStatus($username, $status, $courseTitle, $sessionTitle)
+    {
+        $user = $this->getUserManager()->findUserByUsername($username);
+        $course = $this->getCourseManager()->findOneByTitle($courseTitle);
+        $session = $this->getSessionManager()->findOneByName($sessionTitle);
+
+        switch ($status) {
+            case 'student':
+                $this->getSessionManager()->hasStudentInCourse($user, $course, $session);
+                break;
+            case 'drh':
+                $this->getSessionManager()->hasDrh($user, $session);
+                break;
+            case 'coach':
+                $this->getSessionManager()->hasCoachInCourse($user, $course, $session);
+                break;
+        }
+    }
+
 }

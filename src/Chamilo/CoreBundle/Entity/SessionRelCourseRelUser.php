@@ -11,16 +11,18 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(
  *      name="session_rel_course_rel_user",
- *      indexes={@ORM\Index(
- *          name="idx_session_rel_course_rel_user_id_user", columns={"id_user"}
- *          ),
- *       @ORM\Index(name="idx_session_rel_course_rel_user_course_id", columns={"c_id"})})
+ *      indexes={
+ *          @ORM\Index(name="idx_session_rel_course_rel_user_id_user", columns={"id_user"}),
+ *          @ORM\Index(name="idx_session_rel_course_rel_user_course_id", columns={"c_id"})
+ *      }
+ * )
  * @ORM\Entity
  */
 class SessionRelCourseRelUser
 {
     public $statusList = array(
-
+        0 => 'student',
+        2 => 'course_coach'
     );
 
     /**
@@ -66,6 +68,21 @@ class SessionRelCourseRelUser
      * @ORM\JoinColumn(name="id_session", referencedColumnName="id")
      */
     protected $session;
+
+    /**
+     * @var Course
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->visibility = 1;
+    }
 
     /**
      * @return mixed
@@ -114,13 +131,6 @@ class SessionRelCourseRelUser
     {
         $this->course = $course;
     }
-
-    /**
-     * @var Course
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
-    protected $course;
 
     /**
      * Get id

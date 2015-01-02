@@ -30,6 +30,10 @@ class Session
     const INVISIBLE = 3;
     const AVAILABLE = 4;
 
+    const STUDENT = 0;
+    const DRH = 1;
+    const COACH = 2;
+
     /**
      * @var integer
      *
@@ -241,7 +245,47 @@ class Session
     public function addUser(SessionRelUser $user)
     {
         $user->setSession($this);
-        $this->users[] = $user;
+
+        if (!$this->hasUser($user)) {
+            $this->users[] = $user;
+        }
+    }
+
+    /**
+     * @param int $status
+     * @param User $user
+     */
+    public function addUserInSession($status, User $user)
+    {
+        $sessionRelUser = new SessionRelUser();
+        $sessionRelUser->setSession($this);
+        $sessionRelUser->setUser($user);
+        $sessionRelUser->setRelationType($status);
+
+        $this->addUser($sessionRelUser);
+    }
+
+    /**
+     * @param SessionRelUser $subscription
+     * @return bool
+     */
+    public function hasUser(SessionRelUser $subscription)
+    {
+        if ($this->getUsers()->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq("user", $subscription->getUser())
+            )->andWhere(
+                Criteria::expr()->eq("session", $subscription->getSession())
+            )->andWhere(
+                Criteria::expr()->eq("relationType", $subscription->getRelationType())
+            );
+
+            $relation = $this->getUsers()->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
     }
 
     /**
@@ -274,6 +318,26 @@ class Session
     }
 
     /**
+     * @param Course $course
+     *
+     * @return bool
+     */
+    public function hasCourse(Course $course)
+    {
+        if ($this->getCourses()->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq("course", $course)
+            );
+            $relation = $this->getCourses()->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
+    }
+
+
+    /**
      * Remove $course
      *
      * @param SessionRelCourse $course
@@ -290,35 +354,13 @@ class Session
     /**
      * @param User $user
      * @param Course $course
-     */
-    public function addUserInCourse(User $user, Course $course)
-    {
-        if ($this->hasCourse($course)) {
-            // Adding session/user relationship
-            $sessionRelUser = new SessionRelUser();
-            $sessionRelUser->setSession($this);
-            $sessionRelUser->setUser($user);
-
-            $this->addUser($sessionRelUser);
-
-            // Adding session/course/user relationship
-            $userRelCourseRelSession = new SessionRelCourseRelUser();
-            $userRelCourseRelSession->setCourse($course);
-            $userRelCourseRelSession->setUser($user);
-            $userRelCourseRelSession->setSession($this);
-            $this->addUserCourseSubscription($userRelCourseRelSession);
-        }
-    }
-
-    /**
-     * @param User $user
-     * @param Course $course
+     * @param int $status
      *
      * @return bool
      */
-    public function hasUserInCourse(User $user, Course $course)
+    public function hasUserInCourse(User $user, Course $course, $status = null)
     {
-        $relation = $this->getUserInCourse($user, $course);
+        $relation = $this->getUserInCourse($user, $course, $status);
 
         return $relation->count() > 0;
     }
@@ -326,34 +368,33 @@ class Session
     /**
      * @param User $user
      * @param Course $course
-     * @param string $status teacher|student|coach
      *
      * @return bool
      */
-    public function hasUserInCourseWithStatus(User $user, Course $course, $status)
+    public function hasStudentInCourseWithStatus(User $user, Course $course)
     {
-        $usersInCourse = $this->getUserInCourse($user, $course);
-
-        if ($usersInCourse->count() > 0) {
-            /** @var SessionRelCourseRelUser $userInCourse */
-            foreach ($usersInCourse as $userInCourse) {
-                /*if ($userInCourse->getStatus() == ) {
-
-                }*/
-            }
-        }
-
-        return false;
+        return $this->hasUserInCourse($user, $course, self::STUDENT);
     }
-
 
     /**
      * @param User $user
      * @param Course $course
      *
+     * @return bool
+     */
+    public function hasCoachInCourseWithStatus(User $user, Course $course)
+    {
+        return $this->hasUserInCourse($user, $course, self::COACH);
+    }
+
+    /**
+     * @param User $user
+     * @param Course $course
+     * @param string $status
+     *
      * @return \Doctrine\Common\Collections\Collection|static
      */
-    public function getUserInCourse(User $user, Course $course)
+    public function getUserInCourse(User $user, Course $course, $status = null)
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq("course", $course)
@@ -361,26 +402,13 @@ class Session
             Criteria::expr()->eq("user", $user)
         );
 
-        return $this->getUserCourseSubscriptions()->matching($criteria);
-    }
-
-    /**
-     * @param Course $course
-     *
-     * @return bool
-     */
-    public function hasCourse(Course $course)
-    {
-        if ($this->getCourses()->count()) {
-            $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("course", $course)
+        if (!is_null($status))  {
+            $criteria->andWhere(
+                Criteria::expr()->eq("status", $status)
             );
-            $relation = $this->getCourses()->matching($criteria);
-            error_log($relation->count());
-            return $relation->count() > 0;
         }
 
-        return false;
+        return $this->getUserCourseSubscriptions()->matching($criteria);
     }
 
     /**
@@ -784,6 +812,45 @@ class Session
     public function addUserCourseSubscription(SessionRelCourseRelUser $subscription)
     {
         $subscription->setSession($this);
-        $this->userCourseSubscriptions[] = $subscription;
+        if (!$this->hasUserCourseSubscription($subscription)) {
+            $this->userCourseSubscriptions[] = $subscription;
+        }
+    }
+
+    /**
+     * @param int $status
+     * @param User $user
+     * @param Course $course
+     */
+    public function addUserInCourse($status, User $user, Course $course)
+    {
+        $userRelCourseRelSession = new SessionRelCourseRelUser();
+        $userRelCourseRelSession->setCourse($course);
+        $userRelCourseRelSession->setUser($user);
+        $userRelCourseRelSession->setSession($this);
+        $userRelCourseRelSession->setStatus($status);
+        $this->addUserCourseSubscription($userRelCourseRelSession);
+    }
+
+    /**
+     * @param SessionRelCourseRelUser $subscription
+     * @return bool
+     */
+    public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription)
+    {
+        if ($this->getUserCourseSubscriptions()->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq("user", $subscription->getUser())
+            )->andWhere(
+                Criteria::expr()->eq("course", $subscription->getCourse())
+            )->andWhere(
+                Criteria::expr()->eq("session", $subscription->getSession())
+            );
+            $relation = $this->getUserCourseSubscriptions()->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
     }
 }

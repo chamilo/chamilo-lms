@@ -6,10 +6,10 @@ Feature: Course Session Relationship
 
   Background:
     Given there are following users:
-      | username | email                 | plain_password  | enabled | groups |
-      | student  | student@example.com | student          | yes      | students |
-      | teacher  | teacher@example.com | teacher          | yes      | teachers |
-      | coach    | coach@example.com    | coach            | yes      | teachers |
+      | username | email               | plain_password | enabled | groups   |
+      | student  | student@example.com | student        | yes     | Students |
+      | coach    | coach@example.com   | coach          | yes     | Teachers |
+      | drh      | drh@example.com     | drh            | yes     | Teachers |
     Given I have a course "My course"
     Given I have a session "My session"
 
@@ -17,16 +17,16 @@ Feature: Course Session Relationship
     When I add session "My session" to course "My course"
     Then I should find a course "My course" in session "My session"
 
-  Scenario: A course in a session contains a user
+  Scenario: A course in a session contains a student
     When I add student "student" to course "My course" in session "My session"
     Then I should find a user "student" in course "My course" in session "My session"
 
-  Scenario Outline: A course in a session contains a user
+  Scenario Outline: A course in a session contains a user with status
     When I add user with status "<status>" with username "<username>" in course "My course" in session "My session"
-    Then I should find a user "<username>" in course "My course" in session "My session"
+    Then I should find a user "<username>" with status "<status>" in course "My course" in session "My session"
 
   Examples:
-    | username  | status    |
-    | student   | student   |
-    | teacher   | teacher   |
-    | coach     | coach      |
+    | username | status  |
+    | student  | student |
+    | drh      | drh     |
+    | coach    | coach   |

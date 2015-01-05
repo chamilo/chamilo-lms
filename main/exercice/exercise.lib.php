@@ -1291,6 +1291,7 @@ function get_exam_results_data(
             (
                 SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
                 FROM $TBL_USER u
+                WHERE u.status != " . ROLE_INVITED . "
             )";
         }
 
@@ -1361,6 +1362,7 @@ function get_exam_results_data(
                     AND tth.exe_cours_id = '" . api_get_course_id()."'
                     $hotpotatoe_where
                     $sqlWhereOption
+                    AND user.status != " . ROLE_INVITED . "
                 ORDER BY
                     tth.exe_cours_id ASC,
                     tth.exe_date DESC";

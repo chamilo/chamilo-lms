@@ -289,7 +289,7 @@ switch ($action) {
                 get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).
                 '</p></div></p>';
         }
-        if (api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit() || api_is_coach()) {
             // Work list
             $content .= '<div class="row">';
             $content .= '<div class="span9">';

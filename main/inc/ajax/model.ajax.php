@@ -214,7 +214,6 @@ switch ($action) {
     case 'get_work_student':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $count = getWorkListStudent(0, $limit, $sidx, $sord, $whereCondition, true);
-
         break;
     case 'get_work_user_list_all':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -258,7 +257,7 @@ switch ($action) {
         }
         break;
     case 'get_work_student_list_overview':
-        if (!api_is_allowed_to_edit()) {
+        if (!(api_is_allowed_to_edit() || api_is_coach())) {
             return 0;
         }
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -588,7 +587,6 @@ switch ($action) {
                 'actions'
             );
         } else {
-
             $columns = array(
                 'type',
                 'firstname',
@@ -677,7 +675,7 @@ switch ($action) {
         $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
         break;
     case 'get_work_student_list_overview':
-        if (!api_is_allowed_to_edit()) {
+        if (!(api_is_allowed_to_edit() || api_is_coach())) {
             return array();
         }
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';

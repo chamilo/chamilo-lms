@@ -39,7 +39,7 @@ if (!empty($group_id)) {
     } else {
         // you are not a teacher
         $show_work = GroupManager::user_has_access(
-            $user_id,
+            api_get_user_id(),
             $group_id,
             GroupManager::GROUP_TOOL_WORK
         );
@@ -58,7 +58,7 @@ if (!empty($group_id)) {
         'name' => get_lang('GroupSpace').' '.$group_properties['name']
     );
 } else {
-    if (!api_is_allowed_to_edit(false, true)) {
+    if (!(api_is_allowed_to_edit() || api_is_coach())) {
         api_not_allowed(true);
     }
 }
@@ -178,8 +178,14 @@ foreach ($workPerUser as $work) {
             $url = api_get_path(WEB_CODE_PATH).'work/download.php?'.api_get_cidreq().'&id='.$itemId;
             $links .= Display::url(Display::return_icon('save.png', get_lang('Download')), $url);
         }
-        $url = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq().'&item_id='.$itemId.'&id='.$workId.'&parent_id='.$workId;
-        $links .= Display::url(Display::return_icon('rate_work.png', get_lang('Comment')), $url);
+
+        if (api_is_allowed_to_edit()) {
+            $url = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq().'&item_id='.$itemId.'&id='.$workId.'&parent_id='.$workId;
+            $links .= Display::url(
+                Display::return_icon('rate_work.png', get_lang('Comment')),
+                $url
+            );
+        }
 
         $table->setCellContents($row, $column, $links);
 

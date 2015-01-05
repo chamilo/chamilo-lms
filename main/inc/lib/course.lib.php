@@ -4535,6 +4535,11 @@ class CourseManager
     public static function return_hot_courses($days = 30, $limit = 5)
     {
         global $_configuration;
+
+        if (api_is_invited_user()) {
+            return array();
+        }
+
         $limit  = intval($limit);
 
         // Getting my courses

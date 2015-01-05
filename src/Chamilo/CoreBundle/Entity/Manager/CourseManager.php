@@ -59,6 +59,7 @@ class CourseManager extends BaseEntityManager
         if ($userCollection->count()) {
             return true;
         }
+
         return false;
     }
 }

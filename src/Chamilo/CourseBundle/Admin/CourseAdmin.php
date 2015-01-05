@@ -21,6 +21,8 @@ use Knp\Menu\ItemInterface as MenuItemInterface;
  */
 class CourseAdmin extends Admin
 {
+    protected $toolChain;
+
     /**
      * @param FormMapper $formMapper
      */
@@ -135,8 +137,10 @@ class CourseAdmin extends Admin
     {
         $toolChain = $this->getToolChain();
         $tools = $toolChain->getTools();
-
         $currentTools = $course->getTools();
+
+        // @todo use
+        //$toolChain->addToolsInCourse($course);
 
         $addedTools = array();
         if (!empty($currentTools)) {
@@ -150,12 +154,14 @@ class CourseAdmin extends Admin
             if (!in_array($toolName, $addedTools)) {
 
                 $toolEntity = new CTool();
-                $toolEntity->setCId($course->getId());
-                $toolEntity->setImage($tool->getImage());
-                $toolEntity->setName($tool->getName());
-                $toolEntity->setLink($tool->getLink());
-                $toolEntity->setTarget($tool->getTarget());
-                $toolEntity->setCategory($tool->getCategory());
+                $toolEntity
+                    ->setCId($course->getId())
+                    ->setImage($tool->getImage())
+                    ->setName($tool->getName())
+                    ->setLink($tool->getLink())
+                    ->setTarget($tool->getTarget())
+                    ->setCategory($tool->getCategory())
+                ;
 
                 $course->addTools($toolEntity);
             }

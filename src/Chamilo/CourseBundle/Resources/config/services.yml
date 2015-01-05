@@ -1,6 +1,5 @@
 parameters:
-    tool_chain.class: Chamilo\CourseBundle\ToolChain
-
+    chamilo_course.tool_chain.class: Chamilo\CourseBundle\ToolChain
     chamilo_course.controller.settings.class: Chamilo\CourseBundle\Controller\SettingsController
     chamilo_course.settings.form_factory.class: Chamilo\CourseBundle\Form\Factory\SettingsFormFactory
     chamilo_course.settings.manager.class: Chamilo\CourseBundle\Manager\SettingsManager
@@ -65,7 +64,7 @@ services:
 
     # Course tool container
     chamilo_course.tool_chain:
-        class: %tool_chain.class%
+        class: %chamilo_course.tool_chain.class%
 
     # Course tool list
     chamilo_course.tool.agenda:

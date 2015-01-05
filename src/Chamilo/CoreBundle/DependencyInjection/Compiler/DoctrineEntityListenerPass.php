@@ -6,6 +6,10 @@ namespace Chamilo\CoreBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * Class DoctrineEntityListenerPass
+ * @package Chamilo\CoreBundle\DependencyInjection\Compiler
+ */
 class DoctrineEntityListenerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)

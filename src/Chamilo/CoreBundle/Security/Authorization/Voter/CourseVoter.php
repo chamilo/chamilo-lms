@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
@@ -19,10 +20,19 @@ class CourseVoter extends AbstractVoter
     const EDIT = 'edit';
 
     private $entityManager;
+    private $courseManager;
 
-    public function __construct(EntityManager $entityManager)
+    /**
+     * @param EntityManager $entityManager
+     * @param CourseManager $courseManager
+     */
+    public function __construct(
+        EntityManager $entityManager,
+        CourseManager $courseManager
+    )
     {
         $this->entityManager = $entityManager;
+        $this->courseManager = $courseManager;
     }
 
     /**
@@ -31,6 +41,14 @@ class CourseVoter extends AbstractVoter
     public function getEntityManager()
     {
         return $this->entityManager;
+    }
+
+    /**
+     * @return CourseManager
+     */
+    public function getCourseManager()
+    {
+        return $this->courseManager;
     }
 
     /**
@@ -73,9 +91,8 @@ class CourseVoter extends AbstractVoter
                     }
 
                     // User is subscribed in the user list.
-                    $userIsSubscribed = $this->getEntityManager()
-                        ->getRepository('ChamiloCoreBundle:Course')
-                        ->isUserSubscribedInCourse($user, $course);
+                    $userIsSubscribed = $this->getCourseManager()->
+                    isUserSubscribedInCourse($user, $course);
 
                     if ($userIsSubscribed) {
                         dump('user_is_subscribed');

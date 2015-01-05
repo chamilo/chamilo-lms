@@ -1,9 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
+use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CourseBundle\ToolChain;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Chamilo\CoreBundle\Entity\Course;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class CourseListener
@@ -12,12 +16,12 @@ use Chamilo\CoreBundle\Entity\Course;
  */
 class CourseListener
 {
-    private $toolChain;
+    protected $toolChain;
 
     /**
-     * @param $toolChain
+     * @param ToolChain $toolChain
      */
-    public function __construct($toolChain)
+    public function __construct(ToolChain $toolChain)
     {
         $this->toolChain = $toolChain;
     }
@@ -25,16 +29,17 @@ class CourseListener
     /**
      * new object : prePersist
      * edited object: preUpdate
+     * @param Course $course
      * @param LifecycleEventArgs $args
      */
     public function prePersist(Course $course, LifecycleEventArgs $args)
     {
-        foreach ($this->toolChain as $tool) {
-            $tool->getName();
-        }
+        $this->toolChain->addToolsInCourse($course);
+        /*
+        error_log('ddd');
         $course->setDescription( ' dq sdqs dqs dqs ');
-        $args->getEntityManager()->persist($course);
-        $args->getEntityManager()->flush();
 
+        $args->getEntityManager()->persist($course);
+        $args->getEntityManager()->flush();*/
     }
 }

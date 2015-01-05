@@ -11,15 +11,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Chamilo\UserBundle\Entity\User;
-
+// @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\CourseListener"})
 /**
- * Course
+ * Class Course
+ *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="course")
  * @UniqueEntity("code")
  * @UniqueEntity("visualCode")
  * @UniqueEntity("directory")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\CourseRepository")
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
 class Course
 {
@@ -1079,11 +1081,11 @@ class Course
     public static function getStatusList()
     {
         return array(
-            self::CLOSED => 'status_closed',
-            self::REGISTERED => 'status_registered',
-            self::OPEN_PLATFORM => 'status_open_platform',
-            self::OPEN_WORLD => 'status_open_world',
-            self::HIDDEN => 'status_hidden',
+            self::CLOSED => 'Closed',
+            self::REGISTERED => 'Registered',
+            self::OPEN_PLATFORM => 'Open platform',
+            self::OPEN_WORLD => 'Open world',
+            self::HIDDEN => 'Hidden',
         );
     }
 

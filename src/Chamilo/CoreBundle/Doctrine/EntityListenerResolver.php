@@ -1,10 +1,15 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Doctrine;
 
 use Doctrine\ORM\Mapping\DefaultEntityListenerResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Class EntityListenerResolver
+ * @package Chamilo\CoreBundle\Doctrine
+ */
 class EntityListenerResolver extends DefaultEntityListenerResolver
 {
     private $container;
@@ -35,6 +40,5 @@ class EntityListenerResolver extends DefaultEntityListenerResolver
         }
 
         return parent::resolve($className);
-
     }
 }

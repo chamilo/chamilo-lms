@@ -165,6 +165,8 @@ doctrine:
                 auto_mapping: true
                 mappings: ~
 
+#        entity_listener_resolver: chamilo.doctrine.entity_listener_resolver
+
         #metadata_cache_driver: apc  # default "array" "apc", "memcache", "memcached", "xcache"
         #query_cache_driver: apc
 

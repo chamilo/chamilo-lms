@@ -19,10 +19,15 @@ class CourseType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // @todo as a service to load the preferred_choices
         $builder
             ->add('title', 'text')
             //->add('code', 'text')
-            ->add('course_language', 'locale')
+            ->add(
+                'course_language',
+                'locale',
+                array('preferred_choices' => array('en', 'fr', 'es'))
+            )
             ->add('visibility', 'choice',
                 array('choices' => Course::getStatusList())
             )

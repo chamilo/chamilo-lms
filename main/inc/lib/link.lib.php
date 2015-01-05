@@ -827,7 +827,7 @@ function change_visibility_link($id, $scope)
  * session
  * @param   int $courseId
  * @param   int $sessionId
- * @return string SQL query (to be executed)
+ * @return resource
  */
 function getLinkCategories($courseId, $sessionId)
 {
@@ -847,6 +847,13 @@ function getLinkCategories($courseId, $sessionId)
                 $sessionCondition AND
                 linkcat.c_id = " . $courseId . " AND
                 itemproperties.c_id = " . $courseId . "
+            ORDER BY linkcat.display_order DESC";
+
+    $sql = "SELECT *, linkcat.id
+            FROM $tblLinkCategory linkcat
+            WHERE
+                linkcat.c_id = " . $courseId."
+                $sessionCondition
             ORDER BY linkcat.display_order DESC";
 
     return Database::query($sql);

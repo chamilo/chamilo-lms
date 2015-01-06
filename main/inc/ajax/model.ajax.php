@@ -467,11 +467,15 @@ switch ($action) {
             }
         }
 
+        if (!in_array($sidx, array('training_hours'))) {
+            //$sidx = 'training_hours';
+        }
+
         $result = CourseManager::get_user_list_from_course_code(
             null,
             null,
             "LIMIT $start, $limit",
-            " $sidx $sord",
+            null, //" $sidx $sord",
             null,
             null,
             true,
@@ -509,7 +513,9 @@ switch ($action) {
                 $column_names[] = $extra['3'];
             }
         }
-
+        if (!in_array($sidx, array('title'))) {
+            $sidx = 'title';
+        }
         $result = CourseManager::get_user_list_from_course_code(
             null,
             null,
@@ -682,6 +688,7 @@ switch ($action) {
         $columns = array(
             'student', 'works'
         );
+
         $result = getWorkUserListData(
             $workId,
             api_get_course_id(),

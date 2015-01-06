@@ -1483,4 +1483,101 @@ class Attendance
 	{
 		return $this->attendance_weight;
 	}
+
+	/**
+	 * @param string $startDate in UTC time
+	 * @param string $endDate in UTC time
+	 *
+	 * @return string
+	 */
+	public function getAttendanceLogins($startDate, $endDate)
+	{
+		$sessionId = api_get_session_id();
+		$courseCode  = api_get_course_id();
+		if (!empty($sessionId)) {
+			$users = CourseManager:: get_user_list_from_course_code(
+				$courseCode,
+				$sessionId,
+				'',
+				'lastname'
+			);
+		} else {
+			$users = CourseManager:: get_user_list_from_course_code(
+				$courseCode,
+				0,
+				'',
+				'lastname'
+			);
+		}
+
+		$dateTimeStartOriginal = new DateTime($startDate);
+		$dateTimeStart = new DateTime($startDate);
+		$dateTimeEnd= new DateTime($endDate);
+		$interval = $dateTimeStart->diff($dateTimeEnd);
+		$days = intval($interval->format('%a'));
+
+		$dateList = array($dateTimeStart->format('Y-m-d'));
+		$headers = array(
+			get_lang('User'),
+			$dateTimeStart->format('Y-m-d')
+		);
+
+		for ($i = 0; $i < $days; $i++) {
+			$dateTimeStart = $dateTimeStart->add(new DateInterval('P1D'));
+			$date = $dateTimeStart->format('Y-m-d');
+			$dateList[] = $date;
+			$headers[] = $date;
+		}
+
+		$accessData = CourseManager::getCourseAccessPerCourseAndSession(
+			$courseCode,
+			$sessionId,
+			$dateTimeStartOriginal->format('Y-m-d H:i:s'),
+			$dateTimeEnd->format('Y-m-d H:i:s')
+		);
+
+		$results = array();
+		if (!empty($accessData)) {
+			foreach ($accessData as $data) {
+				$onlyDate = substr($data['login_course_date'], 0, 10);
+				$results[$data['user_id']][$onlyDate] = true;
+			}
+		}
+
+		$table = new HTML_Table(array('class' => 'data_table'));
+		$row = 0;
+		$column = 0;
+		foreach ($headers as $header) {
+			$table->setHeaderContents($row, $column, $header);
+			$column++;
+		}
+		$row = 1;
+		foreach ($users as $user) {
+			$table->setCellContents(
+				$row,
+				0,
+				$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'
+			);
+			$row ++;
+		}
+
+		$column = 1;
+		$row = 1;
+		foreach ($users as $user) {
+			foreach ($dateList as $date) {
+				$status = null;
+				if (isset($results[$user['user_id']]) &&
+					isset($results[$user['user_id']][$date])
+				) {
+					$status = 'X';
+				}
+				$table->setCellContents($row, $column, $status);
+				$column++;
+			}
+			$row++;
+			$column = 1;
+		}
+
+		return $table->toHtml();
+	}
 }

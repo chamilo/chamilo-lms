@@ -163,9 +163,36 @@ class ToolResourceRights
         $ownerMask = $builder->get();
 
         return array(
-            $readerMask => 'reader',
-            $editorMask => 'editor',
-            $ownerMask => 'owner'
+            $readerMask => 'Can read',
+            $editorMask => 'Can edit'
+            //$ownerMask => 'owner'
         );
+    }
+
+    /**
+     * @return int
+     */
+    public static function getReaderMask()
+    {
+        $builder = new MaskBuilder();
+        $builder
+            ->add('view')
+        ;
+
+        return $builder->get();
+    }
+
+    /**
+     * @return int
+     */
+    public static function getEditorMask()
+    {
+        $builder = new MaskBuilder();
+        $builder
+            ->add('view')
+            ->add('edit')
+        ;
+
+        return $builder->get();
     }
 }

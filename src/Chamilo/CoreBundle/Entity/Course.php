@@ -375,9 +375,9 @@ class Course
     }
 
     /**
-     * @param CourseRelUser $users
+     * @param ArrayCollection $users
      */
-    public function setUsers(CourseRelUser $users)
+    public function setUsers($users)
     {
         $this->users = new ArrayCollection();
 

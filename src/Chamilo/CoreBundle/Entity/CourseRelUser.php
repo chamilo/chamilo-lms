@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -130,10 +131,10 @@ class CourseRelUser
     }
 
     /**
-     * @param $group
+     * @param CGroupInfo $group
      * @return $this
      */
-    public function setGroup($group)
+    public function setGroup(CGroupInfo $group)
     {
         $this->group = $group;
 
@@ -143,7 +144,7 @@ class CourseRelUser
     /**
      * Get group
      *
-     * @return integer
+     * @return CGroupInfo
      */
     public function getGroup()
     {
@@ -151,10 +152,10 @@ class CourseRelUser
     }
 
     /**
-     * @param $course
+     * @param Course $course
      * @return $this
      */
-    public function setCourse($course)
+    public function setCourse(Course $course)
     {
         $this->course = $course;
 
@@ -164,7 +165,7 @@ class CourseRelUser
     /**
      * Get Course
      *
-     * @return string
+     * @return Course
      */
     public function getCourse()
     {

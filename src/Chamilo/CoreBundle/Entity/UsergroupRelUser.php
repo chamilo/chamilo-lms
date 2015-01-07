@@ -7,9 +7,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Chamilo\UserBundle\Entity\User;
 
 /**
- * UsergroupRelUser
+ * ,
+ *      indexes={
+// *          @ORM\Index(name="IDX_739515A9A76ED395", columns={"user_id"}),
+// *          @ORM\Index(name="IDX_739515A9D2112630", columns={"usergroup_id"})
+ *      }
+ */
+
+/**
+ * Class UsergroupRelUser
  *
- * @ORM\Table(name="usergroup_rel_user", indexes={@ORM\Index(name="IDX_739515A9A76ED395", columns={"user_id"}), @ORM\Index(name="IDX_739515A9D2112630", columns={"usergroup_id"})})
+ * @ORM\Table(
+ *      name="usergroup_rel_user"
+ * )
  * @ORM\Entity
  */
 class UsergroupRelUser

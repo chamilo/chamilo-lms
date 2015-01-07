@@ -84,11 +84,14 @@ class Tool
 
     /**
      * @param ToolResourceRights $toolResourceRight
+     * @return $this
      */
     public function addToolResourceRights(ToolResourceRights $toolResourceRight)
     {
         $toolResourceRight->setTool($this);
         $this->toolResourceRights[] = $toolResourceRight;
+
+        return $this;
     }
 
     /**

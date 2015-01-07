@@ -246,6 +246,10 @@ class LoadPortalData extends AbstractFixture implements
         $branchTransactionStatus->setTitle('Execution failed');
         $manager->persist($branchTransactionStatus);
 
+        $toolChain = $this->container->get('chamilo_course.tool_chain');
+        $toolChain->createTools($manager);
+
+        /*
         $tool = new Tool();
         $tool->setName('agenda');
         $manager->persist($tool);
@@ -272,7 +276,7 @@ class LoadPortalData extends AbstractFixture implements
 
         $tool = new Tool();
         $tool->setName('glossary');
-        $manager->persist($tool);
+        $manager->persist($tool);*/
 
         $manager->flush();
     }

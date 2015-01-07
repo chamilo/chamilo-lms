@@ -257,8 +257,12 @@ EOT;
     }
 
     /**
-     * date_range_picker element creates 2 hidden fields
-     * elementName + "_start" elementName "_end"
+     * The "date_range_picker" element creates 2 hidden fields
+     * "elementName" + "_start"  and "elementName" + "_end"
+     * For example if the name is "range", you will have 2 new fields
+     * when executing $form->getSubmitValues()
+     * "range_start" and "range_end"
+     *
      * @param string $name
      * @param string $label
      * @param bool $required

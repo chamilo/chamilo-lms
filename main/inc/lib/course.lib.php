@@ -1382,7 +1382,6 @@ class CourseManager
 
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {
-            $order_by = Database::escape_string($order_by);
             if (!empty($order_by)) {
                 $order_by = 'ORDER BY '.$order_by;
             } else {
@@ -1415,7 +1414,6 @@ class CourseManager
             if (SessionManager::orderCourseIsEnabled()) {
                 //$order_by = "ORDER BY position";
             }
-
         } else {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
@@ -1424,9 +1422,21 @@ class CourseManager
                 }
             } else {
                 if (empty($course_code)) {
-                    $sql = 'SELECT DISTINCT course.title, course.code, course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
+                    $sql = 'SELECT DISTINCT
+                                course.title,
+                                course.code,
+                                course_rel_user.status as status_rel,
+                                user.user_id,
+                                course_rel_user.role,
+                                course_rel_user.tutor_id,
+                                user.*  ';
                 } else {
-                    $sql = 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
+                    $sql = 'SELECT DISTINCT
+                                course_rel_user.status as status_rel,
+                                user.user_id,
+                                course_rel_user.role,
+                                course_rel_user.tutor_id,
+                                user.*  ';
                 }
             }
 
@@ -1490,6 +1500,7 @@ class CourseManager
         }
 
         $sql .= ' '.$order_by.' '.$limit;
+
         $rs = Database::query($sql);
         $users = array();
 
@@ -5060,6 +5071,10 @@ class CourseManager
     public static function getCourseAccessPerSessionAndUser($sessionId, $userId, $limit = null)
     {
         $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $sessionId = intval($sessionId);
+        $userId = intval($userId);
+
         $sql = "SELECT * FROM $table
                 WHERE session_id = $sessionId AND user_id = $userId";
 
@@ -5067,6 +5082,38 @@ class CourseManager
             $limit = intval($limit);
             $sql .= " LIMIT $limit";
         }
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
+     * Get information from the track_e_course_access table
+     * @param string $courseCode
+     * @param int $sessionId
+     * @param string $startDate
+     * @param string $endDate
+     * @return array
+     */
+    public static function getCourseAccessPerCourseAndSession(
+        $courseCode,
+        $sessionId,
+        $startDate,
+        $endDate
+    ) {
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $courseCode = Database::escape_string($courseCode);
+        $sessionId = intval($sessionId);
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
+
+        $sql = "SELECT * FROM $table
+                WHERE
+                    course_code = $courseCode AND
+                    session_id = $sessionId AND
+                    login_course_date BETWEEN $startDate AND $endDate
+                    ";
+
         $result = Database::query($sql);
 
         return Database::store_result($result);
@@ -5081,6 +5128,9 @@ class CourseManager
      */
     public static function getFirstCourseAccessPerSessionAndUser($sessionId, $userId)
     {
+        $sessionId = intval($sessionId);
+        $userId = intval($userId);
+
         $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT * FROM $table
                 WHERE session_id = $sessionId AND user_id = $userId

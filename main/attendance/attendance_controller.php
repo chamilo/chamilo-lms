@@ -536,10 +536,46 @@ class AttendanceController
             'pdf_teachers' => $teacherName,
             'pdf_course_category' => $courseCategory['name'],
             'format' => 'A4-L',
-            'orientation' =>    'L'
+            'orientation' => 'L'
         );
 
         Export::export_html_to_pdf($content, $params);
         exit;
+    }
+
+    /**
+     * Gets attendace base in the table:
+     * TABLE_STATISTIC_TRACK_E_COURSE_ACCESS
+     * @throws ViewException
+     */
+    public function calendarLogins()
+    {
+        $form = new FormValidator(
+            'search',
+            'post',
+            api_get_self().'?'.api_get_cidreq().'&action=calendar_logins'
+        );
+        $form->addDateRangePicker('range', get_lang('Range'));
+        $form->add_button('submit', get_lang('submit'));
+        $table = null;
+
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+
+            $startDate = api_get_utc_datetime($values['range_start']);
+            $endDate = api_get_utc_datetime($values['range_end']);
+
+            $attendance = new Attendance();
+            $table = $attendance->getAttendanceLogins($startDate, $endDate);
+        }
+
+        $data = array(
+            'form' => $form->return_form(),
+            'table' => $table
+        );
+        $this->view->set_data($data);
+        $this->view->set_layout('layout');
+        $this->view->set_template('calendar_logins');
+        $this->view->render();
     }
 }

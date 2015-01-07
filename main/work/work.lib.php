@@ -4693,15 +4693,17 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
     } else {
         $limitString = null;
         if (!empty($start) && !empty($limit)) {
+            $start = intval($start);
+            $limit = intval($limit);
             $limitString = " LIMIT $start, $limit";
         }
 
         $orderBy = null;
 
         if (!empty($sidx) && !empty($sord)) {
-            $sidx = Database::escape_string($sidx);
-            $sord = Database::escape_string($sord);
-            $orderBy = "ORDER BY $sidx $sord";
+            if (in_array($sidx, array('firstname', 'lastname'))) {
+                $orderBy = "ORDER BY $sidx $sord";
+            }
         }
 
         if (empty($sessionId)) {

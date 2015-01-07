@@ -1023,7 +1023,6 @@ class IndexManager
                 if ($session_category_id == 0 &&
                     isset($session_category['sessions'])
                 ) {
-
                     // Independent sessions
                     foreach ($session_category['sessions'] as $session) {
                         $session_id = $session['session_id'];

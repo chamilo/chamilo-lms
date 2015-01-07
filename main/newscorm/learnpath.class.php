@@ -204,7 +204,7 @@ class learnpath
             $this->last_item_seen = $row['last_item'];
             $this->progress_db = $row['progress'];
             $this->lp_view_session_id = $row['session_id'];
-        } else {
+        } else if (!api_is_invited_user()) {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
             }
@@ -350,16 +350,18 @@ class learnpath
                         }
                     }
                 } else {
-                    if (is_object($this->items[$item_id])) {
-                        $this->items[$item_id]->set_status($this->default_status);
+                    if (!api_is_invited_user()) {
+                        if (is_object($this->items[$item_id])) {
+                            $this->items[$item_id]->set_status($this->default_status);
+                        }
+                        // Add that row to the lp_item_view table so that we have something to show in the stats page.
+                        $sql_ins = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
+                                    VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ", 1, 'not attempted')";
+                        if ($this->debug > 2) {
+                            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
+                        }
+                        Database::query($sql_ins);
                     }
-                    // Add that row to the lp_item_view table so that we have something to show in the stats page.
-                    $sql_ins = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
-                                VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ", 1, 'not attempted')";
-                    if ($this->debug > 2) {
-                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
-                    }
-                    Database::query($sql_ins);
                 }
             }
         }
@@ -3619,7 +3621,7 @@ class learnpath
         if (Database :: num_rows($res) > 0) {
             $row = Database :: fetch_array($res);
             $this->lp_view_id = $row['id'];
-        } else {
+        } else if (!api_is_invited_user()) {
             // There is no database record, create one.
             $sql = "INSERT INTO $lp_view_table (c_id, lp_id,user_id, view_count, session_id) VALUES
             		($course_id, " . $this->get_id() . "," . $this->get_user_id() . ", 1, $sessionId)";
@@ -4186,6 +4188,9 @@ class learnpath
         // TODO
         // Call autosave method to save the current progress.
         //$this->index = 0;
+        if (api_is_invited_user()) {
+            return false;
+        }
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
@@ -4303,7 +4308,7 @@ class learnpath
         $session_condition = api_get_session_condition(api_get_session_id(), true, false);
         $table = Database :: get_course_table(TABLE_LP_VIEW);
 
-        if (isset($this->current)) {
+        if (isset($this->current) && !api_is_invited_user()) {
             if ($this->debug > 2) {
                 error_log('New LP - Saving current item (' . $this->current . ') for later review', 0);
             }
@@ -4320,19 +4325,21 @@ class learnpath
             Database::query($sql);
         }
 
-        // Save progress.
-        list($progress, $text) = $this->get_progress_bar_text('%');
-        if ($progress >= 0 && $progress <= 100) {
-            $progress = (int) $progress;
-            $sql = "UPDATE $table SET
-                        progress = $progress
-                    WHERE
-                        c_id = ".$course_id." AND
-                        lp_id = " . $this->get_id() . " AND
-                        user_id = " . $this->get_user_id()." ".$session_condition;
-            // Ignore errors as some tables might not have the progress field just yet.
-            Database::query($sql);
-            $this->progress_db = $progress;
+        if (!api_is_invited_user()) {
+            // Save progress.
+            list($progress, $text) = $this->get_progress_bar_text('%');
+            if ($progress >= 0 && $progress <= 100) {
+                $progress = (int) $progress;
+                $sql = "UPDATE $table SET
+                            progress = $progress
+                        WHERE
+                            c_id = ".$course_id." AND
+                            lp_id = " . $this->get_id() . " AND
+                            user_id = " . $this->get_user_id()." ".$session_condition;
+                // Ignore errors as some tables might not have the progress field just yet.
+                Database::query($sql);
+                $this->progress_db = $progress;
+            }
         }
     }
 

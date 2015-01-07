@@ -5711,9 +5711,10 @@ class TrackingCourseLog
      * @param $number_of_items
      * @param $column
      * @param $direction
+     * @param $includeInvitedUsers boolean Whether include the invited users
      * @return array
      */
-    public static function get_user_data($from, $number_of_items, $column, $direction)
+    public static function get_user_data($from, $number_of_items, $column, $direction, $includeInvitedUsers = false)
     {
         global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id;
 
@@ -5749,13 +5750,19 @@ class TrackingCourseLog
     		$url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
     	}
 
+        $invitedUsersCondition = '';
+
+        if (!$includeInvitedUsers) {
+            $invitedUsersCondition = " AND user.status != " . ROLE_INVITED;
+        }
+
     	$sql = "SELECT  user.user_id as user_id,
                     user.official_code  as col0,
                     user.lastname       as col1,
                     user.firstname      as col2,
                     user.username       as col3
                 FROM $tbl_user as user $url_table
-    	        $condition_user $url_condition";
+    	        $condition_user $url_condition $invitedUsersCondition";
 
     	if (!in_array($direction, array('ASC','DESC'))) {
     		$direction = 'ASC';

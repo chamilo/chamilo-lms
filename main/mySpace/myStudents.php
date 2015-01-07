@@ -754,6 +754,7 @@ if (!empty($student_id)) {
             echo '</table>';
         }
     } else {
+        if ($user_info['status'] != ROLE_INVITED) {
         $csv_content[] = array();
         $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
         $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
@@ -935,7 +936,9 @@ if (!empty($student_id)) {
         }
         ?>
         </table>
+        <?php } ?>
         <!-- line about exercises -->
+        <?php if ($user_info['status'] != ROLE_INVITED) { ?>
         <table class="data_table">
         <tr>
             <th><?php echo get_lang('Exercices'); ?></th>
@@ -1047,6 +1050,7 @@ if (!empty($student_id)) {
             echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
         }
         echo '</table>';
+        }
 
         //@when using sessions we do not show the survey list
         if (empty($session_id)) {

@@ -38,6 +38,8 @@
     {% endjavascripts %}
 
     <script src="{{ asset('bundles/ivoryckeditor/ckeditor.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 </head>
 <body class="{{ admin_skin|default('skin-blue')}}">
 {% block chamilo_admin_header %}

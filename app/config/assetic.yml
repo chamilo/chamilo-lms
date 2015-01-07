@@ -56,8 +56,8 @@ assetic:
         chamilo_js:
             inputs:
                 - @ChamiloAdminThemeBundle/Resources/public/components/jquery/dist/jquery.js
-                - @bootstrap_js
                 - @ChamiloAdminThemeBundle/Resources/public/components/jquery-ui/jquery-ui.min.js
+                - @bootstrap_js
                 - @ChamiloAdminThemeBundle/Resources/public/components/chosen-bower/chosen.jquery.js
                 - @moment_js
                 - @ChamiloAdminThemeBundle/Resources/public/components/fullcalendar/dist/fullcalendar.min.js

@@ -158,6 +158,8 @@ class AppKernel extends Kernel
             new Oro\Bundle\MigrationBundle\OroMigrationBundle(),
             new Thrace\DataGridBundle\ThraceDataGridBundle(),
 
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+
             //new Vich\UploaderBundle\VichUploaderBundle(),
         );
 

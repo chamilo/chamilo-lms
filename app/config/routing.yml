@@ -66,6 +66,9 @@ thrace_data_grid:
     resource: "@ThraceDataGridBundle/Resources/config/routing.xml"
     prefix:   /
 
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
 # Always at the end
 core_bundle:
     resource: "@ChamiloCoreBundle/Resources/config/routing.yml"

@@ -118,6 +118,11 @@ if ($current_forum['forum_of_group'] != 0) {
     }
 }
 
+// 6. Invited users can't create new threads
+if (api_is_invited_user()) {
+    api_not_allowed(true);
+}
+
 $session_toolgroup = 0;
 if ($origin == 'group') {
     $session_toolgroup = intval($_SESSION['toolgroup']);

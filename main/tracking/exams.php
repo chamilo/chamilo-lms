@@ -473,13 +473,20 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
     if (empty($sessionId)) {
         $students = CourseManager::get_student_list_from_course_code(
             $courseInfo['code'],
+            false,
+            0,
+            null,
+            null,
             false
         );
     } else {
         $students = CourseManager::get_student_list_from_course_code(
             $courseInfo['code'],
             true,
-            $sessionId
+            $sessionId,
+            null,
+            null,
+            false
         );
     }
 

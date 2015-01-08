@@ -35,9 +35,16 @@ if (!api_is_allowed_to_edit()) {
 
 $cat_id = isset($_GET['cat_id']) ? (int)$_GET['cat_id'] : null;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
+$filterOfficialCode = isset($_POST['filter']) ? Security::remove_XSS($_POST['filter']) : null;
+$filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
+
 switch ($action) {
     case 'export_all_certificates':
-        Category::exportAllCertificates($cat_id);
+        $userList = array();
+        if (!empty($filterOfficialCodeGet)) {
+            $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
+        }
+        Category::exportAllCertificates($cat_id, $userList);
         break;
     case 'generate_all_certificates':
         $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
@@ -50,8 +57,8 @@ switch ($action) {
 
 $course_code = api_get_course_id();
 
-$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',	'name' => get_lang('Gradebook'));
-$interbreadcrumb[] = array ('url' => '#','name' => get_lang('GradebookListOfStudentsCertificates'));
+$interbreadcrumb[] = array('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',	'name' => get_lang('Gradebook'));
+$interbreadcrumb[] = array('url' => '#','name' => get_lang('GradebookListOfStudentsCertificates'));
 
 $this_section = SECTION_COURSES;
 
@@ -119,11 +126,13 @@ if (!empty($cats)) {
 $filter = api_get_configuration_value('certificate_filter_by_official_code');
 $userList = array();
 $filterForm = null;
+$certificate_list = array();
 if ($filter) {
     echo '<br />';
     $options = UserManager::getOfficialCodeGrouped();
+    $options =array_merge(array('all' => get_lang('All')), $options);
     $form = new FormValidator(
-        'official_code',
+        'official_code_filter',
         'POST',
         api_get_self().'?'.api_get_cidreq().'&cat_id='.$cat_id
     );
@@ -133,21 +142,33 @@ if ($filter) {
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
-        $userList = UserManager::getUsersByOfficialCode($officialCode);
+         if ($officialCode == 'all') {
+            $certificate_list = get_list_users_certificates($cat_id);
+        } else {
+             $userList = UserManager::getUsersByOfficialCode($officialCode);
+             if (!empty($userList)) {
+                 $certificate_list = get_list_users_certificates(
+                     $cat_id,
+                     $userList
+                 );
+             }
+         }
+    } else {
+        $certificate_list = get_list_users_certificates($cat_id);
     }
+} else {
+    $certificate_list = get_list_users_certificates($cat_id);
 }
 
-$certificate_list = get_list_users_certificates($cat_id, $userList);
-
 echo '<div class="btn-group">';
-$url = api_get_self().'?action=generate_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id;
+$url = api_get_self().'?action=generate_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
 echo Display::url(get_lang('GenerateCertificates'), $url, array('class' => 'btn'));
 
-$url = api_get_self().'?action=delete_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id;
+$url = api_get_self().'?action=delete_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
 echo Display::url(get_lang('DeleteAllCertificates'), $url, array('class' => 'btn'));
 
 if (count($certificate_list) > 0) {
-    $url = api_get_self().'?action=export_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id;
+    $url = api_get_self().'?action=export_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
     echo Display::url(get_lang('ExportAllCertificatesToPDF'), $url, array('class' => 'btn'));
 }
 echo '</div>';

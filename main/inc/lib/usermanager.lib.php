@@ -4937,7 +4937,7 @@ EOF;
 
         $sql = "SELECT DISTINCT user_id
                 FROM $user
-                WHERE official_code = $officialCode
+                WHERE official_code = '$officialCode'
                 ";
         $result = Database::query($sql);
 

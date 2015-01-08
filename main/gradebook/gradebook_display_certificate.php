@@ -45,7 +45,6 @@ switch ($action) {
         break;
     case 'delete_all_certificates':
         Category::deleteAllCertificates($cat_id);
-
         break;
 }
 
@@ -66,7 +65,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         Security::clear_token();
         if ($result ==true) {
             Display::display_confirmation_message(get_lang('CertificateRemoved'));
-        } else  {
+        } else {
             Display::display_error_message(get_lang('CertificateNotRemoved'));
         }
     }
@@ -117,7 +116,28 @@ if (!empty($cats)) {
     }
 }
 
-$certificate_list = get_list_users_certificates($cat_id);
+$filter = api_get_configuration_value('certificate_filter_by_official_code');
+$userList = array();
+$filterForm = null;
+if ($filter) {
+    echo '<br />';
+    $options = UserManager::getOfficialCodeGrouped();
+    $form = new FormValidator(
+        'official_code',
+        'POST',
+        api_get_self().'?'.api_get_cidreq().'&cat_id='.$cat_id
+    );
+    $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
+    $form->add_button('submit', get_lang('Submit'));
+    $filterForm = '<br />'.$form->return_form();
+
+    if ($form->validate()) {
+        $officialCode = $form->getSubmitValue('filter');
+        $userList = UserManager::getUsersByOfficialCode($officialCode);
+    }
+}
+
+$certificate_list = get_list_users_certificates($cat_id, $userList);
 
 echo '<div class="btn-group">';
 $url = api_get_self().'?action=generate_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id;
@@ -132,7 +152,9 @@ if (count($certificate_list) > 0) {
 }
 echo '</div>';
 
-if (count($certificate_list)==0) {
+echo $filterForm;
+
+if (count($certificate_list) == 0 ) {
     echo Display::display_warning_message(get_lang('NoResultsAvailable'));
 } else {
 

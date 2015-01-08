@@ -271,3 +271,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['course_images_in_courses_list'] = false;
 // Which student publication will be taken when connected to the gradebook: first|last
 //$_configuration['student_publication_to_take_in_gradebook'] = 'first';
+// Show a filter by official code
+//$_configuration['certificate_filter_by_official_code'] = false;

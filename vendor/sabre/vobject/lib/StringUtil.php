@@ -19,17 +19,12 @@ class StringUtil {
      */
     static public function isUTF8($str) {
 
-        // First check.. mb_check_encoding
-        if (!mb_check_encoding($str, 'UTF-8')) {
-            return false;
-        }
-
         // Control characters
-        if (preg_match('%(?:[\x00-\x08\x0B-\x0C\x0E\x0F])%', $str)) {
+        if (preg_match('%[\x00-\x08\x0B-\x0C\x0E\x0F]%', $str)) {
             return false;
         }
 
-        return true;
+        return (bool)preg_match('%%u', $str);
 
     }
 

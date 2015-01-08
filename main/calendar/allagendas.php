@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * 
+ *
  * Get the all events by session/course
- * @author Julio Montoya cleaning code, chamilo code style changes, all agenda feature work with courses and sessions, only admins and rrhh users can see this page 
- * 
- *  
- * @author Carlos Brolo First code submittion  
+ * @author Julio Montoya cleaning code, chamilo code style changes,
+ * all agenda feature work with courses and sessions,
+ * only admins and rrhh users can see this page
+ * @author Carlos Brolo First code submittion
  */
 
 // name of the language file that needs to be included
@@ -56,7 +56,7 @@ if (!empty ($course_path)) {
 // showing the header
 Display::display_header(get_lang('MyAgenda'));
 
-function display_mymonthcalendar_2($agendaitems, $month, $year, $weekdaynames=array(), $monthName, $session_id) {	
+function display_mymonthcalendar_2($agendaitems, $month, $year, $weekdaynames=array(), $monthName, $session_id) {
 	global $DaysShort, $course_path;
 	//Handle leap year
 	$numberofdays = array (0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -108,22 +108,22 @@ function display_mymonthcalendar_2($agendaitems, $month, $year, $weekdaynames=ar
 	echo "</table>\n";
 }
 
-function get_agenda_items_by_course_list($course_list, $month, $year, $session_id = 0) {	
+function get_agenda_items_by_course_list($course_list, $month, $year, $session_id = 0) {
 	global $setting_agenda_link;
 	//echo $sql  = 'SELECT name FROM chamilo_main.class WHERE name = "'.$grado.'" ORDER BY name ASC';
 	//$result = Database::query($sql);
 	//while ($row = Database::fetch_array($result, 'ASSOC')) {
-	
-	$agendaitems = array ();	
+
+	$agendaitems = array ();
 	$course_name_list = array();
 	foreach ($course_list as $course) {
-		
+
 		$db_name		= $course['db_name'];
 		$code			= $course['code'];
 		$title			= $course['title'];
-		$course_name_list[] = $title;		
+		$course_name_list[] = $title;
 		//$sql2  = 'SELECT code, db_name, title FROM chamilo_main.course WHERE category_code = "'.$course_name.'" ';
-//		$courses_dbs = Database::query($sql2);		
+//		$courses_dbs = Database::query($sql2);
 
 		$items = array ();
 		// $courses_dbs = array();
@@ -132,8 +132,8 @@ function get_agenda_items_by_course_list($course_list, $month, $year, $session_i
 		//$db_name 	= $row2['db_name'];
 		//$code 		= $row2['code'];
 		//$title 		= $row2['title'];
-		//echo "<center><h2>".$db_name."</h2></center>";		
-		
+		//echo "<center><h2>".$db_name."</h2></center>";
+
 		//databases of the courses
 		$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA, $db_name);
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $db_name);
@@ -143,9 +143,9 @@ function get_agenda_items_by_course_list($course_list, $month, $year, $session_i
 		$session_condition = '';
 		if ($session_id != 0) {
 			$session_id = intval($session_id);
-			$session_condition = "AND session_id = $session_id"; 
+			$session_condition = "AND session_id = $session_id";
 		}
-		
+
 		$sqlquery = "SELECT	DISTINCT agenda.*, item_property.*
 						FROM ".$TABLEAGENDA." agenda,
 							 ".$TABLE_ITEMPROPERTY." item_property
@@ -155,11 +155,11 @@ function get_agenda_items_by_course_list($course_list, $month, $year, $session_i
 						AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 						AND item_property.visibility='1' $session_condition
 						GROUP BY agenda.id
-						ORDER BY start_date ";		
+						ORDER BY start_date ";
 		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result,'ASSOC')) {
 			//taking the day
-			$agendaday = date("j",strtotime($item['start_date']));				
+			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
 			//taking the time
 			$time = date("H:i",strtotime($item['start_date']));
@@ -174,12 +174,12 @@ function get_agenda_items_by_course_list($course_list, $month, $year, $session_i
 			if(!isset($items[$agendaday][$item['start_date']])) {
 				$items[$agendaday][$item['start_date']] = '';
 			}
-			
+
 			$items[$agendaday][$item['start_date']] .= "".get_lang('StartTimeWindow')."&nbsp;<i>".$time."</i>"."&nbsp;-&nbsp;".get_lang("EndTimeWindow")."&nbsp;<i>".$end_time."</i>&nbsp;";
 			$items[$agendaday][$item['start_date']] .= '<br />'."<b><a href=\"$URL\" title=\"".Security::remove_XSS($title)."\">".$agenda_link."</a> </b> ".Security::remove_XSS($item['title'])."<br /> ";
 			$items[$agendaday][$item['start_date']] .= '<br/>';
 		}
-		
+
 		if (is_array($items) && count($items) > 0) {
 			while (list ($agendaday, $tmpitems) = each($items)) {
 				if(!isset($agendaitems[$agendaday])) {
@@ -253,25 +253,25 @@ $my_session_id = intval($_GET['session']);
 $my_course_list = array();
 
 if(!empty($my_session_id)) {
-	$_SESSION['my_course_list'] = array();	
+	$_SESSION['my_course_list'] = array();
 	$my_course_list = array();
 } else {
-	$my_course_list = $_SESSION['my_course_list'];	
+	$my_course_list = $_SESSION['my_course_list'];
 	$my_course_list_keys = array_keys($my_course_list);
-	if (!in_array($my_course_id, $my_course_list_keys)) {	
+	if (!in_array($my_course_id, $my_course_list_keys)) {
 		$course_info = api_get_course_info_by_id($my_course_id);
-		$_SESSION['my_course_list'][$my_course_id] = $course_info;	
+		$_SESSION['my_course_list'][$my_course_id] = $course_info;
 		$my_course_list = $_SESSION['my_course_list'];
 		//echo $my_course_id.'added ';
 	}
-	
+
 	if (isset($_GET['delete_course_option'])) {
-		$course_id_to_delete = intval($_GET['delete_course_option']);	
-		unset($_SESSION['my_course_list'][$course_id_to_delete]);	
+		$course_id_to_delete = intval($_GET['delete_course_option']);
+		unset($_SESSION['my_course_list'][$course_id_to_delete]);
 		$my_course_list = $_SESSION['my_course_list'];
 	}
 	//clean the array
-	$my_course_list = array_filter($my_course_list);	
+	$my_course_list = array_filter($my_course_list);
 }
 
 /* 	OUTPUT	*/
@@ -309,24 +309,24 @@ if (isset ($_user['user_id'])) {
 
 	if (api_is_platform_admin()) {
 		$courses  = array();
-		$sessions = SessionManager::get_sessions_list();		
-		
+		$sessions = SessionManager::get_sessions_list();
+
 	} elseif(api_is_drh()) {
-		$courses  = CourseManager::get_courses_followed_by_drh(api_get_user_id());		
+		$courses  = CourseManager::get_courses_followed_by_drh(api_get_user_id());
 		$sessions = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
 	}
 
 	echo '<table width="100%" border="0" cellspacing="0" cellpadding="0">';
 	echo '<tr>';
-	
+
 	// output: the small calendar item on the left and the view / add links
 	echo '<td width="220" valign="top">';
-		
+
 		echo '<br />';
 		if (count($courses) > 0) {
 			echo '<h1>'.get_lang('SelectACourse').'</h1>';
-			
-			foreach ($courses as $row_course) {	
+
+			foreach ($courses as $row_course) {
 				$course_code = $row_course['id'];
 				$title = $row_course['title'];
 				$my_course_list_keys = array_keys($my_course_list);
@@ -339,37 +339,37 @@ if (isset ($_user['user_id'])) {
 		}
 		if (count($sessions) > 0) {
 			echo '<h1>'.get_lang('SelectASession').'</h1>';
-			foreach ($sessions as $session) {			
+			foreach ($sessions as $session) {
 				$id = $session['id'];
 				$name = $session['name'];
-				echo '<a href="allagendas.php?session='.$id.'">'.$name.'</a><br />'; 
+				echo '<a href="allagendas.php?session='.$id.'">'.$name.'</a><br />';
 			}
 		}
 	echo '</td>';
-		
+
 	// the divider
 	// OlivierB : the image has a white background, which causes trouble if the portal has another background color. Image should be transparent. ----> echo "<td width=\"20\" background=\"../img/verticalruler.gif\">&nbsp;</td>";
 	echo "<td width=\"20\">&nbsp;</td>";
 	// the main area: day, week, month view
 	echo '<td valign="top">';
-	
+
 	//@todo hardcoding option
 	$process = 'month_view';
-	
+
 	switch ($process) {
 		case "month_view" :
 			$session_id = 0;
 			//By courses
 			if (is_array($my_course_list) && count($my_course_list) > 0) {
-				$course_list = $my_course_list;				
+				$course_list = $my_course_list;
 			} else {
 				//session
 				$course_list = SessionManager::get_course_list_by_session_id($my_session_id);
-				$session_id = $my_session_id;				
-				echo '<h1>'.$sessions[$session_id]['name'].'</h1>';					
+				$session_id = $my_session_id;
+				echo '<h1>'.$sessions[$session_id]['name'].'</h1>';
 			}
 			if (is_array($course_list) && count($course_list) > 0) {
-				
+
 				$agendaitems = get_agenda_items_by_course_list($course_list, $month, $year, $session_id);
 				//$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 				display_mymonthcalendar_2($agendaitems, $month, $year, array(), $monthName, $session_id);

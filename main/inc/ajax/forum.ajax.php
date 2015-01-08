@@ -1,16 +1,18 @@
 <?php
-/** For licensing terms, see /license.txt */
+/* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls for forum attachments
  * @package chamilo/forum
  * @author Daniel Barreto Alva <daniel.barreto@beeznest.com>
  */
 
-/**
- * Init
- */
 require_once '../global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
+
+// First, protect this script
+api_protect_course_script(false);
 
 /**
  * Main code
@@ -21,13 +23,14 @@ $json = array(
     'errorMessage' => 'ERROR',
 );
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
+
+$current_forum = get_forum_information($_REQUEST['forum']);
+$current_forum_category = get_forumcategory_information($current_forum['forum_category']);
+
 // Check if exist action
 if (!empty($action)) {
-    require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
-    switch($action) {
+    switch ($action) {
         case 'upload_file':
-            // First, protect this script
-            api_protect_course_script(false);
             if (!empty($_FILES) && !empty($_REQUEST['forum'])) {
                 // The user is not allowed here if
                 // 1. the forum category, forum or thread is invisible (visibility==0)
@@ -35,15 +38,27 @@ if (!empty($action)) {
                 // 3. if anonymous posts are not allowed
                 // The only exception is the course manager
                 // They are several pieces for clarity.
-                if (!api_is_allowed_to_edit(null, true) AND (($current_forum_category && $current_forum_category['visibility'] == 0) OR $current_forum['visibility'] == 0)) {
+                if (!api_is_allowed_to_edit(null, true) AND
+                    (
+                        ($current_forum_category && $current_forum_category['visibility'] == 0) OR
+                        $current_forum['visibility'] == 0
+                    )
+                ) {
                     $json['errorMessage'] = '1. the forum category, forum or thread is invisible (visibility==0)';
                     break;
                 }
-                if (!api_is_allowed_to_edit(null, true) AND (($current_forum_category && $current_forum_category['locked'] <> 0 ) OR $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0)) {
+                if (!api_is_allowed_to_edit(null, true) AND
+                    (
+                        ($current_forum_category && $current_forum_category['locked'] <> 0) OR
+                        $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0
+                    )
+                ) {
                     $json['errorMessage'] = '2. the forum category, forum or thread is locked (locked <>0)';
                     break;
                 }
-                if (api_is_anonymous() AND $current_forum['allow_anonymous'] == 0) {
+                if (api_is_anonymous() AND
+                    $current_forum['allow_anonymous'] == 0
+                ) {
                     $json['errorMessage'] = '3. if anonymous posts are not allowed';
                     break;
                 }
@@ -56,12 +71,23 @@ if (!empty($action)) {
                 $json['thread'] = $threadId;
                 $postId = isset($_REQUEST['postId'])? intval($_REQUEST['postId']) : null;
                 $json['postId'] = $postId;
-                if (!empty($courseId) && !is_null($forumId) && !is_null($threadId) && !is_null($postId)) {
+
+                if (!empty($courseId) &&
+                    !is_null($forumId) &&
+                    !is_null($threadId) &&
+                    !is_null($postId)
+                ) {
                     // Save forum attachment
                     $attachId = add_forum_attachment_file('', $postId);
                     if ($attachId !== false) {
                         // Get prepared array of attachment data
-                        $array = getAttachedFiles($forumId, $threadId, $postId, $attachId, $courseId);
+                        $array = getAttachedFiles(
+                            $forumId,
+                            $threadId,
+                            $postId,
+                            $attachId,
+                            $courseId
+                        );
                         // Check if array data is consistent
                         if (isset($array['name'])) {
                             $json['error'] = false;
@@ -73,8 +99,6 @@ if (!empty($action)) {
             }
             break;
         case 'delete_file':
-            // First, protect this script
-            api_protect_course_script(false);
             // Check if set attachment ID and thread ID
             if (isset($_REQUEST['attachId']) && isset($_REQUEST['thread'])) {
                 api_block_course_item_locked_by_gradebook($_REQUEST['thread'], LINK_FORUM_THREAD);
@@ -85,11 +109,20 @@ if (!empty($action)) {
                 // 4. if editing of replies is not allowed
                 // The only exception is the course manager
                 // They are several pieces for clarity.
-                if (!api_is_allowed_to_edit(null, true) AND (($current_forum_category && $current_forum_category['visibility'] == 0) OR $current_forum['visibility'] == 0)) {
+                if (!api_is_allowed_to_edit(null, true) AND
+                    (
+                        ($current_forum_category && $current_forum_category['visibility'] == 0) OR
+                        $current_forum['visibility'] == 0)
+                ) {
                     $json['errorMessage'] = '1. the forum category, forum or thread is invisible (visibility==0)';
                     break;
                 }
-                if (!api_is_allowed_to_edit(null, true) AND (($current_forum_category && $current_forum_category['locked'] <> 0 ) OR $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0)) {
+                if (!api_is_allowed_to_edit(null, true) AND
+                    (
+                        ($current_forum_category && $current_forum_category['locked'] <> 0) OR
+                        $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0
+                    )
+                ) {
                     $json['errorMessage'] = '2. the forum category, forum or thread is locked (locked <>0)';
                     break;
                 }
@@ -98,7 +131,10 @@ if (!empty($action)) {
                     break;
                 }
                 $group_id = api_get_group_id();
-                if (!api_is_allowed_to_edit(null, true) AND $current_forum['allow_edit'] == 0 && !GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)) {
+                if (!api_is_allowed_to_edit(null, true) AND
+                    $current_forum['allow_edit'] == 0 &&
+                    ($group_id && !GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))
+                ) {
                     $json['errorMessage'] = '4. if editing of replies is not allowed';
                     break;
                 }
@@ -116,8 +152,5 @@ if (!empty($action)) {
     }
 }
 
-/**
- * Display
- */
 echo json_encode($json);
 exit;

@@ -1,16 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
+
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 
 /**
+ * Class UserTable
  * Table to display flat view of a student's evaluations and links
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised, use of caching, datagenerator class)
@@ -18,21 +13,17 @@ require_once dirname(__FILE__).'/../be.inc.php';
  */
 class UserTable extends SortableTable
 {
-
 	private $userid;
 	private $datagen;
-
 
 	/**
 	 * Constructor
 	 */
-    function UserTable ($userid, $evals = array(), $links = array(), $addparams = null) {
-    	parent :: __construct ('userlist', null, null, 0);
-
+	public function UserTable($userid, $evals = array(), $links = array(), $addparams = null)
+	{
+		parent :: __construct ('userlist', null, null, 0);
 		$this->userid = $userid;
-
 		$this->datagen = new UserDataGenerator($userid, $evals, $links);
-
 		if (isset($addparams)) {
 			$this->set_additional_parameters($addparams);
 		}
@@ -48,22 +39,21 @@ class UserTable extends SortableTable
 		if ($scoredisplay->is_custom()) {
 			$this->set_header($column++, get_lang('Display'));
 		}
-    }
-
+	}
 
 	/**
 	 * Function used by SortableTable to get total number of items in the table
 	 */
-	function get_total_number_of_items () {
+	function get_total_number_of_items()
+	{
 		return $this->datagen->get_total_items_count();
 	}
-
 
 	/**
 	 * Function used by SortableTable to generate the data to display
 	 */
-	function get_table_data ($from = 1) {
-
+	public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
+	{
 		$scoredisplay = ScoreDisplay :: instance();
 
 		// determine sorting type
@@ -113,30 +103,38 @@ class UserTable extends SortableTable
 				$sortable_data[] = $row;
 			}
 		}
+
 		return $sortable_data;
 	}
 
-
-// Other functions
-
-	private function build_type_column ($item) {
+	/**
+	 * @param $item
+	 * @return string
+	 */
+	private function build_type_column($item)
+	{
 		return build_type_icon_tag($item->get_icon_name());
 	}
 
-	private function build_name_link ($item) {
+	/**
+	 * @param $item
+	 * @return string
+	 */
+	private function build_name_link($item)
+	{
 		switch ($item->get_item_type()) {
 			// evaluation
 			case 'E' :
 				return '&nbsp;'
-					. '<a href="gradebook_view_result.php?selecteval=' . $item->get_id() . '">'
-					. $item->get_name()
-					. '</a>';
+				. '<a href="gradebook_view_result.php?selecteval=' . $item->get_id() . '">'
+				. $item->get_name()
+				. '</a>';
 			// link
 			case 'L' :
 				return '&nbsp;<a href="' . $item->get_link() . '">'
-						. $item->get_name()
-						. '</a>'
-						. '&nbsp;[' . $item->get_type_name() . ']';
+				. $item->get_name()
+				. '</a>'
+				. '&nbsp;[' . $item->get_type_name() . ']';
 		}
 	}
 }

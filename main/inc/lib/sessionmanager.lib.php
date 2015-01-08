@@ -17,16 +17,16 @@ class SessionManager
     public static $_debug = false;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
-
     }
 
     /**
      * Fetches a session from the database
-     * @param   int     Session ID
+     * @param   int  $id   Session Id
+     *
      * @return  array   Session details
      */
     public static function fetch($id)
@@ -40,6 +40,7 @@ class SessionManager
         if (Database::num_rows($r) != 1) {
             return array();
         }
+
         return Database::fetch_array($r, 'ASSOC');
     }
 
@@ -1767,11 +1768,7 @@ class SessionManager
     ) {
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tableSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-
         $sessionId = intval($sessionId);
-        if ($sessionId == 118 && $courseInfo['code'] == 'C1') {
-            var_dump($userList);
-        }
 
         if (empty($sessionId) || empty($userList) || empty($courseInfo)) {
             return false;
@@ -2465,7 +2462,8 @@ class SessionManager
     /**
      * Get a list of sessions of which the given conditions match with an = 'cond'
      * @param  array $conditions a list of condition example :
-     *  array('status' => STUDENT) or array('s.name LIKE' => "%$needle%")
+     * array('status' => STUDENT) or
+     * array('s.name' => array('operator' => 'LIKE', value = '%$needle%'))
      * @param  array $order_by a list of fields on which sort
      * @return array An array with all sessions of the platform.
      * @todo   optional course code parameter, optional sorting parameters...
@@ -2478,12 +2476,19 @@ class SessionManager
         $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $session_course_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-
         $access_url_id = api_get_current_access_url_id();
-
         $return_array = array();
 
-        $sql_query = " SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname, sc.name as category_name, s.promotion_id
+        $sql_query = " SELECT
+                    s.id,
+                    s.name,
+                    s.nbr_courses,
+                    s.date_start,
+                    s.date_end,
+                    u.firstname,
+                    u.lastname,
+                    sc.name as category_name,
+                    s.promotion_id
 				FROM $session_table s
 				INNER JOIN $user_table u ON s.id_coach = u.user_id
 				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
@@ -2492,23 +2497,53 @@ class SessionManager
 				INNER JOIN $course_table c ON sco.course_code = c.code
 				WHERE ar.access_url_id = $access_url_id ";
 
+        $availableFields = array(
+            's.id',
+            's.name'
+        );
+
+        $availableOperator = array(
+            'like',
+            '>=',
+            '<=',
+            '='
+        );
+
         if (count($conditions) > 0) {
-            foreach ($conditions as $field => $value) {
+            foreach ($conditions as $field => $options) {
+                $operator = strtolower($options['operator']);
+                $value = Database::escape_string($options['value']);
                 $sql_query .= ' AND ';
-                $field = Database::escape_string($field);
-                $value = Database::escape_string($value);
-                $sql_query .= $field . " '" . $value . "'";
+                if (in_array($field, $availableFields) && in_array($operator, $availableOperator)) {
+                    $sql_query .= $field . " $operator '" . $value . "'";
+                }
             }
         }
+
+        $orderAvailableList = array('name');
+
         if (count($order_by) > 0) {
-            $sql_query .= ' ORDER BY ' . Database::escape_string(implode(',', $order_by));
+            $order = null;
+            $direction = null;
+            if (isset($order_by[0]) && in_array($order_by[0], $orderAvailableList)) {
+                $order = $order_by[0];
+            }
+            if (isset($order_by[1]) && in_array(strtolower($order_by[1]), array('desc', 'asc'))) {
+                $direction = $order_by[1];
+            }
+
+            if (!empty($order)) {
+                $sql_query .= " ORDER BY $order $direction ";
+            }
         }
+
         $sql_result = Database::query($sql_query);
         if (Database::num_rows($sql_result) > 0) {
             while ($result = Database::fetch_array($sql_result)) {
                 $return_array[$result['id']] = $result;
             }
         }
+
         return $return_array;
     }
 
@@ -2948,7 +2983,7 @@ class SessionManager
         // select the courses
         $sql = "SELECT * FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code
-		        WHERE src.id_session = '$session_id'";
+		        WHERE src.id_session = '$session_id' ";
 
         if (!empty($course_name)) {
             $course_name = Database::escape_string($course_name);
@@ -2957,7 +2992,7 @@ class SessionManager
 
         if (!empty($orderBy)) {
             $orderBy = Database::escape_string($orderBy);
-            $orderBy = "ORDER BY $orderBy";
+            $orderBy = " ORDER BY $orderBy";
         } else {
             if (SessionManager::orderCourseIsEnabled()) {
                 $orderBy .= " ORDER BY position ";
@@ -2967,7 +3002,6 @@ class SessionManager
         }
 
         $sql .= Database::escape_string($orderBy);
-
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
         $courses = array();

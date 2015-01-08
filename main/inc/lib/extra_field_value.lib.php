@@ -18,7 +18,8 @@ class ExtraFieldValue extends Model
 
     /**
      * Formats the necessary elements for the given datatype
-     * @param string The type of data to which this extra field applies (user, course, session, ...)
+     * @param string $type The type of data to which this extra field
+     * applies (user, course, session, ...)
      * @return void (or false if unmanaged datatype)
      * @assert (-1) === false
      */
@@ -29,6 +30,11 @@ class ExtraFieldValue extends Model
         $this->handler_id = $extra_field->handler_id;
 
         switch ($this->type) {
+            case 'calendar_event':
+                $this->table = Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_VALUES);
+                $this->table_handler_field = Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_FIELD);
+                $this->author_id = 'user_id';
+                break;
             case 'course':
                 $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
@@ -77,12 +83,14 @@ class ExtraFieldValue extends Model
     public function get_count()
     {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
+
         return $row['count'];
     }
 
     /**
-     * Saves a series of records given as parameter into the coresponding table
-     * @param array  Structured parameter for the insertion into the *_field_values table
+     * Saves a series of records given as parameter into the corresponding table
+     * @param array  $params array for the insertion into the *_field_values table
+     *
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
@@ -133,13 +141,13 @@ class ExtraFieldValue extends Model
                             }
 
                             foreach ($value as $optionId) {
-                                $new_params = array(
-                                    $this->handler_id   => $params[$this->handler_id],
-                                    'field_id'          => $extra_field_info['id'],
-                                    'field_value'       => $optionId,
-                                    'comment'           => $comment
+                                $newParams = array(
+                                    $this->handler_id => $params[$this->handler_id],
+                                    'field_id' => $extra_field_info['id'],
+                                    'field_value' => $optionId,
+                                    'comment' => $comment
                                 );
-                                self::save($new_params);
+                                self::save($newParams);
                             }
 
                             if (!empty($deleteItems)) {
@@ -200,8 +208,8 @@ class ExtraFieldValue extends Model
 
     /**
      * Save values in the *_field_values table
-     * @param array Structured array with the values to save
-     * @param boolean Whether to show the insert query (passed to the parent save() method)
+     * @param array $params Structured array with the values to save
+     * @param boolean $show_query Whether to show the insert query (passed to the parent save() method)
      * @result mixed The result sent from the parent method
      * @assert (array()) === false
      */
@@ -230,22 +238,22 @@ class ExtraFieldValue extends Model
                 case ExtraField::FIELD_TYPE_SELECT:
                 case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     //$field_options = $session_field_option->get_field_options_by_field($params['field_id']);
-					//$params['field_value'] = split(';', $value_to_insert);
-               /*
-                   if ($field_options) {
-                       $check = false;
-                       foreach ($field_options as $option) {
-                           if (in_array($option['option_value'], $values)) {
-                               $check = true;
-                               break;
+                    //$params['field_value'] = split(';', $value_to_insert);
+                    /*
+                        if ($field_options) {
+                            $check = false;
+                            foreach ($field_options as $option) {
+                                if (in_array($option['option_value'], $values)) {
+                                    $check = true;
+                                    break;
+                                }
                            }
-                      }
-                      if (!$check) {
-                          return false; //option value not found
-                      }
-                  } else {
-                      return false; //enumerated type but no option found
-                  }*/
+                           if (!$check) {
+                               return false; //option value not found
+                           }
+                       } else {
+                           return false; //enumerated type but no option found
+                       }*/
                     break;
                 case ExtraField::FIELD_TYPE_TEXT:
                 case ExtraField::FIELD_TYPE_TEXTAREA:
@@ -254,7 +262,7 @@ class ExtraFieldValue extends Model
                     if (is_array($value)) {
                         if (isset($value['extra_'.$extra_field_info['field_variable']]) &&
                             isset($value['extra_'.$extra_field_info['field_variable'].'_second'])
-                             ) {
+                        ) {
                             $value_to_insert = $value['extra_'.$extra_field_info['field_variable']].'::'.$value['extra_'.$extra_field_info['field_variable'].'_second'];
                         } else {
                             $value_to_insert = null;
@@ -402,9 +410,9 @@ class ExtraFieldValue extends Model
 
     /**
      * Returns the value of the given extra field on the given resource
-     * @param int Item ID (It could be a session_id, course_id or user_id)
-     * @param int Field ID (the ID from the *_field table)
-     * @param bool Whether to transform the result to a human readable strings
+     * @param int $item_id Item ID (It could be a session_id, course_id or user_id)
+     * @param int $field_id Field ID (the ID from the *_field table)
+     * @param bool $transform Whether to transform the result to a human readable strings
      * @return mixed A structured array with the field_id and field_value, or false on error
      * @assert (-1,-1) === false
      */
@@ -415,7 +423,7 @@ class ExtraFieldValue extends Model
 
         $sql = "SELECT s.*, field_type FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
-                WHERE {$this->handler_id} = '$item_id'  AND
+                WHERE {$this->handler_id} = '$item_id' AND
                       field_id = '".$field_id."'
                 ORDER BY id";
         $result = Database::query($sql);
@@ -485,8 +493,9 @@ class ExtraFieldValue extends Model
     /**
      * Gets a structured array of the original item and its extra values, using
      * a specific original item and a field name (like "branch", or "birthdate")
-     * @param int Item ID from the original table
-     * @param string The name of the field we are looking for
+     * @param int $item_id Item ID from the original table
+     * @param string $field_variable The name of the field we are looking for
+     * @param bool $transform
      * @return mixed Array of results, or false on error or not found
      * @assert (-1,'') === false
      */
@@ -529,10 +538,10 @@ class ExtraFieldValue extends Model
     /**
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value
-     * @param string Field (type of data) we want to check
-     * @param string Data we are looking for in the given field
-     * @param bool Whether to transform the result to a human readable strings
-     * @param bool Whether to return the last element or simply the first one we get
+     * @param string $field_variable Field (type of data) we want to check
+     * @param string $field_value Data we are looking for in the given field
+     * @param bool $transform Whether to transform the result to a human readable strings
+     * @param bool $last Whether to return the last element or simply the first one we get
      * @return mixed Give the ID if found, or false on failure or not found
      * @assert (-1,-1) === false
      */
@@ -572,7 +581,7 @@ class ExtraFieldValue extends Model
 
     /**
      * Get all values for a specific field id
-     * @param int Field ID
+     * @param int $field_id
      * @return mixed Array of values on success, false on failure or not found
      * @assert (-1) === false
      */
@@ -642,7 +651,7 @@ class ExtraFieldValue extends Model
 
     /**
      * Deletes all the values related to a specific field ID
-     * @param int Field ID
+     * @param int $field_id
      * @return void
      * @assert ('a') == null
      */
@@ -655,8 +664,8 @@ class ExtraFieldValue extends Model
 
     /**
      * Deletes values of a specific field for a specific item
-     * @param int Item ID (session id, course id, etc)
-     * @param int Field ID
+     * @param int $item_id (session id, course id, etc)
+     * @param int $field_id
      * @return void
      * @assert (-1,-1) == null
      */
@@ -664,7 +673,8 @@ class ExtraFieldValue extends Model
     {
         $field_id = intval($field_id);
         $item_id = Database::escape_string($item_id);
-        $sql = "DELETE FROM {$this->table} WHERE {$this->handler_id} = '$item_id' AND field_id = '".$field_id."' ";
+        $sql = "DELETE FROM {$this->table}
+                WHERE {$this->handler_id} = '$item_id' AND field_id = '".$field_id."' ";
         Database::query($sql);
     }
 
@@ -689,8 +699,8 @@ class ExtraFieldValue extends Model
 
     /**
      * Not yet implemented - Compares the field values of two items
-     * @param int Item 1
-     * @param int Item 2
+     * @param int $item_id Item 1
+     * @param int $item_to_compare Item 2
      * @return mixed Differential array generated from the comparison
      */
     public function compare_item_values($item_id, $item_to_compare)

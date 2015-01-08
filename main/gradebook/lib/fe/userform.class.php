@@ -1,18 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
+
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
+
 /**
+ * Class UserForm
  * Extends formvalidator with import and export forms
  * @author Stijn Konings
  * @package chamilo.gradebook
@@ -29,7 +25,8 @@ class UserForm extends FormValidator
 	 * @param method
 	 * @param action
 	 */
-	function UserForm($form_type, $user, $form_name, $method= 'post', $action= null) {
+	public function UserForm($form_type, $user, $form_name, $method= 'post', $action= null)
+	{
 		parent :: __construct($form_name, $method, $action);
 		$this->form_type= $form_type;
 		if (isset ($user)) {
@@ -47,11 +44,12 @@ class UserForm extends FormValidator
 		$this->setDefaults();
 	}
 
-	protected function build_simple_search() {
+	protected function build_simple_search()
+	{
 		if (isset($_GET['search']) && (!empty($_GET['search']))) {
-		   	$this->setDefaults(array(
-   		    'keyword' => Security::remove_XSS($_GET['search'])
-   		    ));
+			$this->setDefaults(array(
+				'keyword' => Security::remove_XSS($_GET['search'])
+			));
 		}
 		$renderer =& $this->defaultRenderer();
 		$renderer->setElementTemplate('<span>{element}</span> ');
@@ -59,7 +57,8 @@ class UserForm extends FormValidator
 		$this->addElement('style_submit_button','submit',get_lang('Search'),'class="search"');
 	}
 
-	protected function build_user_info_form() {
+	protected function build_user_info_form()
+	{
 		if (api_is_western_name_order()) {
 			$this->addElement('static', 'fname', get_lang('FirstName'), $this->user_info['firstname']);
 			$this->addElement('static', 'lname', get_lang('LastName'), $this->user_info['lastname']);
@@ -73,10 +72,14 @@ class UserForm extends FormValidator
 		$this->addElement('static', 'phone', get_lang('Phone'), $this->user_info['phone']);
 		$this->addElement('style_submit_button', 'submit', get_lang('Back'),'class="save"');
 	}
-	function display() {
+
+	function display()
+	{
 		parent :: display();
 	}
-	function setDefaults($defaults= array(), $filter = null) {
+
+	function setDefaults($defaults= array(), $filter = null)
+	{
 		parent :: setDefaults($defaults, $filter);
 	}
 }

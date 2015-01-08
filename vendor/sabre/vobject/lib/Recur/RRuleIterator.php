@@ -374,7 +374,11 @@ class RRuleIterator implements Iterator {
             // Current hour of the day
             $currentHour = $this->currentDate->format('G');
 
-        } while (($this->byDay && !in_array($currentDay, $recurrenceDays)) || ($this->byHour && !in_array($currentHour, $recurrenceHours)) || ($this->byMonth && !in_array($currentMonth, $recurrenceMonths)));
+        } while (
+            ($this->byDay   && !in_array($currentDay, $recurrenceDays)) ||
+            ($this->byHour  && !in_array($currentHour, $recurrenceHours)) ||
+            ($this->byMonth && !in_array($currentMonth, $recurrenceMonths))
+        );
 
     }
 

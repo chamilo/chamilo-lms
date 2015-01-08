@@ -1,6 +1,12 @@
 <?php
 /* See license terms in /license.txt */
 
+/*define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH).'mpdf');
+if (!is_dir(_MPDF_TEMP_PATH)) {
+    mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
+}
+require_once api_get_path(SYS_PATH).'vendor/mpdf/mpdf/mpdf.php';
+*/
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 require_once _MPDF_PATH.'mpdf.php';
 
@@ -18,12 +24,12 @@ class PDF
 
     /**
      * Creates the mPDF object
-     * @param string  $page_format format A4 A4-L see  http://mpdf1.com/manual/index.php?tid=184&searchstring=format
+     * @param string  $pageFormat format A4 A4-L see  http://mpdf1.com/manual/index.php?tid=184&searchstring=format
      * @param string  $orientation orientation "P" = Portrait "L" = Landscape
      * @param array $params
      */
     public function __construct(
-        $page_format = 'A4',
+        $pageFormat = 'A4',
         $orientation = 'P',
         $params = array()
     ) {
@@ -33,7 +39,7 @@ class PDF
         if (!in_array($orientation, array('P','L'))) {
             $orientation = 'P';
         }
-        //$this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', 30, 20, 27, 25, 16, 13, $orientation);
+        //$this->pdf = $pdf = new mPDF('UTF-8', $pageFormat, '', '', 30, 20, 27, 25, 16, 13, $orientation);
         //left, right, top, bottom, margin_header, margin footer
 
         $params['left']     = isset($params['left'])    ? $params['left']   : 15;
@@ -50,7 +56,7 @@ class PDF
 
         $this->pdf = new mPDF(
             'UTF-8',
-            $page_format,
+            $pageFormat,
             '',
             '',
             $params['left'],
@@ -66,6 +72,7 @@ class PDF
     /**
      * Export the given HTML to PDF, using a global template
      * @param string $content the HTML content
+     *
      * @uses export/table_pdf.tpl
      */
     public function html_to_pdf_with_template($content)
@@ -73,20 +80,24 @@ class PDF
         global $_configuration;
         Display :: display_no_header();
 
-        //Assignments
+        // Assignments
         Display::$global_template->assign('pdf_content', $content);
 
         $organization = api_get_setting('Institution');
         $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+
+        // Search for classic logo
         if (file_exists($img)) {
             $img = api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
             $organization = "<img src='$img'>";
         } else {
+            // Just use the platform title.
             if (!empty($organization)) {
                 $organization = '<h2 align="left">'.$organization.'</h2>';
             }
         }
 
+        // Use custom logo image.
         if (isset($_configuration['pdf_logo_header']) &&
             $_configuration['pdf_logo_header']
         ) {
@@ -113,7 +124,7 @@ class PDF
         Display::$global_template->assign('pdf_title', $this->params['pdf_title']);
         Display::$global_template->assign('add_signatures', $this->params['add_signatures']);
 
-        //Getting template
+        // Getting template
         $tpl = Display::$global_template->get_template('export/table_pdf.tpl');
         $html = Display::$global_template->fetch($tpl);
         $html = api_utf8_encode($html);
@@ -125,11 +136,15 @@ class PDF
 
     /**
      * Converts HTML files to PDF
-     * @param   mixed   could be an html file path or an array with paths example:
-    /var/www/myfile.html or
-    array('/myfile.html','myotherfile.html') or even an indexed array with both 'title' and 'path' indexes
-    for each element like
-     * array(0=>array('title'=>'Hello','path'=>'file.html'),1=>array('title'=>'Bye','path'=>'file2.html'));
+     * @param mixed $html_file_array could be an html file path or an array
+     * with paths example:
+     * /var/www/myfile.html or array('/myfile.html','myotherfile.html') or
+     * even an indexed array with both 'title' and 'path' indexes
+     * for each element like
+     * array(
+     *     0 => array('title'=>'Hello','path'=>'file.html'),
+     *     1 => array('title'=>'Bye','path'=>'file2.html')
+     * );
      * @param   string  pdf name
      * @param   string  course code (if you are using html that are located in the document tool you must provide this)
      * @param bool Whether to print the header, footer and watermark (true) or just the content (false)
@@ -316,11 +331,11 @@ class PDF
 
     /**
      * Converts an html string to PDF
-     * @param   string  valid html
-     * @param   string  CSS content of a CSS file
-     * @param   string  pdf name
-     * @param   string  course code (if you are using html that are located in the document tool you must provide this)
-     * @return  string Web path
+     * @param   string  $document_html valid html
+     * @param   string  $css CSS content of a CSS file
+     * @param   string  $pdf_name pdf name
+     * @param   string  $course_code course code (if you are using html that are located in the document tool you must provide this)
+     * @return  string  Web path
      */
     public function content_to_pdf(
         $document_html,

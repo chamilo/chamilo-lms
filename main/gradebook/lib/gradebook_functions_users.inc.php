@@ -12,10 +12,9 @@
  */
 function get_users_in_course($course_id)
 {
-	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-
+	$tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
+	$tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
 
 	$current_session = api_get_session_id();
@@ -41,18 +40,18 @@ function get_users_in_course($course_id)
 
 function get_user_array_from_sql_result($result)
 {
-    $a_students = array();
-    while ($user = Database::fetch_array($result)) {
-        if (!array_key_exists($user['user_id'], $a_students)) {
-            $a_current_student = array ();
-            $a_current_student[] = $user['user_id'];
-            $a_current_student[] = $user['username'];
-            $a_current_student[] = $user['lastname'];
-            $a_current_student[] = $user['firstname'];
-            $a_current_student[] = $user['official_code'];
-            $a_students['STUD'.$user['user_id']] = $a_current_student;
-        }
-    }
+	$a_students = array();
+	while ($user = Database::fetch_array($result)) {
+		if (!array_key_exists($user['user_id'], $a_students)) {
+			$a_current_student = array ();
+			$a_current_student[] = $user['user_id'];
+			$a_current_student[] = $user['username'];
+			$a_current_student[] = $user['lastname'];
+			$a_current_student[] = $user['firstname'];
+			$a_current_student[] = $user['official_code'];
+			$a_students['STUD'.$user['user_id']] = $a_current_student;
+		}
+	}
 	return $a_students;
 }
 
@@ -76,7 +75,7 @@ function get_all_users ($evals = array(), $links = array())
 			$sql = 'SELECT user.user_id,lastname, firstname, user.official_code
                     FROM '.$tbl_res.' as res, '.$tbl_user.' as user
                     WHERE res.evaluation_id = '.intval($eval->get_id())
-					.' AND res.user_id = user.user_id';
+				.' AND res.user_id = user.user_id';
 			$result = Database::query($sql);
 			$users = array_merge($users, get_user_array_from_sql_result($result));
 		}

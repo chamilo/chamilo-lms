@@ -69,7 +69,7 @@ class FlatViewTable extends SortableTable
      */
     public function setLimitEnabled($value)
     {
-       $this->limit_enabled = (bool) $value;
+        $this->limit_enabled = (bool) $value;
     }
 
     /**
@@ -81,8 +81,8 @@ class FlatViewTable extends SortableTable
     }
 
     /**
-    * Display the graph of the total results of all students
-    * */
+     * Display the graph of the total results of all students
+     * */
     public function display_graph()
     {
         include_once api_get_path(LIBRARY_PATH) . 'pchart/pData.class.php';
@@ -505,33 +505,33 @@ class FlatViewTable extends SortableTable
         $header = null;
         if ($this->limit_enabled && $totalitems > LIMIT) {
             $header .= '<table style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
-                    . '<tbody>'
-                    . '<tr>';
+                . '<tbody>'
+                . '<tr>';
 
             // previous X
             $header .= '<td style="width:100%;">';
             if ($this->offset >= LIMIT) {
                 $header .= '<a href="' . api_get_self()
-                        . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-                        . '&offset=' . (($this->offset) - LIMIT)
-                        . (isset($_GET['search']) ? '&search=' . Security::remove_XSS($_GET['search']) : '') . '">'
-                        . Display::return_icon('action_prev.png', get_lang('PreviousPage'), array(), 32)
-                        . '</a>';
+                    . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
+                    . '&offset=' . (($this->offset) - LIMIT)
+                    . (isset($_GET['search']) ? '&search=' . Security::remove_XSS($_GET['search']) : '') . '">'
+                    . Display::return_icon('action_prev.png', get_lang('PreviousPage'), array(), 32)
+                    . '</a>';
             } else {
                 $header .= Display::return_icon('action_prev_na.png', get_lang('PreviousPage'), array(), 32);
             }
             $header .= ' ';
             // next X
             $calcnext = (($this->offset + (2 * LIMIT)) > $totalitems) ?
-                    ($totalitems - (LIMIT + $this->offset)) : LIMIT;
+                ($totalitems - (LIMIT + $this->offset)) : LIMIT;
 
             if ($calcnext > 0) {
                 $header .= '<a href="' . api_get_self()
-                        . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-                        . '&offset=' . ($this->offset + LIMIT)
-                        . (isset($_GET['search']) ? '&search=' . Security::remove_XSS($_GET['search']) : '') . '">'
-                        . Display::return_icon('action_next.png', get_lang('NextPage'), array(), 32)
-                        . '</a>';
+                    . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
+                    . '&offset=' . ($this->offset + LIMIT)
+                    . (isset($_GET['search']) ? '&search=' . Security::remove_XSS($_GET['search']) : '') . '">'
+                    . Display::return_icon('action_next.png', get_lang('NextPage'), array(), 32)
+                    . '</a>';
             } else {
                 $header .= Display::return_icon('action_next_na.png', get_lang('NextPage'), array(), 32);
             }

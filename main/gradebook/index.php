@@ -9,7 +9,7 @@ $language_file = array('gradebook', 'exercice');
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
-$cidReset= false;
+//$cidReset = false;
 $_in_course = true;
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
@@ -612,11 +612,11 @@ if (isset ($move_form)){
 
 // LOAD DATA & DISPLAY TABLE
 
-$is_platform_admin  = api_is_platform_admin();
-$is_course_admin    = api_is_allowed_to_edit(null, true);
+$is_platform_admin = api_is_platform_admin();
+$is_course_admin = api_is_allowed_to_edit(null, true);
 
 //load data for category, evaluation and links
-if (empty ($_GET['selectcat'])) {
+if (empty($_GET['selectcat'])) {
     $category= 0;
 } else {
     $category= $_GET['selectcat'];
@@ -702,7 +702,7 @@ if (isset($_GET['studentoverview'])) {
         }
         unset($cats);
     }
-    $cats = Category :: load ($category, null, null, null, null, null, false);
+    $cats = Category::load($category, null, null, null, null, null, false);
 
     //with this fix the teacher only can view 1 gradebook
     if (api_is_platform_admin()) {
@@ -734,7 +734,7 @@ if (isset($_GET['cidReq']) && $_GET['cidReq']!='') {
 $no_qualification = false;
 
 // Show certificate link.
-
+$certificate = array();
 if ($category != '0') {
     $cat = new Category();
     $category_id   = intval($_GET['selectcat']);
@@ -744,9 +744,14 @@ if ($category != '0') {
     if ($show_message == '') {
         // Student
         if (!api_is_allowed_to_edit()) {
-            $certificate_html = Category::register_user_certificate($category_id, $stud_id);
-            if ($certificate_html) {
-                echo $certificate_html;
+            $certificate = Category::register_user_certificate(
+                $category_id,
+                $stud_id
+            );
+            if (!empty($certificate)) {
+                echo '<div class="actions" align="right">';
+                echo $certificate['pdf_link'];
+                echo '</div>';
             }
         }
     }
@@ -756,11 +761,24 @@ if (api_is_allowed_to_edit(null, true)) {
     // Tool introduction
     Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
 
-    if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0)) {
+    if ((isset ($_GET['selectcat']) && $_GET['selectcat']<>0)) {
         //
     } else {
-        if (((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
-            $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
+        if ((
+                (isset ($_GET['selectcat']) && $_GET['selectcat'] == 0) || (
+                (isset($_GET['cidReq']) && $_GET['cidReq'] !== ''))
+            ) ||
+            isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false'
+        ) {
+            $cats = Category:: load(
+                null,
+                null,
+                $course_code,
+                null,
+                null,
+                $session_id,
+                false
+            );
         }
     }
 }
@@ -772,10 +790,11 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 
     if (!empty($cats)) {
         if ((api_get_setting('gradebook_enable_grade_model') == 'true') &&
-            (api_is_platform_admin() || (api_is_allowed_to_edit(null, true) &&
-                    api_get_setting('teachers_can_change_grade_model_settings') == 'true'))
+            (
+                api_is_platform_admin() || (api_is_allowed_to_edit(null, true) &&
+                api_get_setting('teachers_can_change_grade_model_settings') == 'true')
+            )
         ) {
-
             // Getting grade models.
             $obj = new GradeModel();
             $grade_models = $obj->get_all();
@@ -815,7 +834,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 
                             $gradebook->save($params);
                         }
-                        //Reloading cats
+                        // Reloading cats
                         $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
                     } else {
                         $form_grade->display();
@@ -837,6 +856,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             } else {
                 // This is the father
                 // Create gradebook/add gradebook links.
+
                 DisplayGradebook::display_header_gradebook(
                     $cat,
                     0,
@@ -845,7 +865,8 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                     $is_platform_admin,
                     $simple_search_form,
                     false,
-                    true
+                    true,
+                    $certificate
                 );
 
                 if (api_is_allowed_to_edit(null,true) &&

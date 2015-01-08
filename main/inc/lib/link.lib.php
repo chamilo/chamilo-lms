@@ -565,7 +565,7 @@ function editlinkcategory($type)
             if (empty ($mytarget)) {
                 $mytarget = '_self';
             }
-            $mytarget = ",target='" . $target . "'";
+            $mytarget = ", target='" . $target . "'";
 
             // Finding the old category_id.
             $sql = "SELECT * FROM " . $tbl_link . "
@@ -592,7 +592,7 @@ function editlinkcategory($type)
                 "description='" . Database :: escape_string($_POST['description']) . "', " .
                 "category_id='" . Database :: escape_string($_POST['selectcategory']) . "', " .
                 "display_order='" . $max_display_order . "', " .
-                "on_homepage='" . Database :: escape_string($onhomepage) . " ' $mytarget " .
+                "on_homepage= '" . Database :: escape_string($onhomepage) ."' $mytarget " .
                 " WHERE c_id = $course_id AND id='" . intval($_POST['id']) . "'";
             Database :: query($sql);
 
@@ -827,7 +827,7 @@ function change_visibility_link($id, $scope)
  * session
  * @param   int $courseId
  * @param   int $sessionId
- * @return string SQL query (to be executed)
+ * @return resource
  */
 function getLinkCategories($courseId, $sessionId)
 {
@@ -847,6 +847,13 @@ function getLinkCategories($courseId, $sessionId)
                 $sessionCondition AND
                 linkcat.c_id = " . $courseId . " AND
                 itemproperties.c_id = " . $courseId . "
+            ORDER BY linkcat.display_order DESC";
+
+    $sql = "SELECT *, linkcat.id
+            FROM $tblLinkCategory linkcat
+            WHERE
+                linkcat.c_id = " . $courseId."
+                $sessionCondition
             ORDER BY linkcat.display_order DESC";
 
     return Database::query($sql);

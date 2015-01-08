@@ -5,7 +5,7 @@
 require_once 'dropbox_init.inc.php';
 
 // get the last time the user accessed the tool
-if ($_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] == '') {
+if (isset($_SESSION[$_course['id']]) && $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] == '') {
 	$last_access = get_last_tool_access(TOOL_DROPBOX);
 	$_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] = $last_access;
 } else {
@@ -181,9 +181,11 @@ if (isset($_GET['error']) AND !empty($_GET['error'])) {
 	Display :: display_normal_message(get_lang($_GET['error']));
 }
 
+$dropbox_data_sent = array();
+$movelist = array();
+$dropbox_data_recieved = array();
 
 if ($action != 'add') {
-
 	// Getting all the categories in the dropbox for the given user
 	$dropbox_categories = get_dropbox_categories();
 	// Greating the arrays with the categories for the received files and for the sent files

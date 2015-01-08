@@ -1,6 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-/* For licensing terms, see /dokeos_license.txt */
 /**
   @author Bart Mollet
  * 	@package chamilo.admin

@@ -1210,8 +1210,8 @@ class Tracking
      * Calculates the time spent on the platform by a user
      * @param   int|array User id
      * @param   string type of time filter: 'last_week' or 'custom'
-     * @param   strgin  start date date('Y-m-d H:i:s')
-     * @param   strgin  end date date('Y-m-d H:i:s')
+     * @param   string  start date date('Y-m-d H:i:s')
+     * @param   string  end date date('Y-m-d H:i:s')
      * @return timestamp $nb_seconds
      */
     public static function get_time_spent_on_the_platform(

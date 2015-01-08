@@ -20,7 +20,6 @@ class ExtraField extends Model
         'tms'
     );
 
-
     public $ops = array(
         'eq' => '=',        //equal
         'ne' => '<>',       //not equal
@@ -38,23 +37,23 @@ class ExtraField extends Model
         'nc' => 'NOT LIKE'  //doesn't contain
     );
 
-    const FIELD_TYPE_TEXT            = 1;
-    const FIELD_TYPE_TEXTAREA        = 2;
-    const FIELD_TYPE_RADIO           = 3;
-    const FIELD_TYPE_SELECT          = 4;
+    const FIELD_TYPE_TEXT = 1;
+    const FIELD_TYPE_TEXTAREA = 2;
+    const FIELD_TYPE_RADIO = 3;
+    const FIELD_TYPE_SELECT = 4;
     const FIELD_TYPE_SELECT_MULTIPLE = 5;
-    const FIELD_TYPE_DATE            = 6;
-    const FIELD_TYPE_DATETIME        = 7;
-    const FIELD_TYPE_DOUBLE_SELECT   = 8;
-    const FIELD_TYPE_DIVIDER         = 9;
-    const FIELD_TYPE_TAG             = 10;
-    const FIELD_TYPE_TIMEZONE        = 11;
-    const FIELD_TYPE_SOCIAL_PROFILE  = 12;
-    const FIELD_TYPE_CHECKBOX        = 13;
-    const FIELD_TYPE_MOBILE_PHONE_NUMBER       = 14;
-    const FIELD_TYPE_INTEGER        = 15;
-    const FIELD_TYPE_FILE_IMAGE     = 16;
-    const FIELD_TYPE_FLOAT          = 17;
+    const FIELD_TYPE_DATE = 6;
+    const FIELD_TYPE_DATETIME = 7;
+    const FIELD_TYPE_DOUBLE_SELECT = 8;
+    const FIELD_TYPE_DIVIDER = 9;
+    const FIELD_TYPE_TAG = 10;
+    const FIELD_TYPE_TIMEZONE = 11;
+    const FIELD_TYPE_SOCIAL_PROFILE = 12;
+    const FIELD_TYPE_CHECKBOX = 13;
+    const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
+    const FIELD_TYPE_INTEGER = 15;
+    const FIELD_TYPE_FILE_IMAGE = 16;
+    const FIELD_TYPE_FLOAT = 17;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
@@ -68,21 +67,28 @@ class ExtraField extends Model
     {
         $this->type = $type;
         switch ($this->type) {
+            case 'calendar_event':
+                $this->table = Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_FIELD);
+                $this->table_field_options = Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_OPTIONS);
+                $this->table_field_values  = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+                $this->handler_id = 'calendar_event_id';
+                $this->primaryKey = 'id';
+                break;
             case 'course':
                 $this->table_field_options = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_OPTIONS);
                 $this->table_field_values  = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
-                //Used for the model
-                $this->table      = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+                // Used for the model
+                $this->table  = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
                 $this->handler_id = 'course_code';
                 $this->handlerEntityId = 'courseCode';
                 $this->primaryKey = 'id';
                 break;
             case 'user':
                 $this->table_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-                $this->table_field_values  = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+                $this->table_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
-                //Used for the model
+                // Used for the model
                 $this->table = Database::get_main_table(TABLE_MAIN_USER_FIELD);
                 $this->handler_id = 'user_id';
                 $this->handlerEntityId = 'userId';
@@ -92,7 +98,7 @@ class ExtraField extends Model
                 //$this->table_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
                 $this->table_field_values  = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 
-                //Used for the model
+                // Used for the model
                 $this->table      = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
                 $this->handler_id = 'session_id';
                 $this->handlerEntityId = 'sessionId';
@@ -102,7 +108,7 @@ class ExtraField extends Model
                 $this->table_field_options = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_OPTIONS);
                 $this->table_field_values  = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
 
-                //Used for the model
+                // Used for the model
                 $this->table      = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
                 $this->handler_id = 'question_id';
                 $this->handlerEntityId = 'questionId';
@@ -127,14 +133,15 @@ class ExtraField extends Model
     /**
      * @return array
      */
-    static function getValidExtraFieldTypes()
+    public static function getValidExtraFieldTypes()
     {
         return array(
             'user',
             'course',
             'session',
             'question',
-            'lp'
+            'lp',
+            'calendar_event'
         );
     }
 
@@ -177,14 +184,16 @@ class ExtraField extends Model
     }
 
     /**
-     * @param $field_variable
+     * @param string $field_variable
+     *
      * @return array|bool
      */
     public function get_handler_field_info_by_field_variable($field_variable)
     {
         $field_variable = Database::escape_string($field_variable);
-        $sql_field      = "SELECT * FROM {$this->table} WHERE field_variable = '$field_variable'";
-        $result         = Database::query($sql_field);
+        $sql = "SELECT * FROM {$this->table}
+                WHERE field_variable = '$field_variable'";
+        $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $r_field = Database::fetch_array($result, 'ASSOC');
 
@@ -213,23 +222,24 @@ class ExtraField extends Model
 
     /**
      * @param $handler
+     *
      * @return array
      */
     public static function get_extra_fields_by_handler($handler)
     {
-        $types                                   = array();
-        $types[self::FIELD_TYPE_TEXT]            = get_lang('FieldTypeText');
-        $types[self::FIELD_TYPE_TEXTAREA]        = get_lang('FieldTypeTextarea');
-        $types[self::FIELD_TYPE_RADIO]           = get_lang('FieldTypeRadio');
-        $types[self::FIELD_TYPE_SELECT]          = get_lang('FieldTypeSelect');
+        $types= array();
+        $types[self::FIELD_TYPE_TEXT] = get_lang('FieldTypeText');
+        $types[self::FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
+        $types[self::FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
+        $types[self::FIELD_TYPE_SELECT] = get_lang('FieldTypeSelect');
         $types[self::FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
-        $types[self::FIELD_TYPE_DATE]            = get_lang('FieldTypeDate');
-        $types[self::FIELD_TYPE_DATETIME]        = get_lang('FieldTypeDatetime');
-        $types[self::FIELD_TYPE_DOUBLE_SELECT]   = get_lang('FieldTypeDoubleSelect');
-        $types[self::FIELD_TYPE_DIVIDER]         = get_lang('FieldTypeDivider');
-        $types[self::FIELD_TYPE_TAG]             = get_lang('FieldTypeTag');
-        $types[self::FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
-        $types[self::FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
+        $types[self::FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
+        $types[self::FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
+        $types[self::FIELD_TYPE_DOUBLE_SELECT] = get_lang('FieldTypeDoubleSelect');
+        $types[self::FIELD_TYPE_DIVIDER] = get_lang('FieldTypeDivider');
+        $types[self::FIELD_TYPE_TAG] = get_lang('FieldTypeTag');
+        $types[self::FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
+        $types[self::FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
         $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
         $types[self::FIELD_TYPE_CHECKBOX]       = get_lang('FieldTypeCheckbox');
         $types[self::FIELD_TYPE_INTEGER]           = get_lang('FieldTypeInteger');
@@ -299,7 +309,9 @@ class ExtraField extends Model
 
         if (!empty($fields) > 0) {
             foreach ($fields as $field) {
-                $field_value = $field_values->get_values_by_handler_and_field_id($item_id, $field['id']);
+                $field_value = $field_values->get_values_by_handler_and_field_id(
+                    $item_id, $field['id']
+                );
                 if ($field_value) {
                     $field_value = $field_value['field_value'];
 
@@ -341,7 +353,7 @@ class ExtraField extends Model
     public function get_all_extra_field_by_type($field_type)
     {
         // all the information of the field
-        $sql = "SELECT * FROM  {$this->table}
+        $sql = "SELECT * FROM {$this->table}
                 WHERE field_type = '".Database::escape_string($field_type)."'";
         $result = Database::query($sql);
         $return = array();
@@ -379,12 +391,17 @@ class ExtraField extends Model
      * Converts a string like this:
      * France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
      * into
-     * array('France' => array('Paris', 'Bregtane', 'Marseilles'), 'Belgique' => array('Namur', 'Liège', etc
+     * array(
+ *      'France' =>
+     *      array('Paris', 'Bregtane', 'Marseilles'),
+     *  'Belgique' =>
+     *      array('Namur', 'Liège')
+     * ), etc
      * @param string $string
      *
      * @return array
      */
-    static function extra_field_double_select_convert_string_to_array($string)
+    public static function extra_field_double_select_convert_string_to_array($string)
     {
         $options = explode('|', $string);
         $options_parsed = array();
@@ -405,7 +422,7 @@ class ExtraField extends Model
      * @param array $options
      * @return array
      */
-    static function extra_field_double_select_convert_array_to_ordered_array($options)
+    public static function extra_field_double_select_convert_array_to_ordered_array($options)
     {
         $options_parsed = array();
         if (!empty($options)) {
@@ -426,7 +443,7 @@ class ExtraField extends Model
      *
      * @return string
      */
-    static function extra_field_double_select_convert_array_to_string($options)
+    public static function extra_field_double_select_convert_array_to_string($options)
     {
         $string = null;
         $options_parsed = self::extra_field_double_select_convert_array_to_ordered_array($options);
@@ -466,7 +483,7 @@ class ExtraField extends Model
         }
 
         if (!isset($params['field_order'])) {
-            $max_order             = self::get_max_field_order();
+            $max_order = self::get_max_field_order();
             $params['field_order'] = $max_order;
         }
 
@@ -475,16 +492,16 @@ class ExtraField extends Model
 
     /**
      * @param array $params
-     * @param bool $show_query
+     * @param bool  $show_query
      *
      * @return bool
      */
     public function save($params, $show_query = false)
     {
-        $session_field_info = self::get_handler_field_info_by_field_variable($params['field_variable']);
+        $fieldInfo = self::get_handler_field_info_by_field_variable($params['field_variable']);
         $params = self::clean_parameters($params);
-        if ($session_field_info) {
-            return $session_field_info['id'];
+        if ($fieldInfo) {
+            return $fieldInfo['id'];
         } else {
             if (!isset($params['tms'])) {
                 $params['tms'] = api_get_utc_datetime();
@@ -502,6 +519,7 @@ class ExtraField extends Model
 
     /**
      * @param $params
+     *
      * @return bool|void
      */
     public function update($params)
@@ -517,6 +535,7 @@ class ExtraField extends Model
 
     /**
      * @param $id
+     *
      * @return bool|void
      */
     public function delete($id)
@@ -1341,20 +1360,20 @@ EOF;
         //With this function we can add actions to the jgrid (edit, delete, etc)
         return 'function action_formatter(cellvalue, options, rowObject) {
          return \'<a href="?action=edit&type='.$this->type.'&id=\'+options.rowId+\'">'.Display::return_icon(
-                'edit.png',
-                get_lang('Edit'),
-                '',
-                ICON_SIZE_SMALL
-            ).'</a>'.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(
-                api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
-            )."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon(
-                'delete.png',
-                get_lang('Delete'),
-                '',
-                ICON_SIZE_SMALL
-            ).'</a>'.
-            '\';
+            'edit.png',
+            get_lang('Edit'),
+            '',
+            ICON_SIZE_SMALL
+        ).'</a>'.
+        '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(
+            api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
+        )."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon(
+            'delete.png',
+            get_lang('Delete'),
+            '',
+            ICON_SIZE_SMALL
+        ).'</a>'.
+        '\';
         }';
     }
 

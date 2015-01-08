@@ -16,7 +16,12 @@ if (api_is_allowed_to_edit(null, true)) {
         $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
     }
     echo '<div class="actions">';
-    echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=attendance_add">'.Display::return_icon('new_attendance_list.png',get_lang('CreateANewAttendance'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=attendance_add">'.
+        Display::return_icon('new_attendance_list.png',get_lang('CreateANewAttendance'),'',ICON_SIZE_MEDIUM).'</a>';
+
+    echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=calendar_logins">'.
+        Display::return_icon('attendance_list.png',get_lang('Logins'),'',ICON_SIZE_MEDIUM).'</a>';
+
     echo '</div>';
 }
 $attendance = new Attendance();
@@ -25,7 +30,12 @@ if ($attendance->get_number_of_attendances() == 0) {
     $attendance->set_description(get_lang('Attendances'));
     $attendance->attendance_add();
 }
-$table = new SortableTable('attendance_list', array('Attendance', 'get_number_of_attendances'), array('Attendance', 'get_attendance_data'), $default_column);
+$table = new SortableTable(
+    'attendance_list',
+    array('Attendance', 'get_number_of_attendances'),
+    array('Attendance', 'get_attendance_data'),
+    $default_column
+);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, array('style'=>'width:20px;'));
 $table->set_header(1, get_lang('Name'), true );

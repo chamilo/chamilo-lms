@@ -71,12 +71,20 @@ $extra_params['height'] = 'auto';
 $htmlHeadXtra[] = '<script>
 $(function() {
     '.Display::grid_js('user_course_report',  $url, $columns, $column_model, $extra_params, array(), null, true).'
-    jQuery("#user_course_report").jqGrid("navGrid","#user_course_report_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
-    jQuery("#user_course_report").jqGrid("navButtonAdd","#user_course_report_pager",{
-           caption:"",
-           onClickButton : function () {
-               jQuery("#user_course_report").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
-           }
+    jQuery("#user_course_report").jqGrid("navGrid","#user_course_report_pager",{
+        view:false,
+        edit:false,
+        add:false,
+        del:false,
+        search:false,
+        excel:true
+    });
+
+    jQuery("#user_course_report").jqGrid("navButtonAdd","#user_course_report_pager", {
+       caption:"",
+       onClickButton : function () {
+           jQuery("#user_course_report").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
+       }
     });
 });
 </script>';

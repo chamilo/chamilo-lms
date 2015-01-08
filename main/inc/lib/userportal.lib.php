@@ -3,6 +3,9 @@
 
 use \ChamiloSession as Session;
 
+/**
+ * Class IndexManager
+ */
 class IndexManager
 {
     //An instance of the template engine
@@ -1020,7 +1023,6 @@ class IndexManager
                 if ($session_category_id == 0 &&
                     isset($session_category['sessions'])
                 ) {
-
                     // Independent sessions
                     foreach ($session_category['sessions'] as $session) {
                         $session_id = $session['session_id'];
@@ -1062,7 +1064,6 @@ class IndexManager
                                         }
                                     }
                                 }
-
                             }
                             if ($session_now > $allowed_time && $days_access_after_end > $dif_time_after - 1) {
                                 // Read only and accessible.
@@ -1076,7 +1077,7 @@ class IndexManager
                                         true,
                                         $this->load_directories_preview
                                     );
-                                    $html_courses_session .= $c[1];
+                                    $html_courses_session .= isset($c[1]) ? $c[1] : null;
                                 }
                                 $count_courses_session++;
                             }
@@ -1163,13 +1164,17 @@ class IndexManager
                                     if ($date_session_start != '0000-00-00') {
                                         $allowed_time = api_strtotime($date_session_start . ' 00:00:00') - ($days_access_before_beginning * 86400);
                                     }
-                                    if ($date_session_end != '0000-00-00') {
-                                        $endSessionToTms = api_strtotime($date_session_end . ' 23:59:59');
-                                        if ($session_now > $endSessionToTms) {
-                                            $dif_time_after = $session_now - $endSessionToTms;
-                                            $dif_time_after = round(
-                                                $dif_time_after / 86400
+                                    if (!isset($_GET['history'])) {
+                                        if ($date_session_end != '0000-00-00') {
+                                            $endSessionToTms = api_strtotime(
+                                                $date_session_end . ' 23:59:59'
                                             );
+                                            if ($session_now > $endSessionToTms) {
+                                                $dif_time_after = $session_now - $endSessionToTms;
+                                                $dif_time_after = round(
+                                                    $dif_time_after / 86400
+                                                );
+                                            }
                                         }
                                     }
                                 } else {
@@ -1178,7 +1183,9 @@ class IndexManager
                                     );
                                 }
 
-                                if ($session_now > $allowed_time && $days_access_after_end > $dif_time_after - 1) {
+                                if ($session_now > $allowed_time &&
+                                    $days_access_after_end > $dif_time_after - 1
+                                ) {
                                     if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                         $c = CourseManager:: get_logged_user_course_html(
                                             $course,

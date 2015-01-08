@@ -1120,28 +1120,25 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
                 $link .= "../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"];
             }
             break;
-
         case 'HotPotatoes':
-              $TBL_DOCUMENT  = Database::get_course_table(TABLE_DOCUMENT);
+            $TBL_DOCUMENT  = Database::get_course_table(TABLE_DOCUMENT);
             $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
             $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $path = $myrow['path'];
-              $name = GetQuizName($path, $documentPath);
-
-            if ($builder=='builder') { $origin='builder'; }
-
+            $name = GetQuizName($path, $documentPath);
+            if ($builder == 'builder') {
+                $origin = 'builder';
+            }
             $cid = $_course['official_code'];
-
             if ($builder != 'builder') {
                 $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path";
             } else {
                 $link .= "../exercice/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id'];
             }
             break;
-
         case 'Forum':
-        //deprecated
+            //deprecated
             $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);  // TODO: This is the old table name, it should be corrected.
             $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
             $myrow = Database::fetch_array($result);
@@ -1585,11 +1582,6 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             $in_frames = in_array($ext, array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png'));
             $output = '<img src="../img/'.$image.'" align="middle" /> <a href="../document/'.($in_frames ? 'showinframes.php?file=' : 'download.php?doc_url=').$myrow['path'].'"'.$styling.' '.$target.'>'.$filename."</a><br />\n";
             break;
-        /*
-        case 'Externallink':
-            $output = '<img src="../img/links.gif" align="middle" /> <a href="'.$id.'"'.$styling.' '.$target.'>'.$id."</a><br />\n";
-            break;
-        */
     }
     return $output;
 }
@@ -1602,26 +1594,31 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
  * In each case, we query the corresponding table for information and build the link
  * with that information.
  * @author	Yannick Warnier <ywarnier@beeznest.org> - rebranding based on previous work (display_addedresource_link_in_learnpath())
- * @param	int	Course code
- * @param	int The learning path ID (in lp table)
- * @param   int id_in_path  - the unique index in the items table
+ * @param	int	$course_id Course code
+ * @param	int $learnpath_id The learning path ID (in lp table)
+ * @param   int $id_in_path the unique index in the items table
+ * @param int $lpViewId
  */
-function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_path)
+function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_path, $lpViewId)
 {
-    $tbl_lp_item 	= Database::get_course_table(TABLE_LP_ITEM);
-
+    $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     $course_info = api_get_course_info_by_id($course_id);
     $course_id = $course_info['real_id'];
     $course_code = $course_info['code'];
     $session_id = api_get_session_id();
+    $learnpath_id = intval($learnpath_id);
+    $id_in_path = intval($id_in_path);
+    $lpViewId = intval($lpViewId);
 
-    $learnpath_id 	= intval($learnpath_id);
-    $id_in_path		= intval($id_in_path);
-
-    $sql_item = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $learnpath_id AND id = $id_in_path";
-    $res_item = Database::query($sql_item);
+    $sql = "SELECT * FROM $tbl_lp_item
+             WHERE
+                c_id = $course_id AND
+                lp_id = $learnpath_id AND
+                id = $id_in_path
+            ";
+    $res_item = Database::query($sql);
     if (Database::num_rows($res_item) < 1) {
-        return -1; //exit
+        return -1;
     }
     $row_item = Database::fetch_array($res_item);
 
@@ -1630,9 +1627,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
     $origin = 'learnpath';
     $main_dir_path = api_get_path(WEB_CODE_PATH);
     $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
-
     $link = '';
-
     switch ($type) {
         case 'dokeos_chapter':
             $link .= $main_dir_path.'newscorm/blank.php';
@@ -1655,7 +1650,6 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
                 $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id";
                 $result= Database::query($sql);
                 $myrow=Database::fetch_array($result);
-
                 if ($row_item['title'] != '') {
                     $myrow['title'] = $row_item['title'];
                 }
@@ -1664,12 +1658,12 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             break;
         case 'hotpotatoes': //lowercase because of strtolower above
             $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-            $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND  id=$id");
+            $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $path = $myrow['path'];
             $link .= $main_dir_path.'exercice/showinframes.php?file='.$path.'' .
                     '&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().'' .
-                    '&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path;
+                    '&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&lp_view_id='.$lpViewId;
             break;
         case TOOL_FORUM:
             $link .= $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&origin=learnpath';

@@ -18,8 +18,14 @@ require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/scoredisplay.class.php';
 
 api_block_anonymous_users();
-block_students();
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    api_get_course_info()
+);
 
+if (!$isDrhOfCourse) {
+    block_students();
+}
 $interbreadcrumb[]= array (
     'url' => $_SESSION['gradebook_dest'],
     'name' => get_lang('Gradebook'

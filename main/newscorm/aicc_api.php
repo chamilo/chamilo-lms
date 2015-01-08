@@ -23,8 +23,6 @@
  * made by another set of scripts.
  */
 
-/* INIT SECTION */
-
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
@@ -36,9 +34,9 @@ require_once 'learnpathItem.class.php';
 require_once 'aicc.class.php';
 
 // Is this needed? This is probabaly done in the header file.
-$file							= $_SESSION['file'];
-$oLP							= unserialize($_SESSION['lpobject']);
-$oItem 							= $oLP->items[$oLP->current];
+$file = $_SESSION['file'];
+$oLP = unserialize($_SESSION['lpobject']);
+$oItem = $oLP->items[$oLP->current];
 if (!is_object($oItem)) {
     error_log('New LP - scorm_api - Could not load oItem item', 0);
     exit;

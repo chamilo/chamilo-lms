@@ -1,31 +1,27 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Definition of the AddCourseToSession class
- * @package chamilo.library
- */
-/**
- * Init
- */
+
 require_once dirname(__FILE__).'/xajax/xajax.inc.php';
 //require_once (api_get_path(SYS_CODE_PATH).'admin/add_courses_to_session.php');
 
 /**
- * AddCourseToSession class
+ * Class AddCourseToSession
  */
-class AddCourseToSession {
-    /**
-     * Searches a course, given a search string and a type of search box
-     * @param string Search string
-     * @param string Type of search box ('single' or anything else)
-     * @return string XajaxResponse
-     * @assert () !== null
-     * @assert ('abc', 'single') !== null
-     * @assert ('abc', 'multiple') !== null
-     */
-    public function search_courses($needle,$type) {
+class AddCourseToSession
+{
+	/**
+	 * Searches a course, given a search string and a type of search box
+	 * @param string $needle Search string
+	 * @param string $type Type of search box ('single' or anything else)
+	 * @return string XajaxResponse
+	 * @assert () !== null
+	 * @assert ('abc', 'single') !== null
+	 * @assert ('abc', 'multiple') !== null
+	 */
+	public static function search_courses($needle, $type)
+	{
 		global $tbl_course, $tbl_session_rel_course, $id_session;
-
+		$course_title = null;
 		$xajax_response = new XajaxResponse();
 		$return = '';
 		if(!empty($needle) && !empty($type)) {
@@ -35,9 +31,10 @@ class AddCourseToSession {
 
 			$cond_course_code = '';
 			if (!empty($id_session)) {
-			$id_session = Database::escape_string($id_session);
+				$id_session = Database::escape_string($id_session);
 				// check course_code from session_rel_course table
-				$sql = 'SELECT course_code FROM '.$tbl_session_rel_course.' WHERE id_session ="'.(int)$id_session.'"';
+				$sql = 'SELECT course_code FROM '.$tbl_session_rel_course.'
+						WHERE id_session ="'.(int)$id_session.'"';
 				$res = Database::query($sql);
 				$course_codes = '';
 				if (Database::num_rows($res) > 0) {
@@ -51,19 +48,21 @@ class AddCourseToSession {
 			}
 
 			if ($type=='single') {
-			// search users where username or firstname or lastname begins likes $needle
-			$sql = 'SELECT course.code, course.visual_code, course.title, session_rel_course.id_session
+				// search users where username or firstname or lastname begins likes $needle
+				$sql = 'SELECT course.code, course.visual_code, course.title, session_rel_course.id_session
 					FROM '.$tbl_course.' course
 					LEFT JOIN '.$tbl_session_rel_course.' session_rel_course
 						ON course.code = session_rel_course.course_code
 						AND session_rel_course.id_session = '.intval($id_session).'
-					WHERE course.visual_code LIKE "'.$needle.'%"
-					OR course.title LIKE "'.$needle.'%"';
+					WHERE
+						course.visual_code LIKE "'.$needle.'%" OR
+						course.title LIKE "'.$needle.'%"';
 			} else {
-
-			$sql = 'SELECT course.code, course.visual_code, course.title
-					FROM '.$tbl_course.' course
-					WHERE course.visual_code LIKE "'.$needle.'%" '.$cond_course_code.' ORDER BY course.code ';
+				$sql = 'SELECT course.code, course.visual_code, course.title
+						FROM '.$tbl_course.' course
+						WHERE
+							course.visual_code LIKE "'.$needle.'%" '.$cond_course_code.'
+						ORDER BY course.code ';
 			}
 
 			global $_configuration;
@@ -79,13 +78,18 @@ class AddCourseToSession {
 									ON course.code = session_rel_course.course_code
 									AND session_rel_course.id_session = '.intval($id_session).'
 								INNER JOIN '.$tbl_course_rel_access_url.' url_course ON (url_course.course_code=course.code)
-								WHERE access_url_id = '.$access_url_id.' AND (course.visual_code LIKE "'.$needle.'%"
-								OR course.title LIKE "'.$needle.'%" )';
+								WHERE
+									access_url_id = '.$access_url_id.' AND
+									(course.visual_code LIKE "'.$needle.'%" OR
+									course.title LIKE "'.$needle.'%" )';
 					} else {
 						$sql = 'SELECT course.code, course.visual_code, course.title
 								FROM '.$tbl_course.' course, '.$tbl_course_rel_access_url.' url_course
-								WHERE url_course.course_code=course.code AND access_url_id = '.$access_url_id.'
-								AND course.visual_code LIKE "'.$needle.'%" '.$cond_course_code.' ORDER BY course.code ';
+								WHERE
+									url_course.course_code=course.code AND
+									access_url_id = '.$access_url_id.' AND
+									course.visual_code LIKE "'.$needle.'%" '.$cond_course_code.'
+								ORDER BY course.code ';
 					}
 				}
 			}
@@ -99,11 +103,8 @@ class AddCourseToSession {
 					$course_title=str_replace("'","\'",$course_title);
 					$return .= '<a href="javascript: void(0);" onclick="javascript: add_course_to_session(\''.$course['code'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
 				}
-
 				$xajax_response -> addAssign('ajax_list_courses_single','innerHTML',api_utf8_encode($return));
-
 			} else {
-
 				$return .= '<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:340px;">';
 				while($course = Database :: fetch_array($rs)) {
 					$course_list[] = $course['code'];
@@ -116,6 +117,7 @@ class AddCourseToSession {
 			}
 		}
 		$_SESSION['course_list'] = $course_list;
+
 		return $xajax_response;
 	}
 }

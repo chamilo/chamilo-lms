@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
@@ -47,9 +48,7 @@ function remove_image_form(id_elem1) {
 	if (filepaths.childNodes.length < 3) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
-			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">' . get_lang(
-        'AddOneMoreFile'
-    ) . '</a>\';
+			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</a>\';
 		}
 	}
 }
@@ -67,10 +66,7 @@ function add_image_form() {
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"' . api_get_path(
-        WEB_CODE_PATH
-    ) . 'img/delete.gif\"></a>";
-
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif\"></a>";
 	if (filepaths.childNodes.length == 3) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -92,34 +88,33 @@ jQuery(document).ready(function() {
     $("#tab_browse").bind("tabsselect", function(event, ui) {
 		window.location.href=ui.tab;
     });
+
 	$("#tabs").tabs();
 	$("#tab_browse").tabs();
-
     var valor = "' . $anchor . '";
 
     $(".head").click(function() {
-				$(this).next().next().slideToggle("fast");
-				image_clicked = $("#" + this.id + " img").attr("src");
-				image_clicked_info = image_clicked.split("/");
-				image_real_clicked = image_clicked_info[image_clicked_info.length-1];
-				image_path = image_clicked.split("img");
-				current_path = image_path[0]+"img/";
-				if (image_real_clicked == "div_show.gif") {
-					current_path = current_path+"div_hide.gif";
-					$("#" + this.id + " img").attr("src", current_path);
-				} else {
-					current_path = current_path+"div_show.gif";
-					$("#" + this.id + " img").attr("src", current_path)
-				}
-				return false;
-		 	}).next().next().hide();
+        $(this).next().next().slideToggle("fast");
+        image_clicked = $("#" + this.id + " img").attr("src");
+        image_clicked_info = image_clicked.split("/");
+        image_real_clicked = image_clicked_info[image_clicked_info.length-1];
+        image_path = image_clicked.split("img");
+        current_path = image_path[0]+"img/";
+        if (image_real_clicked == "div_show.gif") {
+            current_path = current_path+"div_hide.gif";
+            $("#" + this.id + " img").attr("src", current_path);
+        } else {
+            current_path = current_path+"div_show.gif";
+            $("#" + this.id + " img").attr("src", current_path)
+        }
+        return false;
+    }).next().next().hide();
 
    // anchor for current topic
    if (valor) {
    		$("#"+valor).show();
    		window.location = document.URL+"#"+valor;
    }
-
 });
 </script>';
 

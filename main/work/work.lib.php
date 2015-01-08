@@ -1691,6 +1691,11 @@ function getWorkListStudent(
     $group_id = api_get_group_id();
     $userId = api_get_user_id();
 
+    $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+        api_get_user_id(),
+        $courseInfo
+    );
+
     if (!in_array($direction, array('asc','desc'))) {
         $direction = 'desc';
     }
@@ -1742,7 +1747,12 @@ function getWorkListStudent(
     }
 
     $works = array();
+
     $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq();
+    if ($isDrhOfCourse) {
+        $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
+    }
+
     $urlOthers = api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id=';
     while ($work = Database::fetch_array($result, 'ASSOC')) {
         $isSubscribed = userIsSubscribedToWork($userId, $work['id'], $course_id);
@@ -1751,6 +1761,7 @@ function getWorkListStudent(
         }
         $work['type'] = Display::return_icon('work.png');
         $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
+
         if (empty($work['title'])) {
             $work['title'] = basename($work['url']);
         }
@@ -1765,7 +1776,6 @@ function getWorkListStudent(
             $work['id'],
             $whereCondition
         );
-
 
         if (ADD_DOCUMENT_TO_WORK) {
            $count = getTotalWorkComment($workList, $courseInfo);
@@ -1818,12 +1828,12 @@ function getWorkListTeacher(
 ) {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-    $courseInfo = api_get_course_info();
+
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
-    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+    $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
 
     if (!in_array($direction, array('asc', 'desc'))) {
         $direction = 'desc';
@@ -1921,9 +1931,18 @@ function getWorkListTeacher(
                 );
             }
             $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
-            $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \''.$deleteUrl.'\' ) " >'.
-                Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+            $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \'' . $deleteUrl . '\' ) " >' .
+                Display::return_icon(
+                    'delete.png',
+                    get_lang('Delete'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ) . '</a>';
 
+            if (!api_is_allowed_to_edit()) {
+                $deleteLink = null;
+                $editLink = null;
+            }
             $work['actions'] = $downloadLink.$editLink.$deleteLink;
             $works[] = $work;
         }
@@ -2174,9 +2193,14 @@ function get_work_user_list(
     }
 
     $work_data = get_work_data_by_id($work_id);
-    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+    $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
     $condition_session  = api_get_session_condition($session_id);
     $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
+
+    $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+        api_get_user_id(),
+        $course_info
+    );
 
     if (!empty($work_data)) {
         if (!empty($group_id)) {
@@ -2186,10 +2210,12 @@ function get_work_user_list(
             $extra_conditions = " work.post_group_id = '0' ";
         }
 
-        if ($is_allowed_to_edit) {
+        if ($is_allowed_to_edit || $isDrhOfCourse) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
-            if (isset($course_info['show_score']) &&  $course_info['show_score'] == 1) {
+            if (isset($course_info['show_score']) &&
+                $course_info['show_score'] == 1
+            ) {
                 $extra_conditions .= " AND (u.user_id = ".api_get_user_id()." AND work.active IN (0, 1)) ";
             } else {
                 $extra_conditions .= ' AND work.active IN (0, 1) ';
@@ -2239,7 +2265,6 @@ function get_work_user_list(
         if (!empty($start) && !empty($limit)) {
             $sql .= "LIMIT $start, $limit";
         }
-
         $result = Database::query($sql);
         $works = array();
 
@@ -2252,7 +2277,6 @@ function get_work_user_list(
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
-            //$workItem = get_work_data_by_id($item_id);
 
             // Get the author ID for that document from the item_property table
             $is_author  = false;
@@ -2278,7 +2302,9 @@ function get_work_user_list(
             }
 
             $qualification_exists = false;
-            if (!empty($work_data['qualification']) && intval($work_data['qualification']) > 0) {
+            if (!empty($work_data['qualification']) &&
+                intval($work_data['qualification']) > 0
+            ) {
                 $qualification_exists = true;
             }
 
@@ -2314,9 +2340,8 @@ function get_work_user_list(
 
             if (($can_read && $work['accepted'] == '1') ||
                 ($is_author && in_array($work['accepted'], array('1', '0'))) ||
-                $is_allowed_to_edit
+                ($is_allowed_to_edit || api_is_drh())
             ) {
-
                 // Firstname, lastname, username
                 $work['firstname'] = Display::div($work['firstname'], array('class' => $class));
                 $work['lastname'] = Display::div($work['lastname'], array('class' => $class));
@@ -2361,7 +2386,7 @@ function get_work_user_list(
                 // Actions.
 
                 $action = '';
-                if ($is_allowed_to_edit) {
+                if (api_is_allowed_to_edit()) {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
 
@@ -3616,6 +3641,7 @@ function getWorkCommentForm($work)
         $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
     }
     $form->addElement('button', 'button', get_lang('Send'));
+
     return $form->return_form();
 }
 
@@ -4666,15 +4692,17 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
     } else {
         $limitString = null;
         if (!empty($start) && !empty($limit)) {
+            $start = intval($start);
+            $limit = intval($limit);
             $limitString = " LIMIT $start, $limit";
         }
 
         $orderBy = null;
 
         if (!empty($sidx) && !empty($sord)) {
-            $sidx = Database::escape_string($sidx);
-            $sord = Database::escape_string($sord);
-            $orderBy = "ORDER BY $sidx $sord";
+            if (in_array($sidx, array('firstname', 'lastname'))) {
+                $orderBy = "ORDER BY $sidx $sord";
+            }
         }
 
         if (empty($sessionId)) {

@@ -56,7 +56,6 @@ $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' O
 
 $session_list = SessionManager::get_sessions_list();
 
-
 $html = '';
 $show_users_with_problems = isset($_REQUEST['show_users_with_problems']) && $_REQUEST['show_users_with_problems'] == 1 ? true : false;
 if ($show_users_with_problems) {

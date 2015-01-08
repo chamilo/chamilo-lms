@@ -29,13 +29,14 @@ require_once 'Work.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 
 /**
- * Class which can build a course-object from a Chamilo-course.
+ * Class CourseBuilder
+ * Builds a course-object from a Chamilo-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
 class CourseBuilder
 {
-    /** Course */
+    /** @var Course  */
     public $course;
 
     /* With this array you can filter the tools you want to be parsed by
@@ -67,8 +68,10 @@ class CourseBuilder
 
     /**
      * Create a new CourseBuilder
+     * @param string $type
+     * @param null $course
      */
-	public function __construct($type='', $course = null)
+    public function __construct($type='', $course = null)
     {
         $_course = api_get_course_info();
 
@@ -87,7 +90,6 @@ class CourseBuilder
     }
 
     /**
-     *
      * @param array $array
      */
     public function set_tools_to_build($array)
@@ -121,7 +123,7 @@ class CourseBuilder
      * @param bool     true if you want to get the elements that exists in the course and
      *                 in the session, (session_id = 0 or session_id = X)
      */
-	public function build($session_id = 0, $course_code = '', $with_base_content = false)
+    public function build($session_id = 0, $course_code = '', $with_base_content = false)
     {
         $table_link       = Database :: get_course_table(TABLE_LINKED_RESOURCES);
         $table_properties = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -467,7 +469,7 @@ class CourseBuilder
             //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
         } else {
             $sql = "SELECT * FROM $table_qui WHERE c_id = $course_id AND active >=0 AND session_id = 0";
-             //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
+            //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
         }
 
         $db_result = Database::query($sql);
@@ -747,11 +749,11 @@ class CourseBuilder
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $survey = new Survey($obj->survey_id, $obj->code,$obj->title,
-                                $obj->subtitle, $obj->author, $obj->lang,
-                                $obj->avail_from, $obj->avail_till, $obj->is_shared,
-                                $obj->template, $obj->intro, $obj->surveythanks,
-                                $obj->creation_date, $obj->invited, $obj->answered,
-                                $obj->invite_mail, $obj->reminder_mail);
+                $obj->subtitle, $obj->author, $obj->lang,
+                $obj->avail_from, $obj->avail_till, $obj->is_shared,
+                $obj->template, $obj->intro, $obj->surveythanks,
+                $obj->creation_date, $obj->invited, $obj->answered,
+                $obj->invite_mail, $obj->reminder_mail);
             $sql = 'SELECT * FROM '.$table_question.' WHERE c_id = '.$course_id.' AND survey_id = '.$obj->survey_id;
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)){
@@ -925,75 +927,75 @@ class CourseBuilder
 
         $db_result = Database::query($sql);
         if ($db_result)
-        while ($obj = Database::fetch_object($db_result)) {
-            $items = array();
-            $sql_items = "SELECT * FROM ".$table_item." WHERE c_id = '$course_id' AND lp_id = ".$obj->id;
-            $db_items = Database::query($sql_items);
-            while ($obj_item = Database::fetch_object($db_items)) {
-                $item['id']                   = $obj_item->id;
-                $item['item_type']            = $obj_item->item_type;
-                $item['ref']                = $obj_item->ref;
-                $item['title']                = $obj_item->title;
-                $item['description']        = $obj_item->description;
-                $item['path']                = $obj_item->path;
-                $item['min_score']            = $obj_item->min_score;
-                $item['max_score']            = $obj_item->max_score;
-                $item['mastery_score']        = $obj_item->mastery_score;
-                $item['parent_item_id']    = $obj_item->parent_item_id;
-                $item['previous_item_id']  = $obj_item->previous_item_id;
-                $item['next_item_id']        = $obj_item->next_item_id;
-                $item['display_order']     = $obj_item->display_order;
-                $item['prerequisite']       = $obj_item->prerequisite;
-                $item['parameters']        = $obj_item->parameters;
-                $item['launch_data']        = $obj_item->launch_data;
-                $item['audio']                = $obj_item->audio;
-                $items[] = $item;
-            }
+            while ($obj = Database::fetch_object($db_result)) {
+                $items = array();
+                $sql_items = "SELECT * FROM ".$table_item." WHERE c_id = '$course_id' AND lp_id = ".$obj->id;
+                $db_items = Database::query($sql_items);
+                while ($obj_item = Database::fetch_object($db_items)) {
+                    $item['id']                   = $obj_item->id;
+                    $item['item_type']            = $obj_item->item_type;
+                    $item['ref']                = $obj_item->ref;
+                    $item['title']                = $obj_item->title;
+                    $item['description']        = $obj_item->description;
+                    $item['path']                = $obj_item->path;
+                    $item['min_score']            = $obj_item->min_score;
+                    $item['max_score']            = $obj_item->max_score;
+                    $item['mastery_score']        = $obj_item->mastery_score;
+                    $item['parent_item_id']    = $obj_item->parent_item_id;
+                    $item['previous_item_id']  = $obj_item->previous_item_id;
+                    $item['next_item_id']        = $obj_item->next_item_id;
+                    $item['display_order']     = $obj_item->display_order;
+                    $item['prerequisite']       = $obj_item->prerequisite;
+                    $item['parameters']        = $obj_item->parameters;
+                    $item['launch_data']        = $obj_item->launch_data;
+                    $item['audio']                = $obj_item->audio;
+                    $items[] = $item;
+                }
 
-            $sql_tool = "SELECT id FROM $table_tool
+                $sql_tool = "SELECT id FROM $table_tool
                          WHERE
                             c_id = $course_id AND
                             (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' AND image='scormbuilder.gif') AND
                             visibility = '1' ";
-            $db_tool = Database::query($sql_tool);
+                $db_tool = Database::query($sql_tool);
 
-            if (Database::num_rows($db_tool)) {
-                $visibility = '1';
-            } else {
-                $visibility = '0';
+                if (Database::num_rows($db_tool)) {
+                    $visibility = '1';
+                } else {
+                    $visibility = '0';
+                }
+
+                $lp = new CourseCopyLearnpath(
+                    $obj->id,
+                    $obj->lp_type,
+                    $obj->name,
+                    $obj->path,
+                    $obj->ref,
+                    $obj->description,
+                    $obj->content_local,
+                    $obj->default_encoding,
+                    $obj->default_view_mod,
+                    $obj->prevent_reinit,
+                    $obj->force_commit,
+                    $obj->content_maker,
+                    $obj->display_order,
+                    $obj->js_lib,
+                    $obj->content_license,
+                    $obj->debug,
+                    $visibility,
+                    $obj->author,
+                    $obj->preview_image,
+                    $obj->use_max_score,
+                    $obj->autolunch,
+                    $obj->created_on,
+                    $obj->modified_on,
+                    $obj->publicated_on,
+                    $obj->expired_on,
+                    $obj->session_id,
+                    $items
+                );
+                $this->course->add_resource($lp);
             }
-
-            $lp = new CourseCopyLearnpath(
-                $obj->id,
-                $obj->lp_type,
-                $obj->name,
-                $obj->path,
-                $obj->ref,
-                $obj->description,
-                $obj->content_local,
-                $obj->default_encoding,
-                $obj->default_view_mod,
-                $obj->prevent_reinit,
-                $obj->force_commit,
-                $obj->content_maker,
-                $obj->display_order,
-                $obj->js_lib,
-                $obj->content_license,
-                $obj->debug,
-                $visibility,
-                $obj->author,
-                $obj->preview_image,
-                $obj->use_max_score,
-                $obj->autolunch,
-                $obj->created_on,
-                $obj->modified_on,
-                $obj->publicated_on,
-                $obj->expired_on,
-                $obj->session_id,
-                $items
-            );
-            $this->course->add_resource($lp);
-        }
 
         // Save scorm directory (previously build_scorm_documents())
         $i = 1;
@@ -1092,7 +1094,7 @@ class CourseBuilder
         $course_id         = $course_info['real_id'];
 
         if (!empty($session_id) && !empty($course_code)) {
-             $session_id = intval($session_id);
+            $session_id = intval($session_id);
             if ($with_base_content) {
                 $session_condition = api_get_session_condition($session_id, true, true);
             } else {
@@ -1111,8 +1113,8 @@ class CourseBuilder
     }
 
     /**
-    * Build the Surveys
-    */
+     * Build the Surveys
+     */
     public function build_thematic($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
     {
         $table_thematic            = Database :: get_course_table(TABLE_THEMATIC);
@@ -1149,7 +1151,7 @@ class CourseBuilder
                     //$thematic_plan_complete_list[$item['ref']] = $item;
                 }
             }
-             if (count($thematic_plan_id_list) > 0) {
+            if (count($thematic_plan_id_list) > 0) {
                 $sql = "SELECT tp.*
                         FROM $table_thematic_plan tp
                             INNER JOIN $table_thematic t ON (t.id=tp.thematic_id)
@@ -1169,8 +1171,8 @@ class CourseBuilder
     }
 
     /**
-    * Build the attendances
-    */
+     * Build the attendances
+     */
     public function build_attendance($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
     {
         $table_attendance            = Database :: get_course_table(TABLE_ATTENDANCE);
@@ -1196,21 +1198,23 @@ class CourseBuilder
 
     /**
      * Build the works (or "student publications", or "assignments")
+     *
+     * @param int $session_id
+     * @param string $course_code
+     * @param bool $with_base_content
+     * @param array $id_list
      */
     public function build_works($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
     {
         $table_work  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-        //$table_work_assignment  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-
         $course_id = api_get_course_int_id();
-
         $sessionCondition = api_get_session_condition($session_id, true, $with_base_content);
 
         $sql = "SELECT * FROM $table_work
                 WHERE
-                    c_id = $course_id 
+                    c_id = $course_id
                     $sessionCondition AND
-                    filetype = \'folder\' AND
+                    filetype = 'folder' AND
                     parent_id = 0 AND
                     active = 1";
         $db_result = Database::query($sql);

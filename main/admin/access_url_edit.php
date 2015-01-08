@@ -159,3 +159,5 @@ $form->addElement('file','url_image_3','URL Image 3 (PNG)');
 // Submit button
 $form->addElement('style_submit_button', 'submit', $submit_name, 'class="add"');
 $form->display();
+
+Display::display_footer();

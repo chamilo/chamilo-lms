@@ -15,7 +15,7 @@ require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
-$is_allowed_to_edit = api_is_allowed_to_edit();
+$is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -28,7 +28,12 @@ if (empty($my_folder_data)) {
 
 $work_data = get_work_assignment_by_id($workId);
 
-if (!api_is_allowed_to_edit()) {
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    api_get_course_info()
+);
+
+if (!($is_allowed_to_edit || $isDrhOfCourse)) {
     api_not_allowed(true);
 }
 
@@ -153,17 +158,12 @@ switch ($action) {
             foreach ($documents as $document) {
                 $document['document_id'];
             }
-            VAR_DUMP($documents);
             $studentWorks = getAllUserToWork(
                 $my_folder_data['id'],
                 $courseInfo['real_id']
             );
-            VAR_DUMP($studentWorks);
-
         }
-        VAR_DUMP($my_folder_data);exit;
-
-        $pdf->content_to_pdf($header, null, $my_folder_data['title'], $courseCode);
+        //$pdf->content_to_pdf($header, null, $my_folder_data['title'], $courseCode);
         exit;
         break;
 }
@@ -178,12 +178,11 @@ echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
 
-if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
+if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
     /*echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'">';
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';*/
 
     if (ADD_DOCUMENT_TO_WORK) {
-
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
         echo Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
 

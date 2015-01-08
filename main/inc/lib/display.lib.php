@@ -67,7 +67,6 @@ class Display
             preg_match('/main\/([^*\/]+)/', $currentURL, $matches);
             $toolList = self::toolList();
             if (!empty($matches)) {
-
                 foreach ($matches as $match) {
                     if (in_array($match, $toolList)) {
                         $help = explode('_', $match);
@@ -598,8 +597,6 @@ class Display
         }
         return '<a href="'.api_get_path(WEB_PATH).'index.php">'.$name.'</a>';
     }
-
-
 
     /**
      * Prints an <option>-list with all letters (A-Z).
@@ -1758,7 +1755,8 @@ class Display
      * @param string $type
      * @return string
      */
-    public static function label($content, $type = null) {
+    public static function label($content, $type = null)
+    {
         $class = '';
         switch ($type) {
             case 'success':
@@ -1791,7 +1789,8 @@ class Display
      * @param array $items
      * @return null|string
      */
-    public static function actions($items) {
+    public static function actions($items)
+    {
         $html = null;
         if (!empty($items)) {
             $html = '<div class="new_actions"><ul class="nav nav-pills">';
@@ -1856,7 +1855,8 @@ class Display
     /**
      * @todo use twig
      */
-    public static function group_button($title, $elements) {
+    public static function group_button($title, $elements)
+    {
         $html = '<div class="btn-toolbar">
             <div class="btn-group">
             <button class="btn dropdown-toggle" data-toggle="dropdown">'.$title.' <span class="caret"></span></button>

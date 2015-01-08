@@ -7,9 +7,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  * @license	GNU/GPL
  */
-/**
- * Code
- */
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
@@ -32,13 +30,12 @@ $scorm_css_header = true;
 Display::display_reduced_header();
 
 echo '<body dir="'.api_get_text_direction().'">';
-
-	echo '<div id="audiorecorder">	';
-    $audio_recorder_studentview = 'true';
-    $audio_recorder_item_id = $_SESSION['oLP']->current;
-    if (api_get_setting('service_visio', 'active') == 'true') {
-    	require_once 'audiorecorder.inc.php';
-	}
-    echo '</div>';
-    // end of audiorecorder include
+echo '<div id="audiorecorder">	';
+$audio_recorder_studentview = 'true';
+$audio_recorder_item_id = $_SESSION['oLP']->current;
+if (api_get_setting('service_visio', 'active') == 'true') {
+    require_once 'audiorecorder.inc.php';
+}
+echo '</div>';
+// end of audiorecorder include
 echo '</body></html>';

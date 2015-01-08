@@ -33,6 +33,7 @@ require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
 api_block_anonymous_users();
 
+
 if (!api_is_allowed_to_create_course() && !api_is_session_admin() && !api_is_drh()) {
     // Check if the user is tutor of the course
     $user_course_status = CourseManager::get_tutor_in_course_status(
@@ -85,7 +86,7 @@ if (isset($_GET['details'])) {
             "name" => get_lang("Users")
         );
     } else
-        if (!empty ($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
+        if (!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
             $course_info = CourseManager :: get_course_information($get_course_code);
             $interbreadcrumb[] = array (
                 "url" => "../tracking/courseLog.php?cidReq=".$get_course_code.'&id_session=' . api_get_session_id(),
@@ -222,10 +223,9 @@ if ($check) {
     }
     Security::clear_token();
 }
-//Generate a new token
+
 // user info
 $user_info = api_get_user_info($student_id);
-
 $courses_in_session = array();
 
 //See #4676
@@ -243,8 +243,8 @@ $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_
 // RRHH or session admin
 if (api_is_session_admin() || api_is_drh()) {
     $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-
     $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
+
     if (!empty($session_by_session_admin)) {
         foreach ($session_by_session_admin as $session_coached_by_user) {
             $courses_followed_by_coach = Tracking :: get_courses_list_from_session($session_coached_by_user['id']);
@@ -299,6 +299,12 @@ while ($row = Database :: fetch_array($rs)) {
         }
     }
 }
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    api_get_course_info()
+);
+
+
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
@@ -313,8 +319,12 @@ if (api_is_drh() && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }*/
         } else {
-            if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {
-                api_not_allowed(true);
+            if (!($isDrhOfCourse)) {
+                if (api_is_drh() &&
+                   !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())
+                ) {
+                    api_not_allowed(true);
+                }
             }
         }
     }
@@ -383,7 +393,6 @@ if (!empty($student_id)) {
             array(),
             $session_id
         );
-        //var_dump($avg_student_score);
     }
 
     $avg_student_progress = round($avg_student_progress, 2);

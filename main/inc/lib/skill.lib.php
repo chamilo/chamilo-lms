@@ -28,7 +28,7 @@ class SkillProfile extends Model
         $profiles = Database::store_result($result, 'ASSOC');
         return $profiles;
     }
-    
+
     /**
     * This function is for editing profile info from profile_id.
     * @param int $profileId
@@ -113,7 +113,7 @@ class SkillRelProfile extends Model
     */
 
     public function getProfileInfo($profileId)
-    { 
+    {
         $sql = "SELECT * FROM $this->table p INNER JOIN $this->tableProfile pr ON(pr.id = p.profile_id) WHERE p.profile_id = ".intval($profileId);
         $result = Database::query($sql);
         $profileData = Database::fetch_array($result, 'ASSOC');
@@ -299,7 +299,7 @@ class SkillRelGradebook extends Model
                 }
             }
         }
-        //var_dump($gradebooks_to_add, $gradebooks_to_remove);
+
         if (!empty($gradebooks_to_remove)) {
             foreach ($gradebooks_to_remove as $id) {
                 $this->delete($id);
@@ -853,7 +853,7 @@ class Skill extends Model
                 );
             }
         }
-        //var_dump($simple_tree[0]['children']);
+
         return json_encode($simple_tree[0]['children']);
     }
 

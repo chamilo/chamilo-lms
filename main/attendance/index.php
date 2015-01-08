@@ -48,7 +48,8 @@ $actions = array(
     'attendance_delete_select',
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
-    'attendance_sheet_list_no_edit'
+    'attendance_sheet_list_no_edit',
+    'calendar_logins'
 );
 
 $actions_calendar = array(
@@ -92,7 +93,7 @@ $attendance = new Attendance();
 
 // attendance controller object
 $attendance_controller = new AttendanceController();
-
+$attendance_data = array();
 // get attendance data
 if (!empty($attendance_id)) {
     // attendance data by id
@@ -205,8 +206,10 @@ if (api_is_drh() && isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
     $student_param = '&student_id='.$student_id;
     $student_info = api_get_user_info($student_id);
-    $student_name = api_get_person_name($student_info['firstname'], $student_info['lastname']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id, 'name' => $student_name);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id,
+        'name' => $student_info['complete_name']
+    );
 }
 if (!empty($gradebook)) {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php', 'name' => get_lang('ToolGradebook'));
@@ -300,6 +303,11 @@ switch ($action) {
         }
     case 'calendar_list' :
         $attendance_controller->attendance_calendar($action, $attendance_id, $calendar_id);
+        break;
+    case 'calendar_logins':
+        if (api_is_allowed_to_edit(null, true)) {
+            $attendance_controller->calendarLogins();
+        }
         break;
     default :
         $attendance_controller->attendance_list();

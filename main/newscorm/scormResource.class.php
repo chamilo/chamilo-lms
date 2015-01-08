@@ -30,12 +30,8 @@ class scormResource {
      * @param	string	Type of construction needed ('db' or 'manifest', default = 'manifest')
      * @param	mixed	Depending on the type given, DB id for the lp_item or reference to the DOM element
      */
-    public function __construct($type = 'manifest', &$element) {
-        /*
-        echo "<pre>Analysing resource:<br />\n";
-        var_dump($element);
-        echo "</pre><br />\n";
-        */
+    public function __construct($type = 'manifest', &$element)
+    {
         if (isset($element)) {
 
             // Parsing using PHP5 DOMXML methods.
@@ -73,7 +69,7 @@ class scormResource {
                     }
                     //$keep_href = '';
                     if ($element->hasAttributes()){ //in some cases we get here with an empty attributes array
-                    // TODO: Find when and why we get such a case (empty array).
+                        // TODO: Find when and why we get such a case (empty array).
                         $attributes = $element->attributes;
                         foreach ($attributes as $attrib) {
                             switch ($attrib->name) {
@@ -113,7 +109,7 @@ class scormResource {
      * @return	string	Path for this resource
      */
     public function get_path() {
-        if (!empty($this->href)) {            
+        if (!empty($this->href)) {
             return Database::escape_string($this->href);
         } else {
             return '';
@@ -125,7 +121,7 @@ class scormResource {
      * @return	string	generally 'asset' or 'sco' as these are the only two values defined in SCORM 1.2
      */
     public function get_scorm_type() {
-        if (!empty($this->scormtype)) {            
+        if (!empty($this->scormtype)) {
             return Database::escape_string($this->scormtype);
         } else {
             return '';

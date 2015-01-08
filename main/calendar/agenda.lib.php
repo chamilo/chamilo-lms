@@ -6,7 +6,6 @@
  *
  * @author: Julio Montoya <gugli100@gmail.com>
  */
-
 class Agenda
 {
     public $events = array();
@@ -19,7 +18,7 @@ class Agenda
     public $course;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
@@ -2347,7 +2346,7 @@ class Agenda
             $messages = implode('<br /> ', $messages);
         } else {
             $messages = get_lang('NoAgendaItems');
-                    
+
         }
 
         return $messages;

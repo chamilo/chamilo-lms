@@ -34,7 +34,8 @@ class CourseCopyTestcategory extends Resource
     /**
      * Show the test_category title, used in the partial recycle_course.php form
      */
-    function show() {
+    function show()
+    {
         parent::show();
         echo $this->title;
     }

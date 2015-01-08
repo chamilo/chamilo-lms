@@ -120,11 +120,17 @@ $_configuration[1]['hosting_limit_teachers'] = 0;
 $_configuration[1]['hosting_limit_courses'] = 0;
 // Set a maximum number of sessions. Default (0) = no limit
 $_configuration[1]['hosting_limit_sessions'] = 0;
-// Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB).
+// Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB, etc)
 // Default (0) = no limit
 $_configuration[1]['hosting_limit_disk_space'] = 0;
+// Set a maximum number of usable courses. Default (0) = no limit. Should always be lower than the hosting_limit_courses.
+// If set, defining a course as "hidden" will free room for new courses (up to the hosting_limit_courses, if any value is set there).
+// hosting_limit_enabled_courses is the maximum number of courses that are *not* hidden.
+$_configuration[1]['hosting_limit_active_courses'] = 0;
 // Email to warn if limit was reached.
 //$_configuration[1]['hosting_contact_mail'] = 'example@example.org';
+// Portal size limit in MB (set to 1024 for 1GB, 5120 for 5GB, etc).
+$_configuration['hosting_total_size_limit'] = 0;
 
 /**
  * Content Delivery Network (CDN) settings. Only use if you need a separate
@@ -261,3 +267,9 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['aspell_temp_dir'] = './';
 // Prevent redirecting admin to admin page
 //$_configuration['redirect_admin_to_courses_list'] = true;
+// Shows the custom course icon instead of the classic green board icon
+//$_configuration['course_images_in_courses_list'] = false;
+// Which student publication will be taken when connected to the gradebook: first|last
+//$_configuration['student_publication_to_take_in_gradebook'] = 'first';
+// Show a filter by official code
+//$_configuration['certificate_filter_by_official_code'] = false;

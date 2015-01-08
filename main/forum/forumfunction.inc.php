@@ -44,7 +44,7 @@ $(document).ready(function () {
 $htmlHeadXtra[] = '<script>
 
 function check_unzip() {
-    if(document.upload.unzip.checked){
+    if (document.upload.unzip.checked){
         document.upload.if_exists[0].disabled=true;
         document.upload.if_exists[1].checked=true;
         document.upload.if_exists[2].disabled=true;
@@ -85,46 +85,47 @@ $(function () {
             }
         }
     });
-    enableDeleteFile();
 });
 </script>";
+
 // Recover Thread ID, will be used to generate delete attachment URL to do ajax
 $threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : 0;
+$forumId = isset($_REQUEST['forum']) ? intval($_REQUEST['forum']) : 0;
+
 // The next javascript script is to delete file by ajax
-$htmlHeadXtra[] =
-    '<script>
-        function enableDeleteFile() {
-            $(document).on("click", ".deleteLink", function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var l = $(this);
-                var id = l.closest("tr").attr("id");
-                var filename = l.closest("tr").find(".attachFilename").html();
-                if (confirm("' . get_lang('AreYouSureToDeleteFileX') . '".replace("%s", filename))) {
-                    $.ajax({
-                        type: "POST",
-                        url: "' . api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?a=delete_file&attachId=" + id +"&thread=" + ' .
-                            $threadId . ',
-                        dataType: "json",
-                        success: function(data) {
-                                if (data.error == false) {
-                                    l.closest("tr").remove();
-                                    if ($(".files td").length < 1) {
-                                        $(".files").closest(".control-group").hide();
-                                    }
-                                }
+$htmlHeadXtra[] = '<script>
+    $(function () {
+        $(document).on("click", ".deleteLink", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var l = $(this);
+            var id = l.closest("tr").attr("id");
+            var filename = l.closest("tr").find(".attachFilename").html();
+            if (confirm("' . get_lang('AreYouSureToDeleteFileX') . '".replace("%s", filename))) {
+                $.ajax({
+                    type: "POST",
+                    url: "'.api_get_path(WEB_AJAX_PATH) . 'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId .'&forum='.$forumId .'",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.error == false) {
+                            l.closest("tr").remove();
+                            if ($(".files td").length < 1) {
+                                $(".files").closest(".control-group").hide();
                             }
-                    })
-                }
-            });
-        }
-    </script>';
+                        }
+                    }
+                })
+            }
+        });
+    });
+</script>';
 
 /**
- * This function handles all the forum and forumcategories actions. This is a wrapper for the
+ * This function handles all the forum and forum categories actions. This is a wrapper for the
  * forum and forum categories. All this code code could go into the section where this function is
  * called but this make the code there cleaner.
- * @param int $lp_id Learning path ID
+ * @param int $lp_id Learning path Id
+ *
  * @return void
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Juan Carlos Raña Trabado (return to lp_id)
@@ -181,6 +182,7 @@ function handle_forum_and_forumcategories($lp_id = null)
         $return_message = delete_forum_forumcategory_thread($get_content, $get_id);
         Display::display_confirmation_message($return_message, false);
     }
+
     // Change visibility of a forum or a forum category.
     if ($action_forum_cat == 'invisible' || $action_forum_cat == 'visible') {
         $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
@@ -220,8 +222,6 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
     // Setting the form elements.
     $form->addElement('header', '', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), 'class="input_titles" id="category_title"');
-
-    //$form->applyFilter('forum_category_title', 'html_filter');
     $form->addElement('html_editor', 'forum_category_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 
     //$form->applyFilter('forum_category_comment', 'html_filter');
@@ -441,9 +441,10 @@ function delete_forum_image($forum_id)
 {
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $course_id = api_get_course_int_id();
+    $forum_id = intval($forum_id);
 
-    $forum_id = Database::escape_string($forum_id);
-    $sql = "SELECT forum_image FROM $table_forums WHERE forum_id = '".$forum_id."' AND c_id = $course_id";
+    $sql = "SELECT forum_image FROM $table_forums
+            WHERE forum_id = '".$forum_id."' AND c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if ($row['forum_image'] != '') {
@@ -527,7 +528,7 @@ function store_forumcategory($values)
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
-    $sql = "SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string($table_categories)."
+    $sql = "SELECT MAX(cat_order) as sort_max FROM ".$table_categories."
             WHERE c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
@@ -1023,9 +1024,9 @@ function display_up_down_icon($content, $id, $list)
 /**
  * This function changes the visibility in the database (item_property)
  *
- * @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
- * @param $id the id of the content we want to make invisible
- * @param $target_visibility what is the current status of the visibility (0 = invisible, 1 = visible)
+ * @param string $content what is it that we want to make (in)visible: forum category, forum, thread, post
+ * @param int $id the id of the content we want to make invisible
+ * @param string $target_visibility what is the current status of the visibility (0 = invisible, 1 = visible)
  *
  * @todo change the get parameter so that it matches the tool constants.
  * @todo check if api_item_property_update returns true or false => returnmessage depends on it.
@@ -1134,6 +1135,7 @@ function move_up_down($content, $direction, $id)
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
+    $id = intval($id);
 
     // Determine which field holds the sort order.
     if ($content == 'forumcategory') {
@@ -1253,7 +1255,7 @@ function get_forum_categories($id = '')
     $session_id = api_get_session_id();
     $course_id = api_get_course_int_id();
 
-    $condition_session = api_get_session_condition($session_id, true, false);
+    $condition_session = api_get_session_condition($session_id, true, true);
     $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if (empty($id)) {
@@ -1349,9 +1351,11 @@ function get_forums_in_category($cat_id)
  * The forums are sorted according to the forum_order.
  * Since it does not take the forum category into account there probably
  * will be two or more forums that have forum_order=1, ...
- * @param int forum id
- * @param string course db name
- * @return an array containing all the information about the forums (regardless of their category)
+ * @param int $id forum id
+ * @param string $course_code
+ * @param bool $includeGroupsForum
+ * @param int $sessionId
+ * @return array an array containing all the information about the forums (regardless of their category)
  * @todo check $sql4 because this one really looks fishy.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1380,7 +1384,7 @@ function get_forums(
         $session_id = $sessionId;
     }
 
-    $condition_session = api_get_session_condition($session_id, true, false);
+    $condition_session = api_get_session_condition($session_id, true, false, 'id_session');
     $course_id = $course_info['real_id'];
 
     $forum_list = array();
@@ -1392,9 +1396,13 @@ function get_forums(
     if ($id == '') {
         // Student
         // Select all the forum information of all forums (that are visible to students).
-        $sql = "SELECT * FROM $table_forums forum, ".$table_item_property." item_properties
-                WHERE
+        $sql = "SELECT * FROM $table_forums forum
+                INNER JOIN ".$table_item_property." item_properties
+                ON (
                     forum.forum_id=item_properties.ref AND
+                    forum.c_id = item_properties.c_id
+                )
+                WHERE
                     item_properties.visibility=1 AND
                     item_properties.tool='".TOOL_FORUM."'
                     $condition_session AND
@@ -1405,9 +1413,14 @@ function get_forums(
 
         // Select the number of threads of the forums (only the threads that are visible).
         $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
-                FROM $table_threads threads, ".$table_item_property." item_properties
-                WHERE
+                FROM $table_threads threads
+                INNER JOIN ".$table_item_property." item_properties
+                ON (
                     threads.thread_id=item_properties.ref AND
+                    threads.c_id = item_properties.c_id AND
+                    threads.session_id = item_properties.id_session
+                )
+                WHERE
                     item_properties.visibility=1 AND
                     item_properties.tool='".TOOL_FORUM_THREAD."' AND
                     threads.c_id = $course_id AND
@@ -1421,6 +1434,7 @@ function get_forums(
                     posts.visible=1 AND
                     posts.thread_id=threads.thread_id AND
                     threads.thread_id=item_properties.ref AND
+                    threads.session_id = item_properties.id_session AND
                     item_properties.visibility=1 AND
                     item_properties.tool='".TOOL_FORUM_THREAD."' AND
                     threads.c_id = $course_id AND
@@ -1431,10 +1445,14 @@ function get_forums(
         // Course Admin
         if (is_allowed_to_edit()) {
             // Select all the forum information of all forums (that are not deleted).
-            $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
-                    WHERE
+            $sql = "SELECT * FROM ".$table_forums." forum
+                    INNER JOIN ".$table_item_property." item_properties
+                    ON (
                         forum.forum_id = item_properties.ref AND
-                        item_properties.visibility<>2 AND
+                        forum.c_id = item_properties.c_id
+                    )
+                    WHERE
+                        item_properties.visibility <> 2 AND
                         item_properties.tool='".TOOL_FORUM."'
                         $condition_session AND
                         forum.c_id = $course_id AND
@@ -1444,11 +1462,16 @@ function get_forums(
 
             // Select the number of threads of the forums (only the threads that are not deleted).
             $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
-                    FROM $table_threads threads, ".$table_item_property." item_properties
+                    FROM $table_threads threads
+                    INNER JOIN ".$table_item_property." item_properties
+                    ON (
+                        threads.thread_id=item_properties.ref AND
+                        threads.c_id = item_properties.c_id AND
+                        threads.session_id = item_properties.id_session
+                    )
                     WHERE
-                        threads.thread_id=item_properties.ref
-                        AND item_properties.visibility<>2
-                        AND item_properties.tool='".TOOL_FORUM_THREAD."' AND
+                        item_properties.visibility<>2 AND
+                        item_properties.tool='".TOOL_FORUM_THREAD."' AND
                         threads.c_id = $course_id AND
                         item_properties.c_id = $course_id
                     GROUP BY threads.forum_id";
@@ -1458,6 +1481,7 @@ function get_forums(
                     WHERE
                         posts.thread_id=threads.thread_id AND
                         threads.thread_id=item_properties.ref AND
+                        threads.session_id = item_properties.id_session AND
                         item_properties.visibility=1 AND
                         item_properties.tool='".TOOL_FORUM_THREAD."' AND
                         posts.c_id = $course_id AND
@@ -1718,10 +1742,11 @@ function get_threads($forum_id, $course_code = null)
                 thread.locked as locked
             FROM $table_threads thread
             INNER JOIN $table_item_property item_properties
-                ON  thread.thread_id=item_properties.ref AND
-                    item_properties.c_id = $course_id AND
-                    thread.c_id = $course_id AND
-                    item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
+            ON
+                thread.thread_id=item_properties.ref AND
+                item_properties.c_id = $course_id AND
+                thread.c_id = $course_id AND
+                item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
             LEFT JOIN $table_users users
                 ON thread.thread_poster_id=users.user_id
             WHERE
@@ -1745,10 +1770,10 @@ function get_threads($forum_id, $course_code = null)
                 FROM $table_threads thread
                 INNER JOIN $table_item_property item_properties
                 ON
-                    thread.thread_id=item_properties.ref AND
+                    thread.thread_id = item_properties.ref AND
                     item_properties.c_id = $course_id AND
                     thread.c_id = $course_id AND
-                    item_properties.tool='".TABLE_FORUM_THREAD."'$groupCondition
+                    item_properties.tool = '".TABLE_FORUM_THREAD."' $groupCondition
                 LEFT JOIN $table_users users
                     ON thread.thread_poster_id=users.user_id
                 WHERE
@@ -2280,9 +2305,6 @@ function store_thread($current_forum, $values)
         $message = get_lang('NewThreadStored');
         // Storing the attachments if any.
         if ($has_attachment) {
-            $course_dir = $_course['path'].'/upload/forum';
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $updir = $sys_course_path.$course_dir;
 
             // Try to add an extension to the file if it hasn't one.
             $new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
@@ -2386,14 +2408,13 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
 
     $form->addElement('text', 'post_title', get_lang('Title'));
 
-    $form->addElement('html_editor', 'post_text', get_lang('Text'), true, api_is_allowed_to_edit(null, true) ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300') : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
-    );
+    $form->addElement('html_editor', 'post_text', get_lang('Text'), true, api_is_allowed_to_edit(null, true) ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300') : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student'));
 
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
     $iframe = null;
     $myThread = Security::remove_XSS($myThread);
     if ($forum_setting['show_thread_iframe_on_reply'] && $action != 'newthread' && !empty($myThread)) {
-        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?forum=".Security::remove_XSS($my_forum)."&amp;thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
+        $iframe = "<iframe style=\"border: 1px solid black\" src=\"iframe_thread.php?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&amp;thread=".$myThread."#".Security::remove_XSS($my_post)."\" width=\"100%\"></iframe>";
     }
     if (!empty($iframe)) {
         $form->addElement('label', get_lang('Thread'), $iframe);
@@ -2709,7 +2730,6 @@ function current_qualify_of_thread($thread_id, $session_id)
 function store_reply($current_forum, $values)
 {
     $_course = api_get_course_info();
-    $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
 
     $post_date = api_get_utc_datetime();
@@ -4820,29 +4840,31 @@ function editAttachedFile($array, $id, $courseId = null) {
 
 /**
  * Return a form to upload asynchronously attachments to forum post.
- * @param $forumId Forum ID from where the post are
- * @param $threadId Thread ID where forum post are
- * @param $postId Post ID to identify Post
+ * @param int $forumId Forum ID from where the post are
+ * @param int $threadId Thread ID where forum post are
+ * @param int $postId Post ID to identify Post
  * @return string The Forum Attachment Ajax Form
  */
 function getAttachmentAjaxForm($forumId, $threadId, $postId)
 {
-    // Init variables
     $forumId = intval($forumId);
     $postId = intval($postId);
     $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
     if ($forumId === 0) {
-        // Forum ID must be defined
+        // Forum Id must be defined
 
         return '';
     }
-    $url = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?forum=' . $forumId . '&thread=' . $threadId . '&postId=' . $postId . '&a=upload_file';
+
+    $url = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&forum=' . $forumId . '&thread=' . $threadId . '&postId=' . $postId . '&a=upload_file';
     // Form
     $formFileUpload = '<div class="form-ajax">
         <form id="file_upload" action="'.$url.'" method="POST" enctype="multipart/form-data">
             <input type="file" name="user_upload" multiple>
-            <button type="submit">Upload</button><div class="button-load">
-            '.get_lang('UploadFiles').'</div>
+            <button type="submit">Upload</button>
+            <div class="button-load">
+                '.get_lang('UploadFiles').'
+            </div>
         </form></div>
         ';
 
@@ -4865,14 +4887,18 @@ function getAttachmentsAjaxTable($postId = null)
     if (!empty($_REQUEST['file_ids']) && is_array($_REQUEST['file_ids'])) {
         // 'file_ids is the name from forum attachment ajax form
         foreach ($_REQUEST['file_ids'] as $key => $attachId) {
-            if (!empty($_SESSION['forum']['upload_file'][$courseId][$attachId]) && is_array($_SESSION['forum']['upload_file'][$courseId][$attachId])) {
+            if (!empty($_SESSION['forum']['upload_file'][$courseId][$attachId]) &&
+                is_array($_SESSION['forum']['upload_file'][$courseId][$attachId])
+            ) {
                 // If exist forum attachment then update into $_SESSION data
                 $_SESSION['forum']['upload_file'][$courseId][$attachId]['comment'] = $_POST['file_comments'][$key];
             }
         }
     }
     // Get data to fill into attachment files table
-    if (!empty($_SESSION['forum']['upload_file'][$courseId]) && is_array($_SESSION['forum']['upload_file'][$courseId])) {
+    if (!empty($_SESSION['forum']['upload_file'][$courseId]) &&
+        is_array($_SESSION['forum']['upload_file'][$courseId])
+    ) {
         $uploadedFiles = $_SESSION['forum']['upload_file'][$courseId];
         foreach ($uploadedFiles as $k => $uploadedFile) {
             if (!empty($uploadedFile) && in_array($uploadedFile['id'], $attachIds)) {
@@ -4922,8 +4948,8 @@ function getAttachmentsAjaxTable($postId = null)
  * @param null $courseId
  * @return array
  */
-function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null, $courseId = null) {
-    // Init values
+function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null, $courseId = null)
+{
     $forumId = intval($forumId);
     $courseId = intval($courseId);
     $attachId = intval($attachId);
@@ -4954,14 +4980,17 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
         $filter = "AND post_id = $postId AND id = $attachId";
     }
     $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-    $sql = "SELECT id, comment, filename, path, size FROM $forumAttachmentTable WHERE c_id = $courseId $filter";
+    $sql = "SELECT id, comment, filename, path, size
+            FROM $forumAttachmentTable
+            WHERE c_id = $courseId $filter";
     $result = Database::query($sql);
+    $json = array();
     if ($result !== false && Database::num_rows($result) > 0) {
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             // name contains an URL to download attachment file and its filename
             $json['name'] = Display::url(
                 api_htmlentities($row['filename']),
-                api_get_path(WEB_CODE_PATH) . 'forum/download.php?file='.$row['path'],
+                api_get_path(WEB_CODE_PATH) . 'forum/download.php?file='.$row['path'].'&'.api_get_cidreq(),
                 array('target'=>'_blank', 'class' => 'attachFilename')
             );
             $json['id'] = $row['id'];
@@ -4970,12 +4999,14 @@ function getAttachedFiles($forumId, $threadId, $postId = null, $attachId = null,
             $json['size'] = format_file_size($row['size']);
             // Check if $row is consistent
             if (!empty($row) && is_array($row)) {
-                // Set result as succes and bring delete URL
+                // Set result as success and bring delete URL
                 $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded'));
-                $json['delete'] = '<a class="deleteLink" href="'.api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php' .
-                    '?' . api_get_cidreq() . '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId .
-                    '&amp;id_attach=' . $row['id'] . '">' .
-                    Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+                $url = api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq() . '&amp;action=delete_attach&amp;forum=' . $forumId . '&amp;thread=' . $threadId.'&amp;id_attach=' . $row['id'];
+                $json['delete'] = Display::url(
+                    Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL),
+                    $url,
+                    array('class' => 'deleteLink')
+                );
             } else {
                 // If not, set an exclamation result
                 $json['result'] = Display::return_icon('exclamation.png', get_lang('Error'));

@@ -61,10 +61,13 @@ class ResourceRights
 
     /**
      * @param string $mask
+     * @return $this
      */
     public function setMask($mask)
     {
         $this->mask = $mask;
+
+        return $this;
     }
 
     /**
@@ -77,10 +80,13 @@ class ResourceRights
 
     /**
      * @param mixed $resourceLink
+     * @return $this
      */
     public function setResourceLink($resourceLink)
     {
         $this->resourceLink = $resourceLink;
+
+        return $this;
     }
 
     /**
@@ -93,10 +99,13 @@ class ResourceRights
 
     /**
      * @param string $role
+     * @return $this
      */
     public function setRole($role)
     {
         $this->role = $role;
+
+        return $this;
     }
 
     /**

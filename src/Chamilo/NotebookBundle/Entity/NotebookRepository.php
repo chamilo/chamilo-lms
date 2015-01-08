@@ -5,12 +5,15 @@ namespace Chamilo\NotebookBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\Entity\ToolResourceRights;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
@@ -44,16 +47,45 @@ class NotebookRepository extends EntityRepository
      * @param Course $course
      * @return ResourceLink
      */
-    public function addResourceToCourse(AbstractResource $resource, User $user, Course $course)
-    {
+    public function addResourceToCourse(
+        AbstractResource $resource,
+        User $user,
+        Course $course,
+        $rights = array()
+    ) {
         $resourceNode = $this->addResource($resource, $user);
+        if ($resourceNode) {
 
-        $resourceLink = new ResourceLink();
-        $resourceLink->setResourceNode($resourceNode);
-        $resourceLink->setCourse($course);
+            $resourceLink = new ResourceLink();
+            $resourceLink
+                ->setResourceNode($resourceNode)
+                ->setCourse($course);
 
-        $this->getEntityManager()->persist($resourceLink);
-        $this->getEntityManager()->flush();
+            if (!empty($rights)) {
+                /*$rights = $resourceLink->getResourceNode()->getTool()->getToolResourceRights();
+                 // @var ToolResourceRights $right
+                $newRights = new ArrayCollection();
+                foreach ($rights as $right) {
+                    $right->getRole()
+
+                    $newRights->add()
+                }*/
+
+                $rightsCollection = new ArrayCollection();
+                foreach ($rights as $right) {
+                    $resourceRight = new ResourceRights();
+                    $resourceRight
+                        ->setRole($right['role'])
+                        ->setMask($right['mask']);
+                    $rightsCollection->add($resourceRight);
+                }
+
+                $resourceLink->setRights($rightsCollection);
+            }
+
+            $this->getEntityManager()->persist($resourceLink);
+            $this->getEntityManager()->flush();
+        }
 
         return $resourceNode;
     }
@@ -125,9 +157,14 @@ class NotebookRepository extends EntityRepository
      * @param Course $course
      * @param Session $session
      */
-    public function addResourceToSession(AbstractResource $resource, User $user, Course $course, Session $session)
-    {
-        $resourceLink = $this->addResourceToCourse($resource, $user, $course);
+    public function addResourceToSession(
+        AbstractResource $resource,
+        User $user,
+        Course $course,
+        Session $session,
+        $rights
+    ) {
+        $resourceLink = $this->addResourceToCourse($resource, $user, $course, $rights);
         $resourceLink->setSession($session);
         $this->getEntityManager()->persist($resourceLink);
     }
@@ -138,9 +175,14 @@ class NotebookRepository extends EntityRepository
      * @param Course $course
      * @param CGroupInfo $group
      */
-    public function addResourceToGroup(AbstractResource $resource, User $user, Course $course, CGroupInfo $group)
-    {
-        $resourceLink = $this->addResourceToCourse($resource, $user, $course);
+    public function addResourceToGroup(
+        AbstractResource $resource,
+        User $user,
+        Course $course,
+        CGroupInfo $group,
+        $rights
+    ) {
+        $resourceLink = $this->addResourceToCourse($resource, $user, $course, $rights);
         $resourceLink->setGroup($group);
         $this->getEntityManager()->persist($resourceLink);
     }
@@ -154,7 +196,6 @@ class NotebookRepository extends EntityRepository
             ->getRepository('ChamiloCoreBundle:Tool')
             ->findOneByName($this->getToolName());
     }
-
 
     /**
      * @return string

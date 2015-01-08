@@ -52,7 +52,7 @@ class Block
     /**
      * @var boolean
      *
-     * @ORM\Column(name="active", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="active", type="boolean", nullable=false, unique=false)
      */
     private $active;
 

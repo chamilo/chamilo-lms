@@ -60,6 +60,52 @@ class ResourceLink
     protected $rights;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="private", type="boolean", nullable=true, unique=false)
+     */
+    protected $private;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="public", type="boolean", nullable=true, unique=false)
+     */
+    protected $public;
+
+    /**
+     * @return boolean
+     */
+    public function isPrivate()
+    {
+        return $this->private;
+    }
+
+    /**
+     * @param boolean $private
+     */
+    public function setPrivate($private)
+    {
+        $this->private = $private;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPublic()
+    {
+        return $this->public;
+    }
+
+    /**
+     * @param boolean $public
+     */
+    public function setPublic($public)
+    {
+        $this->public = $public;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getRights()
@@ -68,15 +114,18 @@ class ResourceLink
     }
 
     /**
-     * @param mixed $rights
+     * @param ArrayCollection $rights
+     * @return $this
      */
     public function setRights($rights)
     {
         $this->rights = $rights;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return CGroupInfo
      */
     public function getGroup()
     {
@@ -93,42 +142,57 @@ class ResourceLink
 
     /**
      * @param int $id
+     * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
     }
 
     /**
      * @param User $user
+     * @return $this
      */
     public function setUser(User $user)
     {
         $this->user = $user;
+
+        return $this;
     }
 
     /**
      * @param Course $course
+     * @return $this
      */
     public function setCourse(Course $course)
     {
         $this->course = $course;
+
+        return $this;
     }
 
     /**
      * @param Session $session
+     * @return $this
      */
     public function setSession(Session $session)
     {
         $this->session = $session;
+
+        return $this;
     }
 
     /**
      * @param CGroupInfo $group
+     * @return $this
      */
     public function setGroup(CGroupInfo $group)
     {
         $this->group = $group;
+
+        return $this;
     }
 
     /**
@@ -163,10 +227,13 @@ class ResourceLink
 
     /**
      * @param ResourceNode $resourceNode
+     * @return $this
      */
     public function setResourceNode(ResourceNode $resourceNode)
     {
         $this->resourceNode = $resourceNode;
+
+        return $this;
     }
 
     /**

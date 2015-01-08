@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
 use Chamilo\CoreBundle\Entity\ToolResourceRights;
+use Doctrine\Common\Collections\ArrayCollection;
 use Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
@@ -93,7 +94,6 @@ class ResourceLinkVoter extends AbstractVoter
 
         if ($rightFromResourceLink->count()) {
             // Taken rights of the link
-            /** @var ResourceRights $right */
             $rights = $rightFromResourceLink;
         } else {
             // Taken the rights from the default tool

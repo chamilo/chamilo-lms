@@ -20,12 +20,12 @@ class CNotebook extends AbstractResource
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="description", type="text", nullable=false, unique=false)
      */
     protected $description;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {

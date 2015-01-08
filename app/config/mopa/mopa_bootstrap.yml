@@ -1,3 +1,5 @@
 mopa_bootstrap:
-    form: ~  # Adds twig form theme  support
+#    form:  # Adds twig form theme  support
+#        horizontal_label_class: 'aa'
+#        horizontal_input_wrapper_class: 'dd'
     menu: ~  # enables twig helpers for menu

@@ -153,6 +153,7 @@ class NotebookController extends ToolBaseCrudController
         $resource = $this->findOr404($request);
         $resourceNode = $resource->getResourceNode();
         $link = $this->detectLink($resourceNode);
+
         if (false === $this->isGranted(ResourceLinkVoter::VIEW, $link)) {
             throw new AccessDeniedException('Unauthorised access!');
         }
@@ -231,11 +232,24 @@ class NotebookController extends ToolBaseCrudController
         $form = $this->getForm($resource);
 
         if ($form->handleRequest($request)->isValid()) {
+            $rights = $form->get('rights')->getData();
+
+            var_dump($rights);exit;
+
+            // Build links
+            switch ($rights['sharing']) {
+                case 'another_course':
+                    $idList = explode(',', $rights['search']);
+                    break;
+                case 'user':
+                    break;
+            }
 
             $resourceNode = $this->getRepository()->addResourceToCourse(
                 $resource,
                 $this->getUser(),
-                $this->getCourse()
+                $this->getCourse(),
+                $rights
             );
 
             $resource->setResourceNode($resourceNode);

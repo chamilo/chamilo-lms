@@ -1,11 +1,141 @@
+<script>
+    var $collectionHolder;
+
+    // setup an "add a tag" link
+    var $addTagLink = $('<a href="#" class="btn add_tag_link">Add option</a>');
+    var $newLinkLi = $('<li></li>').append($addTagLink);
+
+    jQuery(document).ready(function() {
+        // Get the ul that holds the collection of tags
+        $collectionHolder = $('ul.tags');
+
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addTagLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm($collectionHolder, $newLinkLi);
+        });
+    });
+
+    function repoFormatResult(repo) {
+        console.log(repo);
+        var markup = '<div class="row-fluid">' +
+                '<div class="span2"><img src="' + repo.owner.avatar_url + '" /></div>' +
+                '<div class="span10">' +
+                '<div class="row-fluid">' +
+                '<div class="span6">' + repo.full_name + '</div>' +
+                '<div class="span3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
+                '<div class="span3"><i class="fa fa-star"></i> ' + repo.stargazers_count + '</div>' +
+                '</div>';
+
+        if (repo.description) {
+            markup += '<div>' + repo.description + '</div>';
+        }
+
+        markup += '</div></div>';
+
+        return markup;
+    }
+
+    function addTagForm($collectionHolder, $newLinkLi) {
+        // Get the data-prototype explained earlier
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<li></li>').append(newForm);
+        $newLinkLi.before($newFormLi);
+
+        $('.sharing_options').on('change', function() {
+
+            var inputId = this.id;
+            var hiddenInput = inputId.replace("sharing", "search");
+            var field = $('#' + hiddenInput);
+            var select2 = $('#s2id_' + hiddenInput);
+
+            var url = '';
+            switch (this.value) {
+                case 'another_course':
+                    field.show();
+                    select2.show();
+                    url = Routing.generate('chamilo_core_user_user_mycourses');
+                    break;
+                case 'user':
+                    field.show();
+                    select2.show();
+                    url = Routing.generate('chamilo_core_user_user_mycourses');
+                    break;
+                default:
+                    field.hide();
+                    select2.hide();
+                    break;
+            }
+
+            if (url != '') {
+                field.select2({
+                    tags: true,
+                    tokenSeparators: [',', ' '],
+                    ajax: {
+                        url: url,
+                        dataType: 'json',
+                        type: "GET",
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                q: params.term, // search term
+                                page: params.page
+                            };
+                        },
+                        results: function (data, page) {
+                            data = data.items;
+                            return {
+                                results: $.map(data, function (item) {
+                                    return {
+                                        text: item.title,
+                                        slug: item.title,
+                                        id: item.id
+                                    }
+                                })
+                            };
+                        }
+                    }
+                });
+            }
+        });
+    }
+</script>
+
 <div class="box box-primary">
     <div class="box-header">
         <h3 class="box-title">Create</h3>
     </div>
-    <form method="post" action="{{ path('chamilo_notebook_new', {'course': course } ) }}">
+    <form method="post" action="{{ path('chamilo_notebook_new', {'course': course }) }}">
         <div class="box-body">
-        {{ form_widget(form) }}
+            {{ form_start(form) }}
+
+            {{ form_row(form.name) }}
+            {{ form_row(form.description) }}
+
+            <ul class="tags" data-prototype="{{ form_widget(form.rights.vars.prototype)|e }}">
+            </ul>
+            {{ form_end(form) }}
         </div>
     </form>
-    </div>
 </div>

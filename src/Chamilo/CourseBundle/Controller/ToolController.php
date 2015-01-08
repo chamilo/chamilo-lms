@@ -114,7 +114,8 @@ class ToolController extends ToolBaseCrudController
             $resourceNode = $this->getRepository()->addResourceToCourse(
                 $resource,
                 $this->getUser(),
-                $this->getCourse()
+                $this->getCourse(),
+                array()
             );
 
             $resource->setResourceNode($resourceNode);

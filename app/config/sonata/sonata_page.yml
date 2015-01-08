@@ -45,6 +45,7 @@ sonata_page:
         - sylius_flow_start
         - sylius_flow_display
         - sylius_flow_forward
+        - chamilo_core_user_user_mycourses
 
     cache_invalidation:
         service:  sonata.page.cache.invalidation.simple

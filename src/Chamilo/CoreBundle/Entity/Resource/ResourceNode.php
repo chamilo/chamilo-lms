@@ -12,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Base entity for all resources.
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
+ * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\MaterializedPathRepository")
  * @ORM\Table(name="resource_node")
  * @Gedmo\Tree(type="materializedPath")
  *
@@ -116,6 +116,14 @@ class ResourceNode
     {
         $this->rights = new ArrayCollection();
         $this->children = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getPath();
     }
 
     /**

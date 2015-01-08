@@ -3,15 +3,16 @@
 
 namespace Chamilo\NotebookBundle\Form\Type;
 
+use Chamilo\CoreBundle\Entity\ToolResourceRights;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class NotebookType
+ * Class ResourceLinkType
  * @package Chamilo\NotebookBundle\Form\Type
  */
-class NotebookType extends AbstractType
+class ResourceLinkType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -19,42 +20,35 @@ class NotebookType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('description', 'ckeditor')
             ->add(
-                'shared',
+                'sharing',
                 'choice',
                 array(
                     'choices' => array(
-                        'only_me' => 'Only me',
-                        'shared' => 'Shared'
+                        'public' => 'Public',
+                        //'private' => 'Only me',
+                        'this_course' => 'This course',
+                        'another_course' => 'Another course',
+                        'user'=> 'User'
                     ),
-                    'multiple' => false,
-                    'expanded' => true,
-                    'required' => true,
-                    'mapped' => false
+                    'attr' => array('class' => 'sharing_options')
                 )
             )
+            ->add('search', 'hidden', array('attr' => array('class' => 'extra_hidden')))
             ->add(
-                'rights',
-                'collection',
-                array(
-                    'type' => new ResourceLinkType(),
-                    'mapped' => false,
-                    'allow_add' => true,
-                )
+                'mask',
+                'choice',
+                array('choices' => ToolResourceRights::getMaskList())
             )
             /*->add(
                 'rights',
                 'collection',
                 array(
                     'type' => new ResourceRightsType(),
-                    'mapped' => false,
-                    'allow_add' => true,
+                    'allow_add'    => true,
                 )
             )*/
-            //->add('resourceNode', new ResourceNodeType())
-            ->add('save', 'submit');
+        ;
     }
 
     /**
@@ -63,7 +57,7 @@ class NotebookType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Chamilo\NotebookBundle\Entity\CNotebook'
+            'data_class' => 'Chamilo\CoreBundle\Entity\Resource\ResourceLink'
         ));
     }
 
@@ -72,6 +66,6 @@ class NotebookType extends AbstractType
      */
     public function getName()
     {
-        return 'chamilo_notebook_notebook';
+        return 'chamilo_resource_link_type';
     }
 }

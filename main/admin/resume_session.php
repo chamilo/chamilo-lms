@@ -250,10 +250,16 @@ foreach ($sessionFields as $field) {
                     case ExtraField::FIELD_TYPE_FILE_IMAGE:
                         if ($sesionValueData !== false && !empty($sesionValueData['field_value'])) {
                             if (file_exists(api_get_path(SYS_CODE_PATH) . $sesionValueData['field_value'])) {
-                                echo Display::img(
+                                $image = Display::img(
                                     api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
                                     $field['field_display_text'],
                                     array('width' => '300')
+                                );
+                                
+                                echo Display::url(
+                                    $image,
+                                    api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
+                                    array('target' => '_blank')
                                 );
                             }
                         }

@@ -258,6 +258,20 @@ foreach ($sessionFields as $field) {
                             }
                         }
                         break;
+                    case ExtraField::FIELD_TYPE_FILE:
+                        if ($sesionValueData !== false && !empty($sesionValueData['field_value'])) {
+                            if (file_exists(api_get_path(SYS_CODE_PATH) . $sesionValueData['field_value'])) {
+                                echo Display::url(
+                                    get_lang('Download'),
+                                    api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
+                                    array(
+                                        'title' => $field['field_display_text'],
+                                        'target' => '_blank'
+                                    )
+                                );
+                            }
+                        }
+                        break;
                     default:
                         echo $sesionValueData['field_value'];
                         break;

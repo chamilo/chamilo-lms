@@ -145,3 +145,12 @@ $banner->save(array(
     'field_visible' => 1,
     'field_changeable' => 1
 ));
+
+$brochure = new ExtraField('session');
+$brochure->save(array(
+    'field_type' => ExtraField::FIELD_TYPE_FILE,
+    'field_variable' => 'brochure',
+    'field_display_text' => 'Brochure',
+    'field_visible' => 1,
+    'field_changeable' => 1
+));

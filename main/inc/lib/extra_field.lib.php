@@ -54,6 +54,7 @@ class ExtraField extends Model
     const FIELD_TYPE_INTEGER = 15;
     const FIELD_TYPE_FILE_IMAGE = 16;
     const FIELD_TYPE_FLOAT = 17;
+    const FIELD_TYPE_FILE = 18;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
@@ -243,8 +244,9 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
         $types[self::FIELD_TYPE_CHECKBOX]       = get_lang('FieldTypeCheckbox');
         $types[self::FIELD_TYPE_INTEGER]           = get_lang('FieldTypeInteger');
-        $types[self::FIELD_TYPE_FILE_IMAGE]           = get_lang('FieldTypeFile');
+        $types[self::FIELD_TYPE_FILE_IMAGE]           = get_lang('FieldTypeFileImage');
         $types[self::FIELD_TYPE_FLOAT]           = get_lang('FieldTypeFloat');
+        $types[self::FIELD_TYPE_FILE]           = get_lang('FieldTypeFFile');
 
         switch ($handler) {
             case 'course':
@@ -1045,7 +1047,7 @@ EOF;
                             if (file_exists(api_get_path(SYS_CODE_PATH) . $extraData[$fieldVariable])) {
                                 $fieldTexts[] = Display::img(
                                     api_get_path(WEB_CODE_PATH) . $extraData[$fieldVariable],
-                                    'ASDASD',
+                                    $field_details['field_display_text'],
                                     array('width' => '300')
                                 );
                             }
@@ -1088,6 +1090,46 @@ EOF;
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
                         $form->applyFilter('extra_'.$field_details['field_variable'], 'floatval');
+
+                        if (!$admin_permissions) {
+                            if ($field_details['field_visible'] == 0) {
+                                $form->freeze(
+                                    'extra_'.$field_details['field_variable']
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_FILE:
+                        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+
+                        $fieldVariable = "extra_{$field_details['field_variable']}";
+
+                        $fieldTexts = array(
+                            $field_details['field_display_text']
+                        );
+
+                        if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
+                            if (file_exists(api_get_path(SYS_CODE_PATH) . $extraData[$fieldVariable])) {
+                                $fieldTexts[] = Display::url(
+                                    api_get_path(WEB_CODE_PATH) . $extraData[$fieldVariable],
+                                    api_get_path(WEB_CODE_PATH) . $extraData[$fieldVariable],
+                                    array(
+                                        'title' => $field_details['field_display_text'],
+                                        'target' => '_blank'
+                                    )
+                                );
+                            }
+                        }
+
+                        $form->addElement(
+                            'file',
+                            $fieldVariable,
+                            $fieldTexts,
+                            array('class' => 'span8')
+                        );
+
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
 
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {

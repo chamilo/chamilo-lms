@@ -188,6 +188,34 @@ class ExtraFieldValue extends Model
                                 self::save($new_params);
                             }
                             break;
+                        case ExtraField::FIELD_TYPE_FILE:
+                            $dirPermissions = api_get_permissions_for_new_directories();
+                            $sysCodePath = api_get_path(SYS_CODE_PATH);
+
+                            $fileDir = "upload/extrafields/{$this->type}/";
+                            $cleanedName = replace_dangerous_char($value['name']);
+                            $fileName = ExtraField::FIELD_TYPE_FILE . "_{$params[$this->handler_id]}_$cleanedName";
+
+                            if (!file_exists($sysCodePath . $fileDir)) {
+                                mkdir($sysCodePath . $fileDir, $dirPermissions, true);
+                            }
+
+                            if ($value['error'] == 0) {
+                                moveUploadedFile($value, $sysCodePath . $fileDir . $fileName);
+
+                                $new_params = array(
+                                    $this->handler_id => $params[$this->handler_id],
+                                    'field_id' => $extra_field_info['id'],
+                                    'field_value' => $fileDir . $fileName
+                                );
+
+                                if ($this->type !== 'session' && $this->type !== 'course') {
+                                    $new_params['comment'] = $comment;
+                                }
+
+                                self::save($new_params);
+                            }
+                            break;
                         default;
                             $new_params = array(
                                 $this->handler_id   => $params[$this->handler_id],

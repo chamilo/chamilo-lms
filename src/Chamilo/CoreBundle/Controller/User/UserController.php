@@ -3,6 +3,9 @@
 
 namespace Chamilo\CoreBundle\Controller\User;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Chamilo\CoreBundle\Controller\BaseController;
@@ -45,6 +48,30 @@ class UserController extends BaseController
             'form_send_message' => \MessageManager::generate_message_form('send_message'),
             'form_send_invitation' => \MessageManager::generate_invitation_form('send_invitation')
         );
+    }
+
+    /**
+     * @Route("/me/my_courses", options={"expose"=true})
+     * @Method({"GET"})
+     */
+    public function myCoursesAction()
+    {
+        $user = $this->getUser();
+        $courses = $user->getCourses();
+
+        $output = array();
+        /** @var CourseRelUser $courseRelUser */
+        foreach ($courses as $courseRelUser) {
+            $course = $courseRelUser->getCourse();
+            if ($course) {
+                $output[] = array(
+                    'id' => $course->getId(),
+                    'title' => $course->getTitle(),
+                );
+            }
+        }
+
+        return $response = new JsonResponse(array('items' => $output));
     }
 
     /**

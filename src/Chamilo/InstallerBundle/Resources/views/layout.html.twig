@@ -12,19 +12,14 @@
     {% block stylesheets %}
     {% endblock %}
 
-    {#{% stylesheets#}
-    {#"@bootstrap_css" %}#}
-    {#<link rel="stylesheet" href="{{ asset_url }}" />#}
-    {#{% endstylesheets %}#}
-
-    {#{% javascripts "@bootstrap_js" %}#}
-    {#<script src="{{ asset_url }}"></script>#}
-    {#{% endjavascripts %}#}
-
     <link rel="stylesheet" href="{{ asset('bundles/chamiloadmintheme/components/bootstrap/dist/css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/chamiloadmintheme/components/fontawesome/css/font-awesome.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/chamiloinstaller/css/install.css') }}" />
+
     <script type="text/javascript" src="{{ asset('bundles/chamiloadmintheme/components/jquery/dist/jquery.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/chamiloadmintheme/components/bootstrap/dist/js/bootstrap.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/chamiloadmintheme/components/ajaxQueue/dist/jquery.ajaxQueue.js') }}"></script>
+
 
     {% block javascript %}
     <script type="text/javascript">
@@ -108,6 +103,7 @@
     </script>
     {% endblock javascript %}
 </head>
+
 <body>
     <div class="container">
         <div class="page-header">
@@ -118,13 +114,13 @@
     </div>
 
     {% block bottom %}
-        <footer>
-            <div class="container">
-                <p>
-                    Chamilo
-                </p>
-            </div>
-        </footer>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">
+                Chamilo  {{ "now"|date("Y") }}
+            </p>
+        </div>
+    </footer>
     {% endblock bottom %}
 </body>
 </html>

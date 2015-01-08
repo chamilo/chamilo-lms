@@ -106,5 +106,6 @@ process:
         next:              Next
         install:           Install
         finish:            Launch application
+        continue:          Continue
     operation:             Operation
     status:                Status

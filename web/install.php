@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 if (!isset($_SERVER['HTTP_HOST'])) {
     exit('This script cannot be run from the CLI. Run it from a browser.');
@@ -15,6 +15,7 @@ require_once __DIR__ . '/../app/autoload.php';
 
 // check for installed system
 $paramFile = __DIR__ . '/../app/config/parameters.yml';
+
 if (file_exists($paramFile)) {
     $data = Yaml::parse($paramFile);
     if (is_array($data)
@@ -47,10 +48,13 @@ $majorProblems    = $collection->getFailedRequirements();
 $minorProblems    = $collection->getFailedRecommendations();
 
 $translator->addLoader('yml', new YamlFileLoader());
-$translator->addResource('yml', __DIR__ . '/../app/Resources/translations/install.' . $locale . '.yml', $locale);
+$translator->addResource(
+    'yml',
+    __DIR__ . '/../app/Resources/translations/install.' . $locale . '.yml',
+    $locale
+);
 
-function iterateRequirements(array $collection)
-{
+function iterateRequirements(array $collection) {
     foreach ($collection as $requirement) :
 ?>
     <tr>
@@ -97,9 +101,12 @@ function iterateRequirements(array $collection)
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><?php echo $translator->trans('title'); ?></title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="bundles/chamiloadmintheme/components/adminlte/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="bundles/chamiloinstaller/css/install.css" />
     <script type="text/javascript" src="bundles/chamiloadmintheme/components/jquery/dist/jquery.min.js"></script>
+
     <script type="text/javascript">
         $(function() {
             $('.progress-bar li:last-child em.fix-bg').width($('.progress-bar li:last-child').width() / 2);
@@ -231,6 +238,10 @@ function iterateRequirements(array $collection)
                     </table>
                 <?php endforeach; ?>
             </div>
+
+            <hr/ >
+            <br />
+
             <div class="button-set">
                 <div class="pull-right">
                     <?php if (count($majorProblems) || count($minorProblems)): ?>
@@ -245,6 +256,10 @@ function iterateRequirements(array $collection)
             </div>
         </div>
     </div>
+
+    <hr/ >
+    <br />
+
     <div class="start-box" style="display: none;">
         <div class="fade-box"></div>
         <div class="start-content">
@@ -260,5 +275,13 @@ function iterateRequirements(array $collection)
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">
+                Chamilo
+            </p>
+        </div>
+    </footer>
 </body>
 </html>

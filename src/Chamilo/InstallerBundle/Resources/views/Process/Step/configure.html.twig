@@ -31,11 +31,9 @@
                 {{ form_rest(form) }}
             </div>
 
-            <div class="form-actions">
-                <div class="pull-right">
-                    <a href="{{ app.request.basePath }}/install.php" class="btn btn-default back">{{ 'process.button.back'|trans }}</a>
-                    <button class="btn btn-primary button next" type="submit">{{ 'process.button.next'|trans }}</button>
-                </div>
+            <div class="install-form-actions">
+                <a href="{{ app.request.basePath }}/install.php" class="btn btn-default back">{{ 'process.button.back'|trans }}</a>
+                <button class="btn btn-primary button next" type="submit">{{ 'process.button.next'|trans }}</button>
             </div>
         </form>
     </div>

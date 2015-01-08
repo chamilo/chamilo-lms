@@ -30,13 +30,13 @@
                 </div>
             </div>
             {{ form_rest(form) }}
-            <div class="form-actions">
+            <div class="install-form-actions">
                 <a href="{{ path('sylius_flow_display', {'scenarioAlias': 'chamilo_installer', 'stepName': 'configure'}) }}" class="btn btn-default btn-lg">
-                    <i class="icon-chevron-left"></i>
+                    <i class="fa fa-chevron-right"></i>
                     {{ 'process.button.back'|trans }}
                 </a> &nbsp;
                 <button class="btn btn-lg btn-primary" type="submit">
-                    <i class="icon-magic"></i> {{ 'process.button.install'|trans }}
+                    <i class="fa fa-magic"></i> {{ 'process.button.install'|trans }}
                 </button>
             </div>
         </form>

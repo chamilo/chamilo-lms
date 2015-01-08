@@ -9,11 +9,13 @@
 
 {% block content %}
 
+<div class="well">
 {{ 'process.step.welcome.content'|trans|raw }}
+</div>
 
-<div class="form-actions">
+<div class="install-form-actions">
     <a href="{{ path('sylius_flow_forward', {'scenarioAlias': 'chamilo_installer', 'stepName': 'welcome'}) }}" class="btn btn-lg btn-primary">
-        {{ 'process.button.install'|trans }} <i class="icon-chevron-right"></i>
+        {{ 'process.button.continue'|trans }} <i class="fa fa-chevron-right"></i>
     </a>
 </div>
 {% endblock %}

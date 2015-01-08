@@ -60,15 +60,13 @@
             </tbody>
         </table>
 
-        <div class="button-set">
-            <div class="pull-right">
-                <a href="{{ path('sylius_flow_display', { scenarioAlias: 'chamilo_installer', stepName: 'configure' }) }}" class="btn btn-default back disabled">
-                    <span>{{ 'process.button.back'|trans }}</span>
-                </a>
-                <a href="javascript: void(0)" class="btn btn-primary next primary disabled">
-                    <span>{{ 'process.button.next'|trans }}</span>
-                </a>
-            </div>
+        <div class="install-form-actions">
+            <a href="{{ path('sylius_flow_display', { scenarioAlias: 'chamilo_installer', stepName: 'configure' }) }}" class="btn btn-default back disabled">
+                <span>{{ 'process.button.back'|trans }}</span>
+            </a>
+            <a href="javascript: void(0)" class="btn btn-primary next primary disabled">
+                <span>{{ 'process.button.next'|trans }}</span>
+            </a>
         </div>
     </div>
 {% endblock %}

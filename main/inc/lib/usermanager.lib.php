@@ -3557,7 +3557,7 @@ class UserManager
     }
 
     /**
-     * Returns a list of all admninistrators
+     * Returns a list of all administrators
      * @author jmontoya
      * @return array
      */
@@ -3568,13 +3568,18 @@ class UserManager
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email FROM $tbl_url_rel_user as url INNER JOIN $table_admin as admin
-                                 ON (admin.user_id=url.user_id) INNER JOIN $table_user u ON (u.user_id=admin.user_id)
-                                 WHERE access_url_id ='".$access_url_id."'";
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email
+                    FROM $tbl_url_rel_user as url
+                    INNER JOIN $table_admin as admin
+                    ON (admin.user_id=url.user_id)
+                    INNER JOIN $table_user u
+                    ON (u.user_id=admin.user_id)
+                    WHERE access_url_id ='".$access_url_id."'";
         } else {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email FROM $table_admin as admin
-                    INNER JOIN $table_user u ON (u.user_id=admin.user_id)";
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email
+                    FROM $table_admin as admin
+                    INNER JOIN $table_user u
+                    ON (u.user_id=admin.user_id)";
         }
         $result = Database::query($sql);
         $return = array();
@@ -3583,6 +3588,7 @@ class UserManager
                 $return[$row['user_id']] = $row;
             }
         }
+
         return $return;
     }
 
@@ -4898,5 +4904,47 @@ EOF;
                     WHERE language = '$from'";
             Database::query($sql);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getOfficialCodeGrouped()
+    {
+        $user = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT DISTINCT official_code
+                FROM $user
+                GROUP BY official_code";
+        $result = Database::query($sql);
+
+        $values = Database::store_result($result, 'ASSOC');
+
+        $result = array();
+        foreach ($values as $value) {
+            $result[$value['official_code']] = $value['official_code'];
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $officialCode
+     * @return array
+     */
+    public static function getUsersByOfficialCode($officialCode)
+    {
+        $user = Database::get_main_table(TABLE_MAIN_USER);
+        $officialCode = Database::escape_string($officialCode);
+
+        $sql = "SELECT DISTINCT user_id
+                FROM $user
+                WHERE official_code = '$officialCode'
+                ";
+        $result = Database::query($sql);
+
+        $users = array();
+        while ($row = Database::fetch_array($result)) {
+            $users[] = $row['user_id'];
+        }
+        return $users;
     }
 }

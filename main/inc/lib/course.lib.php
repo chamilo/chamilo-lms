@@ -36,7 +36,7 @@ class CourseManager
      *
      * @return  mixed  false if the course was not created, array with the course info
      */
-    public static function create_course($params)
+    public static function create_course($params, $extraFields = array())
     {
         global $_configuration;
         // Check portal limits
@@ -129,6 +129,11 @@ class CourseManager
                         $cr->set_file_option();
                         $cr->restore($course_info['id']); //course_info[id] is the course.code value (I know...)
                     }
+
+                    $params['course_code'] = $course_info['code'];
+
+                    $courseFieldValue = new CourseFieldValue();
+                    $courseFieldValue->save_field_values($params);
 
                     return $course_info;
                 }

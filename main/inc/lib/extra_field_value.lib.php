@@ -160,14 +160,74 @@ class ExtraFieldValue extends Model
                                 }
                             }
                             break;
+                        case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                            $dirPermissions = api_get_permissions_for_new_directories();
+                            $sysCodePath = api_get_path(SYS_CODE_PATH);
+
+                            $fileDir = "upload/extrafields/{$this->type}/";
+                            $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE . "_{$params[$this->handler_id]}.png";
+
+                            if (!file_exists($sysCodePath . $fileDir)) {
+                                mkdir($sysCodePath . $fileDir, $dirPermissions, true);
+                            }
+
+                            if ($value['error'] == 0) {
+                                $imageExtraField = new Image($value['tmp_name']);
+                                $imageExtraField->send_image($sysCodePath . $fileDir . $fileName, -1, 'png');
+
+                                $new_params = array(
+                                    $this->handler_id => $params[$this->handler_id],
+                                    'field_id' => $extra_field_info['id'],
+                                    'field_value' => $fileDir . $fileName
+                                );
+
+                                if ($this->type !== 'session' && $this->type !== 'course') {
+                                    $new_params['comment'] = $comment;
+                                }
+
+                                self::save($new_params);
+                            }
+                            break;
+                        case ExtraField::FIELD_TYPE_FILE:
+                            $dirPermissions = api_get_permissions_for_new_directories();
+                            $sysCodePath = api_get_path(SYS_CODE_PATH);
+
+                            $fileDir = "upload/extrafields/{$this->type}/";
+                            $cleanedName = replace_dangerous_char($value['name']);
+                            $fileName = ExtraField::FIELD_TYPE_FILE . "_{$params[$this->handler_id]}_$cleanedName";
+
+                            if (!file_exists($sysCodePath . $fileDir)) {
+                                mkdir($sysCodePath . $fileDir, $dirPermissions, true);
+                            }
+
+                            if ($value['error'] == 0) {
+                                moveUploadedFile($value, $sysCodePath . $fileDir . $fileName);
+
+                                $new_params = array(
+                                    $this->handler_id => $params[$this->handler_id],
+                                    'field_id' => $extra_field_info['id'],
+                                    'field_value' => $fileDir . $fileName
+                                );
+
+                                if ($this->type !== 'session' && $this->type !== 'course') {
+                                    $new_params['comment'] = $comment;
+                                }
+
+                                self::save($new_params);
+                            }
+                            break;
                         default;
-                            $newParams = array(
-                                $this->handler_id => $params[$this->handler_id],
-                                'field_id' => $extra_field_info['id'],
-                                'field_value' => $value,
-                                'comment' => $comment
+                            $new_params = array(
+                                $this->handler_id   => $params[$this->handler_id],
+                                'field_id'          => $extra_field_info['id'],
+                                'field_value'       => $value
                             );
-                            self::save($newParams);
+
+                            if ($this->handler_id !== 'session_id' && $this->handler_id !== 'course_code') {
+                                $new_params['comment'] = $comment;
+                            }
+
+                            self::save($new_params);
                     }
                 }
             }
@@ -256,7 +316,10 @@ class ExtraFieldValue extends Model
 
             $params['field_value'] = $value_to_insert;
             $params['tms'] = api_get_utc_datetime();
-            $params[$this->author_id] = api_get_user_id();
+
+            if ($this->handler_id !== 'session_id' && $this->handler_id !== 'course_code') {
+                $params[$this->author_id] = api_get_user_id();
+            }
 
             // Insert
             if (empty($field_values)) {

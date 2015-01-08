@@ -2714,7 +2714,7 @@ CREATE TABLE IF NOT EXISTS message_attachment (
 
 
 
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', 'Yes', 1 , 1);
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', '', 1 , 1);
 
 --
 -- Table structure for table block

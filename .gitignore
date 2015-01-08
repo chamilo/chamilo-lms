@@ -35,3 +35,6 @@ searchdb/*
 nbproject/*
 
 plugin/bbb/config.vm.php
+
+# Extrafields files
+main/upload/extrafields/*

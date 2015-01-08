@@ -83,7 +83,8 @@ class SessionManager
         $start_limit = true,
         $end_limit = true,
         $fix_name = false,
-        $duration = null
+        $duration = null,
+        $extraFields = array()
     ) {
         global $_configuration;
 
@@ -204,6 +205,11 @@ class SessionManager
                 }
 
                 if (!empty($session_id)) {
+                    $extraFields['session_id'] = $session_id;
+
+                    $sessionFieldValue = new SessionFieldValue();
+                    $sessionFieldValue->save_field_values($extraFields);
+
                     /*
                       Sends a message to the user_id = 1
 
@@ -1345,7 +1351,8 @@ class SessionManager
         $end_limit = true,
         $description = null,
         $showDescription = null,
-        $duration = null
+        $duration = null,
+        $extraFields = array()
     ) {
         $name = trim(stripslashes($name));
         $year_start = intval($year_start);
@@ -1455,6 +1462,12 @@ class SessionManager
 					  WHERE id='$id'";
 
                 Database::query($sql);
+
+                $extraFields['session_id'] = $id;
+
+                $sessionFieldValue = new SessionFieldValue();
+                $sessionFieldValue->save_field_values($extraFields);
+
                 return $id;
             }
         }

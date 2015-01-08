@@ -217,6 +217,76 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 </tr>
 
 <?php
+$sessionField = new SessionField();
+$sessionFields = $sessionField->get_all();
+
+foreach ($sessionFields as $field) {
+    if ($field['field_visible'] != '1') {
+        continue;
+    }
+
+    $sesionFieldValue = new SessionFieldValue();
+    $sesionValueData = $sesionFieldValue->get_values_by_handler_and_field_id($sessionId, $field['id'], true);
+    ?>
+        <tr>
+            <td><?php echo $field['field_display_text'] ?></td>
+            <td>
+                <?php
+                switch ($field['field_type']) {
+                    case ExtraField::FIELD_TYPE_CHECKBOX:
+                        if ($sesionValueData !== false && $sesionValueData['field_value'] == '1') {
+                            echo get_lang('Yes');
+                        } else {
+                            echo get_lang('No');
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_DATE:
+                        if ($sesionValueData !== false && !empty($sesionValueData['field_value'])) {
+                            echo api_format_date($sesionValueData['field_value'], DATE_FORMAT_LONG_NO_DAY);
+                        } else {
+                            echo get_lang('None');
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                        if ($sesionValueData !== false && !empty($sesionValueData['field_value'])) {
+                            if (file_exists(api_get_path(SYS_CODE_PATH) . $sesionValueData['field_value'])) {
+                                $image = Display::img(
+                                    api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
+                                    $field['field_display_text'],
+                                    array('width' => '300')
+                                );
+                                
+                                echo Display::url(
+                                    $image,
+                                    api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
+                                    array('target' => '_blank')
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_FILE:
+                        if ($sesionValueData !== false && !empty($sesionValueData['field_value'])) {
+                            if (file_exists(api_get_path(SYS_CODE_PATH) . $sesionValueData['field_value'])) {
+                                echo Display::url(
+                                    get_lang('Download'),
+                                    api_get_path(WEB_CODE_PATH) . $sesionValueData['field_value'],
+                                    array(
+                                        'title' => $field['field_display_text'],
+                                        'target' => '_blank'
+                                    )
+                                );
+                            }
+                        }
+                        break;
+                    default:
+                        echo $sesionValueData['field_value'];
+                        break;
+                }
+                ?>
+            </td>
+        </tr>
+    <?php
+}
 
 $multiple_url_is_on = api_get_multiple_access_url();
 

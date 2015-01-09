@@ -165,6 +165,10 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 $postAction = isset($_POST['action']) ? $_POST['action'] : null;
 
+if (apiIsExcludedUserType()) {
+    api_not_allowed(true);
+}
+
 if (empty($session_id)) {
     $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, false);
 } else {

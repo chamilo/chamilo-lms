@@ -61,6 +61,7 @@ class InstallCommand extends ContainerAwareCommand
             && $this->getContainer()->getParameter('installed');
 
         if ($isInstalled && !$forceInstall) {
+
             $output->writeln('<comment>ATTENTION</comment>: Chamilo is already installed.');
             $output->writeln(
                 'To proceed with install - run command with <info>--force</info> option:'
@@ -82,6 +83,7 @@ class InstallCommand extends ContainerAwareCommand
         if ($forceInstall) {
             // if --force option we have to clear cache and set installed to false
             $this->updateInstalledFlag(false);
+            // See https://github.com/symfony/symfony/issues/12278
             $commandExecutor->runCommand(
                 'cache:clear',
                 array(

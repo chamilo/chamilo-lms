@@ -1,9 +1,14 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle;
 
 use Symfony\Component\HttpKernel\Kernel;
 
+/**
+ * Class ScriptManager
+ * @package Chamilo\InstallerBundle
+ */
 class ScriptManager
 {
     const CHAMILO_INSTALLER_SCRIPT_FILE_NAME = 'install.php';

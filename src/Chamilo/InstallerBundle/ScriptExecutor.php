@@ -1,10 +1,15 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Class ScriptExecutor
+ * @package Chamilo\InstallerBundle
+ */
 class ScriptExecutor
 {
     const CHAMILO_SCRIPT_ANNOTATION = 'ChamiloScript';

@@ -7497,3 +7497,60 @@ function api_register_campus($listCampus = true) {
     }
     // Reload the settings.
 }
+
+/**
+ * Check whether the user type should be exclude.
+ * Such as invited or anonymous users
+ * @param boolean $checkDB Optional. Whether check the user status
+ * @param int $userId Options. The user id
+ * @return boolean
+ */
+function apiIsExcludedUserType($checkDB = false, $userId = 0)
+{
+    if ($checkDB) {
+        $userId = empty($userId) ? api_get_user_id() : intval($userId);
+
+        if ($userId == 0) {
+            return true;
+        }
+
+        $userInfo = api_get_user_info($userId);
+
+        switch ($userInfo['status']) {
+            case ROLE_INVITED:
+                //no break;
+            case ANONYMOUS:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    $isInvited = api_is_invited_user();
+    $isAnonymous = api_is_anonymous();
+
+    if ($isInvited || $isAnonymous) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Get the exclude user types
+ * @param string $format Optional. The result type. Array or string
+ * @return array
+ */
+function apiGetExcludedUserTypes($format = 'array')
+{
+    $excludedTypes = array(
+        ROLE_INVITED,
+        ANONYMOUS
+    );
+
+    if ($format == 'string') {
+        return implode(', ', $excludedTypes);
+    }
+
+    return $excludedTypes;
+}

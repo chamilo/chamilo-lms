@@ -1680,7 +1680,13 @@ class Category implements GradebookItem
         $catId,
         $userList = array()
     ) {
+        $orientation = api_get_configuration_value('certificate_pdf_orientation');
+
         $params['orientation'] = 'landscape';
+        if (!empty($orientation)) {
+            $params['orientation'] = $orientation;
+        }
+
         $params['left'] = 0;
         $params['right'] = 0;
         $params['top'] = 0;

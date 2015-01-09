@@ -1631,14 +1631,12 @@ class Category implements GradebookItem
                 if (!empty($fileWasGenerated)) {
                     $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
                     $certificates = Display::url(
-                        Display::return_icon(
-                            'certificate_download.png',
-                            get_lang('DownloadCertificate'),
-                            array(),
-                            ICON_SIZE_MEDIUM
-                        ).'&nbsp;'.get_lang('DownloadCertificate'),
+                        '&nbsp;'.get_lang('DownloadCertificate'),
                         $url,
-                        array('target' => '_blank')
+                        array(
+                            'target' => '_blank',
+                            'class' => 'btn'
+                        )
                     );
                     $exportToPDF = Display::url(
                         Display::return_icon(

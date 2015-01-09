@@ -138,7 +138,4 @@ class SessionManager extends BaseEntityManager
             }
         }
     }
-
-
-
 }

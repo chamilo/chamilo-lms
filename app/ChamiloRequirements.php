@@ -155,16 +155,16 @@ class ChamiloRequirements extends SymfonyRequirements
             'Set the "<strong>memory_limit</strong>" setting in php.ini<a href="#phpini">*</a> to at least "256M".'
         );
 
-        /*$this->addRecommendation(
-            $this->checkNodeExists(),
-            'NodeJS should be installed',
-            'Install the <strong>NodeJS</strong>.'
-        );*/
-
         $this->addChamiloRequirement(
             is_writable($baseDir . '/web/uploads'),
             'web/uploads/ directory must be writable',
             'Change the permissions of the "<strong>web/uploads/</strong>" directory so that the web server can write into it.'
+        );
+
+        $this->addChamiloRequirement(
+            is_writable($baseDir . '/web/assetic'),
+            'web/assetic/ directory must be writable',
+            'Change the permissions of the "<strong>web/assetic/</strong>" directory so that the web server can write into it.'
         );
 
         $this->addChamiloRequirement(
@@ -178,8 +178,6 @@ class ChamiloRequirements extends SymfonyRequirements
             'web/media/ directory must be writable',
             'Change the permissions of the "<strong>web/media/</strong>" directory so that the web server can write into it.'
         );
-
-
 
         /*$this->addChamiloRequirement(
             is_writable($baseDir . '/app/attachment'),
@@ -220,6 +218,9 @@ class ChamiloRequirements extends SymfonyRequirements
         }
     }
 
+    /**
+     * @return array
+     */
     private function getExtensions()
     {
         return

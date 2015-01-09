@@ -22,8 +22,7 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
  */
 class SettingsManager extends SyliusSettingsManager
 {
-
-    protected $url;
+    private $url;
 
     /**
      * @return AccessUrl
@@ -31,6 +30,14 @@ class SettingsManager extends SyliusSettingsManager
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * @param AccessUrl $url
+     */
+    public function setUrl(AccessUrl $url)
+    {
+        $this->url = $url;
     }
 
     /**

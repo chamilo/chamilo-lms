@@ -5,6 +5,9 @@ parameters:
     chamilo_core.entity.manager.session_manager.class: Chamilo\CoreBundle\Entity\Manager\SessionManager
     chamilo_core.entity.session: Chamilo\CoreBundle\Entity\Session
 
+    chamilo_core.entity.manager.access_url_manager.class: Chamilo\CoreBundle\Entity\Manager\AccessUrlManager
+    chamilo_core.entity.access_url: Chamilo\CoreBundle\Entity\AccessUrl
+
 services:
     chamilo_core.manager.course:
         class: %chamilo_core.entity.manager.course_manager.class%
@@ -13,6 +16,10 @@ services:
     chamilo_core.manager.session:
         class: %chamilo_core.entity.manager.session_manager.class%
         arguments: [%chamilo_core.entity.session%, @doctrine]
+
+    chamilo_core.manager.access_url:
+        class: %chamilo_core.entity.manager.access_url_manager.class%
+        arguments: [%chamilo_core.entity.access_url%, @doctrine]
 
     twig.extension.chamilo_extension:
         class: Chamilo\CoreBundle\Twig\Extension\ChamiloExtension
@@ -35,8 +42,6 @@ services:
 
     chamilo_core.directory_namer.user_image:
         class: Chamilo\CoreBundle\Naming\UserImage
-
-
 
     chamilo_core.form.type.yes_no:
         class: Chamilo\CoreBundle\Form\Type\YesNoType

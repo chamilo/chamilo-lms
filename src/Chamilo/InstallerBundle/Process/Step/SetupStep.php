@@ -24,11 +24,9 @@ class SetupStep extends AbstractStep
     {
         $form = $this->createSetupForm();
 
-        /** @var SettingsManager $settingsManager */
         $settingsManager = $this->get('chamilo.settings.manager');
         $settings = $settingsManager->loadSettings('platform');
 
-        /** @var ConfigManager $configManager */
         $form->get('portal')->get('institution')->setData($settings->get('institution'));
         $form->get('portal')->get('institution_url')->setData($settings->get('institution_url'));
         $form->get('portal')->get('site_name')->setData($settings->get('site_name'));
@@ -53,7 +51,9 @@ class SetupStep extends AbstractStep
         $adminUser = $this
             ->getDoctrine()
             ->getRepository('ChamiloUserBundle:User')
-            ->findOneBy(array('username' => LoadAdminUserData::DEFAULT_ADMIN_USERNAME));
+            ->findOneBy(
+                array('username' => LoadAdminUserData::DEFAULT_ADMIN_USERNAME)
+            );
 
         if (!$adminUser) {
             throw new \RuntimeException("Admin user wasn't loaded in fixtures.");
@@ -73,10 +73,10 @@ class SetupStep extends AbstractStep
 
             $this->get('fos_user.user_manager')->updateUser($adminUser);
 
-            // update company name and title if specified
-            /** @var SettingsManager $settingsManager */
+            // Setting portal parameters
             $settingsManager = $this->get('chamilo.settings.manager');
-
+            $url = $this->get('chamilo_core.manager.access_url')->find(1);
+            $settingsManager->setUrl($url);
             $settings = $settingsManager->loadSettings('platform');
 
             $parameters = array(

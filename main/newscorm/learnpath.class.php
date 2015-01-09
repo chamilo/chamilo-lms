@@ -204,7 +204,7 @@ class learnpath
             $this->last_item_seen = $row['last_item'];
             $this->progress_db = $row['progress'];
             $this->lp_view_session_id = $row['session_id'];
-        } else if (!api_is_invited_user()) {
+        } else if (!apiIsInvitedUser()) {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
             }
@@ -350,7 +350,7 @@ class learnpath
                         }
                     }
                 } else {
-                    if (!api_is_invited_user()) {
+                    if (!apiIsInvitedUser()) {
                         if (is_object($this->items[$item_id])) {
                             $this->items[$item_id]->set_status($this->default_status);
                         }
@@ -3621,7 +3621,7 @@ class learnpath
         if (Database :: num_rows($res) > 0) {
             $row = Database :: fetch_array($res);
             $this->lp_view_id = $row['id'];
-        } else if (!api_is_invited_user()) {
+        } else if (!apiIsInvitedUser()) {
             // There is no database record, create one.
             $sql = "INSERT INTO $lp_view_table (c_id, lp_id,user_id, view_count, session_id) VALUES
             		($course_id, " . $this->get_id() . "," . $this->get_user_id() . ", 1, $sessionId)";
@@ -4188,7 +4188,7 @@ class learnpath
         // TODO
         // Call autosave method to save the current progress.
         //$this->index = 0;
-        if (api_is_invited_user()) {
+        if (apiIsInvitedUser()) {
             return false;
         }
         $session_id = api_get_session_id();
@@ -4308,7 +4308,7 @@ class learnpath
         $session_condition = api_get_session_condition(api_get_session_id(), true, false);
         $table = Database :: get_course_table(TABLE_LP_VIEW);
 
-        if (isset($this->current) && !api_is_invited_user()) {
+        if (isset($this->current) && !apiIsInvitedUser()) {
             if ($this->debug > 2) {
                 error_log('New LP - Saving current item (' . $this->current . ') for later review', 0);
             }
@@ -4325,7 +4325,7 @@ class learnpath
             Database::query($sql);
         }
 
-        if (!api_is_invited_user()) {
+        if (!apiIsInvitedUser()) {
             // Save progress.
             list($progress, $text) = $this->get_progress_bar_text('%');
             if ($progress >= 0 && $progress <= 100) {

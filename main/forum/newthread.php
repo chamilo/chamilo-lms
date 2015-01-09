@@ -119,7 +119,7 @@ if ($current_forum['forum_of_group'] != 0) {
 }
 
 // 6. Invited users can't create new threads
-if (api_is_invited_user()) {
+if (apiIsInvitedUser()) {
     api_not_allowed(true);
 }
 

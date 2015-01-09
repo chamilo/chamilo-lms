@@ -2565,7 +2565,7 @@ function api_is_teacher() {
  * Checks whether the current user is a invited user
  * @return boolean
  */
-function api_is_invited_user() {
+function apiIsInvitedUser() {
     global $_user;
 
     return isset($_user['status']) && $_user['status'] == ROLE_INVITED;
@@ -7526,7 +7526,7 @@ function apiIsExcludedUserType($checkDB = false, $userId = 0)
         }
     }
 
-    $isInvited = api_is_invited_user();
+    $isInvited = apiIsInvitedUser();
     $isAnonymous = api_is_anonymous();
 
     if ($isInvited || $isAnonymous) {

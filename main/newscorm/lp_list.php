@@ -118,7 +118,7 @@ if (!empty($flat_list)) {
         echo '<th width="300px">'.get_lang('AuthoringOptions')."</th>";
     } else {
         echo '<th width="50%">'.get_lang('Title').'</th>';
-        if (!api_is_invited_user()) {
+        if (!apiIsInvitedUser()) {
             echo '<th>'.get_lang('Progress')."</th>";
         }
         echo '<th>'.get_lang('Actions')."</th>";
@@ -230,7 +230,7 @@ if (!empty($flat_list)) {
 
         $progress = 0;
 
-        if (!api_is_invited_user()) {
+        if (!apiIsInvitedUser()) {
             $progress = learnpath::getProgress(
                 $id,
                 $userId,
@@ -244,7 +244,7 @@ if (!empty($flat_list)) {
         } else {
             $dsp_progress = "";
 
-            if (!api_is_invited_user()) {
+            if (!apiIsInvitedUser()) {
                 $dsp_progress = '<td>'.learnpath::get_progress_bar($progress, '%').'</td>';
             }
         }

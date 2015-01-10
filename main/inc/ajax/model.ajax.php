@@ -214,7 +214,6 @@ switch ($action) {
     case 'get_work_student':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $count = getWorkListStudent(0, $limit, $sidx, $sord, $whereCondition, true);
-
         break;
     case 'get_work_user_list_all':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -258,7 +257,7 @@ switch ($action) {
         }
         break;
     case 'get_work_student_list_overview':
-        if (!api_is_allowed_to_edit()) {
+        if (!(api_is_allowed_to_edit() || api_is_coach())) {
             return 0;
         }
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -468,11 +467,15 @@ switch ($action) {
             }
         }
 
+        if (!in_array($sidx, array('training_hours'))) {
+            //$sidx = 'training_hours';
+        }
+
         $result = CourseManager::get_user_list_from_course_code(
             null,
             null,
             "LIMIT $start, $limit",
-            " $sidx $sord",
+            null, //" $sidx $sord",
             null,
             null,
             true,
@@ -510,7 +513,9 @@ switch ($action) {
                 $column_names[] = $extra['3'];
             }
         }
-
+        if (!in_array($sidx, array('title'))) {
+            $sidx = 'title';
+        }
         $result = CourseManager::get_user_list_from_course_code(
             null,
             null,
@@ -588,7 +593,6 @@ switch ($action) {
                 'actions'
             );
         } else {
-
             $columns = array(
                 'type',
                 'firstname',
@@ -677,13 +681,14 @@ switch ($action) {
         $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
         break;
     case 'get_work_student_list_overview':
-        if (!api_is_allowed_to_edit()) {
+        if (!(api_is_allowed_to_edit() || api_is_coach())) {
             return array();
         }
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $columns = array(
             'student', 'works'
         );
+
         $result = getWorkUserListData(
             $workId,
             api_get_course_id(),

@@ -405,7 +405,9 @@ if (Database :: num_rows($result_total)) {
 //get HotPotatoes files (active and inactive)
 if ($is_allowedToEdit) {
     $sql = "SELECT * FROM $TBL_DOCUMENT
-            WHERE c_id = $courseId AND path LIKE '".Database :: escape_string($uploadPath)."/%/%'";
+            WHERE
+                c_id = $courseId AND
+                path LIKE '".Database :: escape_string($uploadPath.'/%/%')."'";
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 } else {
@@ -413,7 +415,7 @@ if ($is_allowedToEdit) {
             WHERE
                 d.id = ip.ref AND
                 ip.tool = '".TOOL_DOCUMENT."' AND
-                d.path LIKE '".Database :: escape_string($uploadPath)."/%/%' AND
+                d.path LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND
                 ip.visibility ='1' AND
                 d.c_id      = ".$courseId." AND
                 ip.c_id     = ".$courseId;
@@ -920,7 +922,7 @@ if ($is_allowedToEdit) {
                 d.id = ip.ref AND
                 ip.tool = '".TOOL_DOCUMENT."' AND
                 (d.path LIKE '%htm%') AND
-                d.path  LIKE '".Database :: escape_string($uploadPath)."/%/%'
+                d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
             LIMIT ".$from.",".$limit; // only .htm or .html files listed
 } else {
     $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
@@ -931,7 +933,7 @@ if ($is_allowedToEdit) {
                 d.id = ip.ref AND
                 ip.tool = '".TOOL_DOCUMENT."' AND
                 (d.path LIKE '%htm%') AND
-                d.path  LIKE '".Database :: escape_string($uploadPath)."/%/%' AND
+                d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND
                 ip.visibility='1'
             LIMIT ".$from.",".$limit;
 }

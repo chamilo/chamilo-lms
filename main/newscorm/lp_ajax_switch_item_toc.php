@@ -167,4 +167,11 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
     $_SESSION['lpobject'] = serialize($mylp);
     return $return;
 }
-echo switch_item_toc($_POST['lid'], $_POST['uid'], $_POST['vid'], $_POST['iid'], $_POST['next']);
+
+echo switch_item_toc(
+    $_POST['lid'],
+    $_POST['uid'],
+    $_POST['vid'],
+    $_POST['iid'],
+    $_POST['next']
+);

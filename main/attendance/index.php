@@ -48,7 +48,8 @@ $actions = array(
     'attendance_delete_select',
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
-    'attendance_sheet_list_no_edit'
+    'attendance_sheet_list_no_edit',
+    'calendar_logins'
 );
 
 $actions_calendar = array(
@@ -302,6 +303,11 @@ switch ($action) {
         }
     case 'calendar_list' :
         $attendance_controller->attendance_calendar($action, $attendance_id, $calendar_id);
+        break;
+    case 'calendar_logins':
+        if (api_is_allowed_to_edit(null, true)) {
+            $attendance_controller->calendarLogins();
+        }
         break;
     default :
         $attendance_controller->attendance_list();

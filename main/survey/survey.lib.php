@@ -872,6 +872,7 @@ class survey_manager
         $sql = "SELECT * FROM $table_survey_question_option
 		        WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
         $result = Database::query($sql);
+        $return = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $return[$row['question_id']]['answers'][] = $row['option_text'];
         }
@@ -2631,7 +2632,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function handle_reporting_actions($survey_data, $people_filled)
+    public static function handle_reporting_actions($survey_data, $people_filled)
     {
         $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -2639,7 +2640,8 @@ class SurveyUtil
         $temp_questions_data = survey_manager::get_questions($_GET['survey_id']);
 
         // Sorting like they should be displayed and removing the non-answer question types (comment and pagebreak)
-        $my_temp_questions_data=($temp_questions_data==null) ? array() : $temp_questions_data;
+        $my_temp_questions_data = ($temp_questions_data==null) ? array() : $temp_questions_data;
+        $questions_data = array();
         foreach ($my_temp_questions_data as $key => & $value) {
             if ($value['type'] != 'comment' && $value['type'] != 'pagebreak') {
                 $questions_data[$value['sort']] = $value;
@@ -2892,6 +2894,7 @@ class SurveyUtil
         }
 
         $currentQuestion = isset($_GET['question']) ? $_GET['question'] : 0;
+        $question = array();
 
         echo '<div class="actions">';
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.
@@ -2938,7 +2941,7 @@ class SurveyUtil
             }
         }
 
-        echo $question['survey_question'];
+        echo isset($question['survey_question']) ? $question['survey_question'] : null;
 
         if ($question['type'] == 'score') {
             /** @todo This function should return the options as this is needed further in the code */

@@ -5,6 +5,7 @@ require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 /**
+ * Class Auth
  * Auth can be used to instantiate objects or as a library to manage courses
  * This file contains a class used like library provides functions for auth tool.
  * It's also used like model to courses_controller (MVC pattern)
@@ -19,7 +20,6 @@ class Auth
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -35,8 +35,13 @@ class Auth
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         // get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
-            " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
+        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv
+                INNER JOIN $TABLE_COURSE_FIELD tcf
+                ON tcfv.field_id =  tcf.id
+                WHERE
+                    tcf.field_variable = 'special_course' AND
+                    tcfv.field_value = 1
+                ";
 
         $special_course_result = Database::query($sql);
         if (Database::num_rows($special_course_result) > 0) {
@@ -476,25 +481,36 @@ class Auth
         }
 
         $search_term_safe = Database::escape_string($search_term);
-        $sql_find = "SELECT * FROM $TABLECOURS WHERE (code LIKE '%" .
-            $search_term_safe . "%' OR title LIKE '%" . $search_term_safe .
-            "%' OR tutor_name LIKE '%" . $search_term_safe . "%')" .
-            $without_special_courses . "ORDER BY title, visual_code ASC " .
-            $limitFilter;
+        $sql_find = "SELECT * FROM $TABLECOURS
+                    WHERE (
+                        code LIKE '%".$search_term_safe . "%' OR
+                        title LIKE '%" . $search_term_safe ."%' OR
+                        tutor_name LIKE '%" . $search_term_safe . "%'
+                        )
+                        $without_special_courses
+                    ORDER BY title, visual_code ASC
+                    $limitFilter
+                    ";
 
         global $_configuration;
         if ($_configuration['multiple_access_urls']) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql_find = "SELECT * FROM $TABLECOURS as course INNER JOIN" .
-                    $tbl_url_rel_course . "as url_rel_course ON
-                    (url_rel_course.course_code=course.code) WHERE access_url_id = " .
-                    $url_access_id . "AND (code LIKE '%" . $search_term_safe . "%'
-                    OR title LIKE '%" . $search_term_safe . "%'
-                    OR tutor_name LIKE '%" . $search_term_safe . "%' )
-                    $without_special_courses ORDER BY title, visual_code ASC " .
-                    $limitFilter;
+                $sql_find = "SELECT *
+                            FROM $TABLECOURS as course
+                            INNER JOIN $tbl_url_rel_course as url_rel_course
+                            ON (url_rel_course.course_code=course.code)
+                            WHERE
+                                access_url_id = $url_access_id AND (
+                                    code LIKE '%" . $search_term_safe . "%' OR
+                                    title LIKE '%" . $search_term_safe . "%' OR
+                                    tutor_name LIKE '%" . $search_term_safe . "%'
+                                )
+                                $without_special_courses
+                            ORDER BY title, visual_code ASC
+                            $limitFilter
+                            ";
             }
         }
         $result_find = Database::query($sql_find);

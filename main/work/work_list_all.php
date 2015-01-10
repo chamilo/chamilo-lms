@@ -15,7 +15,7 @@ require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
-$is_allowed_to_edit = api_is_allowed_to_edit();
+$is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -33,7 +33,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_course_info()
 );
 
-if (!(api_is_allowed_to_edit() || $isDrhOfCourse)) {
+if (!($is_allowed_to_edit || $isDrhOfCourse)) {
     api_not_allowed(true);
 }
 

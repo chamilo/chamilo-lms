@@ -38,6 +38,7 @@ event_access_tool(TOOL_SURVEY);
  * of the code)
  */
 
+$courseInfo = api_get_course_info();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
     $courseInfo

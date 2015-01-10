@@ -455,7 +455,7 @@ class DisplayGradebook
                 if (!empty($certificateLinkInfo) && isset($certificateLinkInfo['certificate_link'])) {
                     $certificateLink .= '<span style="float:right"> ' . $certificateLinkInfo['certificate_link']."</span>";
                 }
-                $scoreinfo .= '<h2>' . get_lang('Total') . ' : ' . $scorecourse_display . $certificateLink. '</h2>';
+                $scoreinfo .= '<h4>' . get_lang('Total') . ' : ' . $scorecourse_display . $certificateLink. '</h4>';
 
             }
             Display :: display_normal_message($scoreinfo, false);

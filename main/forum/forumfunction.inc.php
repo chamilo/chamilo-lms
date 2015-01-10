@@ -182,6 +182,7 @@ function handle_forum_and_forumcategories($lp_id = null)
         $return_message = delete_forum_forumcategory_thread($get_content, $get_id);
         Display::display_confirmation_message($return_message, false);
     }
+
     // Change visibility of a forum or a forum category.
     if ($action_forum_cat == 'invisible' || $action_forum_cat == 'visible') {
         $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
@@ -527,7 +528,7 @@ function store_forumcategory($values)
     $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
     // Find the max cat_order. The new forum category is added at the end => max cat_order + &
-    $sql = "SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string($table_categories)."
+    $sql = "SELECT MAX(cat_order) as sort_max FROM ".$table_categories."
             WHERE c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
@@ -1023,9 +1024,9 @@ function display_up_down_icon($content, $id, $list)
 /**
  * This function changes the visibility in the database (item_property)
  *
- * @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
- * @param $id the id of the content we want to make invisible
- * @param $target_visibility what is the current status of the visibility (0 = invisible, 1 = visible)
+ * @param string $content what is it that we want to make (in)visible: forum category, forum, thread, post
+ * @param int $id the id of the content we want to make invisible
+ * @param string $target_visibility what is the current status of the visibility (0 = invisible, 1 = visible)
  *
  * @todo change the get parameter so that it matches the tool constants.
  * @todo check if api_item_property_update returns true or false => returnmessage depends on it.

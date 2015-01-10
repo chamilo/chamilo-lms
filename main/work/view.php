@@ -35,14 +35,14 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
-if ((user_is_author($id) || $isDrhOfCourse) ||
+if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_is_coach())) ||
     (
         $courseInfo['show_score'] == 0 &&
         $work['active'] == 1 &&
         $work['accepted'] == 1
     )
 ) {
-    if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
+    if ((api_is_allowed_to_edit() || api_is_coach()) || api_is_drh()) {
         $url_dir = 'work_list_all.php?id='.$my_folder_data['id'];
     } else {
         $url_dir = 'work_list.php?id='.$my_folder_data['id'];
@@ -51,8 +51,13 @@ if ((user_is_author($id) || $isDrhOfCourse) ||
     $interbreadcrumb[] = array('url' => $url_dir, 'name' => $my_folder_data['title']);
     $interbreadcrumb[] = array('url' => '#','name' => $work['title']);
     //|| api_is_drh()
-    if (($courseInfo['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) ||
-        (api_is_allowed_to_edit()) || user_is_author($id) || $isDrhOfCourse
+    if (($courseInfo['show_score'] == 0 &&
+        $work['active'] == 1 &&
+        $work['accepted'] == 1
+        ) ||
+        (api_is_allowed_to_edit() || api_is_coach()) ||
+        user_is_author($id) ||
+        $isDrhOfCourse
     ) {
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
         switch ($action) {
@@ -89,7 +94,9 @@ if ((user_is_author($id) || $isDrhOfCourse) ||
         $tpl->assign('work', $work);
         $tpl->assign('work_comment_enabled', ALLOW_USER_COMMENTS);
         $tpl->assign('comments', $comments);
-        $tpl->assign('form', $commentForm);
+        if (api_is_allowed_to_session_edit()) {
+            $tpl->assign('form', $commentForm);
+        }
         $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
         $template = $tpl->get_template('work/view.tpl');

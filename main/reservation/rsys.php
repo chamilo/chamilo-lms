@@ -1,14 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-    The class-library with all reservation-system specific functionality
+ * Class Rsys
+ * The class-library with all reservation-system specific functionality
  */
-class Rsys {
+class Rsys
+{
 	/**
 	 *  Get required database-vars from inc/lib/database.lib.php and load them into the $GLOBALS['_rsys']-array
 	 *
 	 */
-	function init() {
+	public function init()
+	{
 		// reservation database tables
 		$GLOBALS['_rsys']['dbtables']['item'] 		  	= Database :: get_main_table(TABLE_MAIN_RESERVATION_ITEM);
 		$GLOBALS['_rsys']['dbtables']['reservation']  	= Database :: get_main_table(TABLE_MAIN_RESERVATION_RESERVATION);
@@ -197,7 +201,7 @@ class Rsys {
 	 *  @return -   Array               One or all rows of the category-table
 	 */
 	function get_category($id = null, $orderby = "name ASC") {
-        $id = intval($id);
+		$id = intval($id);
 		$sql = "SELECT * FROM ".Rsys :: getTable("category");
 		if (!empty ($id))
 			$sql .= " WHERE id = ".intval($id)."";
@@ -520,7 +524,7 @@ class Rsys {
                             WHERE ( 1=". (api_is_platform_admin() ? 1 : 0)."
 							OR ((cu.user_id='".api_get_user_id()."' AND (ir.edit_right=1 OR ir.delete_right=1)) OR i.creator='".api_get_user_id()."' ))";
 
- 		return @ Database::result(Database::query($sql), 0, 0);
+		return @ Database::result(Database::query($sql), 0, 0);
 	}
 
 	/**
@@ -570,21 +574,21 @@ class Rsys {
 						} else {
 							$tabel[$count][4] = '<img src="../img/right.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=manage&set=0\'" />';
 						}
-	                    if ($lijn2[5] == 0) {
-       		                 $tabel[$count][5] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=1\'" />';
-                	    } else {
-                        	$tabel[$count][5] = '<img src="../img/right.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=0\'" />';
-	                    }
-			$controle = true;
-			}
-			}
-			if (!$controle) {
-				$tabel[$count][2] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=edit&set=1\'" />';
-				$tabel[$count][3] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=delete&set=1\'" />';
-				$tabel[$count][4] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=manage&set=1\'" />';
-				$tabel[$count][5] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=1\'" />';
-			}
-			$tabel[$count][6] = $itemid."-".$lijn[0];
+						if ($lijn2[5] == 0) {
+							$tabel[$count][5] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=1\'" />';
+						} else {
+							$tabel[$count][5] = '<img src="../img/right.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=0\'" />';
+						}
+						$controle = true;
+					}
+				}
+				if (!$controle) {
+					$tabel[$count][2] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=edit&set=1\'" />';
+					$tabel[$count][3] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=delete&set=1\'" />';
+					$tabel[$count][4] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=manage&set=1\'" />';
+					$tabel[$count][5] = '<img src="../img/wrong.gif" onclick="document.location.href=\'m_item.php?action=m_rights&subaction=switch&class_id='.$lijn[0].'&item_id='.$itemid.'&switch=view&set=1\'" />';
+				}
+				$tabel[$count][6] = $itemid."-".$lijn[0];
 			}
 		}
 		return $tabel;
@@ -927,7 +931,7 @@ class Rsys {
 	 */
 	function get_table_reservations($from, $per_page, $column, $direction) {
 		$sql = "SELECT DISTINCT r.id AS col0, i.name AS col1,  DATE_FORMAT(r.start_at,'%Y-%m-%d %H:%i') AS col2, DATE_FORMAT(r.end_at,'%Y-%m-%d %H:%i') AS col3," .
-   				"DATE_FORMAT(r.subscribe_from,'%Y-%m-%d %k:%i') AS col4, DATE_FORMAT(r.subscribe_until,'%Y-%m-%d %k:%i') AS col5,IF(timepicker <> 0, '".get_lang('TimePicker')."',CONCAT(r.subscribers,'/',r.max_users)) AS col6, r.notes AS col7, r.id as col8
+			"DATE_FORMAT(r.subscribe_from,'%Y-%m-%d %k:%i') AS col4, DATE_FORMAT(r.subscribe_until,'%Y-%m-%d %k:%i') AS col5,IF(timepicker <> 0, '".get_lang('TimePicker')."',CONCAT(r.subscribers,'/',r.max_users)) AS col6, r.notes AS col7, r.id as col8
                 FROM ".Rsys :: getTable('reservation')." r
                 INNER JOIN ".Rsys :: getTable('item')." i ON r.item_id=i.id
                 LEFT JOIN ".Rsys :: getTable('item_rights')." ir ON ir.item_id=i.id
@@ -1005,10 +1009,10 @@ class Rsys {
                 LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = r.item_id
                 LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id
                 WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."') OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).')';
-        if (isset ($_GET['keyword'])) {
-            $keyword = Database::escape_string(trim($_GET['keyword']));
-            $sql .= " AND (i.name LIKE '%".$keyword."%' OR i.description LIKE '%".$keyword."%' OR r.notes LIKE '%".$keyword."%')";
-        }
+		if (isset ($_GET['keyword'])) {
+			$keyword = Database::escape_string(trim($_GET['keyword']));
+			$sql .= " AND (i.name LIKE '%".$keyword."%' OR i.description LIKE '%".$keyword."%' OR r.notes LIKE '%".$keyword."%')";
+		}
 		return Database::result(Database::query($sql), 0, 0);
 	}
 
@@ -1033,7 +1037,7 @@ class Rsys {
 				return 2;
 		}
 		if ($start_at < (date( 'Y-m-d H:i:s',time())))
-				return 3;
+			return 3;
 		if (($stamp_start_date != $stamp_end_date) && $timepicker == '1')
 		{
 			return 4;
@@ -1192,10 +1196,10 @@ class Rsys {
 					WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."')
 					OR i2.creator='".api_get_user_id()."'
 					OR 1=". (api_is_platform_admin() ? 1 : 0)."))";
-      		if (isset ($_GET['keyword'])) {
-            		$keyword = Database::escape_string(trim($_GET['keyword']));
-            		$sql .= " AND (i1.name LIKE '%".$keyword."%' or r1.start_at LIKE '%".$keyword."%' or r1.end_at LIKE '%".$keyword."%' or u.lastname LIKE '%".$keyword."%' or u.firstname LIKE '%".$keyword."%' or s.start_at LIKE '%".$keyword."%' or s.end_at LIKE '%".$keyword."%')";
-        	}
+		if (isset ($_GET['keyword'])) {
+			$keyword = Database::escape_string(trim($_GET['keyword']));
+			$sql .= " AND (i1.name LIKE '%".$keyword."%' or r1.start_at LIKE '%".$keyword."%' or r1.end_at LIKE '%".$keyword."%' or u.lastname LIKE '%".$keyword."%' or u.firstname LIKE '%".$keyword."%' or s.start_at LIKE '%".$keyword."%' or s.end_at LIKE '%".$keyword."%')";
+		}
 		return Database::result(Database::query($sql), 0, 0);
 	}
 
@@ -1228,10 +1232,10 @@ class Rsys {
 					WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."')
 					OR i2.creator='".api_get_user_id()."'
 					OR 1=". (api_is_platform_admin() ? 1 : 0)."))";
-      		if (isset ($_GET['keyword'])) {
-            		$keyword = Database::escape_string(trim($_GET['keyword']));
-            		$sql .= " AND (i1.name LIKE '%".$keyword."%' or c.name LIKE '%".$keyword."%' or r1.start_at LIKE '%".$keyword."%' or r1.end_at LIKE '%".$keyword."%' or u.lastname LIKE '%".$keyword."%' or u.firstname LIKE '%".$keyword."%' or s.start_at LIKE '%".$keyword."%' or s.end_at LIKE '%".$keyword."%')";
-        	}
+		if (isset ($_GET['keyword'])) {
+			$keyword = Database::escape_string(trim($_GET['keyword']));
+			$sql .= " AND (i1.name LIKE '%".$keyword."%' or c.name LIKE '%".$keyword."%' or r1.start_at LIKE '%".$keyword."%' or r1.end_at LIKE '%".$keyword."%' or u.lastname LIKE '%".$keyword."%' or u.firstname LIKE '%".$keyword."%' or s.start_at LIKE '%".$keyword."%' or s.end_at LIKE '%".$keyword."%')";
+		}
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;
 		/*$result = Database::query($sql);
 		while ($array = Database::fetch_array($result, 'NUM'))

@@ -1828,12 +1828,12 @@ function getWorkListTeacher(
 ) {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-    $courseInfo = api_get_course_info();
+
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
-    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+    $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
 
     if (!in_array($direction, array('asc', 'desc'))) {
         $direction = 'desc';
@@ -1931,9 +1931,18 @@ function getWorkListTeacher(
                 );
             }
             $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
-            $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \''.$deleteUrl.'\' ) " >'.
-                Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+            $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \'' . $deleteUrl . '\' ) " >' .
+                Display::return_icon(
+                    'delete.png',
+                    get_lang('Delete'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ) . '</a>';
 
+            if (!api_is_allowed_to_edit()) {
+                $deleteLink = null;
+                $editLink = null;
+            }
             $work['actions'] = $downloadLink.$editLink.$deleteLink;
             $works[] = $work;
         }
@@ -2184,7 +2193,7 @@ function get_work_user_list(
     }
 
     $work_data = get_work_data_by_id($work_id);
-    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+    $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
     $condition_session  = api_get_session_condition($session_id);
     $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
 
@@ -2377,7 +2386,7 @@ function get_work_user_list(
                 // Actions.
 
                 $action = '';
-                if ($is_allowed_to_edit) {
+                if (api_is_allowed_to_edit()) {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
                         Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a> ';
 
@@ -3632,6 +3641,7 @@ function getWorkCommentForm($work)
         $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
     }
     $form->addElement('button', 'button', get_lang('Send'));
+
     return $form->return_form();
 }
 
@@ -4682,15 +4692,17 @@ function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sid
     } else {
         $limitString = null;
         if (!empty($start) && !empty($limit)) {
+            $start = intval($start);
+            $limit = intval($limit);
             $limitString = " LIMIT $start, $limit";
         }
 
         $orderBy = null;
 
         if (!empty($sidx) && !empty($sord)) {
-            $sidx = Database::escape_string($sidx);
-            $sord = Database::escape_string($sord);
-            $orderBy = "ORDER BY $sidx $sord";
+            if (in_array($sidx, array('firstname', 'lastname'))) {
+                $orderBy = "ORDER BY $sidx $sord";
+            }
         }
 
         if (empty($sessionId)) {

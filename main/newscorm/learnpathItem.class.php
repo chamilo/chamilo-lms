@@ -4052,7 +4052,7 @@ class learnpathItem
                                     lesson_location = '" . $this->lesson_location . "'
                                 WHERE
                                     c_id = $course_id AND
-                                    lp_item_id = " . $this->db_id . "AND
+                                    lp_item_id = " . $this->db_id . " AND
                                     lp_view_id = " . $this->view_id . "  AND
                                     view_count = " . $this->get_attempt_id();
 

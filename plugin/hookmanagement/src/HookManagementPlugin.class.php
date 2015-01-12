@@ -10,7 +10,7 @@ class HookManagementPlugin extends Plugin implements HookManagementInterface
     /**
      * Constructor
      */
-    function __construct()
+    protected function __construct()
     {
         $parameters = array(
             'tool_enable' => 'boolean',
@@ -20,9 +20,9 @@ class HookManagementPlugin extends Plugin implements HookManagementInterface
         $this->tables[TABLE_PLUGIN_HOOK_EVENT] = Database::get_main_table(TABLE_PLUGIN_HOOK_EVENT);
         $this->tables[TABLE_PLUGIN_HOOK_CALL] = Database::get_main_table(TABLE_PLUGIN_HOOK_CALL);
 
-        $this->hookCalls = array();
-        $this->hookEvents = array();
-        $this->hookObservers = array();
+        $this->hookCalls = $this->listAllHookCalls();
+        $this->hookEvents = $this->listAllHookEvents();
+        $this->hookObservers = $this->listAllHookObservers();
 
         parent::__construct('1.0', 'Daniel Barreto', $parameters);
     }
@@ -176,6 +176,7 @@ class HookManagementPlugin extends Plugin implements HookManagementInterface
                 'hook_observer_id' => $this->hookObservers[$hookCall[1]],
                 'type' => $hookCall[2],
                 'hook_order' => $hookCall[3],
+                'enabled' => 0,
             );
             // store hook call into property
             $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_CALL], $attributes);
@@ -320,6 +321,62 @@ class HookManagementPlugin extends Plugin implements HookManagementInterface
 
         foreach ($rows as $row) {
             $array[$row['class_name']] = $row;
+        }
+
+        return $array;
+    }
+
+    /**
+     * Return a list an associative array where keys are the active hook observer class name
+     * @return array
+     */
+    public function listAllHookObservers()
+    {
+        $array = array();
+        $columns = 'id, class_name';
+        $rows = Database::select($columns, $this->tables[TABLE_PLUGIN_HOOK_OBSERVER]);
+
+        foreach ($rows as $row) {
+            $array[$row['class_name']] = $row['id'];
+        }
+
+        return $array;
+    }
+
+    /**
+     * Return a list an associative array where keys are the active hook observer class name
+     * @return array
+     */
+    public function listAllHookEvents()
+    {
+        $array = array();
+        $columns = 'id, class_name';
+        $rows = Database::select($columns, $this->tables[TABLE_PLUGIN_HOOK_EVENT]);
+
+        foreach ($rows as $row) {
+            $array[$row['class_name']] = $row['id'];
+        }
+
+        return $array;
+    }
+
+    /**
+     * Return a list an associative array where keys are the active hook observer class name
+     * @return array
+     */
+    public function listAllHookCalls()
+    {
+        $array = array();
+        $joinTable = $this->tables[TABLE_PLUGIN_HOOK_CALL] . 'hc ' .
+            ' INNER JOIN ' . $this->tables[TABLE_PLUGIN_HOOK_EVENT] . 'he ' .
+            ' ON hc.hook_event_id = he.id ' .
+            ' INNER JOIN ' . $this->tables[TABLE_PLUGIN_HOOK_OBSERVER] . ' ho ' .
+            ' ON hc.hook_observer_id = ho.id ';
+        $columns = 'he.class_name AS event_class_name, ho.class_name AS observer_class_name, hc.id AS id, hc.type AS type';
+        $rows = Database::select($columns, $joinTable);
+
+        foreach ($rows as $row) {
+            $array[$row['event_class_name']][$row['observer_class_name']][$row['type']] = $row['id'];
         }
 
         return $array;

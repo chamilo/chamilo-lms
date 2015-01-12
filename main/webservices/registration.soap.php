@@ -79,6 +79,17 @@ function WSHelperVerifyKey($params)
 // Create the server instance
 $server = new soap_server();
 
+/** @var HookWSRegistration $hook */
+$hook = HookWSRegistration::create();
+if (!empty($hook)) {
+    $hook->setEventData(array('server' => $server));
+    $hook->notifyWSRegistration(HOOK_TYPE_PRE);
+    $res = $hook->getEventData();
+    if (!empty($res['server'])) {
+        $server = $res['server'];
+    }
+}
+
 $server->soap_defencoding = 'UTF-8';
 
 // Initialize WSDL support
@@ -5532,6 +5543,16 @@ function WSUserSubscribedInCourse ($params)
     return (CourseManager::is_user_subscribed_in_course($userId,$courseCode));
 }
 
+// Add more webservices by Hooks
+if (!empty($hook)) {
+    $hook->setEventData(array('server' => $server));
+    $hook->notifyWSRegistration(HOOK_TYPE_POST);
+    $res = $hook->getEventData();
+    if (!empty($res['server'])) {
+        $server = $res['server'];
+    }
+}
+
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 // If you send your data in utf8 then this value must be false.
@@ -5543,5 +5564,3 @@ if (isset($_configuration['registration.soap.php.decode_utf8'])) {
     }
 }
 $server->service($HTTP_RAW_POST_DATA);
-
-

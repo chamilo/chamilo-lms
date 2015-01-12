@@ -267,3 +267,27 @@ interface HookAdminBlockObserverInterface extends HookObserverInterface
      */
     public function hookAdminBlock(HookAdminBlockEventInterface $hook);
 }
+
+/**
+ * Interface HookWSRegistrationEventInterface
+ */
+interface HookWSRegistrationEventInterface extends HookEventInterface
+{
+    /**
+     * @param int $type
+     * @return int
+     */
+    public function notifyWSRegistration($type);
+}
+
+/**
+ * Interface HookWSRegistrationObserverInterface
+ */
+interface HookWSRegistrationObserverInterface extends HookObserverInterface
+{
+    /**
+     * @param HookWSRegistrationEventInterface $hook
+     * @return int
+     */
+    public function hookWSRegistration(HookWSRegistrationEventInterface $hook);
+}

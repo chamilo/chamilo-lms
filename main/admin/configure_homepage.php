@@ -961,7 +961,7 @@ switch ($action) {
         foreach ($_languages['name'] as $key => $value) {
             $i++;
             $lang_name = $_languages['folder'][$key];
-            if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
+			//if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
                 $html_langs = '<td width="300">';
                 $html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
                 $html_langs .= '</td>';
@@ -969,7 +969,7 @@ switch ($action) {
                     $html_langs .= '</tr><tr>';
                 }
                 $form->addElement('html', $html_langs);
-            }
+			//}
         }
         $form->addElement('html','</tr></table><br/>');
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');

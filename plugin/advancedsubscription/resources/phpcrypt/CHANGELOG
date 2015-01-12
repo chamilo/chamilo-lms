@@ -1,0 +1,157 @@
+2014-05-09  phpCrypt-0.5.1  Ryan Gilfether
+
+	* Fixed error message in Rijndael.php which inaccurately
+	reported an incorrect key size in bits instead of bytes
+
+	* Fixed a typo in the blockSize() call in the Rijdael.php
+	contructor
+
+2013-09-18  phpCrypt-0.5  Ryan Gilfether
+
+	* Added CAST-128 cipher
+
+	* Added CAST-256 cipher
+
+	* Added support for 8 and 16 byte keys in addition
+	to 24 byte keys for Triple DES (3DES)
+
+	* Removed the OneTimePad cipher. This was redundant since
+	the SimpleXOR cipher is the same as a one time pad when
+	the key length is the same as the length of data length,
+	and the key is unique for each block of data.
+
+	* Added PHP_Crypt::createKey(), a helper function to generate
+	a random string of bytes that can be used as a key for a
+	cipher. See the examples directory to see how it is used.
+
+	* Added PHP_Crypt::setKey() so that it is possible to set
+	the key to a new value without having to create an new
+	instance of phpCrypt
+
+	* Renamed PHP_Crypt::cipherSetKey() to PHP_Crypt::cipherKey()
+
+	* Updated the constants used for PHP_Crypt::createKey() and
+	PHP_Crypt::createIV(). Both now use the PHP_Crypt::RAND
+	constants. The PHP_Crypt::IV constants have been removed.
+
+	* Changed SimpleXOR from a block cipher to a stream cipher
+	since this is what it really is.
+
+	* In Cipher.php made the $key member private, renamed
+	setKey() to key(), and key() is now used to retrieve the
+	current key in use by all extending classes
+
+	* Minor changes to how RC2::splitBytes() works using
+	array_map()
+
+	* Fixed an error message that occurs in php 5.3 in RC2.php
+
+	* Renamed Base.php to Core.php
+
+	* Replaced for() loops with array_map() in Core.php where
+	possible for minor speed improvements
+
+	* Shortened the name of functions in Core.php, and updated
+	all files that use those functions.
+
+	* Create a workaround in Core::rotateBitsLeft32() and
+	Core::rotateBitsRight32() which caused them to not always
+	work correctly on 32 bit platforms
+
+	* Fixed Core::uInt() and Core::uInt32() which caused them to
+	not always work correctly on 32 bit platforms
+
+	* Major bug fix in how CTR mode works. Previously it was not
+	fully compatible with mCrypt's CTR mode.
+
+2013-07-21  phpCrypt-0.4  Ryan Gilfether
+
+	* Added the 3-Way cipher. phpCrypt's implementation is
+	compatible with mCrypts implementation, though there may
+	be a bug in mCrypt's 3-Way gamma() function. phpCrypt
+	mimics the bug to make it compatible, if it is a bug.
+	Unfortunately I do no know enough about 3-Way nor could
+	I find much information on it to know if the gamma() function
+	is suppose to behave the way it does. Please read phpCrypt's
+	3Way::gamma() function comment for further information.
+
+	* Windows users now have the option to create an IV using
+	the secure random number generator found in the Microsoft
+	CAPICOM SDK. The new constant is PHP_Crypt::IV_WIN_COM.
+	View the README file for more information.
+
+	* Fixed a bug in CTR mode where the last few bytes may
+	not get passed to the cipher in some cases
+
+	* Mode::CreateIV() now hashes the random string of bytes
+	before returning it as the IV. This helps in the adding
+	additional 'randomness' to the IV
+
+	* Bug fixes and minor speed improvements in some of the
+	modes.
+
+	* Updated all functions and calculations to handle block
+	size in bytes instead of bits. This makes the API less
+	confusing and fewer conversions from bits to bytes.
+
+2013-07-19  phpCrypt-0.3.2  Ryan Gilfether
+
+	* Version 0.3.1 contained some incomplete files and bugs
+	which were not fixed before the release. This version
+	addresses those issues.
+
+	* Fixes in the examples code
+
+	* Removed the PHP_Crypt::setIV() function and renamed to
+	PHP_Crypt::IV()
+
+2013-07-18  phpCrypt-0.3.1  Ryan Gilfether
+
+	* Found a major bug in the way IV's are used in Encryption
+	and Decryption. The $iv parameter has been removed from
+	PHP_Crypt::Encrypt() and PHP_Crypt::Decrypt() function, and
+	instead the IV should be set with PHP_Crypt::setIV()
+
+	* Updated the code in the 'examples' directory to reflect
+	the changes made to correct the IV bug
+
+	* Updated README and README.md to reflect the changes made
+	for the IV bug
+
+2013-07-12  phpCrypt-0.3  Ryan Gilfether
+
+	* Added the Blowfish Cipher
+
+	* Updated CryptBase::decimal2Hex() with a parameter to force
+	the returned hex to specified byte size
+
+	* Updated RC2.php to use the uInt() function
+
+	* Added PHP_Crypt::SetIV() function
+
+	* Removed the $iv parameter from PHP_Crypt::CreateIV(),
+	now to set the IV use the PHP_Crypt::SetIV() function,
+	or pass the IV in the encrypt() or decrypt() function
+
+	* Renamed CryptBase.php to Base.php. Removed it as a parent
+	class to all other classes except the Cipher class, as it
+	was the only class that really needed it.
+
+	* General performance improvements
+
+2013-06-28  phpCrypt-0.2  Ryan Gilfether
+
+	* Fixed Enigma so that it works on both 64 and 32 bit platforms
+
+	* Renamed & fixed the following functions in CryptBase.php
+	to use native PHP function calls:
+	uInt(), sInt(), uInt32(), sInt32(), uChar(), sChar()
+
+2013-06-24  phpCrypt-0.1  Ryan Gilfether
+
+	* The initial release of phpCrypt 0.1
+
+Copyright 2013 Ryan Gilfether http://www.gilfether.com/phpcrypt
+Copying and distribution of this file, with or without modification,
+are permitted provided the copyright notice and this notice are
+preserved.

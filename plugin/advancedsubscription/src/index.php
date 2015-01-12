@@ -7,25 +7,59 @@
 /**
  *
  */
+
+require_once __DIR__ . '/../config.php';
 $plugin = AdvancedSubscriptionPlugin::create();
-
-if (api_is_platform_admin()) {
-    $isAdmin = api_is_platform_admin();
-    $title = $plugin->get_lang('CourseListOnSale');
-    $templateName = $plugin->get_lang('BuyCourses');
-
-    $tpl = new Template($templateName);
-    $tpl->assign('isAdmin', $isAdmin);
-    $tpl->assign('title', $title);
-    $tpl->assign('BuySessions', $plugin->get_lang('BuySessions'));
-    $tpl->assign('BuyCourses', $templateName);
-    $tpl->assign('ConfigurationOfSessionsAndPrices', $plugin->get_lang('ConfigurationOfSessionsAndPrices'));
-    $tpl->assign('ConfigurationOfCoursesAndPrices', $plugin->get_lang('ConfigurationOfCoursesAndPrices'));
-    $tpl->assign('ConfigurationOfPayments', $plugin->get_lang('ConfigurationOfPayments'));
-    $tpl->assign('OrdersPendingOfPayment', $plugin->get_lang('OrdersPendingOfPayment'));
-    $listing_tpl = 'buycourses/view/index.tpl';
-    $content = $tpl->fetch($listing_tpl);
-    $tpl->assign('content', $content);
-    // If the user is NOT an administrator, redirect it to course/session buy list
-    $isAdmin ? $tpl->display_one_col_template() : header('Location: src/list.php');
+$data = isset($_REQUEST['data']) ?
+    strlen($_REQUEST['data']) > 16 ?
+        $plugin->decrypt($_REQUEST['data']) :
+        null :
+    null;
+if (isset($data)) {
+    if (is_string($data)) {
+        $data = unserialize($data);
+    }
+    if (is_array($data)) {
+        if (isset($data['template'])) {
+            $template = '/advancedsubscription/views/' . $data['template'];
+            $templateName = $plugin->get_lang('plugin_title');
+            $tpl = new Template($templateName);
+            $tplParams = array('user', 'student', 'students','superior', 'admin', 'session', 'signature', '_p', );
+            foreach ($tplParams as $tplParam) {
+                if (isset($data['superior'])) {
+                    $tpl->assign($tplParam, $data[$tplParam]);
+                }
+            }
+            $content = $tpl->fetch($template);
+            $tpl->assign('content', $content);
+            $tpl->display_one_col_template();
+        } elseif ($data['action']) {
+            switch($data['action']) {
+                case ADV_SUB_ACTION_STUDENT_REQUEST:
+                    $plugin->startSubscription($data['user']['id'], $data['session']['id'], $data);
+                    $plugin->sendMail($data, $data['action']);
+                    break;
+                case ADV_SUB_ACTION_SUPERIOR_APPROVE:
+                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
+                    $plugin->sendMail($data, $data['action']);
+                    break;
+                case ADV_SUB_ACTION_SUPERIOR_DISAPPROVE:
+                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED);
+                    $plugin->sendMail($data, $data['action']);
+                    break;
+                case ADV_SUB_ACTION_SUPERIOR_SELECT:
+                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
+                    $plugin->sendMail($data, $data['action']);
+                    break;
+                case ADV_SUB_ACTION_ADMIN_APPROVE:
+                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED);
+                    $plugin->sendMail($data, $data['action']);
+                    break;
+                case ADV_SUB_ACTION_ADMIN_DISAPPROVE:
+                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED);
+                    $plugin->sendMail($data, $data['action']);
+                    break;
+            }
+        }
+    }
 }

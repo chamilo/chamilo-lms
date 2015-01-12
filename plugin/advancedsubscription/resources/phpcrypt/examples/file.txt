@@ -1,0 +1,20 @@
+BEGIN
+
+This is a test file to test encryption & decription. It contains 20 lines.
+The text below is taken from http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation
+
+In cryptography, modes of operation is the procedure of enabling the repeated and secure use of a block cipher under a single key.[1][2]
+A block cipher by itself allows encryption only of a single data block of the cipher's block length. When targeting a variable-length
+message, the data must first be partitioned into separate cipher blocks. Typically, the last block must also be extended to match the
+cipher's block length using a suitable padding scheme. A mode of operation describes the process of encrypting each of these blocks, and
+generally uses randomization based on an additional input value, often called an initialization vector, to allow doing so safely.[1]
+
+Modes of operation have primarily been defined for encryption and authentication.[1][3] Historically, encryption modes have been studied
+extensively in regard to their error propagation properties under various scenarios of data modification. Later development regarded
+integrity protection as an entirely separate cryptographic goal from encryption. Some modern modes of operation combine encryption and
+authentication in an efficient way, and are known as authenticated encryption modes.[2]
+
+While modes of operation are commonly associated with symmetric encryption,[2] they may also be applied to public-key encryption primitives
+such as RSA in principle (though in practice public-key encryption of longer messages is generally realized using hybrid encryption).[1]
+
+END

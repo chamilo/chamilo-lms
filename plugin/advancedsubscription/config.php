@@ -10,6 +10,23 @@ define('TABLE_ADV_SUB_QUEUE', 'plugin_advsub_queue');
 define('TABLE_ADV_SUB_MAIL', 'plugin_advsub_mail');
 define('TABLE_ADV_SUB_MAIL_TYPE', 'plugin_advsub_mail_type');
 define('TABLE_ADV_SUB_MAIL_STATUS', 'plugin_advsub_mail_status');
+
+define('ADV_SUB_ACTION_STUDENT_REQUEST', 0);
+define('ADV_SUB_ACTION_SUPERIOR_APPROVE', 1);
+define('ADV_SUB_ACTION_SUPERIOR_DISAPPROVE', 2);
+define('ADV_SUB_ACTION_SUPERIOR_SELECT', 3);
+define('ADV_SUB_ACTION_ADMIN_APPROVE', 4);
+define('ADV_SUB_ACTION_ADMIN_DISAPPROVE', 5);
+
+
+define('ADV_SUB_QUEUE_STATUS_START', 0);
+define('ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED', 1);
+define('ADV_SUB_QUEUE_STATUS_BOSS_APPROVED', 2);
+define('ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED', 3);
+define('ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED', 10);
+
 require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__ . '/resources/phpcrypt/phpCrypt.php';
 require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
-require_once api_get_path(PLUGIN_PATH) . 'advancedsubscription/src/advanced_subscription_plugin.class.php';
+require_once api_get_path(PLUGIN_PATH) . 'advancedsubscription/src/AdvancedSubscriptionPlugin.class.php';
+require_once api_get_path(PLUGIN_PATH) . 'advancedsubscription/src/HookAdvancedSubscription.class.php';

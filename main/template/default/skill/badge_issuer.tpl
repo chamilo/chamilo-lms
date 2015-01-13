@@ -8,7 +8,7 @@
                 <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
             </li>
             <li class="active">
-                <a href="{{ _p.web_main }}admin/skill_badge_issuer.php">{{ 'IssuerInfo' | get_lang }}</a>
+                <a href="{{ _p.web_main }}admin/skill_badge_issuer.php">{{ 'IssuerDetails' | get_lang }}</a>
             </li>
             <li>
                 <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Skills' | get_lang }}</a>
@@ -18,7 +18,7 @@
             <div class="tab-pane active">
                 <form action="{{ _p.web_self }}" class="form-horizontal">
                     <fieldset>
-                        <legend>{{ 'IssuerInfo' | get_lang }}</legend>
+                        <legend>{{ 'IssuerDetails' | get_lang }}</legend>
                         <div class="control-group">
                             <label class="control-label">{{ 'Name' | get_lang }}</label>
                             <div class="controls">

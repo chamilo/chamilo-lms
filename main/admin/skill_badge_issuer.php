@@ -32,7 +32,7 @@ $interbreadcrumb = array(
     )
 );
 
-$tpl = new Template(get_lang('IssuerInfo'));
+$tpl = new Template(get_lang('IssuerDetails'));
 
 $tpl->assign('backpack', $backpack);
 

@@ -46,7 +46,7 @@
                 <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
             </li>
             <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_issuer.php">{{ 'IssuerInfo' | get_lang }}</a>
+                <a href="{{ _p.web_main }}admin/skill_badge_issuer.php">{{ 'IssuerDetails' | get_lang }}</a>
             </li>
             <li>
                 <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Skills' | get_lang }}</a>

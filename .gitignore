@@ -35,3 +35,6 @@ searchdb/*
 nbproject/*
 
 plugin/bbb/config.vm.php
+
+# Badges images
+main/upload/data/badges/*

@@ -2,6 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ResultsVisibility = "Visibilité des résultats";
+$DownloadCertificate = "Télécharger certificat";
+$PortalActiveCoursesLimitReached = "Désolé, cette installation dispose d'une limite de cours qui a été atteinte à présent. Vous pouvez toujours créer de nouveaux cours, mais uniquement si vous cachez/désactivez au moins un cours actif actuellement. Afin d'utiliser cette méthode, éditez un cours depuis la liste des cours de la page d'administration et changez sa visibilité à 'caché', puis essayer de nouveau de créer ce cours. Afin d'augmenter le nombre maximum de cours actifs autorisés sur cette installation, veuillez contacter votre fournisseur d'hébergement ou, si cette méthode est disponible, passez à un plan d'hébergement supérieur.";
+$WelcomeToInstitution = "Bienvenu(e) sur le campus de %s";
+$WelcomeToSiteName = "Bienvenue à %s";
+$RequestAccess = "Demande d'accès";
 $Formula = "Formule";
 $MultipleConnectionsAreNotAllow = "Cet utilisateur est déjà connecté";
 $Listen = "Écouter";

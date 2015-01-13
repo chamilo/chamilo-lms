@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy = "Urejanje/spreminjanje vprašanja ni na voljo, ker že obstajajo odgovori na to vprašanje. Lahko pa namesto tega naredite kopijo v vprašanja in ga ustrezno spremenite.";
 $SelectADateOnTheCalendar = "Izberi datum s koledarja";
 $AreYouSureDeleteTestResultBeforeDateD = "Ste prepričani, da želite počistiti rezultate tega testa dobljene pred izbranim datumom?";
 $CleanStudentsResultsBeforeDate = "Počisti vse rezultate, dobljene pred izbranim datumom";

@@ -2,6 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ResultsVisibility = "Results visibility";
+$DownloadCertificate = "Download certificate";
+$PortalActiveCoursesLimitReached = "Sorry, this installation has an active courses limit, which has now been reached. You can still create new courses, but only if you hide/disable at least one existing active course. To do this, edit a course from the administration courses list, and change the visibility to 'hidden', then try creating this course again. To increase the maximum number of active courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.";
+$WelcomeToInstitution = "Welcome to the campus of %s";
+$WelcomeToSiteName = "Welcome to %s";
+$RequestAccess = "Request access";
 $Formula = "Formula";
 $MultipleConnectionsAreNotAllow = "This user is already logged in";
 $Listen = "Listen";

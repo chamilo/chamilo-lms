@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WelcomeToSiteName = "Benvido ao %s";
+$RequestAccess = "Solictar acceso";
 $SignatureFormula = "Cordialmente";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item non é visible para o estudante pero poderá acceder a el como profesor";
 $DeleteAllAttendances = "Eliminar tódalas atencións creadas";

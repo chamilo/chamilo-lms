@@ -45,7 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'id' => $skillId
     );
 
-    $objSkill->update($params);
+    if ($objSkill->update($params)) {
+        header('Location: ' . api_get_path(WEB_CODE_PATH) . 'admin/openbadges/list.php');
+    }
 }
 
 $interbreadcrumb = array(

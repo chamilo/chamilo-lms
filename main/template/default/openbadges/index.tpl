@@ -13,9 +13,6 @@
             <li>
                 <a href="{{ _p.web_main }}admin/openbadges/list.php">{{ 'Skills' | get_lang }}</a>
             </li>
-            <li>
-                <a href="{{ _p.web_main }}admin/openbadges/create.php">{{ 'Edit' | get_lang }}</a>
-            </li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane active">

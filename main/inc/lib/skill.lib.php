@@ -445,7 +445,7 @@ class Skill extends Model
             }
         }
 
-        $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type
+        $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type, s.icon
                 FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) $id_condition
                 ORDER BY ss.id, ss.parent_id";
 

@@ -475,6 +475,7 @@ class Database
     public static function escape_string($string, $connection = null, $addFix = true)
     {
         // Fixes security problem when there's no "" or '' between a variable.
+        // See #7440 for more info
         if ($addFix) {
             $string = "__@$string@__";
         }
@@ -686,6 +687,7 @@ class Database
 
     /**
      * Removes "__@" prefix and @__ suffix added by Database::escape_string()
+     * See #7440 for more info
      * @param string $query
      * @return mixed
      */

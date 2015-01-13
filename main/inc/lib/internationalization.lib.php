@@ -571,6 +571,10 @@ function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false
         }
         return gmdate('Y-m-d H:i:s');
     }
+    if (preg_match('/__@(.*)@__/', $time)) {
+        // unfilter special security fix for SQL injection, see Database::fixQuery()
+        $time = str_replace(array("__@","@__"), "", $time);
+    }
     // If time is a timestamp, return directly in utc
     if (is_numeric($time)) {
         $time = intval($time);

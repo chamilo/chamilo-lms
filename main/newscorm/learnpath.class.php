@@ -859,7 +859,9 @@ class learnpath
             $parent = $this->items[$parent_id]; // Get the parent.
             // New experiment including failed and browsed in completed status.
             $current_status = $current_item->get_status();
-            if ($current_item->is_done() || $current_status == 'browsed' || $current_status == 'failed') {
+            //if ($current_item->is_done() || $current_status == 'browsed' || $current_status == 'failed') {
+            // Fixes chapter autocomplete
+            if (true) {
                 // If the current item is completed or passes or succeeded.
                 $completed = true;
                 if ($debug) {

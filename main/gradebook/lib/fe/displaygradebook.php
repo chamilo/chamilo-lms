@@ -451,11 +451,14 @@ class DisplayGradebook
             $total_score = array($item_value_total, $item_total);
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
-                $certificateLink = null;
-                if (!empty($certificateLinkInfo) && isset($certificateLinkInfo['certificate_link'])) {
-                    $certificateLink .= '<span style="float:right"> ' . $certificateLinkInfo['certificate_link']."</span>";
+                $aditionalButtons = null;
+                if (!empty($certificateLinkInfo)) {
+                    $aditionalButtons = '<div class="btn-group pull-right">';
+                    $aditionalButtons .= isset($certificateLinkInfo['certificate_link']) ? $certificateLinkInfo['certificate_link'] : '';
+                    $aditionalButtons .= isset($certificateLinkInfo['badge_link']) ? $certificateLinkInfo['badge_link'] : '';
+                    $aditionalButtons .= '</div>';
                 }
-                $scoreinfo .= '<h4>' . get_lang('Total') . ' : ' . $scorecourse_display . $certificateLink. '</h4>';
+                $scoreinfo .= '<h4>' . get_lang('Total') . ' : ' . $scorecourse_display . $aditionalButtons. '</h4>';
 
             }
             Display :: display_normal_message($scoreinfo, false);

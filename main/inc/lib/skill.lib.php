@@ -371,6 +371,24 @@ class SkillRelUser extends Model
         );
         return $result;
     }
+
+    /**
+     * Get the relation data between user and skill
+     * @param int $userId The user id
+     * @param int $skillId The skill id
+     * @return array The relation data. Otherwise return false
+     */
+    public function getByUserAndSkill($userId, $skillId)
+    {
+        $where = array(
+            'user_id = ? AND skill_id = ?' => array($userId, $skillId)
+        );
+
+        return Database::select('*', $this->table, array(
+            'where' => $where
+        ), 'first');
+    }
+
 }
 
 

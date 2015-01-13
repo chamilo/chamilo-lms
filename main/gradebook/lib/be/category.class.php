@@ -1638,6 +1638,14 @@ class Category implements GradebookItem
                             'class' => 'btn'
                         )
                     );
+                    $badges = Display::url(
+                        get_lang('DownloadBadges'),
+                        api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
+                        array(
+                            'target' => '_blank',
+                            'class' => 'btn'
+                        )
+                    );
                     $exportToPDF = Display::url(
                         Display::return_icon(
                             'pdf.png',
@@ -1648,6 +1656,7 @@ class Category implements GradebookItem
                         "$url&action=export"
                     );
                     $html = array(
+                        'badge_link' => $badges,
                         'certificate_link' => $certificates,
                         'pdf_link' => $exportToPDF
                     );

@@ -57,6 +57,7 @@ class LinkForm extends FormValidator
 		$this->addElement('static',null,null,'"'.$this->link_object->get_name().'" ');
 		$this->addElement('static',null,null,get_lang('MoveTo').' : ');
 		$select = $this->addElement('select','move_cat',null,null);
+		$line = '';
 		foreach ($this->link_object->get_target_categories() as $cat) {
 			for ($i=0;$i<$cat[2];$i++) {
 				$line .= '&mdash;';
@@ -120,7 +121,7 @@ class LinkForm extends FormValidator
 		if (!empty($courseCode)) {
 			$link->set_course_code($courseCode);
 		} elseif(!empty($_GET['course_code'])) {
-			$link->set_course_code(Database::escape_string($_GET['course_code']));
+			$link->set_course_code(Database::escape_string($_GET['course_code'], null, false));
 		}
 
 		return $link;

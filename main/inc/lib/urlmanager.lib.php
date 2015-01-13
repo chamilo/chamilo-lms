@@ -93,8 +93,9 @@ class UrlManager
      */
     public static function url_id_exist($url)
     {
+        if (empty($url)) { return false; }
         $table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table_access_url WHERE id = '".Database::escape_string($url)."' ";
+        $sql = "SELECT id FROM $table_access_url WHERE id = ".intval($url)."";
         $res = Database::query($sql);
         $num = Database::num_rows($res);
         return $num;

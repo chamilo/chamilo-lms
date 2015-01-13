@@ -172,13 +172,13 @@ abstract class AbstractLink implements GradebookItem
         $sql = 'SELECT * FROM '.$tbl_grade_links;
         $paramcount = 0;
         if (isset ($id)) {
-            $sql.= ' WHERE id = '.Database::escape_string($id);
+            $sql.= ' WHERE id = '.intval($id);
             $paramcount ++;
         }
         if (isset ($type)) {
             if ($paramcount != 0) $sql .= ' AND';
             else $sql .= ' WHERE';
-            $sql .= ' type = '.Database::escape_string($type);
+            $sql .= ' type = '.intval($type);
             $paramcount ++;
         }
         if (isset ($ref_id)) {

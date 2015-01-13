@@ -645,7 +645,7 @@ function get_list_users_certificates($cat_id = null, $userList = array())
     		FROM ' . $table_user . ' u
     		INNER JOIN ' . $table_certificate . ' gc ON u.user_id=gc.user_id ';
     if (!is_null($cat_id) && $cat_id > 0) {
-        $sql.=' WHERE cat_id=' . Database::escape_string($cat_id);
+        $sql.=' WHERE cat_id=' . intval($cat_id);
     }
     if (!empty($userList)) {
         $userList = array_map('intval', $userList);
@@ -674,9 +674,9 @@ function get_list_gradebook_certificates_by_user_id($user_id, $cat_id = null)
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     $sql = 'SELECT gc.score_certificate, gc.created_at, gc.path_certificate, gc.cat_id, gc.user_id, gc.id
             FROM  ' . $table_certificate . ' gc
-    	    WHERE gc.user_id="' . Database::escape_string($user_id) . '" ';
+    	    WHERE gc.user_id="' . intval($user_id) . '" ';
     if (!is_null($cat_id) && $cat_id > 0) {
-        $sql.=' AND cat_id=' . Database::escape_string($cat_id);
+        $sql.=' AND cat_id=' . intval($cat_id);
     }
 
     $rs = Database::query($sql);

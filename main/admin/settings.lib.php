@@ -901,7 +901,7 @@ function add_edit_template() {
     if ($_GET['action'] == 'edit') {
         // Database table definition.
         $table_system_template = Database :: get_main_table('system_template');
-        $sql = "SELECT * FROM $table_system_template WHERE id = '".Database::escape_string($_GET['id'])."'";
+        $sql = "SELECT * FROM $table_system_template WHERE id = ".intval($_GET['id'])."";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
@@ -988,7 +988,7 @@ function add_edit_template() {
                if (!empty($new_file_name)) {
                    $sql .= ", image = '".Database::escape_string($new_file_name)."'";
                }
-               $sql .= " WHERE id='".Database::escape_string($_GET['id'])."'";
+               $sql .= " WHERE id = ".intval($_GET['id'])."";
                Database::query($sql);
 
                // Display a feedback message.
@@ -1021,7 +1021,7 @@ function add_edit_template() {
 function delete_template($id) {
     // First we remove the image.
     $table_system_template = Database :: get_main_table('system_template');
-    $sql = "SELECT * FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
+    $sql = "SELECT * FROM $table_system_template WHERE id = ".intval($id)."";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if (!empty($row['image'])) {
@@ -1029,7 +1029,7 @@ function delete_template($id) {
     }
 
     // Now we remove it from the database.
-    $sql = "DELETE FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
+    $sql = "DELETE FROM $table_system_template WHERE id = ".intval($id)."";
     Database::query($sql);
 
     // Display a feedback message.

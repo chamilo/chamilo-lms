@@ -40,6 +40,6 @@ if ($_GET['type'] == "poly" || $_GET['type'] == "delineation" || $_GET['type'] =
 }
 $course_id = api_get_course_int_id();
 $sql = "UPDATE $TBL_ANSWER SET hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',hotspot_type = '".Database::escape_string($hotspot_type)."' 
-        WHERE c_id = $course_id AND id = '".Database::escape_string($answerId)."' AND question_id ='".Database::escape_string($questionId)."' LIMIT 1 ;";
+        WHERE c_id = $course_id AND id = ".intval($answerId)." AND question_id = ".intval($questionId)." LIMIT 1 ;";
 $result = Database::query($sql);
 echo "done=done";

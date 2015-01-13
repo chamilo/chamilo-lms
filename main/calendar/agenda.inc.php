@@ -166,8 +166,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false)
                     AND ip.tool='".TOOL_CALENDAR_EVENT."'
                     AND ip.visibility='1'
                     $session_condition
-                    GROUP BY ip.ref
-                    ORDER $sort_item $sort";
+                    GROUP BY ip.ref";
             }
             // A.3.b you are a course admin or a student
             else {
@@ -1139,7 +1138,7 @@ function store_agenda_item_as_announcement($item_id)
     }
     //get the agenda item
 
-    $item_id = Database::escape_string($item_id);
+    $item_id = intval($item_id);
     $sql = "SELECT * FROM $table_agenda WHERE id = ".$item_id;
     $res = Database::query($sql);
     $course_id = api_get_course_int_id();
@@ -1244,9 +1243,9 @@ function sent_to($tool, $id)
 {
     $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $tool = Database::escape_string($tool);
-    $id = Database::escape_string($id);
+    $id = intval($id);
 
-    $sql = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref='".$id."'";
+    $sql = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref= ".$id."";
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
         // if to_group_id is null then it is sent to a specific user
@@ -1310,7 +1309,7 @@ function sent_to_form($sent_to_array)
         if (isset($sent_to_array['users'])) {
             if (is_array($sent_to_array['users'])) {
                 foreach ($sent_to_array['users'] as $user_id) {
-                    // @todo add username as tooltip - is this fucntion still used ?
+                    // @todo add username as tooltip - is this function still used ?
                     // $user_info= api_get_user_info($user_id);
                     // $username = api_htmlentities(sprintf(get_lang('LoginX'), $user_info['username']), ENT_QUOTES);
                     $output[] = api_get_person_name($user_info['firstName'], $user_info['lastName']);
@@ -1443,12 +1442,12 @@ function show_user_group_filter_form()
 function load_edit_users($tool, $id)
 {
     $tool = Database::escape_string($tool);
-    $id = Database::escape_string($id);
+    $id = intval($id);
     $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
 
     $sql = "SELECT * FROM $TABLE_ITEM_PROPERTY
-            WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
+            WHERE c_id = $course_id AND tool='$tool' AND ref= $id ";
     $result = Database::query($sql);
 
     $to = array();
@@ -1480,13 +1479,13 @@ function change_visibility($tool, $id, $visibility)
     $_course = api_get_course_info();
     $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $tool = Database::escape_string($tool);
-    $id = Database::escape_string($id);
+    $id = intval($id);
 
     if ($visibility == 0) {
-        $sql_visibility = "UPDATE $TABLE_ITEM_PROPERTY SET visibility='0' WHERE tool='$tool' AND ref='$id'";
+        $sql_visibility = "UPDATE $TABLE_ITEM_PROPERTY SET visibility='0' WHERE tool='$tool' AND ref= $id ";
         api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id, "invisible", api_get_user_id());
     } else {
-        $sql_visibility = "UPDATE $TABLE_ITEM_PROPERTY SET visibility='1' WHERE tool='$tool' AND ref='$id'";
+        $sql_visibility = "UPDATE $TABLE_ITEM_PROPERTY SET visibility='1' WHERE tool='$tool' AND ref= $id ";
         api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id, "visible", api_get_user_id());
     }
 }
@@ -1553,18 +1552,18 @@ function get_agenda_item($id)
     global $TABLEAGENDA;
 
     $t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
-    $id = Database::escape_string($id);
+    $id = intval($id);
     $item = array();
     if (empty($id)) {
-        $id = intval(Database::escape_string(($_GET['id'])));
+        $id = intval($_GET['id']);
     } else {
-        $id = (int) $id;
+        $id = intval($id);
     }
     $course_id = api_get_course_int_id();
     if (empty($id)) {
         return $item;
     }
-    $sql = "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."' AND c_id = $course_id ";
+    $sql = "SELECT * FROM ".$TABLEAGENDA." WHERE id = ".$id." AND c_id = $course_id ";
     $result = Database::query($sql);
     $entry_to_edit = Database::fetch_array($result);
     $item['title'] = $entry_to_edit["title"];
@@ -1665,7 +1664,7 @@ function store_edited_agenda_item($event_id, $id_attach, $file_comment)
 function save_edit_agenda_item($id, $title, $content, $start_date, $end_date)
 {
     $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
-    $id = Database::escape_string($id);
+    $id = intval($id);
     $title = Database::escape_string($title);
     $content = Database::escape_string($content);
     $start_date = Database::escape_string($start_date);
@@ -1694,7 +1693,7 @@ function save_edit_agenda_item($id, $title, $content, $start_date, $end_date)
 function delete_agenda_item($id)
 {
     $_course = api_get_course_info();
-    $id = Database::escape_string($id);
+    $id = intval($id);
     if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) {
         if (!empty($_GET['id']) && isset($_GET['action']) && $_GET['action'] == "delete") {
             $t_agenda = Database::get_course_table(TABLE_AGENDA);
@@ -1949,9 +1948,9 @@ function get_attachment($agenda_id, $course_id = null)
     } else {
         $course_id = intval($course_id);
     }
-    $agenda_id = Database::escape_string($agenda_id);
+    $agenda_id = intval($agenda_id);
     $row = array();
-    $sql = 'SELECT id,path, filename,comment FROM '.$agenda_table_attachment.' WHERE c_id = '.$course_id.' AND agenda_id = '.(int) $agenda_id.'';
+    $sql = 'SELECT id,path, filename,comment FROM '.$agenda_table_attachment.' WHERE c_id = '.$course_id.' AND agenda_id = '.$agenda_id.'';
     $result = Database::query($sql);
     if (Database::num_rows($result) != 0) {
         $row = Database::fetch_array($result);
@@ -3417,8 +3416,8 @@ function show_add_form($id = '', $type = null)
                 $safe_file_comment = Database::escape_string($file_comment);
                 $safe_file_name = Database::escape_string($file_name);
                 $safe_new_file_name = Database::escape_string($new_file_name);
-                $safe_agenda_id = (int) $agenda_id;
-                $safe_id_attach = (int) $id_attach;
+                $safe_agenda_id = intval($agenda_id);
+                $safe_id_attach = intval($id_attach);
                 // Storing the attachments if any
                 if ($result) {
                     $sql = "UPDATE $agenda_table_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', agenda_id = '$safe_agenda_id', size ='".intval($_FILES['user_upload']['size'])."'
@@ -3737,17 +3736,17 @@ function show_add_form($id = '', $type = null)
     function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type)
     {
         $tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-        $month = Database::escape_string($month);
-        $year = Database::escape_string($year);
-        $week = Database::escape_string($week);
-        $day = Database::escape_string($day);
+        $month = intval($month);
+        $year = intval($year);
+        $week = intval($week);
+        $day = intval($day);
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
 
         $current_access_url_id = api_get_current_access_url_id();
 
         if ($type == "month_view" or $type == "") {
             // We are in month view
-            $sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date)='".$month."' AND YEAR(start_date) = '".$year."'  AND access_url_id = $current_access_url_id ORDER BY start_date ASC";
+            $sql = "SELECT * FROM ".$tbl_global_agenda." WHERE MONTH(start_date) = ".$month." AND YEAR(start_date) = ".$year."  AND access_url_id = $current_access_url_id ORDER BY start_date ASC";
         }
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
         if ($type == "week_view") { // we are in week view

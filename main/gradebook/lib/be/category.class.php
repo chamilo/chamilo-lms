@@ -441,7 +441,7 @@ class Category implements GradebookItem
                 $sql .= ', '.intval($this->get_grade_model_id());
             }
             if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
-                $sql .= ', '.Database::escape_string($this->get_certificate_min_score());
+                $sql .= ', '.intval($this->get_certificate_min_score());
             }
             $sql .= ')';
             Database::query($sql);
@@ -516,15 +516,15 @@ class Category implements GradebookItem
         }
         $sql .= ', certif_min_score = ';
         if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
-            $sql .= Database::escape_string($this->get_certificate_min_score());
+            $sql .= intval($this->get_certificate_min_score());
         } else {
             $sql .= 'null';
         }
         if (isset($this->grade_model_id)) {
             $sql .= ', grade_model_id = '.intval($this->get_grade_model_id());
         }
-        $sql .= ', weight = '.Database::escape_string($this->get_weight())
-            .', visible = '.intval($this->is_visible())
+        $sql .= ', weight = "'.Database::escape_string($this->get_weight())
+            .'", visible = '.intval($this->is_visible())
             .' WHERE id = '.intval($this->id);
 
         Database::query($sql);

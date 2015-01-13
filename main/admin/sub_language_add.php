@@ -39,7 +39,7 @@ function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_av
     $english_name           = Database::escape_string($english_name);
     $isocode                = Database::escape_string($isocode);
     $sublanguage_available  = Database::escape_string($sublanguage_available);
-    $parent_id              = Database::escape_string($parent_id);
+    $parent_id              = intval($parent_id);
 
     $sql='INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id) VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
     $res = Database::query($sql);
@@ -119,7 +119,7 @@ function check_if_exist_language_by_id ($language_id) {
  * @return  bool    True if this language has children, false otherwise
  */
 function ckeck_if_is_parent_of_sub_language ($parent_id) {
-	$sql='SELECT count(*) AS count FROM language WHERE parent_id="'.Database::escape_string($parent_id).'"';
+	$sql='SELECT count(*) AS count FROM language WHERE parent_id= '.intval($parent_id).'';
 	$rs=Database::query($sql);
 	if (Database::num_rows($rs)>0 && Database::result($rs,0,'count')==1) {
 		return true;

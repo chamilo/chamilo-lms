@@ -91,7 +91,7 @@ $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroT
 $course_id = api_get_course_int_id();
 
 if ($intro_editAllowed) {
-    $moduleId = Database::escape_string($moduleId);
+    $moduleId = intval($moduleId);
 
     /* Replace command */
     if ($intro_cmdUpdate) {

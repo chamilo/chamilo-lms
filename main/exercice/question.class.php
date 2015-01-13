@@ -366,7 +366,7 @@ abstract class Question
             // update or add category for a question
             foreach ($category_list as $category_id) {
                 $category_id = intval($category_id);
-                $question_id = Database::escape_string($this->id);
+                $question_id = intval($this->id);
                 $sql = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY
                         WHERE category_id = $category_id AND question_id = $question_id AND c_id=".api_get_course_int_id();
                 $res = Database::query($sql);
@@ -397,8 +397,8 @@ abstract class Question
             // update or add category for a question
 
 			$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-			$category_id = Database::escape_string($in_category);
-			$question_id = Database::escape_string($this->id);
+			$category_id = intval($in_category);
+			$question_id = intval($this->id);
 			$sql = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY
 			        WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
 			$res = Database::query($sql);
@@ -422,7 +422,7 @@ abstract class Question
 	function deleteCategory()
     {
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-		$question_id = Database::escape_string($this->id);
+		$question_id = intval($this->id);
 	 	$sql = "DELETE FROM $TBL_QUESTION_REL_CATEGORY
 	 	        WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
 	 	Database::query($sql);
@@ -470,7 +470,7 @@ abstract class Question
 			// if we don't change from "unique answer" to "multiple answers" (or conversely)
 			if(!in_array($this->type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)) || !in_array($type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER))) {
 				// removes old answers
-				$sql="DELETE FROM $TBL_REPONSES WHERE c_id = $course_id  AND question_id='".Database::escape_string($this->id)."'";
+				$sql="DELETE FROM $TBL_REPONSES WHERE c_id = $course_id  AND question_id = ".intval($this->id)."";
 				Database::query($sql);
 			}
 
@@ -735,7 +735,7 @@ abstract class Question
 					picture		='".Database::escape_string($picture)."',
                     extra       ='".Database::escape_string($extra)."',
 					level		='".Database::escape_string($level)."'
-				WHERE c_id = $c_id  AND id='".Database::escape_string($id)."'";
+				WHERE c_id = $c_id  AND id = ".intval($id)."";
 			Database::query($sql);
 			$this->saveCategory($category);
 			if (!empty($exerciseId)) {
@@ -755,7 +755,7 @@ abstract class Question
 			// creates a new question
 			$sql	= "SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question
 					   WHERE 	question.id					= test_question.question_id AND
-								test_question.exercice_id	= '".Database::escape_string($exerciseId)."' AND
+								test_question.exercice_id	= ".intval($exerciseId)." AND
 								question.c_id 				= $c_id AND
 								test_question.c_id 			= $c_id ";
 			$result	= Database::query($sql);
@@ -783,14 +783,14 @@ abstract class Question
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 				$sql = "INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
-					    VALUES (".$c_id.", '1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
+					    VALUES (".$c_id.", '1', ".intval($this->id).", '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
 				Database::query($sql);
             }
 
 			if ($type == HOT_SPOT_DELINEATION ) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 				$sql="INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
-					  VALUES (".$c_id.", '1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
+					  VALUES (".$c_id.", '1', ".intval($this->id).", '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
 				Database::query($sql);
 			}
 
@@ -944,7 +944,7 @@ abstract class Question
             $count = $new_exercise->selectNbrQuestions();
             $count++;
 		    $sql="INSERT INTO $TBL_EXERCICE_QUESTION (c_id, question_id, exercice_id, question_order) VALUES
-			     ({$this->course['real_id']}, '".Database::escape_string($id)."','".Database::escape_string($exerciseId)."', '$count' )";
+			     ({$this->course['real_id']}, ".intval($id).", ".intval($exerciseId).", '$count' )";
 		    Database::query($sql);
 
             // we do not want to reindex if we had just saved adnd indexed the question
@@ -979,18 +979,18 @@ abstract class Question
 			// deletes the position in the array containing the wanted exercise ID
 			unset($this->exerciseList[$pos]);
             //update order of other elements
-            $sql = "SELECT question_order FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."' AND exercice_id='".Database::escape_string($exerciseId)."'";
+            $sql = "SELECT question_order FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = ".intval($id)." AND exercice_id = ".intval($exerciseId)."";
             $res = Database::query($sql);
             if (Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
                 if (!empty($row['question_order'])) {
                     $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1
-                            WHERE c_id = $course_id AND exercice_id='".Database::escape_string($exerciseId)."' AND question_order > ".$row['question_order'];
+                            WHERE c_id = $course_id AND exercice_id = ".intval($exerciseId)." AND question_order > ".$row['question_order'];
                     $res = Database::query($sql);
                 }
             }
 
-			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."' AND exercice_id='".Database::escape_string($exerciseId)."'";
+			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = ".intval($id)." AND exercice_id = ".intval($exerciseId)."";
 			Database::query($sql);
 
 			return true;
@@ -1019,7 +1019,7 @@ abstract class Question
 		// if the question must be removed from all exercises
 		if (!$deleteFromEx) {
             //update the question_order of each question to avoid inconsistencies
-            $sql = "SELECT exercice_id, question_order FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."'";
+            $sql = "SELECT exercice_id, question_order FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = ".intval($id)."";
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1027,23 +1027,23 @@ abstract class Question
                     if (!empty($row['question_order'])) {
                         $sql = "UPDATE $TBL_EXERCICE_QUESTION
                                 SET question_order = question_order-1
-                                WHERE c_id = $course_id AND exercice_id='".Database::escape_string($row['exercice_id'])."' AND question_order > ".$row['question_order'];
+                                WHERE c_id = $course_id AND exercice_id = ".intval($row['exercice_id'])." AND question_order > ".$row['question_order'];
                         Database::query($sql);
                     }
                 }
             }
 
-			$sql = "DELETE FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."'";
+			$sql = "DELETE FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = ".intval($id)."";
 			Database::query($sql);
 
-			$sql = "DELETE FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id='".Database::escape_string($id)."'";
+			$sql = "DELETE FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id = ".intval($id)."";
 			Database::query($sql);
 
-			$sql = "DELETE FROM $TBL_REPONSES WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."'";
+			$sql = "DELETE FROM $TBL_REPONSES WHERE c_id = $course_id AND question_id = ".intval($id)."";
 			Database::query($sql);
 
 			// remove the category of this question in the question_rel_category table
-			$sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."' AND c_id=".api_get_course_int_id();
+			$sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY WHERE c_id = $course_id AND question_id = ".intval($id)." AND c_id=".api_get_course_int_id();
 			Database::query($sql);
 
 			api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionDeleted',api_get_user_id());

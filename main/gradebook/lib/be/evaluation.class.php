@@ -328,7 +328,7 @@ class Evaluation implements GradebookItem
 			$sql .= 'null';
 		}
 		$sql .= ', weight = "'.Database::escape_string($this->get_weight()).'" '
-			.', max = '.Database::escape_string($this->get_max())
+			.', max = '.intval($this->get_max())
 			.', visible = '.intval($this->is_visible())
 			.' WHERE id = '.intval($this->id);
 		//recorded history

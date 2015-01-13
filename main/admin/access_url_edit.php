@@ -120,7 +120,7 @@ $form->setDefaults($defaults);
 
 $submit_name = get_lang('AddUrl');
 if (isset($_GET['url_id'])) {
-	$url_id = Database::escape_string($_GET['url_id']);
+	$url_id = intval($_GET['url_id']);
 	$num_url_id = UrlManager::url_id_exist($url_id);
 	if($num_url_id != 1) {
 		header('Location: access_urls.php');

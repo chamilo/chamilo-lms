@@ -1367,7 +1367,7 @@ if ($is_allowed_to_edit ||
         $templateForm .= '</form>';
     } elseif (isset($_GET['add_as_template']) && isset($_POST['create_template'])) {
 
-        $document_id_for_template = intval(Database::escape_string($_GET['add_as_template']));
+        $document_id_for_template = intval($_GET['add_as_template']);
 
         $title = Security::remove_XSS($_POST['template_title']);
         //$description = Security::remove_XSS($_POST['template_description']);

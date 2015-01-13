@@ -45,9 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'id' => $skillId
     );
 
-    if ($objSkill->update($params)) {
-        header('Location: ' . api_get_path(WEB_CODE_PATH) . 'admin/skill_badge_list.php');
-    }
+    $objSkill->update($params);
+
+    header('Location: ' . api_get_path(WEB_CODE_PATH) . 'admin/skill_badge_list.php');
+    exit;
 }
 
 $interbreadcrumb = array(

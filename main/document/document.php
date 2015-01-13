@@ -180,6 +180,8 @@ if (Portfolio::controller()->accept()) {
     Portfolio::controller()->run();
 }
 
+$curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
+
 switch ($action) {
     case 'delete_item':
         if ($is_allowed_to_edit ||

@@ -7,8 +7,8 @@
  */
 $cidReset = true;
 
-require_once '../../inc/global.inc.php';
-require_once '../../inc/lib/fileUpload.lib.php';
+require_once '../inc/global.inc.php';
+require_once '../inc/lib/fileUpload.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($_FILES['image']['error'] == 0) {
-            unlink($sysCodePath . $skill['info']);
+            unlink($sysCodePath . $skill['icon']);
 
             $imageExtraField = new Image($_FILES['image']['tmp_name']);
             $imageExtraField->send_image($sysCodePath . $fileDir . $fileName, -1, 'png');
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     );
 
     if ($objSkill->update($params)) {
-        header('Location: ' . api_get_path(WEB_CODE_PATH) . 'admin/openbadges/list.php');
+        header('Location: ' . api_get_path(WEB_CODE_PATH) . 'admin/skill_badge_list.php');
     }
 }
 
@@ -56,15 +56,15 @@ $interbreadcrumb = array(
         'name' => get_lang('Administration')
     ),
     array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'admin/openbadges/index.php',
-        'name' => get_lang('OpenBadges')
+        'url' => api_get_path(WEB_CODE_PATH) . 'admin/skill_badge.php',
+        'name' => get_lang('Badges')
     )
 );
 
-$tpl = new Template('CreateOpenBadge');
+$tpl = new Template(get_lang('CreateBadge'));
 $tpl->assign('platformAdminEmail', get_setting('emailAdministrator'));
 $tpl->assign('skill', $skill);
 
-$contentTemplate = $tpl->get_template('openbadges/create.tpl');
+$contentTemplate = $tpl->get_template('skill/badge_create.tpl');
 
 $tpl->display($contentTemplate);

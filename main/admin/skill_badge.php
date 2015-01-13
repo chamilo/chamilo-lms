@@ -7,7 +7,7 @@
  */
 $cidReset = true;
 
-require_once '../../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -18,8 +18,8 @@ $interbreadcrumb = array(
     )
 );
 
-$tpl = new Template('OpenBadges');
+$tpl = new Template(get_lang('Badges'));
 
-$contentTemplate = $tpl->get_template('openbadges/index.tpl');
+$contentTemplate = $tpl->get_template('skill/badge.tpl');
 
 $tpl->display($contentTemplate);

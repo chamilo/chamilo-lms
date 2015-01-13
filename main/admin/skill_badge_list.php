@@ -7,12 +7,10 @@
  */
 $cidReset = true;
 
-require_once '../../inc/global.inc.php';
-require_once '../../inc/lib/fileUpload.lib.php';
+require_once '../inc/global.inc.php';
+require_once '../inc/lib/fileUpload.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-
-$skillId = intval($_GET['id']);
 
 $objSkill = new Skill();
 $skills = $objSkill->get_all();
@@ -23,15 +21,15 @@ $interbreadcrumb = array(
         'name' => get_lang('Administration')
     ),
     array(
-        'url' => api_get_path(WEB_CODE_PATH) . 'admin/openbadges/index.php',
-        'name' => get_lang('OpenBadges')
+        'url' => api_get_path(WEB_CODE_PATH) . 'admin/skill_badge.php',
+        'name' => get_lang('Badges')
     )
 );
 
-$tpl = new Template('Skills');
+$tpl = new Template(get_lang('Skills'));
 $tpl->assign('platformAdminEmail', get_setting('emailAdministrator'));
 $tpl->assign('skills', $skills);
 
-$contentTemplate = $tpl->get_template('openbadges/list.tpl');
+$contentTemplate = $tpl->get_template('skill/badge_list.tpl');
 
 $tpl->display($contentTemplate);

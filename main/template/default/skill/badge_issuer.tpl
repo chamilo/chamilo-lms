@@ -32,6 +32,16 @@
                             </div>
                         </div>
                     </fieldset>
+                    <fieldset>
+                        <legend>{{ 'BackpackDetails' | get_lang }}</legend>
+                        <div class="control-group">
+                            <label class="control-label">{{ 'URL' | get_lang }}</label>
+                            <div class="controls">
+                                <span class="uneditable-input input-xxlarge">{{ backpack }}</span>
+                                <p class="help-block">{{ 'TheBadgesWillBeSentToThatBackpack' | get_lang }}</p>
+                            </div>
+                        </div>
+                    </fieldset>
                 </form>
             </div>
         </div>

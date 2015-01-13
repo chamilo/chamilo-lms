@@ -9,6 +9,10 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 
+if (!api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $interbreadcrumb = array(

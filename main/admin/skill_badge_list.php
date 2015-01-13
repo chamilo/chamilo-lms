@@ -10,6 +10,10 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/fileUpload.lib.php';
 
+if (!api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $objSkill = new Skill();

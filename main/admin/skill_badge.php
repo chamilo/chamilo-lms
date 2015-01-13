@@ -11,6 +11,10 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
+if (!api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
 $interbreadcrumb = array(
     array(
         'url' => api_get_path(WEB_CODE_PATH) . 'admin/index.php',

@@ -4284,12 +4284,13 @@ if (!function_exists('sys_get_temp_dir')) {
  * @version     1.0.3
  * @param       string   $dirname    Directory to delete
  * @param       bool     Deletes only the content or not
+ * @param       bool     $strict if one folder/file fails stop the loop
  * @return      bool     Returns TRUE on success, FALSE on failure
  * @link http://aidanlister.com/2004/04/recursively-deleting-a-folder-in-php/
  * @author      Yannick Warnier, adaptation for the Chamilo LMS, April, 2008
  * @author      Ivan Tcholakov, a sanity check about Directory class creation has been added, September, 2009
  */
-function rmdirr($dirname, $delete_only_content_in_folder = false) {
+function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = false) {
     $res = true;
 
     // A sanity check.
@@ -4318,7 +4319,15 @@ function rmdirr($dirname, $delete_only_content_in_folder = false) {
             }
 
             // Recurse.
-            rmdirr("$dirname/$entry");
+            if ($strict) {
+                $result = rmdirr("$dirname/$entry");
+                if ($result == false) {
+                    $res = false;
+                    break;
+                }
+            } else {
+                rmdirr("$dirname/$entry");
+            }
         }
     }
 

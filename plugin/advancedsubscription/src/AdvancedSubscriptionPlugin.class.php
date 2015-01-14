@@ -81,6 +81,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             "session_id int UNSIGNED NOT NULL, " .
             "user_id int UNSIGNED NOT NULL, " .
             "status int UNSIGNED NOT NULL, " .
+            "last_message_id UNSIGNED NOT NULL, " .
             "created_at datetime NOT NULL, " .
             "updated_at datetime NULL, " .
             "PRIMARY KEY PK_tour_log (id)); ";
@@ -223,8 +224,65 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * Register a message type
+     * @param $description
+     * @return bool|int
+     */
+    public function addMessageType($description)
+    {
+        $pAdvSubMessageTable = Database::get_main_table(TABLE_ADV_SUB_MAIL_TYPE);
+        $attributes = array(
+            'description' => $description,
+        );
+
+        $id = Database::insert($pAdvSubMessageTable, $attributes);
+
+        return $id;
+    }
+
+    /**
+     * Register a message status
+     * @param $description
+     * @return bool|int
+     */
+    public function addMessageStatus($description)
+    {
+        $pAdvSubMessageTable = Database::get_main_table(TABLE_ADV_SUB_MAIL_STATUS);
+        $attributes = array(
+            'description' => $description,
+        );
+
+        $id = Database::insert($pAdvSubMessageTable, $attributes);
+
+        return $id;
+    }
+
+    /**
+     * Register message with type and status
+     * @param $mailId
+     * @param $mailTypeId
+     * @param $mailStatusId
+     * @return bool|int
+     */
+    public function addMessage($mailId, $mailTypeId, $mailStatusId)
+    {
+        $pAdvSubMessageTable = Database::get_main_table(TABLE_ADV_SUB_MAIL);
+        $attributes = array(
+            'message_id' => $mailId,
+            'mail_type_id' => $mailTypeId,
+            'mail_status_id' => $mailStatusId,
+        );
+
+        $id = Database::insert($pAdvSubMessageTable, $attributes);
+
+        return $id;
+    }
+
+    /**
+     * Check for requirements and register user into queue
      * @param $userId
      * @param $sessionId
+     * @param $params
      * @return bool|string
      */
     public function startSubscription($userId, $sessionId, $params)
@@ -246,6 +304,31 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         }
 
         return $result;
+    }
+
+    public function sendMailMessage($studentId, $subject, $content, $type = '')
+    {
+        global $_configuration; // @TODO: Add $_configuration['no_reply_user_id'] to configuration file
+
+        $mailId = MessageManager::send_message(
+            $studentId,
+            $subject,
+            $content,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $_configuration['no_reply_user_id']
+        );
+
+        if (!empty($mailId)) {
+            // Save as sent message
+            $mailId = $this->addMessage($mailId, $type, ADV_SUB_MAIL_STATUS_MAIL_SENT);
+        }
+
+        return $mailId;
     }
 
     /**
@@ -294,7 +377,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             );
         }
         if (isset($where)) {
-            $res = Database::update(
+            $res = (bool) Database::update(
                 Database::get_main_table(TABLE_ADV_SUB_QUEUE),
                 array(
                     'unsigned' => $newStatus,
@@ -309,13 +392,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @param $userId
-     * @param $relationType
+     * Render and send mail by defined advanced subscription action
+     * @param $data
+     * @param $actionType
+     * @return array
      */
     public function sendMail($data, $actionType)
     {
-        global $_configuration; // @TODO: Add $_configuration['no_reply_user_id'] to configuration file
-        $tpl= new Template($this->get_lang('plugin_title'));
+        $tpl = new Template($this->get_lang('plugin_title'));
         $tpl->assign('data', $data);
         $tplParams = array('user', 'student', 'students','superior', 'admin', 'session', 'signature', '_p', );
         foreach ($tplParams as $tplParam) {
@@ -326,214 +410,126 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         switch ($actionType) {
             case ADV_SUB_ACTION_STUDENT_REQUEST:
                 // Mail to student
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['student']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_received.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_A
                 );
                 // Mail to superior
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['superior']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_B
                 );
                 break;
             case ADV_SUB_ACTION_SUPERIOR_APPROVE:
                 // Mail to student
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['student']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior_approved.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_A
                 );
                 // Mail to superior
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['superior']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approve_confirmed.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_B
                 );
                 // Mail to admin
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['admin']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_approved_info_admin.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_C
                 );
                 break;
             case ADV_SUB_ACTION_SUPERIOR_DISAPPROVE:
                 // Mail to student
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['student']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior_disapproved.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_A
                 );
                 // Mail to superior
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['superior']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_disapprove_confirmed.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_B
                 );
                 break;
             case ADV_SUB_ACTION_SUPERIOR_SELECT:
                 // Mail to student
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['student']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_received.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_A
                 );
                 // Mail to superior
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['superior']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_B
                 );
                 break;
             case ADV_SUB_ACTION_ADMIN_APPROVE:
                 // Mail to student
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['student']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_student.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_A
                 );
                 // Mail to superior
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['superior']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_superior.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_B
                 );
                 // Mail to admin
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['admin']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_admin.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_C
                 );
                 break;
             case ADV_SUB_ACTION_ADMIN_DISAPPROVE:
                 // Mail to student
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['student']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_student.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_A
                 );
                 // Mail to superior
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['superior']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_superior.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_B
                 );
                 // Mail to admin
-                MessageManager::send_message(
+                $mailIds[] = $this->sendMailMessage(
                     $data['admin']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_admin.tpl'),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $_configuration['no_reply_user_id']
+                    ADV_SUB_MAIL_TYPE_C
                 );
                 break;
             default:
                 break;
         }
+
+        return $mailIds;
     }
 
     /**

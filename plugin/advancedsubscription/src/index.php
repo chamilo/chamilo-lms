@@ -36,29 +36,27 @@ if (isset($data)) {
         } elseif ($data['action']) {
             switch($data['action']) {
                 case ADV_SUB_ACTION_STUDENT_REQUEST:
-                    $plugin->startSubscription($data['user']['id'], $data['session']['id'], $data);
-                    $plugin->sendMail($data, $data['action']);
+                    $res = $plugin->startSubscription($data['user']['id'], $data['session']['id'], $data);
                     break;
                 case ADV_SUB_ACTION_SUPERIOR_APPROVE:
-                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
-                    $plugin->sendMail($data, $data['action']);
+                    $res = $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
                     break;
                 case ADV_SUB_ACTION_SUPERIOR_DISAPPROVE:
-                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED);
-                    $plugin->sendMail($data, $data['action']);
+                    $res = $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED);
                     break;
                 case ADV_SUB_ACTION_SUPERIOR_SELECT:
-                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
-                    $plugin->sendMail($data, $data['action']);
+                    $res = $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
                     break;
                 case ADV_SUB_ACTION_ADMIN_APPROVE:
-                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED);
-                    $plugin->sendMail($data, $data['action']);
+                    $res = $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED);
                     break;
                 case ADV_SUB_ACTION_ADMIN_DISAPPROVE:
-                    $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED);
-                    $plugin->sendMail($data, $data['action']);
+                    $res = $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED);
                     break;
+            }
+
+            if ($res === true) {
+                $plugin->sendMail($data, $data['action']);
             }
         }
     }

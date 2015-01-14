@@ -832,6 +832,11 @@ class learnpath
                     foreach ($parent->get_children() as $childItemId) {
                         $childItem = $this->getItem($childItemId);
 
+                        // If children was not set try to get the info
+                        if (empty($childItem->db_item_view_id)) {
+                            $childItem->set_lp_view($this->lp_view_id, $this->course_int_id);
+                        }
+
                         // Check all his brothers (parent's children) for completion status.
                         if ($childItemId != $item) {
                             if ($debug) {

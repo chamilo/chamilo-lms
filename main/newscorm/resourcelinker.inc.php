@@ -402,7 +402,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             echo str_repeat("&nbsp;&gt;", $level);
 
             // The title and the text are in the content field and we only want to display the title.
-            list($title, $text) = split('<br>', $myrow['content']);
+            list($title, $text) = explode('<br>', $myrow['content']);
             if ($title == '') { $title = $myrow['content']; }
             $title = $myrow['title'];
             $text = $myrow['content'];

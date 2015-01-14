@@ -38,7 +38,7 @@ class aiccObjective extends learnpathItem
                                 break;
                             case 'member':
                                 if (strstr($value, ',') !== false) {
-                                    $temp = split(',', $value);
+                                    $temp = explode(',', $value);
                                     foreach ($temp as $val) {
                                         if (!empty($val)) {
                                             $this->members[] = $val;

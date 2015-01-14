@@ -875,6 +875,7 @@ class learnpath
                         // If all the children were completed:
                         $parent->set_status('completed');
                         $parent->save(false, $this->prerequisites_match($parent->get_id()));
+                        // Force the status to "completed"
                         //$this->update_queue[$parent->get_id()] = $parent->get_status();
                         $this->update_queue[$parent->get_id()] = 'completed';
                         if ($debug) {

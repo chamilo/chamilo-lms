@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Script
  * @package chamilo.gradebook
@@ -35,14 +36,23 @@ if ($session_id == 0) {
 }
 $category = Category :: load($_GET['selectcat']);
 $url = api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
-$typeform = new LinkForm(LinkForm :: TYPE_CREATE, $category[0], null, 'create_link', null, $url, $typeSelected);
+$typeform = new LinkForm(
+    LinkForm :: TYPE_CREATE,
+    $category[0],
+    null,
+    'create_link',
+    null,
+    $url,
+    $typeSelected
+);
 
 // if user selected a link type
 if ($typeform->validate() && isset($_GET['newtypeselected'])) {
     // reload page, this time with a parameter indicating the selected type
     header('Location: '.api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat'])
         .'&typeselected='.$typeform->exportValue('select_link')
-        .'&course_code='.Security::remove_XSS($_GET['course_code'])).'&'.api_get_cidreq();
+        .'&course_code='.Security::remove_XSS($_GET['course_code']).'&'.api_get_cidreq()
+    );
     exit;
 }
 

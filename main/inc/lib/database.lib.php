@@ -182,7 +182,7 @@ class Database
      * statistic table of which you pass the short name as a parameter.
      * Please, define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
-     *
+     * @deprecated use get_main_table
      * @param string $short_table_name, the name of the table
      */
     public static function get_statistic_table($short_table_name)

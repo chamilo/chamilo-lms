@@ -2378,9 +2378,12 @@ function get_work_user_list(
                 }
 
                 $work['qualification'] = $qualification_string.$feedback;
+                $work['qualification_only'] = $qualification_string;
 
                 // Date.
                 $work_date = api_convert_and_format_date($work['sent_date']);
+
+                $work['sent_date_from_db'] = $work['sent_date'];
                 $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])) . ' ' . $add_string . '<br />' . $work_date;
 
                 // Actions.
@@ -5021,12 +5024,17 @@ function exportAllStudentWorkFromPublication(
         }
     }
 
-    $header .= '<br />'.get_lang('Teachers').': '.$teachers;
-    $header .= '<br />'.get_lang('Date').': '.api_get_local_time();
-    $header .= '<br />'.get_lang('StudentPublication').': '.$workData['title'];
+    $header .= '<br />'.get_lang('Teachers').': '.$teachers.'<br />';
+    $header .= '<br />'.get_lang('Date').': '.api_get_local_time().'<br />';
+    $header .= '<br />'.get_lang('StudentPublication').': '.$workData['title'].'<br />';
 
+    $content = null;
     if (!empty($workData['expires_on'])) {
-        $header .= '<br />' . get_lang('ExpiryDate') . ': ' . api_get_local_time($workData['expires_on']);
+        $content .= '<br /><strong>' . get_lang('ExpiryDate') . '</strong>: ' . api_get_local_time($workData['expires_on']);
+    }
+
+    if (!empty($workData['description'])) {
+        $content .= '<br /><strong>' . get_lang('Description') . '</strong>: ' . $workData['description'];
     }
 
     $workList = get_work_user_list(null, null, null, null, $workId);
@@ -5035,24 +5043,24 @@ function exportAllStudentWorkFromPublication(
         case 'pdf':
             if (!empty($workList)) {
                 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
-                $pdf = new PDF();
 
-                $pdf->set_custom_header($header);
+                //$pdf->set_custom_header($header);
 
-                $content = null;
+                $content .= '<hr />';
                 foreach ($workList as $work) {
                     // getWorkComments need c_id
                     $work['c_id'] = $courseInfo['real_id'];
 
-                    $content .= $work['title'].'<br />';
-                    $content .= $work['sent_date'].'<br />';
-                    $content .= $work['qualification'].'<br />';
-                    $content .= $work['description'].'<br />';
-
+                    $content .= '<h3>'.strip_tags($work['title']).'<h3 />';
+                    $content .= get_lang('Date').': '.api_get_local_time($work['sent_date_from_db']).'<br />';
+                    if (!empty($work['qualification_only'])) {
+                        $content .= get_lang('Score').': '.$work['qualification_only'] . '<br />';
+                    }
+                    $content .= get_lang('Description').': '.$work['description'].'<br />';
                     $comments = getWorkComments($work);
 
                     if (!empty($comments)) {
-                        $content .= '<h3>'.get_lang('Feedback').': </h3>';
+                        $content .= '<h4>'.get_lang('Feedback').': </h4>';
                         foreach ($comments as $comment) {
                             $content .= get_lang('User').': '.api_get_person_name(
                                 $comment['firstname'],
@@ -5065,12 +5073,21 @@ function exportAllStudentWorkFromPublication(
                 }
 
                 if (!empty($content)) {
-                    $pdf->content_to_pdf(
+                    /*$pdf->content_to_pdf(
                         $content,
                         null,
                         replace_dangerous_char($workData['title']),
                         $courseInfo['code']
+                    );*/
+
+                    $params = array(
+                        'filename' => $workData['title'] . '_' . api_get_local_time(),
+                        'pdf_title' => replace_dangerous_char($workData['title']),
+                        'course_code' => $courseInfo['code'],
+                        'add_signatures' => false
                     );
+                    $pdf = new PDF('A4', null, $params);
+                    $pdf->html_to_pdf_with_template($content);
                 }
                 exit;
             }

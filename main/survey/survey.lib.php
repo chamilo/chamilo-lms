@@ -877,6 +877,7 @@ class survey_manager
         $sql = "SELECT * FROM $tbl_survey_question
 		        WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
         $result = Database::query($sql);
+        $return = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $return[$row['question_id']]['survey_id'] 			= $row['survey_id'];
             $return[$row['question_id']]['question_id'] 		= $row['question_id'];
@@ -891,7 +892,6 @@ class survey_manager
         $sql = "SELECT * FROM $table_survey_question_option
 		        WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
         $result = Database::query($sql);
-        $return = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $return[$row['question_id']]['answers'][] = $row['option_text'];
         }
@@ -2906,11 +2906,7 @@ class SurveyUtil
         $table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
 
         // Determining the offset of the sql statement (the n-th question of the survey)
-        if (!isset($_GET['question'])) {
-            $offset = 0;
-        } else {
-            $offset = Database::escape_string($_GET['question']);
-        }
+        $offset = !isset($_GET['question']) ? 0 : intval($_GET['question']);
 
         $currentQuestion = isset($_GET['question']) ? $_GET['question'] : 0;
         $question = array();

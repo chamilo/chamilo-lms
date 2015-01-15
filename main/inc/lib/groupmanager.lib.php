@@ -116,7 +116,7 @@ class GroupManager
         $sql .= " WHERE 1=1 ";
 
         if ($category != null) {
-            $sql .= "  AND  g.category_id = '".Database::escape_string($category)."' ";
+            $sql .= "  AND  g.category_id = '".intval($category)."' ";
             $session_condition = api_get_session_condition($session_id);
             if (!empty($session_condition)) {
                 $sql .= $session_condition;
@@ -595,7 +595,7 @@ class GroupManager
         $table_forum = Database :: get_course_table(TABLE_FORUM);
         $categoryId = intval($categoryId);
 
-        $group_id = Database::escape_string($group_id);
+        $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
 
         $sql = "UPDATE ".$table_group." SET
@@ -680,7 +680,7 @@ class GroupManager
         }
         $course_info = api_get_course_info($course_code);
         $course_id     = $course_info['real_id'];
-        $id = Database::escape_string($id);
+        $id = intval($id);
         $table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
         $sql = "SELECT * FROM $table_group_cat
                 WHERE c_id = $course_id AND id = $id LIMIT 1";
@@ -735,7 +735,7 @@ class GroupManager
         $course_info = api_get_course_info($course_code);
         $course_id     = $course_info['real_id'];
 
-        $group_id = Database::escape_string($group_id);
+        $group_id = intval($group_id);
         $sql = "SELECT gc.* FROM $table_group_cat gc, $table_group g
                 WHERE
                     gc.c_id = $course_id AND
@@ -763,7 +763,7 @@ class GroupManager
 
         $table_group = Database:: get_course_table(TABLE_GROUP);
         $table_group_cat = Database:: get_course_table(TABLE_GROUP_CATEGORY);
-        $cat_id = Database::escape_string($cat_id);
+        $cat_id = intval($cat_id);
         $sql = "SELECT id FROM $table_group
                 WHERE c_id = $course_id AND category_id='".$cat_id."'";
         $res = Database::query($sql);
@@ -878,7 +878,7 @@ class GroupManager
         $groups_per_user
     ) {
         $table_group_category = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $id = Database::escape_string($id);
+        $id = intval($id);
 
         $course_id = api_get_course_int_id();
 
@@ -940,7 +940,7 @@ class GroupManager
 				AND gu.c_id = g.c_id
 				AND gu.group_id = g.id ';
         if ($category_id != null) {
-            $category_id = Database::escape_string($category_id);
+            $category_id = intval($category_id);
             $sql .= ' AND g.category_id = '.$category_id;
         }
         $sql .= ' GROUP BY gu.user_id ORDER BY current_max DESC LIMIT 1';
@@ -957,8 +957,8 @@ class GroupManager
     public static function swap_category_order($id1, $id2)
     {
         $table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-        $id1 = Database::escape_string($id1);
-        $id2 = Database::escape_string($id2);
+        $id1 = intval($id1);
+        $id2 = intval($id2);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT id,display_order FROM $table_group_cat
@@ -997,7 +997,7 @@ class GroupManager
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
 
-        $group_id = Database::escape_string($group_id);
+        $group_id = intval($group_id);
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         } else {
@@ -1266,7 +1266,7 @@ class GroupManager
     public static function number_of_students($group_id, $course_id = null)
     {
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
-        $group_id = Database::escape_string($group_id);
+        $group_id = intval($group_id);
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         } else {
@@ -1287,7 +1287,7 @@ class GroupManager
     public static function maximum_number_of_students($group_id)
     {
         $table_group = Database :: get_course_table(TABLE_GROUP);
-        $group_id = Database::escape_string($group_id);
+        $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
         $db_result = Database::query("SELECT max_student FROM $table_group WHERE c_id = $course_id AND id = $group_id");
         $db_object = Database::fetch_object($db_result);

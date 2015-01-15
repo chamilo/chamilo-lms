@@ -253,7 +253,7 @@ class CourseManager
         if (!in_array($orderdirection, array('ASC', 'DESC'))) {
             $sql .= 'ASC';
         } else {
-            $sql .= Database::escape_string($orderdirection);
+            $sql .= ($orderdirection == 'ASC'?'ASC':'DESC');
         }
 
         if (!empty($howmany) && is_int($howmany) and $howmany > 0) {
@@ -263,7 +263,7 @@ class CourseManager
         }
         if (!empty($from)) {
             $from = intval($from);
-            $sql .= ' OFFSET '.Database::escape_string($from);
+            $sql .= ' OFFSET '.intval($from);
         } else {
             $sql .= ' OFFSET 0';
         }
@@ -301,7 +301,7 @@ class CourseManager
     {
         $result = Database::fetch_array(Database::query(
             "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-            WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".Database::escape_string($user_id))
+            WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".intval($user_id))
         );
 
         return $result['status'];
@@ -316,7 +316,7 @@ class CourseManager
     {
         $result = Database::fetch_array(Database::query(
                 "SELECT tutor_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".Database::escape_string($user_id))
+                WHERE course_code = '".Database::escape_string($course_code)."' AND user_id = ".intval($user_id))
         );
 
         return $result['tutor_id'];
@@ -3868,7 +3868,7 @@ class CourseManager
         global $_user;
         $output = array();
         $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "SELECT * FROM ".$table_category." WHERE user_id='".Database::escape_string($_user['user_id'])."'";
+        $sql = "SELECT * FROM ".$table_category." WHERE user_id='".intval($_user['user_id'])."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $output[$row['id']] = $row['title'];

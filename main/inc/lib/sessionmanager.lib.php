@@ -5467,7 +5467,7 @@ class SessionManager
                 $joinTable,
                 array(
                     'where' => array(
-                        'sf.field_variable IN ( ? ) OR' => 'modalidad, duracion, cupos, horario, publico_objetivo',
+                        'sf.field_variable IN ( ? ) OR' => 'as_description, modalidad, duracion, cupos, horario, publico_objetivo',
                     )
                 )
             );
@@ -5478,6 +5478,9 @@ class SessionManager
             if ($publicoObjetivo == $session['publico_objetivo']) {
                 $session['modalidad'] = isset($sessionFieldValueList[$id]) ?
                     $sessionFieldValueList[$id]['modalidad'] :
+                    '';
+                $session['descripcion'] = isset($sessionFieldValueList[$id]) ?
+                    $sessionFieldValueList[$id]['as_description'] :
                     '';
                 $session['duracion'] = isset($sessionFieldValueList[$id]) ?
                     $sessionFieldValueList[$id]['duracion'] :

@@ -327,6 +327,7 @@ class survey_manager
 						'".Database::escape_string($values['survey_thanks'])."',
 						'".api_get_utc_datetime()."',
 						'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
+						'".Database::escape_string($values['visible_results'])."',
 						".api_get_session_id()."
 						)";
             Database::query($sql);
@@ -408,7 +409,8 @@ class survey_manager
                         template 		= '".Database::escape_string('template')."',
                         intro			= '".Database::escape_string($values['survey_introduction'])."',
                         surveythanks	= '".Database::escape_string($values['survey_thanks'])."',
-                        anonymous       = '".Database::escape_string($values['anonymous'])."'".$additionalsets."
+                        anonymous       = '".Database::escape_string($values['anonymous'])."'".$additionalsets.",
+                        visible_results	= '".Database::escape_string($values['visible_results'])."'
 					WHERE c_id = $course_id AND survey_id = '".Database::escape_string($values['survey_id'])."'";
             Database::query($sql);
 
@@ -2983,6 +2985,20 @@ class SurveyUtil
                 $data[$row['option_id']] = $row;
             }
 
+            $chartData = array();
+            foreach ($options as $option) {
+                $optionText = strip_tags($option['option_text']);
+                $optionText = html_entity_decode($optionText);
+                $votes = $data[$option['question_option_id']]['total'];
+                if (empty($votes)) {
+                    $votes = '0';
+                }
+                array_push($chartData, array('option' => $optionText, 'votes' => $votes));
+            }
+            self::drawChart($chartData);
+
+            $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+
             // displaying the table: headers
             echo '<table class="data_table">';
             echo '	<tr>';
@@ -3087,6 +3103,28 @@ class SurveyUtil
             $number_of_answers += $row['total'];
             $data[$row['option_id']][$row['value']] = $row;
         }
+
+        $chartData = array();
+        foreach ($options as $option) {
+            $optionText = strip_tags($option['option_text']);
+            $optionText = html_entity_decode($optionText);
+            for ($i = 1; $i <= $question['max_value']; $i++) {
+                $votes = $data[$option['question_option_id']][$i]['total'];
+                if (empty($votes)) {
+                    $votes = '0';
+                }
+                array_push(
+                    $chartData,
+                    array(
+                        'serie' => $optionText,
+                        'option' => $i,
+                        'votes' => $votes
+                    )
+                );
+            }
+        }
+        self::drawChart($chartData, true);
+
         // Displaying the table: headers
         echo '<table class="data_table">';
         echo '	<tr>';
@@ -3898,86 +3936,131 @@ class SurveyUtil
             $answers_y = SurveyUtil::get_answers_of_question_by_user($_GET['survey_id'], $_GET['yaxis']);
 
             // Displaying the table
-            echo '<table border="1" class="data_table">';
+            $tableHtml = '<table border="1" class="data_table">';
 
+            $xOptions = array();
             // The header
-            echo '	<tr>';
+            $tableHtml .=  '	<tr>';
             for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
                 if ($ii == 0) {
-                    echo '		<th>&nbsp;</th>';
+                    $tableHtml .=  '		<th>&nbsp;</th>';
                 } else {
                     if ($question_x['type'] == 'score') {
                         for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
-                            echo '		<th>'.$question_x['answers'][($ii-1)].'<br />'.$x.'</th>';
+                            $tableHtml .= '		<th>'.$question_x['answers'][($ii-1)].'<br />'.$x.'</th>';
                         }
                         $x = '';
                     } else {
-                        echo '		<th>'.$question_x['answers'][($ii-1)].'</th>';
+                        $tableHtml .= '		<th>'.$question_x['answers'][($ii-1)].'</th>';
                     }
+                    $optionText = strip_tags($question_x['answers'][$ii-1]);
+                    $optionText = html_entity_decode($optionText);
+                    array_push($xOptions, trim($optionText));
                 }
             }
-            echo '	</tr>';
+            $tableHtml .=  '	</tr>';
+            $chartData = array();
 
             // The main part
             for ($ij = 0; $ij < count($question_y['answers']); $ij++) {
+                $currentYQuestion = strip_tags($question_y['answers'][$ij]);
+                $currentYQuestion = html_entity_decode($currentYQuestion);
                 // The Y axis is a scoring question type so we have more rows than the options (actually options * maximum score)
                 if ($question_y['type'] == 'score') {
                     for ($y = 1; $y <= $question_y['maximum_score']; $y++) {
-                        echo '	<tr>';
+                        $tableHtml .=  '	<tr>';
                         for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
                             if ($question_x['type'] == 'score') {
                                 for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                                     if ($ii == 0) {
-                                        echo '		<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
+                                        $tableHtml .=  '		<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
                                         break;
                                     } else {
-                                        echo '		<td align="center">';
-                                        echo SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], $x, $y);
-                                        echo '</td>';
+                                        $tableHtml .=  '		<td align="center">';
+                                        $votes =  SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], $x, $y);
+                                        $tableHtml .=  $votes;
+                                        array_push(
+                                            $chartData,
+                                            array(
+                                                'serie' => array($currentYQuestion, $xOptions[$ii-1]),
+                                                'option' => $x,
+                                                'votes' => $votes
+                                            )
+                                        );
+                                        $tableHtml .=  '</td>';
                                     }
                                 }
                             } else {
                                 if ($ii == 0) {
-                                    echo '		<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
+                                    $tableHtml .=  '		<th>'.$question_y['answers'][$ij].' '.$y.'</th>';
                                 } else {
-                                    echo '		<td align="center">';
-                                    echo SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], 0, $y);
-                                    echo '</td>';
+                                    $tableHtml .=  '		<td align="center">';
+                                    $votes =  SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], 0, $y);
+                                    $tableHtml .= $votes;
+                                    array_push(
+                                        $chartData,
+                                        array(
+                                            'serie' => array($currentYQuestion, $xOptions[$ii-1]),
+                                            'option' => $y,
+                                            'votes' => $votes
+                                        )
+                                    );
+                                    $tableHtml .=  '</td>';
                                 }
                             }
                         }
-                        echo '	</tr>';
+                        $tableHtml .=  '	</tr>';
                     }
                 }
                 // The Y axis is NOT a score question type so the number of rows = the number of options
                 else {
-                    echo '	<tr>';
+                    $tableHtml .=  '	<tr>';
                     for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
                         if ($question_x['type'] == 'score') {
                             for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                                 if ($ii == 0) {
-                                    echo '		<th>'.$question_y['answers'][($ij)].'</th>';
+                                    $tableHtml .=  '		<th>'.$question_y['answers'][$ij].'</th>';
                                     break;
                                 } else {
-                                    echo '		<td align="center">';
-                                    echo SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], $x, 0);
-                                    echo '</td>';
+                                    $tableHtml .=  '		<td align="center">';
+                                    $votes =  SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], $x, 0);
+                                    $tableHtml .= $votes;
+                                    array_push(
+                                        $chartData,
+                                        array(
+                                            'serie' => array($currentYQuestion, $xOptions[$ii-1]),
+                                            'option' => $x,
+                                            'votes' => $votes
+                                        )
+                                    );
+                                    $tableHtml .=  '</td>';
                                 }
                             }
                         } else {
                             if ($ii == 0) {
-                                echo '		<th>'.$question_y['answers'][($ij)].'</th>';
+                                $tableHtml .=  '		<th>'.$question_y['answers'][($ij)].'</th>';
                             } else {
-                                echo '		<td align="center">';
-                                echo SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)]);
-                                echo '</td>';
+                                $tableHtml .=  '		<td align="center">';
+                                $votes = SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)]);
+                                $tableHtml .= $votes;
+                                array_push(
+                                    $chartData,
+                                    array(
+                                        'serie' => $xOptions[$ii-1],
+                                        'option' => $currentYQuestion,
+                                        'votes' => $votes
+                                    )
+                                );
+                                $tableHtml .=  '</td>';
                             }
                         }
                     }
-                    echo '	</tr>';
+                    $tableHtml .=  '	</tr>';
                 }
             }
-            echo '</table>';
+            $tableHtml .=  '</table>';
+            self::drawChart($chartData, true);
+            echo $tableHtml;
         }
     }
 
@@ -4043,7 +4126,7 @@ class SurveyUtil
                 // Check if the user has given $option_x as answer
                 if (in_array($check_x, $answers)) {
                     // Check if the user has given $option_y as an answer
-                    if (in_array($check_y, $answers_y[$user])) {
+                    if (!is_null($answers_y[$user]) && in_array($check_y, $answers_y[$user])) {
                         $counter++;
                     }
                 }
@@ -4972,7 +5055,8 @@ class SurveyUtil
             if ($row['answered'] == 0) {
                 echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'&amp;cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
             } else {
-                echo '<td>'.$row['title'].'</td>';
+                //echo '<td>'.$row['title'].'</td>';
+                echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;cidReq='.$_course['sysCode'].'&amp;id_session='.$row['session_id'].'&amp;gidReq='.'0'.'&amp;origin='.''.'&amp;survey_id='.$row['survey_id'].'">'.$row['title'].'</a></td>';
             }
             echo '<td>';
             echo ($row['anonymous'] == 1) ? get_lang('Yes') : get_lang('No');
@@ -5188,5 +5272,59 @@ class SurveyUtil
         } else {
             return false;
         }
+    }
+
+    /**
+     * Display survey question chart
+     * @param	array	Chart data
+     * @param	boolean	Tells if the chart has a serie. False by default
+     * @return	void 	(direct output)
+     */
+    static function drawChart($chartData, $hasSerie = false)
+    {
+        $htmlChart = '<div id="chartContainer" class="span12">'.
+            api_get_js("d3/d3.v3.4.8.js").'
+            <script src="http://dimplejs.org/dist/dimple.v2.1.0.min.js"></script>
+            <script type="text/javascript">
+            var svg = dimple.newSvg("#chartContainer", "100%", 400);
+            var data = [';
+        $order = array();
+        foreach ($chartData as $chartDataElement) {
+            $htmlChart .= '{"';
+            if (!$hasSerie) {
+                $htmlChart .= get_lang("Option") . '":"' . $chartDataElement['option'] . '", "';
+                array_push($order, $chartDataElement['option']);
+            } else if (!is_array($chartDataElement['serie'])) {
+                $htmlChart .= get_lang("Option") . '":"' . $chartDataElement['serie'] . '", "' .
+                    get_lang("Score") . '":"' . $chartDataElement['option'] . '", "';
+
+            } else {
+                $htmlChart .= get_lang("Serie") . '":"' . $chartDataElement['serie'][0] . '", "' .
+                    get_lang("Option") . '":"' . $chartDataElement['serie'][1] . '", "' .
+                    get_lang("Score") . '":"' . $chartDataElement['option'] . '", "';
+            }
+            $htmlChart .= get_lang("Votes") . '":"' . $chartDataElement['votes'] .
+            '"},';
+        }
+        rtrim($htmlChart, ",");
+        $htmlChart .= '];
+            var myChart = new dimple.chart(svg, data);
+            myChart.addMeasureAxis("y", "'.get_lang("Votes").'");';
+        if (!$hasSerie) {
+            $htmlChart .= 'myChart . addCategoryAxis("x", "'.get_lang("Option").'");';
+            $htmlChart .= 'myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
+
+        } else if (!is_array($chartDataElement['serie'])) {
+            $htmlChart .= 'myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);';
+            $htmlChart .= 'myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
+
+        } else {
+            $htmlChart .= 'myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);';
+            $htmlChart .= 'myChart.addSeries("'.get_lang("Serie").'", dimple.plot.bar);';
+        }
+        $htmlChart .= 'myChart.draw();
+            </script>
+            </div>';
+        echo $htmlChart;
     }
 }

@@ -70,8 +70,12 @@ class HookAdvancedSubscription extends HookObserver implements
                 array(
                     'name' => array('name' => 'name', 'type' => 'xsd:string'), //Course string code
                     'description' => array('name' => 'description', 'type' => 'xsd:string'), //Chamilo user_id
+                    'modality' => array('name' => 'start_date', 'type' => 'xsd:string'),
                     'date_start' => array('name' => 'start_date', 'type' => 'xsd:string'),
                     'date_end' => array('name' => 'end_date', 'type' => 'xsd:string'),
+                    'duration' => array('name' => 'date_end', 'type' => 'xsd:string'),
+                    'quota' => array('name' => 'quota', 'type' => 'xsd:string'),
+                    'schedule' => array('name' => 'schedule', 'type' => 'xsd:string'),
                 )
             );
 
@@ -97,8 +101,9 @@ class HookAdvancedSubscription extends HookObserver implements
                 'all',
                 '',
                 array(
-                    'id' => array('name' => 'id', 'type' => 'xsd:string'), //Course string code
-                    'name' => array('name' => 'name', 'type' => 'xsd:string'), //Chamilo user_id
+                    'id' => array('name' => 'id', 'type' => 'xsd:string'), // Course string code
+                    'name' => array('name' => 'name', 'type' => 'xsd:string'), // Chamilo user_id
+                    'target' => array('name' => 'target', 'type' => 'xsd:string'), // Publico objetivo
                     'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
                 )
             );
@@ -121,7 +126,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'urn:WSRegistration#WSAdvsubEncrypt', // soapaction
                 'rpc', // style
                 'encoded', // use
-                'This service encrpyt data to be used later in urls' // documentation
+                'This service encrypt data to be used later in urls' // documentation
             );
 
             return $data;
@@ -160,9 +165,14 @@ class HookAdvancedSubscription extends HookObserver implements
 
         // Get the session brief List by category
 
-        $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId);
+        $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId, $params['publico_objetivo']);
 
-        if (empty($sessionList)) {
+        $extraFieldSession = new ExtraFieldValue('session');
+        $hasExtraField = $extraFieldSession->get_values_by_handler_and_field_variable(1, 'publico_objetivo');
+        if ($hasExtraField != false) {
+            // Has session extra fields, Nothing to do
+        } else {
+            // No session extra fields
 
             return return_error(WS_ERROR_NOT_FOUND_RESULT);
         }

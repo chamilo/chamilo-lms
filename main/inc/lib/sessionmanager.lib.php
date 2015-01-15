@@ -5442,10 +5442,10 @@ class SessionManager
      * Returns the list of session (name, short description, start date, end date) from category.
      * The short description is an extra field value
      * @param $categoryId
+     * @param $publicoObjetivo
      * @return mixed
      */
-    public static function getSessionBriefListByCategory($categoryId)
-    {
+    public static function getSessionBriefListByCategory($categoryId, $publicoObjetivo) {
         $categoryId = (int) $categoryId;
         $sessionList = array();
         if ($categoryId > 0) {
@@ -5463,11 +5463,11 @@ class SessionManager
                 )
             );
             $sessionFieldValueList = Database::select(
-                'sfv.session_id AS id, sfv.field_value AS description',
+                'sfv.session_id AS id, sfv.field_value AS description,',
                 $joinTable,
                 array(
                     'where' => array(
-                        'sf.field_variable = ?' => 'as_description'
+                        'sf.field_variable IN ( ? ) OR' => 'modalidad, duracion, cupos, horario, publico_objetivo',
                     )
                 )
             );
@@ -5475,9 +5475,20 @@ class SessionManager
         }
 
         foreach ($sessionList as $id => &$session) {
-            $session['description'] = isset($sessionFieldValueList[$id]) ?
-                $sessionFieldValueList[$id]['description'] :
-                '';
+            if ($publicoObjetivo == $session['publico_objetivo']) {
+                $session['modalidad'] = isset($sessionFieldValueList[$id]) ?
+                    $sessionFieldValueList[$id]['modalidad'] :
+                    '';
+                $session['duracion'] = isset($sessionFieldValueList[$id]) ?
+                    $sessionFieldValueList[$id]['duracion'] :
+                    '';
+                $session['cupos'] = isset($sessionFieldValueList[$id]) ?
+                    $sessionFieldValueList[$id]['cupos'] :
+                    '';
+                $session['horario'] = isset($sessionFieldValueList[$id]) ?
+                    $sessionFieldValueList[$id]['horario'] :
+                    '';
+            }
         }
 
         return $sessionList;

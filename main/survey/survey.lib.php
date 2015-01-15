@@ -2917,7 +2917,7 @@ class SurveyUtil
         echo '</div>';
 
         if ($survey_data['number_of_questions'] > 0) {
-            echo '<div id="question_report_questionnumbers">'.get_lang('GoToQuestion').': ';
+            echo '<div id="question_report_questionnumbers">'.get_lang('Question').' ';
             for ($i = 1; $i <= $survey_data['number_of_questions']; $i++) {
                 if ($offset != $i - 1) {
                     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.($i-1).'">'.$i.'</a>';

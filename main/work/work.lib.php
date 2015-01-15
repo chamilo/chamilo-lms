@@ -213,7 +213,8 @@ function get_work_data_by_path($path, $courseId = null)
 
 /**
  * @param int $id
- *
+ * @param int $courseId
+ * @param int $sessionId
  * @return array
  */
 function get_work_data_by_id($id, $courseId = null, $sessionId = null)
@@ -289,6 +290,7 @@ function get_work_count_by_student($user_id, $work_id)
         $return = Database::fetch_row($result,'ASSOC');
         $return = intval($return[0]);
     }
+
     return $return;
 }
 
@@ -313,7 +315,7 @@ function get_work_assignment_by_id($id, $courseId = null)
     $result = Database::query($sql);
     $return = array();
     if (Database::num_rows($result)) {
-        $return = Database::fetch_array($result,'ASSOC');
+        $return = Database::fetch_array($result, 'ASSOC');
     }
 
     return $return;
@@ -578,9 +580,9 @@ function display_student_publications_list(
     if (isset($_GET['direction'])) {
         $sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
     }
-    $sort_params    = implode('&amp;', $sort_params);
-    $my_params      = $sort_params;
-    $origin         = Security::remove_XSS($origin);
+    $sort_params = implode('&amp;', $sort_params);
+    $my_params = $sort_params;
+    $origin = Security::remove_XSS($origin);
 
     $qualification_exists = false;
     if (!empty($my_folder_data['qualification']) && intval($my_folder_data['qualification']) > 0) {
@@ -635,21 +637,24 @@ function display_student_publications_list(
                     qualification,
                     weight,
                     allow_text_assignment
-                FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id)
+                FROM ".$iprop_table." prop
+                INNER JOIN ".$work_table." work
+                ON (prop.ref=work.id AND prop.c_id = $course_id)
                 WHERE active IN (0, 1) AND ";
 
             if (!empty($group_id)) {
-                $sql_select_directory .= " work.post_group_id = '".$group_id."' "; // set to select only messages posted by the user's group
+                // set to select only messages posted by the user's group
+                $sql_select_directory .= " work.post_group_id = '".$group_id."' ";
             } else {
                 $sql_select_directory .= " work.post_group_id = '0' ";
             }
-            $sql_select_directory .= " AND ".
-                "  work.c_id = $course_id AND ".
-                "  work.id  = ".$work_parent->id." AND ".
-                "  work.filetype = 'folder' AND ".
-                "  prop.tool='work' $condition_session";
+            $sql_select_directory .= " AND
+                work.c_id = $course_id AND
+                work.id  = ".$work_parent->id." AND
+                work.filetype = 'folder' AND
+                prop.tool='work' $condition_session";
             $result = Database::query($sql_select_directory);
-            $row    = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_array($result, 'ASSOC');
 
             if (!$row) {
                 // the folder belongs to another session
@@ -657,16 +662,15 @@ function display_student_publications_list(
             }
 
             // form edit directory
+            $homework = array();
             if (!empty($row['has_properties'])) {
                 $sql = Database::query('SELECT * FROM '.$work_assigment.'
                 WHERE c_id = '.$course_id.' AND id = "'.$row['has_properties'].'" LIMIT 1');
                 $homework = Database::fetch_array($sql);
             }
             // save original value for later
-            $utc_expiry_time = $homework['expires_on'];
-
+            $utc_expiry_time = isset($homework['expires_on']) ? $homework['expires_on'] : null;
             $work_data = get_work_data_by_id($work_parent->id);
-
             $workId = $row['id'];
 
             $action = '';
@@ -820,7 +824,16 @@ function display_student_publications_list(
         $my_params = array ('edit_dir' => intval($_GET['edit_dir']));
     }
     $my_params['origin'] = $origin;
-    Display::display_sortable_config_table('work', $table_header, $table_data, $sorting_options, $paging_options, $my_params, $column_show, $column_order);
+    Display::display_sortable_config_table(
+        'work',
+        $table_header,
+        $table_data,
+        $sorting_options,
+        $paging_options,
+        $my_params,
+        $column_show,
+        $column_order
+    );
 }
 
 /**
@@ -1111,8 +1124,7 @@ function create_unexisting_work_directory($base_work_dir, $desired_dir_name)
 
 /**
  * Delete a work-tool directory
- * @param   string  Base "work" directory for this course as /var/www/chamilo/courses/ABCD/work/
- * @param   string  The directory name as the bit after "work/", without trailing slash
+ * @param   int  $id work id to delete
  * @return  integer -1 on error
  */
 function deleteDirWork($id)
@@ -1197,7 +1209,7 @@ function deleteDirWork($id)
 
 /**
  * Get the path of a document in the student_publication table (path relative to the course directory)
- * @param   integer Element ID
+ * @param   integer $id
  * @return  string  Path (or -1 on error)
  */
 function get_work_path($id)
@@ -1216,8 +1228,9 @@ function get_work_path($id)
 
 /**
  * Update the url of a work in the student_publication table
- * @param   integer ID of the work to update
- * @param   string  Destination directory where the work has been moved (must end with a '/')
+ * @param   integer $id of the work to update
+ * @param   string  $new_path Destination directory where the work has been moved (must end with a '/')
+ * @param int $parent_id
  * @return  -1 on error, sql query result on success
  */
 function updateWorkUrl($id, $new_path, $parent_id)
@@ -5050,7 +5063,7 @@ function exportAllStudentWorkFromPublication(
                     // getWorkComments need c_id
                     $work['c_id'] = $courseInfo['real_id'];
 
-                    $content .= '<h3>'.strip_tags($work['title']).'<h3 />';
+                    $content .= '<h3>'.strip_tags($work['title']).'</h3>';
                     $content .= get_lang('Date').': '.api_get_local_time($work['sent_date_from_db']).'<br />';
                     if (!empty($work['qualification_only'])) {
                         $content .= get_lang('Score').': '.$work['qualification_only'] . '<br />';
@@ -5072,13 +5085,6 @@ function exportAllStudentWorkFromPublication(
                 }
 
                 if (!empty($content)) {
-                    /*$pdf->content_to_pdf(
-                        $content,
-                        null,
-                        replace_dangerous_char($workData['title']),
-                        $courseInfo['code']
-                    );*/
-
                     $params = array(
                         'filename' => $workData['title'] . '_' . api_get_local_time(),
                         'pdf_title' => replace_dangerous_char($workData['title']),
@@ -5095,6 +5101,7 @@ function exportAllStudentWorkFromPublication(
 }
 
 /**
+ * Downloads all user files per user
  * @param int $userId
  * @param array $courseInfo
  * @return bool

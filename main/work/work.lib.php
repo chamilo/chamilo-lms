@@ -2170,7 +2170,7 @@ function get_work_user_list(
     $column,
     $direction,
     $work_id,
-    $where_condition,
+    $where_condition = null,
     $studentId = null,
     $getCount = false
 ) {
@@ -3183,7 +3183,7 @@ function getWorkDescriptionToolbar()
 
 /**
  * @param array $work
- * @return string
+ * @return array
  */
 function getWorkComments($work)
 {
@@ -3197,8 +3197,14 @@ function getWorkComments($work)
     $courseId = intval($work['c_id']);
     $workId = intval($work['id']);
 
-    $sql = "SELECT c.id, c.user_id, u.firstname, u.lastname, u.username, u.picture_uri
-            FROM $commentTable c INNER JOIN $userTable u ON(u.user_id = c.user_id)
+    if (empty($courseId) || empty($workId)) {
+        return array();
+    }
+
+    $sql = "SELECT
+            c.id, c.user_id, u.firstname, u.lastname, u.username, u.picture_uri
+            FROM $commentTable c
+            INNER JOIN $userTable u ON (u.user_id = c.user_id)
             WHERE c_id = $courseId AND work_id = $workId
             ORDER BY sent_at
             ";
@@ -4953,6 +4959,7 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
                     foreach ($work->user_results as $userResult) {
                         //var_dump($userResult);exit;
                         $content .= $userResult['title'];
+                        // No need to use api_get_local_time()
                         $content .= $userResult['sent_date'];
                         $content .= $userResult['qualification'];
                         $content .= $userResult['description'];
@@ -4968,6 +4975,104 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
                         $courseInfo['code']
                     );
                 }
+            }
+            break;
+    }
+}
+
+/**
+ * @param int $workId
+ * @param array $courseInfo
+ * @param int $sessionId
+ * @param string $format
+ * @return bool
+ */
+function exportAllStudentWorkFromPublication(
+    $workId,
+    $courseInfo,
+    $sessionId,
+    $format = 'pdf'
+) {
+    if (empty($courseInfo)) {
+        return false;
+    }
+
+    $workData = get_work_data_by_id($workId);
+
+    if (empty($workData)) {
+        return false;
+    }
+
+    $courseCode = $courseInfo['code'];
+    $header = get_lang('Course').': '.$courseInfo['title'];
+    $teachers = CourseManager::get_teacher_list_from_course_code_to_string(
+        $courseCode
+    );
+
+    if (!empty($sessionId)) {
+        $sessionInfo = api_get_session_info($sessionId);
+        if (!empty($sessionInfo)) {
+            $header .= ' - ' . $sessionInfo['name'];
+            $header .= '<br />' . $sessionInfo['description'];
+            $teachers = SessionManager::getCoachesByCourseSessionToString(
+                $sessionId,
+                $courseCode
+            );
+        }
+    }
+
+    $header .= '<br />'.get_lang('Teachers').': '.$teachers;
+    $header .= '<br />'.get_lang('Date').': '.api_get_local_time();
+    $header .= '<br />'.get_lang('StudentPublication').': '.$workData['title'];
+
+    if (!empty($workData['expires_on'])) {
+        $header .= '<br />' . get_lang('ExpiryDate') . ': ' . api_get_local_time($workData['expires_on']);
+    }
+
+    $workList = get_work_user_list(null, null, null, null, $workId);
+
+    switch ($format) {
+        case 'pdf':
+            if (!empty($workList)) {
+                require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+                $pdf = new PDF();
+
+                $pdf->set_custom_header($header);
+
+                $content = null;
+                foreach ($workList as $work) {
+                    // getWorkComments need c_id
+                    $work['c_id'] = $courseInfo['real_id'];
+
+                    $content .= $work['title'].'<br />';
+                    $content .= $work['sent_date'].'<br />';
+                    $content .= $work['qualification'].'<br />';
+                    $content .= $work['description'].'<br />';
+
+                    $comments = getWorkComments($work);
+
+                    if (!empty($comments)) {
+                        $content .= '<h3>'.get_lang('Feedback').': </h3>';
+                        foreach ($comments as $comment) {
+                            $content .= get_lang('User').': '.api_get_person_name(
+                                $comment['firstname'],
+                                $comment['lastname']
+                            ).'<br />';
+                            $content .= $comment['comment'];
+                            $content .= '<hr />';
+                        }
+                    }
+                }
+
+                if (!empty($content)) {
+                    $pdf->content_to_pdf(
+                        $content,
+                        null,
+                        replace_dangerous_char($workData['title']),
+                        $courseInfo['code']
+                    );
+                }
+                exit;
             }
             break;
     }

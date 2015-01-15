@@ -806,7 +806,7 @@ class scorm extends learnpath
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $LPname = $row['path'];
-        $list = split('/', $LPname);
+        $list = explode('/', $LPname);
         $LPnamesafe = $list[0];
         //$zipfoldername = '/tmp';
         //$zipfoldername = '../../courses/'.$_course['directory'].'/temp/'.$LPnamesafe;

@@ -39,7 +39,7 @@ if (!empty($mycourseid) && $mycourseid != -1) {
 	$open_chat_window = api_get_course_setting('allow_open_chat_window');
 }
 
-$cidreq = Security::remove_XSS($_GET['cidReq']);
+$courseCode = Security::remove_XSS($_GET['cidReq']);
 
 ?>
 <!DOCTYPE html>
@@ -76,12 +76,13 @@ if (empty($open_chat_window)) {
 }
 
 $url = api_get_path(WEB_CODE_PATH).'chat/';
+$params = "cidReq=".$courseCode.'&id_session='.api_get_session_id();
 
 echo '<div class="page-chat">';
-echo '<iframe src="'.$url.'chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="no" style="height:550px; width:35%; border: 0px none; float:left"></iframe>';
-echo '<iframe src="'.$url.'chat_chat.php?origin='.$origin.'&target='.$target.'&amp;cidReq='.$cidreq.'" name="chat_chat" id="chat_chat" scrolling="auto" height="380" style="width:65%; border: 0px none; float:right"></iframe>';
-echo '<iframe src="'.$url.'chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no" height="182px" style="width:65%; border: 0px none; float:right"></iframe>';
-echo '<iframe src="'.$url.'chat_hidden.php?cidReq='.$cidreq.'" name="chat_hidden" height="0" style="border: 0px none"></iframe>';
+echo '<iframe src="'.$url.'chat_whoisonline.php?'.$params.'" name="chat_whoisonline" scrolling="no" style="height:550px; width:35%; border: 0px none; float:left"></iframe>';
+echo '<iframe src="'.$url.'chat_chat.php?origin='.$origin.'&target='.$target.'&'.$params.'" name="chat_chat" id="chat_chat" scrolling="auto" height="380" style="width:65%; border: 0px none; float:right"></iframe>';
+echo '<iframe src="'.$url.'chat_message.php?'.$params.'" name="chat_message" scrolling="no" height="182px" style="width:65%; border: 0px none; float:right"></iframe>';
+echo '<iframe src="'.$url.'chat_hidden.php?'.$params.'" name="chat_hidden" height="0" style="border: 0px none"></iframe>';
 echo '</div>';
 
 if (empty($open_chat_window)) {

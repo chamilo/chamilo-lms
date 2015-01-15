@@ -1379,6 +1379,13 @@ class CourseManager
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
         $where = array();
+        
+        if (empty($order_by)) {
+            $order_by = 'user.lastname, user.firstname';
+            if (api_is_western_name_order()) {
+                $order_by = 'user.firstname, user.lastname';
+            }
+        }
 
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {

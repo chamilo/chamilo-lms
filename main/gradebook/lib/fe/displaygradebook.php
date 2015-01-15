@@ -348,7 +348,7 @@ class DisplayGradebook
                     $visibility_command = ($catobj->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 
                     //Right icons
-                    $modify_icons = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . '&cidReq=' . $catobj->get_course_code() . '">' . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM) . '</a>';
+                    $modify_icons = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . '&cidReq=' . $catobj->get_course_code() . '&id_session='.$catobj->get_session_id(). '">' . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM) . '</a>';
                     //$modify_icons .= '<a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.
                     //Display::return_icon('certificate.png', get_lang('AttachCertificate'),'',ICON_SIZE_MEDIUM).'</a>';
                     //hide or delete are not options available
@@ -368,7 +368,7 @@ class DisplayGradebook
 
     /**
      * Displays the header for the gradebook containing the navigation tree and links
-     * @param Category $currentcat
+     * @param Category $catobj
      * @param int $showtree '1' will show the browse tree and naviation buttons
      * @param boolean $is_course_admin
      * @param boolean $is_platform_admin
@@ -553,7 +553,7 @@ class DisplayGradebook
                     $header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?' . $my_api_cidreq . '&amp;cat_id=' . (int) $_GET['selectcat'] . '">' .
                         Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'), '', ICON_SIZE_MEDIUM) . '</a>';
                     // Right icons
-                    $modify_icons = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . '&amp;cidReq=' . $catobj->get_course_code() . '">' .
+                    $modify_icons = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . '&amp;cidReq=' . $catobj->get_course_code() . '&id_session='.$catobj->get_session_id(). '">' .
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM) . '</a>';
                     $modify_icons .= '<a href="../document/document.php?curdirpath=/certificates&' . $my_api_cidreq . '&origin=gradebook&selectcat=' . $catobj->get_id() . '">' .
                             Display::return_icon('certificate.png', get_lang('AttachCertificate'), '', ICON_SIZE_MEDIUM) . '</a>';
@@ -596,7 +596,7 @@ class DisplayGradebook
 
             $min_certification = (intval($catobj->get_certificate_min_score() > 0) ? $catobj->get_certificate_min_score() : 0);
             $min_certification = get_lang('CertificateMinScore') . ' : ' . $min_certification;
-            $edit_icon = '<a class="right_link" href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . '&amp;cidReq=' . $catobj->get_course_code() . '">' .
+            $edit_icon = '<a class="right_link" href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . '&amp;cidReq=' . $catobj->get_course_code() . '&id_session='.$catobj->get_session_id(). '">' .
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
             //$msg = Display::tag('h3', $weight.' - '.$min_certification);
             $msg = Display::tag('h4', $weight . ' - ' . $min_certification . $edit_icon);

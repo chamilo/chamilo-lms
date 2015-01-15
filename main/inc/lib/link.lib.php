@@ -942,7 +942,7 @@ function showlinksofcategory($catid)
 
             if ($myrow['visibility'] == '1') {
                 echo '<tr class="' . $css_class . '">';
-                echo '<td align="center" valign="middle" width="15">';
+                echo '<td align="center" valign="middle" width="5%">';
                 echo '<a href="link_goto.php?' . api_get_cidreq() .
                     '&amp;link_id=' . $myrow['id'] .
                     '&amp;link_url=' . urlencode($myrow['url']) . '" target="_blank">
@@ -958,7 +958,7 @@ function showlinksofcategory($catid)
             } else {
                 if (api_is_allowed_to_edit(null, true)) {
                     echo '<tr class="' . $css_class . '">';
-                    echo '<td align="center" valign="middle" width="15">
+                    echo '<td align="center" valign="middle" width="5%">
                         <a href="link_goto.php?' . api_get_cidreq() .
                         '&amp;link_id=' . $myrow['id'] . "
                         &amp;link_url=" . urlencode($myrow['url']) . '"
@@ -978,8 +978,8 @@ function showlinksofcategory($catid)
                 }
             }
 
-            echo '<td style="text-align:center;">';
             if (api_is_allowed_to_edit(null, true)) {
+                echo '<td style="text-align:center;">';
                 if ($session_id == $myrow['session_id']) {
                     echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .
                         '&amp;sec_token=' . $token .
@@ -1053,8 +1053,9 @@ function showlinksofcategory($catid)
                         ICON_SIZE_SMALL
                     ); //get_lang('EditionNotAvailableFromSession');
                 }
+                echo '</td>';
             }
-            echo '</td></tr>';
+            echo '</tr>';
             $i++;
         }
         echo '</table>';

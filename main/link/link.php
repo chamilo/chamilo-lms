@@ -465,6 +465,8 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
         // - instead of a +, the category is no longer clickable and all the links of this category are displayed
         $myrow['description'] = text_filter($myrow['description']);
 
+        // Link categories are always visible.
+        $myrow['visibility'] = 1;
 
         $strVisibility = '';
         if ($myrow['visibility'] == '1') {

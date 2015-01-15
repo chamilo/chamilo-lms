@@ -58,6 +58,9 @@ class Category implements GradebookItem
         }
     }
 
+    /**
+     * @return string
+     */
     public function get_course_code()
     {
         return $this->course_code;

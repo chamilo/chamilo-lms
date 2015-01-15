@@ -407,13 +407,17 @@ class GradebookTable extends SortableTable
                     $weight_total_links > $weight_category
                 ) {
                     $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $weight_category);
-                    $modify_icons  = '<a class="right_link" href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'">'.
+                    $modify_icons  = '<a class="right_link" href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'&id_session='.api_get_session_id().'">'.
                             Display::return_icon('edit.png', $warning_message, array(), ICON_SIZE_SMALL).'</a>';
                     $warning_message .= $modify_icons;
                     Display::display_warning_message($warning_message, false);
                 }
 
-                $content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);
+                $content_html = DocumentManager::replace_user_info_into_html(
+                    api_get_user_id(),
+                    $course_code
+                );
+
                 if (!empty($content_html)) {
                     $new_content = explode('</head>',$content_html['content']);
                 }
@@ -422,11 +426,6 @@ class GradebookTable extends SortableTable
                     // Set default certificate
                     $courseData = api_get_course_info($course_code);
                     DocumentManager::generateDefaultCertificate($courseData);
-
-                    //$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');
-                    //$cert_icon = '<a class="right_link" href="../document/document.php?curdirpath=/certificates&'.$course_code.'&origin=gradebook&selectcat=' . $id_cat . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'), array(), ICON_SIZE_SMALL).'</a>';
-
-                    //Display::display_warning_message($warning_message.$cert_icon,false);
                 }
             }
 

@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+ * Constants definition
+ */
+require_once 'database.constants.inc.php';
+
+/**
+ * Class Database
  *  This is the main database library for Chamilo.
  *  Include/require it in your code to use its functionality.
  *  Because this library contains all the basic database calls, it could be
@@ -13,20 +19,10 @@
  *
  *  @package chamilo.library
  */
-/**
- * Constants definition
- */
-require_once 'database.constants.inc.php';
-
-/**
- * Database class definition
- * @package chamilo.database
- */
 class Database
 {
     /* Variable use only in the installation process to log errors. See the Database::query function */
     static $log_queries = false;
-
     /*
         Accessor methods
         Usually, you won't need these directly but instead
@@ -158,7 +154,6 @@ class Database
     }
 
     /**
-
      * A more generic method than the older get_course_xxx_table methods,
      * This one can return the correct complete name of any course table of
      * which you pass the short name as a parameter.
@@ -169,7 +164,8 @@ class Database
      * @param string $database_name, optional, name of the course database
      * - if you don't specify this, you work on the current course.
      */
-    public static function get_course_table($short_table_name, $extra = null) {
+    public static function get_course_table($short_table_name, $extra = null)
+    {
         //forces fatal errors so we can debug more easily
         if (!empty($extra)) {
             var_dump($extra);
@@ -186,7 +182,7 @@ class Database
      * statistic table of which you pass the short name as a parameter.
      * Please, define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
-     *
+     * @deprecated use get_main_table
      * @param string $short_table_name, the name of the table
      */
     public static function get_statistic_table($short_table_name)
@@ -218,7 +214,7 @@ class Database
     */
 
     /**
-     *  @return a list (array) of all courses.
+     *  @return array a list (array) of all courses.
      *  @todo shouldn't this be in the course.lib.php script?
      */
     public static function get_course_list()
@@ -1183,13 +1179,12 @@ class Database
         return null;
     }
 
-    /*
-        New useful DB functions
-    */
-
     /**
-     * Experimental useful database insert
-     * @todo lot of stuff to do here
+     * Database insert
+     * @param string $table_name
+     * @param array $attributes
+     * @param bool $show_query
+     * @return bool|int
      */
     public static function insert($table_name, $attributes, $show_query = false)
     {
@@ -1363,7 +1358,7 @@ class Database
      */
     public static function parse_where_conditions($conditions)
     {
-        return self::parse_conditions(array('where'=>$conditions));
+        return self::parse_conditions(array('where' => $conditions));
     }
 
     /**
@@ -1381,25 +1376,28 @@ class Database
         return $affected_rows;
     }
 
-
     /**
-     * Experimental useful database update
-     * @param   string  table name use Database::get_main_table
-     * @param   array   array with values to updates, keys are the fields in the database: Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
-     * @param   array   where conditions i.e array('id = ?' =>'4')
-     * @todo lot of stuff to do here
+     * @param string $table_name use Database::get_main_table
+     * @param array $attributes Values to updates
+     * Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
+     * @param array $where_conditions where conditions i.e array('id = ?' =>'4')
+     * @param bool $show_query
+     * @return bool|int
      */
-    public static function update($table_name, $attributes, $where_conditions = array(), $show_query = false) {
-
+    public static function update(
+        $table_name,
+        $attributes,
+        $where_conditions = array(),
+        $show_query = false
+    ) {
         if (!empty($table_name) && !empty($attributes)) {
             $update_sql = '';
             //Cleaning attributes
             $count = 1;
             foreach ($attributes as $key=>$value) {
-
-                if (!is_array($value))
-
-                $value = self::escape_string($value);
+                if (!is_array($value)) {
+                    $value = self::escape_string($value);
+                }
                 $update_sql .= "$key = '$value' ";
                 if ($count < count($attributes)) {
                     $update_sql.=', ';
@@ -1410,18 +1408,16 @@ class Database
                 //Parsing and cleaning the where conditions
                 $where_return = self::parse_where_conditions($where_conditions);
                 $sql    = "UPDATE $table_name SET $update_sql $where_return ";
-                if ($show_query) { var_dump($sql); }
-                $result = self::query($sql);
+                if ($show_query) {
+                    var_dump($sql);
+                }
+                self::query($sql);
                 $affected_rows = self::affected_rows();
                 return $affected_rows;
             }
         }
         return false;
     }
-
-     /*
-        DEPRECATED METHODS
-    */
 
     /**
      * @deprecated Use api_get_language_isocode($language) instead.

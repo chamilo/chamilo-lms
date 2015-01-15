@@ -5,7 +5,7 @@
 require_once '../../main/inc/global.inc.php';
 api_protect_admin_script();
 $categories = array(
-    'capacitación',
+    'capacitaciones',
     'programas',
     'especializaciones',
     'cursos prácticos'

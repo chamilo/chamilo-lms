@@ -1530,8 +1530,6 @@ class UserManager
             $fvalues = $fvalue;
         }
 
-        $fvalues = Database::escape_string($fvalues);
-
         $sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
         $resuf = Database::query($sqluf);
         $is_extra_file = false;
@@ -1546,9 +1544,9 @@ class UserManager
                     UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
                     return true;
                     break;
-                case self::USER_FIELD_TYPE_SELECT_MULTIPLE :
+                /*case self::USER_FIELD_TYPE_SELECT_MULTIPLE :
                     // check code from UserManager::update_user_picture() to use something similar here
-                    break;
+                    break;*/
                 case self::USER_FIELD_TYPE_RADIO:
                 case self::USER_FIELD_TYPE_SELECT:
                 case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
@@ -1610,7 +1608,7 @@ class UserManager
                     $rowufv = Database::fetch_array($resufv);
                     if ($rowufv['field_value'] != $fvalues) {
                         $sqlu = "UPDATE $t_ufv SET
-                                    field_value = '$fvalues',
+                                    field_value = '".Database::escape_string($fvalues)."',
                                     tms = FROM_UNIXTIME($tms)
                                 WHERE id = ".$rowufv['id'];
                         $resu = Database::query($sqlu);
@@ -1624,7 +1622,11 @@ class UserManager
                 if ($rowufv['field_value'] != $fvalues) {
                     if ($is_extra_file) {
                         // To remove from user folder
-                        self::remove_user_extra_file($user_id, $fname, $rowufv['field_value']);
+                        self::remove_user_extra_file(
+                            $user_id,
+                            $fname,
+                            $rowufv['field_value']
+                        );
                     }
                     // If the new field is empty, delete it
                     if ($fvalues == '') {
@@ -1633,7 +1635,7 @@ class UserManager
                     } else {
                         // Otherwise update it
                         $sql_query = "UPDATE $t_ufv SET
-                                        field_value = '$fvalues',
+                                        field_value = '".Database::escape_string($fvalues)."',
                                         tms = FROM_UNIXTIME($tms)
                                       WHERE id = ".$rowufv['id'];
                     }
@@ -1644,10 +1646,10 @@ class UserManager
 
                 return true;
             } else {
-                $sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms)
-                         VALUES ( $user_id, ".$rowuf['id'].", '$fvalues', FROM_UNIXTIME($tms))";
-                $resi = Database::query($sqli);
-                return ($resi ? true : false);
+                $sql = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms)
+                        VALUES ( $user_id, ".$rowuf['id'].", '".Database::escape_string($fvalues)."', FROM_UNIXTIME($tms))";
+                $res = Database::query($sql);
+                return $res ? true : false;
             }
         } else {
             // Field not found
@@ -3491,12 +3493,12 @@ class UserManager
         if ($tag_id == 0) {
             //the tag doesn't exist
             $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
-            $result = Database::query($sql);
-            $last_insert_id = Database::get_last_insert_id();
+             Database::query($sql);
+            $last_insert_id = Database::insert_id();
         } else {
             //the tag exists we update it
             $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
-            $result = Database::query($sql);
+             Database::query($sql);
             $last_insert_id = $tag_id;
         }
 
@@ -3507,7 +3509,7 @@ class UserManager
             //if the relationship does not exist we create it
             if (Database::num_rows($result) == 0) {
                 $sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
-                $result = Database::query($sql);
+                Database::query($sql);
             }
         }
     }

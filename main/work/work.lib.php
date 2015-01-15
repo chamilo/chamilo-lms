@@ -5045,9 +5045,8 @@ function exportAllStudentWorkFromPublication(
                 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
                 //$pdf->set_custom_header($header);
-
-                $content .= '<hr />';
                 foreach ($workList as $work) {
+                    $content .= '<hr />';
                     // getWorkComments need c_id
                     $work['c_id'] = $courseInfo['real_id'];
 

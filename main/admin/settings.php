@@ -484,7 +484,13 @@ if (!empty($_GET['category'])) {
                     // add event to system log
                     $user_id = api_get_user_id();
                     $category = $_GET['category'];
-                    event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+                    event_system(
+                        LOG_CONFIGURATION_SETTINGS_CHANGE,
+                        LOG_CONFIGURATION_SETTINGS_CATEGORY,
+                        $category,
+                        api_get_utc_datetime(),
+                        $user_id
+                    );
                     Display :: display_confirmation_message(get_lang('DashboardPluginsHaveBeenUpdatedSucesslly'));
                 }
             }

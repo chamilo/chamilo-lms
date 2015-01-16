@@ -800,7 +800,8 @@ function makedefaultviewcode($locatie)
  */
 function change_visibility_link($id, $scope)
 {
-    global $_course, $_user;
+    $_course = api_get_course_info();
+    $_user = api_get_user_info();
     if ($scope == TOOL_LINK) {
         api_item_property_update(
             $_course,
@@ -837,6 +838,17 @@ function getLinkCategories($courseId, $sessionId)
     // Condition for the session.
     $sessionCondition = api_get_session_condition($sessionId, true, true);
 
+    // Getting links
+    $sql = "SELECT *, linkcat.id
+            FROM $tblLinkCategory linkcat
+            WHERE
+                linkcat.c_id = " . $courseId."
+                $sessionCondition
+            ORDER BY linkcat.display_order DESC";
+
+    $result = Database::query($sql);
+    $categories = Database::store_result($result);
+
     $sql = "SELECT *, linkcat.id
             FROM $tblLinkCategory linkcat
             INNER JOIN $tblItemProperty itemproperties
@@ -849,31 +861,34 @@ function getLinkCategories($courseId, $sessionId)
                 itemproperties.c_id = " . $courseId . "
             ORDER BY linkcat.display_order DESC";
 
+    $result = Database::query($sql);
+
+    $categoryInItemProperty = array();
+    if (Database::num_rows($result)) {
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $categoryInItemProperty[$row['id']] = $row;
+        }
+    }
+
+    foreach ($categories as & $category) {
+        if (!isset($categoryInItemProperty[$category['id']])) {
+            api_set_default_visibility($category['id'], TOOL_LINK_CATEGORY);
+        }
+    }
+
     $sql = "SELECT *, linkcat.id
             FROM $tblLinkCategory linkcat
+            INNER JOIN $tblItemProperty itemproperties
+            ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
             WHERE
-                linkcat.c_id = " . $courseId."
-                $sessionCondition
+                itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
+                (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
+                $sessionCondition AND
+                linkcat.c_id = " . $courseId . " AND
+                itemproperties.c_id = " . $courseId . "
             ORDER BY linkcat.display_order DESC";
-
-    return Database::query($sql);
-}
-
-/**
- * Get links categories in the current course and
- * session
- * @param  int $courseId
- * @param  int $sessionId
- * @return array
- */
-function getLinkCategoriesResult($courseId, $sessionId)
-{
-    $result = getLinkCategories($courseId, $sessionId);
-    $list = array();
-    if (Database::num_rows($result)) {
-        $list = Database::store_result($result, 'ASSOC');
-    }
-    return $list;
+    $result = Database::query($sql);
+    return Database::store_result($result, 'ASSOC');
 }
 
 /**

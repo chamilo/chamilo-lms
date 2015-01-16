@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Chamilo\AdminThemeBundle\Event\MessageListEvent;
+use Chamilo\ThemeBundle\Event\MessageListEvent;
 
 class MessageListener
 {

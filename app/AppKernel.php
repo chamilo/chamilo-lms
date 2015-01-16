@@ -142,7 +142,7 @@ class AppKernel extends Kernel
             new Chamilo\CourseBundle\ChamiloCourseBundle(),
             new Chamilo\MessageBundle\ChamiloMessageBundle(),
             new Chamilo\SettingsBundle\ChamiloSettingsBundle(),
-            new Chamilo\AdminThemeBundle\ChamiloAdminThemeBundle(),
+            new Chamilo\ThemeBundle\ChamiloThemeBundle(),
             //new Chamilo\ThemeBundle\ChamiloThemeBundle(),
 
             // Chamilo course tool

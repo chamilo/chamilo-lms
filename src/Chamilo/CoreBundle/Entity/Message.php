@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\MessageBundle\Entity\Message as BaseMessage;
-use Chamilo\AdminThemeBundle\Model\MessageInterface as ThemeMessage;
+use Chamilo\ThemeBundle\Model\MessageInterface as ThemeMessage;
 
 /**
  * @ORM\Table(name="message")

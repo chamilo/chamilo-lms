@@ -3,7 +3,7 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\AdminThemeBundle\Event\SidebarMenuKnpEvent;
+use Chamilo\ThemeBundle\Event\SidebarMenuKnpEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\Request;

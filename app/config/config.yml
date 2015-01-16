@@ -273,7 +273,7 @@ sp_bower:
     assetic: true
     install_on_warmup: false
     bundles:
-        ChamiloAdminThemeBundle:
+        ChamiloThemeBundle:
             cache:
                 directory: ../../../../../../app/cache/public/components/cache
 

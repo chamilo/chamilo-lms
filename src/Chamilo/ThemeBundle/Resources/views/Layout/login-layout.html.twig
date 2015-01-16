@@ -1,0 +1,55 @@
+{% import "ChamiloThemeBundle:Macros:box.html.twig" as macro %}
+<!doctype html>
+<!--[if lt IE 7 ]><html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]><html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}Chamilo Admin!{% endblock %}</title>
+
+    {# -------------------------------------------------------------------------------------------------- STYLESHEETS #}
+    {% block stylesheets %}
+        {% stylesheets '@admin_lte_all_css' filter="cssrewrite" %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+    {% endblock %}
+
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    {# --------------------------------------------------------------------------------------------- JAVASCRIPTS_HEAD #}
+    {%  block javascripts_head %}
+
+        <!--[if lt IE 9]>
+
+        <![endif]-->
+
+    {% endblock %}
+
+</head>
+<body class="bg-black">
+
+<div class="form-box" id="login-box">
+    {% block page_content %}{% endblock %}
+</div>
+
+
+
+{# ------------------------------------------------------------------------------------------------------ JAVASCRIPTS #}
+{% block javascripts %}
+
+    {% javascripts '@admin_lte_all' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{# ----------------------------------------------------------------------------------------------- JAVASCRIPTS_INLINE #}
+{% block javascripts_inline %}
+{% endblock %}
+</body>
+</html>

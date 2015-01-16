@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Chamilo\CoreBundle\Component\Auth;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use FOS\MessageBundle\Model\ParticipantInterface;
-use Chamilo\AdminThemeBundle\Model\UserInterface as ThemeUser;
+use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 //use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Application\Sonata\MediaBundle\Entity\Media;

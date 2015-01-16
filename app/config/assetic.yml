@@ -3,7 +3,7 @@ assetic:
     use_controller: false
     read_from:      %kernel.root_dir%/../web
     write_to:       %kernel.root_dir%/../web
-    bundles:        [ChamiloCoreBundle, ChamiloInstallerBundle, ChamiloAdminThemeBundle]
+    bundles:        [ChamiloCoreBundle, ChamiloInstallerBundle, ChamiloThemeBundle]
 
     filters:
         cssrewrite: ~
@@ -32,55 +32,41 @@ assetic:
                 - @chamilo_bootstrap_css
                 - @chamilo_font_awesome_css
                 - @chamilo_ionicons_css
-                - @ChamiloAdminThemeBundle/Resources/public/components/fullcalendar/dist/fullcalendar.min.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/chosen-bower/chosen.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/jquery-ui/themes/cupertino/jquery-ui.min.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/bootflat/css/bootflat.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/jqgrid/css/ui.jqgrid.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.css
-
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/jvectormap/*
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/morris/*
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/bootstrap-slider/slider.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/colorpicker/bootstrap-colorpicker.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/datatables/dataTables.bootstrap.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/daterangepicker/daterangepicker-bs3.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/iCheck/all.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/ionslider/ion.rangeSlider.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/timepicker/bootstrap-timepicker.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/css/AdminLTE.css
-#            output: web/js/chamilo.js
+                - @ChamiloThemeBundle/Resources/public/components/fullcalendar/dist/fullcalendar.min.css
+                - @ChamiloThemeBundle/Resources/public/components/chosen-bower/chosen.css
+                - @ChamiloThemeBundle/Resources/public/components/jquery-ui/themes/cupertino/jquery-ui.min.css
+                - @ChamiloThemeBundle/Resources/public/components/bootflat/css/bootflat.css
+                - @ChamiloThemeBundle/Resources/public/components/jqgrid/css/ui.jqgrid.css
+                - @ChamiloThemeBundle/Resources/public/components/select2/select2-bootstrap.css
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/jvectormap/*
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/morris/*
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.css
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/bootstrap-slider/slider.css
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/colorpicker/bootstrap-colorpicker.css
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/datatables/dataTables.bootstrap.css
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/daterangepicker/daterangepicker-bs3.css
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/iCheck/all.css
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/ionslider/ion.rangeSlider.css
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/timepicker/bootstrap-timepicker.css
+                - @ChamiloThemeBundle/Resources/public/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/css/AdminLTE.css
+            output: web/js/chamilo.css
 
         chamilo_js:
             inputs:
-                - @ChamiloAdminThemeBundle/Resources/public/components/jquery/dist/jquery.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/jquery-ui/jquery-ui.min.js
+                - @ChamiloThemeBundle/Resources/public/components/jquery/dist/jquery.js
+                - @ChamiloThemeBundle/Resources/public/components/jquery-ui/jquery-ui.min.js
                 - @bootstrap_js
-                - @ChamiloAdminThemeBundle/Resources/public/components/chosen-bower/chosen.jquery.js
+                - @ChamiloThemeBundle/Resources/public/components/chosen-bower/chosen.jquery.js
                 - @moment_js
-                - @ChamiloAdminThemeBundle/Resources/public/components/fullcalendar/dist/fullcalendar.min.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/jqgrid/js/jquery.jqGrid.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/ckeditor/ckeditor.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/daterangepicker/daterangepicker.js
+                - @ChamiloThemeBundle/Resources/public/components/fullcalendar/dist/fullcalendar.min.js
+                - @ChamiloThemeBundle/Resources/public/components/jqgrid/js/jquery.jqGrid.js
+                - @ChamiloThemeBundle/Resources/public/components/select2/select2.js
+                - @ChamiloThemeBundle/Resources/public/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
+                - @ChamiloThemeBundle/Resources/public/components/adminlte/js/plugins/daterangepicker/daterangepicker.js
 
                 - @ChamiloCoreBundle/Resources/public/js/app.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/bootstrap-slider/bootstrap-slider.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/colorpicker/bootstrap-colorpicker.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/datatables/jquery.dataTables.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/datatables/dataTables.bootstrap.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/ionslider/ion.rangeSlider.min.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/slimScroll/jquery.slimscroll.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/sparkline/jquery.sparkline.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/timepicker/bootstrap-timepicker.js
-#                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/jqueryKnob/jquery.knob.js
-#                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/plugins/morris/morris.js
-#                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/AdminLTE/app.js
-#                 - @ChamiloAdminThemeBundle/Resources/public/components/adminlte/js/AdminLTE/dashboard.js
+            output: web/js/chamilo.js
 
         # see http://sonata-project.org/blog/2012/5/15/assetic-package-configuration
         sonata_jqueryui_js:
@@ -136,7 +122,7 @@ assetic:
             inputs:
                 # do not uncomment this, ckeditor behave badly when compacted...
                 #- %kernel.root_dir%/../web/bundles/sonataformatter/vendor/ckeditor/ckeditor.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/ckeditor/ckeditor.js
+#                - @ChamiloThemeBundle/Resources/public/components/ckeditor/ckeditor.js
                 - %kernel.root_dir%/../web/bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
                 - %kernel.root_dir%/../web/bundles/sonataformatter/markitup/sets/markdown/set.js
                 - %kernel.root_dir%/../web/bundles/sonataformatter/markitup/sets/html/set.js
@@ -156,67 +142,34 @@ assetic:
                 - cssrewrite
                 - yui_css
 
-#        sonata_admin_js:
-#            inputs:
-##               - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jquery/dist/jquery.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/jquery/dist/jquery.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.js
-##               - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js
-#                - %kernel.root_dir%/../web/bundles/sonatacore/vendor/moment/min/moment.min.js
-#                - @bootstrap_js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js
-#                - %kernel.root_dir%/../web/bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
-#                - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/jquery/jquery.form.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/jquery/jquery.confirmExit.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/App.js
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/Admin.js
-
         sonata_admin_js:
             inputs:
-                - @ChamiloAdminThemeBundle/Resources/public/components/jquery/dist/jquery.js
+                - @ChamiloThemeBundle/Resources/public/components/jquery/dist/jquery.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.js
 #                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js
                 - %kernel.root_dir%/../web/bundles/sonatacore/vendor/moment/min/moment.min.js
 #                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/bootstrap/dist/js/bootstrap.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/bootstrap/dist/js/bootstrap.js
+                - @ChamiloThemeBundle/Resources/public/components/bootstrap/dist/js/bootstrap.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js
                 - %kernel.root_dir%/../web/bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.js
+                - @ChamiloThemeBundle/Resources/public/components/select2/select2.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/jquery/jquery.form.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/jquery/jquery.confirmExit.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/App.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/treeview.js
+                - %kernel.root_dir%/../web/bundles/sonatapage/sonata-page.back.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/Admin.js
             filters:
                 - yui_js
 
-#        sonata_admin_css:
-#            inputs:
-#                - @chamilo_bootstrap_css
-#                - @chamilo_font_awesome_css
-#                - @chamilo_ionicons_css
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
-#                - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.css
-##                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/select2/select2-bootstrap.css
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
-#                - %kernel.root_dir%/../web/bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/css/styles.css
-#                - %kernel.root_dir%/../web/bundles/sonataadmin/css/layout.css
-#
-#            filters:
-#                - cssrewrite
-#                - yui_css
-
         sonata_admin_css:
             inputs:
-                - @ChamiloAdminThemeBundle/Resources/public/components/bootstrap/dist/css/bootstrap.css
+                - @ChamiloThemeBundle/Resources/public/components/bootstrap/dist/css/bootstrap.css
                 - "bundles/chamiloadmintheme/components/fontawesome/css/font-awesome.min.css"
                 - "bundles/chamiloadmintheme/components/adminlte/css/ionicons.css"
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
-                - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.css
+                - @ChamiloThemeBundle/Resources/public/components/select2/select2.css
 #                - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/select2/select2-bootstrap.css
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
                 - %kernel.root_dir%/../web/bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
@@ -229,22 +182,18 @@ assetic:
 
         sonata_front_js:
             inputs:
-                - @ChamiloAdminThemeBundle/Resources/public/components/jquery/dist/jquery.js
+                - @ChamiloThemeBundle/Resources/public/components/jquery/dist/jquery.js
                 - @bootstrap_js
-#                - %kernel.root_dir%/../web/bundles/sonataproduct/js/product.js
                 - %kernel.root_dir%/../web/bundles/sonatacore/js/base.js
-                - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.js
-#                - %kernel.root_dir%/../web/bundles/sonatademo/js/demo.js
-
+                - @ChamiloThemeBundle/Resources/public/components/select2/select2.js
             filters:
                 - yui_js
 
         sonata_front_css:
             inputs:
                 - @chamilo_bootstrap_css
-                - @ChamiloAdminThemeBundle/Resources/public/components/select2/select2.css
+                - @ChamiloThemeBundle/Resources/public/components/select2/select2.css
 #                - %kernel.root_dir%/../web/bundles/mopabootstrap/css/datepicker.css
-#                - %kernel.root_dir%/../web/bundles/sonatademo/css/demo.css
 
             filters:
                 - cssrewrite

@@ -5,7 +5,6 @@ tests/logs/*
 
 !data/
 data/*
-!data/temp/twig/PLACEHOLDER
 !data/default_course_document
 !data/default_platform_document
 !data/upload/users
@@ -53,6 +52,7 @@ web/css/*
 web/sitemap*.xml
 vendor/*
 /vendor/
+src/Chamilo/ThemeBundle/Resources/public/*
 
 build
 composer.lock

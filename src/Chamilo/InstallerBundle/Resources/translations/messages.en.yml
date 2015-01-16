@@ -1,4 +1,4 @@
-title: Chamilo Application installation
+title: Chamilo installation
 
 flashes:
     installed: Chamilo has been successfully installed.
@@ -71,6 +71,22 @@ process:
             content: <p>Welcome to the installer.</p>
         check:
             header: System requirements
+            invalid: Some of the requirements are not met and the installation process cannot continue. Please check below for the minimum requirements to Install.
+            phpchanges: Changes to the <strong>php.ini</strong> file must be done in "<strong>%path%</strong>".
+            phpcreate: To change settings, create a "<strong>php.ini</strong>".
+
+            table:
+                mandatory:  Mandatory requirements
+                php:        PHP settings
+                chamilo:    Chamilo Specific requirements
+                optional:   Optional recommendations
+                check:      Check
+                cli:        PHP CLI
+                status: Status
+            requirement_status:
+                ok: Ok
+                warning: Warning
+                danger: Danger
         configure:
             header: Configuration
         schema:

@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class ChamiloAdminThemeExtension extends Extension implements PrependExtensionInterface
+class ChamiloThemeExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritDoc}

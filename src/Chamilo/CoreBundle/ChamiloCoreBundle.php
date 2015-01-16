@@ -7,6 +7,10 @@ use Chamilo\CoreBundle\DependencyInjection\Compiler\DoctrineEntityListenerPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * Class ChamiloCoreBundle
+ * @package Chamilo\CoreBundle
+ */
 class ChamiloCoreBundle extends Bundle
 {
     public function boot()

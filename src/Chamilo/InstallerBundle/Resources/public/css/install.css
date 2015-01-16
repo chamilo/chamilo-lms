@@ -165,3 +165,13 @@ ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
     color: #999999;
     background: #ededed;
 }
+
+td pre.output {
+    background-color: #232125;
+    overflow: auto;
+    line-height: 1.3em;
+    color: #fff;
+    font-size: 14px;
+    padding: .7em;
+    margin-top: 10px;
+}

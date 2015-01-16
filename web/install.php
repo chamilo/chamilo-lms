@@ -50,11 +50,11 @@ $minorProblems    = $collection->getFailedRecommendations();
 $translator->addLoader('yml', new YamlFileLoader());
 $translator->addResource(
     'yml',
-    __DIR__ . '/../app/Resources/translations/install.' . $locale . '.yml',
+    __DIR__ . '/../src/Chamilo/InstallerBundle/Resources/translations/messages.' . $locale . '.yml',
     $locale
 );
 
-function iterateRequirements(array $collection) {
+function iterateRequirements(array $collection, $translator) {
     foreach ($collection as $requirement) :
 ?>
     <tr>
@@ -75,12 +75,12 @@ function iterateRequirements(array $collection) {
         <td>
             <?php
                 if ($requirement->isFulfilled()) {
-                    echo '<span class="label label-success">OK</span>';
+                    echo '<h4><span class="label label-success"><i class="fa fa-check-circle"></i>  '.$translator->trans('process.step.check.requirement_status.ok').'</span></h4>';
                 } else {
                     if (!$requirement->isOptional()) {
-                        echo '<span class="label label-danger">';
+                        echo '<h4><span class="label label-danger"><i class="fa fa-exclamation-triangle"> </i> '.$translator->trans('process.step.check.requirement_status.danger').'</span></h4>';
                     } else {
-                        echo '<span class="label label-warning">';
+                        echo '<h4><span class="label label-warning"><i class="fa fa-exclamation-triangle"></i> '.$translator->trans('process.step.check.requirement_status.warning').'</span></h4>';
                     }
                     $requirement->getHelpHtml();
                     echo '</span>';
@@ -103,9 +103,10 @@ function iterateRequirements(array $collection) {
     <title><?php echo $translator->trans('title'); ?></title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="bundles/chamiloadmintheme/components/adminlte/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="bundles/chamilotheme/components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="bundles/chamilotheme/components/fontawesome/css/font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="bundles/chamiloinstaller/css/install.css" />
-    <script type="text/javascript" src="bundles/chamiloadmintheme/components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="bundles/chamilotheme/components/jquery/dist/jquery.min.js"></script>
 
     <script type="text/javascript">
         $(function() {
@@ -136,17 +137,6 @@ function iterateRequirements(array $collection) {
             <?php endif; ?>
         });
     </script>
-    <style>
-        td pre.output {
-            background-color: #232125;
-            overflow: auto;
-            line-height: 1.3em;
-            color: #fff;
-            font-size: 14px;
-            padding: .7em;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -154,40 +144,9 @@ function iterateRequirements(array $collection) {
             <h1 class="logo"><?php echo $translator->trans('title'); ?></h1>
         </div>
         <div class="content">
-            <div class="progress-bar">
-                <ul>
-                    <li class="active">
-                        <em class="fix-bg">&nbsp;</em>
-                        <strong class="step">1</strong>
-                        <span><?php echo $translator->trans('process.step.check.header'); ?></span>
-                    </li>
-                    <li>
-                        <em class="fix-bg">&nbsp;</em>
-                        <strong class="step">2</strong>
-                        <span><?php echo $translator->trans('process.step.configure'); ?></span>
-                    </li>
-                    <li>
-                        <em class="fix-bg">&nbsp;</em>
-                        <strong class="step">3</strong>
-                        <span><?php echo $translator->trans('process.step.schema'); ?></span>
-                    </li>
-                    <li>
-                        <em class="fix-bg">&nbsp;</em>
-                        <strong class="step">4</strong>
-                        <span><?php echo $translator->trans('process.step.setup'); ?></span>
-                    </li>
-                    <li>
-                        <em class="fix-bg">&nbsp;</em>
-                        <strong class="step">5</strong>
-                        <span><?php echo $translator->trans('process.step.final'); ?></span>
-                    </li>
-                </ul>
-            </div>
-
             <div class="page-title">
                 <h2><?php echo $translator->trans('process.step.check.header'); ?></h2>
             </div>
-
             <div>
                 <?php if (count($majorProblems)) : ?>
                 <div class="alert alert-warning" role="alert">
@@ -217,7 +176,7 @@ function iterateRequirements(array $collection) {
                 $requirements = array(
                     'mandatory' => $collection->getMandatoryRequirements(),
                     'php'       => $collection->getPhpIniRequirements(),
-                    'oro'       => $collection->getRequirements(),
+                    'chamilo'   => $collection->getChamiloRequirements(),
                     'cli'       => $collection->getCliRequirements(),
                     'optional'  => $collection->getRecommendations(),
                 );
@@ -229,52 +188,34 @@ function iterateRequirements(array $collection) {
                         <thead>
                             <tr>
                                 <th><?php echo $translator->trans('process.step.check.table.' . $type); ?></th>
-                                <th><?php echo $translator->trans('process.step.check.table.check'); ?></th>
+                                <th><?php echo $translator->trans('process.step.check.table.status'); ?></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php iterateRequirements($requirement); ?>
+                            <?php iterateRequirements($requirement, $translator); ?>
                         </tbody>
                     </table>
                 <?php endforeach; ?>
             </div>
 
-            <hr/ >
+            <hr />
             <br />
 
-            <div class="button-set">
-                <div class="pull-right">
-                    <?php if (count($majorProblems) || count($minorProblems)): ?>
-                    <a href="install.php" class="btn btn-default icon-reset">
-                        <span><?php echo $translator->trans('process.button.refresh'); ?></span>
-                    </a>
-                    <?php endif; ?>
-                    <a href="<?php echo count($majorProblems) ? 'javascript: void(0);' : 'app_dev.php/installer/flow/chamilo_installer/welcome'; ?>" class="btn btn-primary next <?php echo count($majorProblems) ? 'disabled' : 'primary'; ?>">
-                        <span><?php echo $translator->trans('process.button.next'); ?></span>
-                    </a>
-                </div>
+            <div class="install-form-actions">
+                <?php if (count($majorProblems) || count($minorProblems)): ?>
+                <a href="install.php" class="btn btn-default icon-reset">
+                    <span><?php echo $translator->trans('process.button.refresh'); ?></span>
+                </a>
+                <?php endif; ?>
+                <a href="<?php echo count($majorProblems) ? 'javascript: void(0);' : 'app_dev.php/installer/flow/chamilo_installer/welcome'; ?>" class="btn btn-lg btn-primary <?php echo count($majorProblems) ? 'disabled' : 'primary'; ?>">
+                    <i class="fa fa-chevron-right"></i> <?php echo $translator->trans('process.button.continue'); ?>
+                </a>
             </div>
         </div>
     </div>
 
     <hr/ >
     <br />
-
-    <div class="start-box" style="display: none;">
-        <div class="fade-box"></div>
-        <div class="start-content">
-            <div class="start-content-holder">
-                <div class="center"></div>
-                <h2><?php echo $translator->trans('welcome.header'); ?></h2>
-                <h3><?php echo $translator->trans('welcome.content'); ?></h3>
-                <div class="start-footer">
-                    <button type="button" id="begin-install" class="btn btn-primary next" href="javascript: void(0);">
-                        <span><?php echo $translator->trans('welcome.button'); ?></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <footer class="footer">
         <div class="container">

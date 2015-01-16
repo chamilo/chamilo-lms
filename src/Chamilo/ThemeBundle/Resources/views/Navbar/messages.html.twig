@@ -7,7 +7,7 @@
     </a>
     <ul class="dropdown-menu">
         <li class="header">
-            {{ 'You have %total% messages'|trans({'%total%':total}, 'ChamiloAdminTheme') }}
+            {{ 'You have %total% messages'|trans({'%total%':total}, 'ChamiloThemeBundle') }}
         </li>
         <li>
             <!-- inner menu: contains the actual data -->
@@ -30,7 +30,7 @@
         </li>
         <li class="footer">
             <a href="{{ path('fos_message_inbox') }}">
-                {{'See All Messages'|trans({}, 'ChamiloAdminTheme')}}
+                {{'See All Messages'|trans({}, 'ChamiloThemeBundle')}}
             </a>
         </li>
     </ul>

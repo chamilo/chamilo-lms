@@ -82,6 +82,7 @@ class ChamiloRequirements extends SymfonyRequirements
         );
 
         $extensions = $this->getExtensions();
+
         foreach ($extensions as $type) {
             $isOptional = $type == 'optional' ? true : false;
             foreach ($type as $extension => $url) {
@@ -143,7 +144,7 @@ class ChamiloRequirements extends SymfonyRequirements
         }
 
         $baseDir = realpath(__DIR__ . '/..');
-        $mem     = $this->getBytes(ini_get('memory_limit'));
+        $mem = $this->getBytes(ini_get('memory_limit'));
 
         $this->addPhpIniRequirement(
             'memory_limit',
@@ -252,6 +253,7 @@ class ChamiloRequirements extends SymfonyRequirements
      * @param string      $testMessage The message for testing the requirement
      * @param string      $helpHtml The help text formatted in HTML for resolving the problem
      * @param string|null $helpText The help text (when null, it will be inferred from $helpHtml, i.e. stripped from HTML tags)
+     * @param bool        $optional
      */
     public function addChamiloRequirement(
         $fulfilled,
@@ -260,7 +262,15 @@ class ChamiloRequirements extends SymfonyRequirements
         $helpText = null,
         $optional = false
     ) {
-        $this->add(new ChamiloRequirement($fulfilled, $testMessage, $helpHtml, $helpText, $optional));
+        $this->add(
+            new ChamiloRequirement(
+                $fulfilled,
+                $testMessage,
+                $helpHtml,
+                $helpText,
+                $optional
+            )
+        );
     }
 
     /**
@@ -366,13 +376,17 @@ class ChamiloRequirements extends SymfonyRequirements
 
         foreach ($requirements as $key => $requirement) {
             $testMessage = $requirement->getTestMessage();
-            if (preg_match_all(self::EXCLUDE_REQUIREMENTS_MASK, $testMessage, $matches)) {
+            if (preg_match_all(
+                self::EXCLUDE_REQUIREMENTS_MASK,
+                $testMessage,
+                $matches
+            )) {
                 unset($requirements[$key]);
             }
         }
-
         return $requirements;
     }
+
 
     /**
      * {@inheritdoc}

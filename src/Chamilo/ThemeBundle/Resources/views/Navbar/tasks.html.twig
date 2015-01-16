@@ -5,7 +5,7 @@
         <span class="label label-danger">{{ total }}</span>
     </a>
     <ul class="dropdown-menu">
-        <li class="header">{{ 'You have %total% tasks' |trans({'%total%':total}, 'ChamiloAdminTheme') }}</li>
+        <li class="header">{{ 'You have %total% tasks' |trans({'%total%':total}, 'ChamiloThemeBundle') }}</li>
         <li>
             <!-- inner menu: contains the actual data -->
             <ul class="menu">
@@ -23,7 +23,7 @@
                                  aria-valuenow="{{ task.progress }}"
                                  aria-valuemin="0"
                                  aria-valuemax="100">
-                                <span class="sr-only">{{ '%progress%% Complete'|trans({'%progress%':task.progress}, 'ChamiloAdminTheme') }}</span>
+                                <span class="sr-only">{{ '%progress%% Complete'|trans({'%progress%':task.progress}, 'ChamiloThemeBundle') }}</span>
                             </div>
                         </div>
                     </a>
@@ -31,7 +31,7 @@
                 {%  endfor  %}
             </ul>
         <li class="footer">
-            <a href="{{ path('chamilo_admin_all_tasks') }}">{{'View all tasks'|trans({}, 'ChamiloAdminTheme')}}</a>
+            <a href="{{ path('chamilo_admin_all_tasks') }}">{{'View all tasks'|trans({}, 'ChamiloThemeBundle')}}</a>
         </li>
     </ul>
 </li>

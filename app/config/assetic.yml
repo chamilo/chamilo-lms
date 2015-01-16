@@ -13,17 +13,17 @@ assetic:
     assets:
         chamilo_bootstrap_css:
             inputs:
-                - "bundles/chamiloadmintheme/components/bootstrap/dist/css/bootstrap.min.css"
+                - @ChamiloThemeBundle/Resources/public/components/bootstrap/dist/css/bootstrap.min.css
             filters:
                 - cssrewrite
         chamilo_font_awesome_css:
             inputs:
-                - "bundles/chamiloadmintheme/components/fontawesome/css/font-awesome.min.css"
+                - @ChamiloThemeBundle/Resources/public/components/fontawesome/css/font-awesome.min.css
             filters:
                 - cssrewrite
         chamilo_ionicons_css:
             inputs:
-                - "bundles/chamiloadmintheme/components/adminlte/css/ionicons.css"
+                - @ChamiloThemeBundle/Resources/public/components/ionicons/css/ionicons.css
             filters:
                 - cssrewrite
 
@@ -50,7 +50,7 @@ assetic:
                 - @ChamiloThemeBundle/Resources/public/components/adminlte/css/timepicker/bootstrap-timepicker.css
                 - @ChamiloThemeBundle/Resources/public/components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css
                 - @ChamiloThemeBundle/Resources/public/components/adminlte/css/AdminLTE.css
-            output: web/js/chamilo.css
+            output: js/chamilo.css
 
         chamilo_js:
             inputs:
@@ -66,7 +66,7 @@ assetic:
                 - @ChamiloThemeBundle/Resources/public/components/adminlte/js/plugins/daterangepicker/daterangepicker.js
 
                 - @ChamiloCoreBundle/Resources/public/js/app.js
-            output: web/js/chamilo.js
+            output: js/chamilo.js
 
         # see http://sonata-project.org/blog/2012/5/15/assetic-package-configuration
         sonata_jqueryui_js:
@@ -165,8 +165,8 @@ assetic:
         sonata_admin_css:
             inputs:
                 - @ChamiloThemeBundle/Resources/public/components/bootstrap/dist/css/bootstrap.css
-                - "bundles/chamiloadmintheme/components/fontawesome/css/font-awesome.min.css"
-                - "bundles/chamiloadmintheme/components/adminlte/css/ionicons.css"
+                - @ChamiloThemeBundle/Resources/public/components/fontawesome/css/font-awesome.min.css
+                - @ChamiloThemeBundle/Resources/public/components/ionicons/css/ionicons.css
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
                 - @ChamiloThemeBundle/Resources/public/components/select2/select2.css

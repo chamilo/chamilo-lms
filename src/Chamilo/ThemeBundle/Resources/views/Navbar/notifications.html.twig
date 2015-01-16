@@ -5,7 +5,7 @@
         <span class="label label-warning">{{ total }}</span>
     </a>
     <ul class="dropdown-menu">
-        <li class="header">{{ 'You have %total% notifications'|trans({'%total%': total}, 'ChamiloAdminTheme') }}</li>
+        <li class="header">{{ 'You have %total% notifications'|trans({'%total%': total}, 'ChamiloThemeBundle') }}</li>
         <li>
             <!-- inner menu: contains the actual data -->
             <ul class="menu">
@@ -19,6 +19,6 @@
                 {% endfor %}
             </ul>
         </li>
-        <li class="footer"><a href="{{ path('chamilo_admin_all_notifications') }}">{{'View all'|trans({}, 'ChamiloAdminTheme')}}</a></li>
+        <li class="footer"><a href="{{ path('chamilo_admin_all_notifications') }}">{{'View all'|trans({}, 'ChamiloThemeBundle')}}</a></li>
     </ul>
 </li>

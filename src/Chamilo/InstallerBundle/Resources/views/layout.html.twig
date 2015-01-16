@@ -12,14 +12,13 @@
     {% block stylesheets %}
     {% endblock %}
 
-    <link rel="stylesheet" href="{{ asset('bundles/chamiloadmintheme/components/bootstrap/dist/css/bootstrap.css') }}" />
-    <link rel="stylesheet" href="{{ asset('bundles/chamiloadmintheme/components/fontawesome/css/font-awesome.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/chamilotheme/components/bootstrap/dist/css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/chamilotheme/components/fontawesome/css/font-awesome.css') }}" />
     <link rel="stylesheet" href="{{ asset('bundles/chamiloinstaller/css/install.css') }}" />
 
-    <script type="text/javascript" src="{{ asset('bundles/chamiloadmintheme/components/jquery/dist/jquery.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/chamiloadmintheme/components/bootstrap/dist/js/bootstrap.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/chamiloadmintheme/components/ajaxQueue/dist/jquery.ajaxQueue.js') }}"></script>
-
+    <script type="text/javascript" src="{{ asset('bundles/chamilotheme/components/jquery/dist/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/chamilotheme/components/bootstrap/dist/js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/chamilotheme/components/ajaxQueue/dist/jquery.ajaxQueue.js') }}"></script>
 
     {% block javascript %}
     <script type="text/javascript">
@@ -36,6 +35,12 @@
             $('input[type="checkbox"]').removeClass('form-control');
         });
 
+        var wait = '<i class="fa fa-clock-o"></i> {{ 'wait'|trans }}';
+        var progress = '<i class="fa fa-circle-o-notch fa-spin"></i> {{ 'progress'|trans }}';
+        var skipped = '<i class="fa fa-circle-thin"></i> {{ 'skipped'|trans }}';
+        var passed = '<i class="fa fa-check-circle-o"></i> {{ 'passed'|trans }}';
+        var failed = '<i class="fa fa-exclamation-triangle"></i> {{ 'failed'|trans }}';
+
         function ajaxQueue(actions, url) {
             var finRes  = true,
                 aborted = false;
@@ -43,12 +48,12 @@
             $.each(actions, function(i) {
                 var stepCon = $('#step-' + this);
 
-                stepCon.closest('tr').find('td:last').text('{{ 'wait'|trans }}');
+                stepCon.closest('tr').find('td:last').html(wait);
 
                 if (i == 0) {
                     stepCon
                         .addClass('icon-wait')
-                        .closest('tr').find('td:last').text('{{ 'progress'|trans }}');
+                        .closest('tr').find('td:last').html(progress);
                 }
 
                 $.ajaxQueue({
@@ -68,13 +73,13 @@
                         .removeClass('icon-wait')
                         .addClass('icon-' + (curRes ? (exitCode == 0 ? 'yes' : 'warning') : 'no'))
                         .closest('tr')
-                            .find('td:last').text(
+                            .find('td:last').html(
                                 curRes
-                                    ? (exitCode == 0 ? '{{ 'passed'|trans }}' : '{{ 'skipped'|trans }}')
-                                    : '{{ 'failed'|trans }}'
+                                    ? (exitCode == 0 ? passed : skipped)
+                                    : failed
                             ).end()
                         .closest('tr').next()
-                            .find('td:last').text('{{ 'progress'|trans }}').end()
+                            .find('td:last').html(progress).end()
                             .find('span').addClass('icon-wait');
 
                     if (i == actions.length - 1 && finRes) {
@@ -86,13 +91,13 @@
                         stepCon
                             .removeClass('icon-wait')
                             .addClass('icon-warning')
-                            .closest('tr').find('td:last').text('{{ 'skipped'|trans }}');
+                            .closest('tr').find('td:last').html(skipped);
                     } else {
                         finRes = false;
                         stepCon
                             .removeClass('icon-wait')
                             .addClass('icon-no')
-                            .closest('tr').find('td:last').text('{{ 'failed'|trans }}');
+                            .closest('tr').find('td:last').html(failed);
                     }
                     if (i == actions.length - 1) {
                         $('a.back').removeClass('disabled');
@@ -107,7 +112,7 @@
 <body>
     <div class="container">
         <div class="page-header">
-            <h1 class="logo">Chamilo installation</h1>
+            <h1 class="logo">{{ 'title'|trans }}</h1>
         </div>
         {% block progress %}{% endblock %}
         {% block content %}{% endblock %}

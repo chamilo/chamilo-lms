@@ -70,7 +70,6 @@ class SetupStep extends AbstractStep
                 'loadFixtures',
                 $form->has('loadFixtures') && $form->get('loadFixtures')->getData()
             );*/
-
             $this->get('fos_user.user_manager')->updateUser($adminUser);
 
             // Setting portal parameters

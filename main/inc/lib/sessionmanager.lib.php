@@ -641,7 +641,7 @@ class SessionManager
 
             $sql_query = sprintf($sql,
                 intval($courseId),
-                Database::escape_string($user['user_id']),
+                intval($user['user_id']),
                 $sessionId
             );
 
@@ -1485,7 +1485,7 @@ class SessionManager
         }
 
         if (!api_is_platform_admin() && !$from_ws) {
-            $sql = 'SELECT session_admin_id FROM ' . Database :: get_main_table(TABLE_MAIN_SESSION) . ' WHERE id=' . $id_checked;
+            $sql = 'SELECT session_admin_id FROM ' . Database :: get_main_table(TABLE_MAIN_SESSION) . ' WHERE id IN (' . $id_checked.')';
             $rs = Database::query($sql);
             if (Database::result($rs, 0, 0) != $userId) {
                 api_not_allowed(true);
@@ -2056,9 +2056,9 @@ class SessionManager
                 // subscribe all the users from the session to this course inside the session
                 $nbr_users = 0;
                 foreach ($user_list as $enreg_user) {
-                    $enreg_user_id = Database::escape_string($enreg_user['id_user']);
+                    $enreg_user_id = intval($enreg_user['id_user']);
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session, course_code, id_user)
-                            VALUES ('$sessionId','$enreg_course','$enreg_user_id')";
+                            VALUES ($sessionId,'$enreg_course',$enreg_user_id)";
                     Database::query($sql);
                     if (Database::affected_rows()) {
                         $nbr_users++;
@@ -2253,7 +2253,7 @@ class SessionManager
         $return_value = false;
         $sql = "SELECT course_code FROM $tbl_session_course
                 WHERE
-                  id_session = " . Database::escape_string($session_id) . " AND
+                  id_session = " . intval($session_id) . " AND
                   course_code = '" . Database::escape_string($course_id) . "'";
         $result = Database::query($sql);
         $num = Database::num_rows($result);
@@ -5214,8 +5214,8 @@ class SessionManager
     public static function isUserSusbcribedAsStudent($sessionId, $userId) {
         $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $sessionId = Database::escape_string($sessionId);
-        $userId = Database::escape_string($userId);
+        $sessionId = intval($sessionId);
+        $userId = intval($userId);
 
         $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable "
                 . "WHERE id_session = $sessionId AND id_user = $userId AND relation_type = 0";

@@ -3650,7 +3650,7 @@ function api_get_item_property_id($course_code, $tool, $ref)
  */
 function api_track_item_property_update($tool, $ref, $title, $content, $progress)
 {
-    $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+    $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
     $course_id = api_get_real_course_id(); //numeric
     $course_code = api_get_course_id(); //alphanumeric
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);

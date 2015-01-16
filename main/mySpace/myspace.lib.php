@@ -84,16 +84,15 @@ class MySpace
 
     static function get_connections_from_course_list($user_id, $course_list, $session_id = 0) {
         // Database table definitions
-        $tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $tbl_track_course = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         if (empty($course_list)) {
             return false;
         }
 
         // protect data
         $user_id     = intval($user_id);
-        $course_code = Database::escape_string($course_code);
         $session_id  = intval($session_id);
-        $new_course_list = array();;
+        $new_course_list = array();
         foreach ($course_list as $course_item) {
             $new_course_list[] =  '"'.Database::escape_string($course_item['code']).'"';
         }
@@ -180,7 +179,7 @@ class MySpace
         $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
         // getting all the courses of the user
-        $sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+        $sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".intval($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
         $result = Database::query($sql);
         while ($row = Database::fetch_row($result)) {
             $return .= '<tr>';
@@ -1630,9 +1629,9 @@ class MySpace
     function exercises_results($user_id, $course_code, $session_id = false) {
         $questions_answered = 0;
         $sql = 'SELECT exe_result , exe_weighting
-            FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
+            FROM '.Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
             WHERE exe_cours_id = '".Database::escape_string($course_code)."'
-            AND exe_user_id = '".Database::escape_string($user_id)."'";
+            AND exe_user_id = '".intval($user_id)."'";
         if($session_id !== false) {
             $sql .= " AND session_id = '".$session_id."' ";
         }
@@ -1733,7 +1732,7 @@ class MySpace
         // the other lines (the data)
         foreach ($user_data as $key => $user) {
             // getting all the courses of the user
-            $sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user[4])."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+            $sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".intval($user[4])."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
             $result = Database::query($sql);
             while ($row = Database::fetch_row($result)) {
                 $csv_row = array();

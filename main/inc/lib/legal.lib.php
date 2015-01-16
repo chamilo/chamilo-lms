@@ -35,11 +35,11 @@ class LegalManager
 			$version = intval(LegalManager::get_last_condition_version($language));
 			$version++;
 			 $sql = "INSERT INTO $legal_table SET
-			            language_id = '".Database::escape_string($language)."',
+			            language_id = '".$language."',
                         content = '".$content."',
                         changes= '".$changes."',
                         type = '".$type."',
-                        version = '".Database::escape_string($version)."',
+                        version = '".intval($version)."',
                         date = '".$time."'";
 			Database::query($sql);
 
@@ -256,8 +256,8 @@ class LegalManager
 	public static function get_type_of_terms_and_conditions($legal_id,$language_id)
     {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
-		$legal_id=Database::escape_string($legal_id);
-		$language_id=Database::escape_string($language_id);
+		$legal_id = intval($legal_id);
+		$language_id = Database::escape_string($language_id);
 		$sql = 'SELECT type FROM '.$legal_conditions_table.' WHERE legal_id="'.$legal_id.'" AND language_id="'.$language_id.'"';
 		$rs = Database::query($sql);
 

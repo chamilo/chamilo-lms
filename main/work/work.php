@@ -45,7 +45,7 @@ $session_id = api_get_session_id();
 $group_id = api_get_group_id();
 
 $item_id 		        = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
-$parent_id 		        = isset($_REQUEST['parent_id']) ? Database::escape_string($_REQUEST['parent_id']) : '';
+$parent_id 		        = isset($_REQUEST['parent_id']) ? intval($_REQUEST['parent_id']) : '';
 $origin 		        = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 $submitGroupWorkUrl     = isset($_REQUEST['submitGroupWorkUrl']) ? Security::remove_XSS($_REQUEST['submitGroupWorkUrl']) : '';
 $title 			        = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';

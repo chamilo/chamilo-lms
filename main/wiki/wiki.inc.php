@@ -505,7 +505,7 @@ class Wiki
 
         if ($_clean['assignment']==2)  {//config by default for individual assignment (students)
             //Identifies the user as a creator, not the teacher who created
-            $_clean['user_id']=(int)Database::escape_string($assig_user_id);
+            $_clean['user_id']=intval($assig_user_id);
             $_clean['visibility']=0;
             $_clean['visibility_disc']=0;
             $_clean['ratinglock_disc']=0;

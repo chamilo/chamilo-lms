@@ -219,7 +219,7 @@ function load_personal_templates($user_id = 0) {
     $sql = "SELECT template.id, template.title, template.description, template.image, template.ref_doc, document.path
             FROM ".$table_template." template, ".$table_document." document
             WHERE
-                user_id='".Database::escape_string($user_id)."' AND
+                user_id='".intval($user_id)."' AND
                 course_code='".Database::escape_string(api_get_course_id())."' AND
                 document.c_id = $course_id AND
                 document.id = template.ref_doc";

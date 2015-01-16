@@ -306,7 +306,7 @@ function get_number_of_users()
 					LEFT JOIN $table_user_field_values field_values
 						ON field_values.user_id = u.user_id
 					WHERE cu.user_id IS NULL AND u.status<>".DRH."
-						AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
+						AND field_values.field_id = '".intval($field_identification[0])."'
 						AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 			} else	{
 				$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
@@ -421,7 +421,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					LEFT JOIN $table_user_field_values field_values
 						ON field_values.user_id = u.user_id
 					WHERE cu.id_user IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
-						AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
+						AND field_values.field_id = '".intval($field_identification[0])."'
 						AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 			} else {
 				$sql .=	"WHERE cu.id_user IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
@@ -442,7 +442,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 						LEFT JOIN $table_user_field_values field_values
 							ON field_values.user_id = u.user_id
 						WHERE cu.user_id IS NULL AND u.status<>".DRH."
-							AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
+							AND field_values.field_id = '".intval($field_identification[0])."'
 							AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 				} else	{
 					$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
@@ -463,7 +463,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 							LEFT JOIN $table_user_field_values field_values
 								ON field_values.user_id = u.user_id
 							WHERE cu.user_id IS NULL AND u.status<>".DRH."
-								AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
+								AND field_values.field_id = '".intval($field_identification[0])."'
 								AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 					} else	{
 						$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
@@ -489,7 +489,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $table_user_field_values field_values
                         ON field_values.user_id = u.user_id
                     WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
-                        AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
+                        AND field_values.field_id = '".intval($field_identification[0])."'
                         AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
             } else	{
                 $sql .=	"WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
@@ -511,7 +511,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					LEFT JOIN $table_user_field_values field_values
 						ON field_values.user_id = u.user_id
 					WHERE cu.user_id IS NULL AND u.status<>".DRH."
-						AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
+						AND field_values.field_id = '".intval($field_identification[0])."'
 						AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 			} else	{
 				$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
@@ -537,7 +537,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 							LEFT JOIN $table_user_field_values field_values
 								ON field_values.user_id = u.user_id
 							WHERE cu.user_id IS NULL AND u.status<>".DRH."
-								AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
+								AND field_values.field_id = '".intval($field_identification[0])."'
 								AND field_values.field_value = '".Database::escape_string($field_identification[1])."' AND access_url_id= $url_access_id  ";
 					} else	{
 						$sql .=	"WHERE  cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";

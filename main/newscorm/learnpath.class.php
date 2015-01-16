@@ -512,7 +512,7 @@ class learnpath
             $display_order = 0;
         }
 
-        $id = Database::escape_string($id);
+        $id = intval($id);
         $typeCleaned = Database::escape_string($type);
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
@@ -660,7 +660,7 @@ class learnpath
                 // Store the mp3 file in the lp_item table.
                 $sql = "UPDATE $tbl_lp_item SET
                         audio = '" . Database::escape_string($file) . "'
-                    WHERE id = '" . Database::escape_string($new_item_id) . "'";
+                    WHERE id = '" . intval($new_item_id) . "'";
                 Database::query($sql);
             }
         }
@@ -1455,7 +1455,7 @@ class learnpath
             return false;
         }
 
-        $prerequisite_id = Database::escape_string($prerequisite_id);
+        $prerequisite_id = intval($prerequisite_id);
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
         if (!is_numeric($mastery_score) || $mastery_score < 0) {
@@ -6075,7 +6075,7 @@ class learnpath
                     case TOOL_DOCUMENT:
                         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                         $sql_doc = "SELECT path FROM " . $tbl_doc . "
-                                    WHERE c_id = ".$course_id." AND id = " . Database::escape_string($row['path']);
+                                    WHERE c_id = ".$course_id." AND id = " . intval($row['path']);
                         $result = Database::query($sql_doc);
                         $path_file = Database::result($result, 0, 0);
                         $path_parts = pathinfo($path_file);
@@ -7292,7 +7292,7 @@ class learnpath
         if ($action == "add") {
             if (is_numeric($extra_info)) {
                 $sql_doc = "SELECT path FROM " . $tbl_doc . "
-                            WHERE c_id = ".$course_id." AND id = " . Database::escape_string($extra_info);
+                            WHERE c_id = ".$course_id." AND id = " . intval($extra_info);
                 $result = Database::query($sql_doc);
                 $path_file = Database :: result($result, 0, 0);
                 $path_parts = pathinfo($path_file);
@@ -7313,7 +7313,7 @@ class learnpath
             $sql_doc = "SELECT path, title FROM " . $tbl_doc . "
                         WHERE
                             c_id = ".$course_id." AND
-                            id = " . Database::escape_string($extra_info);
+                            id = " . intval($extra_info);
 
             $result = Database::query($sql_doc);
             $row 	= Database::fetch_array($result);
@@ -7596,7 +7596,7 @@ class learnpath
             $item_description = stripslashes($extra_info['description']);
             $item_url = stripslashes($extra_info['url']);
         } elseif (is_numeric($extra_info)) {
-            $extra_info = Database::escape_string($extra_info);
+            $extra_info = intval($extra_info);
             $sql_link = "SELECT title, description, url FROM " . $tbl_link . "
                          WHERE c_id = ".$course_id." AND id = " . $extra_info;
             $result = Database::query($sql_link);
@@ -7789,7 +7789,7 @@ class learnpath
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
         } elseif (is_numeric($extra_info)) {
-            $extra_info = Database::escape_string($extra_info);
+            $extra_info = intval($extra_info);
             $sql_publication = "SELECT title, description FROM " . $tbl_publication . "
                             WHERE c_id = ".$course_id." AND id = " . $extra_info;
 

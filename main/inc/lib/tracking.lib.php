@@ -5945,7 +5945,7 @@ class TrackingUserLog
     	$session_id = intval($session_id);
     	$course_id = Database::escape_string($course_id);
 
-    	$track_access_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+    	$track_access_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
     	$tempView = $view;
     	if(substr($view,0,1) == '1') {
     		$new_view = substr_replace($view,'0',0,1);
@@ -6031,13 +6031,13 @@ class TrackingUserLog
     		$sql = "SELECT ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
                 FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
                 WHERE te.exe_cours_id = '".Database::escape_string($course_id)."'
-                    AND te.exe_user_id = '".Database::escape_string($user_id)."'
+                    AND te.exe_user_id = '".intval($user_id)."'
                     AND te.exe_exo_id = ce.id
                 ORDER BY ce.title ASC, te.exe_date ASC";
 
     		$hpsql = "SELECT te.exe_name, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
                 FROM $TBL_TRACK_HOTPOTATOES AS te
-                WHERE te.exe_user_id = '".Database::escape_string($user_id)."' AND te.exe_cours_id = '".Database::escape_string($course_id)."'
+                WHERE te.exe_user_id = '".intval($user_id)."' AND te.exe_cours_id = '".Database::escape_string($course_id)."'
                 ORDER BY te.exe_cours_id ASC, te.exe_date ASC";
 
     		$hpresults = getManyResultsXCol($hpsql, 4);
@@ -6131,7 +6131,7 @@ class TrackingUserLog
     		$sql = "SELECT u.upload_date, w.title, w.author,w.url
                                 FROM $TABLETRACK_UPLOADS u , $TABLECOURSE_WORK w
                                 WHERE u.upload_work_id = w.id
-                                    AND u.upload_user_id = '".Database::escape_string($user_id)."'
+                                    AND u.upload_user_id = '".intval($user_id)."'
                                     AND u.upload_cours_id = '".Database::escape_string($course_id)."'
                                 ORDER BY u.upload_date DESC";
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
@@ -6200,7 +6200,7 @@ class TrackingUserLog
                         FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
                         WHERE sl.links_link_id = cl.id
                             AND sl.links_cours_id = '".Database::escape_string($course_id)."'
-                            AND sl.links_user_id = '".Database::escape_string($user_id)."'
+                            AND sl.links_user_id = '".intval($user_id)."'
                         GROUP BY cl.title, cl.url";
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
     		$results = getManyResults2Col($sql);

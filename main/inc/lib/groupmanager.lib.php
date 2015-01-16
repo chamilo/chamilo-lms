@@ -611,7 +611,7 @@ class GroupManager
                     max_student = '".Database::escape_string($maximum_number_of_students)."',
                     self_registration_allowed = '".Database::escape_string($self_registration_allowed)."',
                     self_unregistration_allowed = '".Database::escape_string($self_unregistration_allowed)."',
-                    category_id = '".Database::escape_string($categoryId)."'
+                    category_id = ".intval($categoryId)."
                 WHERE c_id = $course_id AND id=".$group_id;
         $result = Database::query($sql);
 
@@ -895,7 +895,7 @@ class GroupManager
                     groups_per_user   = '".Database::escape_string($groups_per_user)."',
                     self_reg_allowed = '".Database::escape_string($self_registration_allowed)."',
                     self_unreg_allowed = '".Database::escape_string($self_unregistration_allowed)."',
-                    max_student = ".Database::escape_string($maximum_number_of_students)."
+                    max_student = ".intval($maximum_number_of_students)."
                 WHERE c_id = $course_id AND id = $id";
 
         Database::query($sql);
@@ -1015,8 +1015,8 @@ class GroupManager
                 WHERE c_id = $courseId AND g.group_id = $group_id";
 
         if (!empty($column) && !empty($direction)) {
-            $column = Database::escape_string($column);
-            $direction = Database::escape_string($direction);
+            $column = Database::escape_string($column, null, false);
+            $direction = ($direction == 'ASC' ? 'ASC' : 'DESC');
             $sql .= " ORDER BY $column $direction";
         }
 
@@ -1306,8 +1306,8 @@ class GroupManager
     {
         $table_group_user     = Database :: get_course_table(TABLE_GROUP_USER);
         $table_group         = Database :: get_course_table(TABLE_GROUP);
-        $user_id             = Database::escape_string($user_id);
-        $cat_id             = Database::escape_string($cat_id);
+        $user_id             = intval($user_id);
+        $cat_id             = intval($cat_id);
 
         $course_id = api_get_course_int_id();
         $cat_condition = '';
@@ -1365,7 +1365,7 @@ class GroupManager
             return false;
         }
         $table_group = Database :: get_course_table(TABLE_GROUP);
-        $group_id = Database::escape_string($group_id);
+        $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
         $db_result = Database::query(
             'SELECT  self_unregistration_allowed
@@ -1389,8 +1389,8 @@ class GroupManager
             return false;
         }
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
-        $group_id = Database::escape_string($group_id);
-        $user_id = Database::escape_string($user_id);
+        $group_id = intval($group_id);
+        $user_id = intval($user_id);
         $course_id = api_get_course_int_id();
         $sql = 'SELECT 1 FROM '.$table_group_user.'
                 WHERE
@@ -1499,7 +1499,7 @@ class GroupManager
             $order_clause = " ORDER BY u.official_code, u.firstname, u.lastname";
         }
 
-        $group_id = Database::escape_string($group_id);
+        $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT tg.id, u.user_id, u.lastname, u.firstname, u.email
@@ -1538,8 +1538,8 @@ class GroupManager
         if (!empty($user_ids)) {
             foreach ($user_ids as $user_id) {
                 if (self::can_user_subscribe($user_id, $group_id)) {
-                    $user_id = Database::escape_string($user_id);
-                    $group_id = Database::escape_string($group_id);
+                    $user_id = intval($user_id);
+                    $group_id = intval($group_id);
                     $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id)
                             VALUES ('$course_id', '".$user_id."', '".$group_id."')";
                     $result &= Database::query($sql);
@@ -1565,8 +1565,8 @@ class GroupManager
         $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
 
         foreach ($user_ids as $user_id) {
-            $user_id = Database::escape_string($user_id);
-            $group_id = Database::escape_string($group_id);
+            $user_id = intval($user_id);
+            $group_id = intval($group_id);
             $sql = "INSERT INTO ".$table_group_tutor." (c_id, user_id, group_id)
                     VALUES ('$course_id', '".$user_id."', '".$group_id."')";
             $result &= Database::query($sql);
@@ -1584,7 +1584,7 @@ class GroupManager
     {
         $user_ids = is_array($user_ids) ? $user_ids : array ($user_ids);
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
-        $group_id = Database::escape_string($group_id);
+        $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
         $sql = 'DELETE FROM '.$table_group_user.'
                 WHERE c_id = '.$course_id.' AND group_id = '.$group_id.' AND user_id IN ('.implode(',', $user_ids).')';
@@ -1654,8 +1654,8 @@ class GroupManager
     public static function is_tutor_of_group($user_id, $group_id)
     {
         $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
-        $user_id = Database::escape_string($user_id);
-        $group_id = Database::escape_string($group_id);
+        $user_id = intval($user_id);
+        $group_id = intval($group_id);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM ".$table_group_tutor."
@@ -1724,7 +1724,7 @@ class GroupManager
     public static function is_tutor($user_id)
     {
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $user_id = Database::escape_string($user_id);
+        $user_id = intval($user_id);
 
         $sql = "SELECT tutor_id FROM ".$course_user_table."
 		        WHERE user_id = '".$user_id."' AND c_id ='".api_get_course_int_id()."'"."AND tutor_id=1";

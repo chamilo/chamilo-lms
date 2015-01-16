@@ -19,7 +19,7 @@ abstract class HookEvent implements HookEventInterface
             $this->observers = new SplObjectStorage();
             $this->eventName = $eventName;
             $this->eventData = array();
-            $this->plugin = HookManagementPlugin::create();
+            $this->plugin = HookManagement::create();
             $this->loadAttachments();
         } else {
             throw new \Exception('Hook Management Plugin is not active');
@@ -183,7 +183,7 @@ abstract class HookEvent implements HookEventInterface
         $isActive = false;
         $appPlugin = new AppPlugin();
         $pluginList = $appPlugin->getInstalledPluginListName();
-        if (in_array(HOOK_MANAGEMENT_PLUGIN, $pluginList)) {
+        if (in_array(HOOK_MANAGEMENT, $pluginList)) {
             $isActive = true;
         }
 

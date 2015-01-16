@@ -360,7 +360,7 @@ define('HOOK_TYPE_PRE', 0);
 define('HOOK_TYPE_POST', 1);
 define('HOOK_TYPE_ALL', 10);
 
-define('HOOK_MANAGEMENT_PLUGIN', 'hookmanagement');
+define('HOOK_MANAGEMENT', 'hookmanagement');
 
 /**
  * Inclusion of internationalization libraries

@@ -2,20 +2,16 @@
 /* For licensing terms, see /license.txt */
 /**
  * @TODO: Improve description
- * @package chamilo.plugin.hookmanagement
+ * @package chamilo.hookmanagement
  */
 
-class HookManagementPlugin extends Plugin implements HookManagementInterface
+class HookManagement implements HookManagementInterface
 {
     /**
      * Constructor
      */
     protected function __construct()
     {
-        $parameters = array(
-            'tool_enable' => 'boolean',
-        );
-
         $this->tables[TABLE_PLUGIN_HOOK_OBSERVER] = Database::get_main_table(TABLE_PLUGIN_HOOK_OBSERVER);
         $this->tables[TABLE_PLUGIN_HOOK_EVENT] = Database::get_main_table(TABLE_PLUGIN_HOOK_EVENT);
         $this->tables[TABLE_PLUGIN_HOOK_CALL] = Database::get_main_table(TABLE_PLUGIN_HOOK_CALL);
@@ -23,14 +19,12 @@ class HookManagementPlugin extends Plugin implements HookManagementInterface
         $this->hookCalls = $this->listAllHookCalls();
         $this->hookEvents = $this->listAllHookEvents();
         $this->hookObservers = $this->listAllHookObservers();
-
-        parent::__construct('1.0', 'Daniel Barreto', $parameters);
     }
 
     /**
-     * Instance the plugin
+     * Instance the hook manager
      * @staticvar null $result
-     * @return HookManagementPlugin
+     * @return HookManagement
      */
     static function create()
     {
@@ -149,7 +143,7 @@ class HookManagementPlugin extends Plugin implements HookManagementInterface
         foreach ($hookEvents as $hookEvent => $v) {
             $attributes = array(
                 'class_name' => $hookEvent,
-                'description' => get_plugin_lang('HookDescription' . $hookEvent, 'HookManagementPlugin'),
+                'description' => get_lang('HookDescription' . $hookEvent),
             );
             $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_EVENT], $attributes);
             // store hook event into property
@@ -395,7 +389,7 @@ class HookManagementPlugin extends Plugin implements HookManagementInterface
         if (isset($eventName) && !isset($this->hookEvents[$eventName])) {
             $attributes = array(
                 'class_name' => $eventName,
-                'description' => get_plugin_lang('HookDescription' . $eventName, 'HookManagementPlugin'),
+                'description' => get_lang('HookDescription' . $eventName),
             );
             $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_EVENT], $attributes, true);
             $this->hookEvents[$eventName] = $id;

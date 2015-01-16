@@ -542,9 +542,14 @@ function store_plugins()
 function store_stylesheets()
 {
     // Insert the stylesheet.
-    $style = Database::escape_string($_POST['style']);
-    if (is_style($style)) {
-        api_set_setting('stylesheets', $style, null, 'stylesheets', api_get_current_access_url_id());
+    if (is_style($_POST['style'])) {
+        api_set_setting(
+            'stylesheets',
+            $_POST['style'],
+            null,
+            'stylesheets',
+            api_get_current_access_url_id()
+        );
     }
     return true;
 }

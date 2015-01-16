@@ -473,7 +473,7 @@ class Database
         // Fixes security problem when there's no "" or '' between a variable.
         // See #7440 for more info
         if ($addFix) {
-            $string = "__@$string@__";
+            //$string = "__@$string@__";
         }
         return get_magic_quotes_gpc()
             ? (self::use_default_connection($connection)
@@ -748,7 +748,7 @@ class Database
             $connection = null;
         }
 
-        $query = self::fixQuery($query);
+        //$query = self::fixQuery($query);
 
         // Check if the table contains a c_ (means a course id)
         if (api_get_setting('server_type') === 'test' && strpos($query, 'c_')) {

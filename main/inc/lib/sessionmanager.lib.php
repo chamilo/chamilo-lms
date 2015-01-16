@@ -5463,33 +5463,35 @@ class SessionManager
                 )
             );
             $sessionFieldValueList = Database::select(
-                'sfv.session_id AS id, sfv.field_value AS description,',
+                'CONCAT(sfv.session_id, sf.field_variable) AS id, sfv.field_value AS field_value',
                 $joinTable,
                 array(
                     'where' => array(
-                        'sf.field_variable IN ( ? ) OR' => 'as_description, modalidad, duracion, cupos, horario, publico_objetivo',
+                        'sf.field_variable IN ( ?, ?, ?, ?, ?, ? )' => array(
+                            'as_description', 'modalidad', 'duracion', 'cupos', 'brochure', 'publico_objetivo',
+                        )
                     )
                 )
             );
-
         }
 
+
         foreach ($sessionList as $id => &$session) {
-            if ($publicoObjetivo == $session['publico_objetivo']) {
-                $session['modalidad'] = isset($sessionFieldValueList[$id]) ?
-                    $sessionFieldValueList[$id]['modalidad'] :
+            if ($publicoObjetivo == $sessionFieldValueList[$id . 'publico_objetivo']['field_value']) {
+                $session['modalidad'] = isset($sessionFieldValueList[$id . 'modalidad']) ?
+                    $sessionFieldValueList[$id . 'modalidad']['field_value'] :
                     '';
-                $session['descripcion'] = isset($sessionFieldValueList[$id]) ?
-                    $sessionFieldValueList[$id]['as_description'] :
+                $session['descripcion'] = isset($sessionFieldValueList[$id . 'modalidad']) ?
+                    $sessionFieldValueList[$id . 'modalidad']['field_value'] :
                     '';
-                $session['duracion'] = isset($sessionFieldValueList[$id]) ?
-                    $sessionFieldValueList[$id]['duracion'] :
+                $session['duracion'] = isset($sessionFieldValueList[$id . 'duracion']) ?
+                    $sessionFieldValueList[$id . 'duracion']['field_value'] :
                     '';
-                $session['cupos'] = isset($sessionFieldValueList[$id]) ?
-                    $sessionFieldValueList[$id]['cupos'] :
+                $session['cupos'] = isset($sessionFieldValueList[$id . 'cupos']) ?
+                    $sessionFieldValueList[$id . 'cupos']['field_value'] :
                     '';
-                $session['horario'] = isset($sessionFieldValueList[$id]) ?
-                    $sessionFieldValueList[$id]['horario'] :
+                $session['horario'] = isset($sessionFieldValueList[$id . 'horario']) ?
+                    $sessionFieldValueList[$id . 'horario']['field_value'] :
                     '';
             }
         }

@@ -139,7 +139,8 @@ class HookAdvancedSubscription extends HookObserver implements
      * @param $params
      * @return null|soap_fault
      */
-    public static function WSSessionListInCategory($params) {
+    public static function WSSessionListInCategory($params)
+    {
         global $debug;
 
         if ($debug) error_log('WSUserSubscribedInCourse');
@@ -165,10 +166,12 @@ class HookAdvancedSubscription extends HookObserver implements
 
         // Get the session brief List by category
 
-        $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId, $params['publico_objetivo']);
+        $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId, $params['target']);
 
+        /*
         $extraFieldSession = new ExtraFieldValue('session');
-        $hasExtraField = $extraFieldSession->get_values_by_handler_and_field_variable(1, 'publico_objetivo');
+        $hasExtraField = $extraFieldSession->get_values_by_handler_and_field_variable(key($sessionList), 'publico_objetivo');
+        var_dump($hasExtraField);
         if ($hasExtraField != false) {
             // Has session extra fields, Nothing to do
         } else {
@@ -176,6 +179,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
             return return_error(WS_ERROR_NOT_FOUND_RESULT);
         }
+        */
 
         return $sessionList;
     }

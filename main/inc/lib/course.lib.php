@@ -1379,7 +1379,7 @@ class CourseManager
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
         $where = array();
-        
+
         if (empty($order_by)) {
             $order_by = 'user.lastname, user.firstname';
             if (api_is_western_name_order()) {
@@ -2643,12 +2643,13 @@ class CourseManager
 
     /**
      * Get list of courses for a given user
-     * @param int       user ID
-     * @param boolean   Whether to include courses from session or not
+     * @param int       $user_id
+     * @param boolean   $include_sessions Whether to include courses from session or not
      * @return array    List of codes and db names
      * @author isaac flores paz
      */
-    public static function get_courses_list_by_user_id($user_id, $include_sessions = false) {
+    public static function get_courses_list_by_user_id($user_id, $include_sessions = false)
+    {
         $user_id = intval($user_id);
         $course_list = array();
         $codes = array();

@@ -1666,7 +1666,7 @@ class Attendance
 			);
 			$row++;
 		}
-		$table->setColAttributes(0, array('style' => 'width:30%'));
+		$table->setColAttributes(0, array('style' => 'width:28%'));
 
 		$row = 1;
 		foreach ($users as $user) {
@@ -1679,15 +1679,16 @@ class Attendance
 			$row++;
 		}
 
-		$tableToString = null;
+		//$tableToString = null;
 
 		//$sessionInfo = api_get_session_info(api_get_session_id());
 		//if (!empty($sessionInfo)) {
-		$tableToString .= '<strong>'.get_lang('PeriodToDisplay').'</strong>: '.
-			sprintf(get_lang('FromDateXToDateY'), $startDate, $endDate);
+		/*$tableToString .= '<strong>'.get_lang('PeriodToDisplay').'</strong>: '.
+			sprintf(get_lang('FromDateXToDateY'), $startDate, $endDate);*/
 		//}
 
-		$tableToString .= $table->toHtml();
+		$tableToString = $table->toHtml();
+
 		$params = array(
 			'filename' => get_lang('Attendance') . '_' . api_get_utc_datetime(),
 			'pdf_title' => get_lang('Attendance'),

@@ -5065,6 +5065,7 @@ function exportAllStudentWorkFromPublication(
                 $table = new HTML_Table(array('class' => 'data_table'));
                 $headers = array(
                     get_lang('Name'),
+                    get_lang('User'),
                     get_lang('HandOutDateLimit'),
                     get_lang('SentDate'),
                     get_lang('Filename'),
@@ -5107,11 +5108,12 @@ function exportAllStudentWorkFromPublication(
                     }
 
                     $table->setCellContents($row, 0, strip_tags($workData['title']));
-                    $table->setCellContents($row, 1, $expiresOn);
-                    $table->setCellContents($row, 2, api_get_local_time($work['sent_date_from_db']));
-                    $table->setCellContents($row, 3, strip_tags($work['title']));
-                    $table->setCellContents($row, 4, $score);
-                    $table->setCellContents($row, 5, $feedback);
+                    $table->setCellContents($row, 1, api_get_person_name(strip_tags($work['firstname']), strip_tags($work['lastname'])));
+                    $table->setCellContents($row, 2, $expiresOn);
+                    $table->setCellContents($row, 3, api_get_local_time($work['sent_date_from_db']));
+                    $table->setCellContents($row, 4, strip_tags($work['title']));
+                    $table->setCellContents($row, 5, $score);
+                    $table->setCellContents($row, 6, $feedback);
 
                     $row++;
                 }

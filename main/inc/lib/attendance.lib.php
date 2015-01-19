@@ -1464,22 +1464,22 @@ class Attendance
 		return $this->date_time;
 	}
 
-	public function get_name($name)
+	public function get_name()
 	{
 		return $this->name;
 	}
 
-	public function get_description($description)
+	public function get_description()
 	{
 		return $this->description;
 	}
 
-	public function get_attendance_qualify_title($attendance_qualify_title)
+	public function get_attendance_qualify_title()
 	{
 		return $this->attendance_qualify_title;
 	}
 
-	public function get_attendance_weight($attendance_weight)
+	public function get_attendance_weight()
 	{
 		return $this->attendance_weight;
 	}
@@ -1490,8 +1490,14 @@ class Attendance
 	 *
 	 * @return string
 	 */
-	public function getAttendanceLogins($startDate, $endDate)
+	public function getAttendanceLogin($startDate, $endDate)
 	{
+		if (empty($startDate) || $startDate == '0000-00-00' ||
+			empty($endDate)|| $endDate == '0000-00-00'
+		) {
+			return false;
+		}
+
 		$sessionId = api_get_session_id();
 		$courseCode  = api_get_course_id();
 		if (!empty($sessionId)) {
@@ -1544,6 +1550,33 @@ class Attendance
 			}
 		}
 
+		return array(
+			'users' => $users,
+			'dateList' => $dateList,
+			'headers' => $headers,
+			'results' => $results
+		);
+	}
+
+	/**
+	 * @param string $startDate in UTC time
+	 * @param string $endDate in UTC time
+	 *
+	 * @return string
+	 */
+	public function getAttendanceLoginTable($startDate, $endDate)
+	{
+		$data = $this->getAttendanceLogin($startDate, $endDate);
+
+		if (!$data) {
+			return null;
+		}
+
+		$headers = $data['headers'];
+		$dateList = $data['dateList'];
+		$users = $data['users'];
+		$results = $data['results'];
+
 		$table = new HTML_Table(array('class' => 'data_table'));
 		$row = 0;
 		$column = 0;
@@ -1579,5 +1612,60 @@ class Attendance
 		}
 
 		return $table->toHtml();
+	}
+
+	/**
+	 * @param string $startDate in UTC time
+	 * @param string $endDate in UTC time
+	 *
+	 * @return string
+	 */
+	public function exportAttendanceLogin($startDate, $endDate)
+	{
+		$data = $this->getAttendanceLogin($startDate, $endDate);
+
+		if (!$data) {
+			return null;
+		}
+		$users = $data['users'];
+		$results = $data['results'];
+
+		$table = new HTML_Table(array('class' => 'data_table'));
+
+		$table->setHeaderContents(0, 0, get_lang('User'));
+		$table->setHeaderContents(0, 1, get_lang('Dates'));
+
+		$row = 1;
+		foreach ($users as $user) {
+			$table->setCellContents(
+				$row,
+				0,
+				$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'
+			);
+			$row ++;
+		}
+
+		$column = 1;
+		$results[15]['2010-04-11'] = true;
+		$results[15]['2010-04-13'] = true;
+
+		foreach ($users as $user) {
+			if (isset($results[$user['user_id']]) &&
+				!empty($results[$user['user_id']])
+			) {
+				$dates = implode(', ', array_keys($results[$user['user_id']]));
+				$table->setCellContents(1, $column, $dates);
+			}
+			$column++;
+		}
+
+		$tableToString = $table->toHtml();
+		$params = array(
+			'filename' => get_lang('Attendance') . '_' . api_get_utc_datetime(),
+			'pdf_title' => get_lang('Attendance'),
+			'course_code' => api_get_course_id(),
+		);
+		$pdf = new PDF('A4', null, $params);
+		$pdf->html_to_pdf_with_template($tableToString);
 	}
 }

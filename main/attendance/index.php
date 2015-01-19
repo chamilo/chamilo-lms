@@ -306,7 +306,7 @@ switch ($action) {
         break;
     case 'calendar_logins':
         if (api_is_allowed_to_edit(null, true)) {
-            $attendance_controller->calendarLogins();
+            $attendance_controller->calendarLogins(false, true);
         }
         break;
     default :

@@ -544,33 +544,52 @@ class AttendanceController
     }
 
     /**
-     * Gets attendace base in the table:
+     * Gets attendance base in the table:
      * TABLE_STATISTIC_TRACK_E_COURSE_ACCESS
+     * @param bool $showForm
      * @throws ViewException
      */
-    public function calendarLogins()
+    public function calendarLogins($showForm = false, $exportToPdf = true)
     {
-        $form = new FormValidator(
-            'search',
-            'post',
-            api_get_self().'?'.api_get_cidreq().'&action=calendar_logins'
-        );
-        $form->addDateRangePicker('range', get_lang('Range'));
-        $form->add_button('submit', get_lang('submit'));
         $table = null;
+        $formToDisplay = null;
+        $startDate = null;
+        $endDate = null;
 
-        if ($form->validate()) {
-            $values = $form->getSubmitValues();
+        $sessionId = api_get_session_id();
+        if ($showForm) {
+            $form = new FormValidator(
+                'search',
+                'post',
+                api_get_self() . '?' . api_get_cidreq(
+                ) . '&action=calendar_logins'
+            );
+            $form->addDateRangePicker('range', get_lang('Range'));
+            $form->add_button('submit', get_lang('submit'));
 
-            $startDate = api_get_utc_datetime($values['range_start']);
-            $endDate = api_get_utc_datetime($values['range_end']);
+            if ($form->validate()) {
+                $values = $form->getSubmitValues();
 
-            $attendance = new Attendance();
-            $table = $attendance->getAttendanceLogins($startDate, $endDate);
+                $startDate = api_get_utc_datetime($values['range_start']);
+                $endDate = api_get_utc_datetime($values['range_end']);
+            }
+            $formToDisplay = $form->return_form();
+        } else {
+           if (!empty($sessionId)) {
+               $sessionInfo = api_get_session_info($sessionId);
+               $startDate = $sessionInfo['date_start'];
+               $endDate = $sessionInfo['date_end'];
+           }
         }
 
+        $attendance = new Attendance();
+
+        if ($exportToPdf) {
+            $attendance->exportAttendanceLogin($startDate, $endDate);
+        }
+        $table = $attendance->getAttendanceLoginTable($startDate, $endDate);
         $data = array(
-            'form' => $form->return_form(),
+            'form' => $formToDisplay,
             'table' => $table
         );
         $this->view->set_data($data);

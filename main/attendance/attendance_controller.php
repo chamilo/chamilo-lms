@@ -585,7 +585,10 @@ class AttendanceController
         $attendance = new Attendance();
 
         if ($exportToPdf) {
-            $attendance->exportAttendanceLogin($startDate, $endDate);
+            $result = $attendance->exportAttendanceLogin($startDate, $endDate);
+            if (empty($result)) {
+                api_not_allowed(true, get_lang('NoDataAvailable'));
+            }
         }
         $table = $attendance->getAttendanceLoginTable($startDate, $endDate);
         $data = array(

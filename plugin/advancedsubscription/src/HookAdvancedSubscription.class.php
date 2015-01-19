@@ -108,6 +108,44 @@ class HookAdvancedSubscription extends HookObserver implements
                 )
             );
 
+            // Input params for get session Details
+            $server->wsdl->addComplexType(
+                'advsubSessionDetailInput',
+                'complexType',
+                'struct',
+                'all',
+                '',
+                array(
+                    'user_id' => array('name' => 'id', 'type' => 'xsd:int'), // Chamilo user_id
+                    'session_id' => array('name' => 'name', 'type' => 'xsd:int'), // Chamilo session_id
+                    'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
+                    'profile_completed' => array('name' => 'profile_completed', 'type' => 'xsd:float'),
+                    'is_connected' => array('name' => 'secret_key', 'type' => 'xsd:boolean'),
+                )
+            );
+
+            // Output params for get session Details
+            $server->wsdl->addComplexType(
+                'advsubSessionDetail',
+                'complexType',
+                'struct',
+                'all',
+                '',
+                array(
+                    'id' => array('name' => 'id', 'type' => 'xsd:string'),
+                    'cost' => array('name' => 'cost', 'type' => 'xsd:string'),
+                    'place' => array('name' => 'place', 'type' => 'xsd:string'),
+                    'visitors' => array('name' => 'visitors', 'type' => 'xsd:string'),
+                    'duration' => array('name' => 'duration', 'type' => 'xsd:int'),
+                    'brochure' => array('name' => 'brochure', 'type' => 'xsd:string'),
+                    'banner' => array('name' => 'banner', 'type' => 'xsd:string'),
+                    'description_full' => array('name' => 'description_full', 'type' => 'xsd:string'),
+                    'status' => array('name' => 'status', 'type' => 'xsd:string'),
+                    'action_url' => array('name' => 'action_url', 'type' => 'xsd:string'),
+                    'message' => array('name' => 'error_message', 'type' => 'xsd:string'),
+                )
+            );
+
             // Register the method to expose
             $server->register('HookAdvancedSubscription..WSSessionListInCategory', // method name
                 array('sessionCategoryInput' => 'tns:sessionCategoryInput'), // input parameters
@@ -124,6 +162,16 @@ class HookAdvancedSubscription extends HookObserver implements
                 array('return' => 'xsd:string'), // output parameters
                 'urn:WSRegistration', // namespace
                 'urn:WSRegistration#WSAdvsubEncrypt', // soapaction
+                'rpc', // style
+                'encoded', // use
+                'This service encrypt data to be used later in urls' // documentation
+            );
+
+            $server->register('HookAdvancedSubscription..WSSessionGetDetailsByUser', // method name
+                array('input' => 'xsd:string'), // input parameters
+                array('return' => 'tns:advsubSessionDetail'), // output parameters
+                'urn:WSRegistration', // namespace
+                'urn:WSRegistration#WSSessionGetDetailsByUser', // soapaction
                 'rpc', // style
                 'encoded', // use
                 'This service encrypt data to be used later in urls' // documentation
@@ -209,6 +257,76 @@ class HookAdvancedSubscription extends HookObserver implements
         } else {
             // Return soap fault Not valid input params
 
+            $result = return_error(WS_ERROR_INVALID_INPUT);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $params
+     * @return null|soap_fault
+     */
+    public function WSSessionGetDetailsByUser($params)
+    {
+        global $debug;
+
+        if ($debug) error_log('WSUserSubscribedInCourse');
+        if ($debug) error_log('Params '. print_r($params, 1));
+        if (!WSHelperVerifyKey($params)) {
+
+            //return return_error(WS_ERROR_SECRET_KEY);
+        }
+        $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
+        // Check params
+        if (is_array($params) && !empty($params['session_id']) && !empty($params['user_id'])) {
+            $userId = (int) $params['user_id'];
+            $sessionId = (int) $params['session_id'];
+            // Check if student is already subscribed
+
+            $advsubPlugin = AdvancedSubscriptionPlugin::create();
+            $isOpen = $advsubPlugin->isSessionOpen($sessionId);
+            $status = $advsubPlugin->getQueueStatus($userId, $sessionId);
+            $vacancy = $advsubPlugin->getVacancy($sessionId);
+            $data = $advsubPlugin->getSessionDetails($sessionId);
+            if (!empty($data) && is_array($data)) {
+
+                $data['status'] = $status;
+                // 5 Cases:
+                if ($isOpen) {
+                    // Go to Course session
+                    $data['action_url'] = $advsubPlugin->getSessionUrl($sessionId);
+                } else {
+                    try {
+                        $isAble = $advsubPlugin->isAbleToRequest($userId, $params);
+                        $data['message'] = $advsubPlugin->getStatusMessage($status, $isAble);
+                    } catch (\Exception $e) {
+                        $data['message'] = $e->getMessage();
+                    }
+                    if ($vacancy > 0) {
+                        // Check conditions
+                        if ($status === ADV_SUB_QUEUE_STATUS_NO_QUEUE) {
+                            // No in Queue, require queue subscription url action
+                        } elseif ($status === ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED) {
+                            // send url action
+                            $data['action_url'] = $advsubPlugin->getSessionUrl($sessionId);
+                        } else {
+                            // In queue, output status message, no more info.
+                        }
+                    } else {
+                        if ($status === ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED) {
+
+                        } else {
+                            // in Queue or not, cannot be subscribed to session
+                        }
+
+                    }
+
+                }
+                $result = $data;
+            }
+        } else {
+            // Return soap fault Not valid input params
             $result = return_error(WS_ERROR_INVALID_INPUT);
         }
 

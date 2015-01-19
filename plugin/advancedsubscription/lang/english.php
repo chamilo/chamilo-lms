@@ -19,3 +19,12 @@ $strings['AdvancedSubscriptionCostXLimitReached'] = "Lo sentimos, usted ya ha al
 $strings['AdvancedSubscriptionTimeXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s horas para los cursos que ha seguido este año";
 $strings['AdvancedSubscriptionCourseXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s cursos que ha seguido este año";
 $strings['AdvancedSubscriptionNotMoreAble'] = "Lo sentimos, usted ya no cumple con las condiciones iniciales para poder inscribirse al curso";
+
+$strings['AdvancedSubscriptionNoQueue'] = "Usted no está inscrito en este curso.";
+$strings['AdvancedSubscriptionNoQueueIsAble'] = "Usted no está inscrito, pero está calificado para este curso.";
+$strings['AdvancedSubscriptionQueueStart'] = "Su inscripción está en espera de aprobación por parte de su jefe, por favor este atento.";
+$strings['AdvancedSubscriptionQueueBossDisapproved'] = "Lo sentimos, su inscripción ha sido desaprobada por su jefe.";
+$strings['AdvancedSubscriptionQueueBossApproved'] = "Su inscripción ha sido aprobada por su jefe, y está en espera de aprobación del Administrador.";
+$strings['AdvancedSubscriptionQueueAdminDisapproved'] = "Lo sentimos, su inscripción ha sido desaprobada por el administrador.";
+$strings['AdvancedSubscriptionQueueAdminApproved'] = "Felicitaciones, Su inscripción ha sido aprobada por el administrador.";
+$strings['AdvancedSubscriptionQueueDefaultX'] = "Ha ocurrido un problema, el estado en cola, %d no está definido en el sistema.";

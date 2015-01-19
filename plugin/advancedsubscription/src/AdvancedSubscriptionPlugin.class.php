@@ -351,8 +351,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $joinTable,
                 array(
                     'where' => array(
-                        'sfv.session_id = ? AND ' => $sessionId,
-                        'sf.field_variable = ?' => $fieldVariable,
+                        'sfv.session_id = ? AND sf.field_variable = ?' => array($sessionId, $fieldVariable),
                     )
                 )
             );
@@ -621,5 +620,124 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $data = unserialize($crypt->decrypt(substr($encrypted, 16)));
 
         return $data;
+    }
+
+    /**
+     * Return the status from user in queue to session subscription
+     * @param int $userId
+     * @param int $sessionId
+     * @return bool|int
+     */
+    public function getQueueStatus($userId, $sessionId)
+    {
+        if (!empty($userId) && !empty($sessionId)) {
+            $queueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
+            $row = Database::select(
+                'status',
+                $queueTable,
+                array(
+                    'where' => array(
+                        'user_id = ? AND session_id = ?' => array($userId, $sessionId),
+                    )
+                )
+            );
+
+            if (count($row) == 1) {
+
+                return $row['status'];
+            } else {
+
+                return ADV_SUB_QUEUE_STATUS_NO_QUEUE;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Return the remaining vacancy
+     * @param $sessionId
+     * @return bool|int
+     */
+    public function getVacancy($sessionId)
+    {
+        if (!empty($sessionId)) {
+            $extra = new ExtraFieldValue('session');
+            $vacancy = $extra->get_values_by_handler_and_field_variable($sessionId, 'vacantes');
+            $vacancy -= $this->countQueueByParams(array('sessions' => $sessionId, 'status' => ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED));
+
+            if ($vacancy >= 0) {
+
+                return $vacancy;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Return the session details data from session extra field value
+     * @param $sessionId
+     * @return bool|mixed
+     */
+    public function getSessionDetails($sessionId)
+    {
+        if (!empty($sessionId)) {
+            $extra = new ExtraFieldValue('session');
+            $data['id'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'id');
+            $data['cost'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'costo');
+            $data['place'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'lugar');
+            $data['allow_visitors'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'permitir_visitantes');
+            $data['class_hours'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'horas_lectivas');
+            $data['brochure'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'brochure');
+            $data['banner'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'banner');
+            $data['description'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'descripcion');
+            $data['class_hours'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'horas_lectivas');
+
+            return $data;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get status message
+     * @param int $status
+     * @param bool $isAble
+     * @return string
+     */
+    public function getStatusMessage($status, $isAble = true)
+    {
+        $message = '';
+        switch ($status)
+        {
+            case ADV_SUB_QUEUE_STATUS_NO_QUEUE:
+                if ($isAble) {
+                    $message = $this->get_lang('AdvancedSubscriptionNoQueueIsAble');
+                } else {
+                    $message = $this->get_lang('AdvancedSubscriptionNoQueue');
+                }
+                break;
+            case ADV_SUB_QUEUE_STATUS_START:
+                $message = $this->get_lang('AdvancedSubscriptionQueueStart');
+                break;
+            case ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED:
+                $message = $this->get_lang('AdvancedSubscriptionQueueBossDisapproved');
+                break;
+            case ADV_SUB_QUEUE_STATUS_BOSS_APPROVED:
+                $message = $this->get_lang('AdvancedSubscriptionQueueBossApproved');
+                break;
+            case ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED:
+                $message = $this->get_lang('AdvancedSubscriptionQueueAdminDisapproved');
+                break;
+            case ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED:
+                $message = $this->get_lang('AdvancedSubscriptionQueueAdminApproved');
+                break;
+            default:
+                $message = sprintf($this->get_lang('AdvancedSubscriptionQueueDefault'), $status);
+
+        }
+
+        return $message;
     }
 }

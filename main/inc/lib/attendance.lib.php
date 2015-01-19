@@ -1513,7 +1513,7 @@ class Attendance
 	public function getAttendanceLogin($startDate, $endDate)
 	{
 		if (empty($startDate) || $startDate == '0000-00-00' ||
-			empty($endDate)|| $endDate == '0000-00-00'
+			empty($endDate) || $endDate == '0000-00-00'
 		) {
 			return false;
 		}
@@ -1525,14 +1525,16 @@ class Attendance
 				$courseCode,
 				$sessionId,
 				'',
-				'lastname'
+				'lastname',
+				0
 			);
 		} else {
 			$users = CourseManager:: get_user_list_from_course_code(
 				$courseCode,
 				0,
 				'',
-				'lastname'
+				'lastname',
+				STUDENT
 			);
 		}
 
@@ -1664,6 +1666,7 @@ class Attendance
 			);
 			$row++;
 		}
+		$table->setColAttributes(0, array('style' => 'width:30%'));
 
 		$row = 1;
 		foreach ($users as $user) {
@@ -1676,11 +1679,20 @@ class Attendance
 			$row++;
 		}
 
-		$tableToString = $table->toHtml();
+		$tableToString = null;
+
+		//$sessionInfo = api_get_session_info(api_get_session_id());
+		//if (!empty($sessionInfo)) {
+		$tableToString .= '<strong>'.get_lang('PeriodToDisplay').'</strong>: '.
+			sprintf(get_lang('FromDateXToDateY'), $startDate, $endDate);
+		//}
+
+		$tableToString .= $table->toHtml();
 		$params = array(
 			'filename' => get_lang('Attendance') . '_' . api_get_utc_datetime(),
 			'pdf_title' => get_lang('Attendance'),
 			'course_code' => api_get_course_id(),
+			'show_real_course_teachers' => true
 		);
 		$pdf = new PDF('A4', null, $params);
 		$pdf->html_to_pdf_with_template($tableToString);

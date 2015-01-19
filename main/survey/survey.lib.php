@@ -2920,7 +2920,7 @@ class SurveyUtil
             echo '<div id="question_report_questionnumbers">'.get_lang('Question').' ';
             for ($i = 1; $i <= $survey_data['number_of_questions']; $i++) {
                 if ($offset != $i - 1) {
-                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.($i-1).'">'.$i.'</a>';
+                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;'.api_get_cidreq().'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.($i-1).'">'.$i.'</a>';
                 } else {
                     echo $i;
                 }
@@ -2943,14 +2943,14 @@ class SurveyUtil
 
             // Navigate through the questions (next and previous)
             if ($currentQuestion != 0 ) {
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.Security::remove_XSS($offset-1).'">'.
+                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;'.api_get_cidreq().'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset-1).'">'.
                     Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
             } else {
                 echo Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').' ';
             }
             echo ' | ';
             if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle')).'</a>';
+                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;'.api_get_cidreq().'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle')).'</a>';
             } else {
                 echo get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle'));
             }
@@ -5301,6 +5301,7 @@ class SurveyUtil
             <script type="text/javascript">
             var svg = dimple.newSvg("#chartContainer", "100%", 400);
             var data = [';
+        $serie = array();
         $order = array();
         foreach ($chartData as $chartDataElement) {
             $htmlChart .= '{"';
@@ -5310,7 +5311,7 @@ class SurveyUtil
             } else if (!is_array($chartDataElement['serie'])) {
                 $htmlChart .= get_lang("Option") . '":"' . $chartDataElement['serie'] . '", "' .
                     get_lang("Score") . '":"' . $chartDataElement['option'] . '", "';
-
+                array_push($serie, $chartDataElement['serie']);
             } else {
                 $htmlChart .= get_lang("Serie") . '":"' . $chartDataElement['serie'][0] . '", "' .
                     get_lang("Option") . '":"' . $chartDataElement['serie'][1] . '", "' .
@@ -5324,13 +5325,16 @@ class SurveyUtil
             var myChart = new dimple.chart(svg, data);
             myChart.addMeasureAxis("y", "'.get_lang("Votes").'");';
         if (!$hasSerie) {
-            $htmlChart .= 'myChart . addCategoryAxis("x", "'.get_lang("Option").'");';
+            $htmlChart .= 'var xAxisCategory = myChart.addCategoryAxis("x", "'.get_lang("Option").'");';
+            $htmlChart .= 'xAxisCategory.addOrderRule('.json_encode($order).');';
             $htmlChart .= 'myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
 
         } else if (!is_array($chartDataElement['serie'])) {
-            $htmlChart .= 'myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);';
+            $serie = array_values(array_unique($serie));
+            $htmlChart .= 'var xAxisCategory = myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);';
+            $htmlChart .= 'xAxisCategory.addOrderRule('.json_encode($serie).');';
+            $htmlChart .= 'xAxisCategory.addGroupOrderRule("'.get_lang("Score").'");';
             $htmlChart .= 'myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
-
         } else {
             $htmlChart .= 'myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);';
             $htmlChart .= 'myChart.addSeries("'.get_lang("Serie").'", dimple.plot.bar);';

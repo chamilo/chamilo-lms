@@ -549,7 +549,7 @@ class AttendanceController
      * @param bool $showForm
      * @throws ViewException
      */
-    public function calendarLogins($showForm = false, $exportToPdf = true)
+    public function getAttendanceBaseInLogin($showForm = false, $exportToPdf = true)
     {
         $table = null;
         $formToDisplay = null;

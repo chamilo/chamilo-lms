@@ -272,12 +272,12 @@ class Attendance
 		$value_calification  = 0;
 		$weight_calification =	floatval($this->attendance_weight);
 		$sql = "INSERT INTO $tbl_attendance SET
-					c_id =  $course_id,
-					name ='".Database::escape_string($this->name)."',
-					description = '".Database::escape_string($this->description)."',
-					attendance_qualify_title = '$title_gradebook',
-					attendance_weight = '$weight_calification',
-					session_id = '$session_id'";
+				c_id =  $course_id,
+				name ='".Database::escape_string($this->name)."',
+				description = '".Database::escape_string($this->description)."',
+				attendance_qualify_title = '$title_gradebook',
+				attendance_weight = '$weight_calification',
+				session_id = '$session_id'";
 		Database::query($sql);
 		$affected_rows = Database::affected_rows();
 		$last_id = 0;
@@ -383,7 +383,8 @@ class Attendance
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
-				$sql = "UPDATE $tbl_attendance SET active = 1 WHERE c_id = $course_id AND id = '$id'";
+				$sql = "UPDATE $tbl_attendance SET active = 1
+						WHERE c_id = $course_id AND id = '$id'";
 				Database::query($sql);
 				$affected_rows = Database::affected_rows();
 				if (!empty($affected_rows)) {
@@ -393,7 +394,8 @@ class Attendance
 			}
 		} else  {
 			$attendance_id	= intval($attendance_id);
-			$sql = "UPDATE $tbl_attendance SET active = 1 WHERE c_id = $course_id AND id = '$attendance_id'";
+			$sql = "UPDATE $tbl_attendance SET active = 1
+					WHERE c_id = $course_id AND id = '$attendance_id'";
 			Database::query($sql);
 			$affected_rows = Database::affected_rows();
 			if (!empty($affected_rows)) {
@@ -419,7 +421,8 @@ class Attendance
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
-				$sql = "UPDATE $tbl_attendance SET active = 0 WHERE c_id = $course_id AND id = '$id'";
+				$sql = "UPDATE $tbl_attendance SET active = 0
+						WHERE c_id = $course_id AND id = '$id'";
 				Database::query($sql);
 				$affected_rows = Database::affected_rows();
 				if (!empty($affected_rows)) {
@@ -429,7 +432,8 @@ class Attendance
 			}
 		} else  {
 			$attendance_id	= intval($attendance_id);
-			$sql = "UPDATE $tbl_attendance SET active = 0 WHERE c_id = $course_id AND id = '$attendance_id'";
+			$sql = "UPDATE $tbl_attendance SET active = 0
+					WHERE c_id = $course_id AND id = '$attendance_id'";
 			Database::query($sql);
 			$affected_rows = Database::affected_rows();
 			if (!empty($affected_rows)) {
@@ -685,13 +689,18 @@ class Attendance
 				if (count($calendar_ids) > 0) {
 					$sql = "SELECT count(presence) as count_presences
 							FROM $tbl_attendance_sheet
-					        WHERE c_id = $course_id AND user_id = '$uid' AND attendance_calendar_id IN(".implode(',',$calendar_ids).") AND presence = 1";
+					        WHERE
+					        	c_id = $course_id AND
+					        	user_id = '$uid' AND
+					        	attendance_calendar_id IN(".implode(',',$calendar_ids).") AND
+					        	presence = 1";
 					$rs_count  = Database::query($sql);
 					$row_count = Database::fetch_array($rs_count);
 					$count_presences = $row_count['count_presences'];
 				}
 				// save results
-				$sql = "SELECT id FROM $tbl_attendance_result WHERE c_id = $course_id AND user_id='$uid' AND attendance_id='$attendance_id'";
+				$sql = "SELECT id FROM $tbl_attendance_result
+						WHERE c_id = $course_id AND user_id='$uid' AND attendance_id='$attendance_id'";
 				$rs_check_result = Database::query($sql);
 				if (Database::num_rows($rs_check_result) > 0) {
 					// update result
@@ -702,10 +711,10 @@ class Attendance
 				} else {
 					// insert new result
 					$sql = "INSERT INTO $tbl_attendance_result SET
-								c_id = $course_id ,
-								user_id			= '$uid',
-								attendance_id 	= '$attendance_id',
-								score			= '$count_presences'";
+							c_id = $course_id ,
+							user_id			= '$uid',
+							attendance_id 	= '$attendance_id',
+							score			= '$count_presences'";
 					Database::query($sql);
 				}
 			}
@@ -746,8 +755,8 @@ class Attendance
 		}
 
 		// save data
-		$ins = "INSERT INTO $tbl_attendance_sheet_log(c_id, attendance_id, lastedit_date, lastedit_type, lastedit_user_id, calendar_date_value)
-                VALUES($course_id, $attendance_id, '$lastedit_date', '$lastedit_type', $lastedit_user_id, '$calendar_date_value')";
+		$ins = "INSERT INTO $tbl_attendance_sheet_log (c_id, attendance_id, lastedit_date, lastedit_type, lastedit_user_id, calendar_date_value)
+                VALUES ($course_id, $attendance_id, '$lastedit_date', '$lastedit_type', $lastedit_user_id, '$calendar_date_value')";
 
 		Database::query($ins);
 
@@ -839,8 +848,12 @@ class Attendance
 			foreach ($attendances_by_course as $attendance) {
 				// get total faults and total weight
 				$total_done_attendance 	= $attendance['attendance_qualify_max'];
-				$sql = "SELECT score FROM $tbl_attendance_result
-                        WHERE c_id = $course_id AND user_id = $user_id AND attendance_id = ".$attendance['id'];
+				$sql = "SELECT score
+						FROM $tbl_attendance_result
+                        WHERE
+                        	c_id = $course_id AND
+                        	user_id = $user_id AND
+                        	attendance_id = ".$attendance['id'];
 				$rs = Database::query($sql);
 				$score = 0;
 				if (Database::num_rows($rs) > 0) {
@@ -884,7 +897,10 @@ class Attendance
 			// Get total faults and total weight
 			$total_done_attendance 	= $attendance['attendance_qualify_max'];
 			$sql = "SELECT score FROM $tbl_attendance_result
-					WHERE c_id = {$course_info['real_id']} AND user_id=$user_id AND attendance_id=".$attendance['id'];
+					WHERE
+						c_id = {$course_info['real_id']} AND
+						user_id = $user_id AND
+						attendance_id=".$attendance['id'];
 			$rs = Database::query($sql);
 			$score = 0;
 			if (Database::num_rows($rs) > 0) {
@@ -957,7 +973,7 @@ class Attendance
 							att.c_id = $course_id AND
 							cal.c_id =  $course_id AND
 							att.user_id = '$user_id' AND
-							att.attendance_calendar_id IN(".implode(',',$calendar_ids).")
+							att.attendance_calendar_id IN (".implode(',',$calendar_ids).")
                         ORDER BY date_time";
 				$res = Database::query($sql);
 				if (Database::num_rows($res) > 0) {
@@ -1014,7 +1030,7 @@ class Attendance
 					attendance_id = '$attendance_id' AND
 					done_attendance = 0
 				ORDER BY date_time
-				limit 1";
+				LIMIT 1";
 		$rs = Database::query($sql);
 		$next_calendar_datetime = 0;
 		if (Database::num_rows($rs) > 0) {
@@ -1331,10 +1347,14 @@ class Attendance
 		$course_id = api_get_course_int_id();
 		// check if datetime already exists inside the table
 		$sql = "SELECT id FROM $tbl_attendance_calendar
-		        WHERE c_id = $course_id AND date_time = '".Database::escape_string($this->date_time)."' AND attendance_id = '$attendance_id'";
+		        WHERE
+		        	c_id = $course_id AND
+		        	date_time = '".Database::escape_string($this->date_time)."' AND
+		        	attendance_id = '$attendance_id'";
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) == 0) {
-			$sql = "UPDATE $tbl_attendance_calendar SET date_time='".Database::escape_string($this->date_time)."'
+			$sql = "UPDATE $tbl_attendance_calendar
+					SET date_time='".Database::escape_string($this->date_time)."'
 					WHERE c_id = $course_id AND id = '".intval($calendar_id)."'";
 			Database::query($sql);
 			$affected_rows = Database::affected_rows();
@@ -1361,7 +1381,7 @@ class Attendance
 	{
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$tbl_attendance_sheet 	 = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
-		$session_id = api_get_session_id();
+
 		$attendance_id = intval($attendance_id);
 		// get all registered users inside current course
 		$users = $this->get_users_rel_course();
@@ -1488,7 +1508,7 @@ class Attendance
 	 * @param string $startDate in UTC time
 	 * @param string $endDate in UTC time
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function getAttendanceLogin($startDate, $endDate)
 	{
@@ -1633,7 +1653,7 @@ class Attendance
 		$table = new HTML_Table(array('class' => 'data_table'));
 
 		$table->setHeaderContents(0, 0, get_lang('User'));
-		$table->setHeaderContents(0, 1, get_lang('Dates'));
+		$table->setHeaderContents(0, 1, get_lang('Date'));
 
 		$row = 1;
 		foreach ($users as $user) {
@@ -1646,8 +1666,6 @@ class Attendance
 		}
 
 		$column = 1;
-		$results[15]['2010-04-11'] = true;
-		$results[15]['2010-04-13'] = true;
 
 		foreach ($users as $user) {
 			if (isset($results[$user['user_id']]) &&

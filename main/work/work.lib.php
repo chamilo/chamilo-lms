@@ -5066,7 +5066,7 @@ function exportAllStudentWorkFromPublication(
                 $headers = array(
                     get_lang('Name'),
                     get_lang('HandOutDateLimit'),
-                    get_lang('SendDate'),
+                    get_lang('SentDate'),
                     get_lang('Filename'),
                     get_lang('Score'),
                     get_lang('Feedback')

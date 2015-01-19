@@ -476,9 +476,6 @@ if (empty($_GET['action']) ||
         // - instead of a +, the category is no longer clickable and all the links of this category are displayed
         $myrow['description'] = text_filter($myrow['description']);
 
-        // Link categories are always visible.
-        //$myrow['visibility'] = 1;
-
         $strVisibility = '';
         if ($myrow['visibility'] == '1') {
             $strVisibility =  '<a href="link.php?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;action=invisible&amp;id=' . $myrow['id'] . '&amp;scope=' . TOOL_LINK_CATEGORY . '" title="' . get_lang('Hide') . '">' .
@@ -489,7 +486,6 @@ if (empty($_GET['action']) ||
         }
 
         if ($myrow['visibility'] == '1') {
-
             if (isset($urlview[$i]) && $urlview[$i] == '1') {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
@@ -502,7 +498,10 @@ if (empty($_GET['action']) ||
                 echo '</th>';
                 if (api_is_allowed_to_edit(null, true)) {
                     if ($session_id == $myrow['session_id']) {
-                        echo '<th>'; echo $strVisibility; showcategoryadmintools($myrow['id']); echo '</th>';
+                        echo '<th>';
+                        echo $strVisibility;
+                        showcategoryadmintools($myrow['id']);
+                        echo '</th>';
                     } else {
                         echo '<th>'.get_lang('EditionNotAvailableFromSession');
                     }
@@ -515,20 +514,27 @@ if (empty($_GET['action']) ||
                 echo '<tr>';
                 echo '<table class="data_table">';
                 echo '<tr>';
-                echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;"><a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview=';
+                echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;">
+                    <a href="'.api_get_self().'?'.api_get_cidreq().'&amp;urlview=';
                 echo is_array($view) ? implode('', $view) : $view;
-                echo '"><img src="../img/icons/22/view_tree.png" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).$session_img;
+                echo '"><img src="../img/icons/22/view_tree.png" />&nbsp;&nbsp;'.
+                    Security::remove_XSS($myrow['category_title']).$session_img;
                 echo'</a><br />&nbsp;&nbsp;&nbsp;';
                 echo $myrow['description'];
+
                 if (api_is_allowed_to_edit(null, true)) {
-                    echo '<th style="text-align:center;">'; echo $strVisibility; showcategoryadmintools($myrow['id']); echo '</th>';
+                    if ($session_id == $myrow['session_id']) {
+                        echo '<th style="text-align:center;">';
+                        echo $strVisibility;
+                        showcategoryadmintools($myrow['id']);
+                        echo '</th>';
+                    }
                 }
                 echo '</th>';
                 echo '</tr>';
                 echo '</table>';
                 echo '</tr>';
             }
-
         } else {
             // NO VISIBLE
             if (api_is_allowed_to_edit(null, true)) {
@@ -562,9 +568,16 @@ if (empty($_GET['action']) ||
                     echo '"><img src="../img/icons/22/view_tree_na.png" />&nbsp;&nbsp;'.Security::remove_XSS($myrow['category_title']).$session_img;
                     echo'</a><br />&nbsp;&nbsp;&nbsp;';
                     echo $myrow['description'];
+
                     if (api_is_allowed_to_edit(null, true)) {
-                        echo '<th style="text-align:center;">'; echo $strVisibility; showcategoryadmintools($myrow['id']); echo '</th>';
+                        if ($session_id == $myrow['session_id']) {
+                            echo '<th style="text-align:center;">';
+                            echo $strVisibility;
+                            showcategoryadmintools($myrow['id']);
+                            echo '</th>';
+                        }
                     }
+
                     echo '</th>';
                     echo '</tr>';
                     echo '</table>';

@@ -857,8 +857,7 @@ function getLinkCategories($courseId, $sessionId)
                 itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
                 (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
                 $sessionCondition AND
-                linkcat.c_id = " . $courseId . " AND
-                itemproperties.c_id = " . $courseId . "
+                linkcat.c_id = " . $courseId . "
             ORDER BY linkcat.display_order DESC";
 
     $result = Database::query($sql);
@@ -876,7 +875,7 @@ function getLinkCategories($courseId, $sessionId)
         }
     }
 
-    $sql = "SELECT *, linkcat.id
+    $sql = "SELECT DISTINCT linkcat.*, visibility
             FROM $tblLinkCategory linkcat
             INNER JOIN $tblItemProperty itemproperties
             ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
@@ -884,10 +883,12 @@ function getLinkCategories($courseId, $sessionId)
                 itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
                 (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
                 $sessionCondition AND
-                linkcat.c_id = " . $courseId . " AND
-                itemproperties.c_id = " . $courseId . "
-            ORDER BY linkcat.display_order DESC";
+                linkcat.c_id = " . $courseId . "
+            GROUP BY c_id, id
+            ORDER BY linkcat.display_order DESC
+            ";
     $result = Database::query($sql);
+
     return Database::store_result($result, 'ASSOC');
 }
 

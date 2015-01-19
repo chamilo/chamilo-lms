@@ -1662,19 +1662,18 @@ class Attendance
 				0,
 				$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'
 			);
-			$row ++;
+			$row++;
 		}
 
-		$column = 1;
-
+		$row = 1;
 		foreach ($users as $user) {
 			if (isset($results[$user['user_id']]) &&
 				!empty($results[$user['user_id']])
 			) {
 				$dates = implode(', ', array_keys($results[$user['user_id']]));
-				$table->setCellContents(1, $column, $dates);
+				$table->setCellContents($row, 1, $dates);
 			}
-			$column++;
+			$row++;
 		}
 
 		$tableToString = $table->toHtml();

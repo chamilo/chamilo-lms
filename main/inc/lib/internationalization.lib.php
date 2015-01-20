@@ -2499,7 +2499,8 @@ function api_strcasecmp($string1, $string2, $language = null, $encoding = null) 
  * @link http://php.net/manual/en/function.strcmp.php
  * @link http://php.net/manual/en/collator.compare.php
  */
-function api_strcmp($string1, $string2, $language = null, $encoding = null) {
+function api_strcmp($string1, $string2, $language = null, $encoding = null)
+{
     if (INTL_INSTALLED) {
         $collator = _api_get_collator($language);
         if (is_object($collator)) {

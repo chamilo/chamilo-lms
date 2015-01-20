@@ -3776,8 +3776,8 @@ function api_get_languages_combo($name = 'language', $chozen=true) {
  * @param  boolean Hide form if only one language available (defaults to false = show the box anyway)
  * @return void Display the box directly
  */
-function api_display_language_form($hide_if_no_choice = false) {
-
+function api_display_language_form($hide_if_no_choice = false)
+{
     // Retrieve a complete list of all the languages.
     $language_list = api_get_languages();
     if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
@@ -3788,7 +3788,6 @@ function api_display_language_form($hide_if_no_choice = false) {
     if (isset($_SESSION['user_language_choice'])) {
         $user_selected_language = $_SESSION['user_language_choice'];
     }
-
     if (empty($user_selected_language)) {
         $user_selected_language = api_get_setting('platformLanguage');
     }

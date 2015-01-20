@@ -272,9 +272,10 @@ class FlatViewDataGenerator
 
         // sort users array
         if ($users_sorting & self :: FVDG_SORT_LASTNAME) {
-            usort($userTable, array ('FlatViewDataGenerator','sort_by_last_name'));
+            usort($userTable, array('FlatViewDataGenerator','sort_by_last_name'));
+
         } elseif ($users_sorting & self :: FVDG_SORT_FIRSTNAME) {
-            usort($userTable, array ('FlatViewDataGenerator','sort_by_first_name'));
+            usort($userTable, array('FlatViewDataGenerator','sort_by_first_name'));
         }
 
         if ($users_sorting & self :: FVDG_SORT_DESC) {
@@ -796,11 +797,21 @@ class FlatViewDataGenerator
         return $data;
     }
 
+    /**
+     * @param $item1
+     * @param $item2
+     * @return int
+     */
     public function sort_by_last_name($item1, $item2)
     {
         return api_strcmp($item1[2], $item2[2]);
     }
 
+    /**
+     * @param $item1
+     * @param $item2
+     * @return int
+     */
     public function sort_by_first_name($item1, $item2)
     {
         return api_strcmp($item1[3], $item2[3]);

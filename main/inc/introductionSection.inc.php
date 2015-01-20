@@ -19,7 +19,7 @@
  *
  * usage :
  *
- * $moduleId = XX // specifying the module Id
+ * $moduleId = 'XX'; // specifying the module tool (string value)
  * include(introductionSection.inc.php);
  *
  * This script is also used since Chamilo 1.9 to show course progress (from the
@@ -92,19 +92,27 @@ $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroT
 $course_id = api_get_course_int_id();
 
 if ($intro_editAllowed) {
-    $moduleId = intval($moduleId);
-
     /* Replace command */
     if ($intro_cmdUpdate) {
         if ($form->validate()) {
             $form_values = $form->exportValues();
             $intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
             if (!empty($intro_content)) {
-                $sql = "REPLACE $TBL_INTRODUCTION SET c_id = $course_id, id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".intval($session_id)."'";
+                $sql = "REPLACE $TBL_INTRODUCTION
+                        SET
+                            c_id = $course_id, id='".Database::escape_string($moduleId)."',
+                            intro_text='".Database::escape_string($intro_content)."',
+                            session_id='".intval($session_id)."'
+                        ";
                 Database::query($sql);
-                $introduction_section .= Display::return_message(get_lang('IntroductionTextUpdated'),'confirmation', false);
+                $introduction_section .= Display::return_message(
+                    get_lang('IntroductionTextUpdated'),
+                    'confirmation',
+                    false
+                );
             } else {
-                $intro_cmdDel = true;	// got to the delete command
+                // got to the delete command
+                $intro_cmdDel = true;
             }
         } else {
             $intro_cmdEdit = true;
@@ -113,7 +121,12 @@ if ($intro_editAllowed) {
 
     /* Delete Command */
     if ($intro_cmdDel) {
-        Database::query("DELETE FROM $TBL_INTRODUCTION WHERE c_id = $course_id AND id='".$moduleId."' AND session_id='".intval($session_id)."'");
+        $sql = "DELETE FROM $TBL_INTRODUCTION
+                WHERE
+                    c_id = $course_id AND
+                    id='".Database::escape_string($moduleId)."' AND
+                    session_id='".intval($session_id)."'";
+        Database::query($sql);
         $introduction_section .= Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation');
     }
 }

@@ -118,8 +118,7 @@ if (!empty($_POST['submitAuth'])) {
         }
     }
     // End login -- if ($_POST['submitAuth'])
-}
-else {
+} else {
     // Only if login form was not sent because if the form is sent the user was already on the page.
     event_open();
 }
@@ -142,8 +141,7 @@ if (!api_is_anonymous()) {
 
     if (api_is_platform_admin()) {
         $controller->tpl->assign('course_block', $controller->return_course_block());
-    }
-    else {
+    } else {
         $controller->tpl->assign('teacher_block', $controller->return_teacher_link());
     }
 }
@@ -163,9 +161,7 @@ if (!isset($_REQUEST['include'])) {
 $controller->tpl->assign('hot_courses', $hot_courses);
 $controller->tpl->assign('announcements_block', $announcements_block);
 $controller->tpl->assign('home_page_block', $controller->return_home_page());
-
 $controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
-
 $controller->tpl->assign('notice_block', $controller->return_notice());
 $controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
 $controller->tpl->assign('help_block', $controller->return_help());
@@ -183,7 +179,7 @@ if (isset($_GET['firstpage'])) {
     api_set_firstpage_parameter($_GET['firstpage']);
     // if we are already logged, go directly to course
     if (api_user_is_login()) {
-        echo "<script type='text/javascript'>self.location.href='index.php?firstpage=".$_GET['firstpage']."'</script>";
+        echo "<script type='text/javascript'>self.location.href='index.php?firstpage=".Security::remove_XSS($_GET['firstpage'])."'</script>";
     }
 } else {
     api_delete_firstpage_parameter();

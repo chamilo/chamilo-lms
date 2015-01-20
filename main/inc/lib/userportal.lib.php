@@ -213,11 +213,15 @@ class IndexManager
         if (!empty($html)) {
             $html = self::show_right_block(get_lang('Courses'), $html, 'teacher_block');
         }
+
         return $html;
     }
 
-    /* Includes a created page */
-    function return_home_page()
+    /**
+     * Includes a created page
+     * @return string
+     */
+    public function return_home_page()
     {
         $userId = api_get_user_id();
         global $_configuration;
@@ -229,7 +233,9 @@ class IndexManager
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             // Hiding home top when user not connected.
-            if (isset($_configuration['hide_home_top_when_connected']) && $_configuration['hide_home_top_when_connected'] && !empty($userId)) {
+            if (isset($_configuration['hide_home_top_when_connected']) &&
+                $_configuration['hide_home_top_when_connected'] && !empty($userId)
+            ) {
                 return $html;
             }
 
@@ -240,7 +246,6 @@ class IndexManager
             } else {
                 $user_selected_language = api_get_setting('platformLanguage');
             }
-
 			if (!file_exists($this->home.'home_news_'.$user_selected_language.'.html')) {
 				if (file_exists($this->home.'home_top.html')) {
 					$home_top_temp = file($this->home.'home_top.html');

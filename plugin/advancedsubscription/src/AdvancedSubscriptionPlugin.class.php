@@ -72,40 +72,17 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     private function installDatabase()
     {
         $pAdvSubQueueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
-        $pAdvSubMailTable = Database::get_main_table(TABLE_ADV_SUB_MAIL);
-        $pAdvSubMailTypeTable = Database::get_main_table(TABLE_ADV_SUB_MAIL_TYPE);
-        $pAdvSubMailStatusTable = Database::get_main_table(TABLE_ADV_SUB_MAIL_STATUS);
 
         $sql = "CREATE TABLE IF NOT EXISTS $pAdvSubQueueTable (" .
             "id int UNSIGNED NOT NULL AUTO_INCREMENT, " .
             "session_id int UNSIGNED NOT NULL, " .
             "user_id int UNSIGNED NOT NULL, " .
             "status int UNSIGNED NOT NULL, " .
-            "last_message_id UNSIGNED NOT NULL, " .
+            "last_message_id int UNSIGNED NOT NULL, " .
             "created_at datetime NOT NULL, " .
             "updated_at datetime NULL, " .
-            "PRIMARY KEY PK_tour_log (id)); ";
-        Database::query($sql);
-
-        $sql = "CREATE TABLE $pAdvSubMailTypeTable ( " .
-            "id int UNSIGNED NOT NULL AUTO_INCREMENT, " .
-            "description char(20), " .
-            "PRIMARY KEY PK_advsub_mail_type (id) " .
-            "); ";
-
-        Database::query($sql);
-        $sql = "CREATE TABLE $pAdvSubMailTable ( " .
-            "id int UNSIGNED NOT NULL AUTO_INCREMENT, " .
-            "message_id, mail_type_id, mail_status_id, " .
-            "PRIMARY KEY PK_advsub_mail (id) " .
-            "); ";
-        Database::query($sql);
-
-        $sql = "CREATE TABLE $pAdvSubMailStatusTable ( " .
-            "id int UNSIGNED NOT NULL AUTO_INCREMENT, " .
-            "description char(20), " .
-            "PRIMARY KEY PK_advsub_mail_status (id) " .
-            "); ";
+            "PRIMARY KEY PK_advsub_queue (id), " .
+            "UNIQUE KEY UK_advsub_queue (user_id, session_id)); ";
         Database::query($sql);
     }
 
@@ -117,17 +94,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         /* Drop plugin tables */
         $pAdvSubQueueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
-        $pAdvSubMailTable = Database::get_main_table(TABLE_ADV_SUB_MAIL);
-        $pAdvSubMailTypeTable = Database::get_main_table(TABLE_ADV_SUB_MAIL_TYPE);
-        $pAdvSubMailStatusTable = Database::get_main_table(TABLE_ADV_SUB_MAIL_STATUS);
 
         $sql = "DROP TABLE IF EXISTS $pAdvSubQueueTable; ";
-        Database::query($sql);
-        $sql = "DROP TABLE IF EXISTS $pAdvSubMailTable; ";
-        Database::query($sql);
-        $sql = "DROP TABLE IF EXISTS $pAdvSubMailTypeTable; ";
-        Database::query($sql);
-        $sql = "DROP TABLE IF EXISTS $pAdvSubMailStatusTable; ";
         Database::query($sql);
 
         /* Delete settings */
@@ -165,15 +133,18 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $uitMax *= $advSubPlugin->get('yearly_cost_limit');
                         // @TODO: Get UIT completed by user this year by WS
                         $uitUser = 0;
-                        if ($uitMax > $uitUser) {
+                        $extra = new ExtraFieldValue('session');
+                        $uitUser += $extra->get_values_by_handler_and_field_variable($params['session_id'], 'costo');
+                        if ($uitMax >= $uitUser) {
                             $expendedTimeMax = $advSubPlugin->get('yearly_hours_limit');
                             // @TODO: Get Expended time from user data
                             $expendedTime = 0;
-                            if ($expendedTimeMax > $expendedTime) {
+                            $expendedTime += $extra->get_values_by_handler_and_field_variable($params['session_id'], 'duracion');
+                            if ($expendedTimeMax >= $expendedTime) {
                                 $expendedNumMax = $advSubPlugin->get('courses_count_limit');
                                 // @TODO: Get Expended num from user
                                 $expendedNum = 0;
-                                if ($expendedNumMax > $expendedNum) {
+                                if ($expendedNumMax >= $expendedNum) {
                                     $isAble = true;
                                 } else {
                                     throw new \Exception(get_lang('AdvancedSubscriptionCourseXLimitReached'));
@@ -689,8 +660,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $data['place'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'lugar');
             $data['allow_visitors'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'permitir_visitantes');
             $data['class_hours'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'horas_lectivas');
+            // Get brochure URL
             $data['brochure'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'brochure');
+            $data['brochure'] = api_get_path(WEB_CODE_PATH) . $data['brochure']['field_value'];
+            // Get banner URL
             $data['banner'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'banner');
+            $data['banner'] = api_get_path(WEB_CODE_PATH) . $data['banner']['field_value'];
             $data['description'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'descripcion');
             $data['class_hours'] = $extra->get_values_by_handler_and_field_variable($sessionId, 'horas_lectivas');
 
@@ -739,5 +714,26 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         }
 
         return $message;
+    }
+
+    public function getSessionUrl($sessionId)
+    {
+        $url = api_get_path(WEB_CODE_PATH) . 'session/?session_id=' . $sessionId;
+        return $url;
+    }
+
+    public function getQueueUrl($params)
+    {
+        $data = array(
+            'a' => 'second',
+            'u' => $params['user_id'],
+            's' => $params['session_id'],
+            'is_connected' => $params['is_connected'],
+            'profile_completed' => $params['profile_completed'],
+            'accept' => $params['accept'],
+        );
+        $data = $this->encrypt($data);
+        $url = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?data=' . $data;
+        return $url;
     }
 }

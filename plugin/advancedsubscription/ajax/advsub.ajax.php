@@ -11,7 +11,7 @@ require_once '../config.php';
 $plugin = AdvancedSubscriptionPlugin::create();
 $data = isset($_REQUEST['data']) ?
     strlen($_REQUEST['data']) > 16 ?
-        $plugin->decrypt(Security::remove_XSS($_REQUEST['data'])) :
+        $plugin->decrypt($_REQUEST['data']) :
         null :
     null;
 // Get data

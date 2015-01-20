@@ -168,7 +168,7 @@ class HookAdvancedSubscription extends HookObserver implements
             );
 
             $server->register('HookAdvancedSubscription..WSSessionGetDetailsByUser', // method name
-                array('input' => 'xsd:string'), // input parameters
+                array('advsubSessionDetailInput' => 'tns:advsubSessionDetailInput'), // input parameters
                 array('return' => 'tns:advsubSessionDetail'), // output parameters
                 'urn:WSRegistration', // namespace
                 'urn:WSRegistration#WSSessionGetDetailsByUser', // soapaction
@@ -290,7 +290,6 @@ class HookAdvancedSubscription extends HookObserver implements
             $vacancy = $advsubPlugin->getVacancy($sessionId);
             $data = $advsubPlugin->getSessionDetails($sessionId);
             if (!empty($data) && is_array($data)) {
-
                 $data['status'] = $status;
                 // 5 Cases:
                 if ($isOpen) {
@@ -307,6 +306,7 @@ class HookAdvancedSubscription extends HookObserver implements
                         // Check conditions
                         if ($status === ADV_SUB_QUEUE_STATUS_NO_QUEUE) {
                             // No in Queue, require queue subscription url action
+                            $data['action_url'] = $advsubPlugin->getQueueUrl($params);
                         } elseif ($status === ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED) {
                             // send url action
                             $data['action_url'] = $advsubPlugin->getSessionUrl($sessionId);
@@ -315,9 +315,10 @@ class HookAdvancedSubscription extends HookObserver implements
                         }
                     } else {
                         if ($status === ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED) {
-
+                            $data['action_url'] = $advsubPlugin->getSessionUrl($sessionId);
                         } else {
                             // in Queue or not, cannot be subscribed to session
+                            $data['action_url'] = $advsubPlugin->getQueueUrl($params);
                         }
 
                     }

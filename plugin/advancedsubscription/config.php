@@ -7,9 +7,6 @@
  */
 
 define('TABLE_ADV_SUB_QUEUE', 'plugin_advsub_queue');
-define('TABLE_ADV_SUB_MAIL', 'plugin_advsub_mail');
-define('TABLE_ADV_SUB_MAIL_TYPE', 'plugin_advsub_mail_type');
-define('TABLE_ADV_SUB_MAIL_STATUS', 'plugin_advsub_mail_status');
 
 define('ADV_SUB_ACTION_STUDENT_REQUEST', 0);
 define('ADV_SUB_ACTION_SUPERIOR_APPROVE', 1);
@@ -24,14 +21,6 @@ define('ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED', 1);
 define('ADV_SUB_QUEUE_STATUS_BOSS_APPROVED', 2);
 define('ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED', 3);
 define('ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED', 10);
-
-define('ADV_SUB_MAIL_TYPE_A', 1);
-define('ADV_SUB_MAIL_TYPE_B', 2);
-define('ADV_SUB_MAIL_TYPE_C', 3);
-
-define('ADV_SUB_MAIL_STATUS_MAIL_SENT', 1);
-define('ADV_SUB_MAIL_STATUS_MAIL_ANSWERED', 2);
-define('ADV_SUB_MAIL_STATUS_MAIL_EXPIRED', 3);
 
 require_once __DIR__ . '/../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';

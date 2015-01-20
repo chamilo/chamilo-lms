@@ -8,17 +8,21 @@ use \ChamiloSession as Session;
  */
 class IndexManager
 {
-    //An instance of the template engine
-    public $tpl     = false;
-    public $name     = '';
-    public $home            = '';
-    public $default_home     = 'home/';
+    // An instance of the template engine
+    public $tpl = false;
+    public $name = '';
+    public $home = '';
+    public $default_home = 'home/';
 
+    /**
+     * Construct
+     * @param string $title
+     */
     public function __construct($title)
     {
         $this->tpl = new Template($title);
-        $this->home     = api_get_home_path();
-        $this->user_id  = api_get_user_id();
+        $this->home = api_get_home_path();
+        $this->user_id = api_get_user_id();
         $this->load_directories_preview = false;
 
         if (api_get_setting('show_documents_preview') == 'true') {
@@ -39,9 +43,7 @@ class IndexManager
 
             // Only display if the user isn't logged in.
             $this->tpl->assign('login_language_form', api_display_language_form(true));
-
             if ($setLoginForm) {
-
                 $this->tpl->assign('login_form',  self::display_login_form());
 
                 if ($loginFailed) {
@@ -246,20 +248,23 @@ class IndexManager
             } else {
                 $user_selected_language = api_get_setting('platformLanguage');
             }
-			if (!file_exists($this->home.'home_news_'.$user_selected_language.'.html')) {
-				if (file_exists($this->home.'home_top.html')) {
-					$home_top_temp = file($this->home.'home_top.html');
-				} else {
-					$home_top_temp = file($this->default_home.'home_top.html');
-				}
-				$home_top_temp = implode('', $home_top_temp);
-			} else {
-				if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
-					$home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
-				} else {
-					$home_top_temp = file_get_contents($this->home.'home_top.html');
-				}
-			}
+
+            // Try language specific home
+            if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
+                $home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
+            }
+
+            // Try default language home
+            if (empty($home_top_temp)) {
+                if (file_exists($this->home.'home_top.html')) {
+                    $home_top_temp = file_get_contents($this->home.'home_top.html');
+                } else {
+                    if (file_exists($this->default_home.'home_top.html')) {
+                        $home_top_temp = file_get_contents($this->default_home . 'home_top.html');
+                    }
+                }
+            }
+
 			if (trim($home_top_temp) == '' && api_is_platform_admin()) {
 				$home_top_temp = '<div class="welcome-mascot">' . get_lang('PortalHomepageDefaultIntroduction') . '</div>';
 			} else {
@@ -268,6 +273,7 @@ class IndexManager
 			$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
 			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 		}
+
 		return $html;
 	}
 

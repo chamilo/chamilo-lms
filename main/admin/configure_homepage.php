@@ -143,6 +143,8 @@ if (!empty($_SESSION['user_language_choice'])) {
 	$lang = api_get_setting('platformLanguage');
 }
 
+$languageGet = isset($_GET['language']) ? Security::remove_XSS($_GET['language']) : $lang;
+
 // Ensuring availability of main files in the corresponding language
 
 if (api_is_multiple_url_enabled()) {
@@ -195,6 +197,7 @@ foreach ($homef as $my_file) {
 		}
 	}
 }
+
 if (api_is_multiple_url_enabled()) {
 	$homep = $homep_new;
 }
@@ -233,22 +236,20 @@ if (!empty($action)) {
 				}
 
 				// Write
-				if (file_exists($homep.$topf.'_'.$lang.$ext)) {
+				if (is_writable($homep)) {
+					// Default
 					if (is_writable($homep.$topf.'_'.$lang.$ext)) {
 						$fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
 						fputs($fp, $home_top);
 						fclose($fp);
-var_dump($_languages['name']);exit;
+
+						// Language
 						foreach ($_languages['name'] as $key => $value) {
 							$lang_name = $_languages['folder'][$key];
 							if (isset($_POST[$lang_name])) {
-								if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
-									if (is_writable($homep.$topf.'_'.$lang_name.$ext)) {
-										$fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
-										fputs($fp, $home_top);
-										fclose($fp);
-									}
-								}
+								$fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
+								fputs($fp, $home_top);
+								fclose($fp);
 							}
 						}
 					} else {
@@ -275,7 +276,13 @@ var_dump($_languages['name']);exit;
 				if (EventsMail::check_if_using_class('portal_homepage_edited')) {
 					EventsDispatcher::events('portal_homepage_edited',array('about_user' => api_get_user_id()));
 				}
-				event_system(LOG_HOMEPAGE_CHANGED, 'edit_top', cut(strip_tags($home_top), 254), api_get_utc_datetime(), api_get_user_id());
+				event_system(
+					LOG_HOMEPAGE_CHANGED,
+					'edit_top',
+					cut(strip_tags($home_top), 254),
+					api_get_utc_datetime(),
+					api_get_user_id()
+				);
 				break;
 			case 'edit_notice':
 				// Filter
@@ -549,7 +556,7 @@ var_dump($_languages['name']);exit;
 		} //end of switch($action)
 
 		if (empty($errorMsg)) {
-			header('Location: '.api_get_self());
+			header('Location: '.api_get_self().'?language='.$languageGet);
 			exit();
 		}
 	} else {
@@ -899,14 +906,13 @@ switch ($action) {
 			$form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), array('id' => 'all_langs'));
 			$form->addElement('html','<table id="table_langs" style="margin-left:159px;"><tr>');
 			$i = 0;
-
 			foreach ($_languages['name'] as $key => $value) {
 				$i++;
 				$lang_name = $_languages['folder'][$key];
 				$html_langs = '<td width="300">';
 				$html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
 				$html_langs .= '</td>';
-				if ($i%5 == 0) {
+				if ($i % 5 == 0) {
 					$html_langs .= '</tr><tr>';
 				}
 				$form->addElement('html', $html_langs);
@@ -979,15 +985,21 @@ switch ($action) {
 		}
 		$form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'),array('id' => 'all_langs'));
 		$form->addElement('html','<table id="table_langs" style="margin-left:5px;"><tr>');
-		$i = 0;
 
+		$currentLanguage = api_get_interface_language();
+		$i = 0;
 		foreach ($_languages['name'] as $key => $value) {
-			$i++;
 			$lang_name = $_languages['folder'][$key];
+			$i++;
+
+			$checked = null;
+			if ($languageGet == $lang_name)  {
+				$checked = "checked";
+			}
 			$html_langs = '<td width="300">';
-			$html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
+			$html_langs .= '<label><input type="checkbox" '.$checked.' id="lang" name="'.$lang_name.'" />&nbsp;'.$value.'<label/>';
 			$html_langs .= '</td>';
-			if ($i%5 == 0) {
+			if ($i % 5 == 0) {
 				$html_langs .= '</tr><tr>';
 			}
 			$form->addElement('html', $html_langs);
@@ -1004,10 +1016,10 @@ switch ($action) {
 			<tr>
 				<td width="70%" valign="top">
 					<div class="actions">
-						<a href="<?php echo api_get_self(); ?>?action=edit_top">
+						<a href="<?php echo api_get_self(); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
 							<?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?>
 						</a>
-						<a href="<?php echo api_get_self(); ?>?action=edit_top">
+						<a href="<?php echo api_get_self(); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
 							<?php echo get_lang('EditHomePage'); ?>
 						</a>
 					</div>
@@ -1135,7 +1147,6 @@ switch ($action) {
 				</td>
 				<td width="10%" valign="top"></td>
 				<td width="20%" rowspan="3" valign="top">
-
 					<div id="login_block" class="well sidebar-nav">
 						<?php echo api_display_language_form(); ?>
 						<form id="formLogin">

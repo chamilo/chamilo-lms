@@ -57,6 +57,7 @@ class FlatViewDataGenerator
 
     /**
      * Get total number of users (rows)
+     * @return int
      */
     public function get_total_users_count()
     {
@@ -65,6 +66,7 @@ class FlatViewDataGenerator
 
     /**
     * Get total number of evaluations/links (columns) (the 2 users columns not included)
+    * @return int
     */
     public function get_total_items_count()
     {
@@ -220,6 +222,7 @@ class FlatViewDataGenerator
 
     /**
      * Get array containing evaluation items
+     * @return array
      */
     public function get_evaluation_items($items_start = 0, $items_count = null)
     {

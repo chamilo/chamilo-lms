@@ -5019,6 +5019,8 @@ function exportAllStudentWorkFromPublication(
         return false;
     }
 
+    $assignment = get_work_assignment_by_id($workId);
+
     $courseCode = $courseInfo['code'];
     $header = get_lang('Course').': '.$courseInfo['title'];
     $teachers = CourseManager::get_teacher_list_from_course_code_to_string(
@@ -5042,8 +5044,11 @@ function exportAllStudentWorkFromPublication(
     $header .= '<br />'.get_lang('StudentPublication').': '.$workData['title'].'<br />';
 
     $content = null;
-    if (!empty($workData['expires_on'])) {
-        $content .= '<br /><strong>' . get_lang('ExpiryDate') . '</strong>: ' . api_get_local_time($workData['expires_on']);
+    $expiresOn = null;
+
+    if (!empty($assignment) && isset($assignment['expires_on'])) {
+        $content .= '<br /><strong>' . get_lang('ExpiryDate') . '</strong>: ' . api_get_local_time($assignment['expires_on']);
+        $expiresOn = api_get_local_time($assignment['expires_on']);
     }
 
     if (!empty($workData['description'])) {
@@ -5057,32 +5062,63 @@ function exportAllStudentWorkFromPublication(
             if (!empty($workList)) {
                 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
+                $table = new HTML_Table(array('class' => 'data_table'));
+                $headers = array(
+                    get_lang('Name'),
+                    get_lang('User'),
+                    get_lang('HandOutDateLimit'),
+                    get_lang('SentDate'),
+                    get_lang('Filename'),
+                    get_lang('Score'),
+                    get_lang('Feedback')
+                );
+
+                $column = 0;
+                foreach($headers as $header) {
+                    $table->setHeaderContents(0, $column, $header);
+                    $column++;
+                }
+
+                $row = 1;
+
                 //$pdf->set_custom_header($header);
                 foreach ($workList as $work) {
                     $content .= '<hr />';
                     // getWorkComments need c_id
                     $work['c_id'] = $courseInfo['real_id'];
 
-                    $content .= '<h3>'.strip_tags($work['title']).'</h3>';
-                    $content .= get_lang('Date').': '.api_get_local_time($work['sent_date_from_db']).'<br />';
+                    //$content .= get_lang('Date').': '.api_get_local_time($work['sent_date_from_db']).'<br />';
+                    $score = null;
                     if (!empty($work['qualification_only'])) {
-                        $content .= get_lang('Score').': '.$work['qualification_only'] . '<br />';
+                        $score = $work['qualification_only'];
                     }
-                    $content .= get_lang('Description').': '.$work['description'].'<br />';
+                    //$content .= get_lang('Description').': '.$work['description'].'<br />';
                     $comments = getWorkComments($work);
 
+                    $feedback = null;
                     if (!empty($comments)) {
                         $content .= '<h4>'.get_lang('Feedback').': </h4>';
                         foreach ($comments as $comment) {
-                            $content .= get_lang('User').': '.api_get_person_name(
+                            $feedback .= get_lang('User').': '.api_get_person_name(
                                 $comment['firstname'],
                                 $comment['lastname']
                             ).'<br />';
-                            $content .= $comment['comment'];
-                            $content .= '<hr />';
+                            $feedback .= $comment['comment'].'<br />';
                         }
                     }
+
+                    $table->setCellContents($row, 0, strip_tags($workData['title']));
+                    $table->setCellContents($row, 1, api_get_person_name(strip_tags($work['firstname']), strip_tags($work['lastname'])));
+                    $table->setCellContents($row, 2, $expiresOn);
+                    $table->setCellContents($row, 3, api_get_local_time($work['sent_date_from_db']));
+                    $table->setCellContents($row, 4, strip_tags($work['title']));
+                    $table->setCellContents($row, 5, $score);
+                    $table->setCellContents($row, 6, $feedback);
+
+                    $row++;
                 }
+
+                $content = $table->toHtml();
 
                 if (!empty($content)) {
                     $params = array(

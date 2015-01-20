@@ -8499,7 +8499,7 @@ class learnpath
         $return .= '</li>';
         $course_info = api_get_course_info();
 
-        $linkCategories = getLinkCategoriesResult($course_id, $session_id);
+        $linkCategories = getLinkCategories($course_id, $session_id);
         $categoryIdList = array();
         if (!empty($linkCategories)) {
             foreach ($linkCategories as $categoryInfo) {

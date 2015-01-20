@@ -19,24 +19,24 @@ class DashboardManager
 	 * contructor
 	 */
 	public function __construct()
-    {
-    }
+	{
+	}
 
-    /**
+	/**
 	 * This function allows easy activating and inactivating of dashboard plugins
 	 * @return void
-	*/
+	 */
 	public static function handle_dashboard_plugins()
-    {
-        $token = Security::get_existing_token();
-        $tokenCondition = '&amp;sec_token='.$token;
+	{
+		$token = Security::get_existing_token();
+		$tokenCondition = '&amp;sec_token='.$token;
 
 		/* We scan the plugin directory. Each folder is a potential plugin. */
 		$dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
 		$possibleplugins = self::get_posible_dashboard_plugins_path();
 
 		$table_cols = array('name', 'version', 'description');
-        echo Display::page_subheader(get_lang('DashboardPlugins'));
+		echo Display::page_subheader(get_lang('DashboardPlugins'));
 		echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).$tokenCondition.'">';
 		echo '<table class="data_table">';
 		echo '<tr>';
@@ -51,28 +51,30 @@ class DashboardManager
 		// We display all the possible enabled or disabled plugins
 		foreach ($possibleplugins as $testplugin) {
 			$plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
-			$plugin_info = array();
 			if (file_exists($plugin_info_file) && is_readable($plugin_info_file)) {
 				$plugin_info = parse_info_file($plugin_info_file);
 
-    			// change index to lower case
-    			$plugin_info = array_change_key_case($plugin_info);
+				// change index to lower case
+				$plugin_info = array_change_key_case($plugin_info);
 
-    			echo '<tr>';
-    				self::display_dashboard_plugin_checkboxes($testplugin);
-    				for ($i = 0 ; $i < count($table_cols); $i++) {
-    					if (isset($plugin_info[strtolower($table_cols[$i])])) {
-    			    		echo '<td>';
-    			    			echo $plugin_info[$table_cols[$i]];
-    			    		echo '</td>';
-    			    	} else {
-    			    		echo '<td></td>';
-    			    	}
-    				}
-    			echo '</tr>';
-            } else {
-                echo Display::tag('tr',  Display::tag('td', get_lang('CheckFilePermissions').' '.Security::remove_XSS($plugin_info_file) , array('colspan'=>'3')));
-            }
+				echo '<tr>';
+				self::display_dashboard_plugin_checkboxes($testplugin);
+				for ($i = 0 ; $i < count($table_cols); $i++) {
+					if (isset($plugin_info[strtolower($table_cols[$i])])) {
+						echo '<td>';
+						echo $plugin_info[$table_cols[$i]];
+						echo '</td>';
+					} else {
+						echo '<td></td>';
+					}
+				}
+				echo '</tr>';
+			} else {
+				echo Display::tag(
+					'tr',
+					Display::tag('td', get_lang('CheckFilePermissions').' '.Security::remove_XSS($plugin_info_file) , array('colspan'=>'3'))
+				);
+			}
 		}
 
 		// display all disabled block data
@@ -84,17 +86,17 @@ class DashboardManager
 					if (isset($disabled_block[strtolower($table_cols[$j])])) {
 						if ($j == 2) {
 							echo '<td>';
-			    				echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font><br />';
-			    				echo '<font color="red">'.get_lang('ThisPluginHasbeenDeletedFromDashboardPluginDirectory').'</font>';
-			    			echo '</td>';
+							echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font><br />';
+							echo '<font color="red">'.get_lang('ThisPluginHasbeenDeletedFromDashboardPluginDirectory').'</font>';
+							echo '</td>';
 						} else {
 							echo '<td>';
-			    				echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font>';
-			    			echo '</td>';
+							echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font>';
+							echo '</td>';
 						}
-			    	} else {
-			    		echo '<td>&nbsp;</td>';
-			    	}
+					} else {
+						echo '<td>&nbsp;</td>';
+					}
 				}
 				echo '</tr>';
 			}
@@ -113,9 +115,9 @@ class DashboardManager
 	public static function display_dashboard_plugin_checkboxes($plugin_path) {
 
 		$tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
-		$plugin_path = Database::escape_string($plugin_path);
 
-		$sql = "SELECT * FROM $tbl_block WHERE path = '$plugin_path' AND active = 1";
+		$sql = "SELECT * FROM $tbl_block
+				WHERE path = '".Database::escape_string($plugin_path)."' AND active = 1";
 		$rs  = Database::query($sql);
 
 		$checked = '';
@@ -124,18 +126,18 @@ class DashboardManager
 		}
 
 		echo "<td align=\"center\">";
-			echo '<input type="checkbox" name="'.$plugin_path.'" value="true" '.$checked.'/>';
+		echo '<input type="checkbox" name="'.$plugin_path.'" value="true" '.$checked.'/>';
 		echo "</td>";
 	}
 
 	/**
-	 * This function allows easy activating and inactivating of plugins and save them inside db
-	 * @param array dashboard plugin paths
+	 * This function allows easy activating and inactivating
+	 * of plugins and save them inside db
+	 * @param array $plugin_paths dashboard plugin paths
 	 * return int affected rows
-	*/
+	 */
 	public static function store_dashboard_plugins($plugin_paths)
 	{
-
 		$tbl_block = Database :: get_main_table(TABLE_MAIN_BLOCK);
 		$affected_rows = 0;
 
@@ -145,8 +147,8 @@ class DashboardManager
 
 		if (count($possibleplugins) > 0) {
 
-			$selected_plugins = array_intersect(array_keys($plugin_paths),$possibleplugins);
-			$not_selected_plugins = array_diff($possibleplugins,array_keys($plugin_paths));
+			$selected_plugins = array_intersect(array_keys($plugin_paths), $possibleplugins);
+			$not_selected_plugins = array_diff($possibleplugins, array_keys($plugin_paths));
 
 			// get blocks id from not selected path
 			$not_selected_blocks_id = array();
@@ -183,7 +185,6 @@ class DashboardManager
 
 				// update extra user blocks data
 				$upd_extra_field = self::store_user_blocks($user_id, $user_blocks_id, $columns);
-
 			}
 
 			// clean from block data
@@ -195,7 +196,6 @@ class DashboardManager
 					Database::query($del);
 				}
 			}
-
 
 			// store selected plugins
 			foreach ($selected_plugins as $testplugin) {
@@ -254,18 +254,16 @@ class DashboardManager
 
 		// get all plugins path inside plugin directory
 		/* We scan the plugin directory. Each folder is a potential plugin. */
-		$possibleplugins = array();
+		$possiblePlugins = array();
 		$dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
 		$handle = @opendir($dashboard_pluginpath);
-		while (false !== ($file = readdir($handle)))
-		{
-			if ($file <> '.' AND $file <> '..' AND is_dir($dashboard_pluginpath.$file))
-			{
-				$possibleplugins[] = $file;
+		while (false !== ($file = readdir($handle))) {
+			if ($file <> '.' AND $file <> '..' AND is_dir($dashboard_pluginpath.$file)) {
+				$possiblePlugins[] = $file;
 			}
 		}
 		@closedir($handle);
-		return $possibleplugins;
+		return $possiblePlugins;
 	}
 
 	/**
@@ -284,9 +282,9 @@ class DashboardManager
 			while ($row = Database::fetch_array($rs)) {
 				$path = $row['path'];
 				if (!in_array($row['path'],$possibleplugins)) {
-						$active = 0;
+					$active = 0;
 				} else {
-						$active = 1;
+					$active = 1;
 				}
 				// update active
 				$upd = "UPDATE $tbl_block SET active = '$active' WHERE path = '".$row['path']."'";
@@ -371,28 +369,28 @@ class DashboardManager
 				$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';
 				require_once $dashboard_plugin_path.$filename_controller;
 				if (class_exists($controller_class)) {
-				    $obj_block = new $controller_class($user_id);
+					$obj_block = new $controller_class($user_id);
 
-    				// check if user is allowed to see the block
-    				if (method_exists($obj_block, 'is_block_visible_for_user')) {
-    					$is_block_visible_for_user = $obj_block->is_block_visible_for_user($user_id);
-    					if (!$is_block_visible_for_user) continue;
-    				}
+					// check if user is allowed to see the block
+					if (method_exists($obj_block, 'is_block_visible_for_user')) {
+						$is_block_visible_for_user = $obj_block->is_block_visible_for_user($user_id);
+						if (!$is_block_visible_for_user) continue;
+					}
 
-    				echo '<tr>';
-                    // checkboxes
-                    self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
-                    echo '<td>'.$block['name'].'</td>';
-                    echo '<td>'.$block['description'].'</td>';
-                    echo '<td><center>
+					echo '<tr>';
+					// checkboxes
+					self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
+					echo '<td>'.$block['name'].'</td>';
+					echo '<td>'.$block['description'].'</td>';
+					echo '<td><center>
                             <select name="columns['.$block['id'].']">
                             <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==1?'selected':'').' >1</option>
                             <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==2?'selected':'').' >2</option>
                             </select></center>
                           </td>';
-                    echo '</tr>';
+					echo '</tr>';
 				} else {
-			         echo Display::tag('tr',  Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
+					echo Display::tag('tr',  Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
 				}
 			}
 
@@ -427,7 +425,7 @@ class DashboardManager
 		}
 
 		echo "<td align=\"center\">";
-			echo '<input type="checkbox" name="enabled_blocks['.$block_id.']" value="true" '.$checked.'/>';
+		echo '<input type="checkbox" name="enabled_blocks['.$block_id.']" value="true" '.$checked.'/>';
 		echo "</td>";
 	}
 
@@ -437,7 +435,7 @@ class DashboardManager
 	 * @param array selected blocks
 	 * @param array columns position
 	 * @return bool
-	*/
+	 */
 	public static function store_user_blocks($user_id, $enabled_blocks, $columns) {
 		$selected_blocks_id  = array();
 		if (is_array($enabled_blocks) && count($enabled_blocks) > 0) {
@@ -469,11 +467,11 @@ class DashboardManager
 		$data = array();
 		foreach ($extra_user_data as $extra) {
 			$split_extra = explode(':',$extra);
-            if (!empty($split_extra)) {
-                $block_id = $split_extra[0];
-                $column = isset($split_extra[1]) ? $split_extra[1] : null;
-                $data[$block_id] = array('block_id' => $block_id, 'column' => $column);
-            }
+			if (!empty($split_extra)) {
+				$block_id = $split_extra[0];
+				$column = isset($split_extra[1]) ? $split_extra[1] : null;
+				$data[$block_id] = array('block_id' => $block_id, 'column' => $column);
+			}
 		}
 		return $data;
 	}

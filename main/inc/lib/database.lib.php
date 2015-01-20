@@ -474,7 +474,7 @@ class Database
         // See #7440 for more info
         /*
         if ($addFix) {
-            $string = "__@$string@__";
+            //$string = "__@$string@__";
         }
         */
         return get_magic_quotes_gpc()

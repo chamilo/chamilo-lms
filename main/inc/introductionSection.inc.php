@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * The INTRODUCTION MICRO MODULE is used to insert and edit
  * an introduction section on a Chamilo module or on the course homepage.
@@ -117,7 +118,6 @@ if ($intro_editAllowed) {
     }
 }
 
-
 /* INTRODUCTION MICRO MODULE - DISPLAY SECTION */
 
 /* Retrieves the module introduction text, if exist */
@@ -126,6 +126,7 @@ if ($intro_editAllowed) {
 $intro_content = null;
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION
         WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id = 0";
+
 $intro_dbQuery = Database::query($sql);
 if (Database::num_rows($intro_dbQuery) > 0) {
     $intro_dbResult = Database::fetch_array($intro_dbQuery);
@@ -243,7 +244,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                     <div class="row-fluid score-thematic">
                                         <div class="span8">';
         $thematic_description_html .=
-                                            '<div class="span6 name-student">
+            '<div class="span6 name-student">
                                                 <h2>' . $userInfo['firstName'] . '</h2>
                                                 <h3>' . $userInfo['lastName'] . '</h3>
                                             </div>
@@ -256,7 +257,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                             </div>
                                         </div>';
         $thematic_description_html .=
-                                        '<div class="span4">
+            '<div class="span4">
                                             <a id="thematic-show" class="btn btn-small btn-primary accordion-toggle btn-hide-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
                                             ' . get_lang('SeeDetail') . '
                                             </a>
@@ -268,7 +269,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                 </div>
                             </div>';
         $thematic_description_html .=
-                            '<div class="accordion-body collapse in" id="pross" style="height: auto !important;">
+            '<div class="accordion-body collapse in" id="pross" style="height: auto !important;">
                                 <div class="accordion-inner">
                                     <div class="row-fluid">
                                         <div class="span4">
@@ -291,10 +292,10 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                             </div>
                                         </div>';
         $thematic_description_html .=
-                                        '<div class="span8">
+            '<div class="span8">
                                             <div class="row-fluid">';
         $thematic_description_html .=
-                                                '<div class="span6 items-progress'.$class1.'">
+            '<div class="span6 items-progress'.$class1.'">
                                                     <div class="topics">' . $subTitle1 . '</div>
                                                     <p class="title_topics">' . $thematic_info['title'] . '</p>
                                                     <p class="date">' . $thematic_advance_info['start_date'] . '</p>
@@ -308,7 +309,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
             $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
             $thematic_description_html .=
-                                                '<div class="span6 items-progress">
+                '<div class="span6 items-progress">
                                                     <div class="topics">'.$subTitle2.'</div>
                                                     <p class="title_topics">'.$thematic_info['title'].'</p>
                                                     <p class="date">'.$thematic_advance_info2['start_date'].'</p>
@@ -317,7 +318,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                                 </div>';
         }
         $thematic_description_html.=
-                                                '</div>
+            '</div>
                                             </div>
                                         </div>
                                     </div>
@@ -337,9 +338,6 @@ $introduction_section .=  '</div>';
 $introduction_section .=  '<div class="home-course-intro span12"><div class="page-course">';
 
 if ($intro_dispDefault) {
-
-    $intro_content = $intro_content;
-
     if (!empty($intro_content)) {
         $introduction_section.='<div class="page-course-intro">';
         $introduction_section .=  $intro_content;

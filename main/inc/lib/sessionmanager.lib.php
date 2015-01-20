@@ -2741,9 +2741,9 @@ class SessionManager
                 }
             }
         }
-
         // Inserting new sessions list.
         if (!empty($sessions_list) && is_array($sessions_list)) {
+
             foreach ($sessions_list as $session_id) {
                 $session_id = intval($session_id);
                 $sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user, relation_type)

@@ -42,6 +42,8 @@ class NotebookType extends AbstractType
                     'type' => new ResourceLinkType(),
                     'mapped' => false,
                     'allow_add' => true,
+                    'by_reference' => false,
+                    'allow_delete' => true
                 )
             )
             /*->add(

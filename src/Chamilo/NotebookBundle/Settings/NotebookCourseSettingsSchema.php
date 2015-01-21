@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class NotebookCourseSettingsSchema
+ * Settings for a notebook inside a course
  * @package Chamilo\NotebookBundle\Settings
  */
 class NotebookCourseSettingsSchema implements SchemaInterface

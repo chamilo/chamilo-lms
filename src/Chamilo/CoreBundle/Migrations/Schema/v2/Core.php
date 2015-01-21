@@ -8,6 +8,10 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 
+/**
+ * Class Core
+ * @package Chamilo\CoreBundle\Migrations\Schema\v2
+ */
 class Core implements Migration, OrderedMigrationInterface
 {
     /**
@@ -18,6 +22,9 @@ class Core implements Migration, OrderedMigrationInterface
         return 1;
     }
 
+    /**
+     * @inheritdoc
+     **/
     public function up(Schema $schema, QueryBag $queries)
     {
         $queries->addQuery("CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(255) NOT NULL, username_canonical VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, salt VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, last_login DATETIME DEFAULT NULL, locked TINYINT(1) NOT NULL, expired TINYINT(1) NOT NULL, expires_at DATETIME DEFAULT NULL, confirmation_token VARCHAR(255) DEFAULT NULL, password_requested_at DATETIME DEFAULT NULL, roles LONGTEXT NOT NULL COMMENT '(DC2Type:array)', credentials_expired TINYINT(1) NOT NULL, credentials_expire_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, date_of_birth DATETIME DEFAULT NULL, firstname VARCHAR(64) DEFAULT NULL, lastname VARCHAR(64) DEFAULT NULL, website VARCHAR(64) DEFAULT NULL, biography VARCHAR(1000) DEFAULT NULL, gender VARCHAR(1) DEFAULT NULL, locale VARCHAR(8) DEFAULT NULL, timezone VARCHAR(64) DEFAULT NULL, phone VARCHAR(64) DEFAULT NULL, facebook_uid VARCHAR(255) DEFAULT NULL, facebook_name VARCHAR(255) DEFAULT NULL, facebook_data LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', twitter_uid VARCHAR(255) DEFAULT NULL, twitter_name VARCHAR(255) DEFAULT NULL, twitter_data LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', gplus_uid VARCHAR(255) DEFAULT NULL, gplus_name VARCHAR(255) DEFAULT NULL, gplus_data LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', token VARCHAR(255) DEFAULT NULL, two_step_code VARCHAR(255) DEFAULT NULL, user_id INT DEFAULT NULL, auth_source VARCHAR(50) DEFAULT NULL, status INT DEFAULT NULL, official_code VARCHAR(40) DEFAULT NULL, picture_uri VARCHAR(250) DEFAULT NULL, creator_id INT DEFAULT NULL, competences LONGTEXT DEFAULT NULL, diplomas LONGTEXT DEFAULT NULL, openarea LONGTEXT DEFAULT NULL, teach LONGTEXT DEFAULT NULL, productions VARCHAR(250) DEFAULT NULL, chatcall_user_id INT DEFAULT NULL, chatcall_date DATETIME DEFAULT NULL, chatcall_text VARCHAR(50) DEFAULT NULL, language VARCHAR(40) DEFAULT NULL, registration_date DATETIME NOT NULL, expiration_date DATETIME DEFAULT NULL, active TINYINT(1) NOT NULL, openid VARCHAR(255) DEFAULT NULL, theme VARCHAR(255) DEFAULT NULL, hr_dept_id SMALLINT DEFAULT NULL, isActive VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, emailCanonical VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D64992FC23A8 (username_canonical), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
@@ -136,6 +143,10 @@ class Core implements Migration, OrderedMigrationInterface
         $queries->addQuery("CREATE TABLE tool_resource_rights (id INT AUTO_INCREMENT NOT NULL, tool_id INT DEFAULT NULL, role VARCHAR(255) NOT NULL, mask INT NOT NULL, INDEX IDX_95CE3398F7B22CC (tool_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
         $queries->addQuery("CREATE TABLE tool_resource_rights_audit (id INT NOT NULL, rev INT NOT NULL, tool_id INT DEFAULT NULL, role VARCHAR(255) DEFAULT NULL, mask INT DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
         $queries->addQuery("CREATE TABLE resource_rights (id INT AUTO_INCREMENT NOT NULL, resource_link_id INT DEFAULT NULL, role VARCHAR(255) NOT NULL, mask INT NOT NULL, UNIQUE INDEX UNIQ_C99C3BF9F004E599 (resource_link_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;");
+
+        $queries->addQuery("CREATE TABLE resource_node (id INT AUTO_INCREMENT NOT NULL, tool_id INT DEFAULT NULL, creator_id INT NOT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, level INT DEFAULT NULL, path VARCHAR(3000) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_8A5F48FF8F7B22CC (tool_id), INDEX IDX_8A5F48FF61220EA6 (creator_id), INDEX IDX_8A5F48FF727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB";
+        $queries->addQuery("CREATE TABLE resource_link (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, session_id INT DEFAULT NULL, user_id INT DEFAULT NULL, c_id INT DEFAULT NULL, group_id INT DEFAULT NULL, private TINYINT(1) DEFAULT NULL, public TINYINT(1) DEFAULT NULL, UNIQUE INDEX UNIQ_398C394B1BAD783F (resource_node_id), INDEX IDX_398C394B613FECDF (session_id), INDEX IDX_398C394BA76ED395 (user_id), INDEX IDX_398C394B91D79BD3 (c_id), INDEX IDX_398C394BFE54D947 (group_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB";
+
         $queries->addQuery("CREATE TABLE track_e_hotspot (hotspot_id INT AUTO_INCREMENT NOT NULL, hotspot_user_id INT NOT NULL, hotspot_exe_id INT NOT NULL, hotspot_question_id INT NOT NULL, hotspot_answer_id INT NOT NULL, hotspot_correct TINYINT(1) NOT NULL, hotspot_coordinate LONGTEXT NOT NULL, c_id INT NOT NULL, INDEX hotspot_user_id (hotspot_user_id), INDEX hotspot_exe_id (hotspot_exe_id), INDEX hotspot_question_id (hotspot_question_id), PRIMARY KEY(hotspot_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
         $queries->addQuery("CREATE TABLE question_field_values (id INT AUTO_INCREMENT NOT NULL, question_id INT NOT NULL, field_id INT NOT NULL, tms DATETIME NOT NULL, user_id VARCHAR(255) NOT NULL, comment VARCHAR(255) DEFAULT NULL, field_value LONGTEXT DEFAULT NULL, INDEX IDX_83093BA61E27F6BF (question_id), INDEX idx_question_field_values_field_id (field_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
         $queries->addQuery("CREATE TABLE usergroup (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB");
@@ -375,7 +386,10 @@ class Core implements Migration, OrderedMigrationInterface
         $queries->addQuery("DROP TABLE track_e_hotpotatoes");
         $queries->addQuery("DROP TABLE branch_sync");
         $queries->addQuery("DROP TABLE c_quiz_question");
-
+        $queries->addQuery("DROP TABLE resource_node");
+        $queries->addQuery("DROP TABLE resource_link");
+        //$queries->addQuery("DROP TABLE resource_node_audit");
+        //$queries->addQuery("DROP TABLE resource_link_audit");
         $queries->addQuery("ALTER TABLE settings_current DROP namespace");
         $queries->addQuery("ALTER TABLE settings_current DROP name");
     }

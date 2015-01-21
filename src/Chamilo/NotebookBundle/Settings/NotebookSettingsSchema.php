@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class NotebookSettingsSchema
+ * Global notebook settings for all the platform
  * @package Chamilo\NotebookBundle\Settings
  */
 class NotebookSettingsSchema implements SchemaInterface
@@ -33,6 +34,8 @@ class NotebookSettingsSchema implements SchemaInterface
      */
     public function buildForm(FormBuilderInterface $builder)
     {
+        // yes_no is a new FormType located here:
+        // Chamilo\CoreBundle\Form\Type\YesNoType
         $builder
             ->add('enabled', 'yes_no')
         ;

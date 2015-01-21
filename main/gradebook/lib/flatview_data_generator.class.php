@@ -163,9 +163,6 @@ class FlatViewDataGenerator
             foreach ($allcat as $sub_cat) {
                 $sub_cat_weight = round(100 * $sub_cat->get_weight() / $main_weight, 1);
                 $add_weight = " $sub_cat_weight %";
-                /*if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
-                   $add_weight = null;
-                }*/
                 $headers[] = Display::url(
                         $sub_cat->get_name(),
                         api_get_self().'?selectcat='.$sub_cat->get_id()
@@ -190,7 +187,9 @@ class FlatViewDataGenerator
             for ($count = 0; ($count < $items_count) && ($items_start + $count < count($this->evals_links)); $count++) {
                 /** @var AbstractLink $item */
                 $item = $this->evals_links[$count + $items_start];
-                if ($mainCategoryId == $item->get_category_id() && !in_array($item->get_id(), $evaluationsAdded)) {
+                if ($mainCategoryId == $item->get_category_id() &&
+                    !in_array($item->get_id(), $evaluationsAdded)
+                ) {
                     $weight = round(100 * $item->get_weight() / $main_weight, 1);
                     $headers[] = $item->get_name() . ' ' . $weight . ' % ';
                 }

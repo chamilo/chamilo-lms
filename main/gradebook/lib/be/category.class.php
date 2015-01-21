@@ -1439,8 +1439,14 @@ class Category implements GradebookItem
                 $sessionId
             );
             if (!empty($subcats)) {
+                /** @var Category $subcat */
                 foreach ($subcats as $subcat) {
-                    $sublinks = $subcat->get_links($stud_id, false, $course_code, $sessionId);
+                    $sublinks = $subcat->get_links(
+                        $stud_id,
+                        false,
+                        $course_code,
+                        $sessionId
+                    );
                     $links = array_merge($links, $sublinks);
                 }
             }
@@ -1567,10 +1573,19 @@ class Category implements GradebookItem
     public static function register_user_certificate($category_id, $user_id)
     {
         // Generating the total score for a course
-        $cats_course = Category::load($category_id, null, null, null, null, api_get_session_id(), false);
-
-        $alleval_course  = $cats_course[0]->get_evaluations($user_id, true);
-        $alllink_course  = $cats_course[0]->get_links($user_id, true);
+        $cats_course = Category::load(
+            $category_id,
+            null,
+            null,
+            null,
+            null,
+            api_get_session_id(),
+            false
+        );
+        /** @var Category $category */
+        $category = $cats_course[0];
+        $alleval_course  = $category->get_evaluations($user_id, true);
+        $alllink_course  = $category->get_links($user_id, true);
         $evals_links = array_merge($alleval_course, $alllink_course);
 
         //@todo move these in a function

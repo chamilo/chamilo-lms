@@ -266,6 +266,7 @@ class SurveyLink extends AbstractLink
 
 	private static function html_to_text($string)
 	{
-		return trim(api_html_entity_decode(strip_tags(str_ireplace(array('<p>', '</p>', '<br />', '<br/>', '<br>'), array('', ' ', ' ', ' ', ' '), $string)), ENT_QUOTES));
+		return strip_tags($string);
+		//return trim(api_html_entity_decode(strip_tags(str_ireplace(array('<p>', '</p>', '<br />', '<br/>', '<br>'), array('', ' ', ' ', ' ', ' '), $string)), ENT_QUOTES));
 	}
 }

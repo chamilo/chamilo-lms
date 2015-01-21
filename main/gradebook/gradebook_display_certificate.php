@@ -13,6 +13,8 @@ $current_course_tool  = TOOL_GRADEBOOK;
 
 api_protect_course_script();
 
+set_time_limit(0);
+
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_data_generator.class.php';

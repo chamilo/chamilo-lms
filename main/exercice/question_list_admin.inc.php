@@ -206,7 +206,7 @@ if (!$inATest) {
                 // Question name
                 $questionName = Display::tag(
                     'div',
-                    '<a href="#" title = "'.htmlentities($title).'">'.$move.' '.cut($title, 42).'</a>',
+                    '<a href="#" title = "'.Security::remove_XSS($title).'">'.$move.' '.cut($title, 42).'</a>',
                     array('style'=>$styleQuestion)
                 );
 

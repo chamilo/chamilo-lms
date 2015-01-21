@@ -5,6 +5,7 @@
  * Script
  * @package chamilo.gradebook
  */
+
 /**
  * These are functions used in gradebook
  *
@@ -110,6 +111,7 @@ function remove_resource_from_course_gradebook($link_id)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;
     Database::query($sql);
+
     return true;
 }
 
@@ -127,7 +129,9 @@ function block_students()
 function get_course_name_from_code($code)
 {
     $tbl_main_categories = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $sql = 'SELECT title, code FROM ' . $tbl_main_categories . 'WHERE code = "' . Database::escape_string($code) . '"';
+    $sql = 'SELECT title, code
+            FROM ' . $tbl_main_categories . '
+            WHERE code = "' . Database::escape_string($code) . '"';
     $result = Database::query($sql);
     if ($col = Database::fetch_array($result)) {
         return $col['title'];
@@ -194,6 +198,7 @@ function get_icon_file_name($type)
             $icon = 'link.gif';
             break;
     }
+
     return $icon;
 }
 
@@ -400,7 +405,10 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $course_code = Database::escape_string($course_code);
     $sql = "SELECT * FROM $l l
-            WHERE course_code = '$course_code' AND type = ".(int)$resource_type . " AND ref_id = " . (int)$resource_id;
+            WHERE
+                course_code = '$course_code' AND
+                type = ".(int)$resource_type . " AND
+                ref_id = " . (int)$resource_id;
     $res = Database::query($sql);
 
     if (Database::num_rows($res) < 1) {
@@ -649,7 +657,8 @@ function get_list_users_certificates($cat_id = null, $userList = array())
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
     		FROM ' . $table_user . ' u
-    		INNER JOIN ' . $table_certificate . ' gc ON u.user_id=gc.user_id ';
+    		INNER JOIN ' . $table_certificate . ' gc
+    		ON u.user_id=gc.user_id ';
     if (!is_null($cat_id) && $cat_id > 0) {
         $sql.=' WHERE cat_id=' . intval($cat_id);
     }

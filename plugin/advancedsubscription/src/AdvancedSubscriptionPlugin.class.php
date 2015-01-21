@@ -729,4 +729,64 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $url = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?data=' . $data;
         return $url;
     }
+
+    /**
+     * Return the list of student, in queue used by admin view
+     * @param int $sessionId
+     * @return array
+     */
+    public function listAllStudentsInQueueBySession($sessionId)
+    {
+        $return = array();
+        $extraSession = new ExtraFieldValue('session');
+        $session = api_get_session_info($sessionId);
+        $session['publico_objetivo'] = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'publico_objetivo');
+        $session['fin_publicacion'] = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'fin_publicacion');
+        $session['modalidad'] = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'modalidad');
+        $session['participantes_recomendados'] = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'numero_recomendado_participantes');
+        $session['vacantes'] = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'vacantes');
+        $queueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $userJoinTable = $queueTable . ' q INNER JOIN ' . $userTable . ' u ON q.user_id = u.user_id';
+        $where = array('where' => array('session_id = ?' => $sessionId));
+        $select = 'u.user_id, u.firstname, u.lastname, q.created_at, q.updated_at, q.status';
+        $students = Database::select($select, $userJoinTable, $where);
+        foreach ($students as &$student) {
+            $status = intval($student['status']);
+            switch($status) {
+                case ADV_SUB_QUEUE_STATUS_NO_QUEUE:
+                case ADV_SUB_QUEUE_STATUS_START:
+                    $student['validation'] = '';
+                    break;
+                case ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED:
+                case ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED:
+                    $student['validation'] = get_lang('No');
+                    break;
+                case ADV_SUB_QUEUE_STATUS_BOSS_APPROVED:
+                case ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED:
+                    $student['validation'] = get_lang('Yes');
+                    break;
+                default:
+                    error_log(__FILE__ . ' ' . __FUNCTION__ . ' Student status no detected');
+            }
+        }
+        $return = array(
+            'session' => $session,
+            'students' => $students,
+        );
+
+        return $return;
+
+    }
+
+    /**
+     * List all session (id, name) for select input
+     * @return array
+     */
+    public function listAllSessions()
+    {
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $columns = 'id, name';
+        return Database::select($columns, $sessionTable);
+    }
 }

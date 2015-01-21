@@ -236,7 +236,7 @@ class LearnpathLink extends AbstractLink
 			$sql = 'SELECT * FROM '.$this->get_learnpath_table().'
                     WHERE c_id = '.$this->course_id.' AND id = '.$this->get_ref_id().' ';
 			$result = Database::query($sql);
-			$this->learnpath_data=Database::fetch_array($result);
+			$this->learnpath_data = Database::fetch_array($result);
 		}
 		return $this->learnpath_data;
 	}

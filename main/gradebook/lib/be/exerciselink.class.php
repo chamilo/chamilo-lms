@@ -260,6 +260,7 @@ class ExerciseLink extends AbstractLink
                 if ($title == '') {
                     $title = basename($data['path']);
                 }
+
                 return $title;
             }
         }
@@ -334,7 +335,6 @@ class ExerciseLink extends AbstractLink
     private function get_exercise_data()
     {
         $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
         if ($this->is_hp == 1) {
             $tbl_exercise = Database :: get_course_table(TABLE_DOCUMENT);
         } else {
@@ -362,7 +362,7 @@ class ExerciseLink extends AbstractLink
                             id = '.(int)$this->get_ref_id().' ';
             }
             $result = Database::query($sql);
-            $this->exercise_data=Database::fetch_array($result);
+            $this->exercise_data = Database::fetch_array($result);
         }
 
         return $this->exercise_data;

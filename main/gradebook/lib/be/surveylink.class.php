@@ -69,8 +69,15 @@ class SurveyLink extends AbstractLink
 				WHERE c_id = '.$course_id.' AND session_id = '.intval($session_id).'';
 		$result = Database::query($sql);
 		while ($data = Database::fetch_array($result)) {
-			$links[] = array($data['survey_id'], api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80));
-		};
+			$links[] = array(
+				$data['survey_id'],
+				api_trunc_str(
+					$data['code'] . ': ' . self::html_to_text($data['title']),
+					80
+				)
+			);
+		}
+
 		return isset($links) ? $links : null;
 	}
 
@@ -112,7 +119,6 @@ class SurveyLink extends AbstractLink
 		$session_id = api_get_session_id();
 		$tbl_survey = Database::get_course_table(TABLE_SURVEY);
 		$tbl_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-		$get_individual_score = !is_null($stud_id);
 		$sql = "SELECT
 				COUNT(i.answered)
 				FROM $tbl_survey AS s
@@ -153,7 +159,9 @@ class SurveyLink extends AbstractLink
 				WHERE
 					s.c_id = {$this->course_id} AND
 					i.c_id = {$this->course_id} AND
-					s.survey_id = $ref_id AND i.session_id = $session_id";
+					s.survey_id = $ref_id AND
+					i.session_id = $session_id
+				";
 
 		if ($get_individual_score) {
 			$sql .= ' AND i.user = '.intval($stud_id);
@@ -199,7 +207,10 @@ class SurveyLink extends AbstractLink
 	{
 		$session_id = api_get_session_id();
 		$sql = 'SELECT count(survey_id) FROM '.$this->get_survey_table().'
-        		 WHERE c_id = '.$this->course_id.' AND survey_id = '.intval($this->get_ref_id()).' AND session_id='.intval($session_id).'';
+        		 WHERE
+        		 	c_id = '.$this->course_id.' AND
+        		 	survey_id = '.intval($this->get_ref_id()).' AND
+        		 	session_id='.intval($session_id).'';
 		$result = Database::query($sql);
 		$number = Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -217,7 +228,10 @@ class SurveyLink extends AbstractLink
 			$session_id = api_get_session_id();
 			if ($tbl_name != '') {
 				$sql = 'SELECT survey_id FROM '.$this->get_survey_table().'
-    					WHERE c_id = '.$this->course_id.' AND survey_id = '.intval($this->get_ref_id()).' AND session_id = '.intval($session_id).' ';
+    					WHERE
+    						c_id = '.$this->course_id.' AND
+    						survey_id = '.intval($this->get_ref_id()).' AND
+    						session_id = '.intval($session_id).' ';
 				$result = Database::query($sql);
 				$row = Database::fetch_array($result, 'ASSOC');
 				$survey_id = $row['survey_id'];
@@ -234,7 +248,11 @@ class SurveyLink extends AbstractLink
 		if ($tbl_name == '') {
 			return false;
 		} elseif (!isset($this->survey_data)) {
-			$sql = 'SELECT * FROM '.$tbl_name.' WHERE c_id = '.$this->course_id.' AND survey_id = '.intval($this->get_ref_id()).' AND session_id='.intval($session_id).'';
+			$sql = 'SELECT * FROM '.$tbl_name.'
+					WHERE
+						c_id = '.$this->course_id.' AND
+						survey_id = '.intval($this->get_ref_id()).' AND
+						session_id='.intval($session_id).'';
 			$query = Database::query($sql);
 			$this->survey_data = Database::fetch_array($query);
 		}

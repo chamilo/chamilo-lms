@@ -5451,47 +5451,46 @@ class SessionManager
             $sTable = Database::get_main_table(TABLE_MAIN_SESSION);
             $sfTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
             $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+            $joinSSfvTable = $sTable . ' o INNER JOIN ' . $sfvTable . ' q ON s.id = sfv.session_id';
             $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
+            $fieldsArray = array(
+                'as_description', 'modalidad', 'duracion', 'vacantes', 'brochure', 'publico_objetivo', 'horario'
+            );
             $sessionList = Database::select(
                 'id, name, date_start, date_end',
                 $sTable,
                 array(
                     'where' => array(
-                        'session_category_id = ?' => $categoryId
+                        "session_category_id = ? AND id IN (
+                            SELECT sfv.session_id FROM $joinTable WHERE
+                            sfv.session_id = session.id
+                            AND sf.field_variable = 'publico_objetivo'
+                            AND sfv.field_value = ?
+                        );" => array($categoryId, $publicoObjetivo)
                     )
                 )
             );
-            $sessionFieldValueList = Database::select(
-                'CONCAT(sfv.session_id, sf.field_variable) AS id, sfv.field_value AS field_value',
-                $joinTable,
-                array(
-                    'where' => array(
-                        'sf.field_variable IN ( ?, ?, ?, ?, ?, ? )' => array(
-                            'as_description', 'modalidad', 'duracion', 'cupos', 'brochure', 'publico_objetivo',
-                        )
-                    )
-                )
-            );
+
+            $extraField = new ExtraField('session');
+            $fieldList = $extraField->get_all(array(
+                'field_variable IN ( ?, ?, ?, ?, ?, ?, ? )' => $fieldsArray
+            ));
+            foreach ($fieldList as $field) {
+                $fields[$field['id']] = $field['field_variable'];
+            }
+            $extra = new ExtraFieldValue('session');
+            $sessionFieldValueList = $extra->get_all(array('field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => array_keys($fields)));
         }
 
-
         foreach ($sessionList as $id => &$session) {
-            if ($publicoObjetivo == $sessionFieldValueList[$id . 'publico_objetivo']['field_value']) {
-                $session['modalidad'] = isset($sessionFieldValueList[$id . 'modalidad']) ?
-                    $sessionFieldValueList[$id . 'modalidad']['field_value'] :
-                    '';
-                $session['descripcion'] = isset($sessionFieldValueList[$id . 'modalidad']) ?
-                    $sessionFieldValueList[$id . 'modalidad']['field_value'] :
-                    '';
-                $session['duracion'] = isset($sessionFieldValueList[$id . 'duracion']) ?
-                    $sessionFieldValueList[$id . 'duracion']['field_value'] :
-                    '';
-                $session['cupos'] = isset($sessionFieldValueList[$id . 'cupos']) ?
-                    $sessionFieldValueList[$id . 'cupos']['field_value'] :
-                    '';
-                $session['horario'] = isset($sessionFieldValueList[$id . 'horario']) ?
-                    $sessionFieldValueList[$id . 'horario']['field_value'] :
-                    '';
+            foreach ($sessionFieldValueList as $sessionFieldValue) {
+                if ($sessionFieldValue['session_id'] == $id) {
+                    if (isset($fields[$sessionFieldValue['field_id']])) {
+                        $var = $fields[$sessionFieldValue['field_id']];
+                        $val = $sessionFieldValue['field_value'];
+                        $session[$var] = $val;
+                    }
+                }
             }
         }
 

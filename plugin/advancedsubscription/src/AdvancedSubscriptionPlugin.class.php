@@ -600,7 +600,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
             if (count($row) == 1) {
 
-                return $row['status'];
+                return $row[0]['status'];
             } else {
 
                 return ADV_SUB_QUEUE_STATUS_NO_QUEUE;
@@ -650,9 +650,9 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'lugar');
             $data['place'] = $var['field_value'];
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'permitir_visitantes');
-            $data['allow_visitors'] = $var['field_value'];
+            $data['visitors'] = $var['field_value'];
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'horas_lectivas');
-            $data['class_hours'] = $var['field_value'];
+            $data['duration'] = $var['field_value'];
             // Get brochure URL
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'brochure');
             $data['brochure'] = api_get_path(WEB_CODE_PATH) . $var['field_value'];
@@ -661,8 +661,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $data['banner'] = api_get_path(WEB_CODE_PATH) . $var['field_value'];
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'descripcion');
             $data['description'] = $var['field_value'];
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'horas_lectivas');
-            $data['class_hours'] = $var['field_value'];
 
             return $data;
         }

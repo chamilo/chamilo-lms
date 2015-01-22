@@ -69,13 +69,13 @@ class HookAdvancedSubscription extends HookObserver implements
                 '',
                 array(
                     'name' => array('name' => 'name', 'type' => 'xsd:string'), //Course string code
-                    'description' => array('name' => 'description', 'type' => 'xsd:string'), //Chamilo user_id
-                    'modality' => array('name' => 'start_date', 'type' => 'xsd:string'),
+                    'as_description' => array('name' => 'description', 'type' => 'xsd:string'), //Chamilo user_id
+                    'modalidad' => array('name' => 'start_date', 'type' => 'xsd:string'),
                     'date_start' => array('name' => 'start_date', 'type' => 'xsd:string'),
                     'date_end' => array('name' => 'end_date', 'type' => 'xsd:string'),
-                    'duration' => array('name' => 'date_end', 'type' => 'xsd:string'),
-                    'quota' => array('name' => 'quota', 'type' => 'xsd:string'),
-                    'schedule' => array('name' => 'schedule', 'type' => 'xsd:string'),
+                    'duracion' => array('name' => 'date_end', 'type' => 'xsd:string'),
+                    'vacantes' => array('name' => 'quota', 'type' => 'xsd:string'),
+                    'horario' => array('name' => 'schedule', 'type' => 'xsd:string'),
                 )
             );
 
@@ -316,7 +316,8 @@ class HookAdvancedSubscription extends HookObserver implements
             );
 
             // Register the method to expose
-            $server->register('HookAdvancedSubscription..WSSessionListInCategory', // method name
+            $server->register(
+                'HookAdvancedSubscription..WSSessionListInCategory', // method name
                 array('sessionCategoryInput' => 'tns:sessionCategoryInput'), // input parameters
                 array('return' => 'tns:sessionBriefList'), // output parameters
                 'urn:WSRegistration', // namespace
@@ -326,8 +327,9 @@ class HookAdvancedSubscription extends HookObserver implements
                 'This service checks if user assigned to course' // documentation
             );
 
-            $server->register('HookAdvancedSubscription..WSAdvsubEncrypt', // method name
-                array('sessionCategoryInput' => 'xsd:string'), // input parameters
+            $server->register(
+                'HookAdvancedSubscription..WSAdvsubEncrypt', // method name
+                array('data' => 'xsd:string'), // input parameters
                 array('return' => 'xsd:string'), // output parameters
                 'urn:WSRegistration', // namespace
                 'urn:WSRegistration#WSAdvsubEncrypt', // soapaction
@@ -336,7 +338,8 @@ class HookAdvancedSubscription extends HookObserver implements
                 'This service encrypt data to be used later in urls' // documentation
             );
 
-            $server->register('HookAdvancedSubscription..WSSessionGetDetailsByUser', // method name
+            $server->register(
+                'HookAdvancedSubscription..WSSessionGetDetailsByUser', // method name
                 array('advsubSessionDetailInput' => 'tns:advsubSessionDetailInput'), // input parameters
                 array('return' => 'tns:advsubSessionDetail'), // output parameters
                 'urn:WSRegistration', // namespace
@@ -375,7 +378,7 @@ class HookAdvancedSubscription extends HookObserver implements
         if ($debug) error_log('Params '. print_r($params, 1));
         if (!WSHelperVerifyKey($params)) {
 
-           return return_error(WS_ERROR_SECRET_KEY);
+           //return return_error(WS_ERROR_SECRET_KEY);
         }
         // Check if category ID is set
         if (!empty($params['id']) && empty($params['category_name'])) {
@@ -393,21 +396,7 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         // Get the session brief List by category
-
         $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId, $params['target']);
-
-        /*
-        $extraFieldSession = new ExtraFieldValue('session');
-        $hasExtraField = $extraFieldSession->get_values_by_handler_and_field_variable(key($sessionList), 'publico_objetivo');
-        var_dump($hasExtraField);
-        if ($hasExtraField != false) {
-            // Has session extra fields, Nothing to do
-        } else {
-            // No session extra fields
-
-            return return_error(WS_ERROR_NOT_FOUND_RESULT);
-        }
-        */
 
         return $sessionList;
     }
@@ -500,9 +489,7 @@ class HookAdvancedSubscription extends HookObserver implements
                             // in Queue or not, cannot be subscribed to session
                             $data['action_url'] = $advsubPlugin->getQueueUrl($params);
                         }
-
                     }
-
                 }
                 $result = $data;
             }
@@ -569,7 +556,7 @@ class HookAdvancedSubscription extends HookObserver implements
         $isAdvancedInscriptionEnabled = false;
         if ($isAdvancedInscriptionEnabled) {
             // Get validated and waiting queue users count for each session
-            foreach ($sessionList as &$session) {;
+            foreach ($sessionList as &$session) {
                 // Add validated and queue users count
                 $session['validated_user_num'] = 0;
                 $session['waiting_user_num'] = 0;

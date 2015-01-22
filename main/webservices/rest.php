@@ -3,7 +3,7 @@
 /**
  * Controller for REST request
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- * @package chamilo.plugin.tour
+ * @package chamilo.webservices
  */
 /* Require libs and classes */
 require_once '../main/inc/global.inc.php';

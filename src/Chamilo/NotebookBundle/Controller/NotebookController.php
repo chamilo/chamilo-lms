@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRights;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceLinkVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\NotebookBundle\Tool\Notebook;
 use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -154,9 +154,8 @@ class NotebookController extends ToolBaseCrudController
 
         $resource = $this->findOr404($request);
         $resourceNode = $resource->getResourceNode();
-        $link = $this->detectLink($resourceNode);
 
-        if (false === $this->isGranted(ResourceLinkVoter::VIEW, $link)) {
+        if (false === $this->isGranted(ResourceNodeVoter::VIEW, $resourceNode)) {
             throw new AccessDeniedException('Unauthorised access!');
         }
 
@@ -180,6 +179,10 @@ class NotebookController extends ToolBaseCrudController
         $session = $this->getSession();
         $course = $this->getCourse();
 
+        /*if ($user->getId() == $resourceNode->getCreator()->getId()) {
+
+        }*/
+
         $links = $resourceNode->getLinks();
 
         $linkFound = null;
@@ -200,7 +203,7 @@ class NotebookController extends ToolBaseCrudController
                     }
                 }
 
-                if (isset($course)) {
+                if (isset($course) && isset($linkCourse)) {
                     if ($linkCourse->getId() == $course->getId()) {
                         $linkFound = $link;
                         break;
@@ -329,6 +332,9 @@ class NotebookController extends ToolBaseCrudController
                         break;
                 }
             }
+
+            $resource->setResourceNode($resourceNode);
+
             $resource = $this->domainManager->create($resource);
 
             if ($this->config->isApiRequest()) {

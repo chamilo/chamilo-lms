@@ -17,7 +17,9 @@
             <dd>{{ notebook.resourceNode.updatedAt | format_datetime }}</dd>
             <dt>Links</dt>
             {% for link in notebook.resourceNode.links %}
-            <dd> Course : {{ link.course.title }} - ({{ link.course.code }})</dd>
+                {% if link.course %}
+                    <dd> Course : {{ link.course.title }} ({{ link.course.code }})</dd>
+                {% endif %}
             {% endfor %}
             <dd>Donec id elit non mi porta gravida at eget metus.</dd>
             <dt>Malesuada porta</dt>

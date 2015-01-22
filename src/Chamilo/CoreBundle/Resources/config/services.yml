@@ -34,7 +34,7 @@ services:
            - { name: security.voter }
 
     chamilo_core.security.authorization.voter.resource_link:
-        class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceLinkVoter
+        class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter
         public: false
         arguments: [ @service_container ]
         tags:

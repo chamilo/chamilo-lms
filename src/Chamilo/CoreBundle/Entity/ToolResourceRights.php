@@ -141,24 +141,24 @@ class ToolResourceRights
     {
         $builder = new MaskBuilder();
         $builder
-            ->add('view')
+            ->add('VIEW')
         ;
 
         $readerMask = $builder->get();
 
         $builder = new MaskBuilder();
         $builder
-            ->add('view')
-            ->add('edit')
+            ->add('VIEW')
+            ->add('EDIT')
         ;
 
         $editorMask = $builder->get();
 
         $builder = new MaskBuilder();
         $builder
-            ->add('view')
-            ->add('edit')
-            ->add('delete')
+            ->add('VIEW')
+            ->add('EDIT')
+            ->add('DELETE')
         ;
         $ownerMask = $builder->get();
 
@@ -176,7 +176,7 @@ class ToolResourceRights
     {
         $builder = new MaskBuilder();
         $builder
-            ->add('view')
+            ->add('VIEW')
         ;
 
         return $builder->get();
@@ -189,8 +189,8 @@ class ToolResourceRights
     {
         $builder = new MaskBuilder();
         $builder
-            ->add('view')
-            ->add('edit')
+            ->add('VIEW')
+            ->add('EDIT')
         ;
 
         return $builder->get();

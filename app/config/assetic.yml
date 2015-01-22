@@ -37,7 +37,8 @@ assetic:
                 - bundles/chamilotheme/components/jquery-ui/themes/cupertino/jquery-ui.min.css
                 - bundles/chamilotheme/components/bootflat/css/bootflat.css
                 - bundles/chamilotheme/components/jqgrid/css/ui.jqgrid.css
-                - bundles/chamilotheme/components/select2/select2-bootstrap.css
+                - bundles/chamilotheme/components/select2/select2.css
+#                - bundles/chamilotheme/components/select2/select2-bootstrap.css
                 - bundles/chamilotheme/components/adminlte/css/jvectormap/*
                 - bundles/chamilotheme/components/adminlte/css/morris/*
                 - bundles/chamilotheme/components/adminlte/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.css

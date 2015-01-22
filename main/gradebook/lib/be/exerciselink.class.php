@@ -260,6 +260,7 @@ class ExerciseLink extends AbstractLink
                 if ($title == '') {
                     $title = basename($data['path']);
                 }
+
                 return $title;
             }
         }
@@ -334,20 +335,22 @@ class ExerciseLink extends AbstractLink
     private function get_exercise_data()
     {
         $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
         if ($this->is_hp == 1) {
             $tbl_exercise = Database :: get_course_table(TABLE_DOCUMENT);
         } else {
             $tbl_exercise = $this->get_exercise_table();
         }
-        if ($tbl_exercise=='') {
+
+        $ref_id = intval($this->get_ref_id());
+
+        if ($tbl_exercise == '') {
             return false;
         } elseif (!isset($this->exercise_data)) {
             if ($this->is_hp == 1) {
-                $ref_id = intval($this->get_ref_id());
-                $sql = "SELECT * FROM $tbl_exercise ex, $TBL_ITEM_PROPERTY ip
+                $sql = "SELECT * FROM $tbl_exercise ex
+                        INNER JOIN $TBL_ITEM_PROPERTY ip
+                        ON (ip.ref = ex.id AND ip.c_id = ex.c_id)
                         WHERE
-                            ip.ref = ex.id AND
                             ip.c_id = $this->course_id AND
                             ex.c_id = $this->course_id AND
                             ip.ref = $ref_id AND
@@ -359,10 +362,10 @@ class ExerciseLink extends AbstractLink
                 $sql = 'SELECT * FROM '.$tbl_exercise.'
                         WHERE
                             c_id = '.$this->course_id.' AND
-                            id = '.(int)$this->get_ref_id().' ';
+                            id = '.$ref_id.' ';
             }
             $result = Database::query($sql);
-            $this->exercise_data=Database::fetch_array($result);
+            $this->exercise_data = Database::fetch_array($result);
         }
 
         return $this->exercise_data;

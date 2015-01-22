@@ -1011,7 +1011,15 @@ function api_get_months_long($language = null) {
  * @author Carlos Vargas <carlos.vargas@dokeos.com> - initial implementation.
  * @author Ivan Tcholakov
  */
-function api_get_person_name($first_name, $last_name, $title = null, $format = null, $language = null, $encoding = null, $username = null) {
+function api_get_person_name(
+    $first_name,
+    $last_name,
+    $title = null,
+    $format = null,
+    $language = null,
+    $encoding = null,
+    $username = null
+) {
     static $valid = array();
     if (empty($format)) {
         $format = PERSON_NAME_COMMON_CONVENTION;
@@ -1025,6 +1033,7 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }
+
     if (!isset($valid[$format][$language])) {
         if (is_int($format)) {
             switch ($format) {
@@ -1078,7 +1087,7 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
 /**
  * Checks whether a given format represents person name in Western order (for which first name is first).
  * @param int/string $format (optional)	The person name format. It may be a pattern-string (for example '%t. %l, %f') or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
- * @param string $language (optional)	The language indentificator. If it is omited, the current interface language is assumed. This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
+ * @param string $language (optional)	The language identificator. If it is omited, the current interface language is assumed. This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
  * @return bool							The result TRUE means that the order is first_name last_name, FALSE means last_name first_name.
  * Note: You may use this function for determing the order of the fields or columns "First name" and "Last name" in forms, tables and reports.
  * @author Ivan Tcholakov
@@ -2499,7 +2508,8 @@ function api_strcasecmp($string1, $string2, $language = null, $encoding = null) 
  * @link http://php.net/manual/en/function.strcmp.php
  * @link http://php.net/manual/en/collator.compare.php
  */
-function api_strcmp($string1, $string2, $language = null, $encoding = null) {
+function api_strcmp($string1, $string2, $language = null, $encoding = null)
+{
     if (INTL_INSTALLED) {
         $collator = _api_get_collator($language);
         if (is_object($collator)) {

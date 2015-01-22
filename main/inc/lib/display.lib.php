@@ -142,7 +142,13 @@ class Display
         echo self::return_introduction_section($tool, $editor_config);
     }
 
-    public static function return_introduction_section($tool, $editor_config = null) {
+    /**
+     * @param string $tool
+     * @param array $editor_config
+     * @return null
+     */
+    public static function return_introduction_section($tool, $editor_config = null)
+    {
         $is_allowed_to_edit = api_is_allowed_to_edit();
         $moduleId = $tool;
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {

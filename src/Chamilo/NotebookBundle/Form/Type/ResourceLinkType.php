@@ -25,16 +25,20 @@ class ResourceLinkType extends AbstractType
                 'choice',
                 array(
                     'choices' => array(
-                        'public' => 'Public',
-                        //'private' => 'Only me',
-                        'this_course' => 'This course',
-                        'another_course' => 'Another course',
-                        'user'=> 'User'
+                        'everyone' => 'Everyone',
+                        'course' => 'Course',
+                        'user'=> 'User',
+                        'group'=> 'Group'
                     ),
                     'attr' => array('class' => 'sharing_options')
                 )
             )
             ->add('search', 'hidden', array('attr' => array('class' => 'extra_hidden')))
+            ->add(
+                'role',
+                'choice',
+                array('choices' => ToolResourceRights::getDefaultRoles())
+            )
             ->add(
                 'mask',
                 'choice',

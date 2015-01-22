@@ -29,11 +29,18 @@
             addTagForm($collectionHolder, $newLinkLi);
         });
 
+        // This course
         $('#chamilo_notebook_notebook_shared_0').on('click', function() {
             $('#rights').hide();
         });
 
+        // Only me
         $('#chamilo_notebook_notebook_shared_1').on('click', function() {
+            $('#rights').hide();
+        });
+
+        // Shared
+        $('#chamilo_notebook_notebook_shared_2').on('click', function() {
             $('#rights').show();
         });
     });
@@ -92,30 +99,44 @@
 
         $('.sharing_options').on('change', function() {
             var inputId = this.id;
-            var hiddenInput = inputId.replace("sharing", "search");
-            var field = $('#' + hiddenInput);
-            var select2 = $('#s2id_' + hiddenInput);
+            var hiddenInputId = inputId.replace("sharing", "search");
+            var roleId = inputId.replace("sharing", "role");
+
+            var selectRow = $('#' + hiddenInputId);
+            var select2 = $('#s2id_' + hiddenInputId);
+            var roleRow = $('#' + roleId).parent();
 
             var url = '';
             switch (this.value) {
-                case 'another_course':
-                    field.show();
+                case 'everyone':
+                    roleRow.hide();
+                    break;
+                case 'course':
+                    selectRow.show();
                     select2.show();
+                    roleRow.show();
                     url = Routing.generate('chamilo_core_user_user_mycourses');
                     break;
                 case 'user':
-                    field.show();
+                    selectRow.show();
                     select2.show();
+                    roleRow.hide();
+                    url = Routing.generate('chamilo_core_user_user_mycourses');
+                    break;
+                case 'group':
+                    selectRow.show();
+                    select2.show();
+                    roleRow.hide();
                     url = Routing.generate('chamilo_core_user_user_mycourses');
                     break;
                 default:
-                    field.hide();
+                    selectRow.hide();
                     select2.hide();
                     break;
             }
 
             if (url != '') {
-                field.select2({
+                selectRow.select2({
                     tags: true,
                     tokenSeparators: [',', ' '],
                     ajax: {
@@ -155,7 +176,6 @@
     <form method="post" action="{{ path('chamilo_notebook_new', {'course': course }) }}">
         <div class="box-body">
             {{ form_start(form) }}
-
             {{ form_row(form.name) }}
             {{ form_row(form.description) }}
             {{ form_row(form.shared) }}

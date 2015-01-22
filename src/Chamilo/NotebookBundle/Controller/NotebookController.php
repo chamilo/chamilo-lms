@@ -6,7 +6,9 @@ namespace Chamilo\NotebookBundle\Controller;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\Entity\ToolResourceRights;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceLinkVoter;
 use Chamilo\NotebookBundle\Tool\Notebook;
 use Doctrine\ORM\QueryBuilder;
@@ -232,28 +234,101 @@ class NotebookController extends ToolBaseCrudController
         $form = $this->getForm($resource);
 
         if ($form->handleRequest($request)->isValid()) {
-            $rights = $form->get('rights')->getData();
+            $sharedType = $form->get('shared')->getData();
+            $shareList = array();
 
-            var_dump($rights);exit;
-
-            // Build links
-            switch ($rights['sharing']) {
-                case 'another_course':
-                    $idList = explode(',', $rights['search']);
+            switch ($sharedType) {
+                case 'this_course':
+                    // Default Chamilo behaviour:
+                    // Teachers can edit and students can see
+                    $shareList = array(
+                        array(
+                            'sharing' => 'course',
+                            'mask' => ToolResourceRights::getReaderMask(),
+                            'role' => 'ROLE_STUDENT',
+                            'search' => $this->getCourse()->getId()
+                        ),
+                        array(
+                            'sharing' => 'course',
+                            'mask' => ToolResourceRights::getEditorMask(),
+                            'role' => 'ROLE_TEACHER',
+                            'search' => $this->getCourse()->getId()
+                        )
+                    );
                     break;
-                case 'user':
+                case 'shared':
+                    $shareList = $form->get('rights')->getData();
+                    break;
+                case 'only_me':
+                    $shareList = array(
+                        array(
+                            'sharing' => 'user',
+                            'only_me' => true
+                        )
+                    );
                     break;
             }
 
-            $resourceNode = $this->getRepository()->addResourceToCourse(
+            /** @var NotebookRepository $repository */
+            $repository = $this->getRepository();
+
+            $resourceNode = $repository->addResourceNode(
                 $resource,
-                $this->getUser(),
-                $this->getCourse(),
-                $rights
+                $this->getUser()
             );
+            // Loops all sharing options
+            foreach ($shareList as $share) {
+                $idList = array();
+                if (isset($share['search'])) {
+                    $idList = explode(',', $share['search']);
+                }
 
-            $resource->setResourceNode($resourceNode);
+                $resourceRight = new ResourceRights();
+                $resourceRight->setMask($share['mask']);
+                $resourceRight->setRole($share['role']);
 
+                // Build links
+                switch ($share['sharing']) {
+                    case 'everyone':
+                        $repository->addResourceToEveryone(
+                            $resourceNode,
+                            $resourceRight
+                        );
+                        break;
+                    case 'course':
+                        $repository->addResourceToCourse(
+                            $resourceNode,
+                            $this->getCourse(),
+                            $resourceRight
+                        );
+                        break;
+                    case 'session':
+                        $repository->addResourceToSession(
+                            $resourceNode,
+                            $this->getCourse(),
+                            $this->getSession(),
+                            $resourceRight
+                        );
+                        break;
+                    case 'user':
+                        // Only for me
+                        if (isset($rights['only_me'])) {
+                            $repository->addResourceOnlyToMe(
+                                $resourceNode
+                            );
+                        } else {
+                            // To other users
+                            $repository->addResourceToUserList(
+                                $resourceNode,
+                                $idList
+                            );
+                        }
+                        break;
+                    case 'group':
+                        // @todo
+                        break;
+                }
+            }
             $resource = $this->domainManager->create($resource);
 
             if ($this->config->isApiRequest()) {

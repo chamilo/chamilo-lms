@@ -129,8 +129,8 @@ class ToolResourceRights
     public static function getDefaultRoles()
     {
         return array(
-            'ROLE_STUDENT' => 'ROLE_STUDENT',
-            'ROLE_TEACHER' => 'ROLE_TEACHER'
+            'ROLE_STUDENT' => 'Students',
+            'ROLE_TEACHER' => 'Teachers'
         );
     }
 

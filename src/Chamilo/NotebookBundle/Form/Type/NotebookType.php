@@ -26,6 +26,7 @@ class NotebookType extends AbstractType
                 'choice',
                 array(
                     'choices' => array(
+                        'this_course' => 'This course',
                         'only_me' => 'Only me',
                         'shared' => 'Shared'
                     ),

@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
@@ -25,7 +26,7 @@ class ResourceLink
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode")
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id")
      */
     protected $resourceNode;
@@ -38,13 +39,13 @@ class ResourceLink
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      **/
     protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)
      */
     protected $course;
 
@@ -55,7 +56,13 @@ class ResourceLink
     protected $group;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRights", mappedBy="resourceLink", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
+     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
+     */
+    protected $userGroup;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRights", mappedBy="resourceLink", cascade={"persist", "remove"})
      **/
     protected $rights;
 
@@ -72,6 +79,14 @@ class ResourceLink
      * @ORM\Column(name="public", type="boolean", nullable=true, unique=false)
      */
     protected $public;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rights = new ArrayCollection();
+    }
 
     /**
      * @return boolean
@@ -117,19 +132,27 @@ class ResourceLink
      * @param ArrayCollection $rights
      * @return $this
      */
-    public function setRights($rights)
+    public function setRights(ArrayCollection $rights)
     {
-        $this->rights = $rights;
+        $this->rights = new ArrayCollection();
+
+        foreach ($rights as $right) {
+            $this->addRight($right);
+        }
 
         return $this;
     }
 
     /**
-     * @return CGroupInfo
+     * @param ResourceRights $right
+     * @return $this
      */
-    public function getGroup()
+    public function addRight(ResourceRights $right)
     {
-        return $this->group;
+        $right->setResourceLink($this);
+        $this->rights[] = $right;
+
+        return $this;
     }
 
     /**
@@ -185,12 +208,39 @@ class ResourceLink
     }
 
     /**
+     * @return CGroupInfo
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
      * @param CGroupInfo $group
      * @return $this
      */
     public function setGroup(CGroupInfo $group)
     {
         $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * @return Usergroup
+     */
+    public function getUserGroup()
+    {
+        return $this->userGroup;
+    }
+
+    /**
+     * @param Usergroup $group
+     * @return $this
+     */
+    public function setUserGroup(Usergroup $group)
+    {
+        $this->userGroup = $group;
 
         return $this;
     }

@@ -133,7 +133,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 '',
                 array(
                     'id' => array('name' => 'id', 'type' => 'xsd:string'),
-                    'cost' => array('name' => 'cost', 'type' => 'xsd:string'),
+                    'cost' => array('name' => 'cost', 'type' => 'xsd:float'),
                     'place' => array('name' => 'place', 'type' => 'xsd:string'),
                     'visitors' => array('name' => 'visitors', 'type' => 'xsd:string'),
                     'duration' => array('name' => 'duration', 'type' => 'xsd:int'),

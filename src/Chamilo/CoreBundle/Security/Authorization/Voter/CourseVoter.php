@@ -80,6 +80,8 @@ class CourseVoter extends AbstractVoter
             return false;
         }
 
+        $courseManager = $this->getCourseManager();
+
         switch ($attribute) {
             case self::VIEW:
                 $session = $course->getCurrentSession();
@@ -91,8 +93,10 @@ class CourseVoter extends AbstractVoter
                     }
 
                     // User is subscribed in the user list.
-                    $userIsSubscribed = $this->getCourseManager()->
-                    isUserSubscribedInCourse($user, $course);
+                    $userIsSubscribed = $courseManager->isUserSubscribedInCourse(
+                        $user,
+                        $course
+                    );
 
                     if ($userIsSubscribed) {
                         dump('user_is_subscribed');
@@ -112,6 +116,7 @@ class CourseVoter extends AbstractVoter
                 break;
             case self::EDIT:
                 // Teacher
+                // @todo
                 if ($user->getId() === $course->getOwner()->getId()) {
                     return true;
                 }

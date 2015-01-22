@@ -97,6 +97,7 @@ class CourseListener
                     }
 
                     // Check if user is allowed to this course / course-session
+                    // See CourseVoter.php
                     if (false === $securityChecker->isGranted('view', $course)) {
                         throw new AccessDeniedException('Unauthorised access!');
                     }

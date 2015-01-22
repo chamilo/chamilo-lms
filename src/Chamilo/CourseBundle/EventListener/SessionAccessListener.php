@@ -7,6 +7,10 @@ use Chamilo\CourseBundle\Event\SessionAccess;
 use Doctrine\ORM\EntityManager;
 use Chamilo\CoreBundle\Entity\TrackEAccess;
 
+/**
+ * Class SessionAccessListener
+ * @package Chamilo\CourseBundle\EventListener
+ */
 class SessionAccessListener
 {
     protected $em;

@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$TemplateCertificateComment = "Ejemplo de certificado";
+$TemplateCertificateTitle = "Certificado";
 $ResultsVisibility = "Visibilidad de los resultados";
 $DownloadCertificate = "Descargar certificado";
 $PortalActiveCoursesLimitReached = "Lo sentimos, esta instalación tiene un límite de cursos activos, que ahora se ha alcanzado. Todavía puede crear nuevos cursos, pero sólo si te esconde al menos un curso activo existente. Para ello, edite un curso de la lista de cursos de administración y cambiar la visibilidad a 'invisible', a continuación, intente crear este curso de nuevo. para aumentar el número máximo de cursos activos permitidos en esta instalación de Chamilo, por favor póngase en contacto con su proveedor de hosting o, en su caso, actualizar a un plan de alojamiento superiores.";

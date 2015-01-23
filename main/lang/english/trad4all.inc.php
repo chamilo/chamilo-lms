@@ -2,6 +2,18 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CosecantCsc = "Cosecant:\t\t\t\tcsc(x)";
+$HyperbolicCosecantCsch = "Hyperbolic cosecant:\t\tcsch(x)";
+$ArccosecantArccsc = "Arccosecant:\t\t\tarccsc(x)";
+$HyperbolicArccosecantArccsch = "Hyperbolic arccosecant:\t\tarccsch(x)";
+$SecantSec = "Secant:\t\t\t\tsec(x)";
+$HyperbolicSecantSech = "Hyperbolic secant:\t\tsech(x)";
+$ArcsecantArcsec = "Arcsecant:\t\t\tarcsec(x)";
+$HyperbolicArcsecantArcsech = "Hyperbolic arcsecant:\t\tarcsech(x)";
+$CotangentCot = "Cotangent:\t\t\tcot(x)";
+$HyperbolicCotangentCoth = "Hyperbolic cotangent:\t\tcoth(x)";
+$ArccotangentArccot = "Arccotangent:\t\t\tarccot(x)";
+$HyperbolicArccotangentArccoth = "Hyperbolic arccotangent:\t\tarccoth(x)";
 $HelpCookieUsageValidation = "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />
 If needed, the Help section of your browser indicates how to configure cookies.<br /><br />
 For more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website.";
@@ -43,21 +55,15 @@ $BuyCourses = "Buy courses";
 $MySessions = "My sessions";
 $ActivateAudioRecorder = "Activate audio recorder";
 $StartSpeaking = "Start speaking";
-$InverseHyperbolicTangentAtanh = "Inverse hyperbolic tangent:\tatanh(x)";
 $HyperbolicArctangentArctanh = "Hyperbolic arctangent:\t\tarctanh(x)";
-$InverseTangentAtan = "Inverse tangent:\t\tatan(x)";
 $ArctangentArctan = "Arctangent:\t\t\tarctan(x)";
 $HyperbolicTangentTanh = "Hyperbolic tangent:\t\ttanh(x)";
 $TangentTan = "Tangent:\t\t\ttan(x)";
-$InverseHyperbolicCosineAcosh = "Inverse hyperbolic cosine:\tacosh(x)";
 $HyperbolicArccosineArccosh = "Hyperbolic arccosine:\t\tarccosh(x)";
-$InverseCosineAcos = "Inverse cosine:\t\t\tacos(x)";
 $ArccosineArccos = "Arccosine:\t\t\tarccos(x)";
 $HyperbolicCosineCosh = "Hyperbolic cosine:\t\tcosh(x)";
 $CosineCos = "Cosine:\t\t\t\tcos(x)";
-$InverseHyperbolicSineAsinh = "Inverse hyperbolic sine:\tasinh(x)";
 $HyperbolicArcsineArcsinh = "Hyperbolic arcsine:\t\tarcsinh(x)";
-$InverseSineAsin = "Inverse sine:\t\t\tasin(x)";
 $ArcsineArcsin = "Arcsine:\t\t\tarcsin(x)";
 $HyperbolicSineSinh = "Hyperbolic sine:\t\tsinh(x)";
 $SineSin = "Sine:\t\t\t\tsin(x)";

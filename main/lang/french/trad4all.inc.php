@@ -2,6 +2,18 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CosecantCsc = "Cosécante:\t\t\t\tcsc(x)";
+$HyperbolicCosecantCsch = "Cosécante hyperbolique:\t\tcsch(x)";
+$ArccosecantArccsc = "Arccosécante:\t\t\tarccsc(x)";
+$HyperbolicArccosecantArccsch = "Arccosécante hyperbolique:\t\tarccsch(x)";
+$SecantSec = "Sécante:\t\t\t\tsec(x)";
+$HyperbolicSecantSech = "Sécante hyperbolique:\t\tsech(x)";
+$ArcsecantArcsec = "Arcsécante:\t\t\tarcsec(x)";
+$HyperbolicArcsecantArcsech = "Arcsécante hyperbolique:\t\tarcsech(x)";
+$CotangentCot = "Cotangente:\t\t\tcot(x)";
+$HyperbolicCotangentCoth = "Cotangente hyperbolique:\t\tcoth(x)";
+$ArccotangentArccot = "Arccotangente:\t\t\tarccot(x)";
+$HyperbolicArccotangentArccoth = "Arccotangente hyperbolique:\t\tarccoth(x)";
 $HelpCookieUsageValidation = "Dans un soucis de bon fonctionnement et de mesure de fréquentation de la plate forme, Chamilo utilise les cookies.<br/><br/>Au besoin, La rubrique « Aide » des navigateurs vous indique comment paramétrer les cookies.<br/><br/>Pour plus d'informations sur les cookies, visitez le site de la <a href='http://www.cnil.fr/vos-obligations/sites-web-cookies-et-autres-traceurs/que-dit-la-loi/' target='_blank'>CNIL</a>.";
 $YouAcceptCookies = "En continuant votre navigation sur ce site, vous vous engagez à accepter l’utilisation des cookies.";
 $TemplateCertificateComment = "Exemple de certificat";
@@ -41,21 +53,15 @@ $BuyCourses = "Achat de cours";
 $MySessions = "Mes sessions";
 $ActivateAudioRecorder = "Activer l'enregistreur audio";
 $StartSpeaking = "Parlez maintenant";
-$InverseHyperbolicTangentAtanh = "Tangente hyperbolique inverse:\tatanh(x)";
 $HyperbolicArctangentArctanh = "Arctangente hyperbolique:\t\tarctanh(x)";
-$InverseTangentAtan = "Tangente inverse:\t\tatan(x)";
 $ArctangentArctan = "Arctangente:\t\t\tarctan(x)";
 $HyperbolicTangentTanh = "Tangente hyperbolique:\t\ttanh(x)";
 $TangentTan = "Tangente:\t\t\ttan(x)";
-$InverseHyperbolicCosineAcosh = "Cosinus hyperbolique inverse:\tacosh(x)";
 $HyperbolicArccosineArccosh = "Arcosinus hyperbolique:\t\tarccosh(x)";
-$InverseCosineAcos = "Cosinus inverse:\t\t\tacos(x)";
 $ArccosineArccos = "Arccosinus:\t\t\tarccos(x)";
 $HyperbolicCosineCosh = "Cosinus hyperbolique:\t\tcosh(x)";
 $CosineCos = "Cosinus:\t\t\t\tcos(x)";
-$InverseHyperbolicSineAsinh = "Sinus hyperbolique inverse:\tasinh(x)";
 $HyperbolicArcsineArcsinh = "Arcsinus hyperbolique:\t\tarcsinh(x)";
-$InverseSineAsin = "Sinus inverse:\t\t\tasin(x)";
 $ArcsineArcsin = "Arcsinus:\t\t\tarcsin(x)";
 $HyperbolicSineSinh = "Sinus hyperbolique:\tsinh(x)";
 $SineSin = "Sinus:\t\t\t\tsin(x)";

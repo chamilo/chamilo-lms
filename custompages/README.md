@@ -22,6 +22,3 @@ The user-provided custom pages must exactly be named as such :
   Instead, create new images, as the current ones will be overwritten
   by each Chamilo upgrade.
 
-If you pull this feature from a repo, not through an upgrade or install process,
-you have to execute the following SQL statements in the main database or
-this option won't appear in the admin interface :

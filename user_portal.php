@@ -166,7 +166,7 @@ if (api_get_setting('allow_browser_sniffer') == 'true') {
 
 
 // Display the Site Use Cookie Warning Validation
-$useCookieValidation = api_get_configuration_value('chamilo_use_cookie_warning_validation');
+$useCookieValidation = api_get_configuration_value('cookie_warning');
 if ($useCookieValidation) {
 	if (isset($_POST['acceptCookies'])) {
 		api_set_site_use_cookie_warning_cookie();

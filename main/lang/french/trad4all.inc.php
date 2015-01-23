@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$HelpCookieUsageValidation = "Dans un soucis de bon fonctionnement et de mesure de fréquentation de la plate forme, Chamilo utilise les cookies.<br/><br/>Au besoin, La rubrique « Aide » des navigateurs vous indique comment paramétrer les cookies.<br/><br/>Pour plus d'informations sur les cookies, visitez le site de la <a href='http://www.cnil.fr/vos-obligations/sites-web-cookies-et-autres-traceurs/que-dit-la-loi/' target='_blank'>CNIL</a>.";
+$YouAcceptCookies = "En continuant votre navigation sur ce site, vous vous engagez à accepter l’utilisation des cookies.";
 $TemplateCertificateComment = "Exemple de certificat";
 $TemplateCertificateTitle = "Certificat";
 $ResultsVisibility = "Visibilité des résultats";

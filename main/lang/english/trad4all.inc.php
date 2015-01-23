@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$HelpCookieUsageValidation = "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />
+If needed, the Help section of your browser indicates how to configure cookies.<br /><br />
+For more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website.";
+$YouAcceptCookies = "By continuing to use this site, you declare you accept its use of cookies.";
 $TemplateCertificateComment = "An example certificate format";
 $TemplateCertificateTitle = "Certificate";
 $ResultsVisibility = "Results visibility";

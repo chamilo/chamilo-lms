@@ -20,12 +20,12 @@
     <form onSubmit="$(this).toggle('slow')" action="" method="post">
         <input value=1 type="hidden" name="acceptCookies"/>
         <div class="cookieUsageValidation">
-            {{ "youDeclareToAcceptCookies" | get_lang }}
+            {{ "YouAcceptCookies" | get_lang }}
             <span style="margin-left:20px;" onclick="$(this).next().toggle('slow'); $(this).toggle('slow')">
                 ({{"More" | get_lang }})
             </span>
             <div style="display:none; margin:20px 0;">
-                {{ "helpCookieUsageValidation" | get_lang}}
+                {{ "HelpCookieUsageValidation" | get_lang}}
             </div>
             <span style="margin-left:20px;" onclick="$(this).parent().parent().submit()">
                 ({{"Accept" | get_lang }})

@@ -402,7 +402,7 @@ class HookAdvancedSubscription extends HookObserver implements
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return null|soap_fault|string
      */
     public static function WSAdvsubEncrypt($data)
@@ -411,17 +411,22 @@ class HookAdvancedSubscription extends HookObserver implements
 
         if ($debug) error_log('WSUserSubscribedInCourse');
         if ($debug) error_log('Params '. print_r($data, 1));
-        if (!WSHelperVerifyKey($data)) {
 
-            //return return_error(WS_ERROR_SECRET_KEY);
-        }
-        // Check if data is a string
-        if (is_string($data)) {
-            $enc = AdvancedSubscriptionPlugin::create()->encrypt($data);
-            if (is_string($enc) && strlen($enc) > 16) {
-                $result = $enc;
-            } else {
-                $result = return_error(WS_ERROR_INVALID_INPUT);
+        // Check if data is an array
+        if (is_array($data)) {
+            if (!WSHelperVerifyKey($data)) {
+
+                //return return_error(WS_ERROR_SECRET_KEY);
+            }
+            $result = AdvancedSubscriptionPlugin::create()->encrypt($data);
+        } elseif (is_string($data)) {
+            $data = unserialize($data);
+            if (!WSHelperVerifyKey($data)) {
+
+                //return return_error(WS_ERROR_SECRET_KEY);
+            }
+            if (is_array($data)) {
+                $result = AdvancedSubscriptionPlugin::create()->encrypt($data);
             }
         } else {
             // Return soap fault Not valid input params

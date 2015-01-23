@@ -60,6 +60,33 @@ if (!empty($a) && !empty($u)) {
         case 'second': // Subscription
             $res = AdvancedSubscriptionPlugin::create()->startSubscription($u, $s, $params);
             if ($res === true) {
+                // send mail to superior
+                $sessionArray = api_get_session_info($s);
+                $extraSession = new ExtraFieldValue('session');
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'as_description');
+                $sessionArray['description'] = $var['field_valiue'];
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'publico_objetivo');
+                $sessionArray['publico_objetivo'] = $var['field_valiue'];
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'modalidad');
+                $sessionArray['modalidad'] = $var['field_valiue'];
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'fin_publicacion');
+                $sessionArray['publico_objetivo'] = $var['field_value'];
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'numero_recomendado_participantes');
+                $sessionArray['recommended_subscription_limit'] = $var['field_valiue'];
+                $studentArray = api_get_user_info($u);
+                $superiorArray = api_get_user_info($u);
+                $adminArray = api_get_user_info($u);
+                $studentArray = api_get_user_info($u);
+
+                $data = array(
+                    'student' => $studentArray,
+                    'superior' => $superiorArray,
+                    'admin' => $adminArray,
+                    'session' => $sessionArray,
+                    'signature' => 'AQUI DEBE IR UNA FIRMA',
+                );
+
+                $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
                 $result['error'] = false;
                 $result['errorMessage'] = 'No error';
                 $result['pass'] = true;

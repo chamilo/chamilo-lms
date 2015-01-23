@@ -59,7 +59,7 @@
                 <tr>
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>Estimado:</p>
-                        <h2>{{ user.name }}</h2>
+                        <h2>{{ student.name }}</h2>
                         <p>Hemos recibido y registrado su solicitud de inscripción al curso <strong>{{ sesion.title }}</strong> para iniciarse el <strong>{{ session.start_date }}</strong>.</p>
                         <p>Su inscripción es pendiente primero de la aprobación de su superior, y luego de la disponibilidad de cupos. Un correo ha sido enviado a su superior para revisión y aprobación de su solicitud.</p>
                         <p>Gracias.</p>

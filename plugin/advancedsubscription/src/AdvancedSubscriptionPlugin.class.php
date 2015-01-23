@@ -250,13 +250,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
     /**
      * Send message for the student subscription approval to a specific session
-     * @param $studentId
-     * @param $subject
-     * @param $content
-     * @param $sessionId
+     * @param int $studentId
+     * @param string $subject
+     * @param string $content
+     * @param int $sessionId
+     * @param bool $save
      * @return bool|int
      */
-    public function sendMailMessage($studentId, $subject, $content, $sessionId)
+    public function sendMailMessage($studentId, $subject, $content, $sessionId, $save = false)
     {
         global $_configuration; // @TODO: Add $_configuration['no_reply_user_id'] to configuration file
 
@@ -273,7 +274,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $_configuration['no_reply_user_id']
         );
 
-        if (!empty($mailId)) {
+        if ($save && !empty($mailId)) {
             // Save as sent message
             $mailId = $this->saveLastMessage($mailId, $studentId, $sessionId);
         }
@@ -376,7 +377,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['superior']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior.tpl'),
-                    $data['session_id']
+                    $data['session_id'],
+                    true
                 );
                 break;
             case ADV_SUB_ACTION_SUPERIOR_APPROVE:
@@ -399,7 +401,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['admin']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_approved_info_admin.tpl'),
-                    $data['session_id']
+                    $data['session_id'],
+                    true
                 );
                 break;
             case ADV_SUB_ACTION_SUPERIOR_DISAPPROVE:
@@ -408,7 +411,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['student']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior_disapproved.tpl'),
-                    $data['session_id']
+                    $data['session_id'],
+                    true
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
@@ -431,7 +435,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['superior']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior.tpl'),
-                    $data['session_id']
+                    $data['session_id'],
+                    true
                 );
                 break;
             case ADV_SUB_ACTION_ADMIN_APPROVE:
@@ -454,7 +459,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['admin']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_admin.tpl'),
-                    $data['session_id']
+                    $data['session_id'],
+                    true
                 );
                 break;
             case ADV_SUB_ACTION_ADMIN_DISAPPROVE:
@@ -463,7 +469,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['student']['id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_student.tpl'),
-                    $data['session_id']
+                    $data['session_id'],
+                    true
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(

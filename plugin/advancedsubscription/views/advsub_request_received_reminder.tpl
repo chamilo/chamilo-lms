@@ -59,7 +59,7 @@
                 <tr>
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>Estimado:</p>
-                        <h2>{{ user.name }}</h2>
+                        <h2>{{ student.name }}</h2>
                         <p>Este correo es para confirmar que hemos recibido y registrado su solicitud de inscripción al  curso <strong>{{ session.title }}</strong>, por iniciarse el <strong>{{ session.start_date }}</strong>. </p>
                         <p>Su inscripción todavía no ha sido aprobada por su superior, por lo que hemos vuelto a enviarle un correo electrónico de recordatorio.</p>
                         <p>Gracias por su paciencia.</p>

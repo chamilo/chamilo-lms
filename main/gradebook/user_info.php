@@ -5,8 +5,11 @@
  * Script
  * @package chamilo.gradebook
  */
+
 $language_file = 'gradebook';
+
 //$cidReset = true;
+
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
@@ -28,9 +31,16 @@ require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/userform.class.php';
 block_students();
 
-$form = new UserForm(UserForm :: TYPE_USER_INFO, $user, 'user_info_form', null, api_get_self() . '?userid=' . $user_id . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
+$form = new UserForm(
+    UserForm :: TYPE_USER_INFO,
+    $user,
+    'user_info_form',
+    null,
+    api_get_self() . '?userid=' . $user_id . '&selectcat=' . Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq()
+);
+
 if ($form->validate()) {
-    header('Location: user_stats.php?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&userid=' .$user_id);
+    header('Location: user_stats.php?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&userid=' .$user_id.'&'.api_get_cidreq();
     exit;
 }
 

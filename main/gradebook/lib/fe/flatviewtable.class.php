@@ -603,10 +603,11 @@ class FlatViewTable extends SortableTable
     /**
      * @param $user_id
      * @param $name
+     *
      * @return string
      */
     private function build_name_link($user_id, $name)
     {
-        return '<a href="user_stats.php?userid=' . $user_id . '&selectcat=' . $this->selectcat->get_id() . '">' . $name . '</a>';
+        return '<a href="user_stats.php?userid=' . $user_id . '&selectcat=' . $this->selectcat->get_id() . '&'.api_get_cidreq().'">' . $name . '</a>';
     }
 }

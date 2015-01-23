@@ -1795,14 +1795,18 @@ class Display
      * @param array $items
      * @return null|string
      */
-    public static function actions($items)
+    public static function actions($items, $class = 'new_actions')
     {
         $html = null;
         if (!empty($items)) {
-            $html = '<div class="new_actions"><ul class="nav nav-pills">';
+            $html = '<div class="'.$class.'"><ul class="nav nav-pills">';
             foreach ($items as $value) {
                 $class = null;
                 if (isset($value['active']) && $value['active']) {
+                    $class = 'class ="active"';
+                }
+
+                if (basename($_SERVER['REQUEST_URI']) == basename($value['url']) ) {
                     $class = 'class ="active"';
                 }
                 $html .= "<li $class >";

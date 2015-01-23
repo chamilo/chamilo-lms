@@ -149,6 +149,22 @@ if (!api_is_anonymous()) {
 $hot_courses = null;
 $announcements_block = null;
 
+
+// Display the Site Use Cookie Warning Validation
+$useCookieValidation = api_get_configuration_value('chamilo_use_cookie_warning_validation');
+if ($useCookieValidation) {
+    if (isset($_POST['acceptCookies'])) {
+        api_set_site_use_cookie_warning_cookie();
+    } else if (!api_site_use_cookie_warning_cookie_exist()) {
+        if (Template::isToolBarDisplayedForUser()) {
+            $controller->tpl->assign('toolBarDisplayed', true);
+        } else {
+            $controller->tpl->assign('toolBarDisplayed', false);
+        }
+        $controller->tpl->assign('displayCookieUsageWarning', true);
+    }
+}
+
 // When loading a chamilo page do not include the hot courses and news
 
 if (!isset($_REQUEST['include'])) {

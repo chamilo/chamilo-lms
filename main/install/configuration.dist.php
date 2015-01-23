@@ -282,3 +282,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['name_order_conventions'] = array(
 //  'french' => array('format' => 'title last_name first_name',  'sort_by' => 'last_name')
 //);
+// Shows a warning message that the site use cookies
+//$_configuration['chamilo_use_cookie_warning_validation'] = false;

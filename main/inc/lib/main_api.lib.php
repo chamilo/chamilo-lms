@@ -7496,3 +7496,20 @@ function api_register_campus($listCampus = true) {
     }
     // Reload the settings.
 }
+
+/**
+ * Set the Site Use Cookie Warning for 1 year
+ */
+function api_set_site_use_cookie_warning_cookie()
+{
+    setcookie("ChamiloUsesCookies", "ok", time()+31556926);
+}
+
+/**
+ * Return true if the Site Use Cookie Warning Cookie warning exists
+ * @return bool
+ */
+function api_site_use_cookie_warning_cookie_exist()
+{
+    return isset($_COOKIE['ChamiloUsesCookies']);
+}

@@ -381,6 +381,11 @@ function & get_language_folder_list() {
                 continue;
             }
             if (is_dir($dirname.$entries)) {
+                if (is_file($dirname.$entries.'/install_disabled')) {
+                    // Skip all languages that have this file present, just for
+                    // the install process (languages incomplete)
+                    continue;
+                }
                 $result[$entries] = ucwords(str_replace($search, $replace_with, $entries));
             }
         }
@@ -1029,7 +1034,7 @@ function display_language_selection_box($name = 'language_list', $default_langua
  * can be done in the language of the user
  */
 function display_language_selection() { ?>
-    <h2><?php get_lang('WelcomeToTheDokeosInstaller'); ?></h2>
+    <h2><?php get_lang('WelcomeToTheChamiloInstaller'); ?></h2>
     <div class="RequirementHeading">
         <h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
@@ -1038,6 +1043,10 @@ function display_language_selection() { ?>
         <button type="submit" name="step1" class="btn next" value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         </form>
+        <br /><br />
+    </div>
+    <div class="RequirementHeading">
+        <?php echo get_lang('YourLanguageNotThereContactUs'); ?>
     </div>
 <?php
 }

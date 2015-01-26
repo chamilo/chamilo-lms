@@ -5533,6 +5533,86 @@ function WSUserSubscribedInCourse ($params)
     return (CourseManager::is_user_subscribed_in_course($userId,$courseCode));
 }
 
+/* Register WSCertificatesList function */
+// Register the data structures used by the service
+$server->wsdl->addComplexType(
+    'certificateDetails',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'id' => array('name' => 'id', 'type' => 'xsd:int'),
+        'username' => array('name' => 'username', 'type' => 'xsd:string'),
+        'course_code' => array('name' => 'course_code', 'type' => 'xsd:string'),
+        'session_id' => array('name' => 'session_id', 'type' => 'xsd:int'),
+        'cat_id' => array('name' => 'cat_id', 'type' => 'xsd:int'),
+        'created_at' => array('name' => 'created_at', 'type' => 'xsd:string'),
+        'path_certificate' => array('name' => 'path_certificate', 'type' => 'xsd:string')
+    )
+);
+
+$server->wsdl->addComplexType(
+    'certificatesList',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+        array('ref'=>'SOAP:ENC:arrayType',
+            'wsdl:arrayType'=>'tns:certificateDetails[]')
+    ),
+    'tns:certificateDetails'
+);
+// Register the method to expose
+$server->register(
+    'WSCertificatesList',                           // method name
+    array(
+        'startingDate' => 'xsd:string',             // input parameters
+        'endingDate' => 'xsd:string'
+    ),
+    array('return' => 'tns:certificatesList'),      // output parameters
+    'urn:WSRegistration',                           // namespace
+    'urn:WSRegistration#WSCertificatesList',        // soapaction
+    'rpc',                                          // style
+    'encoded',                                      // use
+    'This service returns a list of certificates'   // documentation
+);
+
+function WSCertificatesList($startingDate = '', $endingDate = '')
+{
+    global $_configuration;
+    if ($_configuration['add_gradebook_certificates_cron_task_enabled']) {
+        require_once api_get_path(SYS_CODE_PATH).'cron/add_gradebook_certificates.php';
+    }
+    $result = array();
+    $certificateTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+    $userTable = Database::get_main_table(TABLE_MAIN_USER);
+    $categoryTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+    $query = "SELECT certificate.id, user.username, category.course_code, category.session_id,
+    certificate.user_id, certificate.cat_id, certificate.created_at, certificate.path_certificate
+    FROM $certificateTable AS certificate
+    JOIN $userTable AS user ON certificate.user_id = user.user_id
+    JOIN $categoryTable AS category ON certificate.cat_id = category.id";
+    if (!empty($startingDate) && !empty($endingDate)) {
+        $query .= " WHERE certificate.created_at BETWEEN '$startingDate' AND '$endingDate'";
+    } else if (!empty($startingDate)) {
+        $query .= " WHERE certificate.created_at >= '$startingDate'";
+    } else if (!empty($endingDate)) {
+        $query .= " WHERE certificate.created_at <= '$endingDate'";
+    }
+    $queryResult = Database::query($query);
+    $basePath = api_get_path(WEB_CODE_PATH).'upload/users/';
+    while ($row = Database::fetch_array($queryResult)) {
+        $row['path_certificate'] = $basePath.substr((string) $row['user_id'], 0, 1)
+            .'/'.$row['user_id'].'/certificate'.$row['path_certificate'];
+        $result[] = $row;
+    }
+    return $result;
+
+}
+
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 // If you send your data in utf8 then this value must be false.

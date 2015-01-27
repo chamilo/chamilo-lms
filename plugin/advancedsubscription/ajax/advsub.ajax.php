@@ -42,7 +42,7 @@ if (isset($data) && is_array($data)) {
 $result = array('error' => true, 'errorMessage' => 'There was an error');
 if (!empty($a) && !empty($u)) {
     switch($a) {
-        case 'first': // Check minimum requirements
+        case 'check': // Check minimum requirements
             try {
                 $res = AdvancedSubscriptionPlugin::create()->isAbleToRequest($u, $params);
                 if ($res) {
@@ -57,7 +57,7 @@ if (!empty($a) && !empty($u)) {
                 $result['errorMessage'] = $e->getMessage();
             }
             break;
-        case 'second': // Subscription
+        case 'subscribe': // Subscription
             $res = AdvancedSubscriptionPlugin::create()->startSubscription($u, $s, $params);
             if ($res === true) {
                 // send mail to superior
@@ -74,14 +74,13 @@ if (!empty($a) && !empty($u)) {
                 $var = $extraSession->get_values_by_handler_and_field_variable($s, 'numero_recomendado_participantes');
                 $sessionArray['recommended_subscription_limit'] = $var['field_valiue'];
                 $studentArray = api_get_user_info($u);
-                $superiorArray = api_get_user_info($u);
-                $adminArray = api_get_user_info($u);
-                $studentArray = api_get_user_info($u);
+                $superiorArray = api_get_user_info(UserManager::getStudentBoss($u));
+                $adminsArray = UserManager::get_all_administrators();
 
                 $data = array(
                     'student' => $studentArray,
                     'superior' => $superiorArray,
-                    'admin' => $adminArray,
+                    'admins' => $adminsArray,
                     'session' => $sessionArray,
                     'signature' => 'AQUI DEBE IR UNA FIRMA',
                 );
@@ -99,7 +98,7 @@ if (!empty($a) && !empty($u)) {
                 $result['pass'] = false;
             }
             break;
-        case 'third': // Encrypt
+        case 'encrypt': // Encrypt
             $res = $plugin->encrypt($data);
             if (!empty($res) && strlen($res) > 16) {
                 $result['error'] = false;

@@ -344,8 +344,8 @@ class survey_manager
 						'".Database::escape_string($values['survey_thanks'])."',
 						'".api_get_utc_datetime()."',
 						'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
-						'".Database::escape_string($values['visible_results'])."',
-						".api_get_session_id()."
+						'".api_get_session_id()."',
+						".Database::escape_string($values['visible_results'])."
 						)";
             Database::query($sql);
             $survey_id = Database::insert_id();

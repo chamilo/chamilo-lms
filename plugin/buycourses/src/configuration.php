@@ -21,7 +21,7 @@ $interbreadcrumb[] = array("url" => "paymentsetup.php", "name" => get_lang('Conf
 $tpl = new Template($templateName);
 
 $teacher = api_is_platform_admin();
-//api_protect_course_script(true);
+api_protect_course_script(true);
 
 if ($teacher) {
     // sync course table with the plugin

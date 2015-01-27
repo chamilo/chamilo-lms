@@ -21,7 +21,7 @@ $interbreadcrumb[] = array("url" => "paymentsetup.php", "name" => get_lang('Conf
 $tpl = new Template($templateName);
 
 $teacher = api_is_platform_admin();
-api_protect_course_script(true);
+//api_protect_course_script(true);
 
 if ($teacher) {
     // sync course table with the plugin
@@ -31,6 +31,7 @@ if ($teacher) {
     $visibility[] = getCourseVisibilityIcon('1');
     $visibility[] = getCourseVisibilityIcon('2');
     $visibility[] = getCourseVisibilityIcon('3');
+    $visibility[] = getCourseVisibilityIcon('4');
 
     $coursesList = listCourses();
     $confirmationImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/img/32/accept.png';

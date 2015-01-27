@@ -190,7 +190,7 @@ if (count($_POST) > 0) {
         $sql = "SELECT * FROM $table_survey_question
                 WHERE
                     c_id = $course_id AND
-                    survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'";
+                    survey_id = '".intval($survey_invitation['survey_id'])."'";
         $result = Database::query($sql);
 
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -241,7 +241,7 @@ if (count($_POST) > 0) {
                         $sql = "SELECT * FROM $table_survey_question_option
                                 WHERE
                                     c_id = $course_id AND
-                                    question_option_id='".Database::escape_string($value)."'";
+                                    question_option_id='".intval($value)."'";
                         $result = Database::query($sql);
                         $row = Database::fetch_array($result, 'ASSOC');
                         $option_value = $row['option_text'];
@@ -269,7 +269,7 @@ if (count($_POST) > 0) {
         $sql = "SELECT * FROM $table_survey_question
                 WHERE
                     c_id = $course_id AND
-                    survey_id = '".Database::escape_string($survey_invitation['survey_id'])."' AND
+                    survey_id = '".intval($survey_invitation['survey_id'])."' AND
                     survey_group_pri = '0' $shuffle";
         $result = Database::query($sql);
         // There is only one question type for conditional surveys
@@ -285,7 +285,7 @@ if (count($_POST) > 0) {
                 $survey_question_id = str_replace('question', '', $key);
                 // We select the correct answer and the puntuacion
                 $sql = "SELECT value FROM $table_survey_question_option
-                        WHERE c_id = $course_id AND question_option_id='".Database::escape_string($value)."'";
+                        WHERE c_id = $course_id AND question_option_id='".intval($value)."'";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result, 'ASSOC');
                 $option_value = $row['value'];
@@ -546,7 +546,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
     if ($survey_data['survey_type'] === '0') {
         if (empty($_SESSION['paged_questions'])) {
             $sql = "SELECT * FROM $table_survey_question
-                    WHERE c_id = $course_id AND survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
+                    WHERE c_id = $course_id AND survey_id = '".intval($survey_invitation['survey_id'])."'
                     ORDER BY sort ASC";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -619,7 +619,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         LEFT JOIN $table_survey_question_option survey_question_option
                             ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
                         WHERE
-                            survey_question.survey_id = '".Database::escape_string($survey_invitation['survey_id'])."' AND
+                            survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                             survey_question.question_id IN (".implode(',', $paged_questions[$_GET['show']]).") AND
                             survey_question.c_id =  $course_id
                         ORDER BY survey_question.sort, survey_question_option.sort ASC";
@@ -650,7 +650,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             }
         }
     } elseif ($survey_data['survey_type'] === '1') {
-        $my_survey_id = Database::escape_string($survey_invitation['survey_id']);
+        $my_survey_id = intval($survey_invitation['survey_id']);
         $current_user = Database::escape_string($survey_invitation['user']);
 
         if (isset($_POST['personality'])) {
@@ -978,7 +978,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                 $sql = "SELECT * FROM $table_survey_question
                         WHERE
                             c_id = $course_id AND
-                            survey_id = '".Database::escape_string($survey_invitation['survey_id'])."' AND
+                            survey_id = '".intval($survey_invitation['survey_id'])."' AND
                             survey_group_sec1='0' AND
                             survey_group_sec2='0'
                         ORDER ".$order_sql." ";
@@ -1086,7 +1086,7 @@ $sql = "SELECT * FROM $table_survey_question
         WHERE
             c_id = $course_id AND
             type='".Database::escape_string('pagebreak')."' AND
-            survey_id='".Database::escape_string($survey_invitation['survey_id'])."'";
+            survey_id='".intval($survey_invitation['survey_id'])."'";
 $result = Database::query($sql);
 $numberofpages = Database::num_rows($result) + 1;
 

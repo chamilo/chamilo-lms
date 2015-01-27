@@ -18,7 +18,7 @@ function isMultipleUrlSupport()
 function getCategoryById($categoryId)
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $categoryId = Database::escape_string($categoryId);
+    $categoryId = intval($categoryId);
     $sql = "SELECT * FROM $tbl_category WHERE id = '$categoryId'";
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
@@ -101,7 +101,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $code = trim(Database::escape_string($code));
     $name = trim(Database::escape_string($name));
-    $parent_id = Database::escape_string($parent_id);
+    $parent_id = intval($parent_id);
     $canHaveCourses = Database::escape_string($canHaveCourses);
     $code = generate_course_code($code);
 
@@ -220,7 +220,7 @@ function moveNodeUp($code, $tree_pos, $parent_id)
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $code = Database::escape_string($code);
     $tree_pos = Database::escape_string($tree_pos);
-    $parent_id = Database::escape_string($parent_id);
+    $parent_id = intval($parent_id);
     $sql = "SELECT code,tree_pos
             FROM $tbl_category
             WHERE parent_id " . (empty($parent_id) ? "IS NULL" : "='$parent_id'") . " AND tree_pos<'$tree_pos'
@@ -246,11 +246,11 @@ function moveNodeUp($code, $tree_pos, $parent_id)
  * @param $cpt
  * @return mixed
  */
-function compterFils($pere, $cpt)
+function compterFils($parent, $cpt)
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $pere = Database::escape_string($pere);
-    $result = Database::query("SELECT code FROM $tbl_category WHERE parent_id='$pere'");
+    $parent = intval($parent);
+    $result = Database::query("SELECT code FROM $tbl_category WHERE parent_id='$parent'");
 
     while ($row = Database::fetch_array($result)) {
         $cpt = compterFils($row['code'], $cpt);
@@ -503,7 +503,7 @@ function browseCourseCategories()
  * @return int
  */
 function countCoursesInCategory($category_code="", $searchTerm = '')
-{   
+{
     global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
@@ -556,9 +556,14 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
     }
 
     $sql = "SELECT * FROM $tbl_course
-        WHERE visibility != '0' AND visibility != '4'".
-        $categoryFilter . $searchFilter .
-        $without_special_courses . $visibilityCondition;
+            WHERE
+                visibility != '0' AND
+                visibility != '4'
+                $categoryFilter
+                $searchFilter
+                $without_special_courses
+                $visibilityCondition
+            ";
     // Showing only the courses of the current portal access_url_id.
 
     if (api_is_multiple_url_enabled()) {
@@ -566,11 +571,17 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
         if ($url_access_id != -1) {
             $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $sql = "SELECT * FROM $tbl_course as course
-                INNER JOIN $tbl_url_rel_course as url_rel_course
-                ON (url_rel_course.course_code=course.code)
-                WHERE access_url_id = $url_access_id AND course.visibility != '0'
-                AND course.visibility != '4' AND category_code" . "='" . $category_code . "'" .
-                $searchTerm . $without_special_courses. $visibilityCondition;
+                    INNER JOIN $tbl_url_rel_course as url_rel_course
+                    ON (url_rel_course.course_code=course.code)
+                    WHERE
+                        access_url_id = $url_access_id AND
+                        course.visibility != '0' AND
+                        course.visibility != '4' AND
+                        category_code = '$category_code'
+                        $searchTerm
+                        $without_special_courses
+                        $visibilityCondition
+                    ";
         }
     }
 
@@ -585,7 +596,7 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
  * @return array
  */
 function browseCoursesInCategory($category_code, $random_value = null, $limit = array())
-{   
+{
     global $_configuration;
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
@@ -609,6 +620,7 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
     if (!empty($special_course_list)) {
         $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
     }
+    $visibilityCondition = null;
     if (isset($_configuration['course_catalog_hide_private'])) {
         if ($_configuration['course_catalog_hide_private'] == true) {
             $courseInfo = api_get_course_info();
@@ -960,10 +972,10 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
         $categoryCode = null,
         $hiddenLinks = null,
         $action = null
-    )
-    {
-        $action = isset($action) ? Security::remove_XSS($action) :
-            Security::remove_XSS($_REQUEST['action']);
+    ) {
+        $action = isset($action) ? Security::remove_XSS($action) : Security::remove_XSS($_REQUEST['action']);
+        $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : null;
+
         // Start URL with params
         $pageUrl = api_get_self() .
             '?action=' . $action .
@@ -982,7 +994,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
             case 'subscribe' :
                 // for search
                 $pageUrl .=
-                    '&search_term=' . $_REQUEST['search_term'] .
+                    '&search_term=' . $searchTerm .
                     '&search_course=1' .
                     '&sec_token=' . $_SESSION['sec_token'];
                 break;

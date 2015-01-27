@@ -77,7 +77,7 @@ if (!empty($groupId)) {
     //Course
     if (!api_is_allowed_to_edit(false, true) AND  //is a student
         (($current_forum_category && $current_forum_category['visibility'] == 0) OR
-        $current_forum['visibility'] == 0 OR !$user_has_access_in_group)
+            $current_forum['visibility'] == 0 OR !$user_has_access_in_group)
     ) {
         api_not_allowed();
     }
@@ -281,7 +281,8 @@ if ($origin != 'learnpath') {
             Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<span style="float:right;">'.search_link().'</span>';
-        echo '<a href="'.$forumUrl.'index.php">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'.
+            Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 }
 
@@ -289,19 +290,24 @@ if ($origin != 'learnpath') {
 // 1. the course admin is here
 // 2. the course member is here and new threads are allowed
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
-if (api_is_allowed_to_edit(false, true) OR ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)) {
-	if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
-		if (!api_is_anonymous()) {
-			if ($my_forum == strval(intval($my_forum))) {
-				echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'',ICON_SIZE_MEDIUM).'</a>';
-		    } else {
-		    	$my_forum = strval(intval($my_forum));
-				echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&amp;forum='.$my_forum.$origin_string.'">'.Display::return_icon('new_thread.png',get_lang('NewTopic'),'',ICON_SIZE_MEDIUM).'</a>';
-			}
-		}
-	} else {
-		echo get_lang('ForumLocked');
-	}
+if (api_is_allowed_to_edit(false, true) OR
+    ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR
+    ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)
+) {
+    if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
+        if (!api_is_anonymous()) {
+            if ($my_forum == strval(intval($my_forum))) {
+                echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).$origin_string.'">'.
+                    Display::return_icon('new_thread.png',get_lang('NewTopic'),'',ICON_SIZE_MEDIUM).'</a>';
+            } else {
+                $my_forum = strval(intval($my_forum));
+                echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&amp;forum='.$my_forum.$origin_string.'">'.
+                    Display::return_icon('new_thread.png',get_lang('NewTopic'),'',ICON_SIZE_MEDIUM).'</a>';
+            }
+        }
+    } else {
+        echo get_lang('ForumLocked');
+    }
 }
 echo '</div>';
 
@@ -335,7 +341,7 @@ echo '<td>'.get_lang('Actions').'</td>';
 echo '</tr>';
 
 // Getting al the threads
-$threads = get_threads($my_forum); // Note: This has to be cleaned first
+$threads = get_threads($my_forum);
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 $course_id = api_get_course_int_id();
@@ -344,9 +350,11 @@ $counter = 0;
 if (is_array($threads)) {
     foreach ($threads as $row) {
         // Thread who have no replies yet and the only post is invisible should not be displayed to students.
-        if (api_is_allowed_to_edit(false, true) OR !($row['thread_replies'] == '0' AND $row['visibility'] == '0')) {
+        if (api_is_allowed_to_edit(false, true) OR
+            !($row['thread_replies'] == '0' AND $row['visibility'] == '0')
+        ) {
             if ($counter % 2 == 0) {
-                 $class = 'row_odd';
+                $class = 'row_odd';
             } else {
                 $class = 'row_even';
             }

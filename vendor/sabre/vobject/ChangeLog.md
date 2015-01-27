@@ -1,6 +1,23 @@
 ChangeLog
 =========
 
+3.3.4 (2014-11-19)
+------------------
+
+* #154: Converting `ANNIVERSARY` to `X-ANNIVERSARY` and `X-ABDATE` and
+  vice-versa when converting to/from vCard 4.
+* #154: It's now possible to easily select all vCard properties belonging to
+  a single group with `$vcard->{'ITEM1.'}` syntax. (@armin-hackmann)
+* #156: Simpler way to check if a string is UTF-8. (@Hywan)
+* Unittest improvements.
+* #159: The recurrence iterator, freebusy generator and iCalendar DATE and
+  DATE-TIME properties can now all accept a reference timezone when working
+  floating times or all-day events.
+* #159: Master events will no longer get a `RECURRENCE-ID` when expanding.
+* #159: `RECURRENCE-ID` for all-day events will now be correct when expanding.
+* #163: Added a `getTimeZone()` method to `VTIMEZONE` components.
+
+
 3.3.3 (2014-10-09)
 ------------------
 

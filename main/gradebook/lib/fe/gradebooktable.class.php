@@ -20,10 +20,15 @@ class GradebookTable extends SortableTable
 
     /**
      * Constructor
+     * @param Category $currentcat
+     * @param array $cats
+     * @param array $evals
+     * @param array $links
+     * @param null $addparams
      */
     public function GradebookTable($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null)
     {
-        parent::__construct ('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
+        parent::__construct('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
         $this->evals_links = array_merge($evals, $links);
         $this->currentcat = $currentcat;
         $this->cats = $cats;
@@ -40,7 +45,6 @@ class GradebookTable extends SortableTable
 
         $this->set_header($column++, get_lang('Type'), '', 'width="35px"');
         $this->set_header($column++, get_lang('Name'), false);
-
         $this->set_header($column++, get_lang('Description'), false);
 
         if (api_is_allowed_to_edit(null, true)) {
@@ -60,18 +64,18 @@ class GradebookTable extends SortableTable
         }
 
         // Deactivates the odd/even alt rows in order that the +/- buttons work see #4047
-
         $this->odd_even_rows_enabled = false;
 
         // Admins get an edit column.
         if (api_is_allowed_to_edit(null, true)) {
             $this->set_header($column++, get_lang('Modify'), false, 'width="195px"');
             // Actions on multiple selected documents.
-            $this->set_form_actions(array (
-                'setvisible' => get_lang('SetVisible'),
-                'setinvisible' => get_lang('SetInvisible'),
-                'deleted' => get_lang('DeleteSelected')
-                ));
+            $this->set_form_actions(array(
+                    'setvisible' => get_lang('SetVisible'),
+                    'setinvisible' => get_lang('SetInvisible'),
+                    'deleted' => get_lang('DeleteSelected')
+                )
+            );
         } else {
             if (empty($_GET['selectcat']) && !api_is_allowed_to_edit()) {
                 $this->set_header($column++, get_lang('Certificates'), false);
@@ -87,14 +91,14 @@ class GradebookTable extends SortableTable
         return $this->datagen;
     }
 
-	/**
-	 * Function used by SortableTable to get total number of items in the table
+    /**
+     * Function used by SortableTable to get total number of items in the table
      * @return int
-	 */
+     */
     public function get_total_number_of_items()
     {
-		return $this->datagen->get_total_items_count();
-	}
+        return $this->datagen->get_total_items_count();
+    }
 
     /**
      * Function used by SortableTable to generate the data to display
@@ -142,19 +146,21 @@ class GradebookTable extends SortableTable
         }
 
         // Status of user in course.
-        $user_id        = api_get_user_id();
-        $course_code    = api_get_course_id();
-        $session_id     = api_get_session_id();
-        $status_user    = api_get_status_of_user_in_course($user_id, $course_code);
-        $data_array     = $this->datagen->get_data($sorting, $from, $this->per_page);
+        $user_id = api_get_user_id();
+        $course_code = api_get_course_id();
+        $session_id = api_get_session_id();
+        $status_user = api_get_status_of_user_in_course($user_id, $course_code);
+        $data_array = $this->datagen->get_data(
+            $sorting,
+            $from,
+            $this->per_page
+        );
 
         // generate the data to display
         $sortable_data = array();
         $weight_total_links = 0;
-
         $main_categories = array();
         $main_cat =  Category::load(null, null, $course_code, null, null, $session_id, false);
-
         $total_categories_weight = 0;
         $scoredisplay = ScoreDisplay :: instance();
 
@@ -204,6 +210,7 @@ class GradebookTable extends SortableTable
                 true
             );
 
+            // Weight
             if (api_is_allowed_to_edit(null, true)) {
                 $row[] = $invisibility_span_open .Display::tag('h4', $average).$invisibility_span_close;
             } else {
@@ -258,14 +265,11 @@ class GradebookTable extends SortableTable
             $sortable_data[] = $row;
 
             // Loading children
-
             if (get_class($item) == 'Category') {
-
-                $stud_id        = api_get_user_id();
-                $course_code    = api_get_course_id();
-                $session_id     = api_get_session_id();
-                $parent_id      = $item->get_id();
-
+                $stud_id = api_get_user_id();
+                $course_code = api_get_course_id();
+                $session_id = api_get_session_id();
+                $parent_id = $item->get_id();
                 $cats = Category::load($parent_id, null, null, null, null, null);
 
                 if (isset($cats[0])) {
@@ -275,13 +279,11 @@ class GradebookTable extends SortableTable
 
                     $sub_cat_info = new GradebookDataGenerator($allcat, $alleval, $alllink);
                     $data_array  =  $sub_cat_info->get_data($sorting, $from, $this->per_page);
-
                     $total_weight = 0;
 
                     // Links.
-
                     foreach ($data_array as $data) {
-                        $row  = array();
+                        $row = array();
                         $item = $data[0];
 
                         //if the item is invisible, wrap it in a span with class invisible
@@ -341,7 +343,6 @@ class GradebookTable extends SortableTable
                             }
                         }
                         $row['child_of'] = $parent_id;
-
                         $sortable_data[] = $row;
                     }
 
@@ -406,12 +407,17 @@ class GradebookTable extends SortableTable
                     $weight_total_links > $weight_category
                 ) {
                     $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $weight_category);
-                    $modify_icons  = '<a class="right_link" href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'">'.Display::return_icon('edit.png', $warning_message, array(), ICON_SIZE_SMALL).'</a>';
+                    $modify_icons  = '<a class="right_link" href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'&id_session='.api_get_session_id().'">'.
+                            Display::return_icon('edit.png', $warning_message, array(), ICON_SIZE_SMALL).'</a>';
                     $warning_message .= $modify_icons;
                     Display::display_warning_message($warning_message, false);
                 }
 
-                $content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);
+                $content_html = DocumentManager::replace_user_info_into_html(
+                    api_get_user_id(),
+                    $course_code
+                );
+
                 if (!empty($content_html)) {
                     $new_content = explode('</head>',$content_html['content']);
                 }
@@ -420,11 +426,6 @@ class GradebookTable extends SortableTable
                     // Set default certificate
                     $courseData = api_get_course_info($course_code);
                     DocumentManager::generateDefaultCertificate($courseData);
-
-                    //$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');
-                    //$cert_icon = '<a class="right_link" href="../document/document.php?curdirpath=/certificates&'.$course_code.'&origin=gradebook&selectcat=' . $id_cat . '">'.Display::return_icon('certificate.png', get_lang('AttachCertificate'), array(), ICON_SIZE_SMALL).'</a>';
-
-                    //Display::display_warning_message($warning_message.$cert_icon,false);
                 }
             }
 
@@ -493,7 +494,7 @@ class GradebookTable extends SortableTable
      */
     private function build_course_code ($item)
     {
-    	return $item->get_course_code();
+        return $item->get_course_code();
     }
 
     /**
@@ -502,18 +503,18 @@ class GradebookTable extends SortableTable
      */
     private function build_id_column ($item)
     {
-		switch ($item->get_item_type()) {
-			// category
-			case 'C' :
-				return 'CATE' . $item->get_id();
-			// evaluation
-			case 'E' :
-				return 'EVAL' . $item->get_id();
-			// link
-			case 'L' :
-				return 'LINK' . $item->get_id();
-		}
-	}
+        switch ($item->get_item_type()) {
+            // category
+            case 'C' :
+                return 'CATE' . $item->get_id();
+            // evaluation
+            case 'E' :
+                return 'EVAL' . $item->get_id();
+            // link
+            case 'L' :
+                return 'LINK' . $item->get_id();
+        }
+    }
 
     /**
      * @param $item
@@ -522,95 +523,95 @@ class GradebookTable extends SortableTable
      */
     private function build_type_column ($item, $attributes = array())
     {
-		return build_type_icon_tag($item->get_icon_name(), $attributes);
-	}
+        return build_type_icon_tag($item->get_icon_name(), $attributes);
+    }
 
-	/**
-	 * Generate name column
-	 * @param unknown_type $item
-	 * @return string
-	 */
-	private function build_name_link ($item)
+    /**
+     * Generate name column
+     * @param unknown_type $item
+     * @return string
+     */
+    private function build_name_link($item)
     {
         $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
-		switch ($item->get_item_type()) {
-			// category
-			case 'C' :
-				$prms_uri='?selectcat=' . $item->get_id() . '&amp;view='.$view;
+        switch ($item->get_item_type()) {
+            // category
+            case 'C' :
+                $prms_uri='?selectcat=' . $item->get_id() . '&amp;view='.$view;
 
-				if (isset($_GET['isStudentView'])) {
-					if ( isset($is_student) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
-						$prms_uri=$prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
-					}
-				}
+                if (isset($_GET['isStudentView'])) {
+                    if ( isset($is_student) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
+                        $prms_uri=$prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
+                    }
+                }
 
-				$cat = new Category();
-				$show_message=$cat->show_message_resource_delete($item->get_course_code());
-				return '&nbsp;<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).$prms_uri.'">'
-				 		. $item->get_name()
-				 		. '</a>'
-				 		. ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']'.$show_message : '');
-			// evaluation
-			case 'E' :
-				$cat = new Category();
-				$course_id = Database::get_course_by_category($_GET['selectcat']);
+                $cat = new Category();
+                $show_message=$cat->show_message_resource_delete($item->get_course_code());
+                return '&nbsp;<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).$prms_uri.'">'
+                . $item->get_name()
+                . '</a>'
+                . ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']'.$show_message : '');
+            // evaluation
+            case 'E' :
+                $cat = new Category();
+                $course_id = Database::get_course_by_category($_GET['selectcat']);
 
-				$show_message = $cat->show_message_resource_delete($course_id);
+                $show_message = $cat->show_message_resource_delete($course_id);
 
-				// course/platform admin can go to the view_results page
+                // course/platform admin can go to the view_results page
 
-				if (api_is_allowed_to_edit() && $show_message===false) {
-					if ($item->get_type() == 'presence') {
-						return '&nbsp;'
-							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
-							. $item->get_name()
-							. '</a>';
-					} else {
-						return '&nbsp;'
-							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
-							. $item->get_name()
-							. '</a>&nbsp;'.Display::label(get_lang('Evaluation'));
-					}
-				} elseif (ScoreDisplay :: instance()->is_custom() && $show_message===false) {
-					// students can go to the statistics page (if custom display enabled)
-					return '&nbsp;'
-						. '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'
-						. $item->get_name()
-						. '</a>';
+                if (api_is_allowed_to_edit() && $show_message===false) {
+                    if ($item->get_type() == 'presence') {
+                        return '&nbsp;'
+                        . '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
+                        . $item->get_name()
+                        . '</a>';
+                    } else {
+                        return '&nbsp;'
+                        . '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
+                        . $item->get_name()
+                        . '</a>&nbsp;'.Display::label(get_lang('Evaluation'));
+                    }
+                } elseif (ScoreDisplay :: instance()->is_custom() && $show_message===false) {
+                    // students can go to the statistics page (if custom display enabled)
+                    return '&nbsp;'
+                    . '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'
+                    . $item->get_name()
+                    . '</a>';
 
-				} elseif ($show_message===false && !api_is_allowed_to_edit() && !(ScoreDisplay :: instance()->is_custom())) {
-					return '&nbsp;'
-						. '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'
-						. $item->get_name()
-						. '</a>';
+                } elseif ($show_message===false && !api_is_allowed_to_edit() && !(ScoreDisplay :: instance()->is_custom())) {
+                    return '&nbsp;'
+                    . '<a href="gradebook_statistics.php?selecteval=' . $item->get_id() . '">'
+                    . $item->get_name()
+                    . '</a>';
 
-				} else {
-					return '['.get_lang('Evaluation').']&nbsp;&nbsp;'.$item->get_name().$show_message;
-				}
-			// link
-			case 'L' :
-				$cat 			= new Category();
-				$course_id	 	= Database::get_course_by_category($_GET['selectcat']);
-				$show_message	= $cat->show_message_resource_delete($course_id);
+                } else {
+                    return '['.get_lang('Evaluation').']&nbsp;&nbsp;'.$item->get_name().$show_message;
+                }
+            // link
+            case 'L' :
+                $cat 			= new Category();
+                $course_id	 	= Database::get_course_by_category($_GET['selectcat']);
+                $show_message	= $cat->show_message_resource_delete($course_id);
 
-				$url = $item->get_link();
+                $url = $item->get_link();
 
-				if (isset($url) && $show_message===false) {
-					$text = '&nbsp;<a href="' . $item->get_link() . '">'
-							. $item->get_name()
-							. '</a>';
-				} else {
-					$text = $item->get_name();
-				}
+                if (isset($url) && $show_message===false) {
+                    $text = '&nbsp;<a href="' . $item->get_link() . '">'
+                        . $item->get_name()
+                        . '</a>';
+                } else {
+                    $text = $item->get_name();
+                }
 
-				$text .= "&nbsp;".Display::label($item->get_type_name(), 'info').$show_message;
-				$cc = $this->currentcat->get_course_code();
-				if (empty($cc)) {
-					$text .= '&nbsp;[<a href="'.api_get_path(REL_COURSE_PATH).$item->get_course_code().'/">'.$item->get_course_code().'</a>]';
-				}
-				return $text;
-		}
-	}
+                $text .= "&nbsp;".Display::label($item->get_type_name(), 'info').$show_message;
+                $cc = $this->currentcat->get_course_code();
+                if (empty($cc)) {
+                    $text .= '&nbsp;[<a href="'.api_get_path(REL_COURSE_PATH).$item->get_course_code().'/">'.$item->get_course_code().'</a>]';
+                }
+                return $text;
+        }
+    }
 
     /**
      * @param $item
@@ -618,16 +619,16 @@ class GradebookTable extends SortableTable
      */
     private function build_edit_column($item)
     {
-		switch ($item->get_item_type()) {
-			// category
-			case 'C' :
-				return build_edit_icons_cat($item, $this->currentcat);
-			// evaluation
-			case 'E' :
-				return build_edit_icons_eval($item, $this->currentcat->get_id());
-			// link
-			case 'L' :
-				return build_edit_icons_link($item, $this->currentcat->get_id());
-		}
-	}
+        switch ($item->get_item_type()) {
+            // category
+            case 'C' :
+                return build_edit_icons_cat($item, $this->currentcat);
+            // evaluation
+            case 'E' :
+                return build_edit_icons_eval($item, $this->currentcat->get_id());
+            // link
+            case 'L' :
+                return build_edit_icons_link($item, $this->currentcat->get_id());
+        }
+    }
 }

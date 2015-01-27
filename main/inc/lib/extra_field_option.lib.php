@@ -20,12 +20,15 @@ class ExtraFieldOption extends Model
 
     /**
      * Gets the table for the type of object for which we are using an extra field
-     * @param string Type of object (course, user or session)
+     * @param string $type Type of object (course, user or session)
      */
     public function __construct($type)
     {
         $this->type = $type;
         switch ($this->type) {
+            case 'calendar_event':
+                $this->table = Database::get_main_table(TABLE_MAIN_CALENDAR_EVENT_OPTIONS);
+                break;
             case 'course':
                 $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_OPTIONS);
                 break;
@@ -81,9 +84,9 @@ class ExtraFieldOption extends Model
 
     /**
      * Returns a list of options for a specific field, separated by ";"
-     * @param int Field ID
-     * @param bool Indicates whether we want the results to be given with their id
-     * @param string Order by clause (without the "order by") to be added to the SQL query
+     * @param int $field_id
+     * @param bool $add_id_in_array Indicates whether we want the results to be given with their id
+     * @param string $ordered_by Order by clause (without the "order by") to be added to the SQL query
      * @return string List of options separated by ;
      * @assert (-1, false, null) == ''
      */
@@ -149,8 +152,8 @@ class ExtraFieldOption extends Model
 
     /**
      * Saves an option into the corresponding *_field_options table
-     * @param array Parameters to be considered for the insertion
-     * @param bool Whether to show the query (sent to the parent save() method)
+     * @param array $params Parameters to be considered for the insertion
+     * @param bool $show_query Whether to show the query (sent to the parent save() method)
      * @return bool True on success, false on error
      * @assert (array('field_id'=>0), false) === false
      * @assert (array('field_id'=>1), false) === true
@@ -265,9 +268,9 @@ class ExtraFieldOption extends Model
 
     /**
      * Save one option item at a time
-     * @param array Parameters specific to the option
-     * @param bool Whether to show the query (sent to parent save() method)
-     * @param bool Whether to insert even if the option already exists
+     * @param array $params Parameters specific to the option
+     * @param bool $show_query Whether to show the query (sent to parent save() method)
+     * @param bool $insert_repeated Whether to insert even if the option already exists
      * @return bool True on success, false on failure
      * @assert (array('field_id'=>0),false) === false
      * @assert (array('field_id'=>0),false) === true
@@ -295,7 +298,10 @@ class ExtraFieldOption extends Model
         if ($insert_repeated) {
             parent::save($params, $show_query);
         } else {
-            $check = self::get_field_option_by_field_and_option($field_id, $params['option_value']);
+            $check = self::get_field_option_by_field_and_option(
+                $field_id,
+                $params['option_value']
+            );
             if ($check == false) {
                 parent::save($params, $show_query);
             }
@@ -306,8 +312,8 @@ class ExtraFieldOption extends Model
 
     /**
      * Get the complete row of a specific option of a specific field
-     * @param int Field ID
-     * @param string Value of the option
+     * @param int $field_id
+     * @param string $option_value Value of the option
      * @return mixed The row on success or false on failure
      * @assert (0,'') === false
      */
@@ -328,8 +334,8 @@ class ExtraFieldOption extends Model
 
     /**
      * Get the complete row of a specific option's display text of a specific field
-     * @param int Field ID
-     * @param string Display value of the option
+     * @param int $field_id
+     * @param string $option_display_text Display value of the option
      * @return mixed The row on success or false on failure
      * @assert (0, '') === false
      */
@@ -350,9 +356,9 @@ class ExtraFieldOption extends Model
 
     /**
      * Get the complete row of a specific option's display text of a specific field
-     * @param int Field ID
-     * @param string Display value of the option
-     * @param string Value of the option
+     * @param int $field_id
+     * @param string $option_display_text Display value of the option
+     * @param string $option_value Value of the option
      * @return mixed The row on success or false on failure
      * @assert (0, '', '') === false
      */
@@ -380,9 +386,9 @@ class ExtraFieldOption extends Model
 
     /**
      * Gets an array of options for a specific field
-     * @param int The field ID
-     * @param bool Whether to add the row ID in the result
-     * @param string Extra ordering query bit
+     * @param int $field_id The field ID
+     * @param bool $add_id_in_array Whether to add the row ID in the result
+     * @param string $ordered_by Extra ordering query bit
      * @result mixed Row on success, false on failure
      * @assert (0, '') === false
      */
@@ -415,9 +421,9 @@ class ExtraFieldOption extends Model
 
     /**
      * Get options for a specific field as array or in JSON format suited for the double-select format
-     * @param int Field ID
-     * @param int Option value ID
-     * @param bool Return format (whether it should be formatted to JSON or not)
+     * @param int $field_id
+     * @param int $option_value_id Option value ID
+     * @param bool $to_json Return format (whether it should be formatted to JSON or not)
      * @return mixed Row/JSON on success
      */
     public function get_second_select_field_options_by_field($field_id, $option_value_id, $to_json = false)
@@ -451,8 +457,8 @@ class ExtraFieldOption extends Model
 
     /**
      * Get options for a specific field as string split by ;
-     * @param int Field ID
-     * @param string Extra query bit for reordering
+     * @param int $field_id
+     * @param string $ordered_by Extra query bit for reordering
      * @return string HTML string of options
      * @assert (0, '') === null
      */
@@ -479,12 +485,11 @@ class ExtraFieldOption extends Model
         }
 
         return null;
-
     }
 
     /**
      * Get the maximum order value for a specific field
-     * @param int Field ID
+     * @param int $field_id
      * @return int Current max ID + 1 (we start from 0)
      * @assert (0, '') === 1
      */
@@ -515,22 +520,25 @@ class ExtraFieldOption extends Model
      * Display a form with the options for the field_id given in REQUEST
      * @return void Prints output
      */
-    function display()
+    public function display()
     {
         // action links
         echo '<div class="actions">';
         $field_id = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : null;
         echo '<a href="'.api_get_self(
-        ).'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.Display::return_icon(
-            'add_user_fields.png',
-            get_lang('Add'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
+            ).'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.Display::return_icon(
+                'add_user_fields.png',
+                get_lang('Add'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).'</a>';
         echo '</div>';
         echo Display::grid_html('extra_field_options');
     }
 
+    /**
+     * @return array
+     */
     public function getPriorityOptions()
     {
         return  array(
@@ -542,6 +550,10 @@ class ExtraFieldOption extends Model
         );
     }
 
+    /**
+     * @param $priority
+     * @return null|string
+     */
     public function getPriorityMessageType($priority)
     {
         switch ($priority) {
@@ -554,8 +566,8 @@ class ExtraFieldOption extends Model
             case 4:
                 return 'error';
         }
-        return null;
 
+        return null;
     }
 
     /**
@@ -660,6 +672,4 @@ class ExtraFieldOption extends Model
 
         return $json;
     }
-
-
 }

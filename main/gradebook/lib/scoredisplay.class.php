@@ -1,37 +1,31 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
 
 // Score display types constants
-define('SCORE_DIV',                      1);    // X / Y
-define('SCORE_PERCENT',                  2);    // XX %
-define('SCORE_DIV_PERCENT',              3);    // X / Y (XX %)
-define('SCORE_AVERAGE',                  4);    // XX %
-define('SCORE_DECIMAL',                  5);    // 0.50  (X/Y)
-define('SCORE_BAR',                      6);    // Uses the Display::bar_progress function
-define('SCORE_SIMPLE',                   7);    // X
+define('SCORE_DIV', 1);    // X / Y
+define('SCORE_PERCENT', 2);    // XX %
+define('SCORE_DIV_PERCENT', 3);    // X / Y (XX %)
+define('SCORE_AVERAGE', 4);    // XX %
+define('SCORE_DECIMAL', 5);    // 0.50  (X/Y)
+define('SCORE_BAR', 6);    // Uses the Display::bar_progress function
+define('SCORE_SIMPLE', 7);    // X
 
 //@todo where is number 6?
 
-define('SCORE_IGNORE_SPLIT',             8);    //  ??
+define('SCORE_IGNORE_SPLIT', 8);    //  ??
 
-define('SCORE_DIV_PERCENT_WITH_CUSTOM',  9);    // X / Y (XX %) - Good!
-define('SCORE_CUSTOM',                  10);    // Good!
-define('SCORE_DIV_SIMPLE_WITH_CUSTOM',  11);    // X - Good!
+define('SCORE_DIV_PERCENT_WITH_CUSTOM', 9);    // X / Y (XX %) - Good!
+define('SCORE_CUSTOM', 10);    // Good!
+define('SCORE_DIV_SIMPLE_WITH_CUSTOM', 11);    // X - Good!
 
-define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS',  12);    // X - Good!
+define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS', 12);    // X - Good!
 
-define('SCORE_BOTH',1);
-define('SCORE_ONLY_DEFAULT',2);
-define('SCORE_ONLY_CUSTOM',3);
+define('SCORE_BOTH', 1);
+define('SCORE_ONLY_DEFAULT', 2);
+define('SCORE_ONLY_CUSTOM', 3);
 
 /**
+ * Class ScoreDisplay
  * Class to display scores according to the settings made by the platform admin.
  * This class works as a singleton: call instance() to retrieve an object.
  * @author Bert Steppé
@@ -39,7 +33,12 @@ define('SCORE_ONLY_CUSTOM',3);
  */
 class ScoreDisplay
 {
-    // Singleton stuff
+    private $coloring_enabled;
+    private $color_split_value;
+    private $custom_enabled;
+    private $upperlimit_included;
+    private $custom_display;
+    private $custom_display_conv;
 
     /**
      * Get the instance of this class
@@ -75,13 +74,6 @@ class ScoreDisplay
 
         }
     }
-
-    private $coloring_enabled;
-    private $color_split_value;
-    private $custom_enabled;
-    private $upperlimit_included;
-    private $custom_display;
-    private $custom_display_conv;
 
     /**
      * Protected constructor - call instance() to instantiate

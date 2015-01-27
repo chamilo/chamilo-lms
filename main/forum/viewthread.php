@@ -39,13 +39,13 @@ $gradebook = null;
 
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
+// but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
 // Note: This has to be validated that it is an existing thread
 $current_thread	= get_thread_information($_GET['thread']);
 // Note: This has to be validated that it is an existing forum.
 $current_forum	= get_forum_information($current_thread['forum_id']);
 $current_forum_category	= get_forumcategory_information($current_forum['forum_category']);
-$whatsnew_post_info	= isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null; // This variable should be deprecated?
+$whatsnew_post_info	= isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 /* Header and Breadcrumbs */
 
@@ -132,7 +132,6 @@ if ($my_message != 'PostDeletedSpecial') {
     if ($origin != 'learnpath') {
         echo '<a href="'.$forumUrl.'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
-
     }
     // The reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
     // If one of the three levels is locked then the link should not be displayed.
@@ -145,7 +144,14 @@ if ($my_message != 'PostDeletedSpecial') {
                     Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM).'</a>';
             }
             // new thread link
-            if ((api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])) OR ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)) {
+            if (
+                (
+                    api_is_allowed_to_edit(false, true) &&
+                    !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])
+                ) OR
+                ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR
+                ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)
+            ) {
                 if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
                     echo '&nbsp;&nbsp;';
                 } else {
@@ -184,15 +190,16 @@ if ($my_message != 'PostDeletedSpecial') {
     }
 
     if (isset($_GET['msg']) && isset($_GET['type'])) {
-    	switch($_GET['type']) {
-    		case 'error':
-    			Display::display_error_message($_GET['msg']);
-    			break;
-    		case 'confirmation':
-    			Display::display_confirmation_message($_GET['msg']);
-    			break;
-    	}
+        switch($_GET['type']) {
+            case 'error':
+                Display::display_error_message($_GET['msg']);
+                break;
+            case 'confirmation':
+                Display::display_confirmation_message($_GET['msg']);
+                break;
+        }
     }
+
     switch ($viewmode) {
         case 'flat':
             include_once 'viewthread_flat.inc.php';
@@ -208,8 +215,6 @@ if ($my_message != 'PostDeletedSpecial') {
             break;
     }
 }
-
-/* FOOTER */
 
 if ($origin != 'learnpath') {
     Display :: display_footer();

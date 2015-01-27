@@ -1,12 +1,11 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
+
 /**
  * This script allows for the addition of sub-languages
  * @package chamilo.admin
  */
-/**
- * Initialization section
- */
+
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
@@ -40,8 +39,8 @@ function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_av
     $english_name           = Database::escape_string($english_name);
     $isocode                = Database::escape_string($isocode);
     $sublanguage_available  = Database::escape_string($sublanguage_available);
-    $parent_id              = Database::escape_string($parent_id);
-    
+    $parent_id              = intval($parent_id);
+
     $sql='INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id) VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
     $res = Database::query($sql);
     if ($res === false) {
@@ -86,14 +85,14 @@ function check_if_language_exist ($original_name, $english_name, $isocode, $subl
 		$has_error=true;
 		$message_information['english_name']=true;
 	}
-	
-	$iso_list = api_get_platform_isocodes();	
+
+	$iso_list = api_get_platform_isocodes();
 	$iso_list = array_values($iso_list);
-	
+
 	if (!in_array($isocode, $iso_list)) {
 		$has_error=true;
 		$message_information['isocode']=true;
-	}	
+	}
 	if ($has_error===true) {
 		$message_information['execute_add']=false;
 	}
@@ -120,7 +119,7 @@ function check_if_exist_language_by_id ($language_id) {
  * @return  bool    True if this language has children, false otherwise
  */
 function ckeck_if_is_parent_of_sub_language ($parent_id) {
-	$sql='SELECT count(*) AS count FROM language WHERE parent_id="'.Database::escape_string($parent_id).'"';
+	$sql='SELECT count(*) AS count FROM language WHERE parent_id= '.intval($parent_id).'';
 	$rs=Database::query($sql);
 	if (Database::num_rows($rs)>0 && Database::result($rs,0,'count')==1) {
 		return true;
@@ -217,7 +216,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 			$english_name=str_replace(' ','_',$english_name);
                         //Fixes BT#1636
                         $english_name=api_strtolower($english_name);
-            
+
 			$isocode=str_replace(' ','_',$isocode);
 			$str_info='<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('PlatformCharsetTitle').' : '.$isocode;
 

@@ -91,7 +91,7 @@ if ($action == 'mark') {
 		$exercise_table = Database::get_statistic_table('track_e_exercices');
 		#global $origin, $tbl_learnpath_user, $learnpath_id, $learnpath_item_id;
 		$sql = "SELECT * FROM $exercise_table
-			    WHERE exe_user_id = '".Database::escape_string($my_usr)."' AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = '".Database::escape_string($my_exe)."'
+			    WHERE exe_user_id = ".intval($my_usr)." AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = ".intval($my_exe)."
 			    ORDER BY exe_date DESC";
 		#echo $sql;
 		$res = Database::query($sql);
@@ -116,9 +116,9 @@ if ($action == 'mark') {
 					   exe_weighting,
 					   exe_date
 					  ) VALUES (
-					   '".Database::escape_string($my_usr)."',
+					   ".intval($my_usr).",
 					   '".Database::escape_string($my_cid)."',
-					   '".Database::escape_string($my_exe)."',
+					   ".intval($my_exe).",
 					   '".Database::escape_string($my_score)."',
 					   '".Database::escape_string($obj_question->selectWeighting())."',
 					   FROM_UNIXTIME(".$reallyNow.")
@@ -148,7 +148,7 @@ Display::display_header($nameTools,"Exercise");
 
 // 1a - result of previous marking then exit suggestion
 // 1b - user answer and marking box + submit button
-$objAnswerTmp = new Answer();
+$objAnswerTmp = new Answer($my_qst);
 $objAnswerTmp->selectAnswer($answerId);
 
 if($action == 'mark'){

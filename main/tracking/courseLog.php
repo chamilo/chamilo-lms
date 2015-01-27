@@ -155,21 +155,23 @@ $htmlHeadXtra[] .= $js;
 
 // Database table definitions.
 //@todo remove this calls
-$TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-$TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
-$TABLETRACK_DOWNLOADS   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-$TABLETRACK_ACCESS_2    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-$TABLETRACK_EXERCISES 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TABLETRACK_ACCESS      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+$TABLETRACK_LINKS       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
+$TABLETRACK_DOWNLOADS   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+$TABLETRACK_ACCESS_2    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$TABLETRACK_EXERCISES 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user             = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ              = Database::get_course_table(TABLE_QUIZ_TEST);
 
+$sessionId = api_get_session_id();
+
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array('url' => '../admin/session_list.php','name' => get_lang('SessionList'));
-    $interbreadcrumb[] = array('url' => '../admin/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
+    $interbreadcrumb[] = array('url' => '../admin/resume_session.php?id_session='.$sessionId, 'name' => get_lang('SessionOverview'));
 }
 
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
@@ -189,7 +191,7 @@ if (empty($session_id)) {
     $a_students = CourseManager::get_student_list_from_course_code(
         api_get_course_id(),
         true,
-        api_get_session_id()
+        $sessionId
     );
 }
 
@@ -220,9 +222,26 @@ if (isset($_GET['additional_profile_field']) &&
 echo '<div class="actions">';
 
 echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM);
-echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM), 'course_log_tools.php?'.api_get_cidreq());
-echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM), 'course_log_resources.php?'.api_get_cidreq());
-echo Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq());
+echo Display::url(
+    Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
+    'course_log_tools.php?'.api_get_cidreq()
+);
+
+echo Display::url(
+    Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM),
+    'course_log_resources.php?'.api_get_cidreq()
+);
+echo Display::url(
+    Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
+);
+
+if (!empty($sessionId)) {
+    echo Display::url(
+        Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . 'attendance/index.php?' . api_get_cidreq() . '&action=calendar_logins'
+    );
+}
 
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
@@ -256,8 +275,8 @@ $form_search = new FormValidator(
 $renderer = $form_search->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span>');
 $form_search->addElement('hidden', 'from', Security::remove_XSS($from));
-$form_search->addElement('hidden', 'session_id', api_get_session_id());
-$form_search->addElement('hidden', 'id_session', api_get_session_id());
+$form_search->addElement('hidden', 'session_id', $sessionId);
+$form_search->addElement('hidden', 'id_session', $sessionId);
 $form_search->addElement('text', 'user_keyword');
 $form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');
 $form_search->display();

@@ -445,7 +445,7 @@ class MessageManager
         if ($id != strval(intval($id)))
             return false;
         $user_receiver_id = intval($user_receiver_id);
-        $id = Database::escape_string($id);
+        $id = intval($id);
         $sql = "SELECT * FROM $table_message WHERE id=".$id." AND msg_status<>4;";
         $rs = Database::query($sql);
 
@@ -763,14 +763,15 @@ class MessageManager
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $query = "SELECT id FROM $table_message
                   WHERE
-                    user_receiver_id=".Database::escape_string($user_id)." AND
-                    id='".Database::escape_string($id)."'";
+                    user_receiver_id = ".intval($user_id)." AND
+                    id = '".intval($id)."'";
         $result = Database::query($query);
         $num = Database::num_rows($result);
-        if ($num > 0)
+        if ($num > 0) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -973,8 +974,8 @@ class MessageManager
             $query = "SELECT * FROM $table_message
                       WHERE
                             user_sender_id=".api_get_user_id()." AND
-                            id=".intval(Database::escape_string($_GET['id_send']))." AND
-                            msg_status=4;";
+                            id=".intval($_GET['id_send'])." AND
+                            msg_status = 4;";
             $result = Database::query($query);
             $message_id = intval($_GET['id_send']);
         }
@@ -1598,8 +1599,8 @@ class MessageManager
         $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname "
                 . "FROM $messagesTable as m "
                 . "INNER JOIN $userTable as u "
-                . "ON m.user_receiver_id = u.user_id "
-                . "WHERE u.user_id = $userId "
+                . "ON m.user_sender_id = u.user_id "
+                . "WHERE m.user_receiver_id = $userId "
                 . "AND m.msg_status = " . MESSAGE_STATUS_UNREAD . " "
                 . "AND m.id > $lastId "
                 . "ORDER BY m.send_date DESC";

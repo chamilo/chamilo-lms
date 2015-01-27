@@ -378,12 +378,12 @@ class scorm extends learnpath
                 $title = Database::escape_string($item['title']);
                 $title = api_utf8_decode($title);
 
-                $max_score = Database::escape_string($item['max_score']);
+                $max_score = intval($item['max_score']);
 
                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
                     // If max score is not set The use_max_score parameter is check in order to use 100 (chamilo style) or '' (strict scorm)
                     if ($use_max_score) {
-                        $max_score = "'100'";
+                        $max_score = 100;
                     } else {
                         $max_score = "NULL";
                     }
@@ -806,7 +806,7 @@ class scorm extends learnpath
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $LPname = $row['path'];
-        $list = split('/', $LPname);
+        $list = explode('/', $LPname);
         $LPnamesafe = $list[0];
         //$zipfoldername = '/tmp';
         //$zipfoldername = '../../courses/'.$_course['directory'].'/temp/'.$LPnamesafe;

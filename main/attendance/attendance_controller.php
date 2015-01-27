@@ -212,10 +212,12 @@ class AttendanceController
     }
 
     /**
-     * It's used for controlling attendace sheet (list, add),
+     * It's used for controlling attendance sheet (list, add),
      * render to attendance_sheet view
-     * @param string action
-     * @param int	 attendance id
+     * @param string $action
+     * @param int	 $attendance_id
+     * @param int $student_id
+     * @param bool $edit
      */
     public function attendance_sheet($action, $attendance_id, $student_id = 0, $edit = true)
     {
@@ -230,8 +232,14 @@ class AttendanceController
             $filter_type = $_REQUEST['filter'];
         }
 
+        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+            api_get_user_id(),
+            api_get_course_info()
+        );
+
         if ($edit == true) {
-            if (api_is_allowed_to_edit(null, true)) {
+
+            if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                 $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
             }
         } else {
@@ -242,11 +250,12 @@ class AttendanceController
             }
 
             if (api_is_allowed_to_edit(null, true) ||
-                api_is_coach(api_get_session_id(), api_get_course_id())
+                api_is_coach(api_get_session_id(), api_get_course_id()) ||
+                $isDrhOfCourse
             ) {
-                $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id);
+                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
             } else {
-                $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id, $user_id);
+                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, $user_id);
             }
 
             $data['faults']  = $attendance->get_faults_of_user($user_id, $attendance_id);
@@ -257,7 +266,6 @@ class AttendanceController
         $data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
-
             if (isset($_POST['hidden_input'])) {
                 foreach ($_POST['hidden_input'] as $cal_id) {
                     $users_present = array();
@@ -528,10 +536,68 @@ class AttendanceController
             'pdf_teachers' => $teacherName,
             'pdf_course_category' => $courseCategory['name'],
             'format' => 'A4-L',
-            'orientation' =>    'L'
+            'orientation' => 'L'
         );
 
         Export::export_html_to_pdf($content, $params);
         exit;
+    }
+
+    /**
+     * Gets attendance base in the table:
+     * TABLE_STATISTIC_TRACK_E_COURSE_ACCESS
+     * @param bool $showForm
+     * @throws ViewException
+     */
+    public function getAttendanceBaseInLogin($showForm = false, $exportToPdf = true)
+    {
+        $table = null;
+        $formToDisplay = null;
+        $startDate = null;
+        $endDate = null;
+
+        $sessionId = api_get_session_id();
+        if ($showForm) {
+            $form = new FormValidator(
+                'search',
+                'post',
+                api_get_self() . '?' . api_get_cidreq(
+                ) . '&action=calendar_logins'
+            );
+            $form->addDateRangePicker('range', get_lang('Range'));
+            $form->add_button('submit', get_lang('submit'));
+
+            if ($form->validate()) {
+                $values = $form->getSubmitValues();
+
+                $startDate = api_get_utc_datetime($values['range_start']);
+                $endDate = api_get_utc_datetime($values['range_end']);
+            }
+            $formToDisplay = $form->return_form();
+        } else {
+           if (!empty($sessionId)) {
+               $sessionInfo = api_get_session_info($sessionId);
+               $startDate = $sessionInfo['date_start'];
+               $endDate = $sessionInfo['date_end'];
+           }
+        }
+
+        $attendance = new Attendance();
+
+        if ($exportToPdf) {
+            $result = $attendance->exportAttendanceLogin($startDate, $endDate);
+            if (empty($result)) {
+                api_not_allowed(true, get_lang('NoDataAvailable'));
+            }
+        }
+        $table = $attendance->getAttendanceLoginTable($startDate, $endDate);
+        $data = array(
+            'form' => $formToDisplay,
+            'table' => $table
+        );
+        $this->view->set_data($data);
+        $this->view->set_layout('layout');
+        $this->view->set_template('calendar_logins');
+        $this->view->render();
     }
 }

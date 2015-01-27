@@ -177,8 +177,8 @@ function load_platform_templates() {
     $certificateTemplateContent = file_get_contents(api_get_path(SYS_PATH) . 'main/gradebook/certificate_template/template.html');
     $certificateTemplateHTML = str_replace($search, $replace, $certificateTemplateContent);
 
-    echo '<Template title="TemplateCertificateTitle" image="' . "$certificateTemplateThumb" . '">'
-    . '<Description>TemplateCertificateDescription</Description>'
+    echo '<Template title="'.get_lang('TemplateCertificateTitle').'" image="' . "$certificateTemplateThumb" . '">'
+    . '<Description>'. get_lang('TemplateCertificateComment') . '</Description>'
     . '<Html>'
     . '<![CDATA['
     . $certificateTemplateHTML
@@ -219,7 +219,7 @@ function load_personal_templates($user_id = 0) {
     $sql = "SELECT template.id, template.title, template.description, template.image, template.ref_doc, document.path
             FROM ".$table_template." template, ".$table_document." document
             WHERE
-                user_id='".Database::escape_string($user_id)."' AND
+                user_id='".intval($user_id)."' AND
                 course_code='".Database::escape_string(api_get_course_id())."' AND
                 document.c_id = $course_id AND
                 document.id = template.ref_doc";

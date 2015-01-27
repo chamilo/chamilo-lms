@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * See copyright information in the Dokeos root directory, dokeos_license.txt
  * @package chamilo.calendar
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = 'agenda';
 $id=$_GET['id'];

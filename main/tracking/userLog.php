@@ -8,8 +8,8 @@
  * @todo clean code - structure is unclear and difficult to modify
  */
 
-$uInfo = $_REQUEST['uInfo'];
-$view  = $_REQUEST['view'];
+$uInfo = intval($_REQUEST['uInfo']);
+$view  = Security::remove_XSS($_REQUEST['view']);
 
 // name of the language file that needs to be included
 $language_file = 'tracking';
@@ -135,7 +135,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
             // if user can only track one group : list users of this group
             $sql = "SELECT count(user)
                     FROM $TABLECOURSE_GROUPSUSER
-                    WHERE group_id = '".Database::escape_string($_gid)."'";
+                    WHERE group_id = '".intval($_gid)."'";
         }
         $userGroupNb = getOneResult($sql);
         $step = 25; // number of student per page
@@ -183,7 +183,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
             $sql = "SELECT u.user_id, u.firstname,u.lastname
                         FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
                         WHERE gu.user_id = u.user_id
-                            AND gu.group_id = '".Database::escape_string($_gid)."'
+                            AND gu.group_id = '".intval($_gid)."'
                         LIMIT $offset,$step";
         }
         $list_users = getManyResults3Col($sql);
@@ -219,8 +219,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
             $sql = "SELECT u.firstname,u.lastname, u.email
                     FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
                     WHERE gu.user_id = u.user_id
-                        AND gu.group_id = '".Database::escape_string($_gid)."'
-                        AND u.user_id = '".Database::escape_string($uInfo)."'";
+                        AND gu.group_id = '".intval($_gid)."'
+                        AND u.user_id = '".intval($uInfo)."'";
             $query = Database::query($sql);
             $tracked_user_info = @Database::fetch_assoc($query);
             if(is_array($tracked_user_info)) $tracking_is_accepted = true;
@@ -299,12 +299,13 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     echo "</td></tr>";
                     if ($ar['id'] == $scormcontopen) {
                         //have to list the students here
-                        $contentId=$ar['id'];
+                        $contentId = intval($ar['id']);
                         $sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
                                 "FROM $tbl_learnpath_item i " .
                                 "INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
                                 "INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
-                                "WHERE (v.user_id=".Database::escape_string($uInfo)." and v.lp_id=$contentId) ORDER BY v.id, i.id";
+                                "WHERE (v.user_id=".intval($uInfo)." and v.lp_id=$contentId)
+                                ORDER BY v.id, i.id";
                         $result3=Database::query($sql3);
                         $ar3=Database::fetch_array($result3);
                         if (is_array($ar3)) {

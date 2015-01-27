@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 require_once 'Course.class.php';
@@ -22,7 +21,10 @@ class CourseArchiver
         $dir = api_get_path(SYS_ARCHIVE_PATH);
         if ($handle = @ opendir($dir)) {
             while (($file = readdir($handle)) !== false) {
-                if ($file != "." && $file != ".." && strpos($file, 'CourseArchiver_') === 0 && is_dir($dir . '/' . $file)) {
+                if ($file != "." && $file != ".." &&
+                    strpos($file, 'CourseArchiver_') === 0 &&
+                    is_dir($dir . '/' . $file)
+                ) {
                     rmdirr($dir . '/' . $file);
                 }
             }
@@ -152,15 +154,20 @@ class CourseArchiver
                     $course_code = $file_parts[1];
                     $file_parts = explode('.', $file_parts[2]);
                     $date = $file_parts[0];
-                    $ext = $file_parts[1];
+                    $ext = isset($file_parts[1]) ? $file_parts[1] : null;
                     if ($ext == 'zip' && ($user_id != null && $owner_id == $user_id || $user_id == null)) {
                         $date = substr($date, 0, 4) . '-' . substr($date, 4, 2) . '-' . substr($date, 6, 2) . ' ' . substr($date, 9, 2) . ':' . substr($date, 11, 2) . ':' . substr($date, 13, 2);
-                        $backup_files[] = array('file' => $file, 'date' => $date, 'course_code' => $course_code);
+                        $backup_files[] = array(
+                            'file' => $file,
+                            'date' => $date,
+                            'course_code' => $course_code
+                        );
                     }
                 }
             }
             closedir($dir);
         }
+
         return $backup_files;
     }
 
@@ -174,8 +181,10 @@ class CourseArchiver
         $new_dir = api_get_path(SYS_ARCHIVE_PATH);
         if (is_dir($new_dir) && is_writable($new_dir)) {
             move_uploaded_file($file, api_get_path(SYS_ARCHIVE_PATH).$new_filename);
+
             return $new_filename;
         }
+
         return false;
     }
 
@@ -218,7 +227,7 @@ class CourseArchiver
             return new Course();
         }
         $course->backup_path = $unzip_dir;
+
         return $course;
     }
-
 }

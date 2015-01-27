@@ -27,6 +27,7 @@ class survey_manager
 {
     /**
      * @param $code
+     *
      * @return string
      */
     public static function generate_unique_code($code)
@@ -56,6 +57,7 @@ class survey_manager
     /**
      * Deletes all survey invitations of a user
      * @param int $user_id
+     *
      * @return boolean
      * @assert ('') === false
      */
@@ -72,15 +74,15 @@ class survey_manager
         $sql = "SELECT survey_invitation_id, survey_code
                 FROM $table_survey_invitation WHERE user = '$user_id' AND c_id <> 0 ";
         $result = Database::query($sql);
-        $deleted = array();
         while ($row = Database::fetch_array($result ,'ASSOC')){
             $survey_invitation_id = $row['survey_invitation_id'];
             $survey_code = $row['survey_code'];
             $sql2 = "DELETE FROM $table_survey_invitation
                     WHERE survey_invitation_id = '$survey_invitation_id' AND c_id <> 0";
             if (Database::query($sql2)) {
-                $sql3 = "UPDATE $table_survey SET invited = invited-1 ".
-                    " WHERE c_id  <> 0 AND code ='$survey_code'";
+                $sql3 = "UPDATE $table_survey SET
+                            invited = invited-1
+                        WHERE c_id <> 0 AND code ='$survey_code'";
                 Database::query($sql3);
             }
         }
@@ -88,8 +90,8 @@ class survey_manager
 
     /**
      *
-     * @param type $course_code
-     * @param type $session_id
+     * @param string $course_code
+     * @param int $session_id
      * @return type
      * @assert ('') === false
      */
@@ -102,7 +104,8 @@ class survey_manager
         $course_info = api_get_course_info($course_code);
         $session_condition = api_get_session_condition($session_id, true, true);
 
-        $sql = "SELECT * FROM $table_survey WHERE c_id = {$course_info['real_id']} $session_condition ";
+        $sql = "SELECT * FROM $table_survey
+                WHERE c_id = {$course_info['real_id']} $session_condition ";
         $result = Database::query($sql);
         $result = Database::store_result($result, 'ASSOC');
         return $result;
@@ -139,11 +142,11 @@ class survey_manager
         if ($shared != 0) {
             $table_survey	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
             $sql = "SELECT * FROM $table_survey
-                    WHERE survey_id='".Database::escape_string($survey_id)."' ";
+                    WHERE survey_id='".intval($survey_id)."' ";
         } else {
             $sql = "SELECT * FROM $table_survey
 		            WHERE
-		                survey_id='".Database::escape_string($survey_id)."' AND
+		                survey_id='".intval($survey_id)."' AND
 		                c_id = ".$my_course_info['real_id'];
         }
 
@@ -182,6 +185,7 @@ class survey_manager
      * This function stores a survey in the database.
      *
      * @param array $values
+     *
      * @return array $return the type of return message that has to be displayed and the message in it
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -214,7 +218,6 @@ class survey_manager
             }
 
             $values['anonymous'] = intval($values['anonymous']);
-
             $additional['columns'] = '';
             $additional['values'] = '';
 
@@ -267,17 +270,19 @@ class survey_manager
                 // Logic for versioning surveys
                 if (!empty($values['parent_id'])) {
                     $additional['columns'] .= ', survey_version';
-                    $sql = 'SELECT survey_version FROM '.$table_survey.'
+                    $sql = 'SELECT survey_version
+                            FROM '.$table_survey.'
 					        WHERE
 					            c_id = '.$course_id.' AND
-					            parent_id = '.Database::escape_string($values['parent_id']).'
-                            ORDER BY survey_version DESC LIMIT 1';
+					            parent_id = '.intval($values['parent_id']).'
+                            ORDER BY survey_version DESC
+                            LIMIT 1';
                     $rs = Database::query($sql);
                     if (Database::num_rows($rs) === 0) {
                         $sql = 'SELECT survey_version FROM '.$table_survey.'
 						        WHERE
 						            c_id = '.$course_id.' AND
-						            survey_id = '.Database::escape_string($values['parent_id']);
+						            survey_id = '.intval($values['parent_id']);
                         $rs = Database::query($sql);
                         $getversion = Database::fetch_array($rs, 'ASSOC');
                         if (empty($getversion['survey_version'])) {
@@ -312,7 +317,7 @@ class survey_manager
 						'".Database::escape_string(strtolower(generate_course_code(api_substr($values['survey_code'],0))))."',
 						'".Database::escape_string($values['survey_title'])."',
 						'".Database::escape_string($values['survey_subtitle'])."',
-						'".Database::escape_string($_user['user_id'])."',
+						'".intval($_user['user_id'])."',
 						'".Database::escape_string($values['survey_language'])."',
 						'".Database::escape_string($values['start_date'])."',
 						'".Database::escape_string($values['end_date'])."',
@@ -404,7 +409,7 @@ class survey_manager
                         intro			= '".Database::escape_string($values['survey_introduction'])."',
                         surveythanks	= '".Database::escape_string($values['survey_thanks'])."',
                         anonymous       = '".Database::escape_string($values['anonymous'])."'".$additionalsets."
-					WHERE c_id = $course_id AND survey_id = '".Database::escape_string($values['survey_id'])."'";
+					WHERE c_id = $course_id AND survey_id = '".intval($values['survey_id'])."'";
             Database::query($sql);
 
             // Update into item_property (update)
@@ -442,7 +447,7 @@ class survey_manager
                     '".Database::escape_string($values['survey_code'])."',
                     '".Database::escape_string($values['survey_title'])."',
                     '".Database::escape_string($values['survey_subtitle'])."',
-                    '".Database::escape_string($_user['user_id'])."',
+                    '".intval($_user['user_id'])."',
                     '".Database::escape_string($values['survey_language'])."',
                     '".Database::escape_string('template')."',
                     '".Database::escape_string($values['survey_introduction'])."',
@@ -456,7 +461,7 @@ class survey_manager
                         code 			= '".Database::escape_string($values['survey_code'])."',
                         title 			= '".Database::escape_string($values['survey_title'])."',
                         subtitle 		= '".Database::escape_string($values['survey_subtitle'])."',
-                        author 			= '".Database::escape_string($_user['user_id'])."',
+                        author 			= '".intval($_user['user_id'])."',
                         lang 			= '".Database::escape_string($values['survey_language'])."',
                         template 		= '".Database::escape_string('template')."',
                         intro			= '".Database::escape_string($values['survey_introduction'])."',
@@ -533,7 +538,7 @@ class survey_manager
         $table_survey_question_group 	= Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
         $table_survey_question 			= Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_options 			= Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $survey_id                      = Database::escape_string($survey_id);
+        $survey_id                      = intval($survey_id);
 
         // Get groups
         $survey_data = self::get_survey($survey_id, 0, null, true);
@@ -683,7 +688,7 @@ class survey_manager
 		        SET answered = $number
 		        WHERE
                     c_id = $course_id AND
-		            survey_id = ".Database::escape_string($survey_id);
+		            survey_id = ".intval($survey_id);
         Database::query($sql);
 
         // Storing that the user has finished the survey.
@@ -772,11 +777,11 @@ class survey_manager
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $tbl_survey_question
-                WHERE c_id = $course_id AND question_id='".Database::escape_string($question_id)."'
+                WHERE c_id = $course_id AND question_id='".intval($question_id)."'
                 ORDER BY `sort` ";
 
         $sqlOption = "  SELECT * FROM $table_survey_question_option
-                        WHERE c_id = $course_id AND question_id='".Database::escape_string($question_id)."'
+                        WHERE c_id = $course_id AND question_id='".intval($question_id)."'
                         ORDER BY `sort` ";
 
         if ($shared) {
@@ -784,10 +789,10 @@ class survey_manager
             $table_survey_question_option	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 
             $sql = "SELECT * FROM $tbl_survey_question
-                    WHERE question_id='".Database::escape_string($question_id)."'
+                    WHERE question_id='".intval($question_id)."'
                     ORDER BY `sort` ";
             $sqlOption = "SELECT * FROM $table_survey_question_option
-                          WHERE question_id='".Database::escape_string($question_id)."'
+                          WHERE question_id='".intval($question_id)."'
                           ORDER BY `sort` ";
         }
 
@@ -851,7 +856,7 @@ class survey_manager
 
         // Getting the information of the question
         $sql = "SELECT * FROM $tbl_survey_question
-		        WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
+		        WHERE c_id = $course_id AND survey_id='".intval($survey_id)."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $return[$row['question_id']]['survey_id'] 			= $row['survey_id'];
@@ -865,8 +870,9 @@ class survey_manager
 
         // Getting the information of the question options
         $sql = "SELECT * FROM $table_survey_question_option
-		        WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
+		        WHERE c_id = $course_id AND survey_id='".intval($survey_id)."'";
         $result = Database::query($sql);
+        $return = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $return[$row['question_id']]['answers'][] = $row['option_text'];
         }
@@ -937,7 +943,7 @@ class survey_manager
                     // Finding the max sort order of the questions in the given survey
                     $sql = "SELECT max(sort) AS max_sort
 					        FROM $tbl_survey_question
-                            WHERE c_id = $course_id AND survey_id='".Database::escape_string($form_content['survey_id'])."'";
+                            WHERE c_id = $course_id AND survey_id='".intval($form_content['survey_id'])."'";
                     $result = Database::query($sql);
                     $row = Database::fetch_array($result,'ASSOC');
                     $max_sort = $row['max_sort'];
@@ -996,7 +1002,7 @@ class survey_manager
                                 display 				= '".Database::escape_string($form_content['horizontalvertical'])."',
                                 max_value 				= '".Database::escape_string($form_content['maximum_score'])."'" .
                         $additionalsets."
-                            WHERE c_id = $course_id AND question_id = '".Database::escape_string($form_content['question_id'])."'";
+                            WHERE c_id = $course_id AND question_id = '".intval($form_content['question_id'])."'";
                     Database::query($sql);
                     $return_message = 'QuestionUpdated';
                 }
@@ -1045,7 +1051,7 @@ class survey_manager
         if ($form_content['shared_question_id'] == '' || !is_numeric($form_content['shared_question_id'])) {
             // Finding the max sort order of the questions in the given survey
             $sql = "SELECT max(sort) AS max_sort FROM $tbl_survey_question
-                    WHERE survey_id='".Database::escape_string($survey_data['survey_share'])."'
+                    WHERE survey_id='".intval($survey_data['survey_share'])."'
                     AND code='".Database::escape_string($_course['id'])."'";
             $result = Database::query($sql);
             $row = Database::fetch_array($result,'ASSOC');
@@ -1070,7 +1076,7 @@ class survey_manager
                         survey_question_comment = '".Database::escape_string($form_content['question_comment'])."',
                         display = '".Database::escape_string($form_content['horizontalvertical'])."'
                     WHERE
-                        question_id = '".Database::escape_string($form_content['shared_question_id'])."' AND
+                        question_id = '".intval($form_content['shared_question_id'])."' AND
                         code = '".Database::escape_string($_course['id'])."'";
             Database::query($sql);
             $shared_question_id = $form_content['shared_question_id'];
@@ -1122,10 +1128,10 @@ class survey_manager
         }
 
         $sql1 = "UPDATE $table_survey_question SET sort = '".Database::escape_string($question_sort_two)."'
-		        WHERE c_id = $course_id AND  question_id='".Database::escape_string($question_id_one)."'";
+		        WHERE c_id = $course_id AND  question_id='".intval($question_id_one)."'";
         Database::query($sql1);
         $sql2 = "UPDATE $table_survey_question SET sort = '".Database::escape_string($question_sort_one)."'
-		        WHERE c_id = $course_id AND question_id='".Database::escape_string($question_id_two)."'";
+		        WHERE c_id = $course_id AND question_id='".intval($question_id_two)."'";
         Database::query($sql2);
     }
 
@@ -1152,7 +1158,7 @@ class survey_manager
         }
 
         $sql = "DELETE FROM $table_survey_question
-		        WHERE $course_condition survey_id='".Database::escape_string($survey_id)."'";
+		        WHERE $course_condition survey_id='".intval($survey_id)."'";
 
         // Deleting the survey questions
 
@@ -1190,8 +1196,8 @@ class survey_manager
         $sql = "DELETE FROM $table_survey_question
 		        WHERE
 		            c_id = $course_id AND
-		            survey_id='".Database::escape_string($survey_id)."' AND
-		            question_id='".Database::escape_string($question_id)."'";
+		            survey_id='".intval($survey_id)."' AND
+		            question_id='".intval($question_id)."'";
         Database::query($sql);
 
         // Deleting the options of the question of the survey
@@ -1220,12 +1226,12 @@ class survey_manager
 
         // Deleting the survey questions
         $sql = "DELETE FROM $table_survey_question
-		        WHERE question_id='".Database::escape_string($question_data['shared_question_id'])."'";
+		        WHERE question_id='".intval($question_data['shared_question_id'])."'";
         Database::query($sql);
 
         // Deleting the options of the question of the survey question
         $sql = "DELETE FROM $table_survey_question_option
-		        WHERE question_id='".Database::escape_string($question_data['shared_question_id'])."'";
+		        WHERE question_id='".intval($question_data['shared_question_id'])."'";
         Database::query($sql);
     }
 
@@ -1258,7 +1264,7 @@ class survey_manager
         // We are editing a question so we first have to remove all the existing options from the database
         if (is_numeric($form_content['question_id'])) {
             $sql = "DELETE FROM $table_survey_question_option
-			        WHERE c_id = $course_id AND question_id = '".Database::escape_string($form_content['question_id'])."'";
+			        WHERE c_id = $course_id AND question_id = '".intval($form_content['question_id'])."'";
             Database::query($sql);
         }
 
@@ -1268,8 +1274,8 @@ class survey_manager
             for ($i = 0; $i < count($form_content['answers']); $i++) {
                 $sql = "INSERT INTO $table_survey_question_option (c_id, question_id, survey_id, option_text, value,sort) VALUES (
                             $course_id,
-                            '".Database::escape_string($form_content['question_id'])."',
-                            '".Database::escape_string($form_content['survey_id'])."',
+                            '".intval($form_content['question_id'])."',
+                            '".intval($form_content['survey_id'])."',
                             '".Database::escape_string($form_content['answers'][$i])."',
                             '".Database::escape_string($form_content['values'][$i])."',
                             '".Database::escape_string($counter)."')";
@@ -2454,14 +2460,12 @@ class ch_score extends survey_question
     }
 }
 
-
 /**
  * This class offers a series of general utility functions for survey querying and display
  * @package chamilo.survey
  */
 class SurveyUtil
 {
-
     /**
      * Checks whether the given survey has a pagebreak question as the first or the last question.
      * If so, break the current process, displaying an error message
@@ -2628,7 +2632,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function handle_reporting_actions($survey_data, $people_filled)
+    public static function handle_reporting_actions($survey_data, $people_filled)
     {
         $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -2636,7 +2640,8 @@ class SurveyUtil
         $temp_questions_data = survey_manager::get_questions($_GET['survey_id']);
 
         // Sorting like they should be displayed and removing the non-answer question types (comment and pagebreak)
-        $my_temp_questions_data=($temp_questions_data==null) ? array() : $temp_questions_data;
+        $my_temp_questions_data = ($temp_questions_data==null) ? array() : $temp_questions_data;
+        $questions_data = array();
         foreach ($my_temp_questions_data as $key => & $value) {
             if ($value['type'] != 'comment' && $value['type'] != 'pagebreak') {
                 $questions_data[$value['sort']] = $value;
@@ -2723,14 +2728,20 @@ class SurveyUtil
 
         // Actions bar
         echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.
+            Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         if (isset($_GET['user'])) {
-            // The delete link
-            echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=deleteuserreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($_GET['user']).'" >'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_MEDIUM).'</a>';
+            if (api_is_allowed_to_edit()) {
+                // The delete link
+                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=deleteuserreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;user='.Security::remove_XSS($_GET['user']).'" >'.
+                    Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_MEDIUM).'</a>';
+            }
 
             // Export the user report
-            echo '<a href="javascript: void(0);" onclick="document.form1a.submit();">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
-            echo '<a href="javascript: void(0);" onclick="document.form1b.submit();">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
+            echo '<a href="javascript: void(0);" onclick="document.form1a.submit();">'.
+                Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
+            echo '<a href="javascript: void(0);" onclick="document.form1b.submit();">'.
+                Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
             echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user_id='.Security::remove_XSS($_GET['user']).'">';
             echo '<input type="hidden" name="export_report" value="export_report">';
             echo '<input type="hidden" name="export_format" value="csv">';
@@ -2867,7 +2878,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
      */
-    function display_question_report($survey_data)
+    public static function display_question_report($survey_data)
     {
         $course_id = api_get_course_int_id();
         // Database table definitions
@@ -2879,11 +2890,15 @@ class SurveyUtil
         if (!isset($_GET['question'])) {
             $offset = 0;
         } else {
-            $offset = Database::escape_string($_GET['question']);
+            $offset = intval($_GET['question']);
         }
 
+        $currentQuestion = isset($_GET['question']) ? $_GET['question'] : 0;
+        $question = array();
+
         echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.
+            Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
 
         if ($survey_data['number_of_questions'] > 0) {
@@ -2912,20 +2927,21 @@ class SurveyUtil
             $question = Database::fetch_array($result);
 
             // Navigate through the questions (next and previous)
-            if ($_GET['question'] != 0) {
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.Security::remove_XSS($offset-1).'">'.Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
+            if ($currentQuestion != 0 ) {
+                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.Security::remove_XSS($offset-1).'">'.
+                    Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
             } else {
                 echo Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').' ';
             }
             echo ' | ';
-            if ($_GET['question'] < ($survey_data['number_of_questions'] - 1)) {
+            if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle')).'</a>';
             } else {
                 echo get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle'));
             }
         }
 
-        echo $question['survey_question'];
+        echo isset($question['survey_question']) ? $question['survey_question'] : null;
 
         if ($question['type'] == 'score') {
             /** @todo This function should return the options as this is needed further in the code */
@@ -2954,16 +2970,18 @@ class SurveyUtil
             }
             // Getting the answers
             $sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
-						WHERE c_id = $course_id AND
-						      survey_id='".Database::escape_string($_GET['survey_id'])."' AND
-						      question_id = '".Database::escape_string($question['question_id'])."'
-						GROUP BY option_id, value";
+                    WHERE
+                        c_id = $course_id AND
+                        survey_id='".Database::escape_string($_GET['survey_id'])."' AND
+                        question_id = '".Database::escape_string($question['question_id'])."'
+                    GROUP BY option_id, value";
             $result = Database::query($sql);
+            $number_of_answers = 0;
+            $data = array();
             while ($row = Database::fetch_array($result)) {
                 $number_of_answers += $row['total'];
                 $data[$row['option_id']] = $row;
             }
-
 
             // displaying the table: headers
             echo '<table class="data_table">';
@@ -2977,7 +2995,10 @@ class SurveyUtil
             // Displaying the table: the content
             if (is_array($options)) {
                 foreach ($options as $key => & $value) {
-                    $absolute_number = $data[$value['question_option_id']]['total'];
+                    $absolute_number = null;
+                    if (isset($data[$value['question_option_id']])) {
+                        $absolute_number = $data[$value['question_option_id']]['total'];
+                    }
                     if ($question['type'] == 'percentage' && empty($absolute_number)) {
                         continue;
                     }
@@ -3032,7 +3053,7 @@ class SurveyUtil
      * @param	integer	The offset of results shown
      * @return	void 	(direct output)
      */
-    function display_question_report_score($survey_data, $question, $offset)
+    public static function display_question_report_score($survey_data, $question, $offset)
     {
         $course_id = api_get_course_int_id();
         // Database table definitions
@@ -3112,7 +3133,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function display_complete_report($survey_data)
+    public static function display_complete_report($survey_data)
     {
         // Database table definitions
         $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -3428,7 +3449,10 @@ class SurveyUtil
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
-            if (!($_POST['submit_question_filter']) || (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))) {
+            if (!($_POST['submit_question_filter']) ||
+                (is_array($_POST['questions_filter']) &&
+                    in_array($row['question_id'], $_POST['questions_filter']))
+            ) {
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
                     if ($row['number_of_options'] == 0 && $row['type'] == 'open') {
@@ -4469,6 +4493,32 @@ class SurveyUtil
     }
 
     /**
+     * Show table only visible by DRH users
+     */
+    public static function displaySurveyListForDrh()
+    {
+        $parameters = array();
+        $parameters['cidReq'] = api_get_course_id();
+
+        // Create a sortable table with survey-data
+        $table = new SortableTable('surveys', 'get_number_of_surveys', 'get_survey_data_drh', 2);
+        $table->set_additional_parameters($parameters);
+        $table->set_header(0, '', false);
+        $table->set_header(1, get_lang('SurveyName'));
+        $table->set_header(2, get_lang('SurveyCode'));
+        $table->set_header(3, get_lang('NumberOfQuestions'));
+        $table->set_header(4, get_lang('Author'));
+        $table->set_header(5, get_lang('AvailableFrom'));
+        $table->set_header(6, get_lang('AvailableUntil'));
+        $table->set_header(7, get_lang('Invite'));
+        $table->set_header(8, get_lang('Anonymous'));
+        $table->set_header(9, get_lang('Modify'), false, 'width="150"');
+        $table->set_column_filter(8, 'anonymous_filter');
+        $table->set_column_filter(9, 'modify_filter_drh');
+        $table->display();
+    }
+
+    /**
      * This function displays the sortable table with all the surveys
      *
      * @return	void	(direct output)
@@ -4541,18 +4591,26 @@ class SurveyUtil
      * This function changes the modify column of the sortable table
      *
      * @param integer $survey_id the id of the survey
-     * @return html code that are the actions that can be performed on any survey
+     * @param bool $drh
+     * @return string html code that are the actions that can be performed on any survey
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    static function modify_filter($survey_id)
+    static function modify_filter($survey_id, $drh = false)
     {
         $survey_id = Security::remove_XSS($survey_id);
         $return = '';
 
+        if ($drh) {
+            return '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.
+            Display::return_icon('stats.png', get_lang('Reporting'),'',ICON_SIZE_SMALL).'</a>';
+        }
+
         // Coach can see that only if the survey is in his session
-        if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
+        if (api_is_allowed_to_edit() ||
+            api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
+        ) {
             $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
             if (survey_manager::survey_generation_hash_available()) {
                 $return .=  Display::url(
@@ -4560,15 +4618,26 @@ class SurveyUtil
                     api_get_path(WEB_CODE_PATH).'survey/generate_link.php?survey_id='.$survey_id.'&'.api_get_cidreq()
                 );
             }
-            $return .= Display::url(Display::return_icon('copy.png', get_lang('DuplicateSurvey'), '', ICON_SIZE_SMALL), 'survey_list.php?action=copy_survey&survey_id='.$survey_id.'&'.api_get_cidreq());
+            $return .= Display::url(
+                Display::return_icon('copy.png', get_lang('DuplicateSurvey'), '', ICON_SIZE_SMALL),
+                'survey_list.php?action=copy_survey&survey_id='.$survey_id.'&'.api_get_cidreq()
+            );
 
-            $return .= ' <a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+            $return .= ' <a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.
+                Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
         }
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('stats.png', get_lang('Reporting'),'',ICON_SIZE_SMALL).'</a>';
-        if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
-            $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.
+            Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.
+            Display::return_icon('mail_send.png', get_lang('Publish'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+        $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.
+            Display::return_icon('stats.png', get_lang('Reporting'),'',ICON_SIZE_SMALL).'</a>';
+
+        if (api_is_allowed_to_edit() ||
+            api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
+        ) {
+            $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'.
+                Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
         }
         return $return;
     }
@@ -4670,13 +4739,14 @@ class SurveyUtil
      * @param int $number_of_items
      * @param int $column
      * @param string $direction
+     * @param bool $isDrh
      * @return unknown
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya <gugli100@gmail.com>, Beeznest - Adding intvals
      * @version January 2007
      */
-    static function get_survey_data($from, $number_of_items, $column, $direction)
+    static function get_survey_data($from, $number_of_items, $column, $direction, $isDrh = false)
     {
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -4730,7 +4800,6 @@ class SurveyUtil
         $surveys = array();
         $array = array();
         while ($survey = Database::fetch_array($res)) {
-
             $array[0] = $survey[0];
             $array[1] = Display::url(
                 $survey[1],
@@ -4756,7 +4825,12 @@ class SurveyUtil
 
             $array[8] = $survey[8];
             $array[9] = $survey[9];
-            //$array[10] = $survey[10];
+
+            if ($isDrh) {
+                $array[1] = $survey[1];
+                $array[7] = strip_tags($array[7]);
+            }
+
             $surveys[] = $array;
         }
         return $surveys;
@@ -4853,7 +4927,7 @@ class SurveyUtil
 			        FROM '.$table_survey_answer.'
 					WHERE
 					    c_id = '.$course_id.' AND
-					    question_id='.Database::escape_string($all_question_id[$i]['question_id']).' AND
+					    question_id='.intval($all_question_id[$i]['question_id']).' AND
 					    user = '.$user_id;
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -4874,7 +4948,7 @@ class SurveyUtil
         echo '</tr>';
         $sql = "SELECT * FROM $table_survey survey, $table_survey_invitation survey_invitation
 				WHERE
-				survey_invitation.user 	= '".Database::escape_string($user_id)."' AND
+				survey_invitation.user 	= $user_id AND
 				survey.code 			= survey_invitation.survey_code AND
 				survey.avail_from 		<= '".date('Y-m-d H:i:s')."' AND
 				survey.avail_till 		>= '".date('Y-m-d H:i:s')."' AND
@@ -5085,7 +5159,7 @@ class SurveyUtil
         $table_survey_question    = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 
         $survey_code = Database::escape_string($survey_code);
-        $user_id = Database::escape_string($user_id);
+        $user_id = intval($user_id);
         $user_answer = Database::escape_string($user_answer);
 
         $course_id = api_get_course_int_id();

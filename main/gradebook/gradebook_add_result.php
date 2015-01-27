@@ -24,13 +24,20 @@ $resultadd = new Result();
 $resultadd->set_evaluation_id($_GET['selecteval']);
 $evaluation = Evaluation :: load($_GET['selecteval']);
 $category = !empty($_GET['selectcat']) ? $_GET['selectcat'] : "";
-$add_result_form = new EvalForm(EvalForm :: TYPE_RESULT_ADD, $evaluation[0], $resultadd, 'add_result_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($category) . '&selecteval=' . Security::remove_XSS($_GET['selecteval']));
+$add_result_form = new EvalForm(
+    EvalForm :: TYPE_RESULT_ADD,
+    $evaluation[0],
+    $resultadd,
+    'add_result_form',
+    null,
+    api_get_self() . '?selectcat=' . Security::remove_XSS($category) . '&selecteval=' . Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq()
+);
 $table = $add_result_form->toHtml();
 if ($add_result_form->validate()) {
     $values = $add_result_form->exportValues();
     $nr_users = $values['nr_users'];
     if ($nr_users == '0') {
-        header('Location: gradebook_view_result.php?addresultnostudents=&selecteval=' . Security::remove_XSS($_GET['selecteval']));
+        header('Location: gradebook_view_result.php?addresultnostudents=&selecteval=' . Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq());
         exit;
     }
     $scores = ($values['score']);
@@ -43,10 +50,13 @@ if ($add_result_form->validate()) {
         $res->add();
         next($scores);
     }
-    header('Location: gradebook_view_result.php?addresult=&selecteval=' . Security::remove_XSS($_GET['selecteval']));
+    header('Location: gradebook_view_result.php?addresult=&selecteval=' . Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq());
     exit;
 }
-$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('Gradebook'));
+$interbreadcrumb[] = array(
+    'url' => Security::remove_XSS($_SESSION['gradebook_dest']),
+    'name' => get_lang('Gradebook')
+);
 Display :: display_header(get_lang('AddResult'));
 DisplayGradebook :: display_header_result ($evaluation[0], null, 0,0);
 echo $table;

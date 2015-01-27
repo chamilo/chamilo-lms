@@ -6,7 +6,6 @@
  *
  * @author: Julio Montoya <gugli100@gmail.com>
  */
-
 class Agenda
 {
     public $events = array();
@@ -19,7 +18,7 @@ class Agenda
     public $course;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
@@ -498,7 +497,7 @@ class Agenda
         }
 
         // Get the agenda item.
-        $item_id = Database::escape_string($item_id);
+        $item_id = intval($item_id);
         $sql = "SELECT * FROM $table_agenda WHERE c_id = $course_id AND id = ".$item_id;
         $res = Database::query($sql);
 
@@ -1914,7 +1913,7 @@ class Agenda
      */
     public static function changeVisibility($id, $visibility, $courseInfo, $userId = null)
     {
-        $id = Database::escape_string($id);
+        $id = intval($id);
         if (empty($userId)) {
             $userId = api_get_user_id();
         } else {
@@ -1954,7 +1953,7 @@ class Agenda
     {
         $tableAttachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
         $courseId = intval($courseInfo['real_id']);
-        $eventId = Database::escape_string($eventId);
+        $eventId = intval($eventId);
         $row = array();
         $sql = "SELECT id, path, filename, comment
                 FROM $tableAttachment
@@ -2347,7 +2346,7 @@ class Agenda
             $messages = implode('<br /> ', $messages);
         } else {
             $messages = get_lang('NoAgendaItems');
-                    
+
         }
 
         return $messages;

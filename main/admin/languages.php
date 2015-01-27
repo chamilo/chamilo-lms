@@ -160,7 +160,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
             if (count($_POST['id']) > 0) {
                 $ids = array();
                 foreach ($_POST['id'] as $index => $id) {
-                    $ids[] = Database::escape_string($id);
+                    $ids[] = intval($id);
                 }
                 $sql = "UPDATE $tbl_admin_languages SET available='1' WHERE id IN ('" . implode("','", $ids) . "')";
                 Database::query($sql);
@@ -170,7 +170,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
             if (count($_POST['id']) > 0) {
                 $ids = array();
                 foreach ($_POST['id'] as $index => $id) {
-                    $ids[] = Database::escape_string($id);
+                    $ids[] = intval($id);
                 }
                 $sql = "UPDATE $tbl_admin_languages SET available='0' WHERE id IN ('" . implode("','", $ids) . "')";
                 Database::query($sql);

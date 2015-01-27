@@ -2,22 +2,22 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * File containing the declaration of the learnpathList class.
- * @package	chamilo.learnpath
- * @author	Yannick Warnier <ywarnier@beeznest.org>
- */
-
-/**
+ * Class learnpathList
  * This class is only a learning path list container with several practical methods for sorting the list and
  * provide links to specific paths
  * @uses	Database.lib.php to use the database
  * @uses	learnpath.class.php to generate learnpath objects to get in the list
+ * @author	Yannick Warnier <ywarnier@beeznest.org>
+ *
  */
 class learnpathList
 {
-    public $list = array(); // Holds a flat list of learnpaths data from the database.
-    public $ref_list = array(); // Holds a list of references to the learnpaths objects (only filled by get_refs()).
-    public $alpha_list = array(); // Holds a flat list of learnpaths sorted by alphabetical name order.
+    // Holds a flat list of learnpaths data from the database.
+    public $list = array();
+    // Holds a list of references to the learnpaths objects (only filled by get_refs()).
+    public $ref_list = array();
+    // Holds a flat list of learnpaths sorted by alphabetical name order.
+    public $alpha_list = array();
     public $course_code;
     public $user_id;
     public $refs_active = false;
@@ -26,9 +26,11 @@ class learnpathList
      * This method is the constructor for the learnpathList. It gets a list of available learning paths from
      * the database and creates the learnpath objects. This list depends on the user that is connected
      * (only displays) items if he has enough permissions to view them.
-     * @param	integer		User ID
-     * @param	string		Optional course code (otherwise we use api_get_course_id())
-     * @param	int			Optional session id (otherwise we use api_get_session_id())
+     * @param	integer		$user_id
+     * @param	string		$course_code Optional course code (otherwise we use api_get_course_id())
+     * @param int			$session_id Optional session id (otherwise we use api_get_session_id())
+     * @param string $order_by
+     * @param string $check_publication_dates
      * @return	void
      */
     public function __construct($user_id, $course_code = '', $session_id = null, $order_by = null, $check_publication_dates = false)
@@ -57,7 +59,7 @@ class learnpathList
 
         $order = "ORDER BY display_order ASC, name ASC";
         if (isset($order_by)) {
-           $order = Database::parse_conditions(array('order'=>$order_by));
+            $order = Database::parse_conditions(array('order'=>$order_by));
         }
 
         $now = api_get_utc_datetime();
@@ -104,9 +106,9 @@ class learnpathList
             $vis = api_get_item_visibility(api_get_course_info($course_code), 'learnpath', $row['id'], $session_id);
 
             if (!empty($row['created_on']) && $row['created_on'] != '0000-00-00 00:00:00') {
-            	$row['created_on'] = $row['created_on'];
+                $row['created_on'] = $row['created_on'];
             } else {
-            	$row['created_on'] = '';
+                $row['created_on'] = '';
             }
 
             if (!empty($row['modified_on']) && $row['modified_on'] != '0000-00-00 00:00:00') {
@@ -141,7 +143,7 @@ class learnpathList
                 'lp_visibility'     => $vis,
                 'lp_published'	    => $pub,
                 'lp_prevent_reinit' => $row['prevent_reinit'],
-          		'seriousgame_mode'  => $row['seriousgame_mode'],
+                'seriousgame_mode'  => $row['seriousgame_mode'],
                 'lp_scorm_debug'    => $row['debug'],
                 'lp_display_order'  => $row['display_order'],
                 'lp_preview_image'  => stripslashes($row['preview_image']),
@@ -153,8 +155,8 @@ class learnpathList
                 'expired_on'        => $row['expired_on']
             );
             $names[$row['name']] = $row['id'];
-       }
-       $this->alpha_list = asort($names);
+        }
+        $this->alpha_list = asort($names);
     }
 
     /**
@@ -162,7 +164,8 @@ class learnpathList
      * This applies a transformation internally on list and ref_list and returns a copy of the refs list
      * @return	array	List of references to learnpath objects
      */
-    function get_refs() {
+    function get_refs()
+    {
         foreach ($this->list as $id => $dummy) {
             $this->ref_list[$id] = new learnpath($this->course_code, $id, $this->user_id);
         }
@@ -174,19 +177,20 @@ class learnpathList
      * Gets a table of the different learnpaths we have at the moment
      * @return	array	Learnpath info as [lp_id] => ([lp_type]=> ..., [lp_name]=>...,[lp_desc]=>...,[lp_path]=>...)
      */
-    function get_flat_list() {
+    function get_flat_list()
+    {
         return $this->list;
     }
     /**
      *  Gets a list of lessons  of the given course_code and session_id
      *  This functions doesn't need user_id
-     *  @param string Text code of the course
-     *  @param int  Id of session
+     *  @param string $course_code Text code of the course
+     *  @param int  $session_id Id of session
      *  @return array List of lessons with lessons id as keys
      */
-    static function  get_course_lessons($course_code, $session_id) {
-        $tbl_course_lp          = Database::get_course_table(TABLE_LP_MAIN);
-
+    static function  get_course_lessons($course_code, $session_id)
+    {
+        $tbl_course_lp = Database::get_course_table(TABLE_LP_MAIN);
         $course = api_get_course_info($course_code);
         //QUery
         $sql = "SELECT * FROM $tbl_course_lp

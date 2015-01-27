@@ -6,9 +6,7 @@
  * 	@author
  * 	@version $Id: savescores.php 15602 2008-06-18 08:52:24Z pcool $
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = 'learnpath';
 
@@ -22,9 +20,12 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'learnpath') {
 }
 
 require_once '../inc/global.inc.php';
+$courseInfo = api_get_course_info();
+$_user = api_get_user_info();
+
 $this_section = SECTION_COURSES;
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
+$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
 
 $test = $_REQUEST['test'];
 $full_file_path = $documentPath.$test;
@@ -34,13 +35,12 @@ my_delete($full_file_path.$_user['user_id'].".t.html");
 $TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-$_cid = api_get_course_id();
-
 $score = $_REQUEST['score'];
 $origin = $_REQUEST['origin'];
 $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
-$course_info = api_get_course_info();
-$course_id = $course_info['real_id'];
+$lpViewId = isset($_REQUEST['lp_view_id']) ? intval($_REQUEST['lp_view_id']) : null;
+$course_id = $courseInfo['real_id'];
+$_cid = api_get_course_id();
 $jscript2run = '';
 
 /**
@@ -67,7 +67,7 @@ function save_scores($file, $score)
     }
     $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, exe_cours_id, exe_result, exe_weighting) VALUES (
 			'".Database::escape_string($file)."',
-			'".Database::escape_string($user_id)."',
+			".intval($user_id).",
 			'".Database::escape_string($date)."',
 			'".Database::escape_string($_cid)."',
 			'".Database::escape_string($score)."',
@@ -103,9 +103,19 @@ if ($origin != 'learnpath') {
 } else {
     $htmlHeadXtra[] = $jscript2run;
     Display::display_reduced_header();
-    $update_sql = "UPDATE $TABLE_LP_ITEM_VIEW SET status = 'completed'
-                   WHERE c_id = $course_id AND lp_item_id= $learnpath_item_id";
-    Database::query($update_sql);
-    Display::display_confirmation_message(get_lang('HotPotatoesFinished'));
+    if (!empty($course_id) && !empty($learnpath_item_id) && !empty($lpViewId)) {
+        $sql = "UPDATE $TABLE_LP_ITEM_VIEW SET
+                    status = 'completed'
+                WHERE
+                    c_id = $course_id AND
+                    lp_item_id= $learnpath_item_id AND
+                    lp_view_id = $lpViewId
+                ";
+        Database::query($sql);
+        Display::display_confirmation_message(get_lang('HotPotatoesFinished'));
+    } else {
+        Display::display_error_message(get_lang('Error'));
+    }
+
     Display::display_footer();
 }

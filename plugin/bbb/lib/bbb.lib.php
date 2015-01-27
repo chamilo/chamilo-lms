@@ -551,6 +551,37 @@ class bbb
                             }
                         }
                     }
+                } else {
+                    $actionLinks = '';
+                    if ($this->isTeacher()) {
+                        if ($meetingDB['visibility'] == 0) {
+                            $actionLinks .= Display::url(
+                                Display::return_icon(
+                                    'invisible.png',
+                                    get_lang('MakeVisible'),
+                                    array(),
+                                    ICON_SIZE_MEDIUM
+                                ),
+                                api_get_self().'?'.
+                                api_get_cidreq().
+                                '&action=publish&id='.$meetingDB['id']
+                            );
+                        } else {
+                            $actionLinks .= Display::url(
+                                Display::return_icon(
+                                    'visible.png',
+                                    get_lang('MakeInvisible'),
+                                    array(),
+                                    ICON_SIZE_MEDIUM
+                                ),
+                                api_get_self().'?'.
+                                api_get_cidreq().
+                                '&action=unpublish&id='.$meetingDB['id']
+                            );
+                        }
+                    }
+                    $actionLinksArray[] = $actionLinks;
+                    $item['action_links'] = implode('<br />', $actionLinksArray);
                 }
                 //var_dump($recordArray);
                 $item['show_links']  = implode('<br />', $recordArray);

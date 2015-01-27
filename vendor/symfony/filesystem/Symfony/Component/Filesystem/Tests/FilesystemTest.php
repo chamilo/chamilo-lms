@@ -53,6 +53,27 @@ class FilesystemTest extends FilesystemTestCase
         $this->filesystem->copy($sourceFilePath, $targetFilePath);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
+     */
+    public function testCopyUnreadableFileFails()
+    {
+        // skip test on Windows; PHP can't easily set file as unreadable on Windows
+        if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+            $this->markTestSkipped('This test cannot run on Windows.');
+        }
+
+        $sourceFilePath = $this->workspace.DIRECTORY_SEPARATOR.'copy_source_file';
+        $targetFilePath = $this->workspace.DIRECTORY_SEPARATOR.'copy_target_file';
+
+        file_put_contents($sourceFilePath, 'SOURCE FILE');
+
+        // make sure target cannot be read
+        $this->filesystem->chmod($sourceFilePath, 0222);
+
+        $this->filesystem->copy($sourceFilePath, $targetFilePath);
+    }
+
     public function testCopyOverridesExistingFileIfModified()
     {
         $sourceFilePath = $this->workspace.DIRECTORY_SEPARATOR.'copy_source_file';
@@ -104,6 +125,33 @@ class FilesystemTest extends FilesystemTestCase
 
         $this->assertFileExists($targetFilePath);
         $this->assertEquals('SOURCE FILE', file_get_contents($targetFilePath));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
+     */
+    public function testCopyWithOverrideWithReadOnlyTargetFails()
+    {
+        // skip test on Windows; PHP can't easily set file as unwritable on Windows
+        if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+            $this->markTestSkipped('This test cannot run on Windows.');
+        }
+
+        $sourceFilePath = $this->workspace.DIRECTORY_SEPARATOR.'copy_source_file';
+        $targetFilePath = $this->workspace.DIRECTORY_SEPARATOR.'copy_target_file';
+
+        file_put_contents($sourceFilePath, 'SOURCE FILE');
+        file_put_contents($targetFilePath, 'TARGET FILE');
+
+        // make sure both files have the same modification time
+        $modificationTime = time() - 1000;
+        touch($sourceFilePath, $modificationTime);
+        touch($targetFilePath, $modificationTime);
+
+        // make sure target is read-only
+        $this->filesystem->chmod($targetFilePath, 0444);
+
+        $this->filesystem->copy($sourceFilePath, $targetFilePath, true);
     }
 
     public function testCopyCreatesTargetDirectoryIfItDoesNotExist()
@@ -797,6 +845,21 @@ class FilesystemTest extends FilesystemTestCase
         $this->filesystem->mirror($sourcePath, $targetPath, null, array('delete' => true));
         $this->assertFalse($this->filesystem->exists($targetPath.'directory'));
         $this->assertFalse($this->filesystem->exists($targetPath.'directory'.DIRECTORY_SEPARATOR.'file1'));
+    }
+
+    public function testMirrorCreatesEmptyDirectory()
+    {
+        $sourcePath = $this->workspace.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR;
+
+        mkdir($sourcePath);
+
+        $targetPath = $this->workspace.DIRECTORY_SEPARATOR.'target'.DIRECTORY_SEPARATOR;
+
+        $this->filesystem->mirror($sourcePath, $targetPath);
+
+        $this->assertTrue(is_dir($targetPath));
+
+        $this->filesystem->remove($sourcePath);
     }
 
     public function testMirrorCopiesLinks()

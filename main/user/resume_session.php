@@ -84,7 +84,7 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
             }
     
             if (!empty($_GET['class'])){
-                Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
+                Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".intval($_GET['class']));
                 $nbr_affected_rows=Database::affected_rows();
                 Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
             }

@@ -495,7 +495,7 @@ class Answer
 				hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
         hotspot_type = '".Database::escape_string($hotspot_type)."'
 				WHERE c_id = {$this->course_id} AND id = '$id'
-				AND question_id = '".Database::escape_string($questionId)."'";
+				AND question_id = ".intval($questionId)."";
         Database::query($sql);
 	}
 

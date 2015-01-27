@@ -1,26 +1,18 @@
 <?php
 /* See license terms in /license.txt */
-/**
-*	This is the export library for Chamilo.
-*	Include/require it in your code to use its functionality.
-*
-*	Several functions below are adaptations from functions distributed by www.nexen.net
-*
-*	@package chamilo.library
-*/
-/**
- * Code
- */
+
 require_once 'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
 /**
+ *  This is the export library for Chamilo.
+ *	Include/require it in your code to use its functionality.
+ *	Several functions below are adaptations from functions distributed by www.nexen.net
  *
- * @package chamilo.library
+ *  @package chamilo.library
  */
 class Export
 {
-
 	private function __construct()
     {
 	}
@@ -38,7 +30,7 @@ class Export
             foreach ($data as $index => $row) {
                 $line = '';
                 if (is_array($row)) {
-                    foreach($row as $value) {
+                    foreach ($row as $value) {
                         $line .= '"'.str_replace('"', '""', $value).'";';
                     }
                 }
@@ -47,6 +39,7 @@ class Export
         }
         @fclose($handle);
         DocumentManager :: file_send_for_download($file, true, $filename.'.csv');
+
         return false;
     }
 
@@ -130,7 +123,7 @@ class Export
     * @param string Name of the root element. A root element should always be given.
     * @param string Encoding in which the data is provided
     */
-	public static function export_table_xml ($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding = null)
+	public static function export_table_xml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding = null)
     {
 		if (empty($encoding)) {
 			$encoding = api_get_system_encoding();
@@ -192,7 +185,9 @@ class Export
      */
     public static function _export_complex_table_xml_helper ($data, $level = 1)
     {
-    	if (count($data)<1) { return '';}
+        if (count($data) < 1) {
+            return '';
+        }
         $string = '';
         foreach ($data as $row) {
             $string .= "\n".str_repeat("\t",$level).'<'.$row['name'].'>';
@@ -204,12 +199,12 @@ class Export
                 $string .= '</'.$row['name'].'>';
             }
         }
+
         return $string;
     }
 
     /**
-     *
-     * @param array table in array format to be read with the HTML_table class
+     * @param array $data table to be read with the HTML_table class
      */
     public static function export_table_pdf($data, $params = array())
     {
@@ -237,6 +232,7 @@ class Export
     /**
      * @param array $data
      * @param array $params
+     *
      * @return string
      */
     public static function convert_array_to_html($data, $params = array())

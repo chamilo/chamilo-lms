@@ -191,6 +191,9 @@ $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Ein Mindestwert für d
 $LinkMod = "Speichern";
 $EditLink = "Aktivität bearbeiten";
 $CategoryDeleted = "Die Kategorie wurde gelöscht.";
+$GenerateCertificates = "Zertifikate erstellen";
+$ExportAllCertificatesToPDF = "Alle Zertifikate als PDF exportieren";
+$DeleteAllCertificates = "Alle Zertifikate löschen";
 $AreYouSureToLockedTheEvaluation = "Sind Sie sicher das Sie die Bewertung sperren wollen?";
 $AreYouSureToUnLockedTheEvaluation = "Sind Sie sicher das Sie die Bewertung entsperren wollen?";
 $EvaluationHasBeenUnLocked = "Bewertung wurde entsperrt";
@@ -233,4 +236,7 @@ $AllMustWeight100 = "Die Summe aller Werte muss 100 entsprechen";
 $Components = "Elemente";
 $OnlyActiveWhenThereAreAnyComponents = "Diese Option ist aktiv, wenn Sie keine Bewertung oder Kategorien angelegt haben.";
 $GradebookLockedAlert = "Diese Bewertung wurde gesperrt. Sie können sie nicht entsperren. Wenn Sie sie wirklich entsperren möchten, kontaktieren Sie den Portal-Administrator.Erklären Sie ihm, warum es für Sie notwendig ist die Enstperrung vorzunehmen, ansonsten kann dies als Betrugsversuch gewertet werden.";
+$NoStudentCertificatesAvailableYet = "Aktuell kein Zertifikat verfügbar. Bitte zur Zertifikatserstellung berücksichtigen, daß der Kursteilnehmer in der Bewertungsmappe erst mit Erreichen des Kurszieles ein Zertifikat durch Klick auf das Zertifikats-Symbol abrufen kann.";
+$CertificateExistsButNotPublic = "Das gewünschte Zertifikat existiert, ist jedoch nicht frei zugänglich. Bitte anmelden, um das Zertifikat anzusehen.";
+$ConfirmToUnlockElement = "Bestätigen, um Element freizuschalten";
 ?>

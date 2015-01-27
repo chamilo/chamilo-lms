@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@package chamilo.admin
 */
@@ -82,12 +83,9 @@ function search_users($needle, $type)
 
         // xajax send utf8 datas... datas in db can be non-utf8 datas
         $charset = api_get_system_encoding();
-        $needle = Database::escape_string($needle);
         $needle = api_convert_encoding($needle, $charset, 'utf-8');
-
+        $needle = Database::escape_string($needle);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-
-
         $showOfficialCode = false;
         global $_configuration;
         if (isset($_configuration['order_user_list_by_official_code']) &&
@@ -117,7 +115,6 @@ function search_users($needle, $type)
                 $cond_user_id = ' AND user.user_id NOT IN('.implode(",",$user_ids).')';
             }
         }
-
         switch ($type) {
             case 'single':
                 // search users where username or firstname or lastname begins likes $needle
@@ -128,14 +125,19 @@ function search_users($needle, $type)
                                 username LIKE "'.$needle.'%" OR
                                 firstname LIKE "'.$needle.'%" OR
                                 lastname LIKE "'.$needle.'%"
-                            ) AND user.status<>6 AND user.status<>'.DRH.''.
+                            ) AND
+                            user.status <> 6 AND
+                            user.status <> '.DRH.''.
                         $order_clause.'
                         LIMIT 11';
                 break;
             case 'multiple':
                 $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
-                        WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.status<>6 '.$cond_user_id.
+                        WHERE
+                            '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND
+                            user.status <> '.DRH.' AND
+                            user.status <> 6 '.$cond_user_id.
                         $order_clause;
                 break;
             case 'any_session':
@@ -154,7 +156,7 @@ function search_users($needle, $type)
             $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                switch($type) {
+                switch ($type) {
                     case 'single':
                         $sql = 'SELECT user.user_id, username, lastname, firstname, official_code
                         FROM '.$tbl_user.' user
@@ -165,7 +167,8 @@ function search_users($needle, $type)
                                 username LIKE "'.$needle.'%" OR
                                 firstname LIKE "'.$needle.'%" OR
                                 lastname LIKE "'.$needle.'%"
-                            ) AND user.status<>6 AND user.status<>'.DRH.' '.
+                            ) AND user.status<>6 AND
+                            user.status<>'.DRH.' '.
                         $order_clause.
                         ' LIMIT 11';
                         break;
@@ -195,7 +198,7 @@ function search_users($needle, $type)
                 }
             }
         }
-
+        //echo Database::fixQuery($sql);
         $rs = Database::query($sql);
         $i = 0;
         if ($type=='single') {
@@ -219,19 +222,18 @@ function search_users($needle, $type)
             global $nosessionUsersList;
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
             while ($user = Database :: fetch_array($rs)) {
-
                 $person_name = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') '.$user['official_code'];
                 if ($showOfficialCode) {
                     $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
                     $person_name = $officialCode.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
                 }
-
 	            $return .= '<option value="'.$user['user_id'].'">'.$person_name.' </option>';
 			}
 			$return .= '</select>';
 			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
 		}
 	}
+
 	return $xajax_response;
 }
 
@@ -284,11 +286,11 @@ function change_select(val) {
 }
 </script>';
 
-$form_sent=0;
-$errorMsg=$firstLetterUser=$firstLetterSession='';
-$UserList=$SessionList=array();
-$sessions=array();
-$noPHP_SELF=true;
+$form_sent = 0;
+$errorMsg = $firstLetterUser = $firstLetterSession = '';
+$UserList = $SessionList = array();
+$sessions = array();
+$noPHP_SELF = true;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent             = $_POST['form_sent'];
@@ -330,7 +332,8 @@ if ($ajax_search) {
     $sql = "SELECT user_id, lastname, firstname, username, id_session, official_code
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
-                ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                ON $tbl_session_rel_user.id_user = u.user_id AND
+                $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 AND $tbl_session_rel_user.id_session = ".intval($id_session)."
             WHERE u.status<>".DRH." AND u.status<>6
             $order_clause";
@@ -342,7 +345,8 @@ if ($ajax_search) {
             $sql="SELECT u.user_id, lastname, firstname, username, id_session, official_code
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
-                ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                ON $tbl_session_rel_user.id_user = u.user_id AND
+                $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 AND $tbl_session_rel_user.id_session = ".intval($id_session)."
             INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
             WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
@@ -438,8 +442,8 @@ if ($ajax_search) {
         }
     }
 
-    $result   = Database::query($sql);
-    $users    = Database::store_result($result,'ASSOC');
+    $result = Database::query($sql);
+    $users = Database::store_result($result,'ASSOC');
     foreach ($users as $uid => $user) {
         if ($user['id_session'] != $id_session) {
             $nosessionUsersList[$user['user_id']] = array(

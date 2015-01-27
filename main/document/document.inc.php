@@ -340,7 +340,11 @@ function create_document_link(
                     preg_match('/jpeg$/i', urldecode($url)) ||
                     preg_match('/bmp$/i', urldecode($url)) ||
                     preg_match('/svg$/i', urldecode($url)) ||
-                    (preg_match('/wav$/i', urldecode($url)) && preg_match('/_chnano_.wav$/i', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
+                    (
+                        preg_match('/wav$/i', urldecode($url)) &&
+                        preg_match('/_chnano_.wav$/i', urldecode($url)) &&
+                        api_get_setting('enable_nanogong') == 'true'
+                    )
                 ) {
                     $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'];
                     return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' .
@@ -760,23 +764,36 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
         if (is_array($folders)) {
             foreach ($folders as & $folder) {
                 // Hide some folders
-                if ($folder == '/HotPotatoes_files' || $folder == '/certificates' || basename($folder) == 'css') {
+                if ($folder == '/HotPotatoes_files' ||
+                    $folder == '/certificates' ||
+                    basename($folder) == 'css'
+                ) {
                     continue;
                 }
-                //Admin setting for Hide/Show the folders of all users
+                // Admin setting for Hide/Show the folders of all users
                 if (api_get_setting('show_users_folders') == 'false' &&
                     (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))
                 ) {
                     continue;
                 }
-                //Admin setting for Hide/Show Default folders to all users
+
+                // Admin setting for Hide/Show Default folders to all users
                 if (api_get_setting('show_default_folders') == 'false' &&
-                    ($folder == '/images' || $folder == '/flash' || $folder == '/audio' || $folder == '/video' || strstr($folder, '/images/gallery') || $folder == '/video/flv')
+                    (
+                        $folder == '/images' ||
+                        $folder == '/flash' ||
+                        $folder == '/audio' ||
+                        $folder == '/video' ||
+                        strstr($folder, '/images/gallery') ||
+                        $folder == '/video/flv'
+                    )
                 ) {
                     continue;
                 }
-                //Admin setting for Hide/Show chat history folder
-                if (api_get_setting('show_chat_folder') == 'false' && $folder == '/chat_files') {
+
+                // Admin setting for Hide/Show chat history folder
+                if (api_get_setting('show_chat_folder') == 'false' &&
+                    $folder == '/chat_files') {
                     continue;
                 }
 
@@ -784,7 +801,10 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
                 // 1. current directory
                 // 2. inside the folder you want to move
                 // 3. inside a subfolder of the folder you want to move
-                if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file . '/')) {
+                if (($curdirpath != $folder) &&
+                    ($folder != $move_file) &&
+                    (substr($folder, 0, strlen($move_file) + 1) != $move_file . '/')
+                ) {
                     $path_displayed = $folder;
                     // If document title is used, we have to display titles instead of real paths...
                     $path_displayed = get_titles_of_path($folder);
@@ -793,13 +813,15 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
                         $path_displayed = get_lang('Untitled');
                     }
                     $options[$folder] = $path_displayed;
-                    //$form .= '<option value="'.$folder.'">'.$path_displayed.'</option>';
                 }
             }
         }
     } else {
         foreach ($folders as $folder) {
-            if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file . '/')) {
+            if (($curdirpath != $folder) &&
+                ($folder != $move_file) &&
+                (substr($folder, 0, strlen($move_file) + 1) != $move_file . '/')
+            ) {
                 // Cannot copy dir into his own subdir
                 $path_displayed = get_titles_of_path($folder);
                 $display_folder = substr($path_displayed, strlen($group_dir));
@@ -816,10 +838,11 @@ function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = 
 
 /**
  * Gets the path translated with title of docs and folders
- * @param string the real path
+ * @param string $path the real path
  * @return the path which should be displayed
  */
-function get_titles_of_path($path) {
+function get_titles_of_path($path)
+{
     global $tmp_folders_titles;
     $course_id = api_get_course_int_id();
     $nb_slashes = substr_count($path, '/');
@@ -871,12 +894,12 @@ function display_user_link_document($user_id, $name) {
  * Creates form that asks for the directory name.
  * @return string	html-output text for the form
  */
-function create_dir_form($current_dir_id) {
+function create_dir_form($dirId) {
     global $document_id;
     $form = new FormValidator('create_dir_form', 'post', api_get_self().'?'.api_get_cidreq(), '', null, false);
     $form->addElement('hidden', 'create_dir', 1);
     $form->addElement('hidden', 'dir_id', intval($document_id));
-    $form->addElement('hidden', 'id', intval($current_dir_id));
+    $form->addElement('hidden', 'id', intval($dirId));
     $form->addElement('header', '', get_lang('CreateDir'));
     $form->addElement('text', 'dirname', get_lang('NewDir'), array('autofocus' => 'autofocus'));
     $form->addElement('style_submit_button', 'submit', get_lang('CreateFolder'), 'class="add"');

@@ -18,17 +18,23 @@ require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/scoredisplay.class.php';
 
 api_block_anonymous_users();
-block_students();
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    api_get_course_info()
+);
 
+if (!$isDrhOfCourse) {
+    block_students();
+}
 $interbreadcrumb[]= array (
     'url' => $_SESSION['gradebook_dest'],
     'name' => get_lang('Gradebook'
 ));
 
 $category = Category :: load($_GET['selectcat']);
-$my_user_id=Security::remove_XSS($_GET['userid']);
-$allevals= $category[0]->get_evaluations($my_user_id, true);
-$alllinks= $category[0]->get_links($my_user_id, true);
+$my_user_id = Security::remove_XSS($_GET['userid']);
+$allevals = $category[0]->get_evaluations($my_user_id, true);
+$alllinks = $category[0]->get_links($my_user_id, true);
 
 if ($_GET['selectcat'] != null) {
     $addparams= array (
@@ -42,7 +48,7 @@ if ($_GET['selectcat'] != null) {
     );
 }
 
-$user_table= new UserTable($my_user_id, $allevals, $alllinks, $addparams);
+$user_table = new UserTable($my_user_id, $allevals, $alllinks, $addparams);
 
 if (isset ($_GET['exportpdf'])) {
     $datagen       = new UserDataGenerator($my_user_id, $allevals, $alllinks);

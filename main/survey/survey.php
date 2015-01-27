@@ -26,7 +26,18 @@ require_once 'survey.lib.php';
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 // Coach can't view this page
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
-if (!api_is_allowed_to_edit(false, true) || (api_is_course_coach() && $extend_rights_for_coachs == 'false')) {
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+	api_get_user_id(),
+	api_get_course_info()
+);
+
+if ($isDrhOfCourse) {
+    header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq());
+    exit;
+}
+if (!api_is_allowed_to_edit(false, true) ||
+    (api_is_course_coach() && $extend_rights_for_coachs == 'false')
+) {
 	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
@@ -85,7 +96,7 @@ if ($is_survey_type_1 && ($action == 'addgroup' || $action == 'deletegroup')) {
 	}
 
 	if ($action == 'deletegroup') {
-		Database::query('DELETE FROM '.$table_survey_question_group.' WHERE c_id = '.$course_id.' AND id = '.Database::escape_string($_GET['gid']).' and survey_id = '.Database::escape_string($survey_id));
+		Database::query('DELETE FROM '.$table_survey_question_group.' WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' and survey_id = '.intval($survey_id));
 		$sendmsg = 'GroupDeletedSuccessfully';
 	}
 	header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
@@ -176,7 +187,7 @@ echo '	</tr>';
 // Displaying the table contents with all the questions
 $question_counter = 1;
 $sql = "SELECT * FROM $table_survey_question_group
-        WHERE c_id = '.$course_id.' AND survey_id = '".Database::escape_string($survey_id)."' ORDER BY id";
+        WHERE c_id = '.$course_id.' AND survey_id = ".intval($survey_id)." ORDER BY id";
 $result = Database::query($sql);
 $groups = array();
 while ($row = Database::fetch_array($result)) {
@@ -187,7 +198,7 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
         LEFT JOIN $table_survey_question_option survey_question_option
         ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
         WHERE
-            survey_question.survey_id 	= '".Database::escape_string($survey_id)."' AND
+            survey_question.survey_id 	= ".intval($survey_id)." AND
              survey_question.c_id 		= $course_id
         GROUP BY survey_question.question_id
         ORDER BY survey_question.sort ASC";
@@ -253,7 +264,7 @@ if ($is_survey_type_1) {
 	echo '<table border="0"><tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
 	echo '<form action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
 	if ($_GET['action'] == 'editgroup') {
-		$sql = 'SELECT name,description FROM '.$table_survey_question_group.' WHERE id = '.Database::escape_string($_GET['gid']).' AND survey_id = '.Database::escape_string($survey_id).' limit 1';
+		$sql = 'SELECT name,description FROM '.$table_survey_question_group.' WHERE id = '.intval($_GET['gid']).' AND survey_id = '.intval($survey_id).' limit 1';
 		$rs = Database::query($sql);
 		$editedrow = Database::fetch_array($rs,'ASSOC');
 		echo	'<input type="text" maxlength="20" name="name" value="'.$editedrow['name'].'" size="10" disabled>';
@@ -274,7 +285,7 @@ if ($is_survey_type_1) {
 	echo '		<th width="100">'.get_lang('Modify').'</th>';
 	echo '	</tr>';
 
-	$sql = 'SELECT id,name,description FROM '.$table_survey_question_group.' WHERE c_id = '.$course_id.' AND survey_id = '.Database::escape_string($survey_id).' ORDER BY name';
+	$sql = 'SELECT id,name,description FROM '.$table_survey_question_group.' WHERE c_id = '.$course_id.' AND survey_id = '.intval($survey_id).' ORDER BY name';
 
 	$rs = Database::query($sql);
 	while($row = Database::fetch_array($rs,ASSOC)){

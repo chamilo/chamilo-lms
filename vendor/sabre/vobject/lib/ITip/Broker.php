@@ -736,6 +736,10 @@ class Broker {
                     $event->add('SUMMARY', $summary);
                 }
             } else {
+                // This branch of the code is reached, when a reply is
+                // generated for an instance of a recurring event, through the
+                // fact that the instance has disappeared by showing up in
+                // EXDATE
                 $dt = DateTimeParser::parse($instance['id'], $eventInfo['timezone']);
                 // Treat is as a DATE field
                 if (strlen($instance['id']) <= 8) {

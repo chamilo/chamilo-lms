@@ -113,7 +113,7 @@ class GroupPortalManager
     {
         $id = intval($id);
         $table = Database :: get_main_table(TABLE_MAIN_GROUP);
-        $sql = "DELETE FROM $table WHERE id = ".Database::escape_string($id);
+        $sql = "DELETE FROM $table WHERE id = ".intval($id);
         $result = Database::query($sql);
         // Deleting all relationship with users and groups
         self::delete_users($id);

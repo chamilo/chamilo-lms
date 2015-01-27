@@ -983,7 +983,7 @@ class DocumentManager
     {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = $_course['real_id'];
-        $document_id = Database::escape_string($document_id);
+        $document_id = intval($document_id);
         $sql = "SELECT filetype FROM $TABLE_DOCUMENT
                 WHERE c_id = $course_id AND id= $document_id";
         $result = Database::fetch_array(Database::query($sql), 'ASSOC');
@@ -1467,7 +1467,7 @@ class DocumentManager
                     '" . Database::escape_string($title) . "',
                     '" . Database::escape_string($description) . "',
                     '" . Database::escape_string($course_code) . "',
-                    '" . Database::escape_string($user_id) . "',
+                    '" . intval($user_id) . "',
                     '" . Database::escape_string($document_id_for_template) . "',
                     '" . Database::escape_string($image) . "')";
         Database::query($sql);
@@ -1486,8 +1486,8 @@ class DocumentManager
     {
         $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
         $course_code = Database::escape_string($course_code);
-        $user_id = Database::escape_string($user_id);
-        $document_id = Database::escape_string($document_id);
+        $user_id = intval($user_id);
+        $document_id = intval($document_id);
 
         $sql = 'SELECT id FROM ' . $table_template . '
                 WHERE
@@ -1718,13 +1718,13 @@ class DocumentManager
         $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = api_get_session_id();
         if ($session_id == 0 || is_null($session_id)) {
-            $sql_session = 'AND (session_id=' . Database::escape_string($session_id) . ' OR isnull(session_id)) ';
+            $sql_session = 'AND (session_id=' . intval($session_id) . ' OR isnull(session_id)) ';
         } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id=' . Database::escape_string($session_id);
+            $sql_session = 'AND session_id=' . intval($session_id);
         } else {
             $sql_session = '';
         }
-        $sql = 'UPDATE ' . $tbl_category . ' SET document_id="' . Database::escape_string($document_id) . '"
+        $sql = 'UPDATE ' . $tbl_category . ' SET document_id="' . intval($document_id) . '"
                WHERE course_code="' . Database::escape_string($course_id) . '" ' . $sql_session;
         Database::query($sql);
     }
@@ -1739,9 +1739,9 @@ class DocumentManager
         $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = api_get_session_id();
         if ($session_id == 0 || is_null($session_id)) {
-            $sql_session = 'AND (session_id=' . Database::escape_string($session_id) . ' OR isnull(session_id)) ';
+            $sql_session = 'AND (session_id=' . intval($session_id) . ' OR isnull(session_id)) ';
         } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id=' . Database::escape_string($session_id);
+            $sql_session = 'AND session_id=' . intval($session_id);
         } else {
             $sql_session = '';
         }
@@ -1911,9 +1911,9 @@ class DocumentManager
             $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $session_id = api_get_session_id();
             if ($session_id == 0 || is_null($session_id)) {
-                $sql_session = 'AND (session_id=' . Database::escape_string($session_id) . ' OR isnull(session_id)) ';
+                $sql_session = 'AND (session_id=' . intval($session_id) . ' OR isnull(session_id)) ';
             } elseif ($session_id > 0) {
-                $sql_session = 'AND session_id=' . Database::escape_string($session_id);
+                $sql_session = 'AND session_id=' . intval($session_id);
             } else {
                 $sql_session = '';
             }

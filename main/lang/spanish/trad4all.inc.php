@@ -2,6 +2,24 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CosecantCsc = "Cosecante:\t\t\t\tcsc(x)";
+$HyperbolicCosecantCsch = "Cosecante hiperbólico:\t\tcsch(x)";
+$ArccosecantArccsc = "Arccosecante:\t\t\tarccsc(x)";
+$HyperbolicArccosecantArccsch = "Arcocosecante hiperbólico:\t\tarccsch(x)";
+$SecantSec = "Secante:\t\t\t\tsec(x)";
+$HyperbolicSecantSech = "Secante hiperbólico:\t\tsech(x)";
+$ArcsecantArcsec = "Arcosecante:\t\t\tarcsec(x)";
+$HyperbolicArcsecantArcsech = "Arcosecante hiperbólico:\t\tarcsech(x)";
+$CotangentCot = "Cotangente:\t\t\tcot(x)";
+$HyperbolicCotangentCoth = "Cotangente hiperbólico:\t\tcoth(x)";
+$ArccotangentArccot = "Arcocotangente:\t\t\tarccot(x)";
+$HyperbolicArccotangentArccoth = "Arcocotangente hiperbólico:\t\tarccoth(x)";
+$HelpCookieUsageValidation = "Para el buen funcionamiento de este sitio y la medición de su uso, esta plataforma usa cookies.<br /><br />
+Si lo considera necesario, la sección de ayuda de su navegador le informará sobre los prcedimientos para configurar los cookies.<br /><br />
+Para mayor información sobre cookies, puede visitar el sitio <a href=\"http://www.aboutcookies.org/\">About Cookies</a> (en inglés) o cualquier equivalente en español.";
+$YouAcceptCookies = "A través del uso de este sitio web, declara aceptar el uso de cookies.";
+$TemplateCertificateComment = "Ejemplo de certificado";
+$TemplateCertificateTitle = "Certificado";
 $ResultsVisibility = "Visibilidad de los resultados";
 $DownloadCertificate = "Descargar certificado";
 $PortalActiveCoursesLimitReached = "Lo sentimos, esta instalación tiene un límite de cursos activos, que ahora se ha alcanzado. Todavía puede crear nuevos cursos, pero sólo si te esconde al menos un curso activo existente. Para ello, edite un curso de la lista de cursos de administración y cambiar la visibilidad a 'invisible', a continuación, intente crear este curso de nuevo. para aumentar el número máximo de cursos activos permitidos en esta instalación de Chamilo, por favor póngase en contacto con su proveedor de hosting o, en su caso, actualizar a un plan de alojamiento superiores.";
@@ -37,21 +55,15 @@ $BuyCourses = "Comprar cursos";
 $MySessions = "Mis sesiones";
 $ActivateAudioRecorder = "Activar la grabación de voz";
 $StartSpeaking = "Hable ahora";
-$InverseHyperbolicTangentAtanh = "Tangente hiperbólica inversa:\tatanh(x)";
 $HyperbolicArctangentArctanh = "Arcotangente hiperbólica:\tarctanh(x)";
-$InverseTangentAtan = "Tangente inversa:\t\tatan(x)";
 $ArctangentArctan = "Arcotangente:\t\t\tarctan(x)";
 $HyperbolicTangentTanh = "Tangente hiperbólica:\t\ttanh(x)";
 $TangentTan = "Tangente:\t\t\ttan(x)";
-$InverseHyperbolicCosineAcosh = "Coseno hiperbólico inverso:\tacosh(x)";
 $HyperbolicArccosineArccosh = "Arcocoseno hiperbólico:\t\tarccosh(x)";
-$InverseCosineAcos = "Coseno inverso:\t\t\tacos(x)";
 $ArccosineArccos = "Arcocoseno:\t\t\tarccos(x)";
 $HyperbolicCosineCosh = "Coseno hiperbólico:\t\tcosh(x)";
 $CosineCos = "Coseno:\t\t\t\tcos(x)";
-$InverseHyperbolicSineAsinh = "Seno hiperbólico inverso:\tasinh(x)";
 $HyperbolicArcsineArcsinh = "Arcoseno hiperbólico:\t\tarcsinh(x)";
-$InverseSineAsin = "Seno inverso:\t\t\tasin(x)";
 $ArcsineArcsin = "Arcoseno:\t\t\tarcsin(x)";
 $HyperbolicSineSinh = "Seno hiperbólico:\t\tsinh(x)";
 $SineSin = "Seno:\t\t\t\tsin(x)";

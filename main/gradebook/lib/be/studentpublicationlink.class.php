@@ -202,7 +202,10 @@ class StudentPublicationLink extends AbstractLink
 		// for 1 student
 		if (!empty($stud_id)) {
 			if ($data = Database::fetch_array($scores)) {
-				return array($data['qualification'], $assignment['qualification']);
+				return array(
+					$data['qualification'],
+					$assignment['qualification']
+				);
 			} else {
 				return '';
 			}
@@ -224,7 +227,7 @@ class StudentPublicationLink extends AbstractLink
 			if ($rescount == 0) {
 				return null;
 			} else {
-				return array ($sum , $rescount);
+				return array($sum, $rescount);
 			}
 		}
 	}

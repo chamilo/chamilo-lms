@@ -45,22 +45,22 @@ if (isset($_GET['action']) AND isset($_GET['permission']) AND isset($_GET['tool'
 if (isset($_GET['action']) AND isset($_GET['role_id']) AND $_GET['action']=='delete') {
 	//deleting the assignments fo this role: users
 	$table=Database::get_course_table(TABLE_ROLE_USER);
-	$sql="DELETE FROM $table WHERE role_id='".Database::escape_string($_GET['role_id'])."'";
+	$sql="DELETE FROM $table WHERE role_id='".intval($_GET['role_id'])."'";
 	$result=Database::query($sql);
 
 	// deleting the assignments of this role: groups
 	$table=Database::get_course_table(TABLE_ROLE_GROUP);
-	$sql="DELETE FROM $table WHERE role_id='".Database::escape_string($_GET['role_id'])."'";
+	$sql="DELETE FROM $table WHERE role_id='".intval($_GET['role_id'])."'";
 	$result=Database::query($sql);
 
 	// deleting the permissions of this role
 	$table=Database::get_course_table(TABLE_ROLE_PERMISSION);
-	$sql="DELETE FROM $table WHERE role_id='".Database::escape_string($_GET['role_id'])."'";
+	$sql="DELETE FROM $table WHERE role_id='".intval($_GET['role_id'])."'";
 	$result=Database::query($sql);
 
 	// deleting the role
 	$table_role=Database::get_course_table(TABLE_ROLE);
-	$sql="DELETE FROM $table_role WHERE role_id='".Database::escape_string($_GET['role_id'])."'";
+	$sql="DELETE FROM $table_role WHERE role_id='".intval($_GET['role_id'])."'";
 	$result=Database::query($sql);
 	$result_message=get_lang('RoleDeleted');
 }

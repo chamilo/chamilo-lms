@@ -384,7 +384,7 @@ class ExtraFieldValue extends Model
     public function get_values_by_handler_and_field_id($item_id, $field_id, $transform = false)
     {
         $field_id = intval($field_id);
-        $item_id = Database::escape_string($item_id);
+        $item_id = intval($item_id);
 
         $sql = "SELECT s.*, field_type FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
@@ -466,7 +466,7 @@ class ExtraFieldValue extends Model
      */
     public function get_values_by_handler_and_field_variable($item_id, $field_variable, $transform = false)
     {
-        $item_id = Database::escape_string($item_id);
+        $item_id = intval($item_id);
         $field_variable = Database::escape_string($field_variable);
 
         $sql = "SELECT s.*, field_type FROM {$this->table} s
@@ -637,7 +637,7 @@ class ExtraFieldValue extends Model
     public function delete_values_by_handler_and_field_id($item_id, $field_id)
     {
         $field_id = intval($field_id);
-        $item_id = Database::escape_string($item_id);
+        $item_id = intval($item_id);
         $sql = "DELETE FROM {$this->table}
                 WHERE {$this->handler_id} = '$item_id' AND field_id = '".$field_id."' ";
         Database::query($sql);

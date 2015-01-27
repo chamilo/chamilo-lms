@@ -3,10 +3,10 @@
 /**
  * Controller for REST request
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- * @package chamilo.plugin.tour
+ * @package chamilo.webservices
  */
 /* Require libs and classes */
-require_once '../main/inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 /* Manage actions */
 $json = array();

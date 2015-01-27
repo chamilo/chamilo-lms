@@ -100,7 +100,7 @@ if ($_GET['chatid'] != '') {
     $time = date("Y-m-d H:i:s", $time);
     $chatid = intval($_GET['chatid']);
     if ($_GET['chatid'] == strval(intval($_GET['chatid']))) {
-        $sql = "update $track_user_table set chatcall_user_id = '".Database::escape_string($_user['user_id'])."', chatcall_date = '".Database::escape_string($time)."', chatcall_text = '' where (user_id = ".(int)Database::escape_string($chatid).")";
+        $sql = "update $track_user_table set chatcall_user_id = ".intval($_user['user_id']).", chatcall_date = '".Database::escape_string($time)."', chatcall_text = '' where (user_id = ".(int)Database::escape_string($chatid).")";
         $result = Database::query($sql);
         //redirect caller to chat
         header("Location: ".api_get_path(WEB_CODE_PATH)."chat/chat.php?".api_get_cidreq()."&origin=whoisonline&target=".Security::remove_XSS($chatid));

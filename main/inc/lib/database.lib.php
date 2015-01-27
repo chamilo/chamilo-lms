@@ -465,16 +465,18 @@ class Database
      * @param resource  $connection (optional)   The database server connection, for detailed description see the method query().
      * @param bool $addFix
      * @return string   he escaped string
-     * @author Yannick Warnier <yannick.warnier@dokeos.com>
+     * @author Yannick Warnier <yannick.warnier@beeznest.com>
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
     public static function escape_string($string, $connection = null, $addFix = true)
     {
         // Fixes security problem when there's no "" or '' between a variable.
         // See #7440 for more info
+        /*
         if ($addFix) {
-            $string = "__@$string@__";
+            //$string = "__@$string@__";
         }
+        */
         return get_magic_quotes_gpc()
             ? (self::use_default_connection($connection)
                 ? mysql_real_escape_string(stripslashes($string))
@@ -514,7 +516,7 @@ class Database
      * @param   string      Optional class name to instanciate
      * @param   array       Optional array of parameters
      * @return  object      Object of class StdClass or the required class, containing the query result row
-     * @author  Yannick Warnier <yannick.warnier@dokeos.com>
+     * @author  Yannick Warnier <yannick.warnier@beeznest.com>
      */
     public static function fetch_object($result, $class = null, $params = null) {
         return !empty($class) ? (is_array($params) ? mysql_fetch_object($result, $class, $params) : mysql_fetch_object($result, $class)) : mysql_fetch_object($result);
@@ -663,7 +665,7 @@ class Database
      * Gets the number of rows from the last query result - help achieving database independence
      * @param resource      The result
      * @return integer      The number of rows contained in this result
-     * @author Yannick Warnier <yannick.warnier@dokeos.com>
+     * @author Yannick Warnier <yannick.warnier@beeznest.com>
      **/
     public static function num_rows($result) {
         return is_resource($result) ? mysql_num_rows($result) : false;
@@ -748,7 +750,7 @@ class Database
             $connection = null;
         }
 
-        $query = self::fixQuery($query);
+        //$query = self::fixQuery($query);
 
         // Check if the table contains a c_ (means a course id)
         if (api_get_setting('server_type') === 'test' && strpos($query, 'c_')) {

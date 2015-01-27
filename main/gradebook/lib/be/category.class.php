@@ -786,14 +786,14 @@ class Category implements GradebookItem
             foreach ($links as $link) {
                 $linkres = $link->calc_score($stud_id);
 
-                if (isset($linkres) && $link->get_weight() != 0) {
-                    $linkweight     = $link->get_weight();
-                    $link_res_denom = ($linkres[1] == 0) ? 1 : $linkres[1];
+                if (!empty($linkres) && $link->get_weight() != 0) {
+                    $linkweight = $link->get_weight();
+                    $link_res_denom = $linkres[1] == 0 ? 1 : $linkres[1];
                     $rescount++;
                     $weightsum += $linkweight;
-                    $ressum += (($linkres[0] / $link_res_denom) * $linkweight);
+                    $ressum += ($linkres[0] / $link_res_denom) * $linkweight;
                 } else {
-                    // Ddding if result does not exists
+                    // Adding if result does not exists
                     if ($link->get_weight() != 0) {
                         $linkweight = $link->get_weight();
                         $weightsum += $linkweight;
@@ -1439,8 +1439,14 @@ class Category implements GradebookItem
                 $sessionId
             );
             if (!empty($subcats)) {
+                /** @var Category $subcat */
                 foreach ($subcats as $subcat) {
-                    $sublinks = $subcat->get_links($stud_id, false, $course_code, $sessionId);
+                    $sublinks = $subcat->get_links(
+                        $stud_id,
+                        false,
+                        $course_code,
+                        $sessionId
+                    );
                     $links = array_merge($links, $sublinks);
                 }
             }
@@ -1567,10 +1573,19 @@ class Category implements GradebookItem
     public static function register_user_certificate($category_id, $user_id)
     {
         // Generating the total score for a course
-        $cats_course = Category::load($category_id, null, null, null, null, api_get_session_id(), false);
-
-        $alleval_course  = $cats_course[0]->get_evaluations($user_id, true);
-        $alllink_course  = $cats_course[0]->get_links($user_id, true);
+        $cats_course = Category::load(
+            $category_id,
+            null,
+            null,
+            null,
+            null,
+            api_get_session_id(),
+            false
+        );
+        /** @var Category $category */
+        $category = $cats_course[0];
+        $alleval_course  = $category->get_evaluations($user_id, true);
+        $alllink_course  = $category->get_links($user_id, true);
         $evals_links = array_merge($alleval_course, $alllink_course);
 
         //@todo move these in a function
@@ -1589,13 +1604,15 @@ class Category implements GradebookItem
         $main_weight = $cats_course[0]->get_weight();
 
         $item_total_value = 0;
-        $item_value = 0;
-
         for ($count=0; $count < count($evals_links); $count++) {
+            /** @var AbstractLink $item */
             $item = $evals_links[$count];
             $score = $item->calc_score($user_id);
-            $divide = ( ($score[1])==0 ) ? 1 : $score[1];
-            $item_value = $score[0]/$divide*$item->get_weight();
+            $item_value = 0;
+            if (!empty($score)) {
+                $divide = $score[1] == 0 ? 1 : $score[1];
+                $item_value = $score[0] / $divide * $item->get_weight();
+            }
             $item_total_value += $item_value;
         }
 

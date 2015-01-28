@@ -5036,7 +5036,7 @@ class SurveyUtil
                 break;
             }
         }
-        echo '<table class="data_table">';
+        echo '<table class="data_table cosa">';
         echo '<tr>';
         echo '	<th>'.get_lang('SurveyName').'</th>';
         echo '	<th>'.get_lang('Anonymous').'</th>';
@@ -5065,7 +5065,9 @@ class SurveyUtil
             $row_answer = Database::fetch_array($result_answer,'ASSOC');
             echo '<tr>';
             if ($row['answered'] == 0) {
-                echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'&amp;cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
+                echo '<td>';
+                echo Display::return_icon('survey.gif', get_lang('CreateNewSurvey'),'',ICON_SIZE_MEDIUM).'</a> ';
+                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'&amp;cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
             } else {
                 //echo '<td>'.$row['title'].'</td>';
                 echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;cidReq='.$_course['sysCode'].'&amp;id_session='.$row['session_id'].'&amp;gidReq='.'0'.'&amp;origin='.''.'&amp;survey_id='.$row['survey_id'].'">'.$row['title'].'</a></td>';

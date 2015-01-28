@@ -211,6 +211,7 @@ $(document).ready(function() {
 					close: function() {
 						$("#title").attr('value', '');
 						$("#content").attr('value', '');
+                        $("#comment").attr('value', '');
 					}
 				});
 
@@ -368,7 +369,6 @@ $(document).ready(function() {
 
                             if (calEvent.parent_event_id || calEvent.has_children != '' ) {
                                 var newDiv = $(document.createElement('div'));
-                                //newDiv.html('{{ "" |get_lang }}');
 
                                 newDiv.dialog({
                                     modal: true,
@@ -388,7 +388,7 @@ $(document).ready(function() {
                                                     );
                                                     calendar.fullCalendar("refetchEvents");
                                                     calendar.fullCalendar("rerenderEvents");
-                                                    $("#dialog-form").dialog( "close" );
+                                                    $("#dialog-form").dialog("close");
                                                     newDiv.dialog( "close" );
                                                 }
                                             });
@@ -436,15 +436,19 @@ $(document).ready(function() {
 					close: function() {
                         $("#title_edit").hide();
                         $("#content_edit").hide();
+                        $("#comment_edit").hide();
 
                         $("#title").show();
                         $("#content").show();
+                        $("#comment").show();
 
 						$("#title_edit").html('');
 						$("#content_edit").html('');
+                        $("#comment_edit").html('');
 
                         $("#title").attr('value', '');
                         $("#content").attr('value', '');
+                        $("#comment").attr('value', '');
 					}
 				});
 			} else {
@@ -487,7 +491,10 @@ $(document).ready(function() {
 			$.ajax({
 				url: '{{ web_agenda_ajax_url }}',
 				data: {
-					a:'move_event', id: event.id, day_delta: day_delta, minute_delta: minute_delta
+                    a: 'move_event',
+                    id: event.id,
+                    day_delta: day_delta,
+                    minute_delta: minute_delta
 				}
 			});
 		},
@@ -495,7 +502,10 @@ $(document).ready(function() {
             $.ajax({
 				url: '{{ web_agenda_ajax_url }}',
 				data: {
-					a:'resize_event', id: event.id, day_delta: day_delta, minute_delta: minute_delta
+                    a: 'resize_event',
+                    id: event.id,
+                    day_delta: day_delta,
+                    minute_delta: minute_delta
 				}
 			});
         },

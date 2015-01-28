@@ -644,17 +644,47 @@ class ImportCsv
     {
         $data = Import::csv_to_array($file);
 
+        if ($this->getDumpValues()) {
+            // Remove all calendar items
+            $truncateTables = array(
+                Database::get_course_table(TABLE_AGENDA),
+                Database::get_course_table(TABLE_AGENDA_ATTACHMENT),
+                Database::get_course_table(TABLE_AGENDA_REPEAT),
+                Database::get_course_table(TABLE_AGENDA_REPEAT_NOT),
+                Database::get_main_table(TABLE_PERSONAL_AGENDA),
+                Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT_NOT),
+                Database::get_main_table(TABLE_PERSONAL_AGENDA_REPEAT)
+            );
+
+            foreach ($truncateTables as $table) {
+                $sql = "TRUNCATE $table";
+                Database::query($sql);
+            }
+
+            $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+            $sql = "DELETE FROM $table WHERE tool = 'calendar_event'";
+            Database::query($sql);
+        }
+
         if (!empty($data)) {
             $this->logger->addInfo(count($data) . " records found.");
             $eventsToCreate = array();
             $errorFound = false;
             foreach ($data as $row) {
-                $sessionId = SessionManager::get_session_id_from_original_id(
-                    $row['external_sessionID'],
-                    $this->extraFieldIdNameList['session']
-                );
+                $sessionId = null;
+                $externalSessionId = null;
+                if (isset($row['external_sessionID'])) {
+                    $externalSessionId = $row['external_sessionID'];
+                    $sessionId = SessionManager::get_session_id_from_original_id(
+                        $externalSessionId,
+                        $this->extraFieldIdNameList['session']
+                    );
+                }
 
-                $courseCode = $row['coursecode'];
+                $courseCode  = null;
+                if (isset($row['coursecode'])) {
+                    $courseCode = $row['coursecode'];
+                }
                 $courseInfo = api_get_course_info($courseCode);
 
                 if (empty($courseInfo)) {
@@ -662,7 +692,7 @@ class ImportCsv
                 }
 
                 if (empty($sessionId)) {
-                    $this->logger->addInfo("external_sessionID: ".$row['external_sessionID']." does not exists.");
+                    $this->logger->addInfo("external_sessionID: ".$externalSessionId." does not exists.");
                 }
                 $teacherId = null;
 
@@ -793,6 +823,12 @@ class ImportCsv
                 $agenda->setSessionId($event['session_id']);
                 $agenda->setSenderId($event['sender_id']);
 
+                $eventComment = $event['comment'];
+
+                // To use the event comment you need
+                // ALTER TABLE c_calendar_event ADD COLUMN comment TEXT;
+                // add in configuration.php allow_agenda_event_comment = true
+
                 if (empty($courseInfo)) {
                     $this->logger->addInfo(
                         "No course found for added: #".$event['course_id']." Skipping ..."
@@ -814,7 +850,11 @@ class ImportCsv
                     $event['title'],
                     $content,
                     array('everyone'), // send to
-                    false //$addAsAnnouncement = false
+                    false, //$addAsAnnouncement = false
+                    null, //  $parentEventId
+                    array(), //$attachmentArray = array(),
+                    null, //$attachmentComment = null,
+                    $eventComment
                 );
 
                 if (!empty($eventId)) {

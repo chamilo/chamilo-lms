@@ -3,9 +3,7 @@
 /**
  * @package chamilo.calendar
  */
-/**
- * INIT SECTION
- */
+
 // name of the language file that needs to be included
 $language_file = array('agenda', 'group', 'announcements');
 

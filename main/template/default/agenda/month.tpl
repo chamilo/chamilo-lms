@@ -230,21 +230,25 @@ $(document).ready(function() {
                         delay: 2000
                     },
 		            content: event.attachment,
-		            position: { at:'top right' , my:'bottom right'},
+		            position: { at:'top right' , my:'bottom right'}
 		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
             }
 			if (event.description) {
+                var comment = '';
+                if (event.comment) {
+                    comment = event.comment;
+                }
+
 				element.qtip({
                     hide: {
                         delay: 2000
                     },
-		            content: event.description,
+		            content: event.description + ' ' + comment,
 		            position: { at:'top left' , my:'bottom left'}
 		        });
 			}
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
-            //var start_date 	= Math.round(calEvent.start.getTime() / 1000);
             var start_date = $.datepicker.formatDate("yy-mm-dd", calEvent.start) + " " + calEvent.start.toTimeString().substr(0, 8);
 
             if (calEvent.allDay == 1) {
@@ -293,14 +297,21 @@ $(document).ready(function() {
                 if ($("#content").parent().find('#content_edit').length == 0) {
                     $("#content").parent().append('<div id="content_edit"></div>');
                 }
-
                 $("#content_edit").html(calEvent.description);
+
+                if ($("#comment").parent().find('#comment_edit').length == 0) {
+                    $("#comment").parent().append('<div id="comment_edit"></div>');
+                }
+
+                $("#comment_edit").html(calEvent.comment);
 
                 $("#title_edit").show();
                 $("#content_edit").show();
+                $("#comment_edit").show();
 
                 $("#title").hide();
                 $("#content").hide();
+                $("#comment").hide();
 
 				allFields.removeClass( "ui-state-error" );
 
@@ -332,12 +343,11 @@ $(document).ready(function() {
 							$.ajax({
 								url: url+'&'+params,
 								success:function() {
-									calEvent.title 			= $("#title").val();
-									calEvent.start 			= calEvent.start;
-									calEvent.end 			= calEvent.end;
-									calEvent.allDay         = calEvent.allDay;
-									calEvent.description 	= $("#content").val();
-
+									calEvent.title = $("#title").val();
+									calEvent.start = calEvent.start;
+									calEvent.end = calEvent.end;
+									calEvent.allDay = calEvent.allDay;
+									calEvent.description = $("#content").val();
 									calendar.fullCalendar('updateEvent',
                                         calEvent,
                                         true // make the event "stick"
@@ -374,7 +384,7 @@ $(document).ready(function() {
                                                 url: delete_url,
                                                 success:function() {
                                                     calendar.fullCalendar('removeEvents',
-                                                            calEvent
+                                                        calEvent
                                                     );
                                                     calendar.fullCalendar("refetchEvents");
                                                     calendar.fullCalendar("rerenderEvents");
@@ -395,7 +405,7 @@ $(document).ready(function() {
                                             url: delete_url+'&delete_all_events=1',
                                             success:function() {
                                                 calendar.fullCalendar('removeEvents',
-                                                        calEvent
+                                                    calEvent
                                                 );
                                                 calendar.fullCalendar("refetchEvents");
                                                 calendar.fullCalendar("rerenderEvents");
@@ -450,13 +460,14 @@ $(document).ready(function() {
 
                 $("#simple_title").html(calEvent.title);
                 $("#simple_content").html(calEvent.description);
+                $("#simple_comment").html(calEvent.comment);
+
                 $("#simple-dialog-form").dialog("open");
                 $("#simple-dialog-form").dialog({
 					buttons: {
 						'{{"ExportiCalConfidential"|get_lang}}' : function() {
                             url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
                             window.location.href = url;
-
 						},
 						'{{"ExportiCalPrivate"|get_lang}}': function() {
                             url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
@@ -528,6 +539,17 @@ $(document).ready(function() {
                     <div id="simple_content"></div>
                 </div>
             </div>
+            {% if allow_agenda_event_comment %}
+            <div class="control-group">
+                <label class="control-label">
+                    <b>{{ "Comment" |get_lang}}</b>
+                </label>
+                <div class="controls">
+                    <div id="simple_comment"></div>
+                </div>
+            </div>
+            {% endif %}
+
         </form>
     </div>
 </div>
@@ -538,6 +560,6 @@ $(document).ready(function() {
 	</div>
 </div>
 <div id="loading" style="margin-left:150px;position:absolute;display:none">
-    {{ "Loading"|get_lang }}...
+    {{ "Loading" | get_lang }}...
 </div>
 <div id="calendar"></div>

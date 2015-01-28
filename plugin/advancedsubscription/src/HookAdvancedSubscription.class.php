@@ -378,7 +378,7 @@ class HookAdvancedSubscription extends HookObserver implements
         if ($debug) error_log('Params '. print_r($params, 1));
         if (!WSHelperVerifyKey($params)) {
 
-           //return return_error(WS_ERROR_SECRET_KEY);
+           return return_error(WS_ERROR_SECRET_KEY);
         }
         // Check if category ID is set
         if (!empty($params['id']) && empty($params['category_name'])) {
@@ -416,14 +416,14 @@ class HookAdvancedSubscription extends HookObserver implements
         if (is_array($data)) {
             if (!WSHelperVerifyKey($data)) {
 
-                //return return_error(WS_ERROR_SECRET_KEY);
+                return return_error(WS_ERROR_SECRET_KEY);
             }
             $result = AdvancedSubscriptionPlugin::create()->encrypt($data);
         } elseif (is_string($data)) {
             $data = unserialize($data);
             if (!WSHelperVerifyKey($data)) {
 
-                //return return_error(WS_ERROR_SECRET_KEY);
+                return return_error(WS_ERROR_SECRET_KEY);
             }
             if (is_array($data)) {
                 $result = AdvancedSubscriptionPlugin::create()->encrypt($data);
@@ -449,7 +449,7 @@ class HookAdvancedSubscription extends HookObserver implements
         if ($debug) error_log('Params '. print_r($params, 1));
         if (!WSHelperVerifyKey($params)) {
 
-            //return return_error(WS_ERROR_SECRET_KEY);
+            return return_error(WS_ERROR_SECRET_KEY);
         }
         $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
         // Check params
@@ -530,7 +530,7 @@ class HookAdvancedSubscription extends HookObserver implements
         // Check if secret key is valid
         if(!WSHelperVerifyKey($secretKey)) {
 
-            //return return_error(WS_ERROR_SECRET_KEY);
+            return return_error(WS_ERROR_SECRET_KEY);
         }
 
         // Check if category ID is set

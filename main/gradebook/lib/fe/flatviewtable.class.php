@@ -212,28 +212,24 @@ class FlatViewTable extends SortableTable
         require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pImage.class.php';
         require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pCache.class.php';
 
-        $header_name = $this->datagen->get_header_names();
+        $headerName = $this->datagen->get_header_names();
         $total_users = $this->datagen->get_total_users_count();
-        $img_file = '';
 
         if ($this->datagen->get_total_items_count() > 0 && $total_users > 0) {
             //Removing first name
-            array_shift($header_name);
+            array_shift($headerName);
             //Removing last name
-            array_shift($header_name);
+            array_shift($headerName);
 
-            $displayscore = ScoreDisplay :: instance();
+            $displayscore = ScoreDisplay::instance();
             $customdisplays = $displayscore->get_custom_score_display_settings();
 
             if (is_array($customdisplays) && count(($customdisplays))) {
 
                 $user_results = $this->datagen->get_data_to_graph2(false);
                 $pre_result = $new_result = array();
-                $DataSet = new pData();
-                //filling the Dataset
                 foreach ($user_results as $result) {
-                    //print_r($result);
-                    for ($i = 0; $i < count($header_name); $i++) {
+                    for ($i = 0; $i < count($headerName); $i++) {
                         $pre_result[$i + 3][] = $result[$i + 1];
                     }
                 }
@@ -294,19 +290,19 @@ class FlatViewTable extends SortableTable
 
                     $DataSet->addPoints($resource, 'Serie');
                     $DataSet->addPoints(array_keys($resource), 'Labels');
-                    $DataSet->SetSerieDescription('Labels', strip_tags($header_name[$i - 1]));
+                    $DataSet->SetSerieDescription('Labels', strip_tags($headerName[$i - 1]));
                     $DataSet->setAbscissa('Labels');
                     $DataSet->setAbscissaName(get_lang('GradebookSkillsRanking'));
                     $DataSet->SetAxisName(0, get_lang('Students'));
                     $Palette = array(
-                        "0"=>array("R"=>188,"G"=>224,"B"=>46,"Alpha"=>100),
-                        "1"=>array("R"=>224,"G"=>100,"B"=>46,"Alpha"=>100),
-                        "2"=>array("R"=>224,"G"=>214,"B"=>46,"Alpha"=>100),
-                        "3"=>array("R"=>46,"G"=>151,"B"=>224,"Alpha"=>100),
-                        "4"=>array("R"=>176,"G"=>46,"B"=>224,"Alpha"=>100),
-                        "5"=>array("R"=>224,"G"=>46,"B"=>117,"Alpha"=>100),
-                        "6"=>array("R"=>92,"G"=>224,"B"=>46,"Alpha"=>100),
-                        "7"=>array("R"=>224,"G"=>176,"B"=>46,"Alpha"=>100)
+                        "0" => array("R" => 188, "G" => 224, "B" => 46, "Alpha" => 100),
+                        "1" => array("R" => 224, "G" => 100, "B" => 46, "Alpha" => 100),
+                        "2" => array("R" => 224, "G" => 214, "B" => 46, "Alpha" => 100),
+                        "3" => array("R" => 46, "G" => 151, "B" => 224, "Alpha" => 100),
+                        "4" => array("R" => 176, "G" => 46, "B" => 224, "Alpha" => 100),
+                        "5" => array("R" => 224, "G" => 46, "B" => 117, "Alpha" => 100),
+                        "6" => array("R" => 92, "G" => 224, "B" => 46, "Alpha" => 100),
+                        "7" => array("R" => 224, "G" => 176, "B" => 46, "Alpha" => 100)
                     );
                     // Cache definition
                     $cachePath = api_get_path(SYS_ARCHIVE_PATH);
@@ -327,16 +323,16 @@ class FlatViewTable extends SortableTable
                         $myPicture->Antialias = FALSE;
 
                         /* Add a border to the picture */
-                        $myPicture->drawRectangle(0, 0, $chart_size_w - 1, $chart_size_h - 1,array("R"=>0,"G"=>0,"B"=>0));
+                        $myPicture->drawRectangle(0, 0, $chart_size_w - 1, $chart_size_h - 1, array("R" => 0, "G" => 0, "B" => 0));
 
                         /* Set the default font */
-                        $myPicture->setFontProperties(array("FontName"=> api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf","FontSize"=>10));
+                        $myPicture->setFontProperties(array("FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf", "FontSize" => 10));
 
                         /* Write the chart title */
                         $myPicture->drawText(
                             250,
                             30,
-                            strip_tags($header_name[$i - 1]),
+                            strip_tags($headerName[$i - 1]),
                             array(
                                 "FontSize" => 12,
                                 "Align" => TEXT_ALIGN_BOTTOMMIDDLE
@@ -344,17 +340,17 @@ class FlatViewTable extends SortableTable
                         );
 
                         /* Define the chart area */
-                        $myPicture->setGraphArea(50,40,$chart_size_w - 20, $chart_size_h - 50);
+                        $myPicture->setGraphArea(50, 40, $chart_size_w - 20, $chart_size_h - 50);
 
                         /* Draw the scale */
-                        $scaleSettings = array("GridR"=>200,"GridG"=>200,"GridB"=>200,"DrawSubTicks"=>TRUE,"CycleBackground"=>TRUE,"Mode"=>SCALE_MODE_START0);
+                        $scaleSettings = array("GridR" => 200, "GridG" => 200, "GridB" => 200, "DrawSubTicks" => true, "CycleBackground" => true, "Mode" => SCALE_MODE_START0);
                         $myPicture->drawScale($scaleSettings);
 
                         /* Turn on shadow computing */
-                        $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
+                        $myPicture->setShadow(true, array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10));
 
                         /* Draw the chart */
-                        $myPicture->setShadow(true,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
+                        $myPicture->setShadow(true, array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10));
                         $settings = array(
                             "OverrideColors" => $Palette,
                             "Gradient" => false,

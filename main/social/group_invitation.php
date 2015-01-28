@@ -83,7 +83,7 @@ function search_users($needle, $type)
         ) ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
         $cond_user_id = '';
         if (!empty($id_session)) {
-            $group_id = Database::escape_string($group_id);
+            $group_id = intval($group_id);
             // check id_user from session_rel_user table
             $sql = 'SELECT id_user FROM ' . $tbl_group_rel_user . ' WHERE group_id ="' . (int)$group_id . '"';
             $res = Database::query($sql);

@@ -142,7 +142,13 @@ class Display
         echo self::return_introduction_section($tool, $editor_config);
     }
 
-    public static function return_introduction_section($tool, $editor_config = null) {
+    /**
+     * @param string $tool
+     * @param array $editor_config
+     * @return null
+     */
+    public static function return_introduction_section($tool, $editor_config = null)
+    {
         $is_allowed_to_edit = api_is_allowed_to_edit();
         $moduleId = $tool;
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
@@ -1789,14 +1795,18 @@ class Display
      * @param array $items
      * @return null|string
      */
-    public static function actions($items)
+    public static function actions($items, $class = 'new_actions')
     {
         $html = null;
         if (!empty($items)) {
-            $html = '<div class="new_actions"><ul class="nav nav-pills">';
+            $html = '<div class="'.$class.'"><ul class="nav nav-pills">';
             foreach ($items as $value) {
                 $class = null;
                 if (isset($value['active']) && $value['active']) {
+                    $class = 'class ="active"';
+                }
+
+                if (basename($_SERVER['REQUEST_URI']) == basename($value['url']) ) {
                     $class = 'class ="active"';
                 }
                 $html .= "<li $class >";

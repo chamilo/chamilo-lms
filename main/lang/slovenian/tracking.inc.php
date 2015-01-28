@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AssignedCourses = "Dodeljeni tečaji";
 $SleepingStudents = "Uporabniki brez aktivnosti v zadnjih dneh";
 $SleepingTeachers = "Učitelji brez aktivnosti v zadnjih dneh";
 $InactiveUsers = "Onemogočeni uporabniki";

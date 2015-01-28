@@ -1613,8 +1613,8 @@ function event_send_mail($event_name, $params)
  */
 function check_if_mail_already_sent($event_name, $user_from, $user_to = null) {
     $event_name = Database::escape_string($event_name);
-    $user_to = Database::escape_string($user_to);
-    $user_from = Database::escape_string($user_from);
+    $user_to = intval($user_to);
+    $user_from = intval($user_from);
     if ($user_to == null) {
         $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . '
                 WHERE user_from = '.$user_from.' AND event_type_name = "'.$event_name.'"';

@@ -243,7 +243,7 @@ $sql = "SELECT attempts.question_id, answer
         ON
             questions.id=quizz_rel_questions.question_id AND
             questions.c_id = ".api_get_course_int_id()."
-        WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
+        WHERE attempts.exe_id = ".intval($id)." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 
 $result = Database::query($sql);
@@ -487,7 +487,7 @@ foreach ($questionList as $questionId) {
             }
 
             //showing the score
-            $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+            $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = ".intval($id)." and question_id= ".intval($questionId)."";
             $resfree = Database::query($queryfree);
             $questionScore= Database::result($resfree,0,"marks");
             $totalScore+=$questionScore;

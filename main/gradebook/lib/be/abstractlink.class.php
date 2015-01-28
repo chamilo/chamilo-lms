@@ -106,7 +106,10 @@ abstract class AbstractLink implements GradebookItem
         $this->user_id = $user_id;
     }
 
-    public function set_course_code ($course_code)
+    /**
+     * @param string $course_code
+     */
+    public function set_course_code($course_code)
     {
         $this->course_code = $course_code;
         $course_info = api_get_course_info($course_code);
@@ -172,13 +175,13 @@ abstract class AbstractLink implements GradebookItem
         $sql = 'SELECT * FROM '.$tbl_grade_links;
         $paramcount = 0;
         if (isset ($id)) {
-            $sql.= ' WHERE id = '.Database::escape_string($id);
+            $sql.= ' WHERE id = '.intval($id);
             $paramcount ++;
         }
         if (isset ($type)) {
             if ($paramcount != 0) $sql .= ' AND';
             else $sql .= ' WHERE';
-            $sql .= ' type = '.Database::escape_string($type);
+            $sql .= ' type = '.intval($type);
             $paramcount ++;
         }
         if (isset ($ref_id)) {
@@ -225,6 +228,7 @@ abstract class AbstractLink implements GradebookItem
 
         $result = Database::query($sql);
         $links = AbstractLink::create_objects_from_sql_result($result);
+
         return $links;
     }
 
@@ -263,8 +267,15 @@ abstract class AbstractLink implements GradebookItem
     public function add()
     {
         $this->add_linked_data();
-        if (isset($this->type) && isset($this->ref_id) && isset($this->user_id) && isset($this->course_code) && isset($this->category) && isset($this->weight) && isset($this->visible)) {
-            $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        if (isset($this->type) &&
+            isset($this->ref_id) &&
+            isset($this->user_id) &&
+            isset($this->course_code) &&
+            isset($this->category) &&
+            isset($this->weight) &&
+            isset($this->visible)
+        ) {
+            $tbl_grade_links = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
             $sql = "SELECT count(*) FROM ".$tbl_grade_links."
                     WHERE
                         ref_id=".$this->get_ref_id()." AND
@@ -275,7 +286,7 @@ abstract class AbstractLink implements GradebookItem
             $result = Database::query($sql);
             $row_testing = Database::fetch_array($result);
 
-            if ($row_testing[0]==0) {
+            if ($row_testing[0] == 0) {
                 $sql = 'INSERT INTO '.$tbl_grade_links.' (type, ref_id, user_id, course_code, category_id, weight, visible, created_at) VALUES ('
                     .intval($this->get_type())
                     .','.intval($this->get_ref_id())
@@ -501,14 +512,14 @@ abstract class AbstractLink implements GradebookItem
     {
     }
 
-    public function get_view_url ($stud_id)
+    public function get_view_url($stud_id)
     {
         return null;
     }
 
     /**
      * Locks a link
-     * @param int locked 1 or unlocked 0
+     * @param int $locked 1 or unlocked 0
      *
      * */
     public function lock($locked)

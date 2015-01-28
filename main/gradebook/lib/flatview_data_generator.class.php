@@ -57,6 +57,7 @@ class FlatViewDataGenerator
 
     /**
      * Get total number of users (rows)
+     * @return int
      */
     public function get_total_users_count()
     {
@@ -65,6 +66,7 @@ class FlatViewDataGenerator
 
     /**
     * Get total number of evaluations/links (columns) (the 2 users columns not included)
+    * @return int
     */
     public function get_total_items_count()
     {
@@ -161,9 +163,6 @@ class FlatViewDataGenerator
             foreach ($allcat as $sub_cat) {
                 $sub_cat_weight = round(100 * $sub_cat->get_weight() / $main_weight, 1);
                 $add_weight = " $sub_cat_weight %";
-                /*if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
-                   $add_weight = null;
-                }*/
                 $headers[] = Display::url(
                         $sub_cat->get_name(),
                         api_get_self().'?selectcat='.$sub_cat->get_id()
@@ -188,7 +187,9 @@ class FlatViewDataGenerator
             for ($count = 0; ($count < $items_count) && ($items_start + $count < count($this->evals_links)); $count++) {
                 /** @var AbstractLink $item */
                 $item = $this->evals_links[$count + $items_start];
-                if ($mainCategoryId == $item->get_category_id() && !in_array($item->get_id(), $evaluationsAdded)) {
+                if ($mainCategoryId == $item->get_category_id() &&
+                    !in_array($item->get_id(), $evaluationsAdded)
+                ) {
                     $weight = round(100 * $item->get_weight() / $main_weight, 1);
                     $headers[] = $item->get_name() . ' ' . $weight . ' % ';
                 }
@@ -220,6 +221,7 @@ class FlatViewDataGenerator
 
     /**
      * Get array containing evaluation items
+     * @return array
      */
     public function get_evaluation_items($items_start = 0, $items_count = null)
     {
@@ -272,9 +274,10 @@ class FlatViewDataGenerator
 
         // sort users array
         if ($users_sorting & self :: FVDG_SORT_LASTNAME) {
-            usort($userTable, array ('FlatViewDataGenerator','sort_by_last_name'));
+            usort($userTable, array('FlatViewDataGenerator','sort_by_last_name'));
+
         } elseif ($users_sorting & self :: FVDG_SORT_FIRSTNAME) {
-            usort($userTable, array ('FlatViewDataGenerator','sort_by_first_name'));
+            usort($userTable, array('FlatViewDataGenerator','sort_by_first_name'));
         }
 
         if ($users_sorting & self :: FVDG_SORT_DESC) {
@@ -796,11 +799,21 @@ class FlatViewDataGenerator
         return $data;
     }
 
+    /**
+     * @param $item1
+     * @param $item2
+     * @return int
+     */
     public function sort_by_last_name($item1, $item2)
     {
         return api_strcmp($item1[2], $item2[2]);
     }
 
+    /**
+     * @param $item1
+     * @param $item2
+     * @return int
+     */
     public function sort_by_first_name($item1, $item2)
     {
         return api_strcmp($item1[3], $item2[3]);

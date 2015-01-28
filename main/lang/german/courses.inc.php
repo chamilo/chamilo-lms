@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AlreadyRegisteredToCourse = "Bereits im Kurs registriert";
 $lang_already_enrolled = "Sie haben diesen Kurs bereits belegt";
 $lang_my_personnal_course_list = "Meine persönliche Kursliste";
 $lang_course_enrollment = "Kurse des Benutzers";
@@ -82,5 +83,7 @@ $Collapse = "zusammenklappen";
 $CourseDetails = "Kursbeschreibung";
 $GroupPendingInvitations = "Gruppe offene Einladungen";
 $Compose = "Nachricht erstellen";
+$EmptyHeaderLine = "Leerzeile im Kopfbereich der gewählten Datei entdeckt";
+$EnrollToCourseXSuccessful = "Erfolgreiche Registrierung im Kurs: %s";
 $ThereAreNoCoursesInThisCategory = "Keine Kurse in dieser Kategorie-Ebene";
 ?>

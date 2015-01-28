@@ -9,6 +9,7 @@
  * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
  *
  * 	@todo use quickforms for the forms
+ * @todo security filter options better (Database::escape_string)
  */
 
 // Language file that needs to be included
@@ -30,7 +31,7 @@ $table_survey_invitation        = Database :: get_course_table(TABLE_SURVEY_INVI
 
 $course_id = api_get_course_int_id();
 $userId = api_get_user_id();
-$surveyId = Database::escape_string($_GET['survey_id']);
+$surveyId = intval($_GET['survey_id']);
 $userInvited = 0;
 $userAnonymous = 0;
 
@@ -128,7 +129,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 		$paged_questions = array();
 		$counter = 0;
 		$sql = "SELECT * FROM $table_survey_question
-		        WHERE c_id = $course_id AND survey_id = '".Database::escape_string($survey_id)."'
+		        WHERE c_id = $course_id AND survey_id = '".intval($survey_id)."'
 				ORDER BY sort ASC";
 		$result = Database::query($sql);
         $questions_exists = true;
@@ -160,8 +161,8 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 					LEFT JOIN $table_survey_question_option survey_question_option
 					ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
 					WHERE
-					    survey_question.survey_id = '".Database::escape_string($survey_id)."' AND
-						survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).") AND
+					    survey_question.survey_id = '".intval($survey_id)."' AND
+						survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']]), null, false).") AND
 						survey_question.c_id =  $course_id
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
@@ -193,7 +194,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 	        WHERE
 	            c_id = $course_id AND
 	            type='".Database::escape_string('pagebreak')."' AND
-	            survey_id='".Database::escape_string($survey_id)."'";
+	            survey_id='".intval($survey_id)."'";
 	$result = Database::query($sql);
 	$numberofpages = Database::num_rows($result) + 1;
 	// Displaying the form with the questions

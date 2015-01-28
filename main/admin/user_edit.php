@@ -260,7 +260,6 @@ $creatorInfo = api_get_user_info($user_data['creator_id']);
 $date = sprintf(get_lang('CreatedByXYOnZ'), 'user_information.php?user_id='.$user_data['creator_id'], $creatorInfo['username'], $user_data['registration_date']);
 $form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('RegistrationDate').'</label><div class="controls">'.$date.'</div></div>');
 
-
 if (!$user_data['platform_admin']) {
 	// Expiration Date
 	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
@@ -273,7 +272,6 @@ if (!$user_data['platform_admin']) {
 	$form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
 	$form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 }
-
 
 // EXTRA FIELDS
 $return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'user_edit', true, $user_id);
@@ -432,7 +430,7 @@ if ($form->validate()) {
                 } else {
                     UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
                 }
-            } elseif (strpos($key,'remove_extra') !== false) {
+            } elseif (strpos($key, 'remove_extra') !== false) {
                 $extra_value = Security::filter_filename(urldecode(key($value)));
                 // To remove from user_field_value and folder
                 UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);

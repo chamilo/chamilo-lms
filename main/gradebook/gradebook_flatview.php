@@ -99,7 +99,6 @@ if ($simple_search_form->validate() && (empty($keyword))) {
 
 if (!empty($keyword)) {
     $users = find_students($keyword);
-
 } else {
     if (isset($alleval) && isset($alllinks)) {
         $users = get_all_users($alleval, $alllinks);
@@ -107,7 +106,6 @@ if (!empty($keyword)) {
         $users = null;
     }
 }
-
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
 // Main course category

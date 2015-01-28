@@ -102,7 +102,7 @@ class link_processor extends search_processor {
         if (!empty($course_information)) {
             $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-            $link_id = Database::escape_string($link_id);
+            $link_id = intval($link_id);
             $sql = "SELECT insert_user_id FROM $item_property_table
               		WHERE ref = $link_id AND tool = '" . TOOL_LINK . "' AND c_id = $course_id
               		LIMIT 1";

@@ -92,8 +92,8 @@ class UserTable extends SortableTable
 		foreach ($data_array as $data) {
 			if ($data[2]!="") {//filter by course removed
 				$row = array ();
-				$row[] = $this->build_type_column ($data[0]);
-				$row[] = $this->build_name_link ($data[0]);
+				$row[] = $this->build_type_column($data[0]);
+				$row[] = $this->build_name_link($data[0]);
 				$row[] = $data[2];
 				$row[] = $data[3];
 				$row[] = $data[4];

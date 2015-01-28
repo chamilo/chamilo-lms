@@ -209,9 +209,9 @@ class learnpath
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
             }
             $this->attempt = 1;
-            $sql_ins = "INSERT INTO $lp_table (c_id, lp_id, user_id, view_count, session_id)
-                        VALUES ($course_id, $lp_id, $user_id, 1, $session_id)";
-            Database::query($sql_ins);
+            $sql = "INSERT INTO $lp_table (c_id, lp_id, user_id, view_count, session_id)
+                    VALUES ($course_id, $lp_id, $user_id, 1, $session_id)";
+            Database::query($sql);
             $this->lp_view_id = Database::insert_id();
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql_ins, 0);
@@ -263,6 +263,7 @@ class learnpath
                         // Don't use reference here as the next loop will make the pointed object change.
 
                         $this->items[$my_item_id] = $oItem;
+
                         $this->refs_list[$oItem->ref] = $my_item_id;
                         if ($this->debug > 2) {
                             error_log('New LP - object with id ' . $my_item_id . ' set in items[]', 0);
@@ -354,12 +355,13 @@ class learnpath
                         $this->items[$item_id]->set_status($this->default_status);
                     }
                     // Add that row to the lp_item_view table so that we have something to show in the stats page.
-                    $sql_ins = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
-                                VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ", 1, 'not attempted')";
+                    $sql = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
+                            VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ", 1, 'not attempted')";
                     if ($this->debug > 2) {
-                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
+                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql, 0);
                     }
-                    Database::query($sql_ins);
+                    $this->items[$item_id]->set_lp_view($this->lp_view_id, $course_id);
+                    Database::query($sql);
                 }
             }
         }
@@ -454,16 +456,13 @@ class learnpath
             error_log('New LP - In learnpath::add_item(' . $parent . ',' . $previous . ',' . $type . ',' . $id . ',' . $title . ')', 0);
         }
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-
         $parent = intval($parent);
         $previous = intval($previous);
         $id = intval($id);
-        $max_time_allowed = Database::escape_string(htmlentities($max_time_allowed));
-        if (empty ($max_time_allowed)) {
+        $max_time_allowed = htmlentities($max_time_allowed);
+        if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
         }
-        $title       = Database::escape_string($title);
-        $description = Database::escape_string($description);
         $sql_count = "	SELECT COUNT(id) AS num
                         FROM $tbl_lp_item
                         WHERE
@@ -478,12 +477,13 @@ class learnpath
         if ($num > 0) {
             if ($previous == 0) {
                 $sql = "SELECT id, next_item_id, display_order
-                       FROM " . $tbl_lp_item . "
-                       WHERE   c_id = $course_id AND
-                               lp_id = " . $this->get_id() . " AND
-                               parent_item_id = " . $parent . " AND
-                               previous_item_id = 0 OR
-                               previous_item_id=" . $parent;
+                        FROM " . $tbl_lp_item . "
+                        WHERE
+                            c_id = $course_id AND
+                            lp_id = " . $this->get_id() . " AND
+                            parent_item_id = " . $parent . " AND
+                            previous_item_id = 0 OR
+                            previous_item_id=" . $parent;
                 $result = Database::query($sql);
                 $row = Database :: fetch_array($result);
 
@@ -500,7 +500,7 @@ class learnpath
                             id = " . $previous;
 
                 $result = Database::query($sql);
-                $row 	= Database :: fetch_array($result);
+                $row = Database:: fetch_array($result);
 
                 $tmp_previous = $row['id'];
                 $next = $row['next_item_id'];
@@ -512,8 +512,7 @@ class learnpath
             $display_order = 0;
         }
 
-        $new_item_id = -1;
-        $id = Database::escape_string($id);
+        $id = intval($id);
         $typeCleaned = Database::escape_string($type);
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
@@ -535,79 +534,34 @@ class learnpath
             $max_score = 100;
         }
 
+        $params = array(
+            "c_id" => $course_id,
+            "lp_id" => $this->get_id(),
+            "item_type" =>$typeCleaned ,
+            "ref" => '',
+            "title" =>$title ,
+            "description" => $description,
+            "path" => $id,
+            "max_score" => $max_score,
+            "parent_item_id" => $parent,
+            "previous_item_id" => $previous,
+            "next_item_id" => $next,
+            "display_order" => $display_order +1,
+            "prerequisite" => $prerequisites,
+            "max_time_allowed" => $max_time_allowed
+        );
+
         if ($prerequisites != 0) {
-            $sql_ins = "INSERT INTO " . $tbl_lp_item . " (
-                            c_id,
-                            lp_id, ".
-                "item_type, ".
-                "ref, ".
-                "title, ".
-                "description, ".
-                "path, ".
-                "max_score, ".
-                "parent_item_id, ".
-                "previous_item_id, ".
-                "next_item_id, ".
-                "display_order, ".
-                "prerequisite, ".
-                "max_time_allowed ".
-                ") VALUES (
-                            $course_id ,
-                            ".$this->get_id() . ", ".
-                "'" . $typeCleaned . "', ".
-                "'', ".
-                "'" . $title . "', ".
-                "'" . $description . "', ".
-                "'" . $id . "', ".
-                "'" . $max_score . "', ".
-                $parent . ", ".
-                $previous . ", ".
-                $next . ", ".
-                ($display_order +1) . ", ".
-                $prerequisites . ", ".
-                $max_time_allowed .
-                ")";
-        } else {
-            // Insert new item.
-            $sql_ins = "INSERT INTO " . $tbl_lp_item . " ( ".
-                "c_id, ".
-                "lp_id, ".
-                "item_type, ".
-                "ref, ".
-                "title, ".
-                "description, ".
-                "path, ".
-                "max_score, ".
-                "parent_item_id, ".
-                "previous_item_id, ".
-                "next_item_id, ".
-                "display_order, ".
-                "max_time_allowed ".
-                ") VALUES (".
-                $course_id. ",".
-                $this->get_id() . ",".
-                "'" . $typeCleaned . "',".
-                "'',".
-                "'" . $title . "',".
-                "'" . $description . "',".
-                "'" . $id . "',".
-                "'" . $max_score . "',".
-                $parent . ",".
-                $previous . ",".
-                $next . ",".
-                ($display_order +1) . ",".
-                $max_time_allowed .
-                ")";
+            $params['prerequisite'] = $prerequisites;
         }
+
+        $new_item_id = Database::insert($tbl_lp_item, $params);
 
         if ($this->debug > 2) {
-            error_log('New LP - Inserting dokeos_chapter: ' . $sql_ins, 0);
+            error_log('New LP - Inserting dokeos_chapter: ' . $new_item_id, 0);
         }
 
-        $res_ins = Database::query($sql_ins);
-
-        if ($res_ins > 0) {
-            $new_item_id = Database :: insert_id($res_ins);
+        if ($new_item_id) {
 
             // Update the item that should come after the new item.
             $sql_update_next = "
@@ -628,7 +582,7 @@ class learnpath
             // Update all the items after the new item.
             $sql_update_order = "
                             UPDATE " . $tbl_lp_item . "
-                            SET display_order = display_order + 1
+                                SET display_order = display_order + 1
                             WHERE
                                 c_id = $course_id AND
                                 lp_id = " . $this->get_id() . " AND
@@ -643,72 +597,72 @@ class learnpath
                                SET ref = " . $new_item_id . "
                                WHERE c_id = $course_id AND id = " . $new_item_id;
             Database::query($sql_update_ref);
-        }
 
-        // Upload audio.
-        if (!empty ($_FILES['mp3']['name'])) {
-            // Create the audio folder if it does not exist yet.
-            global $_course;
-            $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
-            if (!is_dir($filepath . 'audio')) {
-                mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
-                $audio_id = add_document(
+            // Upload audio.
+            if (!empty($_FILES['mp3']['name'])) {
+                // Create the audio folder if it does not exist yet.
+                global $_course;
+                $filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
+                if (!is_dir($filepath . 'audio')) {
+                    mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
+                    $audio_id = add_document(
+                        $_course,
+                        '/audio',
+                        'folder',
+                        0,
+                        'audio'
+                    );
+                    api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $audio_id,
+                        'FolderCreated',
+                        api_get_user_id(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        api_get_session_id()
+                    );
+                    api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $audio_id,
+                        'invisible',
+                        api_get_user_id(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        api_get_session_id()
+                    );
+                }
+
+                // Upload the file in the documents tool.
+                include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+                $file_path = handle_uploaded_document(
                     $_course,
+                    $_FILES['mp3'],
+                    api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document',
                     '/audio',
-                    'folder',
-                    0,
-                    'audio'
-                );
-                api_item_property_update(
-                    $_course,
-                    TOOL_DOCUMENT,
-                    $audio_id,
-                    'FolderCreated',
                     api_get_user_id(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    api_get_session_id()
+                    '',
+                    '',
+                    '',
+                    '',
+                    false
                 );
-                api_item_property_update(
-                    $_course,
-                    TOOL_DOCUMENT,
-                    $audio_id,
-                    'invisible',
-                    api_get_user_id(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    api_get_session_id()
-                );
-            }
 
-            // Upload the file in the documents tool.
-            include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-            $file_path = handle_uploaded_document(
-                $_course,
-                $_FILES['mp3'],
-                api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document',
-                '/audio',
-                api_get_user_id(),
-                '',
-                '',
-                '',
-                '',
-                false
-            );
+                // Getting the filename only.
+                $file_components = explode('/', $file_path);
+                $file = $file_components[count($file_components) - 1];
 
-            // Getting the filename only.
-            $file_components = explode('/', $file_path);
-            $file = $file_components[count($file_components) - 1];
-
-            // Store the mp3 file in the lp_item table.
-            $sql = "UPDATE $tbl_lp_item SET
+                // Store the mp3 file in the lp_item table.
+                $sql = "UPDATE $tbl_lp_item SET
                         audio = '" . Database::escape_string($file) . "'
-                    WHERE id = '" . Database::escape_string($new_item_id) . "'";
-            Database::query($sql);
+                    WHERE id = '" . intval($new_item_id) . "'";
+                Database::query($sql);
+            }
         }
 
         return $new_item_id;
@@ -842,64 +796,102 @@ class learnpath
     public function autocomplete_parents($item)
     {
         $debug = $this->debug;
+
         if ($debug) {
             error_log('Learnpath::autocomplete_parents()', 0);
         }
+
         if (empty($item)) {
             $item = $this->current;
         }
-        $parent_id = $this->items[$item]->get_parent();
 
-        if (isset($this->items[$item]) && is_object($this->items[$item]) and !empty($parent_id)) {
-            // if $item points to an object and there is a parent.
-            if ($debug) {
-                error_log('Autocompleting parent of item ' . $item . ' (item ' . $parent_id . ')', 0);
-            }
-            $current_item = $this->items[$item];
-            $parent = $this->items[$parent_id]; // Get the parent.
-            // New experiment including failed and browsed in completed status.
-            $current_status = $current_item->get_status();
-            if ($current_item->is_done() || $current_status == 'browsed' || $current_status == 'failed') {
-                // If the current item is completed or passes or succeeded.
-                $completed = true;
+        $currentItem = $this->getItem($item);
+        if ($currentItem) {
+            $parent_id = $currentItem->get_parent();
+            $parent = $this->getItem($parent_id);
+            if ($parent) {
+                // if $item points to an object and there is a parent.
                 if ($debug) {
-                    error_log('Status of current item is alright', 0);
+                    error_log(
+                        'Autocompleting parent of item ' . $item . ' "'.$currentItem->get_title().'" (item ' . $parent_id . ' "'.$parent->get_title().'") ',
+                        0
+                    );
                 }
 
-                foreach ($parent->get_children() as $child) {
-                    // Check all his brothers (parent's children) for completion status.
-                    if ($child != $item) {
-                        if ($debug) {
-                            error_log('Looking at brother with ID ' . $child . ', status is ' . $this->items[$child]->get_status(), 0);
-                        }
-                        //if($this->items[$child]->status_is(array('completed','passed','succeeded')))
-                        // Trying completing parents of failed and browsed items as well.
-                        if ($this->items[$child]->status_is(array(
-                            'completed',
-                            'passed',
-                            'succeeded',
-                            'browsed',
-                            'failed'
-                        ))) {
-                            // Keep completion status to true.
-                        } else {
-                            if ($this->debug > 2) {
-                                error_log('Found one incomplete child of ' . $parent_id . ': ' . $child . ' is ' . $this->items[$child]->get_status(), 0);
-                            }
-                            $completed = false;
-                            break;
-                        }
-                    }
-                }
-
-                if ($completed) { // If all the children were completed:
-                    $parent->set_status('completed');
-                    $parent->save(false, $this->prerequisites_match($parent->get_id()));
-                    $this->update_queue[$parent->get_id()] = $parent->get_status();
+                // New experiment including failed and browsed in completed status.
+                //$current_status = $currentItem->get_status();
+                //if ($currentItem->is_done() || $current_status == 'browsed' || $current_status == 'failed') {
+                // Fixes chapter auto complete
+                if (true) {
+                    // If the current item is completed or passes or succeeded.
+                    $updateParentStatus = true;
                     if ($debug) {
-                        error_log('Added parent to update queue ' . print_r($this->update_queue, true), 0);
+                        error_log('Status of current item is alright', 0);
                     }
-                    $this->autocomplete_parents($parent->get_id()); // Recursive call.
+
+                    foreach ($parent->get_children() as $childItemId) {
+                        $childItem = $this->getItem($childItemId);
+
+                        // If children was not set try to get the info
+                        if (empty($childItem->db_item_view_id)) {
+                            $childItem->set_lp_view($this->lp_view_id, $this->course_int_id);
+                        }
+
+                        // Check all his brothers (parent's children) for completion status.
+                        if ($childItemId != $item) {
+                            if ($debug) {
+                                error_log(
+                                    'Looking at brother #'.$childItemId . ' "' . $childItem->get_title() . '", status is ' . $childItem->get_status(),
+                                    0
+                                );
+                            }
+                            // Trying completing parents of failed and browsed items as well.
+                            if ($childItem->status_is(
+                                array(
+                                    'completed',
+                                    'passed',
+                                    'succeeded',
+                                    'browsed',
+                                    'failed'
+                                )
+                            )
+                            ) {
+                                // Keep completion status to true.
+                                continue;
+                            } else {
+                                if ($debug > 2) {
+                                    error_log(
+                                        'Found one incomplete child of parent #' . $parent_id . ': child #'.$childItemId . ' "' . $childItem->get_title() . '", is ' . $childItem->get_status().' db_item_view_id:#'.$childItem->db_item_view_id,
+                                        0
+                                    );
+                                }
+                                $updateParentStatus = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($updateParentStatus) {
+                        // If all the children were completed:
+                        $parent->set_status('completed');
+                        $parent->save(false, $this->prerequisites_match($parent->get_id()));
+                        // Force the status to "completed"
+                        //$this->update_queue[$parent->get_id()] = $parent->get_status();
+                        $this->update_queue[$parent->get_id()] = 'completed';
+                        if ($debug) {
+                            error_log(
+                                'Added parent #'.$parent->get_id().' "'.$parent->get_title().'" to update queue status: completed '.
+                                print_r($this->update_queue, 1),
+                                0
+                            );
+                        }
+                        // Recursive call.
+                        $this->autocomplete_parents($parent->get_id());
+                    }
+                }
+            } else {
+                if ($debug) {
+                    error_log("Parent #$parent_id does not exists");
                 }
             }
         } else {
@@ -1463,7 +1455,7 @@ class learnpath
             return false;
         }
 
-        $prerequisite_id = Database::escape_string($prerequisite_id);
+        $prerequisite_id = intval($prerequisite_id);
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
         if (!is_numeric($mastery_score) || $mastery_score < 0) {
@@ -4010,49 +4002,61 @@ class learnpath
      * and the prerequisite string on error.
      * This function is based on the rules for aicc_script language as
      * described in the SCORM 1.2 CAM documentation page 108.
-     * @param	integer	Optional item ID. If none given, uses the current open item.
+     * @param	integer	$itemId Optional item ID. If none given, uses the current open item.
      * @return	boolean	True if prerequisites are matched, false otherwise -
      * Empty string if true returned, prerequisites string otherwise.
      */
-    public function prerequisites_match($item = null)
+    public function prerequisites_match($itemId = null)
     {
-        if ($this->debug > 0) {
+        $debug = $this->debug;
+        if ($debug > 0) {
             error_log('In learnpath::prerequisites_match()', 0);
         }
-        if (empty($item)) {
-            $item = $this->current;
-        }
-        if (isset($this->items[$item]) && is_object($this->items[$item])) {
 
+        if (empty($itemId)) {
+            $itemId = $this->current;
+        }
+
+        $currentItem = $this->getItem($itemId);
+
+        if ($currentItem) {
             if ($this->type == 2) {
-                //Getting prereq from scorm
-                $prereq_string = $this->get_scorm_prereq_string($item);
+                // Getting prereq from scorm
+                $prereq_string = $this->get_scorm_prereq_string($itemId);
             } else {
-                $prereq_string = $this->items[$item]->get_prereq_string();
+                $prereq_string = $currentItem->get_prereq_string();
             }
 
             if (empty($prereq_string)) {
+                if ($debug > 0) {
+                    error_log('Found prereq_string is empty return true');
+                }
                 return true;
             }
             // Clean spaces.
             $prereq_string = str_replace(' ', '', $prereq_string);
-            if ($this->debug > 0) {
+            if ($debug > 0) {
                 error_log('Found prereq_string: ' . $prereq_string, 0);
             }
             // Now send to the parse_prereq() function that will check this component's prerequisites.
-            $result = $this->items[$item]->parse_prereq($prereq_string, $this->items, $this->refs_list, $this->get_user_id());
+            $result = $currentItem->parse_prereq(
+                $prereq_string,
+                $this->items,
+                $this->refs_list,
+                $this->get_user_id()
+            );
 
             if ($result === false) {
-                $this->set_error_msg($this->items[$item]->prereq_alert);
+                $this->set_error_msg($currentItem->prereq_alert);
             }
         } else {
             $result = true;
-            if ($this->debug > 1) {
-                error_log('$this->items[' . $item . '] was not an object', 0);
+            if ($debug > 1) {
+                error_log('$this->items[' . $itemId . '] was not an object', 0);
             }
         }
 
-        if ($this->debug > 1) {
+        if ($debug > 1) {
             error_log('End of prerequisites_match(). Error message is now ' . $this->error, 0);
         }
         return $result;
@@ -6071,7 +6075,7 @@ class learnpath
                     case TOOL_DOCUMENT:
                         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
                         $sql_doc = "SELECT path FROM " . $tbl_doc . "
-                                    WHERE c_id = ".$course_id." AND id = " . Database::escape_string($row['path']);
+                                    WHERE c_id = ".$course_id." AND id = " . intval($row['path']);
                         $result = Database::query($sql_doc);
                         $path_file = Database::result($result, 0, 0);
                         $path_parts = pathinfo($path_file);
@@ -7288,7 +7292,7 @@ class learnpath
         if ($action == "add") {
             if (is_numeric($extra_info)) {
                 $sql_doc = "SELECT path FROM " . $tbl_doc . "
-                            WHERE c_id = ".$course_id." AND id = " . Database::escape_string($extra_info);
+                            WHERE c_id = ".$course_id." AND id = " . intval($extra_info);
                 $result = Database::query($sql_doc);
                 $path_file = Database :: result($result, 0, 0);
                 $path_parts = pathinfo($path_file);
@@ -7309,7 +7313,7 @@ class learnpath
             $sql_doc = "SELECT path, title FROM " . $tbl_doc . "
                         WHERE
                             c_id = ".$course_id." AND
-                            id = " . Database::escape_string($extra_info);
+                            id = " . intval($extra_info);
 
             $result = Database::query($sql_doc);
             $row 	= Database::fetch_array($result);
@@ -7592,7 +7596,7 @@ class learnpath
             $item_description = stripslashes($extra_info['description']);
             $item_url = stripslashes($extra_info['url']);
         } elseif (is_numeric($extra_info)) {
-            $extra_info = Database::escape_string($extra_info);
+            $extra_info = intval($extra_info);
             $sql_link = "SELECT title, description, url FROM " . $tbl_link . "
                          WHERE c_id = ".$course_id." AND id = " . $extra_info;
             $result = Database::query($sql_link);
@@ -7785,7 +7789,7 @@ class learnpath
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
         } elseif (is_numeric($extra_info)) {
-            $extra_info = Database::escape_string($extra_info);
+            $extra_info = intval($extra_info);
             $sql_publication = "SELECT title, description FROM " . $tbl_publication . "
                             WHERE c_id = ".$course_id." AND id = " . $extra_info;
 
@@ -8495,7 +8499,7 @@ class learnpath
         $return .= '</li>';
         $course_info = api_get_course_info();
 
-        $linkCategories = getLinkCategoriesResult($course_id, $session_id);
+        $linkCategories = getLinkCategories($course_id, $session_id);
         $categoryIdList = array();
         if (!empty($linkCategories)) {
             foreach ($linkCategories as $categoryInfo) {
@@ -9836,6 +9840,19 @@ EOD;
         }
 
         return $learnPath;
+    }
+
+    /**
+     * @param int $itemId
+     * @return learnpathItem|false
+     */
+    public function getItem($itemId)
+    {
+        if (isset($this->items[$itemId]) && is_object($this->items[$itemId])) {
+            return $this->items[$itemId];
+        }
+
+        return false;
     }
 }
 

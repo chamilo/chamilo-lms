@@ -169,9 +169,9 @@ Time :
  * @todo shouldn't this be moved to the part above (around line 111: action handling)
  */
 if (isset($_POST['ok'])) {
-	$exercise_id = Database::escape_string($_POST['exe_id']);
+	$exercise_id = intval($_POST['exe_id']);
 	if ($_POST['limit']==1) {
-		$minutes = Database::escape_string($_POST['minutes']);
+		$minutes = intval($_POST['minutes']);
 		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= $minutes WHERE id= $exercise_id";
 		Database::query($query);
 	} else {
@@ -180,7 +180,7 @@ if (isset($_POST['ok'])) {
 	}
 
 	if ($_POST['attempt']==1) {
-		$attempts = Database::escape_string($_POST['attempts']);
+		$attempts = intval($_POST['attempts']);
 		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = $attempts WHERE id= $exercise_id";
 		Database::query($query);
 	} else {

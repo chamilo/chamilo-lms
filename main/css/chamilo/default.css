@@ -35,18 +35,11 @@ a:active {
     color: #FFFFFF;
 }
 .subnav .navbar-inner {
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    border: 1px solid #178ACC;
-    background: #4fb2ea; /* Old browsers */
-    background: -moz-linear-gradient(top, #4fb2ea 0%, #0191c7 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4fb2ea), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #4fb2ea 0%,#0191c7 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4fb2ea', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */    
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 02px;
+    border-radius: 0px;
+    border: none;
+    background: #00a9e0; /* Old browsers */
 }
 
 .subnav .nav > li > a {
@@ -314,10 +307,10 @@ a.thumbnail:hover{
 }
 
 .well {
-  background-color: rgba(96,165,209, 0.1);
-  border: 1px solid rgba(96,165,209, 0.1);
+  background-color: rgba(255,255,255, 0.1);
+  border: 1px solid #EAEAEA;
   border-radius: 8px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.09) inset;
   margin-bottom: 20px;
   min-height: 20px;
   padding: 20px 10px;
@@ -361,8 +354,8 @@ a.thumbnail:hover{
   padding-bottom: 0px;
 }
 .well_border{
-  background-color: rgba(96,165,209, 0.1);
-  border: 1px solid rgba(96,165,209, 0.1);
+  background-color: rgba(255,255,255, 0.1);
+  border: 1px solid #EAEAEA;
   border-radius: 8px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
   margin-bottom: 20px;
@@ -633,16 +626,9 @@ a.thumbnail:hover{
  *****************************************************/
 footer {
     height: 7em;
-    background: #4fb2ea; /* Old browsers */
-    background: -moz-linear-gradient(top, #4fb2ea 0%, #0191c7 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4fb2ea), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #4fb2ea 0%,#0191c7 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4fb2ea', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
+    background: #00a9e0; /* Old browsers */
     color:#ffffff;
-    border-top: 1px solid #0191C7;
+    border-top: none;
 }
 footer .container .row {
   padding-top: 5px;
@@ -997,14 +983,7 @@ RESPONSIVE CSS
   color: #FFFFFF;
 }
 .navbar-inner{
-  background: #2bb8ef; /* Old browsers */
-  background: -moz-linear-gradient(top, #2bb8ef 0%, #0191c7 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2bb8ef), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #2bb8ef 0%,#0191c7 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2bb8ef', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
+  background: #00A9E0; /* Old browsers */
 }
 
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
@@ -1036,8 +1015,8 @@ RESPONSIVE CSS
         padding-top: 10px;
     }
     #profile_block .nav-list li, #course_block .nav-list li{
-        padding-bottom: 5px;
-        padding-top: 5px;
+        padding-bottom: 10px;
+        padding-top: 10px;
     }
     #top_main_content .menu-column #user_image_block{
       box-shadow: none;

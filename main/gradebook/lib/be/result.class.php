@@ -125,7 +125,7 @@ class Result
                 LEFT JOIN $tbl_user u ON gr.user_id = u.user_id ";
         $paramcount = 0;
         if (!empty($id)) {
-            $sql.= ' WHERE gr.id = ' . Database::escape_string($id);
+            $sql.= ' WHERE gr.id = ' . intval($id);
             $paramcount ++;
         }
         if (!empty($user_id)) {
@@ -133,7 +133,7 @@ class Result
                 $sql .= ' AND';
             else
                 $sql .= ' WHERE';
-            $sql .= ' gr.user_id = ' . Database::escape_string($user_id);
+            $sql .= ' gr.user_id = ' . intval($user_id);
             $paramcount ++;
         }
         if (!empty($evaluation_id)) {
@@ -142,7 +142,7 @@ class Result
             } else {
                 $sql .= ' WHERE';
             }
-            $sql .= ' gr.evaluation_id = ' . Database::escape_string($evaluation_id);
+            $sql .= ' gr.evaluation_id = ' . intval($evaluation_id);
             $paramcount ++;
         }
         $sql .= ' ORDER BY u.lastname, u.firstname';

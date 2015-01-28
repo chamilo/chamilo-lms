@@ -3,7 +3,14 @@
 
 use ChamiloSession as Session;
 
-$language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
+$language_file = array(
+    'exercice',
+    'work',
+    'document',
+    'admin',
+    'gradebook',
+    'tracking'
+);
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
@@ -125,46 +132,12 @@ switch ($action) {
         }
         break;
     case 'export_pdf':
-        $pdf = new PDF();
-
-        $header = get_lang('Course').': '.$courseInfo['title'];
-        $teachers = CourseManager::get_teacher_list_from_course_code_to_string(
-            $courseCode
+        exportAllStudentWorkFromPublication(
+            $workId,
+            $courseInfo,
+            $sessionId,
+            'pdf'
         );
-
-        if (!empty($sessionId)) {
-            $sessionInfo = api_get_session_info($sessionId);
-            $header .= ' - '.$sessionInfo['name'];
-            $header .= '<br />'.$sessionInfo['description'];
-            $teachers = SessionManager::getCoachesByCourseSessionToString(
-                $sessionId,
-                $courseCode
-            );
-        }
-
-        $header .= '<br />'.get_lang('Teachers').': '.$teachers;
-        $header .= '<br />'.get_lang('Date').': '.api_get_local_time();
-
-        if (!empty($my_folder_data['expires_on'])) {
-            $header .= '<br />' . get_lang('ExpiryDate') . ': ' . api_get_local_time($my_folder_data['expires_on']);
-        }
-
-        if (ADD_DOCUMENT_TO_WORK) {
-            $documents = getAllDocumentToWork(
-                $my_folder_data['id'],
-                $courseInfo['real_id']
-            );
-
-            foreach ($documents as $document) {
-                $document['document_id'];
-            }
-            $studentWorks = getAllUserToWork(
-                $my_folder_data['id'],
-                $courseInfo['real_id']
-            );
-        }
-        //$pdf->content_to_pdf($header, null, $my_folder_data['title'], $courseCode);
-        exit;
         break;
 }
 

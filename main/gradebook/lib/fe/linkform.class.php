@@ -17,7 +17,7 @@ class LinkForm extends FormValidator
 {
 	const TYPE_CREATE = 1;
 	const TYPE_MOVE = 2;
-
+	/** @var Category */
 	private $category_object;
 	private $link_object;
 	private $extra;
@@ -30,15 +30,25 @@ class LinkForm extends FormValidator
 	 * @param method
 	 * @param action
 	 */
-	function LinkForm($form_type, $category_object,$link_object, $form_name, $method = 'post', $action = null, $extra = null)
-	{
+	public function LinkForm(
+		$form_type,
+		$category_object,
+		$link_object,
+		$form_name,
+		$method = 'post',
+		$action = null,
+		$extra = null
+	) {
 		parent :: __construct($form_name, $method, $action);
 
 		if (isset ($category_object)) {
 			$this->category_object = $category_object;
-		} if (isset ($link_object)) {
-			$this->link_object = $link_object;
+		} else {
+			if (isset($link_object)) {
+				$this->link_object = $link_object;
+			}
 		}
+
 		if (isset ($extra)) {
 			$this->extra = $extra;
 		}
@@ -47,7 +57,6 @@ class LinkForm extends FormValidator
 		} elseif ($form_type == self :: TYPE_MOVE) {
 			$this->build_move();
 		}
-		//$this->setDefaults();
 	}
 
 	protected function build_move()
@@ -57,6 +66,7 @@ class LinkForm extends FormValidator
 		$this->addElement('static',null,null,'"'.$this->link_object->get_name().'" ');
 		$this->addElement('static',null,null,get_lang('MoveTo').' : ');
 		$select = $this->addElement('select','move_cat',null,null);
+		$line = '';
 		foreach ($this->link_object->get_target_categories() as $cat) {
 			for ($i=0;$i<$cat[2];$i++) {
 				$line .= '&mdash;';
@@ -67,10 +77,19 @@ class LinkForm extends FormValidator
 		$this->addElement('submit', null, get_lang('Ok'));
 	}
 
+	/**
+	 * Builds the form
+	 */
 	protected function build_create()
 	{
 		$this->addElement('header', get_lang('MakeLink'));
-		$select = $this->addElement('select', 'select_link', get_lang('ChooseLink'), null, array('onchange' => 'document.create_link.submit()'));
+		$select = $this->addElement(
+			'select',
+			'select_link',
+			get_lang('ChooseLink'),
+			null,
+			array('onchange' => 'document.create_link.submit()')
+		);
 
 		$linkTypes = LinkFactory::get_all_types();
 
@@ -120,7 +139,7 @@ class LinkForm extends FormValidator
 		if (!empty($courseCode)) {
 			$link->set_course_code($courseCode);
 		} elseif(!empty($_GET['course_code'])) {
-			$link->set_course_code(Database::escape_string($_GET['course_code']));
+			$link->set_course_code(Database::escape_string($_GET['course_code'], null, false));
 		}
 
 		return $link;

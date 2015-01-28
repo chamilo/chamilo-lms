@@ -105,7 +105,7 @@ function get_options_data($from, $number_of_items, $column, $direction)
 				option_order 		AS col0,
 				option_display_text	AS col1,
 				id 					AS col2
-			FROM $table_userfields_options WHERE field_id='".Database::escape_string($_GET['field_id'])."' ORDER BY option_order ASC";
+			FROM $table_userfields_options WHERE field_id = ".intval($_GET['field_id'])." ORDER BY option_order ASC";
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = Database::query($sql);
 	$return = array ();
@@ -122,7 +122,7 @@ function get_number_of_options($from=null, $number_of_items=null, $column=null, 
 	$table_userfields_options 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 
 	// The sql statement
-	$sql = "SELECT count(id) as total FROM $table_userfields_options WHERE field_id='".Database::escape_string($_GET['field_id'])."' ";
+	$sql = "SELECT count(id) as total FROM $table_userfields_options WHERE field_id= ".intval($_GET['field_id'])." ";
 	$res = Database::query($sql);
 	$row = Database::fetch_row($res);
 	return $row[0];
@@ -131,7 +131,7 @@ function get_number_of_options($from=null, $number_of_items=null, $column=null, 
 function actions_filter($option_id,$url_params,$row)
 {
 	global $number_of_options;
-
+    $return = '';
 	if ($row[0]<>1)
 	{
 		$return .= '<a href="'.api_get_self().'?action=moveup&amp;option_id='.$option_id.'&amp;field_id='.Security::remove_XSS($_GET['field_id']).'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
@@ -182,7 +182,7 @@ function move_user_field_option($direction,$option_id)
 
 	$found = false;
 
-	$sql = "SELECT id, option_order FROM $table_userfields_options  WHERE field_id='".Database::escape_string($_GET['field_id'])."' ORDER BY option_order $sortdirection";
+	$sql = "SELECT id, option_order FROM $table_userfields_options  WHERE field_id = ".intval($_GET['field_id'])." ORDER BY option_order $sortdirection";
 	$result = Database::query($sql);
 	while($row = Database::fetch_array($result))
 	{
@@ -201,8 +201,8 @@ function move_user_field_option($direction,$option_id)
 		}
 	}
 
-	$sql1 = "UPDATE ".$table_userfields_options." SET option_order = '".Database::escape_string($next_order)."' WHERE id =  '".Database::escape_string($this_id)."'";
-	$sql2 = "UPDATE ".$table_userfields_options." SET option_order = '".Database::escape_string($this_order)."' WHERE id =  '".Database::escape_string($next_id)."'";
+	$sql1 = "UPDATE ".$table_userfields_options." SET option_order = '".Database::escape_string($next_order)."' WHERE id =  ".intval($this_id)."";
+	$sql2 = "UPDATE ".$table_userfields_options." SET option_order = '".Database::escape_string($this_order)."' WHERE id =  ".intval($next_id)."";
 	Database::query($sql1);
 	Database::query($sql2);
 

@@ -975,9 +975,10 @@ class Autoload
         $result['learnpath_processor'] = '/main/inc/lib/search/tool_processors/learnpath_processor.class.php';
         $result['link_processor'] = '/main/inc/lib/search/tool_processors/link_processor.class.php';
         $result['net\HttpChannel'] = '/main/inc/lib/system/net/http_channel.class.php';
-        $result['pCache'] = '/main/inc/lib/pchart/pCache.class.php';
-        $result['pChart'] = '/main/inc/lib/pchart/pChart.class.php';
-        $result['pData'] = '/main/inc/lib/pchart/pData.class.php';
+        $result['pCache'] = '/main/inc/lib/pChart2/class/pCache.class.php';
+        $result['pDraw'] = '/main/inc/lib/pChart2/class/pDraw.class.php';
+        $result['pImage'] = '/main/inc/lib/pChart2/class/pImage.class.php';
+        $result['pData'] = '/main/inc/lib/pChart2/class/pData.class.php';
         $result['quiz_processor'] = '/main/inc/lib/search/tool_processors/quiz_processor.class.php';
         $result['scorm'] = '/main/newscorm/scorm.class.php';
         $result['scormItem'] = '/main/newscorm/scormItem.class.php';

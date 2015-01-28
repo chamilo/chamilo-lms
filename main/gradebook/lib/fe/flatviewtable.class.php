@@ -207,9 +207,10 @@ class FlatViewTable extends SortableTable
      */
     public function display_graph_by_resource()
     {
-        require_once api_get_path(LIBRARY_PATH) . 'pchart/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH) . 'pchart/pChart.class.php';
-        require_once api_get_path(LIBRARY_PATH) . 'pchart/pCache.class.php';
+        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pData.class.php';
+        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pDraw.class.php';
+        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pImage.class.php';
+        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pCache.class.php';
 
         $header_name = $this->datagen->get_header_names();
         $total_users = $this->datagen->get_total_users_count();
@@ -291,190 +292,80 @@ class FlatViewTable extends SortableTable
                     $DataSet = new pData();
                     // Reverse array, otherwise we get highest values first
                     $resource = array_reverse($resource, true);
-                    foreach ($resource as $name => $cant) {
-                        $DataSet->AddPoint($cant, "Serie" . $j);
-                        $DataSet->SetSerieName(strip_tags($name), "Serie" . $j);
-                        $j++;
-                    }
-                    //print_r($pre_result); print_r($header_name);
-                    // Dataset definition
-                    $DataSet->AddAllSeries();
-                    $DataSet->SetAbsciseLabelSerie('');
+
+                    $DataSet->addPoints($resource, 'Serie');
+                    $DataSet->addPoints(array_keys($resource), 'Labels');
+                    $DataSet->SetSerieDescription('Labels', 'GRADES');
+                    $DataSet->setAbscissa('Labels');
                     $DataSet->SetXAxisName(get_lang('GradebookSkillsRanking'));
-                    $DataSet->SetYAxisName(get_lang('Students'));
-                    $show_draw = true;
+                    $DataSet->SetAxisName(0, get_lang('Students'));
+                    $Palette = array(
+                        "0"=>array("R"=>188,"G"=>224,"B"=>46,"Alpha"=>100),
+                        "1"=>array("R"=>224,"G"=>100,"B"=>46,"Alpha"=>100),
+                        "2"=>array("R"=>224,"G"=>214,"B"=>46,"Alpha"=>100),
+                        "3"=>array("R"=>46,"G"=>151,"B"=>224,"Alpha"=>100),
+                        "4"=>array("R"=>176,"G"=>46,"B"=>224,"Alpha"=>100),
+                        "5"=>array("R"=>224,"G"=>46,"B"=>117,"Alpha"=>100),
+                        "6"=>array("R"=>92,"G"=>224,"B"=>46,"Alpha"=>100),
+                        "7"=>array("R"=>224,"G"=>176,"B"=>46,"Alpha"=>100)
+                    );
                     // Cache definition
-                    $Cache = new pCache();
-                    // the graph id
-                    $gradebook_id = intval($_GET['selectcat']);
-                    $graph_id = api_get_user_id() . 'ByResource' . $gradebook_id . api_get_course_id() . api_get_session_id();
+                    $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+                    $myCache = new pCache(array("CacheFolder" => substr($cachePath, 0, strlen($cachePath) - 1)));
+                    $chartHash = $myCache->getHash($DataSet);
+                    if ($myCache->isInCache($chartHash)) {
+                        $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                        $myCache->saveFromCache($chartHash, $imgPath);
+                        $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                    } else {
+                        /* Create the pChart object */
+                        $chart_size_w = 480;
+                        $chart_size_h = 250;
 
-                    if ($show_draw) {
-                        //if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
-                        if (0) {
-                            //if we already created the img we get the img file id
-                            //echo 'in cache';
-                            $img_file = $Cache->GetHash($graph_id, $DataSet->GetData());
-                        } else {
-                            // if the image does not exist in the archive/ folder
-                            // Initialise the graph
-                            $chart_size_w = 480;
-                            $chart_size_h = 250;
-                            $angle = -30;
+                        $myPicture = new pImage($chart_size_w, $chart_size_h, $DataSet);
 
-                            $Test = new pChart($chart_size_w, $chart_size_h);
+                        /* Turn of Antialiasing */
+                        $myPicture->Antialias = FALSE;
 
-                            // set font of the axes
-                            $Test->setFontProperties(api_get_path(LIBRARY_PATH) . "pchart/fonts/tahoma.ttf", 8);
+                        /* Add a border to the picture */
+                        $myPicture->drawRectangle(0, 0, $chart_size_w - 1, $chart_size_h - 1,array("R"=>0,"G"=>0,"B"=>0));
 
-                            $Test = $Test->fixHeightByRotation(
-                                $DataSet->GetData(),
-                                $DataSet->GetDataDescription(),
-                                $angle
-                            );
+                        /* Set the default font */
+                        $myPicture->setFontProperties(array("FontName"=> api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf","FontSize"=>10));
 
-                            // Adding the color schemma
-                            $Test->loadColorPalette(api_get_path(LIBRARY_PATH) . "pchart/palette/pastel.txt");
+                        /* Define the chart area */
+                        $myPicture->setGraphArea(50,20,$chart_size_w - 20, $chart_size_h - 30);
 
-                            $area_graph_w = $chart_size_w - 130;
-                            $Test->setGraphArea(50, 30, $area_graph_w, $chart_size_h - 50);
+                        /* Draw the scale */
+                        $scaleSettings = array("GridR"=>200,"GridG"=>200,"GridB"=>200,"DrawSubTicks"=>TRUE,"CycleBackground"=>TRUE,"Mode"=>SCALE_MODE_START0);
+                        $myPicture->drawScale($scaleSettings);
 
-                            $Test->drawFilledRoundedRectangle(
-                                5,
-                                5,
-                                $chart_size_w - 1,
-                                $Test->YSize - 20,
-                                5,
-                                240,
-                                240,
-                                240
-                            );
-                            //$Test->drawRoundedRectangle(5,5,790,330,5,230,230,230);
-                            //background color area & stripe or not
-                            $Test->drawGraphArea(255, 255, 255, TRUE);
+                        /* Turn on shadow computing */
+                        $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
 
-                            //Setting max height by default see #3296
-                            if (!empty($max)) {
-                                if (is_int($max)) {
-                                    $Test->setFixedScale(0, $max + 1, $max + 1);
-                                } else {
-                                    $Test->setFixedScale(0, $max);
-                                }
-                            }
+                        /* Draw the chart */
+                        $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
+                        $settings = array("Gradient"=>TRUE,"GradientMode"=>GRADIENT_EFFECT_CAN,"DisplayPos"=>LABEL_POS_INSIDE,"DisplayValues"=>TRUE,"DisplayR"=>255,"DisplayG"=>255,"DisplayB"=>255,"DisplayShadow"=>TRUE,"Surrounding"=>10);
+                        $myPicture->drawBarChart(array("OverrideColors"=>$Palette));
 
-                            $Test->drawScale(
-                                $DataSet->GetData(),
-                                $DataSet->GetDataDescription(),
-                                SCALE_ADDALLSTART0,
-                                150,
-                                150,
-                                150,
-                                TRUE,
-                                0,
-                                1,
-                                FALSE
-                            );
+                        /* Render the picture (choose the best way) */
 
-                            //background grid
-                            $Test->drawGrid(4, TRUE, 230, 230, 230, 50);
-
-                            // Draw the 0 line
-                            //$Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",6);
-                            //$Test->drawTreshold(0,143,55,72,TRUE,TRUE);
-                            // Draw the bar graph
-                            $Test->setFontProperties(api_get_path(LIBRARY_PATH) . "pchart/fonts/tahoma.ttf", 11);
-                            $Test->drawBarGraph($DataSet->GetData(), $DataSet->GetDataDescription(), TRUE);
-
-                            //Set legend properties: width, height and text color and font
-                            $Test->setFontProperties(api_get_path(LIBRARY_PATH) . "pchart/fonts/tahoma.ttf", 9);
-                            $Test->drawLegend($area_graph_w + 10, 50, $DataSet->GetDataDescription(), 255, 255, 255);
-
-                            //Set title properties
-                            $Test->setFontProperties(api_get_path(LIBRARY_PATH) . "pchart/fonts/tahoma.ttf", 10);
-                            $Test->drawTitle(50, 22, strip_tags($header_name[$i - 1]), 50, 50, 80, $chart_size_w - 50);
-
-                            //------------------
-                            //echo 'not in cache';
-                            $Cache->WriteToCache($graph_id, $DataSet->GetData(), $Test);
-                            //ob_start();
-                            //$Test->Stroke();
-                            //ob_end_clean();
-                            $img_file = $Cache->GetHash($graph_id, $DataSet->GetData());
-                        }
-                        echo '<img src="' . api_get_path(WEB_ARCHIVE_PATH) . $img_file . '" >';
-                        if ($i % 2 == 0 && $i != 0) {
-                            echo '<br />';
-                        }
-                        $i++;
+                        $myCache->writeToCache($chartHash, $myPicture);
+                        $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                        $myCache->saveFromCache($chartHash, $imgPath);
+                        $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
                     }
-                } //end foreach
-            } else {
-                echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
-            }
-            // Pie charts
-            /*
-              $show_draw = false;
-              $resource_list = array();
-              //print_r($pre_result_pie);
-
-              if ($total_users>0) {
-              foreach($pre_result_pie as $key=>$res_array) {
-              //$resource_list
-              foreach($res_array as $user_result) {
-              $total+=  $user_result / ($total_users*100);
-              }
-              echo $total;
-              //echo $total =  $res / ($total_users*100);
-              echo '<br>';
-              //$DataSet->AddPoint($total,"Serie".$i);
-              //$DataSet->SetSerieName($header_name[$i-1],"Serie".$i);
-
-              }
-              }
-              //here--------------
-              foreach($resource_list as $key=>$resource) {
-              $new_resource_list = $new_resource_list_name = array();
-
-              foreach($resource as $name=>$cant) {
-              $new_resource_list[]=$cant;
-              $new_resource_list_name[]=$name;
-              }
-              //Pie chart
-              $DataSet = new pData;
-              $DataSet->AddPoint($new_resource_list,"Serie1");
-              $DataSet->AddPoint($new_resource_list_name,"Serie2");
-              $DataSet->AddAllSeries();
-              $DataSet->SetAbsciseLabelSerie("Serie2");
-
-              $Test = new pChart(400,300);
-              $Test->loadColorPalette(api_get_path(LIBRARY_PATH)."pchart/palette/soft_tones.txt");
-              // background
-              //$Test->drawFilledRoundedRectangle(7,7,293,193,5,240,240,240);
-              // border color
-              $Test->drawRoundedRectangle(5,5,295,195,5,230,230,230);
-
-              // This will draw a shadow under the pie chart
-              //$Test->drawFilledCircle(122,102,70,200,200,200);
-
-              //Draw the pie chart
-              $Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",8);
-
-              $Test->drawBarGraph($DataSet->GetData(),$DataSet->GetDataDescription(),TRUE);
-              $tmp_path = api_get_path(SYS_ARCHIVE_PATH);
-
-              $Test->drawBasicPieGraph($DataSet->GetData(),$DataSet->GetDataDescription(),120,100,70,PIE_PERCENTAGE,255,255,218);
-              $Test->drawPieLegend(230,15,$DataSet->GetData(),$DataSet->GetDataDescription(),250,250,250);
-              $user_id = api_get_user_id();
-              $img_file_generated_name = $key.uniqid('').'gradebook.png';
-              $Test->Render($tmp_path.$img_file_generated_name);
-              chmod($tmp_path.$img_file_generated_name, api_get_permissions_for_new_files());
-
-              if ($i % 2 == 0 && $i!= 0) {
-              echo '<br>';
-              }
-              echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file_generated_name.'">';
-              }
-             */
+                    echo '<img src="' . $imgPath . '" >';
+                    if ($i % 2 == 0 && $i != 0) {
+                        echo '<br />';
+                    } else {
+                        echo '&nbsp;&nbsp;&nbsp;';
+                    }
+                        $i++;
+                }
+            } //end foreach
+        } else {
+            echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
         }
     }
 

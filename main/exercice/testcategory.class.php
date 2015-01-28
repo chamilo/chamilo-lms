@@ -45,8 +45,8 @@ class Testcategory
     public function getCategory($in_id)
     {
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-		$in_id = Database::escape_string($in_id);
-		$sql = "SELECT * FROM $t_cattable WHERE id=$in_id AND c_id=".api_get_course_int_id();
+		$in_id = intval($in_id);
+		$sql = "SELECT * FROM $t_cattable WHERE id = $in_id AND c_id=".api_get_course_int_id();
 		$res = Database::query($sql);
 		$numrows = Database::num_rows($res);
 		if ($numrows > 0) {
@@ -104,7 +104,7 @@ class Testcategory
     {
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $tbl_question_rel_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-		$v_id = Database::escape_string($this->id);
+		$v_id = intval($this->id);
 		$sql = "DELETE FROM $t_cattable WHERE id=$v_id AND c_id=".api_get_course_int_id();
 		Database::query($sql);
 		if (Database::affected_rows() <= 0) {
@@ -127,11 +127,11 @@ class Testcategory
     public function modifyCategory()
     {
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-		$v_id = Database::escape_string($this->id);
+		$v_id = intval($this->id);
 		$v_name = Database::escape_string($this->name);
 		$v_description = Database::escape_string($this->description);
 		$sql = "UPDATE $t_cattable SET title='$v_name', description='$v_description'
-		        WHERE id='$v_id' AND c_id=".api_get_course_int_id();
+		        WHERE id = $v_id AND c_id=".api_get_course_int_id();
 		Database::query($sql);
 		if (Database::affected_rows() <= 0) {
 			return false;
@@ -156,7 +156,7 @@ class Testcategory
     public function getCategoryQuestionsNumber()
     {
 		$t_reltable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-		$in_id = Database::escape_string($this->id);
+		$in_id = intval($this->id);
 		$sql = "SELECT count(*) AS nb FROM $t_reltable
 		        WHERE category_id=$in_id AND c_id=".api_get_course_int_id();
 		$res = Database::query($sql);
@@ -221,9 +221,9 @@ class Testcategory
             $courseId = api_get_course_int_id();
 		}
 		$table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $questionId = Database::escape_string($questionId);
+        $questionId = intval($questionId);
 		$sql = "SELECT category_id FROM $table
-		        WHERE question_id='$questionId' AND c_id = $courseId";
+		        WHERE question_id = $questionId AND c_id = $courseId";
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);
@@ -256,8 +256,8 @@ class Testcategory
 		$catid = Testcategory::getCategoryForQuestion($in_questionid, $in_courseid);
 		$result = "";	// result
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-		$catid = Database::escape_string($catid);
-		$sql = "SELECT title FROM $t_cattable WHERE id='$catid' AND c_id=$in_courseid";
+		$catid = intval($catid);
+		$sql = "SELECT title FROM $t_cattable WHERE id = $catid  AND c_id = $in_courseid";
 		$res = Database::query($sql);
 		$data = Database::fetch_array($res);
 		if (Database::num_rows($res) > 0) {

@@ -273,3 +273,14 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['student_publication_to_take_in_gradebook'] = 'first';
 // Show a filter by official code
 //$_configuration['certificate_filter_by_official_code'] = false;
+// Max quantity of fkceditor allowed in the exercise result page otherwise
+// Textareas are used.
+//$_configuration['exercise_max_fckeditors_in_page'] = 0;
+// Default upload option
+//$_configuration['document_if_file_exists_option'] = 'rename'; // overwrite
+// Custom name_order_conventions
+//$_configuration['name_order_conventions'] = array(
+//  'french' => array('format' => 'title last_name first_name',  'sort_by' => 'last_name')
+//);
+// Shows a warning message explaining that the site uses cookies
+//$_configuration['cookie_warning'] = false;

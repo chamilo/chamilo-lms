@@ -67,7 +67,7 @@ function save_scores($file, $score)
     }
     $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, exe_cours_id, exe_result, exe_weighting) VALUES (
 			'".Database::escape_string($file)."',
-			'".Database::escape_string($user_id)."',
+			".intval($user_id).",
 			'".Database::escape_string($date)."',
 			'".Database::escape_string($_cid)."',
 			'".Database::escape_string($score)."',

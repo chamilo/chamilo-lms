@@ -121,20 +121,20 @@ class Dropbox_Work
 			$this->id = $res['id'];
 			$this->upload_date = $res['upload_date'];
 		    $sql = "UPDATE ".$dropbox_cnf["tbl_file"]." SET
-					filesize			= '".Database::escape_string($this->filesize)."' ,
+					filesize			= '".intval($this->filesize)."' ,
 					title 				= '".Database::escape_string($this->title)."',
 					description 		= '".Database::escape_string($this->description)."',
 					author 				= '".Database::escape_string($this->author)."',
 					last_upload_date 	= '".Database::escape_string($this->last_upload_date)."'
-					WHERE c_id = $course_id AND id='".Database::escape_string($this->id)."'";
+					WHERE c_id = $course_id AND id = ".intval($this->id)."";
 			Database::query($sql);
 		} else {
 			$this->upload_date = $this->last_upload_date;
 			$sql = "INSERT INTO ".$dropbox_cnf['tbl_file']." (c_id, uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, session_id)
 				VALUES ( $course_id,
-						'".Database::escape_string($this->uploader_id)."'
+						'".intval($this->uploader_id)."'
 						, '".Database::escape_string($this->filename)."'
-						, '".Database::escape_string($this->filesize)."'
+						, '".intval($this->filesize)."'
 						, '".Database::escape_string($this->title)."'
 						, '".Database::escape_string($this->description)."'
 						, '".Database::escape_string($this->author)."'
@@ -148,7 +148,7 @@ class Dropbox_Work
 		}
 
         $sql = "SELECT count(file_id) as count FROM ".$dropbox_cnf['tbl_person']."
-				WHERE c_id = $course_id AND file_id = '".Database::escape_string($this->id)."' AND user_id = ".$this->uploader_id;
+				WHERE c_id = $course_id AND file_id = ".intval($this->id)." AND user_id = ".$this->uploader_id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         if ($row['count'] == 0) {
@@ -156,8 +156,8 @@ class Dropbox_Work
             // Insert entries into person table
             $sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (c_id, file_id, user_id)
                     VALUES ($course_id,
-                            '".Database::escape_string($this->id)."'
-                            , '".Database::escape_string($this->uploader_id)."'
+                            ".intval($this->id)."
+                            , ".intval($this->uploader_id)."
                             )";
             Database::query($sql);
         }
@@ -181,7 +181,7 @@ class Dropbox_Work
 		// Get the data from DB
 		$sql = "SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
 				FROM ".$dropbox_cnf['tbl_file']."
-				WHERE c_id = $course_id AND id = '".Database::escape_string($id)."'";
+				WHERE c_id = $course_id AND id = ".intval($id)."";
         $result = Database::query($sql);
 		$res = Database::fetch_array($result, 'ASSOC');
 
@@ -351,7 +351,7 @@ class Dropbox_SentWork extends Dropbox_Work
 		$this->recipients = array();
 		$sql = "SELECT dest_user_id, feedback_date, feedback
 				FROM ".$dropbox_cnf['tbl_post']."
-				WHERE c_id = $course_id AND file_id='".Database::escape_string($id)."'";
+				WHERE c_id = $course_id AND file_id = ".intval($id)."";
         $result = Database::query($sql);
 		while ($res = Database::fetch_array($result, 'ASSOC')) {
 
@@ -430,8 +430,8 @@ class Dropbox_Person
 				FROM $file_tbl f INNER JOIN $person_tbl p
 				ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
                 WHERE
-                    f.uploader_id 	= '".Database::escape_string($this->userId)."' AND
-                    p.user_id       = '".Database::escape_string($this->userId)."'
+                    f.uploader_id   = ".intval($this->userId)." AND
+                    p.user_id       = ".intval($this->userId)."
                     $condition_session
                 ";
         $result = Database::query($sql);

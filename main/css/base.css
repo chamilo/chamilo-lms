@@ -5291,3 +5291,16 @@ i.size-32.icon-new-work{
     margin-right: auto;
     max-width: 100%;
 }
+
+/* display the cookie usage warning validation */
+.cookieUsageValidation {
+    padding: 5px;
+    background-color: #333333;
+    color:#E0E0E0;
+    text-align:center;
+}
+
+.displayUnderToolbar
+{
+    height: 52px;
+}

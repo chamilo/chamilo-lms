@@ -221,16 +221,16 @@ function store_move($id, $target, $part)
     if ((isset($id) AND $id != '') AND (isset($target) AND $target != '') AND (isset($part) AND $part != '')) {
 
         if ($part == 'received') {
-            $sql = "UPDATE ".$dropbox_cnf["tbl_post"]." SET cat_id='".Database::escape_string($target)."'
-                        WHERE c_id = $course_id AND dest_user_id='".Database::escape_string($_user['user_id'])."'
-                        AND file_id='".Database::escape_string($id)."'";
+            $sql = "UPDATE ".$dropbox_cnf["tbl_post"]." SET cat_id = ".intval($target)."
+                        WHERE c_id = $course_id AND dest_user_id = ".intval($_user['user_id'])."
+                        AND file_id = ".intval($id)."";
             Database::query($sql);
             $return_message = get_lang('ReceivedFileMoved');
         }
         if ($part == 'sent') {
-            $sql = "UPDATE ".$dropbox_cnf["tbl_file"]." SET cat_id='".Database::escape_string($target)."'
-                        WHERE c_id = $course_id AND uploader_id='".Database::escape_string($_user['user_id'])."'
-                        AND id='".Database::escape_string($id)."'";
+            $sql = "UPDATE ".$dropbox_cnf["tbl_file"]." SET cat_id = ".intval($target)."
+                        WHERE c_id = $course_id AND uploader_id = ".intval($_user['user_id'])."
+                        AND id = ".intval($id)."";
             Database::query($sql);
             $return_message = get_lang('SentFileMoved');
         }
@@ -386,7 +386,7 @@ function store_addcategory()
         // step 3b, we add the category if it does not exist yet.
         if (Database::num_rows($result) == 0) {
             $sql = "INSERT INTO ".$dropbox_cnf['tbl_category']." (c_id, cat_name, received, sent, user_id, session_id)
-                    VALUES ($course_id, '".Database::escape_string($_POST['category_name'])."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', '".Database::escape_string($_user['user_id'])."',$session_id)";
+                    VALUES ($course_id, '".Database::escape_string($_POST['category_name'])."', '".Database::escape_string($received)."', '".Database::escape_string($sent)."', ".intval($_user['user_id']).", $session_id)";
             Database::query($sql);
             return array('type' => 'confirmation', 'message' => get_lang('CategoryStored'));
         } else {
@@ -394,8 +394,8 @@ function store_addcategory()
         }
     } else {
         $sql = "UPDATE ".$dropbox_cnf['tbl_category']." SET cat_name='".Database::escape_string($_POST['category_name'])."', received='".Database::escape_string($received)."' , sent='".Database::escape_string($sent)."'
-                WHERE c_id = $course_id AND user_id='".Database::escape_string($_user['user_id'])."'
-                AND cat_id='".Database::escape_string($_POST['edit_id'])."'";
+                WHERE c_id = $course_id AND user_id = ".intval($_user['user_id'])."
+                AND cat_id = ".intval($_POST['edit_id'])."";
         Database::query($sql);
         return array('type' => 'confirmation', 'message' => get_lang('CategoryModified'));
     }
@@ -420,7 +420,7 @@ function display_addcategory_form($category_name = '', $id = '', $action)
 
     if (isset($id) AND $id != '') {
         // retrieve the category we are editing
-        $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id='".Database::escape_string($id)."'";
+        $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id = ".intval($id)."";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
@@ -938,7 +938,7 @@ function display_user_link_work($user_id, $name = '') {
     if ($user_id != 0) {
         if (empty($name)) {
             $table_user = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "SELECT * FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
+            $sql = "SELECT * FROM $table_user WHERE user_id = ".intval($user_id)."";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             return '<a href="../user/userInfo.php?uInfo='.$row['user_id'].'">'.api_get_person_name($row['firstname'], $row['lastname']).'</a>';
@@ -1264,7 +1264,7 @@ function get_last_tool_access($tool, $course_code = '', $user_id='')
 
     $sql = "SELECT access_date FROM $table_last_access
             WHERE
-                access_user_id='".Database::escape_string($user_id)."' AND
+                access_user_id = ".intval($user_id)." AND
                 access_cours_code='".Database::escape_string($course_code)."' AND
                 access_tool='".Database::escape_string($tool)."'
                 ORDER BY access_date DESC

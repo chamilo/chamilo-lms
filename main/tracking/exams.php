@@ -107,7 +107,7 @@ if (!$exportToXLS) {
         if (api_is_platform_admin()) {
             $menuItems[] = Display::url(
                 Display::return_icon('star.png', get_lang('AdminInterface'), array(), 32),
-                api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin'
+                api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
             );
         } else {
             $menuItems[] = Display::url(

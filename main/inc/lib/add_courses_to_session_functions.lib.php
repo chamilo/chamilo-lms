@@ -31,10 +31,10 @@ class AddCourseToSession
 
 			$cond_course_code = '';
 			if (!empty($id_session)) {
-				$id_session = Database::escape_string($id_session);
+				$id_session = intval($id_session);
 				// check course_code from session_rel_course table
 				$sql = 'SELECT course_code FROM '.$tbl_session_rel_course.'
-						WHERE id_session ="'.(int)$id_session.'"';
+						WHERE id_session = '.$id_session;
 				$res = Database::query($sql);
 				$course_codes = '';
 				if (Database::num_rows($res) > 0) {

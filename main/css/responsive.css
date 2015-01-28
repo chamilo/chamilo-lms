@@ -228,8 +228,8 @@ The more frequent ones have been marked with *
       width: auto;
     }
     #profile_block .nav-list li, #course_block .nav-list li {
-        padding-bottom: 3px;
-        padding-top: 3px;
+        padding-bottom: 10px;
+        padding-top: 10px;
     }
     .well_border .row .span2 .thumbnail {
     background-color: #FFFFFF;
@@ -731,7 +731,6 @@ The more frequent ones have been marked with *
       box-shadow: none;
     }
     #top_main_content .menu-column .block_user_info {
-        float: left;
         width: 280px;
     }
     .section-mycampus .hot-course-box, .section-mycourses .course-box {

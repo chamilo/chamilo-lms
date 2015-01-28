@@ -566,10 +566,10 @@ class AnnouncementManager
         if ($insert_id != strval(intval($insert_id))) {
             return false;
         }
-        $insert_id = Database::escape_string($insert_id);
+        $insert_id = intval($insert_id);
         $course_id = api_get_course_int_id();
         // store the modifications in the table tbl_annoucement
-        $sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE c_id = $course_id AND id='$insert_id'";
+        $sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE c_id = $course_id AND id = $insert_id";
         Database::query($sql);
     }
 
@@ -793,7 +793,7 @@ class AnnouncementManager
                 // adding the individual users to the select form
                 foreach ($ref_array_users as $this_user) {
                     if (!is_array($to_already_selected) || !in_array("USER:" . $this_user['user_id'], $to_already_selected)) { // $to_already_selected is the array containing the users (and groups) that are already selected
-                        echo "<option value=\"USER:", $this_user['user_id'], "\"  title='" . sprintf(get_lang('LoginX'), $user['username']) . "'>",
+                        echo "<option value=\"USER:", $this_user['user_id'], "\"  title='" . sprintf(get_lang('LoginX'), $this_user['username']) . "'>",
                         "", api_get_person_name($this_user['firstname'], $this_user['lastname']),
                         "</option>";
                     }
@@ -873,10 +873,10 @@ class AnnouncementManager
     {
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
-        $id = Database::escape_string($id);
+        $id = intval($id);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $tbl_item_property WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
+        $sql = "SELECT * FROM $tbl_item_property WHERE c_id = $course_id AND tool='$tool' AND ref = $id";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $to_group = $row['to_group_id'];

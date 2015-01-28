@@ -133,7 +133,6 @@ function search_sessions($needle,$type) {
 
         // xajax send utf8 datas... datas in db can be non-utf8 datas
         $charset = api_get_system_encoding();
-        $needle  = Database::escape_string($needle);
         $needle  = api_convert_encoding($needle, $charset, 'utf-8');
 
         if ($type == 'single') {

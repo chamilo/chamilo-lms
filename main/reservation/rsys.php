@@ -180,7 +180,7 @@ class Rsys
 	 *  @param  -   int     $id     The id
 	 */
 	function delete_category($id) {
-		$id = intval($id);
+        $id = intval($id);
 		$sql = "SELECT id FROM ".Rsys :: getTable("item")." WHERE category_id=".inval($id)."";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) == 0) {
@@ -351,7 +351,7 @@ class Rsys
 		if (!Rsys :: check_item($name, $category, $id))
 			return false;
 		$sql = "UPDATE ".Rsys :: getTable("item")." SET category_id='".intval($category)."',course_code='".Database::escape_string($course)."',name='".Database::escape_string($name)."',description='".Database::escape_string($description)."' " .
-			"WHERE id =".intval($id)."";
+			   "WHERE id =".intval($id)."";
 		Database::query($sql);
 		return $id;
 	}

@@ -2185,6 +2185,13 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
                 $parsed_url = parse_url($url);
                 //$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] : ''; //http
                 $host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+                // Patch if the host is the default host and is used through
+                // the IP address (sometimes the host is not taken correctly
+                // in this case)
+                if (empty($host) && !empty($_SERVER['HTTP_HOST'])) {
+                    $host = $_SERVER['HTTP_HOST'];
+                    $url = preg_replace('#:///#', '://'.$host.'/', $url);
+                }
                 $path = isset($parsed_url['path']) ? $parsed_url['path'] : '/';
                 $port = isset($parsed_url['port']) ? $parsed_url['port'] : '80';
 

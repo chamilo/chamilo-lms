@@ -81,7 +81,6 @@ function getWhereClause($col, $oper, $val)
         'nc' => 'NOT LIKE'  //doesn't contain
     );
 
-
     if (empty($col)) {
         return '';
     }

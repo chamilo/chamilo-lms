@@ -101,7 +101,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $code = trim(Database::escape_string($code));
     $name = trim(Database::escape_string($name));
-    $parent_id = Database::escape_string($parent_id);
+    $parent_id = intval($parent_id);
     $canHaveCourses = Database::escape_string($canHaveCourses);
     $code = generate_course_code($code);
 
@@ -220,7 +220,7 @@ function moveNodeUp($code, $tree_pos, $parent_id)
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $code = Database::escape_string($code);
     $tree_pos = Database::escape_string($tree_pos);
-    $parent_id = Database::escape_string($parent_id);
+    $parent_id = intval($parent_id);
     $sql = "SELECT code,tree_pos
             FROM $tbl_category
             WHERE parent_id " . (empty($parent_id) ? "IS NULL" : "='$parent_id'") . " AND tree_pos<'$tree_pos'
@@ -246,11 +246,11 @@ function moveNodeUp($code, $tree_pos, $parent_id)
  * @param $cpt
  * @return mixed
  */
-function compterFils($pere, $cpt)
+function compterFils($parent, $cpt)
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $pere = Database::escape_string($pere);
-    $result = Database::query("SELECT code FROM $tbl_category WHERE parent_id='$pere'");
+    $parent = intval($parent);
+    $result = Database::query("SELECT code FROM $tbl_category WHERE parent_id='$parent'");
 
     while ($row = Database::fetch_array($result)) {
         $cpt = compterFils($row['code'], $cpt);

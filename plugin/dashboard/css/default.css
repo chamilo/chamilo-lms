@@ -1,7 +1,7 @@
 /* Colors */
 .color-yellow {background:#f2bc00;}
 .color-red    {background:#dd0000;}
-.color-blue   {background:#148ea4;}
+.color-blue   {background:#00A9E0;}
 .color-white  {background:#dfdfdf;}
 .color-orange {background:#f66e00;}
 .color-green  {background:#8dc100;}
@@ -76,3 +76,6 @@
 }
 
 .widget-actions {text-align:right;margin-right:5px;margin-top:5px;}
+.widget-actions img {
+    margin-bottom: 15px;
+}

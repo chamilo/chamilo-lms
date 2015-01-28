@@ -539,7 +539,7 @@ function store_edited_agenda_item() {
 function save_edit_agenda_item($id, $title, $content, $start_date, $end_date) {
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
-	$id=Database::escape_string($id);
+	$id=intval($id);
 	$title=Database::escape_string($title);
 	$content=Database::escape_string($content);
 
@@ -902,7 +902,7 @@ function display_one_agenda_item($agenda_id)
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-	$agenda_id=Database::escape_string($agenda_id);
+	$agenda_id = intval($agenda_id);
 	//echo "displaying agenda items";
 
 	// getting the name of the groups
@@ -2642,7 +2642,7 @@ function is_repeated_event($id,$course=null)
         $course = $course_info['dbName'];
     }
     $id = (int) $id;
-	//$t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course);
+    $t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
     $sql = "SELECT * FROM $t_agenda_repeat WHERE cal_id = $id";
     $res = Database::query($sql);
     if(Database::num_rows($res)>0)
@@ -2733,24 +2733,21 @@ function agenda_add_item($title, $content, $db_start_date, $db_end_date) {
     return $last_id;
 }
 /**
- * Adds a repetitive item to the database
- * @param   array   Course info
- * @param   int     The original event's id
- * @param   string  Type of repetition
- * @param   int     Timestamp of end of repetition (repeating until that date)
- * @param   array   Original event's destination
- * @return  boolean False if error, True otherwise
+ * Gets calendar items
+ * @param   int     Month
+ * @param   int     Year
+ * @return  array   Array of events
  */
- function get_calendar_items($month, $year) {
-	global $_user, $_course;
-	global $is_allowed_to_edit;
+function get_calendar_items($month, $year)
+{
+    global $_user, $_course;
+    global $is_allowed_to_edit;
 
-	$month=Database::escape_string($month);
-	$year=Database::escape_string($year);
+    $month = intval($month);
+    $year = intval($year);
 
-	// database variables
-	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-	//$TABLE_ITEM_PROPERTY=Database::get_course_table(TABLE_ITEM_PROPERTY);
+    // database variables
+    $TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
     $month_first_day = mktime(0,0,0,$month,1,$year);
     $month_last_day  = mktime(0,0,0,$month+1,1,$year)-1;

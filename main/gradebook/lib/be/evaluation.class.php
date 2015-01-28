@@ -17,16 +17,23 @@ class Evaluation implements GradebookItem
 	private $weight;
 	private $eval_max;
 	private $visible;
+	private $sessionId;
 
 	public function __construct()
 	{
 	}
 
+	/**
+	 * @return int
+	 */
 	public function get_id()
 	{
 		return $this->id;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_name()
 	{
 		return $this->name;
@@ -45,6 +52,22 @@ class Evaluation implements GradebookItem
 	public function get_course_code()
 	{
 		return $this->course_code;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSessionId()
+	{
+		return $this->sessionId;
+	}
+
+	/**
+	 * @param int $sessionId
+	 */
+	public function setSessionId($sessionId)
+	{
+		$this->sessionId = intval($sessionId);
 	}
 
 	public function get_category_id()
@@ -206,6 +229,10 @@ class Evaluation implements GradebookItem
 		return $alleval;
 	}
 
+	/**
+	 * @param array $result
+	 * @return array
+	 */
 	private static function create_evaluation_objects_from_sql_result($result)
 	{
 		$alleval=array();
@@ -224,10 +251,12 @@ class Evaluation implements GradebookItem
 				$eval->set_visible($data['visible']);
 				$eval->set_type($data['type']);
 				$eval->set_locked($data['locked']);
+				$eval->setSessionId(api_get_session_id());
 
-				$alleval[]=$eval;
+				$alleval[] = $eval;
 			}
 		}
+
 		return $alleval;
 	}
 
@@ -328,7 +357,7 @@ class Evaluation implements GradebookItem
 			$sql .= 'null';
 		}
 		$sql .= ', weight = "'.Database::escape_string($this->get_weight()).'" '
-			.', max = '.Database::escape_string($this->get_max())
+			.', max = '.intval($this->get_max())
 			.', visible = '.intval($this->is_visible())
 			.' WHERE id = '.intval($this->id);
 		//recorded history

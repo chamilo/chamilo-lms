@@ -542,7 +542,7 @@ function store_forumcategory($values)
         $sql = "UPDATE ".$table_categories." SET
                 cat_title='".$clean_cat_title."',
                 cat_comment='".Database::escape_string($values['forum_category_comment'])."'
-                WHERE c_id = $course_id AND cat_id='".Database::escape_string($values['forum_category_id'])."'";
+                WHERE c_id = $course_id AND cat_id= ".intval($values['forum_category_id'])."";
         Database::query($sql);
         Database::insert_id();
         api_item_property_update(
@@ -676,7 +676,7 @@ function store_forum($values)
                 forum_group_public_private='".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
                 default_view='".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
                 forum_of_group='".Database::escape_string($values['group_forum'])."'
-            WHERE c_id = $course_id AND forum_id='".Database::escape_string($values['forum_id'])."'";
+            WHERE c_id = $course_id AND forum_id = ".intval($values['forum_id'])."";
         Database::query($sql);
 
         api_item_property_update(
@@ -845,7 +845,7 @@ function delete_post($post_id)
 
         // Note: This has to be a recursive function that deletes all of the posts in this block.
         $sql = "DELETE FROM $table_posts
-                WHERE c_id = $course_id AND post_id='".Database::escape_string($post_id)."'";
+                WHERE c_id = $course_id AND post_id = ".intval($post_id)."";
         Database::query($sql);
 
         // Delete attachment file about this post id.
@@ -857,16 +857,16 @@ function delete_post($post_id)
     if (is_array($last_post_of_thread)) {
         // Decreasing the number of replies for this thread and also changing the last post information.
         $sql = "UPDATE $table_threads SET thread_replies=thread_replies-1,
-                    thread_last_post='".Database::escape_string($last_post_of_thread['post_id'])."',
+                    thread_last_post = ".intval($last_post_of_thread['post_id']).",
                     thread_date='".Database::escape_string($last_post_of_thread['post_date'])."'
-            WHERE c_id = $course_id AND thread_id='".intval($_GET['thread'])."'";
+            WHERE c_id = $course_id AND thread_id = ".intval($_GET['thread'])."";
         Database::query($sql);
         return 'PostDeleted';
     }
     if (!$last_post_of_thread) {
         // We deleted the very single post of the thread so we need to delete the entry in the thread table also.
         $sql = "DELETE FROM $table_threads
-                WHERE c_id = $course_id AND thread_id='".intval($_GET['thread'])."'";
+                WHERE c_id = $course_id AND thread_id = ".intval($_GET['thread'])."";
         Database::query($sql);
         return 'PostDeletedSpecial';
     }
@@ -887,7 +887,7 @@ function check_if_last_post_of_thread($thread_id)
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
     $sql = "SELECT * FROM $table_posts
-            WHERE c_id = $course_id AND thread_id='".Database::escape_string($thread_id)."'
+            WHERE c_id = $course_id AND thread_id = ".intval($thread_id)."
             ORDER BY post_date DESC";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
@@ -1150,7 +1150,7 @@ function move_up_down($content, $direction, $id)
         $sort_column = 'forum_order';
         // We also need the forum_category of this forum.
         $sql = "SELECT forum_category FROM $table_forums
-                WHERE c_id = $course_id AND forum_id=".Database::escape_string($id);
+                WHERE c_id = $course_id AND forum_id = ".intval($id);
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $forum_category = $row['forum_category'];
@@ -1283,7 +1283,7 @@ function get_forum_categories($id = '')
                 WHERE
                     forum_categories.cat_id=item_properties.ref AND
                     item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
-                    forum_categories.cat_id='".Database::escape_string($id)."'
+                    forum_categories.cat_id = ".intval($id)."
                     $condition_session
                 ORDER BY forum_categories.cat_order ASC";
     }
@@ -1502,7 +1502,7 @@ function get_forums(
         $sql = "SELECT * FROM $table_forums forum, ".$table_item_property." item_properties
                 WHERE
                     forum.forum_id=item_properties.ref AND
-                    forum_id='".Database::escape_string($id)."' AND
+                    forum_id = ".intval($id)." AND
                     item_properties.visibility<>2 AND
                     item_properties.tool='".TOOL_FORUM."'
                     $condition_session AND
@@ -1514,7 +1514,7 @@ function get_forums(
         $sql2 = "SELECT count(*) AS number_of_threads, forum_id
                 FROM $table_threads
                 WHERE
-                    forum_id=".Database::escape_string($id)." AND
+                    forum_id = ".intval($id)." AND
                     c_id = $course_id
                 GROUP BY forum_id";
 
@@ -1522,7 +1522,7 @@ function get_forums(
         $sql3 = "SELECT count(*) AS number_of_posts, forum_id
                 FROM $table_posts
                 WHERE
-                    forum_id=".Database::escape_string($id)." AND
+                    forum_id = ".intval($id)." AND
                     c_id = $course_id
                 GROUP BY forum_id";
 
@@ -1531,7 +1531,7 @@ function get_forums(
                     post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname
                 FROM $table_posts post, $table_users users
                 WHERE
-                    forum_id=".Database::escape_string($id)." AND
+                    forum_id = ".intval($id)." AND
                     post.poster_id=users.user_id AND
                     post.c_id = $course_id
                 GROUP BY post.forum_id
@@ -1666,7 +1666,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
                 $table_item_property thread_properties,
                 $table_item_property forum_properties
             WHERE
-                post.forum_id=".Database::escape_string($forum_id)."
+                post.forum_id = ".intval($forum_id)."
                 AND post.poster_id=users.user_id
                 AND post.thread_id=thread_properties.ref
                 AND thread_properties.tool='".TOOL_FORUM_THREAD."'
@@ -1751,7 +1751,7 @@ function get_threads($forum_id, $course_code = null)
                 ON thread.thread_poster_id=users.user_id
             WHERE
                 item_properties.visibility='1' AND
-                thread.forum_id='".Database::escape_string($forum_id)."'
+                thread.forum_id = ".intval($forum_id)."
             ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 
     if (is_allowed_to_edit()) {
@@ -1778,7 +1778,7 @@ function get_threads($forum_id, $course_code = null)
                     ON thread.thread_poster_id=users.user_id
                 WHERE
                     item_properties.visibility<>2 AND
-                    thread.forum_id='".Database::escape_string($forum_id)."'
+                    thread.forum_id = ".intval($forum_id)."
                 ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
     }
     $result = Database::query($sql);
@@ -1818,7 +1818,7 @@ function get_posts($thread_id)
                     ON posts.poster_id = users.user_id
                 WHERE
                     posts.c_id = $course_id AND
-                    posts.thread_id='".Database::escape_string($thread_id)."'
+                    posts.thread_id = ".intval($thread_id)."
 
                 ORDER BY posts.post_id ASC";
     } else {
@@ -1828,7 +1828,7 @@ function get_posts($thread_id)
                     ON posts.poster_id=users.user_id
                 WHERE
                     posts.c_id = $course_id AND
-                    posts.thread_id = '".Database::escape_string($thread_id)."' AND
+                    posts.thread_id = ".intval($thread_id)." AND
                     posts.visible='1'
                 ORDER BY posts.post_id ASC";
     }
@@ -1860,7 +1860,7 @@ function get_post_information($post_id)
             WHERE
                 c_id = $course_id AND
                 posts.poster_id=users.user_id AND
-                posts.post_id='".Database::escape_string($post_id)."'";
+                posts.post_id = ".intval($post_id)."";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
@@ -1886,8 +1886,8 @@ function get_thread_information($thread_id)
             WHERE
                 item_properties.tool= '".TOOL_FORUM_THREAD."' AND
                 item_properties.c_id = $course_id AND
-                item_properties.ref = '".Database::escape_string($thread_id)."' AND
-                threads.thread_id   = '".Database::escape_string($thread_id)."' AND
+                item_properties.ref = ".intval($thread_id)." AND
+                threads.thread_id   = ".intval($thread_id)." AND
                 threads.c_id = $course_id
             ";
     $result = Database::query($sql);
@@ -1934,8 +1934,8 @@ function get_thread_users_details($thread_id)
                   user.user_id = session_rel_user_rel_course.id_user AND
                   session_rel_user_rel_course.status<>'2' AND
                   session_rel_user_rel_course.id_user NOT IN ($user_to_avoid) AND
-                  thread_id = '".Database::escape_string($thread_id)."' AND
-                  id_session = '".api_get_session_id()."' AND
+                  thread_id = ".intval($thread_id)." AND
+                  id_session = ".api_get_session_id()." AND
                   c_id = $course_id AND
                   course_code = '".$course_code."' $orderby ";
     } else {
@@ -1944,7 +1944,7 @@ function get_thread_users_details($thread_id)
                   WHERE poster_id = user.user_id
                   AND user.user_id = course_user.user_id
                   AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                  AND thread_id = '".Database::escape_string($thread_id)."'
+                  AND thread_id = ".intval($thread_id)."
                   AND course_user.status NOT IN('1') AND
                   c_id = $course_id AND
                   course_code = '".$course_code."' $orderby";
@@ -3408,7 +3408,7 @@ function handle_mail_cue($content, $id)
     if ($content == 'post') {
         // Getting the information about the post (need the thread_id).
         $post_info = get_post_information($id);
-        $thread_id = Database::escape_string($post_info['thread_id']);
+        $thread_id = intval($post_info['thread_id']);
 
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
         $sql = "SELECT users.firstname, users.lastname, users.user_id, users.email
@@ -3434,9 +3434,9 @@ function handle_mail_cue($content, $id)
                 WHERE
                     posts.c_id = $course_id AND
                     mailcue.c_id = $course_id AND
-                    posts.thread_id='".Database::escape_string($id)."'
+                    posts.thread_id = ".intval($id)."
                     AND posts.post_notification='1'
-                    AND mailcue.thread_id='".Database::escape_string($id)."'
+                    AND mailcue.thread_id = ".intval($id)."
                     AND users.user_id=posts.poster_id
                     AND users.active=1
                 GROUP BY users.email";
@@ -4490,8 +4490,8 @@ function count_number_of_post_for_user_thread($thread_id, $user_id)
     $course_id = api_get_course_int_id();
     $sql = "SELECT count(*) as count FROM $table_posts
             WHERE c_id = $course_id AND
-                  thread_id=".Database::escape_string($thread_id)." AND
-                  poster_id = ".Database::escape_string($user_id)." AND visible = 1 ";
+                  thread_id=".intval($thread_id)." AND
+                  poster_id = ".intval($user_id)." AND visible = 1 ";
     $result = Database::query($sql);
     $count = 0;
     if (Database::num_rows($result) > 0) {

@@ -144,7 +144,7 @@ class TestCalendar extends UnitTestCase {
  	}
 
  	public function testSaveEditAgendaItem(){
-	 	$id=Database::escape_string($id);
+	 	$id=intval($id);
 		$title=Database::escape_string($title);
 		$content=Database::escape_string($content);
 		$start_date=Database::escape_string($start_date);

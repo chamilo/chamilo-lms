@@ -28,13 +28,10 @@
 *	@package chamilo.course_home
 */
 
-/* 		INIT SECTION		*/
-
-
 use \ChamiloSession as Session;
 
 // Name of the language file that needs to be included.
-$language_file = array('course_home','courses');
+$language_file = array('course_home', 'courses');
 $use_anonymous = true;
 
 // Inlcuding the global initialization file.
@@ -48,9 +45,7 @@ require_once dirname(__FILE__).'/../inc/global.inc.php';
 //unset($_SESSION['lpobject']);
 
 $htmlHeadXtra[] ='<script>
-
 /* option show/hide thematic-block */
-
 $(document).ready(function(){
     $("#thematic-show").click(function(){
         $(".btn-hide-thematic").hide();
@@ -63,7 +58,6 @@ $(document).ready(function(){
         $("#pross").fadeToggle(); //Not working collapse for Chrome
     });
 });
-
 
 $(document).ready(function() {
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
@@ -119,7 +113,6 @@ $(document).ready(function() {
 	});
 });
 
-
 </script>';
 
 // The section for the tabs
@@ -140,9 +133,9 @@ define('TOOL_DRH', 'tool_drh');
 define('TOOL_STUDENT_VIEW', 'toolstudentview');
 define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
 
-$user_id 		= api_get_user_id();
-$course_code 	= api_get_course_id();
-$sessionId      = api_get_session_id();
+$user_id = api_get_user_id();
+$course_code = api_get_course_id();
+$sessionId = api_get_session_id();
 $show_message = '';
 
 if (apiIsInvitedUser()) {
@@ -265,12 +258,15 @@ $content = Display::return_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 	the setting homepage_view is adjustable through
 	the platform administration section */
 
-//require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
-
 if ($show_autolunch_lp_warning) {
-    $show_message .= Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),'warning');
+    $show_message .= Display::return_message(
+        get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),
+        'warning'
+    );
 }
-if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_view') == 'activity_big') {
+if (api_get_setting('homepage_view') == 'activity' ||
+    api_get_setting('homepage_view') == 'activity_big'
+) {
 	require 'activity.php';
 } elseif (api_get_setting('homepage_view') == '2column') {
 	require '2column.php';

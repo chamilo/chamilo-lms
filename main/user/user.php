@@ -390,7 +390,7 @@ if (api_is_allowed_to_edit(null, true)) {
         if (isset($_GET['user_id']) && is_numeric($_GET['user_id']) &&
             ($_GET['user_id'] != $_user['user_id'] || api_is_platform_admin())
         ) {
-            $user_id = Database::escape_string($_GET['user_id']);
+            $user_id = intval($_GET['user_id']);
             $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
             $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);

@@ -22,7 +22,14 @@ $objSkill = new Skill();
 $skill = $objSkill->get($skillId);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_FILES['image']['error'] == 0) {
+    $params = array(
+        'name' => $_POST['name'],
+        'description' => $_POST['description'],
+        'criteria' => $_POST['criteria'],
+        'id' => $skillId
+    );
+
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
         $dirPermissions = api_get_permissions_for_new_directories();
         $sysCodePath = api_get_path(SYS_CODE_PATH);
 
@@ -32,22 +39,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!file_exists($sysCodePath . $fileDir)) {
             mkdir($sysCodePath . $fileDir, $dirPermissions, true);
         }
-
-        if ($_FILES['image']['error'] == 0) {
-            unlink($sysCodePath . $skill['icon']);
-
-            $imageExtraField = new Image($_FILES['image']['tmp_name']);
-            $imageExtraField->send_image($sysCodePath . $fileDir . $fileName, -1, 'png');
+        
+        if (!empty($skill['icon'])) {
+            $iconFileAbsoulePath = $sysCodePath . $skill['icon'];
+            $iconDirAbsolutePath = $sysCodePath . $fileDir;
+            
+            if (Security::check_abs_path($iconFileAbsoulePath, $iconDirAbsolutePath)) {
+                unlink($sysCodePath . $skill['icon']);
+            }
         }
-    }
 
-    $params = array(
-        'name' => $_POST['name'],
-        'description' => $_POST['description'],
-        'icon' => $fileDir . $fileName,
-        'criteria' => $_POST['criteria'],
-        'id' => $skillId
-    );
+        $imageExtraField = new Image($_FILES['image']['tmp_name']);
+        $imageExtraField->send_image($sysCodePath . $fileDir . $fileName, -1, 'png');
+
+        $params['icon'] = $fileDir . $fileName;
+    }
 
     $objSkill->update($params);
 

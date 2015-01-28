@@ -4589,7 +4589,7 @@ class CourseManager
      * @param int $url_id
      *
      */
-    public function remove_course_ranking($course_id, $session_id, $url_id = null)
+    public static function remove_course_ranking($course_id, $session_id, $url_id = null)
     {
         $table_course_ranking = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
         $table_user_course_vote = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);

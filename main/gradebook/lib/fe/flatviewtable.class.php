@@ -285,7 +285,6 @@ class FlatViewTable extends SortableTable
                 $resource_list = $new_list;
 
                 $i = 1;
-                $j = 0;
 
                 foreach ($resource_list as $key => $resource) {
                     $new_resource_list = $new_resource_list_name = array();
@@ -295,9 +294,9 @@ class FlatViewTable extends SortableTable
 
                     $DataSet->addPoints($resource, 'Serie');
                     $DataSet->addPoints(array_keys($resource), 'Labels');
-                    $DataSet->SetSerieDescription('Labels', 'GRADES');
+                    $DataSet->SetSerieDescription('Labels', strip_tags($header_name[$i - 1]));
                     $DataSet->setAbscissa('Labels');
-                    $DataSet->SetXAxisName(get_lang('GradebookSkillsRanking'));
+                    $DataSet->setAbscissaName(get_lang('GradebookSkillsRanking'));
                     $DataSet->SetAxisName(0, get_lang('Students'));
                     $Palette = array(
                         "0"=>array("R"=>188,"G"=>224,"B"=>46,"Alpha"=>100),
@@ -333,8 +332,19 @@ class FlatViewTable extends SortableTable
                         /* Set the default font */
                         $myPicture->setFontProperties(array("FontName"=> api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf","FontSize"=>10));
 
+                        /* Write the chart title */
+                        $myPicture->drawText(
+                            250,
+                            30,
+                            strip_tags($header_name[$i - 1]),
+                            array(
+                                "FontSize" => 12,
+                                "Align" => TEXT_ALIGN_BOTTOMMIDDLE
+                            )
+                        );
+
                         /* Define the chart area */
-                        $myPicture->setGraphArea(50,20,$chart_size_w - 20, $chart_size_h - 30);
+                        $myPicture->setGraphArea(50,40,$chart_size_w - 20, $chart_size_h - 50);
 
                         /* Draw the scale */
                         $scaleSettings = array("GridR"=>200,"GridG"=>200,"GridB"=>200,"DrawSubTicks"=>TRUE,"CycleBackground"=>TRUE,"Mode"=>SCALE_MODE_START0);
@@ -344,9 +354,20 @@ class FlatViewTable extends SortableTable
                         $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
 
                         /* Draw the chart */
-                        $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
-                        $settings = array("Gradient"=>TRUE,"GradientMode"=>GRADIENT_EFFECT_CAN,"DisplayPos"=>LABEL_POS_INSIDE,"DisplayValues"=>TRUE,"DisplayR"=>255,"DisplayG"=>255,"DisplayB"=>255,"DisplayShadow"=>TRUE,"Surrounding"=>10);
-                        $myPicture->drawBarChart(array("OverrideColors"=>$Palette));
+                        $myPicture->setShadow(true,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
+                        $settings = array(
+                            "OverrideColors" => $Palette,
+                            "Gradient" => false,
+                            "GradientMode" => GRADIENT_SIMPLE,
+                            "DisplayPos" => LABEL_POS_TOP,
+                            "DisplayValues" => true,
+                            "DisplayR" => 0,
+                            "DisplayG" => 0,
+                            "DisplayB" => 0,
+                            "DisplayShadow" => true,
+                            "Surrounding" => 10,
+                        );
+                        $myPicture->drawBarChart($settings);
 
                         /* Render the picture (choose the best way) */
 
@@ -357,11 +378,11 @@ class FlatViewTable extends SortableTable
                     }
                     echo '<img src="' . $imgPath . '" >';
                     if ($i % 2 == 0 && $i != 0) {
-                        echo '<br />';
+                        echo '<br /><br />';
                     } else {
                         echo '&nbsp;&nbsp;&nbsp;';
                     }
-                        $i++;
+                    $i++;
                 }
             } //end foreach
         } else {

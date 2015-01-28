@@ -644,7 +644,7 @@ class HTML_QuickForm extends HTML_Common
      *
      * @param    mixed      $element        element object or type of element to add (text, textarea, file...)
      * @since    1.0
-     * @return   HTML_QuickForm_Element     a reference to newly added element
+     * @return   HTML_QuickForm_element     a reference to newly added element
      * @access   public
      * @throws   HTML_QuickForm_Error
      */

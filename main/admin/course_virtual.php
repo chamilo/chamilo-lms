@@ -3,6 +3,7 @@
 /**
  * @author Roan Embrechts - initial admin interface
  * @package chamilo.admin
+ * @deprecated
  */
 /**
  * INIT SECTION

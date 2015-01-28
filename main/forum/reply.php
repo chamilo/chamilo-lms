@@ -143,7 +143,8 @@ if ($origin == 'learnpath') {
 if ($origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<span style="float:right;">'.search_link().'</span>';
-    echo '<a href="viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;origin='.$origin.'">'.Display::return_icon('back.png', get_lang('BackToThread'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;origin='.$origin.'">'.
+        Display::return_icon('back.png', get_lang('BackToThread'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 } else {
     echo '<div style="height:15px">&nbsp;</div>';
@@ -175,7 +176,11 @@ if (!empty($values) AND isset($_POST['SubmitPost'])) {
 } else {
     // Only show Forum attachment ajax form when do not pass form submit
     echo '<div class="row"><div class="span12">';
-    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], 0);
+    $attachmentAjaxForm = getAttachmentAjaxForm(
+        $current_forum['forum_id'],
+        $current_thread['thread_id'],
+        0
+    );
     echo $attachmentAjaxForm;
     echo '</div></div>';
 }

@@ -587,12 +587,26 @@ $gradebooktable= new GradebookTable($cats[0], $allcat, $alleval, $alllink, $addp
 if (((empty ($allcat)) && (empty ($alleval)) && (empty ($alllink)) && (!$is_platform_admin) && ($is_course_admin) && (!isset ($_GET['selectcat']))) && api_is_course_tutor()) {
     Display :: display_normal_message(get_lang('GradebookWelcomeMessage') . '<br /><br /><form name="createcat" method="post" action="' . api_get_self() . '?createallcategories=1"><input type="submit" value="' . get_lang('CreateAllCat') . '"></form>',false);
 }
-//here we are in a sub category
+// Here we are in a sub category
 if ($category != '0') {
-    DisplayGradebook :: display_header_gradebook($cats[0], 1, $_GET['selectcat'], $is_course_admin, $is_platform_admin, $simple_search_form);
+    DisplayGradebook:: display_header_gradebook(
+        $cats[0],
+        1,
+        $_GET['selectcat'],
+        $is_course_admin,
+        $is_platform_admin,
+        $simple_search_form
+    );
 } else {
-    //this is the root category
-    DisplayGradebook :: display_header_gradebook($cats[0], (((count($allcat) == '0') && (!isset ($_GET['search']))) ? 0 : 1), 0, $is_course_admin, $is_platform_admin, $simple_search_form);
+    // This is the root category
+    DisplayGradebook:: display_header_gradebook(
+        $cats[0],
+        (((count($allcat) == '0') && (!isset ($_GET['search']))) ? 0 : 1),
+        0,
+        $is_course_admin,
+        $is_platform_admin,
+        $simple_search_form
+    );
 }
 $gradebooktable->display();
 Display :: display_footer();

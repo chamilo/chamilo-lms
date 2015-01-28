@@ -10,8 +10,6 @@
  * @package chamilo.admin
  */
 
-/* INIT SECTION */
-
 // Language files that need to be included.
 if (isset($_GET['category']) && $_GET['category'] == 'Templates') {
     $language_file = array('admin', 'document');
@@ -45,7 +43,12 @@ $settings_to_avoid = array(
     'example_material_course_creation'  => 'true' // ON by default - now we have this option when  we create a course
 );
 
-$convert_byte_to_mega_list = array('dropbox_max_filesize', 'message_max_upload_filesize', 'default_document_quotum', 'default_group_quotum');
+$convert_byte_to_mega_list = array(
+    'dropbox_max_filesize',
+    'message_max_upload_filesize',
+    'default_document_quotum',
+    'default_group_quotum'
+);
 
 if (isset($_POST['style'])) {
     Display::$preview_style = $_POST['style'];
@@ -68,8 +71,8 @@ if (isset($_GET['delete_watermark'])) {
 }
 
 if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
-	$id = intval($_GET['id']);
-	api_delete_setting_option($id);
+    $id = intval($_GET['id']);
+    api_delete_setting_option($id);
 }
 
 $form_search = new FormValidator('search_settings', 'get', api_get_self() , null, array('class'=>'well form-inline'));
@@ -119,11 +122,16 @@ function get_settings($category = null) {
             $settings = search_setting($_REQUEST['search_field']);
         }
     }
-    return array('settings' => $settings, 'settings_by_access_list' => $settings_by_access_list);
+    return array(
+        'settings' => $settings,
+        'settings_by_access_list' => $settings_by_access_list
+    );
 }
 
 // Build the form.
-if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
+if (!empty($_GET['category']) &&
+    !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))
+) {
     $my_category = isset($_GET['category']) ? $_GET['category'] : null;
     $settings_array = get_settings($my_category);
     $settings = $settings_array['settings'];
@@ -139,11 +147,15 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         $un_mark_all = false;
 
         if (api_is_multiple_url_enabled()) {
-            if (isset($values['buttons_in_action_right']) && isset($values['buttons_in_action_right']['mark_all'])) {
+            if (isset($values['buttons_in_action_right']) &&
+                isset($values['buttons_in_action_right']['mark_all'])
+            ) {
                 $mark_all = true;
             }
 
-            if (isset($values['buttons_in_action_right']) && isset($values['buttons_in_action_right']['unmark_all'])) {
+            if (isset($values['buttons_in_action_right']) &&
+                isset($values['buttons_in_action_right']['unmark_all'])
+            ) {
                 $un_mark_all = true;
             }
         }
@@ -174,7 +186,10 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 $settings_array = get_settings($my_category);
                 $settings = $settings_array['settings'];
                 $settings_by_access_list = $settings_array['settings_by_access_list'];
-                $form = generate_settings_form($settings, $settings_by_access_list);
+                $form = generate_settings_form(
+                    $settings,
+                    $settings_by_access_list
+                );
             }
         }
         if (!empty($_FILES['pdf_export_watermark_path'])) {
@@ -182,7 +197,10 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         }
 
         if (isset($pdf_export_watermark_path) && !empty($pdf_export_watermark_path['name'])) {
-            $pdf_export_watermark_path_result = PDF::upload_watermark($pdf_export_watermark_path['name'], $pdf_export_watermark_path['tmp_name']);
+            $pdf_export_watermark_path_result = PDF::upload_watermark(
+                $pdf_export_watermark_path['name'],
+                $pdf_export_watermark_path['tmp_name']
+            );
             if ($pdf_export_watermark_path_result) {
                 $message['confirmation'][] = get_lang('UplUploadSucceeded');
             } else {
@@ -193,15 +211,14 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
         // Set true for allow_message_tool variable if social tool is actived
         foreach ($convert_byte_to_mega_list as $item) {
-			if (isset($values[$item])) {
-				$values[$item]        = round($values[$item]*1024*1024);
-			}
-		}
+            if (isset($values[$item])) {
+                $values[$item]        = round($values[$item]*1024*1024);
+            }
+        }
 
         if (isset($values['allow_social_tool']) && $values['allow_social_tool'] == 'true') {
             $values['allow_message_tool'] = 'true';
         }
-
 
         // The first step is to set all the variables that have type=checkbox of the category
         // to false as the checkbox that is unchecked is not in the $_POST data and can
@@ -225,96 +242,115 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
         foreach ($settings as $item) {
             $key = $item['variable'];
-            if (in_array($key, $settings_to_avoid)) { continue; }
-            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
+            if (in_array($key, $settings_to_avoid)) {
+                continue;
+            }
+            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') {
+                continue;
+            }
             $key = Database::escape_string($key);
-            $sql = "UPDATE $table_settings_current SET selected_value = 'false' WHERE variable = '".$key."' AND access_url = ".intval($url_id)."  AND type IN ('checkbox', 'radio') ";
+            $sql = "UPDATE $table_settings_current
+                    SET selected_value = 'false'
+                    WHERE variable = '".$key."' AND access_url = ".intval($url_id)."  AND type IN ('checkbox', 'radio') ";
             $res = Database::query($sql);
         }
-
-        /*foreach($settings_to_avoid as $key => $value) {
-            api_set_setting($key, $value, null, null, $_configuration['access_url']);
-        }*/
 
         // Save the settings.
         $keys = array();
 
         foreach ($values as $key => $value) {
-            if (strcmp($key,'MAX_FILE_SIZE')===0) { continue; }
-            if (in_array($key, $settings_to_avoid)) { continue; }
+            if (strcmp($key, 'MAX_FILE_SIZE') === 0) {
+                continue;
+            }
+            if (in_array($key, $settings_to_avoid)) {
+                continue;
+            }
             // Avoid form elements which have nothing to do with settings
-            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') { continue; }
+            if ($key == 'search_field' or $key == 'submit_fixed_in_bottom') {
+                continue;
+            }
 
             // Treat gradebook values in separate function.
             //if (strpos($key, 'gradebook_score_display_custom_values') === false) {
-                if (!is_array($value)) {
-                    $old_value = api_get_setting($key);
-                    switch ($key) {
-                    	case 'header_extra_content':
-                    		file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/header_extra_content.txt', $value);
-                    		$value = api_get_home_path().'/header_extra_content.txt';
-                    		break;
-                    	case 'footer_extra_content':
-                    		file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/footer_extra_content.txt', $value);
-                    		$value = api_get_home_path().'/footer_extra_content.txt';
-                    		break;
-                        // URL validation for some settings.
-                        case 'InstitutionUrl':
-                        case 'course_validation_terms_and_conditions_url':
-                            $value = trim(Security::remove_XSS($value));
-                            if ($value != '') {
-                                // Here we accept absolute URLs only.
-                                if (strpos($value, '://') === false) {
-                                    $value = 'http://'.$value;
-                                }
-                                if (!api_valid_url($value, true)) {
-                                    // If the new (non-empty) URL value is invalid, then the old URL value stays.
-                                    $value = $old_value;
-                                }
+            if (!is_array($value)) {
+                $old_value = api_get_setting($key);
+                switch ($key) {
+                    case 'header_extra_content':
+                        file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/header_extra_content.txt', $value);
+                        $value = api_get_home_path().'/header_extra_content.txt';
+                        break;
+                    case 'footer_extra_content':
+                        file_put_contents(api_get_path(SYS_PATH).api_get_home_path().'/footer_extra_content.txt', $value);
+                        $value = api_get_home_path().'/footer_extra_content.txt';
+                        break;
+                    // URL validation for some settings.
+                    case 'InstitutionUrl':
+                    case 'course_validation_terms_and_conditions_url':
+                        $value = trim(Security::remove_XSS($value));
+                        if ($value != '') {
+                            // Here we accept absolute URLs only.
+                            if (strpos($value, '://') === false) {
+                                $value = 'http://'.$value;
                             }
-                            // If the new URL value is empty, then it will be stored (i.e. the setting will be deleted).
-                            break;
-
-                        // Validation against e-mail address for some settings.
-                        case 'emailAdministrator':
-                            $value = trim(Security::remove_XSS($value));
-                            if ($value != '' && !api_valid_email($value)) {
-                                // If the new (non-empty) e-mail address is invalid, then the old e-mail address stays.
-                                // If the new e-mail address is empty, then it will be stored (i.e. the setting will be deleted).
+                            if (!api_valid_url($value, true)) {
+                                // If the new (non-empty) URL value is invalid, then the old URL value stays.
                                 $value = $old_value;
                             }
-                            break;
-                    }
-                    if ($old_value != $value) $keys[] = $key;
-                    $result = api_set_setting($key, $value, null, null, $url_id);
-                } else {
-                    $sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
-                    $res = Database::query($sql);
-                    while ($row_subkeys = Database::fetch_array($res)) {
-                        // If subkey is changed:
-                        if ((isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'false') ||
-                            (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'true')) {
-                            $keys[] = $key;
-                            break;
                         }
-                    }
-                    foreach ($value as $subkey => $subvalue) {
-                        $result = api_set_setting($key, 'true', $subkey, null, $url_id);
-                    }
+                        // If the new URL value is empty, then it will be stored (i.e. the setting will be deleted).
+                        break;
 
+                    // Validation against e-mail address for some settings.
+                    case 'emailAdministrator':
+                        $value = trim(Security::remove_XSS($value));
+                        if ($value != '' && !api_valid_email($value)) {
+                            // If the new (non-empty) e-mail address is invalid, then the old e-mail address stays.
+                            // If the new e-mail address is empty, then it will be stored (i.e. the setting will be deleted).
+                            $value = $old_value;
+                        }
+                        break;
                 }
+                if ($old_value != $value) $keys[] = $key;
+                $result = api_set_setting($key, $value, null, null, $url_id);
+            } else {
+                $sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
+                $res = Database::query($sql);
+                while ($row_subkeys = Database::fetch_array($res)) {
+                    // If subkey is changed:
+                    if ((isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'false') ||
+                        (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key, $row_subkeys['subkey']) == 'true')) {
+                        $keys[] = $key;
+                        break;
+                    }
+                }
+                foreach ($value as $subkey => $subvalue) {
+                    $result = api_set_setting($key, 'true', $subkey, null, $url_id);
+                }
+            }
         }
 
         // Add event configuration settings category to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+        event_system(
+            LOG_CONFIGURATION_SETTINGS_CHANGE,
+            LOG_CONFIGURATION_SETTINGS_CATEGORY,
+            $category,
+            api_get_utc_datetime(),
+            $user_id
+        );
 
         // Add event configuration settings variable to the system log.
         if (is_array($keys) && count($keys) > 0) {
             foreach ($keys as $variable) {
                 if (in_array($key, $settings_to_avoid)) { continue; }
-                event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_VARIABLE, $variable, api_get_utc_datetime(), $user_id);
+                event_system(
+                    LOG_CONFIGURATION_SETTINGS_CHANGE,
+                    LOG_CONFIGURATION_SETTINGS_VARIABLE,
+                    $variable,
+                    api_get_utc_datetime(),
+                    $user_id
+                );
             }
         }
     }
@@ -401,7 +437,6 @@ $resultcategories[] = array('category' => 'CAS');
 $resultcategories[] = array('category' => 'Shibboleth');
 $resultcategories[] = array('category' => 'Facebook');
 
-
 foreach ($resultcategories as $row) {
     $url = array();
     $url['url'] = api_get_self()."?category=".$row['category'];
@@ -413,9 +448,7 @@ foreach ($resultcategories as $row) {
 }
 
 echo Display::actions($action_array);
-
 echo '<br />';
-
 echo $form_search_html;
 
 if ($watermark_deleted) {
@@ -451,7 +484,13 @@ if (!empty($_GET['category'])) {
                     // add event to system log
                     $user_id = api_get_user_id();
                     $category = $_GET['category'];
-                    event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+                    event_system(
+                        LOG_CONFIGURATION_SETTINGS_CHANGE,
+                        LOG_CONFIGURATION_SETTINGS_CATEGORY,
+                        $category,
+                        api_get_utc_datetime(),
+                        $user_id
+                    );
                     Display :: display_confirmation_message(get_lang('DashboardPluginsHaveBeenUpdatedSucesslly'));
                 }
             }
@@ -461,23 +500,23 @@ if (!empty($_GET['category'])) {
                 });
                 </script>';
             echo '<div id="tabs">';
-                echo '<ul>';
-                echo '<li><a href="#tabs-1">'.get_lang('Plugins').'</a></li>';
-                echo '<li><a href="#tabs-2">'.get_lang('DashboardPlugins').'</a></li>';
-                echo '<li><a href="#tabs-3">'.get_lang('ConfigureExtensions').'</a></li>';
-                echo '</ul>';
+            echo '<ul>';
+            echo '<li><a href="#tabs-1">'.get_lang('Plugins').'</a></li>';
+            echo '<li><a href="#tabs-2">'.get_lang('DashboardPlugins').'</a></li>';
+            echo '<li><a href="#tabs-3">'.get_lang('ConfigureExtensions').'</a></li>';
+            echo '</ul>';
 
-                echo '<div id="tabs-1">';
-                handle_plugins();
-                echo '</div>';
+            echo '<div id="tabs-1">';
+            handle_plugins();
+            echo '</div>';
 
-                echo '<div id="tabs-2">';
-                DashboardManager::handle_dashboard_plugins();
-                echo '</div>';
+            echo '<div id="tabs-2">';
+            DashboardManager::handle_dashboard_plugins();
+            echo '</div>';
 
-                echo '<div id="tabs-3">';
-                handle_extensions();
-                echo '</div>';
+            echo '<div id="tabs-3">';
+            handle_extensions();
+            echo '</div>';
             echo '</div>';
             break;
         case 'Stylesheets':

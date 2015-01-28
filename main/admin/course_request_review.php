@@ -2,15 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * A list containig the pending course requests
+ * A list containing the pending course requests
  * @package chamilo.admin
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * Centro de Supercomputacion de Galicia (CESGA)
  *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com> (technical adaptation for Chamilo 1.8.8), 2010
  */
-
-/* INIT SECTION */
 
 // Language files that need to be included.
 $language_file = array('admin', 'create_course');
@@ -34,7 +32,7 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 // The delete action should be deactivated in this page.
 // Better reject the target request, after that you can delete it.
-define(DELETE_ACTION_ENABLED, false);
+// see DELETE_ACTION_ENABLED constant in main_api.lib.php
 
 // A check whether the course validation feature is enabled.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
@@ -82,7 +80,6 @@ if ($course_validation_feature) {
         /**
          * Sending to the teacher a request for additional information about the proposed course.
          */
-
         $course_request_code = CourseRequestManager::get_course_request_code($request_info);
         $result = CourseRequestManager::ask_for_additional_info($request_info);
         if ($result) {
@@ -124,26 +121,25 @@ if ($course_validation_feature) {
                 break;
         }
     }
-
 } else {
-
-   $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
-   $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
-   $is_error_message = true;
-
+    $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
+    $message = sprintf(get_lang('PleaseActivateCourseValidationFeature'), sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation')));
+    $is_error_message = true;
 }
 
 /**
  * Get the number of courses which will be displayed.
  */
-function get_number_of_requests() {
+function get_number_of_requests()
+{
     return CourseRequestManager::count_course_requests(COURSE_REQUEST_PENDING);
 }
 
 /**
  * Get course data to display
  */
-function get_request_data($from, $number_of_items, $column, $direction) {
+function get_request_data($from, $number_of_items, $column, $direction)
+{
     global $keyword;
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
@@ -155,7 +151,8 @@ function get_request_data($from, $number_of_items, $column, $direction) {
                    tutor_name AS col4,
                    request_date AS col5,
                    id  AS col6
-                   FROM $course_request_table WHERE status = ".COURSE_REQUEST_PENDING;
+               FROM $course_request_table
+               WHERE status = ".COURSE_REQUEST_PENDING;
     } else {
         $sql = "SELECT
                    code AS col0,
@@ -164,7 +161,8 @@ function get_request_data($from, $number_of_items, $column, $direction) {
                    tutor_name AS col3,
                    request_date AS col4,
                    id  AS col5
-                   FROM $course_request_table WHERE status = ".COURSE_REQUEST_PENDING;
+               FROM $course_request_table
+               WHERE status = ".COURSE_REQUEST_PENDING;
     }
 
     if ($keyword != '') {
@@ -190,7 +188,8 @@ function get_request_data($from, $number_of_items, $column, $direction) {
 /**
  * Enlace a la ficha del profesor
  */
-function email_filter($teacher) {
+function email_filter($teacher)
+{
     $sql = "SELECT user_id FROM ".Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST)." WHERE tutor_name LIKE '".$teacher."'";
     $res = Database::query($sql);
     $info = Database::fetch_array($res);
@@ -200,7 +199,8 @@ function email_filter($teacher) {
 /**
  * Actions in the list: edit, accept, reject, request additional information.
  */
-function modify_filter($id) {
+function modify_filter($id)
+{
     $code = CourseRequestManager::get_course_request_code($id);
     $result = '<a href="course_request_edit.php?id='.$id.'&caller=0">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
         '&nbsp;<a href="?accept_course_request='.$id.'">'.Display::return_icon('accept.png', get_lang('AcceptThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ANewCourseWillBeCreated'), $code), ENT_QUOTES)).'\')) return false;'),16).'</a>'.
@@ -211,6 +211,7 @@ function modify_filter($id) {
     if (DELETE_ACTION_ENABLED) {
         $result .= '&nbsp;<a href="?delete_course_request='.$id.'">'.Display::return_icon('delete.gif', get_lang('DeleteThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeDeleted'), $code), ENT_QUOTES)).'\')) return false;')).'</a>';
     }
+
     return $result;
 }
 
@@ -254,7 +255,7 @@ echo '</div>';
 // Create a sortable table with the course data.
 $offet = DELETE_ACTION_ENABLED ? 1 : 0;
 $table = new SortableTable('course_requests_review', 'get_number_of_requests', 'get_request_data', 4 + $offet, 20, 'DESC');
-$table->set_additional_parameters($parameters);
+//$table->set_additional_parameters($parameters);
 if (DELETE_ACTION_ENABLED) {
     $table->set_header(0, '', false);
 }
@@ -270,7 +271,5 @@ if (DELETE_ACTION_ENABLED) {
     $table->set_form_actions(array('delete_course_requests' => get_lang('DeleteCourseRequests')), 'course_request');
 }
 $table->display();
-
-/* FOOTER */
 
 Display :: display_footer();

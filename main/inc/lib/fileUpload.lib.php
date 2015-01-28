@@ -357,7 +357,7 @@ function handle_uploaded_document(
             );
 
             // This means that the path already exists in this course.
-            if (!empty($documentList)) {
+            if (!empty($documentList) && $whatIfFileExists != 'overwrite') {
                 //$found = false;
                 // Checking if we are talking about the same course + session
                 /*foreach ($documentList as $document) {
@@ -378,6 +378,7 @@ function handle_uploaded_document(
                 case 'overwrite':
                     // Check if the target file exists, so we can give another message
                     $fileExists = file_exists($fullPath);
+
                     if (moveUploadedFile($uploadedFile, $fullPath)) {
                         chmod($fullPath, $filePermissions);
 
@@ -1030,7 +1031,7 @@ function unzip_uploaded_document(
     $courseInfo,
     $userInfo,
     $uploaded_file,
-    $upload_path,
+    $uploadPath,
     $base_work_dir,
     $maxFilledSpace,
     $sessionId = 0,
@@ -1074,7 +1075,8 @@ function unzip_uploaded_document(
         $destinationDir,
         $sessionId,
         $groupId,
-        $output
+        $output,
+        array('path' => $uploadPath)
     );
 
     if (is_dir($destinationDir)) {
@@ -2004,6 +2006,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
  * @param int $groupId
  * @param bool $output
  * @param array $parent
+ * @param string $uploadPath
  *
  */
 function add_all_documents_in_folder_to_database(
@@ -2029,16 +2032,22 @@ function add_all_documents_in_folder_to_database(
     if (is_dir($folderPath)) {
         // Run trough
         while ($file = readdir($handle)) {
+
             if ($file == '.' || $file == '..') {
                 continue;
             }
 
             $parentPath = null;
-            if (!empty($parent)) {
+
+            if (!empty($parent) && isset($parent['path'])) {
                 $parentPath = $parent['path'];
+                if ($parentPath == '/') {
+                    $parentPath = null;
+                }
             }
 
             $completePath = $parentPath.'/'.$file;
+
             $sysFolderPath = $folderPath.'/'.$file;
 
             // Is directory?
@@ -2055,7 +2064,6 @@ function add_all_documents_in_folder_to_database(
                     null,
                     true
                 );
-
                 $files[$file] = $newFolderData;
 
                 // Recursive

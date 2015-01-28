@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
+ * Class CoursesController
+ *
  * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
  * @author Christian Fasanando <christian1827@gmail.com> - BeezNest
  * @package chamilo.auth
- *
- * Class CoursesController
  */
 class CoursesController
 {
@@ -47,15 +48,14 @@ class CoursesController
         $this->view->set_layout('layout');
         $this->view->set_template('courses_list');
         $this->view->render();
-
     }
 
     /**
      * It's used for listing categories,
      * render to categories_list view
-     * @param string   	action
-     * @param string    confirmation message(optional)
-     * @param string    error message(optional)
+     * @param string   	$action
+     * @param string   $message confirmation message(optional)
+     * @param string   $error error message(optional)
      */
     public function categories_list($action, $message='', $error='')
     {
@@ -132,9 +132,9 @@ class CoursesController
         $data['message']          = $message;
         $data['content']          = $content;
         $data['error']            = $error;
-        
+
         $data['catalogShowCoursesSessions'] = 0;
-        
+
         if (isset($_configuration['catalog_show_courses_sessions'])) {
             $data['catalogShowCoursesSessions'] = $_configuration['catalog_show_courses_sessions'];
         }
@@ -178,10 +178,10 @@ class CoursesController
         }
 
         $data['user_coursecodes'] = $user_coursecodes;
-        $data['message']    = $message;
-        $data['content']    = $content;
-        $data['error']      = $error;
-        $data['action']     = 'display_courses';
+        $data['message'] = $message;
+        $data['content'] = $content;
+        $data['error'] = $error;
+        $data['action'] = 'display_courses';
 
         // render to the view
         $this->view->set_data($data);
@@ -493,7 +493,7 @@ class CoursesController
         $url = api_get_path(WEB_PATH) . "main/inc/email_editor.php?action=subscribe_me_to_session&session=$sessionName";
 
         return Display::url(get_lang('Subscribe'), $url, array(
-                    'class' => 'btn btn-large btn-primary',
+            'class' => 'btn btn-large btn-primary',
         ));
     }
 

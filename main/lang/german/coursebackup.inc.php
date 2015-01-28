@@ -49,4 +49,5 @@ $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Beim Exportieren eines Lernpfad
 $ArchivesDirectoryNotWriteableContactAdmin = "Das Verzeichnis des Archivs, das von diesem Tool benutzt wird, ist nicht beschreibbar. Bitte den Plattform-Administrator benachrichtigen.";
 $DestinationCourse = "Ziel-Kurs";
 $IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Wenn Ihr Lernpfad Audio-Dateien beinhaltet, sollten Sie dieses auch in den Dokumenten auswählen";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Bitte die Mediendateien nicht vergessen";
 ?>

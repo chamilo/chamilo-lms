@@ -208,6 +208,7 @@ Display::display_header($nameTools, 'Doc');
 $unzip = isset($_POST['unzip']) ? $_POST['unzip'] : null;
 $index = isset($_POST['index_document']) ? $_POST['index_document'] : null;
 // User has submitted a file
+
 if (!empty($_FILES)) {
     DocumentManager::upload_document(
         $_FILES,
@@ -283,7 +284,7 @@ if (api_get_setting('search_enabled') == 'true') {
 
 $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
 $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
-$form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename', array('checked="checked"'));
+$form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
 // Close the java script and avoid the footer up
 $form->addElement('html', '</div>');
 
@@ -291,7 +292,17 @@ $form->addElement('html', '</div>');
 $form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'), 'class="upload"');
 $form->add_real_progress_bar('DocumentUpload', 'file');
 
-$defaults = array('index_document' => 'checked="checked"');
+$fileExistsOption = api_get_configuration_value('document_if_file_exists_option');
+
+$defaultFileExistsOption = 'rename';
+if (!empty($fileExistsOption)) {
+    $defaultFileExistsOption = $fileExistsOption;
+}
+
+$defaults = array(
+    'index_document' => 'checked="checked"',
+    'if_exists' => $defaultFileExistsOption
+);
 
 $form->setDefaults($defaults);
 

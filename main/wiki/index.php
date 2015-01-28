@@ -1,15 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * 	@author Juan Carlos Raña <herodoto@telefonica.net>
  *
  * 	@package chamilo.wiki
  */
-/**
- * Code
- */
-use \ChamiloSession as Session;
 
 // name of the language file that needs to be included
 $language_file = 'wiki';
@@ -86,7 +83,9 @@ if ($groupId) {
     if ($group_properties['wiki_state'] == 0) {
         api_not_allowed();
     } elseif ($group_properties['wiki_state']==2) {
-        if (!api_is_allowed_to_edit(false,true) and !GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id())) {
+        if (!api_is_allowed_to_edit(false,true) and
+            !GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id())
+        ) {
             api_not_allowed();
         }
     }

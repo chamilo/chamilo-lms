@@ -7,9 +7,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
@@ -26,12 +24,13 @@ require_once 'back_compat.inc.php';
  * @param   integer Item ID
  * @param   array   Objectives array
  */
-function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = array()) {
-    global $_configuration;
+function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = array())
+{
     $debug = 0;
     $return = '';
-    if ($debug > 0) { error_log('In xajax_save_objectives('.$lp_id.','.$user_id.','.$view_id.','.$item_id.',"'.(count($objectives) > 0 ? count($objectives) : '').'")', 0); }
-    //$objResponse = new xajaxResponse();
+    if ($debug > 0) {
+        error_log('In xajax_save_objectives('.$lp_id.','.$user_id.','.$view_id.','.$item_id.',"'.(count($objectives) > 0 ? count($objectives) : '').'")', 0);
+    }
     require_once 'learnpath.class.php';
     require_once 'scorm.class.php';
     require_once 'aicc.class.php';
@@ -40,26 +39,32 @@ function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = arr
     require_once 'aiccItem.class.php';
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $mylpi =& $mylp->items[$item_id];
-    //error_log(__FILE__.' '.__LINE__.' '.print_r($objectives,true), 0);
-    if(is_array($objectives) && count($objectives)>0){
-        foreach($objectives as $index=>$objective){
-            //error_log(__FILE__.' '.__LINE__.' '.$objectives[$index][0], 0);
+    if (is_array($objectives) && count($objectives)>0){
+        foreach ($objectives as $index=>$objective){
             $mylpi->add_objective($index,$objectives[$index]);
         }
         $mylpi->write_objectives_to_db();
     }
-    //return $objResponse;
+
     return $return;
 }
 $objectives = array();
 if (isset($_REQUEST['objectives'])) {
     if (is_array($_REQUEST['objectives'])) {
         foreach ($_REQUEST['objectives'] as $idx => $ob) {
-            $objectives[$idx] = split(',', substr($ob, 1, -1));
-            if (!isset($objectives[$idx][4])) { // Make sure there are 7 elements.
+            $objectives[$idx] = explode(',', substr($ob, 1, -1));
+            if (!isset($objectives[$idx][4])) {
+                // Make sure there are 7 elements.
                 $objectives[$idx][4] = '';
             }
         }
     }
 }
-echo save_objectives($_REQUEST['lid'], $_REQUEST['uid'], $_REQUEST['vid'], $_REQUEST['iid'], $objectives);
+
+echo save_objectives(
+    $_REQUEST['lid'],
+    $_REQUEST['uid'],
+    $_REQUEST['vid'],
+    $_REQUEST['iid'],
+    $objectives
+);

@@ -51,7 +51,7 @@ switch ($_GET['action']) {
 		api_display_tool_title(get_lang('EditResourceType'));
 		$form = new FormValidator('category', 'post', 'm_category.php?action=edit');
 		$form->add_textfield('name', get_lang('ResourceTypeName'), true, array ('maxlength' => '128'));
-		$form->addElement('hidden', 'id', $_GET['id']);
+		$form->addElement('hidden', 'id', intval($_GET['id']));
 		$form->addElement('style_submit_button', 'submit', get_lang('ModifyResourceType'),'class="save"');
 		$form->setDefaults(Rsys :: get_category($_GET['id']));
 		if ($form->validate()) {

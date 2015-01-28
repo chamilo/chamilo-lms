@@ -1,20 +1,20 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
- * This file contains class used like controller for thematic, it should be included inside a dispatcher file (e.g: index.php)
+ * Thematic Controller script.
+ * Prepares the common background variables to give to the scripts corresponding to
+ * the requested action
  *
- * !!! WARNING !!! : ALL DATES IN THIS MODULE ARE STORED IN UTC ! DO NOT CONVERT DURING THE TRANSITION FROM CHAMILO 1.8.x TO 2.0
+ * This file contains class used like controller for thematic,
+ * it should be included inside a dispatcher file (e.g: index.php)
+ *
+ * !!! WARNING !!! : ALL DATES IN THIS MODULE ARE STORED IN UTC !
+ * DO NOT CONVERT DURING THE TRANSITION FROM CHAMILO 1.8.x TO 2.0
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> token support improving UI
- * @package chamilo.course_progress
- */
-
-/**
- * Thematic Controller script. Prepares the common background variables to give to the scripts corresponding to
- * the requested action
+ *
  * @package chamilo.course_progress
  */
 class ThematicController
@@ -171,7 +171,11 @@ class ThematicController
                 case 'thematic_export_pdf':
                     $list = $thematic->get_thematic_list();
                     $table = array();
-                    $table[] = array(get_lang('Thematic'), get_lang('ThematicPlan'), get_lang('ThematicAdvance'));
+                    $table[] = array(
+                        get_lang('Thematic'),
+                        get_lang('ThematicPlan'),
+                        get_lang('ThematicAdvance')
+                    );
                     foreach ($list as $theme) {
                         $data = $thematic->get_thematic_plan_data($theme['id']);
                         $plan_html = null;
@@ -260,29 +264,30 @@ class ThematicController
 
     /**
      * This method is used for thematic plan control (update, insert or listing)
-     * @param 	string	Action
+     * @param 	string	$action
      * render to thematic_plan.php
      */
     public function thematic_plan($action)
     {
         $thematic = new Thematic();
-
         $data = array();
         $error = false;
-
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (isset($_POST['action']) && ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')) {
                 if (isset($_POST['title'])) {
                     if ($_POST['thematic_plan_token'] == $_SESSION['thematic_plan_token']) {
                         if (api_is_allowed_to_edit(null, true)) {
-
                             $title_list = $_REQUEST['title'];
-                            //$description_list   = $_REQUEST['desc'];
                             $description_list = $_REQUEST['description'];
                             $description_type = $_REQUEST['description_type'];
                             for ($i = 1; $i < count($title_list) + 1; $i++) {
-                                $thematic->set_thematic_plan_attributes($_REQUEST['thematic_id'], $title_list[$i], $description_list[$i], $description_type[$i]);
-                                $affected_rows = $thematic->thematic_plan_save();
+                                $thematic->set_thematic_plan_attributes(
+                                    $_REQUEST['thematic_id'],
+                                    $title_list[$i],
+                                    $description_list[$i],
+                                    $description_type[$i]
+                                );
+                                $thematic->thematic_plan_save();
                             }
                             unset($_SESSION['thematic_plan_token']);
                             $data['message'] = 'ok';
@@ -292,6 +297,7 @@ class ThematicController
                             $saveRedirect.= 'thematic_plan_save_message=ok';
 
                             header("Location: $saveRedirect");
+                            exit;
                         }
                         $data['action'] = 'thematic_plan_list';
                     }
@@ -360,8 +366,9 @@ class ThematicController
 
     /**
      * This method is used for thematic advance control (update, insert or listing)
-     * @param 	string	$action
      * render to thematic_advance.php
+     * @param 	string	$action
+     *
      */
     public function thematic_advance($action)
      {
@@ -400,7 +407,9 @@ class ThematicController
                     exit;
                 }
 
-                if (($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) || (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours']))) {
+                if (($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) ||
+                    (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours']))
+                ) {
                     if ($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) {
                         $start_date_error = true;
                         $data['start_date_error'] = $start_date_error;
@@ -488,5 +497,4 @@ class ThematicController
         $this->view->set_template('thematic_advance');
         $this->view->render();
     }
-
 }

@@ -2,11 +2,11 @@
 
 namespace Sabre\VObject\Property\ICalendar;
 
-use
-    Sabre\VObject\Property,
-    Sabre\VObject\Parser\MimeDir,
-    Sabre\VObject\DateTimeParser,
-    Sabre\VObject\TimeZoneUtil;
+use DateTimeZone;
+use Sabre\VObject\Property;
+use Sabre\VObject\Parser\MimeDir;
+use Sabre\VObject\DateTimeParser;
+use Sabre\VObject\TimeZoneUtil;
 
 /**
  * DateTime property
@@ -117,11 +117,16 @@ class DateTime extends Property {
      * first will be returned. To get an array with multiple values, call
      * getDateTimes.
      *
+     * If no timezone information is known, because it's either an all-day
+     * property or floating time, we will use the DateTimeZone argument to
+     * figure out the exact date.
+     *
+     * @param DateTimeZone $timeZone
      * @return \DateTime
      */
-    public function getDateTime() {
+    public function getDateTime(DateTimeZone $timeZone = null) {
 
-        $dt = $this->getDateTimes();
+        $dt = $this->getDateTimes($timeZone);
         if (!$dt) return null;
 
         return $dt[0];
@@ -131,20 +136,25 @@ class DateTime extends Property {
     /**
      * Returns multiple date-time values.
      *
+     * If no timezone information is known, because it's either an all-day
+     * property or floating time, we will use the DateTimeZone argument to
+     * figure out the exact date.
+     *
+     * @param DateTimeZone $timeZone
      * @return \DateTime[]
      */
-    public function getDateTimes() {
+    public function getDateTimes(DateTimeZone $timeZone = null) {
 
-        // Finding the timezone.
-        $tz = $this['TZID'];
+        // Does the property have a TZID?
+        $tzid = $this['TZID'];
 
-        if ($tz) {
-            $tz = TimeZoneUtil::getTimeZone((string)$tz, $this->root);
+        if ($tzid) {
+            $timeZone = TimeZoneUtil::getTimeZone((string)$tzid, $this->root);
         }
 
         $dts = array();
         foreach($this->getParts() as $part) {
-            $dts[] = DateTimeParser::parse($part, $tz);
+            $dts[] = DateTimeParser::parse($part, $timeZone);
         }
         return $dts;
 

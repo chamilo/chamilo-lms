@@ -75,7 +75,7 @@ class document_processor extends search_processor {
             $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
             $doc_table = Database::get_course_table(TABLE_DOCUMENT);
 
-            $doc_id = Database::escape_string($doc_id);
+            $doc_id = intval($doc_id);
             $sql = "SELECT * FROM       $doc_table
                     WHERE      $doc_table.id = $doc_id AND c_id = $course_id 
                     LIMIT 1";

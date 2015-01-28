@@ -4,6 +4,7 @@
 require_once 'learnpathItem.class.php';
 
 /**
+ * Class aiccItem
  * This class handles the elements from an AICC Descriptor file.
  * Container for the aiccItem class that deals with AICC Assignable Units (AUs)
  * @package	chamilo.learnpath

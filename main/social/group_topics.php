@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>

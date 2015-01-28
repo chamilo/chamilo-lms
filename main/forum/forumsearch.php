@@ -57,9 +57,9 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 if (!empty ($_GET['gidReq'])) {
@@ -86,9 +86,6 @@ if ($origin == 'learnpath') {
 } else {
     Display :: display_header($nameTools);
 }
-
-// Display the tool title.
-// api_display_tool_title($nameTools);
 
 // Tool introduction
 Display::display_introduction_section(TOOL_FORUM);

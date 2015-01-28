@@ -179,6 +179,8 @@ if (isset($_user['language']) && $_user['language'] != '') {
 }
 
 $form->setDefaults($values);
+$message = null;
+$content = null;
 
 // Validate the form.
 if ($form->validate()) {

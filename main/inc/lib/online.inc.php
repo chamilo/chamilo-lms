@@ -393,7 +393,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 
     $online_time 		= time() - $time_limit*60;
     $current_date		= api_get_utc_datetime($online_time);
-    $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $course_code         = Database::escape_string($course_code);
 
     $from = intval($from);
@@ -424,7 +424,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 
 function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null) {
 	if(empty($coursecode)) return false;
-	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$coursecode = Database::escape_string($coursecode);
 	$time_limit = Database::escape_string($time_limit);
 
@@ -451,7 +451,7 @@ function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null)
  */
 function GetFullUserName($uid) {
 	$uid = (int) $uid;
-	$uid = Database::escape_string($uid);
+	$uid = intval($uid);
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$query = "SELECT firstname, lastname FROM ".$user_table." WHERE user_id='$uid'";
 	$result = @Database::query($query);

@@ -4303,6 +4303,7 @@ a.forum_group_link {
     /*border-bottom: 1px solid #666666;*/
     margin-bottom: 10px;
     vertical-align: top;
+    background:white;
 }
 .forum_message_post_text_2_be_approved {
     /*border-bottom: 1px solid #666666;*/
@@ -5289,4 +5290,17 @@ i.size-32.icon-new-work{
     margin-left: auto;
     margin-right: auto;
     max-width: 100%;
+}
+
+/* display the cookie usage warning validation */
+.cookieUsageValidation {
+    padding: 5px;
+    background-color: #333333;
+    color:#E0E0E0;
+    text-align:center;
+}
+
+.displayUnderToolbar
+{
+    height: 52px;
 }

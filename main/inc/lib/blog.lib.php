@@ -165,7 +165,7 @@ class Blog {
 		$this_blog_id = Database::insert_id();
 
 		//update item_property (update)
-		api_item_property_update(api_get_course_info(), TOOL_BLOGS, Database::escape_string($blog_id), 'BlogUpdated', api_get_user_id());
+		api_item_property_update(api_get_course_info(), TOOL_BLOGS, intval($blog_id), 'BlogUpdated', api_get_user_id());
 
 		// Update course homepage link
 		$sql = "UPDATE $tbl_tool SET name = '".Database::escape_string($title)."' WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=".Database::escape_string((int)$blog_id)."' LIMIT 1";
@@ -217,7 +217,7 @@ class Blog {
 		Database::query($sql);
 
 		//update item_property (delete)
-		api_item_property_update(api_get_course_info(), TOOL_BLOGS, Database::escape_string($blog_id), 'delete', api_get_user_id());
+		api_item_property_update(api_get_course_info(), TOOL_BLOGS, intval($blog_id), 'delete', api_get_user_id());
 	}
 
 	/**
@@ -278,7 +278,7 @@ class Blog {
 					// Storing the attachments if any
 					if ($result) {
 						$sql='INSERT INTO '.$blog_table_attachment.'(c_id, filename,comment, path, post_id,size, blog_id,comment_id) '.
-							 "VALUES ($course_id, '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".intval($_FILES['user_upload']['size'])."',  '".$blog_id."', '0' )";
+							 "VALUES ($course_id, '".Database::escape_string($file_name)."', '".$comment."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".intval($_FILES['user_upload']['size'])."',  '".$blog_id."', '0' )";
 						$result=Database::query($sql);
 						$message.=' / '.get_lang('AttachmentUpload');
 					}
@@ -404,7 +404,7 @@ class Blog {
 					if ($result)
 					{
 						$sql='INSERT INTO '.$blog_table_attachment.'(c_id, filename,comment, path, post_id,size,blog_id,comment_id) '.
-							 "VALUES ($course_id, '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '".$last_id."'  )";
+							 "VALUES ($course_id, '".Database::escape_string($file_name)."', '".$comment."', '".Database::escape_string($new_file_name)."' , '".$post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '".$last_id."'  )";
 						$result=Database::query($sql);
 						$message.=' / '.get_lang('AttachmentUpload');
 					}
@@ -423,9 +423,9 @@ class Blog {
 		// Init
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
-		$blog_id = Database::escape_string($blog_id);
-		$post_id = Database::escape_string($post_id);
-		$comment_id = Database::escape_string($comment_id);
+		$blog_id = intval($blog_id);
+		$post_id = intval($post_id);
+		$comment_id = intval($comment_id);
 
         $course_id = api_get_course_int_id();
 
@@ -2713,9 +2713,9 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 {
 	$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
-	$blog_id = Database::escape_string($blog_id);
-	$comment_id = Database::escape_string($comment_id);
-	$post_id = Database::escape_string($post_id);
+	$blog_id = intval($blog_id);
+	$comment_id = intval($comment_id);
+	$post_id = intval($post_id);
 	$row=array();
 	$where='';
 	if (!empty ($post_id) && is_numeric($post_id)) {
@@ -2754,9 +2754,9 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 
 	global $_course;
 	$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
-	$blog_id = Database::escape_string($blog_id);
-	$comment_id = Database::escape_string($comment_id);
-	$post_id = Database::escape_string($post_id);
+	$blog_id = intval($blog_id);
+	$comment_id = intval($comment_id);
+	$post_id = intval($post_id);
 
     $course_id = api_get_course_int_id();
 
@@ -2836,7 +2836,7 @@ function get_blog_post_from_user($course_code, $user_id) {
 function get_blog_comment_from_user($course_code, $user_id) {
 		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
 		$tbl_blog_comment 	= Database::get_course_table(TABLE_BLOGS_COMMENTS);
-		$user_id 			= Database::escape_string($user_id);
+		$user_id 			= intval($user_id);
 
 		$course_info 		= api_get_course_info($course_code);
 		$course_id 			= $course_info['real_id'];

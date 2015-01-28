@@ -565,7 +565,7 @@ function editlinkcategory($type)
             if (empty ($mytarget)) {
                 $mytarget = '_self';
             }
-            $mytarget = ",target='" . $target . "'";
+            $mytarget = ", target='" . $target . "'";
 
             // Finding the old category_id.
             $sql = "SELECT * FROM " . $tbl_link . "
@@ -592,7 +592,7 @@ function editlinkcategory($type)
                 "description='" . Database :: escape_string($_POST['description']) . "', " .
                 "category_id='" . Database :: escape_string($_POST['selectcategory']) . "', " .
                 "display_order='" . $max_display_order . "', " .
-                "on_homepage='" . Database :: escape_string($onhomepage) . " ' $mytarget " .
+                "on_homepage= '" . Database :: escape_string($onhomepage) ."' $mytarget " .
                 " WHERE c_id = $course_id AND id='" . intval($_POST['id']) . "'";
             Database :: query($sql);
 
@@ -800,7 +800,8 @@ function makedefaultviewcode($locatie)
  */
 function change_visibility_link($id, $scope)
 {
-    global $_course, $_user;
+    $_course = api_get_course_info();
+    $_user = api_get_user_info();
     if ($scope == TOOL_LINK) {
         api_item_property_update(
             $_course,
@@ -827,7 +828,7 @@ function change_visibility_link($id, $scope)
  * session
  * @param   int $courseId
  * @param   int $sessionId
- * @return string SQL query (to be executed)
+ * @return resource
  */
 function getLinkCategories($courseId, $sessionId)
 {
@@ -837,6 +838,17 @@ function getLinkCategories($courseId, $sessionId)
     // Condition for the session.
     $sessionCondition = api_get_session_condition($sessionId, true, true);
 
+    // Getting links
+    $sql = "SELECT *, linkcat.id
+            FROM $tblLinkCategory linkcat
+            WHERE
+                linkcat.c_id = " . $courseId."
+                $sessionCondition
+            ORDER BY linkcat.display_order DESC";
+
+    $result = Database::query($sql);
+    $categories = Database::store_result($result);
+
     $sql = "SELECT *, linkcat.id
             FROM $tblLinkCategory linkcat
             INNER JOIN $tblItemProperty itemproperties
@@ -845,28 +857,39 @@ function getLinkCategories($courseId, $sessionId)
                 itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
                 (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
                 $sessionCondition AND
-                linkcat.c_id = " . $courseId . " AND
-                itemproperties.c_id = " . $courseId . "
+                linkcat.c_id = " . $courseId . "
             ORDER BY linkcat.display_order DESC";
 
-    return Database::query($sql);
-}
+    $result = Database::query($sql);
 
-/**
- * Get links categories in the current course and
- * session
- * @param  int $courseId
- * @param  int $sessionId
- * @return array
- */
-function getLinkCategoriesResult($courseId, $sessionId)
-{
-    $result = getLinkCategories($courseId, $sessionId);
-    $list = array();
+    $categoryInItemProperty = array();
     if (Database::num_rows($result)) {
-        $list = Database::store_result($result, 'ASSOC');
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $categoryInItemProperty[$row['id']] = $row;
+        }
     }
-    return $list;
+
+    foreach ($categories as & $category) {
+        if (!isset($categoryInItemProperty[$category['id']])) {
+            api_set_default_visibility($category['id'], TOOL_LINK_CATEGORY);
+        }
+    }
+
+    $sql = "SELECT DISTINCT linkcat.*, visibility
+            FROM $tblLinkCategory linkcat
+            INNER JOIN $tblItemProperty itemproperties
+            ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
+            WHERE
+                itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
+                (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
+                $sessionCondition AND
+                linkcat.c_id = " . $courseId . "
+            GROUP BY c_id, id
+            ORDER BY linkcat.display_order DESC
+            ";
+    $result = Database::query($sql);
+
+    return Database::store_result($result, 'ASSOC');
 }
 
 /**
@@ -935,7 +958,7 @@ function showlinksofcategory($catid)
 
             if ($myrow['visibility'] == '1') {
                 echo '<tr class="' . $css_class . '">';
-                echo '<td align="center" valign="middle" width="15">';
+                echo '<td align="center" valign="middle" width="5%">';
                 echo '<a href="link_goto.php?' . api_get_cidreq() .
                     '&amp;link_id=' . $myrow['id'] .
                     '&amp;link_url=' . urlencode($myrow['url']) . '" target="_blank">
@@ -951,7 +974,7 @@ function showlinksofcategory($catid)
             } else {
                 if (api_is_allowed_to_edit(null, true)) {
                     echo '<tr class="' . $css_class . '">';
-                    echo '<td align="center" valign="middle" width="15">
+                    echo '<td align="center" valign="middle" width="5%">
                         <a href="link_goto.php?' . api_get_cidreq() .
                         '&amp;link_id=' . $myrow['id'] . "
                         &amp;link_url=" . urlencode($myrow['url']) . '"
@@ -971,8 +994,8 @@ function showlinksofcategory($catid)
                 }
             }
 
-            echo '<td style="text-align:center;">';
             if (api_is_allowed_to_edit(null, true)) {
+                echo '<td style="text-align:center;">';
                 if ($session_id == $myrow['session_id']) {
                     echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .
                         '&amp;sec_token=' . $token .
@@ -1046,8 +1069,9 @@ function showlinksofcategory($catid)
                         ICON_SIZE_SMALL
                     ); //get_lang('EditionNotAvailableFromSession');
                 }
+                echo '</td>';
             }
-            echo '</td></tr>';
+            echo '</tr>';
             $i++;
         }
         echo '</table>';

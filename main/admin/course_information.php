@@ -5,9 +5,6 @@
  * @author Bart Mollet
  * @package chamilo.admin
  */
-/**
- * INIT SECTION
- */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
@@ -110,7 +107,7 @@ $table->display();
 echo Display::page_header(get_lang('Users'));
 $table_course_user     = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user            = Database :: get_main_table(TABLE_MAIN_USER);
-$sql = "SELECT *,cu.status as course_status 
+$sql = "SELECT *,cu.status as course_status
         FROM $table_course_user cu, $table_user u";
 if (api_is_multiple_url_enabled()) {
     $sql .= " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." url_rel_user

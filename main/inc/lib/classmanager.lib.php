@@ -160,7 +160,7 @@ class ClassManager
         $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "INSERT IGNORE INTO $tbl_course_class SET course_code = '".Database::escape_string($course_code)."', class_id = '".Database::escape_string($class_id)."'";
         Database::query($sql);
-        $sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".Database::escape_string($class_id)."'";
+        $sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".intval($class_id)."'";
         $res = Database::query($sql);
         while ($user = Database::fetch_object($res)) {
             CourseManager :: subscribe_user($user->user_id, $course_code);
@@ -181,7 +181,7 @@ class ClassManager
         $single_class_users = Database::query($sql);
         while ($single_class_user = Database::fetch_object($single_class_users))
         {
-            $sql = "SELECT * FROM $tbl_class_user WHERE class_id = '".Database::escape_string($class_id)."' AND user_id = '".Database::escape_string($single_class_user->user_id)."'";
+            $sql = "SELECT * FROM $tbl_class_user WHERE class_id = '".intval($class_id)."' AND user_id = '".Database::escape_string($single_class_user->user_id)."'";
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0)
             {

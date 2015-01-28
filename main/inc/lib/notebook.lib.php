@@ -59,7 +59,7 @@ class NotebookManager
 					 $course_id,
 					'" . api_get_user_id() . "',
 					'" . Database::escape_string(api_get_course_id()) . "',
-					'" . Database::escape_string($_SESSION['id_session']) . "',
+					'" . intval($_SESSION['id_session']) . "',
 					'" . Database::escape_string($values['note_title']) . "',
 					'" . Database::escape_string($values['note_comment']) . "',
 					'" . Database::escape_string(date('Y-m-d H:i:s')) . "',
@@ -119,7 +119,7 @@ class NotebookManager
         $sql = "UPDATE $t_notebook SET
 					user_id = '" . api_get_user_id() . "',
 					course = '" . Database::escape_string(api_get_course_id()) . "',
-					session_id = '" . Database::escape_string($_SESSION['id_session']) . "',
+					session_id = '" . intval($_SESSION['id_session']) . "',
 					title = '" . Database::escape_string($values['note_title']) . "',
 					description = '" . Database::escape_string($values['note_comment']) . "',
 					update_date = '" . Database::escape_string(date('Y-m-d H:i:s')) . "'

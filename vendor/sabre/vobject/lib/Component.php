@@ -225,8 +225,14 @@ class Component extends Node {
         foreach($this->children as $key=>$child) {
 
             if (
-                strtoupper($child->name) === $name &&
-                (is_null($group) || ( $child instanceof Property && strtoupper($child->group) === $group))
+                (
+                    strtoupper($child->name) === $name
+                    && (is_null($group) || ( $child instanceof Property && strtoupper($child->group) === $group))
+                )
+                ||
+                (
+                    $name === '' && $child instanceof Property && strtoupper($child->group) === $group
+                )
             ) {
 
                 $result[$key] = $child;

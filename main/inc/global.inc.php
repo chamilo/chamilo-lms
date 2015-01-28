@@ -318,7 +318,9 @@ if (file_exists($mail_conf)) {
 }
 
 if (api_get_setting('server_type') == 'test') {
-    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+    ini_set('display_errors', '1');
+    ini_set('log_errors', '1');
+    error_reporting(-1);
 } else {
     /*
     Server type is not test

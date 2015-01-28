@@ -1,12 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
+
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
@@ -28,14 +22,14 @@ class LinkAddEditForm extends FormValidator
 	 * To add link, define category_object and link_type
 	 * To edit link, define link_object
 	 */
-    public function LinkAddEditForm(
-        $form_type,
-        $category_object,
-        $link_type,
-        $link_object,
-        $form_name,
-        $action = null
-    ) {
+	public function LinkAddEditForm(
+		$form_type,
+		$category_object,
+		$link_type,
+		$link_object,
+		$form_name,
+		$action = null
+	) {
 		parent :: __construct($form_name, 'post', $action);
 
 		// set or create link object
@@ -70,53 +64,53 @@ class LinkAddEditForm extends FormValidator
 			$this->addElement('hidden','name_link',$link->get_name(),array('id'=>'name_link'));
 		}
 
-        if (count($category_object) == 1) {
-            $this->addElement('hidden', 'select_gradebook', $category_object[0]->get_id());
-        } else {
-            $select_gradebook = $this->addElement('select', 'select_gradebook', get_lang('SelectGradebook'), array(), array('id' => 'hide_category_id'));
-            $this->addRule('select_gradebook', get_lang('ThisFieldIsRequired'), 'nonzero');
+		if (count($category_object) == 1) {
+			$this->addElement('hidden', 'select_gradebook', $category_object[0]->get_id());
+		} else {
+			$select_gradebook = $this->addElement('select', 'select_gradebook', get_lang('SelectGradebook'), array(), array('id' => 'hide_category_id'));
+			$this->addRule('select_gradebook', get_lang('ThisFieldIsRequired'), 'nonzero');
 
-            $default_weight = 0;
-            if (!empty($category_object)) {
-                foreach ($category_object as $my_cat) {
+			$default_weight = 0;
+			if (!empty($category_object)) {
+				foreach ($category_object as $my_cat) {
 
-                    if ($my_cat->get_course_code() == api_get_course_id()) {
-                        $grade_model_id = $my_cat->get_grade_model_id();
-                        if (empty($grade_model_id)) {
+					if ($my_cat->get_course_code() == api_get_course_id()) {
+						$grade_model_id = $my_cat->get_grade_model_id();
+						if (empty($grade_model_id)) {
 
-                            if ($my_cat->get_parent_id() == 0 ) {
-                                $default_weight = $my_cat->get_weight();
-                                $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
-                            } else {
-                                $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
-                            }
-                        } else {
-                            $select_gradebook->addoption(get_lang('Select'), 0);
-                        }
-                        if ($link->get_category_id() == $my_cat->get_id()) {
-                            $default_weight = $my_cat->get_weight();
-                        }
-                    }
-                }
-            }
-        }
+							if ($my_cat->get_parent_id() == 0 ) {
+								$default_weight = $my_cat->get_weight();
+								$select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+							} else {
+								$select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+							}
+						} else {
+							$select_gradebook->addoption(get_lang('Select'), 0);
+						}
+						if ($link->get_category_id() == $my_cat->get_id()) {
+							$default_weight = $my_cat->get_weight();
+						}
+					}
+				}
+			}
+		}
 
 		$this->add_textfield(
-            'weight_mask',
-            array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight().'</span>] '),
-            true,
-            array(
-			    'size' => '4',
-			    'maxlength' => '5',
-                'class' => 'span1'
-		    )
-        );
+			'weight_mask',
+			array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight().'</span>] '),
+			true,
+			array(
+				'size' => '4',
+				'maxlength' => '5',
+				'class' => 'span1'
+			)
+		);
 
-        $this->addElement('hidden', 'weight');
+		$this->addElement('hidden', 'weight');
 
-        /*
+		/*
 
-		// ELEMENT: weight
+        // ELEMENT: weight
         $this->add_textfield('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
             'size' => '4',
             'maxlength' => '5',
@@ -126,21 +120,21 @@ class LinkAddEditForm extends FormValidator
 		$this->addRule('weight_mask',get_lang('OnlyNumbers'),'numeric');
 		$this->addRule(array ('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 		if ($form_type == self :: TYPE_EDIT) {
-            $parent_cat = Category :: load($link->get_category_id());
+			$parent_cat = Category :: load($link->get_category_id());
 
-            if ($parent_cat[0]->get_parent_id() == 0) {
-                $values['weight'] = $link->get_weight();
-            } else {
-                $cat = Category :: load($parent_cat[0]->get_parent_id());
-                //$global_weight = $cat[0]->get_weight();
-                //$values['weight'] = $link->get_weight()/$parent_cat[0]->get_weight()*$global_weight;
-                //var_dump($global_weight, $link->get_weight(), $parent_cat[0]->get_weight());
-                //$weight = $parent_cat[0]->get_weight()* $link->get_weight() / $global_weight;
-                //$values['weight'] = $weight;
-                $values['weight'] = $link->get_weight() ;
-            }
-            $defaults['weight_mask'] = $values['weight'] ;
-            $defaults['select_gradebook'] = $link->get_category_id();
+			if ($parent_cat[0]->get_parent_id() == 0) {
+				$values['weight'] = $link->get_weight();
+			} else {
+				$cat = Category :: load($parent_cat[0]->get_parent_id());
+				//$global_weight = $cat[0]->get_weight();
+				//$values['weight'] = $link->get_weight()/$parent_cat[0]->get_weight()*$global_weight;
+				//var_dump($global_weight, $link->get_weight(), $parent_cat[0]->get_weight());
+				//$weight = $parent_cat[0]->get_weight()* $link->get_weight() / $global_weight;
+				//$values['weight'] = $weight;
+				$values['weight'] = $link->get_weight() ;
+			}
+			$defaults['weight_mask'] = $values['weight'] ;
+			$defaults['select_gradebook'] = $link->get_category_id();
 
 		}
 		// ELEMENT: max
@@ -187,14 +181,14 @@ class LinkAddEditForm extends FormValidator
 			$this->addElement('style_submit_button', 'submit', get_lang('LinkMod'),'class="save"');
 		}
 
-        if ($form_type == self :: TYPE_ADD) {
-            $setting = api_get_setting('tool_visible_by_default_at_creation');
-            $visibility_default = 1;
-            if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
-                $visibility_default = 0;
-            }
-            $defaults['visible']  = $visibility_default;
-        }
+		if ($form_type == self :: TYPE_ADD) {
+			$setting = api_get_setting('tool_visible_by_default_at_creation');
+			$visibility_default = 1;
+			if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
+				$visibility_default = 0;
+			}
+			$defaults['visible']  = $visibility_default;
+		}
 
 		// set default values
 		$this->setDefaults($defaults);

@@ -7,8 +7,6 @@
  * @package chamilo.admin
  */
 
-/*	INIT SECTION	*/
-
 // Language files that need to be included.
 $language_file = array('admin', 'courses');
 $cidReset = true;
@@ -25,36 +23,56 @@ $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 /**
  * Get the number of courses which will be displayed
  */
-function get_number_of_courses() {
+function get_number_of_courses()
+{
     $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
     $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table";
 
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) &&
+        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
+    ) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
     }
 
     if (isset ($_GET['keyword'])) {
-        $keyword = Database::escape_string($_GET['keyword']);
-        $sql .= " WHERE (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";
-    } elseif (isset ($_GET['keyword_code'])) {
-        $keyword_code = Database::escape_string($_GET['keyword_code']);
-        $keyword_title = Database::escape_string($_GET['keyword_title']);
-        $keyword_category = Database::escape_string($_GET['keyword_category']);
-        $keyword_language = Database::escape_string($_GET['keyword_language']);
-        $keyword_visibility = Database::escape_string($_GET['keyword_visibility']);
+        $keyword = Database::escape_string("%".$_GET['keyword']."%");
+        $sql .= " WHERE (
+                        title LIKE '".$keyword."' OR
+                        code LIKE '".$keyword."' OR
+                        visual_code LIKE '".$keyword."'
+                )
+        ";
+    } elseif (isset($_GET['keyword_code'])) {
+        $keyword_code = Database::escape_string("%".$_GET['keyword_code']."%");
+        $keyword_title = Database::escape_string("%".$_GET['keyword_title']."%");
+        $keyword_category = Database::escape_string("%".$_GET['keyword_category']."%");
+        $keyword_language = Database::escape_string("%".$_GET['keyword_language']."%");
+        $keyword_visibility = Database::escape_string("%".$_GET['keyword_visibility']."%");
         $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
         $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
-        $sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
+
+        $sql .= " WHERE
+                    (code LIKE '".$keyword_code."' OR visual_code LIKE '".$keyword_code."') AND
+                    title LIKE '".$keyword_title."' AND
+                    category_code LIKE '".$keyword_category."' AND
+                    course_language LIKE '".$keyword_language."' AND
+                    visibility LIKE '".$keyword_visibility."' AND
+                    subscribe LIKE '".$keyword_subscribe."' AND
+                    unsubscribe LIKE '".$keyword_unsubscribe."'
+        ";
     }
 
-     // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
+    // adding the filter to see the user's only of the current access_url
+    if ((api_is_platform_admin() || api_is_session_admin()) &&
+        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
+    ) {
         $sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
 
     $res = Database::query($sql);
     $obj = Database::fetch_object($res);
+
     return $obj->total_number_of_items;
 }
 
@@ -64,9 +82,11 @@ function get_number_of_courses() {
  * @param int $number_of_items
  * @param int $column
  * @param string $direction
+ *
  * @return array
  */
-function get_course_data($from, $number_of_items, $column, $direction) {
+function get_course_data($from, $number_of_items, $column, $direction)
+{
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $sql = "SELECT  code AS col0,
@@ -82,35 +102,52 @@ function get_course_data($from, $number_of_items, $column, $direction) {
                     visual_code
     		FROM $course_table";
 
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) &&
+        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
+    ) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
     }
 
     if (isset ($_GET['keyword'])) {
-        $keyword = Database::escape_string(trim($_GET['keyword']));
-        $sql .= " WHERE (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%' ) ";
-    } elseif (isset ($_GET['keyword_code'])) {
-        $keyword_code           = Database::escape_string($_GET['keyword_code']);
-        $keyword_title          = Database::escape_string($_GET['keyword_title']);
-        $keyword_category       = Database::escape_string($_GET['keyword_category']);
-        $keyword_language       = Database::escape_string($_GET['keyword_language']);
-        $keyword_visibility     = Database::escape_string($_GET['keyword_visibility']);
-        $keyword_subscribe      = Database::escape_string($_GET['keyword_subscribe']);
-        $keyword_unsubscribe    = Database::escape_string($_GET['keyword_unsubscribe']);
-        $sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
+        $keyword = Database::escape_string("%".trim($_GET['keyword'])."%");
+        $sql .= " WHERE (
+            title LIKE '".$keyword."' OR
+            code LIKE '".$keyword."' OR
+            visual_code LIKE '".$keyword."'
+        )
+        ";
+    } elseif (isset($_GET['keyword_code'])) {
+        $keyword_code = Database::escape_string("%".$_GET['keyword_code']."%");
+        $keyword_title = Database::escape_string("%".$_GET['keyword_title']."%");
+        $keyword_category = Database::escape_string("%".$_GET['keyword_category']."%");
+        $keyword_language = Database::escape_string("%".$_GET['keyword_language']."%");
+        $keyword_visibility = Database::escape_string("%".$_GET['keyword_visibility']."%");
+        $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
+        $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
+
+        $sql .= " WHERE
+                (code LIKE '".$keyword_code."' OR visual_code LIKE '".$keyword_code."') AND
+                title LIKE '".$keyword_title."' AND
+                category_code LIKE '".$keyword_category."' AND
+                course_language LIKE '".$keyword_language."' AND
+                visibility LIKE '".$keyword_visibility."' AND
+                subscribe LIKE '".$keyword_subscribe."' AND
+                unsubscribe LIKE '".$keyword_unsubscribe."'";
     }
 
     // Adding the filter to see the user's only of the current access_url.
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) &&
+        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
+    ) {
         $sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
 
     $sql .= " ORDER BY col$column $direction ";
-    $sql .= " LIMIT $from,$number_of_items";
+    $sql .= " LIMIT $from, $number_of_items";
 
     $res = Database::query($sql);
-    $courses = array ();
+    $courses = array();
     while ($course = Database::fetch_array($res)) {
         // Place colour icons in front of courses.
         $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
@@ -120,6 +157,7 @@ function get_course_data($from, $number_of_items, $column, $direction) {
         $course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7]);
         $courses[] = $course_rem;
     }
+
     return $courses;
 }
 
@@ -178,8 +216,8 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
  */
 function modify_filter($code)
 {
-	$icourse = api_get_course_info($code);
-        return
+    $icourse = api_get_course_info($code);
+    return
         '<a href="course_information.php?code='.$code.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;'.
         //'<a href="../course_home/course_home.php?cidReq='.$code.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'. // This is not the preferable way to go to the homepage.
         '<a href="'.api_get_path(WEB_COURSE_PATH).$icourse['path'].'/index.php">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.

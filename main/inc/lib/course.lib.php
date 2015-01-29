@@ -3936,6 +3936,8 @@ class CourseManager
     {
         $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+        $original_course_id_name = Database::escape_string($original_course_id_name);
+        $original_course_id_name = Database::escape_string($original_course_id_name);
         $sql = "SELECT course_code FROM $table_field cf
                 INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
                 WHERE

@@ -2507,6 +2507,7 @@ class SurveyUtil
         $error = false;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if ($counter == 1 && $row['type'] == 'pagebreak') {
+
                 Display::display_error_message(get_lang('PagebreakNotFirst'), false);
                 $error = true;
             }
@@ -2916,17 +2917,27 @@ class SurveyUtil
         echo '</div>';
 
         if ($survey_data['number_of_questions'] > 0) {
-            echo '<div id="question_report_questionnumbers">'.get_lang('Question').' ';
-            for ($i = 1; $i <= $survey_data['number_of_questions']; $i++) {
-                if ($offset != $i - 1) {
-                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;'.api_get_cidreq().'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.($i-1).'">'.$i.'</a>';
-                } else {
-                    echo $i;
-                }
-                if ($i < $survey_data['number_of_questions']) {
-                    echo ' | ';
-                }
+            echo '<div id="question_report_questionnumbers" class="pagination">';
+            /* echo '<ul><li class="disabled"><a href="#">'.get_lang('Question').'</a></li>'; */
+
+            if ($currentQuestion != 0 ) {
+                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;'.api_get_cidreq().'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset-1).'">'.get_lang('PreviousQuestion').'</a></li>';
             }
+
+                for ($i = 1; $i <= $survey_data['number_of_questions']; $i++) {
+                    if ($offset != $i - 1) {
+                        echo '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'survey/reporting.php?action=' . Security::remove_XSS($_GET['action']) . '&amp;' . api_get_cidreq() . '&amp;survey_id=' . Security::remove_XSS($_GET['survey_id']) . '&amp;question=' . ($i - 1) . '">' . $i . '</a></li>';
+                    } else {
+                        echo '<li class="disabled"s><a href="#">' . $i . '</a></li>';
+                    }
+                    /*if ($i < $survey_data['number_of_questions']) {
+                        echo ' | ';
+                    }*/
+                }
+            if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
+                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;'.api_get_cidreq().'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').'</li></a>';
+            }
+            echo '</ul>';
             echo '</div>';
 
             // Getting the question information
@@ -2941,7 +2952,7 @@ class SurveyUtil
             $question = Database::fetch_array($result);
 
             // Navigate through the questions (next and previous)
-            if ($currentQuestion != 0 ) {
+            /*if ($currentQuestion != 0 ) {
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;'.api_get_cidreq().'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset-1).'">'.
                     Display::return_icon('action_prev.png', get_lang('PreviousQuestion'), array('align' => 'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
             } else {
@@ -2952,7 +2963,7 @@ class SurveyUtil
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;'.api_get_cidreq().'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle')).'</a>';
             } else {
                 echo get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle'));
-            }
+            }*/
         }
 
         echo isset($question['survey_question']) ? $question['survey_question'] : null;
@@ -5036,7 +5047,11 @@ class SurveyUtil
                 break;
             }
         }
-        echo '<table class="data_table cosa">';
+        echo '<div class="survey-block">';
+        echo '<div class="title-survey-block">';
+        echo  Display::return_icon('survey.png', get_lang('CreateNewSurvey'),array('style'=>'inline-block'),ICON_SIZE_SMALL);
+        echo '<h3>'.get_lang('SurveyList').'</h3></div>';
+        echo '<table id="list-survey" class="table ">';
         echo '<tr>';
         echo '	<th>'.get_lang('SurveyName').'</th>';
         echo '	<th>'.get_lang('Anonymous').'</th>';
@@ -5066,13 +5081,15 @@ class SurveyUtil
             echo '<tr>';
             if ($row['answered'] == 0) {
                 echo '<td>';
-                echo Display::return_icon('survey.gif', get_lang('CreateNewSurvey'),'',ICON_SIZE_MEDIUM).'</a> ';
+                echo Display::return_icon('statistics.png', get_lang('CreateNewSurvey'),array('style'=>'inline-block'),ICON_SIZE_TINY);
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode'].'&amp;invitationcode='.$row['invitation_code'].'&amp;cidReq='.$_course['sysCode'].'">'.$row['title'].'</a></td>';
             } else {
                 //echo '<td>'.$row['title'].'</td>';
-                echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;cidReq='.$_course['sysCode'].'&amp;id_session='.$row['session_id'].'&amp;gidReq='.'0'.'&amp;origin='.''.'&amp;survey_id='.$row['survey_id'].'">'.$row['title'].'</a></td>';
+                echo '<td>';
+                echo Display::return_icon('statistics_na.png', get_lang('CreateNewSurvey'),array('style'=>'inline-block'),ICON_SIZE_TINY);
+                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;cidReq='.$_course['sysCode'].'&amp;id_session='.$row['session_id'].'&amp;gidReq='.'0'.'&amp;origin='.''.'&amp;survey_id='.$row['survey_id'].'">'.$row['title'].'</a></td>';
             }
-            echo '<td>';
+            echo '<td class="center">';
             echo ($row['anonymous'] == 1) ? get_lang('Yes') : get_lang('No');
             echo '</td>';
             echo '</tr>';
@@ -5088,6 +5105,7 @@ class SurveyUtil
             }
         }
         echo '</table>';
+        echo '</div>';
     }
 
     /**

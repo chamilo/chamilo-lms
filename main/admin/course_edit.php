@@ -233,7 +233,7 @@ $specialCourseField = new CourseField();
 $specialCourseFieldInfo = $specialCourseField->get_handler_field_info_by_field_variable('special_course');
 
 if (!empty($specialCourseFieldInfo)) {
-    $specialCourseValue = new CourseFieldValue();
+    $specialCourseValue = new ExtraFieldValue('course');
     $specialCourseValueInfo = $specialCourseValue->get_values_by_handler_and_field_variable($course_code, 'special_course');
 
     $specialCourseAttributes = array();

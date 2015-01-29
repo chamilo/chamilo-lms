@@ -217,7 +217,7 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 </tr>
 
 <?php
-$sessionField = new SessionField();
+$sessionField = new ExtraField('session');
 $sessionFields = $sessionField->get_all();
 
 foreach ($sessionFields as $field) {

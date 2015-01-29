@@ -132,7 +132,7 @@ class CourseManager
 
                     $params['course_code'] = $course_info['code'];
 
-                    $courseFieldValue = new CourseFieldValue();
+                    $courseFieldValue = new ExtraFieldValue('course');
                     $courseFieldValue->save_field_values($params);
 
                     return $course_info;

@@ -1,15 +1,25 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
+/**
+ * Manage the course extra fields
+ */
 class CourseField extends ExtraField {
 
+    /**
+     * Special Course extra field
+     */
     const SPECIAL_COURSE_FIELD = 'special_course';
 
+    /**
+     * Class constructor
+     */
     public function __construct() {
         parent::__construct('course');
     }
 
+    /**
+     * Show the course extra fields
+     */
     function display() {
         // action links
         echo '<div class="actions">';
@@ -20,6 +30,12 @@ class CourseField extends ExtraField {
         echo Display::grid_html('course_fields');
     }
 
+    /**
+     * Generate a form
+     * @param string $url the The form action param
+     * @param string $action The action. Add or edit
+     * @return FormValidator The form
+     */
     public function return_form($url, $action) {
         $form = new FormValidator('course_field', 'post', $url);
         $id = isset($_GET['id']) ? intval($_GET['id']) : null;
@@ -76,7 +92,7 @@ class CourseField extends ExtraField {
         $form->addElement('text', 'field_order', get_lang('FieldOrder'), array('class' => 'span1'));
 
         if ($action == 'edit') {            
-            $option = new CourseFieldOption('course');
+            $option = new ExtraFieldOption('course');
             if ($defaults['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                 $form->freeze('field_options');
             }
@@ -107,11 +123,9 @@ class CourseField extends ExtraField {
 
     /**
      * Add elements to a form
-     *
-     * @param FormValidator $form
-     * @param int $courseCode
-     *
-     * @return array|bool
+     * @param FormValidator $form the form
+     * @param string $courseCode The course code
+     * @return array The extra data. Otherwise return false
      */
     public function addElements($form, $courseCode = null)
     {

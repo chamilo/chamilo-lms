@@ -225,7 +225,7 @@ foreach ($sessionFields as $field) {
         continue;
     }
 
-    $sesionFieldValue = new SessionFieldValue();
+    $sesionFieldValue = new ExtraFieldValue('session');
     $sesionValueData = $sesionFieldValue->get_values_by_handler_and_field_id($sessionId, $field['id'], true);
     ?>
         <tr>

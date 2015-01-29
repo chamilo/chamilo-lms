@@ -50,10 +50,10 @@ sonata_user:
             validation_groups:
                 - ProfileCustom
 
-        register:
-            form:
-                type:                 sonata_user_registration
-                handler:              sonata.user.registration.form.handler.default
-                name:                 sonata_user_registration_form
-                validation_groups:
-                  - ProfileCustom
+#        register:
+#            form:
+#                type:                 sonata_user_registration
+#                handler:              sonata.user.registration.form.handler.default
+#                name:                 sonata_user_registration_form
+#                validation_groups:
+#                  - ProfileCustom

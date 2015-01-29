@@ -3833,7 +3833,7 @@ class SessionManager
                     if ($my_session_result === false) {
 
                         // Creating a session.
-                        $sql_session = "INSERT IGNORE INTO $tbl_session SET
+                        $sql = "INSERT IGNORE INTO $tbl_session SET
                                 name = '$session_name',
                                 id_coach = '$coach_id',
                                 date_start = '$date_start',
@@ -3841,7 +3841,7 @@ class SessionManager
                                 visibility = '$visibilityAfterExpirationPerSession',
                                 session_category_id = '$session_category_id' " . $extraParameters . $extraSessionParameters;
 
-                        Database::query($sql_session);
+                        Database::query($sql);
 
                         // We get the last insert id.
                         $my_session_result = SessionManager::get_session_by_name($enreg['SessionName']);
@@ -3903,16 +3903,32 @@ class SessionManager
                             if (!empty($enreg['SessionName'])) {
                                 $params['name'] = $enreg['SessionName'];
                             }
-                            Database::update($tbl_session, $params, array('id = ?' => $sessionId));
                             $session_id = $sessionId;
                         } else {
-                            Database::update($tbl_session, $params, array("name = '?' " => $enreg['SessionName']));
-
                             $row = Database::query("SELECT id FROM $tbl_session WHERE name = '$session_name'");
                             list($session_id) = Database::fetch_array($row);
                         }
 
                         if ($session_id) {
+                            $sessionInfo = api_get_session_info($session_id);
+                            if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
+                                if (empty($sessionInfo['nb_days_access_before_beginning']) ||
+                                    (!empty($sessionInfo['nb_days_access_before_beginning']) &&
+                                        $sessionInfo['nb_days_access_before_beginning'] < $daysCoachAccessBeforeBeginning)
+                                ) {
+                                    $params['nb_days_access_before_beginning'] = intval($daysCoachAccessBeforeBeginning);
+                                }
+
+                                if (empty($sessionInfo['nb_days_access_after_end']) ||
+                                    (!empty($sessionInfo['nb_days_access_after_end']) &&
+                                        $sessionInfo['nb_days_access_after_end'] < $daysCoachAccessAfterBeginning)
+                                ) {
+                                    $params['nb_days_access_after_end'] = intval($daysCoachAccessAfterBeginning);
+                                }
+                            }
+
+                            Database::update($tbl_session, $params, array('id = ?' => $session_id));
+
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
@@ -4196,6 +4212,7 @@ class SessionManager
 
                         // Adding Students, updating relationship "Session - Course - User".
                         $course_users = array_filter($course_users);
+
                         if (!empty($course_users)) {
                             foreach ($course_users as $user) {
                                 $user_id = UserManager::get_user_id_from_username($user);

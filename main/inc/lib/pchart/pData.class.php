@@ -122,11 +122,11 @@
      if (is_array($Value) && count($Value) == 1)
       $Value = $Value[0];
 
-     $ID = 0;          
+     $ID = 0;
      for ($i=0;$i<=count($this->Data);$i++) {
-     	if(isset($this->Data[$i][$Serie])) { $ID = $i+1; } 
+     	if(isset($this->Data[$i][$Serie])) { $ID = $i+1; }
      }
-     
+
      if ( count($Value) == 1 ) {
        $this->Data[$ID][$Serie] = $Value;
        if ( $Description != "" ) $this->Data[$ID]["Name"] = $Description;
@@ -139,10 +139,10 @@
          $ID++;
         }
       }
-      
-      
-      
-      
+
+
+
+
     }
 
 
@@ -164,7 +164,7 @@
     }
 
    function AddAllSeries()
-    {    	
+    {
      unset($this->DataDescription["Values"]);
      if ( isset($this->Data[0]) )
       {
@@ -174,7 +174,7 @@
           $this->DataDescription["Values"][] = $Key;
         }
       }
-      
+
     }
 
 

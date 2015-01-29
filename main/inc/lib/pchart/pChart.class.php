@@ -196,15 +196,15 @@
    /* This function create the background picture */
    function pChart($XSize,$YSize)
     {
-    	    
+
      $this->XSize   = $XSize;
-     $this->YSize   = $YSize;          
+     $this->YSize   = $YSize;
      $this->Picture = imagecreatetruecolor($XSize,$YSize);
-     $C_White = $this->AllocateColor($this->Picture,255,255,255);          
-     imagefilledrectangle($this->Picture,0,0,$XSize,$YSize,$C_White);     
+     $C_White = $this->AllocateColor($this->Picture,255,255,255);
+     imagefilledrectangle($this->Picture,0,0,$XSize,$YSize,$C_White);
      imagecolortransparent($this->Picture,$C_White);
      $this->setFontProperties("tahoma.ttf",8);
-          
+
     }
 
   /* Set if warnings should be reported */
@@ -2002,18 +2002,18 @@
               }
 
              if ( $Shadow && $Alpha == 100 )
-                          	
+
               $X1 = $YZero;
 			  $Y1 = $XPos+1;
 			  $X2 = $YPos;
 			  $Y2 =	$XPos+$SeriesWidth-1;
-             
+
              $this->drawRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,25,25,25,TRUE,$Alpha);
              $this->drawFilledRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
              //$this->drawRectangle($X1,$Y1,$X2,$Y2,$YPos,25,25,25,TRUE,$Alpha);
              //$this->drawFilledRectangle($X1,$Y1,$X2,$Y2,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
-             
-             
+
+
             }
           }
          $XPos = $XPos + $this->DivisionWidth;
@@ -2021,7 +2021,7 @@
        $SerieID++;
       }
     }
-   
+
 
 
    /* This function draw a bar graph */
@@ -2923,13 +2923,13 @@
 
      $X1=$X1-.2;$Y1=$Y1-.2;
      $X2=$X2+.2;$Y2=$Y2+.2;
-     
+
      $this->drawLine($X1,$Y1,$X2,$Y1,$R,$G,$B);
      $this->drawLine($X2,$Y1,$X2,$Y2,$R,$G,$B);
      $this->drawLine($X2,$Y2,$X1,$Y2,$R,$G,$B);
      $this->drawLine($X1,$Y2,$X1,$Y1,$R,$G,$B);
-     
-     
+
+
     }
 
    /* This function create a filled rectangle with antialias */
@@ -3074,10 +3074,10 @@
      $this->drawLine($X2-$Radius,$Y2,$X1+$Radius,$Y2,$R,$G,$B);
      $this->drawLine($X1,$Y2-$Radius,$X1,$Y1+$Radius,$R,$G,$B);
     }
-    
-    
-    
-    
+
+
+
+
 
    /* This function create a circle with antialias */
    function drawCircle($Xc,$Yc,$Height,$R,$G,$B,$Width=0)

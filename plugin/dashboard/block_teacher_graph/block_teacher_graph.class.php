@@ -12,9 +12,9 @@
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
+require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pData.class.php';
+require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pDraw.class.php';
+require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pCache.class.php';
 
 /**
  * This class is used like controller for teacher graph block plugin,
@@ -100,7 +100,7 @@ class BlockTeacherGraph extends Block
  		$a_last_week = get_last_week();
 
 		if (is_array($user_ids) && count($user_ids) > 0) {
-			$data_set = new pData;
+			$dataSet = new pData;
 			foreach ($user_ids as $user_id) {
 				$teacher_info = api_get_user_info($user_id);
 				$username = $teacher_info['username'];
@@ -115,8 +115,7 @@ class BlockTeacherGraph extends Block
 					$min = floor(($time_on_platform_by_day - ($hours * 3600)) / 60);
 					$time_by_days[] = $min;
 				}
-				$data_set->AddPoint($time_by_days,$username);
-				$data_set->AddSerie($username);
+				$dataSet->addPoints($time_by_days, $username);
 			}
 
 			$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
@@ -125,68 +124,76 @@ class BlockTeacherGraph extends Block
 				$days_on_week[] = date('d/m',$weekday);
 			}
 
-			$data_set->AddPoint($days_on_week,"Days");
-			$data_set->SetXAxisName($last_week);
-			$data_set->SetYAxisName(get_lang('Minutes'));
+			$dataSet->addPoints($days_on_week, 'Days');
+			$dataSet->setAbscissaName($last_week);
+			$dataSet->setAxisName(0, get_lang('Minutes'));
+            $dataSet->setAbscissa('Days');
 
-			$data_set->SetAbsciseLabelSerie("Days");
-			$graph_id = $this->user_id.'TeacherConnectionsGraph';
+            // Cache definition
+            $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+            $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+            $chartHash = $myCache->getHash($dataSet);
+            if ($myCache->isInCache($chartHash)) {
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                $myCache->saveFromCache($chartHash, $imgPath);
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+            } else {
 
-			$cache = new pCache();
-			// the graph id
-			$data = $data_set->GetData();
+                /* Create the pChart object */
+                $widthSize = 440;
+                $heightSize = 350;
+                $angle = 50;
 
-			if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-				//if we already created the img
-				$img_file = $cache->GetHash($graph_id, $data_set->GetData());
-			} else {
+                $myPicture = new pImage($widthSize, $heightSize, $dataSet);
 
-				// Initializing the graph
-				$bg_width = 440;
-				$bg_height = 350;
-                $angle = -30;
-				$test = new pChart($bg_width+10,$bg_height+20);
-				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-                $test = $test->fixHeightByRotation($data_set->GetData(), $data_set->GetDataDescription(), $angle);
-				$test->setGraphArea(65,30,$bg_width-70,$bg_height-50);
-				$test->drawFilledRoundedRectangle(7,7,$bg_width,$bg_height,5,240,240,240);
-				$test->drawRoundedRectangle(5,5,$bg_width+2,$bg_height+2,5,230,230,230);
-				$test->drawGraphArea(255,255,255,TRUE);
-                $test->drawScale(
-                    $data_set->GetData(),
-                    $data_set->GetDataDescription(),
-                    SCALE_NORMAL,
-                    150,
-                    150,
-                    150,
-                    TRUE,
-                    $angle,
-                    2,
-                    TRUE
+                /* Turn of Antialiasing */
+                $myPicture->Antialias = false;
+
+                /* Add a border to the picture */
+                $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
+
+                /* Set the default font */
+                $myPicture->setFontProperties(array('FontName' => api_get_path(LIBRARY_PATH) . 'pChart2/fonts/verdana.ttf', 'FontSize' => 10));
+
+                /* Do NOT Write the chart title */
+
+                /* Define the chart area */
+                $myPicture->setGraphArea(40, 40, $widthSize - 20, $heightSize - 80);
+
+                /* Draw the scale */
+                $scaleSettings = array(
+                    'GridR' => 200,
+                    'GridG' => 200,
+                    'GridB' => 200,
+                    'DrawSubTicks' => true,
+                    'CycleBackground' => true,
+                    'Mode' => SCALE_MODE_ADDALL_START0,
+                    'LabelRotation' => $angle,
                 );
-				$test->drawGrid(4,TRUE,230,230,230,50);
 
-				// Drawing lines
-				//$test->drawLineGraph($data_set->GetData(),$data_set->GetDataDescription());
-				$test->drawFilledCubicCurve($data_set->GetData(),$data_set->GetDataDescription(),.1,30);
-				//$test->drawPlotGraph($data_set->GetData(),$data_set->GetDataDescription(),3,2,255,255,255);
+                $myPicture->drawScale($scaleSettings);
 
-				// Drawing Legend
-				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-				$test->drawLegend($bg_width-80,20,$data_set->GetDataDescription(),204,204,255);
+                /* Turn on shadow computing */
+                $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
 
-				$test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),array("Days"));
+                /* Draw the chart */
+                $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+                $settings = array(
+                    'DisplayValues' => true,
+                    'DisplayR' => 0,
+                    'DisplayG' => 0,
+                    'DisplayB' => 0,
+                );
+                $myPicture->drawFilledSplineChart($settings);
+                $myPicture->drawLegend(40, 20, array('Mode' => LEGEND_HORIZONTAL));
 
-				$cache->WriteToCache($graph_id, $data_set->GetData(), $test);
-				ob_start();
-				$test->Stroke();
-				ob_end_clean();
-				$img_file = $cache->GetHash($graph_id, $data_set->GetData());
-
-			}
-			if (!empty($img_file)) {
-				$graph = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
-			}
+                /* Render the picture (choose the best way) */
+                $myCache->writeToCache($chartHash, $myPicture);
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                $myCache->saveFromCache($chartHash, $imgPath);
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+            }
+            $graph = '<img src="' . $imgPath . '" >';
 		} else {
 			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
 		}

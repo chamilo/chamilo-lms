@@ -5411,3 +5411,10 @@ i.size-32.icon-new-work{
   font-size: 16px;
   text-align: center;
 }
+#question_report_questionnumbers.pagination .disabled a{
+  background-color:#F5F5F5;
+  color: #666;
+}
+.title-question{
+  font-size: 22px;
+}

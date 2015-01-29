@@ -2897,6 +2897,7 @@ class SurveyUtil
      * @todo the pagebreak and comment question types should not be shown => removed from $survey_data before
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
+     * @CSS Alex Aragon <alex.aragon@beeznest.com> - update January 2015
      */
     public static function display_question_report($survey_data)
     {
@@ -2965,9 +2966,9 @@ class SurveyUtil
                 echo get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle'));
             }*/
         }
-
-        echo isset($question['survey_question']) ? $question['survey_question'] : null;
-
+        echo '<div class="title-question">';
+            echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
+        echo '</div>';
         if ($question['type'] == 'score') {
             /** @todo This function should return the options as this is needed further in the code */
             $options = SurveyUtil::display_question_report_score($survey_data, $question, $offset);
@@ -3023,7 +3024,7 @@ class SurveyUtil
             $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 
             // displaying the table: headers
-            echo '<table class="data_table">';
+            echo '<table class="table">';
             echo '	<tr>';
             echo '		<th>&nbsp;</th>';
             echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
@@ -3897,6 +3898,7 @@ class SurveyUtil
         $questions = survey_manager::get_questions($_GET['survey_id']);
 
         // Actions bar
+
         echo '<div class="actions">';
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';

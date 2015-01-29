@@ -114,7 +114,7 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($params as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') {
+            if (substr($key, 0, 6) == 'extra_' || substr($key, 0, 7) == '_extra_') {
                 // An extra field.
                 $field_variable = substr($key, 6);
                 $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($field_variable);
@@ -447,7 +447,7 @@ class ExtraFieldValue extends Model
     public function get_values_by_handler_and_field_id($item_id, $field_id, $transform = false)
     {
         $field_id = intval($field_id);
-        $item_id = intval($item_id);
+        $item_id = Database::escape_string($item_id);
 
         $sql = "SELECT s.*, field_type FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)

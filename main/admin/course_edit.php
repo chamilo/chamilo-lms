@@ -317,20 +317,6 @@ if ($form->validate()) {
         $warn = substr($warn, 0, -1);
     }
 
-    // an extra field
-    $extras = array();
-    foreach ($course as $key => $value) {
-        if (substr($key, 0, 6) == 'extra_') {
-            $extras[substr($key, 6)] = $value;
-        }
-
-        if (substr($key, 0, 7) == '_extra_') {
-            if (!array_key_exists(substr($key, 7), $extras)) {
-                $extras[substr($key, 7)] = $value;
-            }
-        }
-    }
-
 	$tutor_id = isset($course['tutor_name']) ? $course['tutor_name'] : null;
 	$tutor_name = isset($platform_teachers[$tutor_id]) ? $platform_teachers[$tutor_id] : null;
 	$teachers = $course['group']['course_teachers'];
@@ -344,6 +330,7 @@ if ($form->validate()) {
 	$disk_quota = $course['disk_quota'];
 	$subscribe = $course['subscribe'];
 	$unsubscribe = $course['unsubscribe'];
+    $course['course_code'] = $course_code;
 
 	if (!stristr($department_url, 'http://')) {
 		$department_url = 'http://'.$department_url;
@@ -364,11 +351,8 @@ if ($form->validate()) {
 	Database::query($sql);
 
 	// update the extra fields
-	if (count($extras) > 0) {
-		foreach ($extras as $key => $value) {
-			CourseManager::update_course_extra_field_value($course_code, $key, $value);
-		}
-	}
+    $courseFieldValue = new ExtraFieldValue('course');
+    $courseFieldValue->save_field_values($course);
 
     $addTeacherToSessionCourses = isset($course['add_teachers_to_sessions_courses']) && !empty($course['add_teachers_to_sessions_courses']) ? 1 : 0;
 

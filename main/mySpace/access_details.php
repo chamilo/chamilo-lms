@@ -21,9 +21,6 @@ $language_file = array ('registration', 'index', 'tracking');
 require_once '../inc/global.inc.php';
 
 // including additional libraries
-require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 require_once 'myspace.lib.php';
 
 api_block_anonymous_users();

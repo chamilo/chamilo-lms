@@ -2782,9 +2782,9 @@ function convert_to_string($sql_result){
  * @return string
  */
 function grapher($sql_result, $start_date, $end_date, $type = "") {
-    require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-    require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-    require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
+    require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pData.class.php';
+    require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pDraw.class.php';
+    require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pCache.class.php';
 
     if (empty($start_date)) { $start_date =""; }
     if (empty($end_date)) { $end_date =""; }
@@ -2811,7 +2811,6 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
             }
             $i++;
         }
-
         switch ($type) {
             case 'day':
                 $main_date = $main_day;
@@ -2831,76 +2830,139 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
             $main_date = $main_date[$labels];
         }
 
-        $data_set = new pData();
-        $data_set->AddPoint($main_date, 'Q');
+        /* Create and populate the pData object */
+        $myData = new pData();
+        $myData->addPoints($main_date, 'Serie1');
         if (count($main_date)!= 1) {
-            $data_set->AddPoint($labels, 'Date');
+            $myData->addPoints($labels, 'Labels');
+            $myData->setSerieDescription('Labels', 'Months');
+            $myData->setAbscissa('Labels');
         }
-        $data_set->AddAllSeries();
-        $data_set->RemoveSerie('Date');
-        $data_set->SetAbsciseLabelSerie('Date');
-        $data_set->SetYAxisName(get_lang('Minutes', ''));
-        $graph_id = api_get_user_id().'AccessDetails'.api_get_course_id().$start_date.$end_date.$type;
-        $data_set->AddAllSeries();
+        $myData->setSerieWeight('Serie1', 1);
+        $myData->setSerieDescription('Serie1', get_lang('MyResults'));
+        $myData->setAxisName(0, get_lang('Minutes'));
+        // @TODO: Define a custom pallete
+        $myData->loadPalette(api_get_path(LIBRARY_PATH) . 'pChart2/palettes/evening.color', true);
 
-        $cache = new pCache();
-        // the graph id
-        $data = $data_set->GetData();
+        // Cache definition
+        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+        $chartHash = $myCache->getHash($myData);
 
-        if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-            //if (0) {
+        if ($myCache->isInCache($chartHash)) {
             //if we already created the img
-            //  echo 'in cache';
-            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $myCache->saveFromCache($chartHash, $imgPath);
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         } else {
-            // if the image does not exist in the archive/ folder
-            // Initialise the graph
-            $test = new pChart(760, 230);
+            /* Define width, height and angle */
+            $mainWidth = 760;
+            $mainHeight = 230;
+            $angle = 50;
 
-            //which schema of color will be used
-            $quant_resources = count($data[0]) - 1;
-            // Adding the color schemma
-            $test->loadColorPalette(api_get_path(LIBRARY_PATH).'pchart/palette/default.txt');
+            /* Create the pChart object */
+            $myPicture = new pImage($mainWidth, $mainHeight, $myData);
 
-            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
-            $test->setGraphArea(70, 30, 680, 200);
-            $test->drawFilledRoundedRectangle(7, 7, 693, 223, 5, 240, 240, 240);
-            $test->drawRoundedRectangle(5, 5, 695, 225, 5, 230, 230, 230);
-            $test->drawGraphArea(255, 255, 255, TRUE);
-            $test->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_START0, 150, 150, 150, TRUE, 0, 0);
-            $test->drawGrid(4, TRUE, 230, 230, 230, 50);
-            $test->setLineStyle(2);
-            // Draw the 0 line
-            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 6);
-            $test->drawTreshold(0, 143, 55, 72, TRUE, TRUE);
+            /* Turn of Antialiasing */
+            $myPicture->Antialias = false;
 
-            if (count($main_date) == 1) {
-                //Draw a graph
-                echo '<strong>'.$labels.'</strong><br/>';
-                $test->drawBarGraph($data_set->GetData(), $data_set->GetDataDescription(), TRUE);
-            } else {
-                //Draw the line graph
-                $test->drawLineGraph($data_set->GetData(), $data_set->GetDataDescription());
-                $test->drawPlotGraph($data_set->GetData(), $data_set->GetDataDescription(), 3, 2, 255, 255, 255);
-            }
+            /* Draw the background */
+            $Settings = array("R" => 255, "G" => 255, "B" => 255);
+            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $Settings);
 
-            // Finish the graph
-            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
-            $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);
-            $test->drawTitle(60, 22, get_lang('AccessDetails'), 50, 50, 50, 585);
+            /* Add a border to the picture */
+            $myPicture->drawRectangle(
+                0,
+                0,
+                $mainWidth - 1,
+                $mainHeight - 1,
+                array("R" => 0, "G" => 0, "B" => 0)
+            );
 
-            //------------------
-            //echo 'not in cache';
-            $cache->WriteToCache($graph_id, $data_set->GetData(), $test);
-            ob_start();
-            $test->Stroke();
-            ob_end_clean();
-            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+            /* Set the default font */
+            $myPicture->setFontProperties(
+                array(
+                    "FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    "FontSize" => 10)
+            );
+            /* Write the chart title */
+            $myPicture->drawText(
+                $mainWidth / 2,
+                30,
+                get_lang('ExercisesInTimeProgressChart'),
+                array(
+                    "FontSize" => 12,
+                    "Align" => TEXT_ALIGN_BOTTOMMIDDLE
+                )
+            );
+
+            /* Set the default font */
+            $myPicture->setFontProperties(
+                array(
+                    "FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    "FontSize" => 8
+                )
+            );
+
+            /* Define the chart area */
+            $myPicture->setGraphArea(50, 40, $mainWidth - 40, $mainHeight - 80);
+
+            /* Draw the scale */
+            $scaleSettings = array(
+                'XMargin' => 10,
+                'YMargin' => 10,
+                'Floating' => true,
+                'GridR' => 200,
+                'GridG' => 200,
+                'GridB' => 200,
+                'DrawSubTicks' => true,
+                'CycleBackground' => true,
+                'LabelRotation' => $angle,
+                'Mode' => SCALE_MODE_ADDALL_START0,
+            );
+            $myPicture->drawScale($scaleSettings);
+
+            /* Turn on Antialiasing */
+            $myPicture->Antialias = true;
+
+            /* Enable shadow computing */
+            $myPicture->setShadow(
+                true,
+                array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10)
+            );
+
+            /* Draw the line chart */
+            $myPicture->setFontProperties(
+                array(
+                    "FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    "FontSize" => 10
+                )
+            );
+            $myPicture->drawSplineChart();
+            $myPicture->drawPlotChart(
+                array(
+                    "DisplayValues" => true,
+                    "PlotBorder" => true,
+                    "BorderSize" => 1,
+                    "Surrounding" => -60,
+                    "BorderAlpha" => 80
+                )
+            );
+
+            /* Do NOT Write the chart legend */
+
+            /* Write and save into cache */
+            $myCache->writeToCache($chartHash, $myPicture);
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $myCache->saveFromCache($chartHash, $imgPath);
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         }
-        $foo_img = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
-        return $foo_img;
+        $html = '<img src="' . $imgPath . '">';
+
+        return $html;
     } else {
         $foo_img = api_convert_encoding('<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>','UTF-8');
+
         return $foo_img;
     }
 

@@ -4671,7 +4671,8 @@ class Tracking
                 "GridB" => 200,
                 "DrawSubTicks" => true,
                 "CycleBackground" => true,
-                'LabelRotation' => $angle
+                'LabelRotation' => $angle,
+                'Mode' => SCALE_MODE_ADDALL_START0,
             );
             $myPicture->drawScale($scaleSettings);
 

@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +17,7 @@ use Chamilo\CoreBundle\Entity\Session;
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
  */
-class ResourceLink
+class ResourceLink implements ResourceInterface
 {
     /**
      * @ORM\Id
@@ -86,6 +87,14 @@ class ResourceLink
     public function __construct()
     {
         $this->rights = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
     }
 
     /**
@@ -292,5 +301,13 @@ class ResourceLink
     public function getResourceNode()
     {
         return $this->resourceNode;
+    }
+
+    /**
+     * @return $this
+     */
+    public function getResource()
+    {
+        return $this;
     }
 }

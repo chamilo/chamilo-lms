@@ -242,11 +242,11 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
         $types[self::FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
         $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
-        $types[self::FIELD_TYPE_CHECKBOX]       = get_lang('FieldTypeCheckbox');
-        $types[self::FIELD_TYPE_INTEGER]           = get_lang('FieldTypeInteger');
-        $types[self::FIELD_TYPE_FILE_IMAGE]           = get_lang('FieldTypeFileImage');
-        $types[self::FIELD_TYPE_FLOAT]           = get_lang('FieldTypeFloat');
-        $types[self::FIELD_TYPE_FILE]           = get_lang('FieldTypeFile');
+        $types[self::FIELD_TYPE_CHECKBOX] = get_lang('FieldTypeCheckbox');
+        $types[self::FIELD_TYPE_INTEGER] = get_lang('FieldTypeInteger');
+        $types[self::FIELD_TYPE_FILE_IMAGE] = get_lang('FieldTypeFileImage');
+        $types[self::FIELD_TYPE_FLOAT] = get_lang('FieldTypeFloat');
+        $types[self::FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
 
         switch ($handler) {
             case 'course':

@@ -3027,3 +3027,26 @@ CREATE TABLE usergroup_rel_question (
 );
 
 -- 1.10.x-specific, non-course-related, database changes
+-- Hook tables
+CREATE TABLE IF NOT EXISTS hook_observer(
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
+    class_name varchar(255) UNIQUE,
+    path varchar(255) NOT NULL,
+    plugin_name varchar(255) NULL,
+    PRIMARY KEY PK_hook_management_hook_observer(id)
+);
+CREATE TABLE IF NOT EXISTS hook_event(
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
+    class_name varchar(255) UNIQUE,
+    description varchar(255),
+    PRIMARY KEY PK_hook_management_hook_event(id)
+);
+CREATE TABLE IF NOT EXISTS hook_call(
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
+    hook_event_id int UNSIGNED NOT NULL,
+    hook_observer_id int UNSIGNED NOT NULL,
+    type tinyint NOT NULL,
+    hook_order int UNSIGNED NOT NULL,
+    enabled tinyint NOT NULL,
+    PRIMARY KEY PK_hook_management_hook_call(id)
+);

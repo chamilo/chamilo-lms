@@ -174,12 +174,15 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Return true if HookManagement plugin is active. Else, false.
+     * Return true if HookManagement is active. Else, false.
      * This is needed to check if hook event can be instantiated
      * @return boolean
      */
     public static function isHookPluginActive()
     {
+        // Hook Management was a plugin, now is in library
+        // Then, always return true
+        /*
         $isActive = false;
         $appPlugin = new AppPlugin();
         $pluginList = $appPlugin->getInstalledPluginListName();
@@ -188,6 +191,9 @@ abstract class HookEvent implements HookEventInterface
         }
 
         return $isActive;
+        */
+
+        return true;
     }
 
     /**

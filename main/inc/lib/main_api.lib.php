@@ -7582,3 +7582,15 @@ function api_site_use_cookie_warning_cookie_exist()
 {
     return isset($_COOKIE['ChamiloUsesCookies']);
 }
+
+/**
+ * Verify whether a datetime is valid
+ * @param string $dateTime The datetime to validate
+ * @param string $format
+ * @return boolean
+ */
+function apiIsValidDate($dateTime, $format = 'Y-m-d h:m:i') {
+    $tempDate = DateTime::createFromFormat($format, $dateTime);
+
+    return $tempDate && $tempDate->format($format) == $dateTime;
+}

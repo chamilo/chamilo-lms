@@ -69,7 +69,7 @@ if (api_is_multiple_url_enabled()) {
 }
 
 $result     = Database::query($sql);
-$Coaches    = Database::store_result($result);
+$coaches    = Database::store_result($result);
 $thisYear   = date('Y');
 
 $daysOption = array();
@@ -97,7 +97,7 @@ $coachesOption = array(
     '' => '----- ' . get_lang('None') . ' -----'
 );
 
-foreach ($Coaches as $coach) {
+foreach ($coaches as $coach) {
     $personName = api_get_person_name($coach['firstname'], $coach['lastname']);
 
     $coachesOption[$coach['user_id']] = "$personName ({$coach['username']})";
@@ -182,12 +182,7 @@ if ($year_start!="0000") {
     $form->addElement('html','<div id="start_date" style="display:none">');
 }
 
-$startDateGroup = array ();
-$startDateGroup[] = $form->createElement('select', 'day_start', null, $daysOption);
-$startDateGroup[] = $form->createElement('select', 'month_start', null, $monthsOption);
-$startDateGroup[] = $form->createElement('select', 'year_start', null, $yearsOption);
-
-$form->addGroup($startDateGroup, 'start_date_group', null, ' / ', true);
+$form->addElement('date_picker', 'date_start');
 
 $form->addElement('html','</div>');
 
@@ -208,12 +203,7 @@ if ($year_end != "0000") {
     $form->addElement('html','<div id="end_date" style="display:none">');
 }
 
-$endDateGroup = array();
-$endDateGroup[] = $form->createElement('select', 'day_end', null, $daysOption);
-$endDateGroup[] = $form->createElement('select', 'month_end', null, $monthsOption);
-$endDateGroup[] = $form->createElement('select', 'year_end', null, $yearsOption);
-
-$form->addGroup($endDateGroup, 'end_date_group', null, ' / ', true);
+$form->addElement('date_picker', 'date_end');
 
 $visibilityGroup = array();
 $visibilityGroup[] = $form->createElement('advanced_settings', get_lang('SessionVisibility'));
@@ -270,12 +260,8 @@ $form->addElement('button', 'submit', get_lang('ModifyThisSession'), array(
 $formDefaults = array(
     'id_coach' => $infos['id_coach'],
     'session_category' => $infos['session_category_id'],
-    'start_date_group[day_start]' => $day_start,
-    'start_date_group[month_start]' => $month_start,
-    'start_date_group[year_start]' => $year_start,
-    'end_date_group[day_end]' => $day_end,
-    'end_date_group[month_end]' => $month_end,
-    'end_date_group[year_end]' => $year_end,
+    'date_start' => $infos['date_start'],
+    'date_end' => $infos['date_end'],
     'session_visibility' => $infos['visibility'],
     'description' => array_key_exists('show_description', $infos) ? $infos['description'] : ''
 );
@@ -304,12 +290,8 @@ if ($form->validate()) {
     $params = $form->getSubmitValues();
 
     $name = $params['name'];
-    $year_start = $params['start_date_group']['year_start'];
-    $month_start = $params['start_date_group']['month_start'];
-    $day_start = $params['start_date_group']['day_start'];
-    $year_end = $params['end_date_group']['year_end'];
-    $month_end = $params['end_date_group']['month_end'];
-    $day_end = $params['end_date_group']['day_end'];
+    $startDate = $params['date_start'];
+    $endDate = $params['date_end'];
     $nb_days_acess_before = $params['nb_days_access_before'];
     $nb_days_acess_after = $params['nb_days_acc ess_after'];
     $id_coach = $params['id_coach'];
@@ -339,12 +321,8 @@ if ($form->validate()) {
     $return = SessionManager::edit_session(
         $id,
         $name,
-        $year_start,
-        $month_start,
-        $day_start,
-        $year_end,
-        $month_end,
-        $day_end,
+        $startDate,
+        $endDate,
         $nb_days_acess_before,
         $nb_days_acess_after,
         $nolimit,
@@ -382,22 +360,13 @@ $form->display();
 ?>
 
 function setDisable(select) {
+	document.forms['edit_session'].elements['session_visibility'].disabled = (select.checked) ? true : false;
+	document.forms['edit_session'].elements['session_visibility'].selectedIndex = 0;
 
-	document.form.day_start.disabled = (select.checked) ? true : false;
-	document.form.month_start.disabled = (select.checked) ? true : false;
-	document.form.year_start.disabled = (select.checked) ? true : false;
-
-	document.form.day_end.disabled = (select.checked) ? true : false;
-	document.form.month_end.disabled = (select.checked) ? true : false;
-	document.form.year_end.disabled = (select.checked) ? true : false;
-
-	document.form.session_visibility.disabled = (select.checked) ? true : false;
-	document.form.session_visibility.selectedIndex = 0;
-
-    document.form.start_limit.disabled = (select.checked) ? true : false;
-    document.form.start_limit.checked = false;
-    document.form.end_limit.disabled = (select.checked) ? true : false;
-    document.form.end_limit.checked = false;
+    document.forms['edit_session'].elements['start_limit'].disabled = (select.checked) ? true : false;
+    document.forms['edit_session'].elements['start_limit'].checked = false;
+    document.forms['edit_session'].elements['end_limit'].disabled = (select.checked) ? true : false;
+    document.forms['edit_session'].elements['end_limit'].checked = false;
 
     var end_div = document.getElementById('end_date');
     end_div.style.display = 'none';

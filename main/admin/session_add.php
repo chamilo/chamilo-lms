@@ -108,21 +108,13 @@ $(document).on('ready', function () {
 });
 
 function setDisable(select){
-	document.form.day_start.disabled = (select.checked) ? true : false;
-	document.form.month_start.disabled = (select.checked) ? true : false;
-	document.form.year_start.disabled = (select.checked) ? true : false;
+	document.forms['edit_session'].elements['session_visibility'].disabled = (select.checked) ? true : false;
+	document.forms['edit_session'].elements['session_visibility'].selectedIndex = 0;
 
-	document.form.day_end.disabled = (select.checked) ? true : false;
-	document.form.month_end.disabled = (select.checked) ? true : false;
-	document.form.year_end.disabled = (select.checked) ? true : false;
-
-	document.form.session_visibility.disabled = (select.checked) ? true : false;
-	document.form.session_visibility.selectedIndex = 0;
-
-    document.form.start_limit.disabled = (select.checked) ? true : false;
-    document.form.start_limit.checked = false;
-    document.form.end_limit.disabled = (select.checked) ? true : false;
-    document.form.end_limit.checked = false;
+    document.forms['edit_session'].elements['start_limit'].disabled = (select.checked) ? true : false;
+    document.forms['edit_session'].elements['start_limit'].checked = false;
+    document.forms['edit_session'].elements['end_limit'].disabled = (select.checked) ? true : false;
+    document.forms['edit_session'].elements['end_limit'].checked = false;
 
     var end_div = document.getElementById('end_date');
     end_div.style.display = 'none';
@@ -313,12 +305,7 @@ $form->addElement('checkbox', 'start_limit', '', get_lang('DateStartSession'), a
 
 $form->addElement('html','<div id="start_date" style="display:none">');
 
-$startDateGroup = array ();
-$startDateGroup[] = $form->createElement('select', 'day_start', null, $dayList);
-$startDateGroup[] = $form->createElement('select', 'month_start', null, $monthList);
-$startDateGroup[] = $form->createElement('select', 'year_start', null, $yearList);
-
-$form->addGroup($startDateGroup, 'start_date_group', null, ' / ', true);
+$form->addElement('date_picker', 'date_start');
 
 $form->addElement('html','</div>');
 
@@ -329,12 +316,7 @@ $form->addElement('checkbox', 'end_limit', '', get_lang('DateEndSession'), array
 
 $form->addElement('html','<div id="end_date" style="display:none">');
 
-$endDateGroup = array();
-$endDateGroup[] = $form->createElement('select', 'day_end', null, $dayList);
-$endDateGroup[] = $form->createElement('select', 'month_end', null, $monthList);
-$endDateGroup[] = $form->createElement('select', 'year_end', null, $yearList);
-
-$form->addGroup($endDateGroup, 'end_date_group', null, ' / ', true);
+$form->addElement('date_picker', 'date_end');
 
 $visibilityGroup = array();
 $visibilityGroup[] = $form->createElement('advanced_settings', get_lang('SessionVisibility'));
@@ -379,13 +361,9 @@ $formDefaults = array(
 );
 
 if (!$formSent) {
-    $formDefaults['start_date_group[day_start]'] = $thisDay;
-    $formDefaults['start_date_group[month_start]'] = $thisMonth;
-    $formDefaults['start_date_group[year_start]'] = $thisYear;
+    $formDefaults['date_start'] = "$thisYear-$thisMonth-$thisDay";
 
-    $formDefaults['end_date_group[day_end]'] = $thisDay;
-    $formDefaults['end_date_group[month_end]'] = $thisMonth;
-    $formDefaults['end_date_group[year_end]'] = $thisYear + 1;
+    $formDefaults['date_end'] = date('Y-m-d', strtotime("$thisYear-$thisMonth-$thisDay +1 year"));
 } else {
     $formDefaults['name'] = api_htmlentities($name,ENT_QUOTES,$charset);
 }
@@ -396,12 +374,8 @@ if ($form->validate()) {
     $params = $form->getSubmitValues();
  
     $name = $params['name'];
-    $year_start = $params['start_date_group']['year_start'];
-    $month_start = $params['start_date_group']['month_start'];
-    $day_start = $params['start_date_group']['day_start'];
-    $year_end = $params['end_date_group']['year_end'];
-    $month_end = $params['end_date_group']['month_end'];
-    $day_end = $params['end_date_group']['day_end'];
+    $startDate = $params['date_start'];
+    $endDate = $params['date_end'];
     $nb_days_acess_before = $params['nb_days_acess_before'];
     $nb_days_acess_after = $params['nb_days_acess_after'];
     $coach_username = $params['coach_username'];
@@ -426,7 +400,7 @@ if ($form->validate()) {
     }
 
     $return = SessionManager::create_session(
-        $name, $year_start, $month_start, $day_start, $year_end, $month_end, $day_end, $nb_days_acess_before,
+        $name, $startDate, $endDate, $nb_days_acess_before,
         $nb_days_acess_after, $nolimit, $coach_username, $id_session_category, $id_visibility, $start_limit,
         $end_limit, false, $duration, $extraFields
     );

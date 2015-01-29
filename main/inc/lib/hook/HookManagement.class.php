@@ -391,7 +391,7 @@ class HookManagement implements HookManagementInterface
                 'class_name' => $eventName,
                 'description' => get_lang('HookDescription' . $eventName),
             );
-            $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_EVENT], $attributes, true);
+            $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_EVENT], $attributes);
             $this->hookEvents[$eventName] = $id;
         }
 
@@ -403,7 +403,7 @@ class HookManagement implements HookManagementInterface
                 'path' => $object->getPath(),
                 'plugin_name' => $object->getPluginName(),
             );
-            $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_OBSERVER], $attributes, true);
+            $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_OBSERVER], $attributes);
             $this->hookObservers[$observerClassName] = $id;
         }
 

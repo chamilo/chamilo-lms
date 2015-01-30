@@ -44,7 +44,7 @@ class GlossaryManager
         $glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
         $sql = "SELECT description FROM $glossary_table
-                WHERE c_id = $course_id  AND glossary_id =".Database::escape_string($glossary_id);
+                WHERE c_id = $course_id  AND glossary_id =".intval($glossary_id);
         $rs=Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs);
@@ -63,7 +63,7 @@ class GlossaryManager
     public static function get_glossary_term_by_glossary_name ($glossary_name)
     {
         $glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
-        $session_id = intval($session_id);
+        $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $sql_filter = api_get_session_condition($session_id);
         $sql = 'SELECT description FROM '.$glossary_table.'
@@ -161,7 +161,7 @@ class GlossaryManager
                         description	= '".Database::escape_string($values['glossary_comment'])."'
 					WHERE
 					    c_id = $course_id AND
-					    glossary_id = ".Database::escape_string($values['glossary_id']);
+					    glossary_id = ".intval($values['glossary_id']);
             $result = Database::query($sql);
             if ($result === false) {
                 return false;
@@ -170,7 +170,7 @@ class GlossaryManager
             api_item_property_update(
                 api_get_course_info(),
                 TOOL_GLOSSARY,
-                Database::escape_string($values['glossary_id']),
+                intval($values['glossary_id']),
                 'GlossaryUpdated',
                 api_get_user_id()
             );
@@ -287,11 +287,11 @@ class GlossaryManager
 
         if (empty($glossary_id)) { return false; }
 
-        $sql = "DELETE FROM $t_glossary WHERE c_id = $course_id AND glossary_id='".Database::escape_string($glossary_id)."'";
+        $sql = "DELETE FROM $t_glossary WHERE c_id = $course_id AND glossary_id='".intval($glossary_id)."'";
         $result = Database::query($sql);
         if ($result === false or Database::affected_rows() < 1) { return false; }
         //update item_property (delete)
-        api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, Database::escape_string($glossary_id), 'delete', api_get_user_id());
+        api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, intval($glossary_id), 'delete', api_get_user_id());
 
         // reorder the remaining terms
         GlossaryManager::reorder_glossary();
@@ -538,7 +538,7 @@ class GlossaryManager
         $i = 1;
         while ($data = Database::fetch_array($res)) {
             $sql = "UPDATE $t_glossary SET display_order = $i
-                    WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($data['glossary_id'])."'";
+                    WHERE c_id = $course_id  AND glossary_id = '".intval($data['glossary_id'])."'";
             Database::query($sql);
             $i++;
         }

@@ -126,7 +126,7 @@ function listCourses()
     $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
     $sql = "SELECT a.course_id, a.visible, a.price, b.*
         FROM $tableBuyCourse a, $tableCourse b
-        WHERE a.course_id = b.id;";
+        WHERE a.course_id = b.id AND a.session_id = 0;";
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
@@ -170,7 +170,7 @@ function userSessionList()
             // get course of current session
             $sql = "SELECT a.course_id, a.session_id, a.visible, a.price, b.*
             FROM $tableBuyCourse a, $tableCourse b
-            WHERE a.code = b.code AND a.code = '" . $rowSessionCourse['course_code'] . "' AND a.visible = 1;";
+            WHERE a.code = b.code AND a.code = '" . $rowSessionCourse['course_code'] . "';";
             $res = Database::query($sql);
             // loop inside a course of current session
             while ($row = Database::fetch_assoc($res)) {
@@ -369,19 +369,19 @@ function getCourseVisibilityIcon($option)
     $style = 'margin-bottom:-5px;margin-right:5px;';
     switch ($option) {
         case 0:
-            return Display::return_icon('bullet_red.gif', get_lang('CourseVisibilityClosed'), array('style' => $style));
+            return Display::return_icon('bullet_red.gif', get_plugin_lang('CourseVisibilityClosed', 'BuyCoursesPlugin'), array('style' => $style));
             break;
         case 1:
-            return Display::return_icon('bullet_orange.gif', get_lang('Private'), array('style' => $style));
+            return Display::return_icon('bullet_orange.gif', get_plugin_lang('Private', 'BuyCoursesPlugin'), array('style' => $style));
             break;
         case 2:
-            return Display::return_icon('bullet_green.gif', get_lang('OpenToThePlatform'), array('style' => $style));
+            return Display::return_icon('bullet_green.gif', get_plugin_lang('OpenToThePlatform', 'BuyCoursesPlugin'), array('style' => $style));
             break;
         case 3:
-            return Display::return_icon('bullet_blue.gif', get_lang('OpenToTheWorld'), array('style' => $style));
+            return Display::return_icon('bullet_blue.gif', get_plugin_lang('OpenToTheWorld', 'BuyCoursesPlugin'), array('style' => $style));
             break;
         default:
-            return '';
+            return Display::return_icon('bullet_grey.gif', get_plugin_lang('CourseVisibilityHidden', 'BuyCoursesPlugin'), array('style' => $style));
     }
 }
 /**

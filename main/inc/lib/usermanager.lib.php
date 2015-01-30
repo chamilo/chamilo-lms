@@ -653,7 +653,7 @@ class UserManager
                 active='".Database::escape_string($active)."',
                 hr_dept_id=".intval($hr_dept_id);
         if (!is_null($creator_id)) {
-            $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
+            $sql .= ", creator_id='".intval($creator_id)."'";
         }
         $sql .= " WHERE user_id='$user_id'";
         $return = Database::query($sql);
@@ -995,6 +995,7 @@ class UserManager
      * @param array $order_by a list of fields on which sort
      * @return array An array with all users of the platform.
      * @todo optional course code parameter, optional sorting parameters...
+     * @todo security filter order by
      */
     public static function get_user_list($conditions = array(), $order_by = array(), $limit_from = false, $limit_to = false)
     {
@@ -1010,7 +1011,7 @@ class UserManager
             }
         }
         if (count($order_by) > 0) {
-            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
+            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by), null, false);
         }
 
         if (is_numeric($limit_from) && is_numeric($limit_from)) {
@@ -1031,6 +1032,7 @@ class UserManager
      * @param array $order_by a list of fields on which sort
      * @return array An array with all users of the platform.
      * @todo optional course code parameter, optional sorting parameters...
+     * @todo security filter order_by
      */
     public static function get_user_list_like($conditions = array(), $order_by = array(), $simple_like = false, $condition = 'AND')
     {
@@ -1054,7 +1056,7 @@ class UserManager
             }
         }
         if (count($order_by) > 0) {
-            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
+            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by), null, false);
         }
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
@@ -1303,7 +1305,7 @@ class UserManager
 
     /**
      * Update User extra field file type into {user_folder}/{$extra_field}
-     * @param $user_id              The user internal identification number
+     * @param int $user_id          The user internal identification number
      * @param string $extra_field   The $extra_field The extra field name
      * @param null $file            The filename
      * @param null $source_file     The temporal filename
@@ -1318,6 +1320,7 @@ class UserManager
         if (empty($user_id)) {
             return false;
         }
+
         if (empty($source_file)) {
             $source_file = $file;
         }
@@ -1495,9 +1498,10 @@ class UserManager
 
     /**
      * Update an extra field value for a given user
-     * @param    integer    User ID
-     * @param    string    Field variable name
-     * @param    string    Field value
+     * @param    integer   $user_id User ID
+     * @param    string    $fname Field variable name
+     * @param    string    $fvalue Field value
+     *
      * @return    boolean    true if field updated, false otherwise
      */
     public static function update_extra_field_value($user_id, $fname, $fvalue = '')
@@ -1508,24 +1512,26 @@ class UserManager
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         $fname = Database::escape_string($fname);
 
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return false;
-        if ($user_id === false)
+        }
+
+        if ($user_id === false) {
             return false;
+        }
 
         $fvalues = '';
-
-        //echo '<pre>'; print_r($fvalue);
         if (is_array($fvalue)) {
             foreach ($fvalue as $val) {
-                $fvalues .= Database::escape_string($val).';';
+                $fvalues .= $val.';';
             }
             if (!empty($fvalues)) {
                 $fvalues = substr($fvalues, 0, -1);
             }
         } else {
-            $fvalues = Database::escape_string($fvalue);
+            $fvalues = $fvalue;
         }
+
         $sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
         $resuf = Database::query($sqluf);
         $is_extra_file = false;
@@ -1540,9 +1546,9 @@ class UserManager
                     UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
                     return true;
                     break;
-                case self::USER_FIELD_TYPE_SELECT_MULTIPLE :
+                /*case self::USER_FIELD_TYPE_SELECT_MULTIPLE :
                     // check code from UserManager::update_user_picture() to use something similar here
-                    break;
+                    break;*/
                 case self::USER_FIELD_TYPE_RADIO:
                 case self::USER_FIELD_TYPE_SELECT:
                 case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
@@ -1571,7 +1577,12 @@ class UserManager
                         $fvalue['name'] = Security::filter_filename($fvalue['name']);
                         $fvalue['tmp_name'] = Security::filter_filename($fvalue['tmp_name']);
                         // Update and recover the filename
-                        $fvalues = UserManager::update_user_extra_file($user_id, $rowuf['field_variable'], $fvalue['name'], $fvalue['tmp_name']);
+                        $fvalues = UserManager::update_user_extra_file(
+                            $user_id,
+                            $rowuf['field_variable'],
+                            $fvalue['name'],
+                            $fvalue['tmp_name']
+                        );
                     } else {
                         // Set empty string to $fvalues to delete it
                         $fvalues = '';
@@ -1583,7 +1594,9 @@ class UserManager
                     break;
             }
             $tms = time();
-            $sqlufv = "SELECT * FROM $t_ufv WHERE user_id = $user_id AND field_id = ".$rowuf['id']." ORDER BY id";
+            $sqlufv = "SELECT * FROM $t_ufv
+                       WHERE user_id = $user_id AND field_id = ".$rowuf['id']."
+                       ORDER BY id";
             $resufv = Database::query($sqlufv);
             $n = Database::num_rows($resufv);
             if ($n > 1) {
@@ -1596,9 +1609,12 @@ class UserManager
                     }
                     $rowufv = Database::fetch_array($resufv);
                     if ($rowufv['field_value'] != $fvalues) {
-                        $sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
+                        $sqlu = "UPDATE $t_ufv SET
+                                    field_value = '".Database::escape_string($fvalues)."',
+                                    tms = FROM_UNIXTIME($tms)
+                                WHERE id = ".$rowufv['id'];
                         $resu = Database::query($sqlu);
-                        return($resu ? true : false);
+                        return ($resu ? true : false);
                     }
                     return true;
                 }
@@ -1608,33 +1624,43 @@ class UserManager
                 if ($rowufv['field_value'] != $fvalues) {
                     if ($is_extra_file) {
                         // To remove from user folder
-                        self::remove_user_extra_file($user_id, $fname, $rowufv['field_value']);
+                        self::remove_user_extra_file(
+                            $user_id,
+                            $fname,
+                            $rowufv['field_value']
+                        );
                     }
                     // If the new field is empty, delete it
                     if ($fvalues == '') {
-                        $sql_query = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'].";";
+                        $sql_query = "DELETE FROM $t_ufv
+                                      WHERE id = ".$rowufv['id'].";";
                     } else {
                         // Otherwise update it
-                        $sql_query = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
+                        $sql_query = "UPDATE $t_ufv SET
+                                        field_value = '".Database::escape_string($fvalues)."',
+                                        tms = FROM_UNIXTIME($tms)
+                                      WHERE id = ".$rowufv['id'];
                     }
 
                     $resu = Database::query($sql_query);
-                    return($resu ? true : false);
+                    return ($resu ? true : false);
                 }
+
                 return true;
             } else {
-                $sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) ".
-                    "VALUES ($user_id,".$rowuf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
-                $resi = Database::query($sqli);
-                return($resi ? true : false);
+                $sql = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms)
+                        VALUES ( $user_id, ".$rowuf['id'].", '".Database::escape_string($fvalues)."', FROM_UNIXTIME($tms))";
+                $res = Database::query($sql);
+                return $res ? true : false;
             }
         } else {
-            return false; //field not found
+            // Field not found
+            return false;
         }
     }
 
     /**
-     * Get an array of extra fieds with field details (type, default value and options)
+     * Get an array of extra fields with field details (type, default value and options)
      * @param    integer    Offset (from which row)
      * @param    integer    Number of items
      * @param    integer    Column on which sorting is made
@@ -1643,8 +1669,14 @@ class UserManager
      * @param    int        Optional. Whether we get all the fields with field_filter 1 or 0 or everything
      * @return    array    Extra fields details (e.g. $list[2]['type'], $list[4]['options'][2]['title']
      */
-    public static function get_extra_fields($from = 0, $number_of_items = 0, $column = 5, $direction = 'ASC', $all_visibility = true, $field_filter = null)
-    {
+    public static function get_extra_fields(
+        $from = 0,
+        $number_of_items = 0,
+        $column = 5,
+        $direction = 'ASC',
+        $all_visibility = true,
+        $field_filter = null
+    ) {
         $fields = array();
         $t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -1664,7 +1696,7 @@ class UserManager
         }
         $sqlf .= " ORDER BY ".$columns[$column]." $sort_direction ";
         if ($number_of_items != 0) {
-            $sqlf .= " LIMIT ".Database::escape_string($from).','.Database::escape_string($number_of_items);
+            $sqlf .= " LIMIT ".intval($from).','.intval($number_of_items);
         }
 
         $resf = Database::query($sqlf);
@@ -1974,7 +2006,7 @@ class UserManager
                 field_display_text = '".Database::escape_string($fieldtitle)."',
                 field_default_value = '".Database::escape_string($fielddefault)."',
                 tms = FROM_UNIXTIME($time)
-            WHERE id = '".Database::escape_string($fieldid)."'";
+            WHERE id = '".intval($fieldid)."'";
         $result = Database::query($sql);
 
         // we create an array with all the options (will be used later in the script)
@@ -1999,24 +2031,24 @@ class UserManager
         }
 
         // Remove all the field options (and also the choices of the user) that are NOT in the new list of options
-        $sql = "SELECT * FROM $table_field_options WHERE option_value NOT IN ('".implode("','", $list)."') AND field_id = '".Database::escape_string($fieldid)."'";
+        $sql = "SELECT * FROM $table_field_options WHERE option_value NOT IN ('".implode("','", $list)."') AND field_id = '".intval($fieldid)."'";
         $result = Database::query($sql);
         $return['deleted_options'] = 0;
         while ($row = Database::fetch_array($result)) {
             // deleting the option
-            $sql_delete_option = "DELETE FROM $table_field_options WHERE id='".Database::escape_string($row['id'])."'";
+            $sql_delete_option = "DELETE FROM $table_field_options WHERE id='".intval($row['id'])."'";
             Database::query($sql_delete_option);
             $return['deleted_options']++;
 
             // deleting the answer of the user who has chosen this option
             $sql_delete_option_value = "DELETE FROM $table_field_options_values
-            WHERE field_id = '".Database::escape_string($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
+            WHERE field_id = '".intval($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
             Database::query($sql_delete_option_value);
             $return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows();
         }
 
         // we now try to find the field options that are newly added
-        $sql = "SELECT * FROM $table_field_options WHERE field_id = '".Database::escape_string($fieldid)."'";
+        $sql = "SELECT * FROM $table_field_options WHERE field_id = '".intval($fieldid)."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // we remove every option that is already in the database from the $list
@@ -2028,7 +2060,7 @@ class UserManager
 
         // we store the new field options in the database
         foreach ($list as $key => $option) {
-            $sql = "SELECT MAX(option_order) FROM $table_field_options WHERE field_id = '".Database::escape_string($fieldid)."'";
+            $sql = "SELECT MAX(option_order) FROM $table_field_options WHERE field_id = '".intval($fieldid)."'";
             $res = Database::query($sql);
             $max = 1;
             if (Database::num_rows($res) > 0) {
@@ -2037,7 +2069,7 @@ class UserManager
             }
             $time = time();
             $sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms)
-                    VALUES ('".Database::escape_string($fieldid)."','".Database::escape_string($option)."','".Database::escape_string($option)."',$max,FROM_UNIXTIME($time))";
+                    VALUES ('".intval($fieldid)."','".Database::escape_string($option)."','".Database::escape_string($option)."',$max,FROM_UNIXTIME($time))";
             $result = Database::query($sql);
         }
         return true;
@@ -2076,7 +2108,7 @@ class UserManager
         $extra_data = array();
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $user_id = Database::escape_string($user_id);
+        $user_id = intval($user_id);
         $sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
         $filter_cond = '';
 
@@ -2157,7 +2189,7 @@ class UserManager
         $extra_data = array();
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $user_id = Database::escape_string($user_id);
+        $user_id = intval($user_id);
 
         $sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
         $sql .= " WHERE f.field_variable = '$field_variable' ";
@@ -2216,7 +2248,7 @@ class UserManager
         $return = Database::fetch_array($result);
 
         // all the options of the field
-        $sql = "SELECT * FROM $table_field_options WHERE field_id='".Database::escape_string($return['id'])."' ORDER BY option_order ASC";
+        $sql = "SELECT * FROM $table_field_options WHERE field_id='".intval($return['id'])."' ORDER BY option_order ASC";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $return['options'][$row['id']] = $row;
@@ -2254,12 +2286,12 @@ class UserManager
         $table_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 
         // all the information of the field
-        $sql = "SELECT * FROM $table_field WHERE id='".Database::escape_string($field_id)."'";
+        $sql = "SELECT * FROM $table_field WHERE id='".intval($field_id)."'";
         $result = Database::query($sql);
         $return = Database::fetch_array($result);
 
         // all the options of the field
-        $sql = "SELECT * FROM $table_field_options WHERE field_id='".Database::escape_string($field_id)."' ORDER BY option_order ASC";
+        $sql = "SELECT * FROM $table_field_options WHERE field_id='".intval($field_id)."' ORDER BY option_order ASC";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $return['options'][$row['id']] = $row;
@@ -3463,12 +3495,12 @@ class UserManager
         if ($tag_id == 0) {
             //the tag doesn't exist
             $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
-            $result = Database::query($sql);
-            $last_insert_id = Database::get_last_insert_id();
+             Database::query($sql);
+            $last_insert_id = Database::insert_id();
         } else {
             //the tag exists we update it
             $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
-            $result = Database::query($sql);
+             Database::query($sql);
             $last_insert_id = $tag_id;
         }
 
@@ -3479,7 +3511,7 @@ class UserManager
             //if the relationship does not exist we create it
             if (Database::num_rows($result) == 0) {
                 $sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
-                $result = Database::query($sql);
+                Database::query($sql);
             }
         }
     }
@@ -3529,7 +3561,7 @@ class UserManager
     }
 
     /**
-     * Returns a list of all admninistrators
+     * Returns a list of all administrators
      * @author jmontoya
      * @return array
      */
@@ -3540,13 +3572,18 @@ class UserManager
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email FROM $tbl_url_rel_user as url INNER JOIN $table_admin as admin
-                                 ON (admin.user_id=url.user_id) INNER JOIN $table_user u ON (u.user_id=admin.user_id)
-                                 WHERE access_url_id ='".$access_url_id."'";
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email
+                    FROM $tbl_url_rel_user as url
+                    INNER JOIN $table_admin as admin
+                    ON (admin.user_id=url.user_id)
+                    INNER JOIN $table_user u
+                    ON (u.user_id=admin.user_id)
+                    WHERE access_url_id ='".$access_url_id."'";
         } else {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email FROM $table_admin as admin
-                    INNER JOIN $table_user u ON (u.user_id=admin.user_id)";
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email
+                    FROM $table_admin as admin
+                    INNER JOIN $table_user u
+                    ON (u.user_id=admin.user_id)";
         }
         $result = Database::query($sql);
         $return = array();
@@ -3555,26 +3592,31 @@ class UserManager
                 $return[$row['user_id']] = $row;
             }
         }
+
         return $return;
     }
 
     /**
      * Search an user (tags, first name, last name and email )
-     * @param string the tag
-     * @param int field id of the tag
-     * @param int where to start in the query
-     * @param int number of items
-     * @param bool get count or not
+     * @param string $tag
+     * @param int $field_id field id of the tag
+     * @param int $from where to start in the query
+     * @param int $number_of_items
+     * @param bool $getCount get count or not
      * @return array
      */
-    public static function get_all_user_tags($tag, $field_id = 0, $from = 0, $number_of_items = 10, $getCount = false)
-    {
+    public static function get_all_user_tags(
+        $tag,
+        $field_id = 0,
+        $from = 0,
+        $number_of_items = 10,
+        $getCount = false
+    ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
         $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-        $tag = Database::escape_string($tag);
         $field_id = intval($field_id);
         $from = intval($from);
         $number_of_items = intval($number_of_items);
@@ -3599,13 +3641,13 @@ class UserManager
                 LEFT JOIN $table_user_tag_values uv ON (u.user_id AND uv.user_id AND  uv.user_id = url_rel_user.user_id)
                 LEFT JOIN $table_user_tag ut ON (uv.tag_id = ut.id)
                 WHERE
-                    ($where_field tag LIKE '$tag%') OR
+                    ($where_field tag LIKE '".Database::escape_string($tag."%")."') OR
                     (
-                        u.firstname LIKE '%".$tag."%' OR
-                        u.lastname LIKE '%".$tag."%' OR
-                        u.username LIKE '%".$tag."%' OR
-                        concat(u.firstname,' ',u.lastname) LIKE '%".$tag."%' OR
-                        concat(u.lastname,' ',u.firstname) LIKE '%".$tag."%'
+                        u.firstname LIKE '".Database::escape_string("%".$tag."%")."' OR
+                        u.lastname LIKE '".Database::escape_string("%".$tag."%")."' OR
+                        u.username LIKE '".Database::escape_string("%".$tag."%")."' OR
+                        concat(u.firstname, ' ', u.lastname) LIKE '".Database::escape_string("%".$tag."%")."' OR
+                        concat(u.lastname, ' ', u.firstname) LIKE '".Database::escape_string("%".$tag."%")."'
                      )
                      ".(!empty($where_extra_fields) ? $where_extra_fields : '')."
                      AND
@@ -3630,16 +3672,22 @@ class UserManager
                 return $row['count'];
             }
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if (isset($return[$row['user_id']]) && !empty($return[$row['user_id']]['tag'])) {
-                    $url = Display::url($row['tag'], api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'], array('class' => 'tag'));
+                if (isset($return[$row['user_id']]) &&
+                    !empty($return[$row['user_id']]['tag'])
+                ) {
+                    $url = Display::url(
+                        $row['tag'],
+                        api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'],
+                        array('class' => 'tag')
+                    );
                     $row['tag'] = $url;
                 }
                 $return[$row['user_id']] = $row;
             }
         }
+
         return $return;
     }
-
 
     /**
       * Get extra filtrable user fields (type select)
@@ -3653,10 +3701,15 @@ class UserManager
             foreach ($extraFieldList as $extraField) {
                 //if is enabled to filter and is a "<select>" field type
                 if ($extraField[8] == 1 && $extraField[2] == 4) {
-                    $extraFiltrableFields[] = array('name'=> $extraField[3], 'variable'=>$extraField[1], 'data'=> $extraField[9]);
+                    $extraFiltrableFields[] = array(
+                        'name' => $extraField[3],
+                        'variable' => $extraField[1],
+                        'data' => $extraField[9]
+                    );
                 }
             }
         }
+
         if (is_array($extraFiltrableFields) && count($extraFiltrableFields) > 0 ) {
             return $extraFiltrableFields;
         }
@@ -4338,8 +4391,8 @@ class UserManager
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $sql = 'SELECT path_certificate FROM '.$table_certificate.'
                 WHERE
-                    cat_id="'.Database::escape_string($cat_id).'" AND
-                    user_id="'.Database::escape_string($user_id).'"';
+                    cat_id="'.intval($cat_id).'" AND
+                    user_id="'.intval($user_id).'"';
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
         if ($row['path_certificate'] == '' || is_null($row['path_certificate'])) {
@@ -4374,7 +4427,7 @@ class UserManager
         $sql = 'SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id = (SELECT id FROM '.$tbl_grade_category.'
                 WHERE
                     course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' LIMIT 1 ) AND
-                    user_id='.Database::escape_string($user_id);
+                    user_id='.intval($user_id);
 
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
@@ -4408,9 +4461,9 @@ class UserManager
         $session_id = api_get_session_id();
         $user_id = intval($user_id);
         if ($session_id == 0 || is_null($session_id)) {
-            $sql_session = 'AND (session_id='.Database::escape_string($session_id).' OR isnull(session_id)) ';
+            $sql_session = 'AND (session_id='.intval($session_id).' OR isnull(session_id)) ';
         } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id='.Database::escape_string($session_id);
+            $sql_session = 'AND session_id='.intval($session_id);
         } else {
             $sql_session = '';
         }
@@ -4917,6 +4970,48 @@ EOF;
                 $userId, $userStatus, $getOnlyUserId, $getSql, $getCount, $from, $numberItems, $column, $direction,
                 $active, $lastConnectionDate, STUDENT_BOSS
         );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getOfficialCodeGrouped()
+    {
+        $user = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT DISTINCT official_code
+                FROM $user
+                GROUP BY official_code";
+        $result = Database::query($sql);
+
+        $values = Database::store_result($result, 'ASSOC');
+
+        $result = array();
+        foreach ($values as $value) {
+            $result[$value['official_code']] = $value['official_code'];
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $officialCode
+     * @return array
+     */
+    public static function getUsersByOfficialCode($officialCode)
+    {
+        $user = Database::get_main_table(TABLE_MAIN_USER);
+        $officialCode = Database::escape_string($officialCode);
+
+        $sql = "SELECT DISTINCT user_id
+                FROM $user
+                WHERE official_code = '$officialCode'
+                ";
+        $result = Database::query($sql);
+
+        $users = array();
+        while ($row = Database::fetch_array($result)) {
+            $users[] = $row['user_id'];
+        }
+        return $users;
     }
 
 }

@@ -1,23 +1,11 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
+
 require_once dirname(__FILE__) . '/../../../inc/global.inc.php';
 require_once dirname(__FILE__) . '/../be.inc.php';
 require_once dirname(__FILE__) . '/../gradebook_functions.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
 
-/**
- * Extends formvalidator with add&edit forms for evaluations
- * @author Stijn Konings
- * @package chamilo.gradebook
- */
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#evaluation_title").focus();
@@ -27,9 +15,15 @@ $(document).ready(function () {
 });
 </script>';
 
+/**
+ * Class EvalForm
+ *
+ * Extends FormValidator with add&edit forms for evaluations
+ * @author Stijn Konings
+ * @package chamilo.gradebook
+ */
 class EvalForm extends FormValidator
 {
-
     const TYPE_ADD = 1;
     const TYPE_EDIT = 2;
     const TYPE_MOVE = 3;

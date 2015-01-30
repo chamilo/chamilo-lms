@@ -2,6 +2,12 @@
 
 namespace Sabre\VObject;
 
+use DateTime;
+use DateTimeZone;
+use DateInterval;
+use InvalidArgumentException;
+use LogicException;
+
 /**
  * DateTimeParser
  *
@@ -25,19 +31,19 @@ class DateTimeParser {
      * @param DateTimeZone $tz
      * @return DateTime
      */
-    static public function parseDateTime($dt, \DateTimeZone $tz = null) {
+    static public function parseDateTime($dt, DateTimeZone $tz = null) {
 
         // Format is YYYYMMDD + "T" + hhmmss
         $result = preg_match('/^([0-9]{4})([0-1][0-9])([0-3][0-9])T([0-2][0-9])([0-5][0-9])([0-5][0-9])([Z]?)$/',$dt,$matches);
 
         if (!$result) {
-            throw new \LogicException('The supplied iCalendar datetime value is incorrect: ' . $dt);
+            throw new LogicException('The supplied iCalendar datetime value is incorrect: ' . $dt);
         }
 
         if ($matches[7]==='Z' || is_null($tz)) {
-            $tz = new \DateTimeZone('UTC');
+            $tz = new DateTimeZone('UTC');
         }
-        $date = new \DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3] . ' ' . $matches[4] . ':' . $matches[5] .':' . $matches[6], $tz);
+        $date = new DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3] . ' ' . $matches[4] . ':' . $matches[5] .':' . $matches[6], $tz);
 
         // Still resetting the timezone, to normalize everything to UTC
         // $date->setTimeZone(new \DateTimeZone('UTC'));
@@ -46,21 +52,26 @@ class DateTimeParser {
     }
 
     /**
-     * Parses an iCalendar (rfc5545) formatted date and returns a DateTime object
+     * Parses an iCalendar (rfc5545) formatted date and returns a DateTime object.
      *
      * @param string $date
+     * @param DateTimeZone $tz
      * @return DateTime
      */
-    static public function parseDate($date) {
+    static public function parseDate($date, DateTimeZone $tz = null) {
 
         // Format is YYYYMMDD
         $result = preg_match('/^([0-9]{4})([0-1][0-9])([0-3][0-9])$/',$date,$matches);
 
         if (!$result) {
-            throw new \LogicException('The supplied iCalendar date value is incorrect: ' . $date);
+            throw new LogicException('The supplied iCalendar date value is incorrect: ' . $date);
         }
 
-        $date = new \DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3], new \DateTimeZone('UTC'));
+        if (is_null($tz)) {
+            $tz = new DateTimeZone('UTC');
+        }
+
+        $date = new DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3], $tz);
         return $date;
 
     }
@@ -79,7 +90,7 @@ class DateTimeParser {
 
         $result = preg_match('/^(?P<plusminus>\+|-)?P((?P<week>\d+)W)?((?P<day>\d+)D)?(T((?P<hour>\d+)H)?((?P<minute>\d+)M)?((?P<second>\d+)S)?)?$/', $duration, $matches);
         if (!$result) {
-            throw new \LogicException('The supplied iCalendar duration value is incorrect: ' . $duration);
+            throw new LogicException('The supplied iCalendar duration value is incorrect: ' . $duration);
         }
 
         if (!$asString) {
@@ -128,7 +139,7 @@ class DateTimeParser {
             if ($duration==='P') {
                 $duration = 'PT0S';
             }
-            $iv = new \DateInterval($duration);
+            $iv = new DateInterval($duration);
             if ($invert) $iv->invert = true;
 
             return $iv;
@@ -164,17 +175,17 @@ class DateTimeParser {
      * Parses either a Date or DateTime, or Duration value.
      *
      * @param string $date
-     * @param DateTimeZone|string $referenceTZ
+     * @param DateTimeZone|string $referenceTz
      * @return DateTime|DateInterval
      */
-    static public function parse($date, $referenceTZ = null) {
+    static public function parse($date, $referenceTz = null) {
 
         if ($date[0]==='P' || ($date[0]==='-' && $date[1]==='P')) {
             return self::parseDuration($date);
         } elseif (strlen($date)===8) {
-            return self::parseDate($date);
+            return self::parseDate($date, $referenceTz);
         } else {
-            return self::parseDateTime($date, $referenceTZ);
+            return self::parseDateTime($date, $referenceTz);
         }
 
     }
@@ -284,7 +295,7 @@ class DateTimeParser {
                 $/x';
 
             if (!preg_match($regex, $date, $matches)) {
-                throw new \InvalidArgumentException('Invalid vCard date-time string: ' . $date);
+                throw new InvalidArgumentException('Invalid vCard date-time string: ' . $date);
             }
 
         }
@@ -387,7 +398,7 @@ class DateTimeParser {
                 $/x';
 
             if (!preg_match($regex, $date, $matches)) {
-                throw new \InvalidArgumentException('Invalid vCard time string: ' . $date);
+                throw new InvalidArgumentException('Invalid vCard time string: ' . $date);
             }
 
         }

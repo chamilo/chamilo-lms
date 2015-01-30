@@ -95,11 +95,11 @@ function active_user(element_div) {
 	}
 }
 
-function clear_course_list (div_course) {
+function clear_course_list(div_course) {
 	$("div#"+div_course).html("&nbsp;");
 	$("div#"+div_course).hide("");
 }
-function clear_session_list (div_session) {
+function clear_session_list(div_session) {
 	$("div#"+div_session).html("&nbsp;");
 	$("div#"+div_session).hide("");
 }
@@ -115,7 +115,6 @@ function display_advanced_search_form () {
 }
 
 $(document).ready(function() {
-
     var select_val = $("#input_select_extra_data").val();
     if ( document.getElementById(\'extra_data_text\')) {
 
@@ -159,7 +158,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 if ($action == 'login_as') {
     $check = Security::check_token('get');
-
     if (isset($_GET['user_id']) && api_can_login_as($_GET['user_id']) && $check) {
         login_user($_GET['user_id']);
     } else {
@@ -174,7 +172,7 @@ api_protect_admin_script(true);
  * Prepares the shared SQL query for the user table.
  * See get_user_data() and get_number_of_users().
  *
- * @param boolean Whether to count, or get data
+ * @param boolean $is_count Whether to count, or get data
  * @return string SQL query
  */
 function prepare_user_sql_query($is_count) {
@@ -187,16 +185,21 @@ function prepare_user_sql_query($is_count) {
     } else {
         $sql .= "SELECT u.user_id AS col0, u.official_code AS col2, ";
 
-        if (api_is_western_name_order())
+        if (api_is_western_name_order()) {
             $sql .= "u.firstname AS col3, u.lastname AS col4, ";
-        else
+        } else {
             $sql .= "u.lastname AS col3, u.firstname AS col4, ";
+        }
 
-        $sql .= "u.username AS col5, u.email AS col6, ".
-                    "u.status AS col7, u.active AS col8, ".
-                    "u.user_id AS col9, u.registration_date AS col10, ".
-                    "u.expiration_date AS exp, u.password ".
-                    "FROM $user_table u";
+        $sql .= " u.username AS col5,
+                    u.email AS col6,
+                    u.status AS col7,
+                    u.active AS col8,
+                    u.user_id AS col9,
+                    u.registration_date AS col10,
+                    u.expiration_date AS exp,
+                    u.password
+                FROM $user_table u";
     }
 
     // adding the filter to see the user's only of the current access_url
@@ -205,18 +208,29 @@ function prepare_user_sql_query($is_count) {
         $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
 
-    foreach ($_GET as $key => $value) {
-        /* Because this query uses LIKE very liberally we need to escape
-         * LIKE wildcards, concretely "_" and "%". This is only relevant
-         * for *LIKE* statements.
-         *
-         * See: http://stackoverflow.com/a/3683868 */
+    $keywordList = array(
+        'keyword_firstname',
+        'keyword_lastname',
+        'keyword_username',
+        'keyword_email',
+        'keyword_officialcode',
+        'keyword_status',
+        'keyword_active',
+        'check_easy_passwords'
+    );
 
-        // Remove buggy whitespaces and escape for both SQL and LIKE.
-        if ($key == "keyword_status")
-            $$key = Database::escape_string(trim($value));
-        else
-            $$key = Database::escape_sql_wildcards(Database::escape_string(trim($value)));
+    $keywordListValues = array();
+    $atLeastOne = false;
+    foreach ($keywordList as $keyword) {
+        $keywordListValues[$keyword] = null;
+        if (isset($_GET[$keyword]) && !empty($_GET[$keyword])) {
+            $keywordListValues[$keyword] = $_GET[$keyword];
+            $atLeastOne = true;
+        }
+    }
+
+    if ($atLeastOne == false) {
+        $keywordListValues = array();
     }
 
     if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
@@ -225,40 +239,47 @@ function prepare_user_sql_query($is_count) {
         $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
     }
 
-    if (isset($keyword)) {
-        $sql .= " WHERE (".
-                    "u.firstname LIKE '%". $keyword ."%' ".
-                    "OR u.lastname LIKE '%". $keyword ."%' ".
-                    "OR concat(u.firstname,' ',u.lastname) LIKE '%". $keyword ."%' ".
-                    "OR concat(u.lastname,' ',u.firstname) LIKE '%". $keyword ."%' ".
-                    "OR u.username LIKE '%". $keyword ."%' ".
-                    "OR u.official_code LIKE '%". $keyword ."%' ".
-                    "OR u.email LIKE '%". $keyword ."%')";
-    } elseif (isset($keyword_firstname)) {
+    if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+        $keywordFiltered = Database::escape_string("%". $_GET['keyword'] ."%");
+        $sql .= " WHERE (
+                    u.firstname LIKE '$keywordFiltered' OR
+                    u.lastname LIKE '$keywordFiltered' OR
+                    concat(u.firstname, ' ', u.lastname) LIKE '$keywordFiltered' OR
+                    concat(u.lastname,' ',u.firstname) LIKE '$keywordFiltered' OR
+                    u.username LIKE '$keywordFiltered' OR
+                    u.official_code LIKE '$keywordFiltered' OR
+                    u.email LIKE '$keywordFiltered'
+                )
+        ";
+    } elseif (isset($keywordListValues) && !empty($keywordListValues)) {
         $query_admin_table = '';
         $keyword_admin = '';
 
-        if ($keyword_status == SESSIONADMIN) {
-           $keyword_status = '%';
+        if (isset($keywordListValues['keyword_status']) &&
+            $keywordListValues['keyword_status'] == PLATFORM_ADMIN
+        ) {
            $query_admin_table = " , $admin_table a ";
            $keyword_admin = ' AND a.user_id = u.user_id ';
+            $keywordListValues['keyword_status'] = '%';
         }
 
         $keyword_extra_value = '';
-
         if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
             !empty($keyword_extra_data_text)) {
             $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
         }
 
-        $sql .= " $query_admin_table ".
-                "WHERE (u.firstname LIKE '%". $keyword_firstname ."%' ".
-                    "AND u.lastname LIKE '%". $keyword_lastname ."%' ".
-                    "AND u.username LIKE '%". $keyword_username ."%' ".
-                    "AND u.email LIKE '%". $keyword_email ."%' ".
-                    "AND u.official_code LIKE '%". $keyword_officialcode ."%' ".
-                    "AND u.status LIKE '$keyword_status' ".
-                    "$keyword_admin $keyword_extra_value";
+        $sql .= " $query_admin_table
+                WHERE (
+                    u.firstname LIKE '". Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
+                    u.lastname LIKE '". Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
+                    u.username LIKE '". Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
+                    u.email LIKE '". Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
+                    u.official_code LIKE '". Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' AND
+                    u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."'
+                    $keyword_admin
+                    $keyword_extra_value
+                ";
 
         if (isset($keyword_active) && !isset($keyword_inactive)) {
             $sql .= " AND u.active='1'";
@@ -270,7 +291,8 @@ function prepare_user_sql_query($is_count) {
 
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin())
-        && api_get_multiple_access_url()) {
+        && api_get_multiple_access_url()
+    ) {
         $sql .= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }
 
@@ -388,7 +410,7 @@ function login_user($user_id) {
  * @see SortableTable#get_total_number_of_items()
  */
 function get_number_of_users() {
-    $sql = prepare_user_sql_query (true);
+    $sql = prepare_user_sql_query(true);
 
     $res = Database::query($sql);
     $obj = Database::fetch_object($res);
@@ -404,7 +426,7 @@ function get_number_of_users() {
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
-    $sql = prepare_user_sql_query (false);
+    $sql = prepare_user_sql_query(false);
 
     $checkPassStrength = isset($_GET['check_easy_passwords']) && $_GET['check_easy_passwords'] == 1 ? true : false;
 
@@ -754,7 +776,8 @@ $form->addElement(
 $actions  = '';
 if (api_is_platform_admin()) {
 	$actions .= '<span style="float:right;">'.
-		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
+		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+         Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
 		 '</span>';
 }
 $actions .= $form->return_form();
@@ -812,8 +835,10 @@ $status_options['%'] = get_lang('All');
 $status_options[STUDENT] = get_lang('Student');
 $status_options[COURSEMANAGER] = get_lang('Teacher');
 $status_options[DRH] = get_lang('Drh');
-$status_options[SESSIONADMIN] = get_lang('Administrator');
-$form->addElement('select','keyword_status',get_lang('Profile'),$status_options, array('style'=>'margin-left:17px'));
+$status_options[SESSIONADMIN] = get_lang('SessionsAdmin');
+$status_options[PLATFORM_ADMIN] = get_lang('Administrator');
+
+$form->addElement('select','keyword_status',get_lang('Profile'), $status_options, array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td></tr>');
 $form->addElement('html', '<tr><td>');
 $active_group = array();
@@ -903,7 +928,6 @@ if ($table->get_total_number_of_items() == 0) {
 
     if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {
         $keyword = Database::escape_string($_REQUEST['keyword']);
-        //$conditions = array('firstname' => $keyword, 'lastname' => $keyword, 'username' => $keyword);
         $conditions = array('username' => $keyword);
         $user_list = UserManager::get_user_list($conditions, array(), false, ' OR ');
         if (!empty($user_list)) {

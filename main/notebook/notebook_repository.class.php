@@ -158,7 +158,6 @@ class NotebookRepository
     public function find_one_by_course_and_title($c_id, $title)
     {
         $c_id = is_object($c_id) ? $c_id->get_id() : (int) $c_id;
-        $name = Database::escape_string($name);
         return $this->find_one("n.c_id = $c_id AND n.title = '$title'");
     }
 

@@ -354,16 +354,16 @@ function delete_user_fields($field_id)
 	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 
 	// delete the fields
-	$sql = "DELETE FROM $table_user_field WHERE id = '".Database::escape_string($field_id)."'";
+	$sql = "DELETE FROM $table_user_field WHERE id =  ".intval($field_id)." ";
 	$result = Database::query($sql);
 	if (Database::affected_rows() == 1)
 	{
 		// delete the field options
-		$sql = "DELETE FROM $table_user_field_options WHERE field_id = '".Database::escape_string($field_id)."'";
+		$sql = "DELETE FROM $table_user_field_options WHERE field_id = ".intval($field_id)."";
 		$result = Database::query($sql);
 
 		// delete the field values
-		$sql = "DELETE FROM $table_user_field_values WHERE field_id = '".Database::escape_string($field_id)."'";
+		$sql = "DELETE FROM $table_user_field_values WHERE field_id = ".intval($field_id)."";
 		$result = Database::query($sql);
 
 		// recalculate the field_order because the value is used to show/hide the up/down icon
@@ -373,7 +373,7 @@ function delete_user_fields($field_id)
 		$i = 1;
 		while($row = Database::fetch_array($result))
 		{
-			$sql_reorder = "UPDATE $table_user_field SET field_order = '".Database::escape_string($i)."' WHERE id = '".Database::escape_string($row['id'])."'";
+			$sql_reorder = "UPDATE $table_user_field SET field_order = '".Database::escape_string($i)."' WHERE id = ".intval($row['id'])."";
 			$result_reorder = Database::query($sql_reorder);
 			$i++;
 		}

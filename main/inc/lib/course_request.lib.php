@@ -299,7 +299,7 @@ class CourseRequestManager
                 objetives = "%s", target_audience = "%s", status = "%s", info = "%s", exemplary_content = "%s"
             WHERE id = '.$id, Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
             Database::escape_string($code),
-            Database::escape_string($user_id),
+            intval($user_id),
             Database::escape_string($directory),
             Database::escape_string($db_name),
             Database::escape_string($course_language),

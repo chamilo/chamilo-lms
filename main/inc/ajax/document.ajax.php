@@ -5,6 +5,7 @@
  */
 require_once '../global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 $action = $_REQUEST['a'];
 switch ($action) {
@@ -25,7 +26,13 @@ switch ($action) {
             exit;
         }
 
-        $ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : 'overwrite';
+        $fileExistsOption = api_get_configuration_value('document_if_file_exists_option');
+        $defaultFileExistsOption = 'rename';
+        if (!empty($fileExistsOption)) {
+            $defaultFileExistsOption = $fileExistsOption;
+        }
+
+        //$ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : $defaultFileExistsOption;
 
         if (!empty($_FILES)) {
             require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
@@ -36,7 +43,7 @@ switch ($action) {
                 $file['name'],
                 '', // comment
                 0,
-                $ifExists,
+                $defaultFileExistsOption,
                 false,
                 false
             );

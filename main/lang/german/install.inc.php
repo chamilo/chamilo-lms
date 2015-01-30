@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DateTimezoneSettingNotSet = "Ihre php.ini-Datei enthält keine Definition zu date.timezone. Dies ist jedoch eine Vorraussetzung für Chamilo. Bitte konfigurieren Sie diese Einstellung, und starten Sie gegebenenfalls Ihren Webserver neu. Ignorieren auf eigene Gefahr!";
 $langStatDB = "Tracking DB.  Nur sinnvoll in der Multidatenbankinstallation";
 $langEnableTracking = "Tracking aktivieren";
 $langInstituteShortName = "Organisation Name (kurz)";
@@ -119,8 +120,9 @@ $UpgradeFromDokeos18x = "Upgrade von Chamilo 1.8.X";
 $Step7 = "Schritt 7";
 $SuggestionOnlyToEnableCSSUploadFeature = "Vorschlag erfolgt nur, wenn das CSSuploadfeature aktiviert wurde";
 $SuggestionOnlyToEnableSubLanguageFeature = "Vorschlag erfolgt nur, wenn das Untersprachenfeature aktiviert wurde";
+$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Um Ihre Installation zu schützen, setzen Sie das Verzeichnis %s auf nur-lesen (oder chmod 0555 auf Linux-basierenden Systemen). Anschließend bitte das Verzeichnis %s löschen.";
 $IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Wenn Sie vorhaben Chamilo von einer älteren Version zu upgraden, möchten Sie vielleicht das <a href=\"../../documentation/changelog.html\" target=\"_blank\">Changelog</a> ansehen, um zu erfahren was neu ist und geändert wurde";
-$WelcomeToTheDokeosInstaller = "Willkommen zum Chamilo-Installer";
+$WelcomeToTheChamiloInstaller = "Willkommen zum Chamilo-Installer";
 $PHPVersionError = "Ihre PHP-Version entspricht nicht den Anforderungen dieser Software. Überprüfen Sie bite die Aktualität Ihrer PHP-Version und versuchen Sie es erneut.";
 $ExtensionSessionsNotAvailable = "Session Erweiterung nicht verfügbar";
 $ExtensionZlibNotAvailable = "Zlib Erweiterung nicht verfügbar";
@@ -129,4 +131,8 @@ $DatabaseXWillBeCreated = "Datenbank <b>%s</b> wird erstellt";
 $ADatabaseWithTheSameNameAlreadyExists = "Eine Datenbank mit dem gleichen Namen <b>existiert bereits</b>!";
 $UserXCantHaveAccessInTheDatabaseX = "Der User <b>%s</b> darf nicht auf die Datenbank <b>%s</b> zugreifen!";
 $DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "Datenbank <b>%s</b> konnte nicht erstellt werden. Der User <b>%s</b> hat nicht die erforderlichen Rechte.";
+$CourseTestWasCreated = "Ein Test-Kurs wurde erfolgreich angelegt";
+$InstallExecution = "Ausführen der Installationsroutine";
+$UpdateExecution = "Aktualisierung der Installationsroutine";
+$PleaseWaitThisCouldTakeAWhile = "Bitte warten...";
 ?>

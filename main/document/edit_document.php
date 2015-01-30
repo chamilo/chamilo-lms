@@ -223,8 +223,8 @@ if (!is_allowed_to_edit()) {
 
 if (isset($_POST['comment'])) {
 	// Fixing the path if it is wrong
-	$comment 	     = trim(Database::escape_string($_POST['comment']));
-	$title 		     = trim(Database::escape_string($_POST['title']));
+	$comment 	     = Database::escape_string(trim($_POST['comment']));
+	$title 		     = Database::escape_string(trim($_POST['title']));
     //Just in case see BT#3525
     if (empty($title)) {
 		$title = $documen_data['title'];

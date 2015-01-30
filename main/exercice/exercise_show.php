@@ -72,6 +72,7 @@ if (api_is_course_session_coach(
     }
 }
 
+$maxEditors = isset($_configuration['exercise_max_fckeditors_in_page']) ? $_configuration['exercise_max_fckeditors_in_page'] : 0;
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
@@ -128,6 +129,8 @@ if ($origin != 'learnpath') {
 }
 ?>
 <script>
+var maxEditors = '<?php echo intval($maxEditors); ?>';
+
 function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
 	document.getElementById(marksid).style.display='block';
@@ -153,8 +156,12 @@ function getFCK(vals,marksid) {
 		var oHidden = document.createElement("input");
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
-		oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-		oHidden.value = oEditor.GetXHTML(true);
+        if (maxEditors == 0) {
+            oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
+            oHidden.value = oEditor.GetXHTML(true);
+        } else {
+            oHidden.value = $("textarea[name='" + oHidden.name + "']").val();
+        }
 		f.appendChild(oHidden);
 	}
 }
@@ -236,7 +243,7 @@ $sql = "SELECT attempts.question_id, answer
         ON
             questions.id=quizz_rel_questions.question_id AND
             questions.c_id = ".api_get_course_int_id()."
-        WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
+        WHERE attempts.exe_id = ".intval($id)." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 
 $result = Database::query($sql);
@@ -282,6 +289,11 @@ foreach ($questionList as $questionId) {
 $counter = 1;
 $exercise_content = null;
 $category_list = array();
+
+$useAdvancedEditor = true;
+if (count($questionList) > $maxEditors) {
+    $useAdvancedEditor = false;
+}
 
 foreach ($questionList as $questionId) {
 
@@ -475,7 +487,7 @@ foreach ($questionList as $questionId) {
             }
 
             //showing the score
-            $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+            $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = ".intval($id)." and question_id= ".intval($questionId)."";
             $resfree = Database::query($queryfree);
             $questionScore= Database::result($resfree,0,"marks");
             $totalScore+=$questionScore;
@@ -534,7 +546,23 @@ foreach ($questionList as $questionId) {
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
 			$comnt = get_comments($id, $questionId);
 			$default = array('comments_'.$questionId =>  $comnt);
-			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '100%', 'Height' => '120'));
+
+            if ($useAdvancedEditor) {
+                $feedback_form->addElement(
+                    'html_editor',
+                    'comments_' . $questionId,
+                    null,
+                    null,
+                    array(
+                        'ToolbarSet' => 'TestAnswerFeedback',
+                        'Width' => '100%',
+                        'Height' => '120'
+                    )
+                );
+            } else {
+                $feedback_form->addElement('textarea', 'comments_' . $questionId);
+            }
+
 			$feedback_form->addElement('html','<br>');
 			$feedback_form->setDefaults($default);
 			$feedback_form->display();

@@ -114,6 +114,8 @@ if (api_is_allowed_to_edit(false, true) OR
                 $attachment = $sendAttachment ? $_FILES['user_upload'] : null;
                 $attachmentComment = isset($values['file_comment']) ? $values['file_comment'] : null;
 
+                $comment = isset($values['comment']) ? $values['comment'] : null;
+
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
@@ -127,7 +129,8 @@ if (api_is_allowed_to_edit(false, true) OR
                     $sendEmail,
                     null,
                     $attachment,
-                    $attachmentComment
+                    $attachmentComment,
+                    $comment
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -174,6 +177,7 @@ if (api_is_allowed_to_edit(false, true) OR
                 $sendAttachment = isset($_FILES['user_upload']) ? true : false;
                 $attachment = $sendAttachment ? $_FILES['user_upload'] : null;
                 $attachmentComment = isset($values['file_comment']) ? $values['file_comment'] : null;
+                $comment = isset($values['comment']) ? $values['comment'] : null;
 
                 // This is a sub event. Delete the current and create another BT#7803
 
@@ -190,7 +194,8 @@ if (api_is_allowed_to_edit(false, true) OR
                         false,
                         null,
                         $attachment,
-                        $attachmentComment
+                        $attachmentComment,
+                        $comment
                     );
 
                     $message = Display::return_message(get_lang('Updated'), 'confirmation');
@@ -209,7 +214,8 @@ if (api_is_allowed_to_edit(false, true) OR
                     $values['content'],
                     $values['users_to_send'],
                     $attachment,
-                    $attachmentComment
+                    $attachmentComment,
+                    $comment
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {

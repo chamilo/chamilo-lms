@@ -85,7 +85,7 @@ if (isset($_GET['details'])) {
             "name" => get_lang("Users")
         );
     } else
-        if (!empty ($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
+        if (!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
             $course_info = CourseManager :: get_course_information($get_course_code);
             $interbreadcrumb[] = array (
                 "url" => "../tracking/courseLog.php?cidReq=".$get_course_code.'&id_session=' . api_get_session_id(),
@@ -222,10 +222,9 @@ if ($check) {
     }
     Security::clear_token();
 }
-//Generate a new token
+
 // user info
 $user_info = api_get_user_info($student_id);
-
 $courses_in_session = array();
 
 //See #4676
@@ -243,8 +242,8 @@ $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_
 // RRHH or session admin
 if (api_is_session_admin() || api_is_drh()) {
     $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-
     $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
+
     if (!empty($session_by_session_admin)) {
         foreach ($session_by_session_admin as $session_coached_by_user) {
             $courses_followed_by_coach = Tracking :: get_courses_list_from_session($session_coached_by_user['id']);
@@ -299,6 +298,10 @@ while ($row = Database :: fetch_array($rs)) {
         }
     }
 }
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    api_get_course_info()
+);
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
@@ -313,8 +316,12 @@ if (api_is_drh() && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }*/
         } else {
-            if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {
-                api_not_allowed(true);
+            if (!($isDrhOfCourse)) {
+                if (api_is_drh() &&
+                   !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())
+                ) {
+                    api_not_allowed(true);
+                }
             }
         }
     }
@@ -342,8 +349,7 @@ if (!empty($student_id)) {
     }
     echo $send_mail;
     if (!empty($student_id) && !empty($_GET['course'])) {
-        //only show link to connection details if course and student were defined in the URL
-
+        // Only show link to connection details if course and student were defined in the URL
         echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">'.
             Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
     }
@@ -408,7 +414,7 @@ if (!empty($student_id)) {
         $last_connection_date = get_lang('NoConnexion');
     }
 
-    // cvs informations
+    // cvs information
     $csv_content[] = array(
         get_lang('Informations', '')
     );
@@ -604,7 +610,6 @@ if (!empty($student_id)) {
     </td>
     </tr>
     </table>
-
     <?php
 
     $table_title = '';
@@ -712,7 +717,7 @@ if (!empty($student_id)) {
                         $progress = empty($progress) ? '0%' : $progress.'%';
                         $score = empty($score) ? '0%' : $score.'%';
 
-                        $csv_content[] = array (
+                        $csv_content[] = array(
                             $session_name,
                             $course_info['title'],
                             $time_spent_on_course,
@@ -723,12 +728,12 @@ if (!empty($student_id)) {
                         );
 
                         echo '<tr>
-    				<td >'.$course_info['title'].'</td>
-    				<td >'.$time_spent_on_course .'</td>
-    				<td >'.$progress.'</td>
-    				<td >'.$score.'</td>
-    				<td >'.$attendances_faults_avg.'</td>
-                    <td >'.$scoretotal_display.'</td>';
+                        <td >'.$course_info['title'].'</td>
+                        <td >'.$time_spent_on_course .'</td>
+                        <td >'.$progress.'</td>
+                        <td >'.$score.'</td>
+                        <td >'.$attendances_faults_avg.'</td>
+                        <td >'.$scoretotal_display.'</td>';
 
                         if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
                             echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
@@ -817,7 +822,10 @@ if (!empty($student_id)) {
                     array($lp_id),
                     $session_id
                 );
-                if (!empty($total_time)) $any_result = true;
+
+                if (!empty($total_time)) {
+                    $any_result = true;
+                }
 
                 // Get last connection time in lp
                 $start_time = Tracking::get_last_connection_time_in_lp(
@@ -903,14 +911,17 @@ if (!empty($student_id)) {
                     if ($from_myspace) {
                         $from ='&from=myspace';
                     }
-                    $link = Display::url('<img src="../img/2rightarrow.gif" border="0" />','lp_tracking.php?course='.Security::remove_XSS($_GET['course']).$from.'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student_id='.$user_info['user_id'].'&id_session='.$session_id);
+                    $link = Display::url(
+                        '<img src="../img/2rightarrow.gif" border="0" />',
+                        'lp_tracking.php?cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).$from.'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student_id='.$user_info['user_id'].'&id_session='.$session_id
+                    );
                     echo Display::tag('td', $link);
                 }
 
                 if (api_is_allowed_to_edit()) {
                     echo '<td>';
                     if ($any_result === true) {
-                        echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$user_info['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';
+                        echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.Security::remove_XSS($_GET['course']).'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$user_info['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';
                         echo Display::return_icon('clean.png',get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
                         echo '</a>';
                     }

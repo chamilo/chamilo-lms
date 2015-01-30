@@ -12,12 +12,10 @@ require_once dirname(__FILE__).'/../be.inc.php';
  */
 class CatForm extends FormValidator
 {
-
-    const TYPE_ADD              = 1;
-    const TYPE_EDIT             = 2;
-    const TYPE_MOVE             = 3;
-    const TYPE_SELECT_COURSE    = 4;
-
+    const TYPE_ADD = 1;
+    const TYPE_EDIT = 2;
+    const TYPE_MOVE = 3;
+    const TYPE_SELECT_COURSE = 4;
     private $category_object;
 
     /**
@@ -132,16 +130,16 @@ class CatForm extends FormValidator
         $this->build_basic_form();
     }
 
-	/**
-	 * Builds an form to edit a category
-	 */
+    /**
+     * Builds an form to edit a category
+     */
     protected function build_editing_form()
     {
         $skills = $this->category_object->get_skills_for_select();
 
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
-         //Freeze or not
+        //Freeze or not
         $test_cats = Category::load(
             null,
             null,
@@ -388,37 +386,37 @@ class CatForm extends FormValidator
             $visibility_default = 0;
         }
         $this->setDefaults(array('visible' => $visibility_default));
-   	}
+    }
 
     /**
-	 * This function builds an 'select course' form in the add category process,
-	 * if parent id is 0, it will only show courses
-	 */
+     * This function builds an 'select course' form in the add category process,
+     * if parent id is 0, it will only show courses
+     */
     protected function build_select_course_form()
     {
-		$select = $this->addElement('select','select_course',array(get_lang('PickACourse'),'test'), null);
-		$coursecat = Category :: get_all_courses(api_get_user_id());
-		//only return courses that are not yet created by the teacher
+        $select = $this->addElement('select','select_course',array(get_lang('PickACourse'),'test'), null);
+        $coursecat = Category :: get_all_courses(api_get_user_id());
+        //only return courses that are not yet created by the teacher
 
-		foreach($coursecat as $row) {
-			$select->addoption($row[1],$row[0]);
-		}
-		$this->setDefaults(array(
-		   'hid_user_id' => $this->category_object->get_user_id(),
-		   'hid_parent_id' => $this->category_object->get_parent_id()
-		));
-   		$this->addElement('hidden','hid_user_id');
-   		$this->addElement('hidden','hid_parent_id');
-		$this->addElement('submit', null, get_lang('Ok'));
-   	}
+        foreach($coursecat as $row) {
+            $select->addoption($row[1],$row[0]);
+        }
+        $this->setDefaults(array(
+            'hid_user_id' => $this->category_object->get_user_id(),
+            'hid_parent_id' => $this->category_object->get_parent_id()
+        ));
+        $this->addElement('hidden','hid_user_id');
+        $this->addElement('hidden','hid_parent_id');
+        $this->addElement('submit', null, get_lang('Ok'));
+    }
 
     function display()
     {
-   		parent :: display();
-   	}
+        parent :: display();
+    }
 
     function setDefaults($defaults = array(), $filter = null)
     {
         parent::setDefaults($defaults, $filter);
-   	}
+    }
 }

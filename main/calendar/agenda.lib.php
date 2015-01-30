@@ -6,7 +6,6 @@
  *
  * @author: Julio Montoya <gugli100@gmail.com>
  */
-
 class Agenda
 {
     public $events = array();
@@ -17,9 +16,10 @@ class Agenda
     public $senderId;
     /** @var array */
     public $course;
+    public $comment;
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
@@ -115,6 +115,7 @@ class Agenda
      * @param int $parentEventId
      * @param array $attachmentArray $_FILES['']
      * @param string $attachmentComment
+     * @param string $eventComment
      *
      * @return int
      */
@@ -128,7 +129,8 @@ class Agenda
         $addAsAnnouncement = false,
         $parentEventId = null,
         $attachmentArray = array(),
-        $attachmentComment = null
+        $attachmentComment = null,
+        $eventComment = null
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -160,6 +162,12 @@ class Agenda
                     'session_id' => $this->getSessionId(),
                     'c_id' => $this->course['real_id']
                 );
+
+                $allow = api_get_configuration_value('allow_agenda_event_comment');
+
+                if ($allow) {
+                    $attributes['comment'] = $eventComment;
+                }
 
                 if (!empty($parentEventId)) {
                     $attributes['parent_event_id'] = $parentEventId;
@@ -498,7 +506,7 @@ class Agenda
         }
 
         // Get the agenda item.
-        $item_id = Database::escape_string($item_id);
+        $item_id = intval($item_id);
         $sql = "SELECT * FROM $table_agenda WHERE c_id = $course_id AND id = ".$item_id;
         $res = Database::query($sql);
 
@@ -534,6 +542,7 @@ class Agenda
      * @param int $editRepeatType
      * @param array $attachmentArray
      * @param string $attachmentComment
+     * @param string $comment
      *
      * @return bool
      */
@@ -546,7 +555,8 @@ class Agenda
         $content,
         $usersToSend = array(),
         $attachmentArray = array(),
-        $attachmentComment = null
+        $attachmentComment = null,
+        $comment = null
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -594,6 +604,12 @@ class Agenda
                         'end_date' => $end,
                         'all_day' => $allDay
                     );
+
+                    $allow = api_get_configuration_value('allow_agenda_event_comment');
+
+                    if ($allow) {
+                        $attributes['comment'] = $comment;
+                    }
 
                     Database::update(
                         $this->tbl_course_agenda,
@@ -1323,6 +1339,7 @@ class Agenda
         }
 
         $sql .= $dateCondition;
+        $allowComments = api_get_configuration_value('allow_agenda_event_comment');
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -1429,9 +1446,16 @@ class Agenda
                 $event['parent_event_id'] = $row['parent_event_id'];
                 $event['has_children'] = $this->hasChildren($row['id'], $course_id) ? 1 : 0;
 
+                if ($allowComments) {
+                    $event['comment'] = $row['comment'];
+                } else {
+                    $event['comment'] = null;
+                }
+
                 $this->events[] = $event;
             }
         }
+
         return $this->events;
     }
 
@@ -1823,6 +1847,11 @@ class Agenda
         );
 
         if ($this->type == 'course') {
+            $allow = api_get_configuration_value('allow_agenda_event_comment');
+
+            if ($allow) {
+                $form->addElement('textarea', 'comment', get_lang('Comment'));
+            }
 
             $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
             if ($showAttachmentForm) {
@@ -1840,7 +1869,7 @@ class Agenda
                 }
             }
 
-            $form->addElement('textarea', 'file_comment', get_lang('Comment'));
+            $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
         }
 
         if (empty($id)) {
@@ -1914,7 +1943,7 @@ class Agenda
      */
     public static function changeVisibility($id, $visibility, $courseInfo, $userId = null)
     {
-        $id = Database::escape_string($id);
+        $id = intval($id);
         if (empty($userId)) {
             $userId = api_get_user_id();
         } else {
@@ -1954,7 +1983,7 @@ class Agenda
     {
         $tableAttachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
         $courseId = intval($courseInfo['real_id']);
-        $eventId = Database::escape_string($eventId);
+        $eventId = intval($eventId);
         $row = array();
         $sql = "SELECT id, path, filename, comment
                 FROM $tableAttachment
@@ -2347,7 +2376,7 @@ class Agenda
             $messages = implode('<br /> ', $messages);
         } else {
             $messages = get_lang('NoAgendaItems');
-                    
+
         }
 
         return $messages;

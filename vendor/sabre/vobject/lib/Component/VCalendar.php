@@ -2,10 +2,11 @@
 
 namespace Sabre\VObject\Component;
 
-use
-    Sabre\VObject,
-    Sabre\VObject\Component,
-    Sabre\VObject\Recur\EventIterator;
+use DateTime;
+use DateTimeZone;
+use Sabre\VObject;
+use Sabre\VObject\Component;
+use Sabre\VObject\Recur\EventIterator;
 
 /**
  * The VCalendar component
@@ -239,11 +240,17 @@ class VCalendar extends VObject\Document {
      *
      * @param DateTime $start
      * @param DateTime $end
+     * @param DateTimeZone $timeZone reference timezone for floating dates and
+     *                     times.
      * @return void
      */
-    public function expand(\DateTime $start, \DateTime $end) {
+    public function expand(DateTime $start, DateTime $end, DateTimeZone $timeZone = null) {
 
         $newEvents = array();
+
+        if (!$timeZone) {
+            $timeZone = new DateTimeZone('UTC');
+        }
 
         foreach($this->select('VEVENT') as $key=>$vevent) {
 
@@ -266,7 +273,7 @@ class VCalendar extends VObject\Document {
                 throw new \LogicException('Event did not have a UID!');
             }
 
-            $it = new EventIterator($this, $vevent->uid);
+            $it = new EventIterator($this, $vevent->uid, $timeZone);
             $it->fastForward($start);
 
             while($it->valid() && $it->getDTStart() < $end) {
@@ -288,11 +295,11 @@ class VCalendar extends VObject\Document {
 
             foreach($newEvent->children as $child) {
                 if ($child instanceof VObject\Property\ICalendar\DateTime && $child->hasTime()) {
-                    $dt = $child->getDateTimes();
+                    $dt = $child->getDateTimes($timeZone);
                     // We only need to update the first timezone, because
                     // setDateTimes will match all other timezones to the
                     // first.
-                    $dt[0]->setTimeZone(new \DateTimeZone('UTC'));
+                    $dt[0]->setTimeZone(new DateTimeZone('UTC'));
                     $child->setDateTimes($dt);
                 }
 

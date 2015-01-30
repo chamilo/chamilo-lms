@@ -196,18 +196,16 @@ function &_api_get_day_month_names($language = null) {
     return $date_parts[$language];
 }
 
-
-/**
- * Appendix to "Name order conventions"
- */
-
 /**
  * Returns returns person name convention for a given language.
  * @param string $language	The input language.
- * @param string $type		The type of the requested convention. It may be 'format' for name order convention or 'sort_by' for name sorting convention.
- * @return mixed			Depending of the requested type, the returned result may be string or boolean; null is returned on error;
+ * @param string $type		The type of the requested convention.
+ * It may be 'format' for name order convention or 'sort_by' for name sorting convention.
+ * @return mixed Depending of the requested type,
+ * the returned result may be string or boolean; null is returned on error;
  */
-function _api_get_person_name_convention($language, $type) {
+function _api_get_person_name_convention($language, $type)
+{
     static $conventions;
     $language = api_purify_language_id($language);
     if (!isset($conventions)) {
@@ -215,8 +213,22 @@ function _api_get_person_name_convention($language, $type) {
         if (file_exists($file)) {
             $conventions = include ($file);
         } else {
-            $conventions = array('english' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'));
+            $conventions = array(
+                'english' => array(
+                    'format' => 'title first_name last_name',
+                    'sort_by' => 'first_name'
+                )
+            );
         }
+        // Overwrite classic conventions
+        $customConventions = api_get_configuration_value('name_order_conventions');
+
+        if (!empty($customConventions)) {
+            foreach ($customConventions as $key => $data) {
+                $conventions[$key] = $data;
+            }
+        }
+
         $search1 = array('FIRST_NAME', 'LAST_NAME', 'TITLE');
         $replacement1 = array('%F', '%L', '%T');
         $search2 = array('first_name', 'last_name', 'title');

@@ -59,16 +59,17 @@ if (!api_is_platform_admin()) {
 	api_not_allowed(true);
 }
 
-function search_courses($needle,$type)
+function search_courses($needle, $type)
 {
-    global $_configuration, $tbl_course, $tbl_course_rel_user, $tbl_course_rel_access_url,$user_id;
+    global $_configuration, $tbl_course, $tbl_course_rel_access_url,$user_id;
 
     $xajax_response = new XajaxResponse();
     $return = '';
-    if(!empty($needle) && !empty($type)) {
+    if (!empty($needle) && !empty($type)) {
         // xajax send utf8 datas... datas in db can be non-utf8 datas
         $charset = api_get_system_encoding();
         $needle = api_convert_encoding($needle, $charset, 'utf-8');
+		$needle = Database::escape_string($needle);
 
         $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
         $assigned_courses_code = array_keys($assigned_courses_to_hrm);
@@ -190,9 +191,10 @@ if (count($assigned_courses_code) > 0) {
 }
 
 $needle = '%';
+$firstLetter = null;
 if (isset($_POST['firstLetterCourse'])) {
-	$needle = Database::escape_string($_POST['firstLetterCourse']);
-	$needle = "$needle%";
+	$firstLetter = $_POST['firstLetterCourse'];
+	$needle = Database::escape_string($firstLetter.'%');
 }
 
 if (api_is_multiple_url_enabled()) {
@@ -249,7 +251,7 @@ if(!empty($msg)) {
      <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
       <option value="%">--</option>
       <?php
-      echo Display :: get_alphabet_options($_POST['firstLetterCourse']);
+      echo Display :: get_alphabet_options($firstLetter);
       ?>
      </select>
 </td>

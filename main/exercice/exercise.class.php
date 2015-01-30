@@ -446,7 +446,7 @@ class Exercise
             $sql = "SELECT DISTINCT e.question_order
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
                         ON (e.question_id = q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
-					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'";
+					WHERE e.exercice_id	= ".intval($this->id)."";
             $result = Database::query($sql);
 
             $count_question_orders = Database::num_rows($result);
@@ -454,7 +454,7 @@ class Exercise
             $sql = "SELECT e.question_id, e.question_order
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
                         ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
-					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
+					WHERE e.exercice_id	= ".intval($this->id)."
 					ORDER BY question_order";
             $result = Database::query($sql);
 
@@ -816,28 +816,28 @@ class Exercise
 
             if ($type_e != 'simple') {
                 $sql .= ",sound='".Database::escape_string($sound)."',
-					type           ='".Database::escape_string($type)."',
-					random         ='".Database::escape_string($random)."',
-					random_answers ='".Database::escape_string($random_answers)."',
-					active         ='".Database::escape_string($active)."',
-					feedback_type  ='".Database::escape_string($feedback_type)."',
+					type           = ".intval($type).",
+					random         = ".intval($random).",
+					random_answers = ".intval($random_answers).",
+					active         = ".intval($active).",
+					feedback_type  = ".intval($feedback_type).",
 					start_time     = '$start_time',
 					end_time       = '$end_time',
-					max_attempt    ='".Database::escape_string($attempts)."',
-     			    expired_time   ='".Database::escape_string($expired_time)."',
-         			propagate_neg  ='".Database::escape_string($propagate_neg)."',
-         			review_answers  ='".Database::escape_string($review_answers)."',
-        	        random_by_category='".Database::escape_string($randomByCat)."',
+					max_attempt    = ".intval($attempts).",
+     			    expired_time   = ".intval($expired_time).",
+         			propagate_neg  = ".intval($propagate_neg).",
+         			review_answers = ".intval($review_answers).",
+        	        random_by_category= ".intval($randomByCat).",
         	        text_when_finished = '".Database::escape_string($text_when_finished)."',
-        	        display_category_name = '".Database::escape_string($display_category_name)."',
-                    pass_percentage = '".Database::escape_string($pass_percentage)."',
-					results_disabled='".Database::escape_string($results_disabled)."'";
+        	        display_category_name = ".intval($display_category_name).",
+                    pass_percentage = ".intval($pass_percentage).",
+					results_disabled= ".intval($results_disabled)."";
             }
-            $sql .= " WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($id)."'";
+            $sql .= " WHERE c_id = ".$this->course_id." AND id = ".intval($id)."";
             Database::query($sql);
 
             // update into the item_property table
-            api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',api_get_user_id());
+            api_item_property_update($_course, TOOL_QUIZ, $id, 'QuizUpdated', api_get_user_id());
 
             if (api_get_setting('search_enabled')=='true') {
                 $this->search_engine_edit();
@@ -871,20 +871,20 @@ class Exercise
 						'".Database::escape_string($exercise)."',
 						'".Database::escape_string($description)."',
 						'".Database::escape_string($sound)."',
-						'".Database::escape_string($type)."',
-						'".Database::escape_string($random)."',
-						'".Database::escape_string($random_answers)."',
-						'".Database::escape_string($active)."',
-						'".Database::escape_string($results_disabled)."',
-						'".Database::escape_string($attempts)."',
-						'".Database::escape_string($feedback_type)."',
-						'".Database::escape_string($expired_time)."',
-						'".Database::escape_string($session_id)."',
-						'".Database::escape_string($review_answers)."',
-						'".Database::escape_string($randomByCat)."',
+						".intval($type).",
+						".intval($random).",
+						".intval($random_answers).",
+						".intval($active).",
+						".intval($results_disabled).",
+						".intval($attempts).",
+						".intval($feedback_type).",
+						".intval($expired_time).",
+						".intval($session_id).",
+						".intval($review_answers).",
+						".intval($randomByCat).",
 						'".Database::escape_string($text_when_finished)."',
-						'".Database::escape_string($display_category_name)."',
-                        '".Database::escape_string($pass_percentage)."'
+						".intval($display_category_name).",
+                        ".intval($pass_percentage)."
 						)";
             Database::query($sql);
             $this->id = Database::insert_id();
@@ -986,7 +986,7 @@ class Exercise
     {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $TBL_EXERCICES SET active='-1'
-                WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($this->id)."'";
+                WHERE c_id = ".$this->course_id." AND id = ".intval($this->id)."";
         Database::query($sql);
         api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizDeleted', api_get_user_id());
         api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'delete', api_get_user_id());
@@ -1914,7 +1914,7 @@ class Exercise
                     buttons: {
                         '".addslashes(get_lang("EndTest"))."': function() {
                             $('#clock_warning').dialog('close');
-                        },
+                        }
                     },
                     close: function() {
                         send_form();
@@ -2515,7 +2515,7 @@ class Exercise
                             $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                           WHERE
                                             exe_id = '".$exeId."' AND
-                                            question_id= '".Database::escape_string($questionId)."'";
+                                            question_id= ".intval($questionId)."";
                             $resfill = Database::query($queryfill);
                             $str = Database::result($resfill, 0, 'answer');
 
@@ -2641,7 +2641,7 @@ class Exercise
                             $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                           WHERE
                                             exe_id = '".$exeId."' AND
-                                            question_id= '".Database::escape_string($questionId)."'";
+                                            question_id= ".intval($questionId)."";
                             $resfill = Database::query($queryfill);
                             $str = Database::result($resfill, 0, 'answer');
                             api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
@@ -2832,7 +2832,7 @@ class Exercise
                                 WHERE
                                     hotspot_exe_id = '".$exeId."' AND
                                     hotspot_question_id= '".$questionId."' AND
-                                    hotspot_answer_id = '".Database::escape_string($answerId)."'";
+                                    hotspot_answer_id = ".intval($answerId)."";
                         $result = Database::query($sql);
                         $studentChoice = Database::result($result, 0, "hotspot_correct");
 

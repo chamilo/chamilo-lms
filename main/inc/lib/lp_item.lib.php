@@ -39,8 +39,8 @@ class LpItem
             $item_view_table = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT * FROM $item_view_table
                     WHERE
-                        c_id=".Database::escape_string($in_c_id)." AND
-                        id=".Database::escape_string($in_id);
+                        c_id=".intval($in_c_id)." AND
+                        id=".intval($in_id);
 
             $res = Database::query($sql);
             $data = Database::fetch_array($res);
@@ -79,7 +79,7 @@ class LpItem
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM);
         if ($this->c_id > 0 && $this->id > 0) {
             $sql = "UPDATE $item_view_table SET
-                        lp_id = '".Database::escape_string($this->lp_id)."' ,
+                        lp_id = '".intval($this->lp_id)."' ,
                         item_type = '".Database::escape_string($this->item_type)."' ,
                         ref = '".Database::escape_string($this->ref)."' ,
                         title = '".Database::escape_string($this->title)."' ,

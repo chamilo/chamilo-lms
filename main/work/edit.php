@@ -288,7 +288,7 @@ if (!empty($work_id)) {
             echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
         } else {
 
-            $comments = getWorkComments($my_folder_data);
+            $comments = getWorkComments($work_item);
 
             $template = $tpl->get_template('work/comments.tpl');
             $tpl->assign('work_comment_enabled', ALLOW_USER_COMMENTS);

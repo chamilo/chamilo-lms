@@ -26,9 +26,8 @@ switch ($action) {
         break;
     case 'search_session':
         if (api_is_platform_admin()) {
-            //$results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%"));
             $results = SessionManager::get_sessions_list(
-                array('s.name LIKE' => "%".$_REQUEST['q']."%")
+                array('s.name' => array('operator' => 'LIKE', 'value' => "%".$_REQUEST['q']."%"))
             );
             $results2 = array();
             if (!empty($results)) {
@@ -52,7 +51,12 @@ switch ($action) {
         break;
     case 'search_session_all':
         if (api_is_platform_admin()) {
-            $results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%", 'c.id ='=>$_REQUEST['course_id']));
+            $results = SessionManager::get_sessions_list(
+                array(
+                    's.name' => array('operator' => 'like', 'value' => "%".$_REQUEST['q']."%"),
+                    'c.id' => array('operator' => '=', 'value' => $_REQUEST['course_id'])
+                )
+            );
             $results2 = array();
             if (!empty($results)) {
                 foreach ($results as $item) {
@@ -76,7 +80,12 @@ switch ($action) {
         break;
     case 'search_session_by_course':
         if (api_is_platform_admin()) {
-            $results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%", 'c.id ='=>$_REQUEST['course_id']));
+            $results = SessionManager::get_sessions_list(
+                array(
+                    's.name' => array('operator' => 'like', 'value' => "%".$_REQUEST['q']."%"),
+                    'c.id' => array('operator' => '=', 'value' => $_REQUEST['course_id'])
+                )
+            );
             $results2 = array();
             if (!empty($results)) {
                 foreach ($results as $item) {

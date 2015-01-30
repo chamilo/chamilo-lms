@@ -5,6 +5,7 @@ for more information: see languages.txt in the lang folder.
 $SignatureFormula = "Groetjes";
 $HereIsYourFeedback = "In onderstaande bijlage kan je feedback vinden.";
 $LoginToGoToThisCourse = "Gelieve in te loggen om het document te bekijken";
+$YouAreReg = "Je bent aangemeld op";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Dit item is onzichtbaar voor cursisten, maar u hebt toegang als leerkracht.";
 $DeleteAllAttendances = "Verwijder alle gemaakte aanwezigheden";
 $Unsubscribe = "Uitschrijven";
@@ -854,6 +855,7 @@ $ToolCourseProgress = "Voortgang";
 $MyFiles = "Mijn bestanden";
 $ToolVideoconference = "Videoconferentie";
 $AddedToALP = "Toegevoegd aan leerpad";
+$YouAreRegisterToSessionX = "Je bent aangemeld op sesie: %s.";
 $YouHaveANewInvitationFromX = "Je hebt een nieuwe uitnodiging van %s";
 $YouHaveANewMessageFromX = "Je hebt een nieuw bericht van %s";
 $SeeMessage = "Bekijk het bericht";

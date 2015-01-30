@@ -4,9 +4,7 @@
  * Form for group message
  * @package chamilo.social
  */
-/**
- * Initialization
- */
+
 $language_file = array('registration', 'messages', 'userInfo', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -36,19 +34,15 @@ if (isset($_REQUEST['user_friend'])) {
 }
 
 $group_id = intval($_GET['group_id']);
+$message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
 
-$message_id = intval($_GET['message_id']);
 $actions = array(
     'add_message_group',
     'edit_message_group',
     'reply_message_group'
 );
 
-$allowed_action = (isset($_GET['action']) && in_array(
-        $_GET['action'],
-        $actions
-    )) ? Security::remove_XSS($_GET['action']) : '';
-
+$allowed_action = (isset($_GET['action']) && in_array($_GET['action'], $actions)) ? Security::remove_XSS($_GET['action']) : '';
 $to_group = '';
 $subject = '';
 $message = '';
@@ -75,24 +69,15 @@ if (!empty($group_id) && $allowed_action) {
     }
 }
 
-$page_item = !empty($_GET['topics_page_nr']) ? intval(
-    $_GET['topics_page_nr']
-) : 1;
-$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id']) ? ('&items_' . intval(
-        $_GET['topic_id']
-    ) . '_page_nr=' . (!empty($_GET['topics_page_nr']) ? intval(
-        $_GET['topics_page_nr']
-    ) : 1)) : '';
+$page_item = !empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1;
+$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id']) ? ('&items_' . intval($_GET['topic_id']) . '_page_nr=' . (!empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1)) : '';
 $param_item_page .= '&topic_id=' . intval($_GET['topic_id']);
-$page_topic = !empty($_GET['topics_page_nr']) ? intval(
-    $_GET['topics_page_nr']
-) : 1;
+$page_topic = !empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : 1;
+$anchor = isset($_GET['anchor_topic']) ? Security::remove_XSS($_GET['anchor_topic']) : null;
 ?>
 
 <form name="form"
-      action="group_topics.php?id=<?php echo $group_id ?>&anchor_topic=<?php echo Security::remove_XSS(
-          $_GET['anchor_topic']
-      ) ?>&topics_page_nr=<?php echo $page_topic . $param_item_page ?>"
+      action="group_topics.php?id=<?php echo $group_id ?>&anchor_topic=<?php echo $anchor; ?>&topics_page_nr=<?php echo $page_topic . $param_item_page ?>"
       method="POST" enctype="multipart/form-data">
     <input type="hidden" name="action" value="<?php echo $allowed_action ?>"/>
     <input type="hidden" name="group_id" value="<?php echo $group_id ?>"/>

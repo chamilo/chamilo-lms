@@ -48,7 +48,8 @@ $actions = array(
     'attendance_delete_select',
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
-    'attendance_sheet_list_no_edit'
+    'attendance_sheet_list_no_edit',
+    'calendar_logins'
 );
 
 $actions_calendar = array(
@@ -91,8 +92,8 @@ if (isset($_GET['calendar_id'])) {
 $attendance = new Attendance();
 
 // attendance controller object
-$attendance_controller = new AttendanceController();
-
+$attendanceController = new AttendanceController();
+$attendance_data = array();
 // get attendance data
 if (!empty($attendance_id)) {
     // attendance data by id
@@ -205,8 +206,10 @@ if (api_is_drh() && isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
     $student_param = '&student_id='.$student_id;
     $student_info = api_get_user_info($student_id);
-    $student_name = api_get_person_name($student_info['firstname'], $student_info['lastname']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id, 'name' => $student_name);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id,
+        'name' => $student_info['complete_name']
+    );
 }
 if (!empty($gradebook)) {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php', 'name' => get_lang('ToolGradebook'));
@@ -232,53 +235,53 @@ if ($action == 'calendar_add') {
 
 // delete selected attendance
 if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select') {
-    $attendance_controller->attendance_delete($_POST['id']);
+    $attendanceController->attendance_delete($_POST['id']);
 }
 // distpacher actions to controller
 switch ($action) {
     case 'attendance_list':
-        $attendance_controller->attendance_list();
+        $attendanceController->attendance_list();
         break;
     case 'attendance_add':
         if (api_is_allowed_to_edit(null, true)) {
-            $attendance_controller->attendance_add();
+            $attendanceController->attendance_add();
         } else {
             api_not_allowed();
         }
         break;
     case 'attendance_edit' :
         if (api_is_allowed_to_edit(null, true)) {
-            $attendance_controller->attendance_edit($attendance_id);
+            $attendanceController->attendance_edit($attendance_id);
         } else {
             api_not_allowed();
         }
         break;
     case 'attendance_delete' :
         if (api_is_allowed_to_edit(null, true)) {
-            $attendance_controller->attendance_delete($attendance_id);
+            $attendanceController->attendance_delete($attendance_id);
         } else {
             api_not_allowed();
         }
         break;
     case 'attendance_restore':
         if (api_is_allowed_to_edit(null, true)) {
-            $attendance_controller->attendance_restore($attendance_id);
+            $attendanceController->attendance_restore($attendance_id);
         } else {
             api_not_allowed();
         }
         break;
     case 'attendance_sheet_list':
-        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, true);
+        $attendanceController->attendance_sheet($action, $attendance_id, $student_id, true);
         break;
     case 'attendance_sheet_list_no_edit':
-        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, false);
+        $attendanceController->attendance_sheet($action, $attendance_id, $student_id, false);
         break;
     case 'attendance_sheet_export_to_pdf':
-        $attendance_controller->attendance_sheet_export_to_pdf($action, $attendance_id, $student_id, $course_id);
+        $attendanceController->attendance_sheet_export_to_pdf($action, $attendance_id, $student_id, $course_id);
         break;
     case 'attendance_sheet_add' :
         if (api_is_allowed_to_edit(null, true)) {
-            $attendance_controller->attendance_sheet($action, $attendance_id);
+            $attendanceController->attendance_sheet($action, $attendance_id);
         } else {
             api_not_allowed();
         }
@@ -286,7 +289,7 @@ switch ($action) {
     case 'lock_attendance' :
     case 'unlock_attendance' :
         if (api_is_allowed_to_edit(null, true)) {
-            $attendance_controller->lock_attendance($action, $attendance_id);
+            $attendanceController->lock_attendance($action, $attendance_id);
         } else {
             api_not_allowed();
         }
@@ -299,8 +302,13 @@ switch ($action) {
             api_not_allowed();
         }
     case 'calendar_list' :
-        $attendance_controller->attendance_calendar($action, $attendance_id, $calendar_id);
+        $attendanceController->attendance_calendar($action, $attendance_id, $calendar_id);
+        break;
+    case 'calendar_logins':
+        if (api_is_allowed_to_edit(null, true)) {
+            $attendanceController->getAttendanceBaseInLogin(false, true);
+        }
         break;
     default :
-        $attendance_controller->attendance_list();
+        $attendanceController->attendance_list();
 }

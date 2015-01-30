@@ -59,7 +59,7 @@ if (!api_is_platform_admin() && !api_is_session_admin()) {
     api_not_allowed(true);
 }
 
-function search_sessions($needle,$type)
+function search_sessions($needle, $type)
 {
     global $_configuration, $tbl_session_rel_access_url, $tbl_session, $user_id;
 
@@ -69,6 +69,7 @@ function search_sessions($needle,$type)
         // xajax send utf8 datas... datas in db can be non-utf8 datas
         $charset = api_get_system_encoding();
         $needle = api_convert_encoding($needle, $charset, 'utf-8');
+        $needle = Database::escape_string($needle);
         $assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
         $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 
@@ -93,6 +94,7 @@ function search_sessions($needle,$type)
         $return .= '</select>';
         $xajax_response->addAssign('ajax_list_sessions_multiple','innerHTML',api_utf8_encode($return));
     }
+
     return $xajax_response;
 }
 
@@ -192,8 +194,7 @@ if (count($assigned_sessions_id) > 0) {
 
 $needle = '%';
 if (!empty($firstLetterSession)) {
-    $needle = Database::escape_string($firstLetterSession);
-    $needle = "$needle%";
+    $needle = Database::escape_string($firstLetterSession.'%');
 }
 
 if (api_is_multiple_url_enabled()) {
@@ -222,7 +223,8 @@ $result	= Database::query($sql);
             <tr>
                 <td width="45%" align="center"><b><?php echo get_lang('SessionsListInPlatform') ?> :</b></td>
                 <td width="10%">&nbsp;</td>
-                <td align="center" width="45%"><b>
+                <td align="center" width="45%">
+                    <b>
                         <?php
                         if (UserManager::is_admin($user_id)) {
                             echo get_lang('AssignedSessionsListToPlatformAdministrator');
@@ -235,7 +237,7 @@ $result	= Database::query($sql);
                         : </b></td>
             </tr>
 
-            <?php if($add_type == 'multiple') { ?>
+            <?php if ($add_type == 'multiple') { ?>
                 <tr><td width="45%" align="center">
                         <?php echo get_lang('FirstLetterSession');?> :
                         <select name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">

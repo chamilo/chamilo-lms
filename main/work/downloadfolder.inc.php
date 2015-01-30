@@ -10,14 +10,16 @@
 $work_id = $_GET['id'];
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
+$_course = api_get_course_info();
 
-//protection
+// Protection
 api_protect_course_script(true);
 
 require_once 'work.lib.php';
 
 $work_data = get_work_data_by_id($work_id);
 $groupId = api_get_group_id();
+
 if (empty($work_data)) {
     exit;
 }
@@ -59,7 +61,7 @@ if (array_key_exists('filename', $work_data)) {
     $filenameCondition = ", filename";
 }
 
-if (api_is_allowed_to_edit()) {
+if (api_is_allowed_to_edit() || api_is_coach()) {
     //Search for all files that are not deleted => visibility != 2
     $sql = "SELECT DISTINCT
                 url,

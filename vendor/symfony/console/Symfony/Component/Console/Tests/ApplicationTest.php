@@ -95,7 +95,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testHelp()
     {
         $application = new Application();
-        $this->assertStringEqualsFile(self::$fixturesPath.'/application_gethelp.txt', $this->normalizeLineBreaks($application->getHelp()), '->setHelp() returns a help message');
+        $this->assertStringEqualsFile(self::$fixturesPath.'/application_gethelp.txt', $this->normalizeLineBreaks($application->getHelp()), '->getHelp() returns a help message');
     }
 
     public function testAll()
@@ -548,10 +548,10 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $tester = new ApplicationTester($application);
 
         $tester->run(array('command' => 'foo'), array('decorated' => false));
-        $this->assertStringEqualsFile(self::$fixturesPath.'/application_renderexception_doublewidth1.txt', $tester->getDisplay(true), '->renderException() renderes a pretty exceptions with previous exceptions');
+        $this->assertStringEqualsFile(self::$fixturesPath.'/application_renderexception_doublewidth1.txt', $tester->getDisplay(true), '->renderException() renders a pretty exceptions with previous exceptions');
 
         $tester->run(array('command' => 'foo'), array('decorated' => true));
-        $this->assertStringEqualsFile(self::$fixturesPath.'/application_renderexception_doublewidth1decorated.txt', $tester->getDisplay(true), '->renderException() renderes a pretty exceptions with previous exceptions');
+        $this->assertStringEqualsFile(self::$fixturesPath.'/application_renderexception_doublewidth1decorated.txt', $tester->getDisplay(true), '->renderException() renders a pretty exceptions with previous exceptions');
 
         $application = $this->getMock('Symfony\Component\Console\Application', array('getTerminalWidth'));
         $application->setAutoExit(false);
@@ -903,6 +903,22 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('before.foo.after.caught.', $tester->getDisplay());
     }
 
+    public function testRunWithDispatcherSkippingCommand()
+    {
+        $application = new Application();
+        $application->setDispatcher($this->getDispatcher(true));
+        $application->setAutoExit(false);
+
+        $application->register('foo')->setCode(function (InputInterface $input, OutputInterface $output) {
+            $output->write('foo.');
+        });
+
+        $tester = new ApplicationTester($application);
+        $exitCode = $tester->run(array('command' => 'foo'));
+        $this->assertContains('before.after.', $tester->getDisplay());
+        $this->assertEquals(ConsoleCommandEvent::RETURN_CODE_DISABLED, $exitCode);
+    }
+
     public function testTerminalDimensions()
     {
         $application = new Application();
@@ -918,16 +934,22 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(array($width, 80), $application->getTerminalDimensions());
     }
 
-    protected function getDispatcher()
+    protected function getDispatcher($skipCommand = false)
     {
         $dispatcher = new EventDispatcher();
-        $dispatcher->addListener('console.command', function (ConsoleCommandEvent $event) {
+        $dispatcher->addListener('console.command', function (ConsoleCommandEvent $event) use ($skipCommand) {
             $event->getOutput()->write('before.');
+
+            if ($skipCommand) {
+                $event->disableCommand();
+            }
         });
-        $dispatcher->addListener('console.terminate', function (ConsoleTerminateEvent $event) {
+        $dispatcher->addListener('console.terminate', function (ConsoleTerminateEvent $event) use ($skipCommand) {
             $event->getOutput()->write('after.');
 
-            $event->setExitCode(128);
+            if (!$skipCommand) {
+                $event->setExitCode(113);
+            }
         });
         $dispatcher->addListener('console.exception', function (ConsoleExceptionEvent $event) {
             $event->getOutput()->writeln('caught.');
@@ -958,6 +980,25 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $tester->run(array());
 
         $this->assertEquals('interact called'.PHP_EOL.'called'.PHP_EOL, $tester->getDisplay(), 'Application runs the default set command if different from \'list\' command');
+    }
+
+    public function testCanCheckIfTerminalIsInteractive()
+    {
+        if (!function_exists('posix_isatty')) {
+            $this->markTestSkipped('posix_isatty function is required');
+        }
+
+        $application = new CustomDefaultCommandApplication();
+        $application->setAutoExit(false);
+
+        $tester = new ApplicationTester($application);
+        $tester->run(array('command' => 'help'));
+
+        $this->assertTrue($tester->getInput()->isInteractive());
+        $this->assertFalse($tester->getInput()->hasParameterOption(array('--no-interaction', '-n')));
+
+        $inputStream = $application->getHelperSet()->get('question')->getInputStream();
+        $this->assertEquals($tester->getInput()->isInteractive(), @posix_isatty($inputStream));
     }
 }
 

@@ -34,13 +34,13 @@ function get_number_of_classes() {
  * @param int $number_of_items
  * @param string $direction
  */
-function get_class_data($from, $number_of_items, $column, $direction) {
+function get_class_data($from, $number_of_items, $column, $direction = 'ASC') {
     $tbl_class_user = Database::get_main_table(TABLE_MAIN_CLASS_USER);
     $tbl_class = Database :: get_main_table(TABLE_MAIN_CLASS);
-    $from 				= Database::escape_string($from);
-    $number_of_items 	= Database::escape_string($number_of_items);
-    $column 			= Database::escape_string($column);
-    $direction 			= Database::escape_string($direction);
+    $from 				= intval($from);
+    $number_of_items 	= intval($number_of_items);
+    $column 			= intval($column);
+    $direction 			= ($direction == 'ASC'?'ASC':'DESC');
 
     $sql = "SELECT 	id AS col0, name AS col1, COUNT(user_id) AS col2, id AS col3
         FROM $tbl_class

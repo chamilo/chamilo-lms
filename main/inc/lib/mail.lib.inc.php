@@ -39,7 +39,8 @@ function api_mail(
     $extra_headers = '',
     $additionalParameters = array()
 ) {
-    api_mail_html(
+    error_log("api_mail is deprecated. Using api_mail_html() on line ".__LINE__." of [".__FILE__."]");
+    return api_mail_html(
         $recipient_name,
         $recipient_email,
         $subject,

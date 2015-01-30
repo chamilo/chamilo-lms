@@ -11,6 +11,7 @@ $strings['Private'] = "Private - access authorized only for course members";
 $strings['CourseVisibilityClosed'] = "Closed - no access to this course";
 $strings['OpenToThePlatform'] = "Open - access authorized only for users registered on the platform";
 $strings['OpenToTheWorld'] = "Public - access open to anybody";
+$strings['CourseVisibilityHidden'] = "Hidden - Completely hidden to all users except the administrators";
 $strings['Description'] = "Description";
 $strings['Buy'] = "Buy";
 $strings['Mostrar_disponibles'] = "Show available courses";

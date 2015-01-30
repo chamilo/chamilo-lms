@@ -134,7 +134,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     email = '".Database::escape_string($email)."',
                                     official_code = '".Database::escape_string($official_code)."',
                                     phone = '".Database::escape_string($phone)."',
-                                    status = '".Database::escape_string($status)."'
+                                    status = '".intval($status)."'
                                 WHERE username = '".Database::escape_string($username)."'";
 
                             Database::query($sql);

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Copy resources from one course in a session to another one.
  *
@@ -7,10 +8,6 @@
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
  * @package chamilo.backup
  */
-/**
- * Code
- */
-/*  INIT SECTION  */
 
 // Language files that need to be included
 $language_file = array('coursebackup', 'admin');
@@ -18,7 +15,8 @@ $language_file = array('coursebackup', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
-api_protect_course_script(true, true);
+
+api_protect_global_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
@@ -90,7 +88,7 @@ function make_select_session_list($name, $sessions, $attr = array())
 function display_form()
 {
     $html  = '';
-    $sessions = SessionManager::get_sessions_list(null, array('name ASC'));
+    $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
     // Actions
     $html .= '<div class="actions">';
@@ -166,7 +164,7 @@ function search_courses($id_session, $type)
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {
 
-                $sessions = SessionManager::get_sessions_list(null, array('name ASC'));
+                $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
 
                 $select_destination .= '<select name="sessions_list_destination" width="380px" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';

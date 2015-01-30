@@ -134,7 +134,7 @@ class Autoload
         $result['CourseDescription\UploadFileForm'] = '/main/course_description/upload_file_form.class.php';
         $result['CourseEntity'] = '/main/inc/lib/course_entity.class.php';
         $result['CourseEntityRepository'] = '/main/inc/lib/course_entity_repository.class.php';
-        $result['CourseField'] = '/main/inc/lib/CourseField.class.php';
+        $result['CourseField'] = '/main/inc/lib/CourseField.php';
         $result['CourseFieldOption'] = '/main/inc/lib/CourseFieldOption.class.php';
         $result['CourseFieldValue'] = '/main/inc/lib/CourseFieldValue.class.php';
         $result['CourseHome'] = '/main/inc/lib/course_home.lib.php';

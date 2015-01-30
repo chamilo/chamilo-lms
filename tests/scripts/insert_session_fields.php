@@ -9,130 +9,142 @@ require_once '../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
-$horasLectivas = new ExtraField('session');
-$horasLectivas->save(array(
+$teachingHours = new ExtraField('session');
+$teachingHours->save(array(
     'field_type' => ExtraField::FIELD_TYPE_INTEGER,
-    'field_variable' => 'horas_lectivas',
-    'field_display_text' => 'Horas lectivas',
+    'field_variable' => 'teaching_hours',
+    'field_display_text' => get_lang('TeachingHours'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$costo = new ExtraField('session');
-$costo->save(array(
+$cost = new ExtraField('session');
+$cost->save(array(
     'field_type' => ExtraField::FIELD_TYPE_FLOAT,
-    'field_variable' => 'costo',
-    'field_display_text' => 'Costo',
+    'field_variable' => 'cost',
+    'field_display_text' => get_lang('Cost'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$vacantes = new ExtraField('session');
-$vacantes->save(array(
+$vacancies = new ExtraField('session');
+$vacancies->save(array(
     'field_type' => ExtraField::FIELD_TYPE_INTEGER,
-    'field_variable' => 'vacantes',
-    'field_display_text' => 'Vacantes',
+    'field_variable' => 'vacancies',
+    'field_display_text' => get_lang('Vacancies'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$numeroRecomendadoParticipantes = new ExtraField('session');
-$numeroRecomendadoParticipantes->save(array(
+$recommendedNumberOfParticipants = new ExtraField('session');
+$recommendedNumberOfParticipants->save(array(
     'field_type' => ExtraField::FIELD_TYPE_INTEGER,
-    'field_variable' => 'numero_recomendado_participantes',
-    'field_display_text' => 'Número recomendado de participantes',
+    'field_variable' => 'recommended_number_of_participants',
+    'field_display_text' => get_lang('RecommendedNumberOfParticipants'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$lugar = new ExtraField('session');
-$lugar->save(array(
+$place = new ExtraField('session');
+$place->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
-    'field_variable' => 'lugar',
-    'field_display_text' => 'Lugar',
+    'field_variable' => 'place',
+    'field_display_text' => get_lang('Place'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$horario = new ExtraField('session');
-$horario->save(array(
+$schedule = new ExtraField('session');
+$schedule->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
-    'field_variable' => 'horario',
-    'field_display_text' => 'Horario',
+    'field_variable' => 'schedule',
+    'field_display_text' => get_lang('Schedule'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$permitirVisitantes = new ExtraField('session');
-$permitirVisitantes->save(array(
+$allowVisitors = new ExtraField('session');
+$allowVisitors->save(array(
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-    'field_variable' => 'permitir_visitantes',
-    'field_display_text' => 'Permitir visitantes',
+    'field_variable' => 'allow_visitors',
+    'field_display_text' => get_lang('AllowVisitors'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$modalidad = new ExtraField('session');
-$modalidad->save(array(
+$modeOptions = array(
+    get_lang('Online'),
+    get_lang('Presencial'),
+    get_lang('B-Learning')
+);
+
+$mode = new ExtraField('session');
+$mode->save(array(
     'field_type' => ExtraField::FIELD_TYPE_SELECT,
-    'field_variable' => 'modalidad',
-    'field_display_text' => 'Modalidad',
+    'field_variable' => 'mode',
+    'field_display_text' => get_lang('Mode'),
     'field_visible' => 1,
     'field_changeable' => 1,
-    'field_options' => 'Online; Presencial; B-Learning'
+    'field_options' => implode('; ', $modeOptions)
 ));
 
-$esSesionInduccion = new ExtraField('session');
-$esSesionInduccion->save(array(
+$isInductionSession = new ExtraField('session');
+$isInductionSession->save(array(
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-    'field_variable' => 'es_induccion',
-    'field_display_text' => 'Es sesión de inducción',
+    'field_variable' => 'is_induccion_session',
+    'field_display_text' => get_lang('IsInductionSession'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$esSesionAbierta = new ExtraField('session');
-$esSesionAbierta->save(array(
+$isOpenSession = new ExtraField('session');
+$isOpenSession->save(array(
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-    'field_variable' => 'es_abierta',
-    'field_display_text' => 'Es sesión abierta',
+    'field_variable' => 'is_open_session',
+    'field_display_text' => get_lang('IsOpenSession'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$duracion = new ExtraField('session');
-$duracion->save(array(
+$duration = new ExtraField('session');
+$duration->save(array(
     'field_type' => ExtraField::FIELD_TYPE_INTEGER,
-    'field_variable' => 'duracion',
-    'field_display_text' => 'Duración',
+    'field_variable' => 'duration',
+    'field_display_text' => get_lang('Duration'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$mostrarEstado = new ExtraField('session');
-$mostrarEstado->save(array(
+$showStatusOptions = array(
+    get_lang('Open'),
+    get_lang('InProcess'),
+    get_lang('Closed')
+);
+
+$showStatus = new ExtraField('session');
+$showStatus->save(array(
     'field_type' => ExtraField::FIELD_TYPE_SELECT,
-    'field_variable' => 'mostrar_estado',
-    'field_display_text' => 'Mostrar estado',
+    'field_variable' => 'show_status',
+    'field_display_text' => get_lang('ShowStatus'),
     'field_visible' => 1,
     'field_changeable' => 1,
-    'field_options' => 'Abierto; En proceso; Cerrado'
+    'field_options' => implode('; ', $showStatusOptions)
 ));
 
-$inicioPublicacion = new ExtraField('session');
-$inicioPublicacion->save(array(
+$publicationStartDate = new ExtraField('session');
+$publicationStartDate->save(array(
     'field_type' => ExtraField::FIELD_TYPE_DATE,
-    'field_variable' => 'inicio_publicacion',
-    'field_display_text' => 'Inicio de publicación',
+    'field_variable' => 'publication_start_date',
+    'field_display_text' => get_lang('PublicationStartDate'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
 
-$finPublicacion = new ExtraField('session');
-$finPublicacion->save(array(
+$publicationEndDate = new ExtraField('session');
+$publicationEndDate->save(array(
     'field_type' => ExtraField::FIELD_TYPE_DATE,
-    'field_variable' => 'fin_publicacion',
-    'field_display_text' => 'Fin de publicación',
+    'field_variable' => 'publication_end_date',
+    'field_display_text' => get_lang('PublicationEndDate'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
@@ -141,7 +153,7 @@ $banner = new ExtraField('session');
 $banner->save(array(
     'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
     'field_variable' => 'banner',
-    'field_display_text' => 'Banner de la sesión',
+    'field_display_text' => get_lang('SessionBanner'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
@@ -150,7 +162,7 @@ $brochure = new ExtraField('session');
 $brochure->save(array(
     'field_type' => ExtraField::FIELD_TYPE_FILE,
     'field_variable' => 'brochure',
-    'field_display_text' => 'Brochure',
+    'field_display_text' => get_lang('Brochure'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));

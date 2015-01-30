@@ -161,50 +161,64 @@ class FlatViewTable extends SortableTable
                 $i = 1;
 
                 foreach ($resource_list as $key => $resource) {
-                    $new_resource_list = $new_resource_list_name = array();
-                    $DataSet = new pData();
                     // Reverse array, otherwise we get highest values first
                     $resource = array_reverse($resource, true);
 
-                    $DataSet->addPoints($resource, 'Serie');
-                    $DataSet->addPoints(array_keys($resource), 'Labels');
-                    $DataSet->SetSerieDescription('Labels', strip_tags($headerName[$i - 1]));
-                    $DataSet->setAbscissa('Labels');
-                    $DataSet->setAbscissaName(get_lang('GradebookSkillsRanking'));
-                    $DataSet->SetAxisName(0, get_lang('Students'));
-                    $Palette = array(
-                        "0" => array("R" => 188, "G" => 224, "B" => 46, "Alpha" => 100),
-                        "1" => array("R" => 224, "G" => 100, "B" => 46, "Alpha" => 100),
-                        "2" => array("R" => 224, "G" => 214, "B" => 46, "Alpha" => 100),
-                        "3" => array("R" => 46, "G" => 151, "B" => 224, "Alpha" => 100),
-                        "4" => array("R" => 176, "G" => 46, "B" => 224, "Alpha" => 100),
-                        "5" => array("R" => 224, "G" => 46, "B" => 117, "Alpha" => 100),
-                        "6" => array("R" => 92, "G" => 224, "B" => 46, "Alpha" => 100),
-                        "7" => array("R" => 224, "G" => 176, "B" => 46, "Alpha" => 100)
+                    $dataSet = new pData();
+                    $dataSet->addPoints($resource, 'Serie');
+                    $dataSet->addPoints(array_keys($resource), 'Labels');
+                    $dataSet->setSerieDescription('Labels', strip_tags($headerName[$i - 1]));
+                    $dataSet->setAbscissa('Labels');
+                    $dataSet->setAbscissaName(get_lang('GradebookSkillsRanking'));
+                    $dataSet->setAxisName(0, get_lang('Students'));
+                    $palette = array(
+                        '0' => array('R' => 188, 'G' => 224, 'B' => 46, 'Alpha' => 100),
+                        '1' => array('R' => 224, 'G' => 100, 'B' => 46, 'Alpha' => 100),
+                        '2' => array('R' => 224, 'G' => 214, 'B' => 46, 'Alpha' => 100),
+                        '3' => array('R' => 46, 'G' => 151, 'B' => 224, 'Alpha' => 100),
+                        '4' => array('R' => 176, 'G' => 46, 'B' => 224, 'Alpha' => 100),
+                        '5' => array('R' => 224, 'G' => 46, 'B' => 117, 'Alpha' => 100),
+                        '6' => array('R' => 92, 'G' => 224, 'B' => 46, 'Alpha' => 100),
+                        '7' => array('R' => 224, 'G' => 176, 'B' => 46, 'Alpha' => 100)
                     );
                     // Cache definition
                     $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-                    $myCache = new pCache(array("CacheFolder" => substr($cachePath, 0, strlen($cachePath) - 1)));
-                    $chartHash = $myCache->getHash($DataSet);
+                    $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+                    $chartHash = $myCache->getHash($dataSet);
                     if ($myCache->isInCache($chartHash)) {
                         $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
                         $myCache->saveFromCache($chartHash, $imgPath);
                         $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
                     } else {
                         /* Create the pChart object */
-                        $chart_size_w = 480;
-                        $chart_size_h = 250;
+                        $widthSize = 480;
+                        $heightSize = 250;
 
-                        $myPicture = new pImage($chart_size_w, $chart_size_h, $DataSet);
+                        $myPicture = new pImage($widthSize, $heightSize, $dataSet);
 
                         /* Turn of Antialiasing */
-                        $myPicture->Antialias = FALSE;
+                        $myPicture->Antialias = false;
 
                         /* Add a border to the picture */
-                        $myPicture->drawRectangle(0, 0, $chart_size_w - 1, $chart_size_h - 1, array("R" => 0, "G" => 0, "B" => 0));
+                        $myPicture->drawRectangle(
+                            0,
+                            0,
+                            $widthSize - 1,
+                            $heightSize - 1,
+                            array(
+                                'R' => 0,
+                                'G' => 0,
+                                'B' => 0
+                            )
+                        );
 
                         /* Set the default font */
-                        $myPicture->setFontProperties(array("FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf", "FontSize" => 10));
+                        $myPicture->setFontProperties(
+                            array(
+                                'FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                                'FontSize' => 10
+                            )
+                        );
 
                         /* Write the chart title */
                         $myPicture->drawText(
@@ -212,34 +226,61 @@ class FlatViewTable extends SortableTable
                             30,
                             strip_tags($headerName[$i - 1]),
                             array(
-                                "FontSize" => 12,
-                                "Align" => TEXT_ALIGN_BOTTOMMIDDLE
+                                'FontSize' => 12,
+                                'Align' => TEXT_ALIGN_BOTTOMMIDDLE
                             )
                         );
 
                         /* Define the chart area */
-                        $myPicture->setGraphArea(50, 40, $chart_size_w - 20, $chart_size_h - 50);
+                        $myPicture->setGraphArea(50, 40, $widthSize - 20, $heightSize - 50);
 
                         /* Draw the scale */
-                        $scaleSettings = array("GridR" => 200, "GridG" => 200, "GridB" => 200, "DrawSubTicks" => true, "CycleBackground" => true, "Mode" => SCALE_MODE_START0);
+                        $scaleSettings = array(
+                            'GridR' => 200,
+                            'GridG' => 200,
+                            'GridB' => 200,
+                            'DrawSubTicks' => true,
+                            'CycleBackground' => true,
+                            'Mode' => SCALE_MODE_START0
+                        );
                         $myPicture->drawScale($scaleSettings);
 
                         /* Turn on shadow computing */
-                        $myPicture->setShadow(true, array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10));
+                        $myPicture->setShadow(
+                            true,
+                            array(
+                                'X' => 1,
+                                'Y' => 1,
+                                'R' => 0,
+                                'G' => 0,
+                                'B' => 0,
+                                'Alpha' => 10
+                            )
+                        );
 
                         /* Draw the chart */
-                        $myPicture->setShadow(true, array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10));
+                        $myPicture->setShadow(
+                            true,
+                            array(
+                                'X' => 1,
+                                'Y' => 1,
+                                'R' => 0,
+                                'G' => 0,
+                                'B' => 0,
+                                'Alpha' => 10
+                            )
+                        );
                         $settings = array(
-                            "OverrideColors" => $Palette,
-                            "Gradient" => false,
-                            "GradientMode" => GRADIENT_SIMPLE,
-                            "DisplayPos" => LABEL_POS_TOP,
-                            "DisplayValues" => true,
-                            "DisplayR" => 0,
-                            "DisplayG" => 0,
-                            "DisplayB" => 0,
-                            "DisplayShadow" => true,
-                            "Surrounding" => 10,
+                            'OverrideColors' => $palette,
+                            'Gradient' => false,
+                            'GradientMode' => GRADIENT_SIMPLE,
+                            'DisplayPos' => LABEL_POS_TOP,
+                            'DisplayValues' => true,
+                            'DisplayR' => 0,
+                            'DisplayG' => 0,
+                            'DisplayB' => 0,
+                            'DisplayShadow' => true,
+                            'Surrounding' => 10,
                         );
                         $myPicture->drawBarChart($settings);
 

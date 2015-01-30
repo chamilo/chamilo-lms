@@ -142,11 +142,11 @@ class BlockStudentGraph extends Block
             $dataSet = new pData();
             $dataSet->addPoints($faults, 'Serie1');
             $dataSet->addPoints($usernames, 'Labels');
-            $dataSet->SetSerieDescription('Series1', get_lang('Average'));
-            $dataSet->SetSerieDescription('Labels', get_lang('User'));
+            $dataSet->setSerieDescription('Series1', get_lang('Average'));
+            $dataSet->setSerieDescription('Labels', get_lang('User'));
             $dataSet->setAbscissa('Labels');
             $dataSet->setAbscissaName(get_lang('User'));
-            $dataSet->SetAxisName(0, get_lang('Attendance'));
+            $dataSet->setAxisName(0, get_lang('Attendance'));
             $palette = array(
                 '0' => array('R' => 188, 'G' => 224, 'B' => 46, 'Alpha' => 100),
                 '1' => array('R' => 224, 'G' => 100, 'B' => 46, 'Alpha' => 100),
@@ -187,7 +187,12 @@ class BlockStudentGraph extends Block
                 $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
                 /* Set the default font */
-                $myPicture->setFontProperties(array('FontName' => api_get_path(LIBRARY_PATH) . 'pChart2/fonts/verdana.ttf', 'FontSize' => 10));
+                $myPicture->setFontProperties(
+                    array(
+                        'FontName' => api_get_path(LIBRARY_PATH) . 'pChart2/fonts/verdana.ttf',
+                        'FontSize' => 10
+                    )
+                );
 
                 /* Do NOT Write the chart title */
 
@@ -228,8 +233,7 @@ class BlockStudentGraph extends Block
                 );
                 $myPicture->drawBarChart($settings);
 
-                /* Render the picture (choose the best way) */
-
+                /* Write and save into cache */
                 $myCache->writeToCache($chartHash, $myPicture);
                 $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);

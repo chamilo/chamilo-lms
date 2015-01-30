@@ -187,7 +187,7 @@ class BlockTeacherGraph extends Block
                 $myPicture->drawFilledSplineChart($settings);
                 $myPicture->drawLegend(40, 20, array('Mode' => LEGEND_HORIZONTAL));
 
-                /* Render the picture (choose the best way) */
+                /* Write and save into cache */
                 $myCache->writeToCache($chartHash, $myPicture);
                 $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);

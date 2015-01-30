@@ -182,7 +182,17 @@ class BlockEvaluationGraph extends Block
                             $myPicture->Antialias = false;
 
                             /* Add a border to the picture */
-                            $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
+                            $myPicture->drawRectangle(
+                                0,
+                                0,
+                                $widthSize - 1,
+                                $heightSize - 1,
+                                array(
+                                    'R' => 0,
+                                    'G' => 0,
+                                    'B' => 0
+                                )
+                            );
 
                             /* Set the default font */
                             $myPicture->setFontProperties(
@@ -195,7 +205,12 @@ class BlockEvaluationGraph extends Block
                             /* Do NOT Write the chart title */
 
                             /* Define the chart area */
-                            $myPicture->setGraphArea(50, 30, $widthSize - 20, $heightSize - 100);
+                            $myPicture->setGraphArea(
+                                50,
+                                30,
+                                $widthSize - 20,
+                                $heightSize - 100
+                            );
 
                             /* Draw the scale */
                             $scaleSettings = array(
@@ -216,10 +231,30 @@ class BlockEvaluationGraph extends Block
                             $myPicture->drawScale($scaleSettings);
 
                             /* Turn on shadow computing */
-                            $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+                            $myPicture->setShadow(
+                                true,
+                                array(
+                                    'X' => 1,
+                                    'Y' => 1,
+                                    'R' => 0,
+                                    'G' => 0,
+                                    'B' => 0,
+                                    'Alpha' => 10
+                                )
+                            );
 
                             /* Draw the chart */
-                            $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+                            $myPicture->setShadow(
+                                true,
+                                array(
+                                    'X' => 1,
+                                    'Y' => 1,
+                                    'R' => 0,
+                                    'G' => 0,
+                                    'B' => 0,
+                                    'Alpha' => 10
+                                )
+                            );
                             $settings = array(
                                 'DisplayValues' => true,
                                 'DisplaySize' => $fontSize,
@@ -239,7 +274,7 @@ class BlockEvaluationGraph extends Block
                             );
                             $myPicture->drawLegend($widthSize / 2, 15, $legendSettings);
 
-                            /* Render the picture (choose the best way) */
+                            /* Write and save into cache */
 
                             $myCache->writeToCache($chartHash, $myPicture);
                             $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
@@ -323,7 +358,17 @@ class BlockEvaluationGraph extends Block
                                 $myPicture->Antialias = false;
 
                                 /* Add a border to the picture */
-                                $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
+                                $myPicture->drawRectangle(
+                                    0,
+                                    0,
+                                    $widthSize - 1,
+                                    $heightSize - 1,
+                                    array(
+                                        'R' => 0,
+                                        'G' => 0,
+                                        'B' => 0
+                                    )
+                                );
 
                                 /* Set the default font */
                                 $myPicture->setFontProperties(
@@ -357,10 +402,30 @@ class BlockEvaluationGraph extends Block
                                 $myPicture->drawScale($scaleSettings);
 
                                 /* Turn on shadow computing */
-                                $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+                                $myPicture->setShadow(
+                                    true,
+                                    array(
+                                        'X' => 1,
+                                        'Y' => 1,
+                                        'R' => 0,
+                                        'G' => 0,
+                                        'B' => 0,
+                                        'Alpha' => 10
+                                    )
+                                );
 
                                 /* Draw the chart */
-                                $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+                                $myPicture->setShadow(
+                                    true,
+                                    array(
+                                        'X' => 1,
+                                        'Y' => 1,
+                                        'R' => 0,
+                                        'G' => 0,
+                                        'B' => 0,
+                                        'Alpha' => 10
+                                    )
+                                );
                                 $settings = array(
                                     'DisplayValues' => true,
                                     'DisplaySize' => $fontSize,
@@ -380,8 +445,7 @@ class BlockEvaluationGraph extends Block
                                 );
                                 $myPicture->drawLegend($widthSize / 2, 15, $legendSettings);
 
-                                /* Render the picture (choose the best way) */
-
+                                /* Write and save into cache */
                                 $myCache->writeToCache($chartHash, $myPicture);
                                 $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
                                 $myCache->saveFromCache($chartHash, $imgPath);

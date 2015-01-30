@@ -2928,7 +2928,14 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
             /* Enable shadow computing */
             $myPicture->setShadow(
                 true,
-                array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10)
+                array(
+                    "X" => 1,
+                    "Y" => 1,
+                    "R" => 0,
+                    "G" => 0,
+                    "B" => 0,
+                    "Alpha" => 10
+                )
             );
 
             /* Draw the line chart */

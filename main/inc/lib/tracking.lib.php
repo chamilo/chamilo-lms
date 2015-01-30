@@ -4621,7 +4621,7 @@ class Tracking
             $myPicture->Antialias = false;
 
             /* Draw the background */
-            $Settings = array("R" => 255, "G" => 255, "B" => 255);
+            $Settings = array('R' => 255, 'G' => 255, 'B' => 255);
             $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $Settings);
 
             /* Add a border to the picture */
@@ -4630,14 +4630,14 @@ class Tracking
                 0,
                 $mainWidth - 1,
                 $mainHeight - 1,
-                array("R" => 0, "G" => 0, "B" => 0)
+                array('R' => 0, 'G' => 0, 'B' => 0)
             );
 
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
-                    "FontSize" => 10)
+                    'FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    'FontSize' => 10)
             );
             /* Write the chart title */
             $myPicture->drawText(
@@ -4645,16 +4645,16 @@ class Tracking
                 30,
                 get_lang('ExercisesInTimeProgressChart'),
                 array(
-                    "FontSize" => 12,
-                    "Align" => TEXT_ALIGN_BOTTOMMIDDLE
+                    'FontSize' => 12,
+                    'Align' => TEXT_ALIGN_BOTTOMMIDDLE
                 )
             );
 
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
-                    "FontSize" => 6
+                    'FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    'FontSize' => 6
                 )
             );
 
@@ -4663,14 +4663,14 @@ class Tracking
 
             /* Draw the scale */
             $scaleSettings = array(
-                "XMargin" => 10,
-                "YMargin" => 10,
-                "Floating" => true,
-                "GridR" => 200,
-                "GridG" => 200,
-                "GridB" => 200,
-                "DrawSubTicks" => true,
-                "CycleBackground" => true,
+                'XMargin' => 10,
+                'YMargin' => 10,
+                'Floating' => true,
+                'GridR' => 200,
+                'GridG' => 200,
+                'GridB' => 200,
+                'DrawSubTicks' => true,
+                'CycleBackground' => true,
                 'LabelRotation' => $angle,
                 'Mode' => SCALE_MODE_ADDALL_START0,
             );
@@ -4682,24 +4682,31 @@ class Tracking
             /* Enable shadow computing */
             $myPicture->setShadow(
                 true,
-                array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10)
+                array(
+                    'X' => 1,
+                    'Y' => 1,
+                    'R' => 0,
+                    'G' => 0,
+                    'B' => 0,
+                    'Alpha' => 10
+                )
             );
 
             /* Draw the line chart */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
-                    "FontSize" => 10
+                    'FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    'FontSize' => 10
                 )
             );
             $myPicture->drawSplineChart();
             $myPicture->drawPlotChart(
                 array(
-                    "DisplayValues" => true,
-                    "PlotBorder" => true,
-                    "BorderSize" => 1,
-                    "Surrounding" => -60,
-                    "BorderAlpha" => 80
+                    'DisplayValues' => true,
+                    'PlotBorder' => true,
+                    'BorderSize' => 1,
+                    'Surrounding' => -60,
+                    'BorderAlpha' => 80
                 )
             );
 
@@ -4708,14 +4715,14 @@ class Tracking
                 $mainWidth / 2 + 50,
                 50,
                 array(
-                    "Style" => LEGEND_BOX,
-                    "Mode" => LEGEND_HORIZONTAL,
-                    "FontR" => 0,
-                    "FontG" => 0,
-                    "FontB" => 0,
-                    "R" => 220,
-                    "G" => 220,
-                    "B" => 220,
+                    'Style' => LEGEND_BOX,
+                    'Mode' => LEGEND_HORIZONTAL,
+                    'FontR' => 0,
+                    'FontG' => 0,
+                    'FontB' => 0,
+                    'R' => 220,
+                    'G' => 220,
+                    'B' => 220,
                     'Alpha' => 100
                 )
             );
@@ -4812,13 +4819,13 @@ class Tracking
 
         // Dataset definition
         $dataSet = new pData();
-        $dataSet->addPoints($final_array, "Serie1");
-        $dataSet->addPoints($my_final_array, "Serie2");
+        $dataSet->addPoints($final_array, 'Serie1');
+        $dataSet->addPoints($my_final_array, 'Serie2');
         $dataSet->normalize(100, "%");
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-        $myCache = new pCache(array("CacheFolder" => substr($cachePath, 0, strlen($cachePath) - 1)));
+        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
         $chartHash = $myCache->getHash($dataSet);
         if ($myCache->isInCache($chartHash)) {
             $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
@@ -4826,58 +4833,78 @@ class Tracking
             $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         } else {
             /* Create the pChart object */
-            $chart_size_w = 80;
-            $chart_size_h = 35;
+            $widthSize = 80;
+            $heightSize = 35;
             $fontSize = 2;
 
-            $myPicture = new pImage($chart_size_w, $chart_size_h, $dataSet);
+            $myPicture = new pImage($widthSize, $heightSize, $dataSet);
 
             /* Turn of Antialiasing */
             $myPicture->Antialias = false;
 
             /* Add a border to the picture */
-            $myPicture->drawRectangle(0, 0, $chart_size_w - 1, $chart_size_h - 1, array("R" => 0, "G" => 0, "B" => 0));
+            $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
             /* Set the default font */
-            $myPicture->setFontProperties(array("FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf", "FontSize" => $fontSize));
+            $myPicture->setFontProperties(array('FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf", 'FontSize' => $fontSize));
 
             /* Do not write the chart title */
 
             /* Define the chart area */
-            $myPicture->setGraphArea(5, 5, $chart_size_w - 5, $chart_size_h - 5);
+            $myPicture->setGraphArea(5, 5, $widthSize - 5, $heightSize - 5);
 
             /* Draw the scale */
             $scaleSettings = array(
-                "GridR" => 200,
-                "GridG" => 200,
-                "GridB" => 200,
-                "DrawSubTicks" => true,
-                "CycleBackground" => true,
-                "Mode" => SCALE_MODE_MANUAL,
+                'GridR' => 200,
+                'GridG' => 200,
+                'GridB' => 200,
+                'DrawSubTicks' => true,
+                'CycleBackground' => true,
+                'Mode' => SCALE_MODE_MANUAL,
                 'ManualScale' => array(
-                    "0" => array(
-                        "Min" => 0,
-                        "Max" => 100
+                    '0' => array(
+                        'Min' => 0,
+                        'Max' => 100
                     )
                 )
             );
             $myPicture->drawScale($scaleSettings);
 
             /* Turn on shadow computing */
-            $myPicture->setShadow(true, array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10));
+            $myPicture->setShadow(
+                true,
+                array(
+                    'X' => 1,
+                    'Y' => 1,
+                    'R' => 0,
+                    'G' => 0,
+                    'B' => 0,
+                    'Alpha' => 10
+                )
+            );
 
             /* Draw the chart */
-            $myPicture->setShadow(true, array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10));
+            $myPicture->setShadow(
+                true,
+                array(
+                    'X' => 1,
+                    'Y' => 1,
+                    'R' => 0,
+                    'G' => 0,
+                    'B' => 0,
+                    'Alpha' => 10
+                )
+            );
             $settings = array(
-                "DisplayValues" => true,
-                "DisplaySize" => $fontSize,
-                "DisplayR" => 0,
-                "DisplayG" => 0,
-                "DisplayB" => 0,
-                "DisplayOrientation" => ORIENTATION_HORIZONTAL,
-                "Gradient" => false,
-                "Surrounding" => 5,
-                "InnerSurrounding" => 5
+                'DisplayValues' => true,
+                'DisplaySize' => $fontSize,
+                'DisplayR' => 0,
+                'DisplayG' => 0,
+                'DisplayB' => 0,
+                'DisplayOrientation' => ORIENTATION_HORIZONTAL,
+                'Gradient' => false,
+                'Surrounding' => 5,
+                'InnerSurrounding' => 5
             );
             $myPicture->drawStackedBarChart($settings);
 
@@ -4972,20 +4999,20 @@ class Tracking
 
         // Dataset definition
         $dataSet = new pData();
-        $dataSet->addPoints($final_array, "Serie1");
-        $dataSet->addPoints($my_final_array, "Serie2");
-        $dataSet->addPoints($x_axis, "Serie3");
+        $dataSet->addPoints($final_array, 'Serie1');
+        $dataSet->addPoints($my_final_array, 'Serie2');
+        $dataSet->addPoints($x_axis, 'Serie3');
 
         $dataSet->setSerieDescription('Serie1', get_lang('Score'));
         $dataSet->setSerieDescription('Serie2', get_lang('MyResults'));
         $dataSet->setAbscissa('Serie3');
 
-        $dataSet->setXAxisName(get_lang("Score"));
+        $dataSet->setXAxisName(get_lang('Score'));
         $dataSet->normalize(100, "%");
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-        $myCache = new pCache(array("CacheFolder" => substr($cachePath, 0, strlen($cachePath) - 1)));
+        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
         $chartHash = $myCache->getHash($dataSet);
         if ($myCache->isInCache($chartHash)) {
             $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
@@ -5003,10 +5030,10 @@ class Tracking
             $myPicture->Antialias = false;
 
             /* Add a border to the picture */
-            $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array("R" => 0, "G" => 0, "B" => 0));
+            $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
             /* Set the default font */
-            $myPicture->setFontProperties(array("FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf", "FontSize" => 10));
+            $myPicture->setFontProperties(array('FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf", 'FontSize' => 10));
 
             /* Write the chart title */
             $myPicture->drawText(
@@ -5014,8 +5041,8 @@ class Tracking
                 20,
                 $exercise_title,
                 array(
-                    "FontSize" => 12,
-                    "Align" => TEXT_ALIGN_BOTTOMMIDDLE
+                    'FontSize' => 12,
+                    'Align' => TEXT_ALIGN_BOTTOMMIDDLE
                 )
             );
 
@@ -5024,36 +5051,36 @@ class Tracking
 
             /* Draw the scale */
             $scaleSettings = array(
-                "GridR" => 200,
-                "GridG" => 200,
-                "GridB" => 200,
-                "DrawSubTicks" => true,
-                "CycleBackground" => true,
-                "Mode" => SCALE_MODE_MANUAL,
+                'GridR' => 200,
+                'GridG' => 200,
+                'GridB' => 200,
+                'DrawSubTicks' => true,
+                'CycleBackground' => true,
+                'Mode' => SCALE_MODE_MANUAL,
                 'ManualScale' => array(
-                    "0" => array(
-                        "Min" => 0,
-                        "Max" => 100
+                    '0' => array(
+                        'Min' => 0,
+                        'Max' => 100
                     )
                 )
             );
             $myPicture->drawScale($scaleSettings);
 
             /* Turn on shadow computing */
-            $myPicture->setShadow(true, array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10));
+            $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
 
             /* Draw the chart */
-            $myPicture->setShadow(true, array("X" => 1, "Y" => 1, "R" => 0, "G" => 0, "B" => 0, "Alpha" => 10));
+            $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
             $settings = array(
-                "DisplayValues" => true,
-                "DisplaySize" => $fontSize,
-                "DisplayR" => 0,
-                "DisplayG" => 0,
-                "DisplayB" => 0,
-                "DisplayOrientation" => ORIENTATION_HORIZONTAL,
-                "Gradient" => false,
-                "Surrounding" => 30,
-                "InnerSurrounding" => 25
+                'DisplayValues' => true,
+                'DisplaySize' => $fontSize,
+                'DisplayR' => 0,
+                'DisplayG' => 0,
+                'DisplayB' => 0,
+                'DisplayOrientation' => ORIENTATION_HORIZONTAL,
+                'Gradient' => false,
+                'Surrounding' => 30,
+                'InnerSurrounding' => 25
             );
             $myPicture->drawStackedBarChart($settings);
 
@@ -5063,8 +5090,7 @@ class Tracking
             );
             $myPicture->drawLegend($widthSize / 2, 30, $legendSettings);
 
-            /* Render the picture (choose the best way) */
-
+            /* Write and save into cache */
             $myCache->writeToCache($chartHash, $myPicture);
             $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
             $myCache->saveFromCache($chartHash, $imgPath);

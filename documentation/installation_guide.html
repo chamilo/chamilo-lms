@@ -155,8 +155,7 @@ enable CSS styles package upload and sub-language definition:
   <li>[chamilo]/main/css/</li>
   <li>[chamilo]/main/lang/</li>
 </ul>
-Starting from Chamilo 1.8.8, you can also enable full-text indexing features which
-require the php5-xapian PHP's extension module to be installed. If you do use
+Starting from Chamilo 1.8.8, you can also enable full-text indexing features which require the php5-xapian PHP's extension module to be installed. If you do use
 it, you will need to allow your system to write into the sarchdb directory:
 <ul>
   <li>[chamilo]/searchdb</li>
@@ -795,8 +794,9 @@ Then go to your administration page -&gt; Configuration settings -&gt; Search
 and enable the search tool. Follow the recommendations on the page to get the
 complete indexing suite installed. Once you're done, all documents you import
 into your Chamilo portal in a recognized format will be indexed and searchable.
-Chamilo Administrators training (which you can ask any <a href="http://www.chamilo.org/en/providers">Chamilo's Official
-Provider</a> for) include a full review of the full-text search feature.
+Chamilo intermediate Administrators training (which you can ask any <a href="http://www.chamilo.org/en/providers">Chamilo's Official Provider</a> for) include a full review of the full-text search feature.</p>
+<p class="muted">
+Note: Xapian's licensing for the PHP extension is a bit different than what is necessary to enter the Debian repositories, so it has been excluded. You can, however, generate your own package by following the <a href="http://trac.xapian.org/wiki/FAQ/PHP%20Bindings%20Package">packaging instructions on Xapian's wiki</a>.
 </p>
 
 <hr style="width: 100%; height: 2px;" />

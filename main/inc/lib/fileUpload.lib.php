@@ -357,7 +357,7 @@ function handle_uploaded_document(
             );
 
             // This means that the path already exists in this course.
-            if (!empty($documentList)) {
+            if (!empty($documentList) && $whatIfFileExists != 'overwrite') {
                 //$found = false;
                 // Checking if we are talking about the same course + session
                 /*foreach ($documentList as $document) {
@@ -378,6 +378,7 @@ function handle_uploaded_document(
                 case 'overwrite':
                     // Check if the target file exists, so we can give another message
                     $fileExists = file_exists($fullPath);
+
                     if (moveUploadedFile($uploadedFile, $fullPath)) {
                         chmod($fullPath, $filePermissions);
 

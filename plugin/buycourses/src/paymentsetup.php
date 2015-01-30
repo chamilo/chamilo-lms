@@ -18,7 +18,7 @@ $interbreadcrumb[] = array("url" => "configuration.php", "name" => $plugin->get_
 
 $tpl = new Template($templateName);
 $teacher = api_is_platform_admin();
-api_protect_course_script(true);
+api_protect_admin_script(true);
 
 if ($teacher) {
     // Sync course table with the plugin

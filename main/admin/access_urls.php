@@ -40,7 +40,7 @@ if (isset ($_GET['action'])) {
 
     $check = Security::check_token('get');
     if ($check) {
-		$url_id = Database::escape_string($_GET['url_id']);
+		$url_id = intval($_GET['url_id']);
 
         switch ($_GET['action']) {
             case 'delete_url':

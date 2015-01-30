@@ -17,6 +17,20 @@ use Sabre\VObject;
 class VTimeZone extends VObject\Component {
 
     /**
+     * Returns the PHP DateTimeZone for this VTIMEZONE component.
+     *
+     * If we can't accurately determine the timezone, this method will return
+     * UTC.
+     *
+     * @return \DateTimeZone
+     */
+    function getTimeZone() {
+
+        return VObject\TimeZoneUtil::getTimeZone((string)$this->TZID, $this->root);
+
+    }
+
+    /**
      * A simple list of validation rules.
      *
      * This is simply a list of properties, and how many times they either
@@ -30,7 +44,7 @@ class VTimeZone extends VObject\Component {
      *
      * @var array
      */
-    public function getValidationRules() {
+    function getValidationRules() {
 
         return array(
             'TZID' => 1,

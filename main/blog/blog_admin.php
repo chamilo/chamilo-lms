@@ -75,11 +75,11 @@ if (api_is_allowed_to_edit()) {
 		}
 	}
 	if (isset($_GET['action']) && $_GET['action'] == 'visibility') {
-		Blog::change_blog_visibility(Database::escape_string((int)$_GET['blog_id']));
+		Blog::change_blog_visibility(intval($_GET['blog_id']));
 		Display::display_confirmation_message(get_lang('VisibilityChanged'));
 	}
 	if (isset($_GET['action']) && $_GET['action'] == 'delete') {
-		Blog::delete_blog(Database::escape_string((int)$_GET['blog_id']));
+		Blog::delete_blog(intval($_GET['blog_id']));
 		Display::display_confirmation_message(get_lang('BlogDeleted'));
 	}
 
@@ -115,7 +115,7 @@ if (api_is_allowed_to_edit()) {
 			if ($_POST) {
 				Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 			}
-            Blog::display_edit_blog_form(Database::escape_string((int)$_GET['blog_id']));
+            Blog::display_edit_blog_form(intval($_GET['blog_id']));
 		}
 	}
 	Blog::display_blog_list();

@@ -1,5 +1,9 @@
 <?php
+/* For licensing terms, see /license.txt */
 
+/**
+ * Class CoursesAndSessionsCatalog
+ */
 class CoursesAndSessionsCatalog
 {
 
@@ -7,6 +11,7 @@ class CoursesAndSessionsCatalog
      * Check the configuration for the courses and sessions catalog
      * @global array $_configuration Configuration
      * @param int $value The value to check
+     *
      * @return boolean Whether the configuration is $value
      */
     public static function is($value = CATALOG_COURSES)
@@ -25,6 +30,7 @@ class CoursesAndSessionsCatalog
     /**
      * Check whether to display the sessions list
      * @global array $_configuration Configuration
+     *
      * @return boolean whether to display
      */
     public static function showSessions()
@@ -47,6 +53,7 @@ class CoursesAndSessionsCatalog
     /**
      * Check whether to display the courses list
      * @global array $_configuration Configuration
+     *
      * @return boolean whether to display
      */
     public static function showCourses()

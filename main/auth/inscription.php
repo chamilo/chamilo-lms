@@ -482,7 +482,7 @@ if ($form->validate()) {
             }
             if ($store_extended) {
                 $sql .= implode(',', $sql_set);
-                $sql .= " WHERE user_id = '".Database::escape_string($user_id)."'";
+                $sql .= " WHERE user_id = ".intval($user_id)."";
                 Database::query($sql);
             }
 

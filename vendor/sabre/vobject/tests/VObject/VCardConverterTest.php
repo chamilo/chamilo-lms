@@ -2,11 +2,9 @@
 
 namespace Sabre\VObject;
 
-class VCardConverterTest extends \PHPUnit_Framework_TestCase {
+class VCardConverterTest extends TestCase {
 
     function testConvert30to40() {
-
-        $version = Version::VERSION;
 
         $input = <<<IN
 BEGIN:VCARD
@@ -22,13 +20,11 @@ PHOTO;X-PARAM=FOO;ENCODING=b;TYPE=PNG:Zm9v
 PHOTO;VALUE=URI:http://example.org/foo.png
 X-ABShowAs:COMPANY
 END:VCARD
-
 IN;
 
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:4.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 FN:Steve
 TEL;PREF=1;TYPE=HOME:+1 555 666 777
 ITEM1.TEL:+1 444 555 666
@@ -37,29 +33,25 @@ PHOTO;TYPE=HOME:data:image/jpeg;base64,Zm9v
 PHOTO:data:image/gif;base64,Zm9v
 PHOTO;X-PARAM=FOO:data:image/png;base64,Zm9v
 PHOTO:http://example.org/foo.png
-KIND:org
+KIND:ORG
 END:VCARD
-
 OUT;
 
         $vcard = \Sabre\VObject\Reader::read($input);
         $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
     }
 
     function testConvert40to40() {
 
-        $version = Version::VERSION;
-
         $input = <<<IN
 BEGIN:VCARD
 VERSION:4.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 FN:Steve
 TEL;PREF=1;TYPE=HOME:+1 555 666 777
 PHOTO:data:image/jpeg;base64,Zm9v
@@ -73,7 +65,6 @@ IN;
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:4.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 FN:Steve
 TEL;PREF=1;TYPE=HOME:+1 555 666 777
 PHOTO:data:image/jpeg;base64,Zm9v
@@ -87,16 +78,14 @@ OUT;
         $vcard = \Sabre\VObject\Reader::read($input);
         $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
     }
 
     function testConvert21to40() {
-
-        $version = Version::VERSION;
 
         $input = <<<IN
 BEGIN:VCARD
@@ -115,7 +104,6 @@ IN;
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:4.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 N:Family;Johnson;;;
 FN:Johnson Family
 TEL;TYPE=HOME,VOICE:555-12345-345
@@ -129,16 +117,14 @@ OUT;
         $vcard = \Sabre\VObject\Reader::read($input);
         $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
     }
 
     function testConvert30to30() {
-
-        $version = Version::VERSION;
 
         $input = <<<IN
 BEGIN:VCARD
@@ -171,16 +157,14 @@ OUT;
         $vcard = \Sabre\VObject\Reader::read($input);
         $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD30);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
     }
 
     function testConvert40to30() {
-
-        $version = Version::VERSION;
 
         $input = <<<IN
 BEGIN:VCARD
@@ -192,7 +176,7 @@ PHOTO:data:image/jpeg;base64,Zm9v
 PHOTO:data:image/gif,foo
 PHOTO;X-PARAM=FOO:data:image/png;base64,Zm9v
 PHOTO:http://example.org/foo.png
-KIND:org
+KIND:ORG
 END:VCARD
 
 IN;
@@ -200,7 +184,6 @@ IN;
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:3.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 FN:Steve
 TEL;TYPE=PREF,HOME:+1 555 666 777
 PHOTO;ENCODING=b;TYPE=JPEG:Zm9v
@@ -215,16 +198,14 @@ OUT;
         $vcard = \Sabre\VObject\Reader::read($input);
         $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD30);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
     }
 
     function testConvertGroupCard() {
-
-        $version = Version::VERSION;
 
         $input = <<<IN
 BEGIN:VCARD
@@ -238,8 +219,7 @@ IN;
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:4.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
-KIND:group
+KIND:GROUP
 END:VCARD
 
 OUT;
@@ -247,16 +227,15 @@ OUT;
         $vcard = \Sabre\VObject\Reader::read($input);
         $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
         $input = $output;
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:3.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 X-ADDRESSBOOKSERVER-KIND:GROUP
 END:VCARD
 
@@ -265,16 +244,14 @@ OUT;
         $vcard = \Sabre\VObject\Reader::read($input);
         $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD30);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
     }
 
     function testBDAYConversion() {
-
-        $version = Version::VERSION;
 
         $input = <<<IN
 BEGIN:VCARD
@@ -288,7 +265,6 @@ IN;
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:4.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 BDAY:--04-16
 END:VCARD
 
@@ -297,16 +273,15 @@ OUT;
         $vcard = \Sabre\VObject\Reader::read($input);
         $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
         $input = $output;
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:3.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 BDAY;X-APPLE-OMIT-YEAR=1604:1604-04-16
 END:VCARD
 
@@ -315,9 +290,9 @@ OUT;
         $vcard = \Sabre\VObject\Reader::read($input);
         $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD30);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
     }
@@ -344,8 +319,8 @@ END:VCARD
 
 IN;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard->convert(\Sabre\VObject\Document::VCARD40);
+        $vcard = Reader::read($input);
+        $vcard->convert(Document::VCARD40);
 
     }
 
@@ -362,14 +337,12 @@ END:VCARD
 
 IN;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard->convert(\Sabre\VObject\Document::VCARD21);
+        $vcard = Reader::read($input);
+        $vcard->convert(Document::VCARD21);
 
     }
 
     function testConvertIndividualCard() {
-
-        $version = Version::VERSION;
 
         $input = <<<IN
 BEGIN:VCARD
@@ -383,34 +356,134 @@ IN;
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:3.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD30);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD30);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
         );
 
         $input = $output;
         $output = <<<OUT
 BEGIN:VCARD
 VERSION:4.0
-PRODID:-//Sabre//Sabre VObject {$version}//EN
 END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD40);
 
-        $this->assertEquals(
+        $this->assertVObjEquals(
             $output,
-            str_replace("\r", "", $vcard->serialize())
+            $vcard
+        );
+
+    }
+
+    function testAnniversary() {
+
+        $input = <<<IN
+BEGIN:VCARD
+VERSION:4.0
+ITEM1.ANNIVERSARY:20081210
+END:VCARD
+
+IN;
+
+        $output = <<<'OUT'
+BEGIN:VCARD
+VERSION:3.0
+ITEM1.X-ABDATE;VALUE=DATE-AND-OR-TIME:20081210
+ITEM1.X-ABLABEL:_$!<Anniversary>!$_
+ITEM1.X-ANNIVERSARY;VALUE=DATE-AND-OR-TIME:20081210
+END:VCARD
+
+OUT;
+
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD30);
+
+        $this->assertVObjEquals(
+            $output,
+            $vcard
+        );
+
+        // Swapping input and output
+        list(
+            $input,
+            $output
+        ) = array(
+            $output,
+            $input
+        );
+
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD40);
+
+        $this->assertVObjEquals(
+            $output,
+            $vcard
+        );
+
+    }
+
+    function testMultipleAnniversaries() {
+
+        $input = <<<IN
+BEGIN:VCARD
+VERSION:4.0
+ITEM1.ANNIVERSARY:20081210
+ITEM2.ANNIVERSARY:20091210
+ITEM3.ANNIVERSARY:20101210
+END:VCARD
+
+IN;
+
+        $output = <<<'OUT'
+BEGIN:VCARD
+VERSION:3.0
+ITEM1.X-ABDATE;VALUE=DATE-AND-OR-TIME:20081210
+ITEM1.X-ABLABEL:_$!<Anniversary>!$_
+ITEM1.X-ANNIVERSARY;VALUE=DATE-AND-OR-TIME:20081210
+ITEM2.X-ABDATE;VALUE=DATE-AND-OR-TIME:20091210
+ITEM2.X-ABLABEL:_$!<Anniversary>!$_
+ITEM2.X-ANNIVERSARY;VALUE=DATE-AND-OR-TIME:20091210
+ITEM3.X-ABDATE;VALUE=DATE-AND-OR-TIME:20101210
+ITEM3.X-ABLABEL:_$!<Anniversary>!$_
+ITEM3.X-ANNIVERSARY;VALUE=DATE-AND-OR-TIME:20101210
+END:VCARD
+
+OUT;
+
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD30);
+
+        $this->assertVObjEquals(
+            $output,
+            $vcard
+        );
+
+        // Swapping input and output
+        list(
+            $input,
+            $output
+        ) = array(
+            $output,
+            $input
+        );
+
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD40);
+
+        $this->assertVObjEquals(
+            $output,
+            $vcard
         );
 
     }

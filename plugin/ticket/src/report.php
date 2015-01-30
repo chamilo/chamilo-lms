@@ -278,7 +278,7 @@ if (isset($_POST['report'])) {
                 u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname,
                 DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date,
                 c.title AS course, access_tool AS tool
-            FROM  " . Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS) . " access
+            FROM  " . Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS) . " access
             LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_USER) . " u ON access.access_user_id = u.user_id
             LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_COURSE) . " c ON access.access_cours_code = c.CODE
             WHERE access.access_cours_code = '" . $course_info['code'] . "' AND u.user_id = '$user_id' ";

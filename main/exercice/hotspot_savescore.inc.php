@@ -1,5 +1,5 @@
-<?php //$id:$
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 *	This file saves every click in the hotspot tool into track_e_hotspots
 *	@package chamilo.exercise
@@ -45,12 +45,12 @@ $coordinates = substr($coordinates,0,-1);
 $TBL_TRACK_E_HOTSPOT = Database::get_statistic_table(STATISTIC_TRACK_E_HOTSPOTS);
 // Save into db
 $sql = "INSERT INTO $TBL_TRACK_E_HOTSPOT (user_id , course_id , quiz_id , question_id , answer_id , correct , coordinate ) VALUES (
-			'".Database::escape_string($_user['user_id'])."',
+			".intval($_user['user_id']).",
 			'".Database::escape_string($courseCode)."',
-			'".Database::escape_string($exerciseId)."',
-			'".Database::escape_string($questionId)."',
-			'".Database::escape_string($answerId)."',
-			'".Database::escape_string($hit)."',
+			".intval($exerciseId).",
+			".intval($questionId).",
+			".intval($answerId).",
+			".intval($hit)."',
 			'".Database::escape_string($coordinates)."')";
 $result = Database::query($sql);
 // Save insert id into session if users changes answer.

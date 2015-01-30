@@ -94,15 +94,15 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
  * @return void
  */
 function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf) {
-    require_once api_get_path(LIBRARY_PATH).'mpdf/mpdf.php';
+	require_once api_get_path(LIBRARY_PATH).'mpdf/mpdf.php';
 
-    $mpdf = new mPDF('UTF-8', 'A4-L', '', '', 15, 10, 35, 20, 4, 2, 'L');
-    $mpdf->useOnlyCoreFonts = true;
-    $mpdf->mirrorMargins = 0;      // Use different Odd/Even headers and footers and mirror margins
+	$mpdf = new mPDF('UTF-8', 'A4-L', '', '', 15, 10, 35, 20, 4, 2, 'L');
+	$mpdf->useOnlyCoreFonts = true;
+	$mpdf->mirrorMargins = 0;      // Use different Odd/Even headers and footers and mirror margins
 
-    if (is_array($headers_pdf)) {
-        // preparing headers pdf
-        $header = '<table width="100%"  cellspacing="1" cellpadding="1" border="0" class="strong">
+	if (is_array($headers_pdf)) {
+		// preparing headers pdf
+		$header = '<table width="100%"  cellspacing="1" cellpadding="1" border="0" class="strong">
                                 <tr>
                                    <td ROWSPAN="3" style="text-align: left;" class="title"><img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png"></td><td  colspan="3"><h1>'.$title_pdf.'</h1></td>
                                 <tr>
@@ -122,92 +122,92 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
                                     <td><strong>'.$headers_pdf[5][0].'</strong> </td><td> <strong>'.$headers_pdf[5][1].'</strong></td>
                                 </tr>
                             </table>';
-    }
+	}
 
-    // preparing footer pdf
-    $footer = '<table width="100%" cellspacing="2" cellpadding="10" border="0">';
-    if (is_array($footers_pdf)) {
-        $footer .= '<tr>';
-        foreach ($footers_pdf as $foot_pdf) {
-            $footer .= '<td width="33%" style="text-align: center;">'.$foot_pdf.'</td>';
-        }
-        $footer .= '</tr>';
-    }
-    $footer .= '</table>';
+	// preparing footer pdf
+	$footer = '<table width="100%" cellspacing="2" cellpadding="10" border="0">';
+	if (is_array($footers_pdf)) {
+		$footer .= '<tr>';
+		foreach ($footers_pdf as $foot_pdf) {
+			$footer .= '<td width="33%" style="text-align: center;">'.$foot_pdf.'</td>';
+		}
+		$footer .= '</tr>';
+	}
+	$footer .= '</table>';
 
-    $footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
+	$footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
 
-    // preparing content pdf
-    $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
-    if (file_exists($css_file)) {
-        $css = @file_get_contents($css_file);
-    } else {
-        $css = '';
-    }
+	// preparing content pdf
+	$css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+	if (file_exists($css_file)) {
+		$css = @file_get_contents($css_file);
+	} else {
+		$css = '';
+	}
 
-    if(count($data_table) > 30)
-            $items_per_page = (count($data_table)/2);
-        else
-            $items_per_page = count($data_table);
+	if(count($data_table) > 30)
+		$items_per_page = (count($data_table)/2);
+	else
+		$items_per_page = count($data_table);
 
-    $count_pages = ceil(count($data_table) / $items_per_page);
-    for ($x = 0; $x<$count_pages; $x++) {
-        $content_table .= '<table width="100%" border="1" style="border-collapse:collapse">';
-        // header table
-        $content_table .= '<tr>';
-        $i = 0;
-        if (is_array($headers_table)) {
+	$count_pages = ceil(count($data_table) / $items_per_page);
+	for ($x = 0; $x<$count_pages; $x++) {
+		$content_table .= '<table width="100%" border="1" style="border-collapse:collapse">';
+		// header table
+		$content_table .= '<tr>';
+		$i = 0;
+		if (is_array($headers_table)) {
 
-            foreach ($headers_table as $head_table) {
-                if (!empty($head_table[0])) {
-                    $width = (!empty($head_table[1])?$head_table[1].'%':'');
-                    $content_table .= '<th width="'.$width.'">'.$head_table[0].'</th>';
-                    $i++;
-                }
-            }
-        }
-        $content_table .= '</tr>';
-        // body table
-        if (is_array($data_table) && count($data_table) > 0) {
-            $offset = $x*$items_per_page;
-            $data_table = array_slice ($data_table, $offset, count($data_table));
-            $i = 1;
-            $item = $offset+1;
-            foreach ($data_table as $data) {
-                $content_table .= '<tr>';
-                $content_table .= '<td>'.($item<10?'0'.$item:$item).'</td>';
-                foreach ($data as  $key => $content) {
-                    if (isset($content)) {
-                        $key == 1 ? $align='align="left"':$align='align="center"';
-                        $content_table .= '<td '.$align.' style="padding:4px;" >'.$content.'</td>';
-                    }
-                }
-                $content_table .= '</tr>';
-                $i++;
-                $item++;
-                if ($i > $items_per_page) { break; }
-            }
-        } else {
-            $content_table .= '<tr colspan="'.$i.'"><td>'.get_lang('Empty').'</td></tr>';
-        }
-        $content_table .= '</table>';
-        if ($x < ($count_pages - 1)) { $content_table .= '<pagebreak />'; }
-    }
+			foreach ($headers_table as $head_table) {
+				if (!empty($head_table[0])) {
+					$width = (!empty($head_table[1])?$head_table[1].'%':'');
+					$content_table .= '<th width="'.$width.'">'.$head_table[0].'</th>';
+					$i++;
+				}
+			}
+		}
+		$content_table .= '</tr>';
+		// body table
+		if (is_array($data_table) && count($data_table) > 0) {
+			$offset = $x*$items_per_page;
+			$data_table = array_slice ($data_table, $offset, count($data_table));
+			$i = 1;
+			$item = $offset+1;
+			foreach ($data_table as $data) {
+				$content_table .= '<tr>';
+				$content_table .= '<td>'.($item<10?'0'.$item:$item).'</td>';
+				foreach ($data as  $key => $content) {
+					if (isset($content)) {
+						$key == 1 ? $align='align="left"':$align='align="center"';
+						$content_table .= '<td '.$align.' style="padding:4px;" >'.$content.'</td>';
+					}
+				}
+				$content_table .= '</tr>';
+				$i++;
+				$item++;
+				if ($i > $items_per_page) { break; }
+			}
+		} else {
+			$content_table .= '<tr colspan="'.$i.'"><td>'.get_lang('Empty').'</td></tr>';
+		}
+		$content_table .= '</table>';
+		if ($x < ($count_pages - 1)) { $content_table .= '<pagebreak />'; }
+	}
 
-    $html = $content_table;
+	$html = $content_table;
 
 
-    // set attributes for pdf
-    $mpdf->SetHTMLHeader($header);
-    $mpdf->SetHTMLFooter($footer);
-    if (!empty($css)) {
-        $mpdf->WriteHTML($css, 1);
-        $mpdf->WriteHTML($html, 2);
-    } else {
-        $mpdf->WriteHTML($html);
-    }
-    $mpdf->Output(replace_dangerous_char($title_pdf.'.pdf'), 'D');
-    exit;
+	// set attributes for pdf
+	$mpdf->SetHTMLHeader($header);
+	$mpdf->SetHTMLFooter($footer);
+	if (!empty($css)) {
+		$mpdf->WriteHTML($css, 1);
+		$mpdf->WriteHTML($html, 2);
+	} else {
+		$mpdf->WriteHTML($html);
+	}
+	$mpdf->Output(replace_dangerous_char($title_pdf.'.pdf'), 'D');
+	exit;
 }
 
 
@@ -220,45 +220,45 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
  * @return void
  */
 function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf) {
-	
+
 	require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 	$headers_in_pdf = '<img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png">';
-    
+
 	if (is_array($headers_pdf)) {
 		// preparing headers pdf
-		$header = '<br/><br/><table width="100%" cellspacing="1" cellpadding="5" border="0" class="strong">							
-					        <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$title_pdf.'</h1></td></tr>';		
-		foreach($headers_pdf as $header_pdf) {			
+		$header = '<br/><br/><table width="100%" cellspacing="1" cellpadding="5" border="0" class="strong">
+					        <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$title_pdf.'</h1></td></tr>';
+		foreach($headers_pdf as $header_pdf) {
 			if (!empty($header_pdf[0]) && !empty($header_pdf[1])) {
 				$header.= '<tr><td><strong>'.$header_pdf[0].'</strong> </td><td>'.$header_pdf[1].'</td></tr>';
 			}
-		}		
+		}
 		$header.='</table><br />';
 	}
-		
+
 	// preparing footer pdf
 	$footer = '<table width="100%" cellspacing="2" cellpadding="10" border="0">';
 	if (is_array($footers_pdf)) {
-		$footer .= '<tr>';	
+		$footer .= '<tr>';
 		foreach ($footers_pdf as $foot_pdf) {
 			$footer .= '<td width="33%" style="text-align: center;">'.$foot_pdf.'</td>';
 		}
-		$footer .= '</tr>';	
+		$footer .= '</tr>';
 	}
-	$footer .= '</table>';	
+	$footer .= '</table>';
 	$footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
-	
-	// preparing content pdf		
+
+	// preparing content pdf
 	$css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
 	if (file_exists($css_file)) {
 		$css = @file_get_contents($css_file);
 	} else {
 		$css = '';
-	}	
+	}
 	$items_per_page = 30;
-	$count_pages = ceil(count($data_table) / $items_per_page);  
+	$count_pages = ceil(count($data_table) / $items_per_page);
 	for ($x = 0; $x<$count_pages; $x++) {
-		$content_table .= '<table width="100%" border="1" style="border-collapse:collapse">';	
+		$content_table .= '<table width="100%" border="1" style="border-collapse:collapse">';
 		// header table
 		$content_table .= '<tr>';
 		$i = 0;
@@ -267,41 +267,41 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 				if (!empty($head_table[0])) {
 					$width = (!empty($head_table[1])?$head_table[1].'%':'');
 					$content_table .= '<th width="'.$width.'">'.$head_table[0].'</th>';
-					$i++;	
-				}			
-			}		
-		}	
-		$content_table .= '</tr>';			
+					$i++;
+				}
+			}
+		}
+		$content_table .= '</tr>';
 		// body table
-		
+
 		if (is_array($data_table) && count($data_table) > 0) {
-			$offset = $x*$items_per_page;				
+			$offset = $x*$items_per_page;
 			$data_table = array_slice ($data_table, $offset, count($data_table));
 			$i = 1;
 			$item = $offset+1;
-			foreach ($data_table as $data) {			
+			foreach ($data_table as $data) {
 				$content_table .= '<tr>';
 				$content_table .= '<td>'.($item<10?'0'.$item:$item).'</td>';
-				foreach ($data as  $key => $content) {							
+				foreach ($data as  $key => $content) {
 					if (isset($content)) {
 						$key == 1 ? $align='align="left"':$align='align="center"';
-						$content_table .= '<td '.$align.' style="padding:4px;" >'.$content.'</td>';	
-					}					
+						$content_table .= '<td '.$align.' style="padding:4px;" >'.$content.'</td>';
+					}
 				}
 				$content_table .= '</tr>';
 				$i++;
 				$item++;
 				if ($i > $items_per_page) { break; }
-			}			
+			}
 		} else {
 			$content_table .= '<tr colspan="'.$i.'"><td>'.get_lang('Empty').'</td></tr>';
-		}	
-		$content_table .= '</table>';				
-		if ($x < ($count_pages - 1)) { $content_table .= '<pagebreak />'; }		
-	}	
+		}
+		$content_table .= '</table>';
+		if ($x < ($count_pages - 1)) { $content_table .= '<pagebreak />'; }
+	}
 	$pdf = new PDF();
-    $pdf->set_custom_footer($footer);
-    $pdf->set_custom_header($headers_in_pdf);
+	$pdf->set_custom_footer($footer);
+	$pdf->set_custom_header($headers_in_pdf);
 	$pdf->content_to_pdf($header.$content_table, $css, $title_pdf );
 	exit;
 

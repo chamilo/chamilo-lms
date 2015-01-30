@@ -48,6 +48,7 @@ if (isset($_SESSION['image_files_only'])) {
 }
 
 // Calculating the current slide, next slide, previous slide and the number of slides
+$slide = null;
 if ($slide_id != 'all') {
 	$slide = $slide_id ? $slide_id : 0;
 	$previous_slide = $slide - 1;
@@ -64,9 +65,11 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 <?php
 
 if ($slide_id != 'all') {
-	$image = $sys_course_path.$_course['path'].'/document'.$folder.$image_files_only[$slide];
+	$image = null;
+	if (isset($image_files_only[$slide])) {
+		$image = $sys_course_path . $_course['path'] . '/document' . $folder . $image_files_only[$slide];
+	}
 	if (file_exists($image)) {
-
 		echo '<div class="actions-pagination">';
 
 		// Back forward buttons

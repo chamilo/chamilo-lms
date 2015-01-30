@@ -12,7 +12,7 @@ require_once '../inc/global.inc.php';
 
 $id_session = intval($_GET['id_session']);
 SessionManager::protect_session_edit($id_session);
-$course_code = Database::escape_string($_GET['course_code']);
+$course_code = $_GET['course_code'];
 
 $formSent=0;
 $errorMsg='';
@@ -47,7 +47,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 	// get all tutor by course_code in the session
 	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-	        WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2";
+	        WHERE id_session = '$id_session' AND course_code = '".Database::escape_string($course_code)."' AND status = 2";
 	$rs_coachs = Database::query($sql);
 
 	$coachs_course_session = array();
@@ -70,7 +70,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 		$array_intersect = array_diff($coachs_course_session,$id_coachs);
 
 		foreach ($array_intersect as $nocoach_user_id) {
-			$rs2 = SessionManager::set_coach_to_course_session($nocoach_user_id, $id_session, $course_code,true);
+			$rs2 = SessionManager::set_coach_to_course_session(
+				$nocoach_user_id,
+				$id_session,
+				$course_code,
+				true
+			);
 		}
 
 		header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
@@ -79,7 +84,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	}
 } else {
 	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-	        WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2 ";
+	        WHERE id_session = '$id_session' AND course_code = '".Database::escape_string($course_code)."' AND status = 2 ";
 	$rs = Database::query($sql);
 
 	if (Database::num_rows($rs) > 0) {

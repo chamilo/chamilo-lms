@@ -1,9 +1,6 @@
-<?php //$Id: $
-/*
- * See license terms in /dokeos_license.txt
- * Copyright (c) 2008 Dokeos SPRL
- * Copyright (c) 2008 Eric Marguin <eric.marguin@dokeos.com>
- */
+<?php
+/* See license terms in /license.txt */
+
 /**
  * This is a script used to automatically import a list of users from
  * a CSV file into Dokeos.

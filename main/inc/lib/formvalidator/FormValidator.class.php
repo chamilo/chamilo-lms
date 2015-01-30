@@ -18,7 +18,7 @@ define('TEACHER_HTML_FULLPAGE', 5);
  */
 class FormValidator extends HTML_QuickForm
 {
-
+    public $with_progress_bar = false;
     /**
      * Create a form validator based on an array of form data:
      *
@@ -47,10 +47,11 @@ class FormValidator extends HTML_QuickForm
      *             )
      *         );
      *
-     * @param array form_data
+     * @param array $form_data
+     *
      * @return FormValidator
      */
-    static function create($form_data)
+    public static function create($form_data)
     {
         if (empty($form_data)) {
             return null;
@@ -98,10 +99,9 @@ class FormValidator extends HTML_QuickForm
             }
         }
         $result->setDefaults($defaults);
+
         return $result;
     }
-
-    var $with_progress_bar = false;
 
     /**
      * Constructor
@@ -113,7 +113,7 @@ class FormValidator extends HTML_QuickForm
      * @param bool $track_submit (optional)		Whether to track if the form was
      * submitted by adding a special hidden field (default = true)
      */
-    function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true)
+    public function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true)
     {
         // Default form class.
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
@@ -257,8 +257,12 @@ EOT;
     }
 
     /**
-     * date_range_picker element creates 2 hidden fields
-     * elementName + "_start" elementName "_end"
+     * The "date_range_picker" element creates 2 hidden fields
+     * "elementName" + "_start"  and "elementName" + "_end"
+     * For example if the name is "range", you will have 2 new fields
+     * when executing $form->getSubmitValues()
+     * "range_start" and "range_end"
+     *
      * @param string $name
      * @param string $label
      * @param bool $required
@@ -552,12 +556,19 @@ EOT;
      * @return string $return_value HTML code of the form
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, august 2006
+     * @author Julio Montoya
      */
     public function return_form()
     {
         $error = false;
         $addDateLibraries = false;
-        $dateElementTypes = array('date_range_picker', 'date_time_picker', 'date_picker', 'datepicker', 'datetimepicker');
+        $dateElementTypes = array(
+            'date_range_picker',
+            'date_time_picker',
+            'date_picker',
+            'datepicker',
+            'datetimepicker'
+        );
         /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
             if (in_array($element->getType(), $dateElementTypes)) {
@@ -646,7 +657,7 @@ function html_filter_student_fullpage($html)
  * @return string                       The cleaned mobile phone number
  */
 function mobile_phone_number_filter($mobilePhoneNumber)
-{    
+{
     $mobilePhoneNumber = str_replace(array('+', '(', ')'), '', $mobilePhoneNumber);
     return ltrim($mobilePhoneNumber,'0');
 }

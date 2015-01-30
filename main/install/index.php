@@ -111,7 +111,7 @@ error_reporting(E_ALL);
 // Upgrading from any subversion of 1.6 is just like upgrading from 1.6.5
 $update_from_version_6 = array('1.6', '1.6.1', '1.6.2', '1.6.3', '1.6.4', '1.6.5');
 // Upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
-$update_from_version_8 = array('1.8', '1.8.2', '1.8.3', '1.8.4', '1.8.5', '1.8.6', '1.8.6.1', '1.8.6.2','1.8.7','1.8.7.1','1.8.8','1.8.8.2', '1.8.8.4', '1.8.8.6', '1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1');
+$update_from_version_8 = array('1.8', '1.8.2', '1.8.3', '1.8.4', '1.8.5', '1.8.6', '1.8.6.1', '1.8.6.2','1.8.7','1.8.7.1','1.8.8','1.8.8.2', '1.8.8.4', '1.8.8.6', '1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1', '1.9.8', '1.9.8.1', '1.9.8.2', '1.9.10');
 
 $my_old_version = '';
 $tmp_version = get_config_param('dokeos_version');
@@ -861,6 +861,15 @@ if (@$_POST['step2']) {
             case '1.9.4':
             case '1.9.6':
             case '1.9.6.1':
+            case '1.9.8':
+            case '1.9.8.1':
+            case '1.9.8.2':
+            case '1.9.10':
+                include 'update-db-1.9.0-1.10.0.inc.php';
+                //include 'update-files-1.9.0-1.10.0.inc.php';
+                //Only updates the configuration.inc.php with the new version
+                include 'update-configuration.inc.php';
+                break;
             default:
                 break;
         }

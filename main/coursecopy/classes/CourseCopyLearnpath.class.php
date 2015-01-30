@@ -1,11 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * A learnpath
+ * Class CourseCopyLearnpath
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class CourseCopyLearnpath extends Resource {
+class CourseCopyLearnpath extends Resource
+{
 	/**
 	 * Type of learnpath (can be dokeos (1), scorm (2), aicc (3))
 	 */
@@ -106,9 +108,35 @@ class CourseCopyLearnpath extends Resource {
 	 * @param string $visibility
 	 * @param array  $items
 	 */
-	function CourseCopyLearnpath($id,$type,$name, $path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,
-	                             $content_maker, $display_order,$js_lib,$content_license,$debug, $visibility, $author, $preview_image,
-	                             $use_max_score, $autolunch, $created_on, $modified_on, $publicated_on, $expired_on, $session_id, $items) {
+	public function CourseCopyLearnpath(
+		$id,
+		$type,
+		$name,
+		$path,
+		$ref,
+		$description,
+		$content_local,
+		$default_encoding,
+		$default_view_mode,
+		$prevent_reinit,
+		$force_commit,
+		$content_maker,
+		$display_order,
+		$js_lib,
+		$content_license,
+		$debug,
+		$visibility,
+		$author,
+		$preview_image,
+		$use_max_score,
+		$autolunch,
+		$created_on,
+		$modified_on,
+		$publicated_on,
+		$expired_on,
+		$session_id,
+		$items
+	) {
 		parent::Resource($id,RESOURCE_LEARNPATH);
 		$this->lp_type = $type;
 		$this->name = $name;
@@ -147,6 +175,7 @@ class CourseCopyLearnpath extends Resource {
 	{
 		return $this->items;
 	}
+
 	/**
 	 * Check if a given resource is used as an item in this chapter
 	 */
@@ -154,13 +183,14 @@ class CourseCopyLearnpath extends Resource {
 	{
 		foreach ($this->items as $item) {
 			if ($item['id'] == $resource->get_id() &&
-                isset($item['type']) && $item['type'] == $resource->get_type()
-            ) {
+				isset($item['type']) && $item['type'] == $resource->get_type()
+			) {
 				return true;
 			}
 		}
 		return false;
 	}
+
 	/**
 	 * Show this learnpath
 	 */

@@ -3,10 +3,6 @@
 /**
  * This file exclusively export calendar items to iCal or similar formats
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
- * See copyright information in the Dokeos root directory, dokeos_license.txt
- */
-/**
- * Initialisation
  */
 // name of the language file that needs to be included
 $language_file = 'agenda';
@@ -53,7 +49,7 @@ $event = $agenda->get_event($id);
 
 if (!empty($event)) {
 	define('ICAL_LANG',api_get_language_isocode());
-	
+
     $ical = new vcalendar();
     $ical->setConfig('unique_id',api_get_path(WEB_PATH));
     $ical->setProperty( 'method', 'PUBLISH' );
@@ -136,7 +132,7 @@ if (!empty($event)) {
         default:
             header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
             die();
-    }	
+    }
 } else {
 	header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
 	die();

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$YourLanguageNotThereContactUs = "Votre langue n'est pas dans la liste? Contactez-nous à info@chamilo.org pour contribuer en tant que traducteur!";
 $DateTimezoneSettingNotSet = "Votre installation de PHP ne définit pas le paramètre date.timezone. Ce paramètre est important pour l'installation de Chamilo.<br/>Avant de continuer nous vous conseillons vivement de vérifiez ce paramètre dans votre fichier php.ini.<br/>L'installation peut ne pas s'achever correctement le cas échéant.";
 $langStatDB = "Base pour le tracking.  Utile uniquement si vous séparez les bases centrale et tracking";
 $langEnableTracking = "Activer le Tracking";
@@ -122,7 +123,7 @@ $SuggestionOnlyToEnableCSSUploadFeature = "Suggestion, uniquement nécessaire po
 $SuggestionOnlyToEnableSubLanguageFeature = "Suggestion, uniquement nécessaire pour activer la fonctionnalité de sous-langage";
 $ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Pour protéger votre installation, mettez le répertoire %s en lecture seule (chmod -r 0555 sous Linux) et supprimez complètement le répertoire %s";
 $IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Si vous planifiez une mise à jour depuis une version antérieure de Chamilo, nous vous suggérons de consulter <a href=\"../../documentation/changelog.html\" target=\"_blank\">le journal des modifications</a> pour savoir ce qui est nouveau et ce qui a changé.";
-$WelcomeToTheDokeosInstaller = "Bienvenue dans l'installateur de Chamilo";
+$WelcomeToTheChamiloInstaller = "Bienvenue dans l'installateur de Chamilo";
 $PHPVersionError = "Votre version de PHP ne suffit pas pour les pré-requis d'installation de ce logiciel. Veuillez vérifier que vous disposez d'une version égale ou supérieure à celle indiquée, puis essayez à nouveau.";
 $ExtensionSessionsNotAvailable = "Extension de sessions non disponible";
 $ExtensionZlibNotAvailable = "Extension Zlib non disponible";

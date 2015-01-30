@@ -139,6 +139,7 @@ class WSCMUser extends WSCM {
     * @return array An array with all users of the platform.
     * @todo optional course code parameter, optional sorting parameters...
      *@todo Use the UserManager class
+     * @todo security filter order by
     */
     private static function get_user_list_like_start($conditions = array(), $order_by = array()) {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
@@ -152,8 +153,13 @@ class WSCMUser extends WSCM {
                 $sql_query .= $field.' LIKE \''.$value.'%\'';
             }
         }
+        $order = '';
+        foreach ($order_by as $orderByItem) {
+            $order .= Database::escape_string($orderByItem, null, false).', ';
+        }
+        $order = substr($order, 0, -2);
         if (count($order_by) > 0) {
-            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
+            $sql_query .= ' ORDER BY '.$order;
         }
         
         $sql_result = Database::query($sql_query);

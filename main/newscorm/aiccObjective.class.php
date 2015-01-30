@@ -4,6 +4,7 @@
 require_once 'learnpathItem.class.php';
 
 /**
+ * Class aiccObjective
  * Class defining the Block elements in an AICC Course Structure file.
  * Container for the aiccResource class that deals with elemens from AICC Objectives file
  * @package	chamilo.learnpath
@@ -30,28 +31,28 @@ class aiccObjective extends learnpathItem
                     return false;
                 case 'config': // Do the same as the default.
                 default:
-                     foreach ($params as $a => $value) {
-                         switch ($a) {
-                                case 'system_id':
-                                    $this->identifier = strtolower($value);
-                                 break;
-                             case 'member':
-                                 if (strstr($value, ',') !== false) {
-                                     $temp = split(',', $value);
-                                     foreach ($temp as $val) {
-                                         if (!empty($val)) {
-                                             $this->members[] = $val;
-                                         }
-                                     }
-                                 }
-                                 break;
-                         }
-                     }
+                    foreach ($params as $a => $value) {
+                        switch ($a) {
+                            case 'system_id':
+                                $this->identifier = strtolower($value);
+                                break;
+                            case 'member':
+                                if (strstr($value, ',') !== false) {
+                                    $temp = explode(',', $value);
+                                    foreach ($temp as $val) {
+                                        if (!empty($val)) {
+                                            $this->members[] = $val;
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                    }
 
                     return true;
             }
         }
 
         return false;
-     }
+    }
 }

@@ -15,28 +15,22 @@
  * @todo display_digest, shouldn't this be removed and be made into an extension?
  */
 
-/**
- * INIT SECTION
- */
-
-// Language files that should be included.
-
 use \ChamiloSession as Session;
-
 $language_file = array('courses', 'index', 'admin', 'userInfo');
+/* Flag forcing the 'current course' reset, as we're not inside a course anymore */
+$cidReset = true;
 
-$cidReset = true; /* Flag forcing the 'current course' reset,
-                    as we're not inside a course anymore  */
-
+// For HTML editor repository.
 if (isset($_SESSION['this_section']))
-    unset($_SESSION['this_section']); // For HTML editor repository.
+	unset($_SESSION['this_section']);
 
 /* Included libraries */
-
 require_once './main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
+
+$user_id = api_get_user_id();
 
 /* Constants and CONFIGURATION parameters */
 $load_dirs = api_get_setting('show_documents_preview');
@@ -44,47 +38,47 @@ $load_dirs = api_get_setting('show_documents_preview');
 // Check if a user is enrolled only in one course for going directly to the course after the login.
 if (api_get_setting('go_to_course_after_login') == 'true') {
 
-    // Get the courses list
-    $personal_course_list 	= UserManager::get_personal_session_course_list(api_get_user_id());
+	// Get the courses list
+	$personal_course_list = UserManager::get_personal_session_course_list($user_id);
 
-    $my_session_list = array();
-    $count_of_courses_no_sessions = 0;
-    $count_of_courses_with_sessions = 0;
+	$my_session_list = array();
+	$count_of_courses_no_sessions = 0;
+	$count_of_courses_with_sessions = 0;
 
-    foreach ($personal_course_list as $course) {
-        if (!empty($course['id_session'])) {
-            $my_session_list[$course['id_session']] = true;
-            $count_of_courses_with_sessions++;
-        } else {
-            $count_of_courses_no_sessions++;
-        }
-    }
-    $count_of_sessions = count($my_session_list);
+	foreach ($personal_course_list as $course) {
+		if (!empty($course['id_session'])) {
+			$my_session_list[$course['id_session']] = true;
+			$count_of_courses_with_sessions++;
+		} else {
+			$count_of_courses_no_sessions++;
+		}
+	}
+	$count_of_sessions = count($my_session_list);
 
-    if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
+	if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
+		$key = array_keys($personal_course_list);
+		$course_info = $personal_course_list[$key[0]];
+		$course_directory = $course_info['course_info']['path'];
+		$id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
+		$url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$id_session;
 
-        $key              = array_keys($personal_course_list);
-        $course_info      = $personal_course_list[$key[0]];
-        $course_directory = $course_info['course_info']['path'];
-        $id_session       = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
+		header('location:'.$url);
+		exit;
+	}
 
-        $url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$id_session;
-
-        header('location:'.$url);
-        exit;
-    }
-
-    if (!isset($_SESSION['coursesAlreadyVisited']) && $count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
-        $key              = array_keys($personal_course_list);
-        $course_info      = $personal_course_list[$key[0]];
-        $course_directory = $course_info['course_info']['path'];
-        $id_session       = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
-
-        $url = api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$id_session;
-        header('location:'.$url);
-        exit;
-    }
+	if (!isset($_SESSION['coursesAlreadyVisited']) &&
+		$count_of_sessions == 0 && $count_of_courses_no_sessions == 1
+	) {
+		$key = array_keys($personal_course_list);
+		$course_info = $personal_course_list[$key[0]];
+		$course_directory = $course_info['course_info']['path'];
+		$id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
+		$url = api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$id_session;
+		header('location:'.$url);
+		exit;
+	}
 }
+
 $nameTools = get_lang('MyCourses');
 $this_section = SECTION_COURSES;
 
@@ -98,7 +92,6 @@ if ($load_dirs) {
 	$close_icon 	= api_get_path(WEB_IMG_PATH).'loading1.gif';
 
 	$htmlHeadXtra[] =  '<script>
-
 	$(document).ready(function() {
 		$(".document_preview_container").hide();
 		$(".document_preview").click(function() {
@@ -151,14 +144,14 @@ if (isset($_SESSION['sniff_navigator']) && $_SESSION['sniff_navigator']!="checke
 
 $controller = new IndexManager(get_lang('MyCourses'));
 
-$user_id = api_get_user_id();
+
 
 // Main courses and session list
 $courses_and_sessions = $controller->return_courses_and_sessions($user_id);
 
 //Show the chamilo mascot
 if (empty($courses_and_sessions) && !isset($_GET['history'])) {
-    $controller->tpl->assign('welcome_to_course_block', $controller->return_welcome_to_course_block());
+	$controller->tpl->assign('welcome_to_course_block', $controller->return_welcome_to_course_block());
 }
 
 $controller->tpl->assign('content', $courses_and_sessions);
@@ -168,6 +161,23 @@ if (api_get_setting('allow_browser_sniffer') == 'true') {
 		$controller->tpl->assign('show_sniff', 	1);
 	} else {
 		$controller->tpl->assign('show_sniff', 	0);
+	}
+}
+
+// Display the Site Use Cookie Warning Validation
+$useCookieValidation = api_get_configuration_value('cookie_warning');
+if ($useCookieValidation) {
+	if (isset($_POST['acceptCookies'])) {
+		api_set_site_use_cookie_warning_cookie();
+	} else {
+		if (!api_site_use_cookie_warning_cookie_exist()) {
+			if (Template::isToolBarDisplayedForUser()) {
+				$controller->tpl->assign('toolBarDisplayed', true);
+			} else {
+				$controller->tpl->assign('toolBarDisplayed', false);
+			}
+			$controller->tpl->assign('displayCookieUsageWarning', true);
+		}
 	}
 }
 
@@ -184,16 +194,16 @@ if(!empty($some_activex) || !empty($some_plugins)){
 	}
 }
 
-$controller->tpl->assign('profile_block', 				$controller->return_profile_block());
-$controller->tpl->assign('user_image_block',            $controller->return_user_image_block());
-$controller->tpl->assign('course_block',				$controller->return_course_block());
-$controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_links());
-$controller->tpl->assign('reservation_block', 			$controller->return_reservation_block());
-$controller->tpl->assign('search_block', 				$controller->return_search_block());
-$controller->tpl->assign('classes_block', 				$controller->return_classes_block());
+$controller->tpl->assign('profile_block', $controller->return_profile_block());
+$controller->tpl->assign('user_image_block', $controller->return_user_image_block());
+$controller->tpl->assign('course_block', $controller->return_course_block());
+$controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
+$controller->tpl->assign('reservation_block', $controller->return_reservation_block());
+$controller->tpl->assign('search_block', $controller->return_search_block());
+$controller->tpl->assign('classes_block', $controller->return_classes_block());
 
 //if (api_is_platform_admin() || api_is_drh()) {
-    $controller->tpl->assign('skills_block',            $controller->return_skills_links());
+$controller->tpl->assign('skills_block', $controller->return_skills_links());
 //}
 $controller->tpl->display_two_col_template();
 

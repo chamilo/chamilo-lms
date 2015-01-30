@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
 */
@@ -18,7 +18,7 @@ api_protect_admin_script();
 
 $htmlHeadXtra[] = '<script>
 function change_image_user_field (image_value) {
-	
+
 	if (image_value==1) {
 		document.getElementById(\'options\').style.display = \'none\';
 		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
@@ -33,19 +33,19 @@ function change_image_user_field (image_value) {
 
 	} else if (image_value==3) {
 		document.getElementById(\'options\').style.display = \'block\';
-		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';				
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==4) {
 		document.getElementById(\'options\').style.display = \'block\';
-		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';		
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==5) {
 		document.getElementById(\'options\').style.display = \'block\';
-		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';		
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'))."'".');
 
@@ -56,13 +56,13 @@ function change_image_user_field (image_value) {
 
 	} else if (image_value==7) {
 		document.getElementById(\'options\').style.display = \'none\';
-		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';		
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==8) {
 		document.getElementById(\'options\').style.display = \'block\';
-		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';			
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'))."'".');
 
@@ -81,7 +81,7 @@ function change_image_user_field (image_value) {
 	}
 }
 
-function advanced_parameters() {			
+function advanced_parameters() {
 	if(document.getElementById(\'options\').style.display == \'none\') {
 		document.getElementById(\'options\').style.display = \'block\';
 		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
@@ -125,7 +125,7 @@ $form->addRule('fieldtype', get_lang('ThisFieldIsRequired'), 'required');
 
 //Advanced parameters
 $form -> addElement('advanced_settings','<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>');
-//When edit, the combobox displey the field type displeyed else none 	
+//When edit, the combobox displey the field type displeyed else none
 if ( (isset($_GET['action']) && $_GET['action'] == 'edit') && in_array($_GET['field_type'],array(3,4,5,8))) {
 	$form -> addElement('html','<div id="options" style="display:block">');
 } else {
@@ -180,7 +180,7 @@ $form->setDefaults($defaults);
 if(isset($_GET['field_id']) && !empty($_GET['field_id'])) {
 	$class="save";
 	$text=get_lang('buttonEditUserField');
-} else { 
+} else {
 	$class="add";
 	$text=get_lang('buttonAddUserField');
 }
@@ -190,11 +190,11 @@ $form->addElement('html','</div>');
 $form->addElement('style_submit_button', 'submit',$text, 'class='.$class.'');
 // Validate form
 if( $form->validate()) {
-	$check = Security::check_token('post'); 
+	$check = Security::check_token('post');
 	if($check) {
 		$field = $form->exportValues();
-		$fieldlabel = empty($field['fieldlabel'])?$field['fieldtitle']:$field['fieldlabel'];		
-		$fieldlabel = trim(strtolower(str_replace(" ","_",$fieldlabel)));	
+		$fieldlabel = empty($field['fieldlabel'])?$field['fieldtitle']:$field['fieldlabel'];
+		$fieldlabel = trim(strtolower(str_replace(" ","_",$fieldlabel)));
 		$fieldtype = $field['fieldtype'];
 		$fieldtitle = $field['fieldtitle'];
 		$fielddefault = $field['fielddefaultvalue'];

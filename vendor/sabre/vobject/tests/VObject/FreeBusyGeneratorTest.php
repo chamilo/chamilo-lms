@@ -6,8 +6,9 @@ class FreeBusyGeneratorTest extends \PHPUnit_Framework_TestCase {
 
     function getInput() {
 
-        // shows up
-$blob1 = <<<ICS
+        $tests = array();
+
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar
@@ -17,8 +18,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-    // opaque, shows up
-$blob2 = <<<ICS
+        $tests[] = array(
+            $blob,
+            "20110101T120000Z/20110101T130000Z"
+        );
+
+        // opaque, shows up
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar2
@@ -29,8 +35,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-    // transparent, hidden
-$blob3 = <<<ICS
+        $tests[] = array(
+            $blob,
+            "20110101T130000Z/20110101T140000Z"
+        );
+
+        // transparent, hidden
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar3
@@ -41,8 +52,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-    // cancelled, hidden
-$blob4 = <<<ICS
+        $tests[] = array(
+            $blob,
+            null,
+        );
+
+        // cancelled, hidden
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar4
@@ -53,8 +69,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-    // tentative, shows up
-$blob5 = <<<ICS
+        $tests[] = array(
+            $blob,
+            null,
+        );
+
+        // tentative, shows up
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar5
@@ -65,8 +86,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-    // outside of time-range, hidden
-$blob6 = <<<ICS
+        $tests[] = array(
+            $blob,
+            '20110101T180000Z/20110101T190000Z',
+        );
+
+        // outside of time-range, hidden
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar6
@@ -76,8 +102,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-    // outside of time-range, hidden
-$blob7 = <<<ICS
+        $tests[] = array(
+            $blob,
+            null,
+        );
+
+        // outside of time-range, hidden
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar7
@@ -87,8 +118,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-    // using duration, shows up
-$blob8 = <<<ICS
+        $tests[] = array(
+            $blob,
+            null,
+        );
+
+        // using duration, shows up
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar8
@@ -98,9 +134,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
+        $tests[] = array(
+            $blob,
+            '20110101T190000Z/20110101T200000Z',
+        );
 
-    // Day-long event, shows up
-$blob9 = <<<ICS
+        // Day-long event, shows up
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar9
@@ -109,9 +149,14 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
+        $tests[] = array(
+            $blob,
+            '20110102T000000Z/20110103T000000Z',
+        );
 
-// No duration, does not show up
-$blob10 = <<<ICS
+
+        // No duration, does not show up
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar10
@@ -120,8 +165,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-// encoded as object, shows up
-$blob11 = <<<ICS
+        $tests[] = array(
+            $blob,
+            null,
+        );
+
+        // encoded as object, shows up
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar11
@@ -131,8 +181,13 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-// Freebusy. Some parts show up
-$blob12 = <<<ICS
+        $tests[] = array(
+            Reader::read($blob),
+            '20110101T210000Z/20110101T220000Z',
+        );
+
+        // Freebusy. Some parts show up
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VFREEBUSY
 FREEBUSY:20110103T010000Z/20110103T020000Z
@@ -144,8 +199,19 @@ END:VFREEBUSY
 END:VCALENDAR
 ICS;
 
-// Yearly recurrence rule, shows up
-$blob13 = <<<ICS
+        $tests[] = array(
+            Reader::read($blob),
+            array(
+                '20110103T010000Z/20110103T020000Z',
+                '20110103T030000Z/20110103T040000Z',
+                '20110103T040000Z/20110103T050000Z',
+                '20110103T050000Z/20110103T060000Z',
+            )
+        );
+
+
+        // Yearly recurrence rule, shows up
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar13
@@ -156,8 +222,14 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-// Yearly recurrence rule + duration, shows up
-$blob14 = <<<ICS
+        $tests[] = array(
+            Reader::read($blob),
+            '20110101T220000Z/20110101T230000Z',
+        );
+
+
+        // Yearly recurrence rule + duration, shows up
+        $blob = <<<ICS
 BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:foobar14
@@ -168,54 +240,97 @@ END:VEVENT
 END:VCALENDAR
 ICS;
 
-
-        return array(
-            $blob1,
-            $blob2,
-            $blob3,
-            $blob4,
-            $blob5,
-            $blob6,
-            $blob7,
-            $blob8,
-            $blob9,
-            $blob10,
-            Reader::read($blob11),
-            $blob12,
-            $blob13,
-            $blob14,
+        $tests[] = array(
+            Reader::read($blob),
+            '20110101T230000Z/20110102T000000Z',
         );
+
+        // Floating time, no timezone
+        $blob = <<<ICS
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+UID:foobar
+DTSTART:20110101T120000
+DTEND:20110101T130000
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $tests[] = array(
+            $blob,
+            "20110101T120000Z/20110101T130000Z"
+        );
+
+        // Floating time + reference timezone
+        $blob = <<<ICS
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+UID:foobar
+DTSTART:20110101T120000
+DTEND:20110101T130000
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $tests[] = array(
+            $blob,
+            "20110101T170000Z/20110101T180000Z",
+            new \DateTimeZone('America/Toronto')
+        );
+
+        // All-day event
+        $blob = <<<ICS
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+UID:foobar
+DTSTART;VALUE=DATE:20110101
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $tests[] = array(
+            $blob,
+            "20110101T000000Z/20110102T000000Z"
+        );
+
+        // All-day event + reference timezone
+        $blob = <<<ICS
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+UID:foobar
+DTSTART;VALUE=DATE:20110101
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $tests[] = array(
+            $blob,
+            "20110101T050000Z/20110102T050000Z",
+            new \DateTimeZone('America/Toronto')
+        );
+        return $tests;
 
     }
 
-    function testGenerator() {
+    /**
+     * @dataProvider getInput
+     */
+    function testGenerator($input, $expected, $timeZone = null) {
 
         $gen = new FreeBusyGenerator(
             new \DateTime('20110101T110000Z', new \DateTimeZone('UTC')),
             new \DateTime('20110103T110000Z', new \DateTimeZone('UTC')),
-            $this->getInput()
+            $input,
+            $timeZone
         );
 
         $result = $gen->getResult();
 
-        $expected = array(
-            '20110101T120000Z/20110101T130000Z',
-            '20110101T130000Z/20110101T140000Z',
-            '20110101T180000Z/20110101T190000Z',
-            '20110101T190000Z/20110101T200000Z',
-            '20110102T000000Z/20110103T000000Z',
-            '20110101T210000Z/20110101T220000Z',
+        $expected = (array)$expected;
 
-            '20110103T010000Z/20110103T020000Z',
-            '20110103T030000Z/20110103T040000Z',
-            '20110103T040000Z/20110103T050000Z',
-            '20110103T050000Z/20110103T060000Z',
+        $freebusy = $result->VFREEBUSY->select('FREEBUSY');
 
-            '20110101T220000Z/20110101T230000Z',
-            '20110101T230000Z/20110102T000000Z',
-        );
-
-        foreach($result->VFREEBUSY->FREEBUSY as $fb) {
+        foreach($freebusy as $fb) {
 
             $this->assertContains((string)$fb, $expected, "$fb did not appear in our list of expected freebusy strings. This is concerning!");
 
@@ -223,10 +338,10 @@ ICS;
             unset($expected[$k]);
 
         }
-        if (count($expected)>0) {
-            $this->fail('There were elements in the expected array that were not found in the output: ' . "\n"  . print_r($expected,true) . "\n" . $result->serialize());
-
-        }
+        $this->assertTrue(
+            count($expected) === 0,
+            'There were elements in the expected array that were not found in the output: ' . "\n"  . print_r($expected,true) . "\n" . $result->serialize()
+        );
 
     }
 

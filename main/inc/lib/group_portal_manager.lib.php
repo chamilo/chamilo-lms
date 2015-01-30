@@ -35,10 +35,12 @@ class GroupPortalManager
      *
      * @author Julio Montoya <gugli100@gmail.com>,
      *
-     * @param	string	The URL of the site
-     * @param	string  The description of the site
-     * @param	int		is active or not
-     * @param  int     the user_id of the owner
+     * @param	string	$name The URL of the site
+     * @param	string  $description The description of the site
+     * @param  string  $url
+     * @param	int		$visibility is active or not
+     * @param  int     $picture
+     *
      * @return boolean if success
      */
     public static function add($name, $description, $url, $visibility, $picture = '')
@@ -68,10 +70,12 @@ class GroupPortalManager
      * Updates a group
      * @author Julio Montoya <gugli100@gmail.com>,
      *
-     * @param int The id
-     * @param string The description of the site
-     * @param int is active or not
-     * @param int the user_id of the owner
+     * @param int $group_id The id
+     * @param string $name The description of the site
+     * @param string $description
+     * @param string $url
+     * @param int $visibility
+     * @param string $picture_uri
      * @param bool $allowMemberGroupToLeave
      * @return bool if success
      */
@@ -85,30 +89,31 @@ class GroupPortalManager
             $allowMemberGroupToLeave = $allowMemberGroupToLeave == true ? 1 : 0;
             $groupLeaveCondition = " allow_members_leave_group = $allowMemberGroupToLeave , ";
         }
-        $sql = "UPDATE $table
-               	SET name 	= '".Database::escape_string($name)."',
-                description = '".Database::escape_string($description)."',
-                picture_uri = '".Database::escape_string($picture_uri)."',
-                url 		= '".Database::escape_string($url)."',
-                visibility 	= '".Database::escape_string($visibility)."',
-                $groupLeaveCondition
-                updated_on 	= '".$now."'
+        $sql = "UPDATE $table SET
+                    name 	= '".Database::escape_string($name)."',
+                    description = '".Database::escape_string($description)."',
+                    picture_uri = '".Database::escape_string($picture_uri)."',
+                    url 		= '".Database::escape_string($url)."',
+                    visibility 	= '".Database::escape_string($visibility)."',
+                    $groupLeaveCondition
+                    updated_on 	= '".$now."'
                 WHERE id = '$group_id'";
         $result = Database::query($sql);
+
         return $result;
     }
 
     /**
      * Deletes a group
      * @author Julio Montoya
-     * @param int id
+     * @param int $id
      * @return boolean true if success
      * */
     public static function delete($id)
     {
         $id = intval($id);
         $table = Database :: get_main_table(TABLE_MAIN_GROUP);
-        $sql = "DELETE FROM $table WHERE id = ".Database::escape_string($id);
+        $sql = "DELETE FROM $table WHERE id = ".intval($id);
         $result = Database::query($sql);
         // Deleting all relationship with users and groups
         self::delete_users($id);
@@ -122,9 +127,9 @@ class GroupPortalManager
     /**
      * Gets data of all groups
      * @author Julio Montoya
-     * @param int	visibility
-     * @param int	from which record the results will begin (use for pagination)
-     * @param int	number of items
+     * @param int	$visibility
+     * @param int	$from which record the results will begin (use for pagination)
+     * @param int	$number_of_items
      * @return array
      * */
     public static function get_all_group_data($visibility = GROUP_PERMISSION_OPEN, $from = 0, $number_of_items = 10)
@@ -137,12 +142,14 @@ class GroupPortalManager
         while ($item = Database::fetch_array($res)) {
             $data[] = $item;
         }
+
         return $data;
     }
 
     /**
      * Gets a list of all group
-     * @param id of a group not to include (i.e. to exclude)
+     * @param inr $without_this_one id of a group not to include (i.e. to exclude)
+     *
      * @return array : id => name
      * */
     public static function get_groups_list($without_this_one = NULL)
@@ -158,12 +165,14 @@ class GroupPortalManager
         while ($item = Database::fetch_assoc($res)) {
             $list[$item['id']] = $item['name'];
         }
+
         return $list;
     }
 
     /**
      * Gets the group data
      * @param int $group_id
+     *
      * @return array
      */
     public static function get_group_data($group_id)
@@ -176,6 +185,7 @@ class GroupPortalManager
         if (Database::num_rows($res) > 0) {
             $item = Database::fetch_array($res, 'ASSOC');
         }
+
         return $item;
     }
 
@@ -757,10 +767,7 @@ class GroupPortalManager
         $group_table = Database::get_main_table(TABLE_MAIN_GROUP);
         $table_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_group_tag_values = Database::get_main_table(TABLE_MAIN_GROUP_REL_TAG);
-
         $field_id = 5;
-
-        $tag = Database::escape_string($tag);
         $from = intval($from);
         $number_of_items = intval($number_of_items);
 
@@ -777,8 +784,9 @@ class GroupPortalManager
                 WHERE
                     tag LIKE '$tag%' AND field_id= $field_id OR
                     (
-                       g.name LIKE '%".$tag."%' OR g.description LIKE '%".$tag."%'  OR  g.url LIKE '%".$tag."%'
-
+                       g.name LIKE '".Database::escape_string('%'.$tag.'%')."' OR
+                       g.description LIKE '".Database::escape_string('%'.$tag.'%')."' OR
+                       g.url LIKE '".Database::escape_string('%'.$tag.'%')."'
                      )";
 
         $sql .= " LIMIT $from, $number_of_items";
@@ -794,6 +802,7 @@ class GroupPortalManager
                 $return[$row['id']] = $row;
             }
         }
+
         return $return;
     }
 

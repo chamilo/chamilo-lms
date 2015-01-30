@@ -1,9 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Manage the course extra fields
+ * @package chamilo.library
  */
-class CourseField extends ExtraField {
+/**
+ * Manage the course extra fields
+ * 
+ * Add the extra fields to the form excluding the Special Course Field
+ */
+class CourseField extends ExtraField
+{
 
     /**
      * Special Course extra field
@@ -13,7 +21,8 @@ class CourseField extends ExtraField {
     /**
      * Class constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct('course');
     }
 
@@ -53,15 +62,10 @@ class CourseField extends ExtraField {
         }
 
         $extra = $this->set_extra_fields_in_form(
-            $form,
-            $extra_data,
-            $this->type.'_field',
-            false,
-            false,
-            $extra_fields,
-            $courseCode
+            $form, $extra_data, $this->type . '_field', false, false, $extra_fields, $courseCode
         );
 
         return $extra;
     }
+
 }

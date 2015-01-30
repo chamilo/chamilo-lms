@@ -12,9 +12,10 @@
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pData.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pDraw.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pCache.class.php';
+
+use CpChart\Classes\pData as pData;
+use CpChart\Classes\pImage as pImage;
+use CpChart\Classes\pCache as pCache;
 
 /**
  * This class is used like controller for teacher graph block plugin,
@@ -153,7 +154,7 @@ class BlockTeacherGraph extends Block
                 $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
                 /* Set the default font */
-                $myPicture->setFontProperties(array('FontName' => api_get_path(LIBRARY_PATH) . 'pChart2/fonts/verdana.ttf', 'FontSize' => 10));
+                $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
 
                 /* Do NOT Write the chart title */
 

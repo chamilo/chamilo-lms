@@ -1,8 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once api_get_path(LIBRARY_PATH).'pChart2/class/pData.class.php';
-require_once api_get_path(LIBRARY_PATH).'pChart2/class/pDraw.class.php';
-require_once api_get_path(LIBRARY_PATH).'pChart2/class/pCache.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
@@ -10,6 +7,11 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/flatview_data_generator.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
+
+use CpChart\Classes\pData as pData;
+use CpChart\Classes\pImage as pImage;
+use CpChart\Classes\pCache as pCache;
+
 
 /**
  * Class BlockEvaluationGraph
@@ -197,7 +199,7 @@ class BlockEvaluationGraph extends Block
                             /* Set the default font */
                             $myPicture->setFontProperties(
                                 array(
-                                    'FontName' => api_get_path(LIBRARY_PATH) . 'pChart2/fonts/verdana.ttf',
+                                    'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
                                     'FontSize' => 10
                                 )
                             );
@@ -373,7 +375,7 @@ class BlockEvaluationGraph extends Block
                                 /* Set the default font */
                                 $myPicture->setFontProperties(
                                     array(
-                                        'FontName' => api_get_path(LIBRARY_PATH) . 'pChart2/fonts/verdana.ttf',
+                                        'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
                                         'FontSize' => 10
                                     )
                                 );

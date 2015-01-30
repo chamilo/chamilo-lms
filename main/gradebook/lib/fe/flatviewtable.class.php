@@ -85,11 +85,6 @@ class FlatViewTable extends SortableTable
      */
     public function display_graph_by_resource()
     {
-        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pDraw.class.php';
-        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pImage.class.php';
-        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pCache.class.php';
-
         $headerName = $this->datagen->get_header_names();
         $total_users = $this->datagen->get_total_users_count();
 
@@ -215,7 +210,7 @@ class FlatViewTable extends SortableTable
                         /* Set the default font */
                         $myPicture->setFontProperties(
                             array(
-                                'FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                                'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
                                 'FontSize' => 10
                             )
                         );

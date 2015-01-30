@@ -4,6 +4,10 @@
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
+use CpChart\Classes\pData as pData;
+use CpChart\Classes\pImage as pImage;
+use CpChart\Classes\pCache as pCache;
+
 /**
  *  Class Tracking
  *
@@ -4579,10 +4583,6 @@ class Tracking
      */
     static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        require_once api_get_path(LIBRARY_PATH).'pChart2/class/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pChart2/class/pDraw.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pChart2/class/pCache.class.php';
-
         /* Create and populate the pData object */
         $myData = new pData();
         $myData->addPoints($names, 'Labels');
@@ -4595,8 +4595,7 @@ class Tracking
         $myData->setSerieDescription('Serie1', get_lang('MyResults'));
         $myData->setSerieDescription('Serie2', get_lang('AverageScore'));
         $myData->setAxisUnit(0, '%');
-        // @TODO: Define a custom pallete
-        $myData->loadPalette(api_get_path(LIBRARY_PATH) . 'pChart2/palettes/evening.color', true);
+        // @TODO: Define a custom palette
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
@@ -4621,8 +4620,8 @@ class Tracking
             $myPicture->Antialias = false;
 
             /* Draw the background */
-            $Settings = array('R' => 255, 'G' => 255, 'B' => 255);
-            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $Settings);
+            $settings = array('R' => 255, 'G' => 255, 'B' => 255);
+            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
 
             /* Add a border to the picture */
             $myPicture->drawRectangle(
@@ -4636,7 +4635,7 @@ class Tracking
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    'FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 10)
             );
             /* Write the chart title */
@@ -4653,7 +4652,7 @@ class Tracking
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    'FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 6
                 )
             );
@@ -4695,7 +4694,7 @@ class Tracking
             /* Draw the line chart */
             $myPicture->setFontProperties(
                 array(
-                    'FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 10
                 )
             );
@@ -4745,10 +4744,6 @@ class Tracking
      */
     static function generate_exercise_result_thumbnail_graph($attempts)
     {
-        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pDraw.class.php';
-        require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pCache.class.php';
-
         $exercise_title = $attempts['title'];
         $attempts       = $attempts['data'];
         $my_exercise_result_array = $exercise_result = array();
@@ -4846,7 +4841,7 @@ class Tracking
             $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
             /* Set the default font */
-            $myPicture->setFontProperties(array('FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf", 'FontSize' => $fontSize));
+            $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => $fontSize));
 
             /* Do not write the chart title */
 
@@ -4925,10 +4920,6 @@ class Tracking
      */
     static function generate_exercise_result_graph($attempts)
     {
-        require_once api_get_path(LIBRARY_PATH).'pChart2/class/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pChart2/class/pDraw.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pChart2/class/pCache.class.php';
-
         $exercise_title = strip_tags($attempts['title']);
         $attempts       = $attempts['data'];
         $my_exercise_result_array = $exercise_result = array();
@@ -5033,7 +5024,7 @@ class Tracking
             $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
             /* Set the default font */
-            $myPicture->setFontProperties(array('FontName' => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf", 'FontSize' => 10));
+            $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
 
             /* Write the chart title */
             $myPicture->drawText(

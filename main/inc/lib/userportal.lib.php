@@ -719,8 +719,8 @@ class IndexManager
                     'sessionVar'   => basename(__FILE__, '.php'),
                     'imageOptions' => array(
                         'font_size' => 20,
-                        'font_path' => api_get_path(LIBRARY_PATH).'pChart2/fonts/',
-                        'font_file' => 'verdana.ttf',
+                        'font_path' => api_get_path(SYS_CSS_PATH) . 'opensans/',
+                        'font_file' => 'OpenSans-Regular.ttf',
                         //'output' => 'gif'
                     )
                 );

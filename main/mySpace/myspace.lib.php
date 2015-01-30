@@ -4,6 +4,10 @@
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
+use CpChart\Classes\pData as pData;
+use CpChart\Classes\pImage as pImage;
+use CpChart\Classes\pCache as pCache;
+
 /**
  * Class MySpace
  * @package chamilo.reporting
@@ -2781,11 +2785,8 @@ function convert_to_string($sql_result){
  * @version OCT-22- 2010
  * @return string
  */
-function grapher($sql_result, $start_date, $end_date, $type = "") {
-    require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pData.class.php';
-    require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pDraw.class.php';
-    require_once api_get_path(LIBRARY_PATH) . 'pChart2/class/pCache.class.php';
-
+function grapher($sql_result, $start_date, $end_date, $type = "")
+{
     if (empty($start_date)) { $start_date =""; }
     if (empty($end_date)) { $end_date =""; }
     if ($type == ""){ $type = 'day'; }
@@ -2841,8 +2842,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
         $myData->setSerieWeight('Serie1', 1);
         $myData->setSerieDescription('Serie1', get_lang('MyResults'));
         $myData->setAxisName(0, get_lang('Minutes'));
-        // @TODO: Define a custom pallete
-        $myData->loadPalette(api_get_path(LIBRARY_PATH) . 'pChart2/palettes/evening.color', true);
+        // @TODO: Define a custom palette
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
@@ -2867,8 +2867,8 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
             $myPicture->Antialias = false;
 
             /* Draw the background */
-            $Settings = array("R" => 255, "G" => 255, "B" => 255);
-            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $Settings);
+            $settings = array("R" => 255, "G" => 255, "B" => 255);
+            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
 
             /* Add a border to the picture */
             $myPicture->drawRectangle(
@@ -2882,7 +2882,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    "FontName" => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 10)
             );
             /* Write the chart title */
@@ -2899,7 +2899,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    "FontName" => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 8
                 )
             );
@@ -2941,7 +2941,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
             /* Draw the line chart */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(LIBRARY_PATH) . "pChart2/fonts/verdana.ttf",
+                    "FontName" => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 10
                 )
             );

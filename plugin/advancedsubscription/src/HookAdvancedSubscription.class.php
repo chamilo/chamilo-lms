@@ -46,6 +46,7 @@ class HookAdvancedSubscription extends HookObserver implements
     }
 
     /**
+     * Add Webservices to registration.soap.php
      * @param HookWSRegistrationEventInterface $hook
      * @return int
      */
@@ -60,7 +61,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
             /** WSSessionListInCategory */
 
-            // Output params for WSSessionListInCategory
+            // Output params for sessionBriefList WSSessionListInCategory
             $server->wsdl->addComplexType(
                 'sessionBrief',
                 'complexType',
@@ -68,17 +69,18 @@ class HookAdvancedSubscription extends HookObserver implements
                 'all',
                 '',
                 array(
-                    'name' => array('name' => 'name', 'type' => 'xsd:string'), //Course string code
-                    'as_description' => array('name' => 'description', 'type' => 'xsd:string'), //Chamilo user_id
-                    'modalidad' => array('name' => 'start_date', 'type' => 'xsd:string'),
-                    'date_start' => array('name' => 'start_date', 'type' => 'xsd:string'),
-                    'date_end' => array('name' => 'end_date', 'type' => 'xsd:string'),
-                    'duracion' => array('name' => 'date_end', 'type' => 'xsd:string'),
-                    'vacantes' => array('name' => 'quota', 'type' => 'xsd:string'),
-                    'horario' => array('name' => 'schedule', 'type' => 'xsd:string'),
+                    'name' => array('name' => 'name', 'type' => 'xsd:string'), // session.name
+                    'as_description' => array('name' => 'as_description', 'type' => 'xsd:string'), // session.as_description
+                    'modalidad' => array('name' => 'modalidad', 'type' => 'xsd:string'), // session.modalidad
+                    'date_start' => array('name' => 'date_start', 'type' => 'xsd:string'), // session.date_start
+                    'date_end' => array('name' => 'date_end', 'type' => 'xsd:string'), // session.date_end
+                    'duracion' => array('name' => 'duracion', 'type' => 'xsd:string'), // session.duracion
+                    'vacantes' => array('name' => 'vacantes', 'type' => 'xsd:string'), // session.vacantes
+                    'horario' => array('name' => 'horario', 'type' => 'xsd:string'), // session.horario
                 )
             );
 
+            //Output params for WSSessionListInCategory
             $server->wsdl->addComplexType(
                 'sessionBriefList',
                 'complexType',
@@ -93,7 +95,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'tns:sessionBrief'
             );
 
-            // Input params for editing users
+            // Input params for WSSessionListInCategory
             $server->wsdl->addComplexType(
                 'sessionCategoryInput',
                 'complexType',
@@ -101,14 +103,14 @@ class HookAdvancedSubscription extends HookObserver implements
                 'all',
                 '',
                 array(
-                    'id' => array('name' => 'id', 'type' => 'xsd:string'), // Course string code
-                    'name' => array('name' => 'name', 'type' => 'xsd:string'), // Chamilo user_id
-                    'target' => array('name' => 'target', 'type' => 'xsd:string'), // Publico objetivo
+                    'id' => array('name' => 'id', 'type' => 'xsd:string'), // session_category.id
+                    'name' => array('name' => 'name', 'type' => 'xsd:string'), // session_category.name
+                    'publico_objetivo' => array('name' => 'publico_objetivo', 'type' => 'xsd:string'), // session.publico_objetivo
                     'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
                 )
             );
 
-            // Input params for get session Details
+            // Input params for WSSessionGetDetailsByUser
             $server->wsdl->addComplexType(
                 'advsubSessionDetailInput',
                 'complexType',
@@ -116,15 +118,15 @@ class HookAdvancedSubscription extends HookObserver implements
                 'all',
                 '',
                 array(
-                    'user_id' => array('name' => 'id', 'type' => 'xsd:int'), // Chamilo user_id
-                    'session_id' => array('name' => 'name', 'type' => 'xsd:int'), // Chamilo session_id
+                    'user_id' => array('name' => 'user_id', 'type' => 'xsd:int'), // user.user_id
+                    'session_id' => array('name' => 'session_id', 'type' => 'xsd:int'), // session.id
+                    'profile_completed' => array('name' => 'profile_completed', 'type' => 'xsd:float'), // user.profile_completes
+                    'is_connected' => array('name' => 'is_connected', 'type' => 'xsd:boolean'), // user.is_connected
                     'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
-                    'profile_completed' => array('name' => 'profile_completed', 'type' => 'xsd:float'),
-                    'is_connected' => array('name' => 'secret_key', 'type' => 'xsd:boolean'),
                 )
             );
 
-            // Output params for get session Details
+            // Output params for WSSessionGetDetailsByUser
             $server->wsdl->addComplexType(
                 'advsubSessionDetail',
                 'complexType',
@@ -132,22 +134,23 @@ class HookAdvancedSubscription extends HookObserver implements
                 'all',
                 '',
                 array(
-                    'id' => array('name' => 'id', 'type' => 'xsd:string'),
-                    'cost' => array('name' => 'cost', 'type' => 'xsd:float'),
-                    'place' => array('name' => 'place', 'type' => 'xsd:string'),
-                    'visitors' => array('name' => 'visitors', 'type' => 'xsd:string'),
-                    'duration' => array('name' => 'duration', 'type' => 'xsd:int'),
-                    'brochure' => array('name' => 'brochure', 'type' => 'xsd:string'),
-                    'banner' => array('name' => 'banner', 'type' => 'xsd:string'),
-                    'description_full' => array('name' => 'description_full', 'type' => 'xsd:string'),
-                    'status' => array('name' => 'status', 'type' => 'xsd:string'),
-                    'action_url' => array('name' => 'action_url', 'type' => 'xsd:string'),
-                    'message' => array('name' => 'error_message', 'type' => 'xsd:string'),
+                    'id' => array('name' => 'id', 'type' => 'xsd:string'), // session.id
+                    'cost' => array('name' => 'cost', 'type' => 'xsd:float'), // session.costo
+                    'place' => array('name' => 'place', 'type' => 'xsd:string'), // session.lugar
+                    'visitors' => array('name' => 'visitors', 'type' => 'xsd:string'), // session.permitir_visitantes
+                    'duration' => array('name' => 'duration', 'type' => 'xsd:int'), // session.duracion
+                    'brochure' => array('name' => 'brochure', 'type' => 'xsd:string'), // session.brochure
+                    'banner' => array('name' => 'banner', 'type' => 'xsd:string'), // session.banner
+                    'description_full' => array('name' => 'description_full', 'type' => 'xsd:string'), // session.description
+                    'status' => array('name' => 'status', 'type' => 'xsd:string'), // status
+                    'action_url' => array('name' => 'action_url', 'type' => 'xsd:string'), // action_url
+                    'message' => array('name' => 'error_message', 'type' => 'xsd:string'), // message
                 )
             );
 
             /** WSListSessionsDetailsByCategory **/
 
+            // Input params for WSListSessionsDetailsByCategory
             $server->wsdl->addComplexType(
                 'listSessionsDetailsByCategory',
                 'complexType',
@@ -164,6 +167,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'tns:listSessionsDetailsByCategory'
             );
 
+            // Output params for sessionDetailsCourseList WSListSessionsDetailsByCategory
             $server->wsdl->addComplexType(
                 'sessionDetailsCourse',
                 'complexType',
@@ -181,6 +185,7 @@ class HookAdvancedSubscription extends HookObserver implements
             );
 
 
+            // Output array for sessionDetails WSListSessionsDetailsByCategory
             $server->wsdl->addComplexType(
                 'sessionDetailsCourseList',
                 'complexType',
@@ -197,6 +202,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'tns:sessionDetailsCourse'
             );
 
+            // Output params for sessionDetailsList WSListSessionsDetailsByCategory
             $server->wsdl->addComplexType(
                 'sessionDetails',
                 'complexType',
@@ -299,6 +305,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 )
             );
 
+            // Output params for WSListSessionsDetailsByCategory
             $server->wsdl->addComplexType(
                 'sessionDetailsList',
                 'complexType',
@@ -315,7 +322,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'tns:sessionDetails'
             );
 
-            // Register the method to expose
+            // Register the method for WSSessionListInCategory
             $server->register(
                 'HookAdvancedSubscription..WSSessionListInCategory', // method name
                 array('sessionCategoryInput' => 'tns:sessionCategoryInput'), // input parameters
@@ -327,6 +334,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'This service checks if user assigned to course' // documentation
             );
 
+            // Register the method for WSAdvsubEncrypt
             $server->register(
                 'HookAdvancedSubscription..WSAdvsubEncrypt', // method name
                 array('data' => 'xsd:string'), // input parameters
@@ -338,6 +346,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'This service encrypt data to be used later in urls' // documentation
             );
 
+            // Register the method for WSSessionGetDetailsByUser
             $server->register(
                 'HookAdvancedSubscription..WSSessionGetDetailsByUser', // method name
                 array('advsubSessionDetailInput' => 'tns:advsubSessionDetailInput'), // input parameters
@@ -349,6 +358,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'This service encrypt data to be used later in urls' // documentation
             );
 
+            // Register the method for WSListSessionsDetailsByCategory
             $server->register(
                 'HookAdvancedSubscription..WSListSessionsDetailsByCategory', // method name
                 array('name' => 'tns:listSessionsDetailsByCategory'), // input parameters

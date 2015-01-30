@@ -113,17 +113,6 @@ if (!empty($a) && !empty($u)) {
                 $result['pass'] = false;
             }
             break;
-        case 'admin':
-            $studentList = $plugin->listAllStudentsInQueueBySession($s);
-            $sessionList = $plugin->listAllSessions();
-            $tpl = new Template('TESTING');
-            $tpl->assign('session', $studentList['session']);
-            $tpl->assign('sessionItems', $sessionList);
-            $tpl->assign('students', $studentList['students']);
-            $content = $tpl->fetch('/advancedsubscription/views/index.tpl');
-            $tpl->assign('content', $content);
-            $tpl->display_one_col_template();
-            exit;
         default:
             $result['errorMessage'] = 'Action do not exist!';
     }

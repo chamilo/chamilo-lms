@@ -1,7 +1,7 @@
-<form id="form_advsub_admin" class="form-search" method="post" action="/plugin/advancedsubscription/ajax/advsub.ajax.php?a=validation" name="form_advsub_admin">
-    <select name="s">
+<form id="form_advsub_admin" class="form-search" method="post" action="/plugin/advancedsubscription/src/admin_view.php" name="form_advsub_admin">
+    <select id="session-select" name="s">
         {% for sessionItem in sessionItems %}
-        <option value="{{ sessionItem.id }}">
+        <option value="{{ sessionItem.id }}" {{ sessionItem.selected }}>
         {{ sessionItem.name }}
         </option>
         {% endfor %}
@@ -60,3 +60,8 @@
     </table>
     <input name="f" value="social" type="hidden"><input name="action" type="hidden">
 </form>
+<script>
+    $("#session-select").change(function () {
+        $("#form_advsub_admin").submit();
+    });
+</script>

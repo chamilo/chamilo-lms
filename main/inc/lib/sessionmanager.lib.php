@@ -3910,6 +3910,11 @@ class SessionManager
                         }
 
                         if ($session_id) {
+
+                            if ($debug) {
+                                $logger->addError("Sessions - Session to be updated #$session_id");
+                            }
+
                             $sessionInfo = api_get_session_info($session_id);
                             if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
                                 if (empty($sessionInfo['nb_days_access_before_beginning']) ||
@@ -3953,6 +3958,12 @@ class SessionManager
                                 $sql = "DELETE FROM $tbl_session_course_user
                                         WHERE id_session = '$session_id' AND status <> 2";
                                 Database::query($sql);
+                            }
+                        } else {
+                            if ($debug) {
+                                $logger->addError(
+                                    "Sessions - Session not found"
+                                );
                             }
                         }
                     }

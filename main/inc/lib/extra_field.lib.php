@@ -1762,4 +1762,88 @@ EOF;
             'condition_array' => $condition_array
         );
     }
+
+    /**
+     * Get the extra fields and their formated values
+     * @param int|string $itemId The item ID (It could be a session_id, course_id or user_id)
+     * @return array The extra fields data
+     */
+    public function getDataAndFormatedValues($itemId)
+    {
+        $valuesData = array();
+
+        $fields = $this->get_all();
+
+        foreach ($fields as $field) {
+            if ($field['field_visible'] != '1') {
+                continue;
+            }
+
+            $fieldValue = new ExtraFieldValue($this->type);
+            $valueData = $fieldValue->get_values_by_handler_and_field_id($itemId, $field['id'], true);
+
+            if (!$valueData) {
+                continue;
+            }
+
+            $displayedValue = get_lang('None');
+
+            switch ($field['field_type']) {
+                case ExtraField::FIELD_TYPE_CHECKBOX:
+                    if ($valueData !== false && $valueData['field_value'] == '1') {
+                        $displayedValue = get_lang('Yes');
+                    } else {
+                        $displayedValue = get_lang('No');
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_DATE:
+                    if ($valueData !== false && !empty($valueData['field_value'])) {
+                        $displayedValue = api_format_date($valueData['field_value'], DATE_FORMAT_LONG_NO_DAY);
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                    if ($valueData !== false && !empty($valueData['field_value'])) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH) . $valueData['field_value'])) {
+                            $image = Display::img(
+                                api_get_path(WEB_CODE_PATH) . $valueData['field_value'],
+                                $field['field_display_text'],
+                                array('width' => '300')
+                            );
+
+                            $displayedValue = Display::url(
+                                $image,
+                                api_get_path(WEB_CODE_PATH) . $valueData['field_value'],
+                                array('target' => '_blank')
+                            );
+                        }
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_FILE:
+                    if ($valueData !== false && !empty($valueData['field_value'])) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH) . $valueData['field_value'])) {
+                            $displayedValue = Display::url(
+                                get_lang('Download'),
+                                api_get_path(WEB_CODE_PATH) . $valueData['field_value'],
+                                array(
+                                'title' => $field['field_display_text'],
+                                'target' => '_blank'
+                                )
+                            );
+                        }
+                    }
+                    break;
+                default:
+                    $displayedValue = $valueData['field_value'];
+                    break;
+            }
+
+            $valuesData[] = array(
+                'text' => $field['field_display_text'],
+                'value' => $displayedValue
+            );
+        }
+
+        return $valuesData;
+    }
+
 }

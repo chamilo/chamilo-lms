@@ -569,7 +569,7 @@ $headers = array(
 );
 
 if (!api_is_anonymous()) {
-    $headers[] = get_lang('MyQdCM');
+    $headers[] = get_lang('MyQCM');
     $headers[] = get_lang('MyStatistics');
 }
 

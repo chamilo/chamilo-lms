@@ -7500,7 +7500,13 @@ function api_register_campus($listCampus = true) {
     // Reload the settings.
 }
 
-function api_is_student_boss () {
+/**
+ * Checks whether current user is a student boss
+ * @global array $_user
+ * @return boolean
+ */
+function api_is_student_boss ()
+{
     global $_user;
 
     return isset($_user['status']) && $_user['status'] == STUDENT_BOSS;

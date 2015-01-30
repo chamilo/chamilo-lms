@@ -751,7 +751,6 @@ class Autoload
         $result['MultipleAnswerCombination'] = '/main/exercice/multiple_answer_combination.class.php';
         $result['MultipleAnswerCombinationTrueFalse'] = '/main/exercice/multiple_answer_combination_true_false.class.php';
         $result['MultipleAnswerTrueFalse'] = '/main/exercice/multiple_answer_true_false.class.php';
-        $result['MyHorBar'] = '/main/inc/lib/pchart/MyHorBar.class.php';
         $result['MySpace'] = '/main/mySpace/myspace.lib.php';
         $result['Nanogong'] = '/main/inc/lib/nanogong.lib.php';
         $result['NotebookManager'] = '/main/inc/lib/notebook.lib.php';

@@ -12,6 +12,7 @@ security:
             - ROLE_TEACHER
             - ROLE_DIRECTOR
             - ROLE_JURY_PRESIDENT
+            - ROLE_CURRENT_COURSE_TEACHER
         ROLE_SUPER_ADMIN: [ROLE_SONATA_ADMIN, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_GLOBAL_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_RRHH: [ROLE_TEACHER]
@@ -19,9 +20,14 @@ security:
         ROLE_QUESTION_MANAGER: [ROLE_STUDENT, ROLE_QUESTION_MANAGER]
         ROLE_SESSION_MANAGER: [ROLE_STUDENT, ROLE_SESSION_MANAGER, ROLE_ALLOWED_TO_SWITCH]
         ROLE_STUDENT: [ROLE_STUDENT]
+        ROLE_CURRENT_TEACHER: []
+        ROLE_CURRENT_COURSE_STUDENT: [ROLE_CURRENT_COURSE_STUDENT]
+        ROLE_CURRENT_COURSE_TEACHER: [ROLE_CURRENT_COURSE_TEACHER, ROLE_CURRENT_COURSE_STUDENT]
+
         ROLE_ANONYMOUS: [ROLE_ANONYMOUS]
 
     access_decision_manager:
+        # strategy can be: affirmative, unanimous or consensus
         strategy: unanimous
 
     providers:
@@ -87,5 +93,5 @@ security:
         - { path: ^/profile/, role: IS_AUTHENTICATED_FULLY }
         - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
-    acl:
-        connection: default
+#    acl:
+#        connection: default

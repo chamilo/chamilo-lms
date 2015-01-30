@@ -1,8 +1,10 @@
+{% if is_granted('ROLE_CURRENT_COURSE_TEACHER') %}
 <div class="actions">
     <a class="btn btn-default" href="{{ url('chamilo_notebook_new', { 'course': course }) }}">
         {{ 'Add' | trans }}
     </a>
 </div>
+{% endif %}
 
 <div class="row">
 {{ grid_search(grid) }}

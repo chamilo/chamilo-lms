@@ -375,6 +375,28 @@ class Course
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getTeachers()
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('status', User::COURSE_MANAGER));
+
+        return $this->users->matching($criteria);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getStudents()
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('status', User::STUDENT));
+
+        return $this->users->matching($criteria);
+    }
+
+    /**
      * @param ArrayCollection $users
      */
     public function setUsers($users)
@@ -387,14 +409,14 @@ class Course
     }
 
     /**
-     * @param CourseRelUser $user
+     * @param CourseRelUser $courseRelUser
      */
-    public function addUsers(CourseRelUser $user)
+    public function addUsers(CourseRelUser $courseRelUser)
     {
-        $user->setCourse($this);
+        $courseRelUser->setCourse($this);
 
-        if (!$this->hasUser($user)) {
-            $this->users[] = $user;
+        if (!$this->hasSubscription($courseRelUser)) {
+            $this->users[] = $courseRelUser;
         }
     }
 
@@ -402,7 +424,7 @@ class Course
      * @param CourseRelUser $subscription
      * @return bool
      */
-    public function hasUser(CourseRelUser $subscription)
+    private function hasSubscription(CourseRelUser $subscription)
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -419,6 +441,45 @@ class Course
         }
 
         return false;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function hasUser(User $user)
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq("user", $user)
+        );
+
+        return $this->getUsers()->matching($criteria)->count() > 0;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function hasStudent(User $user)
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq("user", $user)
+        );
+
+        return $this->getStudents()->matching($criteria)->count() > 0;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function hasTeacher(User $user)
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq("user", $user)
+        );
+
+        return $this->getTeachers()->matching($criteria)->count() > 0;
     }
 
     /**

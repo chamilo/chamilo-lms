@@ -3,7 +3,10 @@
 
 namespace Chamilo\CourseBundle\EventListener;
 
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Doctrine\ORM\EntityManager;
+use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -11,6 +14,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Chamilo\CourseBundle\Controller\ToolInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -80,6 +84,8 @@ class CourseListener
             $em = $container->get('doctrine')->getManager();
 
             $securityChecker = $container->get('security.authorization_checker');
+            /** @var User $user */
+            $user = $container->get('security.token_storage')->getToken()->getUser();
 
             if (!empty($courseCode)) {
                 /** @var Course $course */
@@ -88,18 +94,26 @@ class CourseListener
                     // Session
                     $sessionId = $request->get('id_session');
 
-                    if (!empty($sessionId)) {
+                    if (empty($sessionId)) {
+                        // Check if user is allowed to this course
+                        // See CourseVoter.php
+                        if (false === $securityChecker->isGranted(CourseVoter::VIEW, $course)) {
+                            throw new AccessDeniedException('Unauthorised access to course!');
+                        }
+                    } else {
                         $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
                         if ($session) {
-                            $course->setCurrentSession($session);
+                            //$course->setCurrentSession($session);
                             $controller[0]->setSession($session);
+                            $session->setCurrentCourse($course);
+                            // Check if user is allowed to this course-session
+                            // See SessionVoter.php
+                            if (false === $securityChecker->isGranted(SessionVoter::VIEW, $session)) {
+                                throw new AccessDeniedException('Unauthorised access to session!');
+                            }
+                        } else {
+                            throw new NotFoundHttpException('Session not found');
                         }
-                    }
-
-                    // Check if user is allowed to this course / course-session
-                    // See CourseVoter.php
-                    if (false === $securityChecker->isGranted('view', $course)) {
-                        throw new AccessDeniedException('Unauthorised access!');
                     }
 
                     // Legacy code
@@ -114,6 +128,8 @@ class CourseListener
                     Sets the controller course in order to use $this->getCourse()
                     */
                     $controller[0]->setCourse($course);
+                } else {
+                    throw new NotFoundHttpException('Course not found');
                 }
             }
         }

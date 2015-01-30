@@ -42,24 +42,4 @@ class CourseManager extends BaseEntityManager
     {
         return $this->getRepository()->findOneByTitle($name);
     }
-
-    /**
-     * @param User $user
-     * @param Course $course
-     * @return bool
-     */
-    public function isUserSubscribedInCourse(User $user, Course $course)
-    {
-        $userCollection = $course->getUsers();
-        $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq("user", $user));
-
-        $userCollection = $userCollection->matching($criteria);
-
-        if ($userCollection->count()) {
-            return true;
-        }
-
-        return false;
-    }
 }

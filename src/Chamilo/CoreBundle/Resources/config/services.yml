@@ -26,21 +26,28 @@ services:
         tags:
             - { name: twig.extension }
 
-    chamilo_core.security.authorization.voter.course:
+    chamilo_core.security.authorization.voter.course_voter:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter
-        arguments: [ @doctrine.orm.entity_manager, @chamilo_core.manager.course ]
+        arguments: [ @doctrine.orm.entity_manager, @chamilo_core.manager.course, @service_container]
         public: false
         tags:
            - { name: security.voter }
 
-    chamilo_core.security.authorization.voter.resource_link:
+    chamilo_core.security.authorization.voter.session_voter:
+        class: Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter
+        arguments: [ @doctrine.orm.entity_manager, @chamilo_core.manager.course, @service_container]
+        public: false
+        tags:
+           - { name: security.voter }
+
+    chamilo_core.security.authorization.voter.resource_node_voter:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter
         public: false
         arguments: [ @service_container ]
         tags:
             - { name: security.voter }
 
-    chamilo_core.directory_namer.user_image:
+    chamilo_core.naming.user_image:
         class: Chamilo\CoreBundle\Naming\UserImage
 
     chamilo_core.form.type.yes_no:

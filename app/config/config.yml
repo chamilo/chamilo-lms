@@ -177,8 +177,8 @@ swiftmailer:
     username:  %mailer_user%
     password:  %mailer_password%
 
-jms_security_extra:
-    secure_all_services: false
+#jms_security_extra:
+#    secure_all_services: false
 
 jms_serializer:
     metadata:
@@ -297,4 +297,4 @@ liip_theme:
 #            inject_on_load:     false
 #            delete_on_update:   true
 #            delete_on_remove:   true
-#            directory_namer:    chamilo_core.directory_namer.user_image
+#            directory_namer:    chamilo_core.naming.user_image

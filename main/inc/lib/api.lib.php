@@ -2484,7 +2484,7 @@ function api_display_tool_title($title_element) {
  * @todo rewrite code so it is easier to understand
  */
 function api_display_tool_view_option() {
-    if (api_get_setting('student_view_enabled') != 'true') {
+    if (api_get_setting('course.student_view_enabled') != 'true') {
         return '';
     }
 
@@ -2626,7 +2626,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
     }
 
     // Check if the student_view is enabled, and if so, if it is activated.
-    if (api_get_setting('student_view_enabled') == 'true') {
+    if (api_get_setting('course.student_view_enabled') == 'true') {
         $studentViewSession = Session::read('studentview');
         if (!empty($my_session_id)) {
             // Check if session visibility is read only for coachs

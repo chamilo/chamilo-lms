@@ -14,7 +14,7 @@ use Chamilo\NotebookBundle\Tool\Notebook;
 use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use APY\DataGridBundle\Grid\Source\Entity;
@@ -45,7 +45,7 @@ class NotebookController extends ToolBaseCrudController
     public function indexAction(Request $request)
     {
         /*if (false === $this->get('security.authorization_checker')->isGranted('view', $course)) {
-           throw new AccessDeniedException('Unauthorised access!');
+           throw new AccessDeniedHttpException('Unauthorised access!');
         }*/
 
         $source = new Entity('ChamiloNotebookBundle:CNotebook');
@@ -85,17 +85,18 @@ class NotebookController extends ToolBaseCrudController
             }
         );*/
 
-        //$deleteMassAction = new MassAction('Delete', 'ChamiloNotebookBundle:CNotebook:deleteMass');
-        $deleteMassAction = new MassAction(
-            'Delete',
-            'chamilo.controller.notebook:deleteMassAction',
-            true,
-            array('course' => $request->get('course'))
-        );
-        $grid->addMassAction($deleteMassAction);
+        if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+            $deleteMassAction = new MassAction(
+                'Delete',
+                'chamilo.controller.notebook:deleteMassAction',
+                true,
+                array('course' => $request->get('course'))
+            );
+            $grid->addMassAction($deleteMassAction);
+        }
 
         $myRowAction = new RowAction(
-            'View',
+            $this->trans('View'),
             'chamilo_notebook_show',
             false,
             '_self',
@@ -104,35 +105,38 @@ class NotebookController extends ToolBaseCrudController
         $myRowAction->setRouteParameters(array('course' => $course, 'id'));
         $grid->addRowAction($myRowAction);
 
-        $myRowAction = new RowAction(
-            'Edit',
-            'chamilo_notebook_edit',
-            false,
-            '_self',
-            array('class' => 'btn btn-info')
-        );
-        $myRowAction->setRouteParameters(array('course' => $course, 'id'));
-        $grid->addRowAction($myRowAction);
+        if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
 
-        $myRowAction = new RowAction(
-            'Delete',
-            'chamilo_notebook_delete',
-            false,
-            '_self',
-            array('class' => 'btn btn-danger', 'form_delete' => true)
-        );
-        $myRowAction->setRouteParameters(array('course' => $course, 'id'));
-        $grid->addRowAction($myRowAction);
+            $myRowAction = new RowAction(
+                $this->trans('Edit'),
+                'chamilo_notebook_edit',
+                false,
+                '_self',
+                array('class' => 'btn btn-info')
+            );
+            $myRowAction->setRouteParameters(array('course' => $course, 'id'));
+            $grid->addRowAction($myRowAction);
+
+            $myRowAction = new RowAction(
+                $this->trans('Delete'),
+                'chamilo_notebook_delete',
+                false,
+                '_self',
+                array('class' => 'btn btn-danger', 'form_delete' => true)
+            );
+            $myRowAction->setRouteParameters(array('course' => $course, 'id'));
+            $grid->addRowAction($myRowAction);
+        }
 
         $grid->addExport(
             new CSVExport(
-                'CSV Export', 'export', array('course' => $course)
+                $this->trans('CSV Export'), 'export', array('course' => $course)
             )
         );
 
         $grid->addExport(
             new ExcelExport(
-                'Excel Export',
+                $this->trans('Excel Export'),
                 'export',
                 array('course' => $course)
             )
@@ -155,9 +159,11 @@ class NotebookController extends ToolBaseCrudController
         $resource = $this->findOr404($request);
         $resourceNode = $resource->getResourceNode();
 
-        if (false === $this->isGranted(ResourceNodeVoter::VIEW, $resourceNode)) {
-            throw new AccessDeniedException('Unauthorised access!');
-        }
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
 
         $view = $this
             ->view()
@@ -167,62 +173,6 @@ class NotebookController extends ToolBaseCrudController
         ;
 
         return $this->handleView($view);
-    }
-
-    /**
-     * @param ResourceNode $resourceNode
-     * @return ResourceLink|null
-     */
-    public function detectLink(ResourceNode $resourceNode)
-    {
-        $user = $this->getUser();
-        $session = $this->getSession();
-        $course = $this->getCourse();
-
-        /*if ($user->getId() == $resourceNode->getCreator()->getId()) {
-
-        }*/
-
-        $links = $resourceNode->getLinks();
-
-        $linkFound = null;
-
-        if (!empty($links)) {
-            /** @var ResourceLink $link */
-            foreach ($links as $link) {
-                $linkCourse = $link->getCourse();
-                $linkSession = $link->getSession();
-                $linkUser = $link->getUser();
-
-                if (isset($course) && isset($session)) {
-                    if ($linkCourse->getId() == $course->getId() &&
-                        $linkSession->getId() == $session->getId()
-                    ) {
-                        $linkFound = $link;
-                        break;
-                    }
-                }
-
-                if (isset($course) && isset($linkCourse)) {
-                    if ($linkCourse->getId() == $course->getId()) {
-                        $linkFound = $link;
-                        break;
-                    }
-                }
-
-                if (isset($linkUser)) {
-                    if ($linkUser->getId() == $user->getId()) {
-                        $linkFound = $link;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (empty($linkFound)) {
-            throw new NotFoundResourceException('Link not found');
-        }
-        return $linkFound;
     }
 
     /**
@@ -236,6 +186,10 @@ class NotebookController extends ToolBaseCrudController
         $resource = $this->createNew();
         $form = $this->getForm($resource);
 
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER
+        );
+
         if ($form->handleRequest($request)->isValid()) {
             $sharedType = $form->get('shared')->getData();
             $shareList = array();
@@ -247,14 +201,14 @@ class NotebookController extends ToolBaseCrudController
                     $shareList = array(
                         array(
                             'sharing' => 'course',
-                            'mask' => ToolResourceRights::getReaderMask(),
-                            'role' => 'ROLE_STUDENT',
+                            'mask' => ResourceNodeVoter::getReaderMask(),
+                            'role' => ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT,
                             'search' => $this->getCourse()->getId()
                         ),
                         array(
                             'sharing' => 'course',
-                            'mask' => ToolResourceRights::getEditorMask(),
-                            'role' => 'ROLE_TEACHER',
+                            'mask' => ResourceNodeVoter::getEditorMask(),
+                            'role' => ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER,
                             'search' => $this->getCourse()->getId()
                         )
                     );
@@ -370,6 +324,15 @@ class NotebookController extends ToolBaseCrudController
      */
     public function updateAction(Request $request)
     {
+        $resource = $this->findOr404($request);
+        $resourceNode = $resource->getResourceNode();
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::EDIT,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
+
         return parent::updateAction($request);
     }
 
@@ -398,6 +361,14 @@ class NotebookController extends ToolBaseCrudController
     {
         /** @var AbstractResource $resource */
         $resource = $this->getRepository()->find($id);
+        $resourceNode = $resource->getResourceNode();
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::DELETE,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
+
         $this->domainManager->delete($resource);
     }
 
@@ -408,5 +379,4 @@ class NotebookController extends ToolBaseCrudController
     {
         return $this->get('chamilo_notebook.entity.notebook_manager');
     }
-
 }

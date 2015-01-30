@@ -3,10 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap;
-use Symfony\Component\Security\Acl\Permission\BasicPermissionMap;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 /**
  * Tool
@@ -139,49 +137,12 @@ class ToolResourceRights
      */
     public static function getMaskList()
     {
-        $builder = new MaskBuilder();
-        $builder
-            ->add('VIEW')
-        ;
-
-        $readerMask = $builder->get();
-
-        $builder = new MaskBuilder();
-        $builder
-            ->add('EDIT')
-        ;
-
-        $editorMask = $builder->get();
+        $readerMask = ResourceNodeVoter::getReaderMask();
+        $editorMask = ResourceNodeVoter::getEditorMask();
 
         return array(
             $readerMask => 'Can read',
             $editorMask => 'Can edit'
         );
-    }
-
-    /**
-     * @return int
-     */
-    public static function getReaderMask()
-    {
-        $builder = new MaskBuilder();
-        $builder
-            ->add('VIEW')
-        ;
-
-        return $builder->get();
-    }
-
-    /**
-     * @return int
-     */
-    public static function getEditorMask()
-    {
-        $builder = new MaskBuilder();
-        $builder
-            ->add('EDIT')
-        ;
-
-        return $builder->get();
     }
 }

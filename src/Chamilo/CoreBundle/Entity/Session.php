@@ -170,6 +170,11 @@ class Session
     protected $userCourseSubscriptions;
 
     /**
+     * @var Course
+     **/
+    protected $currentCourse;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -354,7 +359,8 @@ class Session
     /**
      * @param User $user
      * @param Course $course
-     * @param int $status
+     * @param int $status if not set it will check if the user is registered
+     * with any status
      *
      * @return bool
      */
@@ -371,7 +377,7 @@ class Session
      *
      * @return bool
      */
-    public function hasStudentInCourseWithStatus(User $user, Course $course)
+    public function hasStudentInCourse(User $user, Course $course)
     {
         return $this->hasUserInCourse($user, $course, self::STUDENT);
     }
@@ -852,5 +858,26 @@ class Session
         }
 
         return false;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCurrentCourse()
+    {
+        return $this->currentCourse;
+    }
+
+    /**
+     * @param Course $course
+     * @return $this
+     */
+    public function setCurrentCourse(Course $course)
+    {
+        // If the session is registered in the course session list.
+        if ($this->getCourses()->contains($course->getId())) {
+            $this->currentCourse = $course;
+        }
+        return $this;
     }
 }

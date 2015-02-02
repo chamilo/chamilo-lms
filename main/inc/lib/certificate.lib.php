@@ -262,7 +262,7 @@ class Certificate extends Model
         //Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
             //L low, M - Medium, L large error correction
-            return QRcode::png($text, $path, 'M', 2, 2);
+            return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
         }
         return false;
     }

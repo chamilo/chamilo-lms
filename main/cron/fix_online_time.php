@@ -13,7 +13,7 @@ require_once __DIR__ . '/../inc/global.inc.php';
  */
 function getTeachersInCourseIds()
 {
-    $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $joinStatement = ' JOIN ' . Database::get_main_table(TABLE_MAIN_USER) . ' ON login_user_id = user_id';
     return Database::select(
         'login_user_id', $table . $joinStatement,
@@ -46,7 +46,7 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
         'Y-m-d H:i:s',
         strtotime($dataBaseCurrentHour . ' ' . $timeLimit)
     );
-    $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
     foreach ($teachersInCourseIds as $key => $value) {
         $value = array_shift($value);
         $logResult = Database::select(
@@ -80,7 +80,7 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
             )
         );
         Database::update(
-            Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE),
+            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE),
             array(
                 'course' => 'NULL'
             )

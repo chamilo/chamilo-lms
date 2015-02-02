@@ -722,6 +722,7 @@ return array(
     'GradebookTable' => $baseDir . '/main/gradebook/lib/fe/gradebooktable.class.php',
     'GroupManager' => $baseDir . '/main/inc/lib/groupmanager.lib.php',
     'GroupPortalManager' => $baseDir . '/main/inc/lib/group_portal_manager.lib.php',
+    'HTMLPurifier_Filter_AllowIframes' => $baseDir . '/main/inc/lib/htmlpurifier/library/HTMLPurifier/Filter/AllowIframes.php',
     'HTML_Common' => $baseDir . '/main/inc/lib/pear/HTML/Common.php',
     'HTML_QuickForm' => $baseDir . '/main/inc/lib/pear/HTML/QuickForm.php',
     'HTML_QuickForm_Action' => $baseDir . '/main/inc/lib/pear/HTML/QuickForm/Action.php',

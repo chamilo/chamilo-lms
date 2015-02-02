@@ -2,14 +2,13 @@
 .gitignore export-ignore
 .travis.yml export-ignore
 /tests export-ignore
-/vendor/ezyang/htmlpurifier/docs
-/vendor/ezyang/htmlpurifier/benchmarks
-/vendor/ezyang/htmlpurifier/tests
-/vendor/ezyang/htmlpurifier/smoketests
-/vendor/ezyang/htmlpurifier/package.php
-/vendor/ezyang/htmlpurifier/release1-update.php
-/vendor/ezyang/htmlpurifier/release2-tag.php
-/vendor/ezyang/htmlpurifier/test-settings.sample.php
-
-
-
+/vendor/ezyang/htmlpurifier/docs export-ignore
+/vendor/ezyang/htmlpurifier/benchmarks export-ignore
+/vendor/ezyang/htmlpurifier/tests export-ignore
+/vendor/ezyang/htmlpurifier/smoketests export-ignore
+/vendor/ezyang/htmlpurifier/package.php export-ignore
+/vendor/ezyang/htmlpurifier/release1-update.php export-ignore
+/vendor/ezyang/htmlpurifier/release2-tag.php export-ignore
+/vendor/ezyang/htmlpurifier/test-settings.sample.php export-ignore
+/vendor/twig/twig/test export-ignore
+/vendor/monolog/monolog/tests/ export-ignore

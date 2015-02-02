@@ -14,6 +14,7 @@ return array(
     'Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
+    'PHPQRCode' => array($vendorDir . '/aferrandini/phpqrcode/lib'),
     'Neutron' => array($vendorDir . '/neutron/temporary-filesystem/src'),
     'Michelf' => array($vendorDir . '/michelf/php-markdown'),
     'HttpAdapter' => array($vendorDir . '/toin0u/http-adapter/src'),

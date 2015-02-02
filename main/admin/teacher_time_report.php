@@ -36,10 +36,10 @@ $toolName = get_lang('TeacherTimeReport');
 // Access restrictions.
 api_protect_admin_script();
 
-$startDate = new DateTime(api_get_datetime());
+$startDate = new DateTime(api_get_local_time());
 $startDate->modify('first day of this month');
 
-$limitDate = new DateTime(api_get_datetime());
+$limitDate = new DateTime(api_get_local_time());
 
 $selectedCourse = isset($_REQUEST['course']) ? $_REQUEST['course'] : null;
 $selectedSession = isset($_REQUEST['session']) ? $_REQUEST['session'] : 0;

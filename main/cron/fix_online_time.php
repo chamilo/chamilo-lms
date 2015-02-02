@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Automatic fix online time procedure. If a COURSEMANAGER has been idle for $timeLimit
  * or more then the procedure adds $extraTime to his logout_course_date.

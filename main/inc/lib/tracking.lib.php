@@ -4635,7 +4635,7 @@ class Tracking
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 10)
             );
             /* Write the chart title */
@@ -4652,7 +4652,7 @@ class Tracking
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 6
                 )
             );
@@ -4694,7 +4694,7 @@ class Tracking
             /* Draw the line chart */
             $myPicture->setFontProperties(
                 array(
-                    'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 10
                 )
             );
@@ -4841,7 +4841,7 @@ class Tracking
             $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
             /* Set the default font */
-            $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => $fontSize));
+            $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => $fontSize));
 
             /* Do not write the chart title */
 
@@ -5024,7 +5024,7 @@ class Tracking
             $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
             /* Set the default font */
-            $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
+            $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
 
             /* Write the chart title */
             $myPicture->drawText(

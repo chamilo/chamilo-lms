@@ -154,7 +154,7 @@ class BlockTeacherGraph extends Block
                 $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
 
                 /* Set the default font */
-                $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
+                $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
 
                 /* Do NOT Write the chart title */
 

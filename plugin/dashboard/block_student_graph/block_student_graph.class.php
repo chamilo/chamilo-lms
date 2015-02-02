@@ -190,7 +190,7 @@ class BlockStudentGraph extends Block
                 /* Set the default font */
                 $myPicture->setFontProperties(
                     array(
-                        'FontName' => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                        'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
                         'FontSize' => 10
                     )
                 );

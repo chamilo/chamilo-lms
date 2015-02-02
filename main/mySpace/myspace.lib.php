@@ -2882,7 +2882,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    "FontName" => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 10)
             );
             /* Write the chart title */
@@ -2899,7 +2899,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
             /* Set the default font */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    "FontName" => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 8
                 )
             );
@@ -2941,7 +2941,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
             /* Draw the line chart */
             $myPicture->setFontProperties(
                 array(
-                    "FontName" => api_get_path(SYS_CSS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    "FontName" => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 10
                 )
             );

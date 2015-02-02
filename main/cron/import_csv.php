@@ -1010,7 +1010,6 @@ class ImportCsv
                     // 2014-06-30
                     $dateStart = explode('/', $session['DateStart']);
                     $dateEnd = explode('/', $session['DateEnd']);
-                    //$visibility = $session['visibility'];
                     $visibility = $this->defaultSessionVisibility;
 
                     $coachId = null;
@@ -1028,8 +1027,8 @@ class ImportCsv
                             $dateEnd[0],
                             $dateEnd[1],
                             $dateEnd[2],
-                            null, //$session['nb_days_access_before_beginning'],
-                            null, //$session['nb_days_access_after_end'],
+                            $this->daysCoachAccessBeforeBeginning,
+                            $this->daysCoachAccessAfterBeginning,
                             null,
                             $coachUserName,
                             $categoryId,
@@ -1045,6 +1044,26 @@ class ImportCsv
                             );
                         }
                     } else {
+
+                        $sessionInfo = api_get_session_info($sessionId);
+                        $accessBefore = null;
+                        $accessAfter = null;
+
+                        if (empty($sessionInfo['nb_days_access_before_beginning']) ||
+                            (!empty($sessionInfo['nb_days_access_before_beginning']) &&
+                                $sessionInfo['nb_days_access_before_beginning'] < $this->daysCoachAccessBeforeBeginning)
+                        ) {
+                            $accessBefore = intval($this->daysCoachAccessBeforeBeginning);
+                        }
+
+                        $accessAfter = null;
+                        if (empty($sessionInfo['nb_days_access_after_end']) ||
+                            (!empty($sessionInfo['nb_days_access_after_end']) &&
+                                $sessionInfo['nb_days_access_after_end'] < $this->daysCoachAccessAfterBeginning)
+                        ) {
+                            $accessAfter = intval($this->daysCoachAccessAfterBeginning);
+                        }
+
                         $result = SessionManager::edit_session(
                             $sessionId,
                             $session['SessionName'],
@@ -1054,8 +1073,8 @@ class ImportCsv
                             $dateEnd[0],
                             $dateEnd[1],
                             $dateEnd[2],
-                            null,//$session['nb_days_access_before_beginning'],
-                            null,//$session['nb_days_access_after_end'],
+                            $accessBefore,
+                            $accessAfter,
                             null,
                             $coachId,
                             $categoryId,

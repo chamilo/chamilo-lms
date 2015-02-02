@@ -223,7 +223,7 @@ class Application
     }
 
     /**
-     * Set an input definition set to be used with this application
+     * Set an input definition set to be used with this application.
      *
      * @param InputDefinition $definition The input definition
      *
@@ -736,7 +736,7 @@ class Application
     }
 
     /**
-     * Tries to figure out the terminal width in which this application runs
+     * Tries to figure out the terminal width in which this application runs.
      *
      * @return int|null
      */
@@ -748,7 +748,7 @@ class Application
     }
 
     /**
-     * Tries to figure out the terminal height in which this application runs
+     * Tries to figure out the terminal height in which this application runs.
      *
      * @return int|null
      */
@@ -760,7 +760,7 @@ class Application
     }
 
     /**
-     * Tries to figure out the terminal dimensions based on the current environment
+     * Tries to figure out the terminal dimensions based on the current environment.
      *
      * @return array Array containing width and height
      */
@@ -770,7 +770,7 @@ class Application
             return $this->terminalDimensions;
         }
 
-        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
+        if ('\\' === DIRECTORY_SEPARATOR) {
             // extract [w, H] from "wxh (WxH)"
             if (preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', trim(getenv('ANSICON')), $matches)) {
                 return array((int) $matches[1], (int) $matches[2]);
@@ -800,8 +800,8 @@ class Application
      *
      * Can be useful to force terminal dimensions for functional tests.
      *
-     * @param int     $width  The width
-     * @param int     $height The height
+     * @param int $width  The width
+     * @param int $height The height
      *
      * @return Application The current application
      */
@@ -921,13 +921,13 @@ class Application
         return new InputDefinition(array(
             new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
 
-            new InputOption('--help',           '-h', InputOption::VALUE_NONE, 'Display this help message.'),
-            new InputOption('--quiet',          '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
-            new InputOption('--verbose',        '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug.'),
-            new InputOption('--version',        '-V', InputOption::VALUE_NONE, 'Display this application version.'),
-            new InputOption('--ansi',           '',   InputOption::VALUE_NONE, 'Force ANSI output.'),
-            new InputOption('--no-ansi',        '',   InputOption::VALUE_NONE, 'Disable ANSI output.'),
-            new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
+            new InputOption('--help',           '-h', InputOption::VALUE_NONE, 'Display this help message'),
+            new InputOption('--quiet',          '-q', InputOption::VALUE_NONE, 'Do not output any message'),
+            new InputOption('--verbose',        '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
+            new InputOption('--version',        '-V', InputOption::VALUE_NONE, 'Display this application version'),
+            new InputOption('--ansi',           '',   InputOption::VALUE_NONE, 'Force ANSI output'),
+            new InputOption('--no-ansi',        '',   InputOption::VALUE_NONE, 'Disable ANSI output'),
+            new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question'),
         ));
     }
 
@@ -960,7 +960,7 @@ class Application
     }
 
     /**
-     * Runs and parses stty -a if it's available, suppressing any error output
+     * Runs and parses stty -a if it's available, suppressing any error output.
      *
      * @return string
      */
@@ -983,7 +983,7 @@ class Application
     }
 
     /**
-     * Runs and parses mode CON if it's available, suppressing any error output
+     * Runs and parses mode CON if it's available, suppressing any error output.
      *
      * @return string <width>x<height> or null if it could not be parsed
      */
@@ -1039,10 +1039,10 @@ class Application
 
     /**
      * Finds alternative of $name among $collection,
-     * if nothing is found in $collection, try in $abbrevs
+     * if nothing is found in $collection, try in $abbrevs.
      *
-     * @param string               $name       The string
-     * @param array|\Traversable   $collection The collection
+     * @param string             $name       The string
+     * @param array|\Traversable $collection The collection
      *
      * @return array A sorted array of similar string
      */

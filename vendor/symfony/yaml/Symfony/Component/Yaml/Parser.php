@@ -29,7 +29,7 @@ class Parser
     private $refs = array();
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param int $offset The offset of YAML document (used for line numbers in error messages)
      */
@@ -41,10 +41,10 @@ class Parser
     /**
      * Parses a YAML string to a PHP value.
      *
-     * @param string  $value                  A YAML string
-     * @param bool    $exceptionOnInvalidType true if an exception must be thrown on invalid types (a PHP resource or object), false otherwise
-     * @param bool    $objectSupport          true if object support is enabled, false otherwise
-     * @param bool    $objectForMap           true if maps should return a stdClass instead of array()
+     * @param string $value                  A YAML string
+     * @param bool   $exceptionOnInvalidType true if an exception must be thrown on invalid types (a PHP resource or object), false otherwise
+     * @param bool   $objectSupport          true if object support is enabled, false otherwise
+     * @param bool   $objectForMap           true if maps should return a stdClass instead of array()
      *
      * @return mixed A PHP value
      *
@@ -649,7 +649,7 @@ class Parser
     }
 
     /**
-     * Returns true if the next line starts unindented collection
+     * Returns true if the next line starts unindented collection.
      *
      * @return bool Returns true if the next line starts unindented collection, false otherwise
      */
@@ -681,7 +681,7 @@ class Parser
     }
 
     /**
-     * Returns true if the string is un-indented collection item
+     * Returns true if the string is un-indented collection item.
      *
      * @return bool Returns true if the string is un-indented collection item, false otherwise
      */

@@ -11,7 +11,7 @@ namespace Sabre\VObject\Splitter;
  * This is for example for Card and CalDAV, which require every event and vcard
  * to exist in their own objects, instead of one large one.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Dominik Tobschall
  * @license http://sabre.io/license/ Modified BSD License
  */

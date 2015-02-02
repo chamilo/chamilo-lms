@@ -17,6 +17,7 @@ return array(
     'Neutron' => array($vendorDir . '/neutron/temporary-filesystem/src'),
     'Michelf' => array($vendorDir . '/michelf/php-markdown'),
     'HttpAdapter' => array($vendorDir . '/toin0u/http-adapter/src'),
+    'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'FFMpeg' => array($vendorDir . '/php-ffmpeg/php-ffmpeg/src'),
     'Evenement' => array($vendorDir . '/evenement/evenement/src'),
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib'),

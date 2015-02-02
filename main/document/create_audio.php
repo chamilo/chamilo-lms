@@ -345,7 +345,7 @@ Display :: display_footer();
  */
 function downloadMP3_google($filepath, $dir)
 {
-    $location='create_audio.php?'.api_get_cidreq().'&id='.Security::remove_XSS($_POST['id']).'&dt2a=google';
+    $location='create_audio.php?'.api_get_cidreq().'&id='.intval($_POST['id']).'&dt2a=google';
 
 	//security
 	if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
@@ -420,7 +420,7 @@ function downloadMP3_google($filepath, $dir)
  * @version january 2011, chamilo 1.8.8
  */
 function downloadMP3_pediaphon($filepath, $dir){
-	$location='create_audio.php?'.api_get_cidreq().'&id='.Security::remove_XSS($_POST['id']).'&dt2a=pediaphon';
+	$location='create_audio.php?'.api_get_cidreq().'&id='.intval($_POST['id']).'&dt2a=pediaphon';
 	//security
 	if(!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
 		echo '<script>window.location.href="'.$location.'"</script>';

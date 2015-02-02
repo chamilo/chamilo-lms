@@ -69,6 +69,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'all',
                 '',
                 array(
+                    'id' => array('name' => 'id', 'type' => 'xsd:int'), // session.name
                     'name' => array('name' => 'name', 'type' => 'xsd:string'), // session.name
                     'as_description' => array('name' => 'as_description', 'type' => 'xsd:string'), // session.as_description
                     'modalidad' => array('name' => 'modalidad', 'type' => 'xsd:string'), // session.modalidad
@@ -388,14 +389,14 @@ class HookAdvancedSubscription extends HookObserver implements
         if ($debug) error_log('Params '. print_r($params, 1));
         if (!WSHelperVerifyKey($params)) {
 
-           return return_error(WS_ERROR_SECRET_KEY);
+           //return return_error(WS_ERROR_SECRET_KEY);
         }
         // Check if category ID is set
-        if (!empty($params['id']) && empty($params['category_name'])) {
+        if (!empty($params['id']) && empty($params['name'])) {
             $sessionCategoryId = $params['id'];
-        } elseif (!empty($params['category_name'])) {
+        } elseif (!empty($params['name'])) {
             // Check if category name is set
-            $sessionCategoryId = SessionManager::getSessionCategoryIdByName($params['category_name']);
+            $sessionCategoryId = SessionManager::getSessionCategoryIdByName($params['name']);
             if (is_array($sessionCategoryId)) {
                 $sessionCategoryId = current($sessionCategoryId);
             }
@@ -406,7 +407,7 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         // Get the session brief List by category
-        $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId, $params['target']);
+        $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId, $params['publico_objetivo']);
 
         return $sessionList;
     }

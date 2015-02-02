@@ -28,7 +28,7 @@ if (api_get_setting('enabled_text2audio') == 'false'){
 	api_not_allowed(true);
 }
 
-$document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id());
+$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id());
 if (empty($document_data)) {
     if (api_is_in_group()) {
         $group_properties   = GroupManager::get_group_properties(api_get_group_id());
@@ -212,7 +212,7 @@ $(document).ready(function(){
 		echo '<div>';
 		$form = new FormValidator('form1', 'post', null, '', array('id' => 'form1'));
 		$form->addElement('hidden', 'text2voice_mode', 'google');
-		$form->addElement('hidden', 'document_id', $document_id);
+		$form->addElement('hidden', 'id', $document_id);
 		$form->addElement('text', 'title', get_lang('Title'));
 		$form->addElement('select', 'lang', get_lang('Language'), $options);
 		$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_google', 'class' =>'span6' ));
@@ -235,7 +235,7 @@ $(document).ready(function(){
 
 		$form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
 		$form->addElement('hidden', 'text2voice_mode','pediaphon');
-		$form->addElement('hidden', 'document_id', $document_id);
+		$form->addElement('hidden', 'id', $document_id);
 		$form->addElement('text', 'title', get_lang('Title'));
 		$form->addElement('select', 'lang', get_lang('Language'), $options_pedia, array('onclick' => 'update_voices(this.selectedIndex);'));
 		$form->addElement('select', 'voices', get_lang('Voice'), array(get_lang('FirstSelectALanguage')), array());
@@ -345,7 +345,7 @@ Display :: display_footer();
  */
 function downloadMP3_google($filepath, $dir)
 {
-	$location='create_audio.php?'.api_get_cidreq().'&id='.Security::remove_XSS($_POST['document_id']).'&dt2a=google';
+    $location='create_audio.php?'.api_get_cidreq().'&id='.Security::remove_XSS($_POST['id']).'&dt2a=google';
 
 	//security
 	if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
@@ -420,7 +420,7 @@ function downloadMP3_google($filepath, $dir)
  * @version january 2011, chamilo 1.8.8
  */
 function downloadMP3_pediaphon($filepath, $dir){
-	$location='create_audio.php?'.api_get_cidreq().'&id='.Security::remove_XSS($_POST['document_id']).'&dt2a=pediaphon';
+	$location='create_audio.php?'.api_get_cidreq().'&id='.Security::remove_XSS($_POST['id']).'&dt2a=pediaphon';
 	//security
 	if(!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
 		echo '<script>window.location.href="'.$location.'"</script>';

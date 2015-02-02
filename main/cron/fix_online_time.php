@@ -6,7 +6,6 @@
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
 require_once __DIR__ . '/../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'database.lib.php';
 
 /**
  * Get ids of COURSEMANAGERs that are inside a course right now

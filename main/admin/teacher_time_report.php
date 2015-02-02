@@ -76,33 +76,35 @@ if (!empty($selectedCourse)) {
     foreach ($sessionsByCourse as $session) {
         $coaches = CourseManager::get_coachs_from_course($session['id'], $selectedCourse);
 
-        foreach ($coaches as $coach) {
-            $totalTime = SessionManager::getUserTimeInCourse(
-                $coach['user_id'],
-                $selectedCourse,
-                $session['id'],
-                $selectedFrom,
-                $selectedUntil
-            );
+        if ($coaches) {
+            foreach ($coaches as $coach) {
+                $totalTime = SessionManager::getUserTimeInCourse(
+                    $coach['user_id'],
+                    $selectedCourse,
+                    $session['id'],
+                    $selectedFrom,
+                    $selectedUntil
+                );
 
-            $timeReport->data[] = array(
-                'session' => array(
-                    'id' => $session['id'],
-                    'name' => $session['name']
-                ),
-                'course' => array(
-                    'id' => $course['real_id'],
-                    'name' => $course['title']
-                ),
-                'coach' => array(
-                    'userId' => $coach['user_id'],
-                    'lastname' => $coach['lastname'],
-                    'firstname' => $coach['firstname'],
-                    'username' => $coach['username'],
-                    'completeName' => api_get_person_name($coach['firstname'], $coach['lastname'])
-                ),
-                'totalTime' => $totalTime
-            );
+                $timeReport->data[] = array(
+                    'session' => array(
+                        'id' => $session['id'],
+                        'name' => $session['name']
+                    ),
+                    'course' => array(
+                        'id' => $course['real_id'],
+                        'name' => $course['title']
+                    ),
+                    'coach' => array(
+                        'userId' => $coach['user_id'],
+                        'lastname' => $coach['lastname'],
+                        'firstname' => $coach['firstname'],
+                        'username' => $coach['username'],
+                        'completeName' => api_get_person_name($coach['firstname'], $coach['lastname'])
+                    ),
+                    'totalTime' => $totalTime
+                );
+            }
         }
     }
 }
@@ -119,33 +121,35 @@ if (!empty($selectedSession)) {
     foreach ($courses as $course) {
         $coaches = CourseManager::get_coachs_from_course($selectedSession, $course['code']);
 
-        foreach ($coaches as $coach) {
-            $totalTime = SessionManager::getUserTimeInCourse(
-                $coach['user_id'],
-                $course['code'],
-                $selectedSession,
-                $selectedFrom,
-                $selectedUntil
-            );
+        if ($coaches) {
+            foreach ($coaches as $coach) {
+                $totalTime = SessionManager::getUserTimeInCourse(
+                    $coach['user_id'],
+                    $course['code'],
+                    $selectedSession,
+                    $selectedFrom,
+                    $selectedUntil
+                );
 
-            $timeReport->data[] = array(
-                'session' => array(
-                    'id' => $session['id'],
-                    'name' => $session['name']
-                ),
-                'course' => array(
-                    'id' => $course['id'],
-                    'name' => $course['title']
-                ),
-                'coach' => array(
-                    'userId' => $coach['user_id'],
-                    'lastname' => $coach['lastname'],
-                    'firstname' => $coach['firstname'],
-                    'username' => $coach['username'],
-                    'completeName' => api_get_person_name($coach['firstname'], $coach['lastname'])
-                ),
-                'totalTime' => $totalTime
-            );
+                $timeReport->data[] = array(
+                    'session' => array(
+                        'id' => $session['id'],
+                        'name' => $session['name']
+                    ),
+                    'course' => array(
+                        'id' => $course['id'],
+                        'name' => $course['title']
+                    ),
+                    'coach' => array(
+                        'userId' => $coach['user_id'],
+                        'lastname' => $coach['lastname'],
+                        'firstname' => $coach['firstname'],
+                        'username' => $coach['username'],
+                        'completeName' => api_get_person_name($coach['firstname'], $coach['lastname'])
+                    ),
+                    'totalTime' => $totalTime
+                );
+            }
         }
     }
 }

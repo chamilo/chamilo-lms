@@ -5454,7 +5454,7 @@ class SessionManager
             $joinSSfvTable = $sTable . ' o INNER JOIN ' . $sfvTable . ' q ON s.id = sfv.session_id';
             $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
             $fieldsArray = array(
-                'as_description', 'modalidad', 'duracion', 'vacantes', 'brochure', 'publico_objetivo', 'horario'
+                'short_description', 'mode', 'duration', 'vacancies', 'brochure', 'target', 'schedule'
             );
             $sessionList = Database::select(
                 'id, name, date_start, date_end',
@@ -5464,7 +5464,7 @@ class SessionManager
                         "session_category_id = ? AND id IN (
                             SELECT sfv.session_id FROM $joinTable WHERE
                             sfv.session_id = session.id
-                            AND sf.field_variable = 'publico_objetivo'
+                            AND sf.field_variable = 'target'
                             AND sfv.field_value = ?
                         );" => array($categoryId, $publicoObjetivo)
                     )

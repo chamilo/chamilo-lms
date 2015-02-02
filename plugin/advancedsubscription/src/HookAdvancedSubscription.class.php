@@ -69,15 +69,15 @@ class HookAdvancedSubscription extends HookObserver implements
                 'all',
                 '',
                 array(
-                    'id' => array('name' => 'id', 'type' => 'xsd:int'), // session.name
+                    'id' => array('name' => 'id', 'type' => 'xsd:int'), // session.id
                     'name' => array('name' => 'name', 'type' => 'xsd:string'), // session.name
-                    'as_description' => array('name' => 'as_description', 'type' => 'xsd:string'), // session.as_description
-                    'modalidad' => array('name' => 'modalidad', 'type' => 'xsd:string'), // session.modalidad
+                    'short_description' => array('name' => 'short_description', 'type' => 'xsd:string'), // session.short_description
+                    'mode' => array('name' => 'mode', 'type' => 'xsd:string'), // session.mode
                     'date_start' => array('name' => 'date_start', 'type' => 'xsd:string'), // session.date_start
                     'date_end' => array('name' => 'date_end', 'type' => 'xsd:string'), // session.date_end
-                    'duracion' => array('name' => 'duracion', 'type' => 'xsd:string'), // session.duracion
-                    'vacantes' => array('name' => 'vacantes', 'type' => 'xsd:string'), // session.vacantes
-                    'horario' => array('name' => 'horario', 'type' => 'xsd:string'), // session.horario
+                    'duration' => array('name' => 'duration', 'type' => 'xsd:string'), // session.duration
+                    'vacancies' => array('name' => 'vacancies', 'type' => 'xsd:string'), // session.vacancies
+                    'schedule' => array('name' => 'schedule', 'type' => 'xsd:string'), // session.schedule
                 )
             );
 
@@ -106,7 +106,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 array(
                     'id' => array('name' => 'id', 'type' => 'xsd:string'), // session_category.id
                     'name' => array('name' => 'name', 'type' => 'xsd:string'), // session_category.name
-                    'publico_objetivo' => array('name' => 'publico_objetivo', 'type' => 'xsd:string'), // session.publico_objetivo
+                    'target' => array('name' => 'target', 'type' => 'xsd:string'), // session.target
                     'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
                 )
             );
@@ -136,13 +136,13 @@ class HookAdvancedSubscription extends HookObserver implements
                 '',
                 array(
                     'id' => array('name' => 'id', 'type' => 'xsd:string'), // session.id
-                    'cost' => array('name' => 'cost', 'type' => 'xsd:float'), // session.costo
-                    'place' => array('name' => 'place', 'type' => 'xsd:string'), // session.lugar
-                    'visitors' => array('name' => 'visitors', 'type' => 'xsd:string'), // session.permitir_visitantes
-                    'duration' => array('name' => 'duration', 'type' => 'xsd:int'), // session.duracion
+                    'cost' => array('name' => 'cost', 'type' => 'xsd:float'), // session.cost
+                    'place' => array('name' => 'place', 'type' => 'xsd:string'), // session.place
+                    'allow_visitors' => array('name' => 'allow_visitors', 'type' => 'xsd:string'), // session.allow_visitors
+                    'duration' => array('name' => 'duration', 'type' => 'xsd:int'), // session.duration
                     'brochure' => array('name' => 'brochure', 'type' => 'xsd:string'), // session.brochure
                     'banner' => array('name' => 'banner', 'type' => 'xsd:string'), // session.banner
-                    'description_full' => array('name' => 'description_full', 'type' => 'xsd:string'), // session.description
+                    'as_description' => array('name' => 'as_description', 'type' => 'xsd:string'), // session.description
                     'status' => array('name' => 'status', 'type' => 'xsd:string'), // status
                     'action_url' => array('name' => 'action_url', 'type' => 'xsd:string'), // action_url
                     'message' => array('name' => 'error_message', 'type' => 'xsd:string'), // message
@@ -407,7 +407,7 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         // Get the session brief List by category
-        $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId, $params['publico_objetivo']);
+        $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId, $params['target']);
 
         return $sessionList;
     }

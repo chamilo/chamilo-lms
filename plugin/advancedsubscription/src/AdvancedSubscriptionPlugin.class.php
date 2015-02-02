@@ -134,13 +134,13 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         // @TODO: Get UIT completed by user this year by WS
                         $uitUser = 0;
                         $extra = new ExtraFieldValue('session');
-                        $var = $extra->get_values_by_handler_and_field_variable($params['session_id'], 'costo');
+                        $var = $extra->get_values_by_handler_and_field_variable($params['session_id'], 'cost');
                         $uitUser += $var['field_value'];
                         if ($uitMax >= $uitUser) {
                             $expendedTimeMax = $advSubPlugin->get('yearly_hours_limit');
                             // @TODO: Get Expended time from user data
                             $expendedTime = 0;
-                            $var = $extra->get_values_by_handler_and_field_variable($params['session_id'], 'duracion');
+                            $var = $extra->get_values_by_handler_and_field_variable($params['session_id'], 'duration');
                             $expendedTime += $var['field_value'];
                             if ($expendedTimeMax >= $expendedTime) {
                                 $expendedNumMax = $advSubPlugin->get('courses_count_limit');
@@ -632,7 +632,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         if (!empty($sessionId)) {
             $extra = new ExtraFieldValue('session');
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'vacantes');
+            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'vacancies');
             $vacancy = intval($var['field_value']);
             if (!empty($vacancy)) {
                 $vacancy -= $this->countQueueByParams(array('sessions' => $sessionId, 'status' => ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED));
@@ -658,12 +658,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $extra = new ExtraFieldValue('session');
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'id');
             $data['id'] = $var['field_value'];
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'costo');
+            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'cost');
             $data['cost'] = $var['field_value'];
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'lugar');
+            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'place');
             $data['place'] = $var['field_value'];
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'permitir_visitantes');
-            $data['visitors'] = $var['field_value'];
+            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'allow_visitors');
+            $data['allow_visitors'] = $var['field_value'];
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'horas_lectivas');
             $data['duration'] = $var['field_value'];
             // Get brochure URL
@@ -763,16 +763,16 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $return = array();
         $extraSession = new ExtraFieldValue('session');
         $session = api_get_session_info($sessionId);
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'publico_objetivo');
-        $session['publico_objetivo'] = $var['field_value'];
+        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'target');
+        $session['target'] = $var['field_value'];
         $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'fin_publicacion');
         $session['fin_publicacion'] = $var['field_value'];
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'modalidad');
-        $session['modalidad'] = $var['field_value'];
+        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'mode');
+        $session['mode'] = $var['field_value'];
         $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'numero_recomendado_participantes');
         $session['participantes_recomendados'] = $var['field_value'];
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'vacantes');
-        $session['vacantes'] = $var['field_value'];
+        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'vacancies');
+        $session['vacancies'] = $var['field_value'];
         $queueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $userJoinTable = $queueTable . ' q INNER JOIN ' . $userTable . ' u ON q.user_id = u.user_id';

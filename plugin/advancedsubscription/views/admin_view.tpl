@@ -7,22 +7,22 @@
         {% endfor %}
     </select>
         <div>
-            Nombre de la sessión: {{ session.name }}
+            {{ Name | get_lang }}: {{ session.name }}
         </div>
         <div>
-            Publico objetivo: {{ session.publico_objetivo }}
+            {{ Target | get_lang }}: {{ session.target }}
         </div>
         <div>
-            Fin de publicación: {{ session.fin_publicacion }}
+            {{ PublicationEndDate | get_lang }}: {{ session.fin_publicacion }}
         </div>
         <div>
-            Modalidad: {{ session.modalidad }}
+            {{ Mode | get_lang }}: {{ session.mode }}
         </div>
         <div>
-            Número de participantes recomendados : {{ session.participantes_recomendados }}
+            {{ RecommendedNumberOfParticipants | get_lang }} : {{ session.participantes_recomendados }}
         </div>
         <div>
-            Vacantes: {{ session.vacantes }}
+            {{ Vacancies | get_lang }}: {{ session.vacancies }}
         </div>
     <table class="data_table" id="student_table">
         <tbody>

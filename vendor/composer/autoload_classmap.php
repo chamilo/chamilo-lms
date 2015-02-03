@@ -28,6 +28,7 @@ return array(
     'AjaxController' => $baseDir . '/main/inc/lib/ajax_controller.class.php',
     'AmazonVM' => $baseDir . '/plugin/bbb/lib/vm/AmazonVM.php',
     'Announcement' => $baseDir . '/main/coursecopy/classes/Announcement.class.php',
+    'AnnouncementEmail' => $baseDir . '/main/inc/lib/AnnouncementEmail.php',
     'Answer' => $baseDir . '/main/exercice/answer.class.php',
     'AppPlugin' => $baseDir . '/main/inc/lib/plugin.lib.php',
     'AssetAggregatedRenderer' => $baseDir . '/main/inc/lib/system/media/renderer/asset_aggregated_renderer.class.php',

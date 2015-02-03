@@ -7,22 +7,22 @@
         {% endfor %}
     </select>
         <div>
-            {{ Name | get_lang }}: {{ session.name }}
+            {{ "Name" | get_lang }}: {{ session.name }}
         </div>
         <div>
-            {{ Target | get_lang }}: {{ session.target }}
+            {{ "Target" | get_lang }}: {{ session.target }}
         </div>
         <div>
-            {{ PublicationEndDate | get_lang }}: {{ session.fin_publicacion }}
+            {{ "PublicationEndDate" | get_lang }}: {{ session.publication_end_date }}
         </div>
         <div>
-            {{ Mode | get_lang }}: {{ session.mode }}
+            {{ "Mode" | get_lang }}: {{ session.mode }}
         </div>
         <div>
-            {{ RecommendedNumberOfParticipants | get_lang }} : {{ session.participantes_recomendados }}
+            {{ "RecommendedNumberOfParticipants" | get_lang }} : {{ session.recommended_number_of_participants }}
         </div>
         <div>
-            {{ Vacancies | get_lang }}: {{ session.vacancies }}
+            {{ "Vacancies" | get_lang }}: {{ session.vacancies }}
         </div>
     <table class="data_table" id="student_table">
         <tbody>

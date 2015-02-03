@@ -259,6 +259,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function sendMailMessage($studentId, $subject, $content, $sessionId, $save = false)
     {
+        var_dump($studentId);
+        var_dump($subject);
+        var_dump($content);
+        var_dump($sessionId);
         global $_configuration; // @TODO: Add $_configuration['no_reply_user_id'] to configuration file
 
         $mailId = MessageManager::send_message(
@@ -367,14 +371,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             case ADV_SUB_ACTION_STUDENT_REQUEST:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['student']['id'],
+                    $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_received.tpl'),
                     $data['session_id']
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
-                    $data['superior']['id'],
+                    $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior.tpl'),
                     $data['session_id'],
@@ -384,21 +388,21 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             case ADV_SUB_ACTION_SUPERIOR_APPROVE:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['student']['id'],
+                    $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior_approved.tpl'),
                     $data['session_id']
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
-                    $data['superior']['id'],
+                    $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approve_confirmed.tpl'),
                     $data['session_id']
                 );
                 // Mail to admin
                 $mailIds[] = $this->sendMailMessage(
-                    $data['admin']['id'],
+                    $data['admin']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_approved_info_admin.tpl'),
                     $data['session_id'],
@@ -408,7 +412,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             case ADV_SUB_ACTION_SUPERIOR_DISAPPROVE:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['student']['id'],
+                    $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior_disapproved.tpl'),
                     $data['session_id'],
@@ -416,7 +420,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
-                    $data['superior']['id'],
+                    $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_disapprove_confirmed.tpl'),
                     $data['session_id']
@@ -425,14 +429,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             case ADV_SUB_ACTION_SUPERIOR_SELECT:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['student']['id'],
+                    $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_received.tpl'),
                     $data['session_id']
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
-                    $data['superior']['id'],
+                    $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior.tpl'),
                     $data['session_id'],
@@ -442,14 +446,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             case ADV_SUB_ACTION_ADMIN_APPROVE:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['student']['id'],
+                    $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_student.tpl'),
                     $data['session_id']
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
-                    $data['superior']['id'],
+                    $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_superior.tpl'),
                     $data['session_id']
@@ -469,7 +473,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             case ADV_SUB_ACTION_ADMIN_DISAPPROVE:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['student']['id'],
+                    $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_student.tpl'),
                     $data['session_id'],
@@ -477,7 +481,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
-                    $data['superior']['id'],
+                    $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_superior.tpl'),
                     $data['session_id']
@@ -760,17 +764,16 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function listAllStudentsInQueueBySession($sessionId)
     {
-        $return = array();
         $extraSession = new ExtraFieldValue('session');
         $session = api_get_session_info($sessionId);
         $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'target');
         $session['target'] = $var['field_value'];
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'fin_publicacion');
-        $session['fin_publicacion'] = $var['field_value'];
+        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'publication_end_date');
+        $session['publication_end_date'] = $var['field_value'];
         $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'mode');
         $session['mode'] = $var['field_value'];
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'numero_recomendado_participantes');
-        $session['participantes_recomendados'] = $var['field_value'];
+        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'recommended_number_of_participants');
+        $session['recommended_number_of_participants'] = $var['field_value'];
         $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'vacancies');
         $session['vacancies'] = $var['field_value'];
         $queueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);

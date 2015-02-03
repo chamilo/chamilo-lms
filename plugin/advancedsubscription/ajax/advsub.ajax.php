@@ -58,45 +58,52 @@ if (!empty($a) && !empty($u)) {
             }
             break;
         case 'subscribe': // Subscription
-            $res = AdvancedSubscriptionPlugin::create()->startSubscription($u, $s, $params);
-            if ($res === true) {
-                // send mail to superior
-                $sessionArray = api_get_session_info($s);
-                $extraSession = new ExtraFieldValue('session');
-                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'as_description');
-                $sessionArray['as_description'] = $var['field_valiue'];
-                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'target');
-                $sessionArray['target'] = $var['field_valiue'];
-                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'mode');
-                $sessionArray['mode'] = $var['field_valiue'];
-                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'fin_publicacion');
-                $sessionArray['fin_publicacion'] = $var['field_value'];
-                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'numero_recomendado_participantes');
-                $sessionArray['recommended_subscription_limit'] = $var['field_valiue'];
-                $studentArray = api_get_user_info($u);
-                $superiorArray = api_get_user_info(UserManager::getStudentBoss($u));
-                $adminsArray = UserManager::get_all_administrators();
+            $bossId = UserManager::getStudentBoss($u);
+            if (!empty($bossId)) {
+                $res = AdvancedSubscriptionPlugin::create()->startSubscription($u, $s, $params);
+                if ($res === true) {
+                    // send mail to superior
+                    $sessionArray = api_get_session_info($s);
+                    $extraSession = new ExtraFieldValue('session');
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'as_description');
+                    $sessionArray['as_description'] = $var['field_valiue'];
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'target');
+                    $sessionArray['target'] = $var['field_valiue'];
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'mode');
+                    $sessionArray['mode'] = $var['field_valiue'];
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'publication_end_date');
+                    $sessionArray['publication_end_date'] = $var['field_value'];
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'recommended_number_of_participants');
+                    $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
+                    $studentArray = api_get_user_info($u);
+                    $superiorArray = api_get_user_info(UserManager::getStudentBoss($u));
+                    $adminsArray = UserManager::get_all_administrators();
 
-                $data = array(
-                    'student' => $studentArray,
-                    'superior' => $superiorArray,
-                    'admins' => $adminsArray,
-                    'session' => $sessionArray,
-                    'signature' => 'AQUI DEBE IR UNA FIRMA',
-                );
+                    $data = array(
+                        'student' => $studentArray,
+                        'superior' => $superiorArray,
+                        'admins' => $adminsArray,
+                        'session' => $sessionArray,
+                        'signature' => 'AQUI DEBE IR UNA FIRMA',
+                    );
 
-                $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
-                $result['error'] = false;
-                $result['errorMessage'] = 'No error';
-                $result['pass'] = true;
-            } else {
-                if (is_string($res)) {
-                    $result['errorMessage'] = $res;
+                    $result['mails'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
+                    $result['error'] = false;
+                    $result['errorMessage'] = 'No error';
+                    $result['pass'] = true;
                 } else {
-                    $result['errorMessage'] = 'User can not be subscribed';
+                    if (is_string($res)) {
+                        $result['errorMessage'] = $res;
+                    } else {
+                        $result['errorMessage'] = 'User can not be subscribed';
+                    }
+                    $result['pass'] = false;
                 }
+            } else {
+                $result['errorMessage'] = 'User does not have Boss';
                 $result['pass'] = false;
             }
+
             break;
         case 'encrypt': // Encrypt
             $res = $plugin->encrypt($data);

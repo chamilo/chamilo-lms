@@ -3646,6 +3646,7 @@ class SessionManager
      * @param bool $deleteUsersNotInList
      * @param bool $updateCourseCoaches
      * @param bool $sessionWithCoursesModifier
+     * @param int $showDescription
      * @return array
      */
     static function importCSV(
@@ -3907,10 +3908,6 @@ class SessionManager
                             $params['description'] = $sessionDescription;
                         }
 
-                        if (!is_null($showDescription)) {
-                            $params['show_description'] = intval($showDescription);
-                        }
-
                         if (!empty($fieldsToAvoidUpdate)) {
                             foreach ($fieldsToAvoidUpdate as $field) {
                                 unset($params[$field]);
@@ -3934,6 +3931,9 @@ class SessionManager
                             }
 
                             $sessionInfo = api_get_session_info($session_id);
+
+                            $params['show_description'] = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : intval($showDescription);
+
                             if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
                                 if (empty($sessionInfo['nb_days_access_before_beginning']) ||
                                     (!empty($sessionInfo['nb_days_access_before_beginning']) &&

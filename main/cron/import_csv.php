@@ -1071,6 +1071,8 @@ class ImportCsv
                             $accessAfter = intval($this->daysCoachAccessAfterBeginning);
                         }
 
+                        $showDescription = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : 1;
+
                         $result = SessionManager::edit_session(
                             $sessionId,
                             $session['SessionName'],
@@ -1089,7 +1091,7 @@ class ImportCsv
                             true, //$start_limit =
                             true, //$end_limit =
                             null, //$description
-                            1 // $showDescription = null,
+                            $showDescription // $showDescription = null,
                         );
 
                         if (is_numeric($result)) {

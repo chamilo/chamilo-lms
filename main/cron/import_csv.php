@@ -109,7 +109,10 @@ class ImportCsv
                     $isStatic = strpos($method, 'Static');
 
                     if (method_exists($this, $method)) {
-                        if ($method == 'importUnsubscribeStatic' || empty($isStatic)) {
+                        if (($method == 'importUnsubscribeStatic' ||
+                            $method == 'importSubscribeStatic') ||
+                            empty($isStatic)
+                        ) {
                             $fileToProcess[$parts[1]][] = array(
                                 'method' => $method,
                                 'file' => $path.$fileInfo['basename']
@@ -144,8 +147,10 @@ class ImportCsv
                 'teachers',
                 'courses',
                 'sessions',
+                'subscribe-static',
                 'unsubscribe-static'
             );
+
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import $section --");
 
@@ -169,6 +174,7 @@ class ImportCsv
                 'sessions-static',
                 'calendar-static',
             );
+
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import static files $section --");
 
@@ -1218,6 +1224,67 @@ class ImportCsv
     /**
      * @param string $file
      */
+    private function importSubscribeStatic($file)
+    {
+        $data = Import::csv_reader($file);
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data) . " records found.");
+            foreach ($data as $row) {
+                $chamiloUserName = $row['UserName'];
+                $chamiloCourseCode = $row['CourseCode'];
+                $chamiloSessionId = $row['SessionID'];
+                $type = $row['Type'];
+
+                $sessionInfo = api_get_session_info($chamiloSessionId);
+
+                if (empty($sessionInfo)) {
+                    $this->logger->addError('Session does not exists: '.$chamiloSessionId);
+                    continue;
+                }
+
+                $courseInfo = api_get_course_info($chamiloCourseCode);
+                if (empty($courseInfo)) {
+                    $this->logger->addError('Course does not exists: '.$courseInfo);
+                    continue;
+                }
+
+                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+
+                if (empty($userId)) {
+                    $this->logger->addError('User does not exists: '.$chamiloUserName);
+                    continue;
+                }
+                $status = null;
+                switch ($type) {
+                    case 'student':
+                        SessionManager::subscribe_users_to_session_course(
+                            array($userId),
+                            $chamiloSessionId,
+                            $courseInfo['code'],
+                            null,
+                            false
+                        );
+                        break;
+                    case 'teacher':
+                        SessionManager::set_coach_to_course_session(
+                            $userId,
+                            $chamiloSessionId,
+                            $courseInfo['code']
+                        );
+                        break;
+                }
+
+                $this->logger->addError(
+                    "User '$chamiloUserName' with status $type was added to session: #$chamiloSessionId - Course: " . $courseInfo['code']
+                );
+            }
+        }
+    }
+
+    /**
+     * @param string $file
+     */
     private function importUnsubscribeStatic($file)
     {
         $data = Import::csv_reader($file);
@@ -1250,7 +1317,9 @@ class ImportCsv
                 }
 
                 CourseManager::unsubscribe_user($userId, $courseInfo['code'], $chamiloSessionId);
-                $this->logger->addError("User '$chamiloUserName' was removed from session: #$chamiloSessionId, Course: ".$courseInfo['code']);
+                $this->logger->addError(
+                    "User '$chamiloUserName' was removed from session: #$chamiloSessionId, Course: ".$courseInfo['code']
+                );
             }
         }
     }

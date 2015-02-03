@@ -4,7 +4,6 @@ namespace Sabre\VObject\Property\ICalendar;
 
 use DateTimeZone;
 use Sabre\VObject\Property;
-use Sabre\VObject\Parser\MimeDir;
 use Sabre\VObject\DateTimeParser;
 use Sabre\VObject\TimeZoneUtil;
 
@@ -19,7 +18,7 @@ use Sabre\VObject\TimeZoneUtil;
  * cases represent a DATE value. This is because it's a common usecase to be
  * able to change a DATE-TIME into a DATE.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -107,6 +106,22 @@ class DateTime extends Property {
     public function hasTime() {
 
         return strtoupper((string)$this['VALUE']) !== 'DATE';
+
+    }
+
+    /**
+     * Returns true if this is a floating DATE or DATE-TIME.
+     *
+     * Note that DATE is always floating.
+     */
+    public function isFloating() {
+
+        return
+            !$this->hasTime() ||
+            (
+                !isset($this['TZID']) &&
+                strpos($this->getValue(),'Z')===false
+            );
 
     }
 
@@ -259,9 +274,10 @@ class DateTime extends Property {
 
         $dts = $this->getDateTimes();
         $hasTime = $this->hasTime();
+        $isFloating = $this->isFloating();
 
         $tz = $dts[0]->getTimeZone();
-        $isUtc = in_array($tz->getName() , array('UTC', 'GMT', 'Z'));
+        $isUtc = $isFloating ? false : in_array($tz->getName() , array('UTC', 'GMT', 'Z'));
 
         return array_map(
             function($dt) use ($hasTime, $isUtc) {

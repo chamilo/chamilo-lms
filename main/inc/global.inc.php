@@ -84,7 +84,7 @@ if (api_get_setting('login_is_email') == 'true') {
 define('USERNAME_MAX_LENGTH', $default_username_length);
 
 // Do not over-use this variable. It is only for this script's local use.
-$lib_path = api_get_path(LIBRARY_PATH);
+$lib_path = dirname(__FILE__).'/../../main/inc/lib/';
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
@@ -96,7 +96,7 @@ ini_set('include_path', api_create_include_path_setting());
 ini_set('auto_detect_line_endings', '1');
 
 // Include the libraries that are necessary everywhere
-require_once dirname(__FILE__).'/autoload.inc.php';
+require_once dirname(__FILE__).'/../../vendor/autoload.php';
 
 require_once $lib_path.'database.lib.php';
 require_once $lib_path.'text.lib.php';

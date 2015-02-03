@@ -9,7 +9,7 @@ use Sabre\VObject\Property;
  *
  * This object encodes URI values. vCard 2.1 calls these URL.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */

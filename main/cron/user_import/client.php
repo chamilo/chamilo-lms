@@ -19,9 +19,6 @@ if (php_sapi_name()!='cli') {
     die();
 }
 
-// include nusoap library
-require_once(api_get_path(LIBRARY_PATH).'nusoap/nusoap.php');
-
 // create client
 $client = new nusoap_client(api_get_path(WEB_CODE_PATH).'cron/user_import/service.php');
 

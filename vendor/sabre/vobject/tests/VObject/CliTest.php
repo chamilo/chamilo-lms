@@ -498,8 +498,7 @@ VCARD
         );
 
         rewind($this->cli->stdout);
-        $this->assertEquals("BEGIN:VCARD\r\nVERSION:2.1\r\nEND:VCARD\r\n", stream_get_contents($this->cli->stdout));
-
+        $this->assertRegExp("/^BEGIN:VCARD\r\nVERSION:2.1\r\nUID:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\r\nEND:VCARD\r\n$/", stream_get_contents($this->cli->stdout));
     }
 
     function testRepairNothing() {

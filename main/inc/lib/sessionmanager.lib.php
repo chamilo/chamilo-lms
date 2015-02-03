@@ -83,7 +83,8 @@ class SessionManager
         $start_limit = true,
         $end_limit = true,
         $fix_name = false,
-        $duration = null
+        $duration = null,
+        $showDescription = null
     ) {
         global $_configuration;
 
@@ -199,6 +200,14 @@ class SessionManager
                     }
                     $sql = "UPDATE $tbl_session
                             SET duration = '$duration'
+                            WHERE id = $session_id";
+                    Database::query($sql);
+                }
+
+                if (!is_null($showDescription)) {
+                    $showDescription = intval($showDescription);
+                    $sql = "UPDATE $tbl_session
+                            SET show_description = '$showDescription'
                             WHERE id = $session_id";
                     Database::query($sql);
                 }
@@ -1313,20 +1322,20 @@ class SessionManager
     /**
      * Edit a session
      * @author Carlos Vargas from existing code
-     * @param	integer		id
-     * @param	string 		name
-     * @param 	integer		year_start
-     * @param 	integer		month_start
-     * @param 	integer		day_start
-     * @param 	integer		year_end
-     * @param 	integer		month_end
-     * @param 	integer		day_end
-     * @param 	integer		nb_days_acess_before
-     * @param 	integer		nb_days_acess_after
-     * @param 	integer		nolimit
-     * @param 	integer		id_coach
-     * @param 	integer		id_session_category
-     * @param   int $id_visibility
+     * @param integer		id
+     * @param string 		name
+     * @param integer		year_start
+     * @param integer		month_start
+     * @param integer		day_start
+     * @param integer		year_end
+     * @param integer		month_end
+     * @param integer		day_end
+     * @param integer		nb_days_acess_before
+     * @param integer		nb_days_acess_after
+     * @param integer		nolimit
+     * @param integer		id_coach
+     * @param integer		id_session_category
+     * @param int $id_visibility
      * @param bool
      * @param bool
      * @param string $description
@@ -3654,7 +3663,8 @@ class SessionManager
         $updateCourseCoaches = false,
         $sessionWithCoursesModifier = false,
         $addOriginalCourseTeachersAsCourseSessionCoaches = true,
-        $removeAllTeachersFromCourse = true
+        $removeAllTeachersFromCourse = true,
+        $showDescription = null
     ) {
         $content = file($file);
 
@@ -3680,6 +3690,10 @@ class SessionManager
         if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
             $extraParameters .= ' , nb_days_access_before_beginning = '.intval($daysCoachAccessBeforeBeginning);
             $extraParameters .= ' , nb_days_access_after_end = '.intval($daysCoachAccessAfterBeginning);
+        }
+
+        if (!is_null($showDescription)) {
+            $extraParameters .= ' , show_description = '.intval($showDescription);
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -3749,10 +3763,10 @@ class SessionManager
                     continue;
                 }
 
-                $date_start             = $enreg['DateStart'];
-                $date_end               = $enreg['DateEnd'];
-                $session_category_id    = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
-                $sessionDescription     = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+                $date_start = $enreg['DateStart'];
+                $date_end = $enreg['DateEnd'];
+                $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
+                $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
 
                 $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {
@@ -3891,6 +3905,10 @@ class SessionManager
 
                         if (!empty($sessionDescription)) {
                             $params['description'] = $sessionDescription;
+                        }
+
+                        if (!is_null($showDescription)) {
+                            $params['show_description'] = intval($showDescription);
                         }
 
                         if (!empty($fieldsToAvoidUpdate)) {

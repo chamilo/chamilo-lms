@@ -1038,7 +1038,8 @@ class ImportCsv
                             null,
                             $coachUserName,
                             $categoryId,
-                            $visibility
+                            $visibility,
+                            1
                         );
 
                         if (is_numeric($result)) {
@@ -1084,7 +1085,11 @@ class ImportCsv
                             null,
                             $coachId,
                             $categoryId,
-                            $visibility
+                            $visibility,
+                            true, //$start_limit =
+                            true, //$end_limit =
+                            null, //$description
+                            1 // $showDescription = null,
                         );
 
                         if (is_numeric($result)) {
@@ -1208,7 +1213,10 @@ class ImportCsv
             $avoid,
             false, // deleteUsersNotInList
             false, // updateCourseCoaches
-            true // sessionWithCoursesModifier
+            true, // sessionWithCoursesModifier
+            true, //$addOriginalCourseTeachersAsCourseSessionCoaches
+            true, //$removeAllTeachersFromCourse
+            1 // $showDescription
         );
 
         if (!empty($result['error_message'])) {

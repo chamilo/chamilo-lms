@@ -3024,7 +3024,8 @@ class SurveyUtil
             $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 
             // displaying the table: headers
-            echo '<table class="table">';
+
+            echo '<table id="display-survey" class="table">';
             echo '	<tr>';
             echo '		<th>&nbsp;</th>';
             echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
@@ -3048,31 +3049,43 @@ class SurveyUtil
                         $answers_number = $absolute_number/$number_of_answers*100;
                     }
                     echo '	<tr>';
-                    echo '		<td>'.$value['option_text'].'</td>';
-                    echo '		<td align="right"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset).'&amp;viewoption='.$value['question_option_id'].'">'.$absolute_number.'</a></td>';
-                    echo '		<td align="right">'.round($answers_number, 2).' %</td>';
-                    echo '		<td align="right">';
+                    echo '		<td class="center">'.$value['option_text'].'</td>';
+                    echo '		<td class="center">';
+                    if ($absolute_number!=0){
+		                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset).'&amp;viewoption='.$value['question_option_id'].'">'.$absolute_number.'</a>';
+		            }else{
+		                 echo '0';
+		            }
+
+		            echo '      </td>';
+                    echo '		<td class="center">'.round($answers_number, 2).' %</td>';
+                    echo '		<td class="center">';
                     $size = $answers_number*2;
                     if ($size > 0) {
                         echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'.$size.'px">&nbsp;</div>';
+                    }else{
+                        echo '<div style="text-align: left;">'.get_lang("NoDataRegistered").'</div>';
                     }
-                    echo '		</td>';
-                    echo '	</tr>';
+                    echo ' </td>';
+                    echo ' </tr>';
                 }
             }
             // displaying the table: footer (totals)
             echo '	<tr>';
-            echo '		<td style="border-top:1px solid black;"><b>'.get_lang('Total').'</b></td>';
-            echo '		<td style="border-top:1px solid black;" align="right"><b>'.($number_of_answers==0?'0':$number_of_answers).'</b></td>';
-            echo '		<td style="border-top:1px solid black;">&nbsp;</td>';
-            echo '		<td style="border-top:1px solid black;">&nbsp;</td>';
+            echo '		<td class="total"><b>'.get_lang('Total').'</b></td>';
+            echo '		<td class="total"><b>'.($number_of_answers==0?'0':$number_of_answers).'</b></td>';
+            echo '		<td class="total">&nbsp;</td>';
+            echo '		<td class="total">&nbsp;</td>';
             echo '	</tr>';
 
             echo '</table>';
+
         }
 
         if (isset($_GET['viewoption'])) {
-            echo get_lang('PeopleWhoAnswered').': '.$options[Security::remove_XSS($_GET['viewoption'])]['option_text'].'<br />';
+            echo '<div class="answered-people">';
+
+            echo '<h4>'.get_lang('PeopleWhoAnswered').': '.strip_tags($options[Security::remove_XSS($_GET['viewoption'])]['option_text']).'</h4>';
 
             if (is_numeric($_GET['value'])) {
                 $sql_restriction = "AND value='".Database::escape_string($_GET['value'])."'";
@@ -3080,10 +3093,13 @@ class SurveyUtil
 
             $sql = "SELECT user FROM $table_survey_answer WHERE c_id = $course_id AND option_id = '".Database::escape_string($_GET['viewoption'])."' $sql_restriction";
             $result = Database::query($sql);
+            echo '<ul>';
             while ($row = Database::fetch_array($result)) {
                 $user_info = api_get_user_info($row['user']);
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$row['user'].'">'.$user_info['complete_name'].'</a><br />';
+                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$row['user'].'">'.$user_info['complete_name'].'</a></li>';
             }
+            echo '</ul>';
+            echo '</div>';
         }
     }
 

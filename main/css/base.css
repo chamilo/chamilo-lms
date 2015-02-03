@@ -5418,3 +5418,32 @@ i.size-32.icon-new-work{
 .title-question{
   font-size: 22px;
 }
+#display-survey.table tbody tr th, #display-survey.table tbody tr:hover th{
+    background-color:#666;
+    text-align: center;
+    font-size: 14px;
+    color: #FFFFFF;
+}
+#display-survey .total{
+    background-color: #EBF3F5;
+    text-align: center;
+}
+#display-survey .center{
+    text-align: center;
+}
+#display-survey{
+    border: 1px solid #ddd;
+}
+#display-survey.table tbody tr:hover td,#display-survey.table tbody tr:hover th{
+    background-color: none;
+}
+.answered-people{
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+.answered-people h4{
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: normal;
+}

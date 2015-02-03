@@ -1,5 +1,5 @@
 
-{% include 'default/notebook/header.tpl' %}
+{% include template ~ '/notebook/header.tpl' %}
 
 <div class="actions-bar btn-toolbar" >
     <a href = "{{root}}&amp;action=index" class="btn back">

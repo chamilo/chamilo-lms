@@ -123,5 +123,6 @@ process:
         install:           Install
         finish:            Launch application
         continue:          Continue
+        refresh:           Refresh
     operation:             Operation
     status:                Status

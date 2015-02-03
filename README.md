@@ -90,6 +90,7 @@ Browser install:
 git clone https://github.com/chamilo/chamilo-lms.git chamilo
 cd chamilo
 composer update
+app/console doctrine:database:create
 ```
 
 Load localhost/chamilo/install.php in your browser and follow the instructions.

@@ -203,8 +203,8 @@ function iterateRequirements(array $collection, $translator) {
 
             <div class="install-form-actions">
                 <?php if (count($majorProblems) || count($minorProblems)): ?>
-                <a href="install.php" class="btn btn-default icon-reset">
-                    <span><?php echo $translator->trans('process.button.refresh'); ?></span>
+                <a href="install.php" class="btn btn-default btn-lg">
+                    <i class="fa fa-refresh"></i> <?php echo $translator->trans('process.button.refresh'); ?>
                 </a>
                 <?php endif; ?>
                 <a href="<?php echo count($majorProblems) ? 'javascript: void(0);' : 'app_dev.php/installer/flow/chamilo_installer/welcome'; ?>" class="btn btn-lg btn-primary <?php echo count($majorProblems) ? 'disabled' : 'primary'; ?>">

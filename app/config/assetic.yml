@@ -157,8 +157,8 @@ assetic:
                 - %kernel.root_dir%/../web/bundles/sonataadmin/jquery/jquery.form.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/jquery/jquery.confirmExit.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/App.js
-                - %kernel.root_dir%/../web/bundles/sonataadmin/treeview.js
-                - %kernel.root_dir%/../web/bundles/sonatapage/sonata-page.back.js
+#                - %kernel.root_dir%/../web/bundles/sonataadmin/treeview.js
+#                - %kernel.root_dir%/../web/bundles/sonatapage/sonata-page.back.js
                 - %kernel.root_dir%/../web/bundles/sonataadmin/Admin.js
             filters:
                 - yui_js

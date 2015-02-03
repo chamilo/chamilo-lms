@@ -121,34 +121,34 @@ sonata_admin:
                   items:
                       - sonata.admin.access_url
 
-#    assets:
-#        stylesheets:
-#            # The sandbox includes default pre-optimized version of some css and js
-#            # So you can either use them, and add your custom assets here
-#            #   ~ or ~
-#            # tweak the assetic.yml and the following lines
-#            - assetic/sonata_admin_css.css
-#            - assetic/sonata_formatter_css.css
-#            - assetic/sonata_jqueryui_css.css
-#            #- bundles/sonatademo/css/demo.css
-#
-#            - bundles/sonataformatter/markitup/skins/sonata/style.css
-#            - bundles/sonataformatter/markitup/sets/markdown/style.css
-#            - bundles/sonataformatter/markitup/sets/html/style.css
-#            - bundles/sonataformatter/markitup/sets/textile/style.css
-##            - bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css
-##            - bundles/sonataadmin/vendor/AdminLTE/css/font-awesome.min.css
-##            - bundles/sonataadmin/vendor/AdminLTE/css/ionicons.min.css
-##            - bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
-##            - bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
-##            - bundles/sonataadmin/vendor/select2/select2.css
-##            - bundles/sonataadmin/vendor/select2/select2-bootstrap.css
-##            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
-##            - bundles/sonataadmin/css/styles.css
-##            - bundles/sonataadmin/css/layout.css
-#
-#        javascripts:
-#            - assetic/sonata_admin_js.js
-#            - assetic/sonata_jqueryui_js.js
-#            - assetic/sonata_formatter_js.js
-#            - bundles/sonataformatter/vendor/ckeditor/ckeditor.js
+    assets:
+        stylesheets:
+            # The sandbox includes default pre-optimized version of some css and js
+            # So you can either use them, and add your custom assets here
+            #   ~ or ~
+            # tweak the assetic.yml and the following lines
+            - assetic/sonata_admin_css.css
+            - assetic/sonata_formatter_css.css
+            - assetic/sonata_jqueryui_css.css
+            #- bundles/sonatademo/css/demo.css
+
+            - bundles/sonataformatter/markitup/skins/sonata/style.css
+            - bundles/sonataformatter/markitup/sets/markdown/style.css
+            - bundles/sonataformatter/markitup/sets/html/style.css
+            - bundles/sonataformatter/markitup/sets/textile/style.css
+#            - bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css
+#            - bundles/sonataadmin/vendor/AdminLTE/css/font-awesome.min.css
+#            - bundles/sonataadmin/vendor/AdminLTE/css/ionicons.min.css
+#            - bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
+#            - bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
+#            - bundles/sonataadmin/vendor/select2/select2.css
+#            - bundles/sonataadmin/vendor/select2/select2-bootstrap.css
+#            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
+#            - bundles/sonataadmin/css/styles.css
+#            - bundles/sonataadmin/css/layout.css
+
+        javascripts:
+            - assetic/sonata_admin_js.js
+            - assetic/sonata_jqueryui_js.js
+            - assetic/sonata_formatter_js.js
+            - bundles/sonataformatter/vendor/ckeditor/ckeditor.js

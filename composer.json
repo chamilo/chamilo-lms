@@ -22,6 +22,7 @@
             "main/gradebook/lib",
             "main/newscorm",
             "main/inc/lib",
+            "plugin",
             "main/install",
             "main/inc/lib/getid3",
             "main/survey"
@@ -75,7 +76,8 @@
         "jms/di-extra-bundle": "~1.4",
         "jms/serializer-bundle": "~0.12",
 
-        "doctrine/orm": "~2.4",
+        "doctrine/orm": "2.4.*@dev",
+        "doctrine/dbal": "2.4.4",
         "doctrine/doctrine-bundle": "1.3.*@dev",
         "doctrine/doctrine-migrations-bundle": "~2.0@dev",
         "doctrine/migrations": "~1.0@dev",

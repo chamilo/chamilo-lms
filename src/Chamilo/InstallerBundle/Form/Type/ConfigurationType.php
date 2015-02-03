@@ -16,6 +16,7 @@ class ConfigurationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // See class DatabaseConnectionValidator to see the validator.
         $builder
             ->add(
                 'database',

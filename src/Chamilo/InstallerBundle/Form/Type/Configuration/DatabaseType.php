@@ -16,6 +16,21 @@ class DatabaseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            /*->add(
+                'chamilo_installer_database_driver',
+                'choice',
+                array(
+                    'label'       => 'form.configuration.database.driver',
+                    'choices'       => array(
+                        'pdo_mysql' => 'MySQL',
+                        'pdo_pgsql' => 'PostgreSQL',
+                    ),
+                    'constraints' => array(
+                        new Assert\NotBlank(),
+                        new ExtensionLoaded(),
+                    ),
+                )
+            )*/
             ->add(
                 'chamilo_installer_database_host',
                 'text',

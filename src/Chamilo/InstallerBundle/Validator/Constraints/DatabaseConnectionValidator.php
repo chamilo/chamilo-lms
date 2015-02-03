@@ -17,6 +17,7 @@ class DatabaseConnectionValidator extends ConstraintValidator
             'dbname'   => $value['chamilo_installer_database_name'],
             'user'     => $value['chamilo_installer_database_user'],
             'password' => $value['chamilo_installer_database_password'],
+            //'driver'   => $value['chamilo_installer_database_driver'],
             'driver'   => 'pdo_mysql',
             'charset'  => 'UTF8',
         );

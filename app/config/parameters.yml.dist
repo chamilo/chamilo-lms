@@ -12,10 +12,6 @@ parameters:
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
     installed: ~
-    path.data: null
-    path.temp: null
-    path.courses: null
-    path.logs: null
     security_key: null
     password_encryption: sha1
     deny_delete_users: false

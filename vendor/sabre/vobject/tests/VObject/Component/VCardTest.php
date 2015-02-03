@@ -173,4 +173,116 @@ VCF;
         $this->assertNull($vcard->preferred('EMAIL'));
 
     }
+
+    function testNoUIDCardDAV() {
+
+        $vcard = <<<VCF
+BEGIN:VCARD
+VERSION:4.0
+FN:John Doe
+END:VCARD
+VCF;
+        $this->assertValidate(
+            $vcard,
+            VCARD::PROFILE_CARDDAV,
+            3,
+            'vCards on CardDAV servers MUST have a UID property.'
+        );
+
+    }
+
+    function testNoUIDNoCardDAV() {
+
+        $vcard = <<<VCF
+BEGIN:VCARD
+VERSION:4.0
+FN:John Doe
+END:VCARD
+VCF;
+        $this->assertValidate(
+            $vcard,
+            0,
+            2,
+            'Adding a UID to a vCard property is recommended.'
+        );
+
+    }
+    function testNoUIDNoCardDAVRepair() {
+
+        $vcard = <<<VCF
+BEGIN:VCARD
+VERSION:4.0
+FN:John Doe
+END:VCARD
+VCF;
+        $this->assertValidate(
+            $vcard,
+            VCARD::REPAIR,
+            1,
+            'Adding a UID to a vCard property is recommended.'
+        );
+
+    }
+
+    function testVCard21CardDAV() {
+
+        $vcard = <<<VCF
+BEGIN:VCARD
+VERSION:2.1
+FN:John Doe
+UID:foo
+END:VCARD
+VCF;
+        $this->assertValidate(
+            $vcard,
+            VCARD::PROFILE_CARDDAV,
+            3,
+            'CardDAV servers are not allowed to accept vCard 2.1.'
+        );
+
+    }
+
+    function testVCard21NoCardDAV() {
+
+        $vcard = <<<VCF
+BEGIN:VCARD
+VERSION:2.1
+FN:John Doe
+UID:foo
+END:VCARD
+VCF;
+        $this->assertValidate(
+            $vcard,
+            0,
+            0
+        );
+
+    }
+
+    function assertValidate($vcf, $options, $expectedLevel, $expectedMessage = null) {
+
+        $vcal = VObject\Reader::read($vcf);
+        $result = $vcal->validate($options);
+
+        $this->assertValidateResult($result, $expectedLevel, $expectedMessage);
+
+    }
+
+    function assertValidateResult($input, $expectedLevel, $expectedMessage = null) {
+
+        $messages = array();
+        foreach($input as $warning) {
+            $messages[] = $warning['message'];
+        }
+
+        if ($expectedLevel === 0) {
+            $this->assertEquals(0, count($input), 'No validation messages were expected. We got: ' . implode(', ', $messages));
+        } else {
+            $this->assertEquals(1, count($input), 'We expected exactly 1 validation message, We got: ' . implode(', ', $messages));
+
+            $this->assertEquals($expectedMessage, $input[0]['message']);
+            $this->assertEquals($expectedLevel, $input[0]['level']);
+        }
+
+    }
 }

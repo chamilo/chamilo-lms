@@ -5,7 +5,7 @@ namespace Sabre\VObject;
 /**
  * A node is the root class for every element in an iCalendar of vCard object.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -13,8 +13,29 @@ abstract class Node implements \IteratorAggregate, \ArrayAccess, \Countable {
 
     /**
      * The following constants are used by the validate() method.
+     *
+     * If REPAIR is set, the validator will attempt to repair any broken data
+     * (if possible).
      */
     const REPAIR = 1;
+
+    /**
+     * If this option is set, the validator will operate on the vcards on the
+     * assumption that the vcards need to be valid for CardDAV.
+     *
+     * This means for example that the UID is required, whereas it is not for
+     * regular vcards.
+     */
+    const PROFILE_CARDDAV = 2;
+
+    /**
+     * If this option is set, the validator will operate on iCalendar objects
+     * on the assumption that the vcards need to be valid for CalDAV.
+     *
+     * This means for example that calendars can only contain objects with
+     * identical component types and UIDs.
+     */
+    const PROFILE_CALDAV = 4;
 
     /**
      * Reference to the parent object, if this is not the top object.

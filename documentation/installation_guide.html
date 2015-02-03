@@ -155,8 +155,7 @@ enable CSS styles package upload and sub-language definition:
   <li>[chamilo]/main/css/</li>
   <li>[chamilo]/main/lang/</li>
 </ul>
-Starting from Chamilo 1.8.8, you can also enable full-text indexing features which
-require the php5-xapian PHP's extension module to be installed. If you do use
+Starting from Chamilo 1.8.8, you can also enable full-text indexing features which require the php5-xapian PHP's extension module to be installed. If you do use
 it, you will need to allow your system to write into the sarchdb directory:
 <ul>
   <li>[chamilo]/searchdb</li>
@@ -339,10 +338,8 @@ you upgrade.</em>
 providers have developed improved migration procedures that use more memory but
 process the upgrades up to 20 times faster. If this is the kind of thing you
 need, we highly recommend you contact them (see reference below).</div>
-<div class="muted"> NOTE: This version of Chamilo can only be used to upgrade from
-smaller versions of Chamilo or Dok€os. For example, you cannot use the normal
-upgrade scripts from Chamilo 1.9 to upgrade from Dok€os 2.0. If you need this,
-please contact one of the Chamilo Association's official providers &lt;providers@chamilo.org&gt;)</div>
+<div class="muted"> NOTE: This version of Chamilo can only be used to upgrade from earlier versions of Chamilo or Dok€os. For example, you cannot use the normal
+upgrade scripts from Chamilo 1.9 to upgrade from Dok€os 2.0 (which was born after the split with Chamilo). If you need this, please contact one of the Chamilo Association's <a href="https://chamilo.org/providers">official providers</a>)</div>
 
 <p></p>
 
@@ -357,6 +354,7 @@ As this is only a minor version change from previous 1.10.* versions of Chamilo,
     "searchdb" directories from the package before you overwrite the previous
     files.</li>
   <li> edit the main/inc/conf/configuration.php file: at the en of the file, locate the previous version number (e.g. '1.10.4') and change it to this new version (e.g. '1.10.8')</li>
+  <li> clean your archive/ directory: take a temporary copy of index.html, delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!). It will all be re-generated. You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
   <li> you're done! No other upgrade procedure is required</li>
 </ul>
 
@@ -370,6 +368,7 @@ As this is only a minor version change from previous 1.10.* versions of Chamilo,
   <li> unzip the new files of Chamilo 1.10 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
   <li> point your browser on your portal URL + main/install/</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x/1.9.x</span></li>
+  <li> clean your archive/ directory: take a temporary copy of index.html, delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!). It will all be re-generated. You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
 </ul>
 
 <br />
@@ -383,6 +382,7 @@ As this is only a minor version change from previous 1.10.* versions of Chamilo,
   <li> unzip the new files of Chamilo 1.10 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
   <li> point your browser on your portal URL + main/install/</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x/1.9.x</span></li>
+  <li> clean your archive/ directory: take a temporary copy of index.html, delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!). It will all be re-generated. You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
 </ul>
 A bunch of Chamilo administrators have reported minor issues with the migration between versions considerably apart (like from Dok€os to Chamilo).
 This might include loosing some assignments or forum posts. To avoid any ugly effect on your users, we recommend you first establish a checklist
@@ -433,6 +433,7 @@ Chamilo/Dok€os root folder</li>
   <li> point your browser on your portal URL</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.6.x</span> and confirm the
 current directory of the old version</li>
+  <li> clean your archive/ directory: take a temporary copy of index.html, delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!). It will all be re-generated. You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
 </ul>
 
 <br />
@@ -793,8 +794,9 @@ Then go to your administration page -&gt; Configuration settings -&gt; Search
 and enable the search tool. Follow the recommendations on the page to get the
 complete indexing suite installed. Once you're done, all documents you import
 into your Chamilo portal in a recognized format will be indexed and searchable.
-Chamilo Administrators training (which you can ask any <a href="http://www.chamilo.org/en/providers">Chamilo's Official
-Provider</a> for) include a full review of the full-text search feature.
+Chamilo intermediate Administrators training (which you can ask any <a href="http://www.chamilo.org/en/providers">Chamilo's Official Provider</a> for) include a full review of the full-text search feature.</p>
+<p class="muted">
+Note: Xapian's licensing for the PHP extension is a bit different than what is necessary to enter the Debian repositories, so it has been excluded. You can, however, generate your own package by following the <a href="http://trac.xapian.org/wiki/FAQ/PHP%20Bindings%20Package">packaging instructions on Xapian's wiki</a>.
 </p>
 
 <hr style="width: 100%; height: 2px;" />

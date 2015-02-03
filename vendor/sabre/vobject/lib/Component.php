@@ -8,7 +8,7 @@ namespace Sabre\VObject;
  * A component represents a group of properties, such as VCALENDAR, VEVENT, or
  * VCARD.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -47,7 +47,7 @@ class Component extends Node {
      * @param bool $defaults
      * @return void
      */
-    public function __construct(Document $root, $name, array $children = array(), $defaults = true) {
+    function __construct(Document $root, $name, array $children = array(), $defaults = true) {
 
         $this->name = strtoupper($name);
         $this->root = $root;
@@ -104,7 +104,7 @@ class Component extends Node {
      *
      * @return Node
      */
-    public function add($a1, $a2 = null, $a3 = null) {
+    function add($a1, $a2 = null, $a3 = null) {
 
         if ($a1 instanceof Node) {
             if (!is_null($a2)) {
@@ -145,7 +145,7 @@ class Component extends Node {
      * @param mixed $item
      * @return void
      */
-    public function remove($item) {
+    function remove($item) {
 
         if (is_string($item)) {
             $children = $this->select($item);
@@ -172,7 +172,7 @@ class Component extends Node {
      *
      * @return array
      */
-    public function children() {
+    function children() {
 
         return $this->children;
 
@@ -184,7 +184,7 @@ class Component extends Node {
      *
      * @return array
      */
-    public function getComponents() {
+    function getComponents() {
 
         $result = array();
         foreach($this->children as $child) {
@@ -213,7 +213,7 @@ class Component extends Node {
      * @param string $name
      * @return array
      */
-    public function select($name) {
+    function select($name) {
 
         $group = null;
         $name = strtoupper($name);
@@ -250,7 +250,7 @@ class Component extends Node {
      *
      * @return string
      */
-    public function serialize() {
+    function serialize() {
 
         $str = "BEGIN:" . $this->name . "\r\n";
 
@@ -324,7 +324,7 @@ class Component extends Node {
      *
      * @return array
      */
-    public function jsonSerialize() {
+    function jsonSerialize() {
 
         $components = array();
         $properties = array();
@@ -371,7 +371,7 @@ class Component extends Node {
      * @param string $name
      * @return Property
      */
-    public function __get($name) {
+    function __get($name) {
 
         $matches = $this->select($name);
         if (count($matches)===0) {
@@ -391,7 +391,7 @@ class Component extends Node {
      * @param string $name
      * @return bool
      */
-    public function __isset($name) {
+    function __isset($name) {
 
         $matches = $this->select($name);
         return count($matches)>0;
@@ -411,7 +411,7 @@ class Component extends Node {
      * @param mixed $value
      * @return void
      */
-    public function __set($name, $value) {
+    function __set($name, $value) {
 
         $matches = $this->select($name);
         $overWrite = count($matches)?key($matches):null;
@@ -441,7 +441,7 @@ class Component extends Node {
      * @param string $name
      * @return void
      */
-    public function __unset($name) {
+    function __unset($name) {
 
         $matches = $this->select($name);
         foreach($matches as $k=>$child) {
@@ -461,7 +461,7 @@ class Component extends Node {
      *
      * @return void
      */
-    public function __clone() {
+    function __clone() {
 
         foreach($this->children as $key=>$child) {
             $this->children[$key] = clone $child;
@@ -491,7 +491,7 @@ class Component extends Node {
      *
      * @var array
      */
-    public function getValidationRules() {
+    function getValidationRules() {
 
         return array();
 
@@ -502,6 +502,8 @@ class Component extends Node {
      *
      * The following options are supported:
      *   Node::REPAIR - May attempt to automatically repair the problem.
+     *   Node::PROFILE_CARDDAV - Validate the vCard for CardDAV purposes.
+     *   Node::PROFILE_CALDAV - Validate the iCalendar for CalDAV purposes.
      *
      * This method returns an array with detected problems.
      * Every element has the following properties:
@@ -511,14 +513,14 @@ class Component extends Node {
      *  * node - A reference to the problematic node.
      *
      * The level means:
-     *   1 - The issue was repaired (only happens if REPAIR was turned on)
-     *   2 - An inconsequential issue
-     *   3 - A severe issue.
+     *   1 - The issue was repaired (only happens if REPAIR was turned on).
+     *   2 - A warning.
+     *   3 - An error.
      *
      * @param int $options
      * @return array
      */
-    public function validate($options = 0) {
+    function validate($options = 0) {
 
         $rules = $this->getValidationRules();
         $defaults = $this->getDefaults();

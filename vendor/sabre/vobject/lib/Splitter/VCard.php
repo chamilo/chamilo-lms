@@ -15,7 +15,7 @@ use
  * class checks for BEGIN:VCARD and END:VCARD and parses each encountered
  * component individually.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Dominik Tobschall
  * @author Armin Hackmann
  * @license http://sabre.io/license/ Modified BSD License

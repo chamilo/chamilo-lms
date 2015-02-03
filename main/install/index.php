@@ -39,7 +39,7 @@ api_check_php_version('../inc/');
 ob_implicit_flush(true);
 session_start();
 
-require_once api_get_path(SYS_PATH).'main/inc/autoload.inc.php';
+require_once api_get_path(SYS_PATH).'vendor/autoload.php';
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'log.class.php';
 require_once 'install.lib.php';
@@ -477,8 +477,8 @@ if ($encryptPassForm == '1') {
         </div>
 	</header>
     <br />
-    
-    <?php 
+
+    <?php
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
     ?>
     <div class="row">
@@ -500,11 +500,11 @@ if ($encryptPassForm == '1') {
                 </a>
 			</div>
         </div>
-        
+
         <div class="span9">
-            
+
 <form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
-<?php   
+<?php
 
     $instalation_type_label = '';
     if ($installType == 'new'){
@@ -744,8 +744,8 @@ if (@$_POST['step2']) {
           <h2>'.display_step_sequence().$msg.'</h2>
           <div id="pleasewait" class="warning-message">'.get_lang('PleaseWaitThisCouldTakeAWhile').'</div>
           </div>';
-    
-         
+
+
     // Push the web server to send these strings before we start the real
     // installation process
     flush();
@@ -753,7 +753,7 @@ if (@$_POST['step2']) {
     if (!empty($f)) {
         ob_flush(); //#5565
     }
-    
+
 	if ($installType == 'update') {
 
 		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -778,16 +778,16 @@ if (@$_POST['step2']) {
 		} elseif ($userPasswordCrypted == '0') {
 			$userPasswordCrypted = 'none';
 		}
-        
+
         //Setting the single db form
-        if (in_array($_POST['old_version'], $update_from_version_6)) {            
-            $singleDbForm   	= get_config_param('singleDbEnabled');            
+        if (in_array($_POST['old_version'], $update_from_version_6)) {
+            $singleDbForm   	= get_config_param('singleDbEnabled');
         } else {
-            $singleDbForm   	= isset($_configuration['single_database']) ? $_configuration['single_database'] : false;            
+            $singleDbForm   	= isset($_configuration['single_database']) ? $_configuration['single_database'] : false;
         }
-        
+
         Log::notice("singledbForm: '$singleDbForm'");
-        
+
 		Database::query("SET storage_engine = MYISAM;");
 
 		if (version_compare($my_old_version, '1.8.7', '>=')) {
@@ -866,7 +866,7 @@ if (@$_POST['step2']) {
             case '1.9.8.2':
             case '1.9.10':
                 include 'update-db-1.9.0-1.10.0.inc.php';
-                //include 'update-files-1.9.0-1.10.0.inc.php';
+                include 'update-files-1.9.0-1.10.0.inc.php';
                 //Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';
                 break;

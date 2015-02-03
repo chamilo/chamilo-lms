@@ -284,3 +284,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //);
 // Shows a warning message explaining that the site uses cookies
 //$_configuration['cookie_warning'] = false;
+// Allows a comment field in the course calendar events. Requires DB change
+//$_configuration['allow_agenda_event_comment'] = false;

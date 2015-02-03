@@ -5,7 +5,7 @@ namespace Sabre\VObject;
 /**
  * This utility converts vcards from one version to another.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -96,7 +96,7 @@ class VCardConverter {
 
             if ($property instanceof Property\Uri && in_array($property->name, array('PHOTO','LOGO','SOUND'))) {
 
-                $newProperty = $this->convertUriToBinary($output, $newProperty, $parameters);
+                $newProperty = $this->convertUriToBinary($output, $newProperty);
 
             } elseif ($property instanceof Property\VCard\DateAndOrTime) {
 
@@ -208,7 +208,7 @@ class VCardConverter {
                     $label = $input->{$property->group . '.X-ABLABEL'};
 
                     // We only support converting anniversaries.
-                    if ($label->getValue()!=='_$!<Anniversary>!$_') {
+                    if (!$label || $label->getValue()!=='_$!<Anniversary>!$_') {
                         break;
                     }
 
@@ -319,11 +319,9 @@ class VCardConverter {
      *
      * @param Component\VCard $output
      * @param Property\Uri $property The input property.
-     * @param $parameters List of parameters that will eventually be added to
-     *                    the new property.
      * @return Property\Binary|null
      */
-    protected function convertUriToBinary(Component\VCard $output, Property\Uri $newProperty, array &$parameters) {
+    protected function convertUriToBinary(Component\VCard $output, Property\Uri $newProperty) {
 
         $value = $newProperty->getValue();
 

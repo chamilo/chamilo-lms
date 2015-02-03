@@ -8,7 +8,7 @@ use
 /**
  * This is the CLI interface for sabre-vobject.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -303,7 +303,7 @@ class Cli {
         $this->log($this->colorize('green', '  convert') . ' source_file [output_file] Converts a file.');
         $this->log($this->colorize('green', '  color') . ' source_file                 Colorize a file, useful for debbugging.');
         $this->log(
-<<<HELP
+        <<<HELP
 
 If source_file is set as '-', STDIN will be used.
 If output_file is omitted, STDOUT will be used.

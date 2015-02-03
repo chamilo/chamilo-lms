@@ -50,7 +50,7 @@ use Sabre\VObject\Component\VEvent;
  *
  * The recurrence iterator also does not yet support THISANDFUTURE.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -88,7 +88,6 @@ class EventIterator implements \Iterator {
         }
         $this->timeZone = $timeZone;
 
-        $rrule = null;
         if ($vcal instanceof VEvent) {
             // Single instance mode.
             $events = array($vcal);
@@ -139,17 +138,6 @@ class EventIterator implements \Iterator {
             $this->masterEvent = array_shift($this->overriddenEvents);
         }
 
-        // master event.
-        if (isset($this->masterEvent->RRULE)) {
-            $rrule = $this->masterEvent->RRULE->getParts();
-        } else {
-            // master event has no rrule. We default to something that
-            // iterates once.
-            $rrule = array(
-                'FREQ' => 'DAILY',
-                'COUNT' => 1,
-            );
-        }
         $this->startDate = $this->masterEvent->DTSTART->getDateTime($this->timeZone);
         $this->allDay = !$this->masterEvent->DTSTART->hasTime();
 

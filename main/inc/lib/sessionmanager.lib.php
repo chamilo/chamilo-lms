@@ -83,7 +83,8 @@ class SessionManager
         $start_limit = true,
         $end_limit = true,
         $fix_name = false,
-        $duration = null
+        $duration = null,
+        $showDescription = null
     ) {
         global $_configuration;
 
@@ -199,6 +200,14 @@ class SessionManager
                     }
                     $sql = "UPDATE $tbl_session
                             SET duration = '$duration'
+                            WHERE id = $session_id";
+                    Database::query($sql);
+                }
+
+                if (!is_null($showDescription)) {
+                    $showDescription = intval($showDescription);
+                    $sql = "UPDATE $tbl_session
+                            SET show_description = '$showDescription'
                             WHERE id = $session_id";
                     Database::query($sql);
                 }
@@ -1313,20 +1322,20 @@ class SessionManager
     /**
      * Edit a session
      * @author Carlos Vargas from existing code
-     * @param	integer		id
-     * @param	string 		name
-     * @param 	integer		year_start
-     * @param 	integer		month_start
-     * @param 	integer		day_start
-     * @param 	integer		year_end
-     * @param 	integer		month_end
-     * @param 	integer		day_end
-     * @param 	integer		nb_days_acess_before
-     * @param 	integer		nb_days_acess_after
-     * @param 	integer		nolimit
-     * @param 	integer		id_coach
-     * @param 	integer		id_session_category
-     * @param   int $id_visibility
+     * @param integer		id
+     * @param string 		name
+     * @param integer		year_start
+     * @param integer		month_start
+     * @param integer		day_start
+     * @param integer		year_end
+     * @param integer		month_end
+     * @param integer		day_end
+     * @param integer		nb_days_acess_before
+     * @param integer		nb_days_acess_after
+     * @param integer		nolimit
+     * @param integer		id_coach
+     * @param integer		id_session_category
+     * @param int $id_visibility
      * @param bool
      * @param bool
      * @param string $description
@@ -3637,6 +3646,7 @@ class SessionManager
      * @param bool $deleteUsersNotInList
      * @param bool $updateCourseCoaches
      * @param bool $sessionWithCoursesModifier
+     * @param int $showDescription
      * @return array
      */
     static function importCSV(
@@ -3654,7 +3664,8 @@ class SessionManager
         $updateCourseCoaches = false,
         $sessionWithCoursesModifier = false,
         $addOriginalCourseTeachersAsCourseSessionCoaches = true,
-        $removeAllTeachersFromCourse = true
+        $removeAllTeachersFromCourse = true,
+        $showDescription = null
     ) {
         $content = file($file);
 
@@ -3680,6 +3691,10 @@ class SessionManager
         if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
             $extraParameters .= ' , nb_days_access_before_beginning = '.intval($daysCoachAccessBeforeBeginning);
             $extraParameters .= ' , nb_days_access_after_end = '.intval($daysCoachAccessAfterBeginning);
+        }
+
+        if (!is_null($showDescription)) {
+            $extraParameters .= ' , show_description = '.intval($showDescription);
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -3749,10 +3764,10 @@ class SessionManager
                     continue;
                 }
 
-                $date_start             = $enreg['DateStart'];
-                $date_end               = $enreg['DateEnd'];
-                $session_category_id    = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
-                $sessionDescription     = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+                $date_start = $enreg['DateStart'];
+                $date_end = $enreg['DateEnd'];
+                $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
+                $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
 
                 $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {
@@ -3833,7 +3848,7 @@ class SessionManager
                     if ($my_session_result === false) {
 
                         // Creating a session.
-                        $sql_session = "INSERT IGNORE INTO $tbl_session SET
+                        $sql = "INSERT IGNORE INTO $tbl_session SET
                                 name = '$session_name',
                                 id_coach = '$coach_id',
                                 date_start = '$date_start',
@@ -3841,7 +3856,7 @@ class SessionManager
                                 visibility = '$visibilityAfterExpirationPerSession',
                                 session_category_id = '$session_category_id' " . $extraParameters . $extraSessionParameters;
 
-                        Database::query($sql_session);
+                        Database::query($sql);
 
                         // We get the last insert id.
                         $my_session_result = SessionManager::get_session_by_name($enreg['SessionName']);
@@ -3903,16 +3918,40 @@ class SessionManager
                             if (!empty($enreg['SessionName'])) {
                                 $params['name'] = $enreg['SessionName'];
                             }
-                            Database::update($tbl_session, $params, array('id = ?' => $sessionId));
                             $session_id = $sessionId;
                         } else {
-                            Database::update($tbl_session, $params, array("name = '?' " => $enreg['SessionName']));
-
                             $row = Database::query("SELECT id FROM $tbl_session WHERE name = '$session_name'");
                             list($session_id) = Database::fetch_array($row);
                         }
 
                         if ($session_id) {
+
+                            if ($debug) {
+                                $logger->addError("Sessions - Session to be updated #$session_id");
+                            }
+
+                            $sessionInfo = api_get_session_info($session_id);
+
+                            $params['show_description'] = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : intval($showDescription);
+
+                            if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
+                                if (empty($sessionInfo['nb_days_access_before_beginning']) ||
+                                    (!empty($sessionInfo['nb_days_access_before_beginning']) &&
+                                        $sessionInfo['nb_days_access_before_beginning'] < $daysCoachAccessBeforeBeginning)
+                                ) {
+                                    $params['nb_days_access_before_beginning'] = intval($daysCoachAccessBeforeBeginning);
+                                }
+
+                                if (empty($sessionInfo['nb_days_access_after_end']) ||
+                                    (!empty($sessionInfo['nb_days_access_after_end']) &&
+                                        $sessionInfo['nb_days_access_after_end'] < $daysCoachAccessAfterBeginning)
+                                ) {
+                                    $params['nb_days_access_after_end'] = intval($daysCoachAccessAfterBeginning);
+                                }
+                            }
+
+                            Database::update($tbl_session, $params, array('id = ?' => $session_id));
+
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
@@ -3937,6 +3976,12 @@ class SessionManager
                                 $sql = "DELETE FROM $tbl_session_course_user
                                         WHERE id_session = '$session_id' AND status <> 2";
                                 Database::query($sql);
+                            }
+                        } else {
+                            if ($debug) {
+                                $logger->addError(
+                                    "Sessions - Session not found"
+                                );
                             }
                         }
                     }
@@ -4196,6 +4241,7 @@ class SessionManager
 
                         // Adding Students, updating relationship "Session - Course - User".
                         $course_users = array_filter($course_users);
+
                         if (!empty($course_users)) {
                             foreach ($course_users as $user) {
                                 $user_id = UserManager::get_user_id_from_username($user);

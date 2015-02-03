@@ -42,18 +42,24 @@ if (isset($data) && is_array($data)) {
     $params['profile_completed'] = isset($_REQUEST['profile_completed']) ? $_REQUEST['profile_completed'] : 0;
     $params['accept'] = isset($_REQUEST['accept']) ? $_REQUEST['accept'] : false;
 }
-// Get student list in queue
-$studentList = $plugin->listAllStudentsInQueueBySession($s);
-// Get all sessions
-$sessionList = $plugin->listAllSessions();
-// Set selected to current session
-$sessionList[$s]['selected'] = 'selected="selected"';
+
 // Init template
 $tpl = new Template('TESTING');
+
+if (!empty($s)) {
+    // Get student list in queue
+    $studentList = $plugin->listAllStudentsInQueueBySession($s);
+    // Set selected to current session
+    $sessionList[$s]['selected'] = 'selected="selected"';
+    // Assign variables
+    $tpl->assign('session', $studentList['session']);
+    $tpl->assign('students', $studentList['students']);
+}
+
+// Get all sessions
+$sessionList = $plugin->listAllSessions();
 // Assign variables
-$tpl->assign('session', $studentList['session']);
 $tpl->assign('sessionItems', $sessionList);
-$tpl->assign('students', $studentList['students']);
 // Get rendered template
 $content = $tpl->fetch('/advancedsubscription/views/admin_view.tpl');
 // Assign into content

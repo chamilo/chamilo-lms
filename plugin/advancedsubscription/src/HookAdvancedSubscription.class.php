@@ -33,7 +33,7 @@ class HookAdvancedSubscription extends HookObserver implements
         } elseif ($data['type'] === HOOK_TYPE_POST) {
             if (isset($data['blocks'])) {
                 $data['blocks']['sessions']['items'][] = array(
-                    'url' => 'configure_plugin.php?name=advancedsubscription',
+                    'url' => '../../plugin/advancedsubscription/src/admin_view.php',
                     'label' => get_plugin_lang('plugin_title', 'AdvancedSubscriptionPlugin'),
                 );
             }

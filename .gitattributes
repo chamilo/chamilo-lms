@@ -12,3 +12,7 @@
 /vendor/ezyang/htmlpurifier/test-settings.sample.php export-ignore
 /vendor/twig/twig/test export-ignore
 /vendor/monolog/monolog/tests/ export-ignore
+/vendor/neutron/temporary-filesystem/tests export-ignore
+
+/vendor/sabre/vobject/tests export-ignore
+/vendor/twig/twig/test export-ignore

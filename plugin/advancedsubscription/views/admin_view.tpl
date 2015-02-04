@@ -43,10 +43,10 @@
                     <td>{{ student.lastname }} {{ student.firstname }}</td>
                     <td>{{ student.created_at }}</td>
                     <td>{{ student.validation }}</td>
-                    <td><a onclick="javascript:if(!confirm('¿Esta seguro de que desea aceptar la inscripción de {{ student.lastname }} {{ student.firstname }}?')) return false;" href="/plugin/advancedsubscription/ajax/advsub.ajax.php?action=approve&u={{ student.user_id }}&s={{ session.session_id }}"><img src="/main/img/icons/22/accept.png" alt="Aceptar" title="Aceptar">
+                    <td><a onclick="javascript:if(!confirm('¿Esta seguro de que desea aceptar la inscripción de {{ student.lastname }} {{ student.firstname }}?')) return false;" href="/plugin/advancedsubscription/ajax/advsub.ajax.php?a=approve&u={{ student.user_id }}&s={{ session.session_id }}"><img src="/main/img/icons/22/accept.png" alt="Aceptar" title="Aceptar">
                         </a>
                     </td>
-                    <td><a onclick="javascript:if(!confirm('¿Esta seguro de que desea rechazar la inscripción de {{ student.lastname }} {{ student.firstname }}?')) return false;" href="/plugin/advancedsubscription/ajax/advsub.ajax.php?action=reject&u={{ student.user_id }}&s={{ session.session_id }}"><img src="/main/img/icons/22/delete.png" alt="Rechazar" title="Rechazar">
+                    <td><a onclick="javascript:if(!confirm('¿Esta seguro de que desea rechazar la inscripción de {{ student.lastname }} {{ student.firstname }}?')) return false;" href="/plugin/advancedsubscription/ajax/advsub.ajax.php?a=reject&u={{ student.user_id }}&s={{ session.session_id }}"><img src="/main/img/icons/22/delete.png" alt="Rechazar" title="Rechazar">
                         </a>
                     </td>
                 </tr>

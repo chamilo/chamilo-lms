@@ -26,7 +26,6 @@ class IndexController extends BaseController
 {
     public function indexAction(Request $request)
     {
-
         /** @var \PageController $pageController */
         //$pageController = $this->get('page_controller');
         $pageController = new PageController();
@@ -91,9 +90,6 @@ class IndexController extends BaseController
         Request $request
     ) {
 
-        /** @var \Chamilo\CoreBundle\Entity\CourseManager $courseManager */
-        $courseManager = $this->get('chamilo_core.manager.course');
-
         /** @var \Application\Sonata\PageBundle\Entity\Site $site */
         $site = $this->get('sonata.page.site.selector')->retrieve();
         $site->getId();
@@ -108,7 +104,6 @@ class IndexController extends BaseController
             $agenda = $settingsManagerCourse->getSetting(
                 'calendar_event.enabled'
             );
-            error_log($agenda);
         }
 
         $user = $this->getUser();

@@ -2,8 +2,15 @@
 
 namespace Chamilo\CoreBundle\Twig\Extension;
 
+/**
+ * Class ChamiloExtension
+ * @package Chamilo\CoreBundle\Twig\Extension
+ */
 class ChamiloExtension extends \Twig_Extension
 {
+    /**
+     * @return array
+     */
     public function getFilters()
     {
         return array(

@@ -30,7 +30,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 /**
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user")
- * Vich\Uploadable
+ * //Vich\Uploadable
  * @UniqueEntity("username")
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
  * @ORM\AttributeOverrides({

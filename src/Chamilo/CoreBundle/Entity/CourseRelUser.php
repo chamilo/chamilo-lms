@@ -33,7 +33,8 @@ class CourseRelUser
 
     /**
      * @var integer
-     *
+     * @todo use status instead of this
+     * @deprecated
      * @ORM\Column(name="relation_type", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $relationType;
@@ -47,7 +48,7 @@ class CourseRelUser
 
     /**
      * @var string
-     *
+     * @todo this value should be renamed to description
      * @ORM\Column(name="role", type="string", length=60, precision=0, scale=0, nullable=true, unique=false)
      */
     private $role;
@@ -93,6 +94,7 @@ class CourseRelUser
     protected $course;
 
     /**
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", inversedBy="course", cascade={"persist"})
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid")
      */
@@ -379,6 +381,7 @@ class CourseRelUser
 
     /**
      * Get relation_type list
+     * @deprecated
      *
      * @return array
      */
@@ -397,8 +400,9 @@ class CourseRelUser
     public static function getStatusList()
     {
         return array(
-            COURSEMANAGER => 'Teacher',
-            STUDENT => 'Student'
+            User::COURSE_MANAGER => 'Teacher',
+            User::STUDENT => 'Student'
+            //User::DRH => 'DRH'
         );
     }
 }

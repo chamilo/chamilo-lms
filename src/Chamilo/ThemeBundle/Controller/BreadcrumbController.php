@@ -35,17 +35,16 @@ class BreadcrumbController extends Controller {
      * @return Response
      *
      */
-    public function breadcrumbAction(Request $request, $title = '') {
-
+    public function breadcrumbAction(Request $request, $title = '')
+    {
         if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_BREADCRUMB)) {
             return new Response();
         }
 
-        $active = $this->getDispatcher()->dispatch(ThemeEvents::THEME_BREADCRUMB,new SidebarMenuEvent($request))->getActive();
+        $active = $this->getDispatcher()->dispatch(ThemeEvents::THEME_BREADCRUMB, new SidebarMenuEvent($request))->getActive();
         /** @var $active MenuItemInterface */
         $list = array();
-        if($active) {
-
+        if ($active) {
             $list[] = $active;
             while(null !== ($item = $active->getActiveChild())) {
                 $list[] = $item;
@@ -54,9 +53,9 @@ class BreadcrumbController extends Controller {
         }
 
         return $this->render('ChamiloThemeBundle:Breadcrumb:breadcrumb.html.twig', array(
-                'active' => $list,
-                'title'  => $title
-            ));
+            'active' => $list,
+            'title'  => $title
+        ));
     }
 
 

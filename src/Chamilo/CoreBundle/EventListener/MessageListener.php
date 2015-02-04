@@ -6,6 +6,10 @@ namespace Chamilo\CoreBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Chamilo\ThemeBundle\Event\MessageListEvent;
 
+/**
+ * Class MessageListener
+ * @package Chamilo\CoreBundle\EventListener
+ */
 class MessageListener
 {
     protected $container;

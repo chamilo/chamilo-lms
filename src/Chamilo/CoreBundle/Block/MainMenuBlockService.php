@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Block;
 
@@ -81,5 +82,4 @@ class MainMenuBlockService extends MenuBlockService
 
         return $menu;
     }
-
 }

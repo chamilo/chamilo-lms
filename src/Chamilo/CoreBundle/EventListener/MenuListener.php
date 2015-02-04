@@ -8,6 +8,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class MenuListener
+ * @package Chamilo\CoreBundle\EventListener
+ */
 class MenuListener
 {
     protected $container;

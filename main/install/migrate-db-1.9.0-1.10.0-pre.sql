@@ -13,7 +13,9 @@
 -- This first part is for the main database
 
 -- xxMAINxx
+CREATE TABLE course_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME);
 
+CREATE TABLE session_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME);
 
 
 -- Do not move this query

@@ -1,7 +1,7 @@
 security:
     encoders:
        FOS\UserBundle\Model\UserInterface:
-           id: chamilo_core.encoder
+           id: chamilo_user.security.encoder
 
     role_hierarchy:
         ROLE_SONATA_ADMIN: ROLE_USER

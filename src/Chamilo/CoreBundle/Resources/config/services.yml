@@ -9,6 +9,7 @@ parameters:
     chamilo_core.entity.access_url: Chamilo\CoreBundle\Entity\AccessUrl
 
 services:
+    # Managers
     chamilo_core.manager.course:
         class: %chamilo_core.entity.manager.course_manager.class%
         arguments: [%chamilo_core.entity.course%, @doctrine]
@@ -21,11 +22,20 @@ services:
         class: %chamilo_core.entity.manager.access_url_manager.class%
         arguments: [%chamilo_core.entity.access_url%, @doctrine]
 
+    # Chamilo Twig extension
     twig.extension.chamilo_extension:
         class: Chamilo\CoreBundle\Twig\Extension\ChamiloExtension
         tags:
             - { name: twig.extension }
 
+    ## Security
+
+    # Chamilo custom password encoder
+    chamilo_user.security.encoder:
+        class: Chamilo\UserBundle\Security\Encoder
+        arguments: ['%password_encryption%']
+
+    # Course voter checks if a user has permissions to do actions
     chamilo_core.security.authorization.voter.course_voter:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter
         arguments: [ @doctrine.orm.entity_manager, @chamilo_core.manager.course, @service_container]
@@ -33,6 +43,7 @@ services:
         tags:
            - { name: security.voter }
 
+    # Session voter, checks if a user has permissions to do actions
     chamilo_core.security.authorization.voter.session_voter:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter
         arguments: [ @doctrine.orm.entity_manager, @chamilo_core.manager.course, @service_container]
@@ -40,6 +51,7 @@ services:
         tags:
            - { name: security.voter }
 
+    # Resource node voter, checks if a user has permissions to do actions
     chamilo_core.security.authorization.voter.resource_node_voter:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter
         public: false
@@ -47,21 +59,25 @@ services:
         tags:
             - { name: security.voter }
 
+    # User image naming
     chamilo_core.naming.user_image:
         class: Chamilo\CoreBundle\Naming\UserImage
 
+    # Form types
+
+    # Custom yes/no type, use in the platform settings
     chamilo_core.form.type.yes_no:
         class: Chamilo\CoreBundle\Form\Type\YesNoType
         tags:
             - { name: form.type, alias: yes_no }
 
-    chamilo_user_extra_field_value:
+    chamilo_user.form.type.attribute_value_type:
         class: Chamilo\UserBundle\Form\Type\AttributeValueType
         arguments: [Chamilo\CoreBundle\Entity\UserFieldValues, ["registration"], 'user']
         tags:
             - { name: form.type }
 
-    chamilo_user_extra_field_choice:
+    chamilo_user.form.type.attribute_entity_choice_type:
         class: Chamilo\UserBundle\Form\Type\AttributeEntityChoiceType
         arguments: ['user', Chamilo\CoreBundle\Entity\UserField]
         tags:
@@ -72,16 +88,19 @@ services:
         arguments: [@translator.default, @router]
 
     # Listeners
+
 #    chamilo.doctrine.entity_listener_resolver:
 #        class: Chamilo\CoreBundle\Doctrine\EntityListenerResolver
 #        arguments: [ "@service_container" ]
 
+    # Check if users are online
     chamilo_core.listener.online:
         class: Chamilo\CoreBundle\EventListener\OnlineListener
         arguments: [@security.context, @doctrine.orm.entity_manager ]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onCoreController }
 
+    # When Course entity is loaded
     chamilo_core.listener.course:
         class: Chamilo\CoreBundle\Entity\Listener\CourseListener
         arguments: [ "@chamilo_course.tool_chain" ]
@@ -89,6 +108,7 @@ services:
             - { name: doctrine.orm.entity_listener }
 #            - { name: doctrine.entity_listener } if using custom entity_listener_resolver
 
+    # Setting legacy variables
     chamilo_core.listener.legacy:
         class: Chamilo\CoreBundle\EventListener\LegacyListener
         arguments: [@service_container]
@@ -97,18 +117,21 @@ services:
           - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
           - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
+    # Setting user/system locale
     chamilo_core.listener.locale:
         class: Chamilo\CoreBundle\EventListener\LocaleListener
         arguments: ["%kernel.default_locale%"]
         tags:
             - { name: kernel.event_subscriber }
 
-    chamilo_core.listener.navbar_menu_listener:
-        class: Chamilo\CoreBundle\EventListener\MenuListener
-        arguments: [@service_container]
-        tags:
-            - { name: kernel.event_listener, event: theme.sidebar_setup_menu_knp, method: onSetupMenu }
+    # Menu
+#    chamilo_core.listener.navbar_menu_listener:
+#        class: Chamilo\CoreBundle\EventListener\MenuListener
+#        arguments: [@service_container]
+#        tags:
+#            - { name: kernel.event_listener, event: theme.sidebar_setup_menu_knp, method: onSetupMenu }
 
+    # Show the user information in the topbar
     chamilo_core.listener.navbar_user_listener:
         class: Chamilo\CoreBundle\EventListener\ShowUserListener
         arguments: [@service_container]
@@ -116,16 +139,19 @@ services:
             - { name: kernel.event_listener, event: theme.navbar_user, method: onShowUser }
             - { name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser }
 
+    # Loads the message notifications in the top bar
     chamilo_core.listener.message_listener:
         class: Chamilo\CoreBundle\EventListener\MessageListener
         arguments: [@service_container]
         tags:
             - { name: kernel.event_listener, event: theme.messages, method: onListMessages }
 
+    # When user logins
     chamilo_core.listener.login_success_handler:
         class: Chamilo\CoreBundle\EventListener\LoginSuccessHandler
         arguments:  [@router, @security.context]
 
+    # When user logouts
     chamilo_core.listener.logout_success_handler:
         class: Chamilo\CoreBundle\EventListener\LogoutSuccessHandler
         arguments:  [@router, @security.context]
@@ -150,38 +176,35 @@ services:
             - { name: sonata.block }
 
     # Menus
-    chamilo_core.menu.simple_menu:
-        class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder
-        arguments: [@service_container]
+#    chamilo_core.menu.simple_menu:
+#        class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder
+#        arguments: [@service_container]
 
     chamilo_core.menu.menu.main_menu_builder:
         class: Chamilo\CoreBundle\Menu\MainMenuBuilder
         arguments: [@knp_menu.factory, @router]
 
-    chamilo_core.menu.menu.course_menu_builder:
-        class: Chamilo\CoreBundle\Menu\CourseMenuBuilder
-        arguments: [@knp_menu.factory, @chamilo_course.entity.course, @router]
+#    chamilo_core.menu.menu.course_menu_builder:
+#        class: Chamilo\CoreBundle\Menu\CourseMenuBuilder
+#        arguments: [@knp_menu.factory, @chamilo_course.entity.course, @router]
 
     # Blocks
-    chamilo_core.block.main_menu:
-        class: Chamilo\CoreBundle\Block\MainMenuBlockService
-        arguments: ["chamilo_core.block.menu.main_menu", @templating, @knp_menu.menu_provider, @chamilo_core.menu.menu.main_menu_builder ]
-        tags:
-            - { name: sonata.block }
+
+#    chamilo_core.block.main_menu:
+#        class: Chamilo\CoreBundle\Block\MainMenuBlockService
+#        arguments: ["chamilo_core.block.menu.main_menu", @templating, @knp_menu.menu_provider, @chamilo_core.menu.menu.main_menu_builder ]
+#        tags:
+#            - { name: sonata.block }
 
     # Breadcrumb
-    chamilo_core.block.breadcrumb:
-        class: Chamilo\CoreBundle\Block\DefaultBreadcrumbBlockService
-        arguments: ["default", "chamilo_core.block.breadcrumb", @templating, @knp_menu.menu_provider, @knp_menu.factory]
-        tags:
-            - { name: sonata.block }
-            - { name: sonata.breadcrumb }
+#    chamilo_core.block.breadcrumb:
+#        class: Chamilo\CoreBundle\Block\DefaultBreadcrumbBlockService
+#        arguments: ["default", "chamilo_core.block.breadcrumb", @templating, @knp_menu.menu_provider, @knp_menu.factory]
+#        tags:
+#            - { name: sonata.block }
+#            - { name: sonata.breadcrumb }
 
-    chamilo_core.encoder:
-        class: Chamilo\UserBundle\Security\Encoder
-        arguments: ['%password_encryption%']
-
-    # Settings
+    # Platform settings
     chamilo_core.settings_schema.admin:
         class: Chamilo\CoreBundle\Settings\AdminSettingsSchema
         tags:
@@ -218,9 +241,9 @@ services:
             - { name: sylius.settings_schema, namespace: dropbox }
 
     chamilo_core.settings_schema.editor:
-            class: Chamilo\CoreBundle\Settings\EditorSettingsSchema
-            tags:
-                - { name: sylius.settings_schema, namespace: editor }
+        class: Chamilo\CoreBundle\Settings\EditorSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, namespace: editor }
 
     chamilo_core.settings_schema.exercise:
         class: Chamilo\CoreBundle\Settings\ExerciseSettingsSchema

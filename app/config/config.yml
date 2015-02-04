@@ -206,7 +206,7 @@ doctrine_migrations:
 #    encoders:
 #        FOS\UserBundle\Model\UserInterface: sha512
 #        legacy_encoder:
-#            id: chamilo_core.encoder
+#            id: chamilo_user.security.encoder
 
 sonata_admin:
     title:      Chamilo

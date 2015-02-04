@@ -49,6 +49,8 @@ if (UserManager::is_admin($user_id)) {
     $tool_name= get_lang('AssignUsersToPlatformAdministrator');
 } else if ($user_info['status'] == SESSIONADMIN) {
     $tool_name= get_lang('AssignUsersToSessionsAdministrator');
+} else if  ($user_info['status'] == STUDENT_BOSS) {
+    $tool_name= get_lang('AssignUsersToBoss');
 } else {
     $tool_name= get_lang('AssignUsersToHumanResourcesManager');
 }
@@ -384,7 +386,7 @@ if (api_is_multiple_url_enabled()) {
 			WHERE
                 $without_assigned_users
                 user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
-                status NOT IN(".DRH.", ".SESSIONADMIN.", " . STUDENT_BOSS . ") $search_user AND
+                status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user AND
                 access_url_id = ".api_get_current_access_url_id()."
                 $sqlConditions
             ORDER BY firstname";
@@ -394,7 +396,7 @@ if (api_is_multiple_url_enabled()) {
 			WHERE
 			    $without_assigned_users
 			    user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
-			    status NOT IN(".DRH.", ".SESSIONADMIN.", " . STUDENT_BOSS . ")
+			    status NOT IN(".DRH.", ".SESSIONADMIN.")
 			    $search_user
 			    $sqlConditions
             ORDER BY firstname ";

@@ -45,21 +45,54 @@ if (isset($data) && is_array($data)) {
 
 // Init template
 $tpl = new Template('TESTING');
+// Get all sessions
+$sessionList = $plugin->listAllSessions();
 
 if (!empty($s)) {
     // Get student list in queue
     $studentList = $plugin->listAllStudentsInQueueBySession($s);
     // Set selected to current session
     $sessionList[$s]['selected'] = 'selected="selected"';
+    $studentList['session']['id'] = $s;
     // Assign variables
+
+    // send mail to superior
+    $sessionArray = api_get_session_info($s);
+    $extraSession = new ExtraFieldValue('session');
+    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'as_description');
+    $sessionArray['as_description'] = $var['field_valiue'];
+    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'target');
+    $sessionArray['target'] = $var['field_valiue'];
+    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'mode');
+    $sessionArray['mode'] = $var['field_valiue'];
+    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'publication_end_date');
+    $sessionArray['publication_end_date'] = $var['field_value'];
+    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'recommended_number_of_participants');
+    $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
+    $adminsArray = UserManager::get_all_administrators();
+
+    $data = array(
+        'a' => 'confirm',
+        's' => $s,
+    );
+
+    foreach ($studentList['students'] as &$student) {
+        $data['u'] = $student['user_id'];
+        $data['queue'] = array('id' => $student['queue_id']);
+        $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED;
+        $student['dataApprove'] = $plugin->encrypt($data);
+        $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
+        $student['dataDisapprove'] = $plugin->encrypt($data);
+    }
     $tpl->assign('session', $studentList['session']);
     $tpl->assign('students', $studentList['students']);
 }
 
-// Get all sessions
-$sessionList = $plugin->listAllSessions();
 // Assign variables
 $tpl->assign('sessionItems', $sessionList);
+$tpl->assign('data', $data);
+$tpl->assign('approveAdmin', ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED);
+$tpl->assign('disapproveAdmin', ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED);
 // Get rendered template
 $content = $tpl->fetch('/advancedsubscription/views/admin_view.tpl');
 // Assign into content

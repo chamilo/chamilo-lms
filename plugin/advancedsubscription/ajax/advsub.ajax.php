@@ -22,6 +22,8 @@ if (isset($data) && is_array($data)) {
     $u = isset($data['u']) ? $data['u'] : null;
     // Session ID
     $s = isset($data['s']) ? $data['s'] : null;
+    // Adv sub action
+    $e = isset($data['e']) ? intval($data['e']) : null;
     // More data
     $params['is_connected'] = isset($data['is_connected']) ? $data['is_connected'] : false;
     $params['profile_completed'] = isset($data['profile_completed']) ? $data['profile_completed'] : 0;
@@ -30,9 +32,11 @@ if (isset($data) && is_array($data)) {
     // Action code
     $a = isset($_REQUEST['a']) ? Security::remove_XSS($_REQUEST['a']) : null;
     // User ID
-    $u = isset($_REQUEST['u']) ? Security::remove_XSS($_REQUEST['u']) : null;
+    $u = isset($_REQUEST['u']) ? intval($_REQUEST['u']) : null;
     // Session ID
-    $s = isset($_REQUEST['s']) ? Security::remove_XSS($_REQUEST['s']) : null;
+    $s = isset($_REQUEST['s']) ? intval($_REQUEST['s']) : null;
+    // Adv sub action
+    $e = isset($_REQUEST['e']) ? intval($_REQUEST['e']) : null;
     // More data
     $params['is_connected'] = isset($_REQUEST['is_connected']) ? $_REQUEST['is_connected'] : false;
     $params['profile_completed'] = isset($_REQUEST['profile_completed']) ? $_REQUEST['profile_completed'] : 0;
@@ -118,6 +122,40 @@ if (!empty($a) && !empty($u)) {
                     $result['errorMessage'] = 'User can not be subscribed';
                 }
                 $result['pass'] = false;
+            }
+            break;
+        case 'confirm':
+            if (isset($e)) {
+                $res = $plugin->updateQueueStatus($data, $e);
+                if (true || $res === true) {
+                    $sessionArray = api_get_session_info($s);
+                    $extraSession = new ExtraFieldValue('session');
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'as_description');
+                    $sessionArray['as_description'] = $var['field_valiue'];
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'target');
+                    $sessionArray['target'] = $var['field_valiue'];
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'mode');
+                    $sessionArray['mode'] = $var['field_valiue'];
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'publication_end_date');
+                    $sessionArray['publication_end_date'] = $var['field_value'];
+                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'recommended_number_of_participants');
+                    $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
+                    $studentArray = api_get_user_info($u);
+                    $superiorArray = api_get_user_info(UserManager::getStudentBoss($u));
+                    $adminsArray = UserManager::get_all_administrators();
+                    foreach ($adminsArray as &$admin) {
+                        $admin['complete_name'] = $admin['lastname'] . ', ' . $admin['firstname'];
+                    }
+                    unset($admin);
+                    $data['student'] = $studentArray;
+                    $data['superior'] = $superiorArray;
+                    $data['admins'] = $adminsArray;
+                    $data['session'] = $sessionArray;
+                    $data['signature'] = 'AQUI DEBE IR UNA FIRMA';
+                    $result['mailIds'] = $plugin->sendMail($data, $data['action']);
+                } else {
+                    $result['errorMessage'] = 'User queue can not be updated';
+                }
             }
             break;
         default:

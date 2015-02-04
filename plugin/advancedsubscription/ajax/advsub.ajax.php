@@ -63,7 +63,7 @@ if (!empty($a) && !empty($u)) {
             break;
         case 'subscribe': // Subscription
             $bossId = UserManager::getStudentBoss($u);
-            if (!empty($bossId)) {
+            if (true || !empty($bossId)) { // @TODO: If boss does not exist, then update queue status for admin aproval
                 $res = AdvancedSubscriptionPlugin::create()->startSubscription($u, $s, $params);
                 if ($res === true) {
                     // send mail to superior
@@ -90,6 +90,20 @@ if (!empty($a) && !empty($u)) {
                         'session' => $sessionArray,
                         'signature' => 'AQUI DEBE IR UNA FIRMA',
                     );
+
+
+                    $dataUrl = array(
+                        'a' => 'confirm',
+                        's' => $s,
+                        'u' => $u,
+                    );
+
+                    $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_BOSS_APPROVED;
+                    $data['acceptUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
+                        '?data=' . $plugin->encrypt($dataUrl);
+                    $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED;
+                    $data['rejectUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
+                        '?data=' . $plugin->encrypt($dataUrl);
 
                     $result['mails'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
                     $result['error'] = false;
@@ -152,7 +166,29 @@ if (!empty($a) && !empty($u)) {
                     $data['admins'] = $adminsArray;
                     $data['session'] = $sessionArray;
                     $data['signature'] = 'AQUI DEBE IR UNA FIRMA';
+                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php';
+
+                    // Admin mails approval does not have accept/reject buttons
+                    /*
+                    $dataUrl = array(
+                        'a' => 'confirm',
+                        's' => $s,
+                        'u' => $u,
+                        'queue' => array('id' => $student['queue_id']),
+                    );
+                    $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED;
+                    $data['acceptUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
+                        '?data=' . $plugin->encrypt($dataUrl);
+                    $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
+                    $data['rejectUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
+                        '?data=' . $plugin->encrypt($dataUrl);
+                    */
+
                     $result['mailIds'] = $plugin->sendMail($data, $data['action']);
+                    if (!empty($result['mailIds'])) {
+                        $result['error'] = false;
+                        $result['errorMessage'] = 'User has been processed';
+                    }
                 } else {
                     $result['errorMessage'] = 'User queue can not be updated';
                 }

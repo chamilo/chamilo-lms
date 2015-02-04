@@ -843,7 +843,6 @@ return array(
     'ImsAnswerTrueFalse' => $baseDir . '/main/exercice/export/qti/qti_classes.php',
     'ImsAssessmentItem' => $baseDir . '/main/exercice/export/qti2/qti2_export.php',
     'ImsItem' => $baseDir . '/main/exercice/export/qti2/qti2_export.php',
-    'ImsQuestion' => $baseDir . '/main/exercice/export/qti/qti_classes.php',
     'ImsSection' => $baseDir . '/main/exercice/export/qti2/qti2_export.php',
     'IndexManager' => $baseDir . '/main/inc/lib/userportal.lib.php',
     'IndexableChunk' => $baseDir . '/main/inc/lib/search/IndexableChunk.class.php',

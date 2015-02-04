@@ -62,12 +62,10 @@ switch ($action) {
         }
 
         if (!is_dir($newUrlDir)) {
-            mkdir($newUrlDir, api_get_permissions_for_new_directories());
+            mkdir($newUrlDir, api_get_permissions_for_new_directories(), true);
         }
 
-        $fullFilePath = "{$newUrlDir}{$blockId}_extra.txt";
-        
-        echo $fullFilePath;
+        $fullFilePath = "{$newUrlDir}{$blockId}_extra.html";
 
         if (file_exists($fullFilePath)) {
             unlink($fullFilePath);

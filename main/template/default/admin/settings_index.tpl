@@ -66,6 +66,10 @@ $(document).ready(function() {
                     {{ block_item.extra }}
                     </div>
                 {% endif %}
+
+                {% if block_item.extraContent %}
+                    <div>{{ block_item.extraContent }}</div>
+                {% endif %}
             </div>
         </div>
     {% endfor %}

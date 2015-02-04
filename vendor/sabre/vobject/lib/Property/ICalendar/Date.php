@@ -9,7 +9,7 @@ namespace Sabre\VObject\Property\ICalendar;
  *
  * http://tools.ietf.org/html/rfc5545#section-3.3.5
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */

@@ -34,6 +34,8 @@ class JCalTest extends \PHPUnit_Framework_TestCase {
         $event->add('REQUEST-STATUS', array("2.0", "Success"));
         $event->add('REQUEST-STATUS', array("3.7", "Invalid Calendar User", "ATTENDEE:mailto:jsmith@example.org"));
 
+        $event->add('DTEND', '20150108T133000');
+
         $expected = array(
             "vcalendar",
             array(
@@ -128,6 +130,12 @@ class JCalTest extends \PHPUnit_Framework_TestCase {
                             new \StdClass(),
                             "text",
                             array("3.7", "Invalid Calendar User", "ATTENDEE:mailto:jsmith@example.org"),
+                        ),
+                        array(
+                            'dtend',
+                            new \StdClass(),
+                            "date-time",
+                            "2015-01-08T13:30:00",
                         ),
                     ),
                     array(),

@@ -16,7 +16,7 @@ use Sabre\VObject\Recur\EventIterator;
  * VFREEBUSY components are described in RFC5545, The rules for what should
  * go in a single freebusy report is taken from RFC4791, section 7.10.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */

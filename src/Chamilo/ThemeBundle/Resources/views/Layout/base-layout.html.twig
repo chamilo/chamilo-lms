@@ -81,10 +81,12 @@
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             {% block chamilo_sidebar %}
+
                 {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
                     {{ render(controller('ChamiloThemeBundle:Sidebar:userPanel')) }}
                     {{ render(controller('ChamiloThemeBundle:Sidebar:searchForm')) }}
                 {% endif %}
+
                 {{ render(controller('ChamiloThemeBundle:Sidebar:menu', {'request':app.request})) }}
 
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -97,16 +99,16 @@
                     <form action="{{ path("fos_user_security_check") }}" method="post" role="form" class="sidebar-form">
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
                         <div class="form-group">
-                            <label for="username">{{ 'security.login.username'|trans({}, 'SonataUserBundle') }}</label>
+                            <label for="username">{{ 'form.username' | trans({}, 'FOSUserBundle') }}</label>
                             <input type="text" class="form-control" id="username" name="_username" >
                         </div>
                         <div class="form-group">
-                            <label for="password">{{ 'security.login.password'|trans({}, 'SonataUserBundle') }}</label>
+                            <label for="password">{{ 'form.password' | trans({}, 'FOSUserBundle') }}</label>
                             <input type="password" class="form-control" id="password" name="_password">
                         </div>
                         <button type="submit" class="btn btn-default">Submit</button>
                     </form>
-                    {{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:loginMenu', {'automenu': 'pills', 'stacked':true}) }}
+                    {{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:notLoginMenu', {'automenu': 'pills', 'stacked':true}) }}
                 {% endif %}
                 {#{{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:helpMenu', {'automenu': 'pills', 'stacked':true}) }}#}
             {% endblock %}

@@ -7,7 +7,7 @@ use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
- * Class Builder
+ * Class SimpleMenuBuilder
  *
  * @package Sonata\Bundle\DemoBundle\Menu
  *
@@ -15,12 +15,18 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  */
 class SimpleMenuBuilder extends ContainerAware
 {
-    public function loginMenu(FactoryInterface $factory, array $options)
+    /**
+     * Register/reset password menu
+     * @param FactoryInterface $factory
+     * @param array $options
+     * @return \Knp\Menu\ItemInterface
+     */
+    public function notLoginMenu(FactoryInterface $factory, array $options)
     {
         $menu = $factory->createItem('main');
-
+        $translator = $this->container->get('translator.default');
         $menu->addChild(
-            'Register',
+            $translator->trans('registration.submit', array(), 'FOSUserBundle'),
             array(
                 'route' => 'sonata_user_registration_register',
                 array("attributes" => array("id" => 'nav'))
@@ -28,7 +34,7 @@ class SimpleMenuBuilder extends ContainerAware
         );
 
         $menu->addChild(
-            'Reset Password',
+            $translator->trans('resetting.request.submit', array(), 'FOSUserBundle'),
             array(
                 'route' => 'fos_user_resetting_request',
                 array("attributes" => array("id" => 'nav'))
@@ -38,7 +44,7 @@ class SimpleMenuBuilder extends ContainerAware
         return $menu;
     }
 
-    public function helpMenu(FactoryInterface $factory, array $options)
+    /*public function helpMenu(FactoryInterface $factory, array $options)
     {
         $menu = $factory->createItem('main');
         $menu->addChild(
@@ -50,7 +56,7 @@ class SimpleMenuBuilder extends ContainerAware
         );
 
         return $menu;
-    }
+    }*/
 
     /**
      * Creates the header menu

@@ -49,7 +49,7 @@ class UserType extends AbstractType
             ))
             ->add('extraFields', 'collection', array(
                 'required'     => false,
-                'type'         => 'chamilo_user_extra_field_value',
+                'type'         => 'chamilo_user.form.type.attribute_value_type',
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false

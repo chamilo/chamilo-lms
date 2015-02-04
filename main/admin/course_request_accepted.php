@@ -92,8 +92,9 @@ function get_number_of_requests() {
 /**
  * Get course data to display
  */
-function get_request_data($from, $number_of_items, $column, $direction) {
-    $keyword = Database::escape_string(trim($_GET['keyword']));
+function get_request_data($from, $number_of_items, $column, $direction)
+{
+    $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : null;
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
     $sql = "SELECT id AS col0,

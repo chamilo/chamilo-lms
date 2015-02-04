@@ -5,7 +5,6 @@
  */
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'nusoap/nusoap.php';
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
 require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
@@ -1600,7 +1599,7 @@ function WSEditUserWithPicture($params) {
     // Get user id from id wiener
 
     $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
-    
+
     // Get picture and generate uri.
     $filename = basename($picture_url);
     $tempdir = sys_get_temp_dir();
@@ -5462,10 +5461,10 @@ function WSListSessions($params) {
     $sql_params = array();
     // Dates should be provided in YYYY-MM-DD format, UTC
     if (!empty($params['date_start'])) {
-        $sql_params['s.date_start >='] = $params['date_start'];
+        $sql_params['s.date_start'] = array('operator' => '>=', 'value' => $params['date_start']);
     }
     if (!empty($params['date_end'])) {
-        $sql_params['s.date_end <='] = $params['date_end'];
+        $sql_params['s.date_end'] = array('operator' => '<=', 'value' => $params['date_end']);
     }
     $sessions_list = SessionManager::get_sessions_list($sql_params);
     $return_list = array();
@@ -5478,6 +5477,7 @@ function WSListSessions($params) {
             'date_end' => $session['date_end'],
         );
     }
+
     return $return_list;
 }
 

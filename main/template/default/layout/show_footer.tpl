@@ -25,4 +25,4 @@
 
 {% endif %}
 
-{% include "default/layout/main_footer.tpl" %}
+{% include template ~ "/layout/main_footer.tpl" %}

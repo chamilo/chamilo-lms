@@ -20,7 +20,7 @@ $tool_name = get_lang('BookIt');
 Display :: display_header($tool_name);
 api_display_tool_title($tool_name);
 
-$reservationid = Database::escape_string($_GET['rid']);
+$reservationid = intval($_GET['rid']);
 $reservation = Rsys :: get_reservation($reservationid);
 $item = Rsys :: get_item($reservation[0][2]);
 if ($reservation[0][9] < $reservation[0][4]) {

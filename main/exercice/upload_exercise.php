@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * 	Upload quiz: This script shows the upload quiz feature
  *  Initial work by Isaac flores on Nov 4 of 2010
@@ -327,15 +328,15 @@ function lp_upload_quiz_action_handling() {
                     $globalScore = null;
                     $objAnswer = new Answer($question_id, $courseId);
                     $globalScore = $score_list[$i][3];
-                    
-                    // Calculate the number of correct answers to divide the 
+
+                    // Calculate the number of correct answers to divide the
                     // score between them when importing from CSV
                     $numberRightAnswers = 0;
                     foreach ($answers_data as $answer_data) {
                         if (strtolower($answer_data[3]) == 'x') {
                             $numberRightAnswers++;
                         }
-                    }                    
+                    }
                     foreach ($answers_data as $answer_data) {
                         $answerValue = $answer_data[2];
                         $correct = 0;

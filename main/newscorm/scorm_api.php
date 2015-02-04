@@ -1589,7 +1589,7 @@ function switch_item(current_item, next_item){
     }
 
     var mysrc = 'lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
-                '&item_id=' + next_item + '&cidReq=' + olms.lms_course_code;
+                '&item_id=' + next_item + '&cidReq=' + olms.lms_course_code + '&id_session=' + olms.lms_session_id;
     var cont_f = $("#content_id");
 
     <?php if ($oLP->mode == 'fullscreen') { ?>

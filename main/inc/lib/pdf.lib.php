@@ -42,10 +42,10 @@ class PDF
         //$this->pdf = $pdf = new mPDF('UTF-8', $pageFormat, '', '', 30, 20, 27, 25, 16, 13, $orientation);
         //left, right, top, bottom, margin_header, margin footer
 
-        $params['left']     = isset($params['left'])    ? $params['left']   : 15;
-        $params['right']    = isset($params['right'])   ? $params['right']  : 15;
-        $params['top']      = isset($params['top'])     ? $params['top']    : 20;
-        $params['bottom']   = isset($params['bottom'])  ? $params['bottom'] : 15;
+        $params['left'] = isset($params['left']) ? $params['left'] : 15;
+        $params['right'] = isset($params['right']) ? $params['right'] : 15;
+        $params['top'] = isset($params['top']) ? $params['top'] : 20;
+        $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 15;
 
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : get_lang('Untitled');
@@ -53,6 +53,7 @@ class PDF
         $this->params['session_info'] = isset($params['session_info']) ? $params['session_info'] : api_get_session_info(api_get_session_id());
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
         $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;
+        $this->params['show_real_course_teachers'] = isset($params['show_real_course_teachers']) ? $params['show_real_course_teachers'] : false;
 
         $this->pdf = new mPDF(
             'UTF-8',
@@ -111,10 +112,27 @@ class PDF
         Display::$global_template->assign('organization', $organization);
 
         //Showing only the current teacher/admin instead the all teacher list name see BT#4080
-        //$teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
 
-        $user_info = api_get_user_info();
-        $teacher_list = $user_info['complete_name'];
+        if (isset($this->params['show_real_course_teachers']) &&
+            $this->params['show_real_course_teachers']
+        ) {
+            if (isset($this->params['session_info']) &&
+                !empty($this->params['session_info'])
+            ) {
+                $teacher_list = SessionManager::getCoachesByCourseSessionToString(
+                    $this->params['session_info']['id'],
+                    $this->params['course_code']
+
+                );
+            } else {
+                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string(
+                    $this->params['course_code']
+                );
+            }
+        } else {
+            $user_info = api_get_user_info();
+            $teacher_list = $user_info['complete_name'];
+        }
 
         Display::$global_template->assign('pdf_course', $this->params['course_code']);
         Display::$global_template->assign('pdf_course_info', $this->params['course_info']);
@@ -334,7 +352,8 @@ class PDF
      * @param   string  $document_html valid html
      * @param   string  $css CSS content of a CSS file
      * @param   string  $pdf_name pdf name
-     * @param   string  $course_code course code (if you are using html that are located in the document tool you must provide this)
+     * @param   string  $course_code course code
+     * (if you are using html that are located in the document tool you must provide this)
      * @return  string  Web path
      */
     public function content_to_pdf(
@@ -592,13 +611,15 @@ class PDF
     public function set_header($course_data)
     {
         $this->pdf->defaultheaderfontsize   = 10;   // in pts
-        $this->pdf->defaultheaderfontstyle  = BI;   // blank, B, I, or BI
+        $this->pdf->defaultheaderfontstyle  = 'BI';   // blank, B, I, or BI
         $this->pdf->defaultheaderline       = 1;    // 1 to include line below header/above footer
 
         if (!empty($course_data['code'])) {
             $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
+
             $teachers = '';
             if (!empty($teacher_list)) {
+
                 foreach ($teacher_list as $teacher) {
                     $teachers[]= $teacher['firstname'].' '.$teacher['lastname'];
                 }
@@ -690,8 +711,8 @@ class PDF
     /**
      * Pre-formats a PDF to the right size and, if not stated otherwise, with
      * header, footer and watermark (if any)
-     * @param array General course information (to fill headers)
-     * @param bool Whether we want headers, footers and watermark or not
+     * @param array $course_data General course information (to fill headers)
+     * @param bool $complete Whether we want headers, footers and watermark or not
      */
     public function format_pdf($course_data, $complete = true)
     {

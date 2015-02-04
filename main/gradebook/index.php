@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Gradebook controller
  * @package chamilo.gradebook
@@ -9,7 +10,7 @@ $language_file = array('gradebook', 'exercice');
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
-$cidReset= false;
+//$cidReset = false;
 $_in_course = true;
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
@@ -126,7 +127,9 @@ if (isset($_GET['isStudentView'])) {
     }
 }
 
-if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')) {
+if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) &&
+    (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')
+) {
     Display :: display_header();
     //Introduction tool: student view
     Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
@@ -612,11 +615,11 @@ if (isset ($move_form)){
 
 // LOAD DATA & DISPLAY TABLE
 
-$is_platform_admin  = api_is_platform_admin();
-$is_course_admin    = api_is_allowed_to_edit(null, true);
+$is_platform_admin = api_is_platform_admin();
+$is_course_admin = api_is_allowed_to_edit(null, true);
 
 //load data for category, evaluation and links
-if (empty ($_GET['selectcat'])) {
+if (empty($_GET['selectcat'])) {
     $category= 0;
 } else {
     $category= $_GET['selectcat'];
@@ -702,7 +705,7 @@ if (isset($_GET['studentoverview'])) {
         }
         unset($cats);
     }
-    $cats = Category :: load ($category, null, null, null, null, null, false);
+    $cats = Category::load($category, null, null, null, null, null, false);
 
     //with this fix the teacher only can view 1 gradebook
     if (api_is_platform_admin()) {
@@ -735,6 +738,7 @@ $no_qualification = false;
 
 // Show certificate link.
 $certificate = array();
+
 if ($category != '0') {
     $cat = new Category();
     $category_id   = intval($_GET['selectcat']);
@@ -834,7 +838,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 
                             $gradebook->save($params);
                         }
-                        //Reloading cats
+                        // Reloading cats
                         $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
                     } else {
                         $form_grade->display();
@@ -856,6 +860,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             } else {
                 // This is the father
                 // Create gradebook/add gradebook links.
+
                 DisplayGradebook::display_header_gradebook(
                     $cat,
                     0,

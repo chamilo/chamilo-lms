@@ -8,23 +8,36 @@
  * @package chamilo.attendance
  */
 
-// protect a course script
+// Protect a course script
 api_protect_course_script(true);
 
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
+    api_get_user_id(),
+    api_get_course_info()
+);
+
 if (api_is_allowed_to_edit(null, true) ||
-    api_is_coach(api_get_session_id(), api_get_course_id())
+    api_is_coach(api_get_session_id(), api_get_course_id()) ||
+    $isDrhOfCourse
 ) {
     $param_gradebook = '';
     if (isset($_SESSION['gradebook'])) {
         $param_gradebook = '&gradebook='.$_SESSION['gradebook'];
     }
 
-    $form = new FormValidator('filter', 'post', 'index.php?action=attendance_sheet_list&'.api_get_cidreq().$param_gradebook.'&attendance_id='.$attendance_id, null, array('class' => 'form-search pull-left'));
+    $form = new FormValidator(
+        'filter',
+        'post',
+        'index.php?action=attendance_sheet_list&' . api_get_cidreq() . $param_gradebook . '&attendance_id=' . $attendance_id,
+        null,
+        array('class' => 'form-search pull-left')
+    );
+
     $values = array(
-        'all'           => get_lang('All'),
-        'today'         => get_lang('Today'),
-        'all_done'      => get_lang('AllDone'),
-        'all_not_done'  => get_lang('AllNotDone')
+        'all' => get_lang('All'),
+        'today' => get_lang('Today'),
+        'all_done' => get_lang('AllDone'),
+        'all_not_done' => get_lang('AllNotDone')
     );
     $today = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
     $exists_attendance_today = false;

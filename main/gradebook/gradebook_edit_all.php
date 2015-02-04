@@ -57,7 +57,6 @@ $course_id			  =	get_course_id_by_link_id($my_selectcat);
 
 $table_link           = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation     = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-
 $tbl_forum_thread     = Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_work             = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $tbl_attendance       = Database :: get_course_table(TABLE_ATTENDANCE);
@@ -77,7 +76,7 @@ if ($submitted==1) {
         require_once 'lib/be/evaluation.class.php';
         $eval_log = new Evaluation();
     }
-    if(isset($_POST['link'])){
+    if (isset($_POST['link'])) {
         require_once 'lib/be/abstractlink.class.php';
         //$eval_link_log = new AbstractLink();
     }
@@ -170,7 +169,7 @@ if ($my_api_cidreq=='') {
 }
 ?>
     <div class="actions">
-        <a href="<?php echo Security::remove_XSS($_SESSION['gradebook_dest']).'?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $my_selectcat ?>">
+        <a href="<?php echo Security::remove_XSS($_SESSION['gradebook_dest']).'?'.$my_api_cidreq ?>&selectcat=<?php echo $my_selectcat ?>">
             <?php echo Display::return_icon('back.png',get_lang('FolderView'),'',ICON_SIZE_MEDIUM); ?>
         </a>
     </div>
@@ -178,7 +177,7 @@ if ($my_api_cidreq=='') {
 $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $masked_total);
 Display::display_normal_message($warning_message, false);
 ?>
-    <form method="post" action="gradebook_edit_all.php?id_session=<?php echo $_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $my_selectcat?>">
+    <form method="post" action="gradebook_edit_all.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $my_selectcat?>">
         <table class="data_table">
             <tr class="row_odd">
                 <th style="width: 35px;"><?php echo get_lang('Type'); ?></th>
@@ -189,7 +188,9 @@ Display::display_normal_message($warning_message, false);
         </table>
         <input type="hidden" name="submitted" value="1" />
         <br />
-        <button class="save" type="submit" name="name" value="<?php echo get_lang('Save') ?>"><?php echo get_lang('SaveScoringRules') ?></button>
+        <button class="save" type="submit" name="name" value="<?php echo get_lang('Save') ?>">
+            <?php echo get_lang('SaveScoringRules') ?>
+        </button>
     </form>
 <?php
 Display :: display_footer();

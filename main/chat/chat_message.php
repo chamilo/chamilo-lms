@@ -77,13 +77,19 @@ if ($sent) {
         <div class="tabbable">
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#tab1" data-toggle="tab"><?php echo get_lang('Write'); ?></a>
+                    <a href="#tab1" data-toggle="tab">
+                        <?php echo get_lang('Write'); ?>
+                    </a>
                 </li>
                 <li>
-                    <a href="#tab2" id="preview" data-toggle="tab"><?php echo get_lang('Preview'); ?></a>
+                    <a href="#tab2" id="preview" data-toggle="tab">
+                        <?php echo get_lang('Preview'); ?>
+                    </a>
                 </li>
                 <li>
-                    <a href="#tab3" id="emojis" data-toggle="tab"><?php echo get_lang('Emojis'); ?></a>
+                    <a href="#tab3" id="emojis" data-toggle="tab">
+                        <?php echo Emojione\Emojione::toImage(':smile:'); ?>
+                    </a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -92,8 +98,7 @@ if ($sent) {
                         <tr>
                             <td width="320" valign="middle">
                                 <?php
-                                $talkboxsize=(api_get_course_setting('allow_open_chat_window')) ? 'width: 350px; height: 80px' : 'width: 450px; height: 35px';
-                                //onkeydown="send_message(event);"
+                                $talkboxsize = (api_get_course_setting('allow_open_chat_window')) ? 'width: 350px; height: 80px' : 'width: 450px; height: 35px';
                                 ?>
                                 <textarea id="message" class="message-text" name="message" style=" <?php echo $talkboxsize; ?>"></textarea>
                             </td>

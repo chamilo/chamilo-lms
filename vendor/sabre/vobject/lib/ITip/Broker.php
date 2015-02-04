@@ -31,7 +31,7 @@ use Sabre\VObject\Recur\EventIterator;
  * 6. It can process a reply from an invite and update an events attendee
  *     status based on a reply.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -341,7 +341,7 @@ class Broker {
             return null;
         }
         $instances = array();
-        $requestStatus = '2.0;Success';
+        $requestStatus = '2.0';
 
         // Finding all the instances the attendee replied to.
         foreach($itipMessage->message->VEVENT as $vevent) {
@@ -350,6 +350,7 @@ class Broker {
             $instances[$recurId] = $attendee['PARTSTAT']->getValue();
             if (isset($vevent->{'REQUEST-STATUS'})) {
                 $requestStatus = $vevent->{'REQUEST-STATUS'}->getValue();
+                list($requestStatus) = explode(';', $requestStatus);
             }
         }
 
@@ -736,6 +737,10 @@ class Broker {
                     $event->add('SUMMARY', $summary);
                 }
             } else {
+                // This branch of the code is reached, when a reply is
+                // generated for an instance of a recurring event, through the
+                // fact that the instance has disappeared by showing up in
+                // EXDATE
                 $dt = DateTimeParser::parse($instance['id'], $eventInfo['timezone']);
                 // Treat is as a DATE field
                 if (strlen($instance['id']) <= 8) {

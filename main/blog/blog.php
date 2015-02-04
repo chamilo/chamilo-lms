@@ -136,7 +136,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
 	}
 
 	if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment') {
-		Blog :: delete_assigned_task($blog_id, Database::escape_string((int)$_GET['task_id']), Database::escape_string((int)$_GET['user_id']));
+		Blog :: delete_assigned_task($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
 		$return_message = array('type' => 'confirmation', 'message' => get_lang('TaskAssignmentDeleted'));
 	}
 
@@ -363,7 +363,7 @@ switch ($current_page) {
 		}
 		break;
 	case 'view_post' :
-		Blog :: display_post($blog_id, Database::escape_string((int)$_GET['post_id']));
+		Blog :: display_post($blog_id, intval($_GET['post_id']));
 		break;
 	case 'edit_post' :
 		$task_id = (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) ? $_GET['task_id'] : 0;
@@ -377,7 +377,7 @@ switch ($current_page) {
 				if ($_POST) {
 					Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'));
 				}
-                Blog :: display_form_edit_post($blog_id, Database::escape_string((int)$_GET['post_id']));
+                Blog :: display_form_edit_post($blog_id, intval($_GET['post_id']));
 			} else {
 				if (isset ($_GET['filter']) && !empty ($_GET['filter'])) {
 					Blog :: display_day_results($blog_id, Database::escape_string($_GET['filter']));
@@ -415,11 +415,11 @@ switch ($current_page) {
 			}
 			if (isset($_GET['do']) && $_GET['do'] == 'edit')
 			{
-				Blog :: display_edit_task_form($blog_id, Database::escape_string($_GET['task_id']));
+				Blog :: display_edit_task_form($blog_id, intval($_GET['task_id']));
 			}
 			if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment')
 			{
-				Blog :: display_edit_assigned_task_form($blog_id, Database::escape_string((int)$_GET['task_id']), Database::escape_string((int)$_GET['user_id']));
+				Blog :: display_edit_assigned_task_form($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
 			}
 			Blog :: display_task_list($blog_id);
 			echo '<br /><br />';
@@ -432,9 +432,9 @@ switch ($current_page) {
 		break;
 	case 'execute_task' :
 		if (isset ($_GET['post_id']))
-			Blog :: display_post($blog_id, Database::escape_string((int)$_GET['post_id']));
+			Blog :: display_post($blog_id, intval($_GET['post_id']));
 		else
-			Blog :: display_select_task_post($blog_id, Database::escape_string((int)$_GET['task_id']));
+			Blog :: display_select_task_post($blog_id, intval($_GET['task_id']));
 
 		break;
 	case 'view_search_result' :

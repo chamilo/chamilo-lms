@@ -214,8 +214,11 @@ $CreateFolder = "Ordner erstellen";
 $HelpDefaultDirDocuments = "Dieses Verzeichnis beinhaltet das Standard-Archiv. Hier können Dateien gelöscht oder hinzugefügt werden. Wenn eine Datei aber als versteckt gekennzeichnet ist und in einen Kurs eingefügt wird, sehen die Kursteilnehmer dieses Objekt nicht. Verzeichnisse können unabhängig davon aber unsichtbar geschalten werden.";
 $HelpSharedFolder = "Dieses Verzeichnis beinhaltet die Dateien, welche alle Kursteilnehmer über den Editor in den Kurs einbringen. Üblicherweise sind diese für jeden Kursleiter sichtbar, nicht jedoch für andere Kursteilnehmer. Wenn dieser Ordner sichtbar gemacht wird, hat jeder Kursteilnehmer Zugriff.";
 $TemplateImage = "Icon der Vorlage";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Um die Datei abzuspielen wird ein neuer Browser oder das Flash-Plugin benötigt.";
+$UpdateRequire = "Aktualisierung benötigt";
 $MoveElement = "Element verschieben";
 $CertificateName = "Bezeichnung";
+$HelpFolderLearningPaths = "NUR FÜR LEHRER SICHTBAR:\nDieser Ordner enthält Dokumente, die durch das Lernpfad-Werkzeug oder den Powerpoint-Importer erstellt werden. Die Dateien können wahlweise auch manuell bearbeitet werden. Es ist aber empfohlen, diesen Ordner nicht frei zugänglich zu machen.";
 $CopyToMyFiles = "In mein persönliches Dateiverzeichnis kopieren";
 $Export2PDF = "in PDF exportieren";
 $ResourceShared = "Geteilte Ressource";
@@ -262,4 +265,5 @@ $DocMv = "Dokument verschoben";
 $NoSVGImagesInImagesGalleryPath = "Es gibt keine SVG Bilder in Ihrem Bildergalerie Verzeichnis";
 $NoSVGImages = "Kein SVG Bild";
 $WamiNeedFilename = "Bevor Sie die Aufnahme starten ist ein Dateiname erforderlich.";
+$SelectAnAudioFileFromDocuments = "Bitte eine Audio-Datei auswählen";
 ?>

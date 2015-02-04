@@ -8,17 +8,21 @@ use \ChamiloSession as Session;
  */
 class IndexManager
 {
-    //An instance of the template engine
-    public $tpl     = false;
-    public $name     = '';
-    public $home            = '';
-    public $default_home     = 'home/';
+    // An instance of the template engine
+    public $tpl = false;
+    public $name = '';
+    public $home = '';
+    public $default_home = 'home/';
 
+    /**
+     * Construct
+     * @param string $title
+     */
     public function __construct($title)
     {
         $this->tpl = new Template($title);
-        $this->home     = api_get_home_path();
-        $this->user_id  = api_get_user_id();
+        $this->home = api_get_home_path();
+        $this->user_id = api_get_user_id();
         $this->load_directories_preview = false;
 
         if (api_get_setting('show_documents_preview') == 'true') {
@@ -39,9 +43,7 @@ class IndexManager
 
             // Only display if the user isn't logged in.
             $this->tpl->assign('login_language_form', api_display_language_form(true));
-
             if ($setLoginForm) {
-
                 $this->tpl->assign('login_form',  self::display_login_form());
 
                 if ($loginFailed) {
@@ -213,11 +215,15 @@ class IndexManager
         if (!empty($html)) {
             $html = self::show_right_block(get_lang('Courses'), $html, 'teacher_block');
         }
+
         return $html;
     }
 
-    /* Includes a created page */
-    function return_home_page()
+    /**
+     * Includes a created page
+     * @return string
+     */
+    public function return_home_page()
     {
         $userId = api_get_user_id();
         global $_configuration;
@@ -229,7 +235,9 @@ class IndexManager
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             // Hiding home top when user not connected.
-            if (isset($_configuration['hide_home_top_when_connected']) && $_configuration['hide_home_top_when_connected'] && !empty($userId)) {
+            if (isset($_configuration['hide_home_top_when_connected']) &&
+                $_configuration['hide_home_top_when_connected'] && !empty($userId)
+            ) {
                 return $html;
             }
 
@@ -241,20 +249,22 @@ class IndexManager
                 $user_selected_language = api_get_setting('platformLanguage');
             }
 
-			if (!file_exists($this->home.'home_news_'.$user_selected_language.'.html')) {
-				if (file_exists($this->home.'home_top.html')) {
-					$home_top_temp = file($this->home.'home_top.html');
-				} else {
-					$home_top_temp = file($this->default_home.'home_top.html');
-				}
-				$home_top_temp = implode('', $home_top_temp);
-			} else {
-				if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
-					$home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
-				} else {
-					$home_top_temp = file_get_contents($this->home.'home_top.html');
-				}
-			}
+            // Try language specific home
+            if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
+                $home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
+            }
+
+            // Try default language home
+            if (empty($home_top_temp)) {
+                if (file_exists($this->home.'home_top.html')) {
+                    $home_top_temp = file_get_contents($this->home.'home_top.html');
+                } else {
+                    if (file_exists($this->default_home.'home_top.html')) {
+                        $home_top_temp = file_get_contents($this->default_home . 'home_top.html');
+                    }
+                }
+            }
+
 			if (trim($home_top_temp) == '' && api_is_platform_admin()) {
 				$home_top_temp = '<div class="welcome-mascot">' . get_lang('PortalHomepageDefaultIntroduction') . '</div>';
 			} else {
@@ -263,6 +273,7 @@ class IndexManager
 			$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
 			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 		}
+
 		return $html;
 	}
 
@@ -1023,7 +1034,6 @@ class IndexManager
                 if ($session_category_id == 0 &&
                     isset($session_category['sessions'])
                 ) {
-
                     // Independent sessions
                     foreach ($session_category['sessions'] as $session) {
                         $session_id = $session['session_id'];
@@ -1037,7 +1047,7 @@ class IndexManager
                         $date_session_start = $session['date_start'];
                         $date_session_end = $session['date_end'];
                         $days_access_before_beginning  = $session['nb_days_access_before_beginning'];
-                        $days_access_after_end  = $session['nb_days_access_after_end'];
+                        $days_access_after_end = $session['nb_days_access_after_end'];
 
                         $session_now = time();
                         $count_courses_session = 0;
@@ -1065,9 +1075,11 @@ class IndexManager
                                         }
                                     }
                                 }
-
                             }
-                            if ($session_now > $allowed_time && $days_access_after_end > $dif_time_after - 1) {
+
+                            if ($session_now > $allowed_time &&
+                                $days_access_after_end > $dif_time_after - 1
+                            ) {
                                 // Read only and accessible.
                                 $atLeastOneCourseIsVisible = true;
 
@@ -1079,7 +1091,7 @@ class IndexManager
                                         true,
                                         $this->load_directories_preview
                                     );
-                                    $html_courses_session .= $c[1];
+                                    $html_courses_session .= isset($c[1]) ? $c[1] : null;
                                 }
                                 $count_courses_session++;
                             }
@@ -1095,7 +1107,12 @@ class IndexManager
                         if ($count_courses_session > 0) {
                             $params = array();
                             $session_box = Display::get_session_title_box($session_id);
-                            $params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
+                            $params['icon'] = Display::return_icon(
+                                'window_list.png',
+                                $session_box['title'],
+                                array('id' => 'session_img_' . $session_id),
+                                ICON_SIZE_LARGE
+                            );
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
                             $extra_info .= isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
@@ -1104,7 +1121,15 @@ class IndexManager
                                 $session_link = $session_box['title'];
                                 $params['link'] = null;
                             } else {
-                                $session_link = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
+                                $session_link = Display::tag(
+                                    'a',
+                                    $session_box['title'],
+                                    array(
+                                        'href' => api_get_path(
+                                                WEB_CODE_PATH
+                                            ) . 'session/index.php?session_id=' . $session_id
+                                    )
+                                );
                                 $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                             }
 
@@ -1121,15 +1146,20 @@ class IndexManager
                                 // $params['extra'] .=  $html_courses_session;
                             }
 
-                            $params['description'] =  isset($session_box['description']) ? $session_box['description'] : null;
+                            $params['description'] = isset($session_box['description']) ? $session_box['description'] : null;
 
                             $parentInfo = CourseManager::course_item_html($params, true);
 
-                            if (isset($_configuration['show_simple_session_info']) && $_configuration['show_simple_session_info']) {
+                            if (isset($_configuration['show_simple_session_info']) &&
+                                $_configuration['show_simple_session_info']
+                            ) {
                                 $params['title'] = $session_box['title'];
                                 $parentInfo = CourseManager::course_item_html_no_icon($params);
                             }
-                            $sessions_with_no_category .= CourseManager::course_item_parent($parentInfo, $html_courses_session);
+                            $sessions_with_no_category .= CourseManager::course_item_parent(
+                                $parentInfo,
+                                $html_courses_session
+                            );
                         }
                     }
                 } else {
@@ -1166,13 +1196,17 @@ class IndexManager
                                     if ($date_session_start != '0000-00-00') {
                                         $allowed_time = api_strtotime($date_session_start . ' 00:00:00') - ($days_access_before_beginning * 86400);
                                     }
-                                    if ($date_session_end != '0000-00-00') {
-                                        $endSessionToTms = api_strtotime($date_session_end . ' 23:59:59');
-                                        if ($session_now > $endSessionToTms) {
-                                            $dif_time_after = $session_now - $endSessionToTms;
-                                            $dif_time_after = round(
-                                                $dif_time_after / 86400
+                                    if (!isset($_GET['history'])) {
+                                        if ($date_session_end != '0000-00-00') {
+                                            $endSessionToTms = api_strtotime(
+                                                $date_session_end . ' 23:59:59'
                                             );
+                                            if ($session_now > $endSessionToTms) {
+                                                $dif_time_after = $session_now - $endSessionToTms;
+                                                $dif_time_after = round(
+                                                    $dif_time_after / 86400
+                                                );
+                                            }
                                         }
                                     }
                                 } else {
@@ -1181,7 +1215,9 @@ class IndexManager
                                     );
                                 }
 
-                                if ($session_now > $allowed_time && $days_access_after_end > $dif_time_after - 1) {
+                                if ($session_now > $allowed_time &&
+                                    $days_access_after_end > $dif_time_after - 1
+                                ) {
                                     if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                         $c = CourseManager:: get_logged_user_course_html(
                                             $course,

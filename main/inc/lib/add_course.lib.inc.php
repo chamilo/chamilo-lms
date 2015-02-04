@@ -2015,6 +2015,9 @@ function create_course_tables($course_db_name = null) {
 
     Database::query($sql);
 
+    // New course tables for 1.10.x come here
+
+
     return 0;
 }
 

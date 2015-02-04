@@ -1,6 +1,37 @@
 ChangeLog
 =========
 
+3.3.5 (2015-01-09)
+------------------
+
+* #168: Expanding calendars now removes objects with recurrence rules that
+  don't have a valid recurrence instance.
+* #177: SCHEDULE-STATUS should not contain a reason phrase, only a status
+  code.
+* #175: Parser can now read and skip the UTF-8 BOM.
+* #179: Added `isFloating` to `DATE-TIME` properties.
+* #179: Fixed jCal serialization of floating `DATE-TIME` properties.
+* #173: vCard converter failed for `X-ABDATE` properties that had no
+  `X-ABLABEL`.
+
+
+3.3.4 (2014-11-19)
+------------------
+
+* #154: Converting `ANNIVERSARY` to `X-ANNIVERSARY` and `X-ABDATE` and
+  vice-versa when converting to/from vCard 4.
+* #154: It's now possible to easily select all vCard properties belonging to
+  a single group with `$vcard->{'ITEM1.'}` syntax. (@armin-hackmann)
+* #156: Simpler way to check if a string is UTF-8. (@Hywan)
+* Unittest improvements.
+* #159: The recurrence iterator, freebusy generator and iCalendar DATE and
+  DATE-TIME properties can now all accept a reference timezone when working
+  floating times or all-day events.
+* #159: Master events will no longer get a `RECURRENCE-ID` when expanding.
+* #159: `RECURRENCE-ID` for all-day events will now be correct when expanding.
+* #163: Added a `getTimeZone()` method to `VTIMEZONE` components.
+
+
 3.3.3 (2014-10-09)
 ------------------
 
@@ -15,6 +46,7 @@ ChangeLog
   for a PHP bug.
 * Support for "Line Islands Standard Time" windows timezone.
 * #154: Correctly work around vCard parameters that have a value but no name.
+
 
 3.3.2 (2014-09-19)
 ------------------
@@ -36,6 +68,7 @@ ChangeLog
 * #127: Attendees who delete recurring event instances events they had already
   declined earlier will no longer generate another reply.
 * #125: Send CANCEL messages when ORGANIZER property gets deleted.
+
 
 3.3.1 (2014-08-18)
 ------------------
@@ -102,6 +135,7 @@ ChangeLog
 
 3.2.1 (2014-05-03)
 ------------------
+
 * Minor tweak to make the unittests run with the latest hhvm on travis.
 * Updated timezone definitions.
 * Updated copyright links to point to http://sabre.io/
@@ -135,14 +169,9 @@ ChangeLog
   disabled and an invalid file is read.
 
 
-3.1.5 (2014-??-??)
-------------------
-* Updated: Some docblocks and other documentation. Made the unittests succeed
-  on recent php versions.
-
-
 3.1.4 (2014-03-30)
 ------------------
+
 * Fixed: Issue #87: Several compatibility fixes related to timezone handling
   changes in PHP 5.5.10.
 
@@ -323,6 +352,12 @@ ChangeLog
   VERSION and CALSCALE.
 * Added: You can add new sub-components much quicker with the magic setters, and
   add() method.
+
+
+2.1.6 (2014-12-10)
+------------------
+
+* Fixed: Minor change to make sure that unittests succeed on every PHP version.
 
 
 2.1.5 (2014-06-03)

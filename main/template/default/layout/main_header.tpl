@@ -5,11 +5,34 @@
 <!--[if gt IE 8]><!--><html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
 {% block head %}
-{% include "default/layout/head.tpl" %}
+{% include template ~ "/layout/head.tpl" %}
 {% endblock %}
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
 <noscript>{{ "NoJavascript"|get_lang }}</noscript>
+
+<!-- Display the Chamilo Uses Cookies Warning Validation if needed -->
+{% if displayCookieUsageWarning == true %}
+    <!-- If toolbar is displayed, we have to display this block bellow it -->
+    {% if toolBarDisplayed == true %}
+        <div class="displayUnderToolbar" >&nbsp;</div>
+    {% endif %}
+    <form onSubmit="$(this).toggle('slow')" action="" method="post">
+        <input value=1 type="hidden" name="acceptCookies"/>
+        <div class="cookieUsageValidation">
+            {{ "YouAcceptCookies" | get_lang }}
+            <span style="margin-left:20px;" onclick="$(this).next().toggle('slow'); $(this).toggle('slow')">
+                ({{"More" | get_lang }})
+            </span>
+            <div style="display:none; margin:20px 0;">
+                {{ "HelpCookieUsageValidation" | get_lang}}
+            </div>
+            <span style="margin-left:20px;" onclick="$(this).parent().parent().submit()">
+                ({{"Accept" | get_lang }})
+            </span>
+        </div>
+    </form>
+{% endif %}
 
 {% if show_header == true %}
     <div class="skip">
@@ -30,7 +53,7 @@
 
         {# topbar #}
         {% block topbar %}
-        {% include "default/layout/topbar.tpl" %}
+        {% include template ~ "/layout/topbar.tpl" %}
         {% endblock %}
 
         <div id="main" class="container">
@@ -84,7 +107,7 @@
 
             {# menu #}
             {% block menu %}
-            {% include "default/layout/menu.tpl" %}
+            {% include template ~ "/layout/menu.tpl" %}
             {% endblock %}
 
             {# breadcrumb #}
@@ -95,5 +118,5 @@
         <div id="top_main_content" class="row">
 
         {# course navigation links/shortcuts need to be activated by the admin #}
-        {% include "default/layout/course_navigation.tpl" %}
+        {% include template ~ "/layout/course_navigation.tpl" %}
 {% endif %}

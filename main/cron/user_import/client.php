@@ -1,9 +1,6 @@
-<?php //$Id: $
-/*
- * See license terms in /dokeos_license.txt
- * Copyright (c) 2008 Dokeos SPRL
- * Copyright (c) 2008 Eric Marguin <eric.marguin@dokeos.com>
- */
+<?php
+/* See license terms in /license.txt */
+
 /**
  * This is a script used to automatically import a list of users from
  * a CSV file into Dokeos.
@@ -21,9 +18,6 @@ if (php_sapi_name()!='cli') {
     echo 'You can\'t call this service through a browser';
     die();
 }
-
-// include nusoap library
-require_once(api_get_path(LIBRARY_PATH).'nusoap/nusoap.php');
 
 // create client
 $client = new nusoap_client(api_get_path(WEB_CODE_PATH).'cron/user_import/service.php');

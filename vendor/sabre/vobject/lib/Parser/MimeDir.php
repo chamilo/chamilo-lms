@@ -13,11 +13,13 @@ use
 /**
  * MimeDir parser.
  *
- * This class parses iCalendar/vCard files and returns an array.
+ * This class parses iCalendar 2.0 and vCard 2.1, 3.0 and 4.0 files. This
+ * parser will return one of the following two objects from the parse method:
  *
- * The array is identical to the format jCard/jCal use.
+ * Sabre\VObject\Component\VCalendar
+ * Sabre\VObject\Component\VCard
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -98,6 +100,16 @@ class MimeDir extends Parser {
     protected function parseDocument() {
 
         $line = $this->readLine();
+
+        // BOM is ZERO WIDTH NO-BREAK SPACE (U+FEFF).
+        // It's 0xEF 0xBB 0xBF in UTF-8 hex.
+        if (   3 <= strlen($line)
+            && ord($line[0]) === 0xef
+            && ord($line[1]) === 0xbb
+            && ord($line[2]) === 0xbf) {
+            $line = substr($line, 3);
+        }
+
         switch(strtoupper($line)) {
             case 'BEGIN:VCALENDAR' :
                 $class = isset(VCalendar::$componentMap['VCALENDAR'])

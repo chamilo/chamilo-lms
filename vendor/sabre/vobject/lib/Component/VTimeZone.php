@@ -10,11 +10,25 @@ use Sabre\VObject;
  * This component adds functionality to a component, specific for VTIMEZONE
  * components.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
 class VTimeZone extends VObject\Component {
+
+    /**
+     * Returns the PHP DateTimeZone for this VTIMEZONE component.
+     *
+     * If we can't accurately determine the timezone, this method will return
+     * UTC.
+     *
+     * @return \DateTimeZone
+     */
+    function getTimeZone() {
+
+        return VObject\TimeZoneUtil::getTimeZone((string)$this->TZID, $this->root);
+
+    }
 
     /**
      * A simple list of validation rules.
@@ -30,7 +44,7 @@ class VTimeZone extends VObject\Component {
      *
      * @var array
      */
-    public function getValidationRules() {
+    function getValidationRules() {
 
         return array(
             'TZID' => 1,

@@ -88,8 +88,8 @@ if ($is_allowed_to_edit) {
 
     echo '<div class="actions">';
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_lp">'.Display::return_icon('new_learnpath.png', get_lang('LearnpathAddLearnpath'), '', ICON_SIZE_MEDIUM).'</a>'.
-    str_repeat('&nbsp;', 3).
-    '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import_scorm.png', get_lang('UploadScorm'), '', ICON_SIZE_MEDIUM).'</a>';
+        str_repeat('&nbsp;', 3).
+        '<a href="../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">'.Display::return_icon('import_scorm.png', get_lang('UploadScorm'), '', ICON_SIZE_MEDIUM).'</a>';
     if (api_get_setting('service_ppt2lp', 'active') == 'true') {
         echo str_repeat('&nbsp;', 3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'">
 		'.Display::return_icon('import_powerpoint.png', get_lang('PowerPointConvert'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -214,7 +214,7 @@ if (!empty($flat_list)) {
         }
 
         $dsp_line = '<tr align="center" class="'.$oddclass.'">'.
-                    '<td align="left" valign="top">'.$icon_learnpath.'
+            '<td align="left" valign="top">'.$icon_learnpath.'
                      <a href="'.$url_start_lp.'">'.$my_title.'</a>'.$session_img.$extra."</td>";
 
         $dsp_desc = '';
@@ -255,7 +255,7 @@ if (!empty($flat_list)) {
             // EDIT LP
             if ($current_session == $details['lp_session']) {
                 $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.
-                                Display::return_icon('settings.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL).'</a>';
+                    Display::return_icon('settings.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL).'</a>';
             } else {
                 $dsp_edit_lp = Display::return_icon('settings_na.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL);
             }
@@ -263,8 +263,8 @@ if (!empty($flat_list)) {
             // BUILD
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
-                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=step&amp;lp_id='.$id.'">'.
-                                  Display::return_icon('edit.png', get_lang('LearnpathEditLearnpath'), '', ICON_SIZE_SMALL).'</a>';
+                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=step&amp;lp_id='.$id.'&isStudentView=false">'.
+                        Display::return_icon('edit.png', get_lang('LearnpathEditLearnpath'), '', ICON_SIZE_SMALL).'</a>';
                 } else {
                     $dsp_build = Display::return_icon('edit_na.png', get_lang('LearnpathEditLearnpath'), '', ICON_SIZE_SMALL);
                 }
@@ -457,7 +457,7 @@ if (!empty($flat_list)) {
         }
 
         echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
-        $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
+            $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
 
         echo "</tr>";
         //counter for number of elements treated

@@ -1,10 +1,9 @@
 <?php
-
 /**
  * A standalone test for the internationalization library.
  * @author Ricardo Rodriguez Salazar, 2009.
  * @author Ivan Tcholakov, September 2009.
- * For licensing terms, see /dokeos_license.txt
+ * For licensing terms, see /license.txt
  */
 
 //ini_set('memory_limit','128M');

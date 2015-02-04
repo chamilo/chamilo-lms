@@ -2,11 +2,10 @@
 
 namespace Sabre\VObject\Property\ICalendar;
 
-use
-    Sabre\VObject\Property,
-    Sabre\VObject\Parser\MimeDir,
-    Sabre\VObject\DateTimeParser,
-    Sabre\VObject\TimeZoneUtil;
+use DateTimeZone;
+use Sabre\VObject\Property;
+use Sabre\VObject\DateTimeParser;
+use Sabre\VObject\TimeZoneUtil;
 
 /**
  * DateTime property
@@ -19,7 +18,7 @@ use
  * cases represent a DATE value. This is because it's a common usecase to be
  * able to change a DATE-TIME into a DATE.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -111,17 +110,38 @@ class DateTime extends Property {
     }
 
     /**
+     * Returns true if this is a floating DATE or DATE-TIME.
+     *
+     * Note that DATE is always floating.
+     */
+    public function isFloating() {
+
+        return
+            !$this->hasTime() ||
+            (
+                !isset($this['TZID']) &&
+                strpos($this->getValue(),'Z')===false
+            );
+
+    }
+
+    /**
      * Returns a date-time value.
      *
      * Note that if this property contained more than 1 date-time, only the
      * first will be returned. To get an array with multiple values, call
      * getDateTimes.
      *
+     * If no timezone information is known, because it's either an all-day
+     * property or floating time, we will use the DateTimeZone argument to
+     * figure out the exact date.
+     *
+     * @param DateTimeZone $timeZone
      * @return \DateTime
      */
-    public function getDateTime() {
+    public function getDateTime(DateTimeZone $timeZone = null) {
 
-        $dt = $this->getDateTimes();
+        $dt = $this->getDateTimes($timeZone);
         if (!$dt) return null;
 
         return $dt[0];
@@ -131,20 +151,25 @@ class DateTime extends Property {
     /**
      * Returns multiple date-time values.
      *
+     * If no timezone information is known, because it's either an all-day
+     * property or floating time, we will use the DateTimeZone argument to
+     * figure out the exact date.
+     *
+     * @param DateTimeZone $timeZone
      * @return \DateTime[]
      */
-    public function getDateTimes() {
+    public function getDateTimes(DateTimeZone $timeZone = null) {
 
-        // Finding the timezone.
-        $tz = $this['TZID'];
+        // Does the property have a TZID?
+        $tzid = $this['TZID'];
 
-        if ($tz) {
-            $tz = TimeZoneUtil::getTimeZone((string)$tz, $this->root);
+        if ($tzid) {
+            $timeZone = TimeZoneUtil::getTimeZone((string)$tzid, $this->root);
         }
 
         $dts = array();
         foreach($this->getParts() as $part) {
-            $dts[] = DateTimeParser::parse($part, $tz);
+            $dts[] = DateTimeParser::parse($part, $timeZone);
         }
         return $dts;
 
@@ -249,9 +274,10 @@ class DateTime extends Property {
 
         $dts = $this->getDateTimes();
         $hasTime = $this->hasTime();
+        $isFloating = $this->isFloating();
 
         $tz = $dts[0]->getTimeZone();
-        $isUtc = in_array($tz->getName() , array('UTC', 'GMT', 'Z'));
+        $isUtc = $isFloating ? false : in_array($tz->getName() , array('UTC', 'GMT', 'Z'));
 
         return array_map(
             function($dt) use ($hasTime, $isUtc) {

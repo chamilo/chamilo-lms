@@ -918,7 +918,6 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 {
     $is_allowed_in_course = api_is_allowed_in_course();
     $is_visible = false;
-
     $course_info = api_get_course_info();
 
     if (empty($course_info)) {
@@ -1036,14 +1035,12 @@ function api_block_anonymous_users($print_headers = true) {
         api_not_allowed($print_headers);
         return false;
     }
+
     return true;
 }
 
-/* ACCESSOR FUNCTIONS
-   Don't access kernel variables directly, use these functions instead. */
-
 /**
- * @return an array with the navigator name and version
+ * @return array with the navigator name and version
  */
 function api_get_navigator() {
     $navigator = 'Unknown';
@@ -1275,7 +1272,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
         return _api_format_user($GLOBALS['_user']);
     }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
-            WHERE user_id='".Database::escape_string($user_id)."'";
+            WHERE user_id='".intval($user_id)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
@@ -1465,9 +1462,9 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true)
 function api_get_course_info($course_code = null, $strict = false)
 {
     if (!empty($course_code)) {
-        $course_code        = Database::escape_string($course_code);
-        $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
-        $course_cat_table   = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $course_code = Database::escape_string($course_code);
+        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT course.*, course_category.code faCode, course_category.name faName
                  FROM $course_table
                  LEFT JOIN $course_cat_table
@@ -3230,11 +3227,13 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0)
     $session = (int) $session;
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = intval($_course['real_id']);
-    $sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY
-            WHERE   c_id = $course_id AND
-                    tool = '$tool' AND
-                    ref = $id AND
-                    (id_session = $session OR id_session = 0)
+    $sql = "SELECT visibility
+            FROM $TABLE_ITEMPROPERTY
+            WHERE
+                c_id = $course_id AND
+                tool = '$tool' AND
+                ref = $id AND
+                (id_session = $session OR id_session = 0)
             ORDER BY id_session DESC, lastedit_date DESC
             LIMIT 1";
 
@@ -3276,7 +3275,6 @@ function api_item_property_delete(
     }
 
     $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
     $tool = Database::escape_string($tool);
     $itemId = intval($itemId);
     $userId = intval($userId);
@@ -3292,9 +3290,6 @@ function api_item_property_delete(
     if (empty($userId)) {
         $userCondition = " AND (to_user_id is NULL OR to_user_id = 0) ";
     }
-
-
-
     $sql = "DELETE FROM $table
             WHERE
                 c_id = $courseId AND
@@ -3353,18 +3348,19 @@ function api_item_property_update(
     }
 
     // Definition of variables.
-    $tool           = Database::escape_string($tool);
-    $item_id        = intval($item_id);
-    $lastedit_type  = Database::escape_string($lastedit_type);
-    $user_id        = intval($user_id);
-    $to_group_id    = intval($to_group_id);
-    $to_user_id     = intval($to_user_id);
-    $start_visible  = Database::escape_string($start_visible);
-    $end_visible    = Database::escape_string($end_visible);
-    $start_visible  = ($start_visible == 0) ? '0000-00-00 00:00:00' : $start_visible;
-    $end_visible    = ($end_visible == 0) ? '0000-00-00 00:00:00' : $end_visible;
-    $to_filter      = '';
-    $time           = api_get_utc_datetime();
+    $tool = Database::escape_string($tool);
+    $item_id = intval($item_id);
+    $lastEditTypeNoFilter = $lastedit_type;
+    $lastedit_type = Database::escape_string($lastedit_type);
+    $user_id = intval($user_id);
+    $to_group_id = intval($to_group_id);
+    $to_user_id = intval($to_user_id);
+    $start_visible = Database::escape_string($start_visible);
+    $end_visible = Database::escape_string($end_visible);
+    $start_visible = ($start_visible == 0) ? '0000-00-00 00:00:00' : $start_visible;
+    $end_visible = ($end_visible == 0) ? '0000-00-00 00:00:00' : $end_visible;
+    $to_filter = '';
+    $time = api_get_utc_datetime();
 
     if (!empty($session_id)) {
         $session_id = intval($session_id);
@@ -3390,7 +3386,6 @@ function api_item_property_update(
     }
 
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
-
     $condition_session = '';
     if (!empty($session_id)) {
         $condition_session = " AND id_session = '$session_id' ";
@@ -3423,7 +3418,7 @@ function api_item_property_update(
 
     // Update if possible
     $set_type = '';
-    switch ($lastedit_type) {
+    switch ($lastEditTypeNoFilter) {
         case 'delete':
             // delete = make item only visible for the platform admin.
             $visibility = '2';
@@ -3456,17 +3451,18 @@ function api_item_property_update(
                             lastedit_user_id = '$user_id',
                             visibility='$visibility' $set_type
                         WHERE $filter";
-
             }
             break;
         case 'visible' : // Change item to visible.
             $visibility = '1';
-
             if (!empty($session_id)) {
-
                 // Check whether session id already exist into item_properties for updating visibility or add it.
                 $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY
-                        WHERE c_id = $course_id AND tool = '$tool' AND ref = '$item_id' AND id_session = '$session_id'";
+                        WHERE
+                            c_id = $course_id AND
+                            tool = '$tool' AND
+                            ref = '$item_id' AND
+                            id_session = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3496,7 +3492,11 @@ function api_item_property_update(
             if (!empty($session_id)) {
                 // Check whether session id already exist into item_properties for updating visibility or add it
                 $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY
-                        WHERE c_id=$course_id AND tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+                        WHERE
+                            c_id = $course_id AND
+                            tool = '$tool' AND
+                            ref='$item_id' AND
+                            id_session = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3552,8 +3552,8 @@ function api_item_property_update(
  */
 function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
 {
-    $course_info    = api_get_course_info($course_code);
-    $tool           = Database::escape_string($tool);
+    $course_info = api_get_course_info($course_code);
+    $tool = Database::escape_string($tool);
 
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -3562,7 +3562,10 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
     $course_id = $course_info['real_id'];
 
     $sql = "SELECT * FROM $item_property_table
-            WHERE c_id = $course_id AND tool = '$tool'  $session_condition ";
+            WHERE
+                c_id = $course_id AND
+                tool = '$tool'
+                $session_condition ";
     $rs  = Database::query($sql);
     $list = array();
     if (Database::num_rows($rs) > 0) {
@@ -3618,11 +3621,11 @@ function api_get_item_property_list_by_tool_by_user(
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  */
-function api_get_item_property_id($course_code, $tool, $ref) {
-
-    $course_info    = api_get_course_info($course_code);
-    $tool           = Database::escape_string($tool);
-    $ref            = intval($ref);
+function api_get_item_property_id($course_code, $tool, $ref)
+{
+    $course_info = api_get_course_info($course_code);
+    $tool = Database::escape_string($tool);
+    $ref = intval($ref);
 
     // Definition of tables.
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -3649,7 +3652,7 @@ function api_get_item_property_id($course_code, $tool, $ref) {
  */
 function api_track_item_property_update($tool, $ref, $title, $content, $progress)
 {
-    $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+    $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
     $course_id = api_get_real_course_id(); //numeric
     $course_code = api_get_course_id(); //alphanumeric
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
@@ -3775,8 +3778,8 @@ function api_get_languages_combo($name = 'language', $chozen=true) {
  * @param  boolean Hide form if only one language available (defaults to false = show the box anyway)
  * @return void Display the box directly
  */
-function api_display_language_form($hide_if_no_choice = false) {
-
+function api_display_language_form($hide_if_no_choice = false)
+{
     // Retrieve a complete list of all the languages.
     $language_list = api_get_languages();
     if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
@@ -3787,7 +3790,6 @@ function api_display_language_form($hide_if_no_choice = false) {
     if (isset($_SESSION['user_language_choice'])) {
         $user_selected_language = $_SESSION['user_language_choice'];
     }
-
     if (empty($user_selected_language)) {
         $user_selected_language = api_get_setting('platformLanguage');
     }
@@ -3806,7 +3808,6 @@ function api_display_language_form($hide_if_no_choice = false) {
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
     $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
     $html .=  '<select id="language_list" class="chzn-select" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';
-
 
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {
@@ -3862,13 +3863,15 @@ function api_get_languages_to_array() {
  * @param   string  language name (the corresponding name of the language-folder in the filesystem)
  * @return  int     id of the language
  */
-function api_get_language_id($language) {
+function api_get_language_id($language)
+{
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     if (empty($language)) {
         return null;
     }
     $language = Database::escape_string($language);
-    $sql = "SELECT id FROM $tbl_language WHERE available='1' AND dokeos_folder = '$language' LIMIT 1";
+    $sql = "SELECT id FROM $tbl_language
+            WHERE available='1' AND dokeos_folder = '$language' LIMIT 1";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     return $row['id'];
@@ -4086,7 +4089,8 @@ function api_return_html_area($name, $content = '', $height = '', $width = '100%
  * @param int $user_course_category: the id of the user_course_category
  * @return int the value of the highest sort of the user_course_category
  */
-function api_max_sort_value($user_course_category, $user_id) {
+function api_max_sort_value($user_course_category, $user_id)
+{
     $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
     $sql = "SELECT max(sort) as max_sort FROM $tbl_course_user
@@ -4280,12 +4284,13 @@ if (!function_exists('sys_get_temp_dir')) {
  * @version     1.0.3
  * @param       string   $dirname    Directory to delete
  * @param       bool     Deletes only the content or not
+ * @param       bool     $strict if one folder/file fails stop the loop
  * @return      bool     Returns TRUE on success, FALSE on failure
  * @link http://aidanlister.com/2004/04/recursively-deleting-a-folder-in-php/
  * @author      Yannick Warnier, adaptation for the Chamilo LMS, April, 2008
  * @author      Ivan Tcholakov, a sanity check about Directory class creation has been added, September, 2009
  */
-function rmdirr($dirname, $delete_only_content_in_folder = false) {
+function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = false) {
     $res = true;
 
     // A sanity check.
@@ -4314,7 +4319,15 @@ function rmdirr($dirname, $delete_only_content_in_folder = false) {
             }
 
             // Recurse.
-            rmdirr("$dirname/$entry");
+            if ($strict) {
+                $result = rmdirr("$dirname/$entry");
+                if ($result == false) {
+                    $res = false;
+                    break;
+                }
+            } else {
+                rmdirr("$dirname/$entry");
+            }
         }
     }
 
@@ -4663,7 +4676,9 @@ function api_get_status_langvars() {
 function api_get_settings_options($var) {
     $table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
     $var = Database::escape_string($var);
-    $sql = "SELECT * FROM $table_settings_options WHERE variable = '$var' ORDER BY id";
+    $sql = "SELECT * FROM $table_settings_options
+            WHERE variable = '$var'
+            ORDER BY id";
     $result = Database::query($sql);
     $settings_options_array = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -4819,7 +4834,8 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
     if (empty($access_url)) { $access_url = 1; }
     if (isset($value)) {
         $value = Database::escape_string($value);
-        $sql = "UPDATE $t_s SET selected_value = '$value' WHERE category = '$category' AND access_url = $access_url";
+        $sql = "UPDATE $t_s SET selected_value = '$value'
+                WHERE category = '$category' AND access_url = $access_url";
         if (is_array($fieldtype) && count($fieldtype)>0) {
             $sql .= " AND ( ";
             $i = 0;
@@ -4859,13 +4875,17 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
  * Gets all available access urls in an array (as in the database)
  * @return array    An array of database records
  */
-function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $direction = 'ASC') {
-    $t_au = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $direction = 'ASC')
+{
+    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $from = (int) $from;
     $to = (int) $to;
-    $order = Database::escape_string($order);
-    $direction = Database::escape_string($direction);
-    $sql = "SELECT id, url, description, active, created_by, tms FROM $t_au ORDER BY $order $direction LIMIT $to OFFSET $from";
+    $order = Database::escape_string($order, null, false);
+    $direction = Database::escape_string($direction, null, false);
+    $sql = "SELECT id, url, description, active, created_by, tms
+            FROM $table
+            ORDER BY $order $direction
+            LIMIT $to OFFSET $from";
     $res = Database::query($sql);
     return Database::store_result($res);
 }
@@ -4880,7 +4900,7 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
 function api_get_access_url($id)
 {
     global $_configuration;
-    $id = Database::escape_string(intval($id));
+    $id = intval($id);
     // Calling the Database:: library dont work this is handmade.
     //$table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $table = 'access_url';
@@ -5448,9 +5468,11 @@ function api_get_access_url_from_user($user_id) {
     $user_id = intval($user_id);
     $table_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $table_url          = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-    $sql = "SELECT access_url_id FROM $table_url_rel_user url_rel_user INNER JOIN $table_url u
+    $sql = "SELECT access_url_id
+            FROM $table_url_rel_user url_rel_user
+            INNER JOIN $table_url u
             ON (url_rel_user.access_url_id = u.id)
-            WHERE user_id = ".Database::escape_string($user_id);
+            WHERE user_id = ".intval($user_id);
     $result = Database::query($sql);
     $url_list = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -5468,10 +5490,11 @@ function api_get_access_url_from_user($user_id) {
 function api_get_status_of_user_in_course ($user_id, $course_code) {
     $tbl_rel_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     if (!empty($user_id) && !empty($course_code)) {
-        $user_id        = Database::escape_string(intval($user_id));
+        $user_id        = intval($user_id);
         $course_code    = Database::escape_string($course_code);
-        $sql = 'SELECT status FROM '.$tbl_rel_course_user.'
-            WHERE user_id='.$user_id.' AND course_code="'.$course_code.'";';
+        $sql = 'SELECT status
+                FROM '.$tbl_rel_course_user.'
+                WHERE user_id='.$user_id.' AND course_code="'.$course_code.'";';
         $result = Database::query($sql);
         $row_status = Database::fetch_array($result, 'ASSOC');
         return $row_status['status'];
@@ -5558,14 +5581,14 @@ function api_is_valid_secret_key($original_key_secret, $security_key) {
 /**
  * Checks whether a user is into course
  * @param string $course_id - the course id
- * @param string $user_id - the user id
+ * @param int $user_id - the user id
  */
 function api_is_user_of_course($course_id, $user_id) {
     $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $sql = 'SELECT user_id FROM '.$tbl_course_rel_user.'
             WHERE
                 course_code="'.Database::escape_string($course_id).'" AND
-                user_id="'.Database::escape_string($user_id).'" AND
+                user_id="'.intval($user_id).'" AND
                 relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ';
     $result = Database::query($sql);
     return Database::num_rows($result) == 1;
@@ -5742,7 +5765,8 @@ function api_get_tool_information($tool_id) {
 function api_get_tool_information_by_name($name) {
     $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT * FROM $t_tool WHERE c_id = $course_id  AND name = '".Database::escape_string($name)."' ";
+    $sql = "SELECT * FROM $t_tool
+            WHERE c_id = $course_id  AND name = '".Database::escape_string($name)."' ";
     $rs  = Database::query($sql);
     return Database::fetch_array($rs, 'ASSOC');
 }
@@ -6393,24 +6417,28 @@ function api_is_multiple_url_enabled() {
  * Returns a md5 unique id
  * @todo add more parameters
  */
-
 function api_get_unique_id() {
     $id = md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
     return $id;
 }
 
+/**
+ * Get home path
+ * @return string
+ */
 function api_get_home_path() {
     $home = 'home/';
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
-        $url_info      = api_get_access_url($access_url_id);
-        $url           = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-        $clean_url     = replace_dangerous_char($url);
-        $clean_url     = str_replace('/', '-', $clean_url);
-        $clean_url     .= '/';
+        $url_info = api_get_access_url($access_url_id);
+        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+        $clean_url = replace_dangerous_char($url);
+        $clean_url = str_replace('/', '-', $clean_url);
+        $clean_url .= '/';
         // if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
-        if ($clean_url != 'localhost/')
-            $home          = 'home/'.$clean_url;
+        //if ($clean_url != 'localhost/') {
+            $home = 'home/' . $clean_url;
+        //}
     }
     return $home;
 }
@@ -6444,7 +6472,8 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
         $item_id = intval($item_id);
         $link_type = intval($link_type);
         $course_code = Database::escape_string($course_code);
-        $sql = "SELECT locked FROM $table WHERE locked = 1 AND ref_id = $item_id AND type = $link_type AND course_code = '$course_code' ";
+        $sql = "SELECT locked FROM $table
+                WHERE locked = 1 AND ref_id = $item_id AND type = $link_type AND course_code = '$course_code' ";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return true;
@@ -6995,7 +7024,9 @@ function api_get_bytes_memory_limit($mem){
  */
 function api_get_user_info_from_official_code($official_code = '')
 {
-    if (empty($official_code)) { return false; }
+    if (empty($official_code)) {
+        return false;
+    }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
             WHERE official_code ='".Database::escape_string($official_code)."'";
     $result = Database::query($sql);
@@ -7473,4 +7504,21 @@ function api_is_student_boss () {
     global $_user;
 
     return isset($_user['status']) && $_user['status'] == STUDENT_BOSS;
+}
+
+/**
+ * Set the Site Use Cookie Warning for 1 year
+ */
+function api_set_site_use_cookie_warning_cookie()
+{
+    setcookie("ChamiloUsesCookies", "ok", time()+31556926);
+}
+
+/**
+ * Return true if the Site Use Cookie Warning Cookie warning exists
+ * @return bool
+ */
+function api_site_use_cookie_warning_cookie_exist()
+{
+    return isset($_COOKIE['ChamiloUsesCookies']);
 }

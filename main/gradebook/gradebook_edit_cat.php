@@ -21,7 +21,7 @@ $edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     $("#skills").fcbkcomplete({
         json_url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=find_skills",
@@ -72,7 +72,7 @@ function check_skills() {
                             }
                         });
                     }
-                },
+                }
             });
         }
     });
@@ -99,7 +99,7 @@ if ($form->validate()) {
 
     if (empty ($values['course_code'])) {
         $cat->set_course_code(null);
-    }else {
+    } else {
         $cat->set_course_code($values['course_code']);
     }
 
@@ -122,11 +122,14 @@ if ($form->validate()) {
 
     $cat->set_visible($visible);
     $cat->save();
-    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id());
+    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id().'&'.api_get_cidreq());
     exit;
 }
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
-$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectcat,'name' => get_lang('Gradebook'));
+$interbreadcrumb[] = array(
+    'url' => Security::remove_XSS($_SESSION['gradebook_dest']) . '?selectcat=' . $selectcat . '&' . api_get_cidreq(),
+    'name' => get_lang('Gradebook')
+);
 $this_section = SECTION_COURSES;
 Display :: display_header(get_lang('EditCategory'));
 $form->display();

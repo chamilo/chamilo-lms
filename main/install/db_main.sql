@@ -3025,3 +3025,5 @@ CREATE TABLE usergroup_rel_question (
     usergroup_id int unsigned not null,
     coefficient float(6,2)
 );
+
+-- 1.10.x-specific, non-course-related, database changes

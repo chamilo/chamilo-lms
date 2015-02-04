@@ -301,6 +301,36 @@ class Template
     }
 
     /**
+     * return true if toolbar has to be displayed for user
+     * @return bool
+     */
+    public static function isToolBarDisplayedForUser()
+    {
+        //Toolbar
+        $show_admin_toolbar = api_get_setting('show_admin_toolbar');
+        $show_toolbar = false;
+
+        switch ($show_admin_toolbar) {
+            case 'do_not_show':
+                break;
+            case 'show_to_admin':
+                if (api_is_platform_admin()) {
+                    $show_toolbar = true;
+                }
+                break;
+            case 'show_to_admin_and_teachers':
+                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+                    $show_toolbar = true;
+                }
+                break;
+            case 'show_to_all':
+                $show_toolbar = true;
+                break;
+        }
+        return $show_toolbar;
+    }
+
+    /**
      * Sets the header visibility
      * @param bool true if we show the header
      */
@@ -309,27 +339,12 @@ class Template
         $this->show_header = $status;
         $this->assign('show_header', $status);
 
-        //Toolbar
-        $show_admin_toolbar = api_get_setting('show_admin_toolbar');
-        $show_toolbar       = 0;
+        $show_toolbar = 0;
 
-        switch ($show_admin_toolbar) {
-            case 'do_not_show':
-                break;
-            case 'show_to_admin':
-                if (api_is_platform_admin()) {
-                    $show_toolbar = 1;
-                }
-                break;
-            case 'show_to_admin_and_teachers':
-                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                    $show_toolbar = 1;
-                }
-                break;
-            case 'show_to_all':
-                $show_toolbar = 1;
-                break;
+        if (self::isToolBarDisplayedForUser()) {
+            $show_toolbar = 1;
         }
+
         $this->assign('show_toolbar', $show_toolbar);
 
         //Only if course is available

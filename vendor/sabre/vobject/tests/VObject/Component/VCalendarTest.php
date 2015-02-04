@@ -2,6 +2,7 @@
 
 namespace Sabre\VObject\Component;
 
+use DateTimeZone;
 use Sabre\VObject;
 
 class VCalendarTest extends \PHPUnit_Framework_TestCase {
@@ -9,13 +10,16 @@ class VCalendarTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider expandData
      */
-    public function testExpand($input, $output) {
+    public function testExpand($input, $output, $timeZone = 'UTC', $start = '2011-12-01', $end = '2011-12-31') {
 
         $vcal = VObject\Reader::read($input);
 
+        $timeZone = new DateTimeZone($timeZone);
+
         $vcal->expand(
-            new \DateTime('2011-12-01'),
-            new \DateTime('2011-12-31')
+            new \DateTime($start),
+            new \DateTime($end),
+            $timeZone
         );
 
         // This will normalize the output
@@ -214,6 +218,74 @@ DTSTART:20111230T120000Z
 DTEND:20111230T130000Z
 RECURRENCE-ID:20111230T120000Z
 END:VEVENT
+END:VCALENDAR
+';
+
+        $tests[] = array($input, $output);
+
+        // Floating dates and times.
+        $input = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+UID:bla1
+DTSTART:20141112T195000
+END:VEVENT
+BEGIN:VEVENT
+UID:bla2
+DTSTART;VALUE=DATE:20141112
+END:VEVENT
+BEGIN:VEVENT
+UID:bla3
+DTSTART;VALUE=DATE:20141112
+RRULE:FREQ=DAILY;COUNT=2
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $output = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+UID:bla1
+DTSTART:20141112T225000Z
+END:VEVENT
+BEGIN:VEVENT
+UID:bla2
+DTSTART;VALUE=DATE:20141112
+END:VEVENT
+BEGIN:VEVENT
+UID:bla3
+DTSTART;VALUE=DATE:20141112
+END:VEVENT
+BEGIN:VEVENT
+UID:bla3
+DTSTART;VALUE=DATE:20141113
+RECURRENCE-ID;VALUE=DATE:20141113
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $tests[] = array($input, $output, 'America/Argentina/Buenos_Aires', '2014-01-01', '2015-01-01');
+
+        // Recurrence rule with no valid instances
+        $input = 'BEGIN:VCALENDAR
+CALSCALE:GREGORIAN
+VERSION:2.0
+BEGIN:VEVENT
+UID:bla6
+SUMMARY:Testing RRule3
+DTSTART:20111125T120000Z
+DTEND:20111125T130000Z
+RRULE:FREQ=WEEKLY;COUNT=1
+EXDATE:20111125T120000Z
+END:VEVENT
+END:VCALENDAR
+';
+
+        $output = 'BEGIN:VCALENDAR
+CALSCALE:GREGORIAN
+VERSION:2.0
 END:VCALENDAR
 ';
 
@@ -471,4 +543,154 @@ END:VCALENDAR
         $this->assertNull($result);
 
     }
+
+    function testNoComponents() {
+
+        $input = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:vobject
+END:VCALENDAR
+ICS;
+
+        $this->assertValidate(
+            $input,
+            0,
+            3,
+           "An iCalendar object must have at least 1 component."
+        );
+
+    }
+
+    function testCalDAVNoComponents() {
+
+        $input = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:vobject
+BEGIN:VTIMEZONE
+TZID:America/Toronto
+END:VTIMEZONE
+END:VCALENDAR
+ICS;
+
+        $this->assertValidate(
+            $input,
+            VCalendar::PROFILE_CALDAV,
+            3,
+           "A calendar object on a CalDAV server must have at least 1 component (VTODO, VEVENT, VJOURNAL)."
+        );
+
+    }
+
+    function testCalDAVMultiUID() {
+
+        $input = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:vobject
+BEGIN:VEVENT
+UID:foo
+DTSTAMP:20150109T184500Z
+DTSTART:20150109T184500Z
+END:VEVENT
+BEGIN:VEVENT
+UID:bar
+DTSTAMP:20150109T184500Z
+DTSTART:20150109T184500Z
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $this->assertValidate(
+            $input,
+            VCalendar::PROFILE_CALDAV,
+            3,
+           "A calendar object on a CalDAV server may only have components with the same UID."
+        );
+
+    }
+
+    function testCalDAVMultiComponent() {
+
+        $input = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:vobject
+BEGIN:VEVENT
+UID:foo
+RECURRENCE-ID:20150109T185200Z
+DTSTAMP:20150109T184500Z
+DTSTART:20150109T184500Z
+END:VEVENT
+BEGIN:VTODO
+UID:foo
+DTSTAMP:20150109T184500Z
+DTSTART:20150109T184500Z
+END:VTODO
+END:VCALENDAR
+ICS;
+
+        $this->assertValidate(
+            $input,
+            VCalendar::PROFILE_CALDAV,
+            3,
+           "A calendar object on a CalDAV server may only have 1 type of component (VEVENT, VTODO or VJOURNAL)."
+        );
+
+    }
+
+    function testCalDAVMETHOD() {
+
+        $input = <<<ICS
+BEGIN:VCALENDAR
+VERSION:2.0
+METHOD:PUBLISH
+PRODID:vobject
+BEGIN:VEVENT
+UID:foo
+RECURRENCE-ID:20150109T185200Z
+DTSTAMP:20150109T184500Z
+DTSTART:20150109T184500Z
+END:VEVENT
+END:VCALENDAR
+ICS;
+
+        $this->assertValidate(
+            $input,
+            VCalendar::PROFILE_CALDAV,
+            3,
+           "A calendar object on a CalDAV server MUST NOT have a METHOD property."
+        );
+
+    }
+
+    function assertValidate($ics, $options, $expectedLevel, $expectedMessage = null) {
+
+        $vcal = VObject\Reader::read($ics);
+        $result = $vcal->validate($options);
+
+        $this->assertValidateResult($result, $expectedLevel, $expectedMessage);
+
+    }
+
+    function assertValidateResult($input, $expectedLevel, $expectedMessage = null) {
+
+        $messages = array();
+        foreach($input as $warning) {
+            $messages[] = $warning['message'];
+        }
+
+        if ($expectedLevel === 0) {
+            $this->assertEquals(0, count($input), 'No validation messages were expected. We got: ' . implode(', ', $messages));
+        } else {
+            $this->assertEquals(1, count($input), 'We expected exactly 1 validation message, We got: ' . implode(', ', $messages));
+
+            $this->assertEquals($expectedMessage, $input[0]['message']);
+            $this->assertEquals($expectedLevel, $input[0]['level']);
+        }
+
+    }
+
+
 }

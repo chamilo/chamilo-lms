@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script opened in an iframe and containing the learning path's navigation and progress bar
+ * Script opened in an iframe and containing the
+ * learning path's navigation and progress bar
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -34,7 +35,6 @@ if (isset($_SESSION['lpobject'])) {
     if (is_object($oLP)) {
         $_SESSION['oLP'] = $oLP;
     } else {
-        //error_log('New LP - in lp_nav.php - SESSION[lpobject] is not object - dying',0);
         die('Could not instanciate lp object');
     }
     $display_mode = $_SESSION['oLP']->mode;
@@ -62,13 +62,12 @@ if (isset($_SESSION['lpobject'])) {
 session_write_close();
 ?>
 <script type="text/javascript">
-$(document).ready(function() {
-    jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer({
-        success: function(player, node) {
-        }
+    $(document).ready(function() {
+        jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer({
+            success: function(player, node) {
+            }
+        });
     });
-
-});
 </script>
 <span>
     <?php echo (!empty($mediaplayer)) ? $mediaplayer : '&nbsp;' ?>

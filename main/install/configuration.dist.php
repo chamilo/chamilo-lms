@@ -35,6 +35,14 @@ $_configuration['db_user']     = '{DATABASE_USER}';
 // Your MySQL password
 $_configuration['db_password'] = '{DATABASE_PASSWORD}';
 
+// Persistent connections may have profound effects (not always positive) on
+// your database server. Use with care.
+//$_configuration['db_persistent_connection'] = false;
+// For separate web and DB servers, reduce the bandwidth used by compressing
+// data returning from the DB server. By default, it is ignored. Uncomment
+// the following to enable compression.
+//$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS; 
+
 /**
  * Database settings
  */
@@ -284,3 +292,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //);
 // Shows a warning message explaining that the site uses cookies
 //$_configuration['cookie_warning'] = false;
+// Allows a comment field in the course calendar events. Requires DB change
+//$_configuration['allow_agenda_event_comment'] = false;

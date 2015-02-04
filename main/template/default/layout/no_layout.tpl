@@ -4,7 +4,7 @@
 <!--[if IE 8]>    <html lang="{{document_language}}" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--><html lang="{{document_language}}" class="no-js"> <!--<![endif]-->
 <head>
-{% include "default/layout/head.tpl" %}
+{% include template ~ "/layout/head.tpl" %}
 </head>
 <body dir="{{text_direction}}" class="{{section_name}}">
 {% block name%}

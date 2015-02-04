@@ -14,7 +14,7 @@ use
  * This object represents any properties not recognized by the parser.
  * This type of value has been introduced by the jCal, jCard specs.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */

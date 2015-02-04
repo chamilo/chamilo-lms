@@ -707,17 +707,36 @@ class UserGroup extends Model
      * @param array $options
      * @return array
      */
-    public function get_all_for_export($options = array())
+    public function getDataToExport($options = array())
     {
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->table." u INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (u.id = a.usergroup_id)";
             $options = array('where' => array('access_url_id = ? ' => $urlId));
-            return Database::select('a.id, name, description', $from, $options);
+            $classes = Database::select('a.id, name, description', $from, $options);
         } else {
-            return Database::select('id, name, description', $this->table, $options);
+            $classes = Database::select('id, name, description', $this->table, $options);
         }
+
+        $result = array();
+        if (!empty($classes)) {
+            foreach ($classes as $data) {
+                $users = self::getUserListByUserGroup($data['id']);
+                $userToString = null;
+                if (!empty($users)) {
+                    $userNameList = array();
+                    foreach ($users as $userData) {
+                        $userNameList[] = $userData['username'];
+                    }
+                    $userToString = implode(',', $userNameList);
+                }
+                $data['users'] = $userToString;
+                $result[] = $data;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -763,10 +782,12 @@ class UserGroup extends Model
     {
         $groupExists = $this->usergroup_exists(trim($params['name']));
         if ($groupExists == false) {
+
             $id = parent::save($params, $show_query);
             if ($this->useMultipleUrl) {
                 $this->subscribeToUrl($id, api_get_current_access_url_id());
             }
+
             return $id;
         }
 

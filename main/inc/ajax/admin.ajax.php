@@ -76,6 +76,33 @@ switch ($action) {
         file_put_contents($fullFilePath, $content);
 
         break;
+
+    case 'get_extra_content':
+        $blockId = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
+
+        if (empty($blockId)) {
+            die;
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            $accessUrlId = api_get_current_access_url_id();
+
+            if ($accessUrlId == -1) {
+                die;
+            }
+
+            $urlInfo = api_get_access_url($accessUrlId);
+            $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
+            $cleanUrl = replace_dangerous_char($url);
+            $cleanUrl = str_replace('/', '-', $cleanUrl);
+
+            $newUrlDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
+        } else {
+            $newUrlDir = api_get_path(SYS_PATH) . "home/admin/";
+        }
+
+        echo file_get_contents("{$newUrlDir}{$blockId}_extra.html");
+        break;
 }
 
 

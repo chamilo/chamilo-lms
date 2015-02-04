@@ -12,10 +12,21 @@ $(document).ready(function() {
 
         var $self = $(this);
 
-        $('#extra-block').val($self.data('id'));
-        $('#modal-extra-title').text($self.data('label'));
+        var extraContent = $.ajax('{{ _p.web_ajax }}admin.ajax.php', {
+            type: 'post',
+            data: {
+                a: 'get_extra_content',
+                block: $self.data('id')
+            }
+        });
 
-        $('#modal-extra').modal('show');
+        $.when(extraContent).done(function(content) {
+            $('#extra-content').val(content);
+            $('#extra-block').val($self.data('id'));
+            $('#modal-extra-title').text($self.data('label'));
+
+            $('#modal-extra').modal('show');
+        });
     });
 
     $('#btn-block-editor-save').on('click', function(e) {

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\InstallerBundle;
 
@@ -11,8 +12,14 @@ use Symfony\Component\Process\ProcessBuilder;
 use Oro\Bundle\CacheBundle\Manager\OroDataCacheManager;
 use Chamilo\InstallerBundle\Process\PhpExecutableFinder;
 
+/**
+ * Class CommandExecutor
+ * @package Chamilo\InstallerBundle
+ */
 class CommandExecutor
 {
+    const DEFAULT_TIMEOUT = 300;
+
     /**
      * @var string|null
      */
@@ -49,7 +56,6 @@ class CommandExecutor
      * @param string|null         $env
      * @param OutputInterface     $output
      * @param Application         $application
-     * @param OroDataCacheManager $dataCacheManager
      */
     public function __construct(
         $env,
@@ -115,12 +121,12 @@ class CommandExecutor
                 ->getProcess();
 
             $output = $this->output;
-
             $process->run(
                 function ($type, $data) use ($output) {
                     $output->write($data);
                 }
             );
+
             $this->lastCommandExitCode = $process->getExitCode();
 
             // synchronize all data caches
@@ -129,6 +135,7 @@ class CommandExecutor
             }*/
         } else {
             $this->application->setAutoExit(false);
+            $this->application->setCatchExceptions(false);
             $this->lastCommandExitCode = $this->application->run(new ArrayInput($params), $this->output);
         }
 

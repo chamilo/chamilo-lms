@@ -152,6 +152,8 @@ doctrine:
                 user:     "%database_user%"
                 password: "%database_password%"
                 charset:  UTF8
+                mapping_types:
+                    enum: string
         types:
             json: Sonata\Doctrine\Types\JsonType
             #currency: Sonata\Component\Currency\CurrencyDoctrineType

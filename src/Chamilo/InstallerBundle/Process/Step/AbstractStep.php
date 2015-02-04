@@ -72,6 +72,7 @@ abstract class AbstractStep extends ControllerStep
         error_log(sprintf('[%s] Launching "%s" command', date('Y-m-d H:i:s'), $command));
         error_log($command);
         error_log(print_r($params, 1));
+        // Add error_log in vendor/symfony/symfony/src/Symfony/Component/Console/Application.php run() function
         $mem  = (int)memory_get_usage() / (1024 * 1024);
         $time = time();
 

@@ -5311,3 +5311,7 @@ i.size-32.icon-new-work{
 #settings .span6 .well_border:hover .edit-block {
     display: block;
 }
+
+#settings .span6:nth-child(2n+1) {
+    clear:left
+}

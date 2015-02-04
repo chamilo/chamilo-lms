@@ -51,6 +51,7 @@
   <li><a href="#9.xsendfile">Speeding file downloads with mod_xsendfile</a></li>
   <li><a href="#10.igbinary">IGBinary for faster courses backups and better sessions</a></li>
   <li><a href="#11.permissions-check">Removing files download permissions check</a></li>
+  <li><a href="#12.MySQL-compression">MySQL/MariaDB compression</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using xCache or APC</h2>
@@ -355,12 +356,14 @@ Don't have time or resources to optimize your Chamilo installation yourself? Hir
 		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
 	</a>
 <hr />
+
 <h2><a name="7.High-numbers-memory"></a>Memory considerations for high numbers of users</h2>
 Some administration scripts *have to* handle lists of all users, and this might have a considerable impact on portals with very high numbers of users. For example, the main/admin/add_users_to_session.php script that handles the registration of users into a specific session, if used with the (non-default) full list of users, will devour about 3KB per user, which, for 100,000 users, translates into the need for around 300MB of RAM just to show this page, and to around 3GB for 1,000,000 users.<br />
 This mode is not loaded by default, but could still be selected, leading to a "Fatal error: Allowed memory size ... exhausted" message.<br />
 The only non-scripted solution here is to allow for the corresponding amount of RAM for your PHP configuration (<em>memory_limit = 300M</em>) or your specific VirtualHost if you use mod-php5 (<em>php_value memory_limit 300M</em>).<br/>
 <hr />
-<h2><a name="#8.Avoid-non-fixed-values"></a>Avoiding non-fixed values</h2>
+
+<h2><a name="8.Avoid-non-fixed-values"></a>Avoiding non-fixed values</h2>
 Many things in Chamilo are written focusing on the ease of use, even for the administrator. Sometimes, these settings are weighing a little bit more on the system. This is the case, between others, of the mail.conf.php file (being loaded unconditionally) and its CONSTANT "IS_WINDOWS_OS", which is defined by a function call (api_is_windows_os()) at the beginning of main_api.lib.php.
 
 The definition of this constant (which is executed at *every* page load) can easily be avoided, and the only place where it is used inconditionally (mail.conf.php) can be modified to set the line as you expect it (depending on whether you use sendmail/exim or smtp).
@@ -373,7 +376,7 @@ $platform_email['SMTP_MAILER']       = 'mail';
 </pre>
 In fact, the complete loading of mail.conf.php can also be avoided if loaded conditionally (with <i>require_once</i>) when sending an e-mail (which is the only case where it is useful).
 <hr />
-<h2><a name="#9.xsendfile"></a>Speeding file downloads with mod_xsendfile</h2>
+<h2><a name="9.xsendfile"></a>Speeding file downloads with mod_xsendfile</h2>
 <p>It might have come to your attention that file downloads through Chamilo might get slow, under default conditions, in particular using Apache 2.</p>
 <p>There are several ways to fix this, one of which is removing the .htaccess inside the courses/ directory. This, however, will remove all permissions checks on the files contained in this directory, so... most of the time, not ideal unless your portal is *really* open to the world.</p>
 <p>Another technique, revealed to us by <a href="http://stackoverflow.com/users/46594/virtualblackfox">VirtualBlackFox</a> on <a href="http://stackoverflow.com/questions/3697748/fastest-way-to-serve-a-file-using-php">this Stackoverflow post</a>, is to use the X-SendFile module for Apache 2.2+ (other web servers might offer other solutions, or avoid the problem initially).</p>
@@ -398,11 +401,13 @@ $_configuration['enable_x_sendfile_headers'] = true;
 </pre>
 Done! Now your downloads should go substantially faster. This is still a feature in observation. We're not sure the benefits are sufficient, so don't hesitate to let us know in <a href="https://support.chamilo.org/issues/6853">the related issue in Chamilo's tracking system</a>
 </p>
-<h2><a name="#10.igbinary"></a>IGBinary for courses backups and better sessions management</h2>
+<hr />
+<h2><a name="10.igbinary"></a>IGBinary for courses backups and better sessions management</h2>
 <p>
 <a href="http://pecl.php.net/package/igbinary">IGBinary</a> is a small PECL library that replaces the PHP serializer. It uses less space (so less memory for serialized objects) and is particularly efficient with memory-based storages (like Memcached). Use it for course backups (see <a href="https://support.chamilo.org/issues/4443">issue 4443</a>) or <a href="http://www.neanderthal-technology.com/2011/11/ubuntu-10-install-php-memcached-with-igbinary-support/">to boost sessions management</a>.
 </p>
-<h2><a name="#11.permissions-check"></a>Removing files download permissions check</h2>
+<hr />
+<h2><a name="11.permissions-check"></a>Removing files download permissions check</h2>
 <p>
 This measure is not cumulative with mod_xsendfile explained above. It is not *recommended* either, as it removes an important security layer.<br />
 <br />
@@ -435,13 +440,29 @@ RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA
 </pre><br />
 This is easy, doesn't require a server reload and you should see the results pretty quickly. As mentioned above, if security of your content is an issue, though, you should avoid using this technique.
 </p>
+<hr />
+<h2><a name="12.MySQL-compression"></a>MySQL/MariaDB compression</h2>
 <p>
+If your database server is separate from your web server, you have to play with bandwidth, firewalls, and network restrictions in general.<br />
+In particular, when dealing with large-scale portals, the time a SQL query will take to return to the web server will take longer and, eventually, in the most critical cases, will take <b>too long</b>, and your web servers will be completely overloaded (load average very high because the system is waiting for I/O operations, but processors usage not being very high is a clear sign of this).<br />
+To solve this kind of issues, MySQL and MariaDB offer a data compression mechanism, which will reduce the amount of data passed between PHP and the database server. Ultimately, this reduction will lower bandwidth usage and reduce the impact of numerous and heavy data requests (and save you).<br />
+In 1.10.0, we have added the possibility to enable this compression very easily, from the configuration.php file, uncommenting the following line:
+<pre>
+//$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS;
+</pre>
+This should have an immediate effect on the load average on your server.
 </p>
 <hr />
 <h2>Authors</h2>
 <ul>
 <li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:ywarnier@beeznest.net">ywarnier@beeznest.net</a></li>
 </ul>
+<hr />
+Don't have time or resources to optimize your Chamilo installation yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.
+    <a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+	<a href="http://jigsaw.w3.org/css-validator/">
+		<img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+	</a>
 </div>
 </body>
 </html>

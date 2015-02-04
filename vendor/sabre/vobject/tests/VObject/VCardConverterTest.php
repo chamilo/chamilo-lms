@@ -37,8 +37,8 @@ KIND:ORG
 END:VCARD
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD40);
 
         $this->assertVObjEquals(
             $output,
@@ -75,8 +75,8 @@ END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD40);
 
         $this->assertVObjEquals(
             $output,
@@ -114,8 +114,8 @@ END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD40);
 
         $this->assertVObjEquals(
             $output,
@@ -154,8 +154,8 @@ END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD30);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD30);
 
         $this->assertVObjEquals(
             $output,
@@ -195,8 +195,8 @@ END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD30);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD30);
 
         $this->assertVObjEquals(
             $output,
@@ -224,8 +224,8 @@ END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD40);
 
         $this->assertVObjEquals(
             $output,
@@ -241,8 +241,8 @@ END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD30);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD30);
 
         $this->assertVObjEquals(
             $output,
@@ -270,8 +270,8 @@ END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD40);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD40);
 
         $this->assertVObjEquals(
             $output,
@@ -287,8 +287,8 @@ END:VCARD
 
 OUT;
 
-        $vcard = \Sabre\VObject\Reader::read($input);
-        $vcard = $vcard->convert(\Sabre\VObject\Document::VCARD30);
+        $vcard = Reader::read($input);
+        $vcard = $vcard->convert(Document::VCARD30);
 
         $this->assertVObjEquals(
             $output,
@@ -487,4 +487,45 @@ OUT;
         );
 
     }
+
+    function testNoLabel() {
+
+      $input = <<<VCF
+BEGIN:VCARD
+VERSION:3.0
+UID:foo
+N:Doe;John;;;
+FN:John Doe
+item1.X-ABDATE;type=pref:2008-12-11
+END:VCARD
+
+VCF;
+
+      $vcard = Reader::read($input);
+
+      $this->assertInstanceOf('Sabre\\VObject\\Component\\VCard', $vcard);
+      $vcard = $vcard->convert(Document::VCARD40);
+      $vcard = $vcard->serialize();
+
+      $converted = Reader::read($vcard);
+      $converted->validate();
+
+      $version = Version::VERSION;
+
+      $expected = <<<VCF
+BEGIN:VCARD
+VERSION:4.0
+PRODID:-//Sabre//Sabre VObject $version//EN
+UID:foo
+N:Doe;John;;;
+FN:John Doe
+ITEM1.X-ABDATE;PREF=1:2008-12-11
+END:VCARD
+
+VCF;
+
+      $this->assertEquals($expected, str_replace("\r","", $vcard));
+
+    }
+
 }

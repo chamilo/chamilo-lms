@@ -8,7 +8,7 @@
  * Correct timezones deduced with help from:
  * http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @license http://sabre.io/license/ Modified BSD License
  */
 return array(

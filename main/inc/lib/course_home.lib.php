@@ -418,7 +418,6 @@ class CourseHome
         $course_id              = api_get_course_int_id();
         $condition_session = api_get_session_condition($session_id, true, true);
 
-        //$studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
         $studentView = Container::getSession()->get('studentview');
         //var_dump($studentView);
 
@@ -581,6 +580,7 @@ class CourseHome
                 }
             }
         }
+
         return $all_tools_list;
     }
 

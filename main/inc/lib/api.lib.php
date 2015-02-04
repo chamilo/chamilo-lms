@@ -359,11 +359,6 @@ define('LINK_ATTENDANCE',			7);
 define('LINK_SURVEY',				8);
 define('LINK_HOTPOTATOES',          9);
 
-//Course request
-define('COURSE_REQUEST_PENDING',  0);
-define('COURSE_REQUEST_ACCEPTED', 1);
-define('COURSE_REQUEST_REJECTED', 2);
-
 define('SHORTCUTS_HORIZONTAL', 0);
 define('SHORTCUTS_VERTICAL', 1);
 
@@ -411,8 +406,6 @@ define('MESSAGE_STATUS_OUTBOX',                 '4');
 define('MESSAGE_STATUS_INVITATION_PENDING',     '5');
 define('MESSAGE_STATUS_INVITATION_ACCEPTED',    '6');
 define('MESSAGE_STATUS_INVITATION_DENIED',      '7');
-
-define('SESSION_LINK_TARGET', '_self');
 
 /**
  * Form validator

@@ -99,6 +99,6 @@ $(document).ready(function() {
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" id="btn-block-editor-save" class="btn btn-primary">{{ 'Save' | get_lang }}</a>
+        <button id="btn-block-editor-save" class="btn btn-primary">{{ 'Save' | get_lang }}</button>
     </div>
 </div>

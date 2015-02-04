@@ -40,7 +40,7 @@ switch ($action) {
         $content = isset($_POST['content']) ? Security::remove_XSS($_POST['content']) : null;
         $blockId = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
 
-        if (empty($content) || empty($blockId)) {
+        if (empty($blockId)) {
             die;
         }
 

@@ -8,10 +8,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-
 use Chamilo\CoreBundle\Entity\CourseRelUser;
-
-use Knp\Menu\ItemInterface as MenuItemInterface;
 
 /**
  * Class CourseAdmin

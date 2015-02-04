@@ -47,7 +47,6 @@ class SessionCategoryAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
             ->add('name')
         ;
     }
@@ -58,7 +57,6 @@ class SessionCategoryAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
             ->addIdentifier('name')
         ;
     }

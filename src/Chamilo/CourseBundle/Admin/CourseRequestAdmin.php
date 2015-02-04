@@ -9,8 +9,6 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-use Knp\Menu\ItemInterface as MenuItemInterface;
-
 /**
  * Class CourseRequestAdmin
  * @package Chamilo\CoreBundle\Admin
@@ -52,7 +50,6 @@ class CourseRequestAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
             ->add('title')
         ;
     }
@@ -63,7 +60,6 @@ class CourseRequestAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('id')
             ->addIdentifier('title')
         ;
     }

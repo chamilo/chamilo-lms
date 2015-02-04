@@ -13,8 +13,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Chamilo\CourseBundle\ToolChain;
 
-use Knp\Menu\ItemInterface as MenuItemInterface;
-
 /**
  * Class CourseAdmin
  * @package Chamilo\CoreBundle\Admin
@@ -22,6 +20,19 @@ use Knp\Menu\ItemInterface as MenuItemInterface;
 class CourseAdmin extends Admin
 {
     protected $toolChain;
+
+    /**
+     * Setting default values
+     * @inheritdoc
+     */
+    public function getNewInstance()
+    {
+        $instance = parent::getNewInstance();
+        $instance->setVisibility('2');
+        $instance->setCourseLanguage($this->getTranslator()->getLocale());
+
+        return $instance;
+    }
 
     /**
      * @param FormMapper $formMapper
@@ -44,7 +55,7 @@ class CourseAdmin extends Admin
                     'translation_domain' => 'ChamiloCoreBundle'
                 )
             )
-            ->add('departmentUrl', 'url')
+            ->add('departmentUrl', 'url', array('required' => false))
             ->add('urls', 'sonata_type_collection', array(
                     'cascade_validation' => true,
                 ), array(
@@ -61,7 +72,8 @@ class CourseAdmin extends Admin
             )
             ->add('users', 'sonata_type_collection', array(
                     'cascade_validation' => true,
-                ), array(
+                ),
+                array(
                     'allow_delete' => true,
                     'by_reference' => false,
                     'edit'              => 'inline',
@@ -110,7 +122,7 @@ class CourseAdmin extends Admin
     }
 
     /**
-     * Very important in order to save the related entities!
+     * Very important in order to save the related entities while updating.
      * @param \Chamilo\CoreBundle\Entity\Course $course
      * @return mixed|void
      */
@@ -122,15 +134,19 @@ class CourseAdmin extends Admin
     }
 
     /**
+     *  Very important in order to save the related entities while creation.
      * @param Course $course
      * @return mixed|void
      */
     public function prePersist($course)
     {
+        $course->setUsers($course->getUsers());
+        $course->setUrls($course->getUrls());
         $this->updateTools($course);
     }
 
     /***
+     * Generate tool inside the course
      * @param Course $course
      */
     public function updateTools($course)
@@ -152,7 +168,6 @@ class CourseAdmin extends Admin
         foreach ($tools as $tool) {
             $toolName = $tool->getName();
             if (!in_array($toolName, $addedTools)) {
-
                 $toolEntity = new CTool();
                 $toolEntity
                     ->setCId($course->getId())

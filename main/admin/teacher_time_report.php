@@ -59,7 +59,7 @@ $htmlHeadXtra[] = '
 
 $withFilter = false;
 
-$reportTitle = 'TimeReportIncludingAllCoursesAndSessionsByTeacher';
+$reportTitle = get_lang('TimeReportIncludingAllCoursesAndSessionsByTeacher');
 $reportSubTitle = sprintf(get_lang('TimeSpentBetweenXAndY'), $selectedFrom, $selectedUntil);
 
 $timeReport = new TeacherTimeReport();
@@ -69,7 +69,7 @@ if (!empty($selectedCourse)) {
 
     $course = api_get_course_info($selectedCourse);
 
-    $reportTitle = sprintf(get_lang('TimeReportByCourseX'), $course['title']);
+    $reportTitle = sprintf(get_lang('TimeReportForCourseX'), $course['title']);
 
     $sessionsByCourse = SessionManager::get_session_by_course($selectedCourse);
 
@@ -114,7 +114,7 @@ if (!empty($selectedSession)) {
 
     $session = api_get_session_info($selectedSession);
 
-    $reportTitle = sprintf(get_lang('TimeReportBySessionX'), $session['name']);
+    $reportTitle = sprintf(get_lang('TimeReportForSessionX'), $session['name']);
 
     $courses = SessionManager::get_course_list_by_session_id($selectedSession);
 
@@ -159,7 +159,7 @@ if (!empty($selectedTeacher)) {
 
     $coach = api_get_user_info($selectedTeacher);
 
-    $reportTitle = sprintf(get_lang('TimeReportByTeacherX'), $coach['complete_name']);
+    $reportTitle = sprintf(get_lang('TimeReportForTeacherX'), $coach['complete_name']);
 
     $courses = SessionManager::getCoursesListByCourseCoach($selectedTeacher);
 

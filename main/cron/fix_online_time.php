@@ -80,6 +80,11 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
                 )
             )
         );
+        /*
+         * (Avoid multiple updates)
+         * When the user enters a course, this field is updated with the course code.
+         * And when the user goes to another tool, returns to NULL
+         */
         $userId = intval($value);
         $updateOnLineSql = "UPDATE $onLineTrackTable SET "
             . "COURSE = NULL "

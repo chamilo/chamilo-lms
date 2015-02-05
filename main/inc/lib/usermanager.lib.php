@@ -3978,6 +3978,39 @@ class UserManager
     }
 
     /**
+     * @param int $userId
+     * @return array
+     */
+    public static function getDrhListFromUser($userId)
+    {
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblUserRelUser = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $tblUserRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $userId = intval($userId);
+
+        $orderBy = null;
+        if (api_is_western_name_order()) {
+            $orderBy .= " ORDER BY firstname, lastname ";
+        } else {
+            $orderBy .= " ORDER BY lastname, firstname ";
+        }
+
+        $sql = "SELECT u.user_id, username, u.firstname, u.lastname
+                FROM $tblUser u
+                INNER JOIN $tblUserRelUser uru ON (uru.friend_user_id = u.user_id)
+                INNER JOIN $tblUserRelAccessUrl a ON (a.user_id = u.user_id)
+                WHERE
+                    access_url_id = ".api_get_current_access_url_id()." AND
+                    uru.user_id = '$userId' AND
+                    relation_type = '".USER_RELATION_TYPE_RRHH."'
+                $orderBy
+                ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
      * get users followed by human resource manager
      * @param int $userId
      * @param int $userStatus (STUDENT, COURSEMANAGER, etc)
@@ -4908,6 +4941,27 @@ EOF;
                     WHERE language = '$from'";
             Database::query($sql);
         }
+    }
+
+    /**
+     * Get the teacher (users with COURSEMANGER status) list
+     * @return array The list
+     */
+    public static function getTeachersList()
+    {
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $resultData = Database::select('user_id, lastname, firstname, username', $userTable, array(
+            'where' => array(
+                'status = ?' => COURSEMANAGER
+            )
+        ));
+
+        foreach ($resultData as &$teacherData) {
+            $teacherData['completeName'] = api_get_person_name($teacherData['firstname'], $teacherData['lastname']);
+        }
+
+        return $resultData;
     }
 
     /**

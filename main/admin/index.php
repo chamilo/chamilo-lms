@@ -167,6 +167,10 @@ if (api_is_platform_admin()) {
     $items[] = array('url'=>'configure_inscription.php', 	'label' => get_lang('ConfigureInscription'));
     $items[] = array('url'=>'statistics/index.php', 		'label' => get_lang('Statistics'));
     $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'mySpace/company_reports.php',          'label' => get_lang('Reports'));
+    $items[] = array(
+        'url'=> api_get_path(WEB_CODE_PATH) . 'admin/teacher_time_report.php',
+        'label' => get_lang('TeacherTimeReport')
+    );
 
     /* Event settings */
 

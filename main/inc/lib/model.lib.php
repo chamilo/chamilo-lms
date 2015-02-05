@@ -105,9 +105,10 @@ class Model
 
     /**
      * @param array  $options
+     *
      * @return array
      */
-    public function get_all_for_export($options = null)
+    public function getDataToExport($options = array())
     {
         return Database::select('name, description', $this->table, $options);
     }

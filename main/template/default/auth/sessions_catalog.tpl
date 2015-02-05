@@ -1,4 +1,4 @@
-{% extends "default/layout/main.tpl" %}
+{% extends template ~ "/layout/main.tpl" %}
 
 {% block body %}
     <script type="text/javascript">

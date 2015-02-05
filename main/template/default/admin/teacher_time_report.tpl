@@ -44,10 +44,10 @@
         <div class="actions">
             <span class="pull-right">
                 <a href="{{ _p.web_self }}?export=pdf&from={{ selectedFrom }}&until={{ selectedUntil }}&course={{ selectedCourse }}&session={{ selectedSession }}&teacher={{ selectedTeacher }}">
-                    <img src="{{ _p.web_img }}icons/32/pdf.png">
+                    <img src="{{ _p.web_img }}icons/32/pdf.png" title="{{ 'ExportToPDF' | get_lang }}">
                 </a>
                 <a href="{{ _p.web_self }}?export=xls&from={{ selectedFrom }}&until={{ selectedUntil }}&course={{ selectedCourse }}&session={{ selectedSession }}&teacher={{ selectedTeacher }}">
-                    <img src="{{ _p.web_img }}icons/32/export_excel.png">
+                    <img src="{{ _p.web_img }}icons/32/export_excel.png" title="{{ 'ExportExcel' | get_lang }}">
                 </a>
             </span>
         </div>

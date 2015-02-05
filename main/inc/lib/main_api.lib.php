@@ -355,6 +355,13 @@ define('CATALOG_COURSES', 0);
 define('CATALOG_SESSIONS', 1);
 define('CATALOG_COURSES_SESSIONS', 2);
 
+//Hook
+define('HOOK_TYPE_PRE', 0);
+define('HOOK_TYPE_POST', 1);
+define('HOOK_TYPE_ALL', 10);
+
+define('HOOK_MANAGEMENT_PLUGIN', 'hookmanagement');
+
 /**
  * Inclusion of internationalization libraries
  */

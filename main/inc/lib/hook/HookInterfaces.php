@@ -4,8 +4,28 @@
 /**
  * Interface HookEventInterface
  */
-interface HookEventInterface extends SplSubject
+interface HookEventInterface
 {
+    /**
+     * Attach an HookObserver
+     * @link http://php.net/manual/en/splsubject.attach.php
+     * @param \HookObserverInterface| $observer <p>
+     * The <b>HookObserver</b> to attach.
+     * </p>
+     * @return void
+     */
+    public function attach(HookObserverInterface $observer);
+
+    /**
+     * Detach an HookObserver
+     * @link http://php.net/manual/en/splsubject.detach.php
+     * @param \HookObserverInterface| $observer <p>
+     * The <b>HookObserver</b> to detach.
+     * </p>
+     * @return void
+     */
+    public function detach(HookObserverInterface $observer);
+
     /**
      * Return the singleton instance of Hook event.
      * If Hook Management plugin is not enabled, will return NULL
@@ -59,11 +79,36 @@ interface HookEventInterface extends SplSubject
      * @return boolean
      */
     public static function isHookPluginActive();
+
+    /**
+     * Hook Auto Loader. Search for Hook Observers from plugins
+     * @param string $observerClass
+     * @param string $path
+     * @return int
+     */
+    public static function autoLoadHooks($observerClass, $path);
 }
 
-interface HookObserverInterface extends SplObserver
+interface HookObserverInterface
 {
+    /**
+     * Return the singleton instance of Hook observer.
+     * If Hook Management plugin is not enabled, will return NULL
+     * @return HookEventInterface|null
+     */
+    public static function create();
 
+    /**
+     * Return the path from the class, needed to store location or autoload later.
+     * @return string
+     */
+    public function getPath();
+
+    /**
+     * Return the plugin name where is the Hook Observer.
+     * @return string
+     */
+    public function getPluginName();
 }
 
 interface HookManagementInterface
@@ -129,6 +174,24 @@ interface HookManagementInterface
      * @return mixed
      */
     public function getHookCallId($eventName, $observerClassName, $type);
+}
+
+/**
+ * Interface HookPluginInterface
+ */
+interface HookPluginInterface
+{
+    /**
+     * This method will call the Hook management insertHook to add Hook observer from this plugin
+     * @return int
+     */
+    public function installHook();
+
+    /**
+     * This method will call the Hook management deleteHook to disable Hook observer from this plugin
+     * @return int
+     */
+    public function uninstallHook();
 }
 
 /**

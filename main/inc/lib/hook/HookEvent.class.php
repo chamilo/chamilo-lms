@@ -15,7 +15,7 @@ abstract class HookEvent implements HookEventInterface
      */
     protected function __construct($eventName)
     {
-        if ($this->isHookPluginActive()) {
+        if (self::isHookPluginActive()) {
             $this->observers = new SplObjectStorage();
             $this->eventName = $eventName;
             $this->eventData = array();
@@ -47,35 +47,36 @@ abstract class HookEvent implements HookEventInterface
         }
     }
 
-
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Attach an SplObserver
+     * Attach an HookObserver
      * @link http://php.net/manual/en/splsubject.attach.php
-     * @param SplObserver $observer <p>
-     * The <b>SplObserver</b> to attach.
+     * @param \HookObserverInterface| $observer <p>
+     * The <b>HookObserver</b> to attach.
      * </p>
      * @return void
      */
-    public function attach(SplObserver $observer)
+    public function attach(HookObserverInterface $observer)
     {
         global $_hook;
         $observerClass = get_class($observer);
-        $_hook[$this->eventName][$observerClass] = 1;
+        $_hook[$this->eventName][$observerClass] = array(
+            'class_name' => $observerClass,
+            'path' => $observer->getPath(),
+            'plugin_name' => $observer->getPluginName(),
+        );
         $this->observers->attach($observer);
         $this->plugin->insertHook($this->eventName, $observerClass, HOOK_TYPE_ALL);
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Detach an observer
+     * Detach an HookObserver
      * @link http://php.net/manual/en/splsubject.detach.php
-     * @param SplObserver $observer <p>
-     * The <b>SplObserver</b> to detach.
+     * @param \HookObserverInterface| $observer <p>
+     * The <b>HookObserver</b> to detach.
      * </p>
      * @return void
      */
-    public function detach(SplObserver $observer)
+    public function detach(HookObserverInterface $observer)
     {
         global $_hook;
         $observerClass = get_class($observer);
@@ -135,6 +136,7 @@ abstract class HookEvent implements HookEventInterface
         global $_hook;
         if (isset($_hook[$this->eventName]) && is_array($_hook[$this->eventName])) {
             foreach ($_hook[$this->eventName] as $hookObserver => $val) {
+                self::autoLoadHooks($hookObserver, $val['path']);
                 $hookObserverInstance = $hookObserver::create();
                 $this->observers->attach($hookObserverInstance);
             }
@@ -143,6 +145,7 @@ abstract class HookEvent implements HookEventInterface
             $_hook[$this->eventName] = $this->plugin->listHookObservers($this->eventName);
             if (isset($_hook[$this->eventName]) && is_array($_hook[$this->eventName])) {
                 foreach ($_hook[$this->eventName] as $hookObserver => $val) {
+                    self::autoLoadHooks($hookObserver, $val['path']);
                     $hookObserverInstance = $hookObserver::create();
                     $this->observers->attach($hookObserverInstance);
                 }
@@ -180,11 +183,21 @@ abstract class HookEvent implements HookEventInterface
         $isActive = false;
         $appPlugin = new AppPlugin();
         $pluginList = $appPlugin->getInstalledPluginListName();
-        var_dump($pluginList);
         if (in_array(HOOK_MANAGEMENT_PLUGIN, $pluginList)) {
             $isActive = true;
         }
 
         return $isActive;
+    }
+
+    /**
+     * Hook Auto Loader. Search for Hook Observers from plugins
+     * @param string $observerClass
+     * @param string $path
+     * @return int
+     */
+    public static function autoLoadHooks($observerClass, $path)
+    {
+        Autoload::$map[$observerClass] = $path;
     }
 }

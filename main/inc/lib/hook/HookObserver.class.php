@@ -2,20 +2,58 @@
 /* For licensing terms, see /license.txt */
 
 
-class HookObserver implements HookObserverInterface
+abstract class HookObserver implements HookObserverInterface
 {
+    public $path;
+    public $pluginName;
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Receive update from subject
-     * @link http://php.net/manual/en/splobserver.update.php
-     * @param SplSubject $subject <p>
-     * The <b>SplSubject</b> notifying the observer of an update.
-     * </p>
-     * @return void
+     * Construct method
+     * @param string $path
+     * @param string $pluginName
      */
-    public function update(SplSubject $subject)
+    protected function __construct($path, $pluginName)
     {
-        // TODO: Implement update() method.
+        $this->path = $path;
+        $this->pluginName = $pluginName;
+    }
+
+    /**
+     * Return the singleton instance of Hook observer.
+     * If Hook Management plugin is not enabled, will return NULL
+     * @return HookEventInterface|null
+     */
+    public static function create()
+    {
+        static $result = null;
+
+        if ($result) {
+            return $result;
+        } else {
+            try {
+                $class = get_called_class();
+                return new $class;
+            } catch (Exception $e) {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Return the path from the class, needed to store location or autoload later.
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Return the plugin name where is the Hook Observer.
+     * @return string
+     */
+    public function getPluginName()
+    {
+        return $this->pluginName;
     }
 }

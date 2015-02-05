@@ -346,3 +346,8 @@ define('TABLE_TIMELINE',                    'timeline');
 //Gradebook model
 define('TABLE_GRADE_MODEL',                  'grade_model');
 define('TABLE_GRADE_MODEL_COMPONENTS',       'grade_components');
+
+// Hook tables
+define('TABLE_PLUGIN_HOOK_OBSERVER', 'plugin_hook_observer');
+define('TABLE_PLUGIN_HOOK_CALL', 'plugin_hook_call');
+define('TABLE_PLUGIN_HOOK_EVENT', 'plugin_hook_event');

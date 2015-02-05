@@ -61,6 +61,11 @@ if (isset($_GET['msg']) && isset($_GET['type'])) {
 
 $blocks = array();
 
+$hook = HookAdminBlock::create();
+if (!empty($hook)) {
+    $hook->notifyAdminBlock(HOOK_TYPE_PRE);
+}
+
 /* Users */
 
 $blocks['users']['icon']  = Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_SMALL, false);
@@ -337,6 +342,10 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
     $blocks['version_check']['class'] = 'block-admin-version_check';
+
+    if (!empty($hook)) {
+        $hook->notifyAdminBlock(HOOK_TYPE_POST);
+    }
 
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';

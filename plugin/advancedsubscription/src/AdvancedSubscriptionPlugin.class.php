@@ -369,9 +369,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'rejectUrl'
         );
         foreach ($tplParams as $tplParam) {
-            if (isset($data['superior'])) {
-                $tpl->assign($tplParam, $data[$tplParam]);
-            }
+            $tpl->assign($tplParam, $data[$tplParam]);
         }
         $mailIds = array();
         switch ($actionType) {
@@ -519,6 +517,28 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $this->get_lang('MailStudentRequest'),
                         $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_admin.tpl'),
                         $data['s']
+                    );
+                }
+                break;
+            case ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS:
+                // Mail to student
+                $mailIds[] = $this->sendMailMessage(
+                    $data['u'],
+                    $data['student']['user_id'],
+                    $this->get_lang('MailStudentRequest'),
+                    $tpl->fetch('/advancedsubscription/views/advsub_request_received.tpl'),
+                    $data['s']
+                );
+                // Mail to admin
+                foreach ($data['admins'] as $adminId => $admin) {
+                    $tpl->assign('admin', $admin);
+                    $mailIds[] = $this->sendMailMessage(
+                        $data['u'],
+                        $adminId,
+                        $this->get_lang('MailStudentRequest'),
+                        $tpl->fetch('/advancedsubscription/views/advsub_request_approved_info_admin.tpl'),
+                        $data['s'],
+                        true
                     );
                 }
                 break;

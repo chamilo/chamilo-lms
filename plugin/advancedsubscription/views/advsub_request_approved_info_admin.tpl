@@ -60,7 +60,16 @@
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>Estimado:</p>
                         <h2>{{ admin.complete_name }}</h2>
-                        <p>La inscripción del alumno <strong>{{ student.complete_name_with_username }}</strong> al curso <strong>{{ session.name }}</strong> ha sido aprobada por su superior. Puede gestionar las inscripciones al curso <a href="{{ admin_view_url }}"><strong>aquí</strong></a><strong></strong></p>
+                        <p>La inscripción del alumno
+                            <strong>{{ student.complete_name_with_username }}</strong>
+                            al curso <strong>{{ session.name }}</strong>
+                            ha sido aprobada por su superior.
+                            Puede gestionar las inscripciones al curso
+                            <a href="{{ admin_view_url }}">
+                                <strong>aquí</strong>
+                            </a>
+                            <strong></strong>
+                        </p>
                         <p>Gracias.</p>
                         <h3>{{ signature }}</h3></td>
                     <td>&nbsp;</td>

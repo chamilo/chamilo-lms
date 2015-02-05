@@ -63,35 +63,43 @@ if (!empty($a) && !empty($u)) {
             break;
         case 'subscribe': // Subscription
             $bossId = UserManager::getStudentBoss($u);
-            if (true || !empty($bossId)) { // @TODO: If boss does not exist, then update queue status for admin aproval
-                $res = AdvancedSubscriptionPlugin::create()->startSubscription($u, $s, $params);
-                if ($res === true) {
-                    // send mail to superior
-                    $sessionArray = api_get_session_info($s);
-                    $extraSession = new ExtraFieldValue('session');
-                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'as_description');
-                    $sessionArray['as_description'] = $var['field_valiue'];
-                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'target');
-                    $sessionArray['target'] = $var['field_valiue'];
-                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'mode');
-                    $sessionArray['mode'] = $var['field_valiue'];
-                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'publication_end_date');
-                    $sessionArray['publication_end_date'] = $var['field_value'];
-                    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'recommended_number_of_participants');
-                    $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
-                    $studentArray = api_get_user_info($u);
-                    $superiorArray = api_get_user_info(UserManager::getStudentBoss($u));
-                    $adminsArray = UserManager::get_all_administrators();
+            $res = AdvancedSubscriptionPlugin::create()->startSubscription($u, $s, $params);
+            if ($res === true) {
+                // send mail to superior
+                $sessionArray = api_get_session_info($s);
+                $extraSession = new ExtraFieldValue('session');
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'as_description');
+                $sessionArray['as_description'] = $var['field_valiue'];
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'target');
+                $sessionArray['target'] = $var['field_valiue'];
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'mode');
+                $sessionArray['mode'] = $var['field_valiue'];
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'publication_end_date');
+                $sessionArray['publication_end_date'] = $var['field_value'];
+                $var = $extraSession->get_values_by_handler_and_field_variable($s, 'recommended_number_of_participants');
+                $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
+                $studentArray = api_get_user_info($u);
+                $superiorId = UserManager::getStudentBoss($u);
+                if (!empty($superiorId)) {
+                    $superiorArray = api_get_user_info($superiorId);
+                } else {
+                    $superiorArray = null;
+                }
+                $adminsArray = UserManager::get_all_administrators();
 
-                    $data = array(
-                        'student' => $studentArray,
-                        'superior' => $superiorArray,
-                        'admins' => $adminsArray,
-                        'session' => $sessionArray,
-                        'signature' => 'AQUI DEBE IR UNA FIRMA',
-                    );
+                $data = array(
+                    'student' => $studentArray,
+                    'superior' => $superiorArray,
+                    'admins' => $adminsArray,
+                    'session' => $sessionArray,
+                    'signature' => 'AQUI DEBE IR UNA FIRMA',
+                );
 
-
+                if (empty($superiorId)) { // Does not have boss
+                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php?s=' . $s;
+                    error_log($data['admin_view_url']);
+                    $result['mails'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS);
+                } else {
                     $dataUrl = array(
                         'a' => 'confirm',
                         's' => $s,
@@ -104,21 +112,17 @@ if (!empty($a) && !empty($u)) {
                     $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED;
                     $data['rejectUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
                         '?data=' . $plugin->encrypt($dataUrl);
-
                     $result['mails'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
-                    $result['error'] = false;
-                    $result['errorMessage'] = 'No error';
-                    $result['pass'] = true;
-                } else {
-                    if (is_string($res)) {
-                        $result['errorMessage'] = $res;
-                    } else {
-                        $result['errorMessage'] = 'User can not be subscribed';
-                    }
-                    $result['pass'] = false;
                 }
+                $result['error'] = false;
+                $result['errorMessage'] = 'No error';
+                $result['pass'] = true;
             } else {
-                $result['errorMessage'] = 'User does not have Boss';
+                if (is_string($res)) {
+                    $result['errorMessage'] = $res;
+                } else {
+                    $result['errorMessage'] = 'User can not be subscribed';
+                }
                 $result['pass'] = false;
             }
 
@@ -141,7 +145,7 @@ if (!empty($a) && !empty($u)) {
         case 'confirm':
             if (isset($e)) {
                 $res = $plugin->updateQueueStatus($data, $e);
-                if (true || $res === true) {
+                if ($res === true) {
                     $sessionArray = api_get_session_info($s);
                     $extraSession = new ExtraFieldValue('session');
                     $var = $extraSession->get_values_by_handler_and_field_variable($s, 'as_description');

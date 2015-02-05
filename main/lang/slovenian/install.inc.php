@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$YourLanguageNotThereContactUs = "Ne najdete svojega jezika na seznamu? Kontaktirajte nas preko e-poštnega naslova info@chamilo.org in prispevajte k razvoju platforme kot prevajalec.";
 $DateTimezoneSettingNotSet = "Detektirano je bilo, da vaša nastavitev PHP ne definira vrednosti date.timezone. Ta je zahtevana s strani Chamilo. Dodajte nastavitev v vaš php.ini, sicer lahko med izvajanjem nekaterih skript prihaja do problemov. Bili ste opozorjeni !";
 $langStatDB = "Sledenje DB.  Uporabno le pri večih DB";
 $langEnableTracking = "Omogoči sledenje";

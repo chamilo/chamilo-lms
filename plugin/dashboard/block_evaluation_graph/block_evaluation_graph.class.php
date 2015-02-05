@@ -163,7 +163,7 @@ class BlockEvaluationGraph extends Block
 
                         $dataSet->normalize(100, '%');
 
-                        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.txt');
+                        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
 
                         // Cache definition
                         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
@@ -341,7 +341,7 @@ class BlockEvaluationGraph extends Block
 
                             $dataSet->normalize(100, '%');
 
-                            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.txt');
+                            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
 
                             // Cache definition
                             $cachePath = api_get_path(SYS_ARCHIVE_PATH);

@@ -62,9 +62,9 @@
                 {% endfor %}
             </select>
 
-            <h4>{{ "SessionName" | get_lang }}:</h4>
+            <h4>{{ "SessionName" | get_lang }}</h4>
             <h3 class="title-name-session">{{ session.name }}</h3>
-            <h4>{{ "Target" | get_lang }}:</h4>
+            <h4>{{ "Target" | get_lang }}</h4>
             <p>{{ session.target }}</p>
 
         </div>
@@ -75,8 +75,8 @@
             <p class="separate-badge">
                 <span class="badge badge-recom">{{ session.recommended_number_of_participants }}</span>
                 {{ "RecommendedNumberOfParticipants" | get_lang }}</p>
-            <h4>{{ "PublicationEndDate" | get_lang }}:</h4> <p>{{ session.publication_end_date }}</p>
-            <h4>{{ "Mode" | get_lang }}:</h4> <p>{{ session.mode }}</p>
+            <h4>{{ "PublicationEndDate" | get_lang }}</h4> <p>{{ session.publication_end_date }}</p>
+            <h4>{{ "Mode" | get_lang }}</h4> <p>{{ session.mode }}</p>
         </div>
     </div>
     <div class="row">
@@ -94,7 +94,7 @@
                     {% set row_class = "row_odd" %}
                     {% for student in students %}
                     <tr class="{{ row_class }}">
-                        <td style="width: 118px;"><img src="img/avatar.png" class="img-circle"> </td>
+                        <td style="width: 118px;"><img src="{{ student.picture.file }}" class="img-circle"> </td>
                         <td class="name">{{ student.complete_name }}</td>
                         <td>{{ student.created_at }}</td>
                         <td>{{ student.validation }}</td>

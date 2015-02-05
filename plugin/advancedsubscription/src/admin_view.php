@@ -83,6 +83,9 @@ if (!empty($s)) {
         $student['dataApprove'] = $plugin->encrypt($data);
         $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
         $student['dataDisapprove'] = $plugin->encrypt($data);
+        $student['complete_name'] = $student['lastname'] . ', ' . $student['firstname'];
+        $student['picture'] = UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
+        $student['picture'] = UserManager::get_picture_user($user[0], $student['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
     }
     $tpl->assign('session', $studentList['session']);
     $tpl->assign('students', $studentList['students']);

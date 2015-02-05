@@ -116,19 +116,18 @@ global $database_connection;
 // Connect to the server database and select the main chamilo database.
 // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
 $dbPersistConnection = api_get_configuration_value('db_persistent_connection');
+// $_configuration['db_client_flags'] can be set in configuration.php to pass
+// flags to the DB connection
+$dbFlags = api_get_configuration_value('db_client_flags');
 
 $params = array(
     'server' => $_configuration['db_host'],
     'username' => $_configuration['db_user'],
     'password' => $_configuration['db_password'],
-    'persistent' => $dbPersistConnection
+    'persistent' => $dbPersistConnection,
+    'client_flags' => $dbFlags,
 );
 
-// $_configuration['db_client_flags'] can be set in configuration.php to pass
-// flags to the DB connection
-if (isset($_configuration['db_client_flags']) && !empty($_configuration['db_client_flags'])) {
-    $params['client_flags'] = $_configuration['db_client_flags'];
-}
 if (!($conn_return = @Database::connect($params))) {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.

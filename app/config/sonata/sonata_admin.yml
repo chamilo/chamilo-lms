@@ -39,11 +39,8 @@ sonata_admin:
             #- { position: right, type: sonata.block.service.rss, settings: { title: Sonata Project's Feeds, url: http://sonata-project.org/blog/archive.rss }}
 
         groups:
-            sonata_page:
-                items:
-                    - sonata.page.admin.page
             sonata.admin.group.content:
-                label:           sonata_content
+                label:           Content
                 label_catalogue: SonataDemoBundle
                 icon:            '<i class="fa fa-th"></i>'
                 items:
@@ -81,8 +78,8 @@ sonata_admin:
                 label_catalogue: SonataAdminBundle
                 icon:            '<i class="fa fa-cogs"></i>'
                 items:
-                    #- sonata.page.admin.site
                     - sonata.page.admin.site
+                    - sonata.page.admin.page
                     - sonata.notification.admin.message
                     - sonata.admin.settings_current
                     - sonata.admin.tool

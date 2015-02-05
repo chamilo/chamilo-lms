@@ -116,7 +116,7 @@
                 {% for row in rows %}
                     <tr>
                         {% if withFilter %}
-                            <td>{{ row.session.name }}</td>
+                            <td>{{ row.session ? row.session.name : '&nbsp' }}</td>
                             <td>{{ row.course.name }}</td>
                         {% endif %}
                         <td>{{ row.coach.completeName }} ({{ row.coach.username}})</td>

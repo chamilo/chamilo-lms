@@ -4911,6 +4911,27 @@ EOF;
     }
 
     /**
+     * Get the teacher (users with COURSEMANGER status) list
+     * @return array The list
+     */
+    public static function getTeachersList()
+    {
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $resultData = Database::select('user_id, lastname, firstname, username', $userTable, array(
+            'where' => array(
+                'status = ?' => COURSEMANAGER
+            )
+        ));
+
+        foreach ($resultData as &$teacherData) {
+            $teacherData['completeName'] = api_get_person_name($teacherData['firstname'], $teacherData['lastname']);
+        }
+
+        return $resultData;
+    }
+
+    /**
      * @return array
      */
     public static function getOfficialCodeGrouped()

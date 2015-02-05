@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a422c2e4eb5cfff2fa4784fd9036ed9c",
+    "hash": "14f25295cfdba7534deecf11519b2d22",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -782,8 +782,11 @@
                     "email": "fabien@symfony.com"
                 }
             ],
-            "description": "Symfony Process Component",
-            "homepage": "http://symfony.com",
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
             "time": "2015-01-25 04:39:26"
         },
         {

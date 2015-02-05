@@ -5,6 +5,10 @@ require_once dirname(__FILE__) . '/../../../inc/global.inc.php';
 require_once dirname(__FILE__) . '/../be.inc.php';
 set_time_limit(0);
 
+use CpChart\Classes\pData as pData;
+use CpChart\Classes\pImage as pImage;
+use CpChart\Classes\pCache as pCache;
+
 /**
  * Class FlatViewTable
  * Table to display flat view (all evaluations and links for all students)

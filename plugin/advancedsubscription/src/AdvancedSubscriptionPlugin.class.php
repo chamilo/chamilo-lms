@@ -356,7 +356,18 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         $tpl = new Template($this->get_lang('plugin_title'));
         $tpl->assign('data', $data);
-        $tplParams = array('user', 'student', 'students', 'superior', 'admins', 'session', 'signature', 'admin_view_url');
+        $tplParams = array(
+            'user',
+            'student',
+            'students',
+            'superior',
+            'admins',
+            'session',
+            'signature',
+            'admin_view_url',
+            'acceptUrl',
+            'rejectUrl'
+        );
         foreach ($tplParams as $tplParam) {
             if (isset($data['superior'])) {
                 $tpl->assign($tplParam, $data[$tplParam]);

@@ -9,8 +9,8 @@
 class AdvancedSessionsPlugin extends Plugin
 {
 
-    const FIELD_NAME = 'as_description';
-    const FIELD_TITLE = 'ASDescription';
+    const FIELD_NAME = 'advsess_description';
+    const FIELD_TITLE = 'AdvSessDescription';
 
     /**
      * Class constructor

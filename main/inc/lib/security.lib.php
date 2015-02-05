@@ -353,9 +353,11 @@ class Security
                 $config->set('HTML.Allowed', $allowed_html_anonymous);
             }
 
-            $config->set('Attr.EnableID', true); // We need it for example for the flv player (ids of surrounding div-tags have to be preserved).
+            // We need it for example for the flv player (ids of surrounding div-tags have to be preserved).
+            $config->set('Attr.EnableID', true);
             $config->set('CSS.AllowImportant', true);
-            $config->set('CSS.AllowTricky', true); // We need for the flv player the css definition display: none;
+            // We need for the flv player the css definition display: none;
+            $config->set('CSS.AllowTricky', true);
             $config->set('CSS.Proprietary', true);
 
             // Allow uri scheme.

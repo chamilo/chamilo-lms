@@ -83,7 +83,8 @@ class SessionManager
         $start_limit = true,
         $end_limit = true,
         $fix_name = false,
-        $duration = null
+        $duration = null,
+        $showDescription = null
     ) {
         global $_configuration;
 
@@ -199,6 +200,14 @@ class SessionManager
                     }
                     $sql = "UPDATE $tbl_session
                             SET duration = '$duration'
+                            WHERE id = $session_id";
+                    Database::query($sql);
+                }
+
+                if (!is_null($showDescription)) {
+                    $showDescription = intval($showDescription);
+                    $sql = "UPDATE $tbl_session
+                            SET show_description = '$showDescription'
                             WHERE id = $session_id";
                     Database::query($sql);
                 }
@@ -1313,20 +1322,20 @@ class SessionManager
     /**
      * Edit a session
      * @author Carlos Vargas from existing code
-     * @param	integer		id
-     * @param	string 		name
-     * @param 	integer		year_start
-     * @param 	integer		month_start
-     * @param 	integer		day_start
-     * @param 	integer		year_end
-     * @param 	integer		month_end
-     * @param 	integer		day_end
-     * @param 	integer		nb_days_acess_before
-     * @param 	integer		nb_days_acess_after
-     * @param 	integer		nolimit
-     * @param 	integer		id_coach
-     * @param 	integer		id_session_category
-     * @param   int $id_visibility
+     * @param integer		id
+     * @param string 		name
+     * @param integer		year_start
+     * @param integer		month_start
+     * @param integer		day_start
+     * @param integer		year_end
+     * @param integer		month_end
+     * @param integer		day_end
+     * @param integer		nb_days_acess_before
+     * @param integer		nb_days_acess_after
+     * @param integer		nolimit
+     * @param integer		id_coach
+     * @param integer		id_session_category
+     * @param int $id_visibility
      * @param bool
      * @param bool
      * @param string $description
@@ -3637,6 +3646,7 @@ class SessionManager
      * @param bool $deleteUsersNotInList
      * @param bool $updateCourseCoaches
      * @param bool $sessionWithCoursesModifier
+     * @param int $showDescription
      * @return array
      */
     static function importCSV(
@@ -3654,7 +3664,8 @@ class SessionManager
         $updateCourseCoaches = false,
         $sessionWithCoursesModifier = false,
         $addOriginalCourseTeachersAsCourseSessionCoaches = true,
-        $removeAllTeachersFromCourse = true
+        $removeAllTeachersFromCourse = true,
+        $showDescription = null
     ) {
         $content = file($file);
 
@@ -3680,6 +3691,10 @@ class SessionManager
         if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
             $extraParameters .= ' , nb_days_access_before_beginning = '.intval($daysCoachAccessBeforeBeginning);
             $extraParameters .= ' , nb_days_access_after_end = '.intval($daysCoachAccessAfterBeginning);
+        }
+
+        if (!is_null($showDescription)) {
+            $extraParameters .= ' , show_description = '.intval($showDescription);
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -3749,10 +3764,10 @@ class SessionManager
                     continue;
                 }
 
-                $date_start             = $enreg['DateStart'];
-                $date_end               = $enreg['DateEnd'];
-                $session_category_id    = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
-                $sessionDescription     = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+                $date_start = $enreg['DateStart'];
+                $date_end = $enreg['DateEnd'];
+                $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
+                $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
 
                 $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {
@@ -3916,6 +3931,9 @@ class SessionManager
                             }
 
                             $sessionInfo = api_get_session_info($session_id);
+
+                            $params['show_description'] = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : intval($showDescription);
+
                             if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
                                 if (empty($sessionInfo['nb_days_access_before_beginning']) ||
                                     (!empty($sessionInfo['nb_days_access_before_beginning']) &&
@@ -5381,4 +5399,141 @@ class SessionManager
 
         return false;
     }
+
+    /**
+     * Get the list of course coaches
+     * @return array The list
+     */
+    public static function getAllCourseCoaches()
+    {
+        $coaches = array();
+
+        $scuTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $idResult = Database::select('DISTINCT id_user', $scuTable, array(
+            'where' => array(
+                'status = ?' => 2
+            )
+        ));
+
+        if ($idResult != false) {
+            foreach ($idResult as $idData) {
+                $userResult = Database::select('user_id, lastname, firstname, username', $userTable, array(
+                    'where' => array(
+                        'user_id = ?' => $idData['id_user']
+                    )
+                ), 'first');
+
+                if ($userResult != false) {
+                    $coaches[] = array(
+                        'id' => $userResult['user_id'],
+                        'lastname' => $userResult['lastname'],
+                        'firstname' => $userResult['firstname'],
+                        'username' => $userResult['username'],
+                        'completeName' => api_get_person_name($userResult['firstname'], $userResult['lastname'])
+                    );
+                }
+            }
+        }
+
+        return $coaches;
+    }
+
+    /**
+     * Calculate the total user time in the platform 
+     * @param int $userId The user id
+     * @param string $from Optional. From date
+     * @param string $until Optional. Until date
+     * @return string The time (hh:mm:ss)
+     */
+    public static function getTotalUserTimeInPlatform($userId, $from = '', $until = '')
+    {
+        $userId = intval($userId);
+
+        $trackLoginTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+
+        $whereConditions = array(
+            'login_user_id = ? ' => $userId
+        );
+
+        if (!empty($from) && !empty($until)) {
+            $whereConditions["AND (login_date >= '?' "] = $from;
+            $whereConditions["AND logout_date <= DATE_ADD('?', INTERVAL 1 DAY)) "] = $until;
+        }
+
+        $trackResult = Database::select(
+            'SEC_TO_TIME(SUM(UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date))) as total_time',
+            $trackLoginTable,
+            array(
+                'where' => $whereConditions
+            ), 'first'
+        );
+
+        if ($trackResult != false) {
+            return $trackResult['total_time'] ? $trackResult['total_time'] : '00:00:00';
+        }
+
+        return '00:00:00';
+    }
+
+    /**
+     * Calc the expended time (hh::mm:ss) by a user in a course
+     * @param int $userId The user id
+     * @param string $courseCode The course id
+     * @param int $sessionId Optional. The session id
+     * @param string $from Optional. From date
+     * @param string $until Optional. Until date
+     * @return string The time
+     */
+    public static function getUserTimeInCourse($userId, $courseCode, $sessionId = 0, $from = '', $until = '')
+    {
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+
+        $trackCourseAccessTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $whereConditions = array(
+            'user_id = ? ' => $userId,
+            "AND course_code = '?' " => $courseCode,
+            'AND session_id = ? ' => $sessionId
+        );
+
+        if (!empty($from) && !empty($until)) {
+            $whereConditions["AND (login_course_date >= '?' "] = $from;
+            $whereConditions["AND logout_course_date <= DATE_ADD('?', INTERVAL 1 DAY)) "] = $until;
+        }
+
+        $trackResult = Database::select(
+            'SEC_TO_TIME(SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date))) as total_time',
+            $trackCourseAccessTable,
+            array(
+                'where' => $whereConditions
+            ), 'first'
+        );
+
+        if ($trackResult != false) {
+            return $trackResult['total_time'] ? $trackResult['total_time'] : '00:00:00';
+        }
+
+        return '00:00:00';
+    }
+
+    /**
+     * Get the courses list by a course coach
+     * @param int $coachId The coach id
+     * @return array
+     */
+    public static function getCoursesListByCourseCoach($coachId)
+    {
+        $srcruTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        return  Database::select('*', $srcruTable, array(
+            'where' => array(
+                'id_user = ? AND ' => $coachId,
+                'status = ?' => 2
+            )
+        ));
+    }
+
 }

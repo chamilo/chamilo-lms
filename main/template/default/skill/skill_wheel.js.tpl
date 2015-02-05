@@ -1,5 +1,5 @@
 {# topbar #}
-{% include "default/layout/topbar.tpl" %}
+{% include template ~ "/layout/topbar.tpl" %}
 <script>
 
 /* Skill wheel settings */

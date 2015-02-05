@@ -1,10 +1,10 @@
 {% block header %}
-{% include "default/layout/main_header.tpl" %}
+{% include template ~ "/layout/main_header.tpl" %}
 {% endblock %}
 
 {% block body %}
 	{% if show_sniff == 1 %}
-	 	{% include "default/layout/sniff.tpl" %}
+	 	{% include template ~ "/layout/sniff.tpl" %}
 	{% endif %}
 {% endblock %}
 
@@ -17,5 +17,5 @@
         </div> <!-- end of #page section -->
         </div> <!-- end of #wrapper section -->
     {% endif %}
-    {% include "default/layout/main_footer.tpl" %}
+    {% include template ~ "/layout/main_footer.tpl" %}
 {% endblock %}

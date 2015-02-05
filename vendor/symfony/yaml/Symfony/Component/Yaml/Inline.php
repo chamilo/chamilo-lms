@@ -144,15 +144,13 @@ class Inline
                 }
 
                 return $repr;
+            case '' == $value:
+                return "''";
             case Escaper::requiresDoubleQuoting($value):
                 return Escaper::escapeWithDoubleQuotes($value);
             case Escaper::requiresSingleQuoting($value):
-                return Escaper::escapeWithSingleQuotes($value);
-            case '' == $value:
-                return "''";
             case preg_match(self::getTimestampRegex(), $value):
-            case in_array(strtolower($value), array('null', '~', 'true', 'false')):
-                return "'$value'";
+                return Escaper::escapeWithSingleQuotes($value);
             default:
                 return $value;
         }

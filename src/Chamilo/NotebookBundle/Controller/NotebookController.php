@@ -44,12 +44,7 @@ class NotebookController extends ToolBaseCrudController
      */
     public function indexAction(Request $request)
     {
-        /*if (false === $this->get('security.authorization_checker')->isGranted('view', $course)) {
-           throw new AccessDeniedHttpException('Unauthorised access!');
-        }*/
-
         $source = new Entity('ChamiloNotebookBundle:CNotebook');
-
         $course = $this->getCourse();
 
         /* @var $grid \APY\DataGridBundle\Grid\Grid */
@@ -378,5 +373,13 @@ class NotebookController extends ToolBaseCrudController
     protected function getManager()
     {
         return $this->get('chamilo_notebook.entity.notebook_manager');
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolName()
+    {
+        return $this->get('chamilo_notebook.tool.notebook')->getName();
     }
 }

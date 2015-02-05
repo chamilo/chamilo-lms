@@ -31,9 +31,10 @@ class MenuListener
     {
         $request = $event->getRequest();
 
-        foreach ($this->getMenu($request) as $item) {
+        /*foreach ($this->getMenu($request) as $item) {
             $event->addItem($item);
-        }
+        }*/
+        $event->setMenu($this->getMenu($request));
     }
 
     /**
@@ -42,9 +43,8 @@ class MenuListener
      */
     protected function getMenu(Request $request)
     {
-        $menu = $this->container->get('chamilo.menu.simple_menu');
+        $menu = $this->container->get('chamilo_core.menu.simple_menu');
 
-        /** @var \Knp\Menu\ItemInterface $menuItems */
         $menuItems = $menu->mainMenu(
             $this->container->get('knp_menu.factory'),
             array()
@@ -60,7 +60,6 @@ class MenuListener
      */
     protected function activateByRoute($route, $items)
     {
-
         /** @var \Knp\Menu\MenuItem $item */
         foreach ($items as $item) {
             if ($item->hasChildren()) {

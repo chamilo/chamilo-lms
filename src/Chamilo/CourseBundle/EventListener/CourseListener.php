@@ -84,8 +84,6 @@ class CourseListener
             $em = $container->get('doctrine')->getManager();
 
             $securityChecker = $container->get('security.authorization_checker');
-            /** @var User $user */
-            $user = $container->get('security.token_storage')->getToken()->getUser();
 
             if (!empty($courseCode)) {
                 /** @var Course $course */
@@ -115,6 +113,22 @@ class CourseListener
                             throw new NotFoundHttpException('Session not found');
                         }
                     }
+
+                    // Example 'chamilo_notebook.controller.notebook:indexAction'
+                    $controllerAction = $request->get('_controller');
+                    $controllerActionParts = explode(':', $controllerAction);
+                    $controllerNameParts = explode('.', $controllerActionParts[0]);
+                    $controllerName = $controllerActionParts[0];
+
+                    $toolName = null;
+                    if (isset($controllerNameParts[1]) &&
+                        $controllerNameParts[1] == 'controller') {
+                        $toolName = $this->container->get($controllerName)->getToolName();
+                        $action = str_replace('action', '', $controllerActionParts[1]);
+                        $actionLabel = $toolName.'.'.$action;
+                    }
+
+                    $container->get('twig')->addGlobal('tool_name', $toolName);
 
                     // Legacy code
 

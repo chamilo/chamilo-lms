@@ -4,11 +4,22 @@
 {{- chamilo_settings_get('platform.site_name') -}}
 {% endblock %}
 
-{% block page_title %}
-    {% if page is defined %}
-        {{ page.name }}
-    {% else %}
-        {{ parent() }}
+ {% block page_title %}
+     {% if course is defined %}
+        {# This value is set in the CourseListener #}
+        {% if tool_name is defined %}
+            {{ tool_name | trans }}
+        {% endif %}
+     {% else %}
+         {% if page is defined %}
+             {{ page.name }}
+         {% endif %}
+     {% endif %}
+{% endblock %}
+
+{% block page_subtitle %}
+    {% if course is defined %}
+        {{ course.title }}
     {% endif %}
 {% endblock %}
 

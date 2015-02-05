@@ -1,5 +1,8 @@
 {% extends "ChamiloCoreBundle::layout.html.twig" %}
 
+{% block page_title %} {{ course.title }}{% endblock %}
+{% block page_subtitle %}{{ course.code }}{% endblock %}
+
 {% block page_content %}
 
 {% autoescape false %}

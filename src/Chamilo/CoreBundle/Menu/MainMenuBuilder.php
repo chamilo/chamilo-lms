@@ -7,6 +7,10 @@ use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * Class MainMenuBuilder
+ * @package Chamilo\CoreBundle\Menu
+ */
 class MainMenuBuilder extends ContainerAware
 {
     /**

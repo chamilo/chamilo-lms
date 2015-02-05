@@ -5,14 +5,33 @@
             {{ 'Home'|trans({}, 'ChamiloThemeBundle') }}
         </a>
     </li>
-    {% if active %}
-        {% for item in active %}
-            <li>
-                <a href="{{ item.route is empty ? '#' : '/' in item.route ? item.route : path(item.route, item.routeArgs) }}">
-                    {{ item.label }}
-                </a>
-            </li>
-        {% endfor %}
+
+    {% if course is defined %}
+    <li>
+        <a href="{{ url('course_home', {'course': course }) }}">
+            <i class="fa fa-book"></i>
+            {{ course.title }}
+        </a>
+    </li>
     {% endif %}
+
+    {% if tool_name is defined %}
+        <li>
+            <a href="{{ url('course_home', {'course': course }) }}">
+                <i class="fa fa-cube"></i>
+                {{ tool_name }}
+            </a>
+        </li>
+    {% endif %}
+
+    {#{% if active %}#}
+        {#{% for item in active %}#}
+            {#<li>#}
+                {#<a href="{{ item.route is empty ? '#' : '/' in item.route ? item.route : path(item.route, item.routeArgs) }}">#}
+                    {#{{ item.label }}#}
+                {#</a>#}
+            {#</li>#}
+        {#{% endfor %}#}
+    {#{% endif %}#}
     <li class="active">{{ title }}</li>
 </ol>

@@ -125,11 +125,12 @@ services:
             - { name: kernel.event_subscriber }
 
     # Menu
-#    chamilo_core.listener.navbar_menu_listener:
-#        class: Chamilo\CoreBundle\EventListener\MenuListener
-#        arguments: [@service_container]
-#        tags:
-#            - { name: kernel.event_listener, event: theme.sidebar_setup_menu_knp, method: onSetupMenu }
+    chamilo_core.listener.navbar_menu_listener:
+        class: Chamilo\CoreBundle\EventListener\MenuListener
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: theme.sidebar_setup_menu_knp, method: onSetupMenu }
+            - { name: kernel.event_listener, event: theme.breadcrumb, method: onSetupMenu }
 
     # Show the user information in the topbar
     chamilo_core.listener.navbar_user_listener:
@@ -176,13 +177,13 @@ services:
             - { name: sonata.block }
 
     # Menus
-#    chamilo_core.menu.simple_menu:
-#        class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder
-#        arguments: [@service_container]
+    chamilo_core.menu.simple_menu:
+        class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder
+        arguments: [@service_container]
 
-    chamilo_core.menu.menu.main_menu_builder:
-        class: Chamilo\CoreBundle\Menu\MainMenuBuilder
-        arguments: [@knp_menu.factory, @router]
+#    chamilo_core.menu.menu.main_menu_builder:
+#        class: Chamilo\CoreBundle\Menu\MainMenuBuilder
+#        arguments: [@knp_menu.factory, @router]
 
 #    chamilo_core.menu.menu.course_menu_builder:
 #        class: Chamilo\CoreBundle\Menu\CourseMenuBuilder

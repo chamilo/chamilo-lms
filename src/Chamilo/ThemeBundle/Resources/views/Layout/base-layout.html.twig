@@ -49,6 +49,7 @@
             {{- chamilo_settings_get('platform.institution') -}}
         </a>
         {% endblock %}
+        {% block chamilo_main_navbar %}
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
             <!-- Sidebar toggle button-->
@@ -64,15 +65,16 @@
                     {% block chamilo_navbar %}
                         {{ render(controller('ChamiloThemeBundle:Navbar:messages')) }}
                         {{ render(controller('ChamiloThemeBundle:Navbar:notifications')) }}
-                        {{ render(controller('ChamiloThemeBundle:Navbar:tasks')) }}
+                        {# Not yet implemented #}
+                        {#{{ render(controller('ChamiloThemeBundle:Navbar:tasks')) }}#}
                         {{ render(controller('ChamiloThemeBundle:Navbar:user')) }}
                     {% endblock %}
                 </ul>
             </div>
             {% endif %}
         </nav>
+        {% endblock %}
     </header>
-
 {% endblock %}
 
 <div class="wrapper row-offcanvas row-offcanvas-left">
@@ -81,52 +83,34 @@
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             {% block chamilo_sidebar %}
-
                 {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
                     {{ render(controller('ChamiloThemeBundle:Sidebar:userPanel')) }}
                     {{ render(controller('ChamiloThemeBundle:Sidebar:searchForm')) }}
                 {% endif %}
-
-                {{ render(controller('ChamiloThemeBundle:Sidebar:menu', {'request':app.request})) }}
-
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    {{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:mainMenu', {'automenu': 'pills', 'stacked':true}) }}
-                {% endif %}
-
-                {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
-                    <div class="user-panel">
-                    </div>
-                    <form action="{{ path("fos_user_security_check") }}" method="post" role="form" class="sidebar-form">
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
-                        <div class="form-group">
-                            <label for="username">{{ 'form.username' | trans({}, 'FOSUserBundle') }}</label>
-                            <input type="text" class="form-control" id="username" name="_username" >
-                        </div>
-                        <div class="form-group">
-                            <label for="password">{{ 'form.password' | trans({}, 'FOSUserBundle') }}</label>
-                            <input type="password" class="form-control" id="password" name="_password">
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
-                    {{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:notLoginMenu', {'automenu': 'pills', 'stacked':true}) }}
-                {% endif %}
-                {#{{ mopa_bootstrap_menu('ChamiloCoreBundle:SimpleMenuBuilder:helpMenu', {'automenu': 'pills', 'stacked':true}) }}#}
+                {# Sidebar menu #}
+                {{ render(controller('ChamiloThemeBundle:Sidebar:menuKnp', {'request' : app.request})) }}
             {% endblock %}
         </section>
         <!-- /.sidebar -->
     </aside>
+
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">
         <!-- Content Header (Page header) -->
+        {% block content_header %}
         <section class="content-header">
-            <h1>
-                {% block page_title %}Blank page{% endblock %}
-                <small>{% block page_subtitle %}Control panel{% endblock %}</small>
-            </h1>
+            {% block content_header_title %}
+                <h1>
+                    {% block page_title %}{% endblock %}
+                    <small>{% block page_subtitle %}{% endblock %}</small>
+                </h1>
+            {% endblock %}
+
             {% block chamilo_breadcrumb %}
             {{ render(controller('ChamiloThemeBundle:Breadcrumb:breadcrumb', {'request':app.request, 'title' : block('page_title')})) }}
             {% endblock %}
         </section>
+        {% endblock %}
 
         <!-- Main content -->
         <section class="content">

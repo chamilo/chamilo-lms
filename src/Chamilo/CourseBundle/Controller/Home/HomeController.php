@@ -37,7 +37,7 @@ class HomeController extends ToolBaseController
         $session = $this->getSession();
 
         // Already added in the listener.
-        /*if (false === $this->get('security.authorization_checker')->isGranted('view', $course)) {
+        /*if (false === $this->isGranted('view', $course)) {
             throw new AccessDeniedException('Unauthorised access!');
         }*/
 

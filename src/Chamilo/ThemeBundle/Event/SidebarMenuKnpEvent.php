@@ -1,28 +1,24 @@
 <?php
-/**
- * SidebarMenuEvent.php
- * avanzu-admin
- * Date: 23.02.14
- */
 
 namespace Chamilo\ThemeBundle\Event;
 
-
 use Chamilo\ThemeBundle\Model\MenuItemInterface;
+use Knp\Menu\MenuItem;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class SidebarMenuEvent
+ * Class SidebarMenuKnpEvent
  *
  * @package Chamilo\ThemeBundle\Event
  */
-class SidebarMenuEvent extends ThemeEvent
+class SidebarMenuKnpEvent extends ThemeEvent
 {
-
     /**
      * @var array
      */
     protected $menuRootItems = array();
+
+    protected $menu;
 
     /**
      * @var Request
@@ -42,6 +38,21 @@ class SidebarMenuEvent extends ThemeEvent
         return $this->request;
     }
 
+    /**
+     * @return MenuItem
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * @param MenuItem $menu
+     */
+    public function setMenu(MenuItem $menu)
+    {
+        $this->menu = $menu;
+    }
 
     /**
      * @return array
@@ -52,11 +63,11 @@ class SidebarMenuEvent extends ThemeEvent
     }
 
     /**
-     * @param MenuItemInterface $item
+     * @param MenuItem $item
      */
-    public function addItem($item)
+    public function addItem(MenuItem $item)
     {
-        $this->menuRootItems[$item->getIdentifier()] = $item;
+        $this->menuRootItems[$item->getUri()] = $item;
     }
 
     /**
@@ -72,12 +83,14 @@ class SidebarMenuEvent extends ThemeEvent
     /**
      * @return MenuItemInterface|null
      */
-    public function getActive() {
-
-        foreach($this->getItems() as $item) {
-            /** @var $item MenuItemInterface */
-            if($item->isActive()) return $item;
+    public function getActive()
+    {
+        foreach ($this->getMenu() as $child) {
+            if ($child->isCurrent()) {
+                return $child;
+            }
         }
+
         return null;
     }
 

@@ -97,7 +97,7 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
  * Initialization
  */
 if (php_sapi_name() != 'cli') {
-    //exit; //do not run from browser
+    exit; //do not run from browser
 }
 $teachersInCourseIds = getTeachersInCourseIds();
 if (!empty($teachersInCourseIds)) {

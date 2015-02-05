@@ -20,8 +20,7 @@ function getTeachersInCourseIds()
         'login_user_id', $table . $joinStatement,
         array(
             'where' => array(
-                'course <> ? AND status = ?' => array(
-                    'NULL',
+                'course IS NOT NULL AND status = ?' => array(
                     COURSEMANAGER
                 )
             )
@@ -48,6 +47,7 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
         strtotime($dataBaseCurrentHour . ' ' . $timeLimit)
     );
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $onLineTrackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     foreach ($teachersInCourseIds as $key => $value) {
         $value = array_shift($value);
         $logResult = Database::select(
@@ -80,12 +80,11 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
                 )
             )
         );
-        Database::update(
-            Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE),
-            array(
-                'course' => 'NULL'
-            )
-        );
+        $userId = intval($value);
+        $updateOnLineSql = "UPDATE $onLineTrackTable SET "
+            . "COURSE = NULL "
+            . "WHERE login_user_id = $userId";
+        Database::query($updateOnLineSql);
     }
 }
 
@@ -93,7 +92,7 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
  * Initialization
  */
 if (php_sapi_name() != 'cli') {
-    exit; //do not run from browser
+    //exit; //do not run from browser
 }
 $teachersInCourseIds = getTeachersInCourseIds();
 if (!empty($teachersInCourseIds)) {

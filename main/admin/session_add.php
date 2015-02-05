@@ -17,12 +17,6 @@ require_once '../inc/global.inc.php';
 // including additional libraries
 require_once '../inc/lib/xajax/xajax.inc.php';
 
-$advancedSessionsPluginFilePath = api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
-
-if (file_exists($advancedSessionsPluginFilePath)) {
-    require_once api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
-}
-
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_coachs');

@@ -10,12 +10,6 @@ $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-$advancedSessionsPluginFilePath = api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
-
-if (file_exists($advancedSessionsPluginFilePath)) {
-    require_once api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
-}
-
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 

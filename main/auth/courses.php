@@ -24,12 +24,6 @@ require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'courses_controller.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
-$advancedSessionsPluginFilePath = api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
-
-if (file_exists($advancedSessionsPluginFilePath)) {
-    require_once api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
-}
-
 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
     $htmlHeadXtra[] = '
     <script>

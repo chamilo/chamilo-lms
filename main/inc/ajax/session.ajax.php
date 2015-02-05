@@ -107,15 +107,9 @@ switch ($action) {
         }
         break;
     case 'get_description':
-        $advancedSessionsPluginFilePath = api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
-
-        if (file_exists($advancedSessionsPluginFilePath)) {
-            require_once api_get_path(PLUGIN_PATH) . 'advancedsessions/src/AdvancedSessionsPlugin.class.php';
-        }
-
         $sessionId = intval($_GET['session']);
 
-        if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
+        if (AdvancedSessionsPlugin::hasDescriptionField()) {
             $sessionInfo = api_get_session_info($sessionId);
             ?>
             <h2><?php echo $sessionInfo['name'] ?></h2><br>

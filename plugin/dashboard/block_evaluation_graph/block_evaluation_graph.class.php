@@ -163,6 +163,8 @@ class BlockEvaluationGraph extends Block
 
                         $dataSet->normalize(100, '%');
 
+                        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.txt');
+
                         // Cache definition
                         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
                         $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
@@ -338,6 +340,8 @@ class BlockEvaluationGraph extends Block
                             $dataSet->setAbscissaName(get_lang('EvaluationName'));
 
                             $dataSet->normalize(100, '%');
+
+                            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.txt');
 
                             // Cache definition
                             $cachePath = api_get_path(SYS_ARCHIVE_PATH);

@@ -2842,7 +2842,8 @@ function grapher($sql_result, $start_date, $end_date, $type = "")
         $myData->setSerieWeight('Serie1', 1);
         $myData->setSerieDescription('Serie1', get_lang('MyResults'));
         $myData->setAxisName(0, get_lang('Minutes'));
-        // @TODO: Define a custom palette
+        $myData->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.txt');
+
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);

@@ -149,14 +149,15 @@ class BlockStudentGraph extends Block
             $dataSet->setAbscissaName(get_lang('User'));
             $dataSet->setAxisName(0, get_lang('Attendance'));
             $palette = array(
-                '0' => array('R' => 188, 'G' => 224, 'B' => 46, 'Alpha' => 100),
-                '1' => array('R' => 224, 'G' => 100, 'B' => 46, 'Alpha' => 100),
-                '2' => array('R' => 224, 'G' => 214, 'B' => 46, 'Alpha' => 100),
-                '3' => array('R' => 46, 'G' => 151, 'B' => 224, 'Alpha' => 100),
-                '4' => array('R' => 176, 'G' => 46, 'B' => 224, 'Alpha' => 100),
-                '5' => array('R' => 224, 'G' => 46, 'B' => 117, 'Alpha' => 100),
-                '6' => array('R' => 92, 'G' => 224, 'B' => 46, 'Alpha' => 100),
-                '7' => array('R' => 224, 'G' => 176, 'B' => 46, 'Alpha' => 100)
+                '0' => array('R' => 186, 'G' => 206, 'B' => 151, 'Alpha' => 100),
+                '1' => array('R' => 210, 'G' => 148, 'B' => 147, 'Alpha' => 100),
+                '2' => array('R' => 148, 'G' => 170, 'B' => 208, 'Alpha' => 100),
+                '3' => array('R' => 221, 'G' => 133, 'B' => 61, 'Alpha' => 100),
+                '4' => array('R' => 65, 'G' => 153, 'B' => 176, 'Alpha' => 100),
+                '5' => array('R' => 114, 'G' => 88, 'B' => 144, 'Alpha' => 100),
+                '6' => array('R' => 138, 'G' => 166, 'B' => 78, 'Alpha' => 100),
+                '7' => array('R' => 171, 'G' => 70, 'B' => 67, 'Alpha' => 100),
+                '8' => array('R' => 69, 'G' => 115, 'B' => 168, 'Alpha' => 100),
             );
             // Cache definition
             $cachePath = api_get_path(SYS_ARCHIVE_PATH);

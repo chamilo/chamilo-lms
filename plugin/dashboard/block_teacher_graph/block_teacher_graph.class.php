@@ -129,6 +129,7 @@ class BlockTeacherGraph extends Block
 			$dataSet->setAbscissaName($last_week);
 			$dataSet->setAxisName(0, get_lang('Minutes'));
             $dataSet->setAbscissa('Days');
+            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.txt');
 
             // Cache definition
             $cachePath = api_get_path(SYS_ARCHIVE_PATH);

@@ -25,11 +25,11 @@
                 maxDate: new Date('{{ filterMaxDate }}'),
                 separator: ' / ',
                 locale: {
-                    applyLabel: '{{ 'Ok' | get_lang }}',
-                    cancelLabel: '{{ 'Cancel' | get_lang }}',
-                    fromLabel: '{{ 'From' | get_lang }}',
-                    toLabel: '{{ 'Until' | get_lang }}',
-                    customRangeLabel: '{{ 'CustomRange' | get_lang }}'
+                    applyLabel: "{{ 'Ok' | get_lang }}",
+                    cancelLabel: "{{ 'Cancel' | get_lang }}",
+                    fromLabel: "{{ 'From' | get_lang }}",
+                    toLabel: "{{ 'Until' | get_lang }}",
+                    customRangeLabel: "{{ 'CustomRange' | get_lang }}"
                 }
             });
             $('#daterange').on('apply.daterangepicker', function (ev, picker) {

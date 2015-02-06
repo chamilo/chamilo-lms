@@ -43,6 +43,7 @@ class FlatViewTable extends SortableTable
         $mainCourseCategory = null
     ) {
         parent :: __construct('flatviewlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 1 : 0);
+
         $this->selectcat = $selectcat;
 
         $this->datagen = new FlatViewDataGenerator(
@@ -558,16 +559,15 @@ class FlatViewTable extends SortableTable
 
         $header_names = $this->datagen->get_header_names($this->offset, $selectlimit);
 
-        $column = 0;
-
         if ($is_western_name_order) {
-            $this->set_header($column++, $header_names[1]);
-            $this->set_header($column++, $header_names[0]);
+            $this->set_header(0, $header_names[1]);
+            $this->set_header(1, $header_names[0]);
         } else {
-            $this->set_header($column++, $header_names[0]);
-            $this->set_header($column++, $header_names[1]);
+            $this->set_header(0, $header_names[0]);
+            $this->set_header(1, $header_names[1]);
         }
 
+        $column = 2;
         while ($column < count($header_names)) {
             $this->set_header($column, $header_names[$column], false);
             $column++;

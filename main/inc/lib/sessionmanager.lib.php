@@ -5399,4 +5399,62 @@ class SessionManager
 
         return false;
     }
+
+    /**
+     * Get the session description
+     * @param int $sessionId The session id
+     * @return string The session description. Otherwise return null
+     */
+    public static function getSessionDescription($sessionId)
+    {
+        $sessionId = intval($sessionId);
+
+        $fieldValue = new ExtraFieldValue('session');
+        $description = $fieldValue->get_values_by_handler_and_field_variable($sessionId, 'description', false);
+
+        return $description !== false ? trim($description['field_value']) : '';
+    }
+
+    /**
+     * Whether the session has not description extra field insert a new record. Otherwise update the record
+     * @param int $sessionId The session id
+     * @param string $description The session description
+     * @return void
+     */
+    public static function saveSessionDescription($sessionId, $description)
+    {
+        $sessionId = intval($sessionId);
+        $fieldValuesTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+
+        $fieldValue = new ExtraFieldValue('session');
+        $descriptionValue = $fieldValue->get_values_by_handler_and_field_variable($sessionId, 'description', false);
+
+        if ($descriptionValue === false) {
+            $sessionField = new ExtraField('session');
+            $fieldInfo = $sessionField->get_handler_field_info_by_field_variable('description');
+
+            if (empty($fieldInfo)) {
+                return;
+            }
+
+            $attributes = array(
+                'session_id' => $sessionId,
+                'field_id' => $fieldInfo['id'],
+                'field_value' => $description,
+                'tms' => api_get_utc_datetime()
+            );
+
+            Database::insert($fieldValuesTable, $attributes);
+        } else {
+            $attributes = array(
+                'field_value' => $description,
+                'tms' => api_get_utc_datetime()
+            );
+
+            Database::update($fieldValuesTable, $attributes, array(
+                'id = ?' => $descriptionValue['id']
+            ));
+        }
+    }
+
 }

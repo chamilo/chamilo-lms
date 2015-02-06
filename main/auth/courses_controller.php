@@ -546,12 +546,6 @@ class CoursesController
         // Get session search catalogue URL
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
-        $showDescription = false;
-
-        if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
-            $showDescription = true;
-        }
-
         foreach ($sessions as $session) {
             $sessionsBlock = array(
                 'id' => $session['id'],
@@ -566,12 +560,10 @@ class CoursesController
                 'hasDescription' => false
             );
 
-            if ($showDescription) {
-                $sessionDescription = AdvancedSessionsPlugin::getSessionDescription($session['id']);
+            $sessionDescription = SessionManager::getSessionDescription($session['id']);
 
-                if (!empty($sessionDescription)) {
-                    $sessionsBlock['hasDescription'] = true;
-                }
+            if (!empty($sessionDescription)) {
+                $sessionsBlock['hasDescription'] = true;
             }
 
             $sessionsBlocks[] = $sessionsBlock;

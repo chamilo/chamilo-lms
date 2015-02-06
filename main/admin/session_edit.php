@@ -102,9 +102,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     );
 
 	if ($return == strval(intval($return))) {
-        if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
-            AdvancedSessionsPlugin::saveSessionFieldValue($return, $_POST['description']);
-        }
+        SessionManager::saveSessionDescription($return, $_POST['description']);
 
 		header('Location: resume_session.php?id_session='.$return);
 		exit();
@@ -165,17 +163,15 @@ if (!empty($return)) {
         </select>
         </div>
     </div>
-    <?php if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) { ?>
-        <div class="control-group">
-            <label class="control-label" for="description"><?php echo get_lang('Description') ?></label>
-            <div class="controls">
-                <?php $fckEditor = new FCKeditor('description'); ?>
-                <?php $fckEditor->ToolbarSet = 'TrainingDescription'; ?>
-                <?php $fckEditor->Value = AdvancedSessionsPlugin::getSessionDescription($id) ; ?>
-                <?php echo $fckEditor->CreateHtml(); ?>
-            </div>
+    <div class="control-group">
+        <label class="control-label" for="description"><?php echo get_lang('Description') ?></label>
+        <div class="controls">
+            <?php $fckEditor = new FCKeditor('description'); ?>
+            <?php $fckEditor->ToolbarSet = 'TrainingDescription'; ?>
+            <?php $fckEditor->Value = SessionManager::getSessionDescription($id) ; ?>
+            <?php echo $fckEditor->CreateHtml(); ?>
         </div>
-    <?php } ?>
+    </div>
     <div class="control-group">
         <label class="control-label">
             <?php echo get_lang('SessionCategory') ?>

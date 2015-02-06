@@ -3027,3 +3027,4 @@ CREATE TABLE usergroup_rel_question (
 );
 
 -- 1.10.x-specific, non-course-related, database changes
+INSERT INTO session_field (field_type, field_variable, field_display_text, field_default_value) values (2, 'description','Description', NULL);

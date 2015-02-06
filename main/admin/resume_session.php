@@ -245,17 +245,15 @@ if (SessionManager::durationPerUserIsEnabled()) {
 }
 ?>
 <?php
-if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
-    $sessionDescription = AdvancedSessionsPlugin::getSessionDescription($sessionId);
+$sessionDescription = SessionManager::getSessionDescription($sessionId);
 
-    if (!empty($sessionDescription)) {
-        ?>
-        <tr>
-            <td><?php echo get_lang('Description'); ?></td>
-            <td><?php echo AdvancedSessionsPlugin::getSessionDescription($sessionId) ?></td>
-        </tr>
-        <?php
-    }
+if (!empty($sessionDescription)) {
+?>
+    <tr>
+        <td><?php echo get_lang('Description'); ?></td>
+        <td><?php echo $sessionDescription ?></td>
+    </tr>
+<?php
 }
 ?>
 </table>

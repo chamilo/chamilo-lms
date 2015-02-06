@@ -109,19 +109,17 @@ switch ($action) {
     case 'get_description':
         $sessionId = intval($_GET['session']);
 
-        if (AdvancedSessionsPlugin::hasDescriptionField()) {
-            $sessionInfo = api_get_session_info($sessionId);
-            ?>
-            <h2><?php echo $sessionInfo['name'] ?></h2><br>
-            <div class="home-course-intro">
-                <div class="page-course">
-                    <div class="page-course-intro">
-                        <p><?php echo AdvancedSessionsPlugin::getSessionDescription($sessionId) ?></p>
-                    </div>
+        $sessionInfo = api_get_session_info($sessionId);
+        ?>
+        <h2><?php echo $sessionInfo['name'] ?></h2><br>
+        <div class="home-course-intro">
+            <div class="page-course">
+                <div class="page-course-intro">
+                    <p><?php echo SessionManager::getSessionDescription($sessionId) ?></p>
                 </div>
             </div>
-            <?php
-        }
+        </div>
+        <?php
     default:
         echo '';
 }

@@ -13,6 +13,7 @@
 -- This first part is for the main database
 
 -- xxMAINxx
+INSERT INTO session_field (field_type, field_variable, field_display_text, field_default_value) values (2, 'description','Description', NULL);
 
 
 

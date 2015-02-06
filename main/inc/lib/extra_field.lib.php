@@ -720,20 +720,89 @@ class ExtraField extends Model
                         break;
                     case ExtraField::FIELD_TYPE_SELECT:
                         $get_lang_variables = false;
-
-                        if (in_array($field_details['field_variable'],
-                                array('mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message'))) {
+                        if (in_array(
+                            $field_details['field_variable'],
+                            array('mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message')
+                        )
+                        ) {
                             $get_lang_variables = true;
                         }
 
-                        $options = array();
+                        // Get extra field workflow
+                        $userInfo = api_get_user_info();
 
-                        foreach ($field_details['options'] as $option_id => $option_details) {
-                            //$options[$option_details['option_value']] = $option_details['option_display_text'];
-                            if ($get_lang_variables) {
-                                $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
-                            } else {
-                                $options[$option_details['option_value']] = $option_details['option_display_text'];
+                        $addOptions = array();
+
+                        global $app;
+                        $optionsExists = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->
+                        findOneBy(array('fieldId' => $field_details['id']));
+
+                        if ($optionsExists) {
+                            if (isset($userInfo['status']) && !empty($userInfo['status'])) {
+
+                                $fieldWorkFlow = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
+                                    ->findBy(
+                                        array(
+                                            'fieldId' => $field_details['id'],
+                                            'relatedFieldOptionId' => $defaultValueId,
+                                            'roleId' => $userInfo['status']
+                                        )
+                                    );
+                                foreach ($fieldWorkFlow as $item) {
+                                    $addOptions[] = $item->getFieldOptionId();
+                                }
+                            }
+                        }
+
+                        $options = array();
+                        if (empty($defaultValueId)) {
+                            $options[''] = get_lang('SelectAnOption');
+                        }
+
+                        $optionList = array();
+                        if (!empty($field_details['options'])) {
+                            foreach ($field_details['options'] as $option_details) {
+                                $optionList[$option_details['id']] = $option_details;
+                                if ($get_lang_variables) {
+                                    $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
+                                } else {
+                                    if ($optionsExists) {
+                                        // Adding always the default value
+                                        if ($option_details['id'] == $defaultValueId) {
+                                            $options[$option_details['option_value']] = $option_details['option_display_text'];
+                                        } else {
+                                            if (isset($addOptions) && !empty($addOptions)) {
+                                                // Parsing filters
+                                                if (in_array($option_details['id'], $addOptions)) {
+                                                    $options[$option_details['option_value']] = $option_details['option_display_text'];
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // Normal behaviour
+                                        $options[$option_details['option_value']] = $option_details['option_display_text'];
+                                    }
+                                }
+                            }
+
+                            if (isset($optionList[$defaultValueId])) {
+
+                                if (isset($optionList[$defaultValueId]['option_value']) && $optionList[$defaultValueId]['option_value'] == 'aprobada') {
+                                    if (api_is_question_manager() == false) {
+                                        $form->freeze();
+                                    }
+                                }
+                            }
+
+                            // Setting priority message
+                            if (isset($optionList[$defaultValueId]) && isset($optionList[$defaultValueId]['priority'])) {
+
+                                if (!empty($optionList[$defaultValueId]['priority'])) {
+                                    $priorityId = $optionList[$defaultValueId]['priority'];
+                                    $option = new ExtraFieldOption($this->type);
+                                    $messageType = $option->getPriorityMessageType($priorityId);
+                                    $form->addElement('label', null, Display::return_message($optionList[$defaultValueId]['priority_message'], $messageType));
+                                }
                             }
                         }
 
@@ -741,11 +810,63 @@ class ExtraField extends Model
                             $field_details['field_display_text'] = get_lang($field_details['field_display_text']);
                         }
 
-                        //chzn-select doesn't work for sessions??
-                        $form->addElement('select', 'extra_' . $field_details['field_variable'],
-                            $field_details['field_display_text'], $options,
-                            array('class' => 'chzn-select', 'id' => 'extra_' . $field_details['field_variable'])
+                        // chzn-select doesn't work for sessions??
+                        $form->addElement(
+                            'select',
+                            'extra_' . $field_details['field_variable'],
+                            $field_details['field_display_text'],
+                            $options,
+                            array('id' => 'extra_'.$field_details['field_variable'])
                         );
+
+                        if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
+
+                            $form->addElement(
+                                'textarea',
+                                'extra_' . $field_details['field_variable'] . '_comment',
+                                $field_details['field_display_text'] . ' ' . get_lang('Comment')
+                            );
+
+                            $extraFieldValue = new ExtraFieldValue($this->type);
+                            $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
+                            $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
+                            $newEntity = $repo->findOneBy(
+                                array(
+                                    $this->handlerEntityId => $itemId,
+                                    'fieldId' => $field_details['id']
+                                )
+                            );
+                            // @todo move this in a function inside the class
+                            if ($newEntity) {
+                                $logs = $repoLog->getLogEntries($newEntity);
+                                if (!empty($logs)) {
+                                    $html = '<b>' . get_lang('LatestChanges') . '</b><br /><br />';
+
+                                    $table = new HTML_Table(array('class' => 'data_table'));
+                                    $table->setHeaderContents(0, 0, get_lang('Value'));
+                                    $table->setHeaderContents(0, 1, get_lang('Comment'));
+                                    $table->setHeaderContents(0, 2, get_lang('ModifyDate'));
+                                    $table->setHeaderContents(0, 3, get_lang('Username'));
+                                    $row = 1;
+                                    foreach ($logs as $log) {
+                                        $column = 0;
+                                        $data = $log->getData();
+                                        $fieldValue = isset($data['fieldValue']) ? $data['fieldValue'] : null;
+                                        $comment = isset($data['comment']) ? $data['comment'] : null;
+
+                                        $table->setCellContents($row, $column, $fieldValue);
+                                        $column++;
+                                        $table->setCellContents($row, $column, $comment);
+                                        $column++;
+                                        $table->setCellContents($row, $column, api_get_local_time($log->getLoggedAt()->format('Y-m-d H:i:s')));
+                                        $column++;
+                                        $table->setCellContents($row, $column, $log->getUsername());
+                                        $row++;
+                                    }
+                                    $form->addElement('label', null, $html.$table->toHtml());
+                                }
+                            }
+                        }
 
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {

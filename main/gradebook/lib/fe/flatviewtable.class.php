@@ -541,10 +541,13 @@ class FlatViewTable extends SortableTable
         }
 
         // retrieve sorting type
+
         if ($is_western_name_order) {
-            $users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME : FlatViewDataGenerator :: FVDG_SORT_LASTNAME);
+            //$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME : FlatViewDataGenerator :: FVDG_SORT_LASTNAME);
+            $users_sorting = FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME;
         } else {
-            $users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_LASTNAME : FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME);
+            //$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_LASTNAME : FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME);
+            $users_sorting = FlatViewDataGenerator :: FVDG_SORT_LASTNAME;
         }
         if ($this->direction == 'DESC') {
             $users_sorting |= FlatViewDataGenerator :: FVDG_SORT_DESC;

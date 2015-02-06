@@ -61,9 +61,17 @@ if (isset($_GET['msg']) && isset($_GET['type'])) {
 
 $blocks = array();
 
+// Instantiate Hook Event for Admin Block
 $hook = HookAdminBlock::create();
 if (!empty($hook)) {
-    $hook->notifyAdminBlock(HOOK_TYPE_PRE);
+    // If not empty, then notify Pre process to Hook Observers for Admin Block
+    $hook->setEventData(array('blocks' => $blocks));
+    $data = $hook->notifyAdminBlock(HOOK_EVENT_TYPE_PRE);
+    // Check if blocks data is not null
+    if (isset($data['blocks'])) {
+        // Get modified blocks
+        $blocks = $data['blocks'];
+    }
 }
 
 /* Users */
@@ -343,8 +351,16 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['items'] = null;
     $blocks['version_check']['class'] = 'block-admin-version_check';
 
+    // Check Hook Event for Admin Block Object
     if (!empty($hook)) {
-        $hook->notifyAdminBlock(HOOK_TYPE_POST);
+        // If not empty, then notify Pre process to Hook Observers for Admin Block
+        $hook->setEventData(array('blocks' => $blocks));
+        $data = $hook->notifyAdminBlock(HOOK_EVENT_TYPE_PRE);
+        // Check if blocks data is not null
+        if (isset($data['blocks'])) {
+            // Get modified blocks
+            $blocks = $data['blocks'];
+        }
     }
 
 }

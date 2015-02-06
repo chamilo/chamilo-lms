@@ -12,9 +12,9 @@ class HookManagement implements HookManagementInterface
      */
     protected function __construct()
     {
-        $this->tables[TABLE_PLUGIN_HOOK_OBSERVER] = Database::get_main_table(TABLE_PLUGIN_HOOK_OBSERVER);
-        $this->tables[TABLE_PLUGIN_HOOK_EVENT] = Database::get_main_table(TABLE_PLUGIN_HOOK_EVENT);
-        $this->tables[TABLE_PLUGIN_HOOK_CALL] = Database::get_main_table(TABLE_PLUGIN_HOOK_CALL);
+        $this->tables[TABLE_HOOK_OBSERVER] = Database::get_main_table(TABLE_HOOK_OBSERVER);
+        $this->tables[TABLE_HOOK_EVENT] = Database::get_main_table(TABLE_HOOK_EVENT);
+        $this->tables[TABLE_HOOK_CALL] = Database::get_main_table(TABLE_HOOK_CALL);
 
         $this->hookCalls = $this->listAllHookCalls();
         $this->hookEvents = $this->listAllHookEvents();
@@ -26,172 +26,11 @@ class HookManagement implements HookManagementInterface
      * @staticvar null $result
      * @return HookManagement
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
 
         return $result ? $result : $result = new self();
-    }
-
-    /**
-     * Install the plugin
-     * @return void
-     */
-    public function install()
-    {
-        $this->installDatabase();
-        $this->initDatabase();
-    }
-
-    /**
-     * Uninstall the plugin
-     * @return void
-     */
-    public function uninstall()
-    {
-        $this->uninstallDatabase();
-    }
-
-    /**
-     * Create the database tables for the plugin
-     * @return void
-     */
-    private function installDatabase()
-    {
-        $sql = 'CREATE TABLE IF NOT EXISTS ' . $this->tables[TABLE_PLUGIN_HOOK_OBSERVER] . '( ' .
-            'id int UNSIGNED NOT NULL AUTO_INCREMENT, ' .
-            'class_name varchar(255) UNIQUE, ' .
-            'path varchar(255) NOT NULL, ' .
-            'plugin_name varchar(255) NULL, ' .
-            'PRIMARY KEY PK_hook_management_hook_observer (id) ' .
-            '); ';
-        Database::query($sql);
-
-        $sql = 'CREATE TABLE IF NOT EXISTS ' . $this->tables[TABLE_PLUGIN_HOOK_EVENT] . '( ' .
-            'id int UNSIGNED NOT NULL AUTO_INCREMENT, ' .
-            'class_name varchar(255) UNIQUE, ' .
-            'description varchar(255), ' .
-            'PRIMARY KEY PK_hook_management_hook_event (id) ' .
-            '); ';
-        Database::query($sql);
-
-        $sql = 'CREATE TABLE IF NOT EXISTS ' . $this->tables[TABLE_PLUGIN_HOOK_CALL] . '( ' .
-            'id int UNSIGNED NOT NULL AUTO_INCREMENT, ' .
-            'hook_event_id int UNSIGNED NOT NULL, ' .
-            'hook_observer_id int UNSIGNED NOT NULL, ' .
-            'type tinyint NOT NULL, ' .
-            'hook_order int UNSIGNED NOT NULL, ' .
-            'enabled tinyint NOT NULL, ' .
-            'PRIMARY KEY PK_hook_management_hook_call (id) ' .
-            '); ';
-        Database::query($sql);
-    }
-
-    /**
-     * Initialize Database storing hooks (events, observers, calls)
-     * This should be called right after installDatabase method
-     * @return int
-     */
-    public function initDatabase()
-    {
-        // Search hook events
-        $hookEvents = array();
-        foreach (get_declared_classes() as $class) {
-            if (is_subclass_of($class, '\HookEvent')) {
-                $interfaces = class_implements($class);
-                $hookInterfaces = array();
-                foreach ($interfaces as $interface) {
-                    $hookInterface = (preg_filter('/Hook(.+)EventInterface/', '$1', $interface));
-                    if (!empty($hookInterface)) {
-                        $hookInterfaces[] = $hookInterface;
-                    }
-                }
-                $hookEvents[$class] = $hookInterfaces;
-            }
-        }
-        // Search hook observers
-        $hookObservers = array();
-        foreach (get_declared_classes() as $class) {
-            if (is_subclass_of($class, '\HookObserver')) {
-                $interfaces = class_implements($class);
-                $hookInterfaces = array();
-                foreach ($interfaces as $interface) {
-                    $hookInterface = (preg_filter('/Hook(.+)ObserverInterface/', '$1', $interface));
-                    if (!empty($hookInterface)) {
-                        $hookInterfaces[] =$hookInterface;
-                    }
-                }
-                $hookObservers[$class] = $hookInterfaces;
-            }
-        }
-        // Search hook calls
-        $hookCalls = array();
-        foreach ($hookEvents as $hookEvent => $eventInterfaces) {
-            if (!empty($eventInterfaces)) {
-                $order = 0;
-                foreach ($hookObservers as $hookObserver => $observerInterfaces) {
-                    if ($observerInterfaces === $eventInterfaces) {
-                        $order += 1;
-                        $hookCalls[] = array($hookEvent, $hookObserver, HOOK_TYPE_PRE, $order);
-                        $hookCalls[] = array($hookEvent, $hookObserver, HOOK_TYPE_POST, $order);
-                    }
-                }
-            }
-        }
-
-        // Insert hook events
-        foreach ($hookEvents as $hookEvent => $v) {
-            $attributes = array(
-                'class_name' => $hookEvent,
-                'description' => get_lang('HookDescription' . $hookEvent),
-            );
-            $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_EVENT], $attributes);
-            // store hook event into property
-            $this->hookEvents[$hookEvent] = $id;
-        }
-
-        // Insert hook observer
-        foreach ($hookObservers as $hookObserver => $v) {
-            $object = $hookObserver::create();
-            $attributes = array(
-                'class_name' => $hookObserver,
-                'path' => $object->getPath(),
-                'plugin_name' => $object->getPluginName(),
-            );
-            $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_OBSERVER], $attributes);
-            // store hook observer into property
-            $this->hookObservers[$hookObserver] = $id;
-        }
-
-        // Insert hook call
-        foreach ($hookCalls as $hookCall) {
-            $attributes = array(
-                'hook_event_id' => $this->hookEvents[$hookCall[0]],
-                'hook_observer_id' => $this->hookObservers[$hookCall[1]],
-                'type' => $hookCall[2],
-                'hook_order' => $hookCall[3],
-                'enabled' => 0,
-            );
-            // store hook call into property
-            $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_CALL], $attributes);
-            $this->hookCalls[$hookCall[0]][$hookCall[1]][$hookCall[2]] = $id;
-        }
-
-        return 1;
-    }
-
-    /**
-     * Drop the database tables for the plugin
-     * @return void
-     */
-    private function uninstallDatabase()
-    {
-        $sql = 'DROP TABLE IF EXISTS ' . $this->tables[TABLE_PLUGIN_HOOK_CALL] . '; ';
-        Database::query($sql);
-        $sql = 'DROP TABLE IF EXISTS ' . $this->tables[TABLE_PLUGIN_HOOK_EVENT] . '; ';
-        Database::query($sql);
-        $sql = 'DROP TABLE IF EXISTS ' . $this->tables[TABLE_PLUGIN_HOOK_OBSERVER] . '; ';
-        Database::query($sql);
     }
 
     /**
@@ -203,14 +42,14 @@ class HookManagement implements HookManagementInterface
      */
     public function insertHook($eventName, $observerClassName, $type)
     {
-        if ($type === HOOK_TYPE_ALL) {
-            $this->insertHook($eventName, $observerClassName, HOOK_TYPE_PRE);
-            $this->insertHook($eventName, $observerClassName, HOOK_TYPE_POST);
+        if ($type === HOOK_EVENT_TYPE_ALL) {
+            $this->insertHook($eventName, $observerClassName, HOOK_EVENT_TYPE_PRE);
+            $this->insertHook($eventName, $observerClassName, HOOK_EVENT_TYPE_POST);
         } else {
             $this->insertHookIfNotExist($eventName, $observerClassName);
             // Check if exists hook call
             $row = Database::select('id, enabled',
-                $this->tables[TABLE_PLUGIN_HOOK_CALL],
+                $this->tables[TABLE_HOOK_CALL],
                 array(
                     'where' => array(
                         'hook_event_id = ? ' => $this->hookEvents[$eventName],
@@ -224,7 +63,7 @@ class HookManagement implements HookManagementInterface
                 // Check if is hook call is active
                 if ((int) $row['enabled'] === 0) {
                     Database::update(
-                        $this->tables[TABLE_PLUGIN_HOOK_CALL],
+                        $this->tables[TABLE_HOOK_CALL],
                         array(
                             'enabled' => 1,
                         ),
@@ -247,14 +86,14 @@ class HookManagement implements HookManagementInterface
      */
     public function deleteHook($eventName, $observerClassName, $type)
     {
-        if ($type === HOOK_TYPE_ALL) {
-            $this->insertHook($eventName, $observerClassName, HOOK_TYPE_PRE);
-            $this->insertHook($eventName, $observerClassName, HOOK_TYPE_POST);
+        if ($type === HOOK_EVENT_TYPE_ALL) {
+            $this->insertHook($eventName, $observerClassName, HOOK_EVENT_TYPE_PRE);
+            $this->insertHook($eventName, $observerClassName, HOOK_EVENT_TYPE_POST);
         } else {
             $this->insertHookIfNotExist($eventName, $observerClassName);
 
             Database::update(
-                $this->tables[TABLE_PLUGIN_HOOK_CALL],
+                $this->tables[TABLE_HOOK_CALL],
                 array(
                     'enabled' => 0,
                 ),
@@ -278,7 +117,7 @@ class HookManagement implements HookManagementInterface
             foreach ($hookOrders as $oldOrder => $newOrder)
             {
                 $res = Database::update(
-                    $this->tables[TABLE_PLUGIN_HOOK_CALL],
+                    $this->tables[TABLE_HOOK_CALL],
                     array(
                         'hook_order ' => $newOrder,
                     ),
@@ -304,10 +143,10 @@ class HookManagement implements HookManagementInterface
     public function listHookObservers($eventName)
     {
         $array = array();
-        $joinTable = $this->tables[TABLE_PLUGIN_HOOK_CALL] . 'hc ' .
-            ' INNER JOIN ' . $this->tables[TABLE_PLUGIN_HOOK_EVENT] . 'he ' .
+        $joinTable = $this->tables[TABLE_HOOK_CALL] . 'hc ' .
+            ' INNER JOIN ' . $this->tables[TABLE_HOOK_EVENT] . 'he ' .
             ' ON hc.hook_event_id = he.id ' .
-            ' INNER JOIN ' . $this->tables[TABLE_PLUGIN_HOOK_OBSERVER] . ' ho ' .
+            ' INNER JOIN ' . $this->tables[TABLE_HOOK_OBSERVER] . ' ho ' .
             ' ON hc.hook_observer_id = ho.id ';
         $columns = 'ho.class_name, ho.path, ho.plugin_name, hc.enabled';
         $where = array('where' => array('he.class_name = ? ' => $eventName, 'AND hc.enabled = ? ' => 1));
@@ -328,7 +167,7 @@ class HookManagement implements HookManagementInterface
     {
         $array = array();
         $columns = 'id, class_name';
-        $rows = Database::select($columns, $this->tables[TABLE_PLUGIN_HOOK_OBSERVER]);
+        $rows = Database::select($columns, $this->tables[TABLE_HOOK_OBSERVER]);
 
         foreach ($rows as $row) {
             $array[$row['class_name']] = $row['id'];
@@ -345,7 +184,7 @@ class HookManagement implements HookManagementInterface
     {
         $array = array();
         $columns = 'id, class_name';
-        $rows = Database::select($columns, $this->tables[TABLE_PLUGIN_HOOK_EVENT]);
+        $rows = Database::select($columns, $this->tables[TABLE_HOOK_EVENT]);
 
         foreach ($rows as $row) {
             $array[$row['class_name']] = $row['id'];
@@ -361,10 +200,10 @@ class HookManagement implements HookManagementInterface
     public function listAllHookCalls()
     {
         $array = array();
-        $joinTable = $this->tables[TABLE_PLUGIN_HOOK_CALL] . 'hc ' .
-            ' INNER JOIN ' . $this->tables[TABLE_PLUGIN_HOOK_EVENT] . 'he ' .
+        $joinTable = $this->tables[TABLE_HOOK_CALL] . 'hc ' .
+            ' INNER JOIN ' . $this->tables[TABLE_HOOK_EVENT] . 'he ' .
             ' ON hc.hook_event_id = he.id ' .
-            ' INNER JOIN ' . $this->tables[TABLE_PLUGIN_HOOK_OBSERVER] . ' ho ' .
+            ' INNER JOIN ' . $this->tables[TABLE_HOOK_OBSERVER] . ' ho ' .
             ' ON hc.hook_observer_id = ho.id ';
         $columns = 'he.class_name AS event_class_name, ho.class_name AS observer_class_name, hc.id AS id, hc.type AS type';
         $rows = Database::select($columns, $joinTable);
@@ -391,7 +230,7 @@ class HookManagement implements HookManagementInterface
                 'class_name' => $eventName,
                 'description' => get_lang('HookDescription' . $eventName),
             );
-            $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_EVENT], $attributes);
+            $id = Database::insert($this->tables[TABLE_HOOK_EVENT], $attributes);
             $this->hookEvents[$eventName] = $id;
         }
 
@@ -403,7 +242,7 @@ class HookManagement implements HookManagementInterface
                 'path' => $object->getPath(),
                 'plugin_name' => $object->getPluginName(),
             );
-            $id = Database::insert($this->tables[TABLE_PLUGIN_HOOK_OBSERVER], $attributes);
+            $id = Database::insert($this->tables[TABLE_HOOK_OBSERVER], $attributes);
             $this->hookObservers[$observerClassName] = $id;
         }
 
@@ -416,11 +255,11 @@ class HookManagement implements HookManagementInterface
 
             $row = Database::select(
                 'MAX(hook_order) as hook_order',
-                $this->tables[TABLE_PLUGIN_HOOK_CALL],
+                $this->tables[TABLE_HOOK_CALL],
                 array(
                     'where' => array(
                         'hook_event_id = ? ' =>$this->hookEvents[$eventName],
-                        'AND type = ? ' => HOOK_TYPE_PRE,
+                        'AND type = ? ' => HOOK_EVENT_TYPE_PRE,
                     ),
                 ),
                 'ASSOC'
@@ -428,27 +267,27 @@ class HookManagement implements HookManagementInterface
 
             // Check if exists hook call
             $id = Database::insert(
-                $this->tables[TABLE_PLUGIN_HOOK_CALL],
+                $this->tables[TABLE_HOOK_CALL],
                 array(
                     'hook_event_id' => $this->hookEvents[$eventName],
                     'hook_observer_id' => $this->hookObservers[$observerClassName],
-                    'type' => HOOK_TYPE_PRE,
+                    'type' => HOOK_EVENT_TYPE_PRE,
                     'enabled' => 0,
                     'hook_order' => $row['hook_order'] + 1,
                 )
             );
 
-            $this->hookCalls[$eventName][$observerClassName][HOOK_TYPE_PRE] = $id;
+            $this->hookCalls[$eventName][$observerClassName][HOOK_EVENT_TYPE_PRE] = $id;
 
             // HOOK TYPE POST
 
             $row = Database::select(
                 'MAX(hook_order) as hook_order',
-                $this->tables[TABLE_PLUGIN_HOOK_CALL],
+                $this->tables[TABLE_HOOK_CALL],
                 array(
                     'where' => array(
                         'hook_event_id = ? ' =>$this->hookEvents[$eventName],
-                        'AND type = ? ' => HOOK_TYPE_POST,
+                        'AND type = ? ' => HOOK_EVENT_TYPE_POST,
                     ),
                 ),
                 'ASSOC'
@@ -456,17 +295,17 @@ class HookManagement implements HookManagementInterface
 
             // Check if exists hook call
             $id = Database::insert(
-                $this->tables[TABLE_PLUGIN_HOOK_CALL],
+                $this->tables[TABLE_HOOK_CALL],
                 array(
                     'hook_event_id' => $this->hookEvents[$eventName],
                     'hook_observer_id' => $this->hookObservers[$observerClassName],
-                    'type' => HOOK_TYPE_POST,
+                    'type' => HOOK_EVENT_TYPE_POST,
                     'enabled' => 0,
                     'hook_order' => $row['hook_order'] + 1,
                 )
             );
 
-            $this->hookCalls[$eventName][$observerClassName][HOOK_TYPE_POST] = $id;
+            $this->hookCalls[$eventName][$observerClassName][HOOK_EVENT_TYPE_POST] = $id;
 
         } elseif (isset($eventName) && !isset($observerClassName)) {
             foreach ($this->hookObservers as $observer => $id) {
@@ -483,9 +322,9 @@ class HookManagement implements HookManagementInterface
 
     /**
      * Return the hook call id identified by hook event, hook observer and type
-     * @param $eventName
-     * @param $observerClassName
-     * @param $type
+     * @param string $eventName
+     * @param string $observerClassName
+     * @param int $type
      * @return mixed
      */
     public function getHookCallId($eventName, $observerClassName, $type)
@@ -493,10 +332,10 @@ class HookManagement implements HookManagementInterface
         $eventName = Database::escape_string($eventName);
         $observerClassName($observerClassName);
         $type = Database::escape_string($type);
-        $joinTable = $this->tables[TABLE_PLUGIN_HOOK_CALL] . 'hc ' .
-            ' INNER JOIN ' . $this->tables[TABLE_PLUGIN_HOOK_EVENT] . 'he ' .
+        $joinTable = $this->tables[TABLE_HOOK_CALL] . 'hc ' .
+            ' INNER JOIN ' . $this->tables[TABLE_HOOK_EVENT] . 'he ' .
             ' ON hc.hook_event_id = he.id ' .
-            ' INNER JOIN ' . $this->tables[TABLE_PLUGIN_HOOK_OBSERVER] . ' ho ' .
+            ' INNER JOIN ' . $this->tables[TABLE_HOOK_OBSERVER] . ' ho ' .
             ' ON hc.hook_observer_id = ho.id ';
         $row = Database::select(
             'id',

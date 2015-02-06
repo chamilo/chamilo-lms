@@ -82,7 +82,7 @@ class UserManager
     ) {
         $hook = HookCreateUser::create();
         if (!empty($hook)) {
-            $hook->notifyCreateUser(HOOK_TYPE_PRE);
+            $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
         }
         global $_user, $_configuration;
         $original_password = $password;
@@ -247,7 +247,7 @@ class UserManager
         self::update_extra_field_value($return, 'already_logged_in', 'false');
 
         if (!empty($hook)) {
-            $hook->notifyCreateUser(HOOK_TYPE_POST);
+            $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
         }
         return $return;
     }
@@ -591,7 +591,7 @@ class UserManager
     ) {
         $hook = HookUpdateUser::create();
         if (!empty($hook)) {
-            $hook->notifyUpdateUser(HOOK_TYPE_PRE);
+            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
         }
         global $_configuration;
         $original_password = $password;
@@ -702,7 +702,7 @@ class UserManager
         }
 
         if (!empty($hook)) {
-            $hook->notifyUpdateUser(HOOK_TYPE_POST);
+            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
         }
 
         return $return;

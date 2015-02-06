@@ -355,10 +355,10 @@ define('CATALOG_COURSES', 0);
 define('CATALOG_SESSIONS', 1);
 define('CATALOG_COURSES_SESSIONS', 2);
 
-//Hook
-define('HOOK_TYPE_PRE', 0);
-define('HOOK_TYPE_POST', 1);
-define('HOOK_TYPE_ALL', 10);
+//Hook type events, pre-proccess and post-process. All means to be executed for both hook event types
+define('HOOK_EVENT_TYPE_PRE', 0);
+define('HOOK_EVENT_TYPE_POST', 1);
+define('HOOK_EVENT_TYPE_ALL', 10);
 
 define('HOOK_MANAGEMENT', 'hookmanagement');
 

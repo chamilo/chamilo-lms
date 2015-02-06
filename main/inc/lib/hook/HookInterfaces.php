@@ -1,5 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * This file contains all Hook interfaces and their relation.
+ * They are used for Hook classes
+ * @package chamilo.library.hook
+ */
 
 /**
  * Interface HookEventInterface
@@ -28,7 +33,6 @@ interface HookEventInterface
 
     /**
      * Return the singleton instance of Hook event.
-     * If Hook Management plugin is not enabled, will return NULL
      * @return HookEventInterface|null
      */
     public static function create();
@@ -74,13 +78,6 @@ interface HookEventInterface
     public function detachAll();
 
     /**
-     * Return true if HookManagement plugin is active. Else, false.
-     * This is needed to store attachments into Database inside Hook plugin tables
-     * @return boolean
-     */
-    public static function isHookPluginActive();
-
-    /**
      * Hook Auto Loader. Search for Hook Observers from plugins
      * @param string $observerClass
      * @param string $path
@@ -93,7 +90,6 @@ interface HookObserverInterface
 {
     /**
      * Return the singleton instance of Hook observer.
-     * If Hook Management plugin is not enabled, will return NULL
      * @return HookEventInterface|null
      */
     public static function create();
@@ -113,14 +109,6 @@ interface HookObserverInterface
 
 interface HookManagementInterface
 {
-
-    /**
-     * Initialize Database storing hooks (events, observers, calls)
-     * This should be called right after installDatabase method
-     * @return int
-     */
-    public function initDatabase();
-
     /**
      * Insert hook into Database. Return insert id
      * @param string $eventName
@@ -168,9 +156,9 @@ interface HookManagementInterface
 
     /**
      * Return the hook call id identified by hook event, hook observer and type
-     * @param $eventName
-     * @param $observerClassName
-     * @param $type
+     * @param string $eventName
+     * @param string $observerClassName
+     * @param int $type
      * @return mixed
      */
     public function getHookCallId($eventName, $observerClassName, $type);
@@ -178,6 +166,7 @@ interface HookManagementInterface
 
 /**
  * Interface HookPluginInterface
+ * This interface should be implemented by plugins to implements Hook Observer
  */
 interface HookPluginInterface
 {

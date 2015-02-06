@@ -1,7 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * This file contains an abstract Hook observer class
+ * Used for Hook Observers in plugins, called when a hook event happens
+ * (e.g Create user, Webservice registration)
+ * @package chamilo.library.hook
+ */
 
-
+/**
+ * Class HookObserver
+ * This abstract class implements Hook Observer Interface to build the base
+ * for Hook Observer. This class have some public static method,
+ * e.g for create Hook Observers
+ */
 abstract class HookObserver implements HookObserverInterface
 {
     public $path;
@@ -9,6 +20,8 @@ abstract class HookObserver implements HookObserverInterface
 
     /**
      * Construct method
+     * Save the path of Hook Observer class implementation and
+     * the plugin name where this class is included
      * @param string $path
      * @param string $pluginName
      */

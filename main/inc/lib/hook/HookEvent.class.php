@@ -1,34 +1,40 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * This file contains an abstract Hook event class
+ * Used for Hook Events (e.g Create user, Webservice registration)
+ * @package chamilo.library.hook
+ */
 
-
+/**
+ * Class HookEvent
+ * This abstract class implements Hook Event Interface to build the base
+ * for Hook Events. This class have some public static method,
+ * e.g for create Hook Events
+ */
 abstract class HookEvent implements HookEventInterface
 {
     public $observers;
     public $eventName;
     public $eventData;
+    public $manager;
+    public static $hook;
 
     /**
      * Construct Method
-     * @param $eventName
+     * @param string $eventName
      * @throws Exception
      */
     protected function __construct($eventName)
     {
-        if (self::isHookPluginActive()) {
-            $this->observers = new SplObjectStorage();
-            $this->eventName = $eventName;
-            $this->eventData = array();
-            $this->plugin = HookManagement::create();
-            $this->loadAttachments();
-        } else {
-            throw new \Exception('Hook Management Plugin is not active');
-        }
+        $this->observers = new SplObjectStorage();
+        $this->eventName = $eventName;
+        $this->eventData = array();
+        $this->manager = HookManagement::create();
     }
 
     /**
      * Return the singleton instance of Hook event.
-     * If Hook Management plugin is not enabled, will return NULL
      * @return HookEventInterface|null
      */
     public static function create()
@@ -57,15 +63,14 @@ abstract class HookEvent implements HookEventInterface
      */
     public function attach(HookObserverInterface $observer)
     {
-        global $_hook;
         $observerClass = get_class($observer);
-        $_hook[$this->eventName][$observerClass] = array(
+        self::$hook[$this->eventName][$observerClass] = array(
             'class_name' => $observerClass,
             'path' => $observer->getPath(),
             'plugin_name' => $observer->getPluginName(),
         );
         $this->observers->attach($observer);
-        $this->plugin->insertHook($this->eventName, $observerClass, HOOK_TYPE_ALL);
+        $this->manager->insertHook($this->eventName, $observerClass, HOOK_EVENT_TYPE_ALL);
     }
 
     /**
@@ -78,15 +83,13 @@ abstract class HookEvent implements HookEventInterface
      */
     public function detach(HookObserverInterface $observer)
     {
-        global $_hook;
         $observerClass = get_class($observer);
-        unset($_hook[$this->eventName][$observerClass]);
+        unset(self::$hook[$this->eventName][$observerClass]);
         $this->observers->detach($observer);
-        $this->plugin->deleteHook($this->eventName, $observerClass, HOOK_TYPE_ALL);
+        $this->manager->deleteHook($this->eventName, $observerClass, HOOK_EVENT_TYPE_ALL);
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
      * Notify an observer
      * @link http://php.net/manual/en/splsubject.notify.php
      * @return void
@@ -128,39 +131,12 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Load all hook observer already registered from Session or Database
-     * @return $this
-     */
-    public function loadAttachments()
-    {
-        global $_hook;
-        if (isset($_hook[$this->eventName]) && is_array($_hook[$this->eventName])) {
-            foreach ($_hook[$this->eventName] as $hookObserver => $val) {
-                self::autoLoadHooks($hookObserver, $val['path']);
-                $hookObserverInstance = $hookObserver::create();
-                $this->observers->attach($hookObserverInstance);
-            }
-        } else {
-            // Load from Database and save into global name
-            $_hook[$this->eventName] = $this->plugin->listHookObservers($this->eventName);
-            if (isset($_hook[$this->eventName]) && is_array($_hook[$this->eventName])) {
-                foreach ($_hook[$this->eventName] as $hookObserver => $val) {
-                    self::autoLoadHooks($hookObserver, $val['path']);
-                    $hookObserverInstance = $hookObserver::create();
-                    $this->observers->attach($hookObserverInstance);
-                }
-            }
-        }
-    }
-
-    /**
      * Detach all hook observers
      * @return $this
      */
     public function detachAll()
     {
-        global $_hook;
-        $_hook[$this->eventName] = null;
+        self::$hook[$this->eventName] = null;
         $this->observers->removeAll($this->observers);
     }
 
@@ -171,39 +147,5 @@ abstract class HookEvent implements HookEventInterface
     public function clearAttachments()
     {
         $this->observers->removeAll($this->observers);
-    }
-
-    /**
-     * Return true if HookManagement is active. Else, false.
-     * This is needed to check if hook event can be instantiated
-     * @return boolean
-     */
-    public static function isHookPluginActive()
-    {
-        // Hook Management was a plugin, now is in library
-        // Then, always return true
-        /*
-        $isActive = false;
-        $appPlugin = new AppPlugin();
-        $pluginList = $appPlugin->getInstalledPluginListName();
-        if (in_array(HOOK_MANAGEMENT, $pluginList)) {
-            $isActive = true;
-        }
-
-        return $isActive;
-        */
-
-        return true;
-    }
-
-    /**
-     * Hook Auto Loader. Search for Hook Observers from plugins
-     * @param string $observerClass
-     * @param string $path
-     * @return int
-     */
-    public static function autoLoadHooks($observerClass, $path)
-    {
-        Autoload::$map[$observerClass] = $path;
     }
 }

@@ -83,8 +83,7 @@ $server = new soap_server();
 $hook = HookWSRegistration::create();
 if (!empty($hook)) {
     $hook->setEventData(array('server' => $server));
-    $hook->notifyWSRegistration(HOOK_TYPE_PRE);
-    $res = $hook->getEventData();
+    $res = $hook->notifyWSRegistration(HOOK_EVENT_TYPE_PRE);
     if (!empty($res['server'])) {
         $server = $res['server'];
     }
@@ -5546,8 +5545,7 @@ function WSUserSubscribedInCourse ($params)
 // Add more webservices by Hooks
 if (!empty($hook)) {
     $hook->setEventData(array('server' => $server));
-    $hook->notifyWSRegistration(HOOK_TYPE_POST);
-    $res = $hook->getEventData();
+    $res = $hook->notifyWSRegistration(HOOK_EVENT_TYPE_POST);
     if (!empty($res['server'])) {
         $server = $res['server'];
     }

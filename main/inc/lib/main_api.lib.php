@@ -7513,3 +7513,25 @@ function api_site_use_cookie_warning_cookie_exist()
 {
     return isset($_COOKIE['ChamiloUsesCookies']);
 }
+
+/**
+ * Given a number of seconds, format the time to show hours, minutes and seconds
+ * @param int $time The time in seconds
+ * @param string $originFormat Optional. PHP o JS
+ * @return string (00h00'00")
+ */
+function api_format_time($time, $originFormat = 'php')
+{
+    $h = get_lang('h');
+    $hours = $time / 3600;
+    $mins = ($time % 3600) / 60;
+    $secs = ($time % 60);
+
+    if ($originFormat == 'js') {
+        $scormTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
+    } else {
+        $scormTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
+    }
+
+    return $scormTime;
+}

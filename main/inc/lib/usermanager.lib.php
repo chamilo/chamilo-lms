@@ -5007,13 +5007,13 @@ EOF;
     }
 
     /**
-     * Calc the expended time (hh::mm:ss) by a user in a course
+     * Calc the expended time (in seconds) by a user in a course
      * @param int $userId The user id
      * @param string $courseCode The course id
      * @param int $sessionId Optional. The session id
      * @param string $from Optional. From date
      * @param string $until Optional. Until date
-     * @return string The time
+     * @return int The time
      */
     public static function getExpendedTimeInCourses($userId, $courseCode, $sessionId = 0, $from = '', $until = '')
     {
@@ -5034,7 +5034,7 @@ EOF;
         }
 
         $trackResult = Database::select(
-            'SEC_TO_TIME(SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date))) as total_time',
+            'SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as total_time',
             $trackCourseAccessTable,
             array(
                 'where' => $whereConditions
@@ -5042,10 +5042,10 @@ EOF;
         );
 
         if ($trackResult != false) {
-            return $trackResult['total_time'] ? $trackResult['total_time'] : '00:00:00';
+            return $trackResult['total_time'] ? $trackResult['total_time'] : 0;
         }
 
-        return '00:00:00';
+        return 0;
     }
 
 }

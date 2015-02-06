@@ -81,6 +81,7 @@ if (!empty($selectedCourse)) {
             $selectedFrom,
             $selectedUntil
         );
+        $formatedTime = api_format_time($totalTime);
 
         $timeReport->data[] = array(
             'session' => null,
@@ -95,7 +96,7 @@ if (!empty($selectedCourse)) {
                 'username' => $teacher['username'],
                 'completeName' => api_get_person_name($teacher['firstname'], $teacher['lastname'])
             ),
-            'totalTime' => $totalTime
+            'totalTime' => $formatedTime
         );
     }
 
@@ -113,6 +114,7 @@ if (!empty($selectedCourse)) {
                     $selectedFrom,
                     $selectedUntil
                 );
+                $formatedTime = api_format_time($totalTime);
 
                 $timeReport->data[] = array(
                     'session' => array(
@@ -130,7 +132,7 @@ if (!empty($selectedCourse)) {
                         'username' => $coach['username'],
                         'completeName' => api_get_person_name($coach['firstname'], $coach['lastname'])
                     ),
-                    'totalTime' => $totalTime
+                    'totalTime' => $formatedTime
                 );
             }
         }
@@ -167,6 +169,7 @@ if (!empty($selectedSession)) {
                     $selectedFrom,
                     $selectedUntil
                 );
+                $formatedTime = api_format_time($totalTime);
 
                 $timeReport->data[] = array(
                     'session' => $sessionData,
@@ -178,7 +181,7 @@ if (!empty($selectedSession)) {
                         'username' => $coach['username'],
                         'completeName' => api_get_person_name($coach['firstname'], $coach['lastname'])
                     ),
-                    'totalTime' => $totalTime
+                    'totalTime' => $formatedTime
                 );
             }
         }
@@ -213,6 +216,7 @@ if (!empty($selectedTeacher)) {
                 $selectedFrom,
                 $selectedUntil
             );
+            $formatedTime = api_format_time($totalTime);
 
             $timeReport->data[] = array(
                 'session' => null,
@@ -221,7 +225,7 @@ if (!empty($selectedTeacher)) {
                     'name' => $courseInfo['title']
                 ),
                 'coach' => $teacherData,
-                'totalTime' => $totalTime
+                'totalTime' => $formatedTime
             );
         }
     }
@@ -244,6 +248,7 @@ if (!empty($selectedTeacher)) {
             $selectedFrom,
             $selectedUntil
         );
+        $formatedTime = api_format_time($totalTime);
 
         $timeReport->data[] = array(
             'session' => $sessionData,
@@ -252,7 +257,7 @@ if (!empty($selectedTeacher)) {
                 'name' => $courseInfo['title']
             ),
             'coach' => $teacherData,
-            'totalTime' => $totalTime
+            'totalTime' => $formatedTime
         );
     }
 }

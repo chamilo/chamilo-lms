@@ -425,7 +425,7 @@ if (isset($_REQUEST['oper']) && $_REQUEST['oper'] == 'del') {
     $obj->delete($_REQUEST['id']);
 }
 
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh();
 
 //5. Querying the DB for the elements
 $columns = array();
@@ -658,7 +658,7 @@ switch ($action) {
         $course = api_get_course_info();
         // Used inside get_exam_results_data()
         $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
-        if ($is_allowedToEdit) {
+        if ($is_allowedToEdit || api_is_student_boss()) {
             $columns = array(
                 'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions'
             );

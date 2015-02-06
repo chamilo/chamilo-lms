@@ -13,6 +13,9 @@
 -- This first part is for the main database
 
 -- xxMAINxx
+ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id;
+ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id;
+ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
 
 
 

@@ -2878,8 +2878,11 @@ CREATE TABLE IF NOT EXISTS skill_rel_user (
   skill_id int NOT NULL,
   acquired_skill_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   assigned_by int NOT NULL,
+  course_id INT NOT NULL DEFAULT 0,
+  session_id INT NOT NULL DEFAULT 0
   PRIMARY KEY (id)
 );
+ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
 
 DROP TABLE IF EXISTS skill_profile;
 CREATE TABLE IF NOT EXISTS skill_profile (

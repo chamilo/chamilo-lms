@@ -1,6 +1,6 @@
 {% if allowSkillsTool %}
     <div class="btn-group">
-        <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">{{ 'MySkills' | get_lang }}</a>
+        <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">{{ 'SkillsWheel' | get_lang }}</a>
     </div>
 {% endif %}
 

@@ -324,7 +324,7 @@ class IndexManager
         if (api_get_setting('allow_skills_tool') == 'true') {
             $content = '<ul class="nav nav-list">';
 
-            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'));
+            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'));
 
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
 

@@ -3,11 +3,9 @@
 /**
  * Show the skills report
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- * @package chamilo.plugin.advancedskills
+ * @package chamilo.social.skill
  */
-require_once '../../main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
-require_once api_get_path(PLUGIN_PATH) . 'advancedskills/src/AdvancedSkills.php';
+require_once '../inc/global.inc.php';
 
 $isStudent = api_is_student();
 $isStudentBosss = api_is_student_boss();
@@ -56,7 +54,7 @@ if ($isStudent) {
         $tableRows[] = $tableRow;
     }
 
-    $tplPath = 'advancedskills/tpl/student.tpl';
+    $tplPath = 'skill/student_report.tpl';
 } else if ($isStudentBosss) {
     $selectedStudent = isset($_REQUEST['student']) ? intval($_REQUEST['student']) : 0;
 
@@ -94,7 +92,7 @@ if ($isStudent) {
         }
     }
 
-    $tplPath = 'advancedskills/tpl/student_boss.tpl';
+    $tplPath = 'skill/student_boss_report.tpl';
 
     $tpl->assign('followedStudents', $followedStudents);
     $tpl->assign('selectedStudent', $selectedStudent);
@@ -157,7 +155,7 @@ if ($isStudent) {
         }
     }
 
-    $tplPath = 'advancedskills/tpl/drh.tpl';
+    $tplPath = 'skill/drh_report.tpl';
 
     $tpl->assign('action', $action);
 
@@ -172,7 +170,7 @@ if ($isStudent) {
 
 $tpl->assign('rows', $tableRows);
 
-$contentTemplate = $tpl->fetch($tplPath);
+$contentTemplate = $tpl->fetch("default/" . $tplPath);
 
 $tpl->assign('content', $contentTemplate);
 $tpl->display_one_col_template();

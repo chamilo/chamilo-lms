@@ -7549,11 +7549,11 @@ function apiIsExcludedUserType($checkDB = false, $userId = 0)
 }
 
 /**
- * Get the exclude user types
- * @param string $format Optional. The result type. Array or string
- * @return array
+ * Get the user status to ignore in reports
+ * @param string $format Optional. The result type (array or string)
+ * @return array|string
  */
-function apiGetExcludedUserTypes($format = 'array')
+function api_get_users_status_ignored_in_reports($format = 'array')
 {
     $excludedTypes = array(
         INVITEE,

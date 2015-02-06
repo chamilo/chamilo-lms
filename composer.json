@@ -21,7 +21,8 @@
             "plugin",
             "main/install",
             "main/inc/lib/getid3",
-            "main/survey"
+            "main/survey",
+            "main/inc/lib/hook"
         ]
     },
     "require": {

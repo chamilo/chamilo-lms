@@ -230,7 +230,7 @@ $courses_in_session = array();
 //See #4676
 $drh_can_access_all_courses = false;
 
-if (api_is_drh() || api_is_platform_admin() || api_is_stude) {
+if (api_is_drh() || api_is_platform_admin() || api_is_student_boss()) {
     $drh_can_access_all_courses = true;
 }
 

@@ -120,7 +120,7 @@ if ($isStudent) {
         case 'filterByCourse':
             $course = api_get_course_info_by_id($selectedCourse);
 
-            $reportTitle = sprintf(get_lang('AchievedSkillByCourseX'), $course['name']);
+            $reportTitle = sprintf(get_lang('AchievedSkillInCourseX'), $course['name']);
 
             $tableRows = $objSkill->listAchievedByCourse($selectedCourse);
             break;

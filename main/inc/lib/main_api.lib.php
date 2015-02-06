@@ -1305,6 +1305,8 @@ function api_get_user_info_from_username($username = '')
     if (empty($username)) {
         return false;
     }
+    $username = trim($username);
+
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
             WHERE username='".Database::escape_string($username)."'";
     $result = Database::query($sql);

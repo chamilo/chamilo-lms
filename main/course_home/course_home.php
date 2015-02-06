@@ -140,7 +140,12 @@ $show_message = '';
 
 if (api_is_invitee_user()) {
     $isInASession = $sessionId > 0;
-    $isSubscribed = CourseManager::is_user_subscribed_in_course($user_id, $course_code, $isInASession, $sessionId);
+    $isSubscribed = CourseManager::is_user_subscribed_in_course(
+        $user_id,
+        $course_code,
+        $isInASession,
+        $sessionId
+    );
 
     if (!$isSubscribed) {
         api_not_allowed(true);

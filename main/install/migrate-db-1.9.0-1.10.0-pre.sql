@@ -20,7 +20,7 @@ ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
 
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18716' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.1' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

@@ -23,6 +23,7 @@ return array(
     'AddManySessionToCategoryFunctions' => $baseDir . '/main/inc/lib/add_many_session_to_category_functions.lib.php',
     'AdminPage' => $baseDir . '/main/admin/admin_page.class.php',
     'Adminer' => $baseDir . '/main/admin/db.php',
+    'AdvancedSessionsPlugin' => $baseDir . '/plugin/advancedsessions/src/AdvancedSessionsPlugin.class.php',
     'Aiken2Question' => $baseDir . '/main/exercice/export/aiken/aiken_classes.php',
     'AikenAnswerMultipleChoice' => $baseDir . '/main/exercice/export/aiken/aiken_classes.php',
     'AjaxController' => $baseDir . '/main/inc/lib/ajax_controller.class.php',

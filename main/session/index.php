@@ -354,6 +354,22 @@ if (!empty($start) && !empty($end)) {
 echo Display::tag('h1', $session_info['name']);
 echo $dates.'<br />';
 
+if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
+    $sessionDescription = AdvancedSessionsPlugin::getSessionDescription($session_id);
+
+    if (!empty($sessionDescription)) {
+    ?>
+        <div class="home-course-intro">
+            <div class="page-course">
+                <div class="page-course-intro">
+                    <p><?php echo $sessionDescription; ?></p>
+                </div>
+            </div>
+        </div>
+    <?php
+    }
+}
+
 // All Learnpaths grid settings (First tab, first subtab)
 
 $columns_courses = array(

@@ -546,8 +546,14 @@ class CoursesController
         // Get session search catalogue URL
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
+        $showDescription = false;
+
+        if (class_exists('AdvancedSessionsPlugin') && AdvancedSessionsPlugin::hasDescriptionField()) {
+            $showDescription = true;
+        }
+
         foreach ($sessions as $session) {
-            $sessionsBlocks[] = array(
+            $sessionsBlock = array(
                 'id' => $session['id'],
                 'name' => $session['name'],
                 'nbr_courses' => $session['nbr_courses'],
@@ -556,8 +562,19 @@ class CoursesController
                 'is_subscribed' => $session['is_subscribed'],
                 'icon' => $this->getSessionIcon($session['name']),
                 'date' => SessionManager::getSessionFormattedDate($session),
-                'subscribe_button' => $this->getRegisterInSessionButton($session['name'])
+                'subscribe_button' => $this->getRegisterInSessionButton($session['name']),
+                'hasDescription' => false
             );
+
+            if ($showDescription) {
+                $sessionDescription = AdvancedSessionsPlugin::getSessionDescription($session['id']);
+
+                if (!empty($sessionDescription)) {
+                    $sessionsBlock['hasDescription'] = true;
+                }
+            }
+
+            $sessionsBlocks[] = $sessionsBlock;
         }
 
         $tpl = new Template();

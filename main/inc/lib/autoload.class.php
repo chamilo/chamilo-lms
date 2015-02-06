@@ -751,7 +751,6 @@ class Autoload
         $result['MultipleAnswerCombination'] = '/main/exercice/multiple_answer_combination.class.php';
         $result['MultipleAnswerCombinationTrueFalse'] = '/main/exercice/multiple_answer_combination_true_false.class.php';
         $result['MultipleAnswerTrueFalse'] = '/main/exercice/multiple_answer_true_false.class.php';
-        $result['MyHorBar'] = '/main/inc/lib/pchart/MyHorBar.class.php';
         $result['MySpace'] = '/main/mySpace/myspace.lib.php';
         $result['Nanogong'] = '/main/inc/lib/nanogong.lib.php';
         $result['NotebookManager'] = '/main/inc/lib/notebook.lib.php';
@@ -975,9 +974,6 @@ class Autoload
         $result['learnpath_processor'] = '/main/inc/lib/search/tool_processors/learnpath_processor.class.php';
         $result['link_processor'] = '/main/inc/lib/search/tool_processors/link_processor.class.php';
         $result['net\HttpChannel'] = '/main/inc/lib/system/net/http_channel.class.php';
-        $result['pCache'] = '/main/inc/lib/pchart/pCache.class.php';
-        $result['pChart'] = '/main/inc/lib/pchart/pChart.class.php';
-        $result['pData'] = '/main/inc/lib/pchart/pData.class.php';
         $result['quiz_processor'] = '/main/inc/lib/search/tool_processors/quiz_processor.class.php';
         $result['scorm'] = '/main/newscorm/scorm.class.php';
         $result['scormItem'] = '/main/newscorm/scormItem.class.php';

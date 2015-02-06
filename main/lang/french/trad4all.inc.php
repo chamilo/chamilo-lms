@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$RoleStudentBoss = "Chef d'apprenant(s)";
 $CosecantCsc = "Cosécante:\t\t\t\tcsc(x)";
 $HyperbolicCosecantCsch = "Cosécante hyperbolique:\t\tcsch(x)";
 $ArccosecantArccsc = "Arccosécante:\t\t\tarccsc(x)";
@@ -53,11 +54,14 @@ $BuyCourses = "Achat de cours";
 $MySessions = "Mes sessions";
 $ActivateAudioRecorder = "Activer l'enregistreur audio";
 $StartSpeaking = "Parlez maintenant";
+$SessionDurationDescription = "La durée de la session vous permet d'établir une durée en nombre de jours d'accès depuis le premier accès de l'étudiant à cette session. Tant que l'étudiant n'y entre pas, la durée n'est pas entamée. De cette manière, il vous est possible de définir une session qui durera '15 jours' au lieu de démarrer ou de terminer à une date spécifique.";
 $HyperbolicArctangentArctanh = "Arctangente hyperbolique:\t\tarctanh(x)";
+$SessionDurationTitle = "Durée de session";
 $ArctangentArctan = "Arctangente:\t\t\tarctan(x)";
 $HyperbolicTangentTanh = "Tangente hyperbolique:\t\ttanh(x)";
 $TangentTan = "Tangente:\t\t\ttan(x)";
 $CoachAndStudent = "Coach et apprenant";
+$Serie = "Série";
 $HyperbolicArccosineArccosh = "Arcosinus hyperbolique:\t\tarccosh(x)";
 $ArccosineArccos = "Arccosinus:\t\t\tarccos(x)";
 $HyperbolicCosineCosh = "Cosinus hyperbolique:\t\tcosh(x)";

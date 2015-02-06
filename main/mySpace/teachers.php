@@ -186,7 +186,7 @@ if (api_is_drh()) {
         Display::url(Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), 'student.php'),
         Display::url(Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php'),
         Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),
-        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php')
+        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php'),
     );
 
     $nb_menu_items = count($menu_items);

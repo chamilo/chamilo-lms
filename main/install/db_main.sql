@@ -877,7 +877,7 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18715','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.1','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -2878,8 +2878,11 @@ CREATE TABLE IF NOT EXISTS skill_rel_user (
   skill_id int NOT NULL,
   acquired_skill_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   assigned_by int NOT NULL,
+  course_id INT NOT NULL DEFAULT 0,
+  session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY (id)
 );
+ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
 
 DROP TABLE IF EXISTS skill_profile;
 CREATE TABLE IF NOT EXISTS skill_profile (
@@ -3026,7 +3029,6 @@ CREATE TABLE usergroup_rel_question (
     coefficient float(6,2)
 );
 
--- 1.10.x-specific, non-course-related, database changes
 -- Hook tables
 CREATE TABLE IF NOT EXISTS hook_observer(
     id int UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -3050,3 +3052,6 @@ CREATE TABLE IF NOT EXISTS hook_call(
     enabled tinyint NOT NULL,
     PRIMARY KEY PK_hook_management_hook_call(id)
 );
+-- 1.10.x-specific, non-course-related, database changes
+-- some changes to previous structure might have been applied to the tables
+-- creation statements above to increase efficiency

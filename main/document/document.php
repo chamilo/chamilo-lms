@@ -749,13 +749,13 @@ if ($sessionId == 0) {
     if (!file_exists($base_work_dir.'/shared_folder')) {
         $usf_dir_title = get_lang('UserFolders');
         $usf_dir_name = '/shared_folder';
-        $groupId = 0;
+        //$groupId = 0;
         $visibility = 0;
         create_unexisting_directory(
             $courseInfo,
             api_get_user_id(),
             $sessionId,
-            $groupId,
+            0,
             $to_user_id,
             $base_work_dir,
             $usf_dir_name,
@@ -767,13 +767,13 @@ if ($sessionId == 0) {
     if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.$userId)) {
         $usf_dir_title = $userInfo['complete_name'];
         $usf_dir_name = '/shared_folder/sf_user_'.$userId;
-        $groupId = 0;
+        //$groupId = 0;
         $visibility = 1;
         create_unexisting_directory(
             $courseInfo,
             api_get_user_id(),
             $sessionId,
-            $groupId,
+            0,
             $to_user_id,
             $base_work_dir,
             $usf_dir_name,
@@ -786,13 +786,13 @@ if ($sessionId == 0) {
     if (!file_exists($base_work_dir.'/shared_folder_session_'.$sessionId)) {
         $usf_dir_title = get_lang('UserFolders').' ('.api_get_session_name($sessionId).')';
         $usf_dir_name = '/shared_folder_session_'.$sessionId;
-        $groupId = 0;
+        //$groupId = 0;
         $visibility = 0;
         create_unexisting_directory(
             $courseInfo,
             api_get_user_id(),
             $sessionId,
-            $groupId,
+            0,
             $to_user_id,
             $base_work_dir,
             $usf_dir_name,
@@ -804,13 +804,13 @@ if ($sessionId == 0) {
     if (!file_exists($base_work_dir.'/shared_folder_session_'.$sessionId.'/sf_user_'.$userId)) {
         $usf_dir_title = $userInfo['complete_name'].'('.api_get_session_name($sessionId).')';
         $usf_dir_name = '/shared_folder_session_'.$sessionId.'/sf_user_'.$userId;
-        $groupId = 0;
+        //$groupId = 0;
         $visibility = 1;
         create_unexisting_directory(
             $courseInfo,
             $userId,
             $sessionId,
-            $groupId,
+            0,
             $to_user_id,
             $base_work_dir,
             $usf_dir_name,

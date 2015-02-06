@@ -164,7 +164,19 @@ class ExtraFieldValue extends Model
                             $dirPermissions = api_get_permissions_for_new_directories();
                             $sysCodePath = api_get_path(SYS_CODE_PATH);
 
-                            $fileDir = "upload/extrafields/{$this->type}/";
+                            switch ($this->type) {
+                                case 'course':
+                                    $fileDir = "upload/courses/";
+                                    break;
+                                case 'session':
+                                    $fileDir = "upload/sessions/";
+                                    break;
+                                case 'user':
+                                    $userPath = UserManager::get_user_picture_path_by_id($this->handler_id);
+                                    $fileDir = $userPath['dir'];
+                                    break;
+                            }
+
                             $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE . "_{$params[$this->handler_id]}.png";
 
                             if (!file_exists($sysCodePath . $fileDir)) {
@@ -192,7 +204,19 @@ class ExtraFieldValue extends Model
                             $dirPermissions = api_get_permissions_for_new_directories();
                             $sysCodePath = api_get_path(SYS_CODE_PATH);
 
-                            $fileDir = "upload/extrafields/{$this->type}/";
+                            switch ($this->type) {
+                                case 'course':
+                                    $fileDir = "upload/courses/";
+                                    break;
+                                case 'session':
+                                    $fileDir = "upload/sessions/";
+                                    break;
+                                case 'user':
+                                    $userPath = UserManager::get_user_picture_path_by_id($this->handler_id);
+                                    $fileDir = $userPath['dir'];
+                                    break;
+                            }
+
                             $cleanedName = replace_dangerous_char($value['name']);
                             $fileName = ExtraField::FIELD_TYPE_FILE . "_{$params[$this->handler_id]}_$cleanedName";
 

@@ -36,7 +36,4 @@ nbproject/*
 
 plugin/bbb/config.vm.php
 
-# Extrafields files
-main/upload/extrafields/*
-
 main/cron/incoming/*

@@ -142,10 +142,10 @@ class SessionManager
         } elseif (empty($coach_username)) {
             $msg = get_lang('CoachIsRequired');
             return $msg;
-        } elseif (!empty($start_limit) && empty($nolimit) && !apiIsValidDate($date_start, 'Y-m-d')) {
+        } elseif (!empty($start_limit) && empty($nolimit) && !api_is_valid_date($date_start, 'Y-m-d')) {
             $msg = get_lang('InvalidStartDate');
             return $msg;
-        } elseif (!empty($end_limit) && empty($nolimit) && !apiIsValidDate($date_end, 'Y-m-d')) {
+        } elseif (!empty($end_limit) && empty($nolimit) && !api_is_valid_date($date_end, 'Y-m-d')) {
             $msg = get_lang('InvalidEndDate');
             return $msg;
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
@@ -1399,10 +1399,10 @@ class SessionManager
         } elseif (empty($id_coach)) {
             $msg = get_lang('CoachIsRequired');
             return $msg;
-        } elseif (!empty($start_limit) && empty($nolimit) && !apiIsValidDate($date_start, 'Y-m-d')) {
+        } elseif (!empty($start_limit) && empty($nolimit) && !api_is_valid_date($date_start, 'Y-m-d')) {
             $msg = get_lang('InvalidStartDate');
             return $msg;
-        } elseif (!empty($end_limit) && empty($nolimit) && !apiIsValidDate($date_end, 'Y-m-d')) {
+        } elseif (!empty($end_limit) && empty($nolimit) && !api_is_valid_date($date_end, 'Y-m-d')) {
             $msg = get_lang('InvalidEndDate');
             return $msg;
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {

@@ -2341,14 +2341,14 @@ class Exercise
                             $choice[$ind] = 1;
                         }
 
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if ($studentChoice) {
                             $questionScore  +=$answerWeighting;
                         }
                     } else {
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if (isset($studentChoice)) {

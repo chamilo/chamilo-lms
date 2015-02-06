@@ -2,6 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$StudentsWhoAchievedTheSkillX = "Estudiantes que adquirieron la competencia %s";
+$AchievedSkillInCourseX = "Competencias adquiridas en curso %s";
+$SkillsReport = "Reporte de competencias";
+$AssignedUsersListToStudentBoss = "Lista de usuarios asignados al superior";
+$AssignUsersToBoss = "Asignar usuarios a superior";
+$RoleStudentBoss = "Superior de estudiante(s)";
 $CosecantCsc = "Cosecante:\t\t\t\tcsc(x)";
 $HyperbolicCosecantCsch = "Cosecante hiperbólico:\t\tcsch(x)";
 $ArccosecantArccsc = "Arccosecante:\t\t\tarccsc(x)";
@@ -55,11 +61,14 @@ $BuyCourses = "Comprar cursos";
 $MySessions = "Mis sesiones";
 $ActivateAudioRecorder = "Activar la grabación de voz";
 $StartSpeaking = "Hable ahora";
+$SessionDurationDescription = "La duración de sesiones le permite configurar un número de días de acceso a una sesión que inician desde el primer acceso del estudiante a la misma sesión. Mientras no entre, no inicia el conteo de estos días. De esta manera, puede poner una sesión con acceso 'por 15 días' en lugar de una fecha específica de inicio y de fin, y así tener estudiantes que puedan iniciar con mayor flexibilidad.";
 $HyperbolicArctangentArctanh = "Arcotangente hiperbólica:\tarctanh(x)";
+$SessionDurationTitle = "Duración de sesión";
 $ArctangentArctan = "Arcotangente:\t\t\tarctan(x)";
 $HyperbolicTangentTanh = "Tangente hiperbólica:\t\ttanh(x)";
 $TangentTan = "Tangente:\t\t\ttan(x)";
 $CoachAndStudent = "Tutor y estudiante";
+$Serie = "Serie";
 $HyperbolicArccosineArccosh = "Arcocoseno hiperbólico:\t\tarccosh(x)";
 $ArccosineArccos = "Arcocoseno:\t\t\tarccos(x)";
 $HyperbolicCosineCosh = "Coseno hiperbólico:\t\tcosh(x)";

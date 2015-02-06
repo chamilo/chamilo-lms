@@ -2,6 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$StudentsWhoAchievedTheSkillX = "Students who acquired skill %s";
+$AchievedSkillInCourseX = "Skills acquired in course %s";
+$SkillsReport = "Skills report";
+$AssignedUsersListToStudentBoss = "Users assigned to their superior";
+$AssignUsersToBoss = "Assign users to superior";
+$RoleStudentBoss = "Student's superior";
 $CosecantCsc = "Cosecant:\t\t\t\tcsc(x)";
 $HyperbolicCosecantCsch = "Hyperbolic cosecant:\t\tcsch(x)";
 $ArccosecantArccsc = "Arccosecant:\t\t\tarccsc(x)";

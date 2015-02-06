@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a422c2e4eb5cfff2fa4784fd9036ed9c",
+    "hash": "14f25295cfdba7534deecf11519b2d22",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -782,8 +782,11 @@
                     "email": "fabien@symfony.com"
                 }
             ],
-            "description": "Symfony Process Component",
-            "homepage": "http://symfony.com",
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
             "time": "2015-01-25 04:39:26"
         },
         {
@@ -832,6 +835,48 @@
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
             "time": "2015-01-25 04:39:26"
+        },
+        {
+            "name": "szymach/c-pchart",
+            "version": "1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/szymach/c-pchart.git",
+                "reference": "1d54c14f8b7295abc87039ba806fed45d29d67d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/szymach/c-pchart/zipball/1d54c14f8b7295abc87039ba806fed45d29d67d9",
+                "reference": "1d54c14f8b7295abc87039ba806fed45d29d67d9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.3.3"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "CpChart\\": "src/"
+                },
+                "files": [
+                    "src/Resources/data/constants.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Port of \"pChart\" library into PHP 5.3.",
+            "homepage": "https://github.com/szymach/c-pchart",
+            "keywords": [
+                "c-pChart",
+                "charts",
+                "composer",
+                "pchart",
+                "statistics"
+            ],
+            "time": "2015-01-28 19:54:53"
         },
         {
             "name": "toin0u/digitalocean",

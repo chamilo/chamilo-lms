@@ -252,7 +252,7 @@ class Statistics
                 // User id.
                 $row[3] = Display::url(
                     $row[3],
-                    api_get_path(WEB_CODE_PATH).'admin/user_information?user_id='.$row[4], array('title' => get_lang('UserInfo'))
+                    api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$row[4], array('title' => get_lang('UserInfo'))
                 );
 
                 $row[4] = TrackingUserLog::get_ip_from_user_event($row[4], $row[5], true);

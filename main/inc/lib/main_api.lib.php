@@ -4984,7 +4984,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
 
 /**
  * Gets the distinct settings categories
- * @param array     Array of strings giving the categories we want to exclude
+ * @param array     Array of strings giving the categories we want to excluded
  * @param int       Access URL. Optional. Defaults to 1
  * @return array    A list of categories
  */

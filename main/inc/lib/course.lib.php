@@ -4651,7 +4651,7 @@ class CourseManager
     {
         global $_configuration;
 
-        if (apiIsInvitedUser()) {
+        if (api_is_invitee_user()) {
             return array();
         }
 

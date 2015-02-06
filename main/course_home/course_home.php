@@ -138,7 +138,7 @@ $course_code = api_get_course_id();
 $sessionId = api_get_session_id();
 $show_message = '';
 
-if (apiIsInvitedUser()) {
+if (api_is_invitee_user()) {
     $isInASession = $sessionId > 0;
     $isSubscribed = CourseManager::is_user_subscribed_in_course($user_id, $course_code, $isInASession, $sessionId);
 

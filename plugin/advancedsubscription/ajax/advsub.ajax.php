@@ -86,19 +86,26 @@ if (!empty($a) && !empty($u)) {
                     $superiorArray = null;
                 }
                 $adminsArray = UserManager::get_all_administrators();
-
+                foreach ($adminsArray as &$admin) {
+                    $admin['complete_name'] = $admin['lastname'] . ', ' . $admin['firstname'];
+                }
+                unset($admin);
                 $data = array(
                     'student' => $studentArray,
                     'superior' => $superiorArray,
                     'admins' => $adminsArray,
                     'session' => $sessionArray,
                     'signature' => 'AQUI DEBE IR UNA FIRMA',
+                    's' => $s,
+                    'u' => $u,
                 );
 
                 if (empty($superiorId)) { // Does not have boss
-                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php?s=' . $s;
-                    error_log($data['admin_view_url']);
-                    $result['mails'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS);
+                    $res = $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
+                    if (!empty($res)) {
+                        $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php?s=' . $s;
+                        $result['mails'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS);
+                    }
                 } else {
                     $dataUrl = array(
                         'a' => 'confirm',
@@ -171,22 +178,24 @@ if (!empty($a) && !empty($u)) {
                     $data['session'] = $sessionArray;
                     $data['signature'] = 'AQUI DEBE IR UNA FIRMA';
                     $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php';
-
-                    // Admin mails approval does not have accept/reject buttons
-                    /*
-                    $dataUrl = array(
-                        'a' => 'confirm',
-                        's' => $s,
-                        'u' => $u,
-                        'queue' => array('id' => $student['queue_id']),
-                    );
-                    $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED;
-                    $data['acceptUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
-                        '?data=' . $plugin->encrypt($dataUrl);
-                    $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
-                    $data['rejectUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
-                        '?data=' . $plugin->encrypt($dataUrl);
-                    */
+                    if (empty($data['action'])) {
+                        switch ($e) {
+                            case ADV_SUB_QUEUE_STATUS_BOSS_APPROVED:
+                                $data['action'] = ADV_SUB_ACTION_SUPERIOR_APPROVE;
+                                break;
+                            case ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED:
+                                $data['action'] = ADV_SUB_ACTION_SUPERIOR_APPROVE;
+                                break;
+                            case ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED:
+                                $data['action'] = ADV_SUB_ACTION_ADMIN_APPROVE;
+                                break;
+                            case ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED:
+                                $data['action'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
 
                     $result['mailIds'] = $plugin->sendMail($data, $data['action']);
                     if (!empty($result['mailIds'])) {

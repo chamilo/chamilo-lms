@@ -336,6 +336,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 Database::get_main_table(TABLE_ADV_SUB_QUEUE),
                 array(
                     'status' => $newStatus,
+                    'updated_at' => api_get_utc_datetime(),
                 ),
                 $where
             );
@@ -406,7 +407,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
-                    $tpl->fetch('/advancedsubscription/views/advsub_approve_confirmed.tpl'),
+                    $tpl->fetch('/advancedsubscription/views/advsub_request_approved_info_admin.tpl'),
                     $data['s']
                 );
                 // Mail to admin
@@ -437,7 +438,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
-                    $tpl->fetch('/advancedsubscription/views/advsub_disapprove_confirmed.tpl'),
+                    $tpl->fetch('/advancedsubscription/views/advsub_request_disapprove_confirmed.tpl'),
                     $data['s']
                 );
                 break;

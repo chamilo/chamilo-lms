@@ -53,8 +53,10 @@
     <div class="row">
         <div class="span6">
             <p class="text-title-select">Elige una sesión de formación</p>
-
             <select id="session-select" name="s">
+                <option value="0">
+                    {{ "SelectASession" | get_lang }}
+                </option>
                 {% for sessionItem in sessionItems %}
                 <option value="{{ sessionItem.id }}" {{ sessionItem.selected }}>
                 {{ sessionItem.name }}

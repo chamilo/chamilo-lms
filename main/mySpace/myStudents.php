@@ -749,7 +749,7 @@ if (!empty($student_id)) {
             echo '</table>';
         }
     } else {
-        if ($user_info['status'] != ROLE_INVITED) {
+        if ($user_info['status'] != INVITEE) {
             $csv_content[] = array();
             $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
             $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
@@ -939,7 +939,7 @@ if (!empty($student_id)) {
             </table>
         <?php } ?>
         <!-- line about exercises -->
-        <?php if ($user_info['status'] != ROLE_INVITED) { ?>
+        <?php if ($user_info['status'] != INVITEE) { ?>
         <table class="data_table">
         <tr>
             <th><?php echo get_lang('Exercices'); ?></th>

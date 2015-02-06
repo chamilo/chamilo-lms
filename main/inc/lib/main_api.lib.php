@@ -43,7 +43,7 @@ define('SESSION_GENERAL_COACH', 13);
 define('COURSE_STUDENT', 14);   //student subscribed in a course
 define('SESSION_STUDENT', 15);  //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
-define('ROLE_INVITED', 20);
+define('INVITEE', 20);
 
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
@@ -51,7 +51,7 @@ $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
 $_status_list[DRH]              = 'drh';            // 4
 $_status_list[STUDENT]          = 'user';           // 5
 $_status_list[ANONYMOUS]        = 'anonymous';      // 6
-$_status_list[ROLE_INVITED]     = 'invited';        // 20
+$_status_list[INVITEE]     = 'invited';        // 20
 
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
@@ -2568,7 +2568,7 @@ function api_is_teacher() {
 function apiIsInvitedUser() {
     global $_user;
 
-    return isset($_user['status']) && $_user['status'] == ROLE_INVITED;
+    return isset($_user['status']) && $_user['status'] == INVITEE;
 }
 
 /**
@@ -4675,7 +4675,7 @@ function api_get_status_langvars() {
         DRH             => get_lang('Drh', ''),
         STUDENT         => get_lang('Student', ''),
         ANONYMOUS       => get_lang('Anonymous', ''),
-        ROLE_INVITED => get_lang('Invited')
+        INVITEE => get_lang('Invited')
     );
 }
 
@@ -7529,7 +7529,7 @@ function apiIsExcludedUserType($checkDB = false, $userId = 0)
         $userInfo = api_get_user_info($userId);
 
         switch ($userInfo['status']) {
-            case ROLE_INVITED:
+            case INVITEE:
                 //no break;
             case ANONYMOUS:
                 return true;
@@ -7556,7 +7556,7 @@ function apiIsExcludedUserType($checkDB = false, $userId = 0)
 function apiGetExcludedUserTypes($format = 'array')
 {
     $excludedTypes = array(
-        ROLE_INVITED,
+        INVITEE,
         ANONYMOUS
     );
 

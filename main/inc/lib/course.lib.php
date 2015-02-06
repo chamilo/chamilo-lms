@@ -1787,7 +1787,7 @@ class CourseManager
                    WHERE course_code = '$course_code' AND cu.status = ".STUDENT;
 
             if (!$includeInvitedUsers) {
-                $sql .= " AND u.status != " . ROLE_INVITED;
+                $sql .= " AND u.status != " . INVITEE;
             }
 
             $rs = Database::query($sql);
@@ -1822,7 +1822,7 @@ class CourseManager
             }
 
             if (!$includeInvitedUsers) {
-                $sql .= " AND u.status != " . ROLE_INVITED;
+                $sql .= " AND u.status != " . INVITEE;
             }
 
             $rs = Database::query($sql_query);

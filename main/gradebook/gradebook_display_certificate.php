@@ -53,7 +53,7 @@ switch ($action) {
         $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
         if (!empty($user_list)) {
             foreach ($user_list as $user_info) {
-                if ($user_info['status'] == ROLE_INVITED) {
+                if ($user_info['status'] == INVITEE) {
                     continue;
                 }
 

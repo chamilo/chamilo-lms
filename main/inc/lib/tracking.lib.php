@@ -5753,7 +5753,7 @@ class TrackingCourseLog
         $invitedUsersCondition = '';
 
         if (!$includeInvitedUsers) {
-            $invitedUsersCondition = " AND user.status != " . ROLE_INVITED;
+            $invitedUsersCondition = " AND user.status != " . INVITEE;
         }
 
     	$sql = "SELECT  user.user_id as user_id,

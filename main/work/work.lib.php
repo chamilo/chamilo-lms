@@ -2273,7 +2273,7 @@ function get_work_user_list(
         $sql = " $select
                 FROM $work_condition  $user_condition
                 WHERE $extra_conditions $where_condition $condition_session
-                    AND u.status != " . ROLE_INVITED . "
+                    AND u.status != " . INVITEE . "
                 ORDER BY $column $direction";
 
         if (!empty($start) && !empty($limit)) {

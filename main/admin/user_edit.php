@@ -211,7 +211,7 @@ $status[COURSEMANAGER] 	= get_lang('Teacher');
 $status[STUDENT] 		= get_lang('Learner');
 $status[DRH] 			= get_lang('Drh');
 $status[SESSIONADMIN] 	= get_lang('SessionsAdmin');
-$status[ROLE_INVITED] 	= get_lang('Invited');
+$status[INVITEE] 	= get_lang('Invitee');
 
 $form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();','class'=>'chzn-select'));
 

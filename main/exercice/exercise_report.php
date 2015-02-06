@@ -46,7 +46,7 @@ $gradebook = isset($gradebook) ? $gradebook : null;
 $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
 
 /* 	Constants and variables */
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is_student_boss();
 $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);

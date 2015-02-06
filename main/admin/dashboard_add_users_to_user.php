@@ -40,6 +40,8 @@ $user_info = api_get_user_info($user_id);
 $user_anonymous  = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
 
+$userStatus = api_get_user_status($user_id);
+
 $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
 
 // setting the name of the tool
@@ -47,6 +49,8 @@ if (UserManager::is_admin($user_id)) {
     $tool_name= get_lang('AssignUsersToPlatformAdministrator');
 } else if ($user_info['status'] == SESSIONADMIN) {
     $tool_name= get_lang('AssignUsersToSessionsAdministrator');
+} else if  ($user_info['status'] == STUDENT_BOSS) {
+    $tool_name= get_lang('AssignUsersToBoss');
 } else {
     $tool_name= get_lang('AssignUsersToHumanResourcesManager');
 }
@@ -62,7 +66,7 @@ if (!api_is_platform_admin()) {
 
 function search_users($needle,$type)
 {
-    global $tbl_access_url_rel_user,  $tbl_user, $user_anonymous, $current_user_id, $user_id;
+    global $tbl_access_url_rel_user,  $tbl_user, $user_anonymous, $current_user_id, $user_id, $userStatus;
 
     $xajax_response = new XajaxResponse();
     $return = '';
@@ -70,8 +74,17 @@ function search_users($needle,$type)
         // xajax send utf8 datas... datas in db can be non-utf8 datas
         $charset = api_get_system_encoding();
         $needle = api_convert_encoding($needle, $charset, 'utf-8');
+        $assigned_users_to_hrm = array();
 
-        $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
+        switch ($userStatus) {
+            case DRH:
+                $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
+                break;
+            case STUDENT_BOSS:
+                $assigned_users_to_hrm = UserManager::getUsersFollowedByStudentBoss($user_id);
+                break;
+        }
+
         $assigned_users_id = array_keys($assigned_users_to_hrm);
         $without_assigned_users = '';
 
@@ -92,7 +105,7 @@ function search_users($needle,$type)
                     LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
                     WHERE
                         ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
-                        status NOT IN(".DRH.", ".SESSIONADMIN.") AND
+                        status NOT IN(".DRH.", ".SESSIONADMIN.", " . STUDENT_BOSS . ") AND
                         user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id)
                         $without_assigned_users AND
                         access_url_id = ".api_get_current_access_url_id()."
@@ -104,7 +117,7 @@ function search_users($needle,$type)
                     FROM $tbl_user user
                     WHERE
                         ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
-                        status NOT IN(".DRH.", ".SESSIONADMIN.") AND
+                        status NOT IN(".DRH.", ".SESSIONADMIN.", " . STUDENT_BOSS . ") AND
                         user_id NOT IN ($user_anonymous, $current_user_id, $user_id)
                     $without_assigned_users
                     $order_clause
@@ -127,10 +140,19 @@ function search_users($needle,$type)
                             username LIKE "'.$needle.'%" OR
                             firstname LIKE "'.$needle.'%" OR
                             lastname LIKE "'.$needle.'%"
-                        ) AND
-                        user.status<>6 AND user.status<>'.DRH.' '.
-                    $order_clause.
-                   ' LIMIT 11';
+                        ) AND ';
+
+            switch ($userStatus) {
+                case DRH:
+                    $sql .= " user.status <> 6 AND user.status <> " . DRH;
+                    break;
+                case STUDENT_BOSS:
+                    $sql .= " user.status <> 6 AND user.status <> " . STUDENT_BOSS;
+                    break;
+            }
+
+            $sql .= " $order_clause LIMIT 11";
+
             $rs = Database::query($sql);
             $i = 0;
             while ($user = Database :: fetch_array($rs)) {
@@ -267,7 +289,18 @@ if (!empty($filters) && !empty($filterData)) {
 $msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 	$user_list = $_POST['UsersList'];
-    $affected_rows = UserManager::suscribe_users_to_hr_manager($user_id, $user_list);
+
+    switch ($userStatus) {
+        case DRH:
+            $affected_rows = UserManager::suscribe_users_to_hr_manager($user_id, $user_list);
+            break;
+        case STUDENT_BOSS;
+            $affected_rows = UserManager::subscribeUsersToBoss($user_id, $user_list);
+            break;
+        default:
+            $affected_rows = 0;
+    }
+
     if ($affected_rows)	{
         $msg = get_lang('AssignedUsersHaveBeenUpdatedSuccessfully');
     }
@@ -278,11 +311,27 @@ Display::display_header($tool_name);
 
 // actions
 echo '<div class="actions">';
-echo '<span style="float: right;margin:0px;padding:0px;">
-<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.
-    Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
-<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.
-    Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>';
+
+if ($userStatus != STUDENT_BOSS) {
+    $actions = Display::url(
+        Display::return_icon('course_add.gif', get_lang('AssignCourses'),
+            array(
+            'style' => 'vertical-align:middle'
+        )) . get_lang('AssignCourses'), "dashboard_add_courses_to_user.php?user=$user_id"
+    );
+
+    $actions .= Display::url(
+        Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'),
+            array(
+            'style' => 'vertical-align:middle'
+        )) . get_lang('AssignSessions'), "dashboard_add_sessions_to_user.php?user=$user_id"
+    );
+
+    echo Display::span($actions, array(
+        'style' => 'float: right; margin: 0; paddingg: 0;'
+    ));
+}
+
 echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
 echo '</div>';
 
@@ -294,7 +343,15 @@ echo Display::page_header(
     sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname']))
 );
 
-$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
+switch ($userStatus) {
+    case DRH:
+        $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
+        break;
+    case STUDENT_BOSS;
+        $assigned_users_to_hrm = UserManager::getUsersFollowedByStudentBoss($user_id);
+        break;
+}
+
 $assigned_users_id = array_keys($assigned_users_to_hrm);
 $without_assigned_users = '';
 if (count($assigned_users_id) > 0) {
@@ -368,6 +425,8 @@ if(!empty($msg)) {
 		echo get_lang('AssignedUsersListToPlatformAdministrator');
 	} else if ($user_info['status'] == SESSIONADMIN) {
 		echo get_lang('AssignedUsersListToSessionsAdministrator');
+	} else if ($user_info['status'] == STUDENT_BOSS) {
+		echo get_lang('AssignedUsersListToStudentBoss');
 	} else {
 		echo get_lang('AssignedUsersListToHumanResourcesManager');
 	}

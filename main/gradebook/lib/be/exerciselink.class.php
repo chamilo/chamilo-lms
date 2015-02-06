@@ -221,7 +221,7 @@ class ExerciseLink extends AbstractLink
             if ($student_count == 0) {
                 return null;
             } else {
-                return array ($sum , $student_count);
+                return array($sum, $student_count);
             }
         }
     }

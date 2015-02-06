@@ -282,8 +282,6 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
 
     // main graph
     $flatviewtable->display();
-    // @todo this needs a fix
-    //$image_file = $flatviewtable->display_graph();
     //@todo load images with jquery
     echo '<div id="contentArea" style="text-align: center;" >';
     if (!empty($image_file)) {

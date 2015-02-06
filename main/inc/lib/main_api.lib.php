@@ -284,6 +284,8 @@ define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('SYS_TEST_PATH', 'SYS_TEST_PATH');
 define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
+define('WEB_FONTS_PATH', 'WEB_FONTS_PATH');
+define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
 
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
@@ -475,7 +477,9 @@ function api_get_path($path_type, $path = null)
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
-        SYS_TEMPLATE_PATH       => 'template/'
+        SYS_TEMPLATE_PATH       => 'template/',
+        WEB_FONTS_PATH          => 'fonts/',
+        SYS_FONTS_PATH          => 'fonts/',
     );
 
     static $resource_paths = array(
@@ -580,11 +584,13 @@ function api_get_path($path_type, $path = null)
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
         $paths[SYS_CSS_PATH]            = $paths[SYS_CODE_PATH].$paths[SYS_CSS_PATH];
+        $paths[SYS_FONTS_PATH]          = $paths[SYS_CODE_PATH].$paths[SYS_FONTS_PATH];
 
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
         $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
+        $paths[WEB_FONTS_PATH]          = $paths[WEB_CODE_PATH].$paths[WEB_FONTS_PATH];
 
         $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
         $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
@@ -630,6 +636,7 @@ function api_get_path($path_type, $path = null)
             $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
             $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];
             $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];
+            $paths[WEB_FONTS_PATH]          = $paths[WEB_CODE_PATH].$paths[WEB_FONTS_PATH];
         }
     }
 

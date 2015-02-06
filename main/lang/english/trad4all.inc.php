@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$RoleStudentBoss = "Student's superior";
 $CosecantCsc = "Cosecant:\t\t\t\tcsc(x)";
 $HyperbolicCosecantCsch = "Hyperbolic cosecant:\t\tcsch(x)";
 $ArccosecantArccsc = "Arccosecant:\t\t\tarccsc(x)";

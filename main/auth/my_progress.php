@@ -17,7 +17,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
 $this_section = SECTION_TRACKING;
 
-$tool_name = get_lang('MyProgress');
+$nameTools = get_lang('MyProgress');
 
 api_block_anonymous_users();
 
@@ -115,7 +115,7 @@ if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
 }
 
-$tpl = new Template($tool_name);
+$tpl = new Template($nameTools);
 
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

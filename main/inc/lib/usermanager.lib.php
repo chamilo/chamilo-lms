@@ -4301,6 +4301,7 @@ class UserManager
         $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $userId = intval($userId);
+        $relationType = intval($relationType);
         $affectedRows = 0;
 
         if (api_get_multiple_access_url()) {

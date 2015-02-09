@@ -26,6 +26,20 @@ api_protect_admin_script(true);
 
 $nameTools = get_lang('PlatformAdmin');
 
+if (api_is_multiple_url_enabled()) {
+    $accessUrlId = api_get_current_access_url_id();
+
+    if ($accessUrlId != -1) {
+        $urlInfo = api_get_access_url($accessUrlId);
+        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
+        $cleanUrl = str_replace('/', '-', $url);
+
+        $adminExtraContentDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
+    }
+} else {
+    $adminExtraContentDir = api_get_path(SYS_PATH) . "home/admin/";
+}
+
 // Displaying the header
 $message = '';
 
@@ -67,7 +81,15 @@ $blocks['users']['icon']  = Display::return_icon('members.gif', get_lang('Users'
 $blocks['users']['label'] = api_ucfirst(get_lang('Users'));
 $blocks['users']['class'] = 'block-admin-users';
 
+$usersBlockExtraFile = "{$adminExtraContentDir}block-admin-users_extra.html";
+
+if (file_exists($usersBlockExtraFile)) {
+    $blocks['users']['extraContent'] = file_get_contents($usersBlockExtraFile);
+}
+
 if (api_is_platform_admin()) {
+    $blocks['users']['editable'] = true;
+
     $search_form = '
             <form method="get" class="form-search" action="user_list.php">
                 <input class="span3" type="text" name="keyword" value="">
@@ -108,6 +130,13 @@ if (api_is_platform_admin()) {
     $blocks['courses']['icon']  = Display::return_icon('course.gif', get_lang('Courses'), array(), ICON_SIZE_MEDIUM, false);
     $blocks['courses']['label'] = api_ucfirst(get_lang('Courses'));
     $blocks['courses']['class'] = 'block-admin-courses';
+    $blocks['courses']['editable'] = true;
+
+    $coursesBlockExtraFile = "{$adminExtraContentDir}block-admin-courses_extra.html";
+
+    if (file_exists($coursesBlockExtraFile)) {
+        $blocks['courses']['extraContent'] = file_get_contents($coursesBlockExtraFile);
+    }
 
     $search_form = ' <form method="get" class="form-search" action="course_list.php">
 							<input class="span3" type="text" name="keyword" value="">
@@ -147,7 +176,13 @@ if (api_is_platform_admin()) {
     $blocks['platform']['icon']  = Display::return_icon('platform.png', get_lang('Platform'), array(), ICON_SIZE_MEDIUM, false);
     $blocks['platform']['label'] = api_ucfirst(get_lang('Platform'));
     $blocks['platform']['class'] = 'block-admin-platform';
+    $blocks['platform']['editable'] = true;
 
+    $platformBlockExtraFile = "{$adminExtraContentDir}block-admin-platform_extra.html";
+
+    if (file_exists($platformBlockExtraFile)) {
+        $blocks['platform']['extraContent'] = file_get_contents($platformBlockExtraFile);
+    }
 
     $search_form = ' <form method="get" action="settings.php" class="form-search">
 							<input class="span3" type="text" name="search_field" value="" >
@@ -155,7 +190,6 @@ if (api_is_platform_admin()) {
 							<button class="btn" type="submit">'.get_lang('Search').'</button>
 	            		</form>';
 	$blocks['platform']['search_form'] = $search_form;
-
 
     $items = array();
     $items[] = array('url'=>'settings.php', 				'label' => get_lang('PlatformConfigSettings'));
@@ -199,6 +233,15 @@ $blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Ses
 $blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
 $blocks['sessions']['class'] = 'block-admin-sessions';
 
+$sessionsBlockExtraFile = "{$adminExtraContentDir}block-admin-sessions_extra.html";
+
+if (file_exists($sessionsBlockExtraFile)) {
+    $blocks['sessions']['extraContent'] = file_get_contents($sessionsBlockExtraFile);
+}
+
+if (api_is_platform_admin()) {
+    $blocks['sessions']['editable'] = true;
+}
 
 $search_form = ' <form method="GET" class="form-search" action="session_list.php">
                     <input class="span3" type="text" name="keyword" value="">

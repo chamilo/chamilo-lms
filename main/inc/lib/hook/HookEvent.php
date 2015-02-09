@@ -127,6 +127,7 @@ abstract class HookEvent implements HookEventInterface
     public function setEventData(array $data)
     {
         foreach ($data as $key => $value) {
+            // Assign value for each array item
             $this->eventData[$key] = $value;
         }
         return $this;

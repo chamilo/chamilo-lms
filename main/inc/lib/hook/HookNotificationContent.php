@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This file contains the Hook Event class for Content of Notifications
+ * This file contains the Hook Event class for Content format of Notifications
+ * @package chamilo.library.hook
  */
 
 /**
@@ -20,16 +21,21 @@ class HookNotificationContent extends HookEvent implements HookNotificationConte
 
     /**
      * @param int $type
-     * @return int
+     * @return array|null
      */
     public function notifyNotificationContent($type)
     {
         /** @var \HookNotificationContentObserverInterface $observer */
+        // Check if exists data content
         if (isset($this->eventData['content'])) {
+            // Save data type
             $this->eventData['type'] = $type;
+            // Check for hook all registered observers
             foreach ($this->observers as $observer) {
                 $data = $observer->hookNotificationContent($this);
+                // Check if isset content
                 if (isset($data['content'])) {
+                    // Set data from hook observer data
                     $this->setEventData($data);
                 }
             }

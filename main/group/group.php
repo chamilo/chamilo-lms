@@ -167,17 +167,14 @@ if (api_is_allowed_to_edit(false, true)) {
     echo  '<a href="import.php?'.api_get_cidreq().'&action=import">'.
         Display::return_icon('import_csv.png', get_lang('Import'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.
+    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=csv">'.
         Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.
+    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=xls">'.
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
         Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
-
-    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=xls">'.
-        Display::return_icon('export_excel.png', get_lang('ExportSettingsAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="group_overview.php?'.api_get_cidreq().'">'.
         Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';

@@ -75,6 +75,19 @@ if (isset($_GET['msg']) && isset($_GET['type'])) {
 
 $blocks = array();
 
+// Instantiate Hook Event for Admin Block
+$hook = HookAdminBlock::create();
+if (!empty($hook)) {
+    // If not empty, then notify Pre process to Hook Observers for Admin Block
+    $hook->setEventData(array('blocks' => $blocks));
+    $data = $hook->notifyAdminBlock(HOOK_EVENT_TYPE_PRE);
+    // Check if blocks data is not null
+    if (isset($data['blocks'])) {
+        // Get modified blocks
+        $blocks = $data['blocks'];
+    }
+}
+
 /* Users */
 
 $blocks['users']['icon']  = Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_SMALL, false);
@@ -380,6 +393,18 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = null;
     $blocks['version_check']['class'] = 'block-admin-version_check';
+
+    // Check Hook Event for Admin Block Object
+    if (!empty($hook)) {
+        // If not empty, then notify Pre process to Hook Observers for Admin Block
+        $hook->setEventData(array('blocks' => $blocks));
+        $data = $hook->notifyAdminBlock(HOOK_EVENT_TYPE_PRE);
+        // Check if blocks data is not null
+        if (isset($data['blocks'])) {
+            // Get modified blocks
+            $blocks = $data['blocks'];
+        }
+    }
 
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';

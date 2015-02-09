@@ -10,7 +10,8 @@ require_once __DIR__ . '/../config.php';
 
 class HookAdvancedSubscription extends HookObserver implements
     HookAdminBlockObserverInterface,
-    HookWSRegistrationObserverInterface
+    HookWSRegistrationObserverInterface,
+    HookNotificationContentObserverInterface
 {
 
     protected function __construct()
@@ -584,4 +585,65 @@ class HookAdvancedSubscription extends HookObserver implements
         return $sessionList;
     }
 
+    /**
+     * @param HookNotificationContentEventInterface $hook
+     * @return int
+     */
+    public function hookNotificationContent(HookNotificationContentEventInterface $hook)
+    {
+        $data = $hook->getEventData();
+        if ($data['type'] === HOOK_TYPE_PRE) {
+            $data['advsub_pre_content'] = $data['content'];
+
+            return $data;
+        } elseif ($data['type'] === HOOK_TYPE_POST) {
+            if (
+                isset($data['content']) &&
+                !empty($data['content']) &&
+                isset($data['advsub_pre_content']) &&
+                !empty($data['advsub_pre_content'])
+            ) {
+                $data['content'] = str_replace(
+                    array(
+                        '<br /><hr>',
+                        '<br />',
+                        '<br/>',
+                    ),
+                    '',
+                    $data['advsub_pre_content']
+                );
+            }
+
+            return $data;
+        } else {
+            // Hook type is not valid
+            // Nothing to do
+        }
+    }
+
+    /**
+     * @param HookNotificationTitleEventInterface $hook
+     * @return int
+     */
+    public function hookNotificationTitle(HookNotificationTitleEventInterface $hook)
+    {
+        $data = $hook->getEventData();
+        if ($data['type'] === HOOK_TYPE_PRE) {
+            $data['advsub_pre_title'] = $data['title'];
+
+            return $data;
+        } elseif ($data['type'] === HOOK_TYPE_POST) {
+            if (
+                isset($data['advsub_pre_title']) &&
+                !empty($data['advsub_pre_title'])
+            ) {
+                $data['title'] = $data['advsub_pre_title'];
+            }
+
+            return $data;
+        } else {
+            // Hook type is not valid
+            // Nothing to do
+        }
+    }
 }

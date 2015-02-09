@@ -38,9 +38,9 @@ switch ($action) {
 
     case 'save_block_extra':
         $content = isset($_POST['content']) ? Security::remove_XSS($_POST['content']) : null;
-        $blockId = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
+        $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
 
-        if (empty($blockId)) {
+        if (empty($blockName)) {
             die;
         }
 
@@ -65,7 +65,7 @@ switch ($action) {
             @mkdir($newUrlDir, api_get_permissions_for_new_directories(), true);
         }
 
-        $fullFilePath = "{$newUrlDir}{$blockId}_extra.html";
+        $fullFilePath = "{$newUrlDir}{$blockName}_extra.html";
 
         if (file_exists($fullFilePath)) {
             @unlink($fullFilePath);
@@ -78,9 +78,9 @@ switch ($action) {
         break;
 
     case 'get_extra_content':
-        $blockId = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
+        $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
 
-        if (empty($blockId)) {
+        if (empty($blockName)) {
             die;
         }
 

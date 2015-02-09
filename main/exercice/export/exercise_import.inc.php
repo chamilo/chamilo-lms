@@ -119,6 +119,7 @@ function import_exercise($file)
     while (false !== ($file = readdir($exerciseHandle))) {
 
         if (is_dir($baseWorkDir . '/' . $file) && $file != "." && $file != "..") {
+
             // Find each manifest for each question repository found
             $questionHandle = opendir($baseWorkDir . '/' . $file);
             while (false !== ($questionFile = readdir($questionHandle))) {
@@ -223,8 +224,6 @@ function formatText($text)
  */
 function parse_file($exercisePath, $file, $questionFile)
 {
-    global $exercise_info;
-    global $element_pile;
     global $non_HTML_tag_to_avoid;
     global $record_item_body;
     global $questionTempDir;
@@ -292,9 +291,9 @@ function parse_file($exercisePath, $file, $questionFile)
 /**
  * Function used by the SAX xml parser when the parser meets a opening tag
  *
- * @param unknown_type $parser xml parser created with "xml_parser_create()"
- * @param unknown_type $name name of the element
- * @param unknown_type $attributes
+ * @param object $parser xml parser created with "xml_parser_create()"
+ * @param string $name name of the element
+ * @param array $attributes
  */
 function startElement($parser, $name, $attributes)
 {
@@ -347,7 +346,7 @@ function startElement($parser, $name, $attributes)
 
             }
             if ($current_element == 'BR') {
-                $current_question_item_body .= "<BR/>";
+                $current_question_item_body .= "<br />";
             }
         }
     }

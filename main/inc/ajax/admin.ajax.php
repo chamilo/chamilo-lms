@@ -53,8 +53,7 @@ switch ($action) {
 
             $urlInfo = api_get_access_url($accessUrlId);
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
-            $cleanUrl = replace_dangerous_char($url);
-            $cleanUrl = str_replace('/', '-', $cleanUrl);
+            $cleanUrl = str_replace('/', '-', $url);
 
             $newUrlDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
         } else {
@@ -93,7 +92,7 @@ switch ($action) {
 
             $urlInfo = api_get_access_url($accessUrlId);
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
-            $cleanUrl = str_replace('/', '-', $cleanUrl);
+            $cleanUrl = str_replace('/', '-', $url);
 
             $newUrlDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
         } else {

@@ -32,7 +32,7 @@ if (api_is_multiple_url_enabled()) {
     if ($accessUrlId != -1) {
         $urlInfo = api_get_access_url($accessUrlId);
         $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
-        $cleanUrl = str_replace('/', '-', $cleanUrl);
+        $cleanUrl = str_replace('/', '-', $url);
 
         $adminExtraContentDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
     }

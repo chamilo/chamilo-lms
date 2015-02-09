@@ -102,7 +102,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     );
 
 	if ($return == strval(intval($return))) {
-		header('Location: resume_session.php?id_session='.$return);
+        header('Location: resume_session.php?id_session='.$return);
 		exit();
 	}
 }
@@ -159,6 +159,23 @@ if (!empty($return)) {
                 $Categories = SessionManager::get_all_session_category();
             ?>
         </select>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="description"><?php echo get_lang('Description') ?></label>
+        <div class="controls">
+            <?php $fckEditor = new FCKeditor('description'); ?>
+            <?php $fckEditor->ToolbarSet = 'TrainingDescription'; ?>
+            <?php $fckEditor->Value = $infos['description'] ; ?>
+            <?php echo $fckEditor->CreateHtml(); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input id="show_description" type="checkbox" name="show_description" <?php echo $showDescriptionChecked ?> />
+                <?php echo get_lang('ShowDescription') ?>
+            </label>
         </div>
     </div>
     <div class="control-group">
@@ -366,26 +383,6 @@ if (!empty($return)) {
     </div>
     </div>
   </div>
-
-    <?php if (array_key_exists('show_description', $infos)) { ?>
-
-        <div class="control-group">
-            <div class="controls">
-                <?php echo get_lang('Description') ?> <br />
-                <textarea name="description"><?php  echo $infos['description']; ?></textarea>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div class="controls">
-                <label>
-                <input id="show_description" type="checkbox" name="show_description" <?php echo $showDescriptionChecked ?> />
-                <?php echo get_lang('ShowDescription') ?>
-                </label>
-            </div>
-        </div>
-
-    <?php } ?>
 
     <?php
         if (SessionManager::durationPerUserIsEnabled()) {

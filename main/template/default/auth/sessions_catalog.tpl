@@ -28,7 +28,7 @@
                             var coursesUL = '';
 
                             $.each(response, function(index, course) {
-                                coursesUL += '<li><img src="{{ _p.web }}/main/img/check.png"/> <strong>' + course.name + '</strong>';
+                                coursesUL += '<li><img src="{{ _p.web }}main/img/check.png"/> <strong>' + course.name + '</strong>';
 
                                 if (course.coachName != '') {
                                     coursesUL += ' (' + course.coachName + ')';
@@ -87,65 +87,72 @@
 
         {% if showSessions %}
             <div class="well sidebar-nav">
-            <h4>{{ 'Sessions' | get_lang }}</h4>
+                <h4>{{ 'Sessions' | get_lang }}</h4>
                 <ul class="nav nav-list">
                     <li>{{ 'SearchSessions' | get_lang }}</li>
                     <li>
-                <form class="form-search" method="post" action="{{ api_get_self }}?action=display_sessions">
-                    <div class="input-append">
-                        <input type="date" name="date" id="date" class="span2 search-session" value="{{ searchDate }}" readonly>
-                        <button class="btn" type="submit">{{ 'Search' | get_lang }}</button>
-                    </div>
-                </form></li>
+                        <form class="form-search" method="post" action="{{ api_get_self }}?action=display_sessions">
+                            <div class="input-append">
+                                <input type="date" name="date" id="date" class="span2 search-session" value="{{ searchDate }}" readonly>
+                                <button class="btn" type="submit">{{ 'Search' | get_lang }}</button>
+                            </div>
+                        </form>
+                    </li>
                 </ul>
             </div>
         {% endif %}
     </div>
     <div class="span9">
-               {% for session in sessions_blocks %}
-                <div class="well well-small session-group" id="session-{{ session.id }}">
-                    <div class="row-fluid">
-                        <div class="span9">
-                            <div class="row-fluid padding-clear">
-                                <div class="span2">
-                                    <span class="thumbnail">
-                                        {{ session.icon }}
-                                    </span>
-                                </div>
-                                <div class="span10 border-info">
-                                    <h3>{{ session.name }}</h3>
-                                    <div class="tutor"><img src="{{ _p.web }}/main/img/teachers.gif" width="16px"> {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}</div>
+        {% for session in sessions_blocks %}
+            <div class="well well-small session-group" id="session-{{ session.id }}">
+                <div class="row-fluid">
+                    <div class="span9">
+                        <div class="row-fluid padding-clear">
+                            <div class="span2">
+                                <span class="thumbnail">
+                                    {{ session.icon }}
+                                </span>
+                            </div>
+                            <div class="span10 border-info">
+                                <h3>{{ session.name }}</h3>
+                                <div class="tutor">
+                                    <img src="{{ 'teacher.png' | icon(22) }}" width="16"> {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}
                                 </div>
                             </div>
-                            <div class="row-fluid">
-                                <div class="accordion" id="session-{{ session.id }}-accordion">
-                                    <div class="accordion-group">
-                                        <div class="accordion-heading">
-                                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#session-{{ session.id }}-accordion" href="#session-{{ session.id }}-courses">
-                                                {{ 'CourseList' | get_lang }}
-                                            </a>
-                                        </div>
-                                        <div id="session-{{ session.id }}-courses" class="accordion-body collapse in">
-                                            <div class="accordion-inner"></div>
-                                        </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="accordion" id="session-{{ session.id }}-accordion">
+                                <div class="accordion-group">
+                                    <div class="accordion-heading">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#session-{{ session.id }}-accordion" href="#session-{{ session.id }}-courses">
+                                            {{ 'CourseList' | get_lang }}
+                                        </a>
+                                    </div>
+                                    <div id="session-{{ session.id }}-courses" class="accordion-body collapse in">
+                                        <div class="accordion-inner"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="span3">
-                            
+                    </div>
+                    <div class="span3">
+                        {% if session.showDescription %}
                             <div class="buttom-subscribed">
+                                <a class="ajax btn btn-large btn-info" href="{{ _p.web_ajax }}session.ajax.php?a=get_description&session={{ session.id }}">{{ 'Description' | get_lang }}</a>
+                            </div>
+                        {% endif %}
+
+                        <div class="buttom-subscribed">
                             {% if session.is_subscribed %}
                                 {{ already_subscribed_label }}
                             {% else %}
                                 {{ session.subscribe_button }}
                             {% endif %}
-                            </div>
-                            <div class="time"><img src="{{ _p.web }}/main/img/agenda.gif"> {{ session.date }}</div>
                         </div>
+                        <div class="time"><img src="{{ 'agenda.png' | icon(22) }}"> {{ session.date }}</div>
                     </div>
                 </div>
-
+            </div>
         {% endfor %}
         {{ cataloguePagination }}
     </div>

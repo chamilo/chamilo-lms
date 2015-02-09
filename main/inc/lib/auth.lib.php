@@ -607,7 +607,7 @@ class Auth
         $userId = api_get_user_id();
         $limitFilter = getLimitFilterFromArray($limit);
 
-        $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username "
+        $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username, description, show_description "
             . "FROM $sessionTable AS s "
             . "INNER JOIN $userTable AS u "
             . "ON s.id_coach = u.user_id "

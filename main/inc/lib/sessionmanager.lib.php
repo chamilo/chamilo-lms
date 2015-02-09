@@ -63,6 +63,9 @@ class SessionManager
      * @param  string      Start limit = true if the start date has to be considered
      * @param  string      End limit = true if the end date has to be considered
      * @param  string $fix_name
+     * @param string $duration
+     * @param string $description Optional. The session description
+     * @param int $showDescription Optional. Whether show the session description
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
      * */
@@ -84,7 +87,8 @@ class SessionManager
         $end_limit = true,
         $fix_name = false,
         $duration = null,
-        $showDescription = null
+        $description = null,
+        $showDescription = 0
     ) {
         global $_configuration;
 
@@ -181,10 +185,20 @@ class SessionManager
             }
 
             if ($ready_to_create) {
-                $sql = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
-                        VALUES('" . $name . "','$date_start','$date_end','$id_coach'," . api_get_user_id() . "," . $nb_days_acess_before . ", " . $nb_days_acess_after . ", " . $id_session_category . ", " . $id_visibility . ")";
-                Database::query($sql);
-                $session_id = Database::insert_id();
+                $values = array(
+                    'name' => $name,
+                    'date_start' => $date_start,
+                    'date_end' => $date_end,
+                    'id_coach' => $id_coach,
+                    'session_admin_id' => api_get_user_id(),
+                    'nb_days_access_before_beginning' => $nb_days_acess_before,
+                    'nb_days_access_after_end' => $nb_days_acess_after,
+                    'session_category_id' => $id_session_category,
+                    'visibility' => $id_visibility,
+                    'description' => Database::escape_string($description),
+                    'show_description' => intval($showDescription)
+                );
+                $session_id = Database::insert($tbl_session, $values);
 
                 if (self::durationPerUserIsEnabled()) {
                     $duration = intval($duration);
@@ -200,14 +214,6 @@ class SessionManager
                     }
                     $sql = "UPDATE $tbl_session
                             SET duration = '$duration'
-                            WHERE id = $session_id";
-                    Database::query($sql);
-                }
-
-                if (!is_null($showDescription)) {
-                    $showDescription = intval($showDescription);
-                    $sql = "UPDATE $tbl_session
-                            SET show_description = '$showDescription'
                             WHERE id = $session_id";
                     Database::query($sql);
                 }
@@ -1361,7 +1367,7 @@ class SessionManager
         $start_limit = true,
         $end_limit = true,
         $description = null,
-        $showDescription = null,
+        $showDescription = 0,
         $duration = null
     ) {
         $name = trim(stripslashes($name));
@@ -1430,22 +1436,9 @@ class SessionManager
                 $msg = get_lang('SessionNameAlreadyExists');
                 return $msg;
             } else {
+                $values = array();
 
-                $sessionInfo = SessionManager::fetch($id);
-
-                $descriptionCondition = null;
-                if (array_key_exists('description', $sessionInfo)) {
-                    $descriptionCondition = ' description = "' . Database::escape_string($description) . '" ,';
-                }
-
-                $showDescriptionCondition = null;
-                if (array_key_exists('show_description', $sessionInfo)) {
-                    $showDescriptionCondition = ' show_description = "' . Database::escape_string($showDescription) . '" ,';
-                }
-
-                $durationCondition = null;
                 if (self::durationPerUserIsEnabled()) {
-
                     if (empty($duration)) {
                         $duration = null;
                     } else {
@@ -1454,24 +1447,24 @@ class SessionManager
                         $duration = intval($duration);
                     }
 
-                    $durationCondition = ' duration = "' . $duration . '" ,';
+                    $values['duration'] = $duration;
                 }
 
-                $sql = "UPDATE $tbl_session SET
-                        name='" . Database::escape_string($name) . "',
-						date_start='" . $date_start . "',
-						date_end='" . $date_end . "',
-						id_coach='" . $id_coach . "',
-						nb_days_access_before_beginning = " . $nb_days_acess_before . ",
-						nb_days_access_after_end = " . $nb_days_acess_after . ",
-						session_category_id = " . $id_session_category . " ,
-                        $descriptionCondition
-                        $showDescriptionCondition
-                        $durationCondition
-						visibility= " . $id_visibility . "
-					  WHERE id='$id'";
+                $values['name'] = Database::escape_string($name);
+                $values['date_start'] = $date_start;
+                $values['date_end'] = $date_end;
+                $values['id_coach'] = $id_coach;
+                $values['nb_days_access_before_beginning'] = $nb_days_acess_before;
+                $values['nb_days_access_after_end'] = $nb_days_acess_after;
+                $values['session_category_id'] = $id_session_category;
+                $values['description'] = Database::escape_string($description);
+                $values['show_description'] = intval($showDescription);
+                $values['visibility'] = $id_visibility;
 
-                Database::query($sql);
+                Database::update($tbl_session, $values, array(
+                    'id = ?' => $id
+                ));
+
                 return $id;
             }
         }

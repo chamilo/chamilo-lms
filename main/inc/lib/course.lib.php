@@ -3561,7 +3561,7 @@ class CourseManager
                     $html .= '<div class="span6 '.$param_class.'">';
                         $html .='<h3>'.$params['title'].$notifications.'</h3> ';
 
-                        if (isset($params['description'])) {
+                        if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
                             $html .= '<p>'.$params['description'].'</p>';
                         }
                         if (!empty($params['subtitle'])) {

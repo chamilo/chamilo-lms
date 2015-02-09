@@ -62,18 +62,18 @@ switch ($action) {
         }
 
         if (!is_dir($newUrlDir)) {
-            mkdir($newUrlDir, api_get_permissions_for_new_directories(), true);
+            @mkdir($newUrlDir, api_get_permissions_for_new_directories(), true);
         }
 
         $fullFilePath = "{$newUrlDir}{$blockId}_extra.html";
 
         if (file_exists($fullFilePath)) {
-            unlink($fullFilePath);
+            @unlink($fullFilePath);
         }
 
-        touch($fullFilePath);
+        @touch($fullFilePath);
 
-        file_put_contents($fullFilePath, $content);
+        @file_put_contents($fullFilePath, $content);
 
         break;
 
@@ -100,7 +100,7 @@ switch ($action) {
             $newUrlDir = api_get_path(SYS_PATH) . "home/admin/";
         }
 
-        echo file_get_contents("{$newUrlDir}{$blockId}_extra.html");
+        echo @file_get_contents("{$newUrlDir}{$blockId}_extra.html");
         break;
 }
 

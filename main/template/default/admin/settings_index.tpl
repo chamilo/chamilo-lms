@@ -49,7 +49,7 @@ $(document).ready(function() {
     {% for block_item in blocks %}
         <div id="tabs-{{ loop.index }}" class="span6">
             <div class="well_border {{ block_item.class }}">
-                {% if block_item.editable and _u.status == 1 %}
+                {% if block_item.editable and _u.is_admin %}
                     <div class="pull-right edit-block" id="edit-{{ block_item.class }}">
                         <a href="#" data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
                             <img src="{{ _p.web_img }}icons/22/edit.png" alt="{{ 'Edit' | get_lang }}" title="{{ 'Edit' | get_lang }}">
@@ -87,6 +87,7 @@ $(document).ready(function() {
     </div>
 </div>
 
+{% if _u.is_admin %}
 <div id="modal-extra" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-extra-title" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -102,3 +103,4 @@ $(document).ready(function() {
         <button id="btn-block-editor-save" class="btn btn-primary">{{ 'Save' | get_lang }}</button>
     </div>
 </div>
+{% endif %}

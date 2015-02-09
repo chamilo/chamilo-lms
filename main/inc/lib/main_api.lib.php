@@ -1958,42 +1958,40 @@ function api_get_session_visibility(
             ) {
 
                 // Session duration per student.
-                if (SessionManager::durationPerUserIsEnabled()) {
-                    if (isset($row['duration']) && !empty($row['duration'])) {
-                        $duration = $row['duration']*24*60*60;
+                if (isset($row['duration']) && !empty($row['duration'])) {
+                    $duration = $row['duration']*24*60*60;
 
-                        $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
-                            $session_id,
-                            api_get_user_id()
+                    $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
+                        $session_id,
+                        api_get_user_id()
+                    );
+                    // If there is a session duration but there is no previous
+                    // access by the user, then the session is still available
+                    if (count($courseAccess) == 0) {
+                        return SESSION_AVAILABLE;
+                    }
+                    $currentTime = time();
+                    $firstAccess = 0;
+                    if (isset($courseAccess['login_course_date'])) {
+                        $firstAccess = api_strtotime(
+                            $courseAccess['login_course_date'],
+                            'UTC'
                         );
-                        // If there is a session duration but there is no previous
-                        // access by the user, then the session is still available
-                        if (count($courseAccess) == 0) {
-                            return SESSION_AVAILABLE;
-                        }
-                        $currentTime = time();
-                        $firstAccess = 0;
-                        if (isset($courseAccess['login_course_date'])) {
-                            $firstAccess = api_strtotime(
-                                $courseAccess['login_course_date'],
-                                'UTC'
-                            );
-                        }
-                        $userDurationData = SessionManager::getUserSession(
-                            api_get_user_id(),
-                            $session_id
-                        );
-                        $userDuration = 0;
-                        if (isset($userDurationData['duration'])) {
-                            $userDuration = intval($userDurationData['duration']) * 24 * 60 * 60;
-                        }
+                    }
+                    $userDurationData = SessionManager::getUserSession(
+                        api_get_user_id(),
+                        $session_id
+                    );
+                    $userDuration = 0;
+                    if (isset($userDurationData['duration'])) {
+                        $userDuration = intval($userDurationData['duration']) * 24 * 60 * 60;
+                    }
 
-                        $totalDuration = $firstAccess + $duration + $userDuration;
-                        if ($totalDuration > $currentTime) {
-                            return SESSION_AVAILABLE;
-                        } else {
-                            return SESSION_INVISIBLE;
-                        }
+                    $totalDuration = $firstAccess + $duration + $userDuration;
+                    if ($totalDuration > $currentTime) {
+                        return SESSION_AVAILABLE;
+                    } else {
+                        return SESSION_INVISIBLE;
                     }
                 }
 

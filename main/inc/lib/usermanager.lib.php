@@ -2604,10 +2604,6 @@ class UserManager
             $sql =" SELECT DISTINCT id_session FROM $tbl_session_course_user
                     WHERE id_user = $user_id AND status = 2 ";
 
-            if (SessionManager::orderCourseIsEnabled()) {
-                //$sql .= "ORDER BY position";
-            }
-
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $result = Database::store_result($result);
@@ -2777,9 +2773,9 @@ class UserManager
         $personal_course_list = array();
         $courses = array();
 
-        /* This query is very similar to the above query,but it will check the
+        /* This query is very similar to the query below, but it will check the
         session_rel_course_user table if there are courses registered
-        to our user or not*/
+        to our user or not */
 
         $sql = "SELECT DISTINCT
                     scu.course_code as code, c.visibility, c.id as real_id
@@ -2792,13 +2788,8 @@ class UserManager
                 WHERE
                     scu.id_user = $user_id AND
                     scu.id_session = $session_id
-                    $where_access_url";
-
-        $orderBy = " ORDER BY code ";
-        if (SessionManager::orderCourseIsEnabled()) {
-            $orderBy =  ' ORDER BY position';
-        }
-        $sql .= $orderBy;
+                    $where_access_url
+                ORDER BY sc.position ASC";
 
         $result = Database::query($sql);
 
@@ -2830,7 +2821,7 @@ class UserManager
                         s.id_coach = $user_id
                       )
                     $where_access_url
-                    $orderBy";
+                    ORDER BY sc.position ASC";
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {

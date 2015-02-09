@@ -437,23 +437,16 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
         </div>
     </div>
 
-    <?php
-    if (SessionManager::durationPerUserIsEnabled()) {
-        ?>
-        <div class="control-group">
-            <label class="control-label">
-                <?php echo get_lang('SessionDurationTitle') ?> <br />
-            </label>
-            <div class="controls">
-                <input id="duration" type="text" name="duration" class="span1" maxlength="50" value="">
-                <br />
-                <?php echo get_lang('SessionDurationDescription') ?>
-            </div>
+    <div class="control-group">
+        <label class="control-label">
+            <?php echo get_lang('SessionDurationTitle') ?> <br />
+        </label>
+        <div class="controls">
+            <input id="duration" type="text" name="duration" class="span1" maxlength="50" value="">
+            <br />
+            <?php echo get_lang('SessionDurationDescription') ?>
         </div>
-
-    <?php
-    }
-    ?>
+    </div>
 
  <div class="control-group">
     <div class="controls">

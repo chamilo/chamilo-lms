@@ -200,21 +200,19 @@ class SessionManager
                 );
                 $session_id = Database::insert($tbl_session, $values);
 
-                if (self::durationPerUserIsEnabled()) {
-                    $duration = intval($duration);
+                $duration = intval($duration);
 
-                    if (empty($duration)) {
-                        $duration = null;
-                    } else {
-                        $sql = "UPDATE $tbl_session SET
-                                  date_start = '0000-00-00',
-                                  date_end = '0000-00-00'
-                                WHERE id = $session_id";
-                        Database::query($sql);
-                    }
-                    $sql = "UPDATE $tbl_session
-                            SET duration = '$duration'
+                if (!empty($duration)) {
+                    $sql = "UPDATE $tbl_session SET
+                              date_start = '0000-00-00',
+                              date_end = '0000-00-00',
+                              duration = $duration
                             WHERE id = $session_id";
+                    Database::query($sql);
+                } else {
+                    $sql = "UPDATE $tbl_session
+                        SET duration = $duration
+                        WHERE id = $session_id";
                     Database::query($sql);
                 }
 
@@ -1438,17 +1436,14 @@ class SessionManager
             } else {
                 $values = array();
 
-                if (self::durationPerUserIsEnabled()) {
-                    if (empty($duration)) {
-                        $duration = null;
-                    } else {
-                        $date_start = '0000-00-00';
-                        $date_end = "0000-00-00";
-                        $duration = intval($duration);
-                    }
-
-                    $values['duration'] = $duration;
+                if (empty($duration)) {
+                    $duration = null;
+                } else {
+                    $date_start = '0000-00-00';
+                    $date_end = "0000-00-00";
+                    $duration = intval($duration);
                 }
+                $values['duration'] = $duration;
 
                 $values['name'] = Database::escape_string($name);
                 $values['date_start'] = $date_start;
@@ -2998,11 +2993,7 @@ class SessionManager
             $orderBy = Database::escape_string($orderBy);
             $orderBy = " ORDER BY $orderBy";
         } else {
-            if (SessionManager::orderCourseIsEnabled()) {
-                $orderBy .= " ORDER BY position ";
-            } else {
-                $orderBy .= " ORDER BY title ";
-            }
+            $orderBy .= " ORDER BY position ";
         }
 
         $sql .= Database::escape_string($orderBy);
@@ -5067,21 +5058,6 @@ class SessionManager
     }
 
     /**
-     * Courses re-ordering in resume_session.php flag see BT#8316
-     */
-    public static function orderCourseIsEnabled()
-    {
-        global $_configuration;
-        if (isset($_configuration['session_course_ordering']) &&
-            $_configuration['session_course_ordering']
-        ) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param string $direction (up/down)
      * @param int $sessionId
      * @param string $courseCode
@@ -5089,10 +5065,6 @@ class SessionManager
      */
     public static function move($direction, $sessionId, $courseCode)
     {
-        if (!self::orderCourseIsEnabled()) {
-            return false;
-        }
-
         $sessionId = intval($sessionId);
         $courseCode = Database::escape_string($courseCode);
 
@@ -5170,24 +5142,6 @@ class SessionManager
     public static function moveDown($sessionId, $courseCode)
     {
         return self::move('down', $sessionId, $courseCode);
-    }
-
-    /**
-     * Use the session duration to allow/block user access see BT#8317
-     * Needs these DB changes
-     * ALTER TABLE session ADD COLUMN duration int;
-     * ALTER TABLE session_rel_user ADD COLUMN duration int;
-     */
-    public static function durationPerUserIsEnabled()
-    {
-        global $_configuration;
-        if (isset($_configuration['session_duration_feature']) &&
-            $_configuration['session_duration_feature']
-        ) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

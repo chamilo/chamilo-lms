@@ -24,8 +24,13 @@ CREATE TABLE IF NOT EXISTS hook_call( id int UNSIGNED NOT NULL AUTO_INCREMENT, h
 ALTER TABLE session ADD COLUMN description TEXT DEFAULT NULL;
 ALTER TABLE session ADD COLUMN show_description TINYINT UNSIGNED DEFAULT 0 AFTER description;
 
+ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0;
+ALTER TABLE session_rel_course ADD COLUMN category varchar(255) default '';
+ALTER TABLE session ADD COLUMN duration int;
+ALTER TABLE session_rel_user ADD COLUMN duration int;
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.3' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.4' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

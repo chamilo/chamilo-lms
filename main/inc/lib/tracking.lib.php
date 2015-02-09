@@ -3918,7 +3918,7 @@ class Tracking
         $orderBy = " ORDER BY name ";
         $extraInnerJoin = null;
 
-        if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
+        if (!empty($session_id)) {
             $orderBy = " ORDER BY s.id, position ";
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src ON (cu.course_code = src.course_code AND src.id_session = $session_id) ";
@@ -3961,7 +3961,7 @@ class Tracking
                 $my_course_data[$course_data['id']] = $course_data['title'];
             }
 
-            if (!SessionManager::orderCourseIsEnabled() && empty($session_id)) {
+            if (empty($session_id)) {
                 $my_course_data = utf8_sort($my_course_data);
             }
 

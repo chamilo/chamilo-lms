@@ -1418,9 +1418,6 @@ class CourseManager
                 $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";
             }
 
-            if (SessionManager::orderCourseIsEnabled()) {
-                //$order_by = "ORDER BY position";
-            }
         } else {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
@@ -3360,9 +3357,6 @@ class CourseManager
                     $courseListToString = implode("','", array_keys($courseList));
                     $whereConditions .= " AND c.id IN ('".$courseListToString."')";
                 }
-            }
-
-            if (SessionManager::orderCourseIsEnabled() && !empty($sessionId)) {
                 $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $orderBy =  ' ORDER BY position';
                 $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src

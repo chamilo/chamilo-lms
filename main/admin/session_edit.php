@@ -385,27 +385,22 @@ if (!empty($return)) {
   </div>
 
     <?php
-        if (SessionManager::durationPerUserIsEnabled()) {
-            if (empty($infos['duration'])) {
-                $duration = null;
-            } else {
-                $duration = $infos['duration'];
-            }
-            ?>
-            <div class="control-group">
-                <label class="control-label">
-                    <?php echo get_lang('SessionDurationTitle') ?> <br />
-                </label>
-                <div class="controls">
-                    <input id="duration" type="text" name="duration" class="span1" maxlength="50" value="<?php if($formSent) echo Security::remove_XSS($duration); else echo $duration; ?>">
-                    <br />
-                    <?php echo get_lang('SessionDurationDescription') ?>
-                </div>
-            </div>
-
-        <?php
+        if (empty($infos['duration'])) {
+            $duration = null;
+        } else {
+            $duration = $infos['duration'];
         }
     ?>
+    <div class="control-group">
+        <label class="control-label">
+            <?php echo get_lang('SessionDurationTitle') ?> <br />
+        </label>
+        <div class="controls">
+            <input id="duration" type="text" name="duration" class="span1" maxlength="50" value="<?php if($formSent) echo Security::remove_XSS($duration); else echo $duration; ?>">
+            <br />
+            <?php echo get_lang('SessionDurationDescription') ?>
+        </div>
+    </div>
 
     <div class="control-group">
         <div class="controls">

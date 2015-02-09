@@ -410,6 +410,7 @@ class GroupManager
 
         // Unsubscribe all users
         self :: unsubscribe_all_users($group_ids);
+        self ::unsubscribe_all_tutors($group_ids);
 
         $sql = "SELECT id, secret_directory, session_id FROM $group_table
                 WHERE c_id = $course_id AND id IN (".implode(' , ', $group_ids).")";

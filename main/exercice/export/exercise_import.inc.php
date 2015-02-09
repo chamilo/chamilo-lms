@@ -13,7 +13,6 @@
 /**
  * function to create a temporary directory (SAME AS IN MODULE ADMIN)
  */
-
 function tempdir($dir, $prefix = 'tmp', $mode = 0777)
 {
     if (substr($dir, -1) != '/') {
@@ -28,12 +27,11 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777)
 }
 
 /**
- * the path of the temporary directory where the exercise was uploaded and unzipped
- * @param string
+ * Unzip the exercise in the temp folder
+ * @param string The path of the temporary directory where the exercise was uploaded and unzipped
  * @param string
  * @return bool
  */
-
 function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
 {
     $_course = api_get_course_info();
@@ -63,11 +61,10 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
 }
 
 /**
- * Imports an exercise,
+ * Imports an exercise in QTI format if the XML structure can be found in it
  * @param array $file
  * @return an array as a backlog of what was really imported, and error or debug messages to display
  */
-
 function import_exercise($file)
 {
     global $exercise_info;
@@ -217,6 +214,13 @@ function formatText($text)
     return api_html_entity_decode($text);
 }
 
+/**
+ * Parses a given XML file and fills global arrays with the elements
+ * @param $exercisePath
+ * @param $file
+ * @param $questionFile
+ * @return bool
+ */
 function parse_file($exercisePath, $file, $questionFile)
 {
     global $exercise_info;
@@ -272,10 +276,14 @@ function parse_file($exercisePath, $file, $questionFile)
     //close file
     fclose($fp);
     if (!$question_format_supported) {
-        Display:: display_error_message(get_lang('Unknown question format in file %file',
-            array(
+        Display:: display_error_message(
+            get_lang(
+                'Unknown question format in file %file',
+                array(
                 '%file' => $questionFile
-            )));
+                )
+            )
+        );
         return false;
     }
     return true;
@@ -288,7 +296,6 @@ function parse_file($exercisePath, $file, $questionFile)
  * @param unknown_type $name name of the element
  * @param unknown_type $attributes
  */
-
 function startElement($parser, $name, $attributes)
 {
     global $element_pile;
@@ -345,7 +352,7 @@ function startElement($parser, $name, $attributes)
         }
     }
     switch ($current_element) {
-        case 'ASSESSMENTITEM' :
+        case 'ASSESSMENTITEM':
             //retrieve current question
             $current_question_ident = $attributes['IDENTIFIER'];
             $exercise_info['question'][$current_question_ident] = array();
@@ -371,12 +378,12 @@ function startElement($parser, $name, $attributes)
             //needed for FIB
             $current_answer_id = $attributes['IDENTIFIER'];
             break;
-        case 'INLINECHOICEINTERACTION' :
+        case 'INLINECHOICEINTERACTION':
             $exercise_info['question'][$current_question_ident]['type'] = 'FIB';
             $exercise_info['question'][$current_question_ident]['subtype'] = 'LISTBOX_FILL';
             $current_answer_id = $attributes['RESPONSEIDENTIFIER'];
             break;
-        case 'INLINECHOICE' :
+        case 'INLINECHOICE':
             $current_inlinechoice_id = $attributes['IDENTIFIER'];
             break;
         case 'TEXTENTRYINTERACTION':
@@ -388,7 +395,7 @@ function startElement($parser, $name, $attributes)
         case 'MATCHINTERACTION':
             $exercise_info['question'][$current_question_ident]['type'] = 'MATCHING';
             break;
-        case 'SIMPLEMATCHSET' :
+        case 'SIMPLEMATCHSET':
             if (!isset ($current_match_set)) {
                 $current_match_set = 1;
             } else {
@@ -436,7 +443,6 @@ function startElement($parser, $name, $attributes)
  * @param $parser xml parser created with "xml_parser_create()"
  * @param $name name of the element
  */
-
 function endElement($parser, $name)
 {
     global $element_pile;
@@ -451,9 +457,7 @@ function endElement($parser, $name)
 
     //treat the record of the full content of itembody tag :
 
-    if ($record_item_body && (!in_array($current_element,
-            $non_HTML_tag_to_avoid))
-    ) {
+    if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= "</" . $name . ">";
     }
 
@@ -471,9 +475,12 @@ function endElement($parser, $name)
 
 }
 
+/**
+ * @param $parser
+ * @param $data
+ */
 function elementData($parser, $data)
 {
-
     global $element_pile;
     global $exercise_info;
     global $current_question_ident;
@@ -500,9 +507,7 @@ function elementData($parser, $data)
 
     //treat the record of the full content of itembody tag (needed for question statment and/or FIB text:
 
-    if ($record_item_body && (!in_array($current_element,
-            $non_HTML_tag_to_avoid))
-    ) {
+    if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
         $current_question_item_body .= $data;
     }
 
@@ -514,7 +519,7 @@ function elementData($parser, $data)
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= '' . trim($data);
             }
             break;
-        case 'FEEDBACKINLINE' :
+        case 'FEEDBACKINLINE':
             if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'])) {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] = trim($data);
             } else {
@@ -524,7 +529,7 @@ function elementData($parser, $data)
         case 'SIMPLEASSOCIABLECHOICE':
             $exercise_info['question'][$current_question_ident]['answer'][$current_match_set][$currentAssociableChoice] = trim($data);
             break;
-        case 'VALUE' :
+        case 'VALUE':
             if ($parent_element == "CORRECTRESPONSE") {
                 if ($cardinality == "single") {
                     $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id] = $data;
@@ -534,15 +539,18 @@ function elementData($parser, $data)
             }
             break;
 
-        case 'ITEMBODY' :
+        case 'ITEMBODY':
             $current_question_item_body .= $data;
             break;
-        case 'INLINECHOICE' :
+        case 'INLINECHOICE':
             // if this is the right answer, then we must replace the claroline tags in the FIB text bye the answer between "[" and "]" :
             $answer_identifier = $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id];
             if ($current_inlinechoice_id == $answer_identifier) {
-                $current_question_item_body = str_replace("**claroline_start**" . $current_answer_id . "**claroline_end**",
-                    "[" . $data . "]", $current_question_item_body);
+                $current_question_item_body = str_replace(
+                    "**claroline_start**" . $current_answer_id . "**claroline_end**",
+                    "[" . $data . "]",
+                    $current_question_item_body
+                );
             } else {
                 if (!isset ($exercise_info['question'][$current_question_ident]['wrong_answers'])) {
                     $exercise_info['question'][$current_question_ident]['wrong_answers'] = array();

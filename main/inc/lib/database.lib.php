@@ -411,7 +411,7 @@ class Database
         if (!isset($parameters['new_link'])) {
             $parameters['new_link'] = false;
         }
-        if (!isset($parameters['client_flags'])) {
+        if (!isset($parameters['client_flags']) || empty($parameters['client_flags'])) {
             $parameters['client_flags'] = 0;
         }
 

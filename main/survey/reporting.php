@@ -17,7 +17,7 @@ $language_file = 'survey';
 require_once '../inc/global.inc.php';
 require_once 'survey.lib.php';
 $this_section = SECTION_COURSES;
-$cidReq = Security::remove_XSS(api_get_cidreq());
+$cidReq = api_get_cidreq();
 $survey_id = intval($_GET['survey_id']);
 $survey_data = survey_manager::get_survey($survey_id);
 

@@ -149,7 +149,7 @@ $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $visibleResults = array(
     SURVEY_VISIBLE_TUTOR => get_lang('Coach'),
-    SURVEY_VISIBLE_TUTOR_STUDENT => get_lang('Coach').' '.get_lang('And').' '.get_lang('Student'),
+    SURVEY_VISIBLE_TUTOR_STUDENT => get_lang('CoachAndStudent'),
     SURVEY_VISIBLE_PUBLIC => get_lang('Everyone')
 );
 $form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $visibleResults);

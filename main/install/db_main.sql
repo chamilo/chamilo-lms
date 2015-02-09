@@ -3059,4 +3059,3 @@ CREATE TABLE IF NOT EXISTS hook_call(
     PRIMARY KEY PK_hook_management_hook_call(id)
 );
 
-INSERT INTO session_field (field_type, field_variable, field_display_text, field_default_value) values (2, 'description','Description', NULL);

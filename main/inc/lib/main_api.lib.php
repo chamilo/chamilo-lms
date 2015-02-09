@@ -43,6 +43,7 @@ define('SESSION_GENERAL_COACH', 13);
 define('COURSE_STUDENT', 14);   //student subscribed in a course
 define('SESSION_STUDENT', 15);  //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
+define('STUDENT_BOSS', 17); // student is boss
 
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
@@ -284,6 +285,8 @@ define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('SYS_TEST_PATH', 'SYS_TEST_PATH');
 define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
+define('WEB_FONTS_PATH', 'WEB_FONTS_PATH');
+define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
 
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
@@ -323,6 +326,7 @@ define('USER_RELATION_TYPE_GOODFRIEND', 4); // should be deprecated is useless
 define('USER_RELATION_TYPE_ENEMY',      5); // should be deprecated is useless
 define('USER_RELATION_TYPE_DELETED',    6);
 define('USER_RELATION_TYPE_RRHH',       7);
+define('USER_RELATION_TYPE_BOSS',       8);
 
 //Gradebook link constants
 //Please do not change existing values, they are used in the database !
@@ -475,7 +479,9 @@ function api_get_path($path_type, $path = null)
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
-        SYS_TEMPLATE_PATH       => 'template/'
+        SYS_TEMPLATE_PATH       => 'template/',
+        WEB_FONTS_PATH          => 'fonts/',
+        SYS_FONTS_PATH          => 'fonts/',
     );
 
     static $resource_paths = array(
@@ -580,11 +586,13 @@ function api_get_path($path_type, $path = null)
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
         $paths[SYS_CSS_PATH]            = $paths[SYS_CODE_PATH].$paths[SYS_CSS_PATH];
+        $paths[SYS_FONTS_PATH]          = $paths[SYS_CODE_PATH].$paths[SYS_FONTS_PATH];
 
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
         $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
+        $paths[WEB_FONTS_PATH]          = $paths[WEB_CODE_PATH].$paths[WEB_FONTS_PATH];
 
         $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
         $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
@@ -630,6 +638,7 @@ function api_get_path($path_type, $path = null)
             $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
             $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];
             $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];
+            $paths[WEB_FONTS_PATH]          = $paths[WEB_CODE_PATH].$paths[WEB_FONTS_PATH];
         }
     }
 
@@ -1305,6 +1314,8 @@ function api_get_user_info_from_username($username = '')
     if (empty($username)) {
         return false;
     }
+    $username = trim($username);
+
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
             WHERE username='".Database::escape_string($username)."'";
     $result = Database::query($sql);
@@ -4662,7 +4673,8 @@ function api_get_status_langvars() {
         SESSIONADMIN    => get_lang('SessionsAdmin', ''),
         DRH             => get_lang('Drh', ''),
         STUDENT         => get_lang('Student', ''),
-        ANONYMOUS       => get_lang('Anonymous', '')
+        ANONYMOUS       => get_lang('Anonymous', ''),
+        STUDENT_BOSS       => get_lang('RoleStudentBoss', '')
     );
 }
 
@@ -7498,6 +7510,18 @@ function api_register_campus($listCampus = true) {
 }
 
 /**
+ * Checks whether current user is a student boss
+ * @global array $_user
+ * @return boolean
+ */
+function api_is_student_boss ()
+{
+    global $_user;
+
+    return isset($_user['status']) && $_user['status'] == STUDENT_BOSS;
+}
+
+/**
  * Set the Site Use Cookie Warning for 1 year
  */
 function api_set_site_use_cookie_warning_cookie()
@@ -7512,4 +7536,26 @@ function api_set_site_use_cookie_warning_cookie()
 function api_site_use_cookie_warning_cookie_exist()
 {
     return isset($_COOKIE['ChamiloUsesCookies']);
+}
+
+/**
+ * Given a number of seconds, format the time to show hours, minutes and seconds
+ * @param int $time The time in seconds
+ * @param string $originFormat Optional. PHP o JS
+ * @return string (00h00'00")
+ */
+function api_format_time($time, $originFormat = 'php')
+{
+    $h = get_lang('h');
+    $hours = $time / 3600;
+    $mins = ($time % 3600) / 60;
+    $secs = ($time % 60);
+
+    if ($originFormat == 'js') {
+        $scormTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
+    } else {
+        $scormTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
+    }
+
+    return $scormTime;
 }

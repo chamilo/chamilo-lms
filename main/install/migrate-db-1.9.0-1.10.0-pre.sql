@@ -13,12 +13,16 @@
 -- This first part is for the main database
 
 -- xxMAINxx
+ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id;
+ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id;
+ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
+
 INSERT INTO session_field (field_type, field_variable, field_display_text, field_default_value) values (2, 'description','Description', NULL);
 
 
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18716' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.1' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

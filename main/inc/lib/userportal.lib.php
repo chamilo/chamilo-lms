@@ -324,7 +324,7 @@ class IndexManager
         if (api_get_setting('allow_skills_tool') == 'true') {
             $content = '<ul class="nav nav-list">';
 
-            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'));
+            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'));
 
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
 
@@ -719,8 +719,8 @@ class IndexManager
                     'sessionVar'   => basename(__FILE__, '.php'),
                     'imageOptions' => array(
                         'font_size' => 20,
-                        'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
-                        'font_file' => 'tahoma.ttf',
+                        'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                        'font_file' => 'OpenSans-Regular.ttf',
                         //'output' => 'gif'
                     )
                 );

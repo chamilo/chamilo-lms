@@ -579,13 +579,35 @@ function modify_filter($user_id, $url_params, $row) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}*/
 	} else {
-		if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
-			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'),'',ICON_SIZE_SMALL).'</a>';
-			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
-			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		} else if ($current_user_status_label == $statusname[SESSIONADMIN]) {
-			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		}
+        if ($current_user_status_label == $statusname[SESSIONADMIN]) {
+            $result .= Display::url(
+                Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')),
+                "dashboard_add_sessions_to_user.php?user={$user_id}"
+            );
+        } else {
+            if (
+                $current_user_status_label == $statusname[DRH] ||
+                UserManager::is_admin($user_id) ||
+                $current_user_status_label == $statusname[STUDENT_BOSS]
+            ) {
+                $result .= Display::url(
+                    Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'), '', ICON_SIZE_SMALL),
+                    "dashboard_add_users_to_user.php?user={$user_id}"
+                );
+            }
+
+            if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
+                $result .= Display::url(
+                    Display::return_icon('course_add.gif', get_lang('AssignCourses')),
+                    "dashboard_add_courses_to_user.php?user={$user_id}"
+                );
+
+                $result .= Display::url(
+                    Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')),
+                    "dashboard_add_sessions_to_user.php?user={$user_id}"
+                );
+            }
+        }
 	}
 
     if (api_is_platform_admin()) {

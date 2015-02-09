@@ -256,25 +256,6 @@ function parse_file($exercisePath, $file, $questionFile)
         "IMG"
     );
 
-    //this array to detect tag not supported by claroline import in the xml file to warn the user.
-
-    $non_supported_content_in_question = array(
-        "GAPMATCHINTERACTION",
-        "EXTENDEDTEXTINTERACTION",
-        "HOTTEXTINTERACTION",
-        "HOTSPOTINTERACTION",
-        "SELECTPOINTINTERACTION",
-        "GRAPHICORDERINTERACTION",
-        "GRAPHICASSOCIATIONINTERACTION",
-        "GRAPHICGAPMATCHINTERACTION",
-        "POSITIONOBJECTINTERACTION",
-        "SLIDERINTERACTION",
-        "DRAWINGINTERACTION",
-        "UPLOADINTERACTION",
-        "RESPONSECONDITION",
-        "RESPONSEIF"
-    );
-
     $question_format_supported = true;
 
     $xml_parser = xml_parser_create();

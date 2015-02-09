@@ -46,7 +46,7 @@ class FlatViewTable extends SortableTable
         $addparams = null,
         $mainCourseCategory = null
     ) {
-        parent :: __construct('flatviewlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 1 : 0);
+        parent :: __construct('flatviewlist', null, null, api_is_western_name_order() ? 1 : 0);
 
         $this->selectcat = $selectcat;
 
@@ -373,10 +373,12 @@ class FlatViewTable extends SortableTable
         if ($is_western_name_order) {
             //$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME : FlatViewDataGenerator :: FVDG_SORT_LASTNAME);
             $users_sorting = FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME;
+
         } else {
             //$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_LASTNAME : FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME);
             $users_sorting = FlatViewDataGenerator :: FVDG_SORT_LASTNAME;
         }
+
         if ($this->direction == 'DESC') {
             $users_sorting |= FlatViewDataGenerator :: FVDG_SORT_DESC;
         } else {

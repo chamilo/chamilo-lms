@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *	Main page for the group module.
  *	This script displays the general group settings,
@@ -11,9 +12,6 @@
  *	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
  *	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
  *	@package chamilo.group
- */
-/**
- * INIT SECTION
  */
 
 // Name of the language file that needs to be included
@@ -39,7 +37,7 @@ $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'export_all':
-            $data = GroupManager::exportCategoriesAndGroupsToArray();
+            $data = GroupManager::exportCategoriesAndGroupsToArray(null, true);
             Export::export_table_csv($data);
             exit;
             break;
@@ -54,26 +52,9 @@ if (isset($_GET['action'])) {
             break;
         case 'export':
             $groupId = isset($_GET['id']) ? intval($_GET['id']) : null;
-            $groups = GroupManager::get_group_list();
 
-            $data = array();
-            foreach ($groups as $index => $group) {
-                if (!empty($groupId)) {
-                    if ($group['id'] != $groupId) {
-                        continue;
-                    }
-                }
-                $users = GroupManager::get_users($group['id']);
-                foreach ($users as $index => $user) {
-                    $row = array();
-                    $user = api_get_user_info($user);
-                    $row[] = $group['name'];
-                    $row[] = $user['official_code'];
-                    $row[] = $user['lastName'];
-                    $row[] = $user['firstName'];
-                    $data[] = $row;
-                }
-            }
+            $data = GroupManager::exportCategoriesAndGroupsToArray($groupId, true);
+
             switch ($_GET['type']) {
                 case 'csv':
                     Export::export_table_csv($data);

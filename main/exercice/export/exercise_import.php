@@ -25,7 +25,6 @@ require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 require_once 'exercise_import.inc.php';
 include_once '../exercise.class.php';
 include_once '../question.class.php';
-include_once 'qti/qti_classes.php';
 
 //SQL table name
 

@@ -100,7 +100,9 @@ switch ($action) {
             $newUrlDir = api_get_path(SYS_PATH) . "home/admin/";
         }
 
-        echo @file_get_contents("{$newUrlDir}{$blockId}_extra.html");
+        if (Security::check_abs_path("{$newUrlDir}{$blockName}_extra.html", $newUrlDir)) {
+            echo @file_get_contents("{$newUrlDir}{$blockName}_extra.html");
+        }
         break;
 }
 

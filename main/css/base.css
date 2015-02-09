@@ -5304,3 +5304,14 @@ i.size-32.icon-new-work{
 {
     height: 52px;
 }
+
+#settings .span6 .well_border .edit-block {
+    display: none;
+}
+#settings .span6 .well_border:hover .edit-block {
+    display: block;
+}
+
+#settings .span6:nth-child(2n+1) {
+    clear:left
+}

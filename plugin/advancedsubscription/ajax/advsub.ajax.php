@@ -104,7 +104,19 @@ if (!empty($a) && !empty($u)) {
                     $res = $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
                     if (!empty($res)) {
                         $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php?s=' . $s;
-                        $result['mails'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS);
+                        $result['mailIds'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS);
+                        if (!empty($result['mailIds'])) {
+                            $result['error'] = false;
+                            $result['errorMessage'] = 'No error';
+                            $result['pass'] = true;
+                            if (isset($result['mailIds']['render'])) {
+                                // Render mail
+                                $message = MessageManager::get_message_by_id($result['mailIds']['render']);
+                                $message = str_replace(array('<br /><hr>', '<br />', '<br/>'), '', $message['content']);
+                                echo $message;
+                                exit;
+                            }
+                        }
                     }
                 } else {
                     $dataUrl = array(
@@ -119,11 +131,20 @@ if (!empty($a) && !empty($u)) {
                     $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED;
                     $data['rejectUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
                         '?data=' . $plugin->encrypt($dataUrl);
-                    $result['mails'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
+                    $result['mailIds'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
+                    if (!empty($result['mailIds'])) {
+                        $result['error'] = false;
+                        $result['errorMessage'] = 'No error';
+                        $result['pass'] = true;
+                        if (isset($result['mailIds']['render'])) {
+                            // Render mail
+                            $message = MessageManager::get_message_by_id($result['mailIds']['render']);
+                            $message = str_replace(array('<br /><hr>', '<br />', '<br/>'), '', $message['content']);
+                            echo $message;
+                            exit;
+                        }
+                    }
                 }
-                $result['error'] = false;
-                $result['errorMessage'] = 'No error';
-                $result['pass'] = true;
             } else {
                 if (is_string($res)) {
                     $result['errorMessage'] = $res;
@@ -201,6 +222,13 @@ if (!empty($a) && !empty($u)) {
                     if (!empty($result['mailIds'])) {
                         $result['error'] = false;
                         $result['errorMessage'] = 'User has been processed';
+                        if (isset($result['mailIds']['render'])) {
+                            // Render mail
+                            $message = MessageManager::get_message_by_id($result['mailIds']['render']);
+                            $message = str_replace(array('<br /><hr>', '<br />', '<br/>'), '', $message['content']);
+                            echo $message;
+                            exit;
+                        }
                     }
                 } else {
                     $result['errorMessage'] = 'User queue can not be updated';

@@ -376,7 +376,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         switch ($actionType) {
             case ADV_SUB_ACTION_STUDENT_REQUEST:
                 // Mail to student
-                $mailIds[] = $this->sendMailMessage(
+                $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
@@ -403,7 +403,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['s']
                 );
                 // Mail to superior
-                $mailIds[] = $this->sendMailMessage(
+                $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
@@ -434,7 +434,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     true
                 );
                 // Mail to superior
-                $mailIds[] = $this->sendMailMessage(
+                $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
@@ -452,7 +452,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['s']
                 );
                 // Mail to superior
-                $mailIds[] = $this->sendMailMessage(
+                $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
@@ -489,6 +489,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $data['s'],
                         true
                     );
+                    // Check for current user mail to render
+                    if (isset($data['current_user']) && $data['current_user']['user_id'] == $adminId) {
+                        $mailIds['render'] = end($mailIds);
+                    }
                 }
                 break;
             case ADV_SUB_ACTION_ADMIN_DISAPPROVE:
@@ -519,11 +523,15 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_admin.tpl'),
                         $data['s']
                     );
+                    // Check for current user mail to render
+                    if (isset($data['current_user']) && $data['current_user']['user_id'] == $adminId) {
+                        $mailIds['render'] = end($mailIds);
+                    }
                 }
                 break;
             case ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS:
                 // Mail to student
-                $mailIds[] = $this->sendMailMessage(
+                $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),

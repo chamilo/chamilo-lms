@@ -51,7 +51,8 @@ $sql = 'SELECT
             nb_days_access_before_beginning,
             nb_days_access_after_end,
             session_category_id,
-            visibility
+            visibility,
+            show_description, description
 		FROM '.$tbl_session.'
 		LEFT JOIN '.$tbl_user.'
 		ON id_coach = user_id
@@ -244,18 +245,14 @@ if (SessionManager::durationPerUserIsEnabled()) {
 
 }
 ?>
-<?php
-$sessionDescription = SessionManager::getSessionDescription($sessionId);
-
-if (!empty($sessionDescription)) {
-?>
     <tr>
         <td><?php echo get_lang('Description'); ?></td>
-        <td><?php echo $sessionDescription ?></td>
+        <td><?php echo $session['description'] ?></td>
     </tr>
-<?php
-}
-?>
+    <tr>
+        <td><?php echo get_lang('ShowDescription'); ?></td>
+        <td><?php echo $session['show_description'] == 1 ? get_lang('Yes') : get_lang('No') ?></td>
+    </tr>
 </table>
 <br />
 

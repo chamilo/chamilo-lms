@@ -17,7 +17,8 @@ ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id;
 ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id;
 ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
 
-INSERT INTO session_field (field_type, field_variable, field_display_text, field_default_value) values (2, 'description','Description', NULL);
+ALTER TABLE session ADD COLUMN description TEXT DEFAULT NULL;
+ALTER TABLE session ADD COLUMN show_description TINYINT UNSIGNED DEFAULT 0 AFTER description;
 
 
 

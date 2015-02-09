@@ -469,6 +469,8 @@ CREATE TABLE IF NOT EXISTS session (
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
   promotion_id INT NOT NULL,
+  description TEXT DEFAULT NULL,
+  show_description TINYINT UNSIGNED DEFAULT 0,
   PRIMARY KEY  (id),
   INDEX (session_admin_id),
   UNIQUE KEY name (name)

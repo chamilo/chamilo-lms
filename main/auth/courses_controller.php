@@ -557,14 +557,8 @@ class CoursesController
                 'icon' => $this->getSessionIcon($session['name']),
                 'date' => SessionManager::getSessionFormattedDate($session),
                 'subscribe_button' => $this->getRegisterInSessionButton($session['name']),
-                'hasDescription' => false
+                'showDescription' => $session['show_description']
             );
-
-            $sessionDescription = SessionManager::getSessionDescription($session['id']);
-
-            if (!empty($sessionDescription)) {
-                $sessionsBlock['hasDescription'] = true;
-            }
 
             $sessionsBlocks[] = $sessionsBlock;
         }

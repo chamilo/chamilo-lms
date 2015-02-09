@@ -354,14 +354,12 @@ if (!empty($start) && !empty($end)) {
 echo Display::tag('h1', $session_info['name']);
 echo $dates.'<br />';
 
-$sessionDescription = SessionManager::getSessionDescription($session_id);
-
-if (!empty($sessionDescription)) {
+if ($session_info['show_description'] == 1) {
 ?>
     <div class="home-course-intro">
         <div class="page-course">
             <div class="page-course-intro">
-                <p><?php echo $sessionDescription; ?></p>
+                <p><?php echo $session_info['description']; ?></p>
             </div>
         </div>
     </div>

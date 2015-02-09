@@ -112,6 +112,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $end_limit = $_POST['end_limit'];
     $start_limit = $_POST['start_limit'];
     $duration = isset($_POST['duration']) ? $_POST['duration'] : null;
+    $description = isset($_POST['description']) ? $_POST['description'] : null;
+    $showDescription = isset($_POST['show_description']) ? 1 : 0;
 
     if (empty($end_limit) && empty($start_limit)) {
         $nolimit = 1;
@@ -134,14 +136,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $id_session_category,
         $id_visibility,
         $start_limit,
+        false,
         $end_limit,
-        $duration
+        $duration,
+        $description,
+        $showDescription
     );
 
 	if ($return == strval(intval($return))) {
-        SessionManager::saveSessionDescription($return, $_POST['description']);
-
-		// integer => no error on session creation
+        // integer => no error on session creation
 		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');
 		exit();
 	}
@@ -235,6 +238,14 @@ $Categories = SessionManager::get_all_session_category();
             <?php $fckEditor = new FCKeditor('description'); ?>
             <?php $fckEditor->ToolbarSet = 'TrainingDescription'; ?>
             <?php echo $fckEditor->CreateHtml(); ?>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input id="show_description" type="checkbox" name="show_description" />
+                <?php echo get_lang('ShowDescription') ?>
+            </label>
         </div>
     </div>
     <div class="control-group">

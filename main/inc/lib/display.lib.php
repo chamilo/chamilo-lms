@@ -1562,11 +1562,8 @@ class Display
             $session['active'] = $active;
             $session['session_category_id'] = $session_info['session_category_id'];
 
-            if (array_key_exists('show_description', $session_info)) {
-                if (!empty($session_info['show_description'])) {
-                    $session['description'] = $session_info['description'];
-                }
-            }
+            $session['description'] = $session_info['description'];
+            $session['show_description'] = $session_info['show_description'];
 
             $output = $session;
         }

@@ -115,7 +115,7 @@ switch ($action) {
         <div class="home-course-intro">
             <div class="page-course">
                 <div class="page-course-intro">
-                    <p><?php echo SessionManager::getSessionDescription($sessionId) ?></p>
+                    <p><?php echo $sessionInfo['show_description'] == 1 ? $sessionInfo['description'] : get_lang('None') ?></p>
                 </div>
             </div>
         </div>

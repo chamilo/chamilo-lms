@@ -136,7 +136,7 @@
                         </div>
                     </div>
                     <div class="span3">
-                        {% if session.hasDescription %}
+                        {% if session.showDescription %}
                             <div class="buttom-subscribed">
                                 <a class="ajax btn btn-large btn-info" href="{{ _p.web_ajax }}session.ajax.php?a=get_description&session={{ session.id }}">{{ 'Description' | get_lang }}</a>
                             </div>

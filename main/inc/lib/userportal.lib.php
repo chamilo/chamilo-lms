@@ -1146,7 +1146,8 @@ class IndexManager
                                 // $params['extra'] .=  $html_courses_session;
                             }
 
-                            $params['description'] = isset($session_box['description']) ? $session_box['description'] : null;
+                            $params['description'] = $session_box['description'];
+                            $params['show_description'] = $session_box['show_description'];
 
                             $parentInfo = CourseManager::course_item_html($params, true);
 

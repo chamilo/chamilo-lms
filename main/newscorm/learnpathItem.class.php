@@ -1798,7 +1798,7 @@ class learnpathItem
                 return '00 ' . $h . ' 00 \' 00"';
             }
         } else {
-            return self::calculateScormTime($origin, $time);
+            return api_format_time($time, $origin);
         }
     }
 
@@ -1856,34 +1856,9 @@ class learnpathItem
                 0
             );
         }
-        $time = self::calculateScormTime($origin, $time);
+        $time = api_format_time($time, $origin);
 
         return $time;
-    }
-
-    /**
-     * @param string $origin
-     * @param string $time
-     * @return string
-     */
-    public static function calculateScormTime($origin, $time)
-    {
-        $h = get_lang('h');
-        $hours = $time / 3600;
-        $mins = ($time % 3600) / 60;
-        $secs = ($time % 60);
-
-        if ($origin == 'js') {
-            $scormTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
-        } else {
-            $scormTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
-        }
-
-        if (self::debug > 2) {
-            error_log('learnpathItem::get_scorm_time(' . $scormTime . ')', 0);
-        }
-
-        return $scormTime;
     }
 
     /**

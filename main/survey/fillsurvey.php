@@ -338,7 +338,7 @@ if (!isset($_GET['show'])) {
     $paged_questions_sec = array();
 
     if (!empty($survey_data['survey_introduction'])) {
-        echo '<div id="survey_content" class="survey_content">'.strip_tags($survey_data['survey_introduction']).'</div>';
+        echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
     }
     $limit = 0;
 }

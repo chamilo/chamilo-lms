@@ -28,7 +28,7 @@
                             var coursesUL = '';
 
                             $.each(response, function(index, course) {
-                                coursesUL += '<li><img src="{{ _p.web }}/main/img/check.png"/> <strong>' + course.name + '</strong>';
+                                coursesUL += '<li><img src="{{ _p.web }}main/img/check.png"/> <strong>' + course.name + '</strong>';
 
                                 if (course.coachName != '') {
                                     coursesUL += ' (' + course.coachName + ')';
@@ -115,7 +115,9 @@
                             </div>
                             <div class="span10 border-info">
                                 <h3>{{ session.name }}</h3>
-                                <div class="tutor"><img src="{{ _p.web }}/main/img/teachers.gif" width="16px"> {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}</div>
+                                <div class="tutor">
+                                    <img src="{{ 'teacher.png' | icon(22) }}" width="16"> {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}
+                                </div>
                             </div>
                         </div>
                         <div class="row-fluid">
@@ -147,7 +149,7 @@
                                 {{ session.subscribe_button }}
                             {% endif %}
                         </div>
-                        <div class="time"><img src="{{ _p.web }}/main/img/agenda.gif"> {{ session.date }}</div>
+                        <div class="time"><img src="{{ 'agenda.png' | icon(22) }}"> {{ session.date }}</div>
                     </div>
                 </div>
             </div>

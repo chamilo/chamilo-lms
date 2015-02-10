@@ -7567,3 +7567,30 @@ function api_format_time($time, $originFormat = 'php')
 
     return $scormTime;
 }
+
+/**
+ * Create a new empty directory with index.html file
+ * @param string $name The new directory name
+ * @param string $parentDirectory Directory parent directory name
+ * @return boolean Return true if the directory was create. Otherwise return false
+ */
+function api_create_protected_dir($name, $parentDirectory)
+{
+    $isCreated = false;
+
+    $fullPath = $parentDirectory . replace_dangerous_char($name);
+
+    if (mkdir($fullPath, api_get_permissions_for_new_directories(), true)) {
+        $fp = fopen($fullPath . '/index.html', 'w');
+
+        if ($fp) {
+            if (fwrite($fp, '<html><head></head><body></body></html>')) {
+                $isCreated = true;
+            }
+        }
+
+        fclose($fp);
+    }
+
+    return $isCreated;
+}

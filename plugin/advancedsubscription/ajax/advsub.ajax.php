@@ -227,6 +227,11 @@ if (!empty($a) && !empty($u)) {
                         }
                     }
 
+                    // Student Session inscription
+                    if ($e == ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED) {
+                        SessionManager::suscribe_users_to_session($s, array($u));
+                    }
+
                     $result['mailIds'] = $plugin->sendMail($data, $data['action']);
                     if (!empty($result['mailIds'])) {
                         $result['error'] = false;

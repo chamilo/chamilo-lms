@@ -308,8 +308,6 @@ class MySpace
 
     public static function display_tracking_coach_overview($export_csv)
     {
-        global $_configuration;
-
         if ($export_csv) {
             $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
         } else {
@@ -373,7 +371,7 @@ class MySpace
 			WHERE scu.id_user=user_id AND scu.status=2  AND login_user_id=user_id
 			GROUP BY user_id ";
 
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
@@ -400,7 +398,7 @@ class MySpace
 			GROUP BY user_id
 			ORDER BY login_date '.$tracking_direction;
 
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
@@ -1088,7 +1086,7 @@ class MySpace
     public static function display_user_overview_export_options()
     {
         // include the user manager and formvalidator library
-        if ($_GET['export'] == 'options') {
+        if (isset($_GET['export']) && $_GET['export'] == 'options') {
             // get all the defined extra fields
             $extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC', false, 1);
 
@@ -2159,14 +2157,14 @@ class MySpace
      */
     public static function get_user_data_tracking_overview($from, $number_of_items, $column, $direction)
     {
-        global $_configuration;
         // database table definition
         $access_url_id = api_get_current_access_url_id();
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
-
-        if ($_configuration['multiple_access_urls']) {
-            $condition_multi_url = ", $tbl_url_rel_user as url_user WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";
+        $condition_multi_url = null;
+        if (api_is_multiple_url_enabled()) {
+            $condition_multi_url = ", $tbl_url_rel_user as url_user
+            WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";
         }
 
         global $export_csv;

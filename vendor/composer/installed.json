@@ -1242,34 +1242,5 @@
             "php",
             "utf-8"
         ]
-    },
-    {
-        "name": "ros/ezpdf",
-        "version": "0.12.0-RC17",
-        "version_normalized": "0.12.0.0-RC17",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/didaxRedux/php-ezPDF.git",
-            "reference": "62e09bc84985e848645c6ae359cc8be4275cfd32"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/didaxRedux/php-ezPDF/zipball/62e09bc84985e848645c6ae359cc8be4275cfd32",
-            "reference": "62e09bc84985e848645c6ae359cc8be4275cfd32",
-            "shasum": ""
-        },
-        "time": "2014-09-30 15:15:44",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "src/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Porting of the well-known R&OS PDF class."
     }
 ]

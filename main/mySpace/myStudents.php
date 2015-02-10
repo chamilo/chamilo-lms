@@ -20,15 +20,12 @@ $language_file = array(
 
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
-require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
 api_block_anonymous_users();

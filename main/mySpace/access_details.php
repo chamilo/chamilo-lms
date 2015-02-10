@@ -20,9 +20,6 @@ $language_file = array ('registration', 'index', 'tracking');
 
 require_once '../inc/global.inc.php';
 
-// including additional libraries
-require_once 'myspace.lib.php';
-
 api_block_anonymous_users();
 
 // the section (for the tabs)

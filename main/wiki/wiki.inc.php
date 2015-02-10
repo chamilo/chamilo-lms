@@ -1772,7 +1772,6 @@ class Wiki
             }
         }
 
-        require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
         $data        = self::get_wiki_data($id);
         $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
 
@@ -1804,7 +1803,7 @@ class Wiki
         } else {
             $css = '';
         }
-        require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+
         $pdf = new PDF();
         $pdf->content_to_pdf($html, $css, $title_pdf, $course_code);
         exit;

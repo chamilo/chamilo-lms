@@ -479,21 +479,16 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['s']
                 );
                 // Mail to admin
-                foreach ($data['admins'] as $adminId => $admin) {
-                    $tpl->assign('admin', $admin);
-                    $mailIds[] = $this->sendMailMessage(
-                        $data['u'],
-                        $adminId,
-                        $this->get_lang('MailStudentRequest'),
-                        $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_admin.tpl'),
-                        $data['s'],
-                        true
-                    );
-                    // Check for current user mail to render
-                    if (isset($data['current_user']) && $data['current_user']['user_id'] == $adminId) {
-                        $mailIds['render'] = end($mailIds);
-                    }
-                }
+                $adminId = $data['current_user_id'];
+                $tpl->assign('admin', $data['admins'][$adminId]);
+                $mailIds['render'] = $this->sendMailMessage(
+                    $data['u'],
+                    $adminId,
+                    $this->get_lang('MailStudentRequest'),
+                    $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_admin.tpl'),
+                    $data['s'],
+                    true
+                );
                 break;
             case ADV_SUB_ACTION_ADMIN_DISAPPROVE:
                 // Mail to student
@@ -514,20 +509,15 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['s']
                 );
                 // Mail to admin
-                foreach ($data['admins'] as $adminId => $admin) {
-                    $tpl->assign('admin', $admin);
-                    $mailIds[] = $this->sendMailMessage(
-                        $data['u'],
-                        $adminId,
-                        $this->get_lang('MailStudentRequest'),
-                        $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_admin.tpl'),
-                        $data['s']
-                    );
-                    // Check for current user mail to render
-                    if (isset($data['current_user']) && $data['current_user']['user_id'] == $adminId) {
-                        $mailIds['render'] = end($mailIds);
-                    }
-                }
+                $adminId = $data['current_user_id'];
+                $tpl->assign('admin', $data['admins'][$adminId]);
+                $mailIds['render'] = $this->sendMailMessage(
+                    $data['u'],
+                    $adminId,
+                    $this->get_lang('MailStudentRequest'),
+                    $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_admin.tpl'),
+                    $data['s']
+                );
                 break;
             case ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS:
                 // Mail to student

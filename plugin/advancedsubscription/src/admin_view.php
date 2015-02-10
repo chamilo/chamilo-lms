@@ -74,7 +74,7 @@ if (!empty($s)) {
     $data = array(
         'a' => 'confirm',
         's' => $s,
-        'current_user' => array('user_id' => api_get_user_id()),
+        'current_user_id' => api_get_user_id(),
     );
 
     foreach ($studentList['students'] as &$student) {

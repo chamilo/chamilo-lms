@@ -379,7 +379,7 @@ class ScoreDisplay
                 $score = $this->display_simple_score($score);
 
                 //needs sudo apt-get install php5-intl
-                if (class_exists(NumberFormatter)) {
+                if (class_exists('NumberFormatter')) {
                     $iso = api_get_language_isocode();
                     $f = new NumberFormatter($iso, NumberFormatter::SPELLOUT);
                     $letters = $f->format($score);

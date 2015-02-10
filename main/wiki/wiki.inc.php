@@ -4543,7 +4543,7 @@ class Wiki
                         $message=get_lang('TheTaskDoesNotBeginUntil').': '.api_get_local_time($row['startdate_assig'], null, date_default_timezone_get());
                         self::setMessage(Display::display_warning_message($message, false, true));
                         if (!api_is_allowed_to_edit(false,true)) {
-                            return;
+                            $this->redirectHome();
                         }
                     }
 
@@ -4556,7 +4556,7 @@ class Wiki
                         $message = get_lang('TheDeadlineHasBeenCompleted').': '.api_get_local_time($row['enddate_assig'], null, date_default_timezone_get());
                         self::setMessage(Display::display_warning_message($message, false, true));
                         if (!api_is_allowed_to_edit(false,true)) {
-                            return;
+                            $this->redirectHome();
                         }
                     }
 
@@ -4564,7 +4564,7 @@ class Wiki
                         $message=get_lang('HasReachedMaxiNumVersions');
                         self::setMessage(Display::display_warning_message($message, false, true));
                         if (!api_is_allowed_to_edit(false,true)) {
-                            return;
+                            $this->redirectHome();
                         }
                     }
 
@@ -4572,7 +4572,7 @@ class Wiki
                         $message = get_lang('HasReachedMaxNumWords');
                         self::setMessage(Display::display_warning_message($message, false, true));
                         if (!api_is_allowed_to_edit(false,true)) {
-                            return;
+                            $this->redirectHome();
                         }
                     }
 
@@ -4649,7 +4649,7 @@ class Wiki
                             Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
                             '</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
                         self::setMessage(Display::display_normal_message($is_being_edited, false, true));
-                        return;
+                        $this->redirectHome();
                     }
 
                     // Form.

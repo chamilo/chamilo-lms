@@ -17,7 +17,7 @@ $skill = $objSkill->get($skillId);
 $json = array(
     'name' => $skill['name'],
     'description' => $skill['description'],
-    'image' => api_get_path(WEB_CODE_PATH) . $skill['icon'],
+    'image' => api_get_path(WEB_PATH) . $skill['icon'],
     'criteria' => api_get_path(WEB_CODE_PATH) . "badge/criteria.php?id=$skillId",
     'issuer' => api_get_path(WEB_CODE_PATH) . "badge/issuer.php",
 );

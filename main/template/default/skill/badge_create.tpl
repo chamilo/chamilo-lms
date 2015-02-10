@@ -65,7 +65,7 @@
                         </p>
                         <hr>
                         <div class="well well-small {{ skill.icon ? '' : 'hide' }}" id="badge-container">
-                            <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web_main, skill.icon] | join('') : '' }}">
+                            <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web, skill.icon] | join('') : '' }}">
                         </div>
                     </div>
                     <div class="span9">

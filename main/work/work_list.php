@@ -73,7 +73,7 @@ Display :: display_header(null);
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
-if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee_user() ) {
+if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee() ) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'">';
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';
 }
@@ -112,7 +112,7 @@ $result = getWorkDateValidationStatus($work_data);
 echo $result['message'];
 $check_qualification = intval($my_folder_data['qualification']);
 
-if (!api_is_invitee_user()) {
+if (!api_is_invitee()) {
     if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
         $type = 'simple';
 

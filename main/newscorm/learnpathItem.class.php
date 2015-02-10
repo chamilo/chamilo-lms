@@ -3773,7 +3773,7 @@ class learnpathItem
             if ($this->type == 'quiz' && $this->get_prevent_reinit() == 0 &&
                 $this->get_status() == 'completed'
             ) {
-                if (!api_is_invitee_user()) {
+                if (!api_is_invitee()) {
                     // We force the item to be restarted.
                     $this->restart();
                     $params = array(
@@ -3818,7 +3818,7 @@ class learnpathItem
             // Depending on what we want (really), we'll update or insert a new row
             // now save into DB.
             if (!$inserted && Database::num_rows($check_res) < 1) {
-                if (!api_is_invitee_user()) {
+                if (!api_is_invitee()) {
                     $params = array(
                         "c_id" => $course_id,
                         "total_time" => $this->get_total_time(),
@@ -3845,7 +3845,7 @@ class learnpathItem
                 }
             } else {
                 if ($this->type == 'hotpotatoes') {
-                    if (!api_is_invitee_user()) {
+                    if (!api_is_invitee()) {
                         $params = array(
                             'total_time' => $this->get_total_time(),
                             'start_time' => $this->get_current_start_time(),
@@ -3984,7 +3984,7 @@ class learnpathItem
                     }
 
                     if ($this->type == 'sco') {
-                        if (!api_is_invitee_user()) {
+                        if (!api_is_invitee()) {
                             //IF scorm scorm_update_time has already updated total_time in db
                             //" . //start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
                             ////" max_time_allowed = '".$this->get_max_time_allowed()."'," .
@@ -4002,7 +4002,7 @@ class learnpathItem
                         }
 
                     } else {
-                        if (!api_is_invitee_user()) {
+                        if (!api_is_invitee()) {
                             //" max_time_allowed = '".$this->get_max_time_allowed()."'," .
                             $sql = "UPDATE $item_view_table SET
                                         $total_time

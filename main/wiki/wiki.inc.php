@@ -4321,17 +4321,18 @@ class Wiki
         $page = $this->page;
 
         echo '<div class="actions">';
-        /*        echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('show').'>'.
-            Display::return_icon('wiki.png',get_lang('HomeWiki'),'',ICON_SIZE_MEDIUM).'</a>&nbsp;';*/
         echo '<ul class="nav" style="margin-bottom:0px">
                 <li class="dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0)">'.Display::return_icon('menu.png', get_lang('Menu'), '', ICON_SIZE_MEDIUM).'</a>';
+                <a class="dropdown-toggle" href="javascript:void(0)">'.
+                Display::return_icon('menu.png', get_lang('Menu'), '', ICON_SIZE_MEDIUM).'</a>';
         // menu home
         echo '<ul class="dropdown-menu">';
-        echo '<li><a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('Home').'</a></li>';
+        echo '<li><a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.
+            get_lang('Home').'</a></li>';
         if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit()) {
             // menu add page
-            echo '<li><a href="index.php?cidReq=' . $_course['id'] . '&action=addnew&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('addnew').'>' . get_lang('AddNew') . '</a>';
+            echo '<li><a href="index.php?cidReq=' . $_course['id'] . '&action=addnew&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('addnew').'>'
+            . get_lang('AddNew') . '</a>';
         }
 
         $lock_unlock_addnew = null;
@@ -4348,16 +4349,21 @@ class Wiki
             }
         }
 
-        echo '<a href="index.php?action=show&amp;actionpage='.$lock_unlock_addnew.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$protect_addnewpage.'</a></li>';
+        echo '<a href="index.php?action=show&amp;actionpage='.$lock_unlock_addnew.'&amp;title='.api_htmlentities(urlencode($page)).'">'.
+            $protect_addnewpage.'</a></li>';
         // menu find
-        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('searchpages').'>'.get_lang('SearchPages').'</a></li>';
+        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('searchpages').'>'.
+            get_lang('SearchPages').'</a></li>';
         // menu all pages
-        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('allpages').'>'.get_lang('AllPages').'</a></li>';
+        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('allpages').'>'.
+            get_lang('AllPages').'</a></li>';
         // menu recent changes
-        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.get_lang('RecentChanges').'</a></li>';
+        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.
+            get_lang('RecentChanges').'</a></li>';
         // menu delete all wiki
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            echo '<li><a href="index.php?action=deletewiki&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('deletewiki').'>'.get_lang('DeleteWiki').'</a></li>';
+            echo '<li><a href="index.php?action=deletewiki&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('deletewiki').'>'.
+                get_lang('DeleteWiki').'</a></li>';
         }
         ///menu more
         echo '<li><a href="index.php?action=more&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('more').'>'.get_lang('Statistics').'</a></li>';
@@ -4396,7 +4402,7 @@ class Wiki
                 Display::return_icon('delete.png',get_lang('DeleteThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
         }
         echo '</ul>';
-        echo '</div>'; // End actions
+        echo '</div>';
     }
 
     /**

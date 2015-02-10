@@ -17,7 +17,9 @@
 
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.9.0.18716' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.5' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
+
+ALTER TABLE c_survey ADD visible_results INT UNSIGNED DEFAULT 0;
 

@@ -214,7 +214,7 @@ if (!empty($a) && !empty($u)) {
                                 $data['action'] = ADV_SUB_ACTION_SUPERIOR_APPROVE;
                                 break;
                             case ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED:
-                                $data['action'] = ADV_SUB_ACTION_SUPERIOR_APPROVE;
+                                $data['action'] = ADV_SUB_ACTION_SUPERIOR_DISAPPROVE;
                                 break;
                             case ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED:
                                 $data['action'] = ADV_SUB_ACTION_ADMIN_APPROVE;

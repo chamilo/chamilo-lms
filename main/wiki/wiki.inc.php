@@ -36,16 +36,15 @@ class Wiki
     public function __construct()
     {
         // Database table definition
-        $this->tbl_wiki           = Database::get_course_table(TABLE_WIKI);
-        $this->tbl_wiki_discuss   = Database::get_course_table(TABLE_WIKI_DISCUSS);
-        $this->tbl_wiki_mailcue   = Database::get_course_table(TABLE_WIKI_MAILCUE);
-        $this->tbl_wiki_conf      = Database::get_course_table(TABLE_WIKI_CONF);
+        $this->tbl_wiki = Database::get_course_table(TABLE_WIKI);
+        $this->tbl_wiki_discuss = Database::get_course_table(TABLE_WIKI_DISCUSS);
+        $this->tbl_wiki_mailcue = Database::get_course_table(TABLE_WIKI_MAILCUE);
+        $this->tbl_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
 
         $this->session_id = api_get_session_id();
         $this->condition_session = api_get_session_condition($this->session_id);
         $this->course_id = api_get_course_int_id();
         $this->group_id = api_get_group_id();
-
 
         if (!empty($this->group_id)) {
             $this->groupfilter = ' group_id="'.$this->group_id.'"';
@@ -186,8 +185,10 @@ class Wiki
         $irclink='href="irc';
         $irclinkStyle='class="wiki_irc_link" href="irc';
         $output=str_replace($irclink, $irclinkStyle, $input);
+
         return $output;
     }
+
     /**
      * This function allows users to have [link to a title]-style links like in most regular wikis.
      * It is true that the adding of links is probably the most anoying part of Wiki for the people
@@ -704,7 +705,7 @@ class Wiki
                 }
 
                 $wikiData = self::getWikiData();
-                $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'];
+                $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'].'&'.api_get_cidreq();
                 header('Location: '.$redirectUrl);
                 exit;
             }
@@ -4652,7 +4653,7 @@ class Wiki
                     }
 
                     // Form.
-                    $url = api_get_self().'?action=edit&title='.urlencode($page).'&session_id='.api_get_session_id().'&group_id='.api_get_group_id();
+                    $url = api_get_self().'?action=edit&title='.urlencode($page).'&session_id='.api_get_session_id().'&group_id='.api_get_group_id().'&'.api_get_cidreq();
                     $form = new FormValidator('wiki', 'post', $url);
                     $form->addElement('header', $icon_assignment.str_repeat('&nbsp;',3).api_htmlentities($title));
                     self::setForm($form, $row);
@@ -4682,7 +4683,7 @@ class Wiki
                             self::setMessage(Display::display_confirmation_message($return_message, false, true));
                         }
                         $wikiData = self::getWikiData();
-                        $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'];
+                        $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'].'&'.api_get_cidreq();
                         header('Location: '.$redirectUrl);
                         exit;
                     }
@@ -5131,7 +5132,7 @@ class Wiki
     public function redirectHome()
     {
         $redirectUrl = $this->url.'&action=showpage&title=index';
-        header('Location: '.$redirectUrl);
+        header('Location: '.$redirectUrl.'&'.api_get_cidreq());
         exit;
     }
 
@@ -5155,4 +5156,3 @@ class Wiki
         return false;
     }
 }
-

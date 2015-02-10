@@ -883,7 +883,7 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.4','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.5','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -3036,6 +3036,7 @@ CREATE TABLE usergroup_rel_question (
 );
 
 -- 1.10.x-specific, non-course-related, database changes
+<<<<<<< HEAD
 -- some changes to previous structure might have been applied to the tables
 -- creation statements above to increase efficiency
 
@@ -3063,3 +3064,5 @@ CREATE TABLE IF NOT EXISTS hook_call(
     PRIMARY KEY PK_hook_management_hook_call(id)
 );
 
+=======
+>>>>>>> ilosada-BT9068a

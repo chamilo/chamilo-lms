@@ -332,6 +332,7 @@ if ($form->validate()) {
     $subscribe = $course['subscribe'];
     $unsubscribe = $course['unsubscribe'];
     $course['course_code'] = $course_code;
+    $courseId = $course['id'];
 
     if (!stristr($department_url, 'http://')) {
         $department_url = 'http://' . $department_url;
@@ -348,7 +349,7 @@ if ($form->validate()) {
                 visibility = '" . Database::escape_string($visibility) . "',
                 subscribe = '" . Database::escape_string($subscribe) . "',
                 unsubscribe='" . Database::escape_string($unsubscribe) . "'
-            WHERE code='" . Database::escape_string($course_code) . "'";
+            WHERE id = $courseId ";
     Database::query($sql);
 
     // update the extra fields

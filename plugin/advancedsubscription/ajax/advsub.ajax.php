@@ -207,7 +207,7 @@ if (!empty($a) && !empty($u)) {
                     $data['admins'] = $adminsArray;
                     $data['session'] = $sessionArray;
                     $data['signature'] = 'AQUI DEBE IR UNA FIRMA';
-                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php';
+                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php?s=' . $s;
                     if (empty($data['action'])) {
                         switch ($e) {
                             case ADV_SUB_QUEUE_STATUS_BOSS_APPROVED:

@@ -220,7 +220,7 @@ if (!empty($a) && !empty($u)) {
                                 $data['action'] = ADV_SUB_ACTION_ADMIN_APPROVE;
                                 break;
                             case ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED:
-                                $data['action'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
+                                $data['action'] = ADV_SUB_ACTION_ADMIN_DISAPPROVE;
                                 break;
                             default:
                                 break;

@@ -60,7 +60,7 @@
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>Estimado:</p>
                         <h2>{{ student.complete_name }}</h2>
-                        <p>Nos complace informarle que su inscripción al curso <strong>{{ session.name }}</strong> iniciando el <strong>{{ session.date_start }}</strong> fue validada por los administradores rechazada por falta de cupos. Esperamos mantenga todo su ánimo y participe en otro curso o, en otra oportunidad, a este mismo curso.</p>
+                        <p>Nos complace informarle que su inscripción al curso <strong>{{ session.name }}</strong> iniciando el <strong>{{ session.date_start }}</strong> fue validada por los administradores. Esperamos mantenga todo su ánimo y participe en otro curso o, en otra oportunidad, a este mismo curso.</p>
                         <p>Gracias.</p>
                         <h3>{{ signature }}</h3></td>
                     <td>&nbsp;</td>

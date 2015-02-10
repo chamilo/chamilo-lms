@@ -97,7 +97,7 @@ if (!empty($a) && !empty($u)) {
                     'superior' => $superiorArray,
                     'admins' => $adminsArray,
                     'session' => $sessionArray,
-                    'signature' => 'AQUI DEBE IR UNA FIRMA',
+                    'signature' => api_get_setting('Institution'),
                     's' => $s,
                     'u' => $u,
                 );
@@ -206,7 +206,7 @@ if (!empty($a) && !empty($u)) {
                     $data['superior'] = $superiorArray;
                     $data['admins'] = $adminsArray;
                     $data['session'] = $sessionArray;
-                    $data['signature'] = 'AQUI DEBE IR UNA FIRMA';
+                    $data['signature'] = api_get_setting('Institution');
                     $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php?s=' . $s;
                     if (empty($data['action'])) {
                         switch ($e) {

@@ -347,7 +347,10 @@ class ExtraFieldValue extends Model
 
             // Insert
             if (empty($field_values)) {
+                /* Enable this when field_loggeable is introduced as a table field (2.0)
                 if ($extra_field_info['field_loggeable'] == 1) {
+                */
+                if (false) {
                     global $app;
                     switch($this->type) {
                         case 'question':
@@ -406,7 +409,10 @@ class ExtraFieldValue extends Model
                 }
             } else {
                 // Update
+                /* Enable this when field_loggeable is introduced as a table field (2.0)
                 if ($extra_field_info['field_loggeable'] == 1) {
+                */
+                if (false) {
                     global $app;
                     switch($this->type) {
                         case 'question':

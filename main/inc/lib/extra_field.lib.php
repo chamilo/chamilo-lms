@@ -16,7 +16,9 @@ class ExtraField extends Model
         'field_visible',
         'field_changeable',
         'field_filter',
+         /* Enable this when field_loggeable is introduced as a table field (2.0)
         'field_loggeable',
+         */
         'tms'
     );
 
@@ -819,6 +821,7 @@ class ExtraField extends Model
                             array('id' => 'extra_'.$field_details['field_variable'])
                         );
 
+                        /* Enable this when field_loggeable is introduced as a table field (2.0)
                         if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
 
                             $form->addElement(
@@ -867,6 +870,7 @@ class ExtraField extends Model
                                 }
                             }
                         }
+                        */
 
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {
@@ -1476,11 +1480,12 @@ EOF;
         $group[] = $form->createElement('radio', 'field_filter', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('FieldFilter'), '', false);
 
+        /* Enable this when field_loggeable is introduced as a table field (2.0)
         $group   = array();
         $group[] = $form->createElement('radio', 'field_loggeable', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'field_loggeable', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('FieldLoggeable'), '', false);
-
+        */
 
         $form->addElement('text', 'field_order', get_lang('FieldOrder'), array('class' => 'span1'));
 

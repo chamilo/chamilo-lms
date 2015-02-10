@@ -51,7 +51,15 @@ switch ($action) {
         break;
     case 'generate_all_certificates':
         $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
-        Category::generateCertificatesInUserList($cat_id, $user_list);
+        if (!empty($user_list)) {
+            foreach ($user_list as $user_info) {
+                if ($user_info['status'] == INVITEE) {
+                    continue;
+                }
+
+                Category::register_user_certificate($cat_id, $user_info['user_id']);
+            }
+        }
         break;
     case 'delete_all_certificates':
         Category::deleteAllCertificates($cat_id);

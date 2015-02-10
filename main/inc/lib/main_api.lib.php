@@ -44,6 +44,7 @@ define('COURSE_STUDENT', 14);   //student subscribed in a course
 define('SESSION_STUDENT', 15);  //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
 define('STUDENT_BOSS', 17); // student is boss
+define('INVITEE', 20);
 
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
@@ -51,6 +52,7 @@ $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
 $_status_list[DRH]              = 'drh';            // 4
 $_status_list[STUDENT]          = 'user';           // 5
 $_status_list[ANONYMOUS]        = 'anonymous';      // 6
+$_status_list[INVITEE]     = 'invited';        // 20
 
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
@@ -2579,6 +2581,16 @@ function api_is_teacher() {
 }
 
 /**
+ * Checks whether the current user is a invited user
+ * @return boolean
+ */
+function api_is_invitee_user() {
+    global $_user;
+
+    return isset($_user['status']) && $_user['status'] == INVITEE;
+}
+
+/**
  * This function checks whether a session is assigned into a category
  * @param int       - session id
  * @param string    - category name
@@ -4682,7 +4694,8 @@ function api_get_status_langvars() {
         DRH             => get_lang('Drh', ''),
         STUDENT         => get_lang('Student', ''),
         ANONYMOUS       => get_lang('Anonymous', ''),
-        STUDENT_BOSS       => get_lang('RoleStudentBoss', '')
+        STUDENT_BOSS    => get_lang('RoleStudentBoss', ''),
+        INVITEE         => get_lang('Invited'),
     );
 }
 
@@ -4991,7 +5004,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
 
 /**
  * Gets the distinct settings categories
- * @param array     Array of strings giving the categories we want to exclude
+ * @param array     Array of strings giving the categories we want to excluded
  * @param int       Access URL. Optional. Defaults to 1
  * @return array    A list of categories
  */
@@ -7528,6 +7541,62 @@ function api_is_student_boss ()
 
     return isset($_user['status']) && $_user['status'] == STUDENT_BOSS;
 }
+/**
+ * Check whether the user type should be exclude.
+ * Such as invited or anonymous users
+ * @param boolean $checkDB Optional. Whether check the user status
+ * @param int $userId Options. The user id
+ * @return boolean
+ */
+function apiIsExcludedUserType($checkDB = false, $userId = 0)
+{
+    if ($checkDB) {
+        $userId = empty($userId) ? api_get_user_id() : intval($userId);
+
+        if ($userId == 0) {
+            return true;
+        }
+
+        $userInfo = api_get_user_info($userId);
+
+        switch ($userInfo['status']) {
+            case INVITEE:
+                //no break;
+            case ANONYMOUS:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    $isInvited = api_is_invitee_user();
+    $isAnonymous = api_is_anonymous();
+
+    if ($isInvited || $isAnonymous) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Get the user status to ignore in reports
+ * @param string $format Optional. The result type (array or string)
+ * @return array|string
+ */
+function api_get_users_status_ignored_in_reports($format = 'array')
+{
+    $excludedTypes = array(
+        INVITEE,
+        ANONYMOUS
+    );
+
+    if ($format == 'string') {
+        return implode(', ', $excludedTypes);
+    }
+
+    return $excludedTypes;
+}
 
 /**
  * Set the Site Use Cookie Warning for 1 year
@@ -7560,10 +7629,10 @@ function api_format_time($time, $originFormat = 'php')
     $secs = ($time % 60);
 
     if ($originFormat == 'js') {
-        $scormTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
+        $formattedTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
     } else {
-        $scormTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
+        $formattedTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
     }
 
-    return $scormTime;
+    return $formattedTime;
 }

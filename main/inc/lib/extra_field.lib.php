@@ -51,6 +51,10 @@ class ExtraField extends Model
     const FIELD_TYPE_SOCIAL_PROFILE = 12;
     const FIELD_TYPE_CHECKBOX = 13;
     const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
+    const FIELD_TYPE_INTEGER = 15;
+    const FIELD_TYPE_FILE_IMAGE = 16;
+    const FIELD_TYPE_FLOAT = 17;
+    const FIELD_TYPE_FILE = 18;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
@@ -238,6 +242,11 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
         $types[self::FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
         $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
+        $types[self::FIELD_TYPE_CHECKBOX] = get_lang('FieldTypeCheckbox');
+        $types[self::FIELD_TYPE_INTEGER] = get_lang('FieldTypeInteger');
+        $types[self::FIELD_TYPE_FILE_IMAGE] = get_lang('FieldTypeFileImage');
+        $types[self::FIELD_TYPE_FLOAT] = get_lang('FieldTypeFloat');
+        $types[self::FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
 
         switch ($handler) {
             case 'course':
@@ -677,14 +686,22 @@ class ExtraField extends Model
                                 );
                             }
                         } else {
+                            $fieldVariable = "extra_{$field_details['field_variable']}";
+
+                            $checkboxAttributes = array();
+
+                            if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
+                                $checkboxAttributes['checked'] = true;
+                            }
+
                             // We assume that is a switch on/off with 1 and 0 as values
                             $group[] = $form->createElement(
                                 'checkbox',
                                 'extra_'.$field_details['field_variable'],
                                 null,
                                 //$field_details['field_display_text'].'<br />',
-                                'Yes <br />',
-                                null
+                                get_lang('Yes'),
+                                $checkboxAttributes
                             );
                         }
                         $form->addGroup(
@@ -796,7 +813,7 @@ class ExtraField extends Model
                         // chzn-select doesn't work for sessions??
                         $form->addElement(
                             'select',
-                            'extra_'.$field_details['field_variable'],
+                            'extra_' . $field_details['field_variable'],
                             $field_details['field_display_text'],
                             $options,
                             array('id' => 'extra_'.$field_details['field_variable'])
@@ -806,8 +823,8 @@ class ExtraField extends Model
 
                             $form->addElement(
                                 'textarea',
-                                'extra_'.$field_details['field_variable'].'_comment',
-                                $field_details['field_display_text'].' '.get_lang('Comment')
+                                'extra_' . $field_details['field_variable'] . '_comment',
+                                $field_details['field_display_text'] . ' ' . get_lang('Comment')
                             );
 
                             $extraFieldValue = new ExtraFieldValue($this->type);
@@ -823,7 +840,7 @@ class ExtraField extends Model
                             if ($newEntity) {
                                 $logs = $repoLog->getLogEntries($newEntity);
                                 if (!empty($logs)) {
-                                    $html = '<b>'.get_lang('LatestChanges').'</b><br /><br />';
+                                    $html = '<b>' . get_lang('LatestChanges') . '</b><br /><br />';
 
                                     $table = new HTML_Table(array('class' => 'data_table'));
                                     $table->setHeaderContents(0, 0, get_lang('Value'));
@@ -853,7 +870,7 @@ class ExtraField extends Model
 
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {
-                                $form->freeze('extra_'.$field_details['field_variable']);
+                                $form->freeze('extra_' . $field_details['field_variable']);
                             }
                         }
                         break;
@@ -876,25 +893,17 @@ class ExtraField extends Model
                         }
                         break;
                     case ExtraField::FIELD_TYPE_DATE:
-                        $form->addElement(
-                            'datepickerdate',
-                            'extra_'.$field_details['field_variable'],
-                            $field_details['field_display_text'],
-                            array('form_name' => $form_name)
-                        );
-                        $form->_elements[$form->_elementIndex['extra_'.$field_details['field_variable']]]->setLocalOption(
-                            'minYear',
-                            1900
-                        );
-                        $defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
-                        if (!isset($form->_defaultValues['extra_'.$field_details['field_variable']])) {
-                            $form->setDefaults($defaults);
-                        }
+                        $form->addElement('date_picker', 'extra_'.$field_details['field_variable'], $field_details['field_display_text']);
+                        //$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                        //$defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
+                        //$form->setDefaults($defaults);
+
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {
                                 $form->freeze('extra_'.$field_details['field_variable']);
                             }
                         }
+
                         $form->applyFilter('theme', 'trim');
                         break;
                     case ExtraField::FIELD_TYPE_DATETIME:
@@ -1126,6 +1135,129 @@ EOF;
                         );
                         if ($field_details['field_visible'] == 0) {
                             $form->freeze('extra_'.$field_details['field_variable']);
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_INTEGER:
+                        $form->addElement(
+                            'number',
+                            'extra_'.$field_details['field_variable'],
+                            $field_details['field_display_text'],
+                            array('class' => 'span1', 'step' => 1)
+                        );
+
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'intval');
+
+                        if (!$admin_permissions) {
+                            if ($field_details['field_visible'] == 0) {
+                                $form->freeze(
+                                    'extra_'.$field_details['field_variable']
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                        $fieldVariable = "extra_{$field_details['field_variable']}";
+
+                        $fieldTexts = array(
+                            $field_details['field_display_text']
+                        );
+
+                        if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
+                            if (file_exists(api_get_path(SYS_CODE_PATH) . $extraData[$fieldVariable])) {
+                                $fieldTexts[] = Display::img(
+                                    api_get_path(WEB_CODE_PATH) . $extraData[$fieldVariable],
+                                    $field_details['field_display_text'],
+                                    array('width' => '300')
+                                );
+                            }
+                        }
+
+                        $form->addElement(
+                            'file',
+                            $fieldVariable,
+                            $fieldTexts,
+                            array('class' => 'span8', 'accept' => 'image/*')
+                        );
+
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+
+                        $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+                        $form->addRule(
+                            'extra_'.$field_details['field_variable'],
+                            get_lang('OnlyImagesAllowed') . ' ('.implode(',', $allowed_picture_types).')',
+                            'filetype',
+                            $allowed_picture_types
+                        );
+
+                        if (!$admin_permissions) {
+                            if ($field_details['field_visible'] == 0) {
+                                $form->freeze(
+                                    'extra_'.$field_details['field_variable']
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_FLOAT:
+                        $form->addElement(
+                            'number',
+                            'extra_'.$field_details['field_variable'],
+                            $field_details['field_display_text'],
+                            array('class' => 'span1', 'step' => '0.01')
+                        );
+
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'floatval');
+
+                        if (!$admin_permissions) {
+                            if ($field_details['field_visible'] == 0) {
+                                $form->freeze(
+                                    'extra_'.$field_details['field_variable']
+                                );
+                            }
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_FILE:
+                        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+
+                        $fieldVariable = "extra_{$field_details['field_variable']}";
+
+                        $fieldTexts = array(
+                            $field_details['field_display_text']
+                        );
+
+                        if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
+                            if (file_exists(api_get_path(SYS_CODE_PATH) . $extraData[$fieldVariable])) {
+                                $fieldTexts[] = Display::url(
+                                    api_get_path(WEB_CODE_PATH) . $extraData[$fieldVariable],
+                                    api_get_path(WEB_CODE_PATH) . $extraData[$fieldVariable],
+                                    array(
+                                        'title' => $field_details['field_display_text'],
+                                        'target' => '_blank'
+                                    )
+                                );
+                            }
+                        }
+
+                        $form->addElement(
+                            'file',
+                            $fieldVariable,
+                            $fieldTexts,
+                            array('class' => 'span8')
+                        );
+
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
+                        $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
+
+                        if (!$admin_permissions) {
+                            if ($field_details['field_visible'] == 0) {
+                                $form->freeze(
+                                    'extra_'.$field_details['field_variable']
+                                );
+                            }
                         }
                         break;
                 }
@@ -1751,4 +1883,88 @@ EOF;
             'condition_array' => $condition_array
         );
     }
+
+    /**
+     * Get the extra fields and their formated values
+     * @param int|string $itemId The item ID (It could be a session_id, course_id or user_id)
+     * @return array The extra fields data
+     */
+    public function getDataAndFormatedValues($itemId)
+    {
+        $valuesData = array();
+
+        $fields = $this->get_all();
+
+        foreach ($fields as $field) {
+            if ($field['field_visible'] != '1') {
+                continue;
+            }
+
+            $fieldValue = new ExtraFieldValue($this->type);
+            $valueData = $fieldValue->get_values_by_handler_and_field_id($itemId, $field['id'], true);
+
+            if (!$valueData) {
+                continue;
+            }
+
+            $displayedValue = get_lang('None');
+
+            switch ($field['field_type']) {
+                case ExtraField::FIELD_TYPE_CHECKBOX:
+                    if ($valueData !== false && $valueData['field_value'] == '1') {
+                        $displayedValue = get_lang('Yes');
+                    } else {
+                        $displayedValue = get_lang('No');
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_DATE:
+                    if ($valueData !== false && !empty($valueData['field_value'])) {
+                        $displayedValue = api_format_date($valueData['field_value'], DATE_FORMAT_LONG_NO_DAY);
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_FILE_IMAGE:
+                    if ($valueData !== false && !empty($valueData['field_value'])) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH) . $valueData['field_value'])) {
+                            $image = Display::img(
+                                api_get_path(WEB_CODE_PATH) . $valueData['field_value'],
+                                $field['field_display_text'],
+                                array('width' => '300')
+                            );
+
+                            $displayedValue = Display::url(
+                                $image,
+                                api_get_path(WEB_CODE_PATH) . $valueData['field_value'],
+                                array('target' => '_blank')
+                            );
+                        }
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_FILE:
+                    if ($valueData !== false && !empty($valueData['field_value'])) {
+                        if (file_exists(api_get_path(SYS_CODE_PATH) . $valueData['field_value'])) {
+                            $displayedValue = Display::url(
+                                get_lang('Download'),
+                                api_get_path(WEB_CODE_PATH) . $valueData['field_value'],
+                                array(
+                                'title' => $field['field_display_text'],
+                                'target' => '_blank'
+                                )
+                            );
+                        }
+                    }
+                    break;
+                default:
+                    $displayedValue = $valueData['field_value'];
+                    break;
+            }
+
+            $valuesData[] = array(
+                'text' => $field['field_display_text'],
+                'value' => $displayedValue
+            );
+        }
+
+        return $valuesData;
+    }
+
 }

@@ -35,4 +35,5 @@ searchdb/*
 nbproject/*
 
 plugin/bbb/config.vm.php
+
 main/cron/incoming/*

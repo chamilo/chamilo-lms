@@ -746,7 +746,7 @@ if ($category != '0') {
 
     if ($show_message == '') {
         // Student
-        if (!api_is_allowed_to_edit()) {
+        if (!api_is_allowed_to_edit() && !apiIsExcludedUserType()) {
             $certificate = Category::register_user_certificate(
                 $category_id,
                 $stud_id

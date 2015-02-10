@@ -541,6 +541,7 @@ CREATE TABLE IF NOT EXISTS session_field (
     PRIMARY KEY(id)
 );
 
+
 DROP TABLE IF EXISTS session_field_values;
 CREATE TABLE IF NOT EXISTS session_field_values(
     id  int NOT NULL auto_increment,
@@ -883,7 +884,7 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.5','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.6','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -2720,7 +2721,7 @@ CREATE TABLE IF NOT EXISTS message_attachment (
 
 
 
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', 'Yes', 1 , 1);
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', '', 1 , 1);
 
 --
 -- Table structure for table block
@@ -3036,7 +3037,6 @@ CREATE TABLE usergroup_rel_question (
 );
 
 -- 1.10.x-specific, non-course-related, database changes
-<<<<<<< HEAD
 -- some changes to previous structure might have been applied to the tables
 -- creation statements above to increase efficiency
 
@@ -3064,5 +3064,28 @@ CREATE TABLE IF NOT EXISTS hook_call(
     PRIMARY KEY PK_hook_management_hook_call(id)
 );
 
-=======
->>>>>>> ilosada-BT9068a
+--
+-- Table structure for table course_field_options
+--
+
+CREATE TABLE course_field_options (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    field_id INT NOT NULL,
+    option_value TEXT,
+    option_display_text VARCHAR(64),
+    option_order INT,
+    tms DATETIME
+);
+
+--
+-- Table structure for table session_field_options
+--
+
+CREATE TABLE session_field_options (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    field_id INT NOT NULL,
+    option_value TEXT,
+    option_display_text VARCHAR(64),
+    option_order INT,
+    tms DATETIME
+);

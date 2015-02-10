@@ -36,7 +36,7 @@ class CourseManager
      *
      * @return  mixed  false if the course was not created, array with the course info
      */
-    public static function create_course($params)
+    public static function create_course($params, $extraFields = array())
     {
         global $_configuration;
         // Check portal limits
@@ -129,6 +129,11 @@ class CourseManager
                         $cr->set_file_option();
                         $cr->restore($course_info['id']); //course_info[id] is the course.code value (I know...)
                     }
+
+                    $params['course_code'] = $course_info['code'];
+
+                    $courseFieldValue = new ExtraFieldValue('course');
+                    $courseFieldValue->save_field_values($params);
 
                     return $course_info;
                 }
@@ -1756,6 +1761,7 @@ class CourseManager
      *  @param integer $session_id
      *  @param string $date_from
      *  @param string $date_to
+     * @param boolean $includeInvitedUsers Whether include the invited users
      *  @return array with user id
      */
     public static function get_student_list_from_course_code(
@@ -1763,7 +1769,8 @@ class CourseManager
         $with_session = false,
         $session_id = 0,
         $date_from = null,
-        $date_to = null
+        $date_to = null,
+        $includeInvitedUsers = true
     ) {
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
@@ -1772,8 +1779,14 @@ class CourseManager
 
         if ($session_id == 0) {
             // students directly subscribed to the course
-            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                   WHERE course_code = '$course_code' AND status = ".STUDENT;
+            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
+                    INNER JOIN user u ON cu.user_id = u.user_id
+                   WHERE course_code = '$course_code' AND cu.status = ".STUDENT;
+
+            if (!$includeInvitedUsers) {
+                $sql .= " AND u.status != " . INVITEE;
+            }
+
             $rs = Database::query($sql);
             while ($student = Database::fetch_array($rs)) {
                 $students[$student['user_id']] = $student;
@@ -1792,6 +1805,7 @@ class CourseManager
 
             $sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
                           $joinSession
+                          INNER JOIN $userTable u ON scu.id_user = u.user_id
                           WHERE scu.course_code = '$course_code' AND scu.status <> 2";
 
             if (!empty($date_from) && !empty($date_to)) {
@@ -1802,6 +1816,10 @@ class CourseManager
 
             if ($session_id != 0) {
                 $sql_query .= ' AND scu.id_session = '.$session_id;
+            }
+
+            if (!$includeInvitedUsers) {
+                $sql .= " AND u.status != " . INVITEE;
             }
 
             $rs = Database::query($sql_query);
@@ -4626,6 +4644,11 @@ class CourseManager
     public static function return_hot_courses($days = 30, $limit = 5)
     {
         global $_configuration;
+
+        if (api_is_invitee_user()) {
+            return array();
+        }
+
         $limit  = intval($limit);
 
         // Getting my courses

@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	@package chamilo.admin
-*/
-
+ * 	@package chamilo.admin
+ */
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
@@ -13,23 +12,25 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'course_category.lib.php';
 
-$course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
-$course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+
+$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 $course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyCourseInfo');
-$interbreadcrumb[] = array ("url" => 'index.php',       "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ("url" => "course_list.php", "name" => get_lang('CourseList'));
+$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => "course_list.php", "name" => get_lang('CourseList'));
 
 // Get all course categories
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 //Get the course infos
-$sql = "SELECT * FROM $course_table WHERE code='".Database::escape_string($course_code)."'";
+$sql = "SELECT * FROM $course_table WHERE code='" . Database::escape_string($course_code) . "'";
 $result = Database::query($sql);
 if (Database::num_rows($result) != 1) {
     header('Location: course_list.php');
@@ -42,7 +43,7 @@ $course_info = api_get_course_info($course_code);
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='".$course_code."'".$order_clause;
+$sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='" . $course_code . "'" . $order_clause;
 $res = Database::query($sql);
 $course_teachers = array();
 while ($obj = Database::fetch_object($res)) {
@@ -51,22 +52,22 @@ while ($obj = Database::fetch_object($res)) {
 
 // Get all possible teachers without the course teachers
 if (api_is_multiple_url_enabled()) {
-	$access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-	$sql = "SELECT u.user_id,lastname,firstname
-	        FROM $table_user as u
-			INNER JOIN $access_url_rel_user_table url_rel_user
-			ON (u.user_id=url_rel_user.user_id)
-			WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
+    $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $sql = "SELECT u.user_id,lastname,firstname
+            FROM $table_user as u
+            INNER JOIN $access_url_rel_user_table url_rel_user
+            ON (u.user_id=url_rel_user.user_id)
+            WHERE url_rel_user.access_url_id=" . api_get_current_access_url_id() . " AND status=1" . $order_clause;
 } else {
     $sql = "SELECT user_id, lastname, firstname
-            FROM $table_user WHERE status='1'".$order_clause;
+            FROM $table_user WHERE status='1'" . $order_clause;
 }
 
 $res = Database::query($sql);
 $teachers = array();
 $allTeachers = array();
 
-$platform_teachers[0] = '-- '.get_lang('NoManager').' --';
+$platform_teachers[0] = '-- ' . get_lang('NoManager') . ' --';
 while ($obj = Database::fetch_object($res)) {
     $allTeachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
     if (!array_key_exists($obj->user_id, $course_teachers)) {
@@ -82,7 +83,7 @@ while ($obj = Database::fetch_object($res)) {
 
 // Case where there is no teacher in the course
 if (count($course_teachers) == 0) {
-    $sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
+    $sql = 'SELECT tutor_name FROM ' . $course_table . ' WHERE code="' . $course_code . '"';
     $res = Database::query($sql);
     $tutor_name = Database::result($res, 0, 0);
     $course['tutor_name'] = array_search($tutor_name, $platform_teachers);
@@ -90,11 +91,11 @@ if (count($course_teachers) == 0) {
 
 // Build the form
 $form = new FormValidator('update_course');
-$form->addElement('header', get_lang('Course').'  #'.$course_info['real_id'].' '.$course_code);
+$form->addElement('header', get_lang('Course') . '  #' . $course_info['real_id'] . ' ' . $course_code);
 $form->addElement('hidden', 'code', $course_code);
 
 //title
-$form->add_textfield('title', get_lang('Title'), true, array ('class' => 'span6'));
+$form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
@@ -114,23 +115,23 @@ $group = array(
 );
 
 $element_template = <<<EOT
-	<div class="control-group">
-		<label>
-			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-		</label>
-		<div class="controls">
-			<table cellpadding="0" cellspacing="0">
-				<tr>
-					<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<td>{element}</td>
-				</tr>
-			</table>
-		</div>
-	</div>
+    <div class="control-group">
+        <label>
+            <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
+        </label>
+        <div class="controls">
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<td>{element}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 EOT;
 
 $renderer = $form->defaultRenderer();
 $renderer->setElementTemplate($element_template, 'group');
-$form->addGroup($group, 'group', get_lang('CourseTeachers'), '</td><td width="80" align="center">'.
+$form->addGroup($group, 'group', get_lang('CourseTeachers'), '</td><td width="80" align="center">' .
     '<input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))"><br><br>'.
     '<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))"></td><td>'
 );
@@ -156,33 +157,35 @@ if (!empty($coursesInSession)) {
             }
         }
 
-        $groupName =  'session_coaches['.$sessionId.']';
-        $platformTeacherId = 'platform_teachers_by_session_'.$sessionId;
-        $coachId = 'coaches_by_session_'.$sessionId;
+        $groupName = 'session_coaches[' . $sessionId . ']';
+        $platformTeacherId = 'platform_teachers_by_session_' . $sessionId;
+        $coachId = 'coaches_by_session_' . $sessionId;
 
         $platformTeacherName = 'platform_teachers_by_session';
         $coachName = 'coaches_by_session';
 
         $group = array(
-            $form->createElement('select', $platformTeacherName, '', $teachers, ' id="'.$platformTeacherId.'" multiple=multiple size="4" style="width:300px;"'),
-            $form->createElement('select', $coachName, '', $sessionTeachers, ' id="'.$coachId.'" multiple=multiple size="4" style="width:300px;"')
+            $form->createElement('select', $platformTeacherName, '', $teachers, ' id="' . $platformTeacherId . '" multiple=multiple size="4" style="width:300px;"'),
+            $form->createElement('select', $coachName, '', $sessionTeachers, ' id="' . $coachId . '" multiple=multiple size="4" style="width:300px;"')
         );
 
         $renderer = $form->defaultRenderer();
         $renderer->setElementTemplate($element_template, $groupName);
-        $sessionUrl = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$sessionId;
-        $form->addGroup($group, $groupName, Display::url($session['name'], $sessionUrl, array('target' => '_blank')).' - '.get_lang('Coaches'), '</td>
+        $sessionUrl = api_get_path(WEB_CODE_PATH) . 'admin/resume_session.php?id_session=' . $sessionId;
+        $form->addGroup($group, $groupName,
+            Display::url($session['name'], $sessionUrl, array('target' => '_blank')) . ' - ' . get_lang('Coaches'),
+            '</td>
             <td width="80" align="center">
-                <input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\''.$platformTeacherId.'\'), document.getElementById(\''.$coachId.'\'));">
+                <input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'' . $platformTeacherId . '\'), document.getElementById(\'' . $coachId . '\'));">
                 <br><br>
-                <input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\''.$coachId.'\'), document.getElementById(\''.$platformTeacherId.'\'));">
+                <input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'' . $coachId . '\'), document.getElementById(\'' . $platformTeacherId . '\'));">
             </td><td>'
         );
     }
 }
 
 // Category code
-$url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
+$url = api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_category';
 $categoryList = array();
 if (!empty($course['category_code'])) {
     $data = getCategory($course['category_code']);
@@ -212,13 +215,13 @@ $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisi
 $form->addGroup($group, '', get_lang('CourseAccess'), '<br />');
 
 $group = array();
-$group[]= $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
-$group[]= $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
+$group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
+$group[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
 $form->addGroup($group, '', get_lang('Subscription'), '<br />');
 
 $group = array();
-$group[]= $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
-$group[]= $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+$group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
+$group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group, '', get_lang('Unsubscription'), '<br />');
 
 $form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')));
@@ -227,21 +230,41 @@ $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 $list_course_extra_field = CourseManager::get_course_extra_field_list($course_code);
 
-//@todo this is wrong
-foreach ($list_course_extra_field as $extra_field) {
-    switch ($extra_field['field_type']) {
-        case CourseManager::COURSE_FIELD_TYPE_CHECKBOX:
-            $checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
-            $form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
-            $field_display_text = $extra_field['field_display_text'];
-            $form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(null, get_lang('AllUsersAreAutomaticallyRegistered')), get_lang('SpecialCourse'), $checked);
-            break;
+$specialCourseField = new CourseField();
+$specialCourseFieldInfo = $specialCourseField->get_handler_field_info_by_field_variable('special_course');
+
+if (!empty($specialCourseFieldInfo)) {
+    $specialCourseValue = new ExtraFieldValue('course');
+    $specialCourseValueInfo = $specialCourseValue->get_values_by_handler_and_field_variable($course_code, 'special_course');
+
+    $specialCourseAttributes = array();
+
+    if (!empty($specialCourseValueInfo) && $specialCourseValueInfo['field_value'] == 1) {
+        $specialCourseAttributes['checked'] = '';
     }
+
+    $form->addElement('hidden', '_extra_special_course', 0);
+    $form->addElement('checkbox', 'extra_special_course', array(
+        null, get_lang('AllUsersAreAutomaticallyRegistered')
+    ), get_lang('SpecialCourse'), $specialCourseAttributes);
 }
+
+//Extra fields
+$extra_field = new CourseField();
+$extra = $extra_field->addElements($form, $course_code);
+
+$htmlHeadXtra[] = '
+<script>
+
+$(function() {
+    ' . $extra['jquery_ready_content'] . '
+});
+</script>';
+
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'), 'onclick="valide()"; class="save"');
 
 // Set some default values
-$course['disk_quota'] = round(DocumentManager::get_course_quota($course_code) /1024/1024, 1);
+$course['disk_quota'] = round(DocumentManager::get_course_quota($course_code) / 1024 / 1024, 1);
 $course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
 $course['real_code'] = $course['code'];
 $course['add_teachers_to_sessions_courses'] = isset($course['add_teachers_to_sessions_courses']) ? $course['add_teachers_to_sessions_courses'] : 0;
@@ -283,70 +306,54 @@ if ($form->validate()) {
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;
 
-    $warn = get_lang('TheFollowingCoursesAlreadyUseThisVisualCode').':';
+    $warn = get_lang('TheFollowingCoursesAlreadyUseThisVisualCode') . ':';
     if (!empty($visual_code)) {
         $list = CourseManager::get_courses_info_from_visual_code($visual_code);
         foreach ($list as $course_temp) {
             if ($course_temp['code'] != $course_code) {
-               $visual_code_is_used = true;
-               $warn .= ' '.$course_temp['title'].' ('.$course_temp['code'].'),';
+                $visual_code_is_used = true;
+                $warn .= ' ' . $course_temp['title'] . ' (' . $course_temp['code'] . '),';
             }
         }
         $warn = substr($warn, 0, -1);
     }
 
-    // an extra field
-    $extras = array();
-    foreach ($course as $key => $value) {
-        if (substr($key, 0, 6) == 'extra_') {
-            $extras[substr($key, 6)] = $value;
-        }
+    $tutor_id = isset($course['tutor_name']) ? $course['tutor_name'] : null;
+    $tutor_name = isset($platform_teachers[$tutor_id]) ? $platform_teachers[$tutor_id] : null;
+    $teachers = $course['group']['course_teachers'];
 
-        if (substr($key, 0, 7) == '_extra_') {
-            if (!array_key_exists(substr($key, 7), $extras)) {
-                $extras[substr($key, 7)] = $value;
-            }
-        }
+    $title = $course['title'];
+    $category_code = $course['category_code'];
+    $department_name = $course['department_name'];
+    $department_url = $course['department_url'];
+    $course_language = $course['course_language'];
+    $course['disk_quota'] = $course['disk_quota'] * 1024 * 1024;
+    $disk_quota = $course['disk_quota'];
+    $subscribe = $course['subscribe'];
+    $unsubscribe = $course['unsubscribe'];
+    $course['course_code'] = $course_code;
+
+    if (!stristr($department_url, 'http://')) {
+        $department_url = 'http://' . $department_url;
     }
 
-	$tutor_id = isset($course['tutor_name']) ? $course['tutor_name'] : null;
-	$tutor_name = isset($platform_teachers[$tutor_id]) ? $platform_teachers[$tutor_id] : null;
-	$teachers = $course['group']['course_teachers'];
+    $sql = "UPDATE $course_table SET course_language='" . Database::escape_string($course_language) . "',
+                title='" . Database::escape_string($title) . "',
+                category_code='" . Database::escape_string($category_code) . "',
+                tutor_name='" . Database::escape_string($tutor_name) . "',
+                visual_code='" . Database::escape_string($visual_code) . "',
+                department_name='" . Database::escape_string($department_name) . "',
+                department_url='" . Database::escape_string($department_url) . "',
+                disk_quota='" . Database::escape_string($disk_quota) . "',
+                visibility = '" . Database::escape_string($visibility) . "',
+                subscribe = '" . Database::escape_string($subscribe) . "',
+                unsubscribe='" . Database::escape_string($unsubscribe) . "'
+            WHERE code='" . Database::escape_string($course_code) . "'";
+    Database::query($sql);
 
-	$title = $course['title'];
-	$category_code = $course['category_code'];
-	$department_name = $course['department_name'];
-	$department_url = $course['department_url'];
-	$course_language = $course['course_language'];
-    $course['disk_quota'] = $course['disk_quota']*1024*1024;
-	$disk_quota = $course['disk_quota'];
-	$subscribe = $course['subscribe'];
-	$unsubscribe = $course['unsubscribe'];
-
-	if (!stristr($department_url, 'http://')) {
-		$department_url = 'http://'.$department_url;
-	}
-
-    $sql = "UPDATE $course_table SET course_language='".Database::escape_string($course_language)."',
-                title='".Database::escape_string($title)."',
-                category_code='".Database::escape_string($category_code)."',
-                tutor_name='".Database::escape_string($tutor_name)."',
-                visual_code='".Database::escape_string($visual_code)."',
-                department_name='".Database::escape_string($department_name)."',
-                department_url='".Database::escape_string($department_url)."',
-                disk_quota='".Database::escape_string($disk_quota)."',
-                visibility = '".Database::escape_string($visibility)."',
-                subscribe = '".Database::escape_string($subscribe)."',
-                unsubscribe='".Database::escape_string($unsubscribe)."'
-            WHERE code='".Database::escape_string($course_code)."'";
-	Database::query($sql);
-
-	// update the extra fields
-	if (count($extras) > 0) {
-		foreach ($extras as $key => $value) {
-			CourseManager::update_course_extra_field_value($course_code, $key, $value);
-		}
-	}
+    // update the extra fields
+    $courseFieldValue = new ExtraFieldValue('course');
+    $courseFieldValue->save_field_values($course);
 
     $addTeacherToSessionCourses = isset($course['add_teachers_to_sessions_courses']) && !empty($course['add_teachers_to_sessions_courses']) ? 1 : 0;
 
@@ -385,31 +392,31 @@ if ($form->validate()) {
         }
     }
 
-	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
-				course_code = '".Database::escape_string($course_code). "',
-				user_id = '".$tutor_id . "',
-				status = '1',
-				role = '',
-				tutor_id='0',
-				sort='0',
-				user_course_cat='0'";
-	Database::query($sql);
+    $sql = "INSERT IGNORE INTO " . $course_user_table . " SET
+                course_code = '" . Database::escape_string($course_code) . "',
+                user_id = '" . $tutor_id . "',
+                status = '1',
+                role = '',
+                tutor_id='0',
+                sort='0',
+                user_course_cat='0'";
+    Database::query($sql);
 
     if (array_key_exists('add_teachers_to_sessions_courses', $course_info)) {
         $sql = "UPDATE $course_table SET add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
-                WHERE id = ".$course_info['real_id'];
+                WHERE id = " . $course_info['real_id'];
         Database::query($sql);
     }
 
-	$course_id = $course_info['real_id'];
-	/*$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
-	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id ";*/
-	if ($visual_code_is_used) {
-	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));
-	} else {
+    $course_id = $course_info['real_id'];
+    /* $forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
+      $sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id "; */
+    if ($visual_code_is_used) {
+        header('Location: course_list.php?action=show_msg&warn=' . urlencode($warn));
+    } else {
         header('Location: course_list.php');
-	}
-	exit;
+    }
+    exit;
 }
 
 Display::display_header($tool_name);
@@ -421,38 +428,38 @@ echo '</div>';
 
 echo "<script>
 function moveItem(origin , destination) {
-	for (var i = 0 ; i<origin.options.length ; i++) {
-		if (origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
+    for (var i = 0 ; i<origin.options.length ; i++) {
+        if (origin.options[i].selected) {
+            destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
+            origin.options[i]=null;
+            i = i-1;
+        }
+    }
+    destination.selectedIndex = -1;
+    sortOptions(destination.options);
 }
 
 function sortOptions(options) {
 
-	newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++) {
-		newOptions[i] = options[i];
+    newOptions = new Array();
+    for (i = 0 ; i<options.length ; i++) {
+        newOptions[i] = options[i];
     }
-	newOptions = newOptions.sort(mysort);
-	options.length = 0;
-	for (i = 0 ; i < newOptions.length ; i++) {
-		options[i] = newOptions[i];
-	}
+    newOptions = newOptions.sort(mysort);
+    options.length = 0;
+    for (i = 0 ; i < newOptions.length ; i++) {
+        options[i] = newOptions[i];
+    }
 }
 
 function mysort(a, b) {
-	if (a.text.toLowerCase() > b.text.toLowerCase()) {
-		return 1;
-	}
-	if (a.text.toLowerCase() < b.text.toLowerCase()) {
-		return -1;
-	}
-	return 0;
+    if (a.text.toLowerCase() > b.text.toLowerCase()) {
+        return 1;
+    }
+    if (a.text.toLowerCase() < b.text.toLowerCase()) {
+        return -1;
+    }
+    return 0;
 }
 
 function valide() {

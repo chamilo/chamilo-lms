@@ -1291,6 +1291,7 @@ function get_exam_results_data(
             (
                 SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
                 FROM $TBL_USER u
+                WHERE u.status NOT IN(" . api_get_users_status_ignored_in_reports('string') . ")
             )";
         }
 
@@ -1361,6 +1362,7 @@ function get_exam_results_data(
                     AND tth.exe_cours_id = '" . api_get_course_id()."'
                     $hotpotatoe_where
                     $sqlWhereOption
+                    AND user.status NOT IN(" . api_get_users_status_ignored_in_reports('string') . ")
                 ORDER BY
                     tth.exe_cours_id ASC,
                     tth.exe_date DESC";
@@ -2861,7 +2863,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         }
 
         // Send notification ..
-        if (!api_is_allowed_to_edit(null,true)) {
+        if (!api_is_allowed_to_edit(null,true) && !apiIsExcludedUserType()) {
             if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
                 $objExercise->send_mail_notification_for_exam($question_list_answers, $origin, $exe_id);
             }

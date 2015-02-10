@@ -20,6 +20,9 @@ ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
 CREATE TABLE IF NOT EXISTS hook_observer( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, path varchar(255) NOT NULL, plugin_name varchar(255) NULL, PRIMARY KEY PK_hook_management_hook_observer(id));
 CREATE TABLE IF NOT EXISTS hook_event( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, description varchar(255), PRIMARY KEY PK_hook_management_hook_event(id));
 CREATE TABLE IF NOT EXISTS hook_call( id int UNSIGNED NOT NULL AUTO_INCREMENT, hook_event_id int UNSIGNED NOT NULL, hook_observer_id int UNSIGNED NOT NULL, type tinyint NOT NULL, hook_order int UNSIGNED NOT NULL, enabled tinyint NOT NULL, PRIMARY KEY PK_hook_management_hook_call(id));
+CREATE TABLE course_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME);
+
+CREATE TABLE session_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME);
 
 ALTER TABLE session ADD COLUMN description TEXT DEFAULT NULL;
 ALTER TABLE session ADD COLUMN show_description TINYINT UNSIGNED DEFAULT 0 AFTER description;
@@ -30,7 +33,7 @@ ALTER TABLE session ADD COLUMN duration int;
 ALTER TABLE session_rel_user ADD COLUMN duration int;
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.5' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.6' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

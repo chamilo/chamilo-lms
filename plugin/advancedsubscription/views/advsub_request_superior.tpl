@@ -60,7 +60,7 @@
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>Estimado:</p>
                         <h2>{{ superior.complete_name }}</h2>
-                        <p>Hemos recibido una solicitud de inscripción de <strong>{{ student.complete_name }}</strong> al curso <strong>{{ session.name }}</strong>, por iniciarse el <strong>{{ session.date_start }}</strong>. Detalles del curso: <strong>{{ sesion.as_description }}</strong>. </p>
+                        <p>Hemos recibido una solicitud de inscripción de <strong>{{ student.complete_name }}</strong> al curso <strong>{{ session.name }}</strong>, por iniciarse el <strong>{{ session.date_start }}</strong>. Detalles del curso: <strong>{{ session.as_description }}</strong>. </p>
                         <p>Le invitamos a aprobar o desarprobar esta inscripción, dando clic en el botón correspondiente a continuación.</p>
                         <table width="100%" border="0" cellspacing="3" cellpadding="4" style="background:#EDE9EA">
                             <tr>

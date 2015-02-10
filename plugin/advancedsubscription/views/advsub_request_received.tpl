@@ -43,7 +43,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">Solicitud recibida para el curso {{ sesion.name }}</td>
+                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">Solicitud recibida para el curso {{ session.name }}</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -60,7 +60,7 @@
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>Estimado:</p>
                         <h2>{{ student.complete_name }}</h2>
-                        <p>Hemos recibido y registrado su solicitud de inscripción al curso <strong>{{ sesion.name }}</strong> para iniciarse el <strong>{{ session.date_start }}</strong>.</p>
+                        <p>Hemos recibido y registrado su solicitud de inscripción al curso <strong>{{ session.name }}</strong> para iniciarse el <strong>{{ session.date_start }}</strong>.</p>
                         <p>Su inscripción es pendiente primero de la aprobación de su superior, y luego de la disponibilidad de cupos. Un correo ha sido enviado a su superior para revisión y aprobación de su solicitud.</p>
                         <p>Gracias.</p>
                         <p><strong>Equipo Forge</strong></p></td>

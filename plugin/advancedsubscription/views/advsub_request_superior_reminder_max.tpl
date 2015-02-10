@@ -60,7 +60,7 @@
         <td height="356">&nbsp;</td>
         <td valign="top"><p>Estimado:</p>
           <h2>{{ superior.complete_name }}</h2>
-          <p>Le recordamos que hemos recibido las siguientes solicitudes de suscripción<strong> </strong>al curso <strong>{{ session.name }}</strong> de parte de sus colaboradores. El curso se iniciará el <strong>{{ session.date_start }}</strong>. Detalles del curso: <strong>{{ sesion.as_description }}</strong>. </p>
+          <p>Le recordamos que hemos recibido las siguientes solicitudes de suscripción<strong> </strong>al curso <strong>{{ session.name }}</strong> de parte de sus colaboradores. El curso se iniciará el <strong>{{ session.date_start }}</strong>. Detalles del curso: <strong>{{ session.as_description }}</strong>. </p>
           <p>Este curso tiene una cantidad de cupos limitados y ha recibido una alta tasa de solicitudes de inscripción, por lo que recomendamos que cada área apruebe un máximo de <strong>{{ session.recommended_number_of_participants }}</strong> candidatos. Le invitamos a aprobar o desaprobar las suscripciones, dando clic en el botón correspondiente a continuación para cada colaborador.</p>
           <table width="100%" border="0" cellspacing="3" cellpadding="4" style="background:#EDE9EA">
             {% for student in students %}

@@ -118,7 +118,9 @@ if (!empty($flat_list)) {
         echo '<th width="300px">'.get_lang('AuthoringOptions')."</th>";
     } else {
         echo '<th width="50%">'.get_lang('Title').'</th>';
-        echo '<th>'.get_lang('Progress')."</th>";
+        if (!api_is_invitee()) {
+            echo '<th>'.get_lang('Progress')."</th>";
+        }
         echo '<th>'.get_lang('Actions')."</th>";
     }
     echo '</tr>';
@@ -226,17 +228,25 @@ if (!empty($flat_list)) {
         $dsp_debug = '';
         $dsp_order = '';
 
-        $progress = learnpath::getProgress(
-            $id,
-            $userId,
-            api_get_course_int_id(),
-            api_get_session_id()
-        );
+        $progress = 0;
+
+        if (!api_is_invitee()) {
+            $progress = learnpath::getProgress(
+                $id,
+                $userId,
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+        }
 
         if ($is_allowed_to_edit) {
             $dsp_progress = '<td><center>'.$progress.'</center></td>';
         } else {
-            $dsp_progress = '<td>'.learnpath::get_progress_bar($progress, '%').'</td>';
+            $dsp_progress = "";
+
+            if (!api_is_invitee()) {
+                $dsp_progress = '<td>'.learnpath::get_progress_bar($progress, '%').'</td>';
+            }
         }
 
         $dsp_edit = '<td class="td_actions">';

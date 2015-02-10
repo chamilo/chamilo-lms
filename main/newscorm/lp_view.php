@@ -255,7 +255,7 @@ if (!empty($_REQUEST['exeId']) &&
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
 
-        if (Database::num_rows($res_last_attempt)) {
+        if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
         	$row_last_attempt = Database::fetch_row($res_last_attempt);
         	$lp_item_view_id  = $row_last_attempt[0];
             $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
@@ -325,7 +325,10 @@ if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -
     $lp_theme_css = $my_style;
 }
 
-$progress_bar   = $_SESSION['oLP']->getProgressBar();
+$progress_bar   = "";
+if (!api_is_invitee()) {
+    $progress_bar   = $_SESSION['oLP']->getProgressBar();
+}
 $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 $mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
 

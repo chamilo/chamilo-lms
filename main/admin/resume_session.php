@@ -218,6 +218,17 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 </tr>
 
 <?php
+$sessionField = new ExtraField('session');
+$extraFieldData = $sessionField->getDataAndFormatedValues($sessionId);
+
+foreach ($extraFieldData as $displayExtraField) {
+?>
+    <tr>
+        <td><?php echo $displayExtraField['text'] ?></td>
+        <td><?php echo $displayExtraField['value'] ?></td>
+    </tr>
+<?php
+}
 
 $multiple_url_is_on = api_get_multiple_access_url();
 

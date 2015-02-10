@@ -182,6 +182,9 @@ if (api_is_platform_admin()) {
     if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
         $items[] = array('url'=>'ldap_import_students.php', 'label' => get_lang('ImportLDAPUsersIntoCourse'));
     }
+
+    $items[] = array('url'=>'extra_fields.php?type=course', 	'label' => get_lang('ManageCourseFields'));
+
     $blocks['courses']['items'] = $items;
     $blocks['courses']['extra'] = null;
 
@@ -279,6 +282,8 @@ if (api_is_platform_admin()) {
     }
     $items[] = array('url'=>'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
 }
+
+$items[] = array('url'=>'extra_fields.php?type=session', 	'label' => get_lang('ManageSessionFields'));
 
 $blocks['sessions']['items'] = $items;
 $blocks['sessions']['extra'] = null;

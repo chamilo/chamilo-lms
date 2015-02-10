@@ -212,6 +212,7 @@ $status[STUDENT] 		= get_lang('Learner');
 $status[DRH] 			= get_lang('Drh');
 $status[SESSIONADMIN] 	= get_lang('SessionsAdmin');
 $status[STUDENT_BOSS] 	= get_lang('RoleStudentBoss');
+$status[INVITEE] 	= get_lang('Invitee');
 
 $form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();','class'=>'chzn-select'));
 

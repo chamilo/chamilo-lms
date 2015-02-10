@@ -71,12 +71,8 @@ class SessionManager
      * */
     public static function create_session(
         $sname,
-        $syear_start,
-        $smonth_start,
-        $sday_start,
-        $syear_end,
-        $smonth_end,
-        $sday_end,
+        $startDate,
+        $endDate,
         $snb_days_acess_before,
         $snb_days_acess_after,
         $nolimit,
@@ -111,12 +107,6 @@ class SessionManager
         }
 
         $name = Database::escape_string(trim($sname));
-        $year_start = intval($syear_start);
-        $month_start = intval($smonth_start);
-        $day_start = intval($sday_start);
-        $year_end = intval($syear_end);
-        $month_end = intval($smonth_end);
-        $day_end = intval($sday_end);
         $nb_days_acess_before = intval($snb_days_acess_before);
         $nb_days_acess_after = intval($snb_days_acess_after);
         $id_session_category = intval($id_session_category);
@@ -133,8 +123,8 @@ class SessionManager
         }
 
         if (empty($nolimit)) {
-            $date_start = "$year_start-" . (($month_start < 10) ? "0$month_start" : $month_start) . "-" . (($day_start < 10) ? "0$day_start" : $day_start);
-            $date_end = "$year_end-" . (($month_end < 10) ? "0$month_end" : $month_end) . "-" . (($day_end < 10) ? "0$day_end" : $day_end);
+            $date_start = Database::escape_string($startDate);
+            $date_end = Database::escape_string($endDate);
         } else {
             $id_visibility = 1; // by default session visibility is read only
             $date_start = "0000-00-00";
@@ -156,10 +146,10 @@ class SessionManager
         } elseif (empty($coach_username)) {
             $msg = get_lang('CoachIsRequired');
             return $msg;
-        } elseif (!empty($start_limit) && empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
+        } elseif (!empty($start_limit) && empty($nolimit) && !api_is_valid_date($date_start, 'Y-m-d')) {
             $msg = get_lang('InvalidStartDate');
             return $msg;
-        } elseif (!empty($end_limit) && empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end, $day_end, $year_end))) {
+        } elseif (!empty($end_limit) && empty($nolimit) && !api_is_valid_date($date_end, 'Y-m-d')) {
             $msg = get_lang('InvalidEndDate');
             return $msg;
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
@@ -217,6 +207,11 @@ class SessionManager
                 }
 
                 if (!empty($session_id)) {
+                    $extraFields['session_id'] = $session_id;
+
+                    $sessionFieldValue = new ExtraFieldValue('session');
+                    $sessionFieldValue->save_field_values($extraFields);
+
                     /*
                       Sends a message to the user_id = 1
 
@@ -1350,12 +1345,8 @@ class SessionManager
     public static function edit_session(
         $id,
         $name,
-        $year_start,
-        $month_start,
-        $day_start,
-        $year_end,
-        $month_end,
-        $day_end,
+        $startDate,
+        $endDate,
         $nb_days_acess_before,
         $nb_days_acess_after,
         $nolimit,
@@ -1366,7 +1357,8 @@ class SessionManager
         $end_limit = true,
         $description = null,
         $showDescription = 0,
-        $duration = null
+        $duration = null,
+        $extraFields = array()
     ) {
         $name = trim(stripslashes($name));
         $year_start = intval($year_start);
@@ -1384,8 +1376,8 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         if (empty($nolimit)) {
-            $date_start = "$year_start-" . (($month_start < 10) ? "0$month_start" : $month_start) . "-" . (($day_start < 10) ? "0$day_start" : $day_start);
-            $date_end = "$year_end-" . (($month_end < 10) ? "0$month_end" : $month_end) . "-" . (($day_end < 10) ? "0$day_end" : $day_end);
+            $date_start = Database::escape_string($startDate);
+            $date_end = Database::escape_string($endDate);
         } else {
             $date_start = "0000-00-00";
             $date_end = "0000-00-00";
@@ -1411,10 +1403,10 @@ class SessionManager
         } elseif (empty($id_coach)) {
             $msg = get_lang('CoachIsRequired');
             return $msg;
-        } elseif (!empty($start_limit) && empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
+        } elseif (!empty($start_limit) && empty($nolimit) && !api_is_valid_date($date_start, 'Y-m-d')) {
             $msg = get_lang('InvalidStartDate');
             return $msg;
-        } elseif (!empty($end_limit) && empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end, $day_end, $year_end))) {
+        } elseif (!empty($end_limit) && empty($nolimit) && !api_is_valid_date($date_end, 'Y-m-d')) {
             $msg = get_lang('InvalidEndDate');
             return $msg;
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
@@ -1459,6 +1451,11 @@ class SessionManager
                 Database::update($tbl_session, $values, array(
                     'id = ?' => $id
                 ));
+
+                $extraFields['session_id'] = $id;
+
+                $sessionFieldValue = new ExtraFieldValue('session');
+                $sessionFieldValue->save_field_values($extraFields);
 
                 return $id;
             }

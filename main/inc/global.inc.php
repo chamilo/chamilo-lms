@@ -102,9 +102,13 @@ require_once $lib_path.'database.lib.php';
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'array.lib.php';
 require_once $lib_path.'events.lib.inc.php';
-require_once $lib_path.'model.lib.php';
 require_once $lib_path.'course.lib.php';
 require_once $lib_path.'online.inc.php';
+
+define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
+if (!is_dir(_MPDF_TEMP_PATH)) {
+    mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
+}
 
 /*  DATABASE CONNECTION  */
 

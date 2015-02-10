@@ -36,7 +36,8 @@
         "zendframework/zend-config": "2.3.3",
         "ezyang/htmlpurifier": "4.6.0",
         "szymach/c-pchart": "1.*",
-        "aferrandini/phpqrcode": "1.0.1"
+        "aferrandini/phpqrcode": "1.0.1",
+        "mpdf/mpdf": "5.7.4"
     },
     "extra": {
         "branch-alias": {

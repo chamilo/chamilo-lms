@@ -94,7 +94,6 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
  * @return void
  */
 function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf) {
-	require_once api_get_path(LIBRARY_PATH).'mpdf/mpdf.php';
 
 	$mpdf = new mPDF('UTF-8', 'A4-L', '', '', 15, 10, 35, 20, 4, 2, 'L');
 	$mpdf->useOnlyCoreFonts = true;

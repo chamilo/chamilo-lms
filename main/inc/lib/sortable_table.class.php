@@ -568,9 +568,9 @@ class SortableTable extends HTML_Table
      */
     public function get_table_html()
     {
-        $pager    = $this->get_pager();
-        $offset   = $pager->getOffsetByPageId();
-        $from     = $offset[0] - 1;
+        $pager = $this->get_pager();
+        $offset = $pager->getOffsetByPageId();
+        $from = $offset[0] - 1;
 
         $table_data = $this->get_table_data($from);
 
@@ -718,6 +718,7 @@ class SortableTable extends HTML_Table
             if ($this->column == $column && $this->direction == 'ASC') {
                 $param['direction'] = 'DESC';
             }
+
             $param['page_nr'] = $this->page_nr;
             $param['per_page'] = $this->per_page;
             $param['column'] = $column;

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "14f25295cfdba7534deecf11519b2d22",
+    "hash": "6278d7d871b000bcfc52ed6726bc22e5",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -423,6 +423,49 @@
             "time": "2014-12-29 21:29:35"
         },
         {
+            "name": "mpdf/mpdf",
+            "version": "v5.7.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/finwe/mpdf.git",
+                "reference": "f9a374c7ea975ce8c795cec4dfd17ef55addac9c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/finwe/mpdf/zipball/f9a374c7ea975ce8c795cec4dfd17ef55addac9c",
+                "reference": "f9a374c7ea975ce8c795cec4dfd17ef55addac9c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=4.3.10"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "mpdf.php",
+                    "classes"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-1.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Ian Back"
+                }
+            ],
+            "description": "A PHP class to generate PDF files from HTML with Unicode/UTF-8 and CJK support",
+            "homepage": "http://www.mpdf1.com/mpdf/index.php",
+            "keywords": [
+                "pdf",
+                "php",
+                "utf-8"
+            ],
+            "time": "2014-12-14 18:32:11"
+        },
+        {
             "name": "neutron/temporary-filesystem",
             "version": "2.1.1",
             "source": {
@@ -568,6 +611,33 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "ros/ezpdf",
+            "version": "0.12.0-RC17",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/didaxRedux/php-ezPDF.git",
+                "reference": "62e09bc84985e848645c6ae359cc8be4275cfd32"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/didaxRedux/php-ezPDF/zipball/62e09bc84985e848645c6ae359cc8be4275cfd32",
+                "reference": "62e09bc84985e848645c6ae359cc8be4275cfd32",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Porting of the well-known R&OS PDF class.",
+            "time": "2014-09-30 15:15:44"
         },
         {
             "name": "sabre/vobject",
@@ -1166,7 +1236,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "php-ffmpeg/php-ffmpeg": 20
+        "php-ffmpeg/php-ffmpeg": 20,
+        "ros/ezpdf": 5
     },
     "prefer-stable": false,
     "prefer-lowest": false,

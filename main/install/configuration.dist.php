@@ -286,6 +286,8 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['exercise_max_fckeditors_in_page'] = 0;
 // Default upload option
 //$_configuration['document_if_file_exists_option'] = 'rename'; // overwrite
+// Which OpenBadges backpack send the badges
+//$_configuration['openbadges_backpack'] = 'https://backpack.openbadges.org/';
 // Custom name_order_conventions
 //$_configuration['name_order_conventions'] = array(
 //  'french' => array('format' => 'title last_name first_name',  'sort_by' => 'last_name')

@@ -37,3 +37,8 @@ nbproject/*
 plugin/bbb/config.vm.php
 
 main/cron/incoming/
+
+data/*
+!data/index.html
+data/badges/*
+!data/badges/index.html

@@ -36,8 +36,7 @@ require_once 'lib/gradebook_data_generator.class.php';
 require_once 'lib/fe/gradebooktable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/userform.class.php';
-require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
-require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
+
 /*
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.min.css');
 $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.min.js');

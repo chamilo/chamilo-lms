@@ -20,20 +20,17 @@ $language_file = array(
 
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
-require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
 api_block_anonymous_users();
 
-if (!api_is_allowed_to_create_course() && !api_is_session_admin() && !api_is_drh()) {
+if (!api_is_allowed_to_create_course() && !api_is_session_admin() && !api_is_drh() && !api_is_student_boss()) {
     // Check if the user is tutor of the course
     $user_course_status = CourseManager::get_tutor_in_course_status(
         api_get_user_id(),
@@ -230,7 +227,7 @@ $courses_in_session = array();
 //See #4676
 $drh_can_access_all_courses = false;
 
-if (api_is_drh() || api_is_platform_admin()) {
+if (api_is_drh() || api_is_platform_admin() || api_is_student_boss()) {
     $drh_can_access_all_courses = true;
 }
 

@@ -4,7 +4,6 @@
  * @author Eric Marguin <eric.marguin@dokeos.com>
  */
 require_once '../../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'nusoap/nusoap.php';
 
 /**
  * Import users into database from a file located on the server.

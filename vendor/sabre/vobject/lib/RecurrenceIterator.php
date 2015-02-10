@@ -10,7 +10,7 @@ use Sabre\VObject\Recur\EventIterator;
  * This class is deprecated. Use Sabre\VObject\Recur\EventIterator instead.
  * This class will be removed from a future version.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @deprecated
  * @license http://sabre.io/license Modified BSD License

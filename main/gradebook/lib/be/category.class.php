@@ -292,7 +292,6 @@ class Category implements GradebookItem
                 // otherwise a special parameter is given to ask explicitely
                 $sql .= " AND (session_id IS NULL OR session_id = 0) ";
             } else {*/
-
             if (empty($session_id)) {
                 $sql .= ' AND (session_id IS NULL OR session_id = 0) ';
             } else {
@@ -326,14 +325,15 @@ class Category implements GradebookItem
                 $sql .= ' '.$order_by;
             }
         }
-        $result = Database::query($sql);
-        $allcat = array();
 
+        $result = Database::query($sql);
+
+        $categories = array();
         if (Database::num_rows($result) > 0) {
-            $allcat = Category::create_category_objects_from_sql_result($result);
+            $categories = Category::create_category_objects_from_sql_result($result);
         }
 
-        return $allcat;
+        return $categories;
     }
 
     /**
@@ -731,7 +731,7 @@ class Category implements GradebookItem
      */
     public function calc_score($stud_id = null, $course_code = '', $session_id = null)
     {
-        // get appropriate subcategories, evaluations and links
+        // Get appropriate subcategories, evaluations and links
         if (!empty($course_code)) {
             $cats  = $this->get_subcategories($stud_id, $course_code, $session_id);
             $evals = $this->get_evaluations($stud_id, false, $course_code);
@@ -782,10 +782,9 @@ class Category implements GradebookItem
         }
 
         if (!empty($links)) {
-            /** @var EvalLink $link */
+            /** @var EvalLink|ExerciseLink $link */
             foreach ($links as $link) {
                 $linkres = $link->calc_score($stud_id);
-
                 if (!empty($linkres) && $link->get_weight() != 0) {
                     $linkweight = $link->get_weight();
                     $link_res_denom = $linkres[1] == 0 ? 1 : $linkres[1];
@@ -1296,14 +1295,23 @@ class Category implements GradebookItem
 
         // 1 student
         if (isset($stud_id)) {
-            // special case: this is the root
+            // Special case: this is the root
             if ($this->id == 0) {
                 return Category::get_root_categories_for_student($stud_id, $course_code, $session_id);
             } else {
-                return Category::load(null,null, $course_code, $this->id, api_is_allowed_to_edit() ? null : 1, $session_id, $order);
+                return Category::load(
+                    null,
+                    null,
+                    $course_code,
+                    $this->id,
+                    api_is_allowed_to_edit() ? null : 1,
+                    $session_id,
+                    $order
+                );
             }
-        } else {// all students
-            // course admin
+        } else {
+            // All students
+            // Course admin
             if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
                 // root
                 if ($this->id == 0) {

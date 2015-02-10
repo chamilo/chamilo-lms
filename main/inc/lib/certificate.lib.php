@@ -167,8 +167,11 @@ class Certificate extends Model
 
             //If the gradebook is related to skills we added the skills to the user
 
+            $courseId = api_get_real_course_id();
+            $sessionId = api_get_session_id();
+
             $skill = new Skill();
-            $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id']);
+            $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id'], $courseId, $sessionId);
 
             if (is_dir($this->certification_user_path)) {
                 if (!empty($this->certificate_data)) {
@@ -261,9 +264,8 @@ class Certificate extends Model
     {
         //Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
-            require_once api_get_path(LIBRARY_PATH).'phpqrcode/qrlib.php';
             //L low, M - Medium, L large error correction
-            return QRcode::png($text, $path, 'M', 2, 2);
+            return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
         }
         return false;
     }

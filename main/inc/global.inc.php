@@ -84,7 +84,7 @@ if (api_get_setting('login_is_email') == 'true') {
 define('USERNAME_MAX_LENGTH', $default_username_length);
 
 // Do not over-use this variable. It is only for this script's local use.
-$lib_path = api_get_path(LIBRARY_PATH);
+$lib_path = dirname(__FILE__).'/../../main/inc/lib/';
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
@@ -96,15 +96,19 @@ ini_set('include_path', api_create_include_path_setting());
 ini_set('auto_detect_line_endings', '1');
 
 // Include the libraries that are necessary everywhere
-require_once dirname(__FILE__).'/autoload.inc.php';
+require_once dirname(__FILE__).'/../../vendor/autoload.php';
 
 require_once $lib_path.'database.lib.php';
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'array.lib.php';
 require_once $lib_path.'events.lib.inc.php';
-require_once $lib_path.'model.lib.php';
 require_once $lib_path.'course.lib.php';
 require_once $lib_path.'online.inc.php';
+
+define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
+if (!is_dir(_MPDF_TEMP_PATH)) {
+    mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
+}
 
 /*  DATABASE CONNECTION  */
 
@@ -115,14 +119,20 @@ if (empty($_configuration['statistics_database']) && $already_installed) {
 global $database_connection;
 // Connect to the server database and select the main chamilo database.
 // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
-if (!($conn_return = @Database::connect(
-    array(
-        'server'        => $_configuration['db_host'],
-        'username'      => $_configuration['db_user'],
-        'password'      => $_configuration['db_password'],
-        'persistent'    => $_configuration['db_persistent_connection']
-    )))
-) {
+$dbPersistConnection = api_get_configuration_value('db_persistent_connection');
+// $_configuration['db_client_flags'] can be set in configuration.php to pass
+// flags to the DB connection
+$dbFlags = api_get_configuration_value('db_client_flags');
+
+$params = array(
+    'server' => $_configuration['db_host'],
+    'username' => $_configuration['db_user'],
+    'password' => $_configuration['db_password'],
+    'persistent' => $dbPersistConnection,
+    'client_flags' => $dbFlags,
+);
+
+if (!($conn_return = @Database::connect($params))) {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.
     require $includePath.'/global_error_message.inc.php';

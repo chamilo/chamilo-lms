@@ -14,6 +14,8 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
+$nameTools = get_lang('Students');
+
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
@@ -49,7 +51,7 @@ function get_count_users()
         $lastConnectionDate,
         null,
         null,
-        STUDENT
+        api_is_student_boss() ? null : STUDENT
     );
     return $count;
 }
@@ -85,7 +87,7 @@ function get_users($from, $limit, $column, $direction)
                 $lastConnectionDate,
                 null,
                 null,
-                STUDENT
+                api_is_student_boss() ? null : STUDENT
             );
             $drhLoaded = true;
         }
@@ -94,7 +96,7 @@ function get_users($from, $limit, $column, $direction)
     if ($drhLoaded == false) {
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
-            STUDENT,
+            api_is_student_boss() ? null : STUDENT,
             false,
             false,
             false,
@@ -104,7 +106,7 @@ function get_users($from, $limit, $column, $direction)
             $direction,
             $active,
             $lastConnectionDate,
-            COURSEMANAGER,
+            api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
             $keyword
         );
     }
@@ -178,7 +180,7 @@ if ($export_csv) {
 }
 
 $sort_by_first_name = api_sort_by_first_name();
-$actions .= '<div class="actions">';
+$actions = '<div class="actions">';
 
 if (api_is_drh()) {
     $menu_items = array(
@@ -186,7 +188,11 @@ if (api_is_drh()) {
         Display::url(Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), '#'),
         Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php'),
         Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),
-        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php')
+        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php'),
+        Display::url(
+            Display::return_icon('skills.png', get_lang('Skills'), array(), ICON_SIZE_MEDIUM),
+            'skills.php'
+        )
     );
 
     $nb_menu_items = count($menu_items);
@@ -195,6 +201,15 @@ if (api_is_drh()) {
             $actions .= $item;
         }
     }
+} else if (api_is_student_boss()) {
+    $actions .= Display::url(
+        Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+    );
+    $actions .= Display::url(
+        Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
+        '#'
+    );
 }
 
 $actions .= '<span style="float:right">';

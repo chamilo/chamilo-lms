@@ -87,8 +87,6 @@ if (isset ($_GET['exportpdf'])) {
         }
     }
     $html .= $table->toHtml();
-
-    require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
     $pdf = new PDF();
     $pdf->content_to_pdf($html);
     exit;

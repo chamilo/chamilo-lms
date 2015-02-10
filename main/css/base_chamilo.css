@@ -1003,41 +1003,7 @@ padding-top: 0px;   padding-right: 0px; padding-bottom: 0px;    padding-left: 0p
 .skip {
     display: none;
 }
-/* Survey  */
-#survey_title {
-    background-color:#dcdcdc;
-    color:#000;
-    padding:2px;
-}
-#survey_subtitle {
-    background-color:#dcdcdc;
-    color:#000;
-    padding:2px;
-}
-.survey_content {
-    background-color:#a0e5fc;
-    color:#264269;
-    padding:5px;
-    border: 1px solid #999;
-    margin-top: 4px;
-}
-.survey_question_wrapper {
-    border: 1px solid #999;
-    margin-top:4px;
-}
-.survey_question {
-    /* 264269 4271b5 E5EDF9 */
-    background-color:#E5EDF9;
-    color:#999;
-    padding:5px;/*border: 1px solid #264269;*/
-}
-.survey_question_options {
-    /* 264269 4271b5 E5EDF9 */
-    background-color:#FFF;
-    color:#000;
-    padding:5px;/*border: 1px solid #264269;*/
-}
-/*
+
  Added: to fit img and blocks in home page
 */
 #hellomindfactory {

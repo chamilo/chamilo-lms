@@ -1,9 +1,6 @@
 <?php
 /* See license terms in /license.txt */
 
-require_once 'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
-
 /**
  *  This is the export library for Chamilo.
  *	Include/require it in your code to use its functionality.

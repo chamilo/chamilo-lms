@@ -4966,7 +4966,6 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
     switch ($format) {
         case 'pdf':
             if (!empty($workPerUser)) {
-                require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
                 $pdf = new PDF();
 
                 $content = null;
@@ -5060,7 +5059,6 @@ function exportAllStudentWorkFromPublication(
     switch ($format) {
         case 'pdf':
             if (!empty($workList)) {
-                require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
                 $table = new HTML_Table(array('class' => 'data_table'));
                 $headers = array(

@@ -13,8 +13,7 @@ ob_start();
 $language_file = array('registration', 'index', 'trad4all', 'tracking');
 $cidReset = true;
 
-require '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH) . 'mySpace/myspace.lib.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
 

@@ -51,7 +51,8 @@ $sql = 'SELECT
             nb_days_access_before_beginning,
             nb_days_access_after_end,
             session_category_id,
-            visibility
+            visibility,
+            show_description, description
 		FROM '.$tbl_session.'
 		LEFT JOIN '.$tbl_user.'
 		ON id_coach = user_id
@@ -232,18 +233,24 @@ if ($multiple_url_is_on) {
     echo '</td></tr>';
 }
 
-if (SessionManager::durationPerUserIsEnabled()) {
-    $sessionInfo = api_get_session_info($sessionId);
-    echo '<tr><td>';
-    echo get_lang('Duration');
-    echo '</td>';
-    echo '<td>';
-    echo $sessionInfo['duration'].' ';
-    echo get_lang('Days');
-    echo '</td></tr>';
+$sessionInfo = api_get_session_info($sessionId);
+echo '<tr><td>';
+echo get_lang('Duration');
+echo '</td>';
+echo '<td>';
+echo $sessionInfo['duration'].' ';
+echo get_lang('Days');
+echo '</td></tr>';
 
-}
 ?>
+    <tr>
+        <td><?php echo get_lang('Description'); ?></td>
+        <td><?php echo $session['description'] ?></td>
+    </tr>
+    <tr>
+        <td><?php echo get_lang('ShowDescription'); ?></td>
+        <td><?php echo $session['show_description'] == 1 ? get_lang('Yes') : get_lang('No') ?></td>
+    </tr>
 </table>
 <br />
 
@@ -273,10 +280,7 @@ if ($session['nbr_courses'] == 0) {
 } else {
 	// select the courses
 
-    $orderBy = "ORDER BY title";
-    if (SessionManager::orderCourseIsEnabled()) {
-        $orderBy = "ORDER BY position";
-    }
+    $orderBy = "ORDER BY position";
 
 	$sql = "SELECT code,title,visual_code, nbr_users
 			FROM $tbl_course, $tbl_session_rel_course
@@ -332,33 +336,31 @@ if ($session['nbr_courses'] == 0) {
 
         $orderButtons = null;
 
-        if (SessionManager::orderCourseIsEnabled()) {
-            $upIcon = 'up.png';
-            $urlUp = api_get_self().'?id_session='.$sessionId.'&course_code='.$course['code'].'&action=move_up';
+        $upIcon = 'up.png';
+        $urlUp = api_get_self().'?id_session='.$sessionId.'&course_code='.$course['code'].'&action=move_up';
 
-            if ($count == 0) {
-                $upIcon = 'up_na.png';
-                $urlUp = '#';
-            }
-
-            $orderButtons = Display::url(
-                Display::return_icon($upIcon, get_lang('MoveUp')),
-                $urlUp
-            );
-
-            $downIcon = 'down.png';
-            $downUrl = api_get_self().'?id_session='.$sessionId.'&course_code='.$course['code'].'&action=move_down';
-
-            if ($count +1 == count($courses)) {
-                $downIcon = 'down_na.png';
-                $downUrl = '#';
-            }
-
-            $orderButtons .= Display::url(
-                Display::return_icon($downIcon, get_lang('MoveDown')),
-                $downUrl
-            );
+        if ($count == 0) {
+            $upIcon = 'up_na.png';
+            $urlUp = '#';
         }
+
+        $orderButtons = Display::url(
+            Display::return_icon($upIcon, get_lang('MoveUp')),
+            $urlUp
+        );
+
+        $downIcon = 'down.png';
+        $downUrl = api_get_self().'?id_session='.$sessionId.'&course_code='.$course['code'].'&action=move_down';
+
+        if ($count +1 == count($courses)) {
+            $downIcon = 'down_na.png';
+            $downUrl = '#';
+        }
+
+        $orderButtons .= Display::url(
+            Display::return_icon($downIcon, get_lang('MoveDown')),
+            $downUrl
+        );
 
 		$orig_param = '&origin=resume_session';
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
@@ -449,14 +451,12 @@ if (!empty($userList)) {
         }
 
         $editUrl = null;
-        if (SessionManager::durationPerUserIsEnabled()) {
-            if (isset($sessionInfo['duration']) && !empty($sessionInfo['duration'])) {
-                $editUrl = api_get_path(WEB_CODE_PATH) . 'admin/session_user_edit.php?session_id=' . $sessionId . '&user_id=' . $userId;
-                $editUrl = Display::url(
-                    Display::return_icon('agenda.png', get_lang('SessionDurationEdit')),
-                    $editUrl
-                );
-            }
+        if (isset($sessionInfo['duration']) && !empty($sessionInfo['duration'])) {
+            $editUrl = api_get_path(WEB_CODE_PATH) . 'admin/session_user_edit.php?session_id=' . $sessionId . '&user_id=' . $userId;
+            $editUrl = Display::url(
+                Display::return_icon('agenda.png', get_lang('SessionDurationEdit')),
+                $editUrl
+            );
         }
 
         $table->setCellContents($row, 0, $userLink);
@@ -481,14 +481,3 @@ if (!empty($userList)) {
 }
 
 Display :: display_footer();
-
-/*
- ALTER TABLE session_rel_course ADD COLUMN position int;
- ALTER TABLE session_rel_course ADD COLUMN category varchar(255);
-
- https://task.beeznest.com/issues/8317:
-
- ALTER TABLE session ADD COLUMN duration int;
- ALTER TABLE session_rel_user ADD COLUMN duration int;
- *
-*/

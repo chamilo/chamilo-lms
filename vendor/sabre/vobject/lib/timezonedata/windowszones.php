@@ -6,7 +6,7 @@
  * Last update: 2014-10-03T07:58:31-04:00
  * Source: http://unicode.org/repos/cldr/trunk/common/supplemental/windowsZones.xml
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @license http://sabre.io/license/ Modified BSD License
  */
 

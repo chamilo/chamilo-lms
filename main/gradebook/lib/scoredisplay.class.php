@@ -364,9 +364,11 @@ class ScoreDisplay
                 return $this->display_as_div($score).' (' . $this->display_as_percent($score) . ')'.$custom;
             case SCORE_DIV_SIMPLE_WITH_CUSTOM :         // X - Good!
                 $custom = $this->display_custom($score);
+
                 if (!empty($custom)) {
                     $custom = ' - '.$custom;
                 }
+
                 return $this->display_simple_score($score).$custom;
                 break;
             case SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS:
@@ -377,7 +379,7 @@ class ScoreDisplay
                 $score = $this->display_simple_score($score);
 
                 //needs sudo apt-get install php5-intl
-                if (class_exists(NumberFormatter)) {
+                if (class_exists('NumberFormatter')) {
                     $iso = api_get_language_isocode();
                     $f = new NumberFormatter($iso, NumberFormatter::SPELLOUT);
                     $letters = $f->format($score);

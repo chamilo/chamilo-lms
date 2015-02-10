@@ -125,7 +125,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-
     /**
      * @expectedException Sabre\VObject\ParseException
      */
@@ -154,6 +153,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('propValue', $result->children[0]->getValue());
 
     }
+
     function testReadNestedComponent() {
 
         $data = array(
@@ -294,6 +294,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('paramvalue', $result->parameters['PARAMNAME']->getValue());
 
     }
+
     function testReadPropertyParameterNewLines() {
 
         $data = "BEGIN:VCALENDAR\r\nPROPNAME;PARAMNAME=paramvalue1^nvalue2^^nvalue3:propValue\r\nEND:VCALENDAR";
@@ -354,7 +355,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals($expected, $result->serialize());
 
-
     }
 
     function testReadWithInvalidLine() {
@@ -385,7 +385,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase {
         ));
 
         $this->assertEquals($expected, $result->serialize());
-
 
     }
 
@@ -433,6 +432,17 @@ ICS;
     public function testReadBrokenInput() {
 
         Reader::read(false);
+
+    }
+
+    public function testReadBOM() {
+
+        $data = chr(0xef) . chr(0xbb) . chr(0xbf) . "BEGIN:VCALENDAR\r\nEND:VCALENDAR";
+        $result = Reader::read($data);
+
+        $this->assertInstanceOf('Sabre\\VObject\\Component', $result);
+        $this->assertEquals('VCALENDAR', $result->name);
+        $this->assertEquals(0, count($result->children));
 
     }
 

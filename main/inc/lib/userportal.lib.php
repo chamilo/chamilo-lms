@@ -324,7 +324,7 @@ class IndexManager
         if (api_get_setting('allow_skills_tool') == 'true') {
             $content = '<ul class="nav nav-list">';
 
-            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'));
+            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'));
 
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
 
@@ -719,8 +719,8 @@ class IndexManager
                     'sessionVar'   => basename(__FILE__, '.php'),
                     'imageOptions' => array(
                         'font_size' => 20,
-                        'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
-                        'font_file' => 'tahoma.ttf',
+                        'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                        'font_file' => 'OpenSans-Regular.ttf',
                         //'output' => 'gif'
                     )
                 );
@@ -1047,7 +1047,7 @@ class IndexManager
                         $date_session_start = $session['date_start'];
                         $date_session_end = $session['date_end'];
                         $days_access_before_beginning  = $session['nb_days_access_before_beginning'];
-                        $days_access_after_end  = $session['nb_days_access_after_end'];
+                        $days_access_after_end = $session['nb_days_access_after_end'];
 
                         $session_now = time();
                         $count_courses_session = 0;
@@ -1076,7 +1076,10 @@ class IndexManager
                                     }
                                 }
                             }
-                            if ($session_now > $allowed_time && $days_access_after_end > $dif_time_after - 1) {
+
+                            if ($session_now > $allowed_time &&
+                                $days_access_after_end > $dif_time_after - 1
+                            ) {
                                 // Read only and accessible.
                                 $atLeastOneCourseIsVisible = true;
 
@@ -1104,7 +1107,12 @@ class IndexManager
                         if ($count_courses_session > 0) {
                             $params = array();
                             $session_box = Display::get_session_title_box($session_id);
-                            $params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
+                            $params['icon'] = Display::return_icon(
+                                'window_list.png',
+                                $session_box['title'],
+                                array('id' => 'session_img_' . $session_id),
+                                ICON_SIZE_LARGE
+                            );
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
                             $extra_info .= isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
@@ -1113,7 +1121,15 @@ class IndexManager
                                 $session_link = $session_box['title'];
                                 $params['link'] = null;
                             } else {
-                                $session_link = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
+                                $session_link = Display::tag(
+                                    'a',
+                                    $session_box['title'],
+                                    array(
+                                        'href' => api_get_path(
+                                                WEB_CODE_PATH
+                                            ) . 'session/index.php?session_id=' . $session_id
+                                    )
+                                );
                                 $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                             }
 
@@ -1130,15 +1146,21 @@ class IndexManager
                                 // $params['extra'] .=  $html_courses_session;
                             }
 
-                            $params['description'] =  isset($session_box['description']) ? $session_box['description'] : null;
+                            $params['description'] = $session_box['description'];
+                            $params['show_description'] = $session_box['show_description'];
 
                             $parentInfo = CourseManager::course_item_html($params, true);
 
-                            if (isset($_configuration['show_simple_session_info']) && $_configuration['show_simple_session_info']) {
+                            if (isset($_configuration['show_simple_session_info']) &&
+                                $_configuration['show_simple_session_info']
+                            ) {
                                 $params['title'] = $session_box['title'];
                                 $parentInfo = CourseManager::course_item_html_no_icon($params);
                             }
-                            $sessions_with_no_category .= CourseManager::course_item_parent($parentInfo, $html_courses_session);
+                            $sessions_with_no_category .= CourseManager::course_item_parent(
+                                $parentInfo,
+                                $html_courses_session
+                            );
                         }
                     }
                 } else {

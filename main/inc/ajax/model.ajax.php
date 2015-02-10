@@ -658,7 +658,7 @@ switch ($action) {
         $course = api_get_course_info();
         // Used inside get_exam_results_data()
         $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
-        if ($is_allowedToEdit) {
+        if ($is_allowedToEdit || api_is_student_boss()) {
             $columns = array(
                 'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions'
             );

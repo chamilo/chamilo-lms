@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$YourLanguageNotThereContactUs = "Ne najdete svojega jezika na seznamu? Kontaktirajte nas preko e-poštnega naslova info@chamilo.org in prispevajte k razvoju platforme kot prevajalec.";
 $DateTimezoneSettingNotSet = "Detektirano je bilo, da vaša nastavitev PHP ne definira vrednosti date.timezone. Ta je zahtevana s strani Chamilo. Dodajte nastavitev v vaš php.ini, sicer lahko med izvajanjem nekaterih skript prihaja do problemov. Bili ste opozorjeni !";
 $langStatDB = "Sledenje DB.  Uporabno le pri večih DB";
 $langEnableTracking = "Omogoči sledenje";
@@ -122,7 +123,7 @@ $SuggestionOnlyToEnableCSSUploadFeature = "Namig: zgolj v primeru, da želite om
 $SuggestionOnlyToEnableSubLanguageFeature = "Namig: zgolj v primeru, da želite omogočiti zmožnost uporabe pod-jezikov";
 $ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Za zaščito vaših strani naredite celotno mapo %s zgolj bralno (chmod 0555 za Linux) in odstranite mapo %s .";
 $IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Če imate namen nadgraditi Chamilo iz starejše različice, boste verjetno želeli pogledati  <a href=\"../../documentation/changelog.html\" target=\"_blank\">dnevnik sprememb</a>, da bi videli, kaj je novega in kaj je bilo spremenjeno.";
-$WelcomeToTheDokeosInstaller = "Dobrodošli v Chamilo namestitev";
+$WelcomeToTheChamiloInstaller = "Dobrodošli v Chamilo namestitev";
 $PHPVersionError = "Različica nameščenega PHP ne ustreza zahtevam te programske opreme. Nadgradite/popravite namestitev PHP in poskusite znova.";
 $ExtensionSessionsNotAvailable = "Session razširitev ni na voljo";
 $ExtensionZlibNotAvailable = "Zlib razširitev ni na voljo";

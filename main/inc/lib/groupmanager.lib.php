@@ -84,34 +84,31 @@ class GroupManager
      */
     public static function get_group_list($category = null, $course_code = null)
     {
-        $my_user_id = api_get_user_id();
         $course_info = api_get_course_info($course_code);
+        $session_id = api_get_session_id();
 
         $course_id = $course_info['real_id'];
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         $table_group = Database :: get_course_table(TABLE_GROUP);
 
-        //condition for the session
-        $session_id = api_get_session_id();
-
         $sql = "SELECT g.id,
-                        g.name,
-                        g.description,
-                        g.category_id,
-                        g.max_student maximum_number_of_members,
-                        g.secret_directory,
-                        g.self_registration_allowed,
-                        g.self_unregistration_allowed,
-                        g.session_id,
-                        ug.user_id is_member
-                    FROM $table_group g
-                    LEFT JOIN $table_group_user ug
-                    ON (
-                        ug.group_id = g.id AND
-                        ug.user_id = '".api_get_user_id()."' AND
-                        ug.c_id = $course_id AND
-                        g.c_id = $course_id
-                    )";
+                    g.name,
+                    g.description,
+                    g.category_id,
+                    g.max_student maximum_number_of_members,
+                    g.secret_directory,
+                    g.self_registration_allowed,
+                    g.self_unregistration_allowed,
+                    g.session_id,
+                    ug.user_id is_member
+                FROM $table_group g
+                LEFT JOIN $table_group_user ug
+                ON (
+                    ug.group_id = g.id AND
+                    ug.user_id = '".api_get_user_id()."' AND
+                    ug.c_id = $course_id AND
+                    g.c_id = $course_id
+                )";
 
         $sql .= " WHERE 1=1 ";
 
@@ -377,7 +374,7 @@ class GroupManager
     }
 
     /**
-     * deletes groups and their data.
+     * Deletes groups and their data.
      * @author Christophe Gesche <christophe.gesche@claroline.net>
      * @author Hugues Peeters <hugues.peeters@claroline.net>
      * @author Bart Mollet
@@ -389,11 +386,11 @@ class GroupManager
     public static function delete_groups($group_ids, $course_code = null)
     {
         $course_info = api_get_course_info($course_code);
-        $course_id     = $course_info['real_id'];
+        $course_id = $course_info['real_id'];
 
         // Database table definitions
-        $group_table             = Database :: get_course_table(TABLE_GROUP);
-        $forum_table             = Database :: get_course_table(TABLE_FORUM);
+        $group_table = Database:: get_course_table(TABLE_GROUP);
+        $forum_table = Database:: get_course_table(TABLE_FORUM);
 
         $group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
         $group_ids = array_map('intval',$group_ids);
@@ -413,6 +410,8 @@ class GroupManager
 
         // Unsubscribe all users
         self :: unsubscribe_all_users($group_ids);
+        self ::unsubscribe_all_tutors($group_ids);
+
         $sql = "SELECT id, secret_directory, session_id FROM $group_table
                 WHERE c_id = $course_id AND id IN (".implode(' , ', $group_ids).")";
         $db_result = Database::query($sql);
@@ -1084,6 +1083,8 @@ class GroupManager
         $sql = "SELECT user_id FROM $tutor_user_table
                 WHERE c_id = $course_id AND group_id = $group_id";
         $res = Database::query($sql);
+
+        $users = array();
         while ($obj = Database::fetch_object($res)) {
             $users[] = api_get_user_info($obj->user_id);
         }
@@ -1524,10 +1525,10 @@ class GroupManager
     }
 
     /**
-     * Subscribe user(s) to a specified group in current course
+     * Subscribe user(s) to a specified group in current course (as a student)
      * @param mixed $user_ids Can be an array with user-id's or a single user-id
      * @param int $group_id
-     * @return bool TRUE if successfull
+     * @return bool TRUE if successful
      */
     public static function subscribe_users($user_ids, $group_id)
     {
@@ -1567,9 +1568,11 @@ class GroupManager
         foreach ($user_ids as $user_id) {
             $user_id = intval($user_id);
             $group_id = intval($group_id);
-            $sql = "INSERT INTO ".$table_group_tutor." (c_id, user_id, group_id)
-                    VALUES ('$course_id', '".$user_id."', '".$group_id."')";
-            $result &= Database::query($sql);
+            if (self::can_user_subscribe($user_id, $group_id)) {
+                $sql = "INSERT INTO " . $table_group_tutor . " (c_id, user_id, group_id)
+                    VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
+                $result &= Database::query($sql);
+            }
         }
         return $result;
     }
@@ -2266,7 +2269,6 @@ class GroupManager
     }
 
     /**
-     *
      * @param array $groupData
      * @param bool $deleteNotInArray
      * @return array
@@ -2404,6 +2406,27 @@ class GroupManager
                     $data['group_id'] = $groupId;
                     $result['updated']['group'][] = $data;
                 }
+
+                $students = isset($data['students']) ? explode(',', $data['students']) : null;
+                if (!empty($students)) {
+                    $studentUserIdList = array();
+                    foreach ($students as $student) {
+                        $userInfo = api_get_user_info_from_username($student);
+                        $studentUserIdList[] = $userInfo['user_id'];
+                    }
+                    self::subscribe_users($studentUserIdList, $groupId);
+                }
+
+                $tutors = isset($data['tutors']) ? explode(',', $data['tutors']) : null;
+                if (!empty($tutors)) {
+                    $tutorIdList = array();
+                    foreach ($tutors as $tutor) {
+                        $userInfo = api_get_user_info_from_username($tutor);
+                        $tutorIdList[] = $userInfo['user_id'];
+                    }
+                    self::subscribe_tutors($tutorIdList, $groupId);
+                }
+
                 $elementsFound['groups'][] = $groupId;
             }
         }
@@ -2434,9 +2457,11 @@ class GroupManager
     /**
      * Export all categories/group from a course to an array.
      * This function works only in a context of a course.
+     * @param int $groupId
+     * @param bool $loadUsers
      * @return array
      */
-    public static function exportCategoriesAndGroupsToArray()
+    public static function exportCategoriesAndGroupsToArray($groupId = null, $loadUsers = false)
     {
         $data = array();
         $data[] = array(
@@ -2456,25 +2481,35 @@ class GroupManager
             'groups_per_user'
         );
 
-        $categories = GroupManager::get_categories();
+        $count = 1;
 
-        foreach ($categories as $categoryInfo) {
-            $data[] = array(
-                $categoryInfo['title'],
-                null,
-                $categoryInfo['description'],
-                $categoryInfo['announcements_state'],
-                $categoryInfo['calendar_state'],
-                $categoryInfo['chat_state'],
-                $categoryInfo['doc_state'],
-                $categoryInfo['forum_state'],
-                $categoryInfo['work_state'],
-                $categoryInfo['wiki_state'],
-                $categoryInfo['max_student'],
-                $categoryInfo['self_reg_allowed'],
-                $categoryInfo['self_unreg_allowed'],
-                $categoryInfo['groups_per_user']
-            );
+        if ($loadUsers) {
+            $data[0][] = 'students';
+            $data[0][] = 'tutors';
+        }
+
+        if ($loadUsers == false) {
+            $categories = GroupManager::get_categories();
+
+            foreach ($categories as $categoryInfo) {
+                $data[$count] = array(
+                    $categoryInfo['title'],
+                    null,
+                    $categoryInfo['description'],
+                    $categoryInfo['announcements_state'],
+                    $categoryInfo['calendar_state'],
+                    $categoryInfo['chat_state'],
+                    $categoryInfo['doc_state'],
+                    $categoryInfo['forum_state'],
+                    $categoryInfo['work_state'],
+                    $categoryInfo['wiki_state'],
+                    $categoryInfo['max_student'],
+                    $categoryInfo['self_reg_allowed'],
+                    $categoryInfo['self_unreg_allowed'],
+                    $categoryInfo['groups_per_user']
+                );
+                $count++;
+            }
         }
 
         $groups = GroupManager::get_group_list();
@@ -2487,7 +2522,31 @@ class GroupManager
                 $categoryTitle = $categoryInfo['title'];
             }
 
-            $data[] = array(
+            $users = GroupManager::getStudents($groupInfo['id']);
+            $userList = array();
+            foreach ($users as $user) {
+                $user = api_get_user_info($user['user_id']);
+                $userList[] = $user['username'];
+            }
+
+            $tutors = GroupManager::getTutors($groupInfo['id']);
+            $tutorList = array();
+            foreach ($tutors as $user) {
+                $user = api_get_user_info($user['user_id']);
+                $tutorList[] = $user['username'];
+            }
+
+            $userListToString = null;
+            if (!empty($userList)) {
+                $userListToString = implode(',', $userList);
+            }
+
+            $tutorListToString = null;
+            if (!empty($tutorList)) {
+                $tutorListToString = implode(',', $tutorList);
+            }
+
+            $data[$count] = array(
                 $categoryTitle,
                 $groupSettings['name'],
                 $groupSettings['description'],
@@ -2501,8 +2560,22 @@ class GroupManager
                 $groupSettings['maximum_number_of_students'],
                 $groupSettings['self_registration_allowed'],
                 $groupSettings['self_unregistration_allowed'],
+                null
             );
+
+            if ($loadUsers) {
+                $data[$count][] = $userListToString;
+                $data[$count][] = $tutorListToString;
+            }
+
+            if (!empty($groupId)) {
+                if ($groupId == $groupInfo['id']) {
+                    break;
+                }
+            }
+            $count++;
         }
+
         return $data;
     }
 

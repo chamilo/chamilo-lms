@@ -1759,6 +1759,7 @@ function create_course_tables($course_db_name = null) {
               show_form_profile int NOT NULL default 0,
               form_fields TEXT NOT NULL,
               session_id int unsigned NOT NULL default 0,
+              visible_results int unsigned DEFAULT 0,
               PRIMARY KEY  (c_id, survey_id)
             )" . $charset_clause;
     $result = Database::query($sql);
@@ -2014,6 +2015,9 @@ function create_course_tables($course_db_name = null) {
             "PRIMARY KEY (c_id, eid)           )".$charset_clause;
 
     Database::query($sql);
+
+    // New course tables for 1.10.x come here
+
 
     return 0;
 }

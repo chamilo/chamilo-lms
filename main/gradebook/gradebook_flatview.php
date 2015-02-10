@@ -21,7 +21,6 @@ require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/exportgradebook.php';
 require_once 'lib/scoredisplay.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
 api_block_anonymous_users();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -282,8 +281,6 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
 
     // main graph
     $flatviewtable->display();
-    // @todo this needs a fix
-    //$image_file = $flatviewtable->display_graph();
     //@todo load images with jquery
     echo '<div id="contentArea" style="text-align: center;" >';
     if (!empty($image_file)) {

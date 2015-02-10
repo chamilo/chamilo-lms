@@ -80,6 +80,10 @@ class UserManager
         $encrypt_method = '',
         $send_mail = false
     ) {
+        $hook = HookCreateUser::create();
+        if (!empty($hook)) {
+            $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
+        }
         global $_user, $_configuration;
         $original_password = $password;
         $access_url_id = 1;
@@ -242,6 +246,9 @@ class UserManager
         }
         self::update_extra_field_value($return, 'already_logged_in', 'false');
 
+        if (!empty($hook)) {
+            $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
+        }
         return $return;
     }
 
@@ -582,6 +589,10 @@ class UserManager
         $send_email = false,
         $reset_password = 0
     ) {
+        $hook = HookUpdateUser::create();
+        if (!empty($hook)) {
+            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
+        }
         global $_configuration;
         $original_password = $password;
 
@@ -688,6 +699,10 @@ class UserManager
                 $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".get_lang('Problem')."\n\n".get_lang('SignatureFormula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
             }
             @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+        }
+
+        if (!empty($hook)) {
+            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
         }
 
         return $return;
@@ -2589,10 +2604,6 @@ class UserManager
             $sql =" SELECT DISTINCT id_session FROM $tbl_session_course_user
                     WHERE id_user = $user_id AND status = 2 ";
 
-            if (SessionManager::orderCourseIsEnabled()) {
-                //$sql .= "ORDER BY position";
-            }
-
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $result = Database::store_result($result);
@@ -2762,9 +2773,9 @@ class UserManager
         $personal_course_list = array();
         $courses = array();
 
-        /* This query is very similar to the above query,but it will check the
+        /* This query is very similar to the query below, but it will check the
         session_rel_course_user table if there are courses registered
-        to our user or not*/
+        to our user or not */
 
         $sql = "SELECT DISTINCT
                     scu.course_code as code, c.visibility, c.id as real_id
@@ -2777,13 +2788,8 @@ class UserManager
                 WHERE
                     scu.id_user = $user_id AND
                     scu.id_session = $session_id
-                    $where_access_url";
-
-        $orderBy = " ORDER BY code ";
-        if (SessionManager::orderCourseIsEnabled()) {
-            $orderBy =  ' ORDER BY position';
-        }
-        $sql .= $orderBy;
+                    $where_access_url
+                ORDER BY sc.position ASC";
 
         $result = Database::query($sql);
 
@@ -2815,7 +2821,7 @@ class UserManager
                         s.id_coach = $user_id
                       )
                     $where_access_url
-                    $orderBy";
+                    ORDER BY sc.position ASC";
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
@@ -3978,6 +3984,39 @@ class UserManager
     }
 
     /**
+     * @param int $userId
+     * @return array
+     */
+    public static function getDrhListFromUser($userId)
+    {
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblUserRelUser = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $tblUserRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $userId = intval($userId);
+
+        $orderBy = null;
+        if (api_is_western_name_order()) {
+            $orderBy .= " ORDER BY firstname, lastname ";
+        } else {
+            $orderBy .= " ORDER BY lastname, firstname ";
+        }
+
+        $sql = "SELECT u.user_id, username, u.firstname, u.lastname
+                FROM $tblUser u
+                INNER JOIN $tblUserRelUser uru ON (uru.friend_user_id = u.user_id)
+                INNER JOIN $tblUserRelAccessUrl a ON (a.user_id = u.user_id)
+                WHERE
+                    access_url_id = ".api_get_current_access_url_id()." AND
+                    uru.user_id = '$userId' AND
+                    relation_type = '".USER_RELATION_TYPE_RRHH."'
+                $orderBy
+                ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
      * get users followed by human resource manager
      * @param int $userId
      * @param int $userStatus (STUDENT, COURSEMANAGER, etc)
@@ -4183,6 +4222,10 @@ class UserManager
                     )"
                 ;
                 break;
+            case STUDENT_BOSS :
+                $drhConditions = " AND friend_user_id = $userId AND "
+                . "relation_type = " . USER_RELATION_TYPE_BOSS;
+                break;
         }
 
         $join = null;
@@ -4249,51 +4292,65 @@ class UserManager
      * */
     public static function suscribe_users_to_hr_manager($hr_dept_id, $users_id)
     {
-        // Database Table Definitions
-        $tbl_user_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        return self::subscribeUsersToUser($hr_dept_id, $users_id, USER_RELATION_TYPE_RRHH);
+    }
 
-        $hr_dept_id = intval($hr_dept_id);
-        $affected_rows = 0;
+    /**
+     * Add subscribed users to a user by relation type
+     * @param int $userId The user id
+     * @param array $subscribedUsersId The id of suscribed users
+     * @param action $relationType The relation type
+     */
+    public static function subscribeUsersToUser($userId, $subscribedUsersId, $relationType)
+    {
+        $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        $userId = intval($userId);
+        $relationType = intval($relationType);
+        $affectedRows = 0;
 
         if (api_get_multiple_access_url()) {
             //Deleting assigned users to hrm_id
-            $sql = "SELECT s.user_id FROM $tbl_user_rel_user s
-                    INNER JOIN $tbl_user_rel_access_url a
-                    ON (a.user_id = s.user_id)
-                    WHERE
-                        friend_user_id = $hr_dept_id AND
-                        relation_type = '".USER_RELATION_TYPE_RRHH."' AND
-                        access_url_id = ".api_get_current_access_url_id()."";
+            $sql = "SELECT s.user_id FROM $userRelUserTable s "
+                . "INNER JOIN $userRelAccessUrlTable a ON (a.user_id = s.user_id) "
+                . "WHERE friend_user_id = $userId "
+                . "AND relation_type = $relationType "
+                . "AND access_url_id = " . api_get_current_access_url_id() . "";
         } else {
-            $sql = "SELECT user_id FROM $tbl_user_rel_user
-                    WHERE
-                        friend_user_id = $hr_dept_id AND
-                        relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+            $sql = "SELECT user_id FROM $userRelUserTable "
+                . "WHERE friend_user_id = $userId "
+                . "AND relation_type = $relationType";
         }
+
         $result = Database::query($sql);
+
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
-                $sql = "DELETE FROM $tbl_user_rel_user
-                        WHERE
-                            user_id = '{$row['user_id']}' AND
-                            friend_user_id = $hr_dept_id AND
-                            relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+                $sql = "DELETE FROM $userRelUserTable "
+                    . "WHERE user_id = {$row['user_id']} "
+                    . "AND friend_user_id = $userId "
+                    . "AND relation_type = $relationType";
+
                 Database::query($sql);
             }
         }
 
         // Inserting new user list
-        if (is_array($users_id)) {
-            foreach ($users_id as $user_id) {
-                $user_id = intval($user_id);
-                $sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type)
-                               VALUES ('$user_id', $hr_dept_id, '".USER_RELATION_TYPE_RRHH."')";
+        if (is_array($subscribedUsersId)) {
+            foreach ($subscribedUsersId as $subscribedUserId) {
+                $subscribedUserId = intval($subscribedUserId);
+
+                $sql = "INSERT IGNORE INTO $userRelUserTable(user_id, friend_user_id, relation_type) "
+                    . "VALUES ($subscribedUserId, $userId, $relationType)";
+
                 Database::query($sql);
-                $affected_rows = Database::affected_rows();
+
+                $affectedRows = Database::affected_rows();
             }
         }
-        return $affected_rows;
+
+        return $affectedRows;
     }
 
     /**
@@ -4911,6 +4968,72 @@ EOF;
     }
 
     /**
+     * Subscribe users to student boss
+     * @param int $bossId The boss id
+     * @param array $usersId The users array
+     * @return int Affected rows
+     */
+    public static function subscribeUsersToBoss($bossId, $usersId)
+    {
+        return self::subscribeUsersToUser($bossId, $usersId, USER_RELATION_TYPE_BOSS);
+    }
+
+    /**
+     * Get users followed by student boss
+     * @param int $userId
+     * @param int $userStatus (STUDENT, COURSEMANAGER, etc)
+     * @param bool $getOnlyUserId
+     * @param bool $getSql
+     * @param bool $getCount
+     * @param int $from
+     * @param int $numberItems
+     * @param int $column
+     * @param string $direction
+     * @param int $active
+     * @param string $lastConnectionDate
+     * @return array     users
+     */
+    public static function getUsersFollowedByStudentBoss(
+        $userId,
+        $userStatus = 0,
+        $getOnlyUserId = false,
+        $getSql = false,
+        $getCount = false,
+        $from = null,
+        $numberItems = null,
+        $column = null,
+        $direction = null,
+        $active = null,
+        $lastConnectionDate = null
+    ){
+        return self::getUsersFollowedByUser(
+                $userId, $userStatus, $getOnlyUserId, $getSql, $getCount, $from, $numberItems, $column, $direction,
+                $active, $lastConnectionDate, STUDENT_BOSS
+        );
+    }
+
+    /**
+     * Get the teacher (users with COURSEMANGER status) list
+     * @return array The list
+     */
+    public static function getTeachersList()
+    {
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $resultData = Database::select('user_id, lastname, firstname, username', $userTable, array(
+            'where' => array(
+                'status = ?' => COURSEMANAGER
+            )
+        ));
+
+        foreach ($resultData as &$teacherData) {
+            $teacherData['completeName'] = api_get_person_name($teacherData['firstname'], $teacherData['lastname']);
+        }
+
+        return $resultData;
+    }
+
+    /**
      * @return array
      */
     public static function getOfficialCodeGrouped()
@@ -4951,4 +5074,47 @@ EOF;
         }
         return $users;
     }
+
+    /**
+     * Calc the expended time (in seconds) by a user in a course
+     * @param int $userId The user id
+     * @param string $courseCode The course id
+     * @param int $sessionId Optional. The session id
+     * @param string $from Optional. From date
+     * @param string $until Optional. Until date
+     * @return int The time
+     */
+    public static function getExpendedTimeInCourses($userId, $courseCode, $sessionId = 0, $from = '', $until = '')
+    {
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
+
+        $trackCourseAccessTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $whereConditions = array(
+            'user_id = ? ' => $userId,
+            "AND course_code = '?' " => $courseCode,
+            'AND session_id = ? ' => $sessionId
+        );
+
+        if (!empty($from) && !empty($until)) {
+            $whereConditions["AND (login_course_date >= '?' "] = $from;
+            $whereConditions["AND logout_course_date <= DATE_ADD('?', INTERVAL 1 DAY)) "] = $until;
+        }
+
+        $trackResult = Database::select(
+            'SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as total_time',
+            $trackCourseAccessTable,
+            array(
+                'where' => $whereConditions
+            ), 'first'
+        );
+
+        if ($trackResult != false) {
+            return $trackResult['total_time'] ? $trackResult['total_time'] : 0;
+        }
+
+        return 0;
+    }
+
 }

@@ -1,5 +1,5 @@
 {% if show_footer == true %}
-    {% include "default/layout/footer.tpl" %}
+    {% include template ~ "/layout/footer.tpl" %}
 {% endif %}
 </body>
 </html>

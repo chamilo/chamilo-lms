@@ -36,5 +36,4 @@ nbproject/*
 
 plugin/bbb/config.vm.php
 
-# Badges images
-main/upload/data/badges/*
+main/cron/incoming/

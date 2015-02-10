@@ -2687,7 +2687,6 @@ class DocumentManager
      */
     public static function export_to_pdf($document_id, $course_code)
     {
-        require_once api_get_path(LIBRARY_PATH) . 'pdf.lib.php';
         $course_data = api_get_course_info($course_code);
         $document_data = self::get_document_data_by_id($document_id, $course_code);
         $file_path = api_get_path(SYS_COURSE_PATH) . $course_data['path'] . '/document' . $document_data['path'];
@@ -3223,7 +3222,7 @@ class DocumentManager
                 if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
                     $user_in_course = true;
                 }
-                //Check if course is open then we can consider that the student is regitered to the course
+                // Check if course is open then we can consider that the student is registered to the course
                 if (isset($course_info) && in_array($course_info['visibility'], array(2, 3))) {
                     $user_in_course = true;
                 }
@@ -3260,6 +3259,13 @@ class DocumentManager
         }
 
         $folderCondition = " AND docs.path LIKE '/%' ";
+
+        if (!api_is_allowed_to_edit()) {
+            $protectedFolders = self::getProtectedFolderFromStudent();
+            foreach ($protectedFolders as $folder) {
+                $folderCondition .= " AND docs.path NOT LIKE '$folder' ";
+            }
+        }
 
         if ($folderId !== false) {
             $parentData = self::get_document_data_by_id($folderId, $course_info['code']);
@@ -3443,7 +3449,6 @@ class DocumentManager
                         });
                     }
     		    }
-
             }
     		</script>";
         }
@@ -3702,10 +3707,10 @@ class DocumentManager
                             $overwrite_url
                         );
                     }
-
                 }
             }
         }
+
         return $return;
     }
 
@@ -4178,9 +4183,9 @@ class DocumentManager
     /**
      * @return array
      */
-    static function get_system_folders()
+    public static function get_system_folders()
     {
-        $system_folders = array(
+        return array(
             '/certificates',
             '/HotPotatoes_files',
             '/chat_files',
@@ -4191,7 +4196,20 @@ class DocumentManager
             '/shared_folder',
             '/learning_path'
         );
-        return $system_folders;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getProtectedFolderFromStudent()
+    {
+        return array(
+            '/certificates',
+            '/HotPotatoes_files',
+            '/chat_files',
+            '/shared_folder',
+            '/learning_path'
+        );
     }
 
     /**

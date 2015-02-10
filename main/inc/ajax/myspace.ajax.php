@@ -9,8 +9,6 @@ $language_file = array('tracking');
 require_once '../global.inc.php';
 $action = $_GET['a'];
 
-//if (!api_is_platform_admin() && !api_is_xml_http_request()) { exit; }
-require_once api_get_path(SYS_CODE_PATH) . 'mySpace/myspace.lib.php';
 
 switch ($action) {
     case 'access_detail':

@@ -11,7 +11,7 @@ use
  * This object represents INTEGER values. These are always a single integer.
  * They may be preceeded by either + or -.
  *
- * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2011-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */

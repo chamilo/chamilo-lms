@@ -144,6 +144,14 @@ class Notification extends Model
      */
     public function formatTitle($title, $senderInfo)
     {
+        $hook = HookNotificationTitle::create();
+        if (!empty($hook)) {
+            $hook->setEventData(array('title' => $title));
+            $data = $hook->notifyNotificationTitle(HOOK_TYPE_PRE);
+            if (isset($data['title'])) {
+                $title = $data['title'];
+            }
+        }
         $newTitle = $this->getTitlePrefix();
 
         switch ($this->type) {
@@ -182,6 +190,14 @@ class Notification extends Model
                     $newTitle .= $senderName;
                 }
                 break;
+        }
+
+        if (!empty($hook)) {
+            $hook->setEventData(array('title' => $newTitle));
+            $data = $hook->notifyNotificationTitle(HOOK_TYPE_POST);
+            if (isset($data['title'])) {
+                $newTitle = $data['title'];
+            }
         }
 
         return $newTitle;
@@ -309,6 +325,14 @@ class Notification extends Model
      * */
     public function formatContent($content, $sender_info)
     {
+        $hook = HookNotificationContent::create();
+        if (!empty($hook)) {
+            $hook->setEventData(array('content' => $content));
+            $data = $hook->notifyNotificationContent(HOOK_TYPE_PRE);
+            if (isset($data['content'])) {
+                $content = $data['content'];
+            }
+        }
         $new_message_text = $link_to_new_message = '';
 
         switch ($this->type) {
@@ -381,6 +405,14 @@ class Notification extends Model
                 get_lang('YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX'),
                 Display::url($preference_url, $preference_url)
             ).'</i>';
+
+        if (!empty($hook)) {
+            $hook->setEventData(array('content' => $content));
+            $data = $hook->notifyNotificationContent(HOOK_TYPE_POST);
+            if (isset($data['content'])) {
+                $content = $data['content'];
+            }
+        }
 
         return $content;
     }

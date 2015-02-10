@@ -165,8 +165,8 @@ if ($user_already_registered_show_terms == false) {
             'sessionVar'   => basename(__FILE__, '.php'),
             'imageOptions' => array(
                 'font_size' => 20,
-                'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
-                'font_file' => 'tahoma.ttf',
+                'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                'font_file' => 'OpenSans-Regular.ttf',
                     //'output' => 'gif'
             )
         );

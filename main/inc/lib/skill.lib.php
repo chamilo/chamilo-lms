@@ -335,7 +335,7 @@ class SkillRelGradebook extends Model
  */
 class SkillRelUser extends Model
 {
-    public $columns = array('id', 'user_id', 'skill_id', 'acquired_skill_at', 'assigned_by');
+    public $columns = array('id', 'user_id', 'skill_id', 'acquired_skill_at', 'assigned_by', 'course_id', 'session_id');
 
     public function __construct()
     {
@@ -620,21 +620,27 @@ class Skill extends Model
         return null;
     }
 
-    public function add_skill_to_user($user_id, $gradebook_id)
+    public function add_skill_to_user($user_id, $gradebook_id, $courseId = 0, $sessionId = 0)
     {
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
         $skill_gradebook = new SkillRelGradebook();
         $skill_rel_user  = new SkillRelUser();
 
         $skill_gradebooks = $skill_gradebook->get_all(array('where' => array('gradebook_id = ?' => $gradebook_id)));
         if (!empty($skill_gradebooks)) {
             foreach ($skill_gradebooks as $skill_gradebook) {
-                $user_has_skill = $this->user_has_skill($user_id, $skill_gradebook['skill_id']);
+                $user_has_skill = $this->user_has_skill($user_id, $skill_gradebook['skill_id'], $courseId, $sessionId);
                 if (!$user_has_skill) {
                     $params = array(
                         'user_id'           => $user_id,
                         'skill_id'          => $skill_gradebook['skill_id'],
                         'acquired_skill_at' => api_get_utc_datetime(),
+                        'course_id' => $courseId,
+                        'session_id' => $sessionId
                     );
+
                     $skill_rel_user->save($params);
                 }
             }
@@ -996,11 +1002,24 @@ class Skill extends Model
      *
      * @return bool
      */
-    public function user_has_skill($user_id, $skill_id)
-    {
-        $skills = $this->get_user_skills($user_id);
-        foreach ($skills as $my_skill_id) {
-            if ($my_skill_id == $skill_id) {
+    public function user_has_skill($user_id, $skill_id, $courseId = 0, $sessionId = 0)
+    {        
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $whereConditions = array(
+            'user_id = ? ' => $user_id,
+            'AND skill_id = ? ' => $skill_id,
+            'AND course_id = ? ' => $courseId,
+            'AND session_id = ? ' => $sessionId
+        );
+
+        $result = Database::select('COUNT(1) AS qty', $this->table_skill_rel_user, array(
+            'where' => $whereConditions
+        ), 'first');
+
+        if ($result != false) {
+            if ($result['qty'] > 0) {
                 return true;
             }
         }
@@ -1042,6 +1061,76 @@ class Skill extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Get the achieved skills by course
+     * @param int $courseId The course id
+     * @return array The skills list
+     */
+    public function listAchievedByCourse($courseId)
+    {
+        $courseId = intval($courseId);
+
+        if ($courseId == 0) {
+            return array();
+        }
+
+        $list = array();
+
+        $sql = "SELECT course.id c_id, course.title c_name, course.directory c_directory, user.user_id, user.lastname, "
+            . "user.firstname, user.username, skill.id skill_id, skill.name skill_name, sru.acquired_skill_at "
+            . "FROM {$this->table_skill_rel_user} AS sru "
+            . "INNER JOIN {$this->table_course} "
+            . "ON sru.course_id = course.id "
+            . "INNER JOIN {$this->table_user} "
+            . "ON sru.user_id = user.user_id "
+            . "INNER JOIN {$this->table} "
+            . "ON sru.skill_id = skill.id "
+            . "WHERE course.id = $courseId";
+            
+        $result = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($result)) {
+            $list[] = $row;
+        }
+
+        return $list;
+    }
+
+    /**
+     * Get the users list who achieved a skill
+     * @param int $skillId The skill id
+     * @return array The users list
+     */
+    public function listUsersWhoAchieved($skillId)
+    {
+        $skillId = intval($skillId);
+
+        if ($skillId == 0) {
+            return array();
+        }
+
+        $list = array();
+
+        $sql = "SELECT course.id c_id, course.title c_name, course.directory c_directory, user.user_id, user.lastname, "
+            . "user.firstname, user.username, skill.id skill_id, skill.name skill_name, sru.acquired_skill_at "
+            . "FROM {$this->table_skill_rel_user} AS sru "
+            . "INNER JOIN {$this->table_course} "
+            . "ON sru.course_id = course.id "
+            . "INNER JOIN {$this->table_user} "
+            . "ON sru.user_id = user.user_id "
+            . "INNER JOIN {$this->table} "
+            . "ON sru.skill_id = skill.id "
+            . "WHERE skill.id = $skillId ";
+
+        $result = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($result)) {
+            $list[] = $row;
+        }
+
+        return $list;
     }
 
 }

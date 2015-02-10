@@ -79,6 +79,8 @@ if (!empty($a) && !empty($u)) {
                 $var = $extraSession->get_values_by_handler_and_field_variable($s, 'recommended_number_of_participants');
                 $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
                 $studentArray = api_get_user_info($u);
+                $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);
+                $studentArray['picture'] = UserManager::get_picture_user($studentArray['user_id'], $studentArray['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
                 $superiorId = UserManager::getStudentBoss($u);
                 if (!empty($superiorId)) {
                     $superiorArray = api_get_user_info($superiorId);
@@ -187,7 +189,14 @@ if (!empty($a) && !empty($u)) {
                     $var = $extraSession->get_values_by_handler_and_field_variable($s, 'recommended_number_of_participants');
                     $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
                     $studentArray = api_get_user_info($u);
-                    $superiorArray = api_get_user_info(UserManager::getStudentBoss($u));
+                    $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);
+                    $studentArray['picture'] = UserManager::get_picture_user($studentArray['user_id'], $studentArray['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
+                    $superiorId = UserManager::getStudentBoss($u);
+                    if (!empty($superiorId)) {
+                        $superiorArray = api_get_user_info($superiorId);
+                    } else {
+                        $superiorArray = null;
+                    }
                     $adminsArray = UserManager::get_all_administrators();
                     foreach ($adminsArray as &$admin) {
                         $admin['complete_name'] = $admin['lastname'] . ', ' . $admin['firstname'];

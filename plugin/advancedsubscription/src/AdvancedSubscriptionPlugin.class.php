@@ -407,7 +407,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
-                    $tpl->fetch('/advancedsubscription/views/advsub_request_approved_info_admin.tpl'),
+                    $tpl->fetch('/advancedsubscription/views/advsub_request_approve_confirmed.tpl'),
                     $data['s']
                 );
                 // Mail to admin

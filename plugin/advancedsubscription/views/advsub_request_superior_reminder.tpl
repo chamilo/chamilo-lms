@@ -65,7 +65,7 @@
                         <table width="100%" border="0" cellspacing="3" cellpadding="4" style="background:#EDE9EA">
                             {% for student in students %}
                             <tr>
-                                <td valign="middle"><img src="{{ _p.web_plugin }}advancedsubscription/views/img/avatar.png" width="50" height="50" alt=""></td>
+                                <td valign="middle"><img src="{{ student.picture.file }}" width="50" height="50" alt=""></td>
                                 <td valign="middle"><h4>{{ student.complete_name }}</h4></td>
                                 <td valign="middle"><a href="{{ student.acceptUrl }}"><img src="{{ _p.web_plugin }}advancedsubscription/views/img/aprobar.png" width="90" height="25" alt=""></a></td>
                                 <td valign="middle"><a href="{{ student.rejectUrl }}"><img src="{{ _p.web_plugin }}advancedsubscription/views/img/desaprobar.png" width="90" height="25" alt=""></a></td>

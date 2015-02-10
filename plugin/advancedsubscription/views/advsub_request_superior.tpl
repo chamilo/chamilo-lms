@@ -64,7 +64,7 @@
                         <p>Le invitamos a aprobar o desarprobar esta inscripción, dando clic en el botón correspondiente a continuación.</p>
                         <table width="100%" border="0" cellspacing="3" cellpadding="4" style="background:#EDE9EA">
                             <tr>
-                                <td width="58" valign="middle"><img src="{{ _p.web_plugin }}advancedsubscription/views/img/avatar.png" width="50" height="50" alt=""></td>
+                                <td width="58" valign="middle"><img src="{{ student.picture.file }}" width="50" height="50" alt=""></td>
                                 <td width="211" valign="middle"><h4>{{ student.complete_name }}</h4></td>
                                 <td width="90" valign="middle"><a href="{{ acceptUrl }}"><img src="{{ _p.web_plugin }}advancedsubscription/views/img/aprobar.png" width="90" height="25" alt=""></a></td>
                                 <td width="243" valign="middle"><a href="{{ rejectUrl }}"><img src="{{ _p.web_plugin }}advancedsubscription/views/img/desaprobar.png" width="90" height="25" alt=""></a></td>

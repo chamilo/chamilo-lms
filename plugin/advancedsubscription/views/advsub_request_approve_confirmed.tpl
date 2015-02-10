@@ -59,9 +59,10 @@
                 <tr>
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>Estimado:</p>
-                        <h2>{{ student.complete_name }}</h2>
-                        <p>Lamentamos informarle que, en esta oportunidad, su inscripción al curso <strong>{{ session.name }}</strong> NO ha sido aprobada. Esperamos mantenga todo su ánimo y participe en otro curso o, en otra oportunidad, a este mismo curso.</p>
-                        <p>Gracias.</p>
+                        <h2>{{ superior.complete_name }}</h2>
+                        <p>Hemos recibido y registrado su decisión de aprobar el curso <strong>{{ session.name }}</strong> para su colaborador <strong>{{ student.complete_name }}</strong></p>
+                        <p>Ahora la inscripción al curso está pendiente de la disponibilidad de cupos. Le mantendremos informado sobre el resultado de esta etapa</p>
+                        <p>Gracias por su colaboración.</p>
                         <h3>{{ signature }}</h3></td>
                     <td>&nbsp;</td>
                 </tr>

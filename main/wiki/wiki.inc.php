@@ -278,8 +278,8 @@ class Wiki
         $_clean['title'] = Database::escape_string(trim($values['title']));
         $_clean['content'] = Database::escape_string($values['content']);
         if (api_get_setting('htmlpurifier_wiki') == 'true'){
-            $purifier = new HTMLPurifier();
-            $_clean['content'] = $purifier->purify($_clean['content']);
+            //$purifier = new HTMLPurifier();
+            $_clean['content'] = Security::remove_XSS($_clean['content']);
         }
         $_clean['user_id'] = api_get_user_id();
         $_clean['assignment']= Database::escape_string($values['assignment']);

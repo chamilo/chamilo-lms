@@ -5649,4 +5649,32 @@ class SessionManager
             return $errorResult;
         }
     }
+
+    /**
+     * Return session description from
+     * @param int $sessionId
+     * @return string
+     */
+    public static function getDescriptionFromSessionId($sessionId)
+    {
+        $sessionId = intval($sessionId);
+        $description = '';
+        if ($sessionId !== 0) {
+            $rows = Database::select(
+                'description',
+                Database::get_main_table(TABLE_MAIN_SESSION),
+                array(
+                    'where' => array(
+                        'id = ?' => $sessionId
+                    )
+                )
+            );
+
+            if (!empty($rows)) {
+                $description = $rows[0]['description'];
+            }
+        }
+
+        return $description;
+    }
 }

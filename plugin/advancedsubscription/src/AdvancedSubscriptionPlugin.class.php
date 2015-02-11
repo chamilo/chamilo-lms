@@ -720,8 +720,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             // Get banner URL
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'banner');
             $data['banner'] = api_get_path(WEB_CODE_PATH) . $var['field_value'];
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'descripcion');
-            $data['description'] = $var['field_value'];
+            $data['description'] = SessionManager::getDescriptionFromSessionId($sessionId);
 
             return $data;
         }

@@ -144,7 +144,7 @@ class HookAdvancedSubscription extends HookObserver implements
                     'duration' => array('name' => 'duration', 'type' => 'xsd:int'), // session.duration
                     'brochure' => array('name' => 'brochure', 'type' => 'xsd:string'), // session.brochure
                     'banner' => array('name' => 'banner', 'type' => 'xsd:string'), // session.banner
-                    'as_description' => array('name' => 'as_description', 'type' => 'xsd:string'), // session.description
+                    'description' => array('name' => 'description', 'type' => 'xsd:string'), // session.description
                     'status' => array('name' => 'status', 'type' => 'xsd:string'), // status
                     'action_url' => array('name' => 'action_url', 'type' => 'xsd:string'), // action_url
                     'message' => array('name' => 'error_message', 'type' => 'xsd:string'), // message

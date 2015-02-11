@@ -59,8 +59,8 @@ if (!empty($s)) {
     // send mail to superior
     $sessionArray = api_get_session_info($s);
     $extraSession = new ExtraFieldValue('session');
-    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'as_description');
-    $sessionArray['as_description'] = $var['field_valiue'];
+    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'description');
+    $sessionArray['description'] = $var['field_valiue'];
     $var = $extraSession->get_values_by_handler_and_field_variable($s, 'target');
     $sessionArray['target'] = $var['field_valiue'];
     $var = $extraSession->get_values_by_handler_and_field_variable($s, 'mode');

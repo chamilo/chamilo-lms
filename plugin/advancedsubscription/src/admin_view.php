@@ -71,18 +71,32 @@ if (!empty($s)) {
     $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
     $adminsArray = UserManager::get_all_administrators();
 
-    $data = array(
-        'a' => 'confirm',
-        's' => $s,
-        'current_user_id' => api_get_user_id(),
-    );
+    $data['a'] = 'confirm';
+    $data['s'] = $s;
+    $data['current_user_id'] = api_get_user_id();
 
     foreach ($studentList['students'] as &$student) {
-        $data['u'] = $student['user_id'];
-        $data['queue'] = array('id' => $student['queue_id']);
+        $data['u'] = intval($student['user_id']);
+        $data['q'] = intval($student['queue_id']);
         $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED;
-        $student['dataApprove'] = $plugin->encrypt($data);
+        $student['acceptUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
+            'a=confirm&' .
+            's=' . $s . '&' .
+            'current_user_id=' . api_get_user_id() . '&' .
+            'e=' . ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED . '&' .
+            'u=' . $student['user_id'] . '&' .
+            'q=' . $student['queue_id'] . '&' .
+            'v=' . $plugin->generateHash($data);
         $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
+        $student['rejectUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
+            'a=confirm&' .
+            's=' . $s . '&' .
+            'current_user_id=' . api_get_user_id() . '&' .
+            'e=' . ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED . '&' .
+            'u=' . $student['user_id'] . '&' .
+            'q=' . $student['queue_id'] . '&' .
+            'v=' . $plugin->generateHash($data);
+        ;
         $student['dataDisapprove'] = $plugin->encrypt($data);
         $student['complete_name'] = $student['lastname'] . ', ' . $student['firstname'];
         $student['picture'] = UserManager::get_user_picture_path_by_id($student['user_id'], 'web', false, true);
@@ -94,7 +108,6 @@ if (!empty($s)) {
 
 // Assign variables
 $tpl->assign('sessionItems', $sessionList);
-$tpl->assign('data', $data);
 $tpl->assign('approveAdmin', ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED);
 $tpl->assign('disapproveAdmin', ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED);
 // Get rendered template

@@ -108,7 +108,7 @@
                                                 '¿Esta seguro de que desea aceptar la inscripción de {{ student.complete_name }}?'
                                             )
                                         ) return false;"
-                                href="{{ _p.web_plugin }}advancedsubscription/ajax/advsub.ajax.php?data={{ student.dataApprove }}"
+                                href="{{ student.acceptUrl }}"
                             >
                                 Aceptar
                             </a>
@@ -119,7 +119,7 @@
                                                 '¿Esta seguro de que desea rechazar la inscripción de {{ student.complete_name }}?'
                                             )
                                         ) return false;"
-                                href="{{ _p.web_plugin }}advancedsubscription/ajax/advsub.ajax.php?data={{ student.dataDisapprove }}"
+                                href="{{ student.rejectUrl }}"
                             >
                                 Rechazar
                             </a>

@@ -9,46 +9,24 @@
 require_once __DIR__ . '/../config.php';
 
 $plugin = AdvancedSubscriptionPlugin::create();
-$data = isset($_REQUEST['data']) ?
-    strlen($_REQUEST['data']) > 16 ?
-        $plugin->decrypt($_REQUEST['data']) :
-        null :
-    null;
-// Get data
-if (isset($data) && is_array($data)) {
-    // Action code
-    $a = isset($data['a']) ? $data['a'] : null;
-    // User ID
-    $u = isset($data['u']) ? $data['u'] : null;
-    // Session ID
-    $s = isset($data['s']) ? $data['s'] : null;
-    // Adv sub action
-    $e = isset($data['e']) ? intval($data['e']) : null;
-    // More data
-    $params['is_connected'] = isset($data['is_connected']) ? $data['is_connected'] : false;
-    $params['profile_completed'] = isset($data['profile_completed']) ? $data['profile_completed'] : 0;
-    $params['accept'] = isset($data['accept']) ? $data['accept'] : false;
-} else {
-    // Action code
-    $a = isset($_REQUEST['a']) ? Security::remove_XSS($_REQUEST['a']) : null;
-    // User ID
-    $u = isset($_REQUEST['u']) ? intval($_REQUEST['u']) : null;
-    // Session ID
-    $s = isset($_REQUEST['s']) ? intval($_REQUEST['s']) : null;
-    // Adv sub action
-    $e = isset($_REQUEST['e']) ? intval($_REQUEST['e']) : null;
-    // More data
-    $params['is_connected'] = isset($_REQUEST['is_connected']) ? $_REQUEST['is_connected'] : false;
-    $params['profile_completed'] = isset($_REQUEST['profile_completed']) ? $_REQUEST['profile_completed'] : 0;
-    $params['accept'] = isset($_REQUEST['accept']) ? $_REQUEST['accept'] : false;
-}
+$hash = $_REQUEST['v'];
+unset($_REQUEST['v']);
+$data['a'] = $a = $_REQUEST['a'];
+$data['s'] = $s = intval($_REQUEST['s']);
+$data['current_user_id'] = intval($_REQUEST['current_user_id']);
+$data['u'] = $u = intval($_REQUEST['u']);
+$data['q'] = $q = intval($_REQUEST['q']);
+$data['e'] = $e = intval($_REQUEST['e']);
+$verified = $plugin->checkHash($data, $hash);
+$data['is_connected'] = isset($_REQUEST['is_connected']) ? $_REQUEST['is_connected'] : false;
+$data['profile_completed'] = isset($_REQUEST['profile_completed']) ? $_REQUEST['profile_completed'] : 0;
 // Init result array
 $result = array('error' => true, 'errorMessage' => 'There was an error');
-if (!empty($a) && !empty($u)) {
+if ($verified) {
     switch($a) {
         case 'check': // Check minimum requirements
             try {
-                $res = AdvancedSubscriptionPlugin::create()->isAbleToRequest($u, $params);
+                $res = AdvancedSubscriptionPlugin::create()->isAbleToRequest($u, $data);
                 if ($res) {
                     $result['error'] = false;
                     $result['errorMessage'] = 'No error';
@@ -63,7 +41,7 @@ if (!empty($a) && !empty($u)) {
             break;
         case 'subscribe': // Subscription
             $bossId = UserManager::getStudentBoss($u);
-            $res = AdvancedSubscriptionPlugin::create()->startSubscription($u, $s, $params);
+            $res = AdvancedSubscriptionPlugin::create()->startSubscription($u, $s, $data);
             if ($res === true) {
                 // send mail to superior
                 $sessionArray = api_get_session_info($s);
@@ -92,15 +70,11 @@ if (!empty($a) && !empty($u)) {
                     $admin['complete_name'] = $admin['lastname'] . ', ' . $admin['firstname'];
                 }
                 unset($admin);
-                $data = array(
-                    'student' => $studentArray,
-                    'superior' => $superiorArray,
-                    'admins' => $adminsArray,
-                    'session' => $sessionArray,
-                    'signature' => api_get_setting('Institution'),
-                    's' => $s,
-                    'u' => $u,
-                );
+                $data['student'] = $studentArray;
+                $data['superior'] = $superiorArray;
+                $data['admins'] = $adminsArray;
+                $data['session'] = $sessionArray;
+                $data['signature'] = api_get_setting('Institution');
 
                 if (empty($superiorId)) { // Does not have boss
                     $res = $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
@@ -121,18 +95,31 @@ if (!empty($a) && !empty($u)) {
                         }
                     }
                 } else {
-                    $dataUrl = array(
-                        'a' => 'confirm',
-                        's' => $s,
-                        'u' => $u,
-                    );
+                    $dataUrl['a'] = $data['a'];
+                    $dataUrl['s'] = intval($data['s']);
+                    $dataUrl['current_user_id'] = intval($data['current_user_id']);
+                    $dataUrl['u'] = intval($data['u']);
+                    $dataUrl['q'] = intval($data['q']);
+                    $dataUrl['e'] = intval($data['e']);
 
                     $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_BOSS_APPROVED;
-                    $data['acceptUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
-                        '?data=' . $plugin->encrypt($dataUrl);
+                    $student['acceptUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
+                        'a=confirm&' .
+                        's=' . $s . '&' .
+                        'current_user_id=' . $dataUrl['current_user_id'] . '&' .
+                        'e=' . ADV_SUB_QUEUE_STATUS_BOSS_APPROVED . '&' .
+                        'u=' . $student['user_id'] . '&' .
+                        'q=' . $student['queue_id'] . '&' .
+                        'v=' . $plugin->generateHash($dataUrl);
                     $dataUrl['e'] = ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED;
-                    $data['rejectUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php' .
-                        '?data=' . $plugin->encrypt($dataUrl);
+                    $student['rejectUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
+                        'a=confirm&' .
+                        's=' . $s . '&' .
+                        'current_user_id=' . $dataUrl['current_user_id'] . '&' .
+                        'e=' . ADV_SUB_QUEUE_STATUS_BOSS_APPROVED . '&' .
+                        'u=' . $student['user_id'] . '&' .
+                        'q=' . $student['queue_id'] . '&' .
+                        'v=' . $plugin->generateHash($dataUrl);
                     $result['mailIds'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
                     if (!empty($result['mailIds'])) {
                         $result['error'] = false;

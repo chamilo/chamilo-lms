@@ -230,7 +230,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function startSubscription($userId, $sessionId, $params)
     {
         $result = false;
-        if (isset($params['accept']) && !empty($sessionId) && !empty($userId)) {
+        if (!empty($sessionId) && !empty($userId)) {
             $advSub = self::create();
             try {
                 if ($advSub->isAbleToRequest($userId, $params)) {
@@ -787,16 +787,23 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getQueueUrl($params)
     {
-        $data = array(
-            'a' => 'subscribe',
-            'u' => $params['user_id'],
-            's' => $params['session_id'],
-            'is_connected' => $params['is_connected'],
-            'profile_completed' => $params['profile_completed'],
-            'accept' => $params['accept'],
-        );
-        $data = $this->encrypt($data);
-        $url = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?data=' . $data;
+        $dataUrl['a'] = $params['a'];
+        $dataUrl['s'] = intval($params['s']);
+        $dataUrl['current_user_id'] = intval($params['current_user_id']);
+        $dataUrl['u'] = intval($params['u']);
+        $dataUrl['q'] = intval($params['q']);
+        $dataUrl['e'] = intval($params['e']);
+
+        $url = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
+            'a=' . $dataUrl['a'] . '&' .
+            's=' . $dataUrl['s'] . '&' .
+            'current_user_id=' . $dataUrl['current_user_id'] . '&' .
+            'e=' . $dataUrl['e'] . '&' .
+            'u=' . $dataUrl['u'] . '&' .
+            'q=' . $dataUrl['q'] . '&' .
+            'is_connected=' . $params['is_connected'] . '&' .
+            'profile_completed=' . $params['profile_completed'] . '&' .
+            'v=' . $this->generateHash($dataUrl);
         return $url;
     }
 
@@ -871,5 +878,29 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $columns = 'id, name';
         return Database::select($columns, $sessionTable);
+    }
+
+    /**
+     * Generate security hash to check data send by url params
+     * @param string $data
+     * @return string
+     */
+    public function generateHash($data)
+    {
+        global $_config;
+        $key = sha1($_config['secret_key']);
+        $data = serialize($data);
+        return sha1($data . $key);
+    }
+
+    /**
+     * Verify hash from data
+     * @param string $data
+     * @param string $hash
+     * @return bool
+     */
+    public function checkHash($data, $hash)
+    {
+        return $this->generateHash($data) == $hash;
     }
 }

@@ -489,6 +489,12 @@ class HookAdvancedSubscription extends HookObserver implements
                     } catch (\Exception $e) {
                         $data['message'] = $e->getMessage();
                     }
+                    $params['a'] = 'subscribe';
+                    $params['s'] = intval($sessionId);
+                    $params['current_user_id'] = 0; // No needed
+                    $params['u'] = intval($userId);
+                    $params['q'] = 0; // No needed
+                    $params['e'] = ADV_SUB_QUEUE_STATUS_START;
                     if ($vacancy > 0) {
                         // Check conditions
                         if ($status === ADV_SUB_QUEUE_STATUS_NO_QUEUE) {

@@ -59,7 +59,7 @@
                 <tr>
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>Estimado:</p>
-                        <h2>{{ admin.complete_name }}</h2>
+                        <h2>{{ superior.complete_name }}</h2>
                         <p>La inscripción de <strong>{{ student.complete_name }}</strong> al curso <strong>{{ session.name }}</strong>, que había aprobado anteriormente, fue rechazada por falta de cupos. Les presentamos nuestras disculpas sinceras.</p>
                         <p>Gracias.</p>
                         <h3>{{ signature }}</h3></td>

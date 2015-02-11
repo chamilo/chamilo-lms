@@ -736,6 +736,8 @@ class ExtraField extends Model
                         $addOptions = array();
 
                         global $app;
+                        $optionsExists = false;
+                        /*
                         $optionsExists = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->
                         findOneBy(array('fieldId' => $field_details['id']));
 
@@ -756,6 +758,7 @@ class ExtraField extends Model
                             }
                         }
 
+                        */
                         $options = array();
                         if (empty($defaultValueId)) {
                             $options[''] = get_lang('SelectAnOption');

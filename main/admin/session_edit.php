@@ -231,15 +231,20 @@ if (array_key_exists('show_description', $infos)) {
     $form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'), $chkDescriptionAttributes);
 }
 
-if (SessionManager::durationPerUserIsEnabled()) {
-    $duration = empty($infos['duration']) ? null : $infos['duration'];
+$duration = empty($infos['duration']) ? null : $infos['duration'];
 
-    $form->addElement('text', 'duration', get_lang('SessionDurationTitle'), array(
+$form->addElement(
+    'text',
+    'duration',
+    array(
+        get_lang('SessionDurationTitle'),
+        get_lang('SessionDurationDescription')
+    ),
+    array(
         'class' => 'span1',
         'maxlength' => 50
-    ));
-    $form->addElement('advanced_settings', get_lang('SessionDurationDescription'));
-}
+    )
+);
 
 //Extra fields
 $extra_field = new ExtraField('session');
@@ -270,18 +275,12 @@ if ($formSent) {
     $formDefaults['name'] = api_htmlentities($name,ENT_QUOTES,$charset);
     $formDefaults['nb_days_access_before'] = api_htmlentities($nb_days_access_before,ENT_QUOTES,$charset);
     $formDefaults['nb_days_access_after'] = api_htmlentities($nb_days_access_after,ENT_QUOTES,$charset);
+    $formDefaults['duration'] = Security::remove_XSS($duration);
 } else {
     $formDefaults['name'] = api_htmlentities($infos['name'],ENT_QUOTES,$charset);
     $formDefaults['nb_days_access_before'] = api_htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset);
     $formDefaults['nb_days_access_after'] = api_htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset);
-}
-
-if (SessionManager::durationPerUserIsEnabled()) {
-    if ($formSent) {
-        $formDefaults['duration'] = Security::remove_XSS($duration);
-    } else {
-        $formDefaults['duration'] = $duration;
-    }
+    $formDefaults['duration'] = $duration;
 }
 
 $form->setDefaults($formDefaults);

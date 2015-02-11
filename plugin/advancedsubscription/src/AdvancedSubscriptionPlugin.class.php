@@ -582,15 +582,11 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function installHook()
     {
-        if (HookEvent::isHookPluginActive()) {
-            $hookObserver = HookAdvancedSubscription::create();
-            HookAdminBlock::create()->attach($hookObserver);
-            HookWSRegistration::create()->attach($hookObserver);
-            HookNotificationContent::create()->attach($hookObserver);
-            HookNotificationTitle::create()->attach($hookObserver);
-        } else {
-            // Hook management plugin is not enabled
-        }
+        $hookObserver = HookAdvancedSubscription::create();
+        HookAdminBlock::create()->attach($hookObserver);
+        HookWSRegistration::create()->attach($hookObserver);
+        HookNotificationContent::create()->attach($hookObserver);
+        HookNotificationTitle::create()->attach($hookObserver);
     }
 
     /**

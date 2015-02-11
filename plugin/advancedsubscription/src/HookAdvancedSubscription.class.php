@@ -29,9 +29,10 @@ class HookAdvancedSubscription extends HookObserver implements
     public function hookAdminBlock(HookAdminBlockEventInterface $hook)
     {
         $data = $hook->getEventData();
-        if ($data['type'] === HOOK_TYPE_PRE) {
+        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
             // Nothing to do
-        } elseif ($data['type'] === HOOK_TYPE_POST) {
+        } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
+
             if (isset($data['blocks'])) {
                 $data['blocks']['sessions']['items'][] = array(
                     'url' => '../../plugin/advancedsubscription/src/admin_view.php',
@@ -54,9 +55,9 @@ class HookAdvancedSubscription extends HookObserver implements
     public function hookWSRegistration(HookWSRegistrationEventInterface $hook)
     {
         $data = $hook->getEventData();
-        if ($data['type'] === HOOK_TYPE_PRE) {
+        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
 
-        } elseif ($data['type'] === HOOK_TYPE_POST) {
+        } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
            /** @var \nusoap_server $server */
             $server = &$data['server'];
 
@@ -592,11 +593,11 @@ class HookAdvancedSubscription extends HookObserver implements
     public function hookNotificationContent(HookNotificationContentEventInterface $hook)
     {
         $data = $hook->getEventData();
-        if ($data['type'] === HOOK_TYPE_PRE) {
+        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
             $data['advsub_pre_content'] = $data['content'];
 
             return $data;
-        } elseif ($data['type'] === HOOK_TYPE_POST) {
+        } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
             if (
                 isset($data['content']) &&
                 !empty($data['content']) &&
@@ -628,11 +629,11 @@ class HookAdvancedSubscription extends HookObserver implements
     public function hookNotificationTitle(HookNotificationTitleEventInterface $hook)
     {
         $data = $hook->getEventData();
-        if ($data['type'] === HOOK_TYPE_PRE) {
+        if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
             $data['advsub_pre_title'] = $data['title'];
 
             return $data;
-        } elseif ($data['type'] === HOOK_TYPE_POST) {
+        } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
             if (
                 isset($data['advsub_pre_title']) &&
                 !empty($data['advsub_pre_title'])

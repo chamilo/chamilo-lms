@@ -358,9 +358,16 @@ class SkillRelUser extends Model
         return $users;
     }
 
-    public function get_user_skills($user_id, $courseId, $sessionId = 0)
+    /**
+     * Get the achieved skills for the user
+     * @param int $userId
+     * @param int $courseId The course id
+     * @param int $sessionId Optional. The session id
+     * @return array The skill list. Otherwise return false
+     */
+    public function get_user_skills($userId, $courseId, $sessionId = 0)
     {
-        if (empty($user_id)) {
+        if (empty($userId)) {
             return array();
         }
         $result = Database::select(
@@ -369,7 +376,7 @@ class SkillRelUser extends Model
             array(
                 'where' => array(
                     'user_id = ? AND course_id = ? AND session_id = ?' => array(
-                        intval($user_id),
+                        intval($userId),
                         intval($courseId),
                         intval($sessionId)
                     )
@@ -384,6 +391,8 @@ class SkillRelUser extends Model
      * Get the relation data between user and skill
      * @param int $userId The user id
      * @param int $skillId The skill id
+     * @param int $courseId The course id
+     * @param int $sessionId Optional. The session id
      * @return array The relation data. Otherwise return false
      */
     public function getByUserAndSkill($userId, $skillId, $courseId, $sessionId = 0)
@@ -1007,19 +1016,18 @@ class Skill extends Model
     }
 
     /**
-     * Return true if the user has the skill
-     *
-     * @param int $userId User's id
-     * @param int $skillId Skill's id
-     * @param int $checkInParents if true, function will search also in parents of the given skill id
-     *
-     * @return bool
+     * Check if the user has the skill
+     * @param int $userId The user id
+     * @param int $skillId The skill id
+     * @param int $courseId The course id
+     * @param int $sessionId Optional. The session id
+     * @return boolean Wheter the user has the skill return true. Otherwise return false
      */
-    public function user_has_skill($user_id, $skill_id, $courseId, $sessionId = 0)
+    public function user_has_skill($userId, $skillId, $courseId, $sessionId = 0)
     {        
         $whereConditions = array(
-            'user_id = ? ' => intval($user_id),
-            'AND skill_id = ? ' => intval($skill_id),
+            'user_id = ? ' => intval($userId),
+            'AND skill_id = ? ' => intval($skillId),
             'AND course_id = ? ' => intval($courseId),
             'AND session_id = ? ' => intval($sessionId)
         );

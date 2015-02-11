@@ -402,9 +402,9 @@ if (api_is_platform_admin()) {
 
     // Check Hook Event for Admin Block Object
     if (!empty($hook)) {
-        // If not empty, then notify Pre process to Hook Observers for Admin Block
+        // If not empty, then notify Post process to Hook Observers for Admin Block
         $hook->setEventData(array('blocks' => $blocks));
-        $data = $hook->notifyAdminBlock(HOOK_EVENT_TYPE_PRE);
+        $data = $hook->notifyAdminBlock(HOOK_EVENT_TYPE_POST);
         // Check if blocks data is not null
         if (isset($data['blocks'])) {
             // Get modified blocks

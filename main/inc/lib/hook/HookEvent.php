@@ -31,6 +31,7 @@ abstract class HookEvent implements HookEventInterface
         $this->eventName = $eventName;
         $this->eventData = array();
         $this->manager = HookManagement::create();
+        $this->loadAttachments();
     }
 
     /**
@@ -150,5 +151,30 @@ abstract class HookEvent implements HookEventInterface
     public function clearAttachments()
     {
         $this->observers->removeAll($this->observers);
+    }
+
+    /**
+     * Load all hook observer already registered from Session or Database
+     * @return $this
+     */
+    public function loadAttachments()
+    {
+        if (isset(self::$hook[$this->eventName]) && is_array(self::$hook[$this->eventName])) {
+            foreach (self::$hook[$this->eventName] as $hookObserver => $val) {
+                $hookObserverInstance = $hookObserver::create();
+                $this->observers->attach($hookObserverInstance);
+            }
+        } else {
+            // Load from Database and save into global name
+            self::$hook[$this->eventName] = $this->manager->listHookObservers($this->eventName);
+            if (isset(self::$hook[$this->eventName]) && is_array(self::$hook[$this->eventName])) {
+                foreach (self::$hook[$this->eventName] as $hookObserver => $val) {
+                    $hookObserverInstance = $hookObserver::create();
+                    $this->observers->attach($hookObserverInstance);
+                }
+            }
+        }
+
+        return $this;
     }
 }

@@ -330,14 +330,18 @@ $form->addGroup($visibilityGroup, 'visibility_group', null, null, false);
 
 $form->addElement('html','</div>');
 
-if (SessionManager::durationPerUserIsEnabled()) {
-    $form->addElement('text', 'duration', get_lang('SessionDurationTitle'),
-        array(
+$form->addElement(
+    'text',
+    'duration',
+    array(
+        get_lang('SessionDurationTitle'),
+        get_lang('SessionDurationDescription')
+    ),
+    array(
         'class' => 'span1',
         'maxlength' => 50
-    ));
-    $form->addElement('advanced_settings', get_lang('SessionDurationDescription'));
-}
+    )
+);
 
 //Extra fields
 $extra_field = new ExtraField('session');

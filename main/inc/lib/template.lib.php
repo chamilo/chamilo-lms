@@ -444,6 +444,7 @@ class Template
             'web_img'    => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
             'web_lib'    => api_get_path(WEB_LIBRARY_PATH),
+            'web_data'   => api_get_path(WEB_DATA_PATH),
             'web_self' => api_get_self(),
             'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
             'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),

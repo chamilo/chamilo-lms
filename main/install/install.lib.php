@@ -1322,6 +1322,10 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_ARCHIVE_PATH)).'</td>
             </tr>
             <tr>
+                <td class="requirements-item">'.api_get_path(SYS_DATA_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_DATA_PATH)).'</td>
+            </tr>
+            <tr>
                 <td class="requirements-item">'.api_get_path(SYS_COURSE_PATH).'</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_COURSE_PATH)).' </td>
             </tr>
@@ -1417,6 +1421,12 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         }
 
         $checked_writable = api_get_path(SYS_ARCHIVE_PATH);
+        if (!is_writable($checked_writable)) {
+            $notwritable[] = $checked_writable;
+            @chmod($checked_writable, $perm);
+        }
+
+        $checked_writable = api_get_path(SYS_DATA_PATH);
         if (!is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm);

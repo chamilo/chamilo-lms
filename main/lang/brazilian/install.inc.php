@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$YourLanguageNotThereContactUs = "Não encontrou seu idioma na lista? Envie-nos um email para info@chamilo.org para contribui como tradutor.";
+$DateTimezoneSettingNotSet = "Detectamos que sua instalação PHP não define os ajustes de data e Zona de Hora. Este é uma exigência do sistema Chamilo. Por favor tenha certeza que está configurado, revise seus ajustes n arquivo php.in, caso contrário poderá encontrar problemas. Avisamos você!";
 $langStatDB = "Base de Dados de Estatísticas. (Apenas se houver várias bases de dados)";
 $langEnableTracking = "Ativa registo de Estatísticas";
 $langInstituteShortName = "Sigla da sua organização";

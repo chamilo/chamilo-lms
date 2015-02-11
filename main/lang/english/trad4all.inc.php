@@ -2,6 +2,19 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$OpenBadgesBannerText = "A new online standard to recognize and verify learning in combination with Chamilo skills. Use the tabs to configure it.";
+$OpenBadgesIntroduction = "Introducing OpenBadges";
+$DesignANewBadgeComment = "Design a new badge, download it from the design tool and upload it on the platform.";
+$TheBadgesWillBeSentToThatBackpack = "The badges will be sent to this backpack";
+$BackpackDetails = "Backpack details";
+$CriteriaToEarnTheBadge = "Criteria to earn the badge";
+$BadgePreview = "Badge preview";
+$DesignNewBadge = "Design a new badge";
+$TotalX = "Total: %s";
+$DownloadBadges = "Download badges";
+$IssuerDetails = "Badges issuer details";
+$CreateBadge = "Create badge";
+$Badges = "Badges";
 $StudentsWhoAchievedTheSkillX = "Students who acquired skill %s";
 $AchievedSkillInCourseX = "Skills acquired in course %s";
 $SkillsReport = "Skills report";

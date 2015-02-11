@@ -371,12 +371,30 @@ class SkillRelUser extends Model
         );
         return $result;
     }
+
+    /**
+     * Get the relation data between user and skill
+     * @param int $userId The user id
+     * @param int $skillId The skill id
+     * @return array The relation data. Otherwise return false
+     */
+    public function getByUserAndSkill($userId, $skillId)
+    {
+        $where = array(
+            'user_id = ? AND skill_id = ?' => array($userId, $skillId)
+        );
+
+        return Database::select('*', $this->table, array(
+            'where' => $where
+        ), 'first');
+    }
+
 }
 
 
 class Skill extends Model
 {
-    public $columns = array('id', 'name', 'description', 'access_url_id', 'short_code');
+    public $columns = array('id', 'name', 'description', 'access_url_id', 'short_code', 'icon', 'criteria');
     public $required = array('name');
 
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
@@ -445,7 +463,7 @@ class Skill extends Model
             }
         }
 
-        $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type
+        $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type, s.icon
                 FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) $id_condition
                 ORDER BY ss.id, ss.parent_id";
 

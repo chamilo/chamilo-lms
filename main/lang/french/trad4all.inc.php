@@ -2,6 +2,24 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$OpenBadgesBannerText = "Un nouveau standard ouvert pour reconnaître et vérifier l'apprentissage, en combinaison avec les compétences de Chamilo. Utilisez les onglets pour le configurer.";
+$OpenBadgesIntroduction = "Nous vous présentons OpenBadges";
+$DesignANewBadgeComment = "Élaborez un nouveau badge, téléchargez-le et utilisez-le dans le formulaire du badge.";
+$TheBadgesWillBeSentToThatBackpack = "Les badges seront envoyés vers ce sac à dos";
+$BackpackDetails = "Détails du sac à dos";
+$CriteriaToEarnTheBadge = "Critères d'obtention du badge";
+$BadgePreview = "Prévisualisation du badge";
+$DesignNewBadge = "Élaborer un nouveau badge";
+$TotalX = "Total: %s";
+$DownloadBadges = "Télécharger les badges";
+$IssuerDetails = "Détails émetteur des badges";
+$CreateBadge = "Créer un badge";
+$Badges = "Badges";
+$StudentsWhoAchievedTheSkillX = "Apprenants qui ont acquis la compétence %s";
+$AchievedSkillInCourseX = "Compétences acquises grâce au cours %s";
+$SkillsReport = "Rapport de compétences";
+$AssignedUsersListToStudentBoss = "Liste des utilisateurs assignés au supérieur";
+$AssignUsersToBoss = "Assigner des utilisateurs au supérieur";
 $RoleStudentBoss = "Chef d'apprenant(s)";
 $CosecantCsc = "Cosécante:\t\t\t\tcsc(x)";
 $HyperbolicCosecantCsch = "Cosécante hyperbolique:\t\tcsch(x)";

@@ -32,8 +32,10 @@ ALTER TABLE session_rel_user ADD COLUMN duration int;
 CREATE TABLE course_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME);
 CREATE TABLE session_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME);
 
+ALTER TABLE skill ADD COLUMN criteria text DEFAULT '';
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.6' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.7' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$StartSurvey = "Começar pesquisa";
 $PublishSurvey = "Publicar questionário";
 $CompareQuestions = "Comparar questões";
 $InformationUpdated = "Informação atualizada";
@@ -203,6 +204,8 @@ $UpdateInformation = "Atualizar informação";
 $PleaseFillSurvey = "Por favor, preencha o questionário";
 $ReportingOverview = "Visualizar relatório";
 $ThereAreNotQuestionsForthisSurvey = "Não existem perguntas para esta enquete";
+$GenerateSurveyAccessLinkExplanation = "Copiando o link abaixo e colando em um editor de e-mail ou em um website, você permitirá qualquer pessoa desconhecida ou anônima entre e responda esta pesquisa. Você pode testar esta característica clicando no link abaixo e respondendo a pesquisa. Isto é particularmente útil se você precisa permitir alguém a responder sua pesquisa e não conhece o endereço de e-mail da mesma.";
+$GenerateSurveyAccessLink = "Gerar link de acesso à pesquisa";
 $Multipleresponse = "Múltiplas alternativas";
 $ErrorSurveyTypeUnknown = "Tipo de enquete desconhecida";
 $SurveyUndetermined = "Enquete indefinida";

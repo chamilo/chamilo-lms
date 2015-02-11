@@ -36,7 +36,7 @@
                             <tr>
                                 <td>
                                     {% if skill.icon %}
-                                        <img src="{{ [_p.web, skill.icon] | join('') }}" width="50" alt="{{ skill.name }}">
+                                        <img src="{{ [_p.web_data, skill.icon] | join('') }}" width="50" alt="{{ skill.name }}">
                                     {% endif %}
                                     {{ skill.name }}
                                 </td>

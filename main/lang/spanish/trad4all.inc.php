@@ -2,6 +2,19 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$OpenBadgesBannerText = "Un nuevo estándar abierto para reconocer y verificar el aprendizaje en combinación con las competencias de Chamilo. Usa las pestañas para configurarlo.";
+$OpenBadgesIntroduction = "Introduciendo OpenBadges";
+$DesignANewBadgeComment = "Diseña una nueva insignia, descárgala y súbela en la plataforma.";
+$TheBadgesWillBeSentToThatBackpack = "Las insignias se mandarán a esta mochila";
+$BackpackDetails = "Detalles de la mochila";
+$CriteriaToEarnTheBadge = "Criterios para lograr la insignia";
+$BadgePreview = "Previsualización insignia";
+$DesignNewBadge = "Diseñar una nueva insignia";
+$TotalX = "Total: %s";
+$DownloadBadges = "Descargar insignias";
+$IssuerDetails = "Detalles del emisor";
+$CreateBadge = "Crear insignia";
+$Badges = "Insignias";
 $StudentsWhoAchievedTheSkillX = "Estudiantes que adquirieron la competencia %s";
 $AchievedSkillInCourseX = "Competencias adquiridas en curso %s";
 $SkillsReport = "Reporte de competencias";

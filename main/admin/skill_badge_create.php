@@ -32,34 +32,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
         $dirPermissions = api_get_permissions_for_new_directories();
         $sysPath = api_get_path(SYS_PATH);
+        $sysDataPath = api_get_path(SYS_DATA_PATH);
 
-        $existsDataDirectory = file_exists($sysPath . 'data/');
+        $existsDataDirectory = is_dir($sysDataPath);
 
         if (!$existsDataDirectory) {
             $existsDataDirectory = api_create_protected_dir('data', $sysPath);
         }
 
-        $fileDir = "data/badges/";
+        $fileDir = "badges/";
         $fileName = sha1($_POST['name']) . ".png";
 
-        $existsBadgesDirectory = file_exists($sysPath . 'data/badges/');
+        $existsBadgesDirectory = is_dir($sysDataPath . 'badges/');
 
         if (!$existsBadgesDirectory) {
-            $existsBadgesDirectory = api_create_protected_dir('badges', $sysPath . 'data/');
+            $existsBadgesDirectory = api_create_protected_dir('badges', $sysDataPath);
         }
 
         if ($existsBadgesDirectory) {
             if (!empty($skill['icon'])) {
-                $iconFileAbsoulePath = $sysPath . $skill['icon'];
-                $iconDirAbsolutePath = $sysPath . $fileDir;
+                $iconFileAbsolutePath = $sysDataPath . $skill['icon'];
+                $iconDirAbsolutePath = $sysDataPath . $fileDir;
 
-                if (Security::check_abs_path($iconFileAbsoulePath, $iconDirAbsolutePath)) {
-                    unlink($sysPath . $skill['icon']);
+                if (Security::check_abs_path($iconFileAbsolutePath, $iconDirAbsolutePath)) {
+                    unlink($sysDataPath . $skill['icon']);
                 }
             }
 
             $imageExtraField = new Image($_FILES['image']['tmp_name']);
-            $imageExtraField->send_image($sysPath . $fileDir . $fileName, -1, 'png');
+            $imageExtraField->send_image($sysDataPath . $fileDir . $fileName, -1, 'png');
 
             $params['icon'] = $fileDir . $fileName;
         }

@@ -59,13 +59,13 @@
             <div class="tab-pane active">
                 <div class="row">
                     <div class="span3">
-                        <p>Design a new badge. Download from the design tool. And Upload in your platform.</p>
+                        <p>{{ 'DesignANewBadgeComment' | get_lang }}</p>
                         <p>
                             <button id="btn-open-designer" class="btn btn-info btn-large btn-block" type="button">{{ 'DesignNewBadge' | get_lang }}</button>
                         </p>
                         <hr>
                         <div class="well well-small {{ skill.icon ? '' : 'hide' }}" id="badge-container">
-                            <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web, skill.icon] | join('') : '' }}">
+                            <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web_data, skill.icon] | join('') : '' }}">
                         </div>
                     </div>
                     <div class="span9">
@@ -91,7 +91,7 @@
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label" for="criteria">{{ 'Criteria' | get_lang }}</label>
+                                    <label class="control-label" for="criteria">{{ 'CriteriaToEarnTheBadge' | get_lang }}</label>
                                     <div class="controls">
                                         <textarea name="criteria" id="criteria" class="input-xxlarge" rows="10">{{ skill.criteria }}</textarea>
                                     </div>

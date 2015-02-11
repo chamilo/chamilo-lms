@@ -17,8 +17,8 @@
         <div class="tab-content">
             <div class="tab-pane active">
                 <div class="hero-unit">
-                    <h1>Introducing Open Badges</h1>
-                    <p class="lead">A new online standard to recognize and verify learning</p>
+                    <h1>{{ 'OpenBadgesIntroduction' | get_lang }}</h1>
+                    <p class="lead">{{ 'OpenBadgesBannerText' | get_lang }}</p>
                     <p class="lead">
                         <a href="http://openbadges.org/">http://openbadges.org/</a>
                     </p>

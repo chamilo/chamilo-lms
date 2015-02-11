@@ -460,7 +460,7 @@ class DisplayGradebook
                     $aditionalButtons .= isset($certificateLinkInfo['badge_link']) ? $certificateLinkInfo['badge_link'] : '';
                     $aditionalButtons .= '</div>';
                 }
-                $scoreinfo .= '<h4>' . get_lang('Total') . ' : ' . $scorecourse_display . $aditionalButtons. '</h4>';
+                $scoreinfo .= '<h4>' . sprintf(get_lang('TotalX'), $scorecourse_display . $aditionalButtons). '</h4>';
 
             }
             Display :: display_normal_message($scoreinfo, false);

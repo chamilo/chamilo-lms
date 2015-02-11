@@ -25,7 +25,7 @@ class HookWSRegistration extends HookEvent implements HookWSRegistrationEventInt
      * Notify all Hook observer for WS Registration.
      * This save "server" (soap server) and send to Hook observer to be modified
      * (e.g. add more registration webservice)
-     * @param int $type Set the type of hook event called. 0: HOOK_TYPE_PRE, 1: HOOK_TYPE_POST
+     * @param int $type Set the type of hook event called. 0: HOOK_EVENT_TYPE_PRE, 1: HOOK_EVENT_TYPE_POST
      * @return int
      */
     public function notifyWSRegistration($type)

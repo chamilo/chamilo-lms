@@ -22,7 +22,7 @@ class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface {
 
     /**
      * Notify Hook observers for Admin Block event
-     * @param int $type Set the type of hook event called. 0: HOOK_TYPE_PRE, 1: HOOK_TYPE_POST
+     * @param int $type Set the type of hook event called. 0: HOOK_EVENT_TYPE_PRE, 1: HOOK_EVENT_TYPE_POST
      * @return array|int
      */
     public function notifyAdminBlock($type)

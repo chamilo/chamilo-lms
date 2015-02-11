@@ -147,7 +147,7 @@ class Notification extends Model
         $hook = HookNotificationTitle::create();
         if (!empty($hook)) {
             $hook->setEventData(array('title' => $title));
-            $data = $hook->notifyNotificationTitle(HOOK_TYPE_PRE);
+            $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_PRE);
             if (isset($data['title'])) {
                 $title = $data['title'];
             }
@@ -194,7 +194,7 @@ class Notification extends Model
 
         if (!empty($hook)) {
             $hook->setEventData(array('title' => $newTitle));
-            $data = $hook->notifyNotificationTitle(HOOK_TYPE_POST);
+            $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_POST);
             if (isset($data['title'])) {
                 $newTitle = $data['title'];
             }
@@ -328,7 +328,7 @@ class Notification extends Model
         $hook = HookNotificationContent::create();
         if (!empty($hook)) {
             $hook->setEventData(array('content' => $content));
-            $data = $hook->notifyNotificationContent(HOOK_TYPE_PRE);
+            $data = $hook->notifyNotificationContent(HOOK_EVENT_TYPE_PRE);
             if (isset($data['content'])) {
                 $content = $data['content'];
             }
@@ -408,7 +408,7 @@ class Notification extends Model
 
         if (!empty($hook)) {
             $hook->setEventData(array('content' => $content));
-            $data = $hook->notifyNotificationContent(HOOK_TYPE_POST);
+            $data = $hook->notifyNotificationContent(HOOK_EVENT_TYPE_POST);
             if (isset($data['content'])) {
                 $content = $data['content'];
             }

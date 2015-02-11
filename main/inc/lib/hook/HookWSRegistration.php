@@ -32,7 +32,7 @@ class HookWSRegistration extends HookEvent implements HookWSRegistrationEventInt
     {
         /** @var \HookWSRegistrationObserverInterface $observer */
         // check if already have server data
-        if (!isset($this->eventData['server'])) {
+        if (isset($this->eventData['server'])) {
             // Save Hook event type data
             $this->eventData['type'] = $type;
             foreach ($this->observers as $observer) {

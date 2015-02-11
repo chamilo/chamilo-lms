@@ -294,6 +294,8 @@ define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
 define('WEB_FONTS_PATH', 'WEB_FONTS_PATH');
 define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
+define('SYS_DATA_PATH', 'SYS_DATA_PATH');
+define('WEB_DATA_PATH', 'WEB_DATA_PATH');
 
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
@@ -426,6 +428,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/archive/
  * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/courses/
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
+ * api_get_path(SYS_DATA_PATH)                  /var/www/chamilo/data/
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
  * api_get_path(LIBRARY_PATH)                   /var/www/chamilo/main/inc/lib/
  * api_get_path(CONFIGURATION_PATH)             /var/www/chamilo/main/inc/conf/
@@ -439,6 +442,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
  * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/courses/
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
+ * api_get_path(WEB_DATA_PATH)                  http://www.mychamilo.org/chamilo/data/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
  * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/archive/
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
@@ -465,12 +469,14 @@ require_once __DIR__.'/internationalization.lib.php';
 function api_get_path($path_type, $path = null)
 {
     static $paths = array(
+        SYS_DATA_PATH           => '',
         WEB_PATH                => '',
         SYS_PATH                => '',
         REL_PATH                => '',
         WEB_SERVER_ROOT_PATH    => '',
         SYS_SERVER_ROOT_PATH    => '',
         WEB_COURSE_PATH         => '',
+        WEB_DATA_PATH           => '',
         SYS_COURSE_PATH         => '',
         REL_COURSE_PATH         => '',
         REL_CODE_PATH           => '',
@@ -517,6 +523,8 @@ function api_get_path($path_type, $path = null)
     global $_configuration;
     //default $_configuration['root_web'] configuration
     $root_web = $_configuration['root_web'];
+
+    $data_folder    = 'data/';
 
     // Configuration data for already installed system.
     $root_sys = $_configuration['root_sys'];
@@ -590,6 +598,8 @@ function api_get_path($path_type, $path = null)
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
+        $paths[SYS_DATA_PATH]           = $root_sys.$data_folder;
+        $paths[WEB_DATA_PATH]           = $root_web.$data_folder;
 
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
@@ -632,6 +642,7 @@ function api_get_path($path_type, $path = null)
                 WEB_ARCHIVE_PATH        => 'archive/',
                 WEB_LIBRARY_PATH        => 'inc/lib/',
                 WEB_AJAX_PATH           => 'inc/ajax/',
+                WEB_DATA_PATH           => '',
             );
 
             $root_web = api_add_trailing_slash($root_web);
@@ -643,6 +654,7 @@ function api_get_path($path_type, $path = null)
             $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
             $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
             $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
+            $paths[WEB_DATA_PATH]           = $root_web.$data_folder;
             $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_IMG_PATH];
 
             $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_CSS_PATH];

@@ -358,15 +358,37 @@ class SkillRelUser extends Model
         return $users;
     }
 
-    public function get_user_skills($user_id)
+    /**
+     * Get the achieved skills for the user
+     * @param int $userId
+     * @param int $courseId Optional. The course id
+     * @param int $sessionId Optional. The session id
+     * @return array The skill list. Otherwise return false
+     */
+    public function get_user_skills($userId, $courseId = 0, $sessionId = 0)
     {
-        if (empty($user_id)) {
+        if (empty($userId)) {
             return array();
         }
+
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $whereConditions = array(
+            'user_id = ? ' => intval($userId)
+        );
+
+        if ($courseId > 0) {
+            $whereConditions['AND course_id = ? '] = $courseId;
+            $whereConditions['AND session_id = ?'] = $sessionId;
+        }
+
         $result = Database::select(
             'skill_id',
             $this->table,
-            array('where' => array('user_id = ?' => intval($user_id))),
+            array(
+                'where' => $whereConditions
+            ),
             'all'
         );
         return $result;
@@ -376,12 +398,19 @@ class SkillRelUser extends Model
      * Get the relation data between user and skill
      * @param int $userId The user id
      * @param int $skillId The skill id
+     * @param int $courseId The course id
+     * @param int $sessionId Optional. The session id
      * @return array The relation data. Otherwise return false
      */
-    public function getByUserAndSkill($userId, $skillId)
+    public function getByUserAndSkill($userId, $skillId, $courseId, $sessionId = 0)
     {
         $where = array(
-            'user_id = ? AND skill_id = ?' => array($userId, $skillId)
+            'user_id = ? AND skill_id = ? AND course_id = ? AND session_id = ?' => array(
+                intval($userId),
+                intval($skillId),
+                intval($courseId),
+                intval($sessionId)
+            )
         );
 
         return Database::select('*', $this->table, array(
@@ -622,9 +651,6 @@ class Skill extends Model
 
     public function add_skill_to_user($user_id, $gradebook_id, $courseId = 0, $sessionId = 0)
     {
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
-
         $skill_gradebook = new SkillRelGradebook();
         $skill_rel_user  = new SkillRelUser();
 
@@ -637,8 +663,8 @@ class Skill extends Model
                         'user_id'           => $user_id,
                         'skill_id'          => $skill_gradebook['skill_id'],
                         'acquired_skill_at' => api_get_utc_datetime(),
-                        'course_id' => $courseId,
-                        'session_id' => $sessionId
+                        'course_id' => intval($courseId),
+                        'session_id' => intval($sessionId)
                     );
 
                     $skill_rel_user->save($params);
@@ -994,25 +1020,27 @@ class Skill extends Model
     }
 
     /**
-     * Return true if the user has the skill
-     *
-     * @param int $userId User's id
-     * @param int $skillId Skill's id
-     * @param int $checkInParents if true, function will search also in parents of the given skill id
-     *
-     * @return bool
+     * Check if the user has the skill
+     * @param int $userId The user id
+     * @param int $skillId The skill id
+     * @param int $courseId Optional. The course id
+     * @param int $sessionId Optional. The session id
+     * @return boolean Wheter the user has the skill return true. Otherwise return false
      */
-    public function user_has_skill($user_id, $skill_id, $courseId = 0, $sessionId = 0)
-    {        
+    public function user_has_skill($userId, $skillId, $courseId = 0, $sessionId = 0)
+    {       
         $courseId = intval($courseId);
         $sessionId = intval($sessionId);
 
         $whereConditions = array(
-            'user_id = ? ' => $user_id,
-            'AND skill_id = ? ' => $skill_id,
-            'AND course_id = ? ' => $courseId,
-            'AND session_id = ? ' => $sessionId
+            'user_id = ? ' => intval($userId),
+            'AND skill_id = ? ' => intval($skillId)
         );
+
+        if ($courseId > 0) {
+            $whereConditions['AND course_id = ? '] = $courseId;
+            $whereConditions['AND session_id = ? '] = $sessionId;
+        }
 
         $result = Database::select('COUNT(1) AS qty', $this->table_skill_rel_user, array(
             'where' => $whereConditions

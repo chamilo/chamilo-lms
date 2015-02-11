@@ -11,6 +11,8 @@ require_once '../inc/global.inc.php';
 
 $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
 $skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
+$courseId = isset($_GET['course']) ? intval($_GET['course']) : 0;
+$sessionId = isset($_GET['session']) ? intval($_GET['session']) : 0;
 
 if ($userId === 0 || $skillId === 0) {
     exit;
@@ -18,12 +20,12 @@ if ($userId === 0 || $skillId === 0) {
 
 $objSkill = new Skill();
 
-if (!$objSkill->user_has_skill($userId, $skillId)) {
+if (!$objSkill->user_has_skill($userId, $skillId, $courseId, $sessionId)) {
     exit;
 }
 
 $objSkillRelUser = new SkillRelUser();
-$userSkill = $objSkillRelUser->getByUserAndSkill($userId, $skillId);
+$userSkill = $objSkillRelUser->getByUserAndSkill($userId, $skillId, $courseId, $sessionId);
 
 if ($userSkill == false) {
     exit;
@@ -42,7 +44,12 @@ $json = array(
     'badge' => api_get_path(WEB_CODE_PATH) . "badge/class.php?id=$skillId",
     'verify' => array(
         'type' => 'hosted',
-        'url' => api_get_path(WEB_CODE_PATH) . "badge/assertion.php?user=$userId&skill=$skillId"
+        'url' => api_get_path(WEB_CODE_PATH) . "badge/assertion.php?" . http_build_query(array(
+            'user' => $userId,
+            'skill' => $skillId,
+            'course' => $courseId,
+            'session' => $sessionId
+        ))
     )
 );
 

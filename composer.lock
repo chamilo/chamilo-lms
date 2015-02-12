@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "92e3639ab4571c7ee337b8fe9ffaedd0",
+    "hash": "b9a64081b907e6968045cc2c894d141f",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -166,13 +166,20 @@
         },
         {
             "name": "ckeditor/ckeditor",
-            "version": "dev-chamilo-lms",
+            "version": "4.4.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ilosada/ckeditor-dev",
-                "reference": "0399f26fe80d63706df6e3bff0418ffbf5346529"
+                "url": "https://github.com/ckeditor/ckeditor-releases.git",
+                "reference": "cc324415302784eb1abe33a3762fbdd3b48c558b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/cc324415302784eb1abe33a3762fbdd3b48c558b",
+                "reference": "cc324415302784eb1abe33a3762fbdd3b48c558b",
+                "shasum": ""
             },
             "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0+",
                 "LGPL-2.1+",
@@ -187,7 +194,7 @@
             "description": "JavaScript WYSIWYG web text editor.",
             "homepage": "http://ckeditor.com",
             "keywords": [
-                "ckeditor",
+                "CKEditor",
                 "editor",
                 "fckeditor",
                 "html",
@@ -196,13 +203,7 @@
                 "text",
                 "wysiwyg"
             ],
-            "support": {
-                "issues": "http://dev.ckeditor.com",
-                "forum": "http://ckeditor.com/forums",
-                "wiki": "http://docs.ckeditor.com",
-                "source": "http://github.com/ckeditor/ckeditor-dev"
-            },
-            "time": "2015-02-05 14:35:19"
+            "time": "2015-01-27 15:13:53"
         },
         {
             "name": "doctrine/cache",
@@ -659,16 +660,16 @@
         },
         {
             "name": "php-ffmpeg/php-ffmpeg",
-            "version": "0.3.x-dev",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
-                "reference": "185fb5c33da594db7ffbf3f89d48e9841bc666a0"
+                "reference": "6e3134e4ecc96852b1205e6c88ceffdb8cf17d34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/185fb5c33da594db7ffbf3f89d48e9841bc666a0",
-                "reference": "185fb5c33da594db7ffbf3f89d48e9841bc666a0",
+                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/6e3134e4ecc96852b1205e6c88ceffdb8cf17d34",
+                "reference": "6e3134e4ecc96852b1205e6c88ceffdb8cf17d34",
                 "shasum": ""
             },
             "require": {
@@ -689,7 +690,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.4-dev"
+                    "dev-master": "0.5-dev"
                 }
             },
             "autoload": {
@@ -724,7 +725,7 @@
                 "video",
                 "video processing"
             ],
-            "time": "2013-10-21 12:13:46"
+            "time": "2015-01-30 19:07:38"
         },
         {
             "name": "psr/log",
@@ -1357,10 +1358,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "php-ffmpeg/php-ffmpeg": 20,
-        "ckeditor/ckeditor": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

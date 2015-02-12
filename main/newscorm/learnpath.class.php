@@ -7240,6 +7240,7 @@ class learnpath
             $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
 
             $relative_prefix = '';
+
             $editor_config = array( 'ToolbarSet' 			=> 'LearningPathDocuments',
                 'Width' 				=> '100%',
                 'Height' 				=> '500',
@@ -7248,6 +7249,7 @@ class learnpath
                 'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/scorm/',
                 'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().$item_path_fck
             );
+
             $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
             $content_path = (api_get_path(SYS_COURSE_PATH).api_get_course_path().$item_path_fck);
             //$defaults['content_lp'] = file_get_contents($item_path);
@@ -7534,6 +7536,7 @@ class learnpath
                             'CreateDocumentDir' 	=> $relative_prefix,
                             'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/',
                             'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/'.$relative_path
+
                         );
 
                         if ($_GET['action'] == 'add_item') {

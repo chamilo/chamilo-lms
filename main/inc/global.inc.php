@@ -107,6 +107,7 @@ require_once $lib_path.'online.inc.php';
 require_once $lib_path.'banner.lib.php';
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
+require_once $lib_path.'fileDisplay.lib.php';
 
 define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
 if (!is_dir(_MPDF_TEMP_PATH)) {

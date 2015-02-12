@@ -1332,6 +1332,7 @@ class DocumentManager
                         path LIKE BINARY '$path' AND
                         session_id = $sessionId
                     LIMIT 1";
+
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -3665,7 +3666,6 @@ class DocumentManager
         $overwrite_url = null,
         $folderId = false
     ) {
-        require_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php';
         $return = '';
 
         if (!empty($documents)) {
@@ -4610,6 +4610,29 @@ class DocumentManager
         if (!isset($defaultCertificateId)) {
             self::attach_gradebook_certificate($courseData['code'], $documentId);
         }
+    }
+
+    /**
+     * Update the document name
+     * @param int $documentId The document id
+     * @param string $newName The new name
+     */
+    public static function renameDocument($documentId, $newName)
+    {
+        $documentId = intval($documentId);
+        $newName = Database::escape_string($newName);
+
+        $docuentTable = Database::get_course_table(TABLE_DOCUMENT);
+
+        $values = array(
+            'title' => $newName
+        );
+
+        $whereConditions = array(
+            'id = ?' => $documentId
+        );
+
+        Database::update($docuentTable, $values, $whereConditions);
     }
 
     /**

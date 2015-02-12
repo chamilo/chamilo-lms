@@ -12,9 +12,6 @@ api_protect_course_script(true);
 
 // Including necessary files
 require_once 'work.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 $this_section = SECTION_COURSES;
 

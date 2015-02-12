@@ -1681,14 +1681,22 @@ class Category implements GradebookItem
                     );
 
                     if (api_get_setting('allow_skills_tool') == 'true') {
-                        $html['badge_link'] = Display::url(
-                            get_lang('DownloadBadges'),
-                            api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
-                            array(
-                                'target' => '_blank',
-                                'class' => 'btn'
-                            )
-                        );
+                        $courseId = api_get_course_int_id();
+                        $sessionId = api_get_session_id();
+
+                        $objSkillRelUser = new SkillRelUser();
+                        $userSkills = $objSkillRelUser->get_user_skills($user_id, $courseId, $sessionId);
+
+                        if (!empty($userSkills)) {
+                            $html['badge_link'] = Display::url(
+                                get_lang('DownloadBadges'),
+                                api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
+                                array(
+                                    'target' => '_blank',
+                                    'class' => 'btn'
+                                )
+                            );
+                        }
                     }
                 }
                 return $html;

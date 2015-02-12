@@ -72,6 +72,7 @@ if ($verified) {
                     $admin['complete_name'] = $admin['lastname'] . ', ' . $admin['firstname'];
                 }
                 unset($admin);
+                $data['a'] = 'confirm';
                 $data['student'] = $studentArray;
                 $data['superior'] = $superiorArray;
                 $data['admins'] = $adminsArray;
@@ -98,9 +99,9 @@ if ($verified) {
                     }
                 } else {
                     $data['e'] = ADV_SUB_QUEUE_STATUS_BOSS_APPROVED;
-                    $student['acceptUrl'] = $plugin->getQueueUrl($data);
+                    $data['student']['acceptUrl'] = $plugin->getQueueUrl($data);
                     $data['e'] = ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED;
-                    $student['rejectUrl'] = $plugin->getQueueUrl($data);
+                    $data['student']['rejectUrl'] = $plugin->getQueueUrl($data);
                     $result['mailIds'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
                     if (!empty($result['mailIds'])) {
                         $result['error'] = false;

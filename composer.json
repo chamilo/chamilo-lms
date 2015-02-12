@@ -9,6 +9,9 @@
         "irc": "irc://irc.freenode.org/chamilo"
     },
     "autoload": {
+        "psr-0": {
+            "": "src/"
+        },
         "classmap": [
             "main/auth",
             "main/admin",
@@ -35,9 +38,13 @@
         "emojione/emojione": "1.3.0",
         "zendframework/zend-config": "2.3.3",
         "ezyang/htmlpurifier": "4.6.0",
+        "aferrandini/phpqrcode": "1.0.1",
+        "ckeditor/ckeditor": "4.4.7",
         "szymach/c-pchart": "1.*",
         "aferrandini/phpqrcode": "1.0.1",
-        "mpdf/mpdf": "5.7.4"
+        "mpdf/mpdf": "5.7.4",
+        "barryvdh/elfinder-builds": "2.1.0.3",
+        "jbroadway/urlify": "1.0.3-stable"
     },
     "extra": {
         "branch-alias": {

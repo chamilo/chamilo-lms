@@ -9,7 +9,6 @@
  */
 class AnnouncementManager
 {
-
     public function __construct()
     {
     }
@@ -631,8 +630,8 @@ class AnnouncementManager
      */
     public static function show_to_form($to_already_selected)
     {
-        $user_list = self::get_course_users();
-        $group_list = self::get_course_groups();
+        $userList = self::get_course_users();
+        $groupList = self::get_course_groups();
 
         if ($to_already_selected == '' || $to_already_selected == 'everyone') {
             $to_already_selected = array();
@@ -651,7 +650,7 @@ class AnnouncementManager
         echo '<td>';
         echo "<strong>" . get_lang('Users') . "</strong><br />";
 
-        self::construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
+        self::construct_not_selected_select_form($groupList, $userList, $to_already_selected);
         echo "</td>";
 
         // the buttons for adding or removing groups/users
@@ -665,7 +664,7 @@ class AnnouncementManager
 
         // the form containing the selected groups and users
         echo "<strong>" . get_lang('DestinationUsers') . "</strong><br />";
-        self::construct_selected_select_form($group_list, $user_list, $to_already_selected);
+        self::construct_selected_select_form($groupList, $userList, $to_already_selected);
         echo "</td>";
         echo "</tr>";
         echo "</table>";
@@ -706,16 +705,23 @@ class AnnouncementManager
     }
 
     /**
-     * this function shows the form for sending a message to a specific group or user.
+     * Shows the form for sending a message to a specific group or user.
+     * @param array $groupList
+     * @param array $userList
+     * @param array $to_already_selected
      */
-    public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
-    {
+    public static function construct_not_selected_select_form(
+        $groupList = array(),
+        $userList = array(),
+        $to_already_selected = array()
+    ) {
         echo '<select id="not_selected_form" name="not_selected_form[]" size="7" class="span4" multiple>';
         // adding the groups to the select form
-        if ($group_list) {
-            foreach ($group_list as $this_group) {
+        if (!empty($groupList)) {
+            foreach ($groupList as $this_group) {
                 if (is_array($to_already_selected)) {
-                    if (!in_array("GROUP:" . $this_group['id'], $to_already_selected)) { // $to_already_selected is the array containing the groups (and users) that are already selected
+                    if (!in_array("GROUP:" . $this_group['id'], $to_already_selected)) {
+                        // $to_already_selected is the array containing the groups (and users) that are already selected
                         $user_label = ($this_group['userNb'] > 0) ? get_lang('Users') : get_lang('LowerCaseUser') ;
                         $user_disabled = ($this_group['userNb'] > 0) ? "" : "disabled=disabled" ;
                         echo "<option $user_disabled value=\"GROUP:" . $this_group['id'] . "\">",
@@ -727,15 +733,25 @@ class AnnouncementManager
             // a divider
             echo "<option value=\"\">---------------------------------------------------------</option>";
         }
+
         // adding the individual users to the select form
-        if ($user_list) {
-            foreach ($user_list as $this_user) {
+
+        if (!empty($userList)) {
+            foreach ($userList as $user) {
                 if (is_array($to_already_selected)) {
-                    if (!in_array("USER:" . $this_user['user_id'], $to_already_selected)) {
+                    if (!in_array("USER:" . $user['user_id'], $to_already_selected)) {
                         // $to_already_selected is the array containing the users (and groups) that are already selected
-                        echo "<option value=\"USER:" . $this_user['user_id'] . "\" title='" . sprintf(get_lang('LoginX'), $this_user['username']) . "'>",
-                        "", api_get_person_name($this_user['firstname'], $this_user['lastname']),
+                        echo "<option value=\"USER:" . $user['user_id'] . "\" title='" . sprintf(get_lang('LoginX'), $user['username']) . "'>",
+                        "", api_get_person_name($user['firstname'], $user['lastname']),
                         "</option>";
+
+                        if (isset($user['drh_list']) && !empty($user['drh_list'])) {
+                            foreach ($user['drh_list'] as $drh) {
+                                echo "<option value=\"USER:" . $drh['user_id'] . "\" title='" . sprintf(get_lang('LoginX'), $drh['username']) . "'>&nbsp;&nbsp;&nbsp;&nbsp;",
+                                "", api_get_person_name($drh['firstname'], $drh['lastname']),
+                                "</option>";
+                            }
+                        }
                     }
                 }
             }
@@ -746,17 +762,13 @@ class AnnouncementManager
     /**
      * this function shows the form for sending a message to a specific group or user.
      */
-    public static function construct_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
+    /**
+     * @param null $groupList
+     * @param null $userList
+     * @param $to_already_selected
+     */
+    public static function construct_selected_select_form($groupList = null, $userList = null, $to_already_selected = array())
     {
-        // we separate the $to_already_selected array (containing groups AND users into
-        // two separate arrays
-        $groupuser = array();
-        if (is_array($to_already_selected)) {
-            $groupuser = self::separate_users_groups($to_already_selected);
-        }
-        $groups_to_already_selected = $groupuser['groups'];
-        $users_to_already_selected = $groupuser['users'];
-
         // we load all the groups and all the users into a reference array that we use to search the name of the group / user
         $ref_array_groups = self::get_course_groups();
         $ref_array_users = self::get_course_users();
@@ -771,7 +783,16 @@ class AnnouncementManager
                 } else {
                     foreach ($ref_array_users as $key => $value) {
                         if ($value['user_id'] == $id) {
-                            echo "<option value=\"" . $groupuser . "\" title='" . sprintf(get_lang('LoginX'), $value['username']) . "'>" . api_get_person_name($value['firstname'], $value['lastname']) . "</option>";
+                            echo "<option value=\"" . $groupuser . "\" title='" . sprintf(get_lang('LoginX'), $value['username']) . "'>" .
+                                api_get_person_name($value['firstname'], $value['lastname']) . "</option>";
+
+                            if (isset($value['drh_list']) && !empty($value['drh_list'])) {
+                                foreach ($value['drh_list'] as $drh) {
+                                    echo "<option value=\"USER:" . $drh['user_id'] . "\" title='" . sprintf(get_lang('LoginX'), $drh['username']) . "'>&nbsp;&nbsp;&nbsp;&nbsp;",
+                                    "", api_get_person_name($drh['firstname'], $drh['lastname']),
+                                    "</option>";
+                                }
+                            }
                             break;
                         }
                     }
@@ -806,8 +827,8 @@ class AnnouncementManager
     /**
      * Returns announcement info from its id
      *
-     * @param type $course_id
-     * @param type $annoucement_id
+     * @param int $course_id
+     * @param int $annoucement_id
      * @return array
      */
     public static function get_by_id($course_id, $annoucement_id)
@@ -819,12 +840,15 @@ class AnnouncementManager
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $sql = "SELECT DISTINCT announcement.id, announcement.title, announcement.content
-                           FROM $tbl_announcement announcement INNER JOIN $tbl_item_property toolitemproperties
-                           ON   announcement.id = toolitemproperties.ref AND
-                                announcement.c_id = $course_id AND
-                                toolitemproperties.c_id = $course_id
-                           WHERE toolitemproperties.tool='announcement' AND
-                                 announcement.id = $annoucement_id";
+               FROM $tbl_announcement announcement
+               INNER JOIN $tbl_item_property toolitemproperties
+               ON
+                    announcement.id = toolitemproperties.ref AND
+                    announcement.c_id = $course_id AND
+                    toolitemproperties.c_id = $course_id
+               WHERE
+                toolitemproperties.tool='announcement' AND
+                announcement.id = $annoucement_id";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return Database::fetch_array($result);
@@ -842,12 +866,22 @@ class AnnouncementManager
         //this would return only the users from real courses:
         $session_id = api_get_session_id();
         if ($session_id != 0) {
-            $user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), true, $session_id);
+            $userList = CourseManager::get_real_and_linked_user_list(
+                api_get_course_id(),
+                true,
+                $session_id,
+                true
+            );
         } else {
-            $user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), false, 0);
+            $userList = CourseManager::get_real_and_linked_user_list(
+                api_get_course_id(),
+                false,
+                0,
+                true
+            );
         }
 
-        return $user_list;
+        return $userList;
     }
 
     /**

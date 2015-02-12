@@ -7,6 +7,10 @@
  */
 require_once '../inc/global.inc.php';
 
+if (api_get_setting('allow_skills_tool') !== 'true') {
+    api_not_allowed(true);
+}
+
 $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();

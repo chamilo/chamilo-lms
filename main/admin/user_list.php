@@ -559,9 +559,27 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 
 	if (api_is_platform_admin(true)) {
+        $editProfileUrl = api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$user_id";
 
-		if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id, null, true)) {
-            $result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+        if (api_get_setting('sso_authentication') === 'true') {
+            $subSSOClass = api_get_setting('sso_authentication_subclass');
+
+            $objSSO = null;
+
+            if (!empty($subSSOClass)) {
+                require_once api_get_path(SYS_CODE_PATH) . "auth/sso/sso.$subSSOClass.class.php";
+
+                $subSSOClass = 'sso' . $subSSOClass;
+                $objSSO = new $subSSOClass();
+            } else {
+                $objSSO = new sso();
+            }
+
+            $editProfileUrl = $objSSO->generateProfileEditingURL($user_id, true);
+        }
+
+        if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id, null, true)) {
+            $result .= '<a href="' . $editProfileUrl . '">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		} else {
             $result .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		}

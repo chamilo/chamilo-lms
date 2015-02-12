@@ -286,12 +286,17 @@ define('INCLUDE_PATH', 'INCLUDE_PATH');
 define('LIBRARY_PATH', 'LIBRARY_PATH');
 define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 define('WEB_LIBRARY_PATH', 'WEB_LIBRARY_PATH');
+define('WEB_LIBRARY_JS_PATH', 'WEB_LIBRARY_JS_PATH');
 define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('SYS_TEST_PATH', 'SYS_TEST_PATH');
 define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
 define('WEB_FONTS_PATH', 'WEB_FONTS_PATH');
 define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
+
+define('SYS_DEFAULT_COURSE_DOCUMENT_PATH', 'SYS_DEFAULT_COURSE_DOCUMENT_PATH');
+define('REL_DEFAULT_COURSE_DOCUMENT_PATH', 'REL_DEFAULT_COURSE_DOCUMENT_PATH');
+define('WEB_DEFAULT_COURSE_DOCUMENT_PATH', 'WEB_DEFAULT_COURSE_DOCUMENT_PATH');
 
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
@@ -369,6 +374,12 @@ define('HOOK_EVENT_TYPE_PRE', 0);
 define('HOOK_EVENT_TYPE_POST', 1);
 define('HOOK_EVENT_TYPE_ALL', 10);
 
+define('CAREER_STATUS_ACTIVE', 1);
+define('CAREER_STATUS_INACTIVE', 0);
+
+define('PROMOTION_STATUS_ACTIVE',  1);
+define('PROMOTION_STATUS_INACTIVE', 0);
+
 /**
  * Inclusion of internationalization libraries
  */
@@ -442,6 +453,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
  * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
+ * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/Chamilo/javascript
  * api_get_path(WEB_TEMPLATE_PATH)              http://www.mychamilo.org/chamilo/main/template/
  *
  *
@@ -486,6 +498,7 @@ function api_get_path($path_type, $path = null)
         LIBRARY_PATH            => 'inc/lib/',
         CONFIGURATION_PATH      => 'inc/conf/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
+        WEB_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
@@ -589,6 +602,10 @@ function api_get_path($path_type, $path = null)
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
 
+        $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_CODE_PATH].'default_course_document/';
+        $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_PATH].'main/default_course_document/';
+
+
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
@@ -601,6 +618,8 @@ function api_get_path($path_type, $path = null)
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
+        $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_JS_PATH];
+
         $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
         $paths[WEB_FONTS_PATH]          = $paths[WEB_CODE_PATH].$paths[WEB_FONTS_PATH];
 

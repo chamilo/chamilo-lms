@@ -20,12 +20,6 @@ $this_section = SECTION_COURSES;
 require_once 'document.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 
-/* Libraries */
-require_once $lib_path.'document.lib.php';
-require_once $lib_path.'fileUpload.lib.php';
-require_once $lib_path.'fileDisplay.lib.php';
-//require_once $lib_path.'tablesort.lib.php';moved to autoload
-
 api_protect_course_script(true);
 
 $htmlHeadXtra[] = api_get_jqgrid_js();

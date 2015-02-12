@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'pear/HTML/QuickForm.php';
-require_once api_get_path(LIBRARY_PATH).'pear/HTML/QuickForm/advmultiselect.php';
-
 /**
  * Filter
  */
@@ -346,42 +343,23 @@ EOT;
      * @param string $label						The label for the form-element
      * @param boolean $required	(optional)		Is the form-element required (default=true)
      * @param boolean $full_page (optional)		When it is true, the editor loads completed html code for a full page.
-     * @param array $editor_config (optional)	Configuration settings for the online editor.
+     * @param array $config (optional)	Configuration settings for the online editor.
+     *
      */
-    function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
+    public function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
-        $html_type = STUDENT_HTML;
-        if (!empty($_SESSION['status'])) {
-            $html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;
-        }
-        if (is_array($config)) {
-            if (isset($config['FullPage'])) {
-                $full_page = is_bool($config['FullPage']) ? $config['FullPage'] : ($config['FullPage'] === 'true');
-            } else {
-                $config['FullPage'] = $full_page;
-            }
-        } else {
-            $config = array('FullPage' => (bool) $full_page);
-        }
-        if ($full_page) {
-            $html_type = isset($_SESSION['status']) && $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;
-            //First *filter* the HTML (markup, indenting, ...)
-            //$this->applyFilter($name,'html_filter_teacher_fullpage');
-        } else {
-            //First *filter* the HTML (markup, indenting, ...)
-            //$this->applyFilter($name,'html_filter_teacher');
-        }
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
-        if ($full_page) {
-            $el = $this->getElement($name);
-            $el->fullPage = true;
+
+        /** @var HTML_QuickForm_html_editor $element */
+        $element = $this->getElement($name);
+
+        if ($element->editor) {
+            $element->editor->processConfig($config);
         }
-        // Add rule to check not-allowed HTML
-        //$this->addRule($name, get_lang('SomeHTMLNotAllowed'), 'html', $html_type);
     }
 
     /**

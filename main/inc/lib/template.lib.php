@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
-require_once api_get_path(SYS_PATH).'vendor/twig/twig/lib/Twig/Autoloader.php';
-
 /**
  * Class Template
  *
@@ -67,9 +64,6 @@ class Template
         $this->show_learnpath   = $show_learnpath;
         $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins     = $load_plugins;
-
-        // Twig settings
-        Twig_Autoloader::register();
 
         $template_paths = array(
             api_get_path(SYS_CODE_PATH).'template', //template folder
@@ -437,6 +431,7 @@ class Template
         //Setting app paths/URLs
         $_p = array(
             'web'        => api_get_path(WEB_PATH),
+            'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main'   => api_get_path(WEB_CODE_PATH),
             'web_css'    => api_get_path(WEB_CSS_PATH),
@@ -475,12 +470,11 @@ class Template
             $this->theme = $this->preview_theme;
         }
 
-        //Base CSS
+        // Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 
-        //Default CSS responsive design
+        // Default CSS responsive design
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
-
 
         //Extra CSS files
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
@@ -582,6 +576,8 @@ class Template
         foreach ($js_files as $js_file) {
             $js_file_to_string .= api_get_js($js_file);
         }
+        // @todo fix this path
+        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'vendor/ckeditor/ckeditor/ckeditor.js"></script>';
 
         //Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {

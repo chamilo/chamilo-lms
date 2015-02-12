@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+ *	Chamilo LMS
+ *
+ *	Copyright (c) 2009-2010 Ivan Tcholakov <ivantcholakov@gmail.com>
+ *	Copyright (c) 2009 Dokeos SPRL
+ *
+ *	License:
+ *	GNU Lesser General Public License, Version 3, 29 June 2007
+ *	by Free Software Foundation, Inc. (http://www.gnu.org/licenses/lgpl.html)
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>AsciiMath Editor</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="robots" content="noindex, nofollow" />
+
+        <script type="text/javascript">
+document.write( '<scr' + 'ipt type="text/javascript" src="' + window.parent.frameElement._DialogArguments.Editor.FCKConfig.ScriptASCIIMathML + '"><\/scr' + 'ipt>' ) ;
+        </script>
+
+        <script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
+        <script src="fck_asciimath.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
+        </script>
+
+        <style type="text/css">
+
+body, td, input, textarea, select, label, button { font-family: Arial, Verdana, Geneva, helvetica, sans-serif; font-size: 11px; }
+form { padding: 0px; margin: 0px; }
+form p { margin-top: 5px; margin-bottom: 5px; }
+
+#clickInput
+{
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    text-align: center;
+}
+#clickInput td
+{
+    border: 1px solid gray;
+    font-size: 1.1em;
+}
+
+#inputText, #outputNode
+{
+    padding: 5px;
+    background-color: white;
+    width: 98%;
+    height: 80px;
+    font-size: 1.3em;
+    border: 1px solid darkgrey;
+    overflow: auto;
+}
+
+.Hand
+{
+    cursor: pointer;
+    cursor: hand;
+}
+
+        </style>
+
+    </head>
+<body scroll="no" style="overflow: hidden;">
+
+<!--
+Table modified from CharacterMap for ASCIIMathML by Peter Jipsen
+HTMLSource based on HTMLArea XTD 1.5 (http://mosforge.net/projects/htmlarea3xtd/) modified by Holger Hees
+Original Author - Bernhard Pfeifer novocaine@gmx.net
+-->
+<table id="clickInput">
+<tr>
+<td colspan="3" class="Hand" title="(x+1)/(x-1)" onclick="javascript: Set('(x+1)/(x-1)');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/x1x1.png" /></td>
+<td colspan="2" class="Hand" title="x^(m+n)" onclick="javascript: Set('x^(m+n)');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/xmn.png" /></td>
+<td colspan="2" class="Hand" title="x_(mn)" onclick="javascript: Set('x_(mn)');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/x_mn.png" /></td>
+<td colspan="2" class="Hand" title="sqrt(x)" onclick="javascript: Set('sqrt(x)');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/sqrtx.png" /></td>
+<td colspan="3" class="Hand" title="root(n)(x)" onclick="javascript: Set('root(n)(x)');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rootnx.png" /></td>
+<td colspan="3" class="Hand" title="{(1 if x&gt;=0),(0 if x&lt;0):}" onclick="javascript: Set('{(1 if x&gt;=0),(0 if x&lt;0):}');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ifx.png" /></td>
+<td colspan="2" class="Hand" title="&quot;text&quot;" onclick="javascript: Set('&quot;text&quot;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/text.png" /></td>
+</tr><tr>
+<td colspan="2" class="Hand" title="dy/dx" onclick="javascript: Set('dy/dx');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/dydx.png" /></td>
+<td colspan="3" class="Hand" title="lim_(x-&gt;oo)" onclick="javascript: Set('lim_(x-&gt;oo)');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/lim.png" /></td>
+<td colspan="3" class="Hand" title="sum_(n=1)^oo" onclick="javascript: Set('sum_(n=1)^oo');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/sumn.png" /></td>
+<td colspan="3" class="Hand" title="int_a^bf(x)dx" onclick="javascript: Set('int_a^bf(x)dx');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/intab.png" /></td>
+<td colspan="3" class="Hand" title="[[a,b],[c,d]]" onclick="javascript: Set('[[a,b],[c,d]]');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/abcd.png" /></td>
+<td colspan="2" class="Hand" title="((n),(k))" onclick="javascript: Set('((n),(k))');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/nk.png" /></td>
+</tr><tr>
+<td class="Hand" title="*" onclick="javascript: Set('*');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/dot.png" /></td>
+<td class="Hand" title="**" onclick="javascript: Set('**');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/star.png" /></td>
+<td class="Hand" title="//" onclick="javascript: Set('//');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/slash.png" /></td>
+<td class="Hand" title="\\" onclick="javascript: Set('\\\\');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/backslash.png" /></td>
+<td class="Hand" title="xx" onclick="javascript: Set('xx');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/times.png" /></td>
+<td class="Hand" title="-:" onclick="javascript: Set('-:');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/div.png" /></td>
+<td class="Hand" title="@" onclick="javascript: Set('@');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/circ.png" /></td>
+<td class="Hand" title="o+" onclick="javascript: Set('o+');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/oplus.png" /></td>
+<td class="Hand" title="ox" onclick="javascript: Set('ox');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/otimes.png" /></td>
+<td class="Hand" title="o." onclick="javascript: Set('o.');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/odot.png" /></td>
+<td class="Hand" title="sum" onclick="javascript: Set('sum');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/sum.png" /></td>
+<td class="Hand" title="prod" onclick="javascript: Set('prod');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/prod.png" /></td>
+<td class="Hand" title="^^" onclick="javascript: Set('^^');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/wedge.png" /></td>
+<td class="Hand" title="^^^" onclick="javascript: Set('^^^');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/bigwedge.png" /></td>
+<td class="Hand" title="vv" onclick="javascript: Set('vv');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/vee.png" /></td>
+<td class="Hand" title="vvv" onclick="javascript: Set('vvv');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/bigvee.png" /></td>
+</tr><tr>
+<td class="Hand" title="!=" onclick="javascript: Set('!=');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ne.png" /></td>
+<td class="Hand" title="&lt;=" onclick="javascript: Set('&lt;=');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/le.png" /></td>
+<td class="Hand" title="&gt;=" onclick="javascript: Set('&gt;=');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ge.png" /></td>
+<td class="Hand" title="-&lt;" onclick="javascript: Set('-&lt;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/prec.png" /></td>
+<td class="Hand" title="&gt;-" onclick="javascript: Set('&gt;-');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/succ.png" /></td>
+<td class="Hand" title="in" onclick="javascript: Set('in');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/in.png" /></td>
+<td class="Hand" title="!in" onclick="javascript: Set('!in');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/notin.png" /></td>
+<td class="Hand" title="sub" onclick="javascript: Set('sub');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/subset.png" /></td>
+<td class="Hand" title="sup" onclick="javascript: Set('sup');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/supset.png" /></td>
+<td class="Hand" title="sube" onclick="javascript: Set('sube');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/subseteq.png" /></td>
+<td class="Hand" title="supe" onclick="javascript: Set('supe');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/supseteq.png" /></td>
+<td class="Hand" title="O/" onclick="javascript: Set('O/');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/emptyset.png" /></td>
+<td class="Hand" title="nn" onclick="javascript: Set('nn');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/cap.png" /></td>
+<td class="Hand" title="nnn" onclick="javascript: Set('nnn');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/bigcap.png" /></td>
+<td class="Hand" title="uu" onclick="javascript: Set('uu');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/cup.png" /></td>
+<td class="Hand" title="uuu" onclick="javascript: Set('uuu');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/bigcup.png" /></td>
+</tr><tr>
+<td class="Hand" title="and" onclick="javascript: Set('and');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/text_and.png" /></td>
+<td class="Hand" title="or" onclick="javascript: Set('or');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/text_or.png" /></td>
+<td class="Hand" title="not" onclick="javascript: Set('not');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/not.png" /></td>
+<td class="Hand" title="=&gt;" onclick="javascript: Set('=&gt;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rightarrow.png" /></td>
+<td class="Hand" title="if" onclick="javascript: Set('if');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/if.png" /></td>
+<td class="Hand" title="&lt;=&gt;" onclick="javascript: Set('&lt;=&gt;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/leftrightarrow.png" /></td>
+<td class="Hand" title="AA" onclick="javascript: Set('AA');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/forall.png" /></td>
+<td class="Hand" title="EE" onclick="javascript: Set('EE');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/exists.png" /></td>
+<td class="Hand" title="_|_" onclick="javascript: Set('_|_');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/bot.png" /></td>
+<td class="Hand" title="TT" onclick="javascript: Set('TT');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/top.png" /></td>
+<td class="Hand" title="|--" onclick="javascript: Set('|--');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/vdash.png" /></td>
+<td class="Hand" title="|==" onclick="javascript: Set('|==');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/models.png" /></td>
+<td class="Hand" title="-=" onclick="javascript: Set('-=');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/equiv.png" /></td>
+<td class="Hand" title="~=" onclick="javascript: Set('~=');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/cong.png" /></td>
+<td class="Hand" title="~~" onclick="javascript: Set('~~');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/approx.png" /></td>
+<td class="Hand" title="prop" onclick="javascript: Set('prop');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/propto.png" /></td>
+</tr><tr>
+<td class="Hand" title="int" onclick="javascript: Set('int');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/int.png" /></td>
+<td class="Hand" title="oint" onclick="javascript: Set('oint');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/oint.png" /></td>
+<td class="Hand" title="del" onclick="javascript: Set('del');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/partial.png" /></td>
+<td class="Hand" title="grad" onclick="javascript: Set('grad');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/nabla.png" /></td>
+<td class="Hand" title="+-" onclick="javascript: Set('+-');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/pm.png" /></td>
+<td class="Hand" title="oo" onclick="javascript: Set('oo');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/infty.png" /></td>
+<td class="Hand" title="A\ B (space between A and B)" onclick="javascript: Set('A\\ B');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/space.png" /></td>
+<td class="Hand" title="AquadB (double space between A and B)" onclick="javascript: Set('AquadB');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/quad.png" /></td>
+<td class="Hand" title="diamond" onclick="javascript: Set('diamond');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/diamond.png" /></td>
+<td class="Hand" title="square" onclick="javascript: Set('square');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/square.png" /></td>
+<td class="Hand" title="|__" onclick="javascript: Set('|__');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/lfloor.png" /></td>
+<td class="Hand" title="__|" onclick="javascript: Set('__|');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rfloor.png" /></td>
+<td class="Hand" title="|~" onclick="javascript: Set('|~');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/lceil.png" /></td>
+<td class="Hand" title="~|" onclick="javascript: Set('~|');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rceil.png" /></td>
+<td class="Hand" title="&lt;&lt;x&gt;&gt;" onclick="javascript: Set('&lt;&lt;x&gt;&gt;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/braxcket.png" /></td>
+<td class="Hand" title="/_" onclick="javascript: Set('/_');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/angle.png" /></td>
+</tr><tr>
+<td class="Hand" title="uarr" onclick="javascript: Set('uarr');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/uarr.png" /></td>
+<td class="Hand" title="darr" onclick="javascript: Set('darr');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/darr.png" /></td>
+<td class="Hand" title="larr" onclick="javascript: Set('larr');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/larr.png" /></td>
+<td class="Hand" title="-&gt;" onclick="javascript: Set('-&gt;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rarr.png" /></td>
+<td class="Hand" title="|-&gt;" onclick="javascript: Set('|-&gt;');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/mapsto.png" /></td>
+<td class="Hand" title="harr" onclick="javascript: Set('harr');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/harr.png" /></td>
+<td class="Hand" title="lArr" onclick="javascript: Set('lArr');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/llarr.png" /></td>
+<td class="Hand" title="rArr" onclick="javascript: Set('rArr');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rrarr.png" /></td>
+<td class="Hand" title="hArr" onclick="javascript: Set('hArr');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/hharr.png" /></td>
+<td class="Hand" title="hata" onclick="javascript: Set('hata');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/hata.png" /></td>
+<td class="Hand" title="ula" onclick="javascript: Set('ula');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ula.png" /></td>
+<td class="Hand" title="dota" onclick="javascript: Set('dota');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/dota.png" /></td>
+<td class="Hand" title="ddota" onclick="javascript: Set('ddota');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ddota.png" /></td>
+<td class="Hand" title="veca" onclick="javascript: Set('veca');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/veca.png" /></td>
+<td class="Hand" title="bara" onclick="javascript: Set('bara');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/bara.png" /></td>
+<td class="Hand" title=":." onclick="javascript: Set(':.');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/therefore.png" /></td>
+</tr><tr>
+<td class="Hand" title="NN" onclick="javascript: Set('NN');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/nn.png" /></td>
+<td class="Hand" title="ZZ" onclick="javascript: Set('ZZ');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/zz.png" /></td>
+<td class="Hand" title="QQ" onclick="javascript: Set('QQ');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/qq.png" /></td>
+<td class="Hand" title="RR" onclick="javascript: Set('RR');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rr.png" /></td>
+<td class="Hand" title="CC" onclick="javascript: Set('CC');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/cc.png" /></td>
+<td class="Hand" title="bbA" onclick="javascript: Set('bbA');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/bba.png" /></td>
+<td class="Hand" title="bbbA" onclick="javascript: Set('bbbA');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/bbba.png" /></td>
+<td class="Hand" title="ccA" onclick="javascript: Set('ccA');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/cca.png" /></td>
+<td class="Hand" title="frA" onclick="javascript: Set('frA');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/fra.png" /></td>
+<td class="Hand" title="sfA" onclick="javascript: Set('sfA');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/sfa.png" /></td>
+<td class="Hand" title="ttA" onclick="javascript: Set('ttA');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/tta.png" /></td>
+<td colspan="3" class="Hand" title="stackrel(-&gt;)(+)" onclick="javascript: Set('stackrel(-&gt;)(+)');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/stackrel.png" /></td>
+<td class="Hand" title="aleph" onclick="javascript: Set('aleph');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/aleph.png" /></td>
+<td class="Hand" title="upsilon" onclick="javascript: Set('upsilon');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/upsilon.png" /></td>
+</tr><tr>
+<td class="Hand" title="alpha" onclick="javascript: Set('alpha');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/alpha.png" /></td>
+<td class="Hand" title="beta" onclick="javascript: Set('beta');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/beta.png" /></td>
+<td class="Hand" title="gamma" onclick="javascript: Set('gamma');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/gamma.png" /></td>
+<td class="Hand" title="Gamma" onclick="javascript: Set('Gamma');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ggamma.png" /></td>
+<td class="Hand" title="delta" onclick="javascript: Set('delta');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/delta.png" /></td>
+<td class="Hand" title="Delta" onclick="javascript: Set('Delta');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ddelta.png" /></td>
+<td class="Hand" title="epsi" onclick="javascript: Set('epsi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/epsilon.png" /></td>
+<td class="Hand" title="zeta" onclick="javascript: Set('zeta');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/zeta.png" /></td>
+<td class="Hand" title="eta" onclick="javascript: Set('eta');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/eta.png" /></td>
+<td class="Hand" title="theta" onclick="javascript: Set('theta');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/theta.png" /></td>
+<td class="Hand" title="Theta" onclick="javascript: Set('Theta');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ttheta.png" /></td>
+<td class="Hand" title="iota" onclick="javascript: Set('iota');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/iota.png" /></td>
+<td class="Hand" title="kappa" onclick="javascript: Set('kappa');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/kappa.png" /></td>
+<td class="Hand" title="lambda" onclick="javascript: Set('lambda');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/lambda.png" /></td>
+<td class="Hand" title="Lambda" onclick="javascript: Set('Lambda');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/llambda.png" /></td>
+<td class="Hand" title="mu" onclick="javascript: Set('mu');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/mu.png" /></td>
+</tr><tr>
+<td class="Hand" title="nu" onclick="javascript: Set('nu');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/nu.png" /></td>
+<td class="Hand" title="pi" onclick="javascript: Set('pi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/pi.png" /></td>
+<td class="Hand" title="Pi" onclick="javascript: Set('Pi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ppi.png" /></td>
+<td class="Hand" title="rho" onclick="javascript: Set('rho');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/rho.png" /></td>
+<td class="Hand" title="sigma" onclick="javascript: Set('sigma');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/sigma.png" /></td>
+<td class="Hand" title="Sigma" onclick="javascript: Set('Sigma');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ssigma.png" /></td>
+<td class="Hand" title="tau" onclick="javascript: Set('tau');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/tau.png" /></td>
+<td class="Hand" title="xi" onclick="javascript: Set('xi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/xi.png" /></td>
+<td class="Hand" title="Xi" onclick="javascript: Set('Xi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/xxi.png" /></td>
+<td class="Hand" title="phi" onclick="javascript: Set('phi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/phi.png" /></td>
+<td class="Hand" title="Phi" onclick="javascript: Set('Phi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/pphi.png" /></td>
+<td class="Hand" title="chi" onclick="javascript: Set('chi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/chi.png" /></td>
+<td class="Hand" title="psi" onclick="javascript: Set('psi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/psi.png" /></td>
+<td class="Hand" title="Psi" onclick="javascript: Set('Psi');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/ppsi.png" /></td>
+<td class="Hand" title="omega" onclick="javascript: Set('omega');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/omega.png" /></td>
+<td class="Hand" title="Omega" onclick="javascript: Set('Omega');" onmouseover="javascript: over(this);" onmouseout="javascript: out(this);"><img src="images/oomega.png" /></td>
+</tr>
+</table>
+<form action="javascript: void(0);">
+<table style="width: 100%; border: none;">
+  <tr>
+    <td style="width:50%;" nowrap="nowrap"><span fckLang="DlgAsciiMathInput">Input</span>&nbsp;&nbsp;<input id="clear" type="button" fckLang="DlgAsciiMathClear" onclick="javascript: Clear();" style="width: 100px; font-size: 10px;" value="Clear" />&nbsp;&nbsp;<input id="delete" type="button" fckLang="DlgAsciiMathDelete" onclick="javascript: Delete();" style="width: 100px; font-size: 10px;" value="Delete" />&nbsp;&nbsp;</td>
+    <td style="width:50%;"><input id="show_mathml" type="button" fckLang="DlgAsciiMathShowMathML" onclick="javascript: ShowMathML();" style="float: right; font-size: 10px; display: none;" value="Show MathML" /><span fckLang="DlgAsciiMathPreview">Preview</span></td>
+  </tr>
+</table>
+<table style="width: 100%; border: none;">
+  <tr>
+    <td style="width:50%; min-width: 300px; max-width: 435px;">
+    <textarea id="inputText" onkeyup="javascript: Preview();"></textarea>
+    </td>
+    <td style="width:50%; min-width: 300px; max-width: 435px;">
+    <div id="outputNode"></div>
+    </td>
+  </tr>
+  <tr><td colspan="2">
+  <span fckLang="DlgAsciiMathBasedOn">Based on ASCIIMathML by </span><a href="http://www.chapman.edu/~jipsen" onclick="javascript: window.open(this.href,'_blank','');return false;">Peter Jipsen</a>,
+<a href="http://www.chapman.edu" onclick="javascript: window.open(this.href,'_blank','');return false;">Chapman University</a><br />
+  <span fckLang="DlgAsciiMathForMoreInfo">For more information on AsciiMathML visit this page: </span><a href="http://www1.chapman.edu/~jipsen/mathml/asciimath.html" onclick="javascript: window.open(this.href,'_blank','');return false;">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</a></td></tr>
+</table>
+</form>
+</body>
+</html>

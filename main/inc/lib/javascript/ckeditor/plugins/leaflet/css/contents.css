@@ -1,0 +1,25 @@
+.leaflet_div {
+  background: #eee;
+  border: 1px solid #ddd;
+  border-radius: 4pxt;
+  box-shadow: 0 1px 1px #fff inset, 0 -1px 0px #ccc inset;
+  margin-right: 1em;
+}
+
+.leaflet_div.align-left {
+  float: left;
+}
+
+.leaflet_div.align-right {
+  float: right;
+}
+
+.leaflet_div.align-center {
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cke_widget_wrapper:hover>.cke_widget_element {
+  outline: 3px solid yellow !important;
+}

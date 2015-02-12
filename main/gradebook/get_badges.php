@@ -5,18 +5,22 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.badge
  */
-$cidReset = true;
-
 require_once '../inc/global.inc.php';
 
+if (api_get_setting('allow_skills_tool') !== 'true') {
+    api_not_allowed(true);
+}
+
 $userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
+$courseId = api_get_course_int_id();
+$sessionId = api_get_session_id();
 
 if ($userId === 0) {
     exit;
 }
 
 $objSkillRelUser = new SkillRelUser();
-$userSkills = $objSkillRelUser->get_user_skills($userId);
+$userSkills = $objSkillRelUser->get_user_skills($userId, $courseId, $sessionId);
 
 if (empty($userSkills)) {
     exit;
@@ -27,7 +31,15 @@ $assertions = array();
 foreach ($userSkills as $skill) {
     $skillId = current($skill);
 
-    $assertions[] = api_get_path(WEB_CODE_PATH) . "badge/assertion.php?user=$userId&skill=$skillId";
+    $assertionUrl = api_get_path(WEB_CODE_PATH) . "badge/assertion.php?";
+    $assertionUrl .= http_build_query(array(
+        'user' => $userId,
+        'skill' => $skillId,
+        'course' => $courseId,
+        'session' => $sessionId
+    ));
+
+    $assertions[] = $assertionUrl;
 }
 
 $backpack = 'https://backpack.openbadges.org/';

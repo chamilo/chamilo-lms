@@ -292,7 +292,7 @@ if ($form->validate()) {
     $startDate = $params['date_start'];
     $endDate = $params['date_end'];
     $nb_days_acess_before = $params['nb_days_access_before'];
-    $nb_days_acess_after = $params['nb_days_acc ess_after'];
+    $nb_days_acess_after = $params['nb_days_access_after'];
     $id_coach = $params['id_coach'];
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];

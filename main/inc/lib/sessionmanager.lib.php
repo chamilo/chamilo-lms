@@ -1361,12 +1361,6 @@ class SessionManager
         $extraFields = array()
     ) {
         $name = trim(stripslashes($name));
-        $year_start = intval($year_start);
-        $month_start = intval($month_start);
-        $day_start = intval($day_start);
-        $year_end = intval($year_end);
-        $month_end = intval($month_end);
-        $day_end = intval($day_end);
         $id_coach = intval($id_coach);
         $nb_days_acess_before = intval($nb_days_acess_before);
         $nb_days_acess_after = intval($nb_days_acess_after);

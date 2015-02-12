@@ -55,7 +55,7 @@
             <p class="text-title-select">Elige una sesión de formación</p>
             <select id="session-select" name="s">
                 <option value="0">
-                    {{ "SelectASession" | get_lang }}
+                    {{ "SelectASession" | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                 </option>
                 {% for sessionItem in sessionItems %}
                 <option value="{{ sessionItem.id }}" {{ sessionItem.selected }}>
@@ -64,21 +64,21 @@
                 {% endfor %}
             </select>
 
-            <h4>{{ "SessionName" | get_lang }}</h4>
+            <h4>{{ "SessionName" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4>
             <h3 class="title-name-session">{{ session.name }}</h3>
-            <h4>{{ "Target" | get_lang }}</h4>
+            <h4>{{ "Target" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4>
             <p>{{ session.target }}</p>
 
         </div>
         <div class="span6">
             <p class="separate-badge">
                 <span class="badge badge-dis">{{ session.vacancies }}</span>
-                {{ "Vacancies" | get_lang }}</p>
+                {{ "Vacancies" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
             <p class="separate-badge">
                 <span class="badge badge-recom">{{ session.recommended_number_of_participants }}</span>
-                {{ "RecommendedNumberOfParticipants" | get_lang }}</p>
-            <h4>{{ "PublicationEndDate" | get_lang }}</h4> <p>{{ session.publication_end_date }}</p>
-            <h4>{{ "Mode" | get_lang }}</h4> <p>{{ session.mode }}</p>
+                {{ "RecommendedNumberOfParticipants" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
+            <h4>{{ "PublicationEndDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4> <p>{{ session.publication_end_date }}</p>
+            <h4>{{ "Mode" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4> <p>{{ session.mode }}</p>
         </div>
     </div>
     <div class="row">
@@ -88,10 +88,10 @@
                     <tbody>
                     <tr>
                         <th style="width: 118px;"><img src="img/icon-avatar.png"/> </th>
-                        <th>{{ "Postulant" | get_lang }}</th>
-                        <th>{{ "InscriptionDate" | get_lang }}</th>
-                        <th>{{ "BossValidation" | get_lang }}</th>
-                        <th>{{ "Decision" | get_lang }}</th>
+                        <th>{{ "Postulant" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
+                        <th>{{ "InscriptionDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
+                        <th>{{ "BossValidation" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
+                        <th>{{ "Decision" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                     </tr>
                     {% set row_class = "row_odd" %}
                     {% for student in students %}

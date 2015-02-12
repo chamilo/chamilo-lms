@@ -25,7 +25,6 @@ define('ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED', 10);
 
 require_once __DIR__ . '/../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
-require_once __DIR__ . '/resources/phpcrypt/phpCrypt.php';
 require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
 require_once api_get_path(PLUGIN_PATH) . 'advancedsubscription/src/AdvancedSubscriptionPlugin.class.php';
 require_once api_get_path(PLUGIN_PATH) . 'advancedsubscription/src/HookAdvancedSubscription.class.php';

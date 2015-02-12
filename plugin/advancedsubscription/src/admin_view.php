@@ -12,36 +12,8 @@ require_once __DIR__ . '/../config.php';
 api_protect_admin_script();
 // start plugin
 $plugin = AdvancedSubscriptionPlugin::create();
-// Decrypt if data is a long string
-$data = isset($_REQUEST['data']) ?
-    strlen($_REQUEST['data']) > 16 ?
-        $plugin->decrypt($_REQUEST['data']) :
-        null :
-    null;
-// Get data
-if (isset($data) && is_array($data)) {
-    // Action code
-    $a = isset($data['a']) ? $data['a'] : null;
-    // User ID
-    $u = isset($data['u']) ? intval($data['u']) : null;
-    // Session ID
-    $s = isset($data['s']) ? intval($data['s']) : null;
-    // More data
-    $params['is_connected'] = isset($data['is_connected']) ? $data['is_connected'] : false;
-    $params['profile_completed'] = isset($data['profile_completed']) ? $data['profile_completed'] : 0;
-    $params['accept'] = isset($data['accept']) ? $data['accept'] : false;
-} else {
-    // Action code
-    $a = isset($_REQUEST['a']) ? Security::remove_XSS($_REQUEST['a']) : null;
-    // User ID
-    $u = isset($_REQUEST['u']) ? intval($_REQUEST['u']) : null;
-    // Session ID
-    $s = isset($_REQUEST['s']) ? intval($_REQUEST['s']) : null;
-    // More data
-    $params['is_connected'] = isset($_REQUEST['is_connected']) ? $_REQUEST['is_connected'] : false;
-    $params['profile_completed'] = isset($_REQUEST['profile_completed']) ? $_REQUEST['profile_completed'] : 0;
-    $params['accept'] = isset($_REQUEST['accept']) ? $_REQUEST['accept'] : false;
-}
+// Session ID
+$s = isset($_REQUEST['s']) ? intval($_REQUEST['s']) : null;
 
 // Init template
 $tpl = new Template('TESTING');
@@ -79,25 +51,9 @@ if (!empty($s)) {
         $data['u'] = intval($student['user_id']);
         $data['q'] = intval($student['queue_id']);
         $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED;
-        $student['acceptUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
-            'a=confirm&' .
-            's=' . $s . '&' .
-            'current_user_id=' . api_get_user_id() . '&' .
-            'e=' . ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED . '&' .
-            'u=' . $student['user_id'] . '&' .
-            'q=' . $student['queue_id'] . '&' .
-            'v=' . $plugin->generateHash($data);
+        $student['acceptUrl'] = $plugin->getQueueUrl($data);
         $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
-        $student['rejectUrl'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
-            'a=confirm&' .
-            's=' . $s . '&' .
-            'current_user_id=' . api_get_user_id() . '&' .
-            'e=' . ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED . '&' .
-            'u=' . $student['user_id'] . '&' .
-            'q=' . $student['queue_id'] . '&' .
-            'v=' . $plugin->generateHash($data);
-        ;
-        $student['dataDisapprove'] = $plugin->encrypt($data);
+        $student['rejectUrl'] = $plugin->getQueueUrl($data);
         $student['complete_name'] = $student['lastname'] . ', ' . $student['firstname'];
         $student['picture'] = UserManager::get_user_picture_path_by_id($student['user_id'], 'web', false, true);
         $student['picture'] = UserManager::get_picture_user($student['user_id'], $student['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);

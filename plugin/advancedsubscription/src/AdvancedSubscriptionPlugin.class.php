@@ -8,8 +8,6 @@
  */
 
 
-use PHP_Crypt\PHP_Crypt as PHP_Crypt;
-
 class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 {
     /**
@@ -27,7 +25,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'ws_url' => 'text',
             'min_profile_percentage' => 'text',
             'check_induction' => 'boolean',
-            'confirmation_message' => 'wysiwyg'
+            'confirmation_message' => 'wysiwyg',
+            'secret_key' => 'text',
         );
 
         parent::__construct('1.0', 'Imanol Losada, Daniel Barreto', $parameters);
@@ -149,22 +148,22 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                                 if ($expendedNumMax >= $expendedNum) {
                                     $isAble = true;
                                 } else {
-                                    throw new \Exception(get_lang('AdvancedSubscriptionCourseXLimitReached'));
+                                    throw new \Exception($this->get_lang('AdvancedSubscriptionCourseXLimitReached'));
                                 }
                             } else {
-                                throw new \Exception(get_lang('AdvancedSubscriptionTimeXLimitReached'));
+                                throw new \Exception($this->get_lang('AdvancedSubscriptionTimeXLimitReached'));
                             }
                         } else {
-                            throw new \Exception(get_lang('AdvancedSubscriptionCostXLimitReached'));
+                            throw new \Exception($this->get_lang('AdvancedSubscriptionCostXLimitReached'));
                         }
                     } else {
-                        throw new \Exception(get_lang('AdvancedSubscriptionIncompleteInduction'));
+                        throw new \Exception($this->get_lang('AdvancedSubscriptionIncompleteInduction'));
                     }
                 } else {
-                    throw new \Exception(get_lang('AdvancedSubscriptionProfileIncomplete'));
+                    throw new \Exception($this->get_lang('AdvancedSubscriptionProfileIncomplete'));
                 }
             } else {
-                throw new \Exception(get_lang('AdvancedSubscriptionNotConnected'));
+                throw new \Exception($this->get_lang('AdvancedSubscriptionNotConnected'));
             }
 
             return $isAble;
@@ -236,7 +235,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 if ($advSub->isAbleToRequest($userId, $params)) {
                     $result = (bool) $advSub->addToQueue($userId, $sessionId);
                 } else {
-                    throw new \Exception(get_lang('AdvancedSubscriptionNotMoreAble'));
+                    throw new \Exception($this->get_lang('AdvancedSubscriptionNotMoreAble'));
                 }
             } catch (Exception $e) {
                 $result = $e->getMessage();
@@ -328,7 +327,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             );
         } elseif(isset($params['u']) && isset($params['s'])) {
             $where = array(
-                'user_id = ? AND session_id = ?' => array($params['u'], $params['s']),
+                'user_id = ? AND session_id = ? AND status <> ? AND status <> ?' => array(
+                    $params['u'],
+                    $params['s'],
+                    $newStatus,
+                    ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED,
+                ),
             );
         }
         if (isset($where)) {
@@ -398,7 +402,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds[] = $this->sendMailMessage(
                     $data['u'],
                     $data['student']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailBossAccept'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior_approved.tpl'),
                     $data['s']
                 );
@@ -406,7 +410,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $data['superior']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailBossAccept'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_approve_confirmed.tpl'),
                     $data['s']
                 );
@@ -416,7 +420,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $mailIds[] = $this->sendMailMessage(
                         $data['u'],
                         $adminId,
-                        $this->get_lang('MailStudentRequest'),
+                        $this->get_lang('MailBossAccept'),
                         $tpl->fetch('/advancedsubscription/views/advsub_request_approved_info_admin.tpl'),
                         $data['s'],
                         true
@@ -428,7 +432,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds[] = $this->sendMailMessage(
                     $data['u'],
                     $data['student']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailBossReject'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior_disapproved.tpl'),
                     $data['s'],
                     true
@@ -437,7 +441,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $data['superior']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailBossReject'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_disapprove_confirmed.tpl'),
                     $data['s']
                 );
@@ -447,7 +451,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds[] = $this->sendMailMessage(
                     $data['u'],
                     $data['student']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailStudentRequestSelect'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_received.tpl'),
                     $data['s']
                 );
@@ -455,7 +459,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $data['superior']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailStudentRequestSelect'),
                     $tpl->fetch('/advancedsubscription/views/advsub_request_superior.tpl'),
                     $data['s'],
                     true
@@ -466,7 +470,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds[] = $this->sendMailMessage(
                     $data['u'],
                     $data['student']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailAdminAccept'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_student.tpl'),
                     $data['s']
                 );
@@ -474,7 +478,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds[] = $this->sendMailMessage(
                     $data['u'],
                     $data['superior']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailAdminAccept'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_superior.tpl'),
                     $data['s']
                 );
@@ -484,7 +488,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $adminId,
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailAdminAccept'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_accepted_notice_admin.tpl'),
                     $data['s'],
                     true
@@ -495,7 +499,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds[] = $this->sendMailMessage(
                     $data['u'],
                     $data['student']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailAdminReject'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_student.tpl'),
                     $data['s'],
                     true
@@ -504,7 +508,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds[] = $this->sendMailMessage(
                     $data['u'],
                     $data['superior']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailAdminReject'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_superior.tpl'),
                     $data['s']
                 );
@@ -514,7 +518,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $adminId,
-                    $this->get_lang('MailStudentRequest'),
+                    $this->get_lang('MailAdminReject'),
                     $tpl->fetch('/advancedsubscription/views/advsub_approval_admin_rejected_notice_admin.tpl'),
                     $data['s']
                 );
@@ -524,8 +528,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $mailIds['render'] = $this->sendMailMessage(
                     $data['u'],
                     $data['student']['user_id'],
-                    $this->get_lang('MailStudentRequest'),
-                    $tpl->fetch('/advancedsubscription/views/advsub_request_received.tpl'),
+                    $this->get_lang('MailStudentRequestNoBoss'),
+                    $tpl->fetch('/advancedsubscription/views/advsub_request_received_no_boss.tpl'),
                     $data['s']
                 );
                 // Mail to admin
@@ -534,7 +538,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $mailIds[] = $this->sendMailMessage(
                         $data['u'],
                         $adminId,
-                        $this->get_lang('MailStudentRequest'),
+                        $this->get_lang('MailStudentRequestNoBoss'),
                         $tpl->fetch('/advancedsubscription/views/advsub_request_approved_info_admin.tpl'),
                         $data['s'],
                         true
@@ -600,43 +604,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         HookWSRegistration::create()->detach($hookObserver);
         HookNotificationContent::create()->detach($hookObserver);
         HookNotificationTitle::create()->detach($hookObserver);
-    }
-
-    /**
-     * Use AES-256 Encryption and url encoded
-     * Return the message encrypted
-     * @param mixed $data
-     * @return string
-     */
-    public function encrypt($data)
-    {
-        global $_config;
-        $key = sha1($_config['secret_key']);
-        $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CTR);
-        $encrypted = $crypt->createIV();
-        $encrypted .= $crypt->encrypt(serialize($data));
-        $encrypted = urlencode($encrypted);
-
-        return $encrypted;
-    }
-
-    /**
-     * Decrypt a message decoding as url an then decrypt AES-256 method
-     * Return the message decrypted
-     * @param $encrypted
-     * @return mixed
-     */
-    public function decrypt($encrypted)
-    {
-        global $_config;
-        $encrypted = urldecode($encrypted);
-        $key = sha1($_config['secret_key']);
-        $crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CTR);
-        $iv = substr($encrypted, 0, 16);
-        $crypt->IV($iv);
-        $data = unserialize($crypt->decrypt(substr($encrypted, 16)));
-
-        return $data;
     }
 
     /**
@@ -787,23 +754,16 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getQueueUrl($params)
     {
-        $dataUrl['a'] = $params['a'];
-        $dataUrl['s'] = intval($params['s']);
-        $dataUrl['current_user_id'] = intval($params['current_user_id']);
-        $dataUrl['u'] = intval($params['u']);
-        $dataUrl['q'] = intval($params['q']);
-        $dataUrl['e'] = intval($params['e']);
-
         $url = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
-            'a=' . $dataUrl['a'] . '&' .
-            's=' . $dataUrl['s'] . '&' .
-            'current_user_id=' . $dataUrl['current_user_id'] . '&' .
-            'e=' . $dataUrl['e'] . '&' .
-            'u=' . $dataUrl['u'] . '&' .
-            'q=' . $dataUrl['q'] . '&' .
+            'a=' . $params['a'] . '&' .
+            's=' . $params['s'] . '&' .
+            'current_user_id=' . $params['current_user_id'] . '&' .
+            'e=' . $params['e'] . '&' .
+            'u=' . $params['u'] . '&' .
+            'q=' . $params['q'] . '&' .
             'is_connected=' . $params['is_connected'] . '&' .
             'profile_completed=' . $params['profile_completed'] . '&' .
-            'v=' . $this->generateHash($dataUrl);
+            'v=' . $this->generateHash($params);
         return $url;
     }
 
@@ -887,10 +847,16 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function generateHash($data)
     {
-        global $_config;
-        $key = sha1($_config['secret_key']);
-        $data = serialize($data);
-        return sha1($data . $key);
+        $key = sha1($this->get('secret_key'));
+        // Prepare array to have specific type variables
+        $dataPrepared['a'] = strval($data['a']);
+        $dataPrepared['s'] = intval($data['s']);
+        $dataPrepared['current_user_id'] = intval($data['current_user_id']);
+        $dataPrepared['u'] = intval($data['u']);
+        $dataPrepared['q'] = intval($data['q']);
+        $dataPrepared['e'] = intval($data['e']);
+        $dataPrepared = serialize($dataPrepared);
+        return sha1($dataPrepared . $key);
     }
 
     /**

@@ -337,18 +337,6 @@ class HookAdvancedSubscription extends HookObserver implements
                 'This service checks if user assigned to course' // documentation
             );
 
-            // Register the method for WSAdvsubEncrypt
-            $server->register(
-                'HookAdvancedSubscription..WSAdvsubEncrypt', // method name
-                array('data' => 'xsd:string'), // input parameters
-                array('return' => 'xsd:string'), // output parameters
-                'urn:WSRegistration', // namespace
-                'urn:WSRegistration#WSAdvsubEncrypt', // soapaction
-                'rpc', // style
-                'encoded', // use
-                'This service encrypt data to be used later in urls' // documentation
-            );
-
             // Register the method for WSSessionGetDetailsByUser
             $server->register(
                 'HookAdvancedSubscription..WSSessionGetDetailsByUser', // method name
@@ -358,7 +346,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 'urn:WSRegistration#WSSessionGetDetailsByUser', // soapaction
                 'rpc', // style
                 'encoded', // use
-                'This service encrypt data to be used later in urls' // documentation
+                'This service return session details to specific user' // documentation
             );
 
             // Register the method for WSListSessionsDetailsByCategory
@@ -412,42 +400,6 @@ class HookAdvancedSubscription extends HookObserver implements
         $sessionList = SessionManager::getSessionBriefListByCategory($sessionCategoryId, $params['target']);
 
         return $sessionList;
-    }
-
-    /**
-     * @param array $data
-     * @return null|soap_fault|string
-     */
-    public static function WSAdvsubEncrypt($data)
-    {
-        global $debug;
-
-        if ($debug) error_log('WSUserSubscribedInCourse');
-        if ($debug) error_log('Params '. print_r($data, 1));
-
-        // Check if data is an array
-        if (is_array($data)) {
-            if (!WSHelperVerifyKey($data)) {
-
-                return return_error(WS_ERROR_SECRET_KEY);
-            }
-            $result = AdvancedSubscriptionPlugin::create()->encrypt($data);
-        } elseif (is_string($data)) {
-            $data = unserialize($data);
-            if (!WSHelperVerifyKey($data)) {
-
-                return return_error(WS_ERROR_SECRET_KEY);
-            }
-            if (is_array($data)) {
-                $result = AdvancedSubscriptionPlugin::create()->encrypt($data);
-            }
-        } else {
-            // Return soap fault Not valid input params
-
-            $result = return_error(WS_ERROR_INVALID_INPUT);
-        }
-
-        return $result;
     }
 
     /**

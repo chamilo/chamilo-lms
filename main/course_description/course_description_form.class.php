@@ -14,7 +14,7 @@ use Security;
 
 /**
  * Edit/create a course description.
- * 
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license /license.txt
  */
@@ -25,7 +25,7 @@ class CourseDescriptionForm extends \FormValidator
      *
      * @param string $action
      * @param \CourseDescription\CourseDescription $description
-     * @return \CourseDescription\CourseDescription 
+     * @return \CourseDescription\CourseDescription
      */
     static function create($action, $description = null)
     {
@@ -46,7 +46,7 @@ class CourseDescriptionForm extends \FormValidator
     /**
      *
      * @return \CourseDescription\CourseDescription
-     * 
+     *
      */
     public function get_course_description()
     {
@@ -60,7 +60,7 @@ class CourseDescriptionForm extends \FormValidator
 
     /**
      *
-     * @param \CourseDescription\CourseDescription $description 
+     * @param \CourseDescription\CourseDescription $description
      */
     function init($description = null)
     {

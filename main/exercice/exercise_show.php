@@ -546,7 +546,6 @@ foreach ($questionList as $questionId) {
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
 			$comnt = get_comments($id, $questionId);
 			$default = array('comments_'.$questionId =>  $comnt);
-
             if ($useAdvancedEditor) {
                 $feedback_form->addElement(
                     'html_editor',
@@ -562,7 +561,6 @@ foreach ($questionList as $questionId) {
             } else {
                 $feedback_form->addElement('textarea', 'comments_' . $questionId);
             }
-
 			$feedback_form->addElement('html','<br>');
 			$feedback_form->setDefaults($default);
 			$feedback_form->display();

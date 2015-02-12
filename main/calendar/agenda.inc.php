@@ -3544,8 +3544,6 @@ function show_add_form($id = '', $type = null)
             return false;
         }
 
-        require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
-
         $ical = new vcalendar();
         $ical->setConfig('directory', dirname($filepath));
         $ical->setConfig('filename', basename($filepath));

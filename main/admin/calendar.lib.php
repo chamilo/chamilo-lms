@@ -2496,7 +2496,7 @@ function agenda_import_ical($course_info,$file) {
     	error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
     	return false;
     }
-    require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
+
     $ical = new vcalendar();
     $ical->setConfig('directory', dirname($filepath) );
     $ical->setConfig('filename', basename($filepath) );

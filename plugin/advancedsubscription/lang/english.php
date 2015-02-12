@@ -1,7 +1,7 @@
 <?php
 
 /* Strings for settings */
-$strings['plugin_title'] = 'Inscripción Avanzada';
+$strings['plugin_title'] = 'Advanced Subscription';
 $strings['plugin_comment'] = 'Plugin que permite gestionar la inscripción en cola a sesiones con comunicación a a un portal externo';
 $strings['uit_value'] = 'Valor de la Unidad Impositiva Tributaria (UIT)';
 $strings['ws_url'] = 'URL del Webservice';
@@ -28,3 +28,26 @@ $strings['AdvancedSubscriptionQueueBossApproved'] = "Su inscripción ha sido apr
 $strings['AdvancedSubscriptionQueueAdminDisapproved'] = "Lo sentimos, su inscripción ha sido desaprobada por el administrador.";
 $strings['AdvancedSubscriptionQueueAdminApproved'] = "Felicitaciones, Su inscripción ha sido aprobada por el administrador.";
 $strings['AdvancedSubscriptionQueueDefaultX'] = "Ha ocurrido un problema, el estado en cola, %d no está definido en el sistema.";
+
+// Mail translations
+$strings['MailStudentRequest'] = 'Student registration request';
+$strings['MailBossAccept'] = 'Registration request accepted by boss';
+$strings['MailBossReject'] = 'Registration request rejected by boss';
+$strings['MailStudentRequestSelect'] = 'Student registration requests selection';
+$strings['MailAdminAccept'] = 'Registration request accepted by administrator';
+$strings['MailAdminReject'] = 'Registration request rejected by administrator';
+$strings['MailStudentRequestNoBoss'] = 'Student registration request without boss';
+
+// TPL langs
+// Admin view
+$strings['SelectASession'] = 'Elija una sesión';
+$strings['SessionName'] = 'Nombre de la sesión';
+$strings['Target'] = 'Target audience';
+$strings['Vacancies'] = 'Vacancies';
+$strings['RecommendedNumberOfParticipants'] = 'Recommended number of participants';
+$strings['PublicationEndDate'] = 'Publication end date';
+$strings['Mode'] = 'Mode';
+$strings['Postulant'] = 'Postulant';
+$strings['InscriptionDate'] = 'Inscription date';
+$strings['BossValidation'] = 'Boss validation';
+$strings['Decision'] = 'Decision';

@@ -34,3 +34,26 @@ $strings['AdvancedSubscriptionIncompleteParams'] = "Los parámetros enviados no 
 $strings['AdvancedSubscriptionIsNotEnabled'] = "La inscripción avanzada no está activada";
 
 //Needed in order to show the plugin title
+
+// Mail translations
+$strings['MailStudentRequest'] = 'Solicitud de registro de estudiante';
+$strings['MailBossAccept'] = 'Solicitud de registro aceptada por superior';
+$strings['MailBossReject'] = 'Solicitud de registro rechazada por superior';
+$strings['MailStudentRequestSelect'] = 'Selección de solicitudes de registro de estudiante';
+$strings['MailAdminAccept'] = 'Solicitud de registro aceptada por administrador';
+$strings['MailAdminReject'] = 'Solicitud de registro rechazada por administrador';
+$strings['MailStudentRequestNoBoss'] = 'Solicitud de registro de estudiante sin superior';
+
+// TPL translations
+// Admin view
+$strings['SelectASession'] = 'Elija una sesión';
+$strings['SessionName'] = 'Nombre de la sesión';
+$strings['Target'] = 'Publico objetivo';
+$strings['Vacancies'] = 'Vacantes';
+$strings['RecommendedNumberOfParticipants'] = 'Número recomendado de participantes';
+$strings['PublicationEndDate'] = 'Fecha fin de publicación';
+$strings['Mode'] = 'Modalidad';
+$strings['Postulant'] = 'Postulante';
+$strings['InscriptionDate'] = 'Fecha de inscripción';
+$strings['BossValidation'] = 'Validación del superior';
+$strings['Decision'] = 'Decisión';

@@ -1,9 +1,9 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
- * Created by PhpStorm.
- * User: dbarreto
- * Date: 19/12/14
- * Time: 09:56 AM
+ * Hook Observer for Advanced subscription plugin
+ * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
+ * @package chamilo.plugin.advancedsubscription
  */
 
 require_once __DIR__ . '/../config.php';

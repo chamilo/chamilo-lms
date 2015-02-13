@@ -37,7 +37,7 @@ $form = new UserForm(
 );
 
 if ($form->validate()) {
-    header('Location: user_stats.php?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&userid=' .$user_id.'&'.api_get_cidreq();
+    header('Location: user_stats.php?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&userid=' .$user_id.'&'.api_get_cidreq());
     exit;
 }
 

@@ -626,7 +626,6 @@ class SessionManager
         }
 
         //Get lessons
-        require_once api_get_path(SYS_CODE_PATH) . 'newscorm/learnpathList.class.php';
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
 
         $table = array();
@@ -3443,7 +3442,6 @@ class SessionManager
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {
-                                require_once api_get_path(SYS_CODE_PATH) . 'newscorm/learnpathList.class.php';
                                 $list = new LearnpathList('', $course_info['code'], $sid);
                                 $flat_list = $list->get_flat_list();
                                 if (!empty($flat_list)) {
@@ -5379,7 +5377,7 @@ class SessionManager
     }
 
     /**
-     * Calculate the total user time in the platform 
+     * Calculate the total user time in the platform
      * @param int $userId The user id
      * @param string $from Optional. From date
      * @param string $until Optional. Until date

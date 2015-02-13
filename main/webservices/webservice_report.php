@@ -97,7 +97,6 @@ class WSReport extends WS {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
 
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $lp = new LearnpathList($user_id,$course_code);
         $list = $lp->list;
         $return = array();

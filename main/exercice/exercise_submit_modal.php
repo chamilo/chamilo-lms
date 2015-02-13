@@ -487,7 +487,6 @@ if ($try==1) {
 // the link to theory (a learning path)
 if (!empty($lp)) {
 	$lp_url= api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp;
-	require_once('../newscorm/learnpathList.class.php');
 	$list = new LearnpathList(api_get_user_id());
 	$flat_list = $list->get_flat_list();
 	$links.= Display :: return_icon('theory.gif', '', array ('style' => 'padding-left:0px;padding-right:5px;')).'<a target="_blank" href="'.$lp_url.'">'.get_lang('SeeTheory').'</a><br />';

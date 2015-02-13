@@ -514,7 +514,6 @@ class MySpace
             get_lang('LastName'),
         );
         //add lessons of course
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
 
         //create columns array

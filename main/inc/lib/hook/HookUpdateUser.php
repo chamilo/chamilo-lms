@@ -3,10 +3,14 @@
 
 /**
  * Class HookUpdateUser
+ *
  * @var \SplObjectStorage $observers
  */
 class HookUpdateUser extends HookEvent implements HookUpdateUserEventInterface
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         parent::__construct('HookUpdateUser');
@@ -24,6 +28,7 @@ class HookUpdateUser extends HookEvent implements HookUpdateUserEventInterface
         foreach ($this->observers as $observer) {
             $observer->hookUpdateUser($this);
         }
+
         return 1;
     }
 }

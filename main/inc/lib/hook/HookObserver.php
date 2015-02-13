@@ -46,6 +46,7 @@ abstract class HookObserver implements HookObserverInterface
             try {
                 $class = get_called_class();
                 return new $class;
+
             } catch (Exception $e) {
                 return null;
             }

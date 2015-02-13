@@ -13,6 +13,7 @@ interface HookManagementInterface
      * @param string $eventName
      * @param string $observerClassName
      * @param int $type
+     *
      * @return int
      */
     public function insertHook($eventName, $observerClassName, $type);
@@ -22,6 +23,7 @@ interface HookManagementInterface
      * @param string $eventName
      * @param string $observerClassName
      * @param int $type
+     *
      * @return int
      */
     public function deleteHook($eventName, $observerClassName, $type);
@@ -31,6 +33,7 @@ interface HookManagementInterface
      * @param $eventName
      * @param $type
      * @param $newOrder
+     *
      * @return int
      */
     public function orderHook($eventName, $type, $newOrder);
@@ -38,6 +41,7 @@ interface HookManagementInterface
     /**
      * Return a list an associative array where keys are the hook observer class name
      * @param $eventName
+     *
      * @return array
      */
     public function listHookObservers($eventName);
@@ -48,6 +52,7 @@ interface HookManagementInterface
      * Will insert them into their respective table
      * @param string $eventName
      * @param string $observerClassName
+     *
      * @return int
      */
     public function insertHookIfNotExist($eventName = null, $observerClassName = null);
@@ -58,6 +63,7 @@ interface HookManagementInterface
      * @param string $eventName
      * @param string $observerClassName
      * @param int $type
+     *
      * @return mixed
      */
     public function getHookCallId($eventName, $observerClassName, $type);

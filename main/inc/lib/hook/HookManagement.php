@@ -4,7 +4,6 @@
  * @TODO: Improve description
  * @package chamilo.hookmanagement
  */
-
 class HookManagement implements HookManagementInterface
 {
     /**
@@ -38,6 +37,7 @@ class HookManagement implements HookManagementInterface
      * @param string $eventName
      * @param string $observerClassName
      * @param int $type
+     *
      * @return int
      */
     public function insertHook($eventName, $observerClassName, $type)
@@ -82,6 +82,7 @@ class HookManagement implements HookManagementInterface
      * @param string $eventName
      * @param string $observerClassName
      * @param int $type
+     *
      * @return int
      */
     public function deleteHook($eventName, $observerClassName, $type)
@@ -109,6 +110,7 @@ class HookManagement implements HookManagementInterface
      * @param $eventName
      * @param $type
      * @param $hookOrders
+     *
      * @return int
      */
     public function orderHook($eventName, $type, $hookOrders)
@@ -131,13 +133,13 @@ class HookManagement implements HookManagementInterface
                     break;
                 }
             }
-
         }
     }
 
     /**
      * Return a list an associative array where keys are the active hook observer class name
      * @param $eventName
+     *
      * @return array
      */
     public function listHookObservers($eventName)
@@ -220,6 +222,7 @@ class HookManagement implements HookManagementInterface
      * Will insert them into their respective table
      * @param string $eventName
      * @param string $observerClassName
+     *
      * @return int
      */
     public function insertHookIfNotExist($eventName = null, $observerClassName = null)
@@ -235,7 +238,9 @@ class HookManagement implements HookManagementInterface
         }
 
         // Check if exists hook observer
-        if (isset($observerClassName) && !isset($this->hookObservers[$observerClassName])){
+        if (isset($observerClassName) &&
+            !isset($this->hookObservers[$observerClassName])
+        ){
             $object = $observerClassName::create();
             $attributes = array(
                 'class_name' => $observerClassName,
@@ -325,6 +330,7 @@ class HookManagement implements HookManagementInterface
      * @param string $eventName
      * @param string $observerClassName
      * @param int $type
+     *
      * @return mixed
      */
     public function getHookCallId($eventName, $observerClassName, $type)

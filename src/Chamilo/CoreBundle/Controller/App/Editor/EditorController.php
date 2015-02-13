@@ -63,6 +63,7 @@ class EditorController extends BaseController
     public function connectorAction()
     {
         error_reporting(-1);
+        /** @var Connector $connector */
         $connector = $this->getEditorConnector();
         $driverList = $this->getRequest()->get('driver_list');
 

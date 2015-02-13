@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
  * Class Driver
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
-class Driver extends \elFinderVolumeLocalFileSystem implements InterfaceDriver
+class Driver extends \elFinderVolumeLocalFileSystem implements DriverInterface
 {
     /** @var string */
     public $name;

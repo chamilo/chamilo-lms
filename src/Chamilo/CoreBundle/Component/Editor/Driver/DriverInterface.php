@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
  * Class Driver
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
-interface interfaceDriver
+interface DriverInterface
 {
     /**
      * Gets driver name.

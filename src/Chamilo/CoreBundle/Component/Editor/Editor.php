@@ -103,7 +103,7 @@ class Editor
     public function editorReplace()
     {
         $toolbar = new Toolbar($this->urlGenerator, $this->toolbarSet, $this->config);
-        $toolbar->setLanguage($this->translator->getLocale());
+        $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
         $html = "<script>
@@ -233,5 +233,13 @@ class Editor
     public function formatTemplates($templates)
     {
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->translator->getLocale();
     }
 }

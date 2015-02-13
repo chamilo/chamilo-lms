@@ -51,7 +51,7 @@ class CkEditor extends Editor
     public function editorReplace()
     {
         $toolbar = new Toolbar\Basic($this->urlGenerator, $this->toolbarSet, $this->config, 'CkEditor');
-        $toolbar->setLanguage($this->translator->getLocale());
+        $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
 

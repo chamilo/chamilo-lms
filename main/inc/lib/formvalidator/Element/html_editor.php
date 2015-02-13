@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
 {
-    /** @var \Chamilo\Component\Editor\Editor */
+    /** @var \Chamilo\CoreBundle\Component\Editor\Editor */
     public $editor;
 
     /**
@@ -73,16 +73,17 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
     }
 
     /**
-     * Build this element using an editor
+     * @return string
      */
     public function buildEditor()
     {
-        $result = null;
+        $result = '';
         if ($this->editor) {
             $this->editor->value = $this->getValue();
             $this->editor->setName($this->getName());
             $result = $this->editor->createHtml();
         }
+
         return $result;
     }
 }

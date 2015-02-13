@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
  * Class DropBoxDriver
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
-class DropBoxDriver extends \elFinderVolumeMySQL implements InterfaceDriver
+class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
 {
     /** @var string */
     public $name = 'DropBoxDriver';

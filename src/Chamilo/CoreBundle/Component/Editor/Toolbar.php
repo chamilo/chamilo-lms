@@ -11,7 +11,7 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class Toolbar
 {
-    public $config;
+    public $config = array();
     public $urlGenerator;
 
     /**
@@ -69,7 +69,8 @@ class Toolbar
     }
 
     /**
-     * @param string
+     * @param string $variable
+     *
      * @return array
      */
     public function getConfigAttribute($variable)
@@ -81,7 +82,7 @@ class Toolbar
     }
 
     /**
-     * @param $language
+     * @param string $language
      */
     public function setLanguage($language)
     {

@@ -1,17 +1,20 @@
 <?php
 
-$strings['plugin_title']        = "SMS Sending";
+$strings['plugin_title']        = "Kannel SMS";
 $strings['plugin_comment']      = "When enabled and an email sent successfully, a text message is sent to the user.";
-
-$strings['api_key'] = "Kannel SMS key";
-$strings['api_key_help'] = "This is the Kannel SMS server security key. <a target='_blank' href='http://www.kannelsms.com/platforms/chamilo/'>Click here</a> to get it.";
 
 $strings['tool_enable'] = "Enable SMS sending";
 $strings['tool_enable_help'] = "Choose if you want to enable SMS sending tool.
     Once enabled, they will be sent along with an email the selected SMS message types to the users who had filled their mobile phone number field in their profile<br />";
 
-$strings['type'] = "Send SMS when";
-$strings['mobile_phone_number'] = "Mobile Phone (include country dialing code only)";
+$strings['hostAddress'] = "Host address";
+$strings['hostAddress_help'] = "This is the address where your SMS gateway is hosted. Example: http://mobilegateway.com/tools/gateways/smssender";
+$strings['username'] = "Username";
+$strings['password'] = "Password";
+$strings['from'] = "Sender mobile number";
+
+$strings['sms_types'] = "Send SMS when";
+$strings['mobile_phone_number'] = "Mobile";
 
 $strings['MessageWelcomeXLoginXPasswordX']                              = "A user is added to the platform";
 $strings['MessageXNewFileSharedCourseXByX']                             = "A file is added to dropbox";

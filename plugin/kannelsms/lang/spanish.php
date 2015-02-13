@@ -1,17 +1,20 @@
 <?php
 
-$strings['plugin_title']        = "Envío de SMS";
+$strings['plugin_title']        = "Kannel SMS";
 $strings['plugin_comment']      = "Ofrece la posibilidad de enviar SMS a celulares cuando se envían e-mails de notificación.";
-
-$strings['api_key'] = "Clave Kannel SMS";
-$strings['api_key_help'] = "Ésta es la clave de seguridad de su servidor Kannel SMS. Para obtenerla, <a target='_blank' href='http://www.kannelsms.com/platforms/chamilo/'>haga click aquí</a>";
 
 $strings['tool_enable'] = "Activar envío de SMS";
 $strings['tool_enable_help'] = "Escoja si desea activar la herramienta de envío de mensajes a celulares Kannel SMS.
     Una vez activada, se enviarán, simultaneamente con los correos, los tipos mensajes SMS seleccionados a los usuarios que hayan especificado un número de celular en su perfil.<br />";
 
+$strings['hostAddress'] = "Dirección del servidor";
+$strings['hostAddress_help'] = "Ésta es la dirección en donde se aloja su pasarela de SMS. Ejemplo: http://mobilegateway.com/tools/gateways/smssender";
+$strings['username'] = "Nombre de usuario";
+$strings['password'] = "Contraseña";
+$strings['from'] = "Número de móvil remitente";
+
 $strings['sms_types'] = "Enviar un SMS cuando";
-$strings['mobile_phone_number'] = "Celular (incluya sólo el código de llamada del país)";
+$strings['mobile_phone_number'] = "Móvil";
 
 $strings['MessageWelcomeXLoginXPasswordX']                              = "Se añada un usuario a la plataforma";
 $strings['MessageXNewFileSharedCourseXByX']                             = "Un archivo se añada a dropbox";

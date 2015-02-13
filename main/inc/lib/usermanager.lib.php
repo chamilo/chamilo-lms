@@ -212,8 +212,9 @@ class UserManager
                     EventsDispatcher::events('user_registration', $values);
                 } else {
                     $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
+                    $plugin = new AppPlugin();
                     $additionalParameters = array(
-                        'smsType' => ClockworksmsPlugin::WELCOME_LOGIN_PASSWORD,
+                        'smsType' => constant($plugin->getSMSPluginName().'::WELCOME_LOGIN_PASSWORD'),
                         'userId' => $return,
                         'mobilePhoneNumber' => $phoneNumber,
                         'password' => $original_password

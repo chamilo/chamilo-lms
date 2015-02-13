@@ -202,8 +202,9 @@ if($register) {
             $message = stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedU');
         }
 
+        $plugin = new AppPlugin();
         $additionalParameters = array(
-            'smsType' => ClockworksmsPlugin::BEEN_SUBSCRIBED_COURSE,
+            'smsType' => constant($plugin->getSMSPluginName().'::BEEN_SUBSCRIBED_COURSE'),
             'userId' => $user_id,
             'courseTitle' => $currentCourseName
         );

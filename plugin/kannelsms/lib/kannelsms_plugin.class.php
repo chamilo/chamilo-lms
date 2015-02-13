@@ -74,7 +74,13 @@ class KannelsmsPlugin extends Plugin
      */
     protected function __construct()
     {
-        $fields = array('tool_enable' => 'boolean', 'api_key' => 'text');
+        $fields = array(
+            'tool_enable' => 'boolean',
+            'hostAddress' => 'text',
+            'username' => 'text',
+            'password' => 'text',
+            'from' => 'text'
+        );
         $smsTypeOptions = $this->getSmsTypeOptions();
         foreach ($smsTypeOptions as $smsTypeOption) {
             $fields[$smsTypeOption] = 'checkbox';

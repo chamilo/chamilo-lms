@@ -227,8 +227,9 @@ function api_mail_html(
     $installedPluginsList = $plugin->getInstalledPluginListObject();
     foreach ($installedPluginsList as $installedPlugin) {
         if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additionalParameters)) {
-            $clockworksmsObject = new Clockworksms();
-            $clockworksmsObject->send($additionalParameters);
+            $className = str_replace("Plugin", "", get_class($installedPlugin));
+            $smsObject = new $className;
+            $smsObject->send($additionalParameters);
         }
     }
 

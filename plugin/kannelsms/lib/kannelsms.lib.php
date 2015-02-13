@@ -13,8 +13,11 @@
 
 class Kannelsms
 {
-    public $apiKey;
     public $api;
+    public $hostAddress;
+    public $username;
+    public $password;
+    public $from;
     public $plugin_enabled = false;
 
     /**
@@ -26,34 +29,13 @@ class Kannelsms
     {
         $plugin = KannelsmsPlugin::create();
         $kannelSMSPlugin = $plugin->get('tool_enable');
-        if (empty($apiKey)) {
-            $kannelSMSApiKey = $plugin->get('api_key');
-        } else {
-            $kannelSMSApiKey = $apiKey;
-        }
         $this->table = Database::get_main_table('user_field_values');
         if ($kannelSMSPlugin == true) {
-            $this->apiKey = $kannelSMSApiKey;
-            // Setting Kannelsms api
-            define('CONFIG_SECURITY_API_KEY', $this->apiKey);
-            $trimmedApiKey = trim(CONFIG_SECURITY_API_KEY);
-            if (!empty($trimmedApiKey)) {
-                $this->api = new Kannel(CONFIG_SECURITY_API_KEY);
-            } else {
-                $this->api = new Kannel(' ');
-                $recipient_name = api_get_person_name(
-                    api_get_setting('administratorName'),
-                    api_get_setting('administratorSurname'),
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                );
-                $email_form = get_setting('emailAdministrator');
-                $emailsubject = 'Kannelsms error';
-                $emailbody = 'Key cannot be blank';
-                $sender_name = $recipient_name;
-                $email_admin = $email_form;
-                api_mail_html($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name, $email_admin);
-            }
+            $this->api = new Kannel(' ');
+            $this->hostAddress = $plugin->get('hostAddress');
+            $this->username = $plugin->get('username');
+            $this->password = $plugin->get('password');
+            $this->from = $plugin->get('from');
             $this->plugin_enabled = true;
         }
     }
@@ -101,7 +83,14 @@ class Kannelsms
             );
 
             if (!empty($message['message'])) {
-                $result = $this->api->send($message);
+                if(extension_loaded('curl')) {
+                    $url = $this->hostAddress.'?username='.
+                        $this->username.'&password='.$this->password.'&from='.
+                        $this->from.'&to='.$message['to'].'&msg='.urlencode($message['message']);
+                    $ch = curl_init($url);
+                    curl_exec($ch);
+                    curl_close($ch);
+                }
 
                 // Commented for future message logging / tracking purposes
                 /*if( $result["success"] ) {
@@ -166,7 +155,7 @@ class Kannelsms
         $tool_name = $plugin->get_lang('plugin_title');
         $tpl = new Template($tool_name);
 
-        switch (constant('KannelsmsPlugin::'.$additionalParameters['smsType'])) {
+        switch ($additionalParameters['smsType']) {
             case KannelsmsPlugin::WELCOME_LOGIN_PASSWORD:
                 $userInfo = api_get_user_info($additionalParameters['userId']);
                 return $this->buildSms(

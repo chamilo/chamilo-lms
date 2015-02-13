@@ -95,8 +95,9 @@ switch ($action) {
                     //$emailbody.=get_lang('Problem'). "\n\n". get_lang('SignatureFormula');
                     $emailbody.=api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 
+                    $plugin = new AppPlugin();
                      $additionalParameters = array(
-                        'smsType' => ClockworksmsPlugin::ACCOUNT_APPROVED_CONNECT,
+                        'smsType' => constant($plugin->getSMSPluginName().'::ACCOUNT_APPROVED_CONNECT'),
                         'userId' => $user_id
                     );
 

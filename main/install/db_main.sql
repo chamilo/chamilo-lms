@@ -1370,7 +1370,8 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
     document_id int unsigned DEFAULT NULL,
     locked int NOT NULL DEFAULT 0,
     default_lowest_eval_exclude TINYINT default null,
-  PRIMARY KEY  (id)
+    generate_certificates TINYINT NOT NULL DEFAULT 0,
+    PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation (

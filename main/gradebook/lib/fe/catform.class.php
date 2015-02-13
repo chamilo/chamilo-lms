@@ -179,6 +179,7 @@ class CatForm extends FormValidator
                 'weight' 			=> $this->category_object->get_weight(),
                 'visible' 			=> $this->category_object->is_visible(),
                 'certif_min_score'  => $this->category_object->get_certificate_min_score(),
+                'generate_certificates' => $this->category_object->getGenerateCetificates()
             )
         );
         $this->addElement('hidden', 'hid_id', $this->category_object->get_id());
@@ -350,6 +351,20 @@ class CatForm extends FormValidator
                     $this->freeze('grade_model_id');
                 }
             }
+
+            $generateCertificatesParams = array();
+
+            if ($this->category_object->getGenerateCetificates()) {
+                $generateCertificatesParams['checked'] = 'checked';
+            }
+
+            $this->addElement(
+                'checkbox',
+                'generate_certificates',
+                null,
+                get_lang('GenerateCertificates'),
+                $generateCertificatesParams
+            );
         }
 
         if ($this->form_type == self :: TYPE_ADD) {

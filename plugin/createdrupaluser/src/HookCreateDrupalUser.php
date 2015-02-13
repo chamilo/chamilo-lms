@@ -48,8 +48,6 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
                 'lastname' => $userInfo['lastname']
             );
 
-            var_dump($drupalDomain . 'sites/all/modules/chamilo/soap.php?wsdl');
-
             $options = array(
                 'location' => $drupalDomain . 'sites/all/modules/chamilo/soap.php?wsdl',
                 'uri' => $drupalDomain

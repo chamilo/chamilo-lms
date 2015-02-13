@@ -44,6 +44,7 @@ define('COURSE_STUDENT', 14);   //student subscribed in a course
 define('SESSION_STUDENT', 15);  //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
 define('STUDENT_BOSS', 17); // student is boss
+define('INVITEE', 20);
 
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
@@ -51,6 +52,7 @@ $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
 $_status_list[DRH]              = 'drh';            // 4
 $_status_list[STUDENT]          = 'user';           // 5
 $_status_list[ANONYMOUS]        = 'anonymous';      // 6
+$_status_list[INVITEE]     = 'invited';        // 20
 
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
@@ -293,6 +295,8 @@ define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
 define('WEB_FONTS_PATH', 'WEB_FONTS_PATH');
 define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
+define('SYS_DATA_PATH', 'SYS_DATA_PATH');
+define('WEB_DATA_PATH', 'WEB_DATA_PATH');
 
 define('SYS_DEFAULT_COURSE_DOCUMENT_PATH', 'SYS_DEFAULT_COURSE_DOCUMENT_PATH');
 define('REL_DEFAULT_COURSE_DOCUMENT_PATH', 'REL_DEFAULT_COURSE_DOCUMENT_PATH');
@@ -455,6 +459,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/archive/
  * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/courses/
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
+ * api_get_path(SYS_DATA_PATH)                  /var/www/chamilo/data/
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
  * api_get_path(LIBRARY_PATH)                   /var/www/chamilo/main/inc/lib/
  * api_get_path(CONFIGURATION_PATH)             /var/www/chamilo/main/inc/conf/
@@ -468,6 +473,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
  * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/courses/
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
+ * api_get_path(WEB_DATA_PATH)                  http://www.mychamilo.org/chamilo/data/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
  * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/archive/
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
@@ -495,12 +501,14 @@ require_once __DIR__.'/internationalization.lib.php';
 function api_get_path($path_type, $path = null)
 {
     static $paths = array(
+        SYS_DATA_PATH           => '',
         WEB_PATH                => '',
         SYS_PATH                => '',
         REL_PATH                => '',
         WEB_SERVER_ROOT_PATH    => '',
         SYS_SERVER_ROOT_PATH    => '',
         WEB_COURSE_PATH         => '',
+        WEB_DATA_PATH           => '',
         SYS_COURSE_PATH         => '',
         REL_COURSE_PATH         => '',
         REL_CODE_PATH           => '',
@@ -548,6 +556,8 @@ function api_get_path($path_type, $path = null)
     global $_configuration;
     //default $_configuration['root_web'] configuration
     $root_web = $_configuration['root_web'];
+
+    $data_folder    = 'data/';
 
     // Configuration data for already installed system.
     $root_sys = $_configuration['root_sys'];
@@ -621,6 +631,8 @@ function api_get_path($path_type, $path = null)
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
+        $paths[SYS_DATA_PATH]           = $root_sys.$data_folder;
+        $paths[WEB_DATA_PATH]           = $root_web.$data_folder;
 
         $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_CODE_PATH].'default_course_document/';
         $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_PATH].'main/default_course_document/';
@@ -669,6 +681,7 @@ function api_get_path($path_type, $path = null)
                 WEB_ARCHIVE_PATH        => 'archive/',
                 WEB_LIBRARY_PATH        => 'inc/lib/',
                 WEB_AJAX_PATH           => 'inc/ajax/',
+                WEB_DATA_PATH           => '',
             );
 
             $root_web = api_add_trailing_slash($root_web);
@@ -680,6 +693,7 @@ function api_get_path($path_type, $path = null)
             $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
             $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
             $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
+            $paths[WEB_DATA_PATH]           = $root_web.$data_folder;
             $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_IMG_PATH];
 
             $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_CSS_PATH];
@@ -2615,6 +2629,16 @@ function api_is_student() {
 function api_is_teacher() {
     global $_user;
     return isset($_user['status']) && $_user['status'] == COURSEMANAGER;
+}
+
+/**
+ * Checks whether the current user is a invited user
+ * @return boolean
+ */
+function api_is_invitee() {
+    global $_user;
+
+    return isset($_user['status']) && $_user['status'] == INVITEE;
 }
 
 /**
@@ -4721,7 +4745,8 @@ function api_get_status_langvars() {
         DRH             => get_lang('Drh', ''),
         STUDENT         => get_lang('Student', ''),
         ANONYMOUS       => get_lang('Anonymous', ''),
-        STUDENT_BOSS       => get_lang('RoleStudentBoss', '')
+        STUDENT_BOSS    => get_lang('RoleStudentBoss', ''),
+        INVITEE         => get_lang('Invited'),
     );
 }
 
@@ -5030,7 +5055,7 @@ function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $u
 
 /**
  * Gets the distinct settings categories
- * @param array     Array of strings giving the categories we want to exclude
+ * @param array     Array of strings giving the categories we want to excluded
  * @param int       Access URL. Optional. Defaults to 1
  * @return array    A list of categories
  */
@@ -7567,6 +7592,62 @@ function api_is_student_boss ()
 
     return isset($_user['status']) && $_user['status'] == STUDENT_BOSS;
 }
+/**
+ * Check whether the user type should be exclude.
+ * Such as invited or anonymous users
+ * @param boolean $checkDB Optional. Whether check the user status
+ * @param int $userId Options. The user id
+ * @return boolean
+ */
+function apiIsExcludedUserType($checkDB = false, $userId = 0)
+{
+    if ($checkDB) {
+        $userId = empty($userId) ? api_get_user_id() : intval($userId);
+
+        if ($userId == 0) {
+            return true;
+        }
+
+        $userInfo = api_get_user_info($userId);
+
+        switch ($userInfo['status']) {
+            case INVITEE:
+                //no break;
+            case ANONYMOUS:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    $isInvited = api_is_invitee();
+    $isAnonymous = api_is_anonymous();
+
+    if ($isInvited || $isAnonymous) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Get the user status to ignore in reports
+ * @param string $format Optional. The result type (array or string)
+ * @return array|string
+ */
+function api_get_users_status_ignored_in_reports($format = 'array')
+{
+    $excludedTypes = array(
+        INVITEE,
+        ANONYMOUS
+    );
+
+    if ($format == 'string') {
+        return implode(', ', $excludedTypes);
+    }
+
+    return $excludedTypes;
+}
 
 /**
  * Set the Site Use Cookie Warning for 1 year
@@ -7599,10 +7680,37 @@ function api_format_time($time, $originFormat = 'php')
     $secs = ($time % 60);
 
     if ($originFormat == 'js') {
-        $scormTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
+        $formattedTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
     } else {
-        $scormTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
+        $formattedTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
     }
 
-    return $scormTime;
+    return $formattedTime;
+}
+
+/**
+ * Create a new empty directory with index.html file
+ * @param string $name The new directory name
+ * @param string $parentDirectory Directory parent directory name
+ * @return boolean Return true if the directory was create. Otherwise return false
+ */
+function api_create_protected_dir($name, $parentDirectory)
+{
+    $isCreated = false;
+
+    $fullPath = $parentDirectory . replace_dangerous_char($name);
+
+    if (mkdir($fullPath, api_get_permissions_for_new_directories(), true)) {
+        $fp = fopen($fullPath . '/index.html', 'w');
+
+        if ($fp) {
+            if (fwrite($fp, '<html><head></head><body></body></html>')) {
+                $isCreated = true;
+            }
+        }
+
+        fclose($fp);
+    }
+
+    return $isCreated;
 }

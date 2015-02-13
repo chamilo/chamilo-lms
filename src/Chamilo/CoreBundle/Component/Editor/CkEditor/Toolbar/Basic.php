@@ -11,7 +11,14 @@ use Chamilo\CoreBundle\Component\Editor\Toolbar;
  */
 class Basic extends Toolbar
 {
-    public $defaultPlugins = array('oembed', 'video', 'wordcount', 'templates');
+    public $defaultPlugins = array(
+        'oembed',
+        'video',
+        'wordcount',
+        'templates',
+        'justify'
+    );
+
     public $plugins = array();
 
     /**

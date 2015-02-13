@@ -40,9 +40,7 @@ $language_file = array('document','gradebook');
 require_once '../inc/global.inc.php';
 
 // Including additional libraries
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-require_once 'document.inc.php';
 
 // Adding extra javascript to the form
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
@@ -150,7 +148,8 @@ if (!empty($groupId)) {
     } else {
         api_not_allowed(true);
     }
-} elseif ($is_allowed_to_edit || is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
+} elseif ($is_allowed_to_edit ||
+    DocumentManager::is_my_shared_folder(api_get_user_id(), $path, api_get_session_id())) {
 
 } else {
     // No course admin and no group member...
@@ -239,7 +238,7 @@ echo '</div>';
 // Form to select directory
 $folders = DocumentManager::get_all_document_folders($_course, $groupId, $is_allowed_to_edit);
 if (!$is_certificate_mode) {
-    echo build_directory_selector(
+    echo DocumentManager::build_directory_selector(
         $folders,
         $document_id,
         (isset($group_properties['directory']) ? $group_properties['directory'] : array())

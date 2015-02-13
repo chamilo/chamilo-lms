@@ -8,18 +8,6 @@ session_cache_limiter("none");
  * This script gives information to the videoconference scripts (in OpenLaszlo)
  * to use the right URL and ports for the videoconference.
  */
-require_once('../newscorm/learnpath.class.php');
-if($debug>0) error_log('New LP - Included learnpath',0);
-require_once('../newscorm/learnpathItem.class.php');
-if($debug>0) error_log('New LP - Included learnpathItem',0);
-require_once('../newscorm/scorm.class.php');
-if($debug>0) error_log('New LP - Included scorm',0);
-require_once('../newscorm/scormItem.class.php');
-if($debug>0) error_log('New LP - Included scormItem',0);
-require_once('../newscorm/aicc.class.php');
-if($debug>0) error_log('New LP - Included aicc',0);
-require_once('../newscorm/aiccItem.class.php');
-if($debug>0) error_log('New LP - Included aiccItem',0);
 
 require("../../main/inc/global.inc.php");
 require_once('get_translation.lib.php');

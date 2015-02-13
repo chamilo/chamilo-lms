@@ -14,8 +14,6 @@ use ChamiloSession as Session;
  *  @todo   this lib should be convert in a static class and moved to main/inc/lib
  */
 
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-
 $addDocumentToWork = api_get_configuration_value('add_document_to_work');
 define('ADD_DOCUMENT_TO_WORK', $addDocumentToWork);
 $workUserComments = api_get_configuration_value('work_user_comments');
@@ -2362,7 +2360,7 @@ function get_work_user_list(
                 }
 
                 // Type.
-                $work['type'] = build_document_icon_tag('file', $work['url']);
+                $work['type'] = DocumentManager::build_document_icon_tag('file', $work['url']);
 
                 // File name.
                 $link_to_download = null;

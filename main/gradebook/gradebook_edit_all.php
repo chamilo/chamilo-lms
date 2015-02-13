@@ -63,12 +63,7 @@ $submitted = isset($_POST['submitted'])?$_POST['submitted']:'';
 if ($submitted==1) {
     Display :: display_confirmation_message(get_lang('GradebookWeightUpdated')) . '<br /><br />';
     if (isset($_POST['evaluation'])) {
-        require_once 'lib/be/evaluation.class.php';
         $eval_log = new Evaluation();
-    }
-    if (isset($_POST['link'])) {
-        require_once 'lib/be/abstractlink.class.php';
-        //$eval_link_log = new AbstractLink();
     }
 }
 

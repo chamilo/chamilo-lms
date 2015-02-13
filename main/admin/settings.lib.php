@@ -1089,7 +1089,6 @@ function select_gradebook_default_grade_model_id() {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function update_gradebook_score_display_custom_values($values) {
-    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
     $scoredisplay = ScoreDisplay::instance();
     $scores = $values['gradebook_score_display_custom_values_endscore'];
     $displays = $values['gradebook_score_display_custom_values_displaytext'];

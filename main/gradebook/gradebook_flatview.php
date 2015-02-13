@@ -206,8 +206,6 @@ if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report')
         if (!api_is_allowed_to_edit(false, false) and !api_is_course_tutor()) {
             $user_id = api_get_user_id();
         }
-
-        require_once 'gradebook_result.class.php';
         $printable_data = GradebookUtils::get_printable_data(
             $cat[0],
             $users,

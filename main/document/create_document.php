@@ -142,9 +142,6 @@ function InnerDialogLoaded() {
     });
 </script>';
 
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-
 //I'm in the certification module?
 $is_certificate_mode = false;
 

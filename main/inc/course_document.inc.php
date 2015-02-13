@@ -9,7 +9,6 @@ require 'global.inc.php';
 /*	Libraries */
 
 require_once api_get_path(LIBRARY_PATH).'course_document.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 //if(!$is_in_admin){
 if (!api_is_platform_admin()){
@@ -201,7 +200,7 @@ if ($docs_and_folders) {
 		}
 		*/
 		// icons with hyperlinks
-		$row[]= '<a href="#" onclick="javascript: OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.build_document_icon_tag($id['filetype'],$id['path']).'</a>';
+		$row[]= '<a href="#" onclick="javascript: OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.DocumentManager::build_document_icon_tag($id['filetype'],$id['path']).'</a>';
 		//document title with hyperlink
 		$row[] = '<a href="#" onclick="javascript: OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.$id['title'].'</a>';
 		//comments => display comment under the document name

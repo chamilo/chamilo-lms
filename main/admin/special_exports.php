@@ -22,8 +22,6 @@ api_protect_admin_script(true);
 $nameTools = get_lang('SpecialExports');
 
 // include additional libraries
-require_once '../document/document.inc.php';
-// include additional libraries
 require_once '../coursecopy/classes/CourseBuilder.class.php';
 require_once '../coursecopy/classes/CourseArchiver.class.php';
 require_once '../coursecopy/classes/CourseRestorer.class.php';

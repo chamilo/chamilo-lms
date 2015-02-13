@@ -4,7 +4,6 @@
  * Responses to AJAX calls for the document upload
  */
 require_once '../global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 $action = $_REQUEST['a'];
 switch ($action) {
@@ -19,7 +18,7 @@ switch ($action) {
             } else {
                 exit;
             }
-        } elseif ($is_allowed_to_edit || is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())) {
+        } elseif ($is_allowed_to_edit || DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())) {
         } else {
             // No course admin and no group member...
             exit;

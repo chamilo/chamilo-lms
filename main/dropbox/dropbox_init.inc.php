@@ -142,13 +142,6 @@ require_once 'dropbox_functions.inc.php';
 // protecting the script
 api_protect_course_script();
 
-/*	Libraries */
-
-// including some libraries that are also used in the documents tool
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';  // we use a function build_document_icon_tag
-
-/*	Virtual course support */
-
 $user_id = api_get_user_id();
 $course_code = api_get_course_id();
 $course_info = api_get_course_info($course_code);

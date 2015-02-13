@@ -69,8 +69,6 @@ $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 $lib_path = api_get_path(LIBRARY_PATH);
 
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-
 $course_info = api_get_course_info();
 $group_id = api_get_group_id();
 
@@ -143,7 +141,8 @@ if ($is_certificate_mode) {
     $html_editor_config['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $sessionId);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']||
+	DocumentManager::is_my_shared_folder(api_get_user_id(), $dir, $sessionId);
 $noPHP_SELF = true;
 
 /*	Other initialization code */
@@ -398,7 +397,7 @@ if ($owner_id == api_get_user_id() ||
 		}
 	}
 
-	if (!$group_document && !is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
+	if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
 		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$document_data['id']).'">'.get_lang('AddMetadata').'</a>';
 
 		//Updated on field

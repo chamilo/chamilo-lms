@@ -346,7 +346,7 @@ function checkUserBuyTransfer($parameter, $user, $type = 'COURSE')
  * Returns an array with all the categories
  * @return array All the categories
  */
-function listCategories()
+function buyCourseListCategories()
 {
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $sql = "SELECT code, name FROM $tblCourseCategory";

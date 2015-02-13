@@ -34,8 +34,10 @@ CREATE TABLE session_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
 
 ALTER TABLE skill ADD COLUMN criteria text DEFAULT '';
 
+ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0;
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.7' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.8' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

@@ -25,10 +25,6 @@ $interbreadcrumb[] = array(
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('MyFiles'));
 
 $htmlHeadXtra[] = '
-<link rel="stylesheet" type="text/css" href="' . api_get_path(WEB_LIBRARY_PATH) .'elfinder/css/elfinder.min.css" />
-<link rel="stylesheet" type="text/css" href="' . api_get_path(WEB_LIBRARY_PATH) .'elfinder/css/theme.css" />
-<script src="' . api_get_path(WEB_LIBRARY_PATH) .'elfinder/js/elfinder.min.js"></script>
-<script src="' . api_get_path(WEB_LIBRARY_PATH) .'elfinder/js/i18n/elfinder.' . api_get_language_isocode() . '.js"></script>
 <script>
 
 function denied_friend (element_input) {
@@ -156,11 +152,14 @@ if (isset($_GET['cidReq'])) {
             ) . ')'
         ) . '</a>';
 }
+$tpl = new Template();
+$editor = new \Chamilo\CoreBundle\Component\Editor\Editor();
+
+$editor = $tpl->fetch('default/'.$editor->getEditorStandAloneTemplate());
 $social_right_content = '<div class="span9">';
-$social_right_content .= '<div id="el-finder"></div>';
+$social_right_content .= $editor;
 $social_right_content .= '</div>';
 
-$tpl = new Template();
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);

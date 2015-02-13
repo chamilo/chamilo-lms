@@ -30,7 +30,7 @@ if (empty($select_eval)) {
     api_not_allowed();
 }
 
-$displayscore = Scoredisplay :: instance();
+$displayscore = ScoreDisplay :: instance();
 $eval = Evaluation :: load($select_eval);
 $overwritescore = 0;
 if ($eval[0]->get_category_id() < 0) {

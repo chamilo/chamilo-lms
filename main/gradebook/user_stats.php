@@ -47,7 +47,7 @@ if (isset ($_GET['exportpdf'])) {
     $datagen       = new UserDataGenerator($my_user_id, $allevals, $alllinks);
     $data_array    = $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);
     $newarray      = array ();
-    $displayscore  = Scoredisplay :: instance();
+    $displayscore  = ScoreDisplay :: instance();
     foreach ($data_array as $data) {
         $newarray[] = array_slice($data, 1);
     }

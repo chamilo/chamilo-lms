@@ -5224,8 +5224,8 @@ class SessionManager
         $sessionId = intval($sessionId);
         $userId = intval($userId);
 
-        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable
-                WHERE id_session = $sessionId AND id_user = $userId AND relation_type = 0";
+        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable "
+            . "WHERE id_session = $sessionId AND id_user = $userId AND relation_type = 0";
 
         $result = Database::fetch_assoc(Database::query($sql));
 
@@ -5305,7 +5305,6 @@ class SessionManager
      * Check if the course belongs to the session
      * @param int $sessionId The session id
      * @param string $courseCode The course code
-     *
      * @return bool
      */
     public static function sessionHasCourse($sessionId, $courseCode)
@@ -5429,4 +5428,266 @@ class SessionManager
         ));
     }
 
+    /**
+     * Returns the list of session (name, short description, start date, end date) from category.
+     * The short description is an extra field value
+     * @param int $categoryId
+     * @param string $target
+     * @return mixed
+     */
+    public static function getSessionBriefListByCategory($categoryId, $target) {
+        // Init variables
+        $categoryId = (int) $categoryId;
+        $sessionList = array();
+        // Check if categoryId is valid
+        if ($categoryId > 0) {
+            $target = Database::escape_string($target);
+            $sTable = Database::get_main_table(TABLE_MAIN_SESSION);
+            $sfTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+            $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+            // Join session field and session field values tables
+            $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
+            $fieldsArray = array(
+                'short_description', 'mode', 'duration', 'vacancies', 'brochure', 'target', 'schedule'
+            );
+            // Get the session list from session category and target
+            $sessionList = Database::select(
+                'id, name, date_start, date_end',
+                $sTable,
+                array(
+                    'where' => array(
+                        "session_category_id = ? AND id IN (
+                            SELECT sfv.session_id FROM $joinTable WHERE
+                            sfv.session_id = session.id
+                            AND sf.field_variable = 'target'
+                            AND sfv.field_value = ?
+                        );" => array($categoryId, $target)
+                    )
+                )
+            );
+
+            // Get session fields
+            $extraField = new ExtraField('session');
+            $fieldList = $extraField->get_all(array(
+                'field_variable IN ( ?, ?, ?, ?, ?, ?, ? )' => $fieldsArray
+            ));
+            // Index session fields
+            foreach ($fieldList as $field) {
+                $fields[$field['id']] = $field['field_variable'];
+            }
+            // Get session field values
+            $extra = new ExtraFieldValue('session');
+            $sessionFieldValueList = $extra->get_all(array('field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => array_keys($fields)));
+            // Add session fields values to session list
+            foreach ($sessionList as $id => &$session) {
+                foreach ($sessionFieldValueList as $sessionFieldValue) {
+                    // Match session field values to session
+                    if ($sessionFieldValue['session_id'] == $id) {
+                        // Check if session field value is set in session field list
+                        if (isset($fields[$sessionFieldValue['field_id']])) {
+                            $var = $fields[$sessionFieldValue['field_id']];
+                            $val = $sessionFieldValue['field_value'];
+                            // Assign session field value to session
+                            $session[$var] = $val;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $sessionList;
+    }
+
+    /**
+     * Return the Session Category id searched by name
+     * @param string $categoryName Name attribute of session category used for search query
+     * @param bool $force boolean used to get even if something is wrong (e.g not unique name)
+     * @return int|array If success, return category id (int), else it will return an array
+     * with the next structure:
+     * array('error' => true, 'errorMessage' => ERROR_MESSAGE)
+     */
+    public static function getSessionCategoryIdByName($categoryName, $force = false)
+    {
+        // Start error result
+        $errorResult = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));
+        $categoryName = Database::escape_string($categoryName);
+        // Check if is not empty category name
+        if (!empty($categoryName)) {
+            $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+            // Get all session category with same name
+            $result = Database::select(
+                'id',
+                $sessionCategoryTable,
+                array(
+                    'where' => array(
+                        'name = ?' => $categoryName,
+                    )
+                )
+            );
+            // Check the result
+            if ($result < 1) {
+                // If not found any result, update error message
+                $errorResult['errorMessage'] = 'Not found any session category name ' . $categoryName;
+            } elseif (count($result) > 1 && !$force) {
+                // If found more than one result and force is disabled, update error message
+                $errorResult['errorMessage'] = 'Found many session categories';
+            } elseif (count($result) == 1 || $force) {
+                // If found just one session category or force option is enabled
+
+                return key($result);
+            }
+        } else {
+            // category name is empty, update error message
+            $errorResult['errorMessage'] = 'Not valid category name';
+        }
+
+        return $errorResult;
+    }
+
+    /**
+     * Return all data from sessions (plus extra field, course and coach data) by category id
+     * @param int $sessionCategoryId session category id used to search sessions
+     * @return array If success, return session list and more session related data, else it will return an array
+     * with the next structure:
+     * array('error' => true, 'errorMessage' => ERROR_MESSAGE)
+     */
+    public static function getSessionListAndExtraByCategoryId($sessionCategoryId)
+    {
+        // Start error result
+        $errorResult = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));
+        $sessionCategoryId = intval($sessionCategoryId);
+        // Check if sesssion category id is valid
+        if ($sessionCategoryId > 0) {
+            // Get table names
+            $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+            $sessionFieldTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+            $sessionFieldValueTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+            $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $userTable = Database::get_main_table(TABLE_MAIN_USER);
+            $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+
+            // Get all data from all sessions whit the session category specified
+            $sessionList = Database::select(
+                '*',
+                $sessionTable,
+                array(
+                    'where' => array(
+                        'session_category_id = ?' => $sessionCategoryId
+                    )
+                )
+            );
+            // Check if session list query had result
+            if (!empty($sessionList)) {
+                // implode all session id
+                $sessionIdsString = '(' . implode(', ', array_keys($sessionList)) . ')';
+                // Get all field variables
+                $sessionFieldList = Database::select('id, field_variable', $sessionFieldTable);
+                // Get all field values
+                $sessionFieldValueList = Database::select(
+                    'session_id, field_id, field_value',
+                    $sessionFieldValueTable,
+                    array('where' => array('session_id IN ?' => $sessionIdsString))
+                );
+                // Check if session field values had result
+                if (!empty($sessionFieldValueList)) {
+                    $sessionFieldValueListBySession = array();
+                    foreach ($sessionFieldValueList as $key => $sessionFieldValue) {
+                        // Create an array to index ids to session id
+                        $sessionFieldValueListBySession[$sessionFieldValue['session_id']][] = $key;
+                    }
+                }
+                // Query used to find course-coaches from sessions
+                $sql = "SELECT scu.id_session AS session_id, c.id AS course_id, c.code AS course_code," .
+                    " c.title AS course_title, u.username AS coach_username, u.firstname AS coach_firstname, " .
+                    " u.lastname AS coach_lastname " .
+                    "FROM $courseTable c " .
+                    "INNER JOIN $sessionCourseUserTable scu ON c.code = scu.course_code " .
+                    "INNER JOIN $userTable u ON scu.id_user = u.user_id " .
+                    "WHERE scu.status = 2 AND scu.id_session IN $sessionIdsString " .
+                    "ORDER BY scu.id_session ASC ";
+                $res = Database::query($sql);
+                $sessionCourseList = Database::store_result($res, 'ASSOC');
+                // Check if course list had result
+                if (!empty($sessionCourseList)) {
+                    foreach ($sessionCourseList as $key => $sessionCourse) {
+                        // Create an array to index ids to session_id
+                        $sessionCourseListBySession[$sessionCourse['session_id']][] = $key;
+                    }
+                }
+                // Join lists
+                if (is_array($sessionList)) {
+                    foreach ($sessionList as $id => &$row) {
+                        if (
+                            !empty($sessionFieldValueListBySession) &&
+                            is_array($sessionFieldValueListBySession[$id])
+                        ) {
+                            // If have an index array for session extra fields, use it to join arrays
+                            foreach ($sessionFieldValueListBySession[$id] as $key) {
+                                $row['extra'][$key] = array(
+                                    'field_name' => $sessionFieldList[$sessionFieldValueList[$key]['field_id']]['field_variable'],
+                                    'field_value' => $sessionFieldValueList[$key]['field_value'],
+                                );
+                            }
+                        }
+                        if (
+                            !empty($sessionCourseListBySession) &&
+                            is_array($sessionCourseListBySession[$id])
+                        ) {
+                            // If have an index array for session course coach, use it to join arrays
+                            foreach ($sessionCourseListBySession[$id] as $key) {
+                                $row['course'][$key] = array(
+                                    'course_id' => $sessionCourseList[$key]['course_id'],
+                                    'course_code' => $sessionCourseList[$key]['course_code'],
+                                    'course_title' => $sessionCourseList[$key]['course_title'],
+                                    'coach_username' => $sessionCourseList[$key]['coach_username'],
+                                    'coach_firstname' => $sessionCourseList[$key]['coach_firstname'],
+                                    'coach_lastname' => $sessionCourseList[$key]['coach_lastname'],
+                                );
+                            }
+                        }
+                    }
+                }
+
+                return $sessionList;
+            } else {
+                // Not found result, update error message
+                $errorResult['errorMessage'] = 'Not found any session for session category id ' . $sessionCategoryId;
+            }
+
+            return $errorResult;
+        }
+    }
+
+    /**
+     * Return session description from
+     * @param int $sessionId
+     * @return string
+     */
+    public static function getDescriptionFromSessionId($sessionId)
+    {
+        // Init variables
+        $sessionId = intval($sessionId);
+        $description = '';
+        // Check if session id is valid
+        if ($sessionId !== 0) {
+            // Select query from session id
+            $rows = Database::select(
+                'description',
+                Database::get_main_table(TABLE_MAIN_SESSION),
+                array(
+                    'where' => array(
+                        'id = ?' => $sessionId
+                    )
+                )
+            );
+
+            // Check if select query result is not empty
+            if (!empty($rows)) {
+                // Get session description
+                $description = $rows[0]['description'];
+            }
+        }
+
+        return $description;
+    }
 }

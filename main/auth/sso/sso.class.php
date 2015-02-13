@@ -256,14 +256,20 @@ class sso {
     }
 
     /**
-     * Generate the URL for profile editing
-     * @return string The SSO URL
+     * Generate the URL for profile editing for a any user or the current user
+     * @param int $userId Optional. The user id
+     * @param boolean $asAdmin Optional. Whether get the URL for the platform admin
+     * @return string The SSO URL 
      */
-    public function generateProfileEditingURL()
+    public function generateProfileEditingURL($userId = 0, $asAdmin = false)
     {
-        $url = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+        $userId = intval($userId);
 
-        return $url;
+        if ($asAdmin && api_is_platform_admin(true)) {
+            return api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$userId";
+        }
+
+        return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
     }
 
 }

@@ -227,18 +227,28 @@ class ssoDrupal {
     }
 
     /**
-     * Generate the URL for profile editing
+     * Generate the URL for profile editing for a any user or the current user
+     * @param int $userId Optional. The user id
+     * @param boolean $asAdmin Optional. Whether get the URL for the platform admin
      * @return string If the URL is obtained return the drupal_user_id. Otherwise return false 
      */
-    public function generateProfileEditingURL()
+    public function generateProfileEditingURL($userId = 0, $asAdmin = false)
     {
-        $userId = api_get_user_id();
+        $userId = intval($userId);
+
+        if (empty($userId)) {
+            $userId = api_get_user_id();
+        }
 
         $userExtraFieldValue = new ExtraFieldValue('user');
         $drupalUserIdData = $userExtraFieldValue->get_values_by_handler_and_field_variable($userId, 'drupal_user_id');
 
         if ($drupalUserIdData === false) {
-            return false;
+            if ($asAdmin && api_is_platform_admin(true)) {
+                return api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$userId";
+            }
+
+            return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
         }
 
         $drupalUserId = $drupalUserIdData['field_value'];

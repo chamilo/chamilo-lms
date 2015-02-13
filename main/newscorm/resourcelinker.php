@@ -796,9 +796,6 @@ if ($content == 'Link') {
     // Including the links language file.
     include "../lang/$language/link.inc.php";
 
-    // Including the links functions file.
-    require_once api_get_path(LIBRARY_PATH).'link.lib.php';
-
     $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
     if (($learnpath_id != '') and ($content == 'Link')) {
         echo "<form name='learnpath_link'><table>";

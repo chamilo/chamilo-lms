@@ -1427,7 +1427,6 @@ class learnpath
         }
 
         if ($row_select['item_type'] == 'link') {
-            require_once api_get_path(LIBRARY_PATH).'link.lib.php';
             $link = new Link();
             $linkId = $row_select['path'];
             $link->updateLink($linkId, $url);
@@ -3373,13 +3372,12 @@ class learnpath
                         }
 
                         if ($lp_item_type == 'link') {
-                            require_once api_get_path(LIBRARY_PATH).'link.lib.php';
-                            if (is_youtube_link($file)) {
-                                $src  = get_youtube_video_id($file);
+                            if (Link::is_youtube_link($file)) {
+                                $src  = Link::get_youtube_video_id($file);
                                 $file = 'embed.php?type=youtube&src='.$src;
                             }
-                            if (isVimeoLink($file)) {
-                                $src  = getVimeoLinkId($file);
+                            if (Link::isVimeoLink($file)) {
+                                $src  = Link::getVimeoLinkId($file);
                                 $file = 'embed.php?type=vimeo&src='.$src;
                             }
                         } else {
@@ -8485,8 +8483,6 @@ class learnpath
      */
     public function get_links()
     {
-        require_once api_get_path(LIBRARY_PATH).'link.lib.php';
-
         $course_id = api_get_course_int_id();
         $tbl_link = Database::get_course_table(TABLE_LINK);
 
@@ -8505,7 +8501,7 @@ class learnpath
         $return .= '</li>';
         $course_info = api_get_course_info();
 
-        $linkCategories = getLinkCategories($course_id, $session_id);
+        $linkCategories = Link::getLinkCategories($course_id, $session_id);
         $categoryIdList = array();
         if (!empty($linkCategories)) {
             foreach ($linkCategories as $categoryInfo) {

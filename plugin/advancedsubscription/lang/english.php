@@ -51,3 +51,4 @@ $strings['Postulant'] = 'Postulant';
 $strings['InscriptionDate'] = 'Inscription date';
 $strings['BossValidation'] = 'Boss validation';
 $strings['Decision'] = 'Decision';
+$strings['AdvancedSubscriptionAdminViewTitle'] = 'Subscription request confirmation result';

@@ -57,3 +57,4 @@ $strings['Postulant'] = 'Postulante';
 $strings['InscriptionDate'] = 'Fecha de inscripción';
 $strings['BossValidation'] = 'Validación del superior';
 $strings['Decision'] = 'Decisión';
+$strings['AdvancedSubscriptionAdminViewTitle'] = 'Resultado de confirmación de solicitud de inscripción';

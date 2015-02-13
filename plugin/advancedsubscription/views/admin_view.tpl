@@ -47,6 +47,20 @@
         vertical-align: middle;
         text-align: center;
     }
+    #modalMail{
+        width: 770px;
+        margin-top: -180px !important;
+        margin-left:  -385px !important;
+    }
+
+    #modalMail .modal-body {
+        height: 360px;
+        overflow: visible;
+    }
+
+    #iframeAdvsub {
+
+    }
 </style>
 
 <form id="form_advsub_admin" class="form-search" method="post" action="/plugin/advancedsubscription/src/admin_view.php" name="form_advsub_admin">
@@ -102,23 +116,13 @@
                         <td>{{ student.validation }}</td>
                         <td>
                             <a
-                                class="btn btn-success"
-                                onclick="javascript:if(
-                                            !confirm(
-                                                '¿Esta seguro de que desea aceptar la inscripción de {{ student.complete_name }}?'
-                                            )
-                                        ) return false;"
+                                class="btn btn-success btn-advsub btn-accept"
                                 href="{{ student.acceptUrl }}"
                             >
                                 Aceptar
                             </a>
                             <a
-                                class="btn btn-danger"
-                                onclick="javascript:if(
-                                            !confirm(
-                                                '¿Esta seguro de que desea rechazar la inscripción de {{ student.complete_name }}?'
-                                            )
-                                        ) return false;"
+                                class="btn btn-danger btn-advsub btn-reject"
                                 href="{{ student.rejectUrl }}"
                             >
                                 Rechazar
@@ -139,8 +143,62 @@
 
 <input name="f" value="social" type="hidden">
 </form>
+<div class="modal fade" id="modalMail" tabindex="-1" role="dialog" aria-labelledby="privacidadLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="privacidadLabel">{{ "AdvancedSubscriptionAdminViewTitle" | get_plugin_lang('AdvancedSubscriptionPlugin')}}</h4>
+            </div>
+            <div class="modal-body">
+                <iframe id="iframeAdvsub" style="width: 100%; height: 100%;" frameBorder="0">
+                </iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
-    $("#session-select").change(function () {
-        $("#form_advsub_admin").submit();
+    $(document).ready(function(){
+        $("#session-select").change(function () {
+            $("#form_advsub_admin").submit();
+        });
+        $("a.btn-advsub").click(function(event){
+            event.preventDefault();
+            var confirmed = false;
+            var studentName = $(this).closest("tr").find(".name").html();
+            if (studentName) {
+                studentName = "de " + studentName + " ?";
+            } else {
+                studentName = " ?"
+            }
+            if ($(this).hasClass('btn-accept')) {
+                var confirmed = confirm(
+                    "¿Esta seguro de que desea aceptar la inscripción " + studentName
+                );
+            } else {
+                var confirmed = confirm(
+                        "¿Esta seguro de que desea aceptar la inscripción " + studentName
+                );
+            }
+            if (confirmed) {
+                var thisBlock = $(this).closest("tr");
+                var advsubUrl = $(this).attr("href")
+                $("#iframeAdvsub").attr("src", advsubUrl)
+                $("#modalMail").modal("show");
+                $.ajax({
+                    dataType: "json",
+                    url: advsubUrl
+                }).done(function(result){
+                    if (result.error == true) {
+                        thisBlock.slideUp();
+                    } else {
+                        console.log(result);
+                    }
+                });
+            }
+        });
     });
 </script>

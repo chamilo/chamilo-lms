@@ -8,7 +8,6 @@
 $language_file = array('agenda', 'group', 'announcements');
 
 require_once '../inc/global.inc.php';
-require_once 'agenda.lib.php';
 require_once 'agenda.inc.php';
 
 $interbreadcrumb[] = array(

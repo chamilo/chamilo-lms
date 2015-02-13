@@ -833,15 +833,16 @@ if ($modifyAnswers) {
                                     </td>
 
                                     <?php
-                                    require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
-                                    $oFCKeditor = new FCKeditor("comment[$i]");
+                                    // @todo use formvalidator
+                                    /*$oFCKeditor = new CKeditor();
                                     $content = $comment[$i];
                                     $oFCKeditor->ToolbarSet = 'TestProposedAnswer';
                                     $oFCKeditor->Config['ToolbarStartExpanded'] = 'false';
                                     $oFCKeditor->Width = '100%';
                                     $oFCKeditor->Height = '100';
                                     $oFCKeditor->Value = $content;
-                                    $return = $oFCKeditor->CreateHtml();
+                                    //$return = $oFCKeditor->CreateHtml();
+                                    $return = $oFCKeditor->editor("comment[$i]", $oFCKeditor->Value);*/
                                     /* <td align="left"><textarea wrap="virtual" rows="1" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo api_htmlentities($comment[$i], ENT_QUOTES, api_get_system_encoding()); ?></textarea></td> */
                                     ?>
                                     <td>&nbsp;</td>

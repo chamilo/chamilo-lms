@@ -10,7 +10,6 @@
  *	@package chamilo.library
  *	@todo test and reorganise
  */
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 /**
  * Changes the file name extension from .php to .phps

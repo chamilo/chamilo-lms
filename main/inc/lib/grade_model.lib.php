@@ -1,20 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	This class provides methods for the notebook management.
-*	Include/require it in your code to use its features.
-*	@package chamilo.library
-*/
-/**
- * Code
- */
-/**
- * @package chamilo.library
- */
 
-require_once 'fckeditor/fckeditor.php';
 /**
  * Class GradeModel
+ * @package chamilo.library
  */
 class GradeModel extends Model
 {
@@ -66,13 +55,14 @@ class GradeModel extends Model
      */
     public function return_form($url, $action)
     {
+        /*
         $oFCKeditor = new FCKeditor('description') ;
         $oFCKeditor->ToolbarSet = 'grade_model';
         $oFCKeditor->Width		= '100%';
         $oFCKeditor->Height		= '200';
         $oFCKeditor->Value		= '';
         $oFCKeditor->CreateHtml();
-
+        */
         $form = new FormValidator('grades', 'post', $url);
 
         // Setting the form elements
@@ -109,7 +99,6 @@ class GradeModel extends Model
 
         $form->addElement('hidden', 'maxvalue', '100');
 		$form->addElement('hidden', 'minvalue', '0');
-
         $renderer = & $form->defaultRenderer();
 
         $component_array = array();
@@ -166,11 +155,12 @@ class GradeModel extends Model
         $form->addElement('advanced_settings', get_lang('AllMustWeight100'));
 
         if ($action == 'edit') {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+            //$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+            $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
         } else {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+            //$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+            $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
         }
-
         if (!empty($components)) {
             $counter = 0;
             foreach ($components as $component) {

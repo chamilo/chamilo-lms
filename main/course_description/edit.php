@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for editing a course description 
+* View (MVC patter) for editing a course description
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.course_description
 */
@@ -38,8 +38,8 @@ foreach ($categories as $id => $title) {
 echo '</div>';
 
 // error messages
-if (isset($error) && intval($error) == 1) {	
-	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
+if (isset($error) && intval($error) == 1) {
+	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
 }
 
 // default header title form

@@ -685,7 +685,6 @@ class Wiki
 
         if ($form->validate()) {
             $values = $form->exportValues();
-
             if (empty($_POST['title'])) {
                 self::setMessage(Display::display_error_message(get_lang("NoWikiPageTitle"), false, true));
             } elseif (strtotime($values['startdate_assig']) > strtotime($values['enddate_assig'])) {
@@ -4683,7 +4682,6 @@ class Wiki
                             //prevent concurrent users and double version
                             self::setMessage(Display::display_error_message(get_lang("EditedByAnotherUser"), false, true));
                         } else {
-
                             $return_message = self::save_wiki($form->exportValues());
                             self::setMessage(Display::display_confirmation_message($return_message, false, true));
                         }

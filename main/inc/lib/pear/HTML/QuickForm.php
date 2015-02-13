@@ -27,10 +27,6 @@
  * PEAR and PEAR_Error classes, for error handling
  */
 require_once 'PEAR.php';
-/**
- * Base class for all HTML classes
- */
-require_once 'HTML/Common.php';
 
 /**
  * Element types known to HTML_QuickForm
@@ -648,7 +644,7 @@ class HTML_QuickForm extends HTML_Common
      * @access   public
      * @throws   HTML_QuickForm_Error
      */
-    function &addElement($element)
+    public function &addElement($element)
     {
         if (is_object($element) && is_subclass_of($element, 'html_quickform_element')) {
            $elementObject = &$element;

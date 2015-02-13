@@ -67,7 +67,7 @@ $_configuration['dokeos_stable']    = $_configuration['system_stable'];
 $userPasswordCrypted                = $_configuration['password_encryption'];
 
 // Include the main Chamilo platform library file.
-require_once $includePath.'/lib/main_api.lib.php';
+require_once $includePath.'/lib/api.lib.php';
 
 //Check the PHP version
 api_check_php_version($includePath.'/');
@@ -104,6 +104,10 @@ require_once $lib_path.'array.lib.php';
 require_once $lib_path.'events.lib.inc.php';
 require_once $lib_path.'course.lib.php';
 require_once $lib_path.'online.inc.php';
+require_once $lib_path.'banner.lib.php';
+require_once $lib_path.'fileManage.lib.php';
+require_once $lib_path.'fileUpload.lib.php';
+require_once $lib_path.'fileDisplay.lib.php';
 
 define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
 if (!is_dir(_MPDF_TEMP_PATH)) {
@@ -196,7 +200,7 @@ if (!Database::select_db($_configuration['main_database'], $database_connection)
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
 $result = Database::query($sql);
-while ($row = @Database::fetch_array($result)) {
+while ($row = Database::fetch_array($result)) {
     $charset = $row[0];
 }
 if (empty($charset)) {
@@ -306,8 +310,6 @@ foreach ($result as & $row) {
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
-// Load HTMLPurifier.
-//require_once $lib_path.'htmlpurifier/library/HTMLPurifier.auto.php'; // It will be loaded later, in a lazy manner.
 
 // Before we call local.inc.php, let's define a global $this_section variable
 // which will then be usable from the banner and header scripts

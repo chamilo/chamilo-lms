@@ -24,7 +24,6 @@ $nameTools = get_lang('ModifInfo');
 
 /*	Libraries */
 require_once api_get_path(INCLUDE_PATH).'conf/course_info.conf.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 api_protect_course_script(true);

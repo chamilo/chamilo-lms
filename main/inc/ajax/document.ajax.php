@@ -35,7 +35,6 @@ switch ($action) {
         //$ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : $defaultFileExistsOption;
 
         if (!empty($_FILES)) {
-            require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
             $file = $_FILES['file'];
             $result = DocumentManager::upload_document(
                 $_FILES,

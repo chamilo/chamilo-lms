@@ -57,39 +57,12 @@ $(document).ready(function() {
             $(this).css("background-image", \'url("../img/hide0.png")\');
         }
     );
+
+    CKEDITOR.on("instanceReady", function (e) {
+        showTemplates();
+    });
 });
 
-function InnerDialogLoaded() {
-	/*
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-	return B.ClickFrame();
-	*/
-	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
-	var EditorFrame = null ;
-
-	if ( !isIE ) {
-		EditorFrame = window.frames[0] ;
-	} else {
-		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
-		// We need a sure method to locate the frame that contains the online editor.
-		for ( var i = 0, n = window.frames.length ; i < n ; i++ ) {
-			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 ) {
-				EditorFrame = window.frames[i] ;
-			}
-		}
-	}
-
-	if ( !EditorFrame ) {
-		return null ;
-	}
-
-	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);
-	return B.ClickFrame();
-};
-
-function FCKeditor_OnComplete( editorInstance) {
-	document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
-}
 </script>';
 
 $_SESSION['whereami'] = 'document/create';
@@ -479,8 +452,8 @@ if ($owner_id == api_get_user_id() ||
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
 	echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span2" style="width:162px">
-                <div id="frmModel" style="overflow: visible;"></div>
+            <div id="template_col" class="span3" style="width:200px">
+                <div id="frmModel"></div>
             </div>
             <div id="hide_bar_template"></div>
             <div id="doc_form" class="span9">

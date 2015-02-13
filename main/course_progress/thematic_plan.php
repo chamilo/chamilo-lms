@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for thematic plan 
+* View (MVC patter) for thematic plan
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.course_progress
 */
@@ -10,17 +10,17 @@
 // actions menu
 $new_thematic_plan_data = array();
 if (!empty($thematic_plan_data))
-foreach($thematic_plan_data as $thematic_item) {    
+foreach($thematic_plan_data as $thematic_item) {
     $thematic_simple_list[] = $thematic_item['description_type'];
-    $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;       
+    $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;
 }
 
 $new_id = ADD_THEMATIC_PLAN;
 if (!empty($thematic_simple_list))
-foreach($thematic_simple_list as $item) {    
-    if ($item >= ADD_THEMATIC_PLAN) {        
+foreach($thematic_simple_list as $item) {
+    if ($item >= ADD_THEMATIC_PLAN) {
     	$new_id = $item + 1;
-        $default_thematic_plan_title[$item] = $new_thematic_plan_data[$item]['title'];               
+        $default_thematic_plan_title[$item] = $new_thematic_plan_data[$item]['title'];
     }
 }
 
@@ -30,40 +30,40 @@ echo Display::tag('h2', $thematic_data['title']);
 echo $thematic_data['content'];
 
 if ($message == 'ok') {
-    Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));    
+    Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));
 }
-if ($action == 'thematic_plan_list') {            
-        $form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');                
+if ($action == 'thematic_plan_list') {
+        $form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
         $form->addElement('hidden', 'action', 'thematic_plan_add');
         $form->addElement('hidden', 'thematic_plan_token', $token);
-        $form->addElement('hidden', 'thematic_id', $thematic_id);   
-        
+        $form->addElement('hidden', 'thematic_id', $thematic_id);
+
         foreach ($default_thematic_plan_title as $id => $title) {
             $form->addElement('hidden', 'description_type['.$id.']', $id);
             $form->add_textfield('title['.$id.']', get_lang('Title'), false, array('size'=>'50'));
             $form->add_html_editor('description['.$id.']', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
-            //$form->addElement('textarea', 'description['.$id.']', get_lang('Description'));                            
+            //$form->addElement('textarea', 'description['.$id.']', get_lang('Description'));
             if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list)) {
-                $thematic_plan = $new_thematic_plan_data[$id];                 
+                $thematic_plan = $new_thematic_plan_data[$id];
                 // set default values
                 $default['title['.$id.']']       = $thematic_plan['title'];
-                $default['description['.$id.']'] = $thematic_plan['description'];                
+                $default['description['.$id.']'] = $thematic_plan['description'];
                 $thematic_plan = null;
             } else {
-                $thematic_plan = null;               
+                $thematic_plan = null;
                 $default['title['.$id.']']       = $title;
-                $default['description['.$id.']']= '';                    
-            }                        
-            $form->setDefaults($default);            
-		}                
-        $form->addElement('style_submit_button', null, get_lang('Save'), 'id="add_plan" class="save"');        
-        $form->display();        	
+                $default['description['.$id.']']= '';
+            }
+            $form->setDefaults($default);
+		}
+        $form->addElement('style_submit_button', null, get_lang('Save'), 'id="add_plan" class="save"');
+        $form->display();
 } else if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 	if ($description_type >= ADD_THEMATIC_PLAN) {
 		$header_form = get_lang('NewBloc');
 	} else {
-		$header_form = $default_thematic_plan_title[$description_type];		
-	}	
+		$header_form = $default_thematic_plan_title[$description_type];
+	}
 	if (!$error) {
 		$token = md5(uniqid(rand(),TRUE));
 		$_SESSION['thematic_plan_token'] = $token;
@@ -74,29 +74,29 @@ if ($action == 'thematic_plan_list') {
 	//$form->addElement('header', '', $header_form);
 	$form->addElement('hidden', 'action', $action);
 	$form->addElement('hidden', 'thematic_plan_token', $token);
-	
+
 	if (!empty($thematic_id)) {
-		$form->addElement('hidden', 'thematic_id', $thematic_id);	
+		$form->addElement('hidden', 'thematic_id', $thematic_id);
 	}
 	if (!empty($description_type)) {
-		$form->addElement('hidden', 'description_type', $description_type);	
+		$form->addElement('hidden', 'description_type', $description_type);
 	}
 
 	$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
-	$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));	
+	$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
 	//$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
-	
+
 	if ($description_type < ADD_THEMATIC_PLAN) {
 		$default['title'] = $default_thematic_plan_title[$description_type];
 	}
 	if (!empty($thematic_plan_data)) {
 		// set default values
 		$default['title'] = $thematic_plan_data[0]['title'];
-		$default['description'] = $thematic_plan_data[0]['description'];		
-	}	
+		$default['description'] = $thematic_plan_data[0]['description'];
+	}
 	$form->setDefaults($default);
-	
+
 	if (isset($default_thematic_plan_question[$description_type])) {
 		$message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
 		$message .= $default_thematic_plan_question[$description_type];
@@ -104,8 +104,8 @@ if ($action == 'thematic_plan_list') {
 	}
 
 	// error messages
-	if ($error) { 	
-		Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
-	}	
-	$form->display();		
+	if ($error) {
+		Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
+	}
+	$form->display();
 }

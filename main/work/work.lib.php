@@ -15,9 +15,6 @@ use ChamiloSession as Session;
  */
 
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 $addDocumentToWork = api_get_configuration_value('add_document_to_work');

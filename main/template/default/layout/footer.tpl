@@ -59,7 +59,6 @@
 {# Extra footer configured in admin section, only shown to non-admins #}
 {{ footer_extra_content }}
 
-{% raw %}
 <script>
 
     $("form").on("click", ' .advanced_parameters', function() {
@@ -69,7 +68,6 @@
             button.toggleClass('active');
         });
     });
-
 
     /* Makes row highlighting possible */
     $(document).ready( function() {
@@ -141,8 +139,6 @@
         };
         $('.boot-tooltip').tooltip(tip_options);
     });
-    {% endraw %}
-
 </script>
 
 {{ execution_stats }}

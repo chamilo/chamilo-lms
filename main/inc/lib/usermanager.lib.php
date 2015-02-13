@@ -413,8 +413,6 @@ class UserManager
         }
 
         if (api_get_setting('allow_social_tool') == 'true') {
-
-            require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
             //Delete user from portal groups
             $group_list = GroupPortalManager::get_groups_by_user($user_id);
             if (!empty($group_list)) {

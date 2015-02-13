@@ -832,8 +832,6 @@ class IndexManager
 
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
-            require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
             // New messages.
             $number_of_new_messages             = MessageManager::get_new_messages();
             // New contact invitations.

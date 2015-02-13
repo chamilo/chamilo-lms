@@ -8,9 +8,6 @@
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
-
 api_block_anonymous_users();
 $language_file = array('courses', 'index', 'admin');
 $user_id = api_get_user_id();

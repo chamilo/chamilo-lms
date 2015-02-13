@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'fileManage.lib.php';
-require_once 'fileUpload.lib.php';
-require_once 'document.lib.php';
-
 /**
  * This library contains some functions for group-management.
  * @author Bart Mollet

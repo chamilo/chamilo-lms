@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "869c0f0cb81f3231bc4f679445bcc110",
+    "hash": "b9a64081b907e6968045cc2c894d141f",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -91,7 +91,7 @@
                     "homepage": "http://www.lickmychip.com/"
                 },
                 {
-                    "name": "Nicolas Le Goff",
+                    "name": "nlegoff",
                     "email": "legoff.n@gmail.com"
                 },
                 {
@@ -106,6 +106,104 @@
                 "driver"
             ],
             "time": "2013-06-21 15:51:20"
+        },
+        {
+            "name": "barryvdh/elfinder-builds",
+            "version": "v2.1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/barryvdh/elfinder-builds.git",
+                "reference": "5826d79edbeccf2a63404f7ca8e9ca66758fd762"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/barryvdh/elfinder-builds/zipball/5826d79edbeccf2a63404f7ca8e9ca66758fd762",
+                "reference": "5826d79edbeccf2a63404f7ca8e9ca66758fd762",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Levashov",
+                    "email": "dio@std42.ru",
+                    "homepage": "http://std42.ru"
+                },
+                {
+                    "name": "Troex Nevelin",
+                    "email": "troex@fury.scancode.ru",
+                    "homepage": "http://std42.ru"
+                },
+                {
+                    "name": "Naoki Sawada",
+                    "email": "hypweb@gmail.com",
+                    "homepage": "http://xoops.hypweb.net"
+                },
+                {
+                    "name": "Community contributions",
+                    "homepage": "https://github.com/Studio-42/elFinder/contributors"
+                }
+            ],
+            "description": "File manager for web",
+            "homepage": "http://elfinder.org",
+            "time": "2015-02-11 11:10:51"
+        },
+        {
+            "name": "ckeditor/ckeditor",
+            "version": "4.4.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ckeditor/ckeditor-releases.git",
+                "reference": "cc324415302784eb1abe33a3762fbdd3b48c558b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/cc324415302784eb1abe33a3762fbdd3b48c558b",
+                "reference": "cc324415302784eb1abe33a3762fbdd3b48c558b",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+",
+                "LGPL-2.1+",
+                "MPL-1.1+"
+            ],
+            "authors": [
+                {
+                    "name": "CKSource",
+                    "homepage": "http://cksource.com"
+                }
+            ],
+            "description": "JavaScript WYSIWYG web text editor.",
+            "homepage": "http://ckeditor.com",
+            "keywords": [
+                "CKEditor",
+                "editor",
+                "fckeditor",
+                "html",
+                "javascript",
+                "richtext",
+                "text",
+                "wysiwyg"
+            ],
+            "time": "2015-01-27 15:13:53"
         },
         {
             "name": "doctrine/cache",
@@ -298,6 +396,61 @@
                 "html"
             ],
             "time": "2013-11-30 08:25:19"
+        },
+        {
+            "name": "jbroadway/urlify",
+            "version": "1.0.3-stable",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jbroadway/urlify.git",
+                "reference": "c9ada9d3873d11f72fa772aecd6896efad11ee67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jbroadway/urlify/zipball/c9ada9d3873d11f72fa772aecd6896efad11ee67",
+                "reference": "c9ada9d3873d11f72fa772aecd6896efad11ee67",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "URLify": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Johnny Broadway",
+                    "email": "johnny@johnnybroadway.com",
+                    "homepage": "http://www.johnnybroadway.com/",
+                    "role": "Main Developer"
+                }
+            ],
+            "description": "PHP port of URLify.js from the Django project. Transliterates non-ascii characters for use in URLs.",
+            "homepage": "https://github.com/jbroadway/urlify",
+            "keywords": [
+                "encode",
+                "iconv",
+                "link",
+                "slug",
+                "translit",
+                "transliterate",
+                "transliteration",
+                "url",
+                "urlify"
+            ],
+            "time": "2014-03-17 16:14:04"
         },
         {
             "name": "michelf/php-markdown",
@@ -507,16 +660,16 @@
         },
         {
             "name": "php-ffmpeg/php-ffmpeg",
-            "version": "0.3.x-dev",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
-                "reference": "185fb5c33da594db7ffbf3f89d48e9841bc666a0"
+                "reference": "6e3134e4ecc96852b1205e6c88ceffdb8cf17d34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/185fb5c33da594db7ffbf3f89d48e9841bc666a0",
-                "reference": "185fb5c33da594db7ffbf3f89d48e9841bc666a0",
+                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/6e3134e4ecc96852b1205e6c88ceffdb8cf17d34",
+                "reference": "6e3134e4ecc96852b1205e6c88ceffdb8cf17d34",
                 "shasum": ""
             },
             "require": {
@@ -537,7 +690,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.4-dev"
+                    "dev-master": "0.5-dev"
                 }
             },
             "autoload": {
@@ -572,7 +725,7 @@
                 "video",
                 "video processing"
             ],
-            "time": "2013-10-21 12:13:46"
+            "time": "2015-01-30 19:07:38"
         },
         {
             "name": "psr/log",
@@ -825,11 +978,8 @@
                     "email": "fabien@symfony.com"
                 }
             ],
-            "description": "Standards compliant HTML filter written in PHP",
-            "homepage": "http://htmlpurifier.org/",
-            "keywords": [
-                "html"
-            ],
+            "description": "Symfony Process Component",
+            "homepage": "http://symfony.com",
             "time": "2015-01-25 04:39:26"
         },
         {
@@ -1208,9 +1358,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "php-ffmpeg/php-ffmpeg": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

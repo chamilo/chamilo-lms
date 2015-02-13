@@ -17,8 +17,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
-
 $views = array('friends', 'mygroups');
 $user_id = intval($_GET['user_id']);
 

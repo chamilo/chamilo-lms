@@ -251,7 +251,6 @@ $session_id = api_get_session_id();
 
 api_protect_course_script(true);
 
-require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
 $lpfound = false;
 
 $myrefresh = 0;

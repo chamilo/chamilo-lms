@@ -46,7 +46,8 @@
         "aferrandini/phpqrcode": "1.0.1",
         "mpdf/mpdf": "5.7.4",
         "barryvdh/elfinder-builds": "2.1.0.3",
-        "jbroadway/urlify": "1.0.3-stable"
+        "jbroadway/urlify": "1.0.3-stable",
+        "monolog/monolog": "~1.0"
     },
     "extra": {
         "branch-alias": {

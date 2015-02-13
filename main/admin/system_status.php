@@ -10,7 +10,6 @@ $language_file = array('admin', 'registration');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'diagnoser.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 // User permissions

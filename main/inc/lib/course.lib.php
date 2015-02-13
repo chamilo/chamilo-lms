@@ -116,7 +116,6 @@ class CourseManager
                     // template course into this new course
                     if (!empty($_configuration['course_creation_use_template'])) {
                         // Include the necessary libraries to generate a course copy
-                        require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
                         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseBuilder.class.php';
                         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseRestorer.class.php';
                         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseSelectForm.class.php';
@@ -2233,7 +2232,6 @@ class CourseManager
         }
         $count = 0;
         if (api_is_multiple_url_enabled()) {
-            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             $url_id = 1;
             if (api_get_current_access_url_id() != -1) {
                 $url_id = api_get_current_access_url_id();

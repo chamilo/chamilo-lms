@@ -407,7 +407,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             }
         }
         $document_to_move = DocumentManager::get_document_data_by_id($_POST['move_file'], api_get_course_id());
-        require_once $lib_path.'fileManage.lib.php';
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
 
@@ -473,7 +472,6 @@ if($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folde
                 api_not_allowed();
             }
         }
-        require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
         if (DocumentManager::delete_document($_course, $_GET['delete'], $base_work_dir)) {
             if ( isset($_GET['delete_certificate_id']) && $_GET['delete_certificate_id'] == strval(intval($_GET['delete_certificate_id']))) {
                 $default_certificate_id = $_GET['delete_certificate_id'];

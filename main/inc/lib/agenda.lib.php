@@ -2284,8 +2284,6 @@ class Agenda
 
         $data = file_get_contents($filepath);
 
-        require_once api_get_path(SYS_PATH).'vendor/autoload.php';
-
         $trans = array(
             'DAILY' => 'daily',
             'WEEKLY' => 'weekly',

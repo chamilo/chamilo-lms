@@ -219,7 +219,6 @@ class CalculatedAnswer extends Question
                         $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
                         $auxFormula = str_replace($blankItem, $randomValue, $auxFormula);
                     }
-                    require_once(api_get_path(LIBRARY_PATH).'evalmath.class.php');
                     $math = new EvalMath();
                     $result = $math->evaluate($auxFormula);
                     $result = number_format($result, 2, ".", "");

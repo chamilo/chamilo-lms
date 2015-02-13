@@ -2192,7 +2192,6 @@ class Exercise
         $nano = null;
 
         if ($answerType == ORAL_EXPRESSION) {
-            require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
             $exe_info = get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 

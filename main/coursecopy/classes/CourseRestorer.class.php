@@ -20,10 +20,6 @@ require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
 require_once 'Work.class.php';
 
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
 define('FILE_SKIP', 1);
 define('FILE_RENAME', 2);
 define('FILE_OVERWRITE', 3);

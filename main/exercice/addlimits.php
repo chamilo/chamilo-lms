@@ -86,10 +86,6 @@ $nameTools=get_lang('Exercice');
 $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices'));
 Display::display_header($nameTools,"Exercise");
 
-/*
-	Action handling
-*/
-require_once '../inc/global.inc.php';
 if (isset($_POST['ok'])) {
 	$message = get_lang('TestLimitsAdded');
 	Display::display_normal_message($message);

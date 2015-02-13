@@ -16,7 +16,7 @@ function validate_data($user_classes) {
     global $purification_option_for_usernames;
     $errors = array ();
     $classcodes = array ();
-    
+
     if (!isset($_POST['subscribe']) && !isset($_POST['subscribe']))  {
           $user_class['error'] = get_lang('SelectAnAction');
           $errors[] = $user_class;
@@ -26,20 +26,20 @@ function validate_data($user_classes) {
         $user_class['line'] = $index + 1;
         // 1. Check whether mandatory fields are set.
         $mandatory_fields = array ('UserName', 'ClassName');
-        
-        foreach ($mandatory_fields as $key => $field) {            
-            if (!isset ($user_class[$field]) || strlen($user_class[$field]) == 0) {                
+
+        foreach ($mandatory_fields as $key => $field) {
+            if (!isset ($user_class[$field]) || strlen($user_class[$field]) == 0) {
                 $user_class['error'] = get_lang($field.'Mandatory');
                 $errors[] = $user_class;
             }
         }
-        
+
         // 2. Check whether classcode exists.
         if (isset ($user_class['ClassName']) && strlen($user_class['ClassName']) != 0) {
             // 2.1 Check whether code has been allready used in this CVS-file.
             if (!isset ($classcodes[$user_class['ClassName']])) {
                 // 2.1.1 Check whether code exists in DB.
-                $class_table = Database :: get_main_table(TABLE_MAIN_CLASS);                
+                $class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
                 $sql = "SELECT * FROM $class_table WHERE name = '".Database::escape_string($user_class['ClassName'])."'";
                 $res = Database::query($sql);
                 if (Database::num_rows($res) == 0) {
@@ -57,7 +57,7 @@ function validate_data($user_classes) {
                 $user_class['error'] = get_lang('UserNameTooLong').': '.$user_class['UserName'];
                 $errors[] = $user_class;
             }
-            $username = UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames);            
+            $username = UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames);
             // 3.2. Check whether username exists.
             if (UserManager::is_username_available($username)) {
                 $user_class['error'] = get_lang('UnknownUser').': '.$username;
@@ -83,7 +83,7 @@ function save_data($users_classes) {
     // Data parsing: purification + conversion (UserName, ClassName) --> (user_is, class_id)
     $csv_data = array ();
     foreach ($users_classes as $index => $user_class) {
-        
+
         $sql1 = "SELECT user_id FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames))."'";
         $res1 = Database::query($sql1);
         $obj1 = Database::fetch_object($res1);
@@ -94,7 +94,7 @@ function save_data($users_classes) {
             $csv_data[$obj1->user_id][$obj2->id] = 1;
         }
     }
-    
+
     // Logic for processing the request (data + UI options).
     $db_subscriptions = array();
     foreach ($csv_data as $user_id => $csv_subscriptions) {
@@ -105,7 +105,7 @@ function save_data($users_classes) {
         }
         $to_subscribe   = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
         $to_unsubscribe = array_diff(array_keys($db_subscriptions), array_keys($csv_subscriptions));
-        
+
         // Subscriptions for new classes.
         if ($_POST['subscribe']) {
             foreach ($to_subscribe as $class_id) {
@@ -139,10 +139,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-
 $tool_name = get_lang('AddUsersToAClass').' CSV';
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -161,9 +157,9 @@ $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="s
 
 if ($form->validate()) {
     $users_classes = parse_csv_data($_FILES['import_file']['tmp_name']);
-    
+
     $errors = validate_data($users_classes);
-    if (count($errors) == 0) {        
+    if (count($errors) == 0) {
         save_data($users_classes);
         header('Location: class_list.php?action=show_message&message='.urlencode(get_lang('FileImported')));
         exit();

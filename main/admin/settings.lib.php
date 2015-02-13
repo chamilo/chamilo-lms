@@ -646,7 +646,6 @@ function handle_search()
     echo '</div>';
 
     if ($search_enabled == 'true') {
-        require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
         $xapian_path = api_get_path(SYS_PATH).'searchdb';
 
         /*
@@ -949,7 +948,6 @@ function add_edit_template() {
             $values = $form->exportValues();
             // Upload the file.
             if (!empty($_FILES['template_image']['name'])) {
-                require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
                 $upload_ok = process_uploaded_file($_FILES['template_image']);
 
                 if ($upload_ok) {

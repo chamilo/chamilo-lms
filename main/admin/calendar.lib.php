@@ -2488,7 +2488,6 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
 
 function agenda_import_ical($course_info,$file) {
 
-	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
     $charset = api_get_system_encoding();
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
     if(!@move_uploaded_file($file['tmp_name'],$filepath))

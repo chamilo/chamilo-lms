@@ -61,10 +61,6 @@ function ch_qti2_display_form()
 function ch_qti2_import_file($array_file)
 {
     $unzip = 0;
-    $lib_path = api_get_path(LIBRARY_PATH);
-    require_once $lib_path.'fileUpload.lib.php';
-    require_once $lib_path.'fileManage.lib.php';
-
     $process = process_uploaded_file($array_file, false);
 
     if (preg_match('/\.zip$/i', $array_file['name'])) {

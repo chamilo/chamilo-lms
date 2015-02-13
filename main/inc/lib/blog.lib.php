@@ -240,7 +240,6 @@ class Blog {
 
 
 		if(!empty($_FILES['user_upload']['name'])) {
-			require_once 'fileUpload.lib.php';
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
 		}
@@ -358,7 +357,6 @@ class Blog {
 		$course_id 			= api_get_course_int_id();
 
 		if(!empty($_FILES['user_upload']['name'])) {
-			require_once('fileUpload.lib.php');
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
 		}

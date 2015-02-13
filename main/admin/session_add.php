@@ -13,9 +13,6 @@ $cidReset=true;
 // including the global Chamilo file
 require_once '../inc/global.inc.php';
 
-// including additional libraries
-require_once '../inc/lib/xajax/xajax.inc.php';
-
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_coachs');
@@ -178,7 +175,7 @@ $monthList = array();
 
 for ($i = 1; $i <= 12; $i++) {
     $month = sprintf("%02d", $i);
-    
+
     $monthList[$month] = $month;
 }
 
@@ -237,7 +234,7 @@ if (intval($countUsers) < 50) {
     if (api_is_multiple_url_enabled()) {
         $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $accessUrlId = api_get_current_access_url_id();
-        
+
         if ($accessUrlId != -1) {
             $sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user "
                 . "INNER JOIN $userRelAccessUrlTable url_user ON (url_user.user_id = user.user_id) "
@@ -376,7 +373,7 @@ $form->setDefaults($formDefaults);
 
 if ($form->validate()) {
     $params = $form->getSubmitValues();
- 
+
     $name = $params['name'];
     $startDate = $params['date_start'];
     $endDate = $params['date_end'];

@@ -1845,7 +1845,6 @@ function exportSCORM($scormname, $course) {
     DocumentManager :: file_send_for_download($zipfilename, false, basename($scormname.'.zip'));
 
     // Clear.
-    include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
     my_delete($zipfilename);
 }
 

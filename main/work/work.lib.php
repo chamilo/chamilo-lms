@@ -1162,7 +1162,6 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND parent_id = $id";
             Database::query($sql);
 
-            require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
             $new_dir = $work_data_url.'_DELETED_'.$id;
 
             if (api_get_setting('permanently_remove_deleted_files') == 'true') {

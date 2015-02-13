@@ -24,7 +24,6 @@ $cidReset = true;
 
 // Including some necessary library files.
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'TeacherTimeReport.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -70,9 +69,9 @@ if (!empty($selectedCourse)) {
     $course = api_get_course_info($selectedCourse);
 
     $reportTitle = sprintf(get_lang('TimeReportForCourseX'), $course['title']);
-    
+
     $teachers = CourseManager::get_teacher_list_from_course_code($selectedCourse);
-    
+
     foreach ($teachers as $teacher) {
         $totalTime = UserManager::getExpendedTimeInCourses(
             $teacher['user_id'],
@@ -192,7 +191,7 @@ if (!empty($selectedTeacher)) {
     $withFilter = true;
 
     $teacher = api_get_user_info();
-    
+
     $teacherData = array(
         'userId' => $teacher['user_id'],
         'lastname' => $teacher['lastname'],
@@ -277,8 +276,6 @@ if (empty($selectedCourse) && empty($selectedSession) && empty($selectedTeacher)
 $timeReport->sortData($withFilter);
 
 if (isset($_GET['export'])) {
-    require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
-
     $dataToExport = $timeReport->prepareDataToExport($withFilter);
 
     $fileName = get_lang('TeacherTimeReport') . ' ' . api_get_local_time();
@@ -304,7 +301,7 @@ if (isset($_GET['export'])) {
             ), array(
                 $reportSubTitle
             ), array());
-            
+
             Export::export_table_xls_html($dataToExport, $fileName);
             break;
     }

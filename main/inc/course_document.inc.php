@@ -10,7 +10,6 @@ require 'global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'course_document.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 //if(!$is_in_admin){
 if (!api_is_platform_admin()){

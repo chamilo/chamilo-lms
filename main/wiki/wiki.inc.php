@@ -1752,7 +1752,6 @@ class Wiki
         $wikiFileName = $exportFile . '_' . $i . '.html';
         $exportPath = $exportDir . '/' . $wikiFileName;
         file_put_contents( $exportPath, $wikiContents );
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         $doc_id = add_document($_course, $groupPath.'/'.$wikiFileName, 'file', filesize($exportPath), $wikiTitle);
         api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);
 

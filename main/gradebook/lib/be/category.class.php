@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
-require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
-require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
-
 /**
  * Class Category
  * Defines a gradebook Category object

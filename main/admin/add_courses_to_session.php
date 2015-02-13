@@ -13,7 +13,6 @@ $language_file = 'admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.php';
 
 $sessionId = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 $add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;

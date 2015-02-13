@@ -1056,7 +1056,6 @@ class DocumentManager
     {
         // needed to deleted medadata
         require_once api_get_path(SYS_CODE_PATH) . 'metadata/md_funcs.php';
-        require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
         $mdStore = new mdstore(true);
 
         //delete metadata
@@ -1498,7 +1497,6 @@ class DocumentManager
         $result = Database::query($sql);
         $template_id = Database::result($result, 0, 0);
 
-        include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
         my_delete(api_get_path(SYS_CODE_PATH) . 'upload/template_thumbnails/' . $template_id . '.jpg');
 
         $sql = 'DELETE FROM ' . $table_template . '
@@ -4359,8 +4357,6 @@ class DocumentManager
      */
     public static function convertWavToMp3($wavFile, $removeWavFileIfSuccess = false)
     {
-        require_once '../../../../vendor/autoload.php';
-
         if (file_exists($wavFile)) {
             try {
                 $ffmpeg = \FFMpeg\FFMpeg::create();

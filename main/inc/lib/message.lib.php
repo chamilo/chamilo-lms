@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 require_once api_get_path(LIBRARY_PATH).'online.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 define('MESSAGE_STATUS_NEW', '0');
 define('MESSAGE_STATUS_UNREAD', '1');

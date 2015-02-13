@@ -1,12 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-define ('SKILL_TYPE_REQUIREMENT', 'required');
-define ('SKILL_TYPE_ACQUIRED', 'acquired');
-define ('SKILL_TYPE_BOTH', 'both');
-
-require_once api_get_path(LIBRARY_PATH).'model.lib.php';
-
 /**
  * Class SkillProfile
  * @package chamilo.library
@@ -1028,7 +1022,7 @@ class Skill extends Model
      * @return boolean Wheter the user has the skill return true. Otherwise return false
      */
     public function user_has_skill($userId, $skillId, $courseId = 0, $sessionId = 0)
-    {       
+    {
         $courseId = intval($courseId);
         $sessionId = intval($sessionId);
 
@@ -1116,7 +1110,7 @@ class Skill extends Model
             . "INNER JOIN {$this->table} "
             . "ON sru.skill_id = skill.id "
             . "WHERE course.id = $courseId";
-            
+
         $result = Database::query($sql);
 
         while ($row = Database::fetch_assoc($result)) {

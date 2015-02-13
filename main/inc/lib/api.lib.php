@@ -446,6 +446,11 @@ define('TF',				1);
 define('MCMA',				2);
 define('FIB',				3);
 
+// Skills
+define ('SKILL_TYPE_REQUIREMENT', 'required');
+define ('SKILL_TYPE_ACQUIRED', 'acquired');
+define ('SKILL_TYPE_BOTH', 'both');
+
 
 /**
  * Inclusion of internationalization libraries
@@ -3025,7 +3030,6 @@ function api_is_allowed($tool, $action, $task_id = 0) {
     //if (!$_SESSION['total_permissions'][$_course['code']] and $_course)
     if (is_array($_course) and count($_course) > 0) {
         require_once api_get_path(SYS_CODE_PATH).'permissions/permissions_functions.inc.php';
-        require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
         // Getting the permissions of this user.
         if ($task_id == 0) {
@@ -4165,7 +4169,6 @@ function api_get_themes() {
  */
 function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
     global $_configuration, $_course, $fck_attribute;
-    require_once api_get_path(LIBRARY_PATH).'formvalidator/Element/html_editor.php';
     $editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
     $editor->setValue($content);
     // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
@@ -4190,7 +4193,6 @@ function api_disp_html_area($name, $content = '', $height = '', $width = '100%',
  */
 function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
     global $fck_attribute;
-    require_once api_get_path(LIBRARY_PATH).'formvalidator/Element/html_editor.php';
     $editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
     $editor->setValue($content);
     // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
@@ -5960,10 +5962,8 @@ function api_sql_query($query, $file = '', $line = 0) {
  * @author Ivan Tcholakov, 04-OCT-2009, a reworked version of this function.
  * @link http://www.dokeos.com/forum/viewtopic.php?t=15557
  */
-function api_send_mail($to, $subject, $message, $additional_headers = null, $additionalParameters = array()) {
-
-    require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
-
+function api_send_mail($to, $subject, $message, $additional_headers = null, $additionalParameters = array())
+{
     if (empty($platform_email['SMTP_FROM_NAME'])) {
         $platform_email['SMTP_FROM_NAME'] = api_get_person_name(
             api_get_setting('administratorName'),
@@ -6186,7 +6186,6 @@ function api_get_template($path_type = 'rel') {
 
 function api_browser_support($format = "")
 {
-    require_once api_get_path(LIBRARY_PATH) . 'browser/Browser.php';
     $browser = new Browser();
     $current_browser = $browser->getBrowser();
     $a_versiontemp = explode('.', $browser->getVersion());

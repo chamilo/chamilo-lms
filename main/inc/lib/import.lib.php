@@ -10,7 +10,6 @@
  */
 class Import
 {
-
 	/**
 	 *
 	 * @param string $path

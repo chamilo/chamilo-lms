@@ -902,7 +902,6 @@ class SessionManager
         /**
          *  Exercises
          */
-        require_once api_get_path(SYS_CODE_PATH) . 'exercice/exercise.lib.php';
         $exercises = get_all_exercises($course, $sessionId, false, '', $getAllSessions);
         $exercises_total = count($exercises);
 

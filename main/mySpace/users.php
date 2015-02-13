@@ -12,7 +12,6 @@ $language_file = array ('registration', 'index', 'tracking', 'admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;

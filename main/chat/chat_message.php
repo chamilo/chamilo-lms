@@ -12,7 +12,6 @@ define('FRAME', 'message');
 
 $language_file = array('chat');
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_PATH).'vendor/autoload.php';
 require_once api_get_path(SYS_CODE_PATH).'chat/chat_functions.lib.php';
 
 $userId = api_get_user_id();
@@ -43,9 +42,6 @@ if (empty($userId)) {
 if (empty($course) || empty($userId)) {
     exit;
 }
-
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 /*	Constants and variables */
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);

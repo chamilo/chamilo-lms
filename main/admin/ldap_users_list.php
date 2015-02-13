@@ -12,20 +12,11 @@ $language_file[] = 'registration';
 $language_file[] = 'admin';
 $cidReset = true;
 require('../inc/global.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'sortable_table.class.php');
-require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 require('../auth/ldap/authldap.php');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-/**
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $action = $_GET["action"];
 $login_as_user_id = $_GET["user_id"];
 

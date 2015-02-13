@@ -595,8 +595,6 @@ class Auth
      */
     public function browseSessions($date = null, $limit = array())
     {
-        require_once api_get_path(LIBRARY_PATH) . 'sessionmanager.lib.php';
-
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 

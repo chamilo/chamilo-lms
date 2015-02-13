@@ -25,7 +25,6 @@ $this_section = SECTION_COURSES;
 /** @todo check if the starting / is needed. api_get_path probably ends with an / */
 //require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
 require_once 'survey.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 $htmlHeadXtra[] = '<script>

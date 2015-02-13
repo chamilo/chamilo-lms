@@ -9,7 +9,6 @@ require_once '../inc/global.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 
 /* Libraries */
-require_once $lib_path.'fileManage.lib.php';
 require_once 'work.lib.php';
 
 // Section (for the tabs)

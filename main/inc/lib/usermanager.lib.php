@@ -403,7 +403,6 @@ class UserManager
         $sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
         Database::query($sqlv);
 
-        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
         if (api_get_multiple_access_url()) {
             $url_id = api_get_current_access_url_id();
             UrlManager::delete_url_rel_user($user_id, $url_id);

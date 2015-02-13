@@ -69,8 +69,6 @@ $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 $lib_path = api_get_path(LIBRARY_PATH);
 
-require_once $lib_path.'fileManage.lib.php';
-require_once $lib_path.'fileUpload.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 $course_info = api_get_course_info();

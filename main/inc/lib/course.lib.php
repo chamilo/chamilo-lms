@@ -2615,8 +2615,9 @@ class CourseManager
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
             $email_admin = api_get_setting('emailAdministrator');
 
+            $plugin = new AppPlugin();
             $additionalParameters = array(
-                'smsType' => ClockworksmsPlugin::NEW_USER_SUBSCRIBED_COURSE,
+                'smsType' => constant($plugin->getSMSPluginName().'::NEW_USER_SUBSCRIBED_COURSE'),
                 'userId' => $tutor['user_id'],
                 'userUsername' => $student['username'],
                 'courseCode' => $course_code

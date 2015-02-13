@@ -2537,8 +2537,9 @@ function send_email_on_homework_creation($course_id)
                 $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
                 $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
 
+                $plugin = new AppPlugin();
                 $additionalParameters = array(
-                    'smsType' => ClockworksmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
+                    'smsType' => constant($plugin->getSMSPluginName().'::ASSIGNMENT_BEEN_CREATED_COURSE'),
                     'userId' => $student["user_id"],
                     'courseTitle' => $course_id
                 );

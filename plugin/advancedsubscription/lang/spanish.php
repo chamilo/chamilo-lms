@@ -19,6 +19,8 @@ $strings['courses_count_limit'] = 'Límite de sesiones';
 $strings['courses_count_limit_help'] = "El límite de cantidad de cursos (sesiones) que se pueden llevar en un año calendario del año actual y que <b>no</b> sean el curso de inducción";
 $strings['course_session_credit_year_start_date'] = 'Fecha de inicio';
 $strings['course_session_credit_year_start_date_help'] = "Fecha de inicio del año (día/mes)";
+$strings['min_profile_percentage'] = 'Porcentage de perfil completado mínimo requerido';
+$strings['min_profile_percentage_help'] = 'Número porcentage ( > 0.00 y < 100.00)';
 
 
 /* String for error message about requirements */

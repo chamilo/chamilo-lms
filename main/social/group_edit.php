@@ -17,7 +17,6 @@ if (api_get_setting('allow_social_tool') !='true') {
 $this_section = SECTION_SOCIAL;
 
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'mail.lib.inc.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 var textarea = "";

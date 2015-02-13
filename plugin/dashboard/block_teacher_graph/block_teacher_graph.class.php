@@ -9,9 +9,6 @@
 /**
  * required files for getting data
  */
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;

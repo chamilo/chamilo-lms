@@ -12,7 +12,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'mail.lib.inc.php';
 
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
 $tool_name = get_lang('GroupEdit');

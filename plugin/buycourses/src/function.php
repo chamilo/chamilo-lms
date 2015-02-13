@@ -9,8 +9,6 @@
  */
 require_once '../config.php';
 require_once 'buy_course.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
 $tableBuySession = Database::get_main_table(TABLE_BUY_SESSION);
 $tableBuySessionTemporal = Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY);

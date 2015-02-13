@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *  Shows the exercise results
  *
@@ -17,14 +18,7 @@ use \ChamiloSession as Session;
 
 $language_file = array('exercice');
 
-// including additional libraries
-require_once 'exercise.class.php';
-require_once 'question.class.php'; //also defines answer type constants
-require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
-
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (empty($origin) ) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;

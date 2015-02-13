@@ -1,5 +1,4 @@
 <?php
-
 /*
   Template to automatically create a new user with information from anywhere.
   This file is loaded by main/inc/local.inc.php
@@ -11,10 +10,7 @@
 
 use \ChamiloSession as Session;
 
-require_once(api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
 require_once(dirname(__FILE__) . '/functions.inc.php');
-
 
 //MAIN CODE
 //$login and $password variables are setted in main/inc/local.inc.php

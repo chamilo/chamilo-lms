@@ -1,19 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	This file saves every click in the hotspot tool into track_e_hotspots
 *	@package chamilo.exercise
 * 	@author Toon Keppens
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-/**
- * Code
- */
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
 include('../inc/global.inc.php');
-include('../inc/lib/database.lib.php');
 $courseCode   = $_GET['coursecode'];
 $questionId   = $_GET['questionId'];
 $coordinates  = $_GET['coord'];

@@ -39,7 +39,6 @@ switch ($action) {
         }
         break;
     case 'search_category':
-        require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
         if (api_is_platform_admin() || api_is_allowed_to_create_course()) {
             $results = searchCategoryByKeyword($_REQUEST['q']);
             if (!empty($results)) {
@@ -77,11 +76,7 @@ switch ($action) {
             }
 
             $results = array();
-
-            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
             if (!empty($courseList)) {
-
                 foreach ($courseList as $courseInfo) {
                     $title = $courseInfo['title'];
 

@@ -459,7 +459,6 @@ class IndexManager
 
         // Showing only the category of courses of the current access_url_id
         if (api_is_multiple_url_enabled()) {
-            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
             $courseCategoryCondition = null;
             if (isMultipleUrlSupport()) {
                 $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);

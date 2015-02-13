@@ -2547,7 +2547,6 @@ class CourseManager
      */
     public static function select_and_sort_categories($element, $defaultCode = null, $parentCode = null , $padding = null)
     {
-        require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
         setCategoriesInForm($element, $defaultCode, $parentCode , $padding);
     }
 

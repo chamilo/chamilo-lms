@@ -810,9 +810,6 @@ class GroupPortalManager
             $source_file = $file;
         }
 
-        // Configuration options about user photos.
-        require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-
         // User-reserved directory where photos have to be placed.
         $path_info = self::get_group_picture_path_by_id($group_id, 'system', true);
         $path = $path_info['dir'];

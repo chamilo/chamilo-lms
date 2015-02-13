@@ -21,7 +21,6 @@
 $language_file = array('registration', 'index');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 // Custom pages
 // Had to move the form handling in here, because otherwise there would

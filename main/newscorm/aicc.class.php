@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'aiccItem.class.php';
-//require_once 'aiccMetadata.class.php';
-//require_once 'aiccOrganization.class.php';
-require_once 'aiccResource.class.php';
-require_once 'aiccBlock.class.php';
 /**
  * Class aicc
  * Defines the AICC class, which is meant to contain the aicc items (nuclear elements)

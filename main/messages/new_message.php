@@ -16,7 +16,6 @@
 $language_file = array('messages', 'userInfo', 'admin');
 $cidReset	= true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 api_block_anonymous_users();
 

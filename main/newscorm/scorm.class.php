@@ -8,14 +8,6 @@
  */
 
 /**
- * Includes
- */
-require_once 'scormItem.class.php';
-require_once 'scormMetadata.class.php';
-require_once 'scormOrganization.class.php';
-require_once 'scormResource.class.php';
-
-/**
  * Defines the "scorm" child of class "learnpath"
  * @package chamilo.learnpath
  */

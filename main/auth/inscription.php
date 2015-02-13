@@ -15,8 +15,6 @@ if (!empty($_POST['language'])) {
     $_GET['language'] = $_POST['language'];
 }
 require_once '../inc/global.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 

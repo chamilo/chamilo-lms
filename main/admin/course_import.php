@@ -63,7 +63,6 @@ function validate_data($courses)
 
         // 4. Check whether course category exists.
         if (isset($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
-            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
             $categoryInfo = getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
                 //@todo this is so bad even all lang variables are wrong ...

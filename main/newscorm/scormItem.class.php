@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'learnpathItem.class.php';
-
 /**
  * Class scormItem
  * This class handles the <item> elements from an imsmanifest file.

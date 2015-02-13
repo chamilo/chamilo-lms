@@ -16,13 +16,7 @@ $use_anonymous = true;
 // Name of the language file that needs to be included.
 $language_file[] = 'learnpath';
 
-require_once 'back_compat.inc.php';
-require_once 'learnpath.class.php';
-require_once 'scorm.class.php';
-require_once 'aicc.class.php';
-require_once 'learnpathItem.class.php';
-require_once 'scormItem.class.php';
-require_once 'aiccItem.class.php';
+require_once '../inc/global.inc.php';
 
 /**
  * Writes an item's new values into the database and returns the operation result

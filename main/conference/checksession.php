@@ -29,7 +29,6 @@ api_block_anonymous_users();
 $confkey = api_get_setting('service_visio','visio_pass');
 $challenge = api_generate_password(32); //generate a 32 characters-long challenge key
 
-require_once (api_get_path(LIBRARY_PATH)."course.lib.php");
 printf ('<?xml version="1.0" encoding="UTF-8" ?>');
 
 printf('<dokeosobject>');

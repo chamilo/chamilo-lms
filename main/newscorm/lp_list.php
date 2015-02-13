@@ -15,15 +15,12 @@ $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
     header('location: lp_controller.php?action=list');
+    exit;
 }
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
-
-require_once 'learnpathList.class.php';
-require_once 'learnpath.class.php';
-require_once 'learnpathItem.class.php';
 
 /**
  * Display initialisation and security checks

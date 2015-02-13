@@ -1,24 +1,21 @@
-<?php //$id:$
+<?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	This file generates the ActionScript variables code used by the HotSpot .swf
 *	@package chamilo.exercise
 * 	@author Toon Keppens
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-/**
- * Code
- */
+
 session_cache_limiter("none");
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+
 include('../inc/global.inc.php');
 
 // set vars
 $questionId    = intval($_GET['modifyAnswers']);
 $objQuestion   = Question::read($questionId);
-$answer_type   = $objQuestion->selectType(); //very important 
+$answer_type   = $objQuestion->selectType(); //very important
 $TBL_ANSWERS   = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath   = $documentPath.'/images';
@@ -36,10 +33,10 @@ $course_id = api_get_course_int_id();
 
 // Query db for answers
 if ($answer_type==HOT_SPOT_DELINEATION) {
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS 
+	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS
 	        WHERE c_id = $course_id AND question_id = ".intval($questionId)." AND hotspot_type = 'delineation' ORDER BY id";
 } else {
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS 
+	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS
 	        WHERE c_id = $course_id AND question_id = ".intval($questionId)." ORDER BY id";
 }
 $result = Database::query($sql);
@@ -76,7 +73,7 @@ while ($hotspot = Database::fetch_assoc($result))
 	if ($hotspot['hotspot_type'] == 'noerror')
 	{
 		$output .= "&hotspot_".$hotspot['id']."_type=noerror";
-	}	
+	}
 
 	// This is a good answer, count + 1 for nmbr of clicks
 	if ($hotspot['hotspot_type'] > 0)

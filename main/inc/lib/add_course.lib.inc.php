@@ -8,10 +8,6 @@
  * @todo Clean up horrible structure, script is unwieldy, for example easier way to deal with
  * different tool visibility settings: ALL_TOOLS_INVISIBLE, ALL_TOOLS_VISIBLE, CORE_TOOLS_VISIBLE...
  */
-/**
- * Code
- */
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /* FUNCTIONS */
 

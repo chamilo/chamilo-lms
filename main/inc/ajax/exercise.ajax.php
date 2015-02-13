@@ -5,11 +5,7 @@
  * Responses to AJAX calls
  */
 
-require_once '../../exercice/exercise.class.php';
-require_once '../../exercice/question.class.php';
-require_once '../../exercice/answer.class.php';
 require_once '../global.inc.php';
-require_once '../../exercice/exercise.lib.php';
 
 api_protect_course_script(true);
 

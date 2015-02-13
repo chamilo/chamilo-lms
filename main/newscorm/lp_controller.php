@@ -229,24 +229,6 @@ $htmlHeadXtra[] = '
 </script>
 ';
 
-// Include class definitions before session_start() to ensure availability when touching
-// session vars containing learning paths.
-require_once 'learnpath.class.php';
-if ($debug > 0) error_log('New LP - Included learnpath', 0);
-require_once 'learnpathItem.class.php';
-if ($debug > 0) error_log('New LP - Included learnpathItem', 0);
-require_once 'scorm.class.php';
-if ($debug > 0) error_log('New LP - Included scorm', 0);
-require_once 'scormItem.class.php';
-if ($debug > 0) error_log('New LP - Included scormItem', 0);
-require_once 'aicc.class.php';
-if ($debug > 0) error_log('New LP - Included aicc', 0);
-require_once 'aiccItem.class.php';
-if ($debug > 0) error_log('New LP - Included aiccItem', 0);
-
-require_once 'back_compat.inc.php';
-if ($debug > 0) error_log('New LP - Included back_compat', 0);
-
 $session_id = api_get_session_id();
 
 api_protect_course_script(true);

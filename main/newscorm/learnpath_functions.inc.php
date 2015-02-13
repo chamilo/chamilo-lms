@@ -1140,13 +1140,6 @@ function export_exercise($item_id) {
     global $expdir, $_course, $_configuration, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk, $origin, $questionNum;
 
     $exerciseId = $item_id;
-
-    require_once '../exercice/testcategory.class.php';
-    require_once '../exercice/exercise.class.php';
-    require_once '../exercice/question.class.php';
-    require_once '../exercice/answer.class.php';
-    require_once '../exercice/exercise.lib.php';
-
     $TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
 
     /* Clears the exercise session */
@@ -1287,10 +1280,6 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
     global $timeNoSecFormat, $dateFormatLong, $language_interface, $langPubl, $langDone, $langThisCourseDescriptionIsEmpty, $lg_course_description, $lg_introduction_text, $_cid, $langHotPotatoesFinished, $lg_author, $lg_date, $lg_groups, $lg_users, $lg_ass, $lg_dropbox, $test, $langQuestion;
 
     $libp = api_get_path(SYS_CODE_PAH);
-    include_once $libp.'exercice/exercise.class.php';
-    include_once $libp.'question.class.php';
-    include_once $libp.'answer.class.php';
-    include_once $libp.'exercise.lib.php';
 
     $langLasting = '';//avoid code parser warning
     include_once $libp.'lang/english/announcements.inc.php'; //this line is here only for $langPubl in announcements

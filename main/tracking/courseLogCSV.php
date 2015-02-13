@@ -23,11 +23,6 @@ $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 $language_file = "tracking";
 
 require_once '../inc/global.inc.php';
-//includes for SCORM and LP
-require_once '../newscorm/learnpath.class.php';
-require_once '../newscorm/learnpathItem.class.php';
-require_once '../newscorm/scorm.class.php';
-require_once '../newscorm/scormItem.class.php';
 
 /* Constants and variables */
 

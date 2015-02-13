@@ -11,14 +11,6 @@
  */
 require_once '../inc/global.inc.php';
 
-/*
-	Including necessary files
-*/
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-
 // name of the language file that needs to be included
 $language_file='exercice';
 
@@ -185,7 +177,7 @@ if (isset($_POST['ok'])) {
 		Database::query($query);
 	} else {
 		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = 0 WHERE id= $exercise_id";
-		Database::query($query); 
+		Database::query($query);
 	}
 }
 ?>

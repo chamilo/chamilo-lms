@@ -98,6 +98,7 @@ ini_set('auto_detect_line_endings', '1');
 // Include the libraries that are necessary everywhere
 require_once dirname(__FILE__).'/../../vendor/autoload.php';
 
+// @todo convert this libs in classes
 require_once $lib_path.'database.lib.php';
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'array.lib.php';
@@ -108,6 +109,9 @@ require_once $lib_path.'banner.lib.php';
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
 require_once $lib_path.'fileDisplay.lib.php';
+require_once $lib_path.'mail.lib.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+require_once $lib_path.'course_category.lib.php';
 
 define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
 if (!is_dir(_MPDF_TEMP_PATH)) {
@@ -327,6 +331,11 @@ $administrator['name']  = isset($administrator['name']) ? $administrator['name']
 $mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 if (file_exists($mail_conf)) {
 	require_once $mail_conf;
+}
+
+$profileConf = api_get_path(CONFIGURATION_PATH).'profile.conf.php';
+if (file_exists($profileConf)) {
+    require_once $profileConf;
 }
 
 if (api_get_setting('server_type') == 'test') {

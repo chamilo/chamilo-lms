@@ -7,19 +7,10 @@
  *
  */
 
-/**
- * Code
- */
 // name of the language file that needs to be included
 $language_file = array('exercice');
 
-// including additional libraries
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 
 if (empty($origin)) {
     $origin = $_REQUEST['origin'];

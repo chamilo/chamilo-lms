@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
 use CpChart\Classes\pCache as pCache;

@@ -7,24 +7,8 @@
 * 	@author Julio Montoya Armas switchable fill in blank option added
 */
 
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-
 $language_file = 'exercice';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
-
-if ($_GET['origin']=='learnpath') {
-	require_once '../newscorm/learnpath.class.php';
-	require_once '../newscorm/learnpathItem.class.php';
-	require_once '../newscorm/scorm.class.php';
-	require_once '../newscorm/scormItem.class.php';
-	require_once '../newscorm/aicc.class.php';
-	require_once '../newscorm/aiccItem.class.php';
-}
-require_once api_get_path(LIBRARY_PATH).'exercise_show_functions.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $this_section = SECTION_COURSES;
 

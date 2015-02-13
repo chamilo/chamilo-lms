@@ -1,13 +1,10 @@
 <?php
 
-require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
-
 //define('USERINFO_TABLE', 'danone_userinfo');
 //define('DEFAULT_PASSWORD', 'danonelearning');
 //TODO : Please implements this function for this module to work.
 /**
- * Gets user info from external source 
+ * Gets user info from external source
  * @param string login
  * @param string password
  * @return user array with at least the following fields:
@@ -128,7 +125,7 @@ function external_add_user($u) {
 }
 
 /**
- * Update the user in chamilo database. It upgrade only info that is present in the 
+ * Update the user in chamilo database. It upgrade only info that is present in the
  * new_user array
  *
  * @param $new_user associative array with the value to upgrade
@@ -150,7 +147,7 @@ function external_add_user($u) {
  *      - extra : array of custom fields
  *      - language
  *      - courses : string of all courses code separated by '|'
- *      - admin : boolean 
+ *      - admin : boolean
  * @return boolean
  * @author ndiechburg <noel@cblue.be>
  * */

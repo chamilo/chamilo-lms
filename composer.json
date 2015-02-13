@@ -17,6 +17,8 @@
             "main/admin",
             "main/cron/lang",
             "main/coursecopy",
+            "main/course_description",
+            "main/dropbox",
             "main/exercice",
             "main/gradebook/lib",
             "main/newscorm",

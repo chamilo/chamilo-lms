@@ -16,8 +16,6 @@ api_protect_course_script(true);
 
 require_once 'work.lib.php';
 
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-
 $course_id      = api_get_course_int_id();
 $course_info    = api_get_course_info();
 $user_id 	    = api_get_user_id();

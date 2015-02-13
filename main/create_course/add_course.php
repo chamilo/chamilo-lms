@@ -21,7 +21,6 @@ $cidReset = true;
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 // Section for the tabs.
 $this_section = SECTION_COURSES;
@@ -35,13 +34,7 @@ if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) 
 }
 
 // Require additional libraries.
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-
-if ($course_validation_feature) {
-    require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-}
 
 $htmlHeadXtra[] = '<script type="text/javascript">
     function setFocus(){

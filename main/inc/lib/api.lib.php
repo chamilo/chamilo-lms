@@ -404,6 +404,49 @@ define('GROUP_IMAGE_SIZE_SMALL', 4);
 
 define('GROUP_TITLE_LENGTH', 50);
 
+// Exercise
+// @todo move into a class
+
+define('ALL_ON_ONE_PAGE', 1);
+define('ONE_PER_PAGE', 2);
+
+define('EXERCISE_FEEDBACK_TYPE_END', 0); //Feedback 		 - show score and expected answers
+define('EXERCISE_FEEDBACK_TYPE_DIRECT', 1); //DirectFeedback - Do not show score nor answers
+define('EXERCISE_FEEDBACK_TYPE_EXAM', 2); //NoFeedback 	 - Show score only
+
+define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS', 0); //show score and expected answers
+define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score nor answers
+define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
+define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
+
+define('EXERCISE_MAX_NAME_SIZE',            80);
+
+// Question types
+// @todo move into a class
+define('UNIQUE_ANSWER',                             1);
+define('MULTIPLE_ANSWER',                           2);
+define('FILL_IN_BLANKS',                            3);
+define('MATCHING',                                  4);
+define('FREE_ANSWER',                               5);
+define('HOT_SPOT',                                  6);
+define('HOT_SPOT_ORDER',                            7);
+define('HOT_SPOT_DELINEATION',                      8);
+define('MULTIPLE_ANSWER_COMBINATION',               9);
+define('UNIQUE_ANSWER_NO_OPTION',                   10);
+define('MULTIPLE_ANSWER_TRUE_FALSE',                11);
+define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
+define('ORAL_EXPRESSION',                           13);
+define('GLOBAL_MULTIPLE_ANSWER',                    14);
+define('MEDIA_QUESTION',                            15);
+define('CALCULATED_ANSWER',                         16);
+
+//Some alias used in the QTI exports
+define('MCUA',				1);
+define('TF',				1);
+define('MCMA',				2);
+define('FIB',				3);
+
+
 /**
  * Inclusion of internationalization libraries
  */
@@ -1270,7 +1313,6 @@ function _api_format_user($user, $add_password = false)
         $last_login = $user['last_login'];
     } else {
         if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
-            require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
             $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
             // Convert the timestamp back into a datetime
             // NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function

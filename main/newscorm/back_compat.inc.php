@@ -10,4 +10,4 @@
 /**
  * Code
  */
-require_once '../inc/global.inc.php';
+

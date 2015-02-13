@@ -23,10 +23,7 @@
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
-require_once 'back_compat.inc.php';
-require_once 'learnpath.class.php';
-require_once 'learnpathItem.class.php';
-require_once 'scorm.class.php';
+require_once '../inc/global.inc.php';
 
 $file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
 /** @var learnpath $oLP */

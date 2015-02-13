@@ -17,14 +17,7 @@ if (api_is_platform_admin()) {
     api_not_allowed();
 }
 
-//DECLARE NEEDED LIBRARIES
-
-require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-
 require_once 'exercise_import.inc.php';
-include_once '../exercise.class.php';
-include_once '../question.class.php';
 
 //SQL table name
 
@@ -33,8 +26,6 @@ $tbl_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $tbl_rel_exercise_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
 // tool libraries
-
-include_once '../exercise.class.php';
 
 //Tool title
 

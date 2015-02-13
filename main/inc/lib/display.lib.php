@@ -1370,7 +1370,6 @@ class Display
                 }
                 // If it's a learning path, ensure it is currently visible to the user
                 if ($item_property['tool'] == TOOL_LEARNPATH) {
-                    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
                     if (!learnpath::is_lp_visible_for_student($item_property['ref'], $user_id, $course_code)) {
                         continue;
                     }

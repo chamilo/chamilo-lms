@@ -21,11 +21,6 @@
 /**
  * @package chamilo.include
  */
-/**
- * Code
- */
-include_once ('../inc/global.inc.php');
-include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 /**
  * helper for WCAG rendering.
@@ -34,7 +29,8 @@ include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
  * @version     1.0
  * @package chamilo.include
  */
-class WCAG_Rendering {
+class WCAG_Rendering
+{
 
 	function editor_header() {
 		return '<div id="WCAG-editor"><div class="title">'.get_lang('WCAGEditor').'</div><div class="body">';
@@ -194,4 +190,3 @@ function &create_xhtml($xhtml) {
 }
 
 } // end class WAI_Rendering
-?>

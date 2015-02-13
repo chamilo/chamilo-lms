@@ -25,10 +25,7 @@ if ($lp_controller_touched != 1) {
     exit;
 }
 
-/* Libraries */
-require_once 'back_compat.inc.php';
-require_once 'learnpath.class.php';
-require_once 'learnpathItem.class.php';
+require_once '../inc/global.inc.php';
 
 //To prevent the template class
 $show_learnpath = true;

@@ -6073,7 +6073,6 @@ class learnpath
                 switch ($row['item_type']) {
                     case TOOL_QUIZ:
                         if (!empty($row['path'])) {
-                            require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
                             $exercise = new Exercise();
                             $exercise->read($row['path']);
                             $return .= $exercise->description.'<br />';
@@ -9093,7 +9092,6 @@ class learnpath
                         }
                         break;
                     case TOOL_QUIZ:
-                        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
                         $exe_id = $item->path; // Should be using ref when everything will be cleaned up in this regard.
                         $exe = new Exercise();
                         $exe->read($exe_id);

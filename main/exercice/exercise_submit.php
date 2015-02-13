@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	Exercise submission
 * 	This script allows to run an exercise. According to the exercise type, questions
@@ -27,16 +28,11 @@
 
 use \ChamiloSession as Session;
 
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-
 // name of the language file that needs to be included
 $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
-require_once 'exercise.lib.php';
 
 $this_section = SECTION_COURSES;
 

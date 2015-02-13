@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
 /**
  * Class Auth
  * Auth can be used to instantiate objects or as a library to manage courses

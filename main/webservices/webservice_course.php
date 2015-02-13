@@ -5,15 +5,14 @@
  */
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'course.lib.php';
 require_once $libpath.'add_course.lib.inc.php';
-require_once $libpath.'course_description.lib.php';
 require_once(dirname(__FILE__).'/webservice.php');
 
 /**
  * Web services available for the Course module. This class extends the WS class
  */
-class WSCourse extends WS {
+class WSCourse extends WS
+{
 	/**
 	 * Deletes a course (helper method)
 	 *

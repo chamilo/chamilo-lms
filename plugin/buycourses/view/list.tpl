@@ -98,7 +98,7 @@ $(function() {
         <div id="course_category_well" class="well">
             <div class="form-content">
                 <h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4>
-                <label class="control-label">{{ 'CourseName'|get_lang }}:</label>
+                <label class="control-label">{{ 'SessionName'|get_lang }}:</label>
                 <input type="text" id="course_name" />
                 <label class="control-label">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
                 <input type="text" id="price_min" class="span1"/>

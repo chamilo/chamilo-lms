@@ -230,9 +230,9 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
 }
 
 if ($_REQUEST['tab'] == 'courses_filter') {
-    $course = Database::escape_string($_REQUEST['course']);
-    $priceMin = Database::escape_string($_REQUEST['pricemin']);
-    $priceMax = Database::escape_string($_REQUEST['pricemax']);
+    $course = isset($_REQUEST['course']) ? Database::escape_string($_REQUEST['course']) : '';
+    $priceMin = isset($_REQUEST['pricemin']) ? floatval($_REQUEST['pricemin']) : 0;
+    $priceMax = isset($_REQUEST['pricemax']) ? floatval($_REQUEST['pricemax']) : 0;
     /**
      * Deprecated since 2014-10-14
      */
@@ -240,44 +240,30 @@ if ($_REQUEST['tab'] == 'courses_filter') {
     $category = Database::escape_string($_REQUEST['category']);
     $server = api_get_path(WEB_PATH);
 
-    $filter = '';
-    if ($course != '') {
-        $filter .= "b.title LIKE '%" . $course . "%'";
-    }
-    if ($priceMin != '') {
-        if ($filter == '') {
-            $filter .= "a.price >= '" . $priceMin . "'";
-        } else {
-            $filter .= " AND a.price >= '" . $priceMin . "'";
-        }
-    }
-
-    if ($priceMax != '') {
-        if ($filter == '') {
-            $filter .= "a.price <= '" . $priceMax . "'";
-        } else {
-            $filter .= " AND a.price <= '" . $priceMax . "'";
-        }
-    }
-
-    if ($category != '') {
-        if ($filter == '') {
-            $filter .= "b.category_code='" . $category . "'";
-        } else {
-            $filter .= " AND b.category_code='" . $category . "'";
-        }
-    }
-
-    if ($filter == '') {
-        $sql = "SELECT a.course_id, a.visible, a.price, b.*
+    $sql = "SELECT a.course_id, a.visible, a.price, b.*
             FROM $tableBuyCourse a, $tableCourse b
             WHERE a.course_id = b.id AND a.session_id = 0
             AND a.visible = 1;";
-    } else {
-        $sql = "SELECT a.course_id, a.visible, a.price, b.*
-            FROM $tableBuyCourse a, $tableCourse b
-            WHERE a.course_id = b.id AND a.session_id = 0
-            AND a.visible = 1 AND " . $filter . ";";
+
+    $filter = "";
+    if (!empty($course)) {
+        $filter .= " AND b.title LIKE '%".$course."%'";
+    }
+
+    if ($priceMin > 0) {
+        $filter .= " AND a.price >= ".$priceMin;
+    }
+
+    if ($priceMax > 0) {
+        $filter .= " AND a.price <= ".$priceMax;
+    }
+
+    if (!empty($category)) {
+        $filter .= " AND b.category_code = '".$category."'";
+    }
+
+    if (!empty($filter)) {
+        $sql = substr_replace($sql, $filter.";", -1);
     }
 
     $res = Database::query($sql);
@@ -288,7 +274,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
             FROM $tableCourseRelUser a, $tableUser b
             WHERE a.course_code = '" . $row['code'] . "'
             AND a.role <> ''
-            AND a.role <> 'NULL'
+            AND a.role IS NOT NULL
             AND a.user_id = b.user_id;";
 
         $tmp = Database::query($sql);
@@ -330,41 +316,52 @@ if ($_REQUEST['tab'] == 'courses_filter') {
     $currencyType = findCurrency();
     $content = '';
     foreach ($aux as $course) {
-        $content .= '<div class="well_border span8">';
-        $content .= '<div class="row">';
-        $content .= '<div class="span">';
-        $content .= '<div class="thumbnail">';
-        $content .= '<a class="ajax" rel="gb_page_center[778]" title=""';
-        $content .= 'href="'.$server.'plugin/buycourses/src/ajax.php?';
-        $content .= 'a=show_course_information&code='.$course['code'].'">';
-        $content .= '<img alt="" src="'.$server.$course['course_img'].'">';
-        $content .= '</a>';
-        $content .= '</div>';
-        $content .= '</div>';
-        $content .= '<div class="span4">';
-        $content .= '<div class="categories-course-description">';
-        $content .= '<h3>'.$course['title'].'</h3>';
-        $content .= '<h5>'.get_lang('Teacher').': '.$course['teacher'].'</h5>';
-        $content .= '</div>';
+        $content .= '
+            <div class="span8">
+                <div class="row well-course">
+                    <div class="span1 icon-course">
+                        <div class="thumbnail">
+                            <a class="ajax" rel="gb_page_center[778]" title=""
+                            href="'.$server.'plugin/buycourses/src/ajax.php?
+                            a=show_course_information&code='.$course['code'].'">
+                                <img alt="" src="'.$server.$course['course_img'].'">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="categories-course-description">
+                            <h3>'.$course['title'].'</h3>
+                            <h5>'.get_lang('Teacher').': '.$course['teacher'].'</h5>
+                        </div>';
         if ($course['enrolled'] == "YES") {
             $content .= '<span class="label label-info">'.$plugin->get_lang('TheUserIsAlreadyRegisteredInTheCourse').'</span>';
         }
-        $content .= '</div>';
-        $content .= '<div class="span right">';
-        $content .= '<div class="sprice right">'.$course['price'].' '.$currencyType.'</div>';
-        $content .= '<div class="cleared"></div>';
-        $content .= '<div class="btn-toolbar right">';
-        $content .= '<a class="ajax btn btn-primary" title=""';
-        $content .= 'href="'.$server.'plugin/buycourses/src/ajax.php?';
-        $content .= 'a=show_course_information&code='.$course['code'].'">'.get_lang('Description').'</a>&nbsp;';
-        if ($course['enrolled'] != "YES") {
-            $content .= '<a class="btn btn-success" title=""';
-            $content .= 'href="'.$server.'plugin/buycourses/src/process.php?code='.$course['id'].'">'.$buy_name.'</a>';
+        if ($course['enrolled'] == "TMP") {
+            $content .= '<span class="label label-warning">'.$plugin->get_lang('WaitingToReceiveThePayment').'</span>';
         }
-        $content .= '</div>';
-        $content .= '</div>';
-        $content .= '</div>';
-        $content .= '</div>';
+        $content .= '</div>
+                    <div class="span3 right">
+                        <div class="sprice right">'.
+                            $course['price'].' '.$currencyType.'
+                        </div>
+                        <div class="cleared">
+                        </div>
+                        <div class="btn-group right">
+                            <a class="ajax btn btn-primary" title=""
+                            href="'.$server.'plugin/buycourses/src/ajax.php?
+                            a=show_course_information&code='.$course['code'].'">'.
+                                get_lang('Description').
+                            '</a>';
+        if ($course['enrolled'] != "YES") {
+            $content .= '<a class="btn btn-success" title=""
+                            href="'.$server.'plugin/buycourses/src/process.php?code='.$course['id'].'">'.
+                                $buy_name.
+                            '</a>';
+        }
+        $content .= '</div>
+                    </div>
+                </div>
+            </div>';
     }
     echo json_encode(array("status" => "true", "content" => $content));
 }

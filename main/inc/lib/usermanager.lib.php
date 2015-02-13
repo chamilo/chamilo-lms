@@ -4454,10 +4454,6 @@ class UserManager
             $session_condition = " AND session_id = $session_id";
         }
 
-        // Getting gradebook score.
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
-
         $sql = 'SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id = (SELECT id FROM '.$tbl_grade_category.'
                 WHERE
                     course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' LIMIT 1 ) AND

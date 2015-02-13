@@ -21,8 +21,6 @@ $language_file = array('exercice', 'tracking');
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
-require_once '../gradebook/lib/be.inc.php';
-
 // Setting the tabs
 $this_section = SECTION_COURSES;
 
@@ -227,10 +225,9 @@ if ($is_allowedToEdit) {
                         // deletes an exercise
                         if ($exercise_action_locked == false) {
                             $objExerciseTmp->delete();
-                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-                            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 1, $exerciseId, api_get_session_id());
+                            $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 1, $exerciseId, api_get_session_id());
                             if ($link_info !== false) {
-                                remove_resource_from_course_gradebook($link_info['id']);
+                                GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
                             }
                             Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
                         }

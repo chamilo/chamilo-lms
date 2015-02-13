@@ -289,10 +289,10 @@ class Attendance
 		// add link to gradebook
 		if ($link_to_gradebook && !empty($this->category_id)) {
 			$description = '';
-			$link_info = is_resource_in_course_gradebook($course_code,7,$last_id,$session_id);
+			$link_info = GradebookUtils::is_resource_in_course_gradebook($course_code,7,$last_id,$session_id);
 			$link_id = $link_info['id'];
 			if (!$link_info) {
-				add_resource_to_course_gradebook(
+				GradebookUtils::add_resource_to_course_gradebook(
 					$this->category_id,
 					$course_code,
 					7,
@@ -346,9 +346,9 @@ class Attendance
 			// add link to gradebook
 			if ($link_to_gradebook && !empty($this->category_id)) {
 				$description = '';
-				$link_id = is_resource_in_course_gradebook($course_code, 7, $attendance_id, $session_id);
+				$link_id = GradebookUtils::is_resource_in_course_gradebook($course_code, 7, $attendance_id, $session_id);
 				if (!$link_id) {
-					add_resource_to_course_gradebook(
+					GradebookUtils::add_resource_to_course_gradebook(
 						$this->category_id,
 						$course_code,
 						7,

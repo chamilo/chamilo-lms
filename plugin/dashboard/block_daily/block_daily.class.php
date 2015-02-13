@@ -11,12 +11,10 @@
  * required files for getting data
  */
 
-require_once api_get_path(LIBRARY_PATH) . 'attendance.lib.php';
-require_once api_get_path(SYS_CODE_PATH) . 'gradebook/lib/be.inc.php';
-
 /**
  * This class is used like controller for this course block plugin,
- * the class name must be registered inside path.info file (e.g: controller = "BlockDiario"), so dashboard controller will be instantiate it
+ * the class name must be registered inside path.info file
+ * (e.g: controller = "BlockDiario"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
 class BlockDaily extends Block

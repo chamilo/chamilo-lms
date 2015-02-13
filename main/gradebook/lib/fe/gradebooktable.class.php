@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see license.txt */
 
-require_once dirname(__FILE__).'/../../../inc/global.inc.php';
-require_once dirname(__FILE__).'/../be.inc.php';
-
 /**
  * GradebookTable Class
  * Table to display categories, evaluations and links
@@ -352,7 +349,7 @@ class GradebookTable extends SortableTable
                             // Compare the category weight to the sum of all weights inside the category
                             if (intval($total_weight) == $category_weight) {
                                 $label = null;
-                                $total = score_badges(array($total_weight.' / '.$category_weight, '100'));
+                                $total = GradebookUtils::score_badges(array($total_weight.' / '.$category_weight, '100'));
                             } else {
                                 $label = Display::return_icon(
                                     'warning.png',
@@ -380,7 +377,7 @@ class GradebookTable extends SortableTable
                 $main_weight = intval($main_cat[0]->get_weight());
 
                 if (intval($total_categories_weight) == $main_weight) {
-                    $total = score_badges(array($total_categories_weight.' / '.$main_weight, '100'));
+                    $total = GradebookUtils::score_badges(array($total_categories_weight.' / '.$main_weight, '100'));
                 } else {
                     $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');
                 }
@@ -523,7 +520,7 @@ class GradebookTable extends SortableTable
      */
     private function build_type_column ($item, $attributes = array())
     {
-        return build_type_icon_tag($item->get_icon_name(), $attributes);
+        return GradebookUtils::build_type_icon_tag($item->get_icon_name(), $attributes);
     }
 
     /**
@@ -622,13 +619,13 @@ class GradebookTable extends SortableTable
         switch ($item->get_item_type()) {
             // category
             case 'C' :
-                return build_edit_icons_cat($item, $this->currentcat);
+                return GradebookUtils::build_edit_icons_cat($item, $this->currentcat);
             // evaluation
             case 'E' :
-                return build_edit_icons_eval($item, $this->currentcat->get_id());
+                return GradebookUtils::build_edit_icons_eval($item, $this->currentcat->get_id());
             // link
             case 'L' :
-                return build_edit_icons_link($item, $this->currentcat->get_id());
+                return GradebookUtils::build_edit_icons_link($item, $this->currentcat->get_id());
         }
     }
 }

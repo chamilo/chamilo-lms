@@ -108,8 +108,7 @@ class CourseManager
                     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
                         if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
-                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-                            create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
+                            GradebookUtils::create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
                     // If parameter defined, copy the contents from a specific
@@ -5338,5 +5337,21 @@ class CourseManager
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         return $row['count'];
+    }
+
+    /**
+     * Returns the course name from a given code
+     * @param string $code
+     */
+    public static function getCourseNameFromCode($code)
+    {
+        $tbl_main_categories = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $sql = 'SELECT title
+                FROM ' . $tbl_main_categories . '
+                WHERE code = "' . Database::escape_string($code) . '"';
+        $result = Database::query($sql);
+        if ($col = Database::fetch_array($result)) {
+            return $col['title'];
+        }
     }
 }

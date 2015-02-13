@@ -15,7 +15,6 @@ $language_file = array('exercice');
 
 // including the global library
 require_once '../inc/global.inc.php';
-require_once '../gradebook/lib/be.inc.php';
 
 // Setting the tabs
 $this_section = SECTION_COURSES;

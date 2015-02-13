@@ -9,17 +9,6 @@ $language_file[] = 'gradebook';
 
 require_once '../inc/global.inc.php';
 
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/displaygradebook.php';
-require_once 'lib/fe/evalform.class.php';
-require_once 'lib/fe/dataform.class.php';
-require_once 'lib/results_data_generator.class.php';
-require_once 'lib/fe/resulttable.class.php';
-require_once 'lib/fe/exportgradebook.php';
-require_once 'lib/scoredisplay.class.php';
-require_once api_get_path(SYS_CODE_PATH) . 'gradebook/lib/gradebook_functions.inc.php';
-
 api_block_anonymous_users();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
@@ -27,7 +16,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 );
 
 if (!$isDrhOfCourse) {
-    block_students();
+    GradebookUtils::block_students();
 }
 
 $interbreadcrumb[] = array(
@@ -137,7 +126,7 @@ if (isset($_GET['import'])) {
                                 exit;
                                 break;
                             } else {
-                                overwritescore($allresult->get_id(), $importedresult['score'], $eval[0]->get_max());
+                                GradebookUtils::overwritescore($allresult->get_id(), $importedresult['score'], $eval[0]->get_max());
                                 $overwritescore++;
                                 $added = '1';
                             }
@@ -150,7 +139,7 @@ if (isset($_GET['import'])) {
                     header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&incorrectdata=');
                     exit;
                 }
-                $userinfo = get_user_info_from_id($importedresult['user_id']);
+                $userinfo = api_get_user_info($importedresult['user_id']);
                 if ($userinfo['lastname'] != $importedresult['lastname'] ||
                     $userinfo['firstname'] != $importedresult['firstname'] ||
                     $userinfo['official_code'] != $importedresult['official_code']
@@ -328,7 +317,7 @@ if (isset($_GET['export'])) {
 
         // export results to xml or csv file
         foreach ($results as $result) {
-            $userinfo = get_user_info_from_id($result->get_user_id());
+            $userinfo = api_get_user_info($result->get_user_id());
             $data['username'] = $userinfo['username']; //$result->get_user_id();
             $data['official_code'] = $userinfo['official_code'];
             $data['lastname'] = $userinfo['lastname'];
@@ -489,14 +478,14 @@ if (isset($_GET['importoverwritescore'])) {
     Display :: display_confirmation_message(get_lang('ImportOverWriteScore') . ' ' . $_GET['importoverwritescore']);
 }
 if (isset($_GET['import_user_error'])) {
-    $userinfo = get_user_info_from_id($_GET['import_user_error']);
+    $userinfo = api_get_user_info($_GET['import_user_error']);
     Display :: display_warning_message(get_lang('UserInfoDoesNotMatch') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']));
 }
 if (isset($_GET['allresdeleted'])) {
     Display :: display_confirmation_message(get_lang('AllResultDeleted'));
 }
 if (isset($_GET['import_score_error'])) {
-    $userinfo = get_user_info_from_id($_GET['import_score_error']);
+    $userinfo = api_get_user_info($_GET['import_score_error']);
     Display :: display_warning_message(get_lang('ScoreDoesNotMatch') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']));
 }
 if ($file_type == null) { //show the result header

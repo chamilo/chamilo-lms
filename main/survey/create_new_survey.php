@@ -25,7 +25,6 @@ $this_section = SECTION_COURSES;
 /** @todo check if the starting / is needed. api_get_path probably ends with an / */
 //require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
 require_once 'survey.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 $htmlHeadXtra[] = '<script>
     function advanced_parameters() {
@@ -101,7 +100,7 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['survey_id'] = $survey_id;
     $defaults['anonymous'] = $survey_data['anonymous'];
 
-    $link_info = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
+    $link_info = GradebookUtils::is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
     $gradebook_link_id = $link_info['id'];
 
     if ($link_info) {
@@ -300,7 +299,7 @@ if ($form->validate()) {
                 $date = time(); // TODO: Maybe time zones implementation is needed here.
                 $visible = 1; // 1 = visible
 
-                $link_info = is_resource_in_course_gradebook(
+                $link_info = GradebookUtils::is_resource_in_course_gradebook(
                     $course_id,
                     $gradebook_link_type,
                     $survey_id,
@@ -308,7 +307,7 @@ if ($form->validate()) {
                 );
                 $gradebook_link_id = $link_info['id'];
                 if (!$gradebook_link_id) {
-                    add_resource_to_course_gradebook(
+                    GradebookUtils::add_resource_to_course_gradebook(
                         $course_id,
                         $gradebook_link_type,
                         $survey_id,

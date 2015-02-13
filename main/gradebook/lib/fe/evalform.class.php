@@ -1,19 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once dirname(__FILE__) . '/../../../inc/global.inc.php';
-require_once dirname(__FILE__) . '/../be.inc.php';
-require_once dirname(__FILE__) . '/../gradebook_functions.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+/*$htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#evaluation_title").focus();
 }
 $(document).ready(function () {
     setFocus();
 });
-</script>';
+</script>';*/
 
 /**
  * Class EvalForm
@@ -166,7 +162,7 @@ class EvalForm extends FormValidator
 
         $results_and_users = array();
         foreach ($this->result_object as $result) {
-            $user = get_user_info_from_id($result->get_user_id());
+            $user = api_get_user_info($result->get_user_id());
             $results_and_users[] = array('result' => $result, 'user' => $user);
         }
         usort($results_and_users, array('EvalForm', 'sort_by_user'));
@@ -246,7 +242,7 @@ class EvalForm extends FormValidator
 		   </form>'
         );
 
-        $tblusers = get_users_in_course($this->evaluation_object->get_course_code());
+        $tblusers = GradebookUtils::get_users_in_course($this->evaluation_object->get_course_code());
         $nr_users = 0;
         //extra field for check on maxvalue
         $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());

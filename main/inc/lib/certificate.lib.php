@@ -139,10 +139,6 @@ class Certificate extends Model
         if (empty($this->certification_user_path) && $this->force_certificate_generation == false) {
             return false;
         }
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
-
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
         $my_category = Category :: load($this->certificate_data['cat_id']);
@@ -175,7 +171,12 @@ class Certificate extends Model
 
             if (is_dir($this->certification_user_path)) {
                 if (!empty($this->certificate_data)) {
-                    $new_content_html = get_user_certificate_content($this->user_id, $my_category[0]->get_course_code(), false, $params['hide_print_button']);
+                    $new_content_html = GradebookUtils::get_user_certificate_content(
+                        $this->user_id,
+                        $my_category[0]->get_course_code(),
+                        false,
+                        $params['hide_print_button']
+                    );
 
                     if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
                         $name = $this->certificate_data['path_certificate'];

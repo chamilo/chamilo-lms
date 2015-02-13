@@ -345,6 +345,8 @@ define('USER_RELATION_TYPE_BOSS',       8);
 //Gradebook link constants
 //Please do not change existing values, they are used in the database !
 
+define('GRADEBOOK_ITEM_LIMIT', 1000);
+
 define('LINK_EXERCISE',             1);
 define('LINK_DROPBOX',              2);
 define('LINK_STUDENTPUBLICATION',   3);
@@ -354,6 +356,30 @@ define('LINK_FORUM_THREAD',         5);
 define('LINK_ATTENDANCE',           7);
 define('LINK_SURVEY',               8);
 define('LINK_HOTPOTATOES',          9);
+
+// Score display types constants
+define('SCORE_DIV', 1);    // X / Y
+define('SCORE_PERCENT', 2);    // XX %
+define('SCORE_DIV_PERCENT', 3);    // X / Y (XX %)
+define('SCORE_AVERAGE', 4);    // XX %
+define('SCORE_DECIMAL', 5);    // 0.50  (X/Y)
+define('SCORE_BAR', 6);    // Uses the Display::bar_progress function
+define('SCORE_SIMPLE', 7);    // X
+
+//@todo where is number 6?
+
+define('SCORE_IGNORE_SPLIT', 8);    //  ??
+
+define('SCORE_DIV_PERCENT_WITH_CUSTOM', 9);    // X / Y (XX %) - Good!
+define('SCORE_CUSTOM', 10);    // Good!
+define('SCORE_DIV_SIMPLE_WITH_CUSTOM', 11);    // X - Good!
+
+define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS', 12);    // X - Good!
+
+define('SCORE_BOTH', 1);
+define('SCORE_ONLY_DEFAULT', 2);
+define('SCORE_ONLY_CUSTOM', 3);
+
 
 //From display.lib.php
 

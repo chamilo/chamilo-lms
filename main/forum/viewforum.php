@@ -147,13 +147,12 @@ if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AN
 
     $locked = api_resource_is_locked_by_gradebook($_GET['id'], LINK_FORUM_THREAD);
     if ($locked == false) {
-        $message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']);
+        $message = GradebookUtils::delete_forum_forumcategory_thread($_GET['content'], $_GET['id']);
         // Delete link
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());
         $link_id = $link_info['id'];
         if ($link_info !== false) {
-            remove_resource_from_course_gradebook($link_id);
+            GradebookUtils::remove_resource_from_course_gradebook($link_id);
         }
     }
 }

@@ -9,16 +9,12 @@
 $language_file = array('gradebook', 'exercice', 'link');
 //$cidReset = true;
 require_once '../inc/global.inc.php';
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/linkform.class.php';
-require_once 'lib/fe/linkaddeditform.class.php';
 
 api_block_anonymous_users();
-block_students();
+GradebookUtils::block_students();
 $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 //selected name of database
-$course_id              = get_course_id_by_link_id($_GET['editlink']);
+$course_id              = GradebookUtils::get_course_id_by_link_id($_GET['editlink']);
 $tbl_forum_thread 		= Database :: get_course_table(TABLE_FORUM_THREAD);
 $tbl_work 				= Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 $tbl_attendance 		= Database :: get_course_table(TABLE_ATTENDANCE);

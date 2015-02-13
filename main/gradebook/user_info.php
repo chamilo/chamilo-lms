@@ -23,10 +23,7 @@ if (isset($_GET['userid'])) {
     api_not_allowed();
 }
 
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/userform.class.php';
-block_students();
+GradebookUtils::block_students();
 
 $form = new UserForm(
     UserForm :: TYPE_USER_INFO,

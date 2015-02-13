@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once dirname(__FILE__) . '/../../../inc/global.inc.php';
-require_once dirname(__FILE__) . '/../be.inc.php';
 set_time_limit(0);
 
 use CpChart\Classes\pData as pData;
@@ -324,24 +322,24 @@ class FlatViewTable extends SortableTable
         // create page navigation if needed
         $totalitems = $this->datagen->get_total_items_count();
 
-        if ($this->limit_enabled && $totalitems > LIMIT) {
-            $selectlimit = LIMIT;
+        if ($this->limit_enabled && $totalitems > GRADEBOOK_ITEM_LIMIT) {
+            $selectlimit = GRADEBOOK_ITEM_LIMIT;
         } else {
             $selectlimit = $totalitems;
         }
 
         $header = null;
-        if ($this->limit_enabled && $totalitems > LIMIT) {
+        if ($this->limit_enabled && $totalitems > GRADEBOOK_ITEM_LIMIT) {
             $header .= '<table style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
                 . '<tbody>'
                 . '<tr>';
 
             // previous X
             $header .= '<td style="width:100%;">';
-            if ($this->offset >= LIMIT) {
+            if ($this->offset >= GRADEBOOK_ITEM_LIMIT) {
                 $header .= '<a href="' . api_get_self()
                     . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-                    . '&offset=' . (($this->offset) - LIMIT)
+                    . '&offset=' . (($this->offset) - GRADEBOOK_ITEM_LIMIT)
                     . (isset($_GET['search']) ? '&search=' . Security::remove_XSS($_GET['search']) : '') . '">'
                     . Display::return_icon('action_prev.png', get_lang('PreviousPage'), array(), 32)
                     . '</a>';
@@ -350,13 +348,13 @@ class FlatViewTable extends SortableTable
             }
             $header .= ' ';
             // next X
-            $calcnext = (($this->offset + (2 * LIMIT)) > $totalitems) ?
-                ($totalitems - (LIMIT + $this->offset)) : LIMIT;
+            $calcnext = (($this->offset + (2 * GRADEBOOK_ITEM_LIMIT)) > $totalitems) ?
+                ($totalitems - (GRADEBOOK_ITEM_LIMIT + $this->offset)) : GRADEBOOK_ITEM_LIMIT;
 
             if ($calcnext > 0) {
                 $header .= '<a href="' . api_get_self()
                     . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-                    . '&offset=' . ($this->offset + LIMIT)
+                    . '&offset=' . ($this->offset + GRADEBOOK_ITEM_LIMIT)
                     . (isset($_GET['search']) ? '&search=' . Security::remove_XSS($_GET['search']) : '') . '">'
                     . Display::return_icon('action_next.png', get_lang('NextPage'), array(), 32)
                     . '</a>';

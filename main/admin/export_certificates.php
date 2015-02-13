@@ -13,9 +13,6 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
 Display::display_header(null);
 
 $form = new FormValidator('export_certificate');

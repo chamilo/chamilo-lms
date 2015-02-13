@@ -14,15 +14,10 @@ require_once 'CourseDescription.class.php';
 require_once 'CourseCopyLearnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once 'Glossary.class.php';
 require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
 require_once 'Work.class.php';
-
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 define('FILE_SKIP', 1);
 define('FILE_RENAME', 2);

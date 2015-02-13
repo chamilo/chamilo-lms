@@ -12,7 +12,6 @@ $language_file = 'admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
 
 global $_configuration;
 $ajax_search = false;

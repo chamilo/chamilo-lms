@@ -9,9 +9,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php
 use \ChamiloSession as Session;
 
@@ -19,13 +17,7 @@ $use_anonymous = true;
 
 // Name of the language file that needs to be included.
 $language_file[] = 'learnpath';
-require_once 'back_compat.inc.php';
-require_once 'learnpath.class.php';
-require_once 'scorm.class.php';
-require_once 'aicc.class.php';
-require_once 'learnpathItem.class.php';
-require_once 'scormItem.class.php';
-require_once 'aiccItem.class.php';
+require_once '../inc/global.inc.php';
 
 /**
  * Get one item's details

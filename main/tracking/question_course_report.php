@@ -10,13 +10,7 @@ $language_file = array('registration', 'index', 'tracking', 'exercice','survey')
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
-
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
 $this_section = "session_my_space";
 
@@ -92,7 +86,7 @@ $form->setDefaults(array('course_code'=>(string)$course_code));
 $course_info = api_get_course_info($course_code);
 //var_dump($session_id);
 if (!empty($course_info)) {
-	$list = new learnpathList('', $course_code);
+	$list = new LearnpathList('', $course_code);
 	$lp_list = $list->get_flat_list();
 	$_course = $course_info;
 	$main_question_list = array();

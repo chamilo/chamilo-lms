@@ -1,16 +1,16 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'course.lib.php';
 require_once $libpath.'add_course.lib.inc.php';
-require_once $libpath.'course_description.lib.php';
 require_once(dirname(__FILE__).'/cm_webservice.php');
 
 /**
  * Web services available for the Course module. This class extends the WS class
  */
-class WSCMCourse extends WSCM {
+class WSCMCourse extends WSCM
+{
 	/**
 	 * Deletes a course (helper method)
 	 *
@@ -170,8 +170,8 @@ class WSCMCourse extends WSCM {
 			$results = array();
 			foreach($courses as $course) {
 				$result_tmp = array();
-                //reinitialize variables just in case
-                $title = $category_code = $wanted_code = $tutor_name = $course_admin_user_id_field_name = $course_admin_user_id_value = $language = $course_id_field_name = $course_id_value = $extras = null;
+				//reinitialize variables just in case
+				$title = $category_code = $wanted_code = $tutor_name = $course_admin_user_id_field_name = $course_admin_user_id_value = $language = $course_id_field_name = $course_id_value = $extras = null;
 				extract($course);
 				$result = $this->createCourseHelper($title, $category_code, $wanted_code, $tutor_name, $course_admin_user_id_field_name, $course_admin_user_id_value, $language, $course_id_field_name, $course_id_value, $extras);
 				if($result instanceof WSCMError) {
@@ -436,8 +436,8 @@ class WSCMCourse extends WSCM {
 				$results = array();
 				foreach($descriptions as $description) {
 					$results[] = array('course_desc_id' => $description->get_description_type(),
-										'course_desc_title' => $description->get_title(),
-										'course_desc_content' => $description->get_content());
+						'course_desc_title' => $description->get_title(),
+						'course_desc_content' => $description->get_content());
 				}
 				return $results;
 			}
@@ -489,39 +489,39 @@ class WSCMCourse extends WSCM {
 			}
 		}
 	}
-    public function unreadMessage($username, $password)
-    {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-            $table_message = Database::get_main_table(TABLE_MESSAGE);
-            $user_id = UserManager::get_user_id_from_username($username);
-            $condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
+	public function unreadMessage($username, $password)
+	{
+		if($this->verifyUserPass($username, $password) == "valid")
+		{
+			$table_message = Database::get_main_table(TABLE_MESSAGE);
+			$user_id = UserManager::get_user_id_from_username($username);
+			$condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
 
-            $sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE $condition_msg_status AND user_receiver_id=".$user_id;
+			$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE $condition_msg_status AND user_receiver_id=".$user_id;
 
-            $sql_result = Database::query($sql_query);
-            $result = Database::fetch_array($sql_result);
-            return $result['number_messages'];
-        }
-        return "0";
-    }
+			$sql_result = Database::query($sql_query);
+			$result = Database::fetch_array($sql_result);
+			return $result['number_messages'];
+		}
+		return "0";
+	}
 
-    public function get_message_data($username, $password)
-    {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-            $user_id = get_user_id_from_username($username);
-            
-        }
+	public function get_message_data($username, $password)
+	{
+		if($this->verifyUserPass($username, $password) == "valid")
+		{
+			$user_id = get_user_id_from_username($username);
 
-    }
+		}
 
-        public function nada($username, $password)
-        {
-            if($this->verifyUserPass($username, $password) == "valid")
-                return $username.$password;
-            return $username;
-        }
+	}
+
+	public function nada($username, $password)
+	{
+		if($this->verifyUserPass($username, $password) == "valid")
+			return $username.$password;
+		return $username;
+	}
 
 
 

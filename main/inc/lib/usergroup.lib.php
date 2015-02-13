@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'model.lib.php';
-
 /**
  * Class UserGroup
  *

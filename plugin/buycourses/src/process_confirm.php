@@ -8,7 +8,6 @@
  * Init
  */
 require_once '../config.php';
-require_once '../../../main/inc/lib/mail.lib.inc.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
 
 if ($_POST['payment_type'] == '') {

@@ -646,7 +646,6 @@ function handle_search()
     echo '</div>';
 
     if ($search_enabled == 'true') {
-        require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
         $xapian_path = api_get_path(SYS_PATH).'searchdb';
 
         /*
@@ -949,7 +948,6 @@ function add_edit_template() {
             $values = $form->exportValues();
             // Upload the file.
             if (!empty($_FILES['template_image']['name'])) {
-                require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
                 $upload_ok = process_uploaded_file($_FILES['template_image']);
 
                 if ($upload_ok) {
@@ -1091,7 +1089,6 @@ function select_gradebook_default_grade_model_id() {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function update_gradebook_score_display_custom_values($values) {
-    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
     $scoredisplay = ScoreDisplay::instance();
     $scores = $values['gradebook_score_display_custom_values_endscore'];
     $displays = $values['gradebook_score_display_custom_values_displaytext'];

@@ -21,6 +21,7 @@ class HookNotificationTitle extends HookEvent implements HookNotificationTitleEv
 
     /**
      * @param int $type
+     *
      * @return array|null
      */
     public function notifyNotificationTitle($type)

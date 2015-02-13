@@ -13,6 +13,7 @@ interface HookWSRegistrationEventInterface extends HookEventInterface
 {
     /**
      * @param int $type
+     *
      * @return int
      */
     public function notifyWSRegistration($type);

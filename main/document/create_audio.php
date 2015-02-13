@@ -17,9 +17,6 @@ require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/createaudio';
 $this_section = SECTION_COURSES;
 
-require_once 'document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
 $nameTools = get_lang('CreateAudio');
 
 api_protect_course_script();
@@ -88,7 +85,9 @@ if (!$is_allowed_in_course) {
 }
 
 
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir),api_get_session_id()))) {
+if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] ||
+	DocumentManager::is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir),api_get_session_id()))
+) {
 	api_not_allowed(true);
 }
 

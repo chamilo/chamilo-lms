@@ -12,6 +12,7 @@ interface HookNotificationTitleEventInterface extends HookEventInterface
 {
     /**
      * @param int $type
+     *
      * @return array
      */
     public function notifyNotificationTitle($type);

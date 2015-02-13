@@ -97,7 +97,6 @@ class WSReport extends WS {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
 
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $lp = new LearnpathList($user_id,$course_code);
         $list = $lp->list;
         $return = array();
@@ -127,7 +126,6 @@ class WSReport extends WS {
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
         $return = array(
           'progress_bar_mode' => $lp->progress_bar_mode,
@@ -161,13 +159,12 @@ class WSReport extends WS {
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
         $item = $lp->last_item_seen;
         $return = $lp->items[$item]->get_lesson_location();
         return $return;
     }
-    
+
     /**
      * Gets score obtained in the given learning path by the given user,
      * assuming there is only one item (SCO) in the learning path
@@ -191,8 +188,7 @@ class WSReport extends WS {
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
+
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
         $return = array(
           'min_score' => $lp->items[$learnpath_item_id]->min_score,
@@ -229,9 +225,7 @@ class WSReport extends WS {
                 return $course_id;
             } else {
                 $course_code = CourseManager::get_course_code_from_course_id($course_id);
-            }            
-            require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-            require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
+            }
             $lp = new learnpath($course_code, $learnpath_id, $user_id);
             return $lp->items[$learnpath_item_id]->status;
         }

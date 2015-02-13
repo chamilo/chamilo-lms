@@ -19,11 +19,6 @@ require_once 'dropbox_config.inc.php';
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';
 
-// the dropbox class
-require_once 'dropbox_class.inc.php';
-
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
 /*	DOWNLOAD A FOLDER */
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();

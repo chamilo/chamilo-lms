@@ -107,7 +107,6 @@ class Security
      */
     public static function filter_filename($filename)
     {
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         return disable_dangerous_file($filename);
     }
 

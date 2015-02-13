@@ -1058,8 +1058,6 @@ class learnpath
             api_get_user_id()
         );
 
-        require_once '../gradebook/lib/be.inc.php';
-
         // Delete link of gradebook tool
         //$tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         /*$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="4" AND gl.ref_id="' . $id . '";';
@@ -1074,10 +1072,9 @@ class learnpath
                    $link[0]->delete();
             }
         }*/
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 4 , $id, api_get_session_id());
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 4 , $id, api_get_session_id());
         if ($link_info !== false) {
-            remove_resource_from_course_gradebook($link_info['id']);
+            GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
 
         if (api_get_setting('search_enabled') == 'true') {
@@ -1430,7 +1427,6 @@ class learnpath
         }
 
         if ($row_select['item_type'] == 'link') {
-            require_once api_get_path(LIBRARY_PATH).'link.lib.php';
             $link = new Link();
             $linkId = $row_select['path'];
             $link->updateLink($linkId, $url);
@@ -3376,13 +3372,12 @@ class learnpath
                         }
 
                         if ($lp_item_type == 'link') {
-                            require_once api_get_path(LIBRARY_PATH).'link.lib.php';
-                            if (is_youtube_link($file)) {
-                                $src  = get_youtube_video_id($file);
+                            if (Link::is_youtube_link($file)) {
+                                $src  = Link::get_youtube_video_id($file);
                                 $file = 'embed.php?type=youtube&src='.$src;
                             }
-                            if (isVimeoLink($file)) {
-                                $src  = getVimeoLinkId($file);
+                            if (Link::isVimeoLink($file)) {
+                                $src  = Link::getVimeoLinkId($file);
                                 $file = 'embed.php?type=vimeo&src='.$src;
                             }
                         } else {
@@ -6073,7 +6068,6 @@ class learnpath
                 switch ($row['item_type']) {
                     case TOOL_QUIZ:
                         if (!empty($row['path'])) {
-                            require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
                             $exercise = new Exercise();
                             $exercise->read($row['path']);
                             $return .= $exercise->description.'<br />';
@@ -7247,6 +7241,7 @@ class learnpath
             $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
 
             $relative_prefix = '';
+
             $editor_config = array( 'ToolbarSet' 			=> 'LearningPathDocuments',
                 'Width' 				=> '100%',
                 'Height' 				=> '500',
@@ -7255,6 +7250,7 @@ class learnpath
                 'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/scorm/',
                 'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().$item_path_fck
             );
+
             $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
             $content_path = (api_get_path(SYS_COURSE_PATH).api_get_course_path().$item_path_fck);
             //$defaults['content_lp'] = file_get_contents($item_path);
@@ -7541,6 +7537,7 @@ class learnpath
                             'CreateDocumentDir' 	=> $relative_prefix,
                             'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/',
                             'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/'.$relative_path
+
                         );
 
                         if ($_GET['action'] == 'add_item') {
@@ -8486,8 +8483,6 @@ class learnpath
      */
     public function get_links()
     {
-        require_once api_get_path(LIBRARY_PATH).'link.lib.php';
-
         $course_id = api_get_course_int_id();
         $tbl_link = Database::get_course_table(TABLE_LINK);
 
@@ -8506,7 +8501,7 @@ class learnpath
         $return .= '</li>';
         $course_info = api_get_course_info();
 
-        $linkCategories = getLinkCategories($course_id, $session_id);
+        $linkCategories = Link::getLinkCategories($course_id, $session_id);
         $categoryIdList = array();
         if (!empty($linkCategories)) {
             foreach ($linkCategories as $categoryInfo) {
@@ -9090,7 +9085,6 @@ class learnpath
                         }
                         break;
                     case TOOL_QUIZ:
-                        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
                         $exe_id = $item->path; // Should be using ref when everything will be cleaned up in this regard.
                         $exe = new Exercise();
                         $exe->read($exe_id);

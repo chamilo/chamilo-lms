@@ -16,9 +16,6 @@ $language_file = array('learnpath', 'courses', 'index','tracking','exercice', 'a
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
 

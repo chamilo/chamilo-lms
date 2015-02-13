@@ -212,8 +212,9 @@ class UserManager
                     EventsDispatcher::events('user_registration', $values);
                 } else {
                     $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
+                    $plugin = new AppPlugin();
                     $additionalParameters = array(
-                        'smsType' => ClockworksmsPlugin::WELCOME_LOGIN_PASSWORD,
+                        'smsType' => constant($plugin->getSMSPluginName().'::WELCOME_LOGIN_PASSWORD'),
                         'userId' => $return,
                         'mobilePhoneNumber' => $phoneNumber,
                         'password' => $original_password
@@ -403,7 +404,6 @@ class UserManager
         $sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
         Database::query($sqlv);
 
-        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
         if (api_get_multiple_access_url()) {
             $url_id = api_get_current_access_url_id();
             UrlManager::delete_url_rel_user($user_id, $url_id);
@@ -413,8 +413,6 @@ class UserManager
         }
 
         if (api_get_setting('allow_social_tool') == 'true') {
-
-            require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
             //Delete user from portal groups
             $group_list = GroupPortalManager::get_groups_by_user($user_id);
             if (!empty($group_list)) {
@@ -1242,9 +1240,6 @@ class UserManager
         if (empty($source_file)) {
             $source_file = $file;
         }
-
-        // Configuration options about user photos.
-        require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
         // User-reserved directory where photos have to be placed.
         $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
@@ -4459,10 +4454,6 @@ class UserManager
         } else {
             $session_condition = " AND session_id = $session_id";
         }
-
-        // Getting gradebook score.
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
 
         $sql = 'SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id = (SELECT id FROM '.$tbl_grade_category.'
                 WHERE

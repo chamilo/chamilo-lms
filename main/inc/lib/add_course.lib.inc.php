@@ -8,10 +8,6 @@
  * @todo Clean up horrible structure, script is unwieldy, for example easier way to deal with
  * different tool visibility settings: ALL_TOOLS_INVISIBLE, ALL_TOOLS_VISIBLE, CORE_TOOLS_VISIBLE...
  */
-/**
- * Code
- */
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /* FUNCTIONS */
 
@@ -2919,8 +2915,9 @@ function register_course($params)
                 $message .= get_lang('Language').' '.$course_language;
 
                 $userInfo = api_get_user_info($user_id);
+                $plugin = new AppPlugin();
                 $additionalParameters = array(
-                    'smsType' => ClockworksmsPlugin::NEW_COURSE_BEEN_CREATED,
+                    'smsType' => constant($plugin->getSMSPluginName().'::NEW_COURSE_BEEN_CREATED'),
                     'userId' => $user_id,
                     'courseName' => $title,
                     'creatorUsername' => $userInfo['username']

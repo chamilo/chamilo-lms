@@ -12,9 +12,6 @@
  * Modified by Hubert Borderiou 2011-10-21 Question Category
  */
 
-// The initialization class for the online editor is needed here.
-require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
-
 /**
  * Shows a question
  *
@@ -147,17 +144,15 @@ function showQuestion(
         } elseif ($answerType == FREE_ANSWER) {
             $fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer']:null;
 
-            $oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
-
-            $oFCKeditor->ToolbarSet = 'TestFreeAnswer';
+            $oFCKeditor = new CKeditor();
+            $oFCKeditor->ToolbarSet = 'Test_Free_Answer';
             $oFCKeditor->Width = '100%';
             $oFCKeditor->Height = '200';
             $oFCKeditor->Value = $fck_content;
-            $s .= $oFCKeditor->CreateHtml();
+            $s .= $oFCKeditor->editor("choice[".$questionId."]", $oFCKeditor->Value);
         } elseif ($answerType == ORAL_EXPRESSION) {
             //Add nanog
             if (api_get_setting('enable_nanogong') == 'true') {
-                require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
                 //@todo pass this as a parameter
                 global $exercise_stat_info, $exerciseId, $exe_id;
 
@@ -178,13 +173,13 @@ function showQuestion(
                 echo $nano->show_button();
             }
 
-            $oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
+            $oFCKeditor = new CKeditor();
             $oFCKeditor->ToolbarSet = 'TestFreeAnswer';
             $oFCKeditor->Width  = '100%';
             $oFCKeditor->Height = '150';
             $oFCKeditor->ToolbarStartExpanded = false;
             $oFCKeditor->Value	= '' ;
-            $s .= $oFCKeditor->CreateHtml();
+            $s .= $oFCKeditor->editor("choice[".$questionId."]", $oFCKeditor->Value);
         }
 
         // Now navigate through the possible answers, using the max number of
@@ -1409,7 +1404,7 @@ function get_exam_results_data(
             }
         }
 
-        $lp_list_obj = new learnpathList(api_get_user_id());
+        $lp_list_obj = new LearnpathList(api_get_user_id());
         $lp_list = $lp_list_obj->get_flat_list();
 
         if (is_array($results)) {

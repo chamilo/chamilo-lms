@@ -1,12 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/flatview_data_generator.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
 
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
@@ -136,7 +129,7 @@ class BlockEvaluationGraph extends Block
 				if (isset($cats) && isset($cats[0])) {
 					$alleval = $cats[0]->get_evaluations(null, true, $course_code);
 					$alllinks = $cats[0]->get_links(null, true);
-					$users = get_all_users($alleval, $alllinks);
+					$users = GradebookUtils::get_all_users($alleval, $alllinks);
 					$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
 					$evaluation_sumary = $datagen->get_evaluation_sumary_results();
 					if (!empty($evaluation_sumary)) {
@@ -314,7 +307,7 @@ class BlockEvaluationGraph extends Block
 					if (isset($cats) && isset($cats[0])) {
 						$alleval = $cats[0]->get_evaluations(null, true, $course_code);
 						$alllinks = $cats[0]->get_links(null, true);
-						$users = get_all_users($alleval, $alllinks);
+						$users = GradebookUtils::get_all_users($alleval, $alllinks);
 						$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
 						$evaluation_sumary = $datagen->get_evaluation_sumary_results();
 						if (!empty($evaluation_sumary)) {

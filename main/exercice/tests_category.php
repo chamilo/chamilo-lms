@@ -24,9 +24,6 @@ $language_file = 'exercice';
 $nameTools = "";
 
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
-require_once 'question.class.php';
-require_once 'testcategory.class.php';
 
 $this_section = SECTION_COURSES;
 

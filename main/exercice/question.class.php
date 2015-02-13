@@ -1,30 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-// Question types
-define('UNIQUE_ANSWER',                             1);
-define('MULTIPLE_ANSWER',                           2);
-define('FILL_IN_BLANKS',                            3);
-define('MATCHING',                                  4);
-define('FREE_ANSWER',                               5);
-define('HOT_SPOT',                                  6);
-define('HOT_SPOT_ORDER',                            7);
-define('HOT_SPOT_DELINEATION',                      8);
-define('MULTIPLE_ANSWER_COMBINATION',               9);
-define('UNIQUE_ANSWER_NO_OPTION',                   10);
-define('MULTIPLE_ANSWER_TRUE_FALSE',                11);
-define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
-define('ORAL_EXPRESSION',                           13);
-define('GLOBAL_MULTIPLE_ANSWER',                    14);
-define('MEDIA_QUESTION',                            15);
-define('CALCULATED_ANSWER',                         16);
-
-//Some alias used in the QTI exports
-define('MCUA',				1);
-define('TF',				1);
-define('MCMA',				2);
-define('FIB',				3);
-
 /**
  * Class Question
  *

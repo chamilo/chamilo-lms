@@ -206,7 +206,6 @@ function ldap_put_user_info_locally($login, $info_array) {
         2. add info to Chamilo
     ------------------------------------------------------------ */
 
-    require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
     $language = api_get_setting('platformLanguage');
     if (empty($language)) { $language = 'english'; }
     $_userId = UserManager::create_user($prenom, $nom, $status,

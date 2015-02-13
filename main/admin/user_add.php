@@ -10,9 +10,6 @@ $cidReset = true;
 // Including necessary libraries.
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'fileManage.lib.php';
-require_once $libpath.'fileUpload.lib.php';
-require_once $libpath.'mail.lib.inc.php';
 
 // Section for the tabs
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -315,7 +312,14 @@ if( $form->validate()) {
             $username = $email;
         }
 
-		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, $language, $phone, null, $auth_source, $expiration_date, $active, $hr_dept_id, null, null, $send_mail);
+        $extra = array();
+        foreach ($user as $key => $value) {
+            if (substr($key, 0, 6) == 'extra_') { //an extra field
+                $extra[substr($key, 6)] = $value;
+            }
+        }
+
+		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, $language, $phone, null, $auth_source, $expiration_date, $active, $hr_dept_id, $extra, null, $send_mail);
 
 		Security::clear_token();
 		$tok = Security::get_token();
@@ -333,10 +337,8 @@ if( $form->validate()) {
 				UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
 			}
 
-			foreach ($user as $key => $value) {
-				if (substr($key, 0, 6) == 'extra_') { //an extra field
-					UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
-				}
+			foreach ($extra as $key => $value) {
+				UserManager::update_extra_field_value($user_id, $key, $value);
 			}
 			if ($platform_admin) {
                 UserManager::add_user_as_admin($user_id);

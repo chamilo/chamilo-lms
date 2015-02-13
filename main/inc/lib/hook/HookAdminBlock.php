@@ -10,7 +10,8 @@
  * This class is a Hook event implementing Admin Block Event interface.
  * This class is used to modify admin block by notifying Hook Observer for Admin Block
  */
-class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface {
+class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface
+{
 
     /**
      * Constructor
@@ -22,7 +23,9 @@ class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface {
 
     /**
      * Notify Hook observers for Admin Block event
-     * @param int $type Set the type of hook event called. 0: HOOK_EVENT_TYPE_PRE, 1: HOOK_EVENT_TYPE_POST
+     * @param int $type Set the type of hook event called.
+     * 0: HOOK_EVENT_TYPE_PRE, 1: HOOK_EVENT_TYPE_POST
+     *
      * @return array|int
      */
     public function notifyAdminBlock($type)

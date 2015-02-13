@@ -63,7 +63,6 @@ function validate_data($courses)
 
         // 4. Check whether course category exists.
         if (isset($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
-            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
             $categoryInfo = getCategory($course['CourseCategory']);
             if (empty($categoryInfo)) {
                 //@todo this is so bad even all lang variables are wrong ...
@@ -165,8 +164,6 @@ require '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 
 if (isset($extAuthSource) && is_array($extAuthSource)) {

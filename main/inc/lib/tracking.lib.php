@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
 use CpChart\Classes\pCache as pCache;
@@ -5151,8 +5149,6 @@ class Tracking
         $tquiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $ttrack_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $ttrack_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
         $sessions = array();
         $courses = array();

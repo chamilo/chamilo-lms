@@ -14,12 +14,6 @@ use ChamiloSession as Session;
  *  @todo   this lib should be convert in a static class and moved to main/inc/lib
  */
 
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
 $addDocumentToWork = api_get_configuration_value('add_document_to_work');
 define('ADD_DOCUMENT_TO_WORK', $addDocumentToWork);
 $workUserComments = api_get_configuration_value('work_user_comments');
@@ -338,7 +332,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null)
     $group_id = api_get_group_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-    $linkInfo = is_resource_in_course_gradebook(
+    $linkInfo = GradebookUtils::is_resource_in_course_gradebook(
         api_get_course_id(),
         3,
         $id,
@@ -698,12 +692,11 @@ function display_student_publications_list(
 
             $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'">'.$icon.'</a>';
 
-            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3, $workId, api_get_session_id());
+            $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 3, $workId, api_get_session_id());
             $link_id = $link_info['id'];
             $count  = 0;
             if ($link_info !== false) {
-                $gradebook_data = get_resource_from_course_gradebook($link_id);
+                $gradebook_data = GradebookUtils::get_resource_from_course_gradebook($link_id);
                 $count = $gradebook_data['weight'];
             }
             if ($count > 0) {
@@ -1165,7 +1158,6 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND parent_id = $id";
             Database::query($sql);
 
-            require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
             $new_dir = $work_data_url.'_DELETED_'.$id;
 
             if (api_get_setting('permanently_remove_deleted_files') == 'true') {
@@ -1192,7 +1184,7 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
-            $link_info = is_resource_in_course_gradebook(
+            $link_info = GradebookUtils::is_resource_in_course_gradebook(
                 api_get_course_id(),
                 3,
                 $id,
@@ -1200,7 +1192,7 @@ function deleteDirWork($id)
             );
             $link_id = $link_info['id'];
             if ($link_info !== false) {
-                remove_resource_from_course_gradebook($link_id);
+                GradebookUtils::remove_resource_from_course_gradebook($link_id);
             }
             return true;
         }
@@ -2368,7 +2360,7 @@ function get_work_user_list(
                 }
 
                 // Type.
-                $work['type'] = build_document_icon_tag('file', $work['url']);
+                $work['type'] = DocumentManager::build_document_icon_tag('file', $work['url']);
 
                 // File name.
                 $link_to_download = null;
@@ -2545,8 +2537,9 @@ function send_email_on_homework_creation($course_id)
                 $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
                 $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
 
+                $plugin = new AppPlugin();
                 $additionalParameters = array(
-                    'smsType' => ClockworksmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
+                    'smsType' => constant($plugin->getSMSPluginName().'::ASSIGNMENT_BEEN_CREATED_COURSE'),
                     'userId' => $student["user_id"],
                     'courseTitle' => $course_id
                 );
@@ -4259,12 +4252,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
     if (!empty($params['category_id'])) {
 
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
-        $link_info = is_resource_in_course_gradebook(
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(
             $courseInfo['code'],
             LINK_STUDENTPUBLICATION,
             $workId,
@@ -4278,7 +4266,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
         if (isset($params['make_calification']) && $params['make_calification'] == 1) {
             if (empty($linkId)) {
-                add_resource_to_course_gradebook(
+                GradebookUtils::add_resource_to_course_gradebook(
                     $params['category_id'],
                     $courseInfo['code'],
                     LINK_STUDENTPUBLICATION,
@@ -4291,7 +4279,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                     api_get_session_id()
                 );
             } else {
-                update_resource_from_course_gradebook(
+                GradebookUtils::update_resource_from_course_gradebook(
                     $linkId,
                     $courseInfo['code'],
                     $params['weight']
@@ -4299,7 +4287,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
             }
         } else {
             // Delete everything of the gradebook for this $linkId
-            remove_resource_from_course_gradebook($linkId);
+            GradebookUtils::remove_resource_from_course_gradebook($linkId);
         }
     }
 }
@@ -4464,7 +4452,7 @@ function getFormWork($form, $defaults = array())
     }
 
     // Loading Gradebook select
-    load_gradebook_select_in_tool($form);
+    GradebookUtils::load_gradebook_select_in_tool($form);
 
     $form->addElement('text', 'weight', get_lang('WeightInTheGradebook'));
     $form->addElement('html', '</div>');

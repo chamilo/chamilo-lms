@@ -4,9 +4,7 @@
  * @author Juan Carlos Trabado herodoto@telefonica.net
  * @package chamilo.social
  */
-/**
- * Initialization
- */
+
 $language_file = array('messages', 'userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -16,8 +14,6 @@ api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }
-
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
 
 $this_section = SECTION_SOCIAL;
 $_SESSION['this_section'] = $this_section;
@@ -68,6 +64,16 @@ function register_friend(element_input) {
     	});
     }
 }
+
+$(document).on("ready", function () {
+    $("#el-finder").elfinder({
+        url: "' . api_get_path(WEB_LIBRARY_PATH) . 'elfinder/php/connector.php",
+        lang: "' . api_get_language_isocode() . '",
+        height: 600,
+        resizable: false,
+        rememberLastDir: false,
+    }).elfinder("instance");
+});
 
 </script>';
 
@@ -146,13 +152,14 @@ if (isset($_GET['cidReq'])) {
             ) . ')'
         ) . '</a>';
 }
+$tpl = new Template();
+$editor = new \Chamilo\CoreBundle\Component\Editor\Editor();
+
+$editor = $tpl->fetch('default/'.$editor->getEditorStandAloneTemplate());
 $social_right_content = '<div class="span9">';
-$social_right_content .= '<iframe name="fileManager" id="fileManager" src="' . api_get_path(
-        WEB_PATH
-    ) . 'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:480px; width:100%; float:left"></iframe>';
+$social_right_content .= $editor;
 $social_right_content .= '</div>';
 
-$tpl = new Template();
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);

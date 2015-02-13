@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *  Shows the exercise results
  *
@@ -17,14 +18,7 @@ use \ChamiloSession as Session;
 
 $language_file = array('exercice');
 
-// including additional libraries
-require_once 'exercise.class.php';
-require_once 'question.class.php'; //also defines answer type constants
-require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
-
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (empty($origin) ) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
@@ -550,7 +544,6 @@ foreach ($questionList as $questionId) {
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
 			$comnt = get_comments($id, $questionId);
 			$default = array('comments_'.$questionId =>  $comnt);
-
             if ($useAdvancedEditor) {
                 $feedback_form->addElement(
                     'html_editor',
@@ -566,7 +559,6 @@ foreach ($questionList as $questionId) {
             } else {
                 $feedback_form->addElement('textarea', 'comments_' . $questionId);
             }
-
 			$feedback_form->addElement('html','<br>');
 			$feedback_form->setDefaults($default);
 			$feedback_form->display();

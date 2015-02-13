@@ -9,11 +9,6 @@
 $language_file= array('gradebook','tracking');
 
 require_once '../inc/global.inc.php';
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/dataform.class.php';
-require_once 'lib/scoredisplay.class.php';
-require_once 'lib/fe/displaygradebook.php';
 
 api_block_anonymous_users();
 

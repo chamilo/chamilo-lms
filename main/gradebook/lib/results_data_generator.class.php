@@ -68,7 +68,7 @@ class ResultsDataGenerator
         $table = array();
         foreach($this->results as $result) {
             $user = array();
-            $info = get_user_info_from_id($result->get_user_id());
+            $info = api_get_user_info($result->get_user_id());
             $user['id'] = $result->get_user_id();
             if ($pdf){
                 $user['username'] = $info['username'];

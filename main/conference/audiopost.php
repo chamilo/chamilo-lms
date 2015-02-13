@@ -1,9 +1,6 @@
 <?php
 /* See license terms in /license.txt */
 
-//file_put_contents("result.txt", print_r($_POST, true));
-//file_put_contents("result3.txt", print_r($_FILES, true));
-//file_put_contents("result2.txt", print_r($_GET, true));
 require_once '../inc/global.inc.php';
 
 // check the request comes from our red5 server
@@ -40,13 +37,9 @@ if($is_our_server)
 			$target = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/audio/';
 			$basename = basename( $_FILES['file']['name']);
 			$target = $target . $basename ;
-			if(!move_uploaded_file($_FILES['file']['tmp_name'], $target))
-			{
+			if(!move_uploaded_file($_FILES['file']['tmp_name'], $target)) {
 				error_log(__FILE__.':'.__LINE__.': File upload to '.$target.' failed',0);
-			}
-			else
-			{
-				require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+			} else {
 				$id = add_document($course_info,'/audio/'.$basename,'file',filesize($target),$basename);
 				if($id !== false)
 				{

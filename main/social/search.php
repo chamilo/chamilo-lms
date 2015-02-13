@@ -10,7 +10,6 @@ $language_file = array('registration', 'admin', 'userInfo');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'magpierss/rss_fetch.inc';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 api_block_anonymous_users();

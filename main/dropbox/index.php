@@ -364,7 +364,7 @@ if ($action != 'add') {
 				}
 
 				$link_open = '<a href="dropbox_download.php?'.api_get_cidreq().'&amp;id='.$dropbox_file->id.'">';
-				$dropbox_file_data[] = $link_open.build_document_icon_tag('file', $dropbox_file->title).'</a>';
+				$dropbox_file_data[] = $link_open.DocumentManager::build_document_icon_tag('file', $dropbox_file->title).'</a>';
 				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download">'.Display::return_icon('save.png', get_lang('Download'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.$dropbox_file->title.'</a>'.$new_icon.'<br />'.$dropbox_file->description;
 				$file_size = $dropbox_file->filesize;
 				$dropbox_file_data[] = format_file_size($file_size);
@@ -411,7 +411,7 @@ if ($action != 'add') {
 					$dropbox_category_data[] = $category['cat_id'];
 					// The icon of the category
 					$link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$category['cat_id'].'&amp;view_sent_category='.$viewSentCategory.'&amp;view='.$view.'">';
-					$dropbox_category_data[] = $link_open.build_document_icon_tag('folder', $category['cat_name']).'</a>';
+					$dropbox_category_data[] = $link_open.DocumentManager::build_document_icon_tag('folder', $category['cat_name']).'</a>';
 					$dropbox_category_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=received">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.$category['cat_name'].'</a>';
 					$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '';
@@ -525,7 +525,7 @@ if ($action != 'add') {
 			if ($view_dropbox_category_sent == $dropbox_file->category) {
 				$dropbox_file_data[] = $dropbox_file->id;
 				$link_open = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">';
-				$dropbox_file_data[] = $link_open.build_document_icon_tag('file', $dropbox_file->title).'</a>';
+				$dropbox_file_data[] = $link_open.DocumentManager::build_document_icon_tag('file', $dropbox_file->title).'</a>';
 				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download">'.Display::return_icon('save.png', get_lang('Save'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.$dropbox_file->title.'</a><br />'.$dropbox_file->description;
 				$file_size = $dropbox_file->filesize;
 				$dropbox_file_data[] = format_file_size($file_size);
@@ -571,7 +571,7 @@ if ($action != 'add') {
                     $moveList[$category['cat_id']] = $category['cat_name'];
 					$dropbox_category_data[] = $category['cat_id']; // This is where the checkbox icon for the files appear.
 					$link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.$view.'">';
-					$dropbox_category_data[] = $link_open.build_document_icon_tag('folder', Security::remove_XSS($category['cat_name'])).'</a>';
+					$dropbox_category_data[] = $link_open.DocumentManager::build_document_icon_tag('folder', Security::remove_XSS($category['cat_name'])).'</a>';
 					$dropbox_category_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'),ICON_SIZE_SMALL).'</a>'.$link_open.Security::remove_XSS($category['cat_name']).'</a>';
 					//$dropbox_category_data[] = '';
 					$dropbox_category_data[] = '';

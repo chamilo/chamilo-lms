@@ -22,7 +22,6 @@ $interbreadcrumb[] = array ('url' => 'specific_fields.php', 'name' => get_lang('
 
 $libpath = api_get_path(LIBRARY_PATH);
 
-require_once $libpath.'sortable_table.class.php';
 include_once $libpath.'specific_fields_manager.lib.php';
 
 // Create an add-field box
@@ -69,7 +68,7 @@ if(!empty($_GET['message'])) {
 echo '<div class="actions">';
 $form->display();
 echo '</div>';
-if (!empty($extra_fields)) { 
+if (!empty($extra_fields)) {
     $table->display();
 }
 

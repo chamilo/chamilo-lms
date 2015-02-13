@@ -304,7 +304,6 @@ function update_event_exercice(
     $remind_list = array(),
     $end_date = null
 ) {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
 
     if ($debug) error_log('Called to update_event_exercice');
@@ -410,7 +409,6 @@ function create_event_exercice($exo_id)
 
     // No record was found, so create one
     // get expire time to insert into the tracking record
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     $current_expired_time_key = get_time_control_key($exercise_id);
     if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
         $expired_date = $_SESSION['expired_time'][$current_expired_time_key];
@@ -435,7 +433,6 @@ function create_event_exercice($exo_id)
  */
 function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null)
 {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug, $learnpath_id, $learnpath_item_id;
     $score          = Database::escape_string($score);
     $answer         = Database::escape_string($answer);
@@ -536,7 +533,6 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
  */
 function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0)
 {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $safe_lp_id, $safe_lp_item_id;
     //Validation in case of fraud  with actived control time
     if (!exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {

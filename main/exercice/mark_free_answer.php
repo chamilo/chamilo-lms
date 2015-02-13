@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	Free answer marking script
 * 	This script allows a course tutor to mark a student's free answer.
@@ -9,19 +10,12 @@
 *
 * 	@todo respect coding guidelines
 */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file='exercice';
 
 // name of the language file that needs to be included
 include('../inc/global.inc.php');
-
-// including additional libraries
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
 
 //debug param. 0: no display - 1: debug display
 $debug=0;
@@ -136,7 +130,7 @@ if ($action == 'mark') {
 			$my_msg = get_lang('MarkInserted');
 		}
 		//Database::query($sql);
-		//return 0;		
+		//return 0;
 	} else {
 		$my_msg .= get_lang('TotalScoreTooBig');
 	}

@@ -108,15 +108,13 @@ class CourseManager
                     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
                         if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
-                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-                            create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
+                            GradebookUtils::create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
                     // If parameter defined, copy the contents from a specific
                     // template course into this new course
                     if (!empty($_configuration['course_creation_use_template'])) {
                         // Include the necessary libraries to generate a course copy
-                        require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
                         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseBuilder.class.php';
                         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseRestorer.class.php';
                         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseSelectForm.class.php';
@@ -2233,7 +2231,6 @@ class CourseManager
         }
         $count = 0;
         if (api_is_multiple_url_enabled()) {
-            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             $url_id = 1;
             if (api_get_current_access_url_id() != -1) {
                 $url_id = api_get_current_access_url_id();
@@ -2547,7 +2544,6 @@ class CourseManager
      */
     public static function select_and_sort_categories($element, $defaultCode = null, $parentCode = null , $padding = null)
     {
-        require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
         setCategoriesInForm($element, $defaultCode, $parentCode , $padding);
     }
 
@@ -2619,8 +2615,9 @@ class CourseManager
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
             $email_admin = api_get_setting('emailAdministrator');
 
+            $plugin = new AppPlugin();
             $additionalParameters = array(
-                'smsType' => ClockworksmsPlugin::NEW_USER_SUBSCRIBED_COURSE,
+                'smsType' => constant($plugin->getSMSPluginName().'::NEW_USER_SUBSCRIBED_COURSE'),
                 'userId' => $tutor['user_id'],
                 'userUsername' => $student['username'],
                 'courseCode' => $course_code
@@ -5341,5 +5338,21 @@ class CourseManager
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         return $row['count'];
+    }
+
+    /**
+     * Returns the course name from a given code
+     * @param string $code
+     */
+    public static function getCourseNameFromCode($code)
+    {
+        $tbl_main_categories = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $sql = 'SELECT title
+                FROM ' . $tbl_main_categories . '
+                WHERE code = "' . Database::escape_string($code) . '"';
+        $result = Database::query($sql);
+        if ($col = Database::fetch_array($result)) {
+            return $col['title'];
+        }
     }
 }

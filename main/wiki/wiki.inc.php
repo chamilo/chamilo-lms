@@ -685,7 +685,6 @@ class Wiki
 
         if ($form->validate()) {
             $values = $form->exportValues();
-
             if (empty($_POST['title'])) {
                 self::setMessage(Display::display_error_message(get_lang("NoWikiPageTitle"), false, true));
             } elseif (strtotime($values['startdate_assig']) > strtotime($values['enddate_assig'])) {
@@ -1753,7 +1752,6 @@ class Wiki
         $wikiFileName = $exportFile . '_' . $i . '.html';
         $exportPath = $exportDir . '/' . $wikiFileName;
         file_put_contents( $exportPath, $wikiContents );
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         $doc_id = add_document($_course, $groupPath.'/'.$wikiFileName, 'file', filesize($exportPath), $wikiTitle);
         api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);
 
@@ -4683,7 +4681,6 @@ class Wiki
                             //prevent concurrent users and double version
                             self::setMessage(Display::display_error_message(get_lang("EditedByAnotherUser"), false, true));
                         } else {
-
                             $return_message = self::save_wiki($form->exportValues());
                             self::setMessage(Display::display_confirmation_message($return_message, false, true));
                         }

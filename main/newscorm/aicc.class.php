@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'aiccItem.class.php';
-//require_once 'aiccMetadata.class.php';
-//require_once 'aiccOrganization.class.php';
-require_once 'aiccResource.class.php';
-require_once 'aiccBlock.class.php';
 /**
  * Class aicc
  * Defines the AICC class, which is meant to contain the aicc items (nuclear elements)
@@ -641,9 +636,6 @@ class aicc extends learnpath
         //error_log('New LP - in export_zip()', 0);
         // Zip everything that is in the corresponding scorm dir.
         // Write the zip file somewhere (might be too big to return).
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-        require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-        require_once api_get_path(LIBRARY_PATH).'document.lib.php';
         require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
         require_once 'learnpath_functions.inc.php';
         $course_id = api_get_course_int_id();

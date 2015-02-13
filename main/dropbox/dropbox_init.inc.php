@@ -138,23 +138,9 @@ Session::write('dropbox_conf', $dropbox_cnf);
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 // protecting the script
 api_protect_course_script();
-
-/*	Libraries */
-
-// including the library for the dropbox
-require_once 'dropbox_class.inc.php';
-
-// including some libraries that are also used in the documents tool
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';  // we use a function build_document_icon_tag
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php'; // the function choose_image is used
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
-/*	Virtual course support */
 
 $user_id = api_get_user_id();
 $course_code = api_get_course_id();

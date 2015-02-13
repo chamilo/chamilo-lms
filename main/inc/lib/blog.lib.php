@@ -240,7 +240,6 @@ class Blog {
 
 
 		if(!empty($_FILES['user_upload']['name'])) {
-			require_once 'fileUpload.lib.php';
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
 		}
@@ -358,7 +357,6 @@ class Blog {
 		$course_id 			= api_get_course_int_id();
 
 		if(!empty($_FILES['user_upload']['name'])) {
-			require_once('fileUpload.lib.php');
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
 		}
@@ -1201,18 +1199,21 @@ class Blog {
 			echo '<div><span class="form_required">*</span>'.get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" /></div><br />';
 
 			// article text
-			$oFCKeditor = new FCKeditor('post_full_text') ;
+			//@todo use formvalidator
+			//$oFCKeditor = new FCKeditor('post_full_text') ;
+            $oFCKeditor = new CKeditor();
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Height		= '200';
 			if(!api_is_allowed_to_edit()) {
-				$oFCKeditor->ToolbarSet = 'ProjectStudent';
+				$oFCKeditor->ToolbarSet = 'Project_Student';
 			} else {
 				$oFCKeditor->ToolbarSet = 'Project';
 			}
 			$oFCKeditor->Value = isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
 
 			echo '<div class="control-group">';
-			$oFCKeditor->Create();
+            //$oFCKeditor->Create();
+            $oFCKeditor->editor('post_full_text');
 			echo '</div>';
 
 			// attachment
@@ -1236,7 +1237,7 @@ class Blog {
 					</div>';
 
 			// submit
-			echo '<div class="control-group">						
+			echo '<div class="control-group">
 						<div class="controls">
 								 <input type="hidden" name="action" value="" />
 								 <input type="hidden" name="new_post_submit" value="true" />
@@ -1285,24 +1286,26 @@ class Blog {
 		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" /><br /></div>';
 
 		// article text
-		$oFCKeditor = new FCKeditor('post_full_text') ;
+		//$oFCKeditor = new FCKeditor('post_full_text') ;
+        $oFCKeditor = new CKeditor();
 
 		$oFCKeditor->Width		= '100%';
 		$oFCKeditor->Height		= '200';
 
 		if(!api_is_allowed_to_edit()) {
-			$oFCKeditor->ToolbarSet = 'ProjectStudent';
+			$oFCKeditor->ToolbarSet = 'Project_Student';
 		} else {
 			$oFCKeditor->ToolbarSet = 'Project';
 		}
 		$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
 		echo '<div class="controls">';
-		echo $oFCKeditor->Create();
+		//echo $oFCKeditor->Create();
+        $oFCKeditor->editor('post_full_text', $oFCKeditor->Value);
 		echo '</div>';
 
 		// submit
 		echo '	<div class="control-group">
-					
+
 					<div class="controls">
 							 <input type="hidden" name="action" value="" />
 							 <input type="hidden" name="edit_post_submit" value="true" />
@@ -1534,7 +1537,7 @@ class Blog {
 				</div>';
 
 		// submit
-		echo '	<div class="control-group">					
+		echo '	<div class="control-group">
 					<div class="controls">
 							<input type="hidden" name="action" value="" />
 							<input type="hidden" name="new_task_submit" value="true" />
@@ -2343,20 +2346,22 @@ class Blog {
 		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" /></div><br />';
 
 		// comment text
-		$oFCKeditor = new FCKeditor('comment_text') ;
+		//$oFCKeditor = new FCKeditor('comment_text') ;
+        $oFCKeditor = new CKeditor();
 		$oFCKeditor->Width		= '100%';
 		$oFCKeditor->Height		= '200';
 		if(!api_is_allowed_to_edit())
 		{
-			$oFCKeditor->ToolbarSet = 'ProjectCommentStudent';
+			$oFCKeditor->ToolbarSet = 'Project_Comment_Student';
 		}
 		else
 		{
-			$oFCKeditor->ToolbarSet = 'ProjectComment';
+			$oFCKeditor->ToolbarSet = 'Project_Comment';
 		}
 		$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
 		echo '<div class="controls">';
-		echo $oFCKeditor->Create() ;
+		//echo $oFCKeditor->Create() ;
+        $oFCKeditor->editor('comment_text');
 		echo '
 				</div>';
 
@@ -2381,7 +2386,7 @@ class Blog {
 				</div>';
 
 		// attachment comment
-		echo '	<div class="control-group">					
+		echo '	<div class="control-group">
 					<div class="controls">
 							 <input type="hidden" name="action" value="" />
 							 <input type="hidden" name="comment_parent_id" id="comment_parent_id" value="0" />';

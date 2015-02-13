@@ -39,6 +39,10 @@ $(document).ready(function() {
             $(this).css("background-image", \'url("../img/hide0.png")\');
         }
     );
+
+    CKEDITOR.on("instanceReady", function (e) {
+        showTemplates();
+    });
 });
 
 function InnerDialogLoaded() {
@@ -138,9 +142,6 @@ function InnerDialogLoaded() {
     });
 </script>';
 
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-
 //I'm in the certification module?
 $is_certificate_mode = false;
 
@@ -223,7 +224,6 @@ if ($is_certificate_mode) {
 	$dir = '/certificates/';
 }
 
-// Configuration for the FCKEDITOR
 $doc_tree  = explode('/', $dir);
 $count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
 
@@ -673,8 +673,8 @@ if ($form->validate()) {
 	}
     // HTML-editor
     echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span2" style="width:162px">
-                <div id="frmModel" style="overflow: visible;"></div>
+            <div id="template_col" class="span3" style="width:200px">
+                <div id="frmModel" ></div>
             </div>
             <div id="hide_bar_template"></div>
             <div id="doc_form" class="span9">

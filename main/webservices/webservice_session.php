@@ -1,18 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.webservices
  */
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
-require_once($libpath.'sessionmanager.lib.php');
-require_once($libpath.'course.lib.php');
 require_once(dirname(__FILE__).'/webservice.php');
 
 /**
  * Web services available for the Session module. This class extends the WS class
  */
-class WSSession extends WS {
+class WSSession extends WS
+{
 
 	/**
 	 * Creates a session (helper method)

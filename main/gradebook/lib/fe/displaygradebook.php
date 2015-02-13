@@ -85,7 +85,7 @@ class DisplayGradebook
         if ($evalobj->get_course_code() == null) {
             $course = get_lang('CourseIndependent');
         } else {
-            $course = get_course_name_from_code($evalobj->get_course_code());
+            $course = CourseManager::getCourseNameFromCode($evalobj->get_course_code());
         }
 
         $evalinfo = '<table width="100%" border="0"><tr><td>';
@@ -216,7 +216,7 @@ class DisplayGradebook
 
         if (!$is_course_admin && $status <> 1 && $selectcat <> 0) {
             $user_id = api_get_user_id();
-            $user = get_user_info_from_id($user_id);
+            $user = api_get_user_info($user_id);
 
             $catcourse = Category :: load($catobj->get_id());
             $scoredisplay = ScoreDisplay :: instance();

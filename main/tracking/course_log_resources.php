@@ -36,16 +36,9 @@ if (!$is_allowedToTrack) {
 
 // Including additional libraries.
 
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/scormItem.class.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;

@@ -17,7 +17,6 @@ if (api_is_anonymous()) {
 
 // Course Chat
 if ($action == 'preview') {
-    require_once api_get_path(SYS_PATH).'vendor/autoload.php';
     require_once api_get_path(SYS_CODE_PATH).'chat/chat_functions.lib.php';
 
     echo saveMessage(

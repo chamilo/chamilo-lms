@@ -9,13 +9,6 @@
 $language_file= 'gradebook';
 
 require_once '../inc/global.inc.php';
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/userform.class.php';
-require_once 'lib/user_data_generator.class.php';
-require_once 'lib/fe/usertable.class.php';
-require_once 'lib/fe/displaygradebook.php';
-require_once 'lib/scoredisplay.class.php';
 
 api_block_anonymous_users();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -24,7 +17,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 );
 
 if (!$isDrhOfCourse) {
-    block_students();
+    GradebookUtils::block_students();
 }
 $interbreadcrumb[]= array (
     'url' => $_SESSION['gradebook_dest'],
@@ -54,11 +47,11 @@ if (isset ($_GET['exportpdf'])) {
     $datagen       = new UserDataGenerator($my_user_id, $allevals, $alllinks);
     $data_array    = $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);
     $newarray      = array ();
-    $displayscore  = Scoredisplay :: instance();
+    $displayscore  = ScoreDisplay :: instance();
     foreach ($data_array as $data) {
         $newarray[] = array_slice($data, 1);
     }
-    $userinfo = get_user_info_from_id($my_user_id);
+    $userinfo = api_get_user_info($my_user_id);
     $html .= get_lang('Results').' : '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')';
 
     if ($displayscore->is_custom()) {

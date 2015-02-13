@@ -39,11 +39,6 @@ define('CAT_FORO', 'FOR');
 define('CAT_ANNU', 'ANN');
 
 require_once __DIR__ . '/../../main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 
 require_once api_get_path(PLUGIN_PATH) . PLUGIN_NAME . '/src/ticket_plugin.class.php';
 require_once api_get_path(PLUGIN_PATH) . PLUGIN_NAME . '/src/ticket.class.php';

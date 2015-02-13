@@ -12,7 +12,7 @@
  * @package chamilo.learnpath
 */
 /**
- * INIT SECTION 
+ * INIT SECTION
  */
 
 $this_section = SECTION_COURSES;
@@ -47,6 +47,11 @@ function InnerDialogLoaded() {
     return B.ClickFrame();
 $};'.$_SESSION['oLP']->get_js_dropdown_array().'
 
+$(document).on("ready", function() {
+    CKEDITOR.on("instanceReady", function (e) {
+        showTemplates();
+    });
+});
 </script>';
 
 /* Constants and variables */
@@ -144,15 +149,15 @@ $path_parts = pathinfo($path_file);
 
 if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
     echo $_SESSION['oLP']->return_new_tree();
-    
+
     // Show the template list
     echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
     echo '<br />';
     echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
 } else {
-    echo $_SESSION['oLP']->return_new_tree();    
+    echo $_SESSION['oLP']->return_new_tree();
 }
-        
+
 echo '</div>';
 echo '<div class="span9">';
 

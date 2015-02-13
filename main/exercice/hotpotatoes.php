@@ -15,8 +15,6 @@ $language_file ='exercice';
 require_once '../inc/global.inc.php';
 
 // Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 require_once 'hotpotatoes.lib.php';
 

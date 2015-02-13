@@ -44,13 +44,13 @@ class Log
             return true;
         }
 
-        $directory = api_get_path(LIBRARY_PATH) . 'symfony';
+        /*$directory = api_get_path(LIBRARY_PATH) . 'symfony';
         if (!class_exists('Doctrine\Common\ClassLoader', false)) {
             require_once $directory . '/Doctrine/Common/ClassLoader.php';
         }
 
         $loader = new Doctrine\Common\ClassLoader('Monolog', $directory);
-        $loader->register();
+        $loader->register();*/
 
         $has_run = true;
     }

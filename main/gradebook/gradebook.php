@@ -20,16 +20,6 @@ if (!empty($_GET['course'])) {
     $this_section = SECTION_MYGRADEBOOK;
     unset($_GET['course']);
 }
-require_once 'lib/be.inc.php';
-require_once 'lib/scoredisplay.class.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/catform.class.php';
-require_once 'lib/fe/evalform.class.php';
-require_once 'lib/fe/linkform.class.php';
-require_once 'lib/gradebook_data_generator.class.php';
-require_once 'lib/fe/gradebooktable.class.php';
-require_once 'lib/fe/displaygradebook.php';
-require_once 'lib/fe/userform.class.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
@@ -57,7 +47,7 @@ $filter_warning_msg = true;
 
 //this is called when there is no data for the course admin
 if (isset ($_GET['createallcategories'])) {
-    block_students();
+    GradebookUtils::block_students();
     $coursecat= Category :: get_not_created_course_categories(api_get_user_id());
     if (!count($coursecat) == 0) {
         foreach ($coursecat as $row) {
@@ -81,7 +71,7 @@ $selectcat=isset($_GET['selectcat']) ?  Security::remove_XSS($_GET['selectcat'])
 
 if (isset ($_GET['movecat'])) {
     $move_cat=Security::remove_XSS($_GET['movecat']);
-    block_students();
+    GradebookUtils::block_students();
     $cats= Category :: load($move_cat);
     if (!isset ($_GET['targetcat'])) {
         $move_form= new CatForm(CatForm :: TYPE_MOVE,
@@ -113,7 +103,7 @@ if (isset ($_GET['movecat'])) {
 
 //move an evaluation
 if (isset ($_GET['moveeval'])) {
-    block_students();
+    GradebookUtils::block_students();
     $get_move_eval=Security::remove_XSS($_GET['moveeval']);
     $evals= Evaluation :: load($get_move_eval);
     if (!isset ($_GET['targetcat'])) {
@@ -149,7 +139,7 @@ if (isset ($_GET['moveeval'])) {
 
 //move a link
 if (isset ($_GET['movelink'])) {
-    block_students();
+    GradebookUtils::block_students();
     $get_move_link=Security::remove_XSS($_GET['movelink']);
     $link= LinkFactory :: load($get_move_link);
     $move_form= new LinkForm(LinkForm :: TYPE_MOVE, null, $link[0], 'move_link_form', null, api_get_self() . '?movelink=' . $get_move_link . '&selectcat=' . Security::remove_XSS($_GET['selectcat']));
@@ -164,7 +154,7 @@ if (isset ($_GET['movelink'])) {
 
 //parameters for categories
 if (isset ($_GET['visiblecat'])) {
-    block_students();
+    GradebookUtils::block_students();
     if (isset ($_GET['set_visible'])) {
         $visibility_command= 1;
     } else {
@@ -184,7 +174,7 @@ if (isset ($_GET['visiblecat'])) {
     }
 }
 if (isset ($_GET['deletecat'])) {
-    block_students();
+    GradebookUtils::block_students();
     $cats= Category :: load($_GET['deletecat']);
     //delete all categories,subcategories and results
     if ($cats[0] != null) {
@@ -198,7 +188,7 @@ if (isset ($_GET['deletecat'])) {
 }
 //parameters for evaluations
 if (isset ($_GET['visibleeval'])) {
-    block_students();
+    GradebookUtils::block_students();
     if (isset ($_GET['set_visible'])) {
         $visibility_command= 1;
     } else {
@@ -218,7 +208,7 @@ if (isset ($_GET['visibleeval'])) {
     }
 }
 if (isset ($_GET['deleteeval'])) {
-    block_students();
+    GradebookUtils::block_students();
     $eval= Evaluation :: load($_GET['deleteeval']);
     if ($eval[0] != null) {
         $eval[0]->delete_with_results();
@@ -228,7 +218,7 @@ if (isset ($_GET['deleteeval'])) {
 }
 //parameters for links
 if (isset ($_GET['visiblelink'])) {
-    block_students();
+    GradebookUtils::block_students();
     if (isset ($_GET['set_visible'])) {
         $visibility_command= 1;
     }else {
@@ -247,7 +237,7 @@ if (isset ($_GET['visiblelink'])) {
     }
 }
 if (isset ($_GET['deletelink'])) {
-    block_students();
+    GradebookUtils::block_students();
     //fixing #5229
     if (!empty($_GET['deletelink'])) {
         $link= LinkFactory :: load($_GET['deletelink']);
@@ -261,7 +251,7 @@ if (isset ($_GET['deletelink'])) {
 }
 $course_to_crsind = isset ($course_to_crsind) ? $course_to_crsind : '';
 if ($course_to_crsind && !isset($_GET['confirm'])) {
-    block_students();
+    GradebookUtils::block_students();
     if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
         die ('Error: movecat or moveeval not defined');
     }
@@ -280,7 +270,7 @@ if ($course_to_crsind && !isset($_GET['confirm'])) {
 }
 //actions on the sortabletable
 if (isset ($_POST['action'])) {
-    block_students();
+    GradebookUtils::block_students();
     $number_of_selected_items= count($_POST['id']);
     if ($number_of_selected_items == '0') {
         $warning_message = get_lang('NoItemsSelected');
@@ -524,7 +514,7 @@ if (!empty($keyword)) {
     }
     $category = Category :: load ($_GET['cat_id']);
     if ($category[0]->is_certificate_available($user_id)) {
-        $user= get_user_info_from_id($user_id);
+        $user = api_get_user_info($user_id);
         $scoredisplay = ScoreDisplay :: instance();
         $scorecourse = $category[0]->calc_score($user_id);
         $scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));

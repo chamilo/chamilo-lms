@@ -22,7 +22,7 @@ use \ChamiloSession as Session;
 
 $use_anonymous = true;
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php';
 if (!empty($_course['language'])){
     $resource_linker_file =  api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php';

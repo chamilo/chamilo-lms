@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
-require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
-require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
-
 /**
  * Class Category
  * Defines a gradebook Category object
@@ -1642,15 +1638,15 @@ class Category implements GradebookItem
         if (isset($certificate_min_score) &&
             $item_total_value >= $certificate_min_score
         ) {
-            $my_certificate = get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
+            $my_certificate = GradebookUtils::get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
             if (empty($my_certificate)) {
-                register_user_info_about_certificate(
+                GradebookUtils::register_user_info_about_certificate(
                     $category_id,
                     $user_id,
                     $my_score_in_gradebook,
                     api_get_utc_datetime()
                 );
-                $my_certificate = get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
+                $my_certificate = GradebookUtils::get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
             }
             $html = array();
             if (!empty($my_certificate)) {
@@ -1741,12 +1737,12 @@ class Category implements GradebookItem
         $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
 
-        $certificate_list = get_list_users_certificates($catId, $userList);
+        $certificate_list = GradebookUtils::get_list_users_certificates($catId, $userList);
         $certificate_path_list = array();
 
         if (!empty($certificate_list)) {
             foreach ($certificate_list as $index=>$value) {
-                $list_certificate = get_list_gradebook_certificates_by_user_id(
+                $list_certificate = GradebookUtils::get_list_gradebook_certificates_by_user_id(
                     $value['user_id'],
                     $catId
                 );
@@ -1778,10 +1774,10 @@ class Category implements GradebookItem
      */
     public static function deleteAllCertificates($catId)
     {
-        $certificate_list = get_list_users_certificates($catId);
+        $certificate_list = GradebookUtils::get_list_users_certificates($catId);
         if (!empty($certificate_list)) {
             foreach ($certificate_list as $index=>$value) {
-                $list_certificate = get_list_gradebook_certificates_by_user_id($value['user_id'], $catId);
+                $list_certificate = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $catId);
                 foreach ($list_certificate as $value_certificate) {
                     $certificate_obj = new Certificate($value_certificate['id']);
                     $certificate_obj->delete(true);

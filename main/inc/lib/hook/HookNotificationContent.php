@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * This file contains the Hook Event class for Content format of Notifications
- * @package chamilo.library.hook
- */
 
 /**
  * Class HookNotificationContent
+ * Hook Event class for Content format of Notifications
+ * @package chamilo.library.hook
+ *
  */
 class HookNotificationContent extends HookEvent implements HookNotificationContentEventInterface
 {
@@ -21,6 +20,7 @@ class HookNotificationContent extends HookEvent implements HookNotificationConte
 
     /**
      * @param int $type
+     *
      * @return array|null
      */
     public function notifyNotificationContent($type)

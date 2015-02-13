@@ -56,10 +56,6 @@ $this_page = '';
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
 $htmlHeadXtra[] = '<script>
 $(function() {
     $("#all_langs").change(function() {

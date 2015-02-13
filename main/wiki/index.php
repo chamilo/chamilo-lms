@@ -23,7 +23,6 @@ $wiki->charset = $charset;
 // section (for the tabs)
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_WIKI;
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();

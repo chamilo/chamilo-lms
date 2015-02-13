@@ -1,17 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'gradebookitem.class.php';
-require_once 'abstractlink.class.php';
-require_once 'exerciselink.class.php';
-require_once 'evallink.class.php';
-require_once 'dropboxlink.class.php';
-require_once 'studentpublicationlink.class.php';
-require_once 'learnpathlink.class.php';
-require_once 'forumthreadlink.class.php';
-require_once 'attendancelink.class.php';
-require_once 'surveylink.class.php';
-
 /**
  * Class LinkFactory
  * Factory for link objects

@@ -39,7 +39,6 @@ switch ($action) {
         }
         break;
     case 'search_category':
-        require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
         if (api_is_platform_admin() || api_is_allowed_to_create_course()) {
             $results = searchCategoryByKeyword($_REQUEST['q']);
             if (!empty($results)) {
@@ -77,11 +76,7 @@ switch ($action) {
             }
 
             $results = array();
-
-            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
             if (!empty($courseList)) {
-
                 foreach ($courseList as $courseInfo) {
                     $title = $courseInfo['title'];
 
@@ -184,7 +179,6 @@ switch ($action) {
     case 'search_exercise_by_course':
         if (api_is_platform_admin()) {
             $course = api_get_course_info_by_id($_GET['course_id']);
-            require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
             $session_id = (!empty($_GET['session_id'])) ?  intval($_GET['session_id']) : 0 ;
             $exercises = get_all_exercises($course, $session_id, false, $_GET['q'], true, 3);
 

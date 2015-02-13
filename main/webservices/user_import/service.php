@@ -30,12 +30,7 @@ function import_users_from_file($filepath, $security_key) {
    	}
 
    	// Libraries
-   	require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-	require_once 'import.lib.php';
+   	require_once 'import.lib.php';
 
 	// Check is users file exists.
 	if (!is_file($filepath)) {

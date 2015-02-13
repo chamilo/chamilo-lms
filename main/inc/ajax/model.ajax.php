@@ -274,7 +274,6 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results':
-        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_id = $_REQUEST['exerciseId'];
 
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
@@ -284,7 +283,6 @@ switch ($action) {
         $count = get_count_exam_results($exercise_id, $whereCondition);
         break;
     case 'get_hotpotatoes_exercise_results':
-        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $hotpot_path = $_REQUEST['path'];
         $count = get_count_exam_hotpotatoes_results($hotpot_path);
         break;
@@ -852,7 +850,6 @@ switch ($action) {
             'firstname',
             'lastname',
         );
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
         foreach ($lessons as $lesson_id => $lesson) {
             $columns[] = $lesson_id;
@@ -1328,7 +1325,6 @@ if (in_array($action, $allowed_actions)) {
 
     if ($operation && $operation == 'excel') {
         $j = 1;
-        require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
         $array = array();
         if (empty($column_names)) {
@@ -1349,7 +1345,6 @@ if (in_array($action, $allowed_actions)) {
             case 'xls':
                 //TODO add date if exists
                 $file_name = (!empty($action)) ? $action : 'company_report';
-                require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
                 $browser = new Browser();
                 if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
                     Export::export_table_xls_html($array, $file_name, 'ISO-8859-15');

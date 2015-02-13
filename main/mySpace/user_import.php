@@ -16,10 +16,6 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN; // TODO: Platform admin section?
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-
 $tool_name = get_lang('ImportUserListXMLCSV');
 api_block_anonymous_users();
 

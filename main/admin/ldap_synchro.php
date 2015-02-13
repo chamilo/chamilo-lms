@@ -14,8 +14,6 @@ $cidReset=true;
 
 require('../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
-require_once($libpath.'formvalidator/FormValidator.class.php');
-require_once($libpath.'usermanager.lib.php');
 require_once('../auth/ldap/authldap.php');
 $annee_base=date('Y');
 // setting the section (for the tabs)

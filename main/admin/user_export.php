@@ -15,8 +15,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 // Database table definitions
 $course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);

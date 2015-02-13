@@ -12,9 +12,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'course_category.lib.php';
-
 $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);

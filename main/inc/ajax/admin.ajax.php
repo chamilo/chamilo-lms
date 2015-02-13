@@ -7,7 +7,6 @@
 // Language files that need to be included.
 $language_file = array('admin');
 require_once '../global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
 
 api_protect_admin_script();
 
@@ -61,18 +60,16 @@ switch ($action) {
         }
 
         if (!is_dir($newUrlDir)) {
-            @mkdir($newUrlDir, api_get_permissions_for_new_directories(), true);
+            mkdir($newUrlDir, api_get_permissions_for_new_directories(), true);
+        }
+
+        if (!is_writable($newUrlDir)) {
+            die;
         }
 
         $fullFilePath = "{$newUrlDir}{$blockName}_extra.html";
 
-        if (file_exists($fullFilePath)) {
-            @unlink($fullFilePath);
-        }
-
-        @touch($fullFilePath);
-
-        @file_put_contents($fullFilePath, $content);
+        file_put_contents($fullFilePath, $content);
 
         break;
 
@@ -99,9 +96,15 @@ switch ($action) {
             $newUrlDir = api_get_path(SYS_PATH) . "home/admin/";
         }
 
-        if (Security::check_abs_path("{$newUrlDir}{$blockName}_extra.html", $newUrlDir)) {
-            echo @file_get_contents("{$newUrlDir}{$blockName}_extra.html");
+        if (!Security::check_abs_path("{$newUrlDir}{$blockName}_extra.html", $newUrlDir)) {
+            die;
         }
+
+        if (!file_exists("{$newUrlDir}{$blockName}_extra.html")) {
+            die;
+        }
+
+        echo file_get_contents("{$newUrlDir}{$blockName}_extra.html");
         break;
 }
 

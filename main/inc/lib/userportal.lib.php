@@ -459,7 +459,6 @@ class IndexManager
 
         // Showing only the category of courses of the current access_url_id
         if (api_is_multiple_url_enabled()) {
-            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
             $courseCategoryCondition = null;
             if (isMultipleUrlSupport()) {
                 $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
@@ -832,8 +831,6 @@ class IndexManager
 
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
-            require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
             // New messages.
             $number_of_new_messages             = MessageManager::get_new_messages();
             // New contact invitations.

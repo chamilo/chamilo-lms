@@ -1,21 +1,20 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
 
-require_once $libpath.'usermanager.lib.php';
-require_once $libpath.'course.lib.php';
 require_once(dirname(__FILE__).'/cm_webservice.php');
-
 
 /**
  * Description of cm_soap_inbox
  *
  * @author marcosousa
  */
-class WSCMCourses extends WSCM {
-    
-    public function get_courses_code($username, $password) { 
+class WSCMCourses extends WSCM
+{
+
+    public function get_courses_code($username, $password) {
         if($this->verifyUserPass($username, $password) == "valid") {
             $user_id = UserManager::get_user_id_from_username($username);
             $listOfCourses = UserManager::get_personal_session_course_list($user_id);

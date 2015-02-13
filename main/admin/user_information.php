@@ -11,7 +11,6 @@ $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin',
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 

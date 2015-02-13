@@ -3540,7 +3540,6 @@ form .formw .freeze {
   margin-bottom: .5em;
 }
 
-
 /* ****************************************************
                      END SKILL
  **************************************************** */
@@ -3660,7 +3659,6 @@ form .formw .freeze {
 }
 
 /* END SCORM CSS BASE*/
-
 .skill_root {
     box-shadow: 2px 2px 19px #aaa;
     -o-box-shadow: 2px 2px 19px #aaa;
@@ -3714,6 +3712,44 @@ form .formw .freeze {
     margin-top:10px;
     position:relative;
 }
+
+/* ****************************************************
+                     END SKILL
+ **************************************************** */
+
+/* list template document */
+#frmModel{
+  height: 700px;
+  min-height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden
+}
+#frmModel ul{
+  list-style: none;
+  margin: 0;
+  padding: 0 .5em 0 1em;
+}
+#frmModel ul li:hover{
+  background-color: #FAFAFA;
+  border: 1px solid #F2F2F2;
+}
+#frmModel ul li{
+  text-align: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+#frmModel ul li .title, #frmModel ul li .description{
+  padding-top: .5em;
+  padding-bottom: .5em;
+  width: auto;
+}
+.lp-add-item{
+  display:block;
+  height:890px;
+  width:250px;
+  position:relative;
+}
+/* end list template document */
 
 .done_window {
     background-color: #73982C;
@@ -5315,6 +5351,7 @@ i.size-32.icon-new-work{
 
 #settings .span6:nth-child(2n+1) {
     clear:left
+}
 
 /***** Survey *****/
 #list-survey p{

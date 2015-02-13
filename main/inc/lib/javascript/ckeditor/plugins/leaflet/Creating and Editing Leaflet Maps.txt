@@ -1,0 +1,56 @@
+CKEditor Leaflet Map Plugin
+
+
+I. CREATING NEW MAP
+
+1.) Click the Leaflet Map icon in the CKEditor Toolbar. The Dialog window will now pop-up.
+
+Then, it is EITHER of the 2 steps:
+2) Input the Place name (for example: Manila, Philippines).
+
+3.) Input the Latitude and Longitude values of a Place in their corresponding text fields.
+(for example: Latitude = 14.123456 and Longitude = 121.654321)
+
+Then click the OK button. After that, a map will be created, centered on that specified coordinates, with the following default values:
+Width: 400px
+Height: 400px
+Zoom Level: 10
+Map Tile: MapQuestOpen.OSM
+Overview Map (MiniMap): Enabled
+Alignment: Left
+
+Note that if you do BOTH #2 and #3 (which is I think will rarely happen), the value in #2 will be ignored and the values/coordinates in #3 will be used.
+
+
+II. EDITING EXISTING MAP
+
+It is either of the 2 steps:
+
+1.)  If you hover the mouse on the map, you will see the map's handle bar (cross hair) in the UPPER LEFT corner of the map,
+you could then double-click that to view or edit the map properties.
+
+2.) With your mouse, select the map to be edited (to set the focus away from other CKEditor objects). Then click the Leaflet Map icon in the CKEditor toolbar.
+
+The Dialog will pop-up and will be set to the properties of the currently selected map.
+Note that the #1 is the preferred way.
+
+To set the current map in a NEW location, either specify a new Place name value in the Search field, or specify a new Lat/Lon values in the corresponding text fields. Note that if you change BOTH the values in the Search field and the Lat/Lon fields (which is I think will rarely happen), the values in the Lat/Lon fields will be used.
+
+You might be wondering why the #1 step has to be done that way.
+The main reason is that CKEditor Leaflet Maps uses the Widget API (introduced in CKEditor 4.3).
+The Widget API introduces innovative features and more plugin flexibility.
+
+For one, the map could have a Map Mode and Widget Mode.
+Map mode uses the mouse wheel or double-click for zooming the map,
+Left-Click+Hold+Drag for panning the map,
+and the possibility to use the map's '+/-' zoom UI buttons.
+
+We could have opted to bind the double-click for showing the map's option
+at the expense of lesser map interaction. However, since I believe that map interaction
+is relatively more important compared to widget's interaction, we need to compromise a bit.
+That's why in order to edit the map's options, we have to do a mouse hover onto the map
+and double-click the default widget's handle bars in the map's upper left corner
+so that the default map's behavior and mouse and key bindings could still be preserved.
+
+Later, we might include the option to edit the map widget's option
+using the Right-Click or Ctrl+Left-Click event bindings.

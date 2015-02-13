@@ -9,7 +9,7 @@
  * @package chamilo.chat
  */
 
-require_once api_get_path(SYS_PATH).'vendor/autoload.php';
+require_once '../inc/global.inc.php';
 
 if (!defined('FRAME')) {
     exit();

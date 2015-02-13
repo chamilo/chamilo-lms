@@ -14,6 +14,7 @@ interface HookCreateUserEventInterface extends HookEventInterface
     /**
      * Update all the observers
      * @param int $type
+     *
      * @return int
      */
     public function notifyCreateUser($type);

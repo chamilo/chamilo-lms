@@ -47,6 +47,7 @@ abstract class HookEvent implements HookEventInterface
         } else {
             try {
                 $class = get_called_class();
+
                 return new $class;
             } catch (Exception $e) {
                 return null;
@@ -131,6 +132,7 @@ abstract class HookEvent implements HookEventInterface
             // Assign value for each array item
             $this->eventData[$key] = $value;
         }
+
         return $this;
     }
 

@@ -76,16 +76,9 @@ if (api_is_drh()) {
 
 // Including additional libraries.
 
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/scormItem.class.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
 if ($export_csv) {
     if (!empty($session_id)) {

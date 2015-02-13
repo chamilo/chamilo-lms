@@ -187,11 +187,19 @@ class Category implements GradebookItem
         return $skill_select;
     }
 
+    /**
+     * Set the generate_certificates value
+     * @param int $generateCertificates
+     */
     public function setGenerateCertificates($generateCertificates)
     {
         $this->generateCertificates = $generateCertificates;
     }
 
+    /**
+     * Get the generate_certificates value
+     * @return int
+     */
     public function getGenerateCetificates()
     {
         return $this->generateCertificates;

@@ -60,3 +60,8 @@ $strings['InscriptionDate'] = 'Fecha de inscripción';
 $strings['BossValidation'] = 'Validación del superior';
 $strings['Decision'] = 'Decisión';
 $strings['AdvancedSubscriptionAdminViewTitle'] = 'Resultado de confirmación de solicitud de inscripción';
+
+$strings['AcceptInfinitive'] = 'Aceptar';
+$strings['RejectInfinitive'] = 'Rechazar';
+$strings['AreYouSureYouWantToAcceptSubscriptionOfX'] = 'Está seguro que quiere aceptar la inscripción de %s?';
+$strings['AreYouSureYouWantToRejectSubscriptionOfX'] = 'Are you sure you want to reject the subscripti %s?';

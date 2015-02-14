@@ -66,7 +66,7 @@
 <form id="form_advsub_admin" class="form-search" method="post" action="/plugin/advancedsubscription/src/admin_view.php" name="form_advsub_admin">
     <div class="row">
         <div class="span6">
-            <p class="text-title-select">Elige una sesión de formación</p>
+            <p class="text-title-select">{{ 'SelectASession' | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
             <select id="session-select" name="s">
                 <option value="0">
                     {{ "SelectASession" | get_plugin_lang('AdvancedSubscriptionPlugin') }}
@@ -119,13 +119,13 @@
                                 class="btn btn-success btn-advsub btn-accept"
                                 href="{{ student.acceptUrl }}"
                             >
-                                Aceptar
+                                {{ 'Accept' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
                             <a
                                 class="btn btn-danger btn-advsub btn-reject"
                                 href="{{ student.rejectUrl }}"
                             >
-                                Rechazar
+                                {{ 'Reject' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
                         </td>
                     </tr>
@@ -170,17 +170,17 @@
             var confirmed = false;
             var studentName = $(this).closest("tr").find(".name").html();
             if (studentName) {
-                studentName = "de " + studentName + " ?";
+                ;
             } else {
-                studentName = " ?"
+                studentName = "";
             }
+            var msgRe = /%s/;
             if ($(this).hasClass('btn-accept')) {
-                var confirmed = confirm(
-                    "¿Esta seguro de que desea aceptar la inscripción " + studentName
-                );
+                var msg = "{{ 'AreYouSureYouWantToAcceptSubscriptionOfX' | get_plugin_lang('AdvancedSubscriptionPlugin') }}";
+                var confirmed = confirm(msg.replace(msgRe, studentName));
             } else {
-                var confirmed = confirm(
-                        "¿Esta seguro de que desea aceptar la inscripción " + studentName
+                var msg = "{{ 'AreYouSureYouWantToRejectSubscriptionOfX' | get_plugin_lang('AdvancedSubscriptionPlugin') }}";
+                var confirmed = confirm(msg.replace(msgRe, studentName));
                 );
             }
             if (confirmed) {

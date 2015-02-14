@@ -54,3 +54,9 @@ $strings['InscriptionDate'] = 'Inscription date';
 $strings['BossValidation'] = 'Boss validation';
 $strings['Decision'] = 'Decision';
 $strings['AdvancedSubscriptionAdminViewTitle'] = 'Subscription request confirmation result';
+
+$strings['AcceptInfinitive'] = 'Accept';
+$strings['RejectInfinitive'] = 'Reject';
+$strings['AreYouSureYouWantToAcceptSubscriptionOfX'] = 'Are you sure you want to accept the subscription of %s?';
+$strings['AreYouSureYouWantToRejectSubscriptionOfX'] = 'Are you sure you want to reject the subscription of %s?';
+

@@ -53,11 +53,6 @@ $tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-/*	Libraries	*/
-
-$lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
-require_once 'announcements.inc.php';
-
 $course_id = api_get_course_int_id();
 $_course = api_get_course_info();
 

@@ -24,9 +24,9 @@ function LoginCheck($uid) {
 	$uid = (int) $uid;
 	$online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     if (!empty($uid)) {
-        $login_ip = '';
+        $user_ip = '';
         if (!empty($_SERVER['REMOTE_ADDR'])) {
-            $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
+            $user_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
         }
 
 		$login_date = api_get_utc_datetime();
@@ -38,9 +38,9 @@ function LoginCheck($uid) {
 		// if the $_course array exists this means we are in a course and we have to store this in the who's online table also
 		// to have the x users in this course feature working
 		if (is_array($_course) && count($_course)>0 && !empty($_course['id'])) {
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, course, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['id']."' , '$session_id' , '$access_url_id' )";
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, course, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$user_ip', '".$_course['id']."' , '$session_id' , '$access_url_id' )";
 		} else {
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '$session_id', '$access_url_id')";
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$user_ip', '$session_id', '$access_url_id')";
 		}
 		@Database::query($query);
 	}

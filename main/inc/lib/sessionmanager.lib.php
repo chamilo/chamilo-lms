@@ -1268,17 +1268,17 @@ class SessionManager
 
         foreach ($return as $key => $info) {
             //Search for ip, we do less querys if we iterate the final array
-            $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
+            $sql = sprintf("SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
             $result = Database::query($sql);
             $ip = Database::fetch_assoc($result);
             //if no ip founded, we search the closest higher ip
-            if (empty($ip['login_ip'])) {
-                $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE login_user_id = %d AND login_date > '%s'  ORDER BY login_date ASC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
+            if (empty($ip['user_ip'])) {
+                $sql = sprintf("SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date > '%s'  ORDER BY login_date ASC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
                 $result = Database::query($sql);
                 $ip = Database::fetch_assoc($result);
             }
             #add ip to final array
-            $return[$key]['ip'] = $ip['login_ip'];
+            $return[$key]['ip'] = $ip['user_ip'];
         }
         return $return;
     }

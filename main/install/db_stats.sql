@@ -195,7 +195,7 @@ CREATE TABLE track_e_login (
   login_id int NOT NULL auto_increment,
   login_user_id int unsigned NOT NULL default 0,
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
-  login_ip varchar(39) NOT NULL default '',
+  user_ip varchar(39) NOT NULL default '',
   logout_date datetime NULL default NULL,
   PRIMARY KEY  (login_id),
   KEY login_user_id (login_user_id)
@@ -206,7 +206,7 @@ CREATE TABLE track_e_online (
   login_id int NOT NULL auto_increment,
   login_user_id int unsigned NOT NULL default 0,
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
-  login_ip varchar(39) NOT NULL default '',
+  user_ip varchar(39) NOT NULL default '',
   course varchar(40) default NULL,
   session_id INT NOT NULL DEFAULT 0,
   access_url_id INT NOT NULL DEFAULT 1,

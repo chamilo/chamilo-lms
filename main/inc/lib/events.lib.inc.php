@@ -82,7 +82,7 @@ function event_login()
     $userId = api_get_user_id();
 
     $reallyNow = api_get_utc_datetime();
-    $sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date) VALUES
+    $sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, user_ip, login_date, logout_date) VALUES
             ('".$userId."',
             '".Database::escape_string(api_get_real_ip())."',
             '".$reallyNow."',

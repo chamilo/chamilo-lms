@@ -6486,7 +6486,7 @@ class TrackingUserLog
             return false;
         }
         $table_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql_ip = "SELECT login_date, login_ip FROM $table_login WHERE login_user_id = $user_id AND login_date < '$event_date' ORDER BY login_date DESC LIMIT 1";
+        $sql_ip = "SELECT login_date, user_ip FROM $table_login WHERE login_user_id = $user_id AND login_date < '$event_date' ORDER BY login_date DESC LIMIT 1";
         $ip = '';
         $res_ip = Database::query($sql_ip);
         if ($res_ip !== false && Database::num_rows($res_ip)>0) {

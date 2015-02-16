@@ -36,6 +36,9 @@ ALTER TABLE skill ADD COLUMN criteria text DEFAULT '';
 
 ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0;
 
+ALTER TABLE track_e_login CHANGE COLUMN user_ip user_ip varchar(39) NOT NULL DEFAULT '';
+ALTER TABLE track_e_online CHANGE COLUMN user_ip user_ip varchar(39) NOT NULL DEFAULT '';
+
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.10.0.8' WHERE variable = 'chamilo_database_version';
 

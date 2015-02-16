@@ -365,7 +365,7 @@ class Category implements GradebookItem
         $cat->set_parent_id(null);
         $cat->set_weight(0);
         $cat->set_visible(1);
-        $cat->setGenerateCertificates(false);
+        $cat->setGenerateCertificates(0);
 
         return $cat;
     }

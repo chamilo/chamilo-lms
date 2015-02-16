@@ -590,7 +590,7 @@ if ($is_allowed_to_edit) {
 
 /*	TEMPLATE ACTION */
 //Only teacher and all users into their group
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)){
+if ($is_allowed_to_edit || $group_member_with_upload_rights || DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)){
     if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
 
         $document_id_for_template = intval($_GET['add_as_template']);

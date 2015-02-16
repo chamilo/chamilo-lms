@@ -25,11 +25,11 @@ $(function() {
             <div class="form-content">
                 <h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4>
                 <label class="control-label">{{ 'CourseName'|get_lang }}:</label>
-                <input type="text" id="course_name" />
+                <input type="text" id="course" />
                 <label class="control-label">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="price_min" class="span1"/>
+                <input type="text" id="coursepricemin" class="span1"/>
                 <label class="control-label">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="price_max" class="span1"/>
+                <input type="text" id="coursepricemax" class="span1"/>
                     {% for category in categories %}
                         <label class="control-label">{{ 'Categories'|get_lang }}:</label>
                         <select id="courses_category">
@@ -38,7 +38,7 @@ $(function() {
                         </select>
                     {% endfor %}
                 <br>
-                 <input type="button" class="btn btn-primary" value="{{ 'Search'|get_lang }}" id="confirm_filter" />
+                 <input type="button" class="filter btn btn-primary" value="{{ 'Search'|get_lang }}" id="courses_filter" />
             </div>
         </div>
     </div>
@@ -99,11 +99,11 @@ $(function() {
             <div class="form-content">
                 <h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4>
                 <label class="control-label">{{ 'SessionName'|get_lang }}:</label>
-                <input type="text" id="course_name" />
+                <input type="text" id="session" />
                 <label class="control-label">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="price_min" class="span1"/>
+                <input type="text" id="sessionpricemin" class="span1"/>
                 <label class="control-label">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="price_max" class="span1"/>
+                <input type="text" id="sessionpricemax" class="span1"/>
                     {% for category in categories %}
                         <label class="control-label">{{ 'Categories'|get_lang }}:</label>
                         <select id="courses_category">
@@ -112,7 +112,7 @@ $(function() {
                         </select>
                     {% endfor %}
                 <br>
-                 <input type="button" class="btn btn-primary" value="{{ 'Search'|get_lang }}" id="confirm_filter" />
+                 <input type="button" class="filter btn btn-primary" value="{{ 'Search'|get_lang }}" id="sessions_filter" />
             </div>
         </div>
     </div>

@@ -27,7 +27,7 @@ $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
 $plugin = BuyCoursesPlugin::create();
 $buy_name = $plugin->get_lang('Buy');
-
+error_log($_REQUEST['tab']);
 if ($_REQUEST['tab'] == 'sync') {
     $sql = "SELECT code, title FROM $tableCourse;";
     $res = Database::query($sql);

@@ -98,7 +98,16 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
-    $('#confirm_filter').click(function (e) {
+    $(".filter").click(function (e) {
+        var filterFields = $(this).siblings("input");
+        var filterFieldsData;
+        $.each(filterFields, function() {
+            console.log($(this));
+            //filterFieldsData.push($(this));
+
+        });
+
+
         var vcourse = $("#course_name").attr("value");
         var pmin = $("#price_min").attr("value");
         var pmax = $("#price_max").attr("value");

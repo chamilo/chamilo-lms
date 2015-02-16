@@ -21,15 +21,15 @@ $(function() {
 <div id="tabs-1">
 <div class="row">
     <div class="span3">
-        <div id="course_category_well" class="well">
+        <div class="category_well well">
             <div class="form-content">
                 <h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4>
                 <label class="control-label">{{ 'CourseName'|get_lang }}:</label>
-                <input type="text" id="course" />
+                <input type="text" class="name" />
                 <label class="control-label">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="coursepricemin" class="span1"/>
+                <input type="text" class="pricemin span1"/>
                 <label class="control-label">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="coursepricemax" class="span1"/>
+                <input type="text" class="pricemax span1"/>
                     {% for category in categories %}
                         <label class="control-label">{{ 'Categories'|get_lang }}:</label>
                         <select id="courses_category">
@@ -95,18 +95,18 @@ $(function() {
 {% if sessionsAreIncluded == "YES" %}
 <div id="tabs-2" class="row">
     <div class="span3">
-        <div id="course_category_well" class="well">
+        <div class="category_well well">
             <div class="form-content">
                 <h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4>
                 <label class="control-label">{{ 'SessionName'|get_lang }}:</label>
-                <input type="text" id="session" />
+                <input type="text" class="name" />
                 <label class="control-label">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="sessionpricemin" class="span1"/>
+                <input type="text" class="pricemin span1"/>
                 <label class="control-label">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="sessionpricemax" class="span1"/>
+                <input type="text" class="pricemax span1"/>
                     {% for category in categories %}
                         <label class="control-label">{{ 'Categories'|get_lang }}:</label>
-                        <select id="courses_category">
+                        <select id="sessions_category">
                             <option value="" selected="selected"></option>
                                 <option value="{{ category.code }}">{{ category.name }}</option>
                         </select>

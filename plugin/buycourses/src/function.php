@@ -27,7 +27,7 @@ $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
 $plugin = BuyCoursesPlugin::create();
 $buy_name = $plugin->get_lang('Buy');
-error_log($_REQUEST['tab']);
+
 if ($_REQUEST['tab'] == 'sync') {
     $sql = "SELECT code, title FROM $tableCourse;";
     $res = Database::query($sql);
@@ -46,48 +46,35 @@ if ($_REQUEST['tab'] == 'sync') {
 }
 
 if ($_REQUEST['tab'] == 'sessions_filter') {
-    $session = isset($_REQUEST['session']) ? Database::escape_string($_REQUEST['session']) : '';
-    $priceMin = isset($_REQUEST['pricemin']) ? Database::escape_string($_REQUEST['pricemin']) : '';
-    $priceMax = isset($_REQUEST['pricemax']) ? Database::escape_string($_REQUEST['pricemax']) : '';
-    $category = isset($_REQUEST['category']) ? Database::escape_string($_REQUEST['category']) : '';
+    $session = isset($_REQUEST['name']) ? Database::escape_string($_REQUEST['name']) : '';
+    $priceMin = isset($_REQUEST['pricemin']) ? floatval($_REQUEST['pricemin']) : 0;
+    $priceMax = isset($_REQUEST['pricemax']) ? floatval($_REQUEST['pricemax']) : 0;
+    //$category = isset($_REQUEST['category']) ? Database::escape_string($_REQUEST['category']) : '';
     $server = api_get_path(WEB_PATH);
 
-    $filter = '';
-    if ($session != '') {
-        $filter .= "b.name LIKE '%" . $session . "%'";
-    }
-    if ($priceMin != '') {
-        if ($filter == '') {
-            $filter .= "a.price >= '" . $priceMin . "'";
-        } else {
-            $filter .= " AND a.price >= '" . $priceMin . "'";
-        }
-    }
-
-    if ($priceMax != '') {
-        if ($filter == '') {
-            $filter .= "a.price <= '" . $priceMax . "'";
-        } else {
-            $filter .= " AND a.price <= '" . $priceMax . "'";
-        }
-    }
-
-    if ($category != '') {
-        if ($filter == '') {
-            $filter .= "b.category_code='" . $category . "'";
-        } else {
-            $filter .= " AND b.category_code='" . $category . "'";
-        }
-    }
-
-    if ($filter == '') {
-        $sql = "SELECT a.session_id, a.visible, a.price, b.*
+    $sql = "SELECT a.session_id, a.visible, a.price, b.*
             FROM $tableBuySession a, $tableSession b
             WHERE a.session_id = b.id AND a.visible = 1;";
-    } else {
-        $sql = "SELECT a.session_id, a.visible, a.price, b.*
-            FROM $tableBuySession a, $tableSession b
-            WHERE a.session_id = b.id AND a.visible = 1 AND " . $filter . ";";
+
+    $filter = "";
+    if (!empty($session)) {
+        $filter .= " AND b.name LIKE '%".$session."%'";
+    }
+
+    if ($priceMin > 0) {
+        $filter .= " AND a.price >= ".$priceMin;
+    }
+
+    if ($priceMax > 0) {
+        $filter .= " AND a.price <= ".$priceMax;
+    }
+
+    /*if (!empty($category)) {
+        $filter .= " AND b.category_code = '".$category."'";
+    }*/
+
+    if (!empty($filter)) {
+        $sql = substr_replace($sql, $filter.";", -1);
     }
 
     $resSessions = Database::query($sql);
@@ -106,7 +93,7 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
             // get course of current session
             $sql = "SELECT a.course_id, a.session_id, a.visible, a.price, b.*
             FROM $tableBuyCourse a, $tableCourse b
-            WHERE a.code = b.code AND a.code = '" . $rowSessionCourse['course_code'] . "' AND a.visible = 1;";
+            WHERE a.code = b.code AND a.code = '" . $rowSessionCourse['course_code'] . "';";
             $res = Database::query($sql);
             // loop inside a course of current session
             while ($row = Database::fetch_assoc($res)) {
@@ -168,60 +155,65 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
     $currencyType = findCurrency();
     $content = '';
     foreach ($auxSessions as $session) {
-        $content .= '<div class="well_border span8">';
-        $content .= '<div class="row">';
-        $content .= '<div class="span4 ">';
-        $content .= '<div class="categories-course-description">';
-        $content .= '<h3>'.$session['name'].'</h3>';
-        $content .= '<h5>'.get_lang('From').' '.$session['date_start'];
-        $content .= ' '.get_lang('Until').' '.$session['date_end'].'</h5>';
+        $content .= '<div class="span8 well-course">
+            <div class="row">
+                <div class="span4 ">
+                    <div class="categories-course-description">
+                        <h3>'.$session['name'].'</h3>
+                        <h5>'.get_lang('From').' '.$session['date_start'].
+                        ' '.get_lang('Until').' '.$session['date_end'].'</h5>';
         if ($session['enrolled'] == "YES") {
             $content .= '<span class="label label-info">'.$plugin->get_lang('TheUserIsAlreadyRegisteredInTheSession').'</span>';
         }
-        $content .= '</div>';
-        $content .= '</div>';
-        $content .= '<div class="span right">';
-        $content .= '<div class="sprice right">';
-        $content .= $session['price'].' '.$currencyType;
-        $content .= '</div>';
-        $content .= '<div class="cleared"></div>';
-        $content .= '<div class="btn-toolbar right">';
-        if ($session['enrolled'] == "NO") {
-            $content .= '<a class="btn btn-success" title=""';
-            $content .= 'href="'.$server.'plugin/buycourses/src/process.php?scode='.$session['session_id'].'">';
-            $content .= $buy_name;
-            $content .= '</a>';
+        if ($session['enrolled'] == "TMP") {
+            $content .= '<span class="label label-warning">'.$plugin->get_lang('WaitingToReceiveThePayment').'</span>';
         }
-        $content .= '</div>';
-        $content .= '</div>';
-        $content .= '</div>';
+        $content .= '</div>
+                </div>
+            <div class="span right">
+                <div class="sprice right">'.
+                    $session['price'].' '.$currencyType.'
+                </div>
+                <div class="cleared">
+                </div>
+                <div class="btn-group right">';
+        if ($session['enrolled'] == "NO") {
+            $content .= '<a class="btn btn-success" title="" href="'.$server.
+                        'plugin/buycourses/src/process.php?scode='.$session['session_id'].'">'.
+                            $buy_name.
+                        '</a>';
+        }
+        $content .= '</div>
+            </div>
+        </div>';
         $courses = $session['courses'];
         foreach ($courses as $course) {
-            $content .= '<div class="row">';
-            $content .= '<div class="span">';
-            $content .= '<div class="thumbnail">';
-            $content .= '<a class="ajax" rel="gb_page_center[778]" title=""';
-            $content .= 'href="'.$server.'plugin/buycourses/src/ajax.php?';
-            $content .= 'a=show_course_information&code='.$course['code'].'">';
-            $content .= '<img alt="" src="' . $server . $course['course_img'] . '">';
-            $content .= '</a>';
-            $content .= '</div>';
-            $content .= '</div>';
-            $content .= '<div class="span4">';
-            $content .= '<div class="categories-course-description">';
-            $content .= '<h3>' . $course['title'] . '</h3>';
-            $content .= '<h5>' . get_lang('Teacher') . ': ' . $course['teacher'] . '</h5>';
-            $content .= '</div>';
-            $content .= '</div>';
-            $content .= '<div class="span right">';
-            $content .= '<div class="cleared"></div>';
-            $content .= '<div class="btn-toolbar right">';
-            $content .= '<a class="ajax btn btn-primary" title=""';
-            $content .= 'href="'.$server.'plugin/buycourses/src/ajax.php?';
-            $content .= 'a=show_course_information&code='.$course['code'].'">'.get_lang('Description').'</a>';
-            $content .= '</div>';
-            $content .= '</div>';
-            $content .= '</div>';
+            $content .= '<div class="row">
+                <div class="span">
+                    <div class="thumbnail">
+                        <a class="ajax" rel="gb_page_center[778]" title=""
+                        href="'.$server.'plugin/buycourses/src/ajax.php?
+                        a=show_course_information&code='.$course['code'].'">
+                            <img alt="" src="' . $server . $course['course_img'] . '">
+                        </a>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="categories-course-description">
+                        <h3>'.$course['title'].'</h3>
+                        <h5>'.get_lang('Teacher').': '.$course['teacher'].'</h5>
+                    </div>
+                </div>
+                <div class="span right">
+                    <div class="cleared">
+                    </div>
+                    <div class="btn-group right">
+                        <a class="ajax btn btn-primary" title=""
+                        href="'.$server.'plugin/buycourses/src/ajax.php?
+                        a=show_course_information&code='.$course['code'].'">'.get_lang('Description').'</a>
+                    </div>
+                </div>
+            </div>';
         }
         $content .= '</div>';
     }
@@ -230,14 +222,14 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
 }
 
 if ($_REQUEST['tab'] == 'courses_filter') {
-    $course = isset($_REQUEST['course']) ? Database::escape_string($_REQUEST['course']) : '';
+    $course = isset($_REQUEST['name']) ? Database::escape_string($_REQUEST['name']) : '';
     $priceMin = isset($_REQUEST['pricemin']) ? floatval($_REQUEST['pricemin']) : 0;
     $priceMax = isset($_REQUEST['pricemax']) ? floatval($_REQUEST['pricemax']) : 0;
     /**
      * Deprecated since 2014-10-14
      */
     //$show = Database::escape_string($_REQUEST['show']);
-    $category = Database::escape_string($_REQUEST['category']);
+    //$category = Database::escape_string($_REQUEST['category']);
     $server = api_get_path(WEB_PATH);
 
     $sql = "SELECT a.course_id, a.visible, a.price, b.*
@@ -258,9 +250,9 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         $filter .= " AND a.price <= ".$priceMax;
     }
 
-    if (!empty($category)) {
+    /*if (!empty($category)) {
         $filter .= " AND b.category_code = '".$category."'";
-    }
+    }*/
 
     if (!empty($filter)) {
         $sql = substr_replace($sql, $filter.";", -1);

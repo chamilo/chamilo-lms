@@ -7,6 +7,3 @@
  */
 
 require_once api_get_path(SYS_PATH) . 'main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
-require_once api_get_path(PLUGIN_PATH) . 'createdrupaluser/src/HookCreateDrupalUser.php';
-require_once api_get_path(PLUGIN_PATH) . 'createdrupaluser/src/CreateDrupalUser.php';

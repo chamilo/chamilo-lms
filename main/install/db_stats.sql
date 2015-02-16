@@ -57,6 +57,7 @@ CREATE TABLE track_e_access (
   access_cours_code varchar(40) NOT NULL default '',
   access_tool varchar(30) default NULL,
   access_session_id int NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
   KEY access_cours_code (access_cours_code)
@@ -111,6 +112,7 @@ CREATE TABLE track_e_exercices (
   exe_exo_id mediumint unsigned NOT NULL default 0,
   exe_result float(6,2) NOT NULL default 0,
   exe_weighting float(6,2) NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (exe_id),
   KEY exe_user_id (exe_user_id),
   KEY exe_cours_id (exe_cours_id)
@@ -245,6 +247,7 @@ CREATE TABLE track_e_course_access (
   logout_course_date datetime default NULL,
   counter int NOT NULL,
   session_id int NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (course_access_id)
 );
 

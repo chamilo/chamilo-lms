@@ -343,18 +343,19 @@ function update_event_exercice(
         }
 
         $sql = "UPDATE $TABLETRACK_EXERCICES SET
-        		   exe_exo_id 			= '".Database::escape_string($exo_id)."',
-        		   exe_result			= '".Database::escape_string($score)."',
-        		   exe_weighting 		= '".Database::escape_string($weighting)."',
-        		   session_id			= '".Database::escape_string($session_id)."',
-        		   orig_lp_id 			= '".Database::escape_string($learnpath_id)."',
-        		   orig_lp_item_id 		= '".Database::escape_string($learnpath_item_id)."',
+        		   exe_exo_id = '".Database::escape_string($exo_id)."',
+        		   exe_result = '".Database::escape_string($score)."',
+        		   exe_weighting = '".Database::escape_string($weighting)."',
+        		   session_id = '".Database::escape_string($session_id)."',
+        		   orig_lp_id = '".Database::escape_string($learnpath_id)."',
+        		   orig_lp_item_id = '".Database::escape_string($learnpath_item_id)."',
                    orig_lp_item_view_id = '".Database::escape_string($learnpath_item_view_id)."',
-        		   exe_duration 		= '".Database::escape_string($duration)."',
-        		   exe_date				= '".$end_date."',
-        		   status 				= '".$status."',
-        		   questions_to_check 	= '".$remind_list."',
-        		   data_tracking    	= '".implode(',', $question_list)."'
+        		   exe_duration = '".Database::escape_string($duration)."',
+        		   exe_date = '".$end_date."',
+        		   status = '".$status."',
+        		   questions_to_check = '".$remind_list."',
+        		   data_tracking = '".implode(',', $question_list)."',
+                   user_ip = '" . Database::escape_string(api_get_real_ip()) . "'
         		 WHERE exe_id = '".Database::escape_string($exeid)."'";
         $res = Database::query($sql);
 
@@ -415,10 +416,14 @@ function create_event_exercice($exo_id)
     } else {
         $expired_date = '0000-00-00 00:00:00';
     }
-    $sql = "INSERT INTO $tbl_track_exe ( exe_user_id, exe_cours_id, expired_time_control, exe_exo_id, session_id)
-        	VALUES (  $uid,  '".api_get_course_id()."' ,'$expired_date','$exo_id','".api_get_session_id()."')";
-    Database::query($sql);
-    $id= Database::insert_id();
+    $id = Database::insert($tbl_track_exe, array(
+        'exe_user_id' => $uid,
+        'exe_cours_id' => api_get_course_id(),
+        'expired_time_control' => $expired_date,
+        'exe_exo_id' => $exo_id,
+        'session_id' => api_get_session_id(),
+        'user_ip' => Database::escape_string(api_get_real_ip())
+    ));
     return $id;
 }
 

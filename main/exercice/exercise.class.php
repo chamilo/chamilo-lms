@@ -1763,6 +1763,8 @@ class Exercise
         $safe_lp_item_id = intval($safe_lp_item_id);
         $safe_lp_item_view_id = intval($safe_lp_item_view_id);
 
+        $trackValues = array();
+
         if (empty($safe_lp_id)) {
             $safe_lp_id = 0;
         }
@@ -1773,19 +1775,24 @@ class Exercise
             $clock_expired_time = 0;
         }
         if ($this->expired_time != 0) {
-            $sql_fields = "expired_time_control, ";
-            $sql_fields_values = "'"."$clock_expired_time"."',";
-        } else {
-            $sql_fields = "";
-            $sql_fields_values = "";
+            $trackValues['expired_time_control'] = $clock_expired_time;
         }
         $questionList = array_map('intval', $questionList);
 
-        $weight = Database::escape_string($weight);
-        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, orig_lp_item_view_id, exe_weighting)
-                VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "', '" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id', '$safe_lp_item_view_id', '$weight')";
-        Database::query($sql);
-        $id = Database::insert_id();
+        $trackValues['exe_exo_id'] = $this->id;
+        $trackValues['exe_user_id'] = api_get_user_id();
+        $trackValues['exe_cours_id'] = api_get_course_id();
+        $trackValues['status'] = 'incomplete';
+        $trackValues['session_id'] = api_get_session_id();
+        $trackValues['data_tracking'] = implode(',', $questionList);
+        $trackValues['start_date'] = api_get_utc_datetime();
+        $trackValues['orig_lp_id'] = $safe_lp_id;
+        $trackValues['orig_lp_item_id'] = $safe_lp_item_id;
+        $trackValues['orig_lp_item_view_id'] = $safe_lp_item_view_id;
+        $trackValues['exe_weighting'] = Database::escape_string($weight);
+        $trackValues['user_ip'] = Database::escape_string(api_get_real_ip());
+
+        $id = Database::insert($track_exercises, $trackValues);
         return $id;
     }
 

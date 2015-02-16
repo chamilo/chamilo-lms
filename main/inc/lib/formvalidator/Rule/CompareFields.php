@@ -1,5 +1,6 @@
 <?php
-require_once 'HTML/QuickForm/Rule.php';
+/* For licensing terms, see /license.txt */
+
 /**
  * QuickForm rule to check a date
  */

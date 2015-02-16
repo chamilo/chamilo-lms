@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'HTML/QuickForm/Rule/Compare.php';
-
 /**
  * Class HTML_QuickForm_Rule_DateCompare
  * @author Julio Montoya

@@ -73,10 +73,6 @@ function confirmation(name) {
 </script>';
 
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'fileManage.lib.php';
-require_once $libpath.'fileUpload.lib.php';
-require_once $libpath.'mail.lib.inc.php';
-
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 
@@ -211,6 +207,8 @@ $status[COURSEMANAGER] 	= get_lang('Teacher');
 $status[STUDENT] 		= get_lang('Learner');
 $status[DRH] 			= get_lang('Drh');
 $status[SESSIONADMIN] 	= get_lang('SessionsAdmin');
+$status[STUDENT_BOSS] 	= get_lang('RoleStudentBoss');
+$status[INVITEE] 	= get_lang('Invitee');
 
 $form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();','class'=>'chzn-select'));
 

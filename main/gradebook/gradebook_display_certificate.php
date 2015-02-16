@@ -16,10 +16,6 @@ api_protect_course_script();
 set_time_limit(0);
 ini_set('max_execution_time', 0);
 
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_data_generator.class.php';
-
 //extra javascript functions for in html head:
 $htmlHeadXtra[] ="<script>
 function confirmation() {
@@ -51,7 +47,15 @@ switch ($action) {
         break;
     case 'generate_all_certificates':
         $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
-        Category::generateCertificatesInUserList($cat_id, $user_list);
+        if (!empty($user_list)) {
+            foreach ($user_list as $user_info) {
+                if ($user_info['status'] == INVITEE) {
+                    continue;
+                }
+
+                Category::register_user_certificate($cat_id, $user_info['user_id']);
+            }
+        }
         break;
     case 'delete_all_certificates':
         Category::deleteAllCertificates($cat_id);
@@ -146,21 +150,21 @@ if ($filter) {
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
          if ($officialCode == 'all') {
-            $certificate_list = get_list_users_certificates($cat_id);
+            $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
         } else {
              $userList = UserManager::getUsersByOfficialCode($officialCode);
              if (!empty($userList)) {
-                 $certificate_list = get_list_users_certificates(
+                 $certificate_list = GradebookUtils::get_list_users_certificates(
                      $cat_id,
                      $userList
                  );
              }
          }
     } else {
-        $certificate_list = get_list_users_certificates($cat_id);
+        $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
     }
 } else {
-    $certificate_list = get_list_users_certificates($cat_id);
+    $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
 }
 
 echo '<div class="btn-group">';
@@ -191,7 +195,7 @@ if (count($certificate_list) == 0 ) {
         echo '<tr><td>
             <table class="data_table">';
 
-        $list_certificate = get_list_gradebook_certificates_by_user_id($value['user_id'], $cat_id);
+        $list_certificate = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $cat_id);
         foreach ($list_certificate as $value_certificate) {
             echo '<tr>';
             echo '<td width="50%">'.get_lang('Score').' : '.$value_certificate['score_certificate'].'</td>';

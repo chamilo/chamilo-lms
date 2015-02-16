@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *  Shows the exercise results
  *
@@ -17,14 +18,7 @@ use \ChamiloSession as Session;
 
 $language_file = array('exercice');
 
-// including additional libraries
-require_once 'exercise.class.php';
-require_once 'question.class.php'; //also defines answer type constants
-require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
-
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (empty($origin) ) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
@@ -73,7 +67,7 @@ if (api_is_course_session_coach(
 }
 
 $maxEditors = isset($_configuration['exercise_max_fckeditors_in_page']) ? $_configuration['exercise_max_fckeditors_in_page'] : 0;
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
@@ -90,6 +84,10 @@ $learnpath_id       = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];
 $lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
 $current_user_id    = api_get_user_id();
+
+if (apiIsExcludedUserType(true, $student_id)) {
+    api_not_allowed(true);
+}
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
@@ -512,7 +510,7 @@ foreach ($questionList as $questionId) {
 	$comnt = null;
 
     if ($show_results) {
-		if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
+		if ($is_allowedToEdit && $locked == false && !api_is_drh() && !api_is_student_boss()) {
 			$name = "fckdiv".$questionId;
 			$marksname = "marksName".$questionId;
 			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
@@ -546,7 +544,6 @@ foreach ($questionList as $questionId) {
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
 			$comnt = get_comments($id, $questionId);
 			$default = array('comments_'.$questionId =>  $comnt);
-
             if ($useAdvancedEditor) {
                 $feedback_form->addElement(
                     'html_editor',
@@ -562,7 +559,6 @@ foreach ($questionList as $questionId) {
             } else {
                 $feedback_form->addElement('textarea', 'comments_' . $questionId);
             }
-
 			$feedback_form->addElement('html','<br>');
 			$feedback_form->setDefaults($default);
 			$feedback_form->display();
@@ -712,7 +708,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 	$marksid = implode(",",$arrmarks);
 }
 
-if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
+if ($is_allowedToEdit && $locked == false && !api_is_drh() && !api_is_student_boss()) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
 		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$learnpath_id.'">';

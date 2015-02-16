@@ -17,8 +17,6 @@ session_cache_limiter('public');
 require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Cache-Control: public');
@@ -46,7 +44,7 @@ if (is_dir($full_file_name)) {
 	//create the path
 	$document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
 	//redirect
-	header('Location: '.$document_explorer); 
+	header('Location: '.$document_explorer);
 }
 
 $tbl_blogs_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
@@ -55,12 +53,12 @@ $course_id = api_get_course_int_id();
 // launch event
 event_download($doc_url);
 
-$sql = 'SELECT filename FROM '.$tbl_blogs_attachment.' 
+$sql = 'SELECT filename FROM '.$tbl_blogs_attachment.'
         WHERE c_id = '.$course_id.' AND path LIKE BINARY "'.Database::escape_string($doc_url).'"';
 $result = Database::query($sql);
 if (Database::num_rows($result) > 0) {
     $row = Database::fetch_array($result);
-    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/')) {    
+    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/')) {
         DocumentManager::file_send_for_download($full_file_name, TRUE, $row['filename']);
     }
 }

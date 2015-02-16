@@ -15,8 +15,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
-
 $group_id = intval($_GET['id']);
 $topic_id = intval($_GET['topic_id']);
 $message_id = intval($_GET['msg_id']);

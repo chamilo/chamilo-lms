@@ -1,30 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> - updated ImsAnswerHotspot to match QTI norms
- * @package chamilo.exercise
- */
-/**
- * Code
- */
-
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/exercise.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/question.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotspot.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/unique_answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/multiple_answer.class.php');
-//require_once(api_get_path(SYS_CODE_PATH).'/exercice/multiple_answer_combination.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/matching.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/freeanswer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/fill_blanks.class.php');
-//include_once $path . '/../../lib/answer_multiplechoice.class.php';
-//include_once $path . '/../../lib/answer_truefalse.class.php';
-//include_once $path . '/../../lib/answer_fib.class.php';
-//include_once $path . '/../../lib/answer_matching.class.php';
-/**
- *
  * @package chamilo.exercise
  */
 class Ims2Question extends Question

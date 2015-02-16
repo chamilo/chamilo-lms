@@ -16,8 +16,6 @@ require_once '../inc/global.inc.php';
 
 $current_course_tool  = TOOL_NOTEBOOK;
 
-require_once api_get_path(LIBRARY_PATH).'notebook.lib.php';
-
 // The section (tabs)
 $this_section = SECTION_COURSES;
 

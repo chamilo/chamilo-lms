@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
+use CpChart\Classes\pData as pData;
+use CpChart\Classes\pImage as pImage;
+use CpChart\Classes\pCache as pCache;
 
 /**
  *  Class Tracking
@@ -3914,7 +3915,7 @@ class Tracking
         $orderBy = " ORDER BY name ";
         $extraInnerJoin = null;
 
-        if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
+        if (!empty($session_id)) {
             $orderBy = " ORDER BY s.id, position ";
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src ON (cu.course_code = src.course_code AND src.id_session = $session_id) ";
@@ -3957,7 +3958,7 @@ class Tracking
                 $my_course_data[$course_data['id']] = $course_data['title'];
             }
 
-            if (!SessionManager::orderCourseIsEnabled() && empty($session_id)) {
+            if (empty($session_id)) {
                 $my_course_data = utf8_sort($my_course_data);
             }
 
@@ -4572,86 +4573,163 @@ class Tracking
 
     /**
      * Generates an histogram
-     *
-     * @param 	array	list of exercise names
-     * @param 	array	my results 0 to 100
-     * @param 	array	average scores 0-100
+     * @param    array    list of exercise names
+     * @param    array    my results 0 to 100
+     * @param    array    average scores 0-100
+     * @return string
      */
     static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
+        /* Create and populate the pData object */
+        $myData = new pData();
+        $myData->addPoints($names, 'Labels');
+        $myData->addPoints($my_results, 'Serie1');
+        $myData->addPoints($average, 'Serie2');
+        $myData->setSerieWeight('Serie1', 1);
+        $myData->setSerieTicks('Serie2', 4);
+        $myData->setSerieDescription('Labels', 'Months');
+        $myData->setAbscissa('Labels');
+        $myData->setSerieDescription('Serie1', get_lang('MyResults'));
+        $myData->setSerieDescription('Serie2', get_lang('AverageScore'));
+        $myData->setAxisUnit(0, '%');
+        $myData->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
+        // Cache definition
+        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+        $chartHash = $myCache->getHash($myData);
 
-        $cache = new pCache();
-
-        // Dataset definition
-        $data_set = new pData();
-
-        // Dataset definition
-        $data_set->AddPoint($average,	 "Serie1");
-        $data_set->AddPoint($my_results, "Serie2");
-        $data_set->AddPoint($names,		 "Serie3");
-        $data_set->AddAllSeries();
-        $data_set->SetAbsciseLabelSerie('Serie3');
-        $data_set->SetSerieName(get_lang('AverageScore'),"Serie1");
-        $data_set->SetSerieName(get_lang('MyResults'),	 "Serie2");
-
-        //$data_set->SetYAxisName(get_lang("Percentage"));
-
-        $data_set->SetYAxisUnit("%");
-
-        // Initialise the graph
-        $main_width    = 860;
-        $main_height   = 500;
-        $y_label_angle = 50;
-        $data_set->RemoveSerie("Serie3");
-        $graph = new pChart($main_width, $main_height);
-        //See 3.2 BT#2797
-        $graph->setFixedScale(0,100);
-
-        $graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-        $graph->setGraphArea(65,50,$main_width-20, $main_height-140);
-
-        $graph->drawFilledRoundedRectangle(7,7,$main_width-7,$main_height-7,5,240,240,240);
-        $graph->drawRoundedRectangle(5,5,$main_width-5,$main_height -5,5,230,230,230);
-        $graph->drawGraphArea(255,255,255,TRUE);
-
-        //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0, SCALE_ADDALL
-        $graph->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL ,150,150,150,TRUE,$y_label_angle,1, TRUE);
-        $graph->drawGrid(4,TRUE,230,230,230,70);
-
-        // Draw the 0 line
-        $graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);
-        $graph->drawTreshold(0,143,55,72,TRUE,TRUE);
-
-        // Draw the cubic curve graph
-        $graph->drawLineGraph($data_set->GetData(),$data_set->GetDataDescription());
-        $graph->drawPlotGraph($data_set->GetData(),$data_set->GetDataDescription(),1,1,230,255,255);
-
-        // Finish the graph
-        $graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);
-        $graph->drawLegend($main_width - 150,70,$data_set->GetDataDescription(),255,255,255);
-
-        $graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',11);
-        $graph->drawTitle(50, 30, get_lang('ExercisesInTimeProgressChart'), 50,50,50,$main_width-110, true);
-
-        // $main_graph = new pChart($main_width,$main_height);
-        $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
-        $graph_id = 'generate_session_exercise_graph'.$courseCode.'-'.intval($_GET['session_id']).'-'.api_get_user_id();
-        if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-        //if (0) {
+        if ($myCache->isInCache($chartHash)) {
             //if we already created the img
-            //echo 'in cache';
-            $img_file = $cache->GetHash($graph_id,$data_set->GetData());
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $myCache->saveFromCache($chartHash, $imgPath);
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         } else {
-            $cache->WriteToCache($graph_id, $data_set->GetData(), $graph);
-            ob_start();
-            $graph->Stroke();
-            ob_end_clean();
-            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+            /* Define width, height and angle */
+            $mainWidth = 860;
+            $mainHeight = 500;
+            $angle = 50;
+
+            /* Create the pChart object */
+            $myPicture = new pImage($mainWidth, $mainHeight, $myData);
+
+            /* Turn of Antialiasing */
+            $myPicture->Antialias = false;
+
+            /* Draw the background */
+            $settings = array('R' => 255, 'G' => 255, 'B' => 255);
+            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
+
+            /* Add a border to the picture */
+            $myPicture->drawRectangle(
+                0,
+                0,
+                $mainWidth - 1,
+                $mainHeight - 1,
+                array('R' => 0, 'G' => 0, 'B' => 0)
+            );
+
+            /* Set the default font */
+            $myPicture->setFontProperties(
+                array(
+                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    'FontSize' => 10)
+            );
+            /* Write the chart title */
+            $myPicture->drawText(
+                $mainWidth / 2,
+                30,
+                get_lang('ExercisesInTimeProgressChart'),
+                array(
+                    'FontSize' => 12,
+                    'Align' => TEXT_ALIGN_BOTTOMMIDDLE
+                )
+            );
+
+            /* Set the default font */
+            $myPicture->setFontProperties(
+                array(
+                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    'FontSize' => 6
+                )
+            );
+
+            /* Define the chart area */
+            $myPicture->setGraphArea(60, 60, $mainWidth - 60, $mainHeight - 150);
+
+            /* Draw the scale */
+            $scaleSettings = array(
+                'XMargin' => 10,
+                'YMargin' => 10,
+                'Floating' => true,
+                'GridR' => 200,
+                'GridG' => 200,
+                'GridB' => 200,
+                'DrawSubTicks' => true,
+                'CycleBackground' => true,
+                'LabelRotation' => $angle,
+                'Mode' => SCALE_MODE_ADDALL_START0,
+            );
+            $myPicture->drawScale($scaleSettings);
+
+            /* Turn on Antialiasing */
+            $myPicture->Antialias = true;
+
+            /* Enable shadow computing */
+            $myPicture->setShadow(
+                true,
+                array(
+                    'X' => 1,
+                    'Y' => 1,
+                    'R' => 0,
+                    'G' => 0,
+                    'B' => 0,
+                    'Alpha' => 10
+                )
+            );
+
+            /* Draw the line chart */
+            $myPicture->setFontProperties(
+                array(
+                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                    'FontSize' => 10
+                )
+            );
+            $myPicture->drawSplineChart();
+            $myPicture->drawPlotChart(
+                array(
+                    'DisplayValues' => true,
+                    'PlotBorder' => true,
+                    'BorderSize' => 1,
+                    'Surrounding' => -60,
+                    'BorderAlpha' => 80
+                )
+            );
+
+            /* Write the chart legend */
+            $myPicture->drawLegend(
+                $mainWidth / 2 + 50,
+                50,
+                array(
+                    'Style' => LEGEND_BOX,
+                    'Mode' => LEGEND_HORIZONTAL,
+                    'FontR' => 0,
+                    'FontG' => 0,
+                    'FontB' => 0,
+                    'R' => 220,
+                    'G' => 220,
+                    'B' => 220,
+                    'Alpha' => 100
+                )
+            );
+
+            $myCache->writeToCache($chartHash, $myPicture);
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $myCache->saveFromCache($chartHash, $imgPath);
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         }
-        $html = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
+
+        $html = '<img src="' . $imgPath . '">';
+
         return $html;
     }
 
@@ -4662,10 +4740,6 @@ class Tracking
      */
     static function generate_exercise_result_thumbnail_graph($attempts)
     {
-        require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
-
         $exercise_title = $attempts['title'];
         $attempts       = $attempts['data'];
         $my_exercise_result_array = $exercise_result = array();
@@ -4734,49 +4808,106 @@ class Tracking
             }
         }
 
-        $cache = new pCache();
-
         // Dataset definition
-        $data_set = new pData();
-        $data_set->AddPoint($final_array,"Serie1");
-        $data_set->AddPoint($my_final_array,"Serie2");
-        //$data_set->AddPoint($x_axis,"Serie3");
-        $data_set->AddAllSeries();
+        $dataSet = new pData();
+        $dataSet->addPoints($final_array, 'Serie1');
+        $dataSet->addPoints($my_final_array, 'Serie2');
+        $dataSet->normalize(100, "%");
+        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
 
-        // Initialise the graph
-
-        $main_width  = 80;
-        $main_height = 35;
-
-        $thumbnail_graph = new pChart($main_width, $main_height);
-
-        $thumbnail_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-        //$thumbnail_graph->setGraphArea(50,30,680,200);
-        $thumbnail_graph->drawFilledRoundedRectangle(2,2,$main_width-2,$main_height-2,2,230,230,230);
-        $thumbnail_graph->setGraphArea(5,5,$main_width-5,$main_height-5);
-        $thumbnail_graph->drawGraphArea(255,255,255);
-
-        //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0
-        $thumbnail_graph->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALLSTART0, 150,150,150,FALSE,0,1,TRUE);
-
-        $thumbnail_graph->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);
-
-        // Finish the graph
-        $graph_id = 'thumbnail_exercise_result_graph_'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
-
-        if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-            //if (0) {
-            //if we already created the img
-            //echo 'in cache';
-            $img_file = $cache->GetHash($graph_id,$data_set->GetData());
+        // Cache definition
+        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+        $chartHash = $myCache->getHash($dataSet);
+        if ($myCache->isInCache($chartHash)) {
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $myCache->saveFromCache($chartHash, $imgPath);
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         } else {
-            $cache->WriteToCache($graph_id, $data_set->GetData(), $thumbnail_graph);
-            ob_start();
-            $thumbnail_graph->Stroke();
-            ob_end_clean();
-            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+            /* Create the pChart object */
+            $widthSize = 80;
+            $heightSize = 35;
+            $fontSize = 2;
+
+            $myPicture = new pImage($widthSize, $heightSize, $dataSet);
+
+            /* Turn of Antialiasing */
+            $myPicture->Antialias = false;
+
+            /* Add a border to the picture */
+            $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
+
+            /* Set the default font */
+            $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => $fontSize));
+
+            /* Do not write the chart title */
+
+            /* Define the chart area */
+            $myPicture->setGraphArea(5, 5, $widthSize - 5, $heightSize - 5);
+
+            /* Draw the scale */
+            $scaleSettings = array(
+                'GridR' => 200,
+                'GridG' => 200,
+                'GridB' => 200,
+                'DrawSubTicks' => true,
+                'CycleBackground' => true,
+                'Mode' => SCALE_MODE_MANUAL,
+                'ManualScale' => array(
+                    '0' => array(
+                        'Min' => 0,
+                        'Max' => 100
+                    )
+                )
+            );
+            $myPicture->drawScale($scaleSettings);
+
+            /* Turn on shadow computing */
+            $myPicture->setShadow(
+                true,
+                array(
+                    'X' => 1,
+                    'Y' => 1,
+                    'R' => 0,
+                    'G' => 0,
+                    'B' => 0,
+                    'Alpha' => 10
+                )
+            );
+
+            /* Draw the chart */
+            $myPicture->setShadow(
+                true,
+                array(
+                    'X' => 1,
+                    'Y' => 1,
+                    'R' => 0,
+                    'G' => 0,
+                    'B' => 0,
+                    'Alpha' => 10
+                )
+            );
+            $settings = array(
+                'DisplayValues' => true,
+                'DisplaySize' => $fontSize,
+                'DisplayR' => 0,
+                'DisplayG' => 0,
+                'DisplayB' => 0,
+                'DisplayOrientation' => ORIENTATION_HORIZONTAL,
+                'Gradient' => false,
+                'Surrounding' => 5,
+                'InnerSurrounding' => 5
+            );
+            $myPicture->drawStackedBarChart($settings);
+
+            /* Save and write in cache */
+            $myCache->writeToCache($chartHash, $myPicture);
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $myCache->saveFromCache($chartHash, $imgPath);
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         }
-        $html = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
+        $html = '<img src="' . $imgPath . '" >';
+
         return $html;
     }
 
@@ -4786,10 +4917,6 @@ class Tracking
      */
     static function generate_exercise_result_graph($attempts)
     {
-        require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
-
         $exercise_title = strip_tags($attempts['title']);
         $attempts       = $attempts['data'];
         $my_exercise_result_array = $exercise_result = array();
@@ -4858,71 +4985,109 @@ class Tracking
             }
         }
 
-        $cache = new pCache();
-
         // Dataset definition
-        $data_set = new pData();
-        $data_set->AddPoint($final_array,"Serie1");
-        $data_set->AddPoint($my_final_array,"Serie2");
-        $data_set->AddPoint($x_axis,"Serie3");
-        $data_set->AddAllSeries();
+        $dataSet = new pData();
+        $dataSet->addPoints($final_array, 'Serie1');
+        $dataSet->addPoints($my_final_array, 'Serie2');
+        $dataSet->addPoints($x_axis, 'Serie3');
 
-        $data_set->SetAbsciseLabelSerie('Serie3');
-        $data_set->SetSerieName(get_lang('Score'),"Serie1");
-        $data_set->SetSerieName(get_lang('MyResults'),"Serie2");
+        $dataSet->setSerieDescription('Serie1', get_lang('Score'));
+        $dataSet->setSerieDescription('Serie2', get_lang('MyResults'));
+        $dataSet->setAbscissa('Serie3');
 
-        $data_set->SetXAxisName(get_lang("Score"));
+        $dataSet->setXAxisName(get_lang('Score'));
+        $dataSet->normalize(100, "%");
 
-        // Initialise the graph
-        $main_width  = 500;
-        $main_height = 250;
+        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
 
-        $main_graph = new pChart($main_width,$main_height);
-
-        $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-        $main_graph->setGraphArea(50,30, $main_width -20,$main_height -50);
-
-        $main_graph->drawFilledRoundedRectangle(10,10, $main_width- 10,$main_height -10,5,240,240,240);
-        $main_graph->drawRoundedRectangle(7,7,$main_width - 7,$main_height  - 7,5,230,230,230);
-
-        $main_graph->drawGraphArea(255,255,255,TRUE);
-
-        //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0
-        $main_graph->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_ADDALLSTART0, 150,150,150,TRUE,0,1,TRUE);
-
-        $main_graph->drawGrid(4,TRUE,230,230,230,50);
-
-        // Draw the 0 line
-        $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);
-        //  $main_graph->drawTreshold(0,143,55,72,TRUE,TRUE);
-
-        // Draw the bar graph
-        $data_set->RemoveSerie("Serie3");
-
-        //$main_graph->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);
-
-        //$main_graph->drawStackedBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);
-        $main_graph->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);
-
-        // Finish the graph
-        $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-        $main_graph->drawLegend($main_width - 120,$main_height -100,$data_set->GetDataDescription(),255,255,255);
-        $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-        $main_graph->drawTitle(180,22,$exercise_title,50,50,50);
-        $graph_id = 'exercise_result_graph'.Security::remove_XSS($_GET['course']).'-'.intval($_GET['session_id']).'-'.api_get_user_id();
-        if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-            //if (0) {
-            //if we already created the img
-            //echo 'in cache';
-            $img_file = $cache->GetHash($graph_id,$data_set->GetData());
+        // Cache definition
+        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+        $chartHash = $myCache->getHash($dataSet);
+        if ($myCache->isInCache($chartHash)) {
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $myCache->saveFromCache($chartHash, $imgPath);
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         } else {
-            $cache->WriteToCache($graph_id, $data_set->GetData(), $main_graph);
-            ob_start();
-            $main_graph->Stroke();
-            ob_end_clean();
-            $img_file = $cache->GetHash($graph_id, $data_set->GetData());
+            /* Create the pChart object */
+            $widthSize = 480;
+            $heightSize = 250;
+            $fontSize = 8;
+
+            $myPicture = new pImage($widthSize, $heightSize, $dataSet);
+
+            /* Turn of Antialiasing */
+            $myPicture->Antialias = false;
+
+            /* Add a border to the picture */
+            $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
+
+            /* Set the default font */
+            $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
+
+            /* Write the chart title */
+            $myPicture->drawText(
+                250,
+                20,
+                $exercise_title,
+                array(
+                    'FontSize' => 12,
+                    'Align' => TEXT_ALIGN_BOTTOMMIDDLE
+                )
+            );
+
+            /* Define the chart area */
+            $myPicture->setGraphArea(50, 50, $widthSize - 20, $heightSize - 30);
+
+            /* Draw the scale */
+            $scaleSettings = array(
+                'GridR' => 200,
+                'GridG' => 200,
+                'GridB' => 200,
+                'DrawSubTicks' => true,
+                'CycleBackground' => true,
+                'Mode' => SCALE_MODE_MANUAL,
+                'ManualScale' => array(
+                    '0' => array(
+                        'Min' => 0,
+                        'Max' => 100
+                    )
+                )
+            );
+            $myPicture->drawScale($scaleSettings);
+
+            /* Turn on shadow computing */
+            $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+
+            /* Draw the chart */
+            $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+            $settings = array(
+                'DisplayValues' => true,
+                'DisplaySize' => $fontSize,
+                'DisplayR' => 0,
+                'DisplayG' => 0,
+                'DisplayB' => 0,
+                'DisplayOrientation' => ORIENTATION_HORIZONTAL,
+                'Gradient' => false,
+                'Surrounding' => 30,
+                'InnerSurrounding' => 25
+            );
+            $myPicture->drawStackedBarChart($settings);
+
+            $legendSettings = array(
+                'Mode' => LEGEND_HORIZONTAL,
+                'Style' => LEGEND_NOBORDER,
+            );
+            $myPicture->drawLegend($widthSize / 2, 30, $legendSettings);
+
+            /* Write and save into cache */
+            $myCache->writeToCache($chartHash, $myPicture);
+            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+            $myCache->saveFromCache($chartHash, $imgPath);
+            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
         }
-        $html = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
+        $html = '<img src="' . $imgPath . '" >';
+
         return $html;
     }
 
@@ -4984,8 +5149,6 @@ class Tracking
         $tquiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $ttrack_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $ttrack_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
         $sessions = array();
         $courses = array();
@@ -5711,9 +5874,10 @@ class TrackingCourseLog
      * @param $number_of_items
      * @param $column
      * @param $direction
+     * @param $includeInvitedUsers boolean Whether include the invited users
      * @return array
      */
-    public static function get_user_data($from, $number_of_items, $column, $direction)
+    public static function get_user_data($from, $number_of_items, $column, $direction, $includeInvitedUsers = false)
     {
         global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id;
 
@@ -5749,13 +5913,19 @@ class TrackingCourseLog
     		$url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
     	}
 
+        $invitedUsersCondition = '';
+
+        if (!$includeInvitedUsers) {
+            $invitedUsersCondition = " AND user.status != " . INVITEE;
+        }
+
     	$sql = "SELECT  user.user_id as user_id,
                     user.official_code  as col0,
                     user.lastname       as col1,
                     user.firstname      as col2,
                     user.username       as col3
                 FROM $tbl_user as user $url_table
-    	        $condition_user $url_condition";
+    	        $condition_user $url_condition $invitedUsersCondition";
 
     	if (!in_array($direction, array('ASC','DESC'))) {
     		$direction = 'ASC';

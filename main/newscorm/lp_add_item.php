@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously
  * learnpath_handler.php
@@ -124,6 +125,12 @@ $(function() {
         window.location.href = $(\'a\', this).attr(\'href\');
     });
 });
+
+$(document).on("ready", function() {
+    CKEDITOR.on("instanceReady", function (e) {
+        showTemplates();
+    });
+});
 </script>';
 
 /* Constants and variables */
@@ -139,7 +146,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 if ($action == 'add' && $type == 'learnpathitem') {
      $htmlHeadXtra[] = "<script type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
+if ((!$is_allowed_to_edit)) {
     error_log('New LP - User not authorized in lp_add_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
@@ -249,7 +256,7 @@ $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 // Show the template list.
 if ($type == 'document' && !isset($_GET['file'])) {
     // Show the template list.
-    echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
+    echo '<div id="frmModel" class="lp-add-item"></div>';
 }
 
 echo '</div>';

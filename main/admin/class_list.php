@@ -69,9 +69,6 @@ function modify_filter($class_id) {
     return $result;
 }
 
-require api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-
 $tool_name = get_lang('ClassList');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 

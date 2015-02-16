@@ -47,15 +47,10 @@
 
 use \ChamiloSession as Session;
 
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-
 // Name of the language file that needs to be included
 $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 $current_course_tool  = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 
@@ -69,8 +64,6 @@ if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /*  stripslashes POST data  */
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	foreach($_POST as $key=>$val) {

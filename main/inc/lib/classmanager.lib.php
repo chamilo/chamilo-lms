@@ -1,11 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-* This is the static class library for this application.
-* @package     chamilo.library
-*/
-/**
- * Code
+ * Class ClassManager
  */
 class ClassManager
 {
@@ -15,7 +12,7 @@ class ClassManager
      * php-function.
      */
     public static function get_class_info($class_id) {
-        $class_id = intval($class_id);        
+        $class_id = intval($class_id);
         $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
         $sql = "SELECT * FROM $table_class WHERE id='".$class_id."'";
         $res = Database::query($sql);
@@ -27,7 +24,7 @@ class ClassManager
      * @param int $class_id The class id
      */
     public static function set_name($name, $class_id) {
-        $class_id = intval($class_id);        
+        $class_id = intval($class_id);
         $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
         $sql = "UPDATE $table_class SET name='".Database::escape_string($name)."' WHERE id='".$class_id."'";
         $res = Database::query($sql);
@@ -59,7 +56,7 @@ class ClassManager
      * class was subscibed to
      */
     public static function delete_class($class_id) {
-        $class_id = intval($class_id);        
+        $class_id = intval($class_id);
         $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
         $table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
         $table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
@@ -76,7 +73,7 @@ class ClassManager
      * @return array
      */
     public static function get_users($class_id) {
-        $class_id = intval($class_id);        
+        $class_id = intval($class_id);
         $table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT * FROM $table_class_user cu, $table_user u WHERE cu.class_id = '".$class_id."' AND cu.user_id = u.user_id";
@@ -111,9 +108,9 @@ class ClassManager
      * @param int $class_id The class id
      */
     public static function unsubscribe_user($user_id, $class_id) {
-        $class_id = intval($class_id);        
+        $class_id = intval($class_id);
         $user_id  = intval($user_id);
-        
+
         $table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
         $table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
         $courses = ClassManager :: get_courses($class_id);
@@ -138,7 +135,7 @@ class ClassManager
      * @return array
      */
     public static function get_courses($class_id) {
-        $class_id = intval($class_id);       
+        $class_id = intval($class_id);
         $table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
         $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT * FROM $table_class_course cc, $table_course c WHERE cc.class_id = '".$class_id."' AND cc.course_code = c.code";

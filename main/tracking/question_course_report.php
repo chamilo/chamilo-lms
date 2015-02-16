@@ -1,23 +1,16 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Report
  * @package chamilo.tracking
  */
-/**
- * Code
- */
-$language_file = array ('registration', 'index', 'tracking', 'exercice','survey');
+
+$language_file = array('registration', 'index', 'tracking', 'exercice','survey');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
-
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
 $this_section = "session_my_space";
 
@@ -59,9 +52,14 @@ if (empty($session_id)) {
 	$temp_course_list = SessionManager::get_course_list_by_session_id($session_id);
 }
 
-foreach($temp_course_list  as $temp_course_item) {
+foreach ($temp_course_list  as $temp_course_item) {
 	$course_item = CourseManager ::get_course_information($temp_course_item['code']);
-	$course_list[]= array('db_name' =>$course_item['db_name'],'code'=>$course_item['code'], 'title'=>$course_item['title'], 'visual_code'=>$course_item['visual_code']);
+	$course_list[] = array(
+		'db_name' => $course_item['db_name'],
+		'code' => $course_item['code'],
+		'title' => $course_item['title'],
+		'visual_code' => $course_item['visual_code']
+	);
 	$course_select_list[$temp_course_item['code']]	= $course_item['title'];
 }
 
@@ -88,47 +86,41 @@ $form->setDefaults(array('course_code'=>(string)$course_code));
 $course_info = api_get_course_info($course_code);
 //var_dump($session_id);
 if (!empty($course_info)) {
-	$list = new learnpathList('', $course_code);
+	$list = new LearnpathList('', $course_code);
 	$lp_list = $list->get_flat_list();
 	$_course = $course_info;
 	$main_question_list = array();
 	foreach ($lp_list as $lp_id =>$lp) {
 		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['real_id']);
-		//var_dump($exercise_list);
 		foreach ($exercise_list as $exercise) {
 			$my_exercise = new Exercise();
-			//$my_exercise->read($exercise['ref']);
 			$my_exercise->read($exercise['path']);
 			$question_list = $my_exercise->selectQuestionList();
 
-			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'],$course_info['id'], $session_id);
-			//echo '<pre>'; print_r($exercise_stats);
+			$exercise_stats = get_all_exercise_event_from_lp(
+				$exercise['path'],
+				$course_info['id'],
+				$session_id
+			);
 
-			foreach($question_list  as $question_id) {
+			foreach ($question_list  as $question_id) {
 				$question_data = Question::read($question_id);
-				///var_dump($question_data);
 				$main_question_list[$question_id] = $question_data;
 				$quantity_exercises = 0;
 				$question_result = 0;
-				//echo '<pre>';
-				//print_r($exercise_stats);
 				foreach($exercise_stats as $stats) {
 					if (!empty($stats['question_list'])) {
 						foreach($stats['question_list'] as $my_question_stat) {
-							// var_dump($my_question_stat);
 							if ($question_id == $my_question_stat['question_id']) {
-								//var_dump($my_question_stat);
 								$question_result =  $question_result + $my_question_stat['marks'];
-								//			var_dump($my_question_stat['marks']);
 								$quantity_exercises++;
 							}
 						}
 					}
 				}
-				//echo $question_id;
-				//var_dump($question_result.' - '.$quantity_exercises.$main_question_list[$question_id]->weighting);
-				if(!empty($quantity_exercises)) {
-					$main_question_list[$question_id]->results =(($question_result / ($quantity_exercises)) ) ; // Score % average
+				if (!empty($quantity_exercises)) {
+					// Score % average
+					$main_question_list[$question_id]->results =(($question_result / ($quantity_exercises)) ) ;
 				} else {
 					$main_question_list[$question_id]->results = 0;
 				}
@@ -138,11 +130,6 @@ if (!empty($course_info)) {
 		}
 	}
 }
-
-//var_dump($main_question_list);
-
-//var_dump($main_question_list);
-//$course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 if (!$export_to_xls) {
 
@@ -173,7 +160,6 @@ if (!$export_to_xls) {
 }
 
 $course_average = array();
-
 $counter = 0;
 
 if (!empty($main_question_list) && is_array($main_question_list)) {
@@ -228,7 +214,8 @@ if ($export_to_xls) {
 	exit;
 }
 
-function sort_user($a, $b) {
+function sort_user($a, $b)
+{
 	if (is_numeric($a['score']) && is_numeric($b['score'])) {
 		echo $a['score'].' : '.$b['score'];
 		echo '<br />';
@@ -240,7 +227,8 @@ function sort_user($a, $b) {
 	return 1;
 }
 
-function export_complete_report_xls($filename, $array) {
+function export_complete_report_xls($filename, $array)
+{
 	global $charset;
 	$workbook = new Spreadsheet_Excel_Writer();
 	$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));

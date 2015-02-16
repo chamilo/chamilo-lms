@@ -16,12 +16,18 @@ $language_file = array('learnpath', 'courses', 'index','tracking','exercice', 'a
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 
-// Only users who are logged in can proceed.
-api_block_anonymous_users();
+$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
+
+$sessionField = new ExtraFieldValue('session');
+$valueAllowVisitors = $sessionField->get_values_by_handler_and_field_variable($session_id, 'allow_visitors');
+
+$allowVisitors = $valueAllowVisitors != false;
+
+if (!$allowVisitors) {
+    // Only users who are logged in can proceed.
+    api_block_anonymous_users();
+}
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -30,7 +36,6 @@ if (empty($_GET['session_id'])) {
     api_not_allowed();
 }
 
-$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
 $course_id  = isset($_GET['course_id'])  ? intval($_GET['course_id']) : null;
 
 $_SESSION['id_session'] = $session_id;
@@ -45,7 +50,10 @@ $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 // Getting all sessions where I'm subscribed
-$new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
+$new_session_list = array();
+if (!api_is_anonymous()) {
+    $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
+}
 $user_course_list = array();
 foreach ($new_session_list as $session_item) {
     $user_course_list[] = $session_item['code'];
@@ -109,7 +117,7 @@ $new_course_list = array();
 
 if (!empty($course_list)) {
     foreach ($course_list as $course_data) {
-        if (in_array($course_data['code'], $user_course_list)) {
+        if (in_array($course_data['code'], $user_course_list) || api_is_anonymous()) {
             $course_data['title'] = Display::url(
                 $course_data['title'],
                 api_get_course_url($course_data['code'], $session_id)
@@ -197,14 +205,14 @@ if (!empty($course_list)) {
 
 // If the requested session does not exist in my list we stop the script
 if (!api_is_platform_admin()) {
-    if (!in_array($session_id, $my_session_list)) {
+    if (!api_is_anonymous() && !in_array($session_id, $my_session_list)) {
         api_not_allowed(true);
     }
 }
 
 //If session is not active we stop de script
 if (!api_is_allowed_to_session_edit()) {
-	//api_not_allowed();
+	api_not_allowed();
 }
 
 Display::display_header(get_lang('Session'));
@@ -354,6 +362,18 @@ if (!empty($start) && !empty($end)) {
 echo Display::tag('h1', $session_info['name']);
 echo $dates.'<br />';
 
+if ($session_info['show_description'] == 1) {
+?>
+    <div class="home-course-intro">
+        <div class="page-course">
+            <div class="page-course-intro">
+                <p><?php echo $session_info['description']; ?></p>
+            </div>
+        </div>
+    </div>
+<?php
+}
+
 // All Learnpaths grid settings (First tab, first subtab)
 
 $columns_courses = array(
@@ -458,34 +478,35 @@ $extra_params_week['autowidth'] = 'true'; //use the width of the parent
 $extra_params_week['height'] = '100%';
 
 // MyQCM grid
-$column_exercise = array(
-    get_lang('Status'),
-    get_lang('ExerciseStartDate'),
-    get_lang('Course'),
-    get_lang('Exercise'),
-    get_lang('Attempts'),
-    get_lang('Result'),
-    get_lang('BestResultInCourse'),
-    get_lang('Ranking')
-);
-$column_exercise_model  = array(
-    array('name'=>'status',     'index'=>'status',     'width'=>'40', 'align'=>'left',   'sortable'=>'false'),
-    array('name'=>'date',       'index'=>'date',       'width'=>'130','align'=>'left',   'sortable'=>'true'),
-    array('name'=>'course',     'index'=>'course',     'width'=>'200','align'=>'left',   'sortable'=>'true', 'wrap_cell' => 'true'),
-    array('name'=>'exercise',   'index'=>'exercise',   'width'=>'200','align'=>'left',   'sortable'=>'false'),
-    array('name'=>'attempt',    'index'=>'attempt',    'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
-    array('name'=>'result',     'index'=>'result',     'width'=>'120','align'=>'center', 'sortable'=>'true'),
-    array('name'=>'best_result','index'=>'best_result','width'=>'140','align'=>'center', 'sortable'=>'true'),
-    array('name'=>'position',   'index'=>'position',   'width'=>'55', 'align'=>'center', 'sortable'=>'true')
-);
-$extra_params_exercise['height'] = '100%';
-$extra_params_exercise['autowidth'] = 'true';
-//$extra_params_exercise['sortname'] = 'status';
-//$extra_params_exercise['sortorder'] = 'desc';
-//$extra_params_exercise['grouping'] = 'true';
-//$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0}</b>'));
-//$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0} - {1} Item(s)</b>'));
-
+if (!api_is_anonymous()) {
+    $column_exercise = array(
+        get_lang('Status'),
+        get_lang('ExerciseStartDate'),
+        get_lang('Course'),
+        get_lang('Exercise'),
+        get_lang('Attempts'),
+        get_lang('Result'),
+        get_lang('BestResultInCourse'),
+        get_lang('Ranking')
+    );
+    $column_exercise_model  = array(
+        array('name'=>'status',     'index'=>'status',     'width'=>'40', 'align'=>'left',   'sortable'=>'false'),
+        array('name'=>'date',       'index'=>'date',       'width'=>'130','align'=>'left',   'sortable'=>'true'),
+        array('name'=>'course',     'index'=>'course',     'width'=>'200','align'=>'left',   'sortable'=>'true', 'wrap_cell' => 'true'),
+        array('name'=>'exercise',   'index'=>'exercise',   'width'=>'200','align'=>'left',   'sortable'=>'false'),
+        array('name'=>'attempt',    'index'=>'attempt',    'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
+        array('name'=>'result',     'index'=>'result',     'width'=>'120','align'=>'center', 'sortable'=>'true'),
+        array('name'=>'best_result','index'=>'best_result','width'=>'140','align'=>'center', 'sortable'=>'true'),
+        array('name'=>'position',   'index'=>'position',   'width'=>'55', 'align'=>'center', 'sortable'=>'true')
+    );
+    $extra_params_exercise['height'] = '100%';
+    $extra_params_exercise['autowidth'] = 'true';
+    //$extra_params_exercise['sortname'] = 'status';
+    //$extra_params_exercise['sortorder'] = 'desc';
+    //$extra_params_exercise['grouping'] = 'true';
+    //$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0}</b>'));
+    //$extra_params_exercise['groupingView'] = array('groupField'=>array('course'),'groupColumnShow'=>'false','groupText' => array('<b>'.get_lang('Course').' {0} - {1} Item(s)</b>'));
+}
 ?>
 <br />
 <script>
@@ -522,7 +543,10 @@ $(function() {
      echo Display::grid_js('list_default',  $url,           $columns,         $column_model,$extra_params,array(), '');
      echo Display::grid_js('list_course',   $url_by_course, $columns,         $column_model,$extra_params_course,array(),'');
      echo Display::grid_js('list_week',     $url_week,      $column_week,     $column_week_model, $extra_params_week,array(),'');
-     echo Display::grid_js('exercises',      '',            $column_exercise, $column_exercise_model, $extra_params_exercise, $my_real_array);
+
+    if (!api_is_anonymous()) {
+        echo Display::grid_js('exercises', '', $column_exercise, $column_exercise_model, $extra_params_exercise, $my_real_array);
+    }
 ?>
     // Generate tabs with jquery-ui
     $('#tabs').tabs();
@@ -533,21 +557,30 @@ $(function() {
 <?php
 
 $courseCode = isset($_GET['course']) ? $_GET['course'] : null;
-$my_reporting = Tracking::show_user_progress(api_get_user_id(), $session_id, '#tabs-4', false, false);
-if (!empty($my_reporting))  {
-    $my_reporting  .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $courseCode, $session_id);
-}
-if (empty($my_reporting)) {
-    $my_reporting  = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+
+$my_reporting = '';
+
+if (!api_is_anonymous()) {
+    $my_reporting = Tracking::show_user_progress(api_get_user_id(), $session_id, '#tabs-4', false, false);
+
+    if (!empty($my_reporting))  {
+        $my_reporting  .= '<br />'.Tracking::show_course_detail(api_get_user_id(), $courseCode, $session_id);
+    }
+    if (empty($my_reporting)) {
+        $my_reporting  = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+    }
 }
 
 // Main headers
 $headers = array(
     get_lang('Courses'),
-    get_lang('LearningPaths'),
-    get_lang('MyQCM'),
-    get_lang('MyStatistics')
+    get_lang('LearningPaths')
 );
+
+if (!api_is_anonymous()) {
+    $headers[] = get_lang('MyQCM');
+    $headers[] = get_lang('MyStatistics');
+}
 
 // Sub headers
 $sub_header = array(

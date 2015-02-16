@@ -28,8 +28,6 @@ $language_file = array('link', 'admin');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LINK;
 
-require_once api_get_path(LIBRARY_PATH).'link.lib.php';
-
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
@@ -126,7 +124,7 @@ if (isset($_GET['action'])) {
             case 'addlink':
                 if ($link_submitted) {
                     // Here we add a link
-                    if (!addlinkcategory("link")) {
+                    if (!Link::addlinkcategory("link")) {
                         unset($submit_link);
                     }
                 }
@@ -134,39 +132,39 @@ if (isset($_GET['action'])) {
             case 'addcategory':
                 if ($category_submitted) {
                     // Here we add a category
-                    if (!addlinkcategory('category')) {
+                    if (!Link::addlinkcategory('category')) {
                         unset($submit_category);
                     }
                 }
                 break;
             case 'importcsv':
                 if ($_POST['submitImport']) {
-                    import_csvfile();
+                    Link::import_csvfile();
                 }
                 break;
             case 'deletelink':
                 // Here we delete a link
-                deletelinkcategory($_GET['id'], 'link');
+                Link::deletelinkcategory($_GET['id'], 'link');
                 break;
             case 'deletecategory':
                 // Here we delete a category
-                deletelinkcategory($_GET['id'], 'category');
+                Link::deletelinkcategory($_GET['id'], 'category');
                 break;
             case 'editlink':
                 // Here we edit a link
-                editlinkcategory('link');
+                Link::editlinkcategory('link');
                 break;
             case 'editcategory':
                 // Here we edit a category
-                editlinkcategory('category');
+                Link::editlinkcategory('category');
                 break;
             case 'visible':
                 // Here we edit a category
-                change_visibility_link($_GET['id'], $_GET['scope']);
+                Link::change_visibility_link($_GET['id'], $_GET['scope']);
                 break;
             case 'invisible':
                 // Here we edit a category
-                change_visibility_link($_GET['id'], $_GET['scope']);
+                Link::change_visibility_link($_GET['id'], $_GET['scope']);
                 break;
         }
         Security::clear_token();
@@ -210,7 +208,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
         $lpId = isset($_GET['lp_id']) ? Security::remove_XSS($_GET['lp_id']) : null;
         if ($_GET['action'] == 'editlink') {
             $clean_link_id = intval($_GET['id']);
-            $link_info = get_link_info($_GET['id']);
+            $link_info = Link::get_link_info($_GET['id']);
             if ($link_info) {
                 $urllink        = $link_info['url'];
                 $title          = $link_info['title'];
@@ -260,7 +258,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
                     </div>
                 </div>';
 
-        $resultcategories = getLinkCategories($course_id, $session_id);
+        $resultcategories = Link::getLinkCategories($course_id, $session_id);
 
         if (!empty($resultcategories)) {
             echo '	<div class="control-group category">
@@ -404,10 +402,10 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 }
 
 if (!empty($down)) {
-    movecatlink($down);
+    Link::movecatlink($down);
 }
 if (!empty($up)) {
-    movecatlink($up);
+    Link::movecatlink($up);
 }
 
 if (empty($_GET['action']) ||
@@ -428,7 +426,7 @@ if (empty($_GET['action']) ||
     }
     // Making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
     // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-    $resultcategories = getLinkCategories($course_id, $session_id);
+    $resultcategories = Link::getLinkCategories($course_id, $session_id);
     $aantalcategories = count($resultcategories);
     if (!empty($resultcategories)) {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&urlview=';
@@ -453,7 +451,7 @@ if (empty($_GET['action']) ||
         echo '<table class="data_table">';
         echo '<tr><th style="font-weight: bold; text-align:left;padding-left: 10px;">'.get_lang('General').'</th></tr>';
         echo '</table>';
-        showlinksofcategory(0);
+        Link::showlinksofcategory(0);
     }
 
     $i = 0;
@@ -467,7 +465,7 @@ if (empty($_GET['action']) ||
         //if (!isset($urlview)) {
         if ($urlview == '') {
             // No $view set in the url, thus for each category link it should be all zeros except it's own
-            makedefaultviewcode($i);
+            Link::makedefaultviewcode($i);
         } else {
             $view = $urlview;
             $view[$i] = '1';
@@ -500,7 +498,7 @@ if (empty($_GET['action']) ||
                     if ($session_id == $myrow['session_id']) {
                         echo '<th>';
                         echo $strVisibility;
-                        showcategoryadmintools($myrow['id']);
+                        Link::showcategoryadmintools($myrow['id']);
                         echo '</th>';
                     } else {
                         echo '<th>'.get_lang('EditionNotAvailableFromSession');
@@ -508,7 +506,7 @@ if (empty($_GET['action']) ||
                 }
                 echo '</tr>';
                 echo '</table>';
-                echo showlinksofcategory($myrow['id']);
+                echo Link::showlinksofcategory($myrow['id']);
                 echo '</tr>';
             } else {
                 echo '<tr>';
@@ -526,7 +524,7 @@ if (empty($_GET['action']) ||
                     if ($session_id == $myrow['session_id']) {
                         echo '<th style="text-align:center;">';
                         echo $strVisibility;
-                        showcategoryadmintools($myrow['id']);
+                        Link::showcategoryadmintools($myrow['id']);
                         echo '</th>';
                     }
                 }
@@ -550,14 +548,14 @@ if (empty($_GET['action']) ||
                     echo '</th>';
                     if (api_is_allowed_to_edit(null, true)) {
                         if ($session_id == $myrow['session_id']) {
-                            echo '<th>'; echo $strVisibility; showcategoryadmintools($myrow['id']); echo '</th>';
+                            echo '<th>'; echo $strVisibility; Link::showcategoryadmintools($myrow['id']); echo '</th>';
                         } else {
                             echo '<th>'.get_lang('EditionNotAvailableFromSession');
                         }
                     }
                     echo '</tr>';
                     echo '</table>';
-                    echo showlinksofcategory($myrow['id']);
+                    echo Link::showlinksofcategory($myrow['id']);
                     echo '</tr>';
                 } else {
                     echo '<tr>';
@@ -573,7 +571,7 @@ if (empty($_GET['action']) ||
                         if ($session_id == $myrow['session_id']) {
                             echo '<th style="text-align:center;">';
                             echo $strVisibility;
-                            showcategoryadmintools($myrow['id']);
+                            Link::showcategoryadmintools($myrow['id']);
                             echo '</th>';
                         }
                     }

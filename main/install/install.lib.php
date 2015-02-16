@@ -1117,24 +1117,26 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.check_extension('xml', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
             <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.check_extension('intl', get_lang('Yes'), get_lang('No')).'</td>
+            </tr>
+               <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.check_extension('json', get_lang('Yes'), get_lang('No')).'</td>
+            </tr>
+
+             <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.check_extension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
+            </tr>
+
+            <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.check_extension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable'), true).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.check_extension('iconv', get_lang('Yes'), get_lang('No'), true).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('intl', get_lang('Yes'), get_lang('No'), true).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('json', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
@@ -1322,6 +1324,10 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_ARCHIVE_PATH)).'</td>
             </tr>
             <tr>
+                <td class="requirements-item">'.api_get_path(SYS_DATA_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_DATA_PATH)).'</td>
+            </tr>
+            <tr>
                 <td class="requirements-item">'.api_get_path(SYS_COURSE_PATH).'</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_COURSE_PATH)).' </td>
             </tr>
@@ -1417,6 +1423,12 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         }
 
         $checked_writable = api_get_path(SYS_ARCHIVE_PATH);
+        if (!is_writable($checked_writable)) {
+            $notwritable[] = $checked_writable;
+            @chmod($checked_writable, $perm);
+        }
+
+        $checked_writable = api_get_path(SYS_DATA_PATH);
         if (!is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm);

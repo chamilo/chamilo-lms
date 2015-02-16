@@ -54,9 +54,6 @@ if(!$is_allowed_to_edit){
 	api_not_allowed(true);
 }
 
-require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
-
 $courseDir = $_course['path'] . "/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path . $courseDir;

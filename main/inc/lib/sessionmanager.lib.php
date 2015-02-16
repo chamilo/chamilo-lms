@@ -63,17 +63,16 @@ class SessionManager
      * @param  string      Start limit = true if the start date has to be considered
      * @param  string      End limit = true if the end date has to be considered
      * @param  string $fix_name
+     * @param string $duration
+     * @param string $description Optional. The session description
+     * @param int $showDescription Optional. Whether show the session description
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
      * */
     public static function create_session(
         $sname,
-        $syear_start,
-        $smonth_start,
-        $sday_start,
-        $syear_end,
-        $smonth_end,
-        $sday_end,
+        $startDate,
+        $endDate,
         $snb_days_acess_before,
         $snb_days_acess_after,
         $nolimit,
@@ -83,7 +82,9 @@ class SessionManager
         $start_limit = true,
         $end_limit = true,
         $fix_name = false,
-        $duration = null
+        $duration = null,
+        $description = null,
+        $showDescription = 0
     ) {
         global $_configuration;
 
@@ -106,12 +107,6 @@ class SessionManager
         }
 
         $name = Database::escape_string(trim($sname));
-        $year_start = intval($syear_start);
-        $month_start = intval($smonth_start);
-        $day_start = intval($sday_start);
-        $year_end = intval($syear_end);
-        $month_end = intval($smonth_end);
-        $day_end = intval($sday_end);
         $nb_days_acess_before = intval($snb_days_acess_before);
         $nb_days_acess_after = intval($snb_days_acess_after);
         $id_session_category = intval($id_session_category);
@@ -128,8 +123,8 @@ class SessionManager
         }
 
         if (empty($nolimit)) {
-            $date_start = "$year_start-" . (($month_start < 10) ? "0$month_start" : $month_start) . "-" . (($day_start < 10) ? "0$day_start" : $day_start);
-            $date_end = "$year_end-" . (($month_end < 10) ? "0$month_end" : $month_end) . "-" . (($day_end < 10) ? "0$day_end" : $day_end);
+            $date_start = Database::escape_string($startDate);
+            $date_end = Database::escape_string($endDate);
         } else {
             $id_visibility = 1; // by default session visibility is read only
             $date_start = "0000-00-00";
@@ -151,10 +146,10 @@ class SessionManager
         } elseif (empty($coach_username)) {
             $msg = get_lang('CoachIsRequired');
             return $msg;
-        } elseif (!empty($start_limit) && empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
+        } elseif (!empty($start_limit) && empty($nolimit) && !api_is_valid_date($date_start, 'Y-m-d')) {
             $msg = get_lang('InvalidStartDate');
             return $msg;
-        } elseif (!empty($end_limit) && empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end, $day_end, $year_end))) {
+        } elseif (!empty($end_limit) && empty($nolimit) && !api_is_valid_date($date_end, 'Y-m-d')) {
             $msg = get_lang('InvalidEndDate');
             return $msg;
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
@@ -180,30 +175,43 @@ class SessionManager
             }
 
             if ($ready_to_create) {
-                $sql = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
-                        VALUES('" . $name . "','$date_start','$date_end','$id_coach'," . api_get_user_id() . "," . $nb_days_acess_before . ", " . $nb_days_acess_after . ", " . $id_session_category . ", " . $id_visibility . ")";
-                Database::query($sql);
-                $session_id = Database::insert_id();
+                $values = array(
+                    'name' => $name,
+                    'date_start' => $date_start,
+                    'date_end' => $date_end,
+                    'id_coach' => $id_coach,
+                    'session_admin_id' => api_get_user_id(),
+                    'nb_days_access_before_beginning' => $nb_days_acess_before,
+                    'nb_days_access_after_end' => $nb_days_acess_after,
+                    'session_category_id' => $id_session_category,
+                    'visibility' => $id_visibility,
+                    'description' => Database::escape_string($description),
+                    'show_description' => intval($showDescription)
+                );
+                $session_id = Database::insert($tbl_session, $values);
 
-                if (self::durationPerUserIsEnabled()) {
-                    $duration = intval($duration);
+                $duration = intval($duration);
 
-                    if (empty($duration)) {
-                        $duration = null;
-                    } else {
-                        $sql = "UPDATE $tbl_session SET
-                                  date_start = '0000-00-00',
-                                  date_end = '0000-00-00'
-                                WHERE id = $session_id";
-                        Database::query($sql);
-                    }
-                    $sql = "UPDATE $tbl_session
-                            SET duration = '$duration'
+                if (!empty($duration)) {
+                    $sql = "UPDATE $tbl_session SET
+                              date_start = '0000-00-00',
+                              date_end = '0000-00-00',
+                              duration = $duration
                             WHERE id = $session_id";
+                    Database::query($sql);
+                } else {
+                    $sql = "UPDATE $tbl_session
+                        SET duration = $duration
+                        WHERE id = $session_id";
                     Database::query($sql);
                 }
 
                 if (!empty($session_id)) {
+                    $extraFields['session_id'] = $session_id;
+
+                    $sessionFieldValue = new ExtraFieldValue('session');
+                    $sessionFieldValue->save_field_values($extraFields);
+
                     /*
                       Sends a message to the user_id = 1
 
@@ -618,7 +626,6 @@ class SessionManager
         }
 
         //Get lessons
-        require_once api_get_path(SYS_CODE_PATH) . 'newscorm/learnpathList.class.php';
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
 
         $table = array();
@@ -895,7 +902,6 @@ class SessionManager
         /**
          *  Exercises
          */
-        require_once api_get_path(SYS_CODE_PATH) . 'exercice/exercise.lib.php';
         $exercises = get_all_exercises($course, $sessionId, false, '', $getAllSessions);
         $exercises_total = count($exercises);
 
@@ -1313,20 +1319,20 @@ class SessionManager
     /**
      * Edit a session
      * @author Carlos Vargas from existing code
-     * @param	integer		id
-     * @param	string 		name
-     * @param 	integer		year_start
-     * @param 	integer		month_start
-     * @param 	integer		day_start
-     * @param 	integer		year_end
-     * @param 	integer		month_end
-     * @param 	integer		day_end
-     * @param 	integer		nb_days_acess_before
-     * @param 	integer		nb_days_acess_after
-     * @param 	integer		nolimit
-     * @param 	integer		id_coach
-     * @param 	integer		id_session_category
-     * @param   int $id_visibility
+     * @param integer		id
+     * @param string 		name
+     * @param integer		year_start
+     * @param integer		month_start
+     * @param integer		day_start
+     * @param integer		year_end
+     * @param integer		month_end
+     * @param integer		day_end
+     * @param integer		nb_days_acess_before
+     * @param integer		nb_days_acess_after
+     * @param integer		nolimit
+     * @param integer		id_coach
+     * @param integer		id_session_category
+     * @param int $id_visibility
      * @param bool
      * @param bool
      * @param string $description
@@ -1337,12 +1343,8 @@ class SessionManager
     public static function edit_session(
         $id,
         $name,
-        $year_start,
-        $month_start,
-        $day_start,
-        $year_end,
-        $month_end,
-        $day_end,
+        $startDate,
+        $endDate,
         $nb_days_acess_before,
         $nb_days_acess_after,
         $nolimit,
@@ -1352,16 +1354,11 @@ class SessionManager
         $start_limit = true,
         $end_limit = true,
         $description = null,
-        $showDescription = null,
-        $duration = null
+        $showDescription = 0,
+        $duration = null,
+        $extraFields = array()
     ) {
         $name = trim(stripslashes($name));
-        $year_start = intval($year_start);
-        $month_start = intval($month_start);
-        $day_start = intval($day_start);
-        $year_end = intval($year_end);
-        $month_end = intval($month_end);
-        $day_end = intval($day_end);
         $id_coach = intval($id_coach);
         $nb_days_acess_before = intval($nb_days_acess_before);
         $nb_days_acess_after = intval($nb_days_acess_after);
@@ -1371,8 +1368,8 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         if (empty($nolimit)) {
-            $date_start = "$year_start-" . (($month_start < 10) ? "0$month_start" : $month_start) . "-" . (($day_start < 10) ? "0$day_start" : $day_start);
-            $date_end = "$year_end-" . (($month_end < 10) ? "0$month_end" : $month_end) . "-" . (($day_end < 10) ? "0$day_end" : $day_end);
+            $date_start = Database::escape_string($startDate);
+            $date_end = Database::escape_string($endDate);
         } else {
             $date_start = "0000-00-00";
             $date_end = "0000-00-00";
@@ -1398,10 +1395,10 @@ class SessionManager
         } elseif (empty($id_coach)) {
             $msg = get_lang('CoachIsRequired');
             return $msg;
-        } elseif (!empty($start_limit) && empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start))) {
+        } elseif (!empty($start_limit) && empty($nolimit) && !api_is_valid_date($date_start, 'Y-m-d')) {
             $msg = get_lang('InvalidStartDate');
             return $msg;
-        } elseif (!empty($end_limit) && empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end, $day_end, $year_end))) {
+        } elseif (!empty($end_limit) && empty($nolimit) && !api_is_valid_date($date_end, 'Y-m-d')) {
             $msg = get_lang('InvalidEndDate');
             return $msg;
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
@@ -1421,48 +1418,37 @@ class SessionManager
                 $msg = get_lang('SessionNameAlreadyExists');
                 return $msg;
             } else {
+                $values = array();
 
-                $sessionInfo = SessionManager::fetch($id);
-
-                $descriptionCondition = null;
-                if (array_key_exists('description', $sessionInfo)) {
-                    $descriptionCondition = ' description = "' . Database::escape_string($description) . '" ,';
+                if (empty($duration)) {
+                    $duration = null;
+                } else {
+                    $date_start = '0000-00-00';
+                    $date_end = "0000-00-00";
+                    $duration = intval($duration);
                 }
+                $values['duration'] = $duration;
 
-                $showDescriptionCondition = null;
-                if (array_key_exists('show_description', $sessionInfo)) {
-                    $showDescriptionCondition = ' show_description = "' . Database::escape_string($showDescription) . '" ,';
-                }
+                $values['name'] = Database::escape_string($name);
+                $values['date_start'] = $date_start;
+                $values['date_end'] = $date_end;
+                $values['id_coach'] = $id_coach;
+                $values['nb_days_access_before_beginning'] = $nb_days_acess_before;
+                $values['nb_days_access_after_end'] = $nb_days_acess_after;
+                $values['session_category_id'] = $id_session_category;
+                $values['description'] = Database::escape_string($description);
+                $values['show_description'] = intval($showDescription);
+                $values['visibility'] = $id_visibility;
 
-                $durationCondition = null;
-                if (self::durationPerUserIsEnabled()) {
+                Database::update($tbl_session, $values, array(
+                    'id = ?' => $id
+                ));
 
-                    if (empty($duration)) {
-                        $duration = null;
-                    } else {
-                        $date_start = '0000-00-00';
-                        $date_end = "0000-00-00";
-                        $duration = intval($duration);
-                    }
+                $extraFields['session_id'] = $id;
 
-                    $durationCondition = ' duration = "' . $duration . '" ,';
-                }
+                $sessionFieldValue = new ExtraFieldValue('session');
+                $sessionFieldValue->save_field_values($extraFields);
 
-                $sql = "UPDATE $tbl_session SET
-                        name='" . Database::escape_string($name) . "',
-						date_start='" . $date_start . "',
-						date_end='" . $date_end . "',
-						id_coach='" . $id_coach . "',
-						nb_days_access_before_beginning = " . $nb_days_acess_before . ",
-						nb_days_access_after_end = " . $nb_days_acess_after . ",
-						session_category_id = " . $id_session_category . " ,
-                        $descriptionCondition
-                        $showDescriptionCondition
-                        $durationCondition
-						visibility= " . $id_visibility . "
-					  WHERE id='$id'";
-
-                Database::query($sql);
                 return $id;
             }
         }
@@ -2996,11 +2982,7 @@ class SessionManager
             $orderBy = Database::escape_string($orderBy);
             $orderBy = " ORDER BY $orderBy";
         } else {
-            if (SessionManager::orderCourseIsEnabled()) {
-                $orderBy .= " ORDER BY position ";
-            } else {
-                $orderBy .= " ORDER BY title ";
-            }
+            $orderBy .= " ORDER BY position ";
         }
 
         $sql .= Database::escape_string($orderBy);
@@ -3459,7 +3441,6 @@ class SessionManager
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {
-                                require_once api_get_path(SYS_CODE_PATH) . 'newscorm/learnpathList.class.php';
                                 $list = new LearnpathList('', $course_info['code'], $sid);
                                 $flat_list = $list->get_flat_list();
                                 if (!empty($flat_list)) {
@@ -3637,6 +3618,7 @@ class SessionManager
      * @param bool $deleteUsersNotInList
      * @param bool $updateCourseCoaches
      * @param bool $sessionWithCoursesModifier
+     * @param int $showDescription
      * @return array
      */
     static function importCSV(
@@ -3654,7 +3636,8 @@ class SessionManager
         $updateCourseCoaches = false,
         $sessionWithCoursesModifier = false,
         $addOriginalCourseTeachersAsCourseSessionCoaches = true,
-        $removeAllTeachersFromCourse = true
+        $removeAllTeachersFromCourse = true,
+        $showDescription = null
     ) {
         $content = file($file);
 
@@ -3680,6 +3663,10 @@ class SessionManager
         if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
             $extraParameters .= ' , nb_days_access_before_beginning = '.intval($daysCoachAccessBeforeBeginning);
             $extraParameters .= ' , nb_days_access_after_end = '.intval($daysCoachAccessAfterBeginning);
+        }
+
+        if (!is_null($showDescription)) {
+            $extraParameters .= ' , show_description = '.intval($showDescription);
         }
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -3749,10 +3736,10 @@ class SessionManager
                     continue;
                 }
 
-                $date_start             = $enreg['DateStart'];
-                $date_end               = $enreg['DateEnd'];
-                $session_category_id    = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
-                $sessionDescription     = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
+                $date_start = $enreg['DateStart'];
+                $date_end = $enreg['DateEnd'];
+                $session_category_id = isset($enreg['SessionCategory']) ? $enreg['SessionCategory'] : null;
+                $sessionDescription = isset($enreg['SessionDescription']) ? $enreg['SessionDescription'] : null;
 
                 $extraSessionParameters = null;
                 if (!empty($sessionDescription)) {
@@ -3833,7 +3820,7 @@ class SessionManager
                     if ($my_session_result === false) {
 
                         // Creating a session.
-                        $sql_session = "INSERT IGNORE INTO $tbl_session SET
+                        $sql = "INSERT IGNORE INTO $tbl_session SET
                                 name = '$session_name',
                                 id_coach = '$coach_id',
                                 date_start = '$date_start',
@@ -3841,7 +3828,7 @@ class SessionManager
                                 visibility = '$visibilityAfterExpirationPerSession',
                                 session_category_id = '$session_category_id' " . $extraParameters . $extraSessionParameters;
 
-                        Database::query($sql_session);
+                        Database::query($sql);
 
                         // We get the last insert id.
                         $my_session_result = SessionManager::get_session_by_name($enreg['SessionName']);
@@ -3903,16 +3890,40 @@ class SessionManager
                             if (!empty($enreg['SessionName'])) {
                                 $params['name'] = $enreg['SessionName'];
                             }
-                            Database::update($tbl_session, $params, array('id = ?' => $sessionId));
                             $session_id = $sessionId;
                         } else {
-                            Database::update($tbl_session, $params, array("name = '?' " => $enreg['SessionName']));
-
                             $row = Database::query("SELECT id FROM $tbl_session WHERE name = '$session_name'");
                             list($session_id) = Database::fetch_array($row);
                         }
 
                         if ($session_id) {
+
+                            if ($debug) {
+                                $logger->addError("Sessions - Session to be updated #$session_id");
+                            }
+
+                            $sessionInfo = api_get_session_info($session_id);
+
+                            $params['show_description'] = isset($sessionInfo['show_description']) ? $sessionInfo['show_description'] : intval($showDescription);
+
+                            if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
+                                if (empty($sessionInfo['nb_days_access_before_beginning']) ||
+                                    (!empty($sessionInfo['nb_days_access_before_beginning']) &&
+                                        $sessionInfo['nb_days_access_before_beginning'] < $daysCoachAccessBeforeBeginning)
+                                ) {
+                                    $params['nb_days_access_before_beginning'] = intval($daysCoachAccessBeforeBeginning);
+                                }
+
+                                if (empty($sessionInfo['nb_days_access_after_end']) ||
+                                    (!empty($sessionInfo['nb_days_access_after_end']) &&
+                                        $sessionInfo['nb_days_access_after_end'] < $daysCoachAccessAfterBeginning)
+                                ) {
+                                    $params['nb_days_access_after_end'] = intval($daysCoachAccessAfterBeginning);
+                                }
+                            }
+
+                            Database::update($tbl_session, $params, array('id = ?' => $session_id));
+
                             foreach ($enreg as $key => $value) {
                                 if (substr($key, 0, 6) == 'extra_') { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
@@ -3937,6 +3948,12 @@ class SessionManager
                                 $sql = "DELETE FROM $tbl_session_course_user
                                         WHERE id_session = '$session_id' AND status <> 2";
                                 Database::query($sql);
+                            }
+                        } else {
+                            if ($debug) {
+                                $logger->addError(
+                                    "Sessions - Session not found"
+                                );
                             }
                         }
                     }
@@ -4196,6 +4213,7 @@ class SessionManager
 
                         // Adding Students, updating relationship "Session - Course - User".
                         $course_users = array_filter($course_users);
+
                         if (!empty($course_users)) {
                             foreach ($course_users as $user) {
                                 $user_id = UserManager::get_user_id_from_username($user);
@@ -4717,7 +4735,7 @@ class SessionManager
                 null,
                 $active,
                 $lastConnectionDate,
-                COURSEMANAGER,
+                api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
                 $keyword
             );
         }
@@ -5028,21 +5046,6 @@ class SessionManager
     }
 
     /**
-     * Courses re-ordering in resume_session.php flag see BT#8316
-     */
-    public static function orderCourseIsEnabled()
-    {
-        global $_configuration;
-        if (isset($_configuration['session_course_ordering']) &&
-            $_configuration['session_course_ordering']
-        ) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param string $direction (up/down)
      * @param int $sessionId
      * @param string $courseCode
@@ -5050,10 +5053,6 @@ class SessionManager
      */
     public static function move($direction, $sessionId, $courseCode)
     {
-        if (!self::orderCourseIsEnabled()) {
-            return false;
-        }
-
         $sessionId = intval($sessionId);
         $courseCode = Database::escape_string($courseCode);
 
@@ -5131,24 +5130,6 @@ class SessionManager
     public static function moveDown($sessionId, $courseCode)
     {
         return self::move('down', $sessionId, $courseCode);
-    }
-
-    /**
-     * Use the session duration to allow/block user access see BT#8317
-     * Needs these DB changes
-     * ALTER TABLE session ADD COLUMN duration int;
-     * ALTER TABLE session_rel_user ADD COLUMN duration int;
-     */
-    public static function durationPerUserIsEnabled()
-    {
-        global $_configuration;
-        if (isset($_configuration['session_duration_feature']) &&
-            $_configuration['session_duration_feature']
-        ) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -5353,4 +5334,99 @@ class SessionManager
 
         return false;
     }
+
+    /**
+     * Get the list of course coaches
+     * @return array The list
+     */
+    public static function getAllCourseCoaches()
+    {
+        $coaches = array();
+
+        $scuTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $idResult = Database::select('DISTINCT id_user', $scuTable, array(
+            'where' => array(
+                'status = ?' => 2
+            )
+        ));
+
+        if ($idResult != false) {
+            foreach ($idResult as $idData) {
+                $userResult = Database::select('user_id, lastname, firstname, username', $userTable, array(
+                    'where' => array(
+                        'user_id = ?' => $idData['id_user']
+                    )
+                ), 'first');
+
+                if ($userResult != false) {
+                    $coaches[] = array(
+                        'id' => $userResult['user_id'],
+                        'lastname' => $userResult['lastname'],
+                        'firstname' => $userResult['firstname'],
+                        'username' => $userResult['username'],
+                        'completeName' => api_get_person_name($userResult['firstname'], $userResult['lastname'])
+                    );
+                }
+            }
+        }
+
+        return $coaches;
+    }
+
+    /**
+     * Calculate the total user time in the platform
+     * @param int $userId The user id
+     * @param string $from Optional. From date
+     * @param string $until Optional. Until date
+     * @return string The time (hh:mm:ss)
+     */
+    public static function getTotalUserTimeInPlatform($userId, $from = '', $until = '')
+    {
+        $userId = intval($userId);
+
+        $trackLoginTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+
+        $whereConditions = array(
+            'login_user_id = ? ' => $userId
+        );
+
+        if (!empty($from) && !empty($until)) {
+            $whereConditions["AND (login_date >= '?' "] = $from;
+            $whereConditions["AND logout_date <= DATE_ADD('?', INTERVAL 1 DAY)) "] = $until;
+        }
+
+        $trackResult = Database::select(
+            'SEC_TO_TIME(SUM(UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date))) as total_time',
+            $trackLoginTable,
+            array(
+                'where' => $whereConditions
+            ), 'first'
+        );
+
+        if ($trackResult != false) {
+            return $trackResult['total_time'] ? $trackResult['total_time'] : '00:00:00';
+        }
+
+        return '00:00:00';
+    }
+
+    /**
+     * Get the courses list by a course coach
+     * @param int $coachId The coach id
+     * @return array
+     */
+    public static function getCoursesListByCourseCoach($coachId)
+    {
+        $srcruTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        return  Database::select('*', $srcruTable, array(
+            'where' => array(
+                'id_user = ? AND ' => $coachId,
+                'status = ?' => 2
+            )
+        ));
+    }
+
 }

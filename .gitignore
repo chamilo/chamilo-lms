@@ -35,3 +35,10 @@ searchdb/*
 nbproject/*
 
 plugin/bbb/config.vm.php
+
+main/cron/incoming/*
+vendor
+data/*
+!data/index.html
+data/badges/*
+!data/badges/index.html

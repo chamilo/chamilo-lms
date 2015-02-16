@@ -4,7 +4,6 @@
  * @author Eric Marguin <eric.marguin@dokeos.com>
  */
 require_once '../../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'nusoap/nusoap.php';
 
 /**
  * Import users into database from a file located on the server.
@@ -31,12 +30,7 @@ function import_users_from_file($filepath, $security_key) {
    	}
 
    	// Libraries
-   	require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-	require_once 'import.lib.php';
+   	require_once 'import.lib.php';
 
 	// Check is users file exists.
 	if (!is_file($filepath)) {

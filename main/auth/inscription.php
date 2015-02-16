@@ -15,8 +15,6 @@ if (!empty($_POST['language'])) {
     $_GET['language'] = $_POST['language'];
 }
 require_once '../inc/global.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 
@@ -165,8 +163,8 @@ if ($user_already_registered_show_terms == false) {
             'sessionVar'   => basename(__FILE__, '.php'),
             'imageOptions' => array(
                 'font_size' => 20,
-                'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
-                'font_file' => 'tahoma.ttf',
+                'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                'font_file' => 'OpenSans-Regular.ttf',
                     //'output' => 'gif'
             )
         );

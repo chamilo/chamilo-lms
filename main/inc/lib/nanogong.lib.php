@@ -286,9 +286,6 @@ class Nanogong
 	 */
 	public function upload_file($is_nano = false)
 	{
-		require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-		require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 		if (!empty($_FILES)) {
 			$upload_ok = process_uploaded_file($_FILES['file'], false);

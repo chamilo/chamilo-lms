@@ -13,10 +13,6 @@
 $language_file = array ('registration','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'security.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 $tbl_stats_access 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $this_section = SECTION_PLATFORM_ADMIN;

@@ -13,11 +13,6 @@ $language_file = array ('admin', 'registration');
 
 $cidReset = true;
 require '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
@@ -48,7 +43,7 @@ function validate_data($users)
         }
 
         // 2. Check username, first, check whether it is empty.
-        
+
         if (isset($user['NewUserName'])) {
             if (!UserManager::is_username_empty($user['NewUserName'])) {
                 // 2.1. Check whether username is too long.
@@ -69,7 +64,7 @@ function validate_data($users)
                 }
              }
           }
-          
+
         // 3. Check status.
         if (isset($user['Status']) && !api_status_exists($user['Status'])) {
             $user['error'] = get_lang('WrongStatus');
@@ -138,7 +133,7 @@ function complete_missing_data($user)
  * @return  void
  * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
  */
- 
+
 function updateUsers($users)
 {
     global $insertedIn_course;
@@ -146,7 +141,6 @@ function updateUsers($users)
     if (!isset($inserted_in_course)) {
         $inserted_in_course = array();
     }
-    require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
     $usergroup = new UserGroup();
     $send_mail = $_POST['sendMail'] ? true : false;
     if (is_array($users)) {
@@ -158,7 +152,7 @@ function updateUsers($users)
             $user_id = $userInfo['user_id'];
             if ($user_id == 0) {
                 return false;
-            } 
+            }
             $firstName = isset($user['FirstName']) ? $user['FirstName'] : $userInfo['firstname'];
             $lastName = isset($user['LastName']) ? $user['LastName'] : $userInfo['lastname'];
             $userName = isset($user['NewUserName']) ? $user['NewUserName'] : $userInfo['username'];
@@ -193,10 +187,10 @@ function updateUsers($users)
                 $hrDeptId,
                 null,
                 $language,
-                '',   
+                '',
                 '',
                 ''
-                
+
             );
             if (!is_array($user['Courses']) && !empty($user['Courses'])) {
                 $user['Courses'] = array($user['Courses']);
@@ -357,9 +351,9 @@ $user_id_error = array();
 $error_message = '';
 
 if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
-    
-    $file_type = 'csv';    
-   
+
+    $file_type = 'csv';
+
     Security::clear_token();
     $tok = Security::get_token();
     $allowed_file_mimetype = array('csv', 'xml');
@@ -378,7 +372,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['
             $errors = validate_data($users);
             $error_kind_file = false;
         } else {
-        
+
             $error_kind_file = true;
         }
     } else {
@@ -480,7 +474,7 @@ if ($count_fields > 0) {
 
 ?>
     <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-     
+
         <blockquote>
             <pre>
                 <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;

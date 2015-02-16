@@ -21,8 +21,6 @@ api_block_anonymous_users();
 
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
-require_once $libPath . 'formvalidator/FormValidator.class.php';
-require_once $libPath . 'group_portal_manager.lib.php';
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_history_ticket (div_course,ticket_id) {
     $.ajax({

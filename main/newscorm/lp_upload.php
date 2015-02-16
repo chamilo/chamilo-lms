@@ -8,7 +8,7 @@
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 $course_dir = api_get_course_path().'/scorm';
 $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;
 if (empty($_POST['current_dir'])) {
@@ -44,7 +44,6 @@ if (Request::is_post() && $is_error) {
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
     $new_dir = replace_dangerous_char(trim($file_base_name), 'strict');
-    require_once 'learnpath.class.php';
     $type = learnpath::get_package_type($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
 
     $proximity = 'local';
@@ -118,8 +117,6 @@ if (Request::is_post() && $is_error) {
     $extension = $info['extension'];
     $file_base_name = str_replace('.'.$extension, '', $filename);
     $new_dir = replace_dangerous_char(trim($file_base_name), 'strict');
-
-    require_once 'learnpath.class.php';
 
     $result = learnpath::verify_document_size($s);
     if ($result == true) {

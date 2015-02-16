@@ -53,16 +53,6 @@ $tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-/*	Libraries	*/
-
-$lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
-require_once $lib.'groupmanager.lib.php';
-require_once $lib.'mail.lib.inc.php';
-require_once $lib.'tracking.lib.php';
-require_once $lib.'fckeditor/fckeditor.php';
-require_once $lib.'fileUpload.lib.php';
-require_once 'announcements.inc.php';
-
 $course_id = api_get_course_int_id();
 $_course = api_get_course_info();
 
@@ -220,7 +210,6 @@ if (api_is_allowed_to_edit(false,true) OR
             // tooledit : visibility = 2 : only visible for platform administrator
             if ($ctok == $_GET['sec_token']) {
                 AnnouncementManager::delete_announcement($_course, $id);
-                //delete_added_resource("Ad_Valvas", $delete);
 
                 $id = null;
                 $emailTitle = null;
@@ -263,7 +252,7 @@ if (api_is_allowed_to_edit(false,true) OR
         $id = intval($_GET['id']);
 
         if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
-            $sql="SELECT * FROM  $tbl_announcement WHERE c_id = $course_id AND id = '$id'";
+            $sql = "SELECT * FROM  $tbl_announcement WHERE c_id = $course_id AND id = '$id'";
             $rs 	= Database::query($sql);
             $myrow  = Database::fetch_array($rs);
             $last_id = $id;
@@ -326,7 +315,6 @@ if (api_is_allowed_to_edit(false,true) OR
         while (list ($announcementId, $announcementOrder) = Database::fetch_row($result)) {
             // STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER.
             //          COMMIT ORDER SWAP ON THE DB
-
             if ($thisAnnouncementOrderFound) {
                 $nextAnnouncementId = $announcementId;
                 $nextAnnouncementOrder = $announcementOrder;
@@ -471,7 +459,7 @@ if (api_is_allowed_to_edit(false,true))  {
 } else {
     // students only get to see the visible announcements
     if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-        $group_memberships=GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
+        $group_memberships = GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
 
         if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 
@@ -494,19 +482,19 @@ if (api_is_allowed_to_edit(false,true))  {
 
         // the user is member of several groups => display personal announcements AND his group announcements AND the general announcements
         if (is_array($group_memberships) && count($group_memberships)>0) {
-            $sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                FROM $tbl_announcement announcement, $tbl_item_property ip
-                WHERE
-                announcement.c_id = $course_id AND
-                ip.c_id = $course_id AND
-                announcement.id = ip.ref AND
-                ip.tool='announcement'
-                AND ip.visibility='1'
-                $cond_user_id
-                $condition_session
-                GROUP BY ip.ref
-                ORDER BY display_order DESC
-                LIMIT 0,$maximum";
+            $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+                    FROM $tbl_announcement announcement, $tbl_item_property ip
+                    WHERE
+                        announcement.c_id = $course_id AND
+                        ip.c_id = $course_id AND
+                        announcement.id = ip.ref AND
+                        ip.tool='announcement'
+                        AND ip.visibility='1'
+                        $cond_user_id
+                        $condition_session
+                    GROUP BY ip.ref
+                    ORDER BY display_order DESC
+                    LIMIT 0, $maximum";
         } else {
             // the user is not member of any group
             // this is an identified user => show the general announcements AND his personal announcements
@@ -520,16 +508,16 @@ if (api_is_allowed_to_edit(false,true))  {
                 $sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
                     FROM $tbl_announcement announcement, $tbl_item_property ip
                     WHERE
-                    announcement.c_id = $course_id AND
-                    ip.c_id = $course_id AND
-                    announcement.id = ip.ref
-                    AND ip.tool='announcement'
-                    AND ip.visibility='1'
-                    $cond_user_id
-                    $condition_session
+                        announcement.c_id = $course_id AND
+                        ip.c_id = $course_id AND
+                        announcement.id = ip.ref
+                        AND ip.tool='announcement'
+                        AND ip.visibility='1'
+                        $cond_user_id
+                        $condition_session
                     GROUP BY ip.ref
                     ORDER BY display_order DESC
-                    LIMIT 0,$maximum";
+                    LIMIT 0, $maximum";
             } else {
 
                 if (api_get_course_setting('allow_user_edit_announcement')) {
@@ -542,13 +530,13 @@ if (api_is_allowed_to_edit(false,true))  {
                 $sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
                     FROM $tbl_announcement announcement, $tbl_item_property ip
                     WHERE
-                    announcement.c_id = $course_id AND
-                    ip.c_id = $course_id AND
-                    announcement.id = ip.ref
-                    AND ip.tool='announcement'
-                    AND ip.visibility='1'
-                    AND ip.to_group_id='0'
-                    $condition_session
+                        announcement.c_id = $course_id AND
+                        ip.c_id = $course_id AND
+                        announcement.id = ip.ref
+                        AND ip.tool='announcement'
+                        AND ip.visibility='1'
+                        AND ip.to_group_id='0'
+                        $condition_session
                     GROUP BY ip.ref
                     ORDER BY display_order DESC
                     LIMIT 0,$maximum";
@@ -619,7 +607,6 @@ if ($display_form) {
     $title_to_modify 	= stripslashes($title_to_modify);
 
     // DISPLAY ADD ANNOUNCEMENT COMMAND
-    //echo '<form method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?publish_survey='.Security::remove_XSS($surveyid).'&id='.Security::remove_XSS($_GET['id']).'&db_name='.$db_name.'&cidReq='.Security::remove_XSS($_GET['cidReq']).'" style="margin:0px;">';
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     echo '<form class="form-horizontal" method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?id='.$id.'&'.api_get_cidreq().'" style="margin:0px;">';
     if (empty($_GET['id'])) {
@@ -668,8 +655,6 @@ if ($display_form) {
                 $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
                 $content_to_modify = get_lang('YourAccountIsActiveYouCanLoginAndCheckYourCourses');
             }
-        } else {
-            //echo '<span id="recipient_overview">' . get_lang('Everybody') . '</span>';
         }
         AnnouncementManager::show_to_form($to);
         echo '		</div>
@@ -726,10 +711,10 @@ if ($display_form) {
     if (!isset($title_to_modify)) 		$title_to_modify = "";
 
     echo '<input type="hidden" name="id" value="'.$announcement_to_modify.'" />';
-
-    $oFCKeditor = new FCKeditor('newContent') ;
-    $oFCKeditor->Width		= '100%';
-    $oFCKeditor->Height		= '300';
+    // @todo use formvalidator
+    $oFCKeditor = new Editor();
+	$oFCKeditor->Width		= '100%';
+	$oFCKeditor->Height		= '300';
 
     if(!api_is_allowed_to_edit()) {
         $oFCKeditor->ToolbarSet = "AnnouncementsStudent";
@@ -743,8 +728,11 @@ if ($display_form) {
 
     echo Display::display_normal_message(get_lang('Tags').' <br /><br />'.implode('<br />', AnnouncementManager::get_tags()), false);
 
-    echo $oFCKeditor->CreateHtml();
-    echo '</div></div>';
+
+	//echo $oFCKeditor->CreateHtml();
+    echo $oFCKeditor->editor('newContent', $oFCKeditor->Value);
+	echo '</div></div>';
+
 
     //File attachment
     echo '	<div class="control-group">

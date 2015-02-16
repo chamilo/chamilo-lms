@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once dirname(__FILE__).'/../../../inc/global.inc.php';
-require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
-
 /**
  * Class ScoreDisplayForm
  * Form for the score display dialog

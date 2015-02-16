@@ -1,17 +1,13 @@
-<?php //$id:$
+<?php
 /* For licensing terms, see /license.txt */
+
 /**
 *
 * @package chamilo.exercise
 * @author Toon Keppens
 * @version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-/**
- * Code
- */
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+
 include('../inc/global.inc.php');
 
 $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -39,7 +35,7 @@ if ($_GET['type'] == "poly" || $_GET['type'] == "delineation" || $_GET['type'] =
 	$hotspot_coordinates = api_substr($hotspot_coordinates,0,-2);
 }
 $course_id = api_get_course_int_id();
-$sql = "UPDATE $TBL_ANSWER SET hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',hotspot_type = '".Database::escape_string($hotspot_type)."' 
+$sql = "UPDATE $TBL_ANSWER SET hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',hotspot_type = '".Database::escape_string($hotspot_type)."'
         WHERE c_id = $course_id AND id = ".intval($answerId)." AND question_id = ".intval($questionId)." LIMIT 1 ;";
 $result = Database::query($sql);
 echo "done=done";

@@ -1,0 +1,203 @@
+I. OVERVIEW
+
+This Leaflet Maps plugin requires CKEditor 4.3 or later versions, and it leverages the power and flexibility
+of Widget API. Hence, the 'widget' plugin is also a hard dependency (which also depends on Line Utilities
+and Clipboard plugins). The Clipboard plugin is already loaded by default in all presets/pre-built packages of CKEditor
+(Basic, Standard, and Full). Hence, we only need to download the Widget plugin (http://ckeditor.com/addon/widget),
+the Line Utilities plugin (http://ckeditor.com/addon/lineutils), and this Leaflet Maps plugin (http://ckeditor.com/addon/leaflet).
+
+For Linux users, after downloading, make sure that the zipped folders or the target CKEditor folders
+    have right read/write/execute permissions, otherwise you might encounter loading issues
+    like the "File x could not be found" notice. You might need to run "sudo chmod 777 -R leaflet",
+    "sudo chmod 777 -R lineutils", and "sudo chmod 777 -R widget" before or after copying them
+    in the appropriate CKEditor folders.
+
+
+II. STANDARD INSTALLATION (Usual Setup)
+
+1) After unzipping the folder, paste the three folders ("lineutils", "leaflet", and "widget")
+    to "ckeditor/plugins" folder. After that, you should have the following folder structures:
+        "ckeditor/plugins/leaflet"
+        "ckeditor/plugins/lineutils"
+        "ckeditor/plugins/widget"
+
+2) Edit the "ckeditor/config.js" file, and add the following:
+    if there's no existing line yet:
+        config.extraPlugins = "lineutils,widget,leaflet";
+
+    otherwise, append it to the existing list, no extra spaces are allowed:
+        config.extraPlugins = "existing_plugin,another_existing_plugin,lineutils,widget,leaflet";
+
+3.) Just to make sure, clear the web browser's cache after modifying your configuration.
+    Clearing the browser's cache is also very important
+    since the CKEditor's JS and CSS assets/components are cached also in the browser.
+
+
+III. DRUPAL INSTALLATION
+
+In Drupal, the typical way to embed the CKEditor WSYIWYG is
+through the CKEditor module (https://drupal.org/project/ckeditor),
+and then loading the corresponding CKEditor JS library (http://ckeditor.com/).
+
+Drupal's CKEditor module (tested on version ) is typically installed to have this internal path:
+    sites/all/modules/ckeditor or sites/all/modules/contrib/ckeditor.
+
+Note that this guide is tested on CKEditor "7.x-1.13", latest version is "7.x-1.14".
+I'll test this guide also in the latest version later.
+
+Moreover, the CKeditor JS Library is typically installed to have this internal path:
+    "sites/all/modules/ckeditor/ckeditor/ckeditor.js" or
+    "sites/all/modules/contrib/ckeditor/ckeditor/ckeditor.js" or
+    "sites/all/libraries/ckeditor/ckeditor.js."
+
+However, installing additional plugins in CKEditor in Drupal is not that straightforward
+as we could see from the issue queues:
+    https://drupal.org/node/2215409#comment-8568207
+    https://drupal.org/node/1930130#comment-7297628
+    https://drupal.org/node/1324554
+    https://drupal.org/node/2215497
+
+Nevertheless, after experimenting with the various ways to enable the additional plugins
+(Line Utilities, Widget, and Leaflet), this is the simplest solution
+(the idea is to copy the plugin folders, enable them, and make them visible in the toolbar):
+
+
+A. DRUPAL INSTALLATION OPTION 1
+
+    1.) Download and unzip the plugins here (depending on your setup):
+            "sites/all/modules/ckeditor/plugins" or
+            "sites/all/modules/contrib/ckeditor/plugins".
+
+        After that, you should have the following folder structures:
+            "ckeditor/plugins/leaflet"
+            "ckeditor/plugins/lineutils"
+            "ckeditor/plugins/widget"
+
+    2.) We should now activate the new plugins and add them to the toolbar.
+        This is done by configuring the CKEditor Profile Settings,
+        in which by default is located in:
+            "admin/config/content/ckeditor/edit/Advanced"
+
+        A. Activate the Plugins
+            In EDITOR APPEARANCE >>> Plugins section:
+            Enable the corresponding checkboxes for the Leaflet Maps, Line Utilities,
+            and Widget plugins. These are the texts displayed adjacent to their checkboxes:
+                "Plugin file: leaflet"
+                "Plugin file: lineutils"
+                "Plugin file: widget"
+
+        B. Add them to the Toolbar
+            We should then make the activated plugins visible in the toolbar,
+            skipping this step will make the Leaflet Maps plugin inaccessible in the toolbar.
+
+            In EDITOR APPEARANCE >>> Toolbar section:
+            Drag the Leaflet Maps icon (black-colored) from the 'All Buttons' section
+            to the 'Used Buttons' section.
+
+            We need to configure the Leaflet Maps icon only since the Line Utilities and Widget plugins
+            have no toolbar icons and they will just load in the background.
+
+    3.) Then, click the Save button. Clear the Drupal's overall cache AND
+        clear the browser's cache. Clearing the browser's cache is also
+        very important since the CKEditor's JS and CSS assets/components
+        are cached also in the browser.
+
+    As indicated above, using the "sites/all/modules/ckeditor/plugins" or
+    "sites/all/modules/contrib/ckeditor/plugins"
+    will work with no additional custom hooks programming since by default
+    CKEditor utilize that folder in the CKEditor Global Profile Settings:
+    "admin/config/content/ckeditor/editg".
+
+    If you go that Global Profile Settings page, this will be indicated
+    (unless you override the default configuration):
+        Path to the CKEditor plugins directory: "%m/plugins"
+
+        In which "%m" refers to the base URL path where the CKEditor module is stored,
+        and defaults to "sites/all/modules/ckeditor" or "sites/all/modules/contrib/ckeditor".
+
+
+B. DRUPAL INSTALLATION OPTION 2
+
+    With the advent of Libraries API (https://drupal.org/project/libraries),
+    Drupal offers more flexibility in the handling of external/third-party libraries,
+    which means a clean mechanism that provides a separation of control between
+    the CKEditor module and CKEditor library, and implies that we could
+    safely upgrade the library and module independent to each other.
+    Having a Libraries folder (sites/all/libraries) is also a very common setup in Drupal.
+
+    This setup assumes that you've already installed and enabled the Libraries API module
+    and configured the CKEditor library (sites/all/libraries/ckeditor).
+    Make sure also that the "Path to CKEditor" settings indicated in
+    the CKEditor's Global Profile (admin/config/content/ckeditor/editg) is
+    indicated as "%l/ckeditor", in which "%l" refers to the "sites/all/libraries".
+
+    1.) Download and unzip the plugins here:
+            "sites/all/libraries/ckeditor/plugins"
+
+        After that, you should have the following folder structures:
+            "ckeditor/plugins/leaflet"
+            "ckeditor/plugins/lineutils"
+            "ckeditor/plugins/widget"
+
+    2.) We should now activate the new plugins and add them to the toolbar.
+        This is done by implementing first the hook_ckeditor_plugin() in a custom module:
+
+        function MYMODULE_ckeditor_plugin() {
+          return array(
+            'leaflet' => array(
+              'name' => 'Leaflet Maps',
+              'desc' => t('Plugin for inserting Leaflet Maps.'),
+              'path' => libraries_get_path('ckeditor') . '/plugins/leaflet/',
+              'buttons' => array(
+                'leaflet' => array(
+                  'label' => 'Leaflet Maps',
+                  'icon' => 'icons/leaflet.png',
+                ),
+              ),
+            ),
+          );
+        }
+
+        For convenience, I've created a Drupal utility module specifically for this purpose,
+        check-out the module and instructions here:
+        https://github.com/ranelpadon/drupal-leaflet-maps/tree/master
+
+        Fortunately, we need only to register the Leaflet Maps plugin,
+        the Line Utilities and Widget plugins are automatically registered.
+        The Leaflet Maps Drupal module above is enough for our purpose.
+
+        Now, we configure the CKEditor Profile Settings,
+        in which by default is located in:
+            "admin/config/content/ckeditor/edit/Advanced"
+
+        A. Activate the Plugin
+            In EDITOR APPEARANCE >>> Plugins section:
+            Enable the corresponding checkbox for the Leaflet Maps plugin.
+            This is the description displayed adjacent to its checkbox:
+                "Plugin for inserting Leaflet Maps."
+
+        B. Add them to the Toolbar
+            We should then make the activated plugin visible in the toolbar,
+            skipping this step will make the Leaflet Maps plugin inaccessible in the toolbar.
+
+            In EDITOR APPEARANCE >>> Toolbar section:
+            Drag the Leaflet Maps icon (black-colored) from the 'All Buttons' section
+            to the 'Used Buttons' section.
+
+            We need to configure the Leaflet Maps icon only since
+            the Line Utilities and Widget plugins have no toolbar icons and
+            they will just load in the background.
+
+    3.) Then, click the Save button. Clear the Drupal's overall cache AND
+        clear the browser's cache. Clearing the browser's cache is also
+        very important since the CKEditor's JS and CSS assets/components
+        are cached also in the browser.
+
+Note that if you configure the Leaflet Maps, Line Utilities, and Widget plugins
+using the handy CKEditor auto-builder (http://ckeditor.com/builder) and
+bundled it with the core "ckeditor.js" file, it will not work in Drupal,
+since as far as I know, the Drupal's CKEditor module
+(or specifically the hook_ckeditor_plugin()) has no support for it yet.
+
+But, outside of Drupal, the Leaflet Maps will work even when
+pre-configured/auto-bundled using the CKEditor builder.

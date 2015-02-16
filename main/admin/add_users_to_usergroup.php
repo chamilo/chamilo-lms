@@ -12,7 +12,6 @@ $cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -129,7 +128,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
     $groupInfo = $usergroup->get($id);
     $users = $usergroup->getUserListByUserGroup($id);
     if (!empty($users)) {
-        require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
 
         $data = array(
             array('UserName', 'ClassName')

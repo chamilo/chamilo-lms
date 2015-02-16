@@ -139,10 +139,6 @@ class Certificate extends Model
         if (empty($this->certification_user_path) && $this->force_certificate_generation == false) {
             return false;
         }
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
-
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
         $my_category = Category :: load($this->certificate_data['cat_id']);
@@ -167,12 +163,20 @@ class Certificate extends Model
 
             //If the gradebook is related to skills we added the skills to the user
 
+            $courseId = api_get_real_course_id();
+            $sessionId = api_get_session_id();
+
             $skill = new Skill();
-            $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id']);
+            $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id'], $courseId, $sessionId);
 
             if (is_dir($this->certification_user_path)) {
                 if (!empty($this->certificate_data)) {
-                    $new_content_html = get_user_certificate_content($this->user_id, $my_category[0]->get_course_code(), false, $params['hide_print_button']);
+                    $new_content_html = GradebookUtils::get_user_certificate_content(
+                        $this->user_id,
+                        $my_category[0]->get_course_code(),
+                        false,
+                        $params['hide_print_button']
+                    );
 
                     if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
                         $name = $this->certificate_data['path_certificate'];
@@ -261,9 +265,8 @@ class Certificate extends Model
     {
         //Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
-            require_once api_get_path(LIBRARY_PATH).'phpqrcode/qrlib.php';
             //L low, M - Medium, L large error correction
-            return QRcode::png($text, $path, 'M', 2, 2);
+            return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
         }
         return false;
     }

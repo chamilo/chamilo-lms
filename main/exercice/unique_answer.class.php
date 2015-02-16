@@ -106,8 +106,6 @@ class UniqueAnswer extends Question
         $question_list = $obj_ex->selectQuestionList();
         $select_question = array();
         $select_question[0] = get_lang('SelectTargetQuestion');
-
-        require_once '../newscorm/learnpathList.class.php';
         if (is_array($question_list)) {
             foreach ($question_list as $key => $questionid) {
                 //To avoid warning messages

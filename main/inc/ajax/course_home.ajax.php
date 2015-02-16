@@ -106,7 +106,6 @@ switch ($action) {
          */
 
         require_once '../global.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $now = time();
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
@@ -231,7 +230,6 @@ switch ($action) {
         break;
     case 'session_courses_lp_by_week':
         require_once '../global.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $now = time();
 
         $page  = intval($_REQUEST['page']);     //page
@@ -357,7 +355,6 @@ switch ($action) {
         break;
     case 'session_courses_lp_by_course':
         require_once '../global.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $now = time();
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows

@@ -469,6 +469,9 @@ CREATE TABLE IF NOT EXISTS session (
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
   promotion_id INT NOT NULL,
+  description TEXT DEFAULT NULL,
+  show_description TINYINT UNSIGNED DEFAULT 0,
+  duration int,
   PRIMARY KEY  (id),
   INDEX (session_admin_id),
   UNIQUE KEY name (name)
@@ -481,10 +484,12 @@ CREATE TABLE IF NOT EXISTS session (
 --
 DROP TABLE IF EXISTS session_rel_course;
 CREATE TABLE IF NOT EXISTS session_rel_course (
-  id_session smallint unsigned NOT NULL default '0',
+  id_session smallint unsigned NOT NULL default 0,
   course_code char(40) NOT NULL default '',
-  nbr_users smallint unsigned NOT NULL default '0',
-  PRIMARY KEY  (id_session,course_code),
+  nbr_users smallint unsigned NOT NULL default 0,
+  position int unsigned NOT NULL default 0,
+  category varchar(255) default '',
+  PRIMARY KEY (id_session,course_code),
   KEY course_code (course_code)
 );
 
@@ -516,6 +521,7 @@ CREATE TABLE IF NOT EXISTS session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
   id_user mediumint unsigned NOT NULL default '0',
   relation_type int default 0,
+  duration int,
   PRIMARY KEY (id_session, id_user, relation_type)
 );
 
@@ -534,6 +540,7 @@ CREATE TABLE IF NOT EXISTS session_field (
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
+
 
 DROP TABLE IF EXISTS session_field_values;
 CREATE TABLE IF NOT EXISTS session_field_values(
@@ -877,7 +884,7 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18715','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.8','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1363,7 +1370,8 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
     document_id int unsigned DEFAULT NULL,
     locked int NOT NULL DEFAULT 0,
     default_lowest_eval_exclude TINYINT default null,
-  PRIMARY KEY  (id)
+    generate_certificates TINYINT NOT NULL DEFAULT 0,
+    PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation (
@@ -2714,7 +2722,7 @@ CREATE TABLE IF NOT EXISTS message_attachment (
 
 
 
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', 'Yes', 1 , 1);
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', '', 1 , 1);
 
 --
 -- Table structure for table block
@@ -2845,6 +2853,7 @@ CREATE TABLE IF NOT EXISTS skill (
   description TEXT NOT NULL,
   access_url_id int NOT NULL,
   icon varchar(255) NOT NULL,
+  criteria text DEFAULT '',
   PRIMARY KEY (id)
 );
 
@@ -2878,8 +2887,11 @@ CREATE TABLE IF NOT EXISTS skill_rel_user (
   skill_id int NOT NULL,
   acquired_skill_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   assigned_by int NOT NULL,
+  course_id INT NOT NULL DEFAULT 0,
+  session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY (id)
 );
+ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
 
 DROP TABLE IF EXISTS skill_profile;
 CREATE TABLE IF NOT EXISTS skill_profile (
@@ -3024,4 +3036,58 @@ CREATE TABLE usergroup_rel_question (
     question_id int unsigned not null,
     usergroup_id int unsigned not null,
     coefficient float(6,2)
+);
+
+-- 1.10.x-specific, non-course-related, database changes
+-- some changes to previous structure might have been applied to the tables
+-- creation statements above to increase efficiency
+
+-- Hook tables
+CREATE TABLE IF NOT EXISTS hook_observer(
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
+    class_name varchar(255) UNIQUE,
+    path varchar(255) NOT NULL,
+    plugin_name varchar(255) NULL,
+    PRIMARY KEY PK_hook_management_hook_observer(id)
+);
+CREATE TABLE IF NOT EXISTS hook_event(
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
+    class_name varchar(255) UNIQUE,
+    description varchar(255),
+    PRIMARY KEY PK_hook_management_hook_event(id)
+);
+CREATE TABLE IF NOT EXISTS hook_call(
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
+    hook_event_id int UNSIGNED NOT NULL,
+    hook_observer_id int UNSIGNED NOT NULL,
+    type tinyint NOT NULL,
+    hook_order int UNSIGNED NOT NULL,
+    enabled tinyint NOT NULL,
+    PRIMARY KEY PK_hook_management_hook_call(id)
+);
+
+--
+-- Table structure for table course_field_options
+--
+
+CREATE TABLE course_field_options (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    field_id INT NOT NULL,
+    option_value TEXT,
+    option_display_text VARCHAR(64),
+    option_order INT,
+    tms DATETIME
+);
+
+--
+-- Table structure for table session_field_options
+--
+
+CREATE TABLE session_field_options (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    field_id INT NOT NULL,
+    option_value TEXT,
+    option_display_text VARCHAR(64),
+    option_order INT,
+    tms DATETIME
 );

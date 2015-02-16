@@ -17,9 +17,6 @@ $cidReset = true;
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
-
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section']=$this_section;

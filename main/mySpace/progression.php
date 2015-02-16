@@ -12,8 +12,7 @@
 
 $language_file = array ('registration', 'index', 'tracking');
 
-require '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
+require_once '../inc/global.inc.php';
 
 $nameTools = get_lang('Progression');
 

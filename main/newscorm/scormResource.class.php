@@ -11,7 +11,8 @@
  * Class defining the <resource> tag in an imsmanifest.xml file
  *
  */
-class scormResource {
+class scormResource
+{
     public $identifier = '';
     public $type = 'webcontent';
     //public $identifierref = '';

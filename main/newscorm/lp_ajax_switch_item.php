@@ -8,16 +8,14 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
 
 // Name of the language file that needs to be included
 $language_file[] = 'learnpath';
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 
 /**
  * Get one item's details
@@ -45,12 +43,6 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      * -'last'
      * - a real item ID
      */
-    require_once 'learnpath.class.php';
-    require_once 'scorm.class.php';
-    require_once 'aicc.class.php';
-    require_once 'learnpathItem.class.php';
-    require_once 'scormItem.class.php';
-    require_once 'aiccItem.class.php';
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $new_item_id = 0;
     switch ($next_item) {

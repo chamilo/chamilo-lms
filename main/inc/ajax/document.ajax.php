@@ -4,8 +4,6 @@
  * Responses to AJAX calls for the document upload
  */
 require_once '../global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 $action = $_REQUEST['a'];
 switch ($action) {
@@ -20,7 +18,7 @@ switch ($action) {
             } else {
                 exit;
             }
-        } elseif ($is_allowed_to_edit || is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())) {
+        } elseif ($is_allowed_to_edit || DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())) {
         } else {
             // No course admin and no group member...
             exit;
@@ -35,7 +33,6 @@ switch ($action) {
         //$ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : $defaultFileExistsOption;
 
         if (!empty($_FILES)) {
-            require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
             $file = $_FILES['file'];
             $result = DocumentManager::upload_document(
                 $_FILES,

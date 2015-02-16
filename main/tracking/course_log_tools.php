@@ -23,7 +23,7 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 if ($from == 'myspace') {
     $from_myspace = true;
-    $this_section = "session_my_space";    
+    $this_section = "session_my_space";
 } else {
     $this_section = SECTION_COURSES;
 }
@@ -31,23 +31,16 @@ if ($from == 'myspace') {
 // Access restrictions.
 $is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() || api_is_session_admin() || api_is_drh() || api_is_course_tutor();
 
-if (!$is_allowedToTrack) {    
-    api_not_allowed();    
+if (!$is_allowedToTrack) {
+    api_not_allowed();
     exit;
 }
 
 // Including additional libraries.
 
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/scormItem.class.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
 $TABLEQUIZ              = Database::get_course_table(TABLE_QUIZ_TEST);
 
@@ -77,12 +70,12 @@ $nameTools = get_lang('Tracking');
 Display::display_header($nameTools, 'Tracking');
 
 // getting all the students of the course
-if (empty($session_id)) {	
+if (empty($session_id)) {
 	// Registered students in a course outside session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id());	
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id());
 } else {
 	// Registered students in session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());    
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());
 }
 
 $nbStudents = count($a_students);
@@ -92,15 +85,15 @@ $nbStudents = count($a_students);
 
 echo '<div class="actions">';
 
-echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq());        
+echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq());
 echo Display::return_icon('course_na.png', get_lang('CourseTracking'), array(), 32);
-echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32), 'course_log_resources.php?'.api_get_cidreq());        
+echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32), 'course_log_resources.php?'.api_get_cidreq());
 
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
-	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';	
+	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
 
 echo '</span>';
 echo '</div>';
@@ -110,15 +103,15 @@ $course_code = api_get_course_id();
 $list = new LearnpathList(null, $course_code, $session_id);
 
 $flat_list = $list->get_flat_list();
-    
-    
+
+
 if (count($flat_list) > 0) {
 
     // learning path tracking
     echo '<div class="report_section">
             '.Display::page_subheader(Display::return_icon('scorms.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath')).'
             <table class="data_table">';
-    
+
     if ($export_csv) {
         $temp = array(get_lang('AverageProgressInLearnpath', ''), '');
         $csv_content[] = array('', '');
@@ -129,7 +122,7 @@ if (count($flat_list) > 0) {
         $lp_avg_progress = 0;
         foreach ($a_students as $student_id => $student) {
             // get the progress in learning pathes
-            $lp_avg_progress += Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);                
+            $lp_avg_progress += Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
         }
         if ($nbStudents > 0) {
             $lp_avg_progress = $lp_avg_progress / $nbStudents;
@@ -149,12 +142,12 @@ if (count($flat_list) > 0) {
         }
     }
     echo '</table></div>';
-} else {        
+} else {
     if ($export_csv) {
         $temp = array(get_lang('NoLearningPath', ''), '');
         $csv_content[] = $temp;
     }
-}   
+}
 
 // Exercices tracking.
 echo '<div class="report_section">
@@ -163,7 +156,7 @@ echo '<div class="report_section">
 
 $course_id = api_get_course_int_id();
 
-$sql = "SELECT id, title FROM $TABLEQUIZ 
+$sql = "SELECT id, title FROM $TABLEQUIZ
         WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
 $rs = Database::query($sql);
 
@@ -182,7 +175,7 @@ if (Database::num_rows($rs) > 0) {
         $quiz_avg_score = 0;
         if ($count_students > 0) {
             foreach ($student_ids as $student_id) {
-                $avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_code, $quiz['id'], $session_id);                    
+                $avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_code, $quiz['id'], $session_id);
                 $quiz_avg_score += $avg_student_score;
             }
         }
@@ -202,7 +195,7 @@ if (Database::num_rows($rs) > 0) {
         $temp = array(get_lang('NoExercises', ''), '');
         $csv_content[] = $temp;
     }
-}    
+}
 echo '</table></div>';
 echo '<div class="clear"></div>';
 
@@ -245,7 +238,7 @@ echo '<div class="report_section">
             '.Display::page_subheader(Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed')).'
         <table class="data_table">';
 
-$tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);    
+$tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);
 
 if ($export_csv) {
     $temp = array(get_lang('ToolsMostUsed'), '');
@@ -289,7 +282,7 @@ if ($export_csv) {
     $csv_content[] = $temp;
 }
 
-if (!empty($documents_most_downloaded)) {        
+if (!empty($documents_most_downloaded)) {
     foreach ($documents_most_downloaded as $row) {
         echo '<tr>
                 <td>'.Display::url($row['down_doc_path'], api_get_path(WEB_CODE_PATH).'document/show_content.php?file='.$row['down_doc_path'].$course_path_params).'</td>

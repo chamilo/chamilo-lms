@@ -6,9 +6,6 @@
 
 require_once '../global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
-require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
-
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
 if (api_get_setting('allow_skills_tool') != 'true') {
@@ -174,7 +171,7 @@ switch ($action) {
         $id             = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $skills = $skill->get_children($id, $load_user_data);
-        
+
         $return = array();
         foreach ($skills as $skill) {
             if (isset($skill['data']) && !empty($skill['data'])) {
@@ -189,7 +186,7 @@ switch ($action) {
         if (empty($return)) {
             $success = false;
         }
-        
+
         $result = array (
             'success' => $success,
             'data' => $return
@@ -212,21 +209,21 @@ switch ($action) {
     case 'profile_matches':
         $skill_rel_user  = new SkillRelUser();
         $skills = $_REQUEST['skill_id'];
-        
+
         $total_skills_to_search = $skills;
-                
+
         $users  = $skill_rel_user->get_user_by_skills($skills);
-        
+
         $user_list = array();
-        
+
         $count_skills = count($skills);
-        
+
         if (!empty($users)) {
             foreach ($users as $user) {
                 $user_info = api_get_user_info($user['user_id']);
                 $user_list[$user['user_id']]['user'] = $user_info;
                 $my_user_skills = $skill_rel_user->get_user_skills($user['user_id']);
-                
+
                 $user_skill_list = array();
                 foreach ($my_user_skills as $skill_item) {
                     $user_skill_list[] = $skill_item['skill_id'];
@@ -234,7 +231,7 @@ switch ($action) {
 
                 $user_skills = array();
                 $found_counts = 0;
-                
+
                 foreach ($skills as $skill_id) {
                     $found = false;
                     if (in_array($skill_id, $user_skill_list)) {
@@ -243,7 +240,7 @@ switch ($action) {
                         $user_skills[$skill_id] = array('skill_id' => $skill_id, 'found' => $found);
                     }
                 }
-                
+
                 foreach ($my_user_skills as $my_skill) {
                     if (!isset($user_skills[$my_skill['skill_id']])) {
                         $user_skills[$my_skill['skill_id']] = array(
@@ -256,7 +253,7 @@ switch ($action) {
                 $user_list[$user['user_id']]['skills'] = $user_skills;
                 $user_list[$user['user_id']]['total_found_skills'] = $found_counts;
             }
-            
+
             $ordered_user_list = array();
             foreach ($user_list as $user_id => $user_data) {
                 $ordered_user_list[$user_data['total_found_skills']][] = $user_data;
@@ -266,11 +263,11 @@ switch ($action) {
                 krsort($ordered_user_list);
             }
         }
-        
+
         Display::display_no_header();
         Display::$global_template->assign('order_user_list', $ordered_user_list);
         Display::$global_template->assign('total_search_skills', $count_skills);
-        
+
         $skill_list = array();
 
         if (!empty($total_skills_to_search)) {
@@ -308,7 +305,7 @@ switch ($action) {
         $profileId = isset($_REQUEST['profile_id']) ? intval($_REQUEST['profile_id']) : null;
         $profile = $skillRelProfile->getProfileInfo($profileId);
         echo json_encode($profile);
-        break; 
+        break;
     case 'save_profile':
         if (api_is_platform_admin() || api_is_drh()) {
             $skill_profile = new SkillProfile();

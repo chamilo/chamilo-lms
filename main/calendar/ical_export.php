@@ -13,10 +13,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
 
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
-require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.lib.php';
-
 // setting the name of the tool
 $nameTools = get_lang('MyAgenda');
 

@@ -1,37 +1,32 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	This class provides methods for the notebook management.
-*	Include/require it in your code to use its features.
-*	@package chamilo.library
-*/
-/**
- * Code
- */
-require_once 'promotion.lib.php';
-require_once 'fckeditor/fckeditor.php';
 
-define ('CAREER_STATUS_ACTIVE',  1);
-define ('CAREER_STATUS_INACTIVE',0);
-
-/**
- * @package chamilo.library
- */
 /**
  * Class Career
  */
 class Career extends Model
 {
     public $table;
-    public $columns = array('id', 'name','description','status','created_at','updated_at');
+    public $columns = array(
+        'id',
+        'name',
+        'description',
+        'status',
+        'created_at',
+        'updated_at'
+    );
 
-	public function __construct()
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
         $this->table =  Database::get_main_table(TABLE_CAREER);
-	}
+    }
 
     /**
      * Get the count of elements
+     * @return int
      */
     public function get_count()
     {
@@ -50,9 +45,9 @@ class Career extends Model
 
     /**
      * Update all promotion status by career
-     * @param   int     career id
-     * @param   int     status (1 or 0)
-    */
+     * @param   int     $career_id
+     * @param   int     $status (1 or 0)
+     */
     public function update_all_promotion_status_by_career_id($career_id, $status)
     {
         $promotion = new Promotion();
@@ -70,14 +65,14 @@ class Career extends Model
     /**
      * Displays the title + grid
      */
-	public function display()
+    public function display()
     {
-		echo '<div class="actions" style="margin-bottom:20px">';
+        echo '<div class="actions" style="margin-bottom:20px">';
         echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
-		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_career.png',get_lang('Add'),'','32').'</a>';
-		echo '</div>';
+        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_career.png',get_lang('Add'),'','32').'</a>';
+        echo '</div>';
         echo Display::grid_html('careers');
-	}
+    }
 
     /**
      * @return array
@@ -88,21 +83,14 @@ class Career extends Model
     }
 
     /**
-    * Returns a Form validator Obj
-    * @todo the form should be auto generated
-    * @param   string  url
-    * @param   string  action add, edit
-    * @return  obj     form validator obj
-    */
+     * Returns a Form validator Obj
+     * @todo the form should be auto generated
+     * @param   string  url
+     * @param   string  action add, edit
+     * @return  obj     form validator obj
+     */
     public function return_form($url, $action)
     {
-		$oFCKeditor = new FCKeditor('description');
-		$oFCKeditor->ToolbarSet = 'careers';
-		$oFCKeditor->Width		= '100%';
-		$oFCKeditor->Height		= '200';
-		$oFCKeditor->Value		= '';
-		$oFCKeditor->CreateHtml();
-
         $form = new FormValidator('career', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
@@ -115,34 +103,44 @@ class Career extends Model
         $form->addElement('hidden', 'id', $id);
 
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
-        $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
-	    $status_list = $this->get_status_list();
+        $form->add_html_editor(
+            'description',
+            get_lang('Description'),
+            false,
+            false,
+            array(
+                'ToolbarSet' => 'careers',
+                'Width' => '100%',
+                'Height' => '250'
+            )
+        );
+        $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
             $form->addElement('text', 'created_at', get_lang('CreatedAt'));
             $form->freeze('created_at');
         }
-
         if ($action == 'edit') {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+            $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
         } else {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+            $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
         }
 
         // Setting the defaults
         $defaults = $this->get($id);
 
         if (!empty($defaults['created_at'])) {
-        	$defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
+            $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
         }
         if (!empty($defaults['updated_at'])) {
-        	$defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
+            $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
         }
         $form->setDefaults($defaults);
 
         // Setting the rules
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
-		return $form;
+
+        return $form;
     }
 
     /**
@@ -184,6 +182,7 @@ class Career extends Model
                 }
             }
         }
+
         return $cid;
     }
 
@@ -212,11 +211,12 @@ class Career extends Model
      */
     public function save($params, $show_query = false)
     {
-	    $id = parent::save($params);
-	    if (!empty($id)) {
-	    	event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-   		}
-   		return $id;
+        $id = parent::save($params);
+        if (!empty($id)) {
+            event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+        }
+
+        return $id;
     }
 
     /**
@@ -225,7 +225,7 @@ class Career extends Model
      */
     public function delete($id)
     {
-	    parent::delete($id);
-	    event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+        parent::delete($id);
+        event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
     }
 }

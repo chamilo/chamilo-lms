@@ -13,7 +13,6 @@
 $language_file="registration";
 
 include("../inc/global.inc.php");
-require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 $this_section=SECTION_COURSES;
 
 if (! ($is_courseAdmin || $is_platformAdmin)) api_not_allowed(true);
@@ -203,8 +202,9 @@ if($register) {
             $message = stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedU');
         }
 
+        $plugin = new AppPlugin();
         $additionalParameters = array(
-            'smsType' => ClockworksmsPlugin::BEEN_SUBSCRIBED_COURSE,
+            'smsType' => constant($plugin->getSMSPluginName().'::BEEN_SUBSCRIBED_COURSE'),
             'userId' => $user_id,
             'courseTitle' => $currentCourseName
         );

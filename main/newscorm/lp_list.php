@@ -15,15 +15,12 @@ $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
     header('location: lp_controller.php?action=list');
+    exit;
 }
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
-
-require_once 'learnpathList.class.php';
-require_once 'learnpath.class.php';
-require_once 'learnpathItem.class.php';
 
 /**
  * Display initialisation and security checks
@@ -118,7 +115,9 @@ if (!empty($flat_list)) {
         echo '<th width="300px">'.get_lang('AuthoringOptions')."</th>";
     } else {
         echo '<th width="50%">'.get_lang('Title').'</th>';
-        echo '<th>'.get_lang('Progress')."</th>";
+        if (!api_is_invitee()) {
+            echo '<th>'.get_lang('Progress')."</th>";
+        }
         echo '<th>'.get_lang('Actions')."</th>";
     }
     echo '</tr>';
@@ -226,17 +225,25 @@ if (!empty($flat_list)) {
         $dsp_debug = '';
         $dsp_order = '';
 
-        $progress = learnpath::getProgress(
-            $id,
-            $userId,
-            api_get_course_int_id(),
-            api_get_session_id()
-        );
+        $progress = 0;
+
+        if (!api_is_invitee()) {
+            $progress = learnpath::getProgress(
+                $id,
+                $userId,
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+        }
 
         if ($is_allowed_to_edit) {
             $dsp_progress = '<td><center>'.$progress.'</center></td>';
         } else {
-            $dsp_progress = '<td>'.learnpath::get_progress_bar($progress, '%').'</td>';
+            $dsp_progress = "";
+
+            if (!api_is_invitee()) {
+                $dsp_progress = '<td>'.learnpath::get_progress_bar($progress, '%').'</td>';
+            }
         }
 
         $dsp_edit = '<td class="td_actions">';
@@ -263,7 +270,7 @@ if (!empty($flat_list)) {
             // BUILD
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
-                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=step&amp;lp_id='.$id.'">'.
+                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=step&amp;lp_id='.$id.'&isStudentView=false">'.
                         Display::return_icon('edit.png', get_lang('LearnpathEditLearnpath'), '', ICON_SIZE_SMALL).'</a>';
                 } else {
                     $dsp_build = Display::return_icon('edit_na.png', get_lang('LearnpathEditLearnpath'), '', ICON_SIZE_SMALL);

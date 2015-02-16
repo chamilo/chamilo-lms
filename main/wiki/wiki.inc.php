@@ -36,16 +36,15 @@ class Wiki
     public function __construct()
     {
         // Database table definition
-        $this->tbl_wiki           = Database::get_course_table(TABLE_WIKI);
-        $this->tbl_wiki_discuss   = Database::get_course_table(TABLE_WIKI_DISCUSS);
-        $this->tbl_wiki_mailcue   = Database::get_course_table(TABLE_WIKI_MAILCUE);
-        $this->tbl_wiki_conf      = Database::get_course_table(TABLE_WIKI_CONF);
+        $this->tbl_wiki = Database::get_course_table(TABLE_WIKI);
+        $this->tbl_wiki_discuss = Database::get_course_table(TABLE_WIKI_DISCUSS);
+        $this->tbl_wiki_mailcue = Database::get_course_table(TABLE_WIKI_MAILCUE);
+        $this->tbl_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
 
         $this->session_id = api_get_session_id();
         $this->condition_session = api_get_session_condition($this->session_id);
         $this->course_id = api_get_course_int_id();
         $this->group_id = api_get_group_id();
-
 
         if (!empty($this->group_id)) {
             $this->groupfilter = ' group_id="'.$this->group_id.'"';
@@ -186,8 +185,10 @@ class Wiki
         $irclink='href="irc';
         $irclinkStyle='class="wiki_irc_link" href="irc';
         $output=str_replace($irclink, $irclinkStyle, $input);
+
         return $output;
     }
+
     /**
      * This function allows users to have [link to a title]-style links like in most regular wikis.
      * It is true that the adding of links is probably the most anoying part of Wiki for the people
@@ -277,8 +278,8 @@ class Wiki
         $_clean['title'] = Database::escape_string(trim($values['title']));
         $_clean['content'] = Database::escape_string($values['content']);
         if (api_get_setting('htmlpurifier_wiki') == 'true'){
-            $purifier = new HTMLPurifier();
-            $_clean['content'] = $purifier->purify($_clean['content']);
+            //$purifier = new HTMLPurifier();
+            $_clean['content'] = Security::remove_XSS($_clean['content']);
         }
         $_clean['user_id'] = api_get_user_id();
         $_clean['assignment']= Database::escape_string($values['assignment']);
@@ -684,7 +685,6 @@ class Wiki
 
         if ($form->validate()) {
             $values = $form->exportValues();
-
             if (empty($_POST['title'])) {
                 self::setMessage(Display::display_error_message(get_lang("NoWikiPageTitle"), false, true));
             } elseif (strtotime($values['startdate_assig']) > strtotime($values['enddate_assig'])) {
@@ -704,7 +704,7 @@ class Wiki
                 }
 
                 $wikiData = self::getWikiData();
-                $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'];
+                $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'].'&'.api_get_cidreq();
                 header('Location: '.$redirectUrl);
                 exit;
             }
@@ -1752,7 +1752,6 @@ class Wiki
         $wikiFileName = $exportFile . '_' . $i . '.html';
         $exportPath = $exportDir . '/' . $wikiFileName;
         file_put_contents( $exportPath, $wikiContents );
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         $doc_id = add_document($_course, $groupPath.'/'.$wikiFileName, 'file', filesize($exportPath), $wikiTitle);
         api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);
 
@@ -1771,7 +1770,6 @@ class Wiki
             }
         }
 
-        require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
         $data        = self::get_wiki_data($id);
         $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
 
@@ -1803,7 +1801,7 @@ class Wiki
         } else {
             $css = '';
         }
-        require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+
         $pdf = new PDF();
         $pdf->content_to_pdf($html, $css, $title_pdf, $course_code);
         exit;
@@ -4320,17 +4318,18 @@ class Wiki
         $page = $this->page;
 
         echo '<div class="actions">';
-        /*        echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('show').'>'.
-            Display::return_icon('wiki.png',get_lang('HomeWiki'),'',ICON_SIZE_MEDIUM).'</a>&nbsp;';*/
         echo '<ul class="nav" style="margin-bottom:0px">
                 <li class="dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0)">'.Display::return_icon('menu.png', get_lang('Menu'), '', ICON_SIZE_MEDIUM).'</a>';
+                <a class="dropdown-toggle" href="javascript:void(0)">'.
+                Display::return_icon('menu.png', get_lang('Menu'), '', ICON_SIZE_MEDIUM).'</a>';
         // menu home
         echo '<ul class="dropdown-menu">';
-        echo '<li><a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('Home').'</a></li>';
+        echo '<li><a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.
+            get_lang('Home').'</a></li>';
         if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit()) {
             // menu add page
-            echo '<li><a href="index.php?cidReq=' . $_course['id'] . '&action=addnew&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('addnew').'>' . get_lang('AddNew') . '</a>';
+            echo '<li><a href="index.php?cidReq=' . $_course['id'] . '&action=addnew&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('addnew').'>'
+            . get_lang('AddNew') . '</a>';
         }
 
         $lock_unlock_addnew = null;
@@ -4347,16 +4346,21 @@ class Wiki
             }
         }
 
-        echo '<a href="index.php?action=show&amp;actionpage='.$lock_unlock_addnew.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$protect_addnewpage.'</a></li>';
+        echo '<a href="index.php?action=show&amp;actionpage='.$lock_unlock_addnew.'&amp;title='.api_htmlentities(urlencode($page)).'">'.
+            $protect_addnewpage.'</a></li>';
         // menu find
-        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('searchpages').'>'.get_lang('SearchPages').'</a></li>';
+        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=searchpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('searchpages').'>'.
+            get_lang('SearchPages').'</a></li>';
         // menu all pages
-        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('allpages').'>'.get_lang('AllPages').'</a></li>';
+        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('allpages').'>'.
+            get_lang('AllPages').'</a></li>';
         // menu recent changes
-        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.get_lang('RecentChanges').'</a></li>';
+        echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('recentchanges').'>'.
+            get_lang('RecentChanges').'</a></li>';
         // menu delete all wiki
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            echo '<li><a href="index.php?action=deletewiki&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('deletewiki').'>'.get_lang('DeleteWiki').'</a></li>';
+            echo '<li><a href="index.php?action=deletewiki&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('deletewiki').'>'.
+                get_lang('DeleteWiki').'</a></li>';
         }
         ///menu more
         echo '<li><a href="index.php?action=more&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('more').'>'.get_lang('Statistics').'</a></li>';
@@ -4395,7 +4399,7 @@ class Wiki
                 Display::return_icon('delete.png',get_lang('DeleteThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
         }
         echo '</ul>';
-        echo '</div>'; // End actions
+        echo '</div>';
     }
 
     /**
@@ -4542,7 +4546,7 @@ class Wiki
                         $message=get_lang('TheTaskDoesNotBeginUntil').': '.api_get_local_time($row['startdate_assig'], null, date_default_timezone_get());
                         self::setMessage(Display::display_warning_message($message, false, true));
                         if (!api_is_allowed_to_edit(false,true)) {
-                            return;
+                            $this->redirectHome();
                         }
                     }
 
@@ -4555,7 +4559,7 @@ class Wiki
                         $message = get_lang('TheDeadlineHasBeenCompleted').': '.api_get_local_time($row['enddate_assig'], null, date_default_timezone_get());
                         self::setMessage(Display::display_warning_message($message, false, true));
                         if (!api_is_allowed_to_edit(false,true)) {
-                            return;
+                            $this->redirectHome();
                         }
                     }
 
@@ -4563,7 +4567,7 @@ class Wiki
                         $message=get_lang('HasReachedMaxiNumVersions');
                         self::setMessage(Display::display_warning_message($message, false, true));
                         if (!api_is_allowed_to_edit(false,true)) {
-                            return;
+                            $this->redirectHome();
                         }
                     }
 
@@ -4571,7 +4575,7 @@ class Wiki
                         $message = get_lang('HasReachedMaxNumWords');
                         self::setMessage(Display::display_warning_message($message, false, true));
                         if (!api_is_allowed_to_edit(false,true)) {
-                            return;
+                            $this->redirectHome();
                         }
                     }
 
@@ -4648,11 +4652,11 @@ class Wiki
                             Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
                             '</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
                         self::setMessage(Display::display_normal_message($is_being_edited, false, true));
-                        return;
+                        $this->redirectHome();
                     }
 
                     // Form.
-                    $url = api_get_self().'?action=edit&title='.urlencode($page).'&session_id='.api_get_session_id().'&group_id='.api_get_group_id();
+                    $url = api_get_self().'?action=edit&title='.urlencode($page).'&session_id='.api_get_session_id().'&group_id='.api_get_group_id().'&'.api_get_cidreq();
                     $form = new FormValidator('wiki', 'post', $url);
                     $form->addElement('header', $icon_assignment.str_repeat('&nbsp;',3).api_htmlentities($title));
                     self::setForm($form, $row);
@@ -4677,12 +4681,11 @@ class Wiki
                             //prevent concurrent users and double version
                             self::setMessage(Display::display_error_message(get_lang("EditedByAnotherUser"), false, true));
                         } else {
-
                             $return_message = self::save_wiki($form->exportValues());
                             self::setMessage(Display::display_confirmation_message($return_message, false, true));
                         }
                         $wikiData = self::getWikiData();
-                        $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'];
+                        $redirectUrl = $this->url.'&action=showpage&title='.$wikiData['reflink'].'&'.api_get_cidreq();
                         header('Location: '.$redirectUrl);
                         exit;
                     }
@@ -5131,7 +5134,7 @@ class Wiki
     public function redirectHome()
     {
         $redirectUrl = $this->url.'&action=showpage&title=index';
-        header('Location: '.$redirectUrl);
+        header('Location: '.$redirectUrl.'&'.api_get_cidreq());
         exit;
     }
 
@@ -5155,4 +5158,3 @@ class Wiki
         return false;
     }
 }
-

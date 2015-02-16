@@ -304,7 +304,6 @@ function update_event_exercice(
     $remind_list = array(),
     $end_date = null
 ) {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
 
     if ($debug) error_log('Called to update_event_exercice');
@@ -410,7 +409,6 @@ function create_event_exercice($exo_id)
 
     // No record was found, so create one
     // get expire time to insert into the tracking record
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     $current_expired_time_key = get_time_control_key($exercise_id);
     if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
         $expired_date = $_SESSION['expired_time'][$current_expired_time_key];
@@ -435,7 +433,6 @@ function create_event_exercice($exo_id)
  */
 function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null)
 {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug, $learnpath_id, $learnpath_item_id;
     $score          = Database::escape_string($score);
     $answer         = Database::escape_string($answer);
@@ -536,7 +533,6 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
  */
 function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0)
 {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $safe_lp_id, $safe_lp_item_id;
     //Validation in case of fraud  with actived control time
     if (!exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
@@ -910,40 +906,67 @@ function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_
  */
 function delete_student_lp_events($user_id, $lp_id, $course, $session_id)
 {
-    $lp_view_table         = Database::get_course_table(TABLE_LP_VIEW);
-    $lp_item_view_table    = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-    $course_id 			   = $course['real_id'];
+    $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
+    $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+    $lpInteraction = Database::get_course_table(TABLE_LP_IV_INTERACTION);
+    $lpObjective = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
+
+    $course_id = $course['real_id'];
 
     if (empty($course_id)) {
         $course_id = api_get_course_int_id();
     }
 
-    $track_e_exercises     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempts        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $recording_table       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-
-    $user_id               = intval($user_id);
-    $lp_id                 = intval($lp_id);
-    $session_id            = intval($session_id);
+    $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+    $user_id = intval($user_id);
+    $lp_id = intval($lp_id);
+    $session_id = intval($session_id);
 
     //Make sure we have the exact lp_view_id
     $sql = "SELECT id FROM $lp_view_table
-            WHERE c_id = $course_id AND user_id = $user_id AND lp_id = $lp_id AND session_id = $session_id ";
-    $result    = Database::query($sql);
+            WHERE
+                c_id = $course_id AND
+                user_id = $user_id AND
+                lp_id = $lp_id AND
+                session_id = $session_id ";
+    $result = Database::query($sql);
 
     if (Database::num_rows($result)) {
-        $view          = Database::fetch_array($result, 'ASSOC');
-        $lp_view_id    = $view['id'];
-        $sql = "DELETE FROM $lp_item_view_table WHERE c_id = $course_id AND lp_view_id = $lp_view_id ";
+        $view = Database::fetch_array($result, 'ASSOC');
+        $lp_view_id = $view['id'];
+        $sql = "DELETE FROM $lp_item_view_table
+                WHERE c_id = $course_id AND lp_view_id = $lp_view_id ";
+        Database::query($sql);
+
+        $sql = "DELETE FROM $lpInteraction
+                WHERE c_id = $course_id AND lp_iv_id = $lp_view_id ";
+        Database::query($sql);
+
+        $sql = "DELETE FROM $lpObjective
+                WHERE c_id = $course_id AND lp_iv_id = $lp_view_id ";
         Database::query($sql);
     }
 
-    $sql = "DELETE FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id= $lp_id AND session_id = $session_id ";
+    $sql = "DELETE FROM $lp_view_table
+            WHERE
+                c_id = $course_id AND
+                user_id = $user_id AND
+                lp_id= $lp_id AND
+                session_id = $session_id
+            ";
     Database::query($sql);
 
     $sql = "SELECT exe_id FROM $track_e_exercises
-            WHERE exe_user_id = $user_id AND session_id = $session_id  AND exe_cours_id = '{$course['code']}' AND orig_lp_id = $lp_id";
-    $result    = Database::query($sql);
+            WHERE
+                exe_user_id = $user_id AND
+                session_id = $session_id AND
+                exe_cours_id = '{$course['code']}' AND
+                orig_lp_id = $lp_id
+            ";
+
+    $result = Database::query($sql);
     $exe_list = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $exe_list[] = $row['exe_id'];
@@ -959,7 +982,15 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id)
         $sql = "DELETE FROM $recording_table WHERE exe_id IN (".implode(',',$exe_list).")";
         Database::query($sql);
     }
-    event_system(LOG_LP_ATTEMPT_DELETE, LOG_LP_ID, $lp_id, null, null, $course['code'], $session_id);
+    event_system(
+        LOG_LP_ATTEMPT_DELETE,
+        LOG_LP_ID,
+        $lp_id,
+        null,
+        null,
+        $course['code'],
+        $session_id
+    );
 }
 
 /**

@@ -12,14 +12,9 @@
 $language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
 
 $cidReset = true;
-require '../inc/global.inc.php';
-require_once 'myspace.lib.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN; // TODO: Platform admin section?
-
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 $tool_name = get_lang('ImportUserListXMLCSV');
 api_block_anonymous_users();

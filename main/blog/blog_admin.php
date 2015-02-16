@@ -27,8 +27,7 @@ if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit()) {
 	api_not_allowed(true);//print headers/footers
 }
 
-if (api_is_allowed_to_edit()) { 
-	require_once api_get_path(LIBRARY_PATH) . "blog.lib.php";
+if (api_is_allowed_to_edit()) {
 	$nameTools = get_lang("blog_management");
 
 	// showing the header if we are not in the learning path, if we are in

@@ -18,8 +18,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-
 if (!isset($_GET['id'])) {
     api_not_allowed();
 }

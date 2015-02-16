@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.calendar
  */
@@ -20,7 +21,6 @@ if ($type == 'personal') {
     $cidReset = true; // fixes #5162
 }
 require_once '../inc/global.inc.php';
-require_once 'agenda.lib.php';
 require_once 'agenda.inc.php';
 
 $current_course_tool = TOOL_CALENDAR_EVENT;
@@ -221,10 +221,15 @@ $form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span
 $form->addElement('text', 'title', get_lang('Title'), array('id' => 'title'));
 $form->addElement('textarea', 'content', get_lang('Description'), array('id' => 'content'));
 
+$allowEventComment = api_get_configuration_value('allow_agenda_event_comment');
+
 if ($agenda->type == 'course') {
     $form->addElement('html', '<div id="add_as_announcement_div" style="display: none">');
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
     $form->addElement('html', '</div>');
+    if ($allowEventComment) {
+        $form->addElement('textarea', 'comment', get_lang('Comment'), array('id' => 'comment'));
+    }
 }
 
 $tpl->assign('form_add', $form->return_form());
@@ -234,6 +239,8 @@ $content = $tpl->fetch('default/agenda/month.tpl');
 
 $message = Session::read('message');
 $tpl->assign('message', $message);
+$tpl->assign('allow_agenda_event_comment', $allowEventComment);
+
 Session::erase('message');
 
 $tpl->assign('content', $content);

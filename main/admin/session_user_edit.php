@@ -24,9 +24,6 @@ if (!isset($sessionInfo['duration']) ||
     api_not_allowed(true);
 }
 
-if (!SessionManager::durationPerUserIsEnabled()) {
-    api_not_allowed(true);
-}
 if (empty($sessionId) || empty($userId)) {
     api_not_allowed(true);
 }

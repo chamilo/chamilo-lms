@@ -48,7 +48,6 @@ class CalculatedAnswer extends Question
 
         // javascript //
         echo '<script>
-
             function parseTextNumber(textNumber, floatValue) {
                 if (textNumber.indexOf(".") > -1) {
                     textNumber = parseFloat(textNumber);
@@ -74,24 +73,28 @@ class CalculatedAnswer extends Question
                 document.getElementById("randomValue"+index).innerHTML = "'.get_lang("ExampleValue").': " + result;
            }
 
-            function FCKeditor_OnComplete(editorInstance) {
+            /*function FCKeditor_OnComplete(editorInstance) {
                 if (window.attachEvent) {
                     editorInstance.EditorDocument.attachEvent("onkeyup", updateBlanks) ;
                 } else {
                     editorInstance.EditorDocument.addEventListener("keyup", updateBlanks, true);
                 }
-            }
+            }*/
+
+            CKEDITOR.on("instanceCreated", function(e) {
+                if (e.editor.name === "answer") {
+                    e.editor.on("change", updateBlanks);
+                }
+            });
 
             var firstTime = true;
 
-            function updateBlanks() {
+            function updateBlanks(e) {
                 if (firstTime) {
                     field = document.getElementById("answer");
                     var answer = field.value;
                 } else {
-                    var oEditor = FCKeditorAPI.GetInstance("answer");
-                    //var answer =  oEditor.GetXHTML(true);
-                    var answer = oEditor.EditorDocument.body.innerHTML;
+                    var answer = e.editor.getData();
                 }
                 var blanks = answer.match(/\[[^\]]*\]/g);
                 var fields = "<div class=\"control-group\"><label class=\"control-label\">'.get_lang('VariableRanges').'</label><div class=\"controls\"><table>";
@@ -125,7 +128,7 @@ class CalculatedAnswer extends Question
 
         // answer
         $form->addElement('label', null, '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'));
-        $form->addElement('html_editor', 'answer', '<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
+        $form->addElement('html_editor', 'answer', '<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'Test_Question_Description', 'Width' => '100%', 'Height' => '350'));
 
         $form->addRule('answer', get_lang('GiveText'),'required');
         $form->addRule('answer', get_lang('DefineBlanks'),'regex','/\[.*\]/');
@@ -216,7 +219,6 @@ class CalculatedAnswer extends Question
                         $auxAnswer = str_replace($blankItem, $randomValue, $auxAnswer);
                         $auxFormula = str_replace($blankItem, $randomValue, $auxFormula);
                     }
-                    require_once(api_get_path(LIBRARY_PATH).'evalmath.class.php');
                     $math = new EvalMath();
                     $result = $math->evaluate($auxFormula);
                     $result = number_format($result, 2, ".", "");

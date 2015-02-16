@@ -3535,16 +3535,12 @@ function show_add_form($id = '', $type = null)
      */
     function agenda_import_ical($course_info, $file)
     {
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-
         $charset = api_get_system_encoding();
         $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
         if (!@move_uploaded_file($file['tmp_name'], $filepath)) {
             error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
             return false;
         }
-
-        require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
 
         $ical = new vcalendar();
         $ical->setConfig('directory', dirname($filepath));

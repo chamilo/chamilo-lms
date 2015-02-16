@@ -27,11 +27,7 @@
 $use_anonymous = true;
 
 // Load common libraries using a compatibility script to bridge between 1.6 and 1.8.
-require_once 'back_compat.inc.php';
-// Load learning path libraries so we can use the objects to define the initial values of the API.
-require_once 'learnpath.class.php';
-require_once 'learnpathItem.class.php';
-require_once 'aicc.class.php';
+require_once '../inc/global.inc.php';
 
 // Is this needed? This is probabaly done in the header file.
 $file = $_SESSION['file'];

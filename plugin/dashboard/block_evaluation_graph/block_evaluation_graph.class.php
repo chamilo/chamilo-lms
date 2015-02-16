@@ -1,16 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/flatview_data_generator.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
+use CpChart\Classes\pData as pData;
+use CpChart\Classes\pImage as pImage;
+use CpChart\Classes\pCache as pCache;
+
 
 /**
  * Class BlockEvaluationGraph
@@ -135,7 +129,7 @@ class BlockEvaluationGraph extends Block
 				if (isset($cats) && isset($cats[0])) {
 					$alleval = $cats[0]->get_evaluations(null, true, $course_code);
 					$alllinks = $cats[0]->get_links(null, true);
-					$users = get_all_users($alleval, $alllinks);
+					$users = GradebookUtils::get_all_users($alleval, $alllinks);
 					$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
 					$evaluation_sumary = $datagen->get_evaluation_sumary_results();
 					if (!empty($evaluation_sumary)) {
@@ -146,96 +140,147 @@ class BlockEvaluationGraph extends Block
                             $min[] = !empty($evaluation['min']) ? $evaluation['min'] : 0;
 							$avg[] = $evaluation['avg'];
 						}
-						// Dataset definition
-					    $data_set = new pData;
-					    $data_set->AddPoint($max, "Max");
-					    $data_set->AddPoint($avg, "Avg");
-					    $data_set->AddPoint($min, "Min");
-					    $data_set->AddPoint($items, "Items");
-					    $data_set->SetXAxisName(get_lang('EvaluationName'));
-						$data_set->SetYAxisName(get_lang('Percentage'));
-						$data_set->AddAllSeries();
-					   	$data_set->RemoveSerie("Items");
-					   	$data_set->SetAbsciseLabelSerie("Items");
-					    $graph_id = $this->user_id.'StudentEvaluationGraph';
-						$cache = new pCache();
-						// the graph id
-						$data = $data_set->GetData();
-						if ($cache->IsInCache($graph_id, $data)) {
-							//if we already created the img
-							$img_file = $cache->GetHash($graph_id, $data);
-						} else {
-							// Initialise the graph
-                            $angle = -30;
-						    $test = new pChart($this->bg_width,$this->bg_height);
-						    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-                            $test = $test->fixHeightByRotation(
-                                $data_set->GetData(),
-                                $data_set->GetDataDescription(),
-                                $angle
+                        // Dataset definition
+                        $dataSet = new pData();
+                        $dataSet->addPoints($min, 'Serie3');
+                        $dataSet->addPoints($avg, 'Serie2');
+                        $dataSet->addPoints($max, 'Serie1');
+                        $dataSet->addPoints($items, 'Labels');
+
+                        $dataSet->setSerieDescription('Serie1', get_lang('Max'));
+                        $dataSet->setSerieDescription('Serie2', get_lang('Avg'));
+                        $dataSet->setSerieDescription('Serie3', get_lang('Min'));
+                        $dataSet->setAbscissa('Labels');
+
+                        $dataSet->setAbscissaName(get_lang('EvaluationName'));
+
+                        $dataSet->normalize(100, '%');
+
+                        $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
+
+                        // Cache definition
+                        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+                        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+                        $chartHash = $myCache->getHash($dataSet);
+                        if ($myCache->isInCache($chartHash)) {
+                            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                            $myCache->saveFromCache($chartHash, $imgPath);
+                            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                        } else {
+                            /* Create the pChart object */
+                            $widthSize = $this->bg_width;
+                            $heightSize = $this->bg_height;
+                            $fontSize = 8;
+                            $angle = 50;
+
+                            $myPicture = new pImage($widthSize, $heightSize, $dataSet);
+
+                            /* Turn of Antialiasing */
+                            $myPicture->Antialias = false;
+
+                            /* Add a border to the picture */
+                            $myPicture->drawRectangle(
+                                0,
+                                0,
+                                $widthSize - 1,
+                                $heightSize - 1,
+                                array(
+                                    'R' => 0,
+                                    'G' => 0,
+                                    'B' => 0
+                                )
                             );
-                            $test->setGraphArea(50, 30, $this->bg_width-75, $this->bg_height - 75);
-                            $test->drawFilledRoundedRectangle(
-                                7,
-                                7,
-                                $this->bg_width-20,
-                                $test->YSize - 20,
-                                5,
-                                240,
-                                240,
-                                240
+
+                            /* Set the default font */
+                            $myPicture->setFontProperties(
+                                array(
+                                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                                    'FontSize' => 10
+                                )
                             );
-                            $test->drawRoundedRectangle(
-                                5,
-                                5,
-                                $this->bg_width-18,
-                                $test->YSize - 18,
-                                5,
-                                230,
-                                230,
-                                230
+
+                            /* Do NOT Write the chart title */
+
+                            /* Define the chart area */
+                            $myPicture->setGraphArea(
+                                50,
+                                30,
+                                $widthSize - 20,
+                                $heightSize - 100
                             );
-                            $test->drawGraphArea(255,255,255,TRUE);
-                            $test->setFixedScale(0,100,5);
-                            $test->drawScale(
-                                $data_set->GetData(),
-                                $data_set->GetDataDescription(),
-                                SCALE_ADDALL,
-                                150,
-                                150,
-                                150,
-                                TRUE,
-                                $angle,
-                                2,
-                                TRUE
+
+                            /* Draw the scale */
+                            $scaleSettings = array(
+                                'GridR' => 200,
+                                'GridG' => 200,
+                                'GridB' => 200,
+                                'DrawSubTicks' => true,
+                                'CycleBackground' => true,
+                                'Mode' => SCALE_MODE_MANUAL,
+                                'ManualScale' => array(
+                                    '0' => array(
+                                        'Min' => 0,
+                                        'Max' => 100,
+                                    )
+                                ),
+                                'LabelRotation' => $angle,
                             );
-						    $test->setColorPalette(0,105,221,34);
-							$test->setColorPalette(1,255,135,30);
-							$test->setColorPalette(2,255,0,0);
-						    $test->drawGrid(4,TRUE,230,230,230,50);
-						    // Draw the 0 line
-						    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);
-						    $test->drawTreshold(0,143,55,72,TRUE,TRUE);
-						    // Draw the bar graph
-						    $test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 90);
-						    // Finish the graph
-						    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-						    $test->drawLegend($this->bg_width-80,20,$data_set->GetDataDescription(),255,255,255);
-						    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);
-						    //$test->drawTitle(50,22,$course_code,50,50,50,185);
-						    $test->setColorPalette(0,50,50,50);
-							$test->setColorPalette(1,50,50,50);
-							$test->setColorPalette(2,50,50,50);
-						    $test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),array("Min", "Max", "Avg"));
-						    $cache->WriteToCache($graph_id, $data_set->GetData(), $test);
-							ob_start();
-							$test->Stroke();
-							ob_end_clean();
-							$img_file = $cache->GetHash($graph_id, $data_set->GetData());
-						}
-						if (!empty($img_file)) {
-							$graphs[$course_code] = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
-						}
+                            $myPicture->drawScale($scaleSettings);
+
+                            /* Turn on shadow computing */
+                            $myPicture->setShadow(
+                                true,
+                                array(
+                                    'X' => 1,
+                                    'Y' => 1,
+                                    'R' => 0,
+                                    'G' => 0,
+                                    'B' => 0,
+                                    'Alpha' => 10
+                                )
+                            );
+
+                            /* Draw the chart */
+                            $myPicture->setShadow(
+                                true,
+                                array(
+                                    'X' => 1,
+                                    'Y' => 1,
+                                    'R' => 0,
+                                    'G' => 0,
+                                    'B' => 0,
+                                    'Alpha' => 10
+                                )
+                            );
+                            $settings = array(
+                                'DisplayValues' => true,
+                                'DisplaySize' => $fontSize,
+                                'DisplayR' => 0,
+                                'DisplayG' => 0,
+                                'DisplayB' => 0,
+                                'DisplayOrientation' => ORIENTATION_HORIZONTAL,
+                                'Gradient' => false,
+                                'Surrounding' => 30,
+                                'InnerSurrounding' => 25
+                            );
+                            $myPicture->drawStackedBarChart($settings);
+
+                            $legendSettings = array(
+                                'Mode' => LEGEND_HORIZONTAL,
+                                'Style' => LEGEND_NOBORDER,
+                            );
+                            $myPicture->drawLegend($widthSize / 2, 15, $legendSettings);
+
+                            /* Write and save into cache */
+
+                            $myCache->writeToCache($chartHash, $myPicture);
+                            $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                            $myCache->saveFromCache($chartHash, $imgPath);
+                            $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                        }
+                        if (!empty($imgPath)) {
+                            $courses_graph[$course_code] = '<img src="' . $imgPath . '">';
+                        }
 					}
 				}
 			} // end for
@@ -262,7 +307,7 @@ class BlockEvaluationGraph extends Block
 					if (isset($cats) && isset($cats[0])) {
 						$alleval = $cats[0]->get_evaluations(null, true, $course_code);
 						$alllinks = $cats[0]->get_links(null, true);
-						$users = get_all_users($alleval, $alllinks);
+						$users = GradebookUtils::get_all_users($alleval, $alllinks);
 						$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
 						$evaluation_sumary = $datagen->get_evaluation_sumary_results();
 						if (!empty($evaluation_sumary)) {
@@ -273,95 +318,141 @@ class BlockEvaluationGraph extends Block
 								$min[] = $evaluation['min'];
 								$avg[] = $evaluation['avg'];
 							}
-							// Dataset definition
-						    $data_set = new pData;
-						    $data_set->AddPoint($max, "Max");
-						    $data_set->AddPoint($avg, "Avg");
-						    $data_set->AddPoint($min, "Min");
-						    $data_set->AddPoint($items, "Items");
-						    $data_set->SetXAxisName(get_lang('EvaluationName'));
-							$data_set->SetYAxisName(get_lang('Percentage'));
-							$data_set->AddAllSeries();
-						   	$data_set->RemoveSerie("Items");
-						   	$data_set->SetAbsciseLabelSerie("Items");
-						    $graph_id = $this->user_id.'StudentEvaluationGraph';
-							$cache = new pCache();
-							// the graph id
-							$data = $data_set->GetData();
-							if ($cache->IsInCache($graph_id, $data)) {
-								//if we already created the img
-								$img_file = $cache->GetHash($graph_id, $data);
-							} else {
-								// Initialise the graph
-                                $angle = -30;
-							    $test = new pChart($this->bg_width, $this->bg_height);
-							    $test->setFontProperties(api_get_path(LIBRARY_PATH) . 'pchart/fonts/tahoma.ttf', 8);
-                                $test->fixHeightByRotation(
-                                    $data_set->GetData(),
-                                    $data_set->GetDataDescription(),
-                                    $angle
+                            // Dataset definition
+                            $dataSet = new pData();
+                            $dataSet->addPoints($min, 'Serie3');
+                            $dataSet->addPoints($avg, 'Serie2');
+                            $dataSet->addPoints($max, 'Serie1');
+                            $dataSet->addPoints($items, 'Labels');
+
+                            $dataSet->setSerieDescription('Serie1', get_lang('Max'));
+                            $dataSet->setSerieDescription('Serie2', get_lang('Avg'));
+                            $dataSet->setSerieDescription('Serie3', get_lang('Min'));
+                            $dataSet->setAbscissa('Labels');
+
+                            $dataSet->setAbscissaName(get_lang('EvaluationName'));
+
+                            $dataSet->normalize(100, '%');
+
+                            $dataSet->loadPalette(api_get_path(SYS_CODE_PATH) . 'palettes/pchart/default.color', true);
+
+                            // Cache definition
+                            $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+                            $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+                            $chartHash = $myCache->getHash($dataSet);
+                            if ($myCache->isInCache($chartHash)) {
+                                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                                $myCache->saveFromCache($chartHash, $imgPath);
+                                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                            } else {
+                                /* Create the pChart object */
+                                $widthSize = $this->bg_width;
+                                $heightSize = $this->bg_height;
+                                $fontSize = 8;
+                                $angle = 50;
+
+                                $myPicture = new pImage($widthSize, $heightSize, $dataSet);
+
+                                /* Turn of Antialiasing */
+                                $myPicture->Antialias = false;
+
+                                /* Add a border to the picture */
+                                $myPicture->drawRectangle(
+                                    0,
+                                    0,
+                                    $widthSize - 1,
+                                    $heightSize - 1,
+                                    array(
+                                        'R' => 0,
+                                        'G' => 0,
+                                        'B' => 0
+                                    )
                                 );
-                                $test->setGraphArea(50, 30, $this->bg_width - 75, $this->bg_height - 75);
-                                $test->drawFilledRoundedRectangle(
-                                    7,
-                                    7,
-                                    $this->bg_width - 20,
-                                    $test->YSize - 20,
-                                    5,
-                                    240,
-                                    240,
-                                    240
+
+                                /* Set the default font */
+                                $myPicture->setFontProperties(
+                                    array(
+                                        'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                                        'FontSize' => 10
+                                    )
                                 );
-                                $test->drawRoundedRectangle(
-                                    5,
-                                    5,
-                                    $this->bg_width - 18,
-                                    $test->YSize - 18,
-                                    5,
-                                    230,
-                                    230,
-                                    230
+
+                                /* Do NOT Write the chart title */
+
+                                /* Define the chart area */
+                                $myPicture->setGraphArea(50, 30, $widthSize - 20, $heightSize - 100);
+
+                                /* Draw the scale */
+                                $scaleSettings = array(
+                                    'GridR' => 200,
+                                    'GridG' => 200,
+                                    'GridB' => 200,
+                                    'DrawSubTicks' => true,
+                                    'CycleBackground' => true,
+                                    'Mode' => SCALE_MODE_MANUAL,
+                                    'ManualScale' => array(
+                                        '0' => array(
+                                            'Min' => 0,
+                                            'Max' => 100,
+                                        )
+                                    ),
+                                    'LabelRotation' => $angle,
                                 );
-							    $test->drawGraphArea(255,255,255,TRUE);
-							    $test->setFixedScale(0,100,5);
-                                $test->drawScale(
-                                    $data_set->GetData(),
-                                    $data_set->GetDataDescription(),
-                                    SCALE_ADDALL,
-                                    150,
-                                    150,
-                                    150,
-                                    TRUE,
-                                    $angle,
-                                    2,
-                                    TRUE
+                                $myPicture->drawScale($scaleSettings);
+
+                                /* Turn on shadow computing */
+                                $myPicture->setShadow(
+                                    true,
+                                    array(
+                                        'X' => 1,
+                                        'Y' => 1,
+                                        'R' => 0,
+                                        'G' => 0,
+                                        'B' => 0,
+                                        'Alpha' => 10
+                                    )
                                 );
-							    $test->setColorPalette(0,105,221,34);
-								$test->setColorPalette(1,255,135,30);
-								$test->setColorPalette(2,255,0,0);
-							    $test->drawGrid(4,TRUE,230,230,230,50);
-							    // Draw the 0 line
-							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',6);
-							    $test->drawTreshold(0,143,55,72,TRUE,TRUE);
-							    // Draw the bar graph
-							    $test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription(), 100);
-							    // Finish the graph
-							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
-							    $test->drawLegend($this->bg_width-80,20,$data_set->GetDataDescription(),255,255,255);
-							    $test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);
-							    $test->setColorPalette(0,50,50,50);
-								$test->setColorPalette(1,50,50,50);
-								$test->setColorPalette(2,50,50,50);
-							    $test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),array("Min", "Max", "Avg"));
-							    $cache->WriteToCache($graph_id, $data_set->GetData(), $test);
-								ob_start();
-								$test->Stroke();
-								ob_end_clean();
-								$img_file = $cache->GetHash($graph_id, $data_set->GetData());
-							}
-							if (!empty($img_file)) {
-								$courses_graph[$course_code] = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
-							}
+
+                                /* Draw the chart */
+                                $myPicture->setShadow(
+                                    true,
+                                    array(
+                                        'X' => 1,
+                                        'Y' => 1,
+                                        'R' => 0,
+                                        'G' => 0,
+                                        'B' => 0,
+                                        'Alpha' => 10
+                                    )
+                                );
+                                $settings = array(
+                                    'DisplayValues' => true,
+                                    'DisplaySize' => $fontSize,
+                                    'DisplayR' => 0,
+                                    'DisplayG' => 0,
+                                    'DisplayB' => 0,
+                                    'DisplayOrientation' => ORIENTATION_HORIZONTAL,
+                                    'Gradient' => false,
+                                    'Surrounding' => 30,
+                                    'InnerSurrounding' => 25
+                                );
+                                $myPicture->drawStackedBarChart($settings);
+
+                                $legendSettings = array(
+                                    'Mode' => LEGEND_HORIZONTAL,
+                                    'Style' => LEGEND_NOBORDER,
+                                );
+                                $myPicture->drawLegend($widthSize / 2, 15, $legendSettings);
+
+                                /* Write and save into cache */
+                                $myCache->writeToCache($chartHash, $myPicture);
+                                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                                $myCache->saveFromCache($chartHash, $imgPath);
+                                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+                            }
+                            if (!empty($imgPath)) {
+                                $courses_graph[$course_code] = '<img src="' . $imgPath . '">';
+                            }
 						}
 					}
 				}

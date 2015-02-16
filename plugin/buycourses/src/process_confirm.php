@@ -8,7 +8,6 @@
  * Init
  */
 require_once '../config.php';
-require_once '../../../main/inc/lib/mail.lib.inc.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
 
 if ($_POST['payment_type'] == '') {
@@ -73,7 +72,7 @@ if (isset($_POST['Confirm'])) {
     $message = str_replace("{{reference}}", $reference, $message);
     $message .= $text;
 
-    api_mail($name, $email, $asunto, $message);
+    api_mail_html($name, $email, $asunto, $message);
     // Return to course list
     header('Location:list.php');
 }

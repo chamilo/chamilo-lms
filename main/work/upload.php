@@ -12,9 +12,6 @@ api_protect_course_script(true);
 
 // Including necessary files
 require_once 'work.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 $this_section = SECTION_COURSES;
 
@@ -48,7 +45,7 @@ allowOnlySubscribedUser($user_id, $work_id, $course_id);
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id);
 $is_course_member = $is_course_member || api_is_platform_admin();
 
-if ($is_course_member == false) {
+if ($is_course_member == false || api_is_invitee()) {
     api_not_allowed(true);
 }
 

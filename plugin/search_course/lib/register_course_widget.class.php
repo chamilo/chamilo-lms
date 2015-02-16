@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Register course widget. 
+ * Register course widget.
  * Handles user's registration action.
  * Display a register to course form if required.
- * 
+ *
  * @copyright (c) 2011 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Laurent Opprecht
@@ -18,10 +18,10 @@ class RegisterCourseWidget
 
     /**
      * Returns $_POST data for $key is it exists or $default otherwise.
-     * 
+     *
      * @param string $key
      * @param object $default
-     * @return string 
+     * @return string
      */
     public static function post($key, $default = '')
     {
@@ -30,10 +30,10 @@ class RegisterCourseWidget
 
     /**
      * Returns $_GET data for $key is it exists or $default otherwise.
-     * 
+     *
      * @param string $key
      * @param object $default
-     * @return string 
+     * @return string
      */
     public static function get($key, $default = '')
     {
@@ -56,7 +56,7 @@ class RegisterCourseWidget
 
     /**
      * Handle the subscribe action.
-     * 
+     *
      * @return bool
      */
     function action_subscribe_user()
@@ -72,7 +72,7 @@ class RegisterCourseWidget
         {
             return false;
         }
-        
+
         $registration_code = self::post(self::PARAM_PASSCODE);
 
         if ($this->subscribe_user($course_code, $registration_code))
@@ -91,11 +91,11 @@ class RegisterCourseWidget
     /**
      * Regiser a user to a course.
      * Returns true on success, false otherwise.
-     * 
+     *
      * @param string $course_code
      * @param string $registration_code
      * @param int $user_id
-     * @return bool 
+     * @return bool
      */
     function subscribe_user($course_code, $registration_code = '', $user_id = null)
     {
@@ -118,7 +118,7 @@ class RegisterCourseWidget
     /**
      * Display the course registration form.
      * Asks for registration code/password.
-     * 
+     *
      * @param string $course_code
      */
     function display_form($course_code)
@@ -152,11 +152,10 @@ EOT;
     /**
      *
      * @param type $course_code
-     * @return type 
+     * @return type
      */
     function retrieve_course($course_code)
     {
-        require_once api_get_path(SYS_PATH) . '/main/inc/lib/course.lib.php';
         return CourseManager::get_course_information($course_code);
     }
 

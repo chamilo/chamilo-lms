@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
 /**
  * Class Auth
  * Auth can be used to instantiate objects or as a library to manage courses
@@ -598,8 +595,6 @@ class Auth
      */
     public function browseSessions($date = null, $limit = array())
     {
-        require_once api_get_path(LIBRARY_PATH) . 'sessionmanager.lib.php';
-
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
@@ -607,7 +602,7 @@ class Auth
         $userId = api_get_user_id();
         $limitFilter = getLimitFilterFromArray($limit);
 
-        $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username "
+        $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username, description, show_description "
             . "FROM $sessionTable AS s "
             . "INNER JOIN $userTable AS u "
             . "ON s.id_coach = u.user_id "

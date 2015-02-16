@@ -16,9 +16,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
 $tool_name = get_lang('AddCourse');
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
@@ -115,6 +112,18 @@ $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
 $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
+
+//Extra fields
+$extra_field = new CourseField();
+$extra = $extra_field->addElements($form);
+
+$htmlHeadXtra[] ='
+<script>
+
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
 
 $form->add_progress_bar();
 $form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');

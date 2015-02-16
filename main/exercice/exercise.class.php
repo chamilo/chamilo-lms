@@ -1,23 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-define('ALL_ON_ONE_PAGE', 1);
-define('ONE_PER_PAGE', 2);
-
-define('EXERCISE_FEEDBACK_TYPE_END', 0); //Feedback 		 - show score and expected answers
-define('EXERCISE_FEEDBACK_TYPE_DIRECT', 1); //DirectFeedback - Do not show score nor answers
-define('EXERCISE_FEEDBACK_TYPE_EXAM', 2); //NoFeedback 	 - Show score only
-
-define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS', 0); //show score and expected answers
-define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score nor answers
-define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
-define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
-
-define('EXERCISE_MAX_NAME_SIZE',            80);
-
-$debug = false; //All exercise scripts should depend in this debug variable
-require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
-
 /**
  * Class Exercise
  *
@@ -60,6 +43,7 @@ class Exercise
     public $exercise_was_added_in_lp = false;
     public $force_edit_exercise_in_lp = false;
     public $sessionId = 0;
+    public $debug = false;
 
     /**
      * Constructor of the class
@@ -2208,7 +2192,6 @@ class Exercise
         $nano = null;
 
         if ($answerType == ORAL_EXPRESSION) {
-            require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
             $exe_info = get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 
@@ -2341,14 +2324,14 @@ class Exercise
                             $choice[$ind] = 1;
                         }
 
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if ($studentChoice) {
                             $questionScore  +=$answerWeighting;
                         }
                     } else {
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if (isset($studentChoice)) {

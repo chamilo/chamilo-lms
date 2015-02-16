@@ -36,7 +36,7 @@ class CourseManager
      *
      * @return  mixed  false if the course was not created, array with the course info
      */
-    public static function create_course($params)
+    public static function create_course($params, $extraFields = array())
     {
         global $_configuration;
         // Check portal limits
@@ -108,15 +108,13 @@ class CourseManager
                     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
                         if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
-                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-                            create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
+                            GradebookUtils::create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
                     // If parameter defined, copy the contents from a specific
                     // template course into this new course
                     if (!empty($_configuration['course_creation_use_template'])) {
                         // Include the necessary libraries to generate a course copy
-                        require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
                         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseBuilder.class.php';
                         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseRestorer.class.php';
                         require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseSelectForm.class.php';
@@ -129,6 +127,11 @@ class CourseManager
                         $cr->set_file_option();
                         $cr->restore($course_info['id']); //course_info[id] is the course.code value (I know...)
                     }
+
+                    $params['course_code'] = $course_info['code'];
+
+                    $courseFieldValue = new ExtraFieldValue('course');
+                    $courseFieldValue->save_field_values($params);
 
                     return $course_info;
                 }
@@ -1418,9 +1421,6 @@ class CourseManager
                 $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";
             }
 
-            if (SessionManager::orderCourseIsEnabled()) {
-                //$order_by = "ORDER BY position";
-            }
         } else {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
@@ -1759,6 +1759,7 @@ class CourseManager
      *  @param integer $session_id
      *  @param string $date_from
      *  @param string $date_to
+     * @param boolean $includeInvitedUsers Whether include the invited users
      *  @return array with user id
      */
     public static function get_student_list_from_course_code(
@@ -1766,7 +1767,8 @@ class CourseManager
         $with_session = false,
         $session_id = 0,
         $date_from = null,
-        $date_to = null
+        $date_to = null,
+        $includeInvitedUsers = true
     ) {
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
@@ -1775,8 +1777,14 @@ class CourseManager
 
         if ($session_id == 0) {
             // students directly subscribed to the course
-            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                   WHERE course_code = '$course_code' AND status = ".STUDENT;
+            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
+                    INNER JOIN user u ON cu.user_id = u.user_id
+                   WHERE course_code = '$course_code' AND cu.status = ".STUDENT;
+
+            if (!$includeInvitedUsers) {
+                $sql .= " AND u.status != " . INVITEE;
+            }
+
             $rs = Database::query($sql);
             while ($student = Database::fetch_array($rs)) {
                 $students[$student['user_id']] = $student;
@@ -1795,6 +1803,7 @@ class CourseManager
 
             $sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
                           $joinSession
+                          INNER JOIN $userTable u ON scu.id_user = u.user_id
                           WHERE scu.course_code = '$course_code' AND scu.status <> 2";
 
             if (!empty($date_from) && !empty($date_to)) {
@@ -1805,6 +1814,10 @@ class CourseManager
 
             if ($session_id != 0) {
                 $sql_query .= ' AND scu.id_session = '.$session_id;
+            }
+
+            if (!$includeInvitedUsers) {
+                $sql .= " AND u.status != " . INVITEE;
             }
 
             $rs = Database::query($sql_query);
@@ -2218,7 +2231,6 @@ class CourseManager
         }
         $count = 0;
         if (api_is_multiple_url_enabled()) {
-            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             $url_id = 1;
             if (api_get_current_access_url_id() != -1) {
                 $url_id = api_get_current_access_url_id();
@@ -2532,7 +2544,6 @@ class CourseManager
      */
     public static function select_and_sort_categories($element, $defaultCode = null, $parentCode = null , $padding = null)
     {
-        require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
         setCategoriesInForm($element, $defaultCode, $parentCode , $padding);
     }
 
@@ -2604,8 +2615,9 @@ class CourseManager
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
             $email_admin = api_get_setting('emailAdministrator');
 
+            $plugin = new AppPlugin();
             $additionalParameters = array(
-                'smsType' => ClockworksmsPlugin::NEW_USER_SUBSCRIBED_COURSE,
+                'smsType' => constant($plugin->getSMSPluginName().'::NEW_USER_SUBSCRIBED_COURSE'),
                 'userId' => $tutor['user_id'],
                 'userUsername' => $student['username'],
                 'courseCode' => $course_code
@@ -3360,9 +3372,6 @@ class CourseManager
                     $courseListToString = implode("','", array_keys($courseList));
                     $whereConditions .= " AND c.id IN ('".$courseListToString."')";
                 }
-            }
-
-            if (SessionManager::orderCourseIsEnabled() && !empty($sessionId)) {
                 $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $orderBy =  ' ORDER BY position';
                 $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
@@ -3561,7 +3570,7 @@ class CourseManager
                     $html .= '<div class="span6 '.$param_class.'">';
                         $html .='<h3>'.$params['title'].$notifications.'</h3> ';
 
-                        if (isset($params['description'])) {
+                        if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
                             $html .= '<p>'.$params['description'].'</p>';
                         }
                         if (!empty($params['subtitle'])) {
@@ -3585,6 +3594,12 @@ class CourseManager
         return $html;
     }
 
+    /**
+     * @param string $main_content
+     * @param string $sub_content
+     * @param string $sub_sub_content
+     * @return string
+     */
     public static function course_item_parent($main_content, $sub_content, $sub_sub_content = null)
     {
         return '<div class="well">'.$main_content.$sub_content.$sub_sub_content.'</div>';
@@ -3597,7 +3612,7 @@ class CourseManager
      * in the sense that any user clicking them is registered as a student
      * @param int       User id
      * @param bool      Whether to show the document quick-loader or not
-     * @return void
+     * @return string
      */
     public static function display_special_courses($user_id, $load_dirs = false)
     {
@@ -3702,7 +3717,7 @@ class CourseManager
      * @uses display_courses_in_category() to display the courses themselves
      * @param int        user id
      * @param bool      Whether to show the document quick-loader or not
-     * @return void
+     * @return string
      */
     public static function display_courses($user_id, $load_dirs = false)
     {
@@ -3740,7 +3755,7 @@ class CourseManager
      *  class userportal-course-item.
      *  @param int      User category id
      * @param bool      Whether to show the document quick-loader or not
-     *  @return void
+     *  @return string
      */
     public static function display_courses_in_category($user_category_id, $load_dirs = false)
     {
@@ -3748,7 +3763,7 @@ class CourseManager
         // Table definitions
         $TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_ACCESS_URL_REL_COURSE    = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $TABLE_ACCESS_URL_REL_COURSE = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
         // Get course list auto-register
@@ -3862,18 +3877,23 @@ class CourseManager
 
             $course_title_url = '';
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0';
+                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
                 $course_title = Display::url($course_info['title'], $course_title_url);
             } else {
-                $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
+                $course_title = $course_info['title']." ".Display::tag('span', get_lang('CourseClosed'), array('class'=>'item_closed'));
             }
 
             // Start displaying the course block itself
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                 $course_title .= ' ('.$course_info['visual_code'].') ';
             }
+
             if (api_get_setting('display_teacher_in_courselist') == 'true') {
-                $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code'], self::USER_SEPARATOR, true);
+                $teachers = CourseManager::get_teacher_list_from_course_code_to_string(
+                    $course['code'],
+                    self::USER_SEPARATOR,
+                    true
+                );
             }
 
             $params['link'] = $course_title_url;
@@ -3885,11 +3905,11 @@ class CourseManager
                 $params['notifications'] = $show_notification;
             }
 
-            $is_subcontent = true;
+            $isSubcontent = true;
             if (empty($user_category_id)) {
-                $is_subcontent = false;
+                $isSubcontent = false;
             }
-            $html .= self::course_item_html($params, $is_subcontent);
+            $html .= self::course_item_html($params, $isSubcontent);
         }
 
         return $html;
@@ -3914,18 +3934,25 @@ class CourseManager
     }
 
     /**
-     * Get the course id based on the original id and field name in the extra fields. Returns 0 if course was not found
+     * Get the course id based on the original id and field name in the extra fields.
+     * Returns 0 if course was not found
      *
-     * @param string Original course code
-     * @param string Original field name
+     * @param string $original_course_id_value Original course code
+     * @param string $original_course_id_name Original field name
      * @return int Course id
      */
     public static function get_course_id_from_original_id($original_course_id_value, $original_course_id_name)
     {
         $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $sql_course = "SELECT course_code FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res = Database::query($sql_course);
+        $original_course_id_name = Database::escape_string($original_course_id_name);
+        $original_course_id_name = Database::escape_string($original_course_id_name);
+        $sql = "SELECT course_code FROM $table_field cf
+                INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
+                WHERE
+                    field_variable='$original_course_id_name' AND
+                    field_value='$original_course_id_value'";
+        $res = Database::query($sql);
         $row = Database::fetch_object($res);
         if ($row != false) {
             return $row->course_code;
@@ -4589,7 +4616,7 @@ class CourseManager
      * @param int $url_id
      *
      */
-    public function remove_course_ranking($course_id, $session_id, $url_id = null)
+    public static function remove_course_ranking($course_id, $session_id, $url_id = null)
     {
         $table_course_ranking = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
         $table_user_course_vote = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);
@@ -4614,6 +4641,11 @@ class CourseManager
     public static function return_hot_courses($days = 30, $limit = 5)
     {
         global $_configuration;
+
+        if (api_is_invitee()) {
+            return array();
+        }
+
         $limit  = intval($limit);
 
         // Getting my courses
@@ -5306,5 +5338,21 @@ class CourseManager
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         return $row['count'];
+    }
+
+    /**
+     * Returns the course name from a given code
+     * @param string $code
+     */
+    public static function getCourseNameFromCode($code)
+    {
+        $tbl_main_categories = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $sql = 'SELECT title
+                FROM ' . $tbl_main_categories . '
+                WHERE code = "' . Database::escape_string($code) . '"';
+        $result = Database::query($sql);
+        if ($col = Database::fetch_array($result)) {
+            return $col['title'];
+        }
     }
 }

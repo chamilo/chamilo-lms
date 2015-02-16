@@ -760,7 +760,6 @@ class bbb
         if (empty($id)) {
             return false;
         }
-        require_once api_get_path(LIBRARY_PATH).'link.lib.php';
         //$records =  BigBlueButtonBN::getRecordingsUrl($id);
         $meetingData = Database::select('*', $this->table, array('where' => array('id = ?' => array($id))), 'first');
 

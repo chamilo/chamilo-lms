@@ -14,7 +14,7 @@ $use_anonymous = true;
 // Name of the language file that needs to be included.
 $language_file[] = 'learnpath';
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 
 /**
  * Get one item's details
@@ -28,12 +28,6 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
     $debug = 0;
     $return = '';
     if ($debug > 0) { error_log('In xajax_switch_item_toc('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')', 0); }
-    require_once 'learnpath.class.php';
-    require_once 'scorm.class.php';
-    require_once 'aicc.class.php';
-    require_once 'learnpathItem.class.php';
-    require_once 'scormItem.class.php';
-    require_once 'aiccItem.class.php';
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $new_item_id = 0;
     switch ($next_item) {

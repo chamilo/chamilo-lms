@@ -12,9 +12,6 @@
  * Modified by Hubert Borderiou 2011-10-21 Question Category
  */
 
-// The initialization class for the online editor is needed here.
-require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
-
 /**
  * Shows a question
  *
@@ -147,17 +144,15 @@ function showQuestion(
         } elseif ($answerType == FREE_ANSWER) {
             $fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer']:null;
 
-            $oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
-
-            $oFCKeditor->ToolbarSet = 'TestFreeAnswer';
+            $oFCKeditor = new CKeditor();
+            $oFCKeditor->ToolbarSet = 'Test_Free_Answer';
             $oFCKeditor->Width = '100%';
             $oFCKeditor->Height = '200';
             $oFCKeditor->Value = $fck_content;
-            $s .= $oFCKeditor->CreateHtml();
+            $s .= $oFCKeditor->editor("choice[".$questionId."]", $oFCKeditor->Value);
         } elseif ($answerType == ORAL_EXPRESSION) {
             //Add nanog
             if (api_get_setting('enable_nanogong') == 'true') {
-                require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
                 //@todo pass this as a parameter
                 global $exercise_stat_info, $exerciseId, $exe_id;
 
@@ -178,13 +173,13 @@ function showQuestion(
                 echo $nano->show_button();
             }
 
-            $oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
+            $oFCKeditor = new CKeditor();
             $oFCKeditor->ToolbarSet = 'TestFreeAnswer';
             $oFCKeditor->Width  = '100%';
             $oFCKeditor->Height = '150';
             $oFCKeditor->ToolbarStartExpanded = false;
             $oFCKeditor->Value	= '' ;
-            $s .= $oFCKeditor->CreateHtml();
+            $s .= $oFCKeditor->editor("choice[".$questionId."]", $oFCKeditor->Value);
         }
 
         // Now navigate through the possible answers, using the max number of
@@ -1198,7 +1193,7 @@ function get_exam_results_data(
     $course_code = api_get_course_id();
     $sessionId = api_get_session_id();
 
-    $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh();
+   	$is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
 
     $TBL_USER = Database :: get_main_table(TABLE_MAIN_USER);
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
@@ -1291,6 +1286,7 @@ function get_exam_results_data(
             (
                 SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
                 FROM $TBL_USER u
+                WHERE u.status NOT IN(" . api_get_users_status_ignored_in_reports('string') . ")
             )";
         }
 
@@ -1361,6 +1357,7 @@ function get_exam_results_data(
                     AND tth.exe_cours_id = '" . api_get_course_id()."'
                     $hotpotatoe_where
                     $sqlWhereOption
+                    AND user.status NOT IN(" . api_get_users_status_ignored_in_reports('string') . ")
                 ORDER BY
                     tth.exe_cours_id ASC,
                     tth.exe_date DESC";
@@ -1407,7 +1404,7 @@ function get_exam_results_data(
             }
         }
 
-        $lp_list_obj = new learnpathList(api_get_user_id());
+        $lp_list_obj = new LearnpathList(api_get_user_id());
         $lp_list = $lp_list_obj->get_flat_list();
 
         if (is_array($results)) {
@@ -1506,8 +1503,8 @@ function get_exam_results_data(
                                 Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
                         }
 
-                        // Admin can always delete the attempt
-                        if ($locked == false || api_is_platform_admin()) {
+                        //Admin can always delete the attempt
+                        if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
                             $ip = TrackingUserLog::get_ip_from_user_event($results[$i]['exe_user_id'], date('Y-m-d h:i:s'), false);
                             $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank"><img src="'.api_get_path(WEB_CODE_PATH).'img/icons/22/info.png" title="'.$ip.'" /></a>';
 
@@ -2861,7 +2858,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         }
 
         // Send notification ..
-        if (!api_is_allowed_to_edit(null,true)) {
+        if (!api_is_allowed_to_edit(null,true) && !apiIsExcludedUserType()) {
             if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
                 $objExercise->send_mail_notification_for_exam($question_list_answers, $origin, $exe_id);
             }

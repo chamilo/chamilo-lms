@@ -57,48 +57,17 @@ $(document).ready(function() {
             $(this).css("background-image", \'url("../img/hide0.png")\');
         }
     );
+
+    CKEDITOR.on("instanceReady", function (e) {
+        showTemplates();
+    });
 });
 
-function InnerDialogLoaded() {
-	/*
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-	return B.ClickFrame();
-	*/
-	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
-	var EditorFrame = null ;
-
-	if ( !isIE ) {
-		EditorFrame = window.frames[0] ;
-	} else {
-		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
-		// We need a sure method to locate the frame that contains the online editor.
-		for ( var i = 0, n = window.frames.length ; i < n ; i++ ) {
-			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 ) {
-				EditorFrame = window.frames[i] ;
-			}
-		}
-	}
-
-	if ( !EditorFrame ) {
-		return null ;
-	}
-
-	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);
-	return B.ClickFrame();
-};
-
-function FCKeditor_OnComplete( editorInstance) {
-	document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
-}
 </script>';
 
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 $lib_path = api_get_path(LIBRARY_PATH);
-
-require_once $lib_path.'fileManage.lib.php';
-require_once $lib_path.'fileUpload.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 $course_info = api_get_course_info();
 $group_id = api_get_group_id();
@@ -172,7 +141,8 @@ if ($is_certificate_mode) {
     $html_editor_config['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $sessionId);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']||
+	DocumentManager::is_my_shared_folder(api_get_user_id(), $dir, $sessionId);
 $noPHP_SELF = true;
 
 /*	Other initialization code */
@@ -427,7 +397,7 @@ if ($owner_id == api_get_user_id() ||
 		}
 	}
 
-	if (!$group_document && !is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
+	if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
 		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$document_data['id']).'">'.get_lang('AddMetadata').'</a>';
 
 		//Updated on field
@@ -479,8 +449,8 @@ if ($owner_id == api_get_user_id() ||
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
 	echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span2" style="width:162px">
-                <div id="frmModel" style="overflow: visible;"></div>
+            <div id="template_col" class="span3" style="width:200px">
+                <div id="frmModel"></div>
             </div>
             <div id="hide_bar_template"></div>
             <div id="doc_form" class="span9">

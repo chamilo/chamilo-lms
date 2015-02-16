@@ -52,7 +52,7 @@ if (!empty($courseId)) {
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto; padding-bottom: 10px; ">{element}</div>');
 
-$toolbar_set = 'Introduction';
+$toolbar_set = 'IntroductionTool';
 $width = '100%';
 $height = '300';
 

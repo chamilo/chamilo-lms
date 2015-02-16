@@ -16,15 +16,12 @@
 $language_file = array('messages', 'userInfo', 'admin');
 $cidReset	= true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 api_block_anonymous_users();
 
 if (api_get_setting('allow_message_tool') !='true') {
     api_not_allowed();
 }
-
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 /*	Constants and variables */

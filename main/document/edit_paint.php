@@ -17,8 +17,6 @@ require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/editpaint';
 $this_section = SECTION_COURSES;
 
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-
 api_protect_course_script();
 api_block_anonymous_users();
 $groupId = api_get_group_id();
@@ -115,7 +113,8 @@ if (empty($document_data['parents'])) {
     }
 }
 
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights'] ||
+	DocumentManager::is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
 
 if (!$is_allowedToEdit) {
 	api_not_allowed(true);

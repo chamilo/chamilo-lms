@@ -128,6 +128,7 @@ if ($form->validate()) {
     $cat->set_user_id($values['hid_user_id']);
     $cat->set_parent_id($values['hid_parent_id']);
     $cat->set_weight($values['weight']);
+    $cat->setGenerateCertificates($values['generate_certificates']);
 
     if (empty ($values['visible'])) {
         $visible = 0;

@@ -15,11 +15,7 @@ $language_file[] = "document";
 $language_file[] = "learnpath";
 $language_file[] = "scormdocument";
 
-// global settings initialisation
-// also provides access to main api (inc/lib/main_api.lib.php)
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">

@@ -68,7 +68,6 @@ header('Last-Modified: '.gmdate('D, d M Y H:i:s',time()+10).' GMT');
 */
 
 if ($content_type == 'text/html') {
-	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 	$directory_name = dirname($full_file_name);
 
 	$dir=str_replace(array('\\',$_configuration['root_sys']."courses/".$_course['path'].'/document'),array('/',''),$directory_name);

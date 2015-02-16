@@ -20,6 +20,7 @@ class Category implements GradebookItem
     private $session_id;
     private $skills = array();
     private $grade_model_id;
+    private $generateCertificates;
 
     public function __construct()
     {
@@ -180,6 +181,24 @@ class Category implements GradebookItem
         }
 
         return $skill_select;
+    }
+
+    /**
+     * Set the generate_certificates value
+     * @param int $generateCertificates
+     */
+    public function setGenerateCertificates($generateCertificates)
+    {
+        $this->generateCertificates = $generateCertificates;
+    }
+
+    /**
+     * Get the generate_certificates value
+     * @return int
+     */
+    public function getGenerateCetificates()
+    {
+        return $this->generateCertificates;
     }
 
     /**
@@ -346,6 +365,7 @@ class Category implements GradebookItem
         $cat->set_parent_id(null);
         $cat->set_weight(0);
         $cat->set_visible(1);
+        $cat->setGenerateCertificates(0);
 
         return $cat;
     }
@@ -371,6 +391,7 @@ class Category implements GradebookItem
             $cat->set_certificate_min_score($data['certif_min_score']);
             $cat->set_grade_model_id($data['grade_model_id']);
             $cat->set_locked($data['locked']);
+            $cat->setGenerateCertificates($data['generate_certificates']);
             $allcat[] = $cat;
         }
 
@@ -409,6 +430,10 @@ class Category implements GradebookItem
                 $sql .= ', certif_min_score ';
             }
 
+            if (isset($this->generateCertificates)) {
+                $sql .= ', generate_certificates ';
+            }
+
             /*
             $setting = api_get_setting('tool_visible_by_default_at_creation');
             $visible = 1;
@@ -441,6 +466,9 @@ class Category implements GradebookItem
             }
             if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
                 $sql .= ', '.intval($this->get_certificate_min_score());
+            }
+            if (isset($this->generateCertificates)) {
+                $sql .= ', ' . intval($this->generateCertificates);
             }
             $sql .= ')';
             Database::query($sql);
@@ -524,6 +552,7 @@ class Category implements GradebookItem
         }
         $sql .= ', weight = "'.Database::escape_string($this->get_weight())
             .'", visible = '.intval($this->is_visible())
+            . ', generate_certificates = ' . intval($this->generateCertificates)
             .' WHERE id = '.intval($this->id);
 
         Database::query($sql);
@@ -639,7 +668,7 @@ class Category implements GradebookItem
             return null;
         } else {
             $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql='SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id FROM '.$tbl_category.' c WHERE c.id='.intval($selectcat);
+            $sql='SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id, generate_certificates FROM '.$tbl_category.' c WHERE c.id='.intval($selectcat);
             $result       = Database::query($sql);
             $row          = Database::fetch_array($result, 'ASSOC');
 
@@ -1588,6 +1617,11 @@ class Category implements GradebookItem
         );
         /** @var Category $category */
         $category = $cats_course[0];
+
+        if (!$category->getGenerateCetificates()) {
+            return false;
+        }
+
         $alleval_course  = $category->get_evaluations($user_id, true);
         $alllink_course  = $category->get_links($user_id, true);
         $evals_links = array_merge($alleval_course, $alllink_course);

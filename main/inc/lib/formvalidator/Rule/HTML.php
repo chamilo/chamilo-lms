@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'HTML/QuickForm/Rule.php';
 require_once api_get_path(SYS_PATH).'main/inc/lib/kses-0.2.2/kses.php';
 
 /**

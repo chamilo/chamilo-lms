@@ -64,8 +64,6 @@ if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /*  stripslashes POST data  */
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	foreach($_POST as $key=>$val) {

@@ -11,8 +11,6 @@
 // | Authors: Eric Marguin <e.marguin@elixir-interactive.com>             |
 // +----------------------------------------------------------------------+
 
-require_once('HTML/QuickForm/Rule.php');
-
 /**
 * Required elements validation
 * @version     1.0

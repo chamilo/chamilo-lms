@@ -87,6 +87,7 @@ class FlatViewDataGenerator
         if (isset($this->params['show_official_code']) && $this->params['show_official_code']) {
             $headers[] = get_lang('OfficialCode');
         }
+
         if (isset($this->params['join_firstname_lastname']) && $this->params['join_firstname_lastname']) {
             if (api_is_western_name_order()) {
                 $headers[] = get_lang('FirstnameAndLastname');
@@ -167,7 +168,7 @@ class FlatViewDataGenerator
                 $add_weight = " $sub_cat_weight %";
                 $headers[] = Display::url(
                         $sub_cat->get_name(),
-                        api_get_self().'?selectcat='.$sub_cat->get_id()
+                        api_get_self().'?selectcat='.$sub_cat->get_id().'&'.api_get_cidreq()
                     ).$add_weight;
             }
         } else {
@@ -199,7 +200,6 @@ class FlatViewDataGenerator
         }
 
         $headers[] = api_strtoupper(get_lang('GradebookQualificationTotal'));
-
         return $headers;
     }
 

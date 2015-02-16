@@ -93,14 +93,11 @@ class EventsMail
                 $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
 
                 // checks if there's a file we need to join to the mail
-                if (isset($values["certificate_pdf_file"]))
-                {
+                if (isset($values["certificate_pdf_file"])) {
                     $message = str_replace("\n", "<br />", $message);                  
-                    @api_mail_html($recipient_name, $user_info["mail"], $subject, $message, $sender_name, $email_admin, null, array($values['certificate_pdf_file']));
-                }
-                else
-                {
-                    @api_mail($recipient_name, $user_info["mail"], $subject, $message, $sender_name, $email_admin);
+                    api_mail_html($recipient_name, $user_info["mail"], $subject, $message, $sender_name, $email_admin, null, array($values['certificate_pdf_file']));
+                } else {
+                    api_mail_html($recipient_name, $user_info["mail"], $subject, $message, $sender_name, $email_admin);
                 }
                 
                 // If the mail only need to be send once (we know that thanks to the events.conf), we log it in the table
@@ -150,7 +147,7 @@ class EventsMail
             // we send the mail
             $recipient_name = api_get_person_name($value['firstname'], $value['lastname']);
 
-            @api_mail($recipient_name, $value["email"], $subject, $message, $sender_name, $email_admin);
+            api_mail_html($recipient_name, $value["email"], $subject, $message, $sender_name, $email_admin);
             
             // If the mail only need to be send once (we know that thanks to the events.conf, we log it in the table
             if ($event_config[$event_name]["sending_mail_once"])

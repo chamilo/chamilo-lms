@@ -2396,8 +2396,6 @@ class DocumentManager
         $origin_course_path_from_zip = null,
         $origin_course_info_path = null
     ) {
-        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-
         if (empty($content_html)) {
             return false;
         }
@@ -2716,8 +2714,6 @@ class DocumentManager
         $index_document = false,
         $show_output = false
     ) {
-        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
         $course_dir = $course_info['path'] . '/document';

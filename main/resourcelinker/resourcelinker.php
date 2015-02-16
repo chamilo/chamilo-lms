@@ -28,7 +28,7 @@ api_protect_course_script();
 	Libraries
 -----------------------------------------------------------
 */
-include_once (api_get_path(LIBRARY_PATH)."fileUpload.lib.php");
+
 include ('resourcelinker.inc.php');
 
 /*

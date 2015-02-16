@@ -109,7 +109,6 @@ require_once $lib_path.'banner.lib.php';
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
 require_once $lib_path.'fileDisplay.lib.php';
-require_once $lib_path.'mail.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once $lib_path.'course_category.lib.php';
 

@@ -5784,7 +5784,7 @@ class DocumentManager
      * Checks whether the user is in shared folder
      * @return return bool Return true when user is into shared folder
      */
-    public function is_shared_folder($curdirpath, $current_session_id)
+    public static function is_shared_folder($curdirpath, $current_session_id)
     {
         $clean_curdirpath = Security::remove_XSS($curdirpath);
         if ($clean_curdirpath == '/shared_folder') {

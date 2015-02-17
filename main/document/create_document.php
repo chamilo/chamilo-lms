@@ -300,7 +300,7 @@ if (!$is_allowed_in_course) {
 
 if (!($is_allowed_to_edit ||
     $_SESSION['group_member_with_upload_rights'] ||
-    is_my_shared_folder($userId, $dir, api_get_session_id()))
+    DocumentManager::is_my_shared_folder($userId, $dir, api_get_session_id()))
 ) {
 	api_not_allowed(true);
 }
@@ -393,7 +393,7 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 // If we are not in the certificates creation, display a folder chooser for the
 // new document created
 
-if (!$is_certificate_mode && !is_my_shared_folder($userId, $dir, $current_session_id)) {
+if (!$is_certificate_mode && !DocumentManager::is_my_shared_folder($userId, $dir, $current_session_id)) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 
 	$parent_select = $form->addElement('select', 'curdirpath', array(null, get_lang('DestinationDirectory')));

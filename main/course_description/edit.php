@@ -11,7 +11,7 @@
 api_protect_course_script(true);
 $original_id = $id;
 
-if (!$error) {
+if (empty($error)) {
 	$token = Security::get_token();
 }
 // display categories
@@ -67,8 +67,12 @@ if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 
 // Set some default values
-$default['title'] = Security::remove_XSS($description_title);
-$default['contentDescription'] = Security::remove_XSS($description_content,COURSEMANAGERLOWSECURITY);
+if (!empty($description_title)) {
+    $default['title'] = Security::remove_XSS($description_title);
+}
+if (!empty($description_content)) {
+    $default['contentDescription'] = Security::remove_XSS($description_content,COURSEMANAGERLOWSECURITY);
+}
 $default['description_type'] = $description_type;
 
 $form->setDefaults($default);

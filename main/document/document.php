@@ -1292,8 +1292,7 @@ if ($is_allowed_to_edit ||
 /* 	VISIBILITY COMMANDS */
 if ($is_allowed_to_edit) {
     if ((isset($_GET['set_invisible']) && !empty($_GET['set_invisible'])) ||
-        (isset($_GET['set_visible']) && !empty($_GET['set_visible'])) &&
-        $_GET['set_visible'] != '*' && $_GET['set_invisible'] != '*'
+        (isset($_GET['set_visible']) && !empty($_GET['set_visible']))
     ) {
         // Make visible or invisible?
         if (isset($_GET['set_visible'])) {
@@ -1328,7 +1327,6 @@ if ($is_allowed_to_edit) {
             null,
             $sessionId)
         ) {
-            //don't use ViMod because firt is load ViMdod (Gradebook). VisibilityChanged (trad4all)
             $message = Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
         } else {
             $message = Display::return_message(get_lang('ViModProb'), 'error');

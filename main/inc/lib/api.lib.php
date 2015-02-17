@@ -7791,6 +7791,10 @@ function api_create_protected_dir($name, $parentDirectory)
 {
     $isCreated = false;
 
+    if (!is_writable($parentDirectory)) {
+        return false;
+    }
+
     $fullPath = $parentDirectory . replace_dangerous_char($name);
 
     if (mkdir($fullPath, api_get_permissions_for_new_directories(), true)) {

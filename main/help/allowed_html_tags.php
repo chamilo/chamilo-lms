@@ -15,8 +15,6 @@
 $language_file = 'help';
 
 require '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/Rule/HTML.php';
 
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 ?>

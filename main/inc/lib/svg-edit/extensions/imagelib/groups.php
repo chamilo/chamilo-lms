@@ -3,10 +3,8 @@
  * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
-//Chamilo load libraries
+
 require_once '../../../../../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 //Add security from Chamilo
 api_protect_course_script();
@@ -24,7 +22,7 @@ $group_web_path  	= api_get_path(WEB_COURSE_PATH).$course_info['path'].'/documen
 
 //get all group files and folders
 $docs_and_folders = DocumentManager::get_all_document_data($course_info, $groupdirpath, api_get_group_id(), null, $is_allowed_to_edit, false);
-	
+
 //get all group filenames
 $array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
 
@@ -33,7 +31,7 @@ if (count($array_to_search) > 0) {
 		$all_files[] = basename($array_to_search[$key]['path']);
 	}
 }
-	
+
 //get all svg and png group files
 $accepted_extensions = array('.svg', '.png');
 
@@ -61,23 +59,23 @@ $style .='</style>';
 echo '<h2>'.get_lang('GroupSingle').': '.$group_properties['name'].'</h2>';
 
 if (($group_properties['doc_state'] == 2 && ($is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid']))) || $group_properties['doc_state'] == 1){
-		
+
 	if (!empty($png_svg_files)) {
 		echo '<h3>'.get_lang('SelectSVGEditImage').'</h3>';
 		echo '<ul>';
-		foreach($png_svg_files as $filename) {			
-			$image = $group_disk_path.$filename;			
-			
+		foreach($png_svg_files as $filename) {
+			$image = $group_disk_path.$filename;
+
 			if (strpos($filename, "svg")){
 				$new_sizes['width'] = 60;
 				$new_sizes['height'] = 60;
 			}
 			else {
 				$new_sizes = api_resize_image($image, 60, 60);
-			}	
+			}
 				echo '<li style="display:inline; padding:8px;">';
 				echo '<a href = "'.$group_web_path.$filename.'" alt="'.$filename.'" title="'.$filename.'">';
-				echo '<img src = "'.$group_web_path.$filename.'" width = "'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';	
+				echo '<img src = "'.$group_web_path.$filename.'" width = "'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
 		}
 		echo '</ul>';
 	}
@@ -91,8 +89,8 @@ if (($group_properties['doc_state'] == 2 && ($is_allowed_to_edit || GroupManager
 
 $('a').click(function() {
 	var href = this.href;
-	
-	// Convert Non-SVG images to data URL first 
+
+	// Convert Non-SVG images to data URL first
 	// (this could also have been done server-side by the library)
 	if(this.href.indexOf('.svg') === -1) {
 
@@ -101,7 +99,7 @@ $('a').click(function() {
 			id: href
 		});
 		window.top.postMessage(meta_str, "*");
-	
+
 		var img = new Image();
 		img.onload = function() {
 			var canvas = document.createElement("canvas");
@@ -132,7 +130,7 @@ $('a').click(function() {
 			data = '|' + href + '|' + data;
 			// This is where the magic happens!
 			window.top.postMessage(data, "*");
-			
+
 		}, 'html'); // 'html' is necessary to keep returned data as a string
 	}
 	return false;

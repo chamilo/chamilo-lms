@@ -771,7 +771,6 @@ class IndexManager
     function return_classes_block() {
         $html = '';
         if (api_get_setting('show_groups_to_users') == 'true') {
-            require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
             $usergroup = new Usergroup();
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
             $classes = '';

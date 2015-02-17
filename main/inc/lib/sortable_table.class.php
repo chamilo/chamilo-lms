@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'pear/HTML/Table.php';
-require_once 'pear/Pager/Pager.php';
-
 /**
  * This class allows you to display a sortable data-table. It is possible to
  * split the data in several pages.

@@ -735,7 +735,6 @@ function showQuestion(
         // Question is a HOT_SPOT
         //checking document/images visibility
         if (api_is_platform_admin() || api_is_course_admin()) {
-            require_once api_get_path(LIBRARY_PATH).'document.lib.php';
             $course = api_get_course_info();
             $doc_id = DocumentManager::get_document_id($course, '/images/'.$pictureName);
             if (is_numeric($doc_id)) {

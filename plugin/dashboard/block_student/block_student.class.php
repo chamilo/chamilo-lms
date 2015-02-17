@@ -7,23 +7,12 @@
  */
 
 /**
- * required files for getting data
- */
-require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
-
-/**
  * This class is used like controller for student block plugin,
  * the class name must be registered inside path.info file (e.g: controller = "BlockStudent"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
 class BlockStudent extends Block
 {
-
     private $user_id;
 	private $students;
 	private $path;

@@ -319,7 +319,6 @@ function WSCreateUsers($params) {
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             if ($_configuration['multiple_access_urls']) {
                 if (api_get_current_access_url_id() != -1) {
                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
@@ -521,7 +520,6 @@ function WSCreateUser($params) {
     if ($result) {
         //echo "id returned";
         $return = Database::insert_id();
-        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
         if ($_configuration['multiple_access_urls']) {
             if (api_get_current_access_url_id() != -1) {
                 UrlManager::add_user_to_url($return, api_get_current_access_url_id());
@@ -813,7 +811,6 @@ function WSCreateUsersPasswordCrypted($params) {
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             if ($_configuration['multiple_access_urls']) {
                 if (api_get_current_access_url_id() != -1) {
                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
@@ -1056,8 +1053,6 @@ function WSCreateUserPasswordCrypted($params) {
     if ($result) {
         $return = Database::insert_id();
 
-        //Multiple URL
-        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
         $url_id = api_get_current_access_url_id();
         UrlManager::add_user_to_url($return, $url_id);
         if ($debug) error_log("Adding user_id = $return to URL id $url_id ");

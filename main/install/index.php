@@ -756,7 +756,6 @@ if (@$_POST['step2']) {
 
 	if ($installType == 'update') {
 
-		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 		remove_memory_and_time_limits();
 		database_server_connect();
 		// Initialization of the database connection encoding intentionaly is not done.

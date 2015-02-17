@@ -3493,7 +3493,7 @@ function api_item_property_update(
                         WHERE
                             c_id = $course_id AND
                             tool = '$tool' AND
-                            ref='$item_id' AND
+                            ref = '$item_id' AND
                             id_session = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
@@ -3501,7 +3501,7 @@ function api_item_property_update(
                             SET
                                 lastedit_type = '".str_replace('_', '', ucwords($tool))."Invisible',
                                 lastedit_date = '$time',
-                                lastedit_user_id='$user_id',
+                                lastedit_user_id = '$user_id',
                                 visibility = '$visibility',
                                 id_session = '$session_id' $set_type
                             WHERE $filter";

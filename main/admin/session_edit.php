@@ -277,7 +277,7 @@ if ($formSent) {
     $formDefaults['nb_days_access_after'] = api_htmlentities($nb_days_access_after,ENT_QUOTES,$charset);
     $formDefaults['duration'] = Security::remove_XSS($duration);
 } else {
-    $formDefaults['name'] = api_htmlentities($infos['name'],ENT_QUOTES,$charset);
+    $formDefaults['name'] = Security::remove_XSS($infos['name']);
     $formDefaults['nb_days_access_before'] = api_htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset);
     $formDefaults['nb_days_access_after'] = api_htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset);
     $formDefaults['duration'] = $duration;

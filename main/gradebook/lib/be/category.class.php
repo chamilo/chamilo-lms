@@ -722,14 +722,20 @@ class Category implements GradebookItem
 
     /**
      * Checks if the certificate is available for the given user in this category
-     * @param    integer    User ID
-     * @return    boolean    True if conditions match, false if fails
+     * @param   integer    $user_id User ID
+     * @return  boolean    True if conditions match, false if fails
      */
     public function is_certificate_available($user_id)
     {
         $score = $this->calc_score($user_id, $this->course_code);
-        if (isset($score)) {
-            $certification_score = ($score[0]/$score[1])*100; //get a percentage score to compare to minimum certificate score
+
+        if (isset($score) && isset($score[0])) {
+            // Get a percentage score to compare to minimum certificate score
+            //$certification_score = $score[0] / $score[1] * 100;
+
+            // Get real score not a percentage.
+            $certification_score = $score[0];
+
             if ($certification_score >= $this->certificate_min_score) {
                 return true;
             }
@@ -1622,8 +1628,8 @@ class Category implements GradebookItem
             return false;
         }
 
-        $alleval_course  = $category->get_evaluations($user_id, true);
-        $alllink_course  = $category->get_links($user_id, true);
+        $alleval_course = $category->get_evaluations($user_id, true);
+        $alllink_course = $category->get_links($user_id, true);
         $evals_links = array_merge($alleval_course, $alllink_course);
 
         //@todo move these in a function
@@ -1686,6 +1692,7 @@ class Category implements GradebookItem
             if (!empty($my_certificate)) {
                 $certificate_obj = new Certificate($my_certificate['id']);
                 $fileWasGenerated = $certificate_obj->html_file_is_generated();
+
                 if (!empty($fileWasGenerated)) {
                     $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
                     $certificates = Display::url(

@@ -200,6 +200,7 @@ class FlatViewDataGenerator
         }
 
         $headers[] = api_strtoupper(get_lang('GradebookQualificationTotal'));
+
         return $headers;
     }
 
@@ -358,7 +359,9 @@ class FlatViewDataGenerator
             }
 
             // Last name
-            if (isset($this->params['join_firstname_lastname']) && $this->params['join_firstname_lastname']) {
+            if (isset($this->params['join_firstname_lastname']) &&
+                $this->params['join_firstname_lastname']
+            ) {
                 if ($export_to_pdf) {
                     $row['name'] = api_get_person_name($user[3], $user[2]);
                 } else {

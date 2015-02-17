@@ -3206,7 +3206,7 @@ class SessionManager
         $urlId = api_get_current_access_url_id();
         if (isset($status) && $status != '') {
             $status = intval($status);
-            $sql .= " WHERE relation_type = $status (access_url_id = $urlId OR access_url_id is null )";
+            $sql .= " WHERE relation_type = $status AND (access_url_id = $urlId OR access_url_id is null )";
         } else {
             $sql .= " WHERE (access_url_id = $urlId OR access_url_id is null )";
         }

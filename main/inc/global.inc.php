@@ -327,14 +327,22 @@ require $includePath.'/local.inc.php';
 $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
 $administrator['name']  = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
-$mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
-if (file_exists($mail_conf)) {
-	require_once $mail_conf;
-}
+// Including configuration files
+$configurationFiles = array(
+    'mail.conf.php',
+    'profile.conf.php',
+    'course_info.conf.php',
+    'add_course.conf.php',
+    'events.conf.php',
+    'auth.conf.php',
+    'portfolio.conf.php'
+);
 
-$profileConf = api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-if (file_exists($profileConf)) {
-    require_once $profileConf;
+foreach ($configurationFiles as $file) {
+    $file = api_get_path(CONFIGURATION_PATH).$file;
+    if (file_exists($file)) {
+        require_once $file;
+    }
 }
 
 if (api_get_setting('server_type') == 'test') {

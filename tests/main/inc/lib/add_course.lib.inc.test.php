@@ -43,7 +43,7 @@ class TestAddCourse extends UnitTestCase {
             'course_language' =>'english',
             'uidCreator'=> '1',
             );
-        $res = register_course($course['courseSysCode'],$course['courseScreenCode'],
+        $res = AddCourse::register_course($course['courseSysCode'],$course['courseScreenCode'],
                             $course['courseRepository'],$course['courseDbName'],
                             $course['titular'],$course['category'],$course['title'],
                             $course['course_language'],$course['uidCreator'],
@@ -58,21 +58,21 @@ class TestAddCourse extends UnitTestCase {
     function TestGenerateCourseCode(){
         global $charset;
         $course_title = 'testcourse';
-        $res = generate_course_code($course_title);
+        $res = CourseManager::generate_course_code($course_title);
         $this->assertTrue($res);
     }
 
 
     function TestDefineCourseKeys(){
         global $prefixAntiNumber, $_configuration;
-        $wantedCode = generate_course_code($wantedCode);
-        $res = define_course_keys(generate_course_code($wantedCode), null, null, null,null, null);
+        $wantedCode = CourseManager::generate_course_code($wantedCode);
+        $res = AddCourse::define_course_keys(CourseManager::generate_course_code($wantedCode), null, null, null,null, null);
         $this->assertTrue($res);
     }
-    
+
     function TestBrowseFolders(){
         $browse = array('path'=>'','file'=>'','media'=>'');
-        $res = browse_folders($browse['path'], $browse['files'],$browse['media']);
+        $res = AddCourse::browse_folders($browse['path'], $browse['files'],$browse['media']);
         $this->assertFalse($res);
     }
     /*
@@ -93,7 +93,7 @@ class TestAddCourse extends UnitTestCase {
 */
     function TestLang2db(){
         $string = 'test';
-        $res = lang2db($string);
+        $res = AddCourse::lang2db($string);
         $this->assertTrue($res);
     }
 
@@ -109,13 +109,13 @@ class TestAddCourse extends UnitTestCase {
         $courseRepository = 'testcourse';
         $language = 'english';
         $default_document_array ='testdocument';
-        $res = fill_db_course($courseDbName, $courseRepository, $language);
+        $res = AddCourse::fill_db_course($courseDbName, $courseRepository, $language);
         $this->assertTrue($res === 0);
     }
 
     function TestString2Binary(){
         $variable = true;
-        $res = string2binary($variable);
+        $res = AddCourse::string2binary($variable);
         $this->assertTrue($res);
     }
 

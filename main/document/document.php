@@ -1285,7 +1285,7 @@ if ($is_allowed_to_edit ||
 
     // Show them the form for the directory name
     if (isset($_GET['createdir'])) {
-        $dirForm = create_dir_form($document_id);
+        $dirForm = DocumentManager::create_dir_form($document_id);
     }
 }
 

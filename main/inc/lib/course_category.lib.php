@@ -103,7 +103,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $name = trim(Database::escape_string($name));
     $parent_id = intval($parent_id);
     $canHaveCourses = Database::escape_string($canHaveCourses);
-    $code = generate_course_code($code);
+    $code = CourseManager::generate_course_code($code);
 
     $result = Database::query("SELECT 1 FROM $tbl_category WHERE code='$code'");
     if (Database::num_rows($result)) {
@@ -192,7 +192,7 @@ function editNode($code, $name, $canHaveCourses, $old_code)
     $old_code = Database::escape_string($old_code);
     $canHaveCourses = Database::escape_string($canHaveCourses);
 
-    $code = generate_course_code($code);
+    $code = CourseManager::generate_course_code($code);
     // Updating category
     $sql = "UPDATE $tbl_category SET name='$name', code='$code', auth_course_child = '$canHaveCourses'
             WHERE code = '$old_code'";

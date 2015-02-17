@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt*/
 
-require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-
 /**
  * Class CourseManager
  *
@@ -81,11 +78,11 @@ class CourseManager
         if (empty($params['wanted_code'])) {
             $params['wanted_code'] = $params['title'];
             // Check whether the requested course code has already been occupied.
-            $params['wanted_code'] = generate_course_code(api_substr($params['title'], 0, self::MAX_COURSE_LENGTH_CODE));
+            $params['wanted_code'] = CourseManager::generate_course_code(api_substr($params['title'], 0, self::MAX_COURSE_LENGTH_CODE));
         }
 
         // Create the course keys
-        $keys = define_course_keys($params['wanted_code']);
+        $keys = AddCourse::define_course_keys($params['wanted_code']);
 
         $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
 
@@ -98,12 +95,12 @@ class CourseManager
             $course_info   = api_get_course_info($params['code']);
 
             if (empty($course_info)) {
-                $course_id      = register_course($params);
+                $course_id      = AddCourse::register_course($params);
                 $course_info    = api_get_course_info_by_id($course_id);
 
                 if (!empty($course_info)) {
-                    prepare_course_repository($course_info['directory'], $course_info['code']);
-                    fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $params['exemplary_content']);
+                    AddCourse::prepare_course_repository($course_info['directory'], $course_info['code']);
+                    AddCourse::fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $params['exemplary_content']);
 
                     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
@@ -2170,7 +2167,7 @@ class CourseManager
         $expiration_date = time() + $firstExpirationDelay;
         //END HACK ------------------------------------------------------------
 
-        register_course($course_sys_code, $course_screen_code, $course_repository, $course_db_name, $responsible_teacher, $faculty_shortname, $course_title, $course_language, $teacher_id, $expiration_date);
+        AddCourse::register_course($course_sys_code, $course_screen_code, $course_repository, $course_db_name, $responsible_teacher, $faculty_shortname, $course_title, $course_language, $teacher_id, $expiration_date);
 
         //above was the normal course creation table update call,
         //now one more thing: fill in the target_course_code field
@@ -2296,7 +2293,7 @@ class CourseManager
                 $sql = "SELECT * FROM $table_course WHERE code='".$codeFiltered."'";
                 $res = Database::query($sql);
                 $course = Database::fetch_array($res);
-                $course_tables = get_course_tables();
+                $course_tables = AddCourse::get_course_tables();
 
                 //Cleaning c_x tables
                 if (!empty($course['id'])) {
@@ -2437,7 +2434,7 @@ class CourseManager
         $res = Database::query($sql);
         $course = Database::fetch_array($res);
 
-        $course_tables = get_course_tables();
+        $course_tables = AddCourse::get_course_tables();
 
         if (!empty($course['id'])) {
             //Cleaning c_x tables
@@ -4256,10 +4253,9 @@ class CourseManager
      */
     public static function generate_nice_next_course_code($wanted_code)
     {
-        require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
         $course_code_ok = !self::course_code_exists($wanted_code);
         if (!$course_code_ok) {
-           $wanted_code = generate_course_code($wanted_code);
+           $wanted_code = CourseManager::generate_course_code($wanted_code);
            $table = Database::get_main_table(TABLE_MAIN_COURSE);
            $wanted_code = Database::escape_string($wanted_code);
            $sql = "SELECT count(*) as count FROM $table WHERE code LIKE '$wanted_code%'";
@@ -5355,4 +5351,25 @@ class CourseManager
             return $col['title'];
         }
     }
+
+    /**
+     * Generates a course code from a course title
+     * @todo Such a function might be useful in other places too. It might be moved in the CourseManager class.
+     * @todo the function might be upgraded for avoiding code duplications (currently, it might suggest a code that is already in use)
+     * @param string A course title
+     * @param string The course title encoding (defaults to type defined globally)
+     * @return string A proposed course code
+     * @assert (null,null) === false
+     * @assert ('ABC_DEF', null) === 'ABCDEF'
+     * @assert ('ABC09*^[%A', null) === 'ABC09A'
+     */
+    public static function generate_course_code($course_title, $encoding = null)
+    {
+        if (empty($encoding)) {
+            $encoding = api_get_system_encoding();
+        }
+        return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, CourseManager::MAX_COURSE_LENGTH_CODE);
+    }
+
+
 }

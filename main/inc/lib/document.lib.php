@@ -5015,7 +5015,7 @@ class DocumentManager
             $ext = strtolower($ext[sizeof($ext) - 1]);
 
             // HTML-files an some other types are shown in a frameset by default.
-            $is_browser_viewable_file = is_browser_viewable($ext);
+            $is_browser_viewable_file = self::is_browser_viewable($ext);
 
             if ($is_browser_viewable_file) {
                 if ($ext == 'pdf' || in_array($ext, $webOdflist)) {
@@ -5850,7 +5850,8 @@ class DocumentManager
      * @param string $file_extension    The filename extension of the document (it must be in lower case).
      * @return bool                     Returns TRUE or FALSE.
      */
-    function is_browser_viewable($file_extension) {
+    public static function is_browser_viewable($file_extension)
+    {
         static $allowed_extensions = array(
             'htm', 'html', 'xhtml',
             'gif', 'jpg', 'jpeg', 'png', 'tif', 'tiff',

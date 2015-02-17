@@ -3,14 +3,19 @@
 
 /**
  * Certificate Class
- * The certificates class is used to generate certificates from inside the
- * gradebook tool.
+ * Generate certificates based in the gradebook tool.
  * @package chamilo.library.certificates
  */
 class Certificate extends Model
 {
     public $table;
-    public $columns = array('id','cat_id','score_certificate','created_at','path_certificate');
+    public $columns = array(
+        'id',
+        'cat_id',
+        'score_certificate',
+        'created_at',
+        'path_certificate'
+    );
     /**
      * Certification data
      */
@@ -21,8 +26,8 @@ class Certificate extends Model
      */
     public $certification_user_path = null;
     public $certification_web_user_path = null;
-    public $html_file     = null;
-    public $qr_file     = null;
+    public $html_file = null;
+    public $qr_file = null;
     public $user_id;
 
     /* If true every time we enter to the certificate URL
@@ -34,16 +39,18 @@ class Certificate extends Model
 
     /**
      * Constructor
-     * @param	int	ID of the certificate. If no ID given, take user_id and try to generate one
+     * @param int $certificate_id ID of the certificate.
+     *
+     * If no ID given, take user_id and try to generate one
      */
     public function __construct($certificate_id = null)
     {
-        $this->table             =  Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->certificate_data = null;
 
         if (isset($certificate_id)) {
             $this->certificate_data = $this->get($certificate_id);
-            $this->user_id          = $this->certificate_data['user_id'];
+            $this->user_id = $this->certificate_data['user_id'];
         } else {
             //Try with the current user
             $this->user_id = api_get_user_id();
@@ -51,10 +58,10 @@ class Certificate extends Model
 
         if ($this->user_id) {
 
-            //Need to be called before any operation
+            // Need to be called before any operation
             $this->check_certificate_path();
 
-            //To force certification generation
+            // To force certification generation
             if ($this->force_certificate_generation) {
                 $this->generate();
             }
@@ -102,9 +109,12 @@ class Certificate extends Model
      * Deletes the current certificate object. This is generally triggered by
      * the teacher from the gradebook tool to re-generate the certificate because
      * the original version wa flawed.
+     * @param bool $force_delete
+     * @return bool
      */
     public function delete($force_delete = false)
     {
+        $delete_db = false;
         if (!empty($this->certificate_data)) {
             if (!is_null($this->html_file) || $this->html_file != '' || strlen($this->html_file)) {
                 //Deleting HTML file
@@ -121,12 +131,15 @@ class Certificate extends Model
                     @unlink($this->qr_file);
                 }
                 if ($delete_db || $force_delete) {
+
                     return parent::delete($this->certificate_data['id']);
                 }
             } else {
+
                 return parent::delete($this->certificate_data['id']);
             }
         }
+
         return false;
     }
 
@@ -146,43 +159,58 @@ class Certificate extends Model
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
         $my_category = Category :: load($this->certificate_data['cat_id']);
-
-        if (isset($my_category[0]) && $my_category[0]->is_certificate_available($this->user_id)) {
-
-            $user         = api_get_user_info($this->user_id);
+        if (isset($my_category[0]) &&
+            $my_category[0]->is_certificate_available($this->user_id)
+        ) {
+            $user = api_get_user_info($this->user_id);
             $scoredisplay = ScoreDisplay :: instance();
-            $scorecourse  = $my_category[0]->calc_score($this->user_id);
+            $scorecourse = $my_category[0]->calc_score($this->user_id);
+            $scorecourse_display = isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable');
 
-            $scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
-
-            //Prepare all necessary variables:
-            $organization_name     = api_get_setting('Institution');
+            // Prepare all necessary variables:
+            $organization_name = api_get_setting('Institution');
             //$portal_name         = api_get_setting('siteName');
-            $stud_fn             = $user['firstname'];
-            $stud_ln             = $user['lastname'];
+            $stud_fn = $user['firstname'];
+            $stud_ln = $user['lastname'];
 
             //@todo this code is not needed
-            $certif_text         = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'), $organization_name, $stud_fn.' '.$stud_ln, $my_category[0]->get_name(), $scorecourse_display);
-            $certif_text         = str_replace("\\n","\n", $certif_text);
+            $certif_text = sprintf(
+                get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),
+                $organization_name, $stud_fn.' '.$stud_ln, $my_category[0]->get_name(),
+                $scorecourse_display
+            );
+            $certif_text = str_replace("\\n","\n", $certif_text);
 
             //If the gradebook is related to skills we added the skills to the user
 
             $skill = new Skill();
-            $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id']);
+            $skill->add_skill_to_user(
+                $this->user_id,
+                $this->certificate_data['cat_id']
+            );
 
             if (is_dir($this->certification_user_path)) {
                 if (!empty($this->certificate_data)) {
-                    $new_content_html = get_user_certificate_content($this->user_id, $my_category[0]->get_course_code(), false, $params['hide_print_button']);
+                    $new_content_html = get_user_certificate_content(
+                        $this->user_id,
+                        $my_category[0]->get_course_code(),
+                        false,
+                        $params['hide_print_button']
+                    );
 
                     if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
                         $name = $this->certificate_data['path_certificate'];
                         $my_path_certificate = $this->certification_user_path.basename($name);
-                        if (file_exists($my_path_certificate) && !empty($name) && !is_dir($my_path_certificate) && $this->force_certificate_generation == false) {
+                        if (file_exists($my_path_certificate) &&
+                            !empty($name) &&
+                            !is_dir($my_path_certificate) &&
+                            $this->force_certificate_generation == false
+                        ) {
                             //Seems that the file was already generated
                             return true;
                         } else {
-                            //Creating new name
-                            $name    = md5($this->user_id.$this->certificate_data['cat_id']).'.html';
+                            // Creating new name
+                            $name = md5($this->user_id.$this->certificate_data['cat_id']).'.html';
                             $my_path_certificate = $this->certification_user_path.$name;
                             $path_certificate    ='/'.$name;
 
@@ -190,13 +218,21 @@ class Certificate extends Model
                             $file_info = pathinfo($path_certificate);
                             $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
 
-                            $my_new_content_html = str_replace('((certificate_barcode))', Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'), $new_content_html['content']);
+                            $my_new_content_html = str_replace(
+                                '((certificate_barcode))',
+                                Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'),
+                                $new_content_html['content']
+                            );
                             $my_new_content_html = mb_convert_encoding($my_new_content_html,'UTF-8', api_get_system_encoding());
 
                             $result = @file_put_contents($my_path_certificate, $my_new_content_html);
                             if ($result) {
                                 //Updating the path
-                                self::update_user_info_about_certificate($this->certificate_data['cat_id'], $this->user_id, $path_certificate);
+                                self::update_user_info_about_certificate(
+                                    $this->certificate_data['cat_id'],
+                                    $this->user_id,
+                                    $path_certificate
+                                );
                                 $this->certificate_data['path_certificate'] = $path_certificate;
 
                                 if ($this->html_file_is_generated()) {
@@ -206,24 +242,29 @@ class Certificate extends Model
                                     }
                                 }
                             }
+
                             return $result;
                         }
                     }
                 }
             }
         }
+
         return false;
     }
 
     /**
     * update user info about certificate
-    * @param int The category id
-    * @param int The user id
-    * @param string the path name of the certificate
+    * @param int $cat_id category id
+    * @param int $user_id user id
+    * @param string $path_certificate the path name of the certificate
     * @return void()
     */
-    public function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate)
-    {
+    public function update_user_info_about_certificate(
+        $cat_id,
+        $user_id,
+        $path_certificate
+    ) {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         if (!UserManager::is_user_certified($cat_id,$user_id)) {
             $sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
@@ -233,7 +274,6 @@ class Certificate extends Model
     }
 
     /**
-     *
      * Check if the file was generated
      *
      * @return boolean
@@ -254,8 +294,8 @@ class Certificate extends Model
 
     /**
      * Generates a QR code for the certificate. The QR code embeds the text given
-     * @param    string    Text to be added in the QR code
-     * @param    string    file path of the image
+     * @param    string    $text Text to be added in the QR code
+     * @param    string    $path file path of the image
      * */
     public function generate_qr($text, $path)
     {
@@ -271,7 +311,8 @@ class Certificate extends Model
     /**
      * Transforms certificate tags into text values. This function is very static
      * (it doesn't allow for much flexibility in terms of what tags are printed).
-     * @param array Contains two array entris: first are the headers, second is an array of contents
+     * @param array $array Contains two array entris: first are the headers,
+     * second is an array of contents
      * @return string The translated string
      */
     public function parse_certificate_variables($array)

@@ -356,7 +356,7 @@ if (api_get_setting('server_type') == 'test') {
     - full fake register globals block
     */
     error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-
+    /*
     // TODO: These obsolete variables $HTTP_* to be check whether they are actually used.
     if (!isset($HTTP_GET_VARS)) { $HTTP_GET_VARS = $_GET; }
     if (!isset($HTTP_POST_VARS)) { $HTTP_POST_VARS = $_POST; }
@@ -384,7 +384,7 @@ if (api_get_setting('server_type') == 'test') {
                 $GLOBALS[$key]=$HTTP_SERVER_VARS[$key];
             }
         }
-    }
+    }*/
 }
 
 /*	LOAD LANGUAGE FILES SECTION */

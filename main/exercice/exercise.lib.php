@@ -2211,25 +2211,33 @@ function get_exercises_to_be_taken($course_code, $session_id)
  **/
 function get_student_stats_by_question($question_id,  $exercise_id, $course_code, $session_id)
 {
-    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-    $question_id 		= intval($question_id);
-    $exercise_id 		= intval($exercise_id);
-    $course_code 		= Database::escape_string($course_code);
-    $session_id 		= intval($session_id);
+    $question_id = intval($question_id);
+    $exercise_id = intval($exercise_id);
+    $course_code = Database::escape_string($course_code);
+    $session_id = intval($session_id);
 
-    $sql = "SELECT MAX(marks) as max , MIN(marks) as min, AVG(marks) as average
-    		FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
-    		WHERE 	exe_exo_id 		= $exercise_id AND
-    				course_code 	= '$course_code' AND
-    				e.session_id 	= $session_id AND
-    				question_id 	= $question_id AND status = '' LIMIT 1";
+    $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
+    		FROM $track_exercises e
+    		INNER JOIN $track_attempt a
+    		ON (
+    		    a.exe_id = e.exe_id AND
+    		    e.exe_cours_id = a.course_code AND
+    		    e.session_id  = a.session_id
+            )
+    		WHERE
+    		    exe_exo_id 	= $exercise_id AND
+                course_code = '$course_code' AND
+                e.session_id = $session_id AND
+                question_id = $question_id AND
+                status = ''
+            LIMIT 1";
     $result = Database::query($sql);
     $return = array();
     if ($result) {
         $return = Database::fetch_array($result, 'ASSOC');
-
     }
 
     return $return;
@@ -2244,30 +2252,46 @@ function get_student_stats_by_question($question_id,  $exercise_id, $course_code
  */
 function get_number_students_question_with_answer_count($question_id, $exercise_id, $course_code, $session_id)
 {
-    $track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $question_id = intval($question_id);
     $exercise_id = intval($exercise_id);
     $course_code = Database::escape_string($course_code);
     $session_id = intval($session_id);
 
+    if (empty($session_id)) {
+        $courseCondition =  "
+            INNER JOIN $courseUser cu
+            ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id";
+        $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
+    } else {
+        $courseCondition =  "
+            INNER JOIN $courseUserSession cu
+            ON cu.course_code = a.course_code AND cu.id_user = exe_user_id";
+        $courseConditionWhere = " AND cu.status = 0 ";
+    }
+
     $sql = "SELECT DISTINCT exe_user_id
     		FROM $track_exercises e
     		INNER JOIN $track_attempt a
-    		ON (a.exe_id = e.exe_id)
-    		INNER JOIN $course_user cu
-            ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id
+    		ON (
+    		    a.exe_id = e.exe_id AND
+    		    e.exe_cours_id = a.course_code AND
+    		    e.session_id  = a.session_id
+            )
+    		$courseCondition
     		WHERE
-    		    exe_exo_id 		= $exercise_id AND
-                a.course_code 	= '$course_code' AND
-                e.session_id 	= $session_id AND
-                question_id 	= $question_id AND
-                answer          <> '0' AND
-                cu.status       = ".STUDENT." AND
-                relation_type  <> 2 AND
-                e.status        = ''";
+    		    exe_exo_id = $exercise_id AND
+                a.course_code = '$course_code' AND
+                e.session_id = $session_id AND
+                question_id = $question_id AND
+                answer <> '0' AND
+                e.status = ''
+                $courseConditionWhere
+            ";
     $result = Database::query($sql);
     $return = 0;
     if ($result) {
@@ -2287,32 +2311,44 @@ function get_number_students_question_with_answer_count($question_id, $exercise_
  */
 function get_number_students_answer_hotspot_count($answer_id, $question_id,  $exercise_id, $course_code, $session_id)
 {
-    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_hotspot		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-    $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_hotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+    $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-    $question_id 		= intval($question_id);
-    $answer_id          = intval($answer_id);
-    $exercise_id 		= intval($exercise_id);
-    $course_code 		= Database::escape_string($course_code);
-    $session_id 		= intval($session_id);
+    $question_id = intval($question_id);
+    $answer_id = intval($answer_id);
+    $exercise_id = intval($exercise_id);
+    $course_code = Database::escape_string($course_code);
+    $session_id = intval($session_id);
+
+    if (empty($session_id)) {
+        $courseCondition =  "
+            INNER JOIN $courseUser cu
+            ON cu.course_code = a.hotspot_course_code AND cu.user_id  = exe_user_id";
+        $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
+    } else {
+        $courseCondition =  "
+            INNER JOIN $courseUserSession cu
+            ON cu.course_code = a.hotspot_course_code AND cu.id_user = exe_user_id";
+        $courseConditionWhere = " AND cu.status = 0 ";
+    }
 
     $sql = "SELECT DISTINCT exe_user_id
     		FROM $track_exercises e
     		INNER JOIN $track_hotspot a
     		ON (a.hotspot_exe_id = e.exe_id)
-    		INNER JOIN $course_user cu
-    		ON cu.course_code = a.hotspot_course_code AND cu.user_id  = exe_user_id
+    		$courseCondition
     		WHERE
     		    exe_exo_id              = $exercise_id AND
                 a.hotspot_course_code 	= '$course_code' AND
                 e.session_id            = $session_id AND
                 hotspot_answer_id       = $answer_id AND
                 hotspot_question_id     = $question_id AND
-                cu.status               = ".STUDENT." AND
                 hotspot_correct         =  1 AND
-                relation_type           <> 2 AND
-                e.status                = ''";
+                e.status                = ''
+                $courseConditionWhere
+            ";
 
     $result = Database::query($sql);
     $return = 0;
@@ -2345,7 +2381,8 @@ function get_number_students_answer_count(
 ) {
     $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $question_id = intval($question_id);
     $answer_id = intval($answer_id);
@@ -2364,21 +2401,36 @@ function get_number_students_answer_count(
             $select_condition = " DISTINCT exe_user_id ";
     }
 
+    if (empty($session_id)) {
+        $courseCondition =  "
+            INNER JOIN $courseUser cu
+            ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id";
+        $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
+    } else {
+        $courseCondition =  "
+            INNER JOIN $courseUserSession cu
+            ON cu.course_code = a.course_code AND cu.id_user = exe_user_id";
+        $courseConditionWhere = " AND cu.status = 0 ";
+    }
+
     $sql = "SELECT $select_condition
     		FROM $track_exercises e
     		INNER JOIN $track_attempt a
-    		ON (a.exe_id = e.exe_id)
-    		INNER JOIN $course_user cu
-            ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id
+    		ON (
+    		    a.exe_id = e.exe_id AND
+    		    e.exe_cours_id = a.course_code AND
+    		    e.session_id  = a.session_id
+            )
+    		$courseCondition
     		WHERE
-    		    exe_exo_id 		= $exercise_id AND
-                a.course_code 	= '$course_code' AND
-                e.session_id 	= $session_id AND
+    		    exe_exo_id = $exercise_id AND
+                a.course_code = '$course_code' AND
+                e.session_id = $session_id AND
                 $answer_condition
-                question_id 	= $question_id AND
-                cu.status        = ".STUDENT." AND
-                relation_type <> 2 AND
-                e.status = ''";
+                question_id = $question_id AND
+                e.status = ''
+                $courseConditionWhere
+            ";
     $result = Database::query($sql);
     $return = 0;
     if ($result) {
@@ -2530,8 +2582,8 @@ function check_fill_in_blanks($answer, $user_answer)
  */
 function get_number_students_finish_exercise($exercise_id, $course_code, $session_id)
 {
-    $track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
     $exercise_id = intval($exercise_id);
     $course_code = Database::escape_string($course_code);

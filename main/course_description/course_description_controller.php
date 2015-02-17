@@ -45,7 +45,7 @@ class CourseDescriptionController
             $data['descriptions'] = array($data['descriptions']);
         }
         foreach ($data['descriptions'] as $description) {
-            if (strpos($description, '<iframe') !== false && $browser['name'] == 'Chrome') {
+            if (strpos($description['content'], '<iframe') !== false && $browser['name'] == 'Chrome') {
                 header("X-XSS-Protection: 0");
             }
         }

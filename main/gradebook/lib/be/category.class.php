@@ -376,7 +376,7 @@ class Category implements GradebookItem
      */
     private static function create_category_objects_from_sql_result($result)
     {
-        $allcat = array();
+        $categories = array();
         while ($data = Database::fetch_array($result)) {
             $cat = new Category();
             $cat->set_id($data['id']);
@@ -392,10 +392,10 @@ class Category implements GradebookItem
             $cat->set_grade_model_id($data['grade_model_id']);
             $cat->set_locked($data['locked']);
             $cat->setGenerateCertificates($data['generate_certificates']);
-            $allcat[] = $cat;
+            $categories[] = $cat;
         }
 
-        return $allcat;
+        return $categories;
     }
 
     /**

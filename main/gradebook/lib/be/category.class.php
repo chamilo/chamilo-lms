@@ -704,9 +704,12 @@ class Category implements GradebookItem
     {
         $score = $this->calc_score($user_id, $this->course_code);
 
-        if (isset($score)) {
+        if (isset($score) && isset($score[0])) {
             // Get a percentage score to compare to minimum certificate score
-            $certification_score = $score[0] / $score[1] * 100;
+            //$certification_score = $score[0] / $score[1] * 100;
+
+            // Get real score not a percentage.
+            $certification_score = $score[0];
 
             if ($certification_score >= $this->certificate_min_score) {
                 return true;

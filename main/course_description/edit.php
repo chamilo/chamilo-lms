@@ -67,10 +67,10 @@ if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 
 // Set some default values
-if(!empty($description_title)) {
+if (!empty($description_title)) {
     $default['title'] = Security::remove_XSS($description_title);
 }
-if(!empty($description_content)) {
+if (!empty($description_content)) {
     $default['contentDescription'] = Security::remove_XSS($description_content,COURSEMANAGERLOWSECURITY);
 }
 $default['description_type'] = $description_type;

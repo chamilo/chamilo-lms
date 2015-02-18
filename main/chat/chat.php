@@ -26,7 +26,7 @@ if ($origin != 'whoisonline') {
 
 /*  TRACKING */
 
-event_access_tool(TOOL_CHAT);
+Event::event_access_tool(TOOL_CHAT);
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 
 /*

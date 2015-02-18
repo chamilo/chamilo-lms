@@ -884,7 +884,7 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.8','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.9','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -3018,9 +3018,9 @@ ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
 DROP TABLE IF EXISTS course_type;
 CREATE TABLE course_type (
     id int unsigned not null auto_increment primary key,
-    name varchar(50) not null, 
-    translation_var char(40) default 'UndefinedCourseTypeLabel', 
-    description TEXT default '', 
+    name varchar(50) not null,
+    translation_var char(40) default 'UndefinedCourseTypeLabel',
+    description TEXT default '',
     props text default ''
 );
 

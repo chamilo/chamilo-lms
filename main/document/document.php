@@ -268,7 +268,7 @@ switch ($action) {
             api_not_allowed();
         }
         // Launch event
-        event_download($document_data['url']);
+        Event::event_download($document_data['url']);
         // Check visibility of document and paths
         if (!($is_allowed_to_edit || $group_member_with_upload_rights)
             && !DocumentManager::is_visible_by_id($document_id, $courseInfo, $sessionId, api_get_user_id())) {
@@ -314,7 +314,7 @@ switch ($action) {
                 require 'downloadfolder.inc.php';
             }
             // Launch event
-            event_download($document_data['url']);
+            Event::event_download($document_data['url']);
             exit;
         }
         break;
@@ -927,7 +927,7 @@ $(document).ready( function() {
 </script>';
 
 // Lib for event log, stats & tracking & record of the access
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 /* 	DISPLAY */
 if ($groupId != 0) { // Add group name after for group documents
@@ -1285,15 +1285,14 @@ if ($is_allowed_to_edit ||
 
     // Show them the form for the directory name
     if (isset($_GET['createdir'])) {
-        $dirForm = create_dir_form($document_id);
+        $dirForm = DocumentManager::create_dir_form($document_id);
     }
 }
 
 /* 	VISIBILITY COMMANDS */
 if ($is_allowed_to_edit) {
     if ((isset($_GET['set_invisible']) && !empty($_GET['set_invisible'])) ||
-        (isset($_GET['set_visible']) && !empty($_GET['set_visible'])) &&
-        $_GET['set_visible'] != '*' && $_GET['set_invisible'] != '*'
+        (isset($_GET['set_visible']) && !empty($_GET['set_visible']))
     ) {
         // Make visible or invisible?
         if (isset($_GET['set_visible'])) {
@@ -1328,7 +1327,6 @@ if ($is_allowed_to_edit) {
             null,
             $sessionId)
         ) {
-            //don't use ViMod because firt is load ViMdod (Gradebook). VisibilityChanged (trad4all)
             $message = Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
         } else {
             $message = Display::return_message(get_lang('ViModProb'), 'error');

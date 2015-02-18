@@ -22,12 +22,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-
-// Including a configuration file.
-require api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-
 // A check whether the course validation feature is enabled.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 

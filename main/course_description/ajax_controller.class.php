@@ -19,14 +19,14 @@ use Header;
 
 /**
  * Ajax controller. Dispatch request and perform required action.
- * 
- *      - delete category/link 
- * 
+ *
+ *      - delete category/link
+ *
  * Usage:
- * 
+ *
  *      $controller = AjaxController::instance();
  *      $controller->run();
- * 
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license /license.txt
  */
@@ -38,7 +38,7 @@ class AjaxController extends \Controller
 
     /**
      * Return the instance of the controller.
-     * 
+     *
      * @return  \CourseDescription\AjaxController
      */
     public static function instance()
@@ -52,15 +52,15 @@ class AjaxController extends \Controller
 
     protected function __construct()
     {
-        
+
     }
 
     /**
-     * Prepare the environment. Set up breadcrumps and raise tracking event. 
+     * Prepare the environment. Set up breadcrumps and raise tracking event.
      */
     protected function prolog()
     {
-        event_access_tool(TOOL_COURSE_DESCRIPTION);
+        Event::event_access_tool(TOOL_COURSE_DESCRIPTION);
     }
 
     public function is_allowed_to_edit()
@@ -79,7 +79,7 @@ class AjaxController extends \Controller
         }
         return true;
     }
-    
+
     public function authorize()
     {
         $authorize = api_protect_course_script();
@@ -102,7 +102,7 @@ class AjaxController extends \Controller
     }
 
     /**
-     * 
+     *
      */
     public function delete()
     {
@@ -120,7 +120,7 @@ class AjaxController extends \Controller
         $this->response($success);
     }
     /**
-     * 
+     *
      */
     public function delete_by_course()
     {
@@ -128,11 +128,11 @@ class AjaxController extends \Controller
             $this->forbidden();
             return;
         }
-        
+
         $course = (object) array();
         $course->c_id = Request::get_c_id();
         $course->session_id = Request::get_session_id();
-        
+
         $success = CourseDescription::repository()->remove_by_course($course);
 
         $this->response($success);
@@ -149,7 +149,7 @@ class AjaxController extends \Controller
     }
 
     /**
-     * Action exists but implementation is missing. 
+     * Action exists but implementation is missing.
      */
     public function missing()
     {
@@ -158,9 +158,9 @@ class AjaxController extends \Controller
 
     /**
      * Display a standard json responce.
-     * 
+     *
      * @param bool $success
-     * @param string $message 
+     * @param string $message
      * @param object $data
      */
     public function response($success = false, $message = '', $data = null)

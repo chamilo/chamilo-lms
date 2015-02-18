@@ -18,7 +18,6 @@
  * @link      http://pear.php.net/package/Image_Text
  * @since     File available since Release 0.0.1
  */
-require_once 'Image/Text/Exception.php';
 /**
  * Image_Text - Advanced text manipulations in images.
  *

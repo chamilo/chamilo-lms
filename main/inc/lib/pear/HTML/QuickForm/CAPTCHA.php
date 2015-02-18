@@ -52,12 +52,6 @@
  */
 
 /**
- * Required packages
- */
-require_once 'HTML/QuickForm/input.php';
-require_once 'Text/CAPTCHA.php';
-
-/**
  * Common class for HTML_QuickForm elements to display a CAPTCHA
  *
  * The HTML_QuickForm_CAPTCHA package adds an element to the
@@ -259,10 +253,3 @@ class HTML_QuickForm_CAPTCHA extends HTML_QuickForm_input
         return $html;
     }
 }
-
-/**
- * Register the rule with QuickForm
- */
-require_once 'HTML/QuickForm/Rule/CAPTCHA.php';
-
-?>

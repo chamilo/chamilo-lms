@@ -23,11 +23,6 @@
  */
 
 /**
- * Base class for form elements
- */
-require_once 'HTML/QuickForm/element.php';
-
-/**
  * Base class for <button></button> form elements
  *
  * @category    HTML

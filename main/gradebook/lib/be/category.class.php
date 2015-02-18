@@ -365,7 +365,7 @@ class Category implements GradebookItem
         $cat->set_parent_id(null);
         $cat->set_weight(0);
         $cat->set_visible(1);
-        $cat->setGenerateCertificates(false);
+        $cat->setGenerateCertificates(0);
 
         return $cat;
     }
@@ -376,7 +376,7 @@ class Category implements GradebookItem
      */
     private static function create_category_objects_from_sql_result($result)
     {
-        $allcat = array();
+        $categories = array();
         while ($data = Database::fetch_array($result)) {
             $cat = new Category();
             $cat->set_id($data['id']);
@@ -392,10 +392,10 @@ class Category implements GradebookItem
             $cat->set_grade_model_id($data['grade_model_id']);
             $cat->set_locked($data['locked']);
             $cat->setGenerateCertificates($data['generate_certificates']);
-            $allcat[] = $cat;
+            $categories[] = $cat;
         }
 
-        return $allcat;
+        return $categories;
     }
 
     /**
@@ -722,14 +722,20 @@ class Category implements GradebookItem
 
     /**
      * Checks if the certificate is available for the given user in this category
-     * @param    integer    User ID
-     * @return    boolean    True if conditions match, false if fails
+     * @param   integer    $user_id User ID
+     * @return  boolean    True if conditions match, false if fails
      */
     public function is_certificate_available($user_id)
     {
         $score = $this->calc_score($user_id, $this->course_code);
-        if (isset($score)) {
-            $certification_score = ($score[0]/$score[1])*100; //get a percentage score to compare to minimum certificate score
+
+        if (isset($score) && isset($score[0])) {
+            // Get a percentage score to compare to minimum certificate score
+            //$certification_score = $score[0] / $score[1] * 100;
+
+            // Get real score not a percentage.
+            $certification_score = $score[0];
+
             if ($certification_score >= $this->certificate_min_score) {
                 return true;
             }
@@ -1594,7 +1600,7 @@ class Category implements GradebookItem
             if ($locked == 1) {
                 $event_type = LOG_GRADEBOOK_LOCKED;
             }
-            event_system($event_type, LOG_GRADEBOOK_ID, $this->id);
+            Event::addEvent($event_type, LOG_GRADEBOOK_ID, $this->id);
         }
     }
 
@@ -1619,11 +1625,19 @@ class Category implements GradebookItem
         $category = $cats_course[0];
 
         if (!$category->getGenerateCetificates()) {
+            $skill = new Skill();
+            $skill->add_skill_to_user(
+                $user_id,
+                $category_id,
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+
             return false;
         }
 
-        $alleval_course  = $category->get_evaluations($user_id, true);
-        $alllink_course  = $category->get_links($user_id, true);
+        $alleval_course = $category->get_evaluations($user_id, true);
+        $alllink_course = $category->get_links($user_id, true);
         $evals_links = array_merge($alleval_course, $alllink_course);
 
         //@todo move these in a function
@@ -1686,6 +1700,7 @@ class Category implements GradebookItem
             if (!empty($my_certificate)) {
                 $certificate_obj = new Certificate($my_certificate['id']);
                 $fileWasGenerated = $certificate_obj->html_file_is_generated();
+
                 if (!empty($fileWasGenerated)) {
                     $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
                     $certificates = Display::url(

@@ -194,7 +194,7 @@ if ($check) {
                 !empty($student_id)
             ) {
                 $course_info = api_get_course_info($course);
-                delete_student_lp_events(
+                Event::delete_student_lp_events(
                     $student_id,
                     $lp_id,
                     $course_info,
@@ -385,11 +385,12 @@ if (!empty($student_id)) {
     $avg_student_progress = round($avg_student_progress, 2);
 
     // time spent on the course
+    $courseInfo = api_get_course_info($course_code);
 
     $time_spent_on_the_course = api_time_to_hms(
         Tracking:: get_time_spent_on_the_course(
             $user_info['user_id'],
-            $course_code,
+            $courseInfo['real_id'],
             $session_id
         )
     );
@@ -445,7 +446,7 @@ if (!empty($student_id)) {
     $info_course = CourseManager :: get_course_information($course_code);
     $coachs_name  = '';
     $session_name = '';
-    $nb_login = Tracking :: count_login_per_student($user_info['user_id'], $_GET['course']);
+    $nb_login = Tracking :: count_login_per_student($user_info['user_id'], $info_course['real_id']);
     //get coach and session_name if there is one and if session_mode is activated
     if ($session_id > 0) {
 
@@ -668,11 +669,13 @@ if (!empty($student_id)) {
 
             if (!empty($courses)) {
                 foreach ($courses as $course_code) {
+                    $courseInfo = api_get_course_info($course_code);
+                    $courseId = $courseInfo['real_id'];
 
                     if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
                         $course_info = CourseManager :: get_course_information($course_code);
 
-                        $time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($user_info['user_id'], $course_code, $session_id));
+                        $time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($user_info['user_id'], $courseId, $session_id));
 
                         // get average of faults in attendances by student
                         $results_faults_avg = $attendance->get_faults_average_by_course($student_id, $course_code, $session_id);
@@ -1092,9 +1095,9 @@ if (!empty($student_id)) {
         $csv_content[] = array ();
         $nb_assignments 		= Tracking::count_student_assignments($student_id, $course_code, $session_id);
         $messages 				= Tracking::count_student_messages($student_id, $course_code, $session_id);
-        $links 					= Tracking::count_student_visited_links($student_id, $course_code, $session_id);
-        $chat_last_connection 	= Tracking::chat_last_connection($student_id, $course_code, $session_id);
-        $documents				= Tracking::count_student_downloaded_documents($student_id, $course_code, $session_id);
+        $links 					= Tracking::count_student_visited_links($student_id, $info_course['real_id'], $session_id);
+        $chat_last_connection 	= Tracking::chat_last_connection($student_id, $info_course['real_id'], $session_id);
+        $documents				= Tracking::count_student_downloaded_documents($student_id, $info_course['real_id'], $session_id);
         $uploaded_documents		= Tracking::count_student_uploaded_documents($student_id, $course_code, $session_id);
 
         $csv_content[] = array(

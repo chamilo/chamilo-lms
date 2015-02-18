@@ -24,7 +24,6 @@ $cidReset = true;
 
 // include global script
 require_once '../inc/global.inc.php';
-require_once 'sub_language.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();

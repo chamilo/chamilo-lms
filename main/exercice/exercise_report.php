@@ -28,9 +28,6 @@ api_protect_course_script(true, false, true);
 // including additional libraries
 require_once 'hotpotatoes.lib.php';
 
-// need functions of statsutils lib to display previous exercices scores
-require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
-
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $origin = isset($origin) ? $origin : null;
@@ -42,9 +39,9 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is
 $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_ATTEMPT = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-$TBL_TRACK_ATTEMPT_RECORDING = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_ATTEMPT = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
 $course_id = api_get_course_int_id();
@@ -130,7 +127,7 @@ if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] == 'update' &&
     ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(intval($_GET['exeid']))) {
     $id = intval($_GET['exeid']); //filtered by post-condition
-    $track_exercise_info = get_exercise_track_exercise_info($id);
+    $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }

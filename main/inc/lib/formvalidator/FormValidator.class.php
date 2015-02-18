@@ -2,15 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Filter
- */
-define('NO_HTML', 1);
-define('STUDENT_HTML', 2);
-define('TEACHER_HTML', 3);
-define('STUDENT_HTML_FULLPAGE', 4);
-define('TEACHER_HTML_FULLPAGE', 5);
-
-/**
  * Objects of this class can be used to create/manipulate/validate user input.
  */
 class FormValidator extends HTML_QuickForm
@@ -59,7 +50,7 @@ class FormValidator extends HTML_QuickForm
         $form_target = isset($form_data['target']) ? $form_data['target'] : '';
         $form_attributes = isset($form_data['attributes']) ? $form_data['attributes'] : null;
         $form_track_submit = isset($form_data['track_submit']) ? $form_data['track_submit'] : true;
-
+        $reset = null;
         $result = new FormValidator($form_name, $form_method, $form_action, $form_target, $form_attributes, $form_track_submit);
 
         $defaults = array();
@@ -454,10 +445,6 @@ EOT;
             return;
         }
 
-        if (!class_exists('xajax')) {
-            require_once api_get_path(LIBRARY_PATH) . 'xajax/xajax.inc.php';
-        }
-
         $xajax_upload = new xajax(api_get_path(WEB_LIBRARY_PATH) . 'upload.xajax.php');
 
         $xajax_upload->registerFunction('updateProgress');
@@ -604,7 +591,6 @@ EOT;
  */
 function html_filter($html, $mode = NO_HTML)
 {
-    require_once api_get_path(LIBRARY_PATH) . 'formvalidator/Rule/HTML.php';
     $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
     $cleaned_html = kses($html, $allowed_tags);
     return $cleaned_html;

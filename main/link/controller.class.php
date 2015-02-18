@@ -18,16 +18,16 @@ use Header;
 
 /**
  * Html controller. Dispatch request and perform required action:
- * 
+ *
  *      - list
  *      - add/edit/delete link
  *      - add/edit/delete category
  *      - make visible/invisible link
  *      - go to link target
- * 
+ *
  * Note:
  * Currently some actions are only implemented in the Ajax controller.
- * 
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license /license.txt
  */
@@ -50,7 +50,7 @@ class Controller extends \Controller
     const ACTION_DEFAULT = 'listing';
 
     /**
-     * 
+     *
      * @return \Link\Controller
      */
     public static function instance()
@@ -82,9 +82,9 @@ class Controller extends \Controller
     }
 
     /**
-     * Action to perform. 
+     * Action to perform.
      * Returns the request parameter.
-     * 
+     *
      * @return string
      */
     public function get_action()
@@ -101,7 +101,7 @@ class Controller extends \Controller
 
     public function prolog()
     {
-        event_access_tool(TOOL_LINK);
+        Event::event_access_tool(TOOL_LINK);
 
         //legacy
         global $interbreadcrumb;
@@ -118,8 +118,8 @@ class Controller extends \Controller
 
     /**
      * Whether the call is authorized or not.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     public function authorize()
     {
@@ -138,7 +138,7 @@ class Controller extends \Controller
 
     /**
      * Javascript used by the controller
-     * 
+     *
      * @return string
      */
     public function javascript()
@@ -153,10 +153,10 @@ class Controller extends \Controller
 
     /**
      * Returns a url for an action that the controller can process
-     * 
+     *
      * @param string $action
      * @param array $params
-     * @return string 
+     * @return string
      */
     public function url($action, $params = array())
     {
@@ -213,7 +213,7 @@ class Controller extends \Controller
         $link->c_id = Request::get_c_id();
         $link->session_id = Request::get_session_id();
         /**
-         * @todo: ensure session_id is correctly defaulted 
+         * @todo: ensure session_id is correctly defaulted
          */
         $action = $this->url(self::ACTION_ADD_LINK);
         $form = new LinkForm('link', 'post', $action);
@@ -242,13 +242,13 @@ class Controller extends \Controller
         if (!$this->is_allowed_to_edit()) {
             $this->forbidden();
             return;
-        }               
-        
+        }
+
         $action = $this->url(self::ACTION_IMPORT_CSV);
         $form = new UploadFileForm('import_csv', 'post', $action);
         $form->init();
         if ($form->validate()) {
-            $file = $form->get_file();        
+            $file = $form->get_file();
             $path = $file['tmp_name'];
             $c_id = Request::get_c_id();
             $session_id = Request::get_session_id();
@@ -310,7 +310,7 @@ class Controller extends \Controller
                 $writer->put($data);
             }
         }
-        
+
 		\DocumentManager :: file_send_for_download($temp, true, get_lang('Links').'.csv');
     }
 
@@ -322,7 +322,7 @@ class Controller extends \Controller
         }
 
         /**
-         * See AjaxController 
+         * See AjaxController
          */
         $this->missing();
     }
@@ -369,7 +369,7 @@ class Controller extends \Controller
         }
 
         /**
-         * See AjaxController 
+         * See AjaxController
          */
         $this->missing();
     }
@@ -382,7 +382,7 @@ class Controller extends \Controller
         }
 
         /**
-         * See AjaxController 
+         * See AjaxController
          */
         $this->missing();
     }
@@ -486,7 +486,7 @@ class Controller extends \Controller
         $link = $repo->find_one_by_id($c_id, $id);
         $url = $link->url;
 
-        event_link($id);
+        Event::event_link($id);
 
         Header::cache_control('no-store, no-cache, must-revalidate');
         Header::pragma('no-cache');
@@ -495,15 +495,15 @@ class Controller extends \Controller
 
     /**
      * Render a template using data. Adds a few common parameters to the data array.
-     * 
+     *
      * @see /main/template/default/course_description/
      * @param string $template
-     * @param array $data 
+     * @param array $data
      */
     protected function render($template, $data)
     {
         $data = $data ? $data : (object) array();
-        
+
         $_user = api_get_user_info();
         $session_id = Request::get_session_id();
         $data->session_image = api_get_session_image($session_id, $_user);

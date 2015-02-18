@@ -3,7 +3,6 @@
  * HTML class for static data
  * @example  $form->addElement('advanced_settings', '<a href="#">advanced settings</a>');
  */
-require_once 'HTML/QuickForm/static.php';
 
 /**
  * A pseudo-element used for adding raw HTML to form
@@ -34,7 +33,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
         $this->HTML_QuickForm_static(null, null, $text);
         $this->_type = 'html';
     }
-    
+
    /**
     * Accepts a renderer
     *
@@ -46,8 +45,8 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
     {
         $renderer->renderHtml($this);
     } // end func accept
-    
-    
+
+
     function toHtml() {
          return '<div class="control-group ">
                     <label class="control-label"></label>
@@ -55,7 +54,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
                     '.HTML_QuickForm_static::toHtml().'
                         </div>
                  </div>
-                                        
+
                 ';
     } //end func toHtml
 } //end class HTML_QuickForm_html

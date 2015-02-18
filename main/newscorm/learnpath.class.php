@@ -253,8 +253,6 @@ class learnpath
                     }
                     break;
                 case 2:
-                    require_once 'scorm.class.php';
-                    require_once 'scormItem.class.php';
                     $oItem = new scormItem('db', $row['id'], $course_id);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
@@ -639,9 +637,6 @@ class learnpath
                         api_get_session_id()
                     );
                 }
-
-                // Upload the file in the documents tool.
-                include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
                 $file_path = handle_uploaded_document(
                     $_course,
                     $_FILES['mp3'],
@@ -8315,7 +8310,6 @@ class learnpath
 
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
                 // lets update max_score Quiz information depending of the Quiz Advanced properties
-                require_once api_get_path(LIBRARY_PATH)."lp_item.lib.php";
                 $tmp_obj_lp_item = new LpItem($course_id, $arrLP[$i]['id']);
                 $tmp_obj_exercice = new Exercise();
                 $tmp_obj_exercice->read($tmp_obj_lp_item->path);
@@ -9483,9 +9477,6 @@ EOD;
             $res = unlink($file);
             if ($res === false) { error_log('Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__, 0); }
         }
-        // Send file to client.
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-
         $name = replace_dangerous_char($this->get_name()).'.zip';
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     }

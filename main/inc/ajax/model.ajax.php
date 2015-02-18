@@ -280,11 +280,11 @@ switch ($action) {
             $filter_user = intval($_GET['filter_by_user']);
             $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
         }
-        $count = get_count_exam_results($exercise_id, $whereCondition);
+        $count = ExerciseLib::get_count_exam_results($exercise_id, $whereCondition);
         break;
     case 'get_hotpotatoes_exercise_results':
         $hotpot_path = $_REQUEST['path'];
-        $count = get_count_exam_hotpotatoes_results($hotpot_path);
+        $count = ExerciseLib::get_count_exam_hotpotatoes_results($hotpot_path);
         break;
     case 'get_sessions_tracking':
         $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
@@ -654,7 +654,7 @@ switch ($action) {
         break;
     case 'get_exercise_results':
         $course = api_get_course_info();
-        // Used inside get_exam_results_data()
+        // Used inside ExerciseLib::get_exam_results_data()
         $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
         if ($is_allowedToEdit || api_is_student_boss()) {
             $columns = array(
@@ -665,7 +665,7 @@ switch ($action) {
                 $columns = array_merge(array('official_code'), $columns);
             }
         }
-        $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
+        $result = ExerciseLib::get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
         break;
     case 'get_hotpotatoes_exercise_results':
         $course = api_get_course_info();
@@ -675,7 +675,7 @@ switch ($action) {
         } else {
             $columns = array('exe_date',  'score', 'actions');
         }
-        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
+        $result = ExerciseLib::get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
         break;
     case 'get_work_student_list_overview':
         if (!(api_is_allowed_to_edit() || api_is_coach())) {
@@ -706,7 +706,7 @@ switch ($action) {
         } else {
             $columns = array('exe_date',  'score', 'actions');
         }
-        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
+        $result = ExerciseLib::get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
         break;
     case 'get_sessions_tracking':
         if (api_is_drh()) {

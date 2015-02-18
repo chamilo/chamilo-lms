@@ -103,7 +103,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $name = trim(Database::escape_string($name));
     $parent_id = intval($parent_id);
     $canHaveCourses = Database::escape_string($canHaveCourses);
-    $code = generate_course_code($code);
+    $code = CourseManager::generate_course_code($code);
 
     $result = Database::query("SELECT 1 FROM $tbl_category WHERE code='$code'");
     if (Database::num_rows($result)) {
@@ -192,7 +192,7 @@ function editNode($code, $name, $canHaveCourses, $old_code)
     $old_code = Database::escape_string($old_code);
     $canHaveCourses = Database::escape_string($canHaveCourses);
 
-    $code = generate_course_code($code);
+    $code = CourseManager::generate_course_code($code);
     // Updating category
     $sql = "UPDATE $tbl_category SET name='$name', code='$code', auth_course_child = '$canHaveCourses'
             WHERE code = '$old_code'";
@@ -689,12 +689,14 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
             $url_access_id = api_get_current_access_url_id();
             $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             if ($category_code != "ALL") {
-                $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
+                $sql = "SELECT * FROM $tbl_course as course
+                    INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
                     WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses $visibilityCondition
                     ORDER BY title $limitFilter";
             } else {
-                $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
+                $sql = "SELECT * FROM $tbl_course as course
+                    INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
                     WHERE access_url_id = $url_access_id $without_special_courses $visibilityCondition
                     ORDER BY title $limitFilter";
@@ -709,7 +711,7 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
         $row['registration_code'] = !empty($row['registration_code']);
         $count_users = CourseManager::get_users_count_in_course($row['code']);
         $count_connections_last_month = Tracking::get_course_connections_count(
-            $row['code'],
+            $row['id'],
             0,
             api_get_utc_datetime(time() - (30 * 86400))
         );

@@ -12,7 +12,6 @@ $language_file = array('admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once '../inc/conf/events.conf.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -35,16 +34,16 @@ if ($action == 'modEventType') {
         $users = explode(';', $eventUsers);
     } else {
         $users = array();
-    }        
+    }
     if (!empty($event_name)) {
         $eventName = $event_name;
-    }    
-    save_event_type_message($eventName, $users, $eventMessage, $eventSubject, $eventMessageLanguage, $activated);
+    }
+    Event::save_event_type_message($eventName, $users, $eventMessage, $eventSubject, $eventMessageLanguage, $activated);
     header('location: event_controller.php');
     exit;
 }
 
-$ets = get_all_event_types();
+$ets = Event::get_all_event_types();
 
 $languages = api_get_languages();
 
@@ -64,7 +63,7 @@ foreach ($users as $user) {
 
 /**
  * Header definition
- */ 
+ */
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'event_controller.php', 'name' => get_lang('Events'));
 $tool_name = get_lang('EventMessageManagement');
@@ -84,16 +83,16 @@ echo Display::actions($action_array);
     var eventsConfig = <?php echo json_encode($event_config) ?>;
     var currentLanguage = <?php echo json_encode(api_get_interface_language()) ?>;
     var flagContentHasChanged = false;
-    var key_lang = "<?php echo $key_lang ?>";    
+    var key_lang = "<?php echo $key_lang ?>";
     var event_type_name = "<?php echo $event_name ?>";
-    
-    $(document).ready(function() {        
+
+    $(document).ready(function() {
         confirmMessage("eventList");
         if (event_type_name != 0) {
             $("#event_list_group").hide();
         }
     });
-    
+
     function ajax(params,func) {
         $.ajax({
             url: "<?php echo $ajaxPath ?>",
@@ -103,27 +102,27 @@ echo Display::actions($action_array);
         });
     }
 
-    function refreshUsersList() {    
+    function refreshUsersList() {
         removeAllOption($('#usersList'));
-        $.each(usersList, function(ind,item) {              
+        $.each(usersList, function(ind,item) {
             addOption($('#usersList'), item.user_id, item.firstname + ' '+item.lastname);
-        });        
+        });
     }
 
     function getCurrentEventTypeName() {
         var name = false;
-        
+
         if (event_type_name != 0) {
             return event_type_name;
         } else {
             return $('#eventList option:selected').first().attr('value');
         }
-        
+
     }
-    
+
     function self_sent_lock(self_sent) {
         if (self_sent == true) {
-            $(".registration_case").show();        
+            $(".registration_case").show();
             $("#usersList").attr('disabled', 'true');
             $("#usersSubList").attr('disabled', 'true');
             removeAllOption($('#usersSubList'));
@@ -135,17 +134,17 @@ echo Display::actions($action_array);
     }
 
     function showEventType() {
-        cleanInput();        
+        cleanInput();
         currentEventName = getCurrentEventTypeName();
-        
+
         $("span#activated_checkbox").css("display", "inline"); // make checkbox visible
         $('input[name=activated]').attr('checked', false);
-        
-        var self_sent = false;        
+
+        var self_sent = false;
 
         if (typeof(eventsConfig[currentEventName])!='undefined') {
             // if registration, only sent to self_user
-            if (eventsConfig[currentEventName].self_sent == true) {                
+            if (eventsConfig[currentEventName].self_sent == true) {
                 self_sent = true;
             }
         }
@@ -180,9 +179,9 @@ echo Display::actions($action_array);
                 $('#keys').append('<li>'+key+'</li>');
             });
         }
-        
+
         if (self_sent == false ) {
-        
+
             $.ajax({
                 url: '<?php echo $ajaxPath ?>?action=get_event_users&eventName=' +currentEventName,
                 dataType: 'json',
@@ -190,8 +189,8 @@ echo Display::actions($action_array);
                     removeAllOption($('#usersSubList'));
                     refreshUsersList();
                     usersIds = new Array();
-                    var json = jQuery.parseJSON(data);                
-                    $.each(json, function(ind,item) {                    
+                    var json = jQuery.parseJSON(data);
+                    $.each(json, function(ind,item) {
                         addOption($('#usersSubList'),item.user_id, item.firstname + ' '+item.lastname);
                         usersIds[ind] = item.value;
                         removeOption($('#usersList'),item.user_id);
@@ -224,7 +223,7 @@ echo Display::actions($action_array);
         select.find('option[value='+value+']').remove();
     }
 
-    function removeAllOption(select) {          
+    function removeAllOption(select) {
         select.find('option').remove();
     }
 
@@ -267,8 +266,8 @@ echo Display::actions($action_array);
     /**
      * Asks if user want to abandon the changes he's done
      */
-    function confirmMessage(sender) {   
-        
+    function confirmMessage(sender) {
+
         if (flagContentHasChanged == true) {
             if (confirm(key_lang)) {
                 flagContentHasChanged = false;
@@ -308,23 +307,23 @@ echo Display::actions($action_array);
 
 <form method="POST" onSubmit="return submitForm(); ">
     <div class="row">
-        
+
     <div class="span12" id="event_list_group">
-        <h4><?php echo get_lang('Events'); ?></h4>       
+        <h4><?php echo get_lang('Events'); ?></h4>
         <select class="span6" multiple="1" id="eventList" onchange="confirmMessage(this.name); return false;" name="eventList">
         <?php
         foreach ($event_config as $key => $config) {
             echo '<option value="' . $key . '">' . $config['name_lang_var'] . '</option>';
         }
         ?>
-        </select>        
+        </select>
     </div>
-        
+
     <div class="span4">
         <h4><?php echo get_lang('Users'); ?></h4>
         <select multiple="1" id="usersList" class="span3 registration_case"></select>
     </div>
-    <div class="span4">          
+    <div class="span4">
         <div class="registration_case">
             <button class="arrowr" onclick='moveUsers($("#usersList"),$("#usersSubList")); return false;'></button>
             <br />
@@ -336,13 +335,13 @@ echo Display::actions($action_array);
         <h4><?php echo get_lang('ToBeWarnedUserList'); ?></h4>
         <select class="span3" multiple="1" id="usersSubList" class="registration_case"></select>
     </div>
-    </div>    
+    </div>
 
     <br />
     <h2 id="eventNameTitle"></h2>
         <span id="activated_checkbox">
             <input type="checkbox" name="activated" value="1" />
-            <label for="activated" style="display:inline;"><?php echo get_lang('ActivateEvent'); ?></label>        
+            <label for="activated" style="display:inline;"><?php echo get_lang('ActivateEvent'); ?></label>
         </span>
     <br />
     <select id="languages" name="languages" style="margin-top:20px;" onclick='confirmMessage(this.name); return false;'>

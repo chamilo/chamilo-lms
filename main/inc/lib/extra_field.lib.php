@@ -1230,7 +1230,6 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_FILE:
-                        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 
                         $fieldVariable = "extra_{$field_details['field_variable']}";
 

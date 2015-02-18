@@ -31,7 +31,7 @@ $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 require_once 'survey.lib.php';
 
 // Tracking
-event_access_tool(TOOL_SURVEY);
+Event::event_access_tool(TOOL_SURVEY);
 
 /** @todo
  * This has to be moved to a more appropriate place (after the display_header

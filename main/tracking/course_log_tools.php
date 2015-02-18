@@ -37,8 +37,6 @@ if (!$is_allowedToTrack) {
 }
 
 // Including additional libraries.
-
-require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
@@ -99,6 +97,7 @@ echo '</span>';
 echo '</div>';
 
 $course_code = api_get_course_id();
+$course_id = api_get_course_int_id();
 
 $list = new LearnpathList(null, $course_code, $session_id);
 
@@ -238,7 +237,7 @@ echo '<div class="report_section">
             '.Display::page_subheader(Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed')).'
         <table class="data_table">';
 
-$tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);
+$tools_most_used = Tracking::get_tools_most_used_by_course($course_id, $session_id);
 
 if ($export_csv) {
     $temp = array(get_lang('ToolsMostUsed'), '');

@@ -77,7 +77,7 @@ if (!empty($new_session_list)) {
                 $course_info   = api_get_course_info($my_course['code']);
 
                 // Getting all visible exercises from the current course
-                $exercise_list = get_all_exercises(
+                $exercise_list = ExerciseLib::get_all_exercises(
                     $course_info,
                     $my_session_id,
                     true,
@@ -96,7 +96,7 @@ if (!empty($new_session_list)) {
                         $visible_return = $exercise->is_visible();
                         if ($visible_return['value'] != false) {
                             // Reading all Exercise results by user, exercise_id, code, and session.
-                            $user_results = get_exercise_results_by_user(
+                            $user_results = Event::getExerciseResultsByUser(
                                 api_get_user_id(),
                                 $exercise_item['id'],
                                 $my_course['code'],
@@ -145,9 +145,9 @@ if (!empty($course_list)) {
             }
         }
 
-        $course_info    = api_get_course_info($course_data['code']);
+        $course_info = api_get_course_info($course_data['code']);
         $exercise_count = count(
-            get_all_exercises(
+            ExerciseLib::get_all_exercises(
                 $course_info,
                 $session_id,
                 true,
@@ -160,7 +160,7 @@ if (!empty($course_list)) {
 
         $last_date = Tracking::get_last_connection_date_on_the_course(
             api_get_user_id(),
-            $course_data['code'],
+            $course_info['real_id'],
             $session_id,
             false
         );
@@ -244,6 +244,7 @@ foreach ($final_array as $session_data) {
     $my_course_list = isset($session_data['data']) ? $session_data['data']: array();
     if (!empty($my_course_list)) {
         foreach ($my_course_list as $my_course_code=>$course_data) {
+            $courseInfo = api_get_course_info($my_course_code);
             if (isset($course_id) && !empty($course_id)) {
                 if ($course_id != $course_data['id']) {
                     continue;
@@ -253,11 +254,15 @@ foreach ($final_array as $session_data) {
             if (!empty($course_data['exercises'])) {
                 // Exercises
                 foreach ($course_data['exercises'] as $my_exercise_id => $exercise_data) {
-                    $best_score_data = get_best_attempt_in_course($my_exercise_id, $my_course_code, $session_id);
+                    $best_score_data = ExerciseLib::get_best_attempt_in_course(
+                        $my_exercise_id,
+                        $courseInfo['real_id'],
+                        $session_id
+                    );
 
                     $best_score = '';
                     if (!empty($best_score_data)) {
-                        $best_score = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
+                        $best_score = ExerciseLib::show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
                     }
                     // Exercise results
                     $counter = 1;
@@ -272,12 +277,12 @@ foreach ($final_array as $session_data) {
                         }
                         if (!empty($result_list)) {
                             foreach ($result_list as $exercise_result) {
-                                $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
+                                $platform_score = ExerciseLib::show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
                                 $my_score = 0;
                                 if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {
                                     $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
                                 }
-                                $position = get_exercise_result_ranking(
+                                $position = ExerciseLib::get_exercise_result_ranking(
                                     $my_score,
                                     $exercise_result['exe_id'],
                                     $my_exercise_id,

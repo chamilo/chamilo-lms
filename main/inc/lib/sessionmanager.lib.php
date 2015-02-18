@@ -228,7 +228,7 @@ class SessionManager
 
                     // add event to system log
                     $user_id = api_get_user_id();
-                    event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
+                    Event::addEvent(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
                 }
                 return $session_id;
             }
@@ -902,7 +902,7 @@ class SessionManager
         /**
          *  Exercises
          */
-        $exercises = get_all_exercises($course, $sessionId, false, '', $getAllSessions);
+        $exercises = ExerciseLib::get_all_exercises($course, $sessionId, false, '', $getAllSessions);
         $exercises_total = count($exercises);
 
         /**
@@ -981,10 +981,10 @@ class SessionManager
             $sql = "SELECT count(*) as count
                     FROM $table_stats_access
                     WHERE access_tool = 'course_description'
-                    AND access_cours_code = '%s'
+                    AND c_id = '%s'
                     AND access_session_id = %s
                     AND access_user_id = %s ";
-            $sql_query = sprintf($sql, $course['code'], $user['id_session'], $user['user_id']);
+            $sql_query = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
 
             $result = Database::query($sql_query);
             $row = Database::fetch_array($result);
@@ -1028,12 +1028,13 @@ class SessionManager
             //count visited wiki pages
             $sql = "SELECT count(distinct default_value) as count
                     FROM $table_stats_default
-                    WHERE default_user_id = %s
-                    AND default_cours_code = '%s'
-                    AND default_event_type = 'wiki_page_view'
-                    AND default_value_type = 'wiki_page_id'
-                    AND c_id = %s";
-            $sql_query = sprintf($sql, $user['user_id'], $course['code'], $course['real_id']);
+                    WHERE
+                        default_user_id = %s AND
+                        default_event_type = 'wiki_page_view' AND
+                        default_value_type = 'wiki_page_id' AND
+                        c_id = %s
+                    ";
+            $sql_query = sprintf($sql, $user['user_id'], $course['real_id']);
             $result = Database::query($sql_query);
             $row = Database::fetch_array($result);
 
@@ -1231,7 +1232,7 @@ class SessionManager
                 a.session_id
             FROM $track_e_course_access a
             INNER JOIN $user u ON a.user_id = u.user_id
-            INNER JOIN $course c ON a.course_code = c.code
+            INNER JOIN $course c ON a.c_id = c.id
             $where $order $limit";
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
@@ -1496,7 +1497,7 @@ class SessionManager
         Database::query($sql_delete_sfv);
 
         // Add event to system log
-        event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $userId);
+        Event::addEvent(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $userId);
     }
 
     /**
@@ -2334,7 +2335,7 @@ class SessionManager
         $id_session = Database::insert_id();
         // Add event to system log
         $user_id = api_get_user_id();
-        event_system(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, api_get_utc_datetime(), $user_id);
+        Event::addEvent(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, api_get_utc_datetime(), $user_id);
         return $id_session;
     }
 
@@ -2433,7 +2434,7 @@ class SessionManager
 
         // Add event to system log
         $user_id = api_get_user_id();
-        event_system(
+        Event::addEvent(
             LOG_SESSION_CATEGORY_DELETE,
             LOG_SESSION_CATEGORY_ID,
             $id_checked,
@@ -3206,7 +3207,7 @@ class SessionManager
         $urlId = api_get_current_access_url_id();
         if (isset($status) && $status != '') {
             $status = intval($status);
-            $sql .= " WHERE relation_type = $status (access_url_id = $urlId OR access_url_id is null )";
+            $sql .= " WHERE relation_type = $status AND (access_url_id = $urlId OR access_url_id is null )";
         } else {
             $sql .= " WHERE (access_url_id = $urlId OR access_url_id is null )";
         }

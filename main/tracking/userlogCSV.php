@@ -23,6 +23,7 @@ require_once '../inc/global.inc.php';
 // Roles and rights system
 $user_id = api_get_user_id();
 $course_id = api_get_course_id();
+$courseId = api_get_course_int_id();
 
 /*
 $role_id = RolesRights::get_local_user_role_id($user_id, $course_id);
@@ -36,11 +37,7 @@ RolesRights::protect_location($role_id, $location_id);
 $is_allowed = true;
 
 /* Libraries */
-
-require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
-require_once api_get_path(
-        SYS_CODE_PATH
-    ) . 'resourcelinker/resourcelinker.inc.php';
+require_once api_get_path(SYS_CODE_PATH) . 'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH) . 'exercice/hotpotatoes.lib.php';
 
 /* Header */
@@ -137,7 +134,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
                         FROM $TABLECOURSE_GROUPSUSER
                         WHERE group_id = '$_gid'";
         }
-        $userGroupNb = getOneResult($sql);
+        $userGroupNb = StatsUtils::getOneResult($sql);
         $step = 25; // number of student per page
         if ($userGroupNb > $step) {
             if (!isset($offset)) {
@@ -228,7 +225,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             list($title_line1, $line1) = TrackingUserLogCSV::display_login_tracking_info(
                 $view,
                 $uInfo,
-                $_cid
+                $courseId
             );
 
             //Exercise results
@@ -242,7 +239,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             list($title_line3, $line3) = TrackingUserLogCSV::display_student_publications_tracking_info(
                 $view,
                 $uInfo,
-                $_cid
+                $courseId
             );
 
             //Links usage

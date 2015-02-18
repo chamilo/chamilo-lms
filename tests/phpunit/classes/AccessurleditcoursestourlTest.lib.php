@@ -17,7 +17,7 @@ class AccessurleditcoursestourlTest extends PHPUnit_Framework_TestCase
     {
         ob_start();
         require_once dirname(__FILE__).'/../../../main/inc/lib/access_url_edit_courses_to_url_functions.lib.php';
-        require_once dirname(__FILE__).'/../../../main/inc/lib/main_api.lib.php';
+        require_once dirname(__FILE__).'/../../../main/inc/lib/api.lib.php';
         $this->object = new Accessurleditcoursestourl;
     }
 

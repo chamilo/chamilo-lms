@@ -272,7 +272,7 @@ if (!empty($action)) {
 				if (EventsMail::check_if_using_class('portal_homepage_edited')) {
 					EventsDispatcher::events('portal_homepage_edited',array('about_user' => api_get_user_id()));
 				}
-				event_system(
+				Event::addEvent(
 					LOG_HOMEPAGE_CHANGED,
 					'edit_top',
 					cut(strip_tags($home_top), 254),
@@ -330,7 +330,7 @@ if (!empty($action)) {
 					fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
 					fclose($fp);
 				}
-				event_system(LOG_HOMEPAGE_CHANGED, 'edit_notice', cut(strip_tags($notice_title), 254), api_get_utc_datetime(), api_get_user_id());
+				Event::addEvent(LOG_HOMEPAGE_CHANGED, 'edit_notice', cut(strip_tags($notice_title), 254), api_get_utc_datetime(), api_get_user_id());
 				break;
 			case 'edit_news':
 				//Filter
@@ -376,7 +376,7 @@ if (!empty($action)) {
 						}
 					}
 				}
-				event_system(LOG_HOMEPAGE_CHANGED, 'edit_news', strip_tags(cut($home_news, 254)), api_get_utc_datetime(), api_get_user_id());
+				Event::addEvent(LOG_HOMEPAGE_CHANGED, 'edit_news', strip_tags(cut($home_news, 254)), api_get_utc_datetime(), api_get_user_id());
 				break;
 			case 'insert_tabs':
 			case 'edit_tabs':
@@ -541,13 +541,13 @@ if (!empty($action)) {
 						}
 					}
 				}
-			event_system(
-				LOG_HOMEPAGE_CHANGED,
-				$action,
-				cut($link_name . ':' . $link_url, 254),
-				api_get_utc_datetime(),
-				api_get_user_id()
-			);
+				Event::addEvent(
+					LOG_HOMEPAGE_CHANGED,
+					$action,
+					cut($link_name . ':' . $link_url, 254),
+					api_get_utc_datetime(),
+					api_get_user_id()
+				);
 				break;
 		} //end of switch($action)
 

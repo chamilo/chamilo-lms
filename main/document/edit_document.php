@@ -178,7 +178,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 //TODO:check the below code and his funcionality
 if (!is_allowed_to_edit()) {

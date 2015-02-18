@@ -47,15 +47,14 @@ td {border-bottom: thin dashed gray;}
 $view = preg_replace('/[^01]/','',$_REQUEST['view']);
 
 $TABLECOURSUSER			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-$TABLETRACK_LINKS 		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
-$TABLETRACK_DOWNLOADS 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-$TABLETRACK_LOGIN 		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-$TABLETRACK_EXERCICES   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TABLETRACK_ACCESS      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$TABLETRACK_LINKS 		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
+$TABLETRACK_DOWNLOADS 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+$TABLETRACK_LOGIN 		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+$TABLETRACK_EXERCICES   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 
 $limitOfDisplayedLogins = 25; // number of logins to display
-include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 
 Display::display_header($nameTools,"Tracking");
 api_display_tool_title($nameTools);
@@ -100,7 +99,7 @@ api_display_tool_title($nameTools);
                     ORDER BY login_date DESC
                     LIMIT ".$limitOfDisplayedLogins."";
         echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('LoginsExplaination')."<br/>";
-        $results = getManyResults1Col($sql);
+        $results = StatsUtils::getManyResults1Col($sql);
         echo "
 <table width='100%' cellpadding='2' cellspacing='1' border='0' align='center'>";
         if (is_array($results))
@@ -116,27 +115,23 @@ api_display_tool_title($nameTools);
         </td>
     </tr>";
 
-                if(!isset($previousDate))
-                {
+                if(!isset($previousDate)) {
                     $sql = "SELECT NOW()";
-                    $previousDate = getOneResult($sql);
+                    $previousDate = StatsUtils::getOneResult($sql);
                 }
 
-
-
-                $sql = "SELECT access_tool, count(access_tool), access_cours_code
+                $sql = "SELECT access_tool, count(access_tool), c_id
                             FROM $TABLETRACK_ACCESS
-                            WHERE access_user_id = '".$_user['user_id']."'".
-                                //AND access_tool IS NOT NULL
-                                "AND access_date > '".$value."'
-                                AND access_date < '".$previousDate."'
-                            GROUP BY access_tool, access_cours_code
-                            ORDER BY access_cours_code ASC";
+                            WHERE
+                                access_user_id = '".$_user['user_id']."' AND
+                                access_date > '".$value."' AND
+                                access_date < '".$previousDate."'
+                            GROUP BY access_tool, c_id
+                            ORDER BY c_id ASC";
 
-                $results2 = getManyResults3Col($sql);
+                $results2 = StatsUtils::getManyResults3Col($sql);
 
-                if (is_array($results2))
-                {
+                if (is_array($results2)) {
                     echo "
     <tr>
         <td colspan='2'>

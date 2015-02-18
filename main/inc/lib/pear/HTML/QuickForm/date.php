@@ -22,15 +22,6 @@
  */
 
 /**
- * Class for a group of form elements
- */
-require_once 'HTML/QuickForm/group.php';
-/**
- * Class for <select></select> elements
- */
-require_once 'HTML/QuickForm/select.php';
-
-/**
  * Class for a group of elements used to input dates (and times).
  *
  * Inspired by original 'date' element but reimplemented as a subclass

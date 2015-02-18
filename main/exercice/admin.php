@@ -64,8 +64,6 @@ if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /*  stripslashes POST data  */
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	foreach($_POST as $key=>$val) {
@@ -115,7 +113,12 @@ $cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
 /* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
     when changing the exercise settings, number of questions, etc */
 
-delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
+Event::delete_all_incomplete_attempts(
+	api_get_user_id(),
+	$exerciseId,
+	api_get_course_int_id(),
+	api_get_session_id()
+);
 
 // get from session
 $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;

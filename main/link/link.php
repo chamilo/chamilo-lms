@@ -99,7 +99,7 @@ $tbl_link       = Database::get_course_table(TABLE_LINK);
 $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
 // Statistics
-event_access_tool(TOOL_LINK);
+Event::event_access_tool(TOOL_LINK);
 
 Display::display_header($nameTools, 'Links');
 

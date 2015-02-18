@@ -67,14 +67,7 @@ if (!empty($my_courses)) {
 		$t_lpi 	= Database :: get_course_table(TABLE_LP_ITEM);
 		$t_news = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 
-
-		//No needed
-		/*$nb_assignments 		= Tracking::count_student_assignments($students, $course_code, $session_id);
-		$messages 				= Tracking::count_student_messages($students, $course_code, $session_id);
-		$links 					= Tracking::count_student_visited_links($students, $course_code, $session_id);
-		$chat_last_connection 	= Tracking::chat_last_connection($students, $course_code, $session_id);
-		$documents				= Tracking::count_student_downloaded_documents($students, $course_code, $session_id);*/
-		$total_tools_list 		= Tracking::get_tools_most_used_by_course($course_code, $session_id);
+		$total_tools_list = Tracking::get_tools_most_used_by_course($course_id, $session_id);
 
 		$total_tools = 0;
 		foreach($total_tools_list as $tool) {
@@ -94,8 +87,6 @@ if (!empty($my_courses)) {
 				}
 
 				$array[$i]['course_name'] = $course['title'];
-
-
 				$count_students_accessing = 0;
 				$count_students_complete_all_activities = 0;
 				$count_students_complete_all_activities_at_50 = 0;
@@ -116,7 +107,7 @@ if (!empty($my_courses)) {
 						}
 						$total_average_progress +=$avg_progress_in_course;
 
-						$time_spent  = Tracking::get_time_spent_on_the_course($student_id, $course_code, $session_id);
+						$time_spent = Tracking::get_time_spent_on_the_course($student_id, $course_id, $session_id);
 						$total_time_spent += $time_spent;
 						if (!empty($time_spent)) {
 							$count_students_accessing++;
@@ -146,7 +137,9 @@ if (!empty($my_courses)) {
 
 				//registering the number of each category of
 				//items in learning path
-				$sql_lpi = "SELECT lpi.item_type FROM $t_lpi lpi WHERE c_id = $course_id AND lpi.lp_id = $lp_id ORDER BY item_type";
+				$sql_lpi = "SELECT lpi.item_type FROM $t_lpi lpi
+						    WHERE c_id = $course_id AND lpi.lp_id = $lp_id
+						    ORDER BY item_type";
 				$res_lpi = Database::query($sql_lpi);
 				while ($row_lpi = Database::fetch_array($res_lpi)) {
 					switch($row_lpi['item_type']) {

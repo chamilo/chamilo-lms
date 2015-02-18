@@ -13,7 +13,7 @@ global $charset;
 $show_description_field = false; //for now
 $nameTools = get_lang('Doc');
 $this_section = SECTION_COURSES;
-event_access_tool(TOOL_LEARNPATH);
+Event::event_access_tool(TOOL_LEARNPATH);
 
 api_protect_course_script();
 

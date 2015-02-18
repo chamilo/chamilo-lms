@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* For licensing terms, see /license.txt */
 
 /**
@@ -44,12 +44,12 @@
 // regroup table names for maintenance purpose
 //we can use the database class: this file is only called in the /index.php file before the global.inc.php
 
-$TABLETRACK_OPEN            = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_OPEN);
-$TABLESTATS_PROVIDERS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_PROVIDERS);
-$TABLESTATS_COUNTRIES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_COUNTRIES);
-$TABLESTATS_BROWSERS        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_BROWSERS);
-$TABLESTATS_OS              = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_OS);
-$TABLESTATS_REFERERS        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_C_REFERERS);
+$TABLETRACK_OPEN            = Database::get_main_table(TABLE_STATISTIC_TRACK_E_OPEN);
+$TABLESTATS_PROVIDERS       = Database::get_main_table(TABLE_STATISTIC_TRACK_C_PROVIDERS);
+$TABLESTATS_COUNTRIES       = Database::get_main_table(TABLE_STATISTIC_TRACK_C_COUNTRIES);
+$TABLESTATS_BROWSERS        = Database::get_main_table(TABLE_STATISTIC_TRACK_C_BROWSERS);
+$TABLESTATS_OS              = Database::get_main_table(TABLE_STATISTIC_TRACK_C_OS);
+$TABLESTATS_REFERERS        = Database::get_main_table(TABLE_STATISTIC_TRACK_C_REFERERS);
 /*
 
 	   Main : decodeOpenInfos launch all processes
@@ -78,7 +78,7 @@ function decodeOpenInfos() {
                 WHERE open_date <= NOW()
                 ORDER BY open_id DESC
                 LIMIT 1";
-    //$processBegin = getOneResult($sql);
+    //$processBegin = StatsUtils::getOneResult($sql);
     $query = Database::query($sql);
     $res = @Database::fetch_array($query);
     $processBegin = $res[0];

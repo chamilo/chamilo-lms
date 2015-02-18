@@ -5,6 +5,10 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.admin.openbadges
  */
+use \ChamiloSession as Session;
+
+$language_file = array('document');
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -62,6 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $imageExtraField->send_image($sysDataPath . $fileDir . $fileName, -1, 'png');
 
             $params['icon'] = $fileDir . $fileName;
+        } else {
+            Session::write('errorMessage', get_lang('UplUnableToSaveFile'));
         }
     }
 

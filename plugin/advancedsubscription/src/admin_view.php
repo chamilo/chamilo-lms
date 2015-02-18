@@ -16,7 +16,7 @@ $plugin = AdvancedSubscriptionPlugin::create();
 $s = isset($_REQUEST['s']) ? intval($_REQUEST['s']) : null;
 
 // Init template
-$tpl = new Template('TESTING');
+$tpl = new Template($plugin->get_lang('plugin_title'));
 // Get all sessions
 $sessionList = $plugin->listAllSessions();
 

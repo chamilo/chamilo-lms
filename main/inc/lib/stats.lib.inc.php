@@ -78,7 +78,7 @@ function decodeOpenInfos() {
                 WHERE open_date <= NOW()
                 ORDER BY open_id DESC
                 LIMIT 1";
-    //$processBegin = getOneResult($sql);
+    //$processBegin = StatsUtils::getOneResult($sql);
     $query = Database::query($sql);
     $res = @Database::fetch_array($query);
     $processBegin = $res[0];

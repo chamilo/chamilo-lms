@@ -608,10 +608,11 @@ class Statistics
         $page_nr = isset($_GET['page_nr'])?intval($_GET['page_nr']) : 1;
         $column = isset($_GET['column'])?intval($_GET['column']) : 0;
         $date_diff = isset($_GET['date_diff'])?intval($_GET['date_diff']) : 60;
-        if (!in_array($_GET['direction'],array(SORT_ASC,SORT_DESC))) {
+
+        $direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
+
+        if (!in_array($direction,array(SORT_ASC,SORT_DESC))) {
             $direction = SORT_ASC;
-        } else {
-            $direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
         }
         $form = new FormValidator('courselastvisit', 'get');
         $form->addElement('hidden','report','courselastvisit');

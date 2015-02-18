@@ -99,7 +99,7 @@ $reqdate=$_REQUEST['reqdate'];
                 </tr>
             ";
 
-            $results = getManyResults2Col($sql);
+            $results = StatsUtils::getManyResults2Col($sql);
             echo "<table cellpadding='0' cellspacing='0' border='0' align=center>";
             echo "<tr bgcolor='#E6E6E6'>
                     <td width='70%'>
@@ -228,8 +228,8 @@ $reqdate=$_REQUEST['reqdate'];
                                 AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY access_date ASC";
 
-                    $days_array = daysTab($sql);
-                    makeHitsTable($days_array,$langDay);
+                    $days_array = StatsUtils::daysTab($sql);
+                    StatsUtils::makeHitsTable($days_array,$langDay);
                     break;
                 // all days
                 case "week" :
@@ -241,8 +241,8 @@ $reqdate=$_REQUEST['reqdate'];
                                 AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY access_date ASC";
 
-                    $days_array = daysTab($sql);
-                    makeHitsTable($days_array,$langDay);
+                    $days_array = StatsUtils::daysTab($sql);
+                    StatsUtils::makeHitsTable($days_array,$langDay);
                     break;
                 // all hours
                 case "day"  :
@@ -254,8 +254,8 @@ $reqdate=$_REQUEST['reqdate'];
                                     AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY access_date ASC";
 
-                    $hours_array = hoursTab($sql,$reqdate);
-                    makeHitsTable($hours_array,$langHour);
+                    $hours_array = StatsUtils::hoursTab($sql,$reqdate);
+                    StatsUtils::makeHitsTable($hours_array,$langHour);
                     break;
             }
         }

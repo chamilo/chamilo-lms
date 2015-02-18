@@ -6258,13 +6258,13 @@ class TrackingUserLog
                 WHERE te.exe_user_id = '".intval($user_id)."' AND te.exe_cours_id = '".Database::escape_string($course_id)."'
                 ORDER BY te.exe_cours_id ASC, te.exe_date ASC";
 
-    		$hpresults = getManyResultsXCol($hpsql, 4);
+    		$hpresults = StatsUtils::getManyResultsXCol($hpsql, 4);
 
     		$NoTestRes = 0;
     		$NoHPTestRes = 0;
 
     		echo "<tr>\n<td style='padding-left : 40px;padding-right : 40px;'>\n";
-    		$results = getManyResultsXCol($sql, 4);
+    		$results = StatsUtils::getManyResultsXCol($sql, 4);
     		echo "<table cellpadding='2' cellspacing='1' border='0' align='center'>\n";
     		echo "
                 <tr bgcolor='#E6E6E6'>
@@ -6353,7 +6353,7 @@ class TrackingUserLog
                         AND u.c_id = '".intval($course_id)."'
                     ORDER BY u.upload_date DESC";
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
-    		$results = getManyResultsXCol($sql,4);
+    		$results = StatsUtils::getManyResultsXCol($sql,4);
     		echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
     		echo "<tr>
                     <td class='secLine' width='40%'>
@@ -6421,7 +6421,7 @@ class TrackingUserLog
                             AND sl.links_user_id = '".intval($user_id)."'
                         GROUP BY cl.title, cl.url";
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
-    		$results = getManyResults2Col($sql);
+    		$results = StatsUtils::getManyResults2Col($sql);
     		echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
     		echo "<tr>
                     <td class='secLine'>
@@ -6488,7 +6488,7 @@ class TrackingUserLog
                         GROUP BY down_doc_path";
 
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
-    		$results = getManyResults1Col($sql);
+    		$results = StatsUtils::getManyResults1Col($sql);
     		echo "<table cellpadding='2' cellspacing='1' border='0' align='center'>";
     		echo "<tr>
                     <td class='secLine'>
@@ -6626,12 +6626,12 @@ class TrackingUserLogCSV
                 WHERE te.exe_user_id = '$user_id' AND te.exe_cours_id = '$course_id'
                 ORDER BY te.exe_cours_id ASC, te.exe_date ASC";
 
-    		$hpresults = getManyResultsXCol($hpsql, 4);
+    		$hpresults = StatsUtils::getManyResultsXCol($hpsql, 4);
 
     		$NoTestRes = 0;
     		$NoHPTestRes = 0;
 
-    		$results = getManyResultsXCol($sql, 4);
+    		$results = StatsUtils::getManyResultsXCol($sql, 4);
     		$title_line=get_lang('ExercicesTitleExerciceColumn').";".get_lang('Date').';'.get_lang('ExercicesTitleScoreColumn')."\n";
 
     		if (is_array($results)) {
@@ -6688,7 +6688,7 @@ class TrackingUserLogCSV
                         u.upload_user_id = '$user_id' AND
                         u.c_id = '$course_id'
                     ORDER BY u.upload_date DESC";
-    		$results = getManyResultsXCol($sql,4);
+    		$results = StatsUtils::getManyResultsXCol($sql,4);
 
     		$title[1]=get_lang('WorksDetails');
     		$line='';
@@ -6725,7 +6725,7 @@ class TrackingUserLogCSV
                             AND sl.links_cours_id = '$course_id'
                             AND sl.links_user_id = '$user_id'
                         GROUP BY cl.title, cl.url";
-    		$results = getManyResults2Col($sql);
+    		$results = StatsUtils::getManyResults2Col($sql);
     		$title_line= get_lang('LinksTitleLinkColumn')."\n";
     		if (is_array($results)) {
     			for ($j = 0 ; $j < count($results) ; $j++) {
@@ -6768,7 +6768,7 @@ class TrackingUserLogCSV
                             AND down_session_id = '$session_id'
                         GROUP BY down_doc_path";
 
-    		$results = getManyResults1Col($sql);
+    		$results = StatsUtils::getManyResults1Col($sql);
     		$title_line = get_lang('DocumentsTitleDocumentColumn')."\n";
             $line = null;
     		if (is_array($results)) {

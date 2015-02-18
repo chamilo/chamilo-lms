@@ -1904,7 +1904,7 @@ class ExerciseLib
                 }
             }
         } else {
-            $hpresults = getManyResultsXCol($hpsql, 6);
+            $hpresults = StatsUtils::getManyResultsXCol($hpsql, 6);
             // Print HotPotatoes test results.
             if (is_array($hpresults)) {
                 for ($i = 0; $i < sizeof($hpresults); $i++) {

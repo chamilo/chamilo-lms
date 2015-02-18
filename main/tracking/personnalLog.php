@@ -55,7 +55,6 @@ $TABLETRACK_EXERCICES   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERC
 
 
 $limitOfDisplayedLogins = 25; // number of logins to display
-include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 
 Display::display_header($nameTools,"Tracking");
 api_display_tool_title($nameTools);
@@ -100,7 +99,7 @@ api_display_tool_title($nameTools);
                     ORDER BY login_date DESC
                     LIMIT ".$limitOfDisplayedLogins."";
         echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('LoginsExplaination')."<br/>";
-        $results = getManyResults1Col($sql);
+        $results = StatsUtils::getManyResults1Col($sql);
         echo "
 <table width='100%' cellpadding='2' cellspacing='1' border='0' align='center'>";
         if (is_array($results))
@@ -116,10 +115,9 @@ api_display_tool_title($nameTools);
         </td>
     </tr>";
 
-                if(!isset($previousDate))
-                {
+                if(!isset($previousDate)) {
                     $sql = "SELECT NOW()";
-                    $previousDate = getOneResult($sql);
+                    $previousDate = StatsUtils::getOneResult($sql);
                 }
 
                 $sql = "SELECT access_tool, count(access_tool), c_id
@@ -131,7 +129,7 @@ api_display_tool_title($nameTools);
                             GROUP BY access_tool, c_id
                             ORDER BY c_id ASC";
 
-                $results2 = getManyResults3Col($sql);
+                $results2 = StatsUtils::getManyResults3Col($sql);
 
                 if (is_array($results2)) {
                     echo "

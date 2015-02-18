@@ -41,7 +41,6 @@ td {border-bottom: thin dashed gray;}
 //@todo use Database library
 $TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 Display::display_header($nameTools,"Tracking");
-require_once api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php";
 
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -154,17 +153,17 @@ $is_allowedToTrack = $is_courseAdmin;
                         AND access_tool IS NULL ";
                 if ($displayType == "month") {
                     $sql .= "ORDER BY UNIX_TIMESTAMP( access_date)";
-                    $month_array = monthTab($sql);
-                    makeHitsTable($month_array,get_lang('PeriodMonth'));
+                    $month_array = StatsUtils::monthTab($sql);
+                    StatsUtils::makeHitsTable($month_array,get_lang('PeriodMonth'));
                 } elseif($displayType == "day") {
                     $sql .= "ORDER BY DAYOFYEAR( access_date)";
-                    $days_array = daysTab($sql);
-                    makeHitsTable($days_array,get_lang('PeriodDay'));
+                    $days_array = StatsUtils::daysTab($sql);
+                    StatsUtils::makeHitsTable($days_array,get_lang('PeriodDay'));
                 } else {
                     // by hours by default
                     $sql .= "ORDER BY HOUR( access_date)";
-                    $hours_array = hoursTab($sql);
-                    makeHitsTable($hours_array,get_lang('PeriodHour'));
+                    $hours_array = StatsUtils::hoursTab($sql);
+                    StatsUtils::makeHitsTable($hours_array,get_lang('PeriodHour'));
                 }
                 break;
             // all days
@@ -178,14 +177,14 @@ $is_allowedToTrack = $is_courseAdmin;
                 if($displayType == "day")
                 {
                     $sql .= "ORDER BY DAYOFYEAR( access_date)";
-                    $days_array = daysTab($sql);
-                    makeHitsTable($days_array,get_lang('PeriodDay'));
+                    $days_array = StatsUtils::daysTab($sql);
+                    StatsUtils::makeHitsTable($days_array,get_lang('PeriodDay'));
                 }
                 else // by hours by default
                 {
                     $sql .= "ORDER BY HOUR( access_date)";
-                    $hours_array = hoursTab($sql);
-                    makeHitsTable($hours_array,get_lang('PeriodHour'));
+                    $hours_array = StatsUtils::hoursTab($sql);
+                    StatsUtils:: makeHitsTable($hours_array,get_lang('PeriodHour'));
                 }
                 break;
             // all hours
@@ -198,8 +197,8 @@ $is_allowedToTrack = $is_courseAdmin;
                         AND c_id = '$courseId'
                         AND access_tool IS NULL
                         ORDER BY HOUR( access_date )";
-                $hours_array = hoursTab($sql,$reqdate);
-                makeHitsTable($hours_array,get_lang('PeriodHour'));
+                $hours_array = StatsUtils::hoursTab($sql,$reqdate);
+                StatsUtils::makeHitsTable($hours_array,get_lang('PeriodHour'));
                 break;
         }
     }

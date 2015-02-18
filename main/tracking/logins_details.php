@@ -169,7 +169,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                 break;
         }
         echo "<tr><td>";
-        $results = getManyResults1Col($sql);
+        $results = StatsUtils::getManyResults1Col($sql);
         /*             * * display of the displayed period  ** */
         echo "<table width='100%' cellpadding='2' cellspacing='1' border='0' align=center>";
         echo "<td bgcolor='#E6E6E6'>" . $displayedDate . "</td>";
@@ -195,7 +195,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                             AND c_id  = '" . $courseId . "'
                         GROUP BY access_tool
                         ORDER BY access_tool ASC";
-                $results2 = getManyResults2Col($sql);
+                $results2 = StatsUtils::getManyResults2Col($sql);
 
                 if (is_array($results2)) {
                     echo "<tr><td colspan='2'>\n";

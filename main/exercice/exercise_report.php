@@ -28,9 +28,6 @@ api_protect_course_script(true, false, true);
 // including additional libraries
 require_once 'hotpotatoes.lib.php';
 
-// need functions of statsutils lib to display previous exercices scores
-require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
-
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $origin = isset($origin) ? $origin : null;

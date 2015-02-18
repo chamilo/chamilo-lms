@@ -281,7 +281,7 @@ $(document).ready(function() {
                         {% if mySkills is not empty %}
                             {%for skill in mySkills %}
                                 {% if skill.iconThumb is empty %}
-                                    <img src="{{ 'award_red.png' | icon(22) }}">
+                                    <img src="{{ 'award_red.png' | icon(22) }}" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% else %}
                                     <img src="{{ _p.web_data }}{{ skill.iconThumb }}" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% endif %}

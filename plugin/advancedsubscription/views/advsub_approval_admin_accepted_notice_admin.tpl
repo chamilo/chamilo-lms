@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Solicitud recibida para el curso {{ session.name }}</title>
+    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</title>
 </head>
 
 <body>
@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">Información: Validación de inscripción recibida </td>
+                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleAdminAcceptToAdmin"| get_plugin_lang('AdvancedSubscriptionPlugin') }}</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -47,10 +47,10 @@
                 </tr>
                 <tr>
                     <td height="356">&nbsp;</td>
-                    <td valign="top"><p>Estimado:</p>
+                    <td valign="top"><p>{{ "MailDear" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
                         <h2>{{ admin.complete_name }}</h2>
-                        <p>Hemos recibido y registrado su validación de la inscripción de <strong>{{ student.complete_name_with_username }}</strong> al curso <strong>{{ session.name }}</strong></p>
-                        <p>Gracias.</p>
+                        <p>{{ "MailContentAdminAcceptToAdmin" | get_plugin_lang('AdvancedSubscriptionPlugin') | format(student.complete_name_with_username, session.name) }}</p>
+                        <p>{{ "MailThankYou" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
                         <h3>{{ signature }}</h3></td>
                     <td>&nbsp;</td>
                 </tr>

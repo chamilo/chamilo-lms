@@ -63,5 +63,52 @@ $strings['AdvancedSubscriptionAdminViewTitle'] = 'Resultado de confirmación de 
 
 $strings['AcceptInfinitive'] = 'Aceptar';
 $strings['RejectInfinitive'] = 'Rechazar';
-$strings['AreYouSureYouWantToAcceptSubscriptionOfX'] = 'Está seguro que quiere aceptar la inscripción de %s?';
-$strings['AreYouSureYouWantToRejectSubscriptionOfX'] = 'Are you sure you want to reject the subscripti %s?';
+$strings['AreYouSureYouWantToAcceptSubscriptionOfX'] = '¿Está seguro que quiere aceptar la inscripción de %s?';
+$strings['AreYouSureYouWantToRejectSubscriptionOfX'] = '¿Está seguro que quiere rechazar la inscripción de %s?';
+
+$strings['MailTitle'] = 'Solicitud recibida para el curso %s';
+$strings['MailDear'] = 'Estimado(a):';
+$strings['MailThankYou'] = 'Gracias.';
+$strings['MailThankYouCollaboration'] = 'Gracias por su colaboración.';
+
+// Admin Accept
+$strings['MailTitleAdminAcceptToAdmin'] = 'Información: Validación de inscripción recibida';
+$strings['MailContentAdminAcceptToAdmin'] = 'Hemos recibido y registrado su validación de la inscripción de <strong> %s </strong> al curso <strong> %s </strong>';
+$strings['MailTitleAdminAcceptToStudent'] = 'Aprobada: ¡Su inscripción al curso %s fue confirmada!';
+$strings['MailContentAdminAcceptToStudent'] = 'Nos complace informarle que su inscripción al curso <strong> %s </strong> iniciando el <strong> %s </strong> fue validada por los administradores. Esperamos mantenga todo su ánimo y participe en otro curso o, en otra oportunidad, a este mismo curso.';
+$strings['MailTitleAdminAcceptToSuperior'] = 'Información: Validación de inscripción de %s al curso %s';
+$strings['MailContentAdminAcceptToSuperior'] = 'La inscripción de <strong> %s </strong> al curso <strong> %s </strong> iniciando el <strong> %s </strong>, que estaba pendiente de validación por los organizadores del curso, fue validada hacen unos minutos. Esperamos nos ayude en asegurar la completa disponibilidad de su colaborador(a) para la duración completa del curso.';
+// Admin Reject
+$strings['MailTitleAdminRejectToAdmin'] = 'Información: rechazo de inscripción recibido';
+$strings['MailContentAdminRejectToAdmin'] = 'Hemos recibido y registrado su rechazo de la inscripción de <strong> %s </strong> al curso <strong> %s </strong>';
+$strings['MailTitleAdminRejectToStudent'] = 'Rechazamos su inscripción al curso %s';
+$strings['MailContentAdminRejectToStudent'] = 'Lamentamos informarle que su inscripción al curso <strong> %s </strong> iniciando el <strong> %s </strong> fue rechazada por falta de cupos. Esperamos mantenga todo su ánimo y participe en otro curso o, en otra oportunidad, a este mismo curso.';
+$strings['MailTitleAdminRejectToSuperior'] = 'Información: Rechazo de inscripción de %s al curso %s';
+$strings['MailContentAdminRejectToSuperior'] = 'La inscripción de <strong> %s </strong> al curso <strong> %s </strong>, que había aprobado anteriormente, fue rechazada por falta de cupos. Les presentamos nuestras disculpas sinceras.';
+
+// Superior Accept
+$strings['MailTitleSuperiorAcceptToAdmin'] = 'Aprobación de %s al curso %s ';
+$strings['MailContentSuperiorAcceptToAdmin'] = 'La inscripción del alumno <strong> %s </strong> al curso <strong> %s </strong> ha sido aprobada por su superior. Puede gestionar las inscripciones al curso <a href="%s"><strong>aquí</strong></a>';
+$strings['MailTitleSuperiorAcceptToSuperior'] = 'Confirmación: Aprobación recibida para %s';
+$strings['MailContentSuperiorAcceptToSuperior'] = 'Hemos recibido y registrado su decisión de aprobar el curso <strong> %s </strong> para su colaborador <strong> %s';
+$strings['MailContentSuperiorAcceptToSuperiorSecond'] = 'Ahora la inscripción al curso está pendiente de la disponibilidad de cupos. Le mantendremos informado sobre el resultado de esta etapa';
+$strings['MailTitleSuperiorAcceptToStudent'] = 'Aprobado: Su inscripción al curso %s ha sido aprobada por su superior ';
+$strings['MailContentSuperiorAcceptToStudent'] = 'Nos complace informarle que su inscripción al curso <strong> %s </strong> ha sido aprobada por su superior. Su inscripción ahora solo se encuentra pendiente de disponibilidad de cupos. Le avisaremos tan pronto como se confirme este último paso.';
+
+// Superior Reject
+$strings['MailTitleSuperiorRejectToStudent'] = 'Información: Su inscripción al curso %s ha sido rechazada ';
+$strings['MailContentSuperiorRejectToStudent'] = 'Lamentamos informarle que, en esta oportunidad, su inscripción al curso <strong> %s </strong> NO ha sido aprobada. Esperamos mantenga todo su ánimo y participe en otro curso o, en otra oportunidad, a este mismo curso.';
+$strings['MailTitleSuperiorRejectToSuperior'] = 'Confirmación: Desaprobación recibida para %s';
+$strings['MailContentSuperiorRejectToSuperior'] = 'Hemos recibido y registrado su decisión de desaprobar el curso <strong> %s </strong> para su colaborador <strong> %s </strong>';
+
+// Student Request
+$strings['MailTitleStudentRequestToStudent'] = 'Información: Validación de inscripción recibida';
+$strings['MailContentStudentRequestToStudent'] = 'Hemos recibido y registrado su validación de la inscripción de <strong> %s </strong> al curso <strong> %s </strong>';
+$strings['MailTitleStudentRequestToSuperior'] = 'Información: Validación de inscripción recibida';
+$strings['MailContentStudentRequestToSuperior'] = 'Hemos recibido y registrado su validación de la inscripción de <strong> %s </strong> al curso <strong> %s </strong>';
+
+// Student Request No Boss
+$strings['MailTitleStudentRequestNoSuperiorToStudent'] = 'Información: Validación de inscripción recibida';
+$strings['MailContentStudentRequestNoSuperiorToStudent'] = 'Hemos recibido y registrado su validación de la inscripción de <strong> %s </strong> al curso <strong> %s </strong>';
+$strings['MailTitleStudentRequestNoSuperiorToAdmin'] = 'Información: Validación de inscripción recibida';
+$strings['MailContentStudentRequestNoSuperiorToAdmin'] = 'Hemos recibido y registrado su validación de la inscripción de <strong> %s </strong> al curso <strong> %s </strong>';

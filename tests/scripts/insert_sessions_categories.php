@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * This script generates four session categories.
  */

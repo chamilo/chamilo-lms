@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $fileDir = "badges/";
-        $fileName = sha1($_POST['name']) . ".png";
+        $fileName = sha1($_POST['name']);
 
         $existsBadgesDirectory = is_dir($sysDataPath . 'badges/');
 
@@ -62,10 +62,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            $imageExtraField = new Image($_FILES['image']['tmp_name']);
-            $imageExtraField->send_image($sysDataPath . $fileDir . $fileName, -1, 'png');
+            $skillImagePath = sprintf("%s%s%s.png", $sysDataPath, $fileDir, $fileName);
 
-            $params['icon'] = $fileDir . $fileName;
+            $skillImage = new Image($_FILES['image']['tmp_name']);
+            $skillImage->send_image($skillImagePath, -1, 'png');
+
+            $skillThumbPath = sprintf("%s%s%s-small.png", $sysDataPath, $fileDir, $fileName);
+
+            $skillImageThumb = new Image($skillImagePath);
+            $skillImageThumb->resize(ICON_SIZE_SMALL, ICON_SIZE_SMALL);
+            $skillImageThumb->send_image($skillThumbPath);
+
+            $params['icon'] = sprintf("%s%s.png", $fileDir, $fileName);
         } else {
             Session::write('errorMessage', get_lang('UplUnableToSaveFile'));
         }

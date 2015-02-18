@@ -734,7 +734,7 @@ class Skill extends Model
     public function get_user_skills($user_id, $get_skill_data = false)
     {
         $user_id = intval($user_id);
-        $sql = 'SELECT DISTINCT s.id, s.name FROM '.$this->table_skill_rel_user.' u INNER JOIN '.$this->table.' s
+        $sql = 'SELECT DISTINCT s.id, s.name, s.icon FROM '.$this->table_skill_rel_user.' u INNER JOIN '.$this->table.' s
                 ON u.skill_id = s.id
                 WHERE user_id = '.$user_id;
 
@@ -744,7 +744,21 @@ class Skill extends Model
         if (!empty($skills)) {
             foreach ($skills as $skill) {
                 if ($get_skill_data) {
-                    $clean_skill[$skill['id']] = $skill;
+                    $iconThumb = null;
+
+                    if (!empty($skill['icon'])) {
+                        $iconThumb = sprintf(
+                            "badges/%s-small.png",
+                            sha1($skill['name'])
+                        );
+                    }
+
+                    $clean_skill[$skill['id']] = array_merge(
+                        $skill,
+                        array(
+                            'iconThumb' => $iconThumb
+                        )
+                    );
                 } else {
                     $clean_skill[$skill['id']] = $skill['id'];
                 }

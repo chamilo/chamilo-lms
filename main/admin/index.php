@@ -120,7 +120,7 @@ if (api_is_platform_admin()) {
         $items[] = array('url'=>'group_add.php', 	'label' => get_lang('AddGroups'));
         $items[] = array('url'=>'group_list.php', 	'label' => get_lang('GroupList'));
     }
-    if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
+    if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
         $items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
     }
     $items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));

@@ -21,12 +21,6 @@ api_protect_course_script(true);
 
 $show=(isset($_GET['show']) && $_GET['show'] == 'result')?'result':'test'; // moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
 
-/**
- * Libraries
- */
-
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
 /* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);

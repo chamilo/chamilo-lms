@@ -22,11 +22,6 @@
  */
 
 /**
- * Class representing an action to perform on HTTP request.
- */
-require_once 'HTML/QuickForm/Action.php';
-
-/**
  * The action for a 'next' button of wizard-type multipage form.
  *
  * @category    HTML

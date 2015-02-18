@@ -512,6 +512,10 @@ define('TEACHER_HTML', 3);
 define('STUDENT_HTML_FULLPAGE', 4);
 define('TEACHER_HTML_FULLPAGE', 5);
 
+// Timeline
+define('TIMELINE_STATUS_ACTIVE', '1');
+define('TIMELINE_STATUS_INACTIVE', '2');
+
 /**
  * Inclusion of internationalization libraries
  */

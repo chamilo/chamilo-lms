@@ -99,7 +99,8 @@ require_once __DIR__.'/../../vendor/autoload.php';
 $libraryPath = api_get_path(LIBRARY_PATH);
 
 // @todo convert this libs in classes
-require_once $libraryPath.'database.lib.php';
+
+require_once $libraryPath.'database.constants.inc.php';
 require_once $libraryPath.'text.lib.php';
 require_once $libraryPath.'array.lib.php';
 require_once $libraryPath.'online.inc.php';
@@ -365,7 +366,6 @@ if (!empty($_POST['language_list'])) {
 }
 
 if (empty($user_language) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !isset($_SESSION['_user'])) {
-    require_once __DIR__.'/../admin/sub_language.class.php';
     $l = subLanguageManager::getLanguageFromBrowserPreference($_SERVER['HTTP_ACCEPT_LANGUAGE']);
     if (!empty($l)) {
         $user_language = $browser_language = $l;
@@ -378,7 +378,6 @@ $langpath = api_get_path(SYS_LANG_PATH);
 
 /* This will only work if we are in the page to edit a sub_language */
 if (isset($this_script) && $this_script == 'sub_language') {
-    require_once '../admin/sub_language.class.php';
     // getting the arrays of files i.e notification, trad4all, etc
     $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(api_get_path(SYS_LANG_PATH).'english', true);
     //getting parent info
@@ -515,7 +514,6 @@ if (isset($language_file)) {
 if (is_array($language_files)) {
     // if the sub-language feature is on
     if (api_get_setting('allow_use_sub_language') == 'true') {
-        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
         $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
         foreach ($language_files as $index => $language_file) {
             // include English

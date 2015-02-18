@@ -190,7 +190,6 @@ function get_lang($variable, $reserved = null, $language = null) {
         if (isset($language_files)) {
             $parent_language = null;
             if (api_get_setting('allow_use_sub_language') == 'true') {
-                require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
                 $parent_language = SubLanguageManager::get_parent_language_path($language);
             }
             if (!is_array($language_files)) {

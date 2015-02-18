@@ -1,9 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Constants definition
- */
-require_once 'database.constants.inc.php';
 
 /**
  * Class Database

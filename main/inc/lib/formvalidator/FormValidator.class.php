@@ -445,10 +445,6 @@ EOT;
             return;
         }
 
-        if (!class_exists('xajax')) {
-            require_once api_get_path(LIBRARY_PATH) . 'xajax/xajax.inc.php';
-        }
-
         $xajax_upload = new xajax(api_get_path(WEB_LIBRARY_PATH) . 'upload.xajax.php');
 
         $xajax_upload->registerFunction('updateProgress');

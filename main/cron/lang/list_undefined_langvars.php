@@ -8,7 +8,6 @@
  */
 die();
 require_once '../../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit','128M');
 /**
@@ -85,7 +84,7 @@ function get_all_php_files($base_path) {
         	if ($sub == '.php' or $sub == '.tpl') {
                     $files[] = $base_path.$item;
         	}
-        } 
+        }
     }
     $list = null;
     return $files;

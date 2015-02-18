@@ -77,7 +77,7 @@ class HookAdvancedSubscription extends HookObserver implements
                     'mode' => array('name' => 'mode', 'type' => 'xsd:string'), // session.mode
                     'date_start' => array('name' => 'date_start', 'type' => 'xsd:string'), // session.date_start
                     'date_end' => array('name' => 'date_end', 'type' => 'xsd:string'), // session.date_end
-                    'duration' => array('name' => 'duration', 'type' => 'xsd:string'), // session.duration
+                    'duration' => array('name' => 'duration', 'type' => 'xsd:string'), // session.human_text_duration
                     'vacancies' => array('name' => 'vacancies', 'type' => 'xsd:string'), // session.vacancies
                     'schedule' => array('name' => 'schedule', 'type' => 'xsd:string'), // session.schedule
                 )

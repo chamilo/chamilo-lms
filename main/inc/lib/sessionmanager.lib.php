@@ -5431,7 +5431,7 @@ class SessionManager
     /**
      * Returns list of a few data from session (name, short description, start date, end date)
      * And the next extra fields
-     * short_description, mode, duration, vacancies, brochure, target, schedule
+     * short_description, mode, human_text_duration, vacancies, brochure, target, schedule
      * from Session category Id.
      * @param int $categoryId
      * @param string $target
@@ -5450,7 +5450,7 @@ class SessionManager
             // Join session field and session field values tables
             $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
             $fieldsArray = array(
-                'short_description', 'mode', 'duration', 'vacancies', 'brochure', 'target', 'schedule'
+                'short_description', 'mode', 'human_text_duration', 'vacancies', 'brochure', 'target', 'schedule'
             );
             // Get the session list from session category and target
             $sessionList = Database::select(

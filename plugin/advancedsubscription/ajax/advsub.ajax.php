@@ -51,18 +51,31 @@ if ($verified) {
             if ($res === true) {
                 // Prepare data
                 // Get session data
+                // Assign variables
+                $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
                 $sessionArray = api_get_session_info($data['s']);
                 $extraSession = new ExtraFieldValue('session');
-                $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'description');
-                $sessionArray['description'] = $var['field_value'];
-                $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'target');
-                $sessionArray['target'] = $var['field_value'];
-                $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'mode');
-                $sessionArray['mode'] = $var['field_value'];
-                $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'publication_end_date');
-                $sessionArray['publication_end_date'] = $var['field_value'];
-                $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'recommended_number_of_participants');
-                $sessionArray['recommended_number_of_participants'] = $var['field_value'];
+                $extraField = new ExtraField('session');
+                // Get session fields
+                $fieldList = $extraField->get_all(array(
+                    'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+                ));
+                // Index session fields
+                foreach ($fieldList as $field) {
+                    $fields[$field['id']] = $field['field_variable'];
+                }
+
+                $mergedArray = array_merge(array($data['s']), array_keys($fields));
+                $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+                foreach ($sessionFieldValueList as $sessionFieldValue) {
+                    // Check if session field value is set in session field list
+                    if (isset($fields[$sessionFieldValue['field_id']])) {
+                        $var = $fields[$sessionFieldValue['field_id']];
+                        $val = $sessionFieldValue['field_value'];
+                        // Assign session field value to session
+                        $sessionArray[$var] = $val;
+                    }
+                }
                 // Get student data
                 $studentArray = api_get_user_info($data['u']);
                 $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);
@@ -161,18 +174,30 @@ if ($verified) {
                 if ($res === true) {
                     // Prepare data
                     // Prepare session data
+                    $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
                     $sessionArray = api_get_session_info($data['s']);
                     $extraSession = new ExtraFieldValue('session');
-                    $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'description');
-                    $sessionArray['description'] = $var['field_value'];
-                    $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'target');
-                    $sessionArray['target'] = $var['field_value'];
-                    $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'mode');
-                    $sessionArray['mode'] = $var['field_value'];
-                    $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'publication_end_date');
-                    $sessionArray['publication_end_date'] = $var['field_value'];
-                    $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'recommended_number_of_participants');
-                    $sessionArray['recommended_number_of_participants'] = $var['field_value'];
+                    $extraField = new ExtraField('session');
+                    // Get session fields
+                    $fieldList = $extraField->get_all(array(
+                        'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+                    ));
+                    // Index session fields
+                    foreach ($fieldList as $field) {
+                        $fields[$field['id']] = $field['field_variable'];
+                    }
+
+                    $mergedArray = array_merge(array($data['s']), array_keys($fields));
+                    $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+                    foreach ($sessionFieldValueList as $sessionFieldValue) {
+                        // Check if session field value is set in session field list
+                        if (isset($fields[$sessionFieldValue['field_id']])) {
+                            $var = $fields[$sessionFieldValue['field_id']];
+                            $val = $sessionFieldValue['field_value'];
+                            // Assign session field value to session
+                            $sessionArray[$var] = $val;
+                        }
+                    }
                     // Prepare student data
                     $studentArray = api_get_user_info($data['u']);
                     $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);

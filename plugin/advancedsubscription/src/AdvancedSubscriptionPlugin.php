@@ -670,26 +670,33 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function getSessionDetails($sessionId)
     {
         if (!empty($sessionId)) {
-            $extra = new ExtraFieldValue('session');
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'id');
-            $data['id'] = $var['field_value'];
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'cost');
-            $data['cost'] = $var['field_value'];
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'place');
-            $data['place'] = $var['field_value'];
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'allow_visitors');
-            $data['allow_visitors'] = $var['field_value'];
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'horas_lectivas');
-            $data['duration'] = $var['field_value'];
-            // Get brochure URL
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'brochure');
-            $data['brochure'] = api_get_path(WEB_CODE_PATH) . $var['field_value'];
-            // Get banner URL
-            $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'banner');
-            $data['banner'] = api_get_path(WEB_CODE_PATH) . $var['field_value'];
-            $data['description'] = SessionManager::getDescriptionFromSessionId($sessionId);
+            // Assign variables
+            $fieldsArray = array('id', 'cost', 'place', 'allow_visitors', 'teaching_hours', 'brochure', 'banner');
+            $extraSession = new ExtraFieldValue('session');
+            $extraField = new ExtraField('session');
+            // Get session fields
+            $fieldList = $extraField->get_all(array(
+                'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+            ));
+            // Index session fields
+            foreach ($fieldList as $field) {
+                $fields[$field['id']] = $field['field_variable'];
+            }
 
-            return $data;
+            $mergedArray = array_merge(array($sessionId), array_keys($fields));
+            $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+            foreach ($sessionFieldValueList as $sessionFieldValue) {
+                // Check if session field value is set in session field list
+                if (isset($fields[$sessionFieldValue['field_id']])) {
+                    $var = $fields[$sessionFieldValue['field_id']];
+                    $val = $sessionFieldValue['field_value'];
+                    // Assign session field value to session
+                    $sessionArray[$var] = $val;
+                }
+            }
+            $sessionArray['description'] = SessionManager::getDescriptionFromSessionId($sessionId);
+
+            return $sessionArray;
         }
 
         return false;
@@ -774,18 +781,31 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function listAllStudentsInQueueBySession($sessionId)
     {
+        // Assign variables
+        $fieldsArray = array('target', 'publication_end_date', 'mode', 'recommended_number_of_participants', 'vacancies');
+        $sessionArray = api_get_session_info($sessionId);
         $extraSession = new ExtraFieldValue('session');
-        $session = api_get_session_info($sessionId);
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'target');
-        $session['target'] = $var['field_value'];
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'publication_end_date');
-        $session['publication_end_date'] = $var['field_value'];
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'mode');
-        $session['mode'] = $var['field_value'];
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'recommended_number_of_participants');
-        $session['recommended_number_of_participants'] = $var['field_value'];
-        $var = $extraSession->get_values_by_handler_and_field_variable($sessionId, 'vacancies');
-        $session['vacancies'] = $var['field_value'];
+        $extraField = new ExtraField('session');
+        // Get session fields
+        $fieldList = $extraField->get_all(array(
+            'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+        ));
+        // Index session fields
+        foreach ($fieldList as $field) {
+            $fields[$field['id']] = $field['field_variable'];
+        }
+
+        $mergedArray = array_merge(array($sessionId), array_keys($fields));
+        $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+        foreach ($sessionFieldValueList as $sessionFieldValue) {
+            // Check if session field value is set in session field list
+            if (isset($fields[$sessionFieldValue['field_id']])) {
+                $var = $fields[$sessionFieldValue['field_id']];
+                $val = $sessionFieldValue['field_value'];
+                // Assign session field value to session
+                $sessionArray[$var] = $val;
+            }
+        }
         $queueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $userJoinTable = $queueTable . ' q INNER JOIN ' . $userTable . ' u ON q.user_id = u.user_id';
@@ -821,7 +841,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         }
         $return = array(
-            'session' => $session,
+            'session' => $sessionArray,
             'students' => $students,
         );
 

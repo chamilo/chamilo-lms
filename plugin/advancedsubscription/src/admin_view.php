@@ -27,20 +27,30 @@ if (!empty($s)) {
     $sessionList[$s]['selected'] = 'selected="selected"';
     $studentList['session']['id'] = $s;
     // Assign variables
-
-    // send mail to superior
+    $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
     $sessionArray = api_get_session_info($s);
     $extraSession = new ExtraFieldValue('session');
-    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'description');
-    $sessionArray['description'] = $var['field_value'];
-    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'target');
-    $sessionArray['target'] = $var['field_value'];
-    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'mode');
-    $sessionArray['mode'] = $var['field_value'];
-    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'publication_end_date');
-    $sessionArray['publication_end_date'] = $var['field_value'];
-    $var = $extraSession->get_values_by_handler_and_field_variable($s, 'recommended_number_of_participants');
-    $sessionArray['recommended_number_of_participants'] = $var['field_value'];
+    $extraField = new ExtraField('session');
+    // Get session fields
+    $fieldList = $extraField->get_all(array(
+        'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+    ));
+    // Index session fields
+    foreach ($fieldList as $field) {
+        $fields[$field['id']] = $field['field_variable'];
+    }
+
+    $mergedArray = array_merge(array($s), array_keys($fields));
+    $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+    foreach ($sessionFieldValueList as $sessionFieldValue) {
+            // Check if session field value is set in session field list
+        if (isset($fields[$sessionFieldValue['field_id']])) {
+            $var = $fields[$sessionFieldValue['field_id']];
+            $val = $sessionFieldValue['field_value'];
+            // Assign session field value to session
+            $sessionArray[$var] = $val;
+        }
+    }
     $adminsArray = UserManager::get_all_administrators();
 
     $data['a'] = 'confirm';

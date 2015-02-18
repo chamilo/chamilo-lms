@@ -555,8 +555,21 @@ class DisplayGradebook
                 if (!$message_resource) {
                     $header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?' . $my_api_cidreq . '&selectcat=' . $catobj->get_id() . '">' .
                         Display::return_icon('stats.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM) . '</a>';
-                    $header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?' . $my_api_cidreq . '&amp;cat_id=' . (int) $_GET['selectcat'] . '">' .
-                        Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'), '', ICON_SIZE_MEDIUM) . '</a>';
+
+                    if ($my_category['generate_certificates'] == 1) {
+                        $header .= "<td style=\"vertical-align: top;\">"
+                            . Display::url(
+                                Display::return_icon(
+                                    'certificate_list.png',
+                                    get_lang('GradebookSeeListOfStudentsCertificates'),
+                                    '',
+                                    ICON_SIZE_MEDIUM
+                                ),
+                                "gradebook_display_certificate.php?$my_api_cidreq&amp;cat_id=" . intval($_GET['selectcat'])
+                            )
+                            . "</td>";
+                    }
+
                     // Right icons
                     $modify_icons = '<a href="gradebook_edit_cat.php?editcat=' . $catobj->get_id() . '&amp;cidReq=' . $catobj->get_course_code() . '&id_session='.$catobj->get_session_id(). '">' .
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM) . '</a>';

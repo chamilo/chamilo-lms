@@ -248,6 +248,10 @@ class UserManager
         self::update_extra_field_value($return, 'already_logged_in', 'false');
 
         if (!empty($hook)) {
+            $hook->setEventData(array(
+                'return' => $return,
+                'originalPassword' => $original_password
+            ));
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
         }
         return $return;

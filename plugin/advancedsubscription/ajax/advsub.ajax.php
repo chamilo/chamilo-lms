@@ -167,7 +167,7 @@ if ($verified) {
 
             break;
         case 'confirm':
-            // Check if is set new status
+            // Check if new status is set
             if (isset($data['e'])) {
                 // Update queue status
                 $res = $plugin->updateQueueStatus($data, $data['e']);

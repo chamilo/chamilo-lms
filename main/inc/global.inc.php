@@ -25,8 +25,8 @@
 define('SHOW_ERROR_CODES', false);
 
 // Determine the directory path where this current file lies.
-// This path will be useful to include the other intialisation files.
-$includePath = dirname(__FILE__);
+// This path will be useful to include the other initialisation files.
+$includePath = __DIR__;
 
 // @todo Isn't this file renamed to configuration.inc.php yet?
 // Include the main Chamilo platform configuration file.
@@ -83,9 +83,6 @@ if (api_get_setting('login_is_email') == 'true') {
 }
 define('USERNAME_MAX_LENGTH', $default_username_length);
 
-// Do not over-use this variable. It is only for this script's local use.
-$lib_path = dirname(__FILE__).'/../../main/inc/lib/';
-
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
@@ -96,19 +93,21 @@ ini_set('include_path', api_create_include_path_setting());
 ini_set('auto_detect_line_endings', '1');
 
 // Include the libraries that are necessary everywhere
-require_once dirname(__FILE__).'/../../vendor/autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
+
+// Do not over-use this variable. It is only for this script's local use.
+$libraryPath = api_get_path(LIBRARY_PATH);
 
 // @todo convert this libs in classes
-require_once $lib_path.'database.lib.php';
-require_once $lib_path.'text.lib.php';
-require_once $lib_path.'array.lib.php';
-require_once $lib_path.'course.lib.php';
-require_once $lib_path.'online.inc.php';
-require_once $lib_path.'banner.lib.php';
-require_once $lib_path.'fileManage.lib.php';
-require_once $lib_path.'fileUpload.lib.php';
-require_once $lib_path.'fileDisplay.lib.php';
-require_once $lib_path.'course_category.lib.php';
+require_once $libraryPath.'database.lib.php';
+require_once $libraryPath.'text.lib.php';
+require_once $libraryPath.'array.lib.php';
+require_once $libraryPath.'online.inc.php';
+require_once $libraryPath.'banner.lib.php';
+require_once $libraryPath.'fileManage.lib.php';
+require_once $libraryPath.'fileUpload.lib.php';
+require_once $libraryPath.'fileDisplay.lib.php';
+require_once $libraryPath.'course_category.lib.php';
 
 define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
 if (!is_dir(_MPDF_TEMP_PATH)) {
@@ -310,7 +309,7 @@ foreach ($result as & $row) {
 }
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
-require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
+require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
 
 // Before we call local.inc.php, let's define a global $this_section variable
 // which will then be usable from the banner and header scripts
@@ -348,41 +347,7 @@ if (api_get_setting('server_type') == 'test') {
     ini_set('log_errors', '1');
     error_reporting(-1);
 } else {
-    /*
-    Server type is not test
-    - normal error reporting level
-    - full fake register globals block
-    */
     error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-    /*
-    // TODO: These obsolete variables $HTTP_* to be check whether they are actually used.
-    if (!isset($HTTP_GET_VARS)) { $HTTP_GET_VARS = $_GET; }
-    if (!isset($HTTP_POST_VARS)) { $HTTP_POST_VARS = $_POST; }
-    if (!isset($HTTP_POST_FILES)) { $HTTP_POST_FILES = $_FILES; }
-    if (!isset($HTTP_SESSION_VARS)) { $HTTP_SESSION_VARS = $_SESSION; }
-    if (!isset($HTTP_SERVER_VARS)) { $HTTP_SERVER_VARS = $_SERVER; }
-
-    // Register SESSION variables into $GLOBALS
-    if (sizeof($HTTP_SESSION_VARS)) {
-        if (!is_array($_SESSION)) {
-            $_SESSION = array();
-        }
-        foreach ($HTTP_SESSION_VARS as $key => $val) {
-            $_SESSION[$key] = $HTTP_SESSION_VARS[$key];
-            $GLOBALS[$key] = $HTTP_SESSION_VARS[$key];
-        }
-    }
-
-    // Register SERVER variables into $GLOBALS
-    if (sizeof($HTTP_SERVER_VARS)) {
-        $_SERVER = array();
-        foreach ($HTTP_SERVER_VARS as $key => $val) {
-            $_SERVER[$key] = $HTTP_SERVER_VARS[$key];
-            if (!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key!= 'lang_path' && $key!= 'extAuthSource' && $key!= 'thisAuthSource' && $key!= 'main_configuration_file_path' && $key!= 'phpDigIncCn' && $key!= 'drs') {
-                $GLOBALS[$key]=$HTTP_SERVER_VARS[$key];
-            }
-        }
-    }*/
 }
 
 /*	LOAD LANGUAGE FILES SECTION */
@@ -600,14 +565,14 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // ===== end "who is logged in?" module section =====
 
-
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
-    $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
+    $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
+        WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
 
     $q_last_connection = Database::query($sql_last_connection);
     if (Database::num_rows($q_last_connection) > 0) {

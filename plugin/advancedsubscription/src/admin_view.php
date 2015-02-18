@@ -32,20 +32,21 @@ if (!empty($s)) {
     $sessionArray = api_get_session_info($s);
     $extraSession = new ExtraFieldValue('session');
     $var = $extraSession->get_values_by_handler_and_field_variable($s, 'description');
-    $sessionArray['description'] = $var['field_valiue'];
+    $sessionArray['description'] = $var['field_value'];
     $var = $extraSession->get_values_by_handler_and_field_variable($s, 'target');
-    $sessionArray['target'] = $var['field_valiue'];
+    $sessionArray['target'] = $var['field_value'];
     $var = $extraSession->get_values_by_handler_and_field_variable($s, 'mode');
-    $sessionArray['mode'] = $var['field_valiue'];
+    $sessionArray['mode'] = $var['field_value'];
     $var = $extraSession->get_values_by_handler_and_field_variable($s, 'publication_end_date');
     $sessionArray['publication_end_date'] = $var['field_value'];
     $var = $extraSession->get_values_by_handler_and_field_variable($s, 'recommended_number_of_participants');
-    $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
+    $sessionArray['recommended_number_of_participants'] = $var['field_value'];
     $adminsArray = UserManager::get_all_administrators();
 
     $data['a'] = 'confirm';
     $data['s'] = $s;
     $data['current_user_id'] = api_get_user_id();
+    $isWesternNameOrder = api_is_western_name_order();
 
     foreach ($studentList['students'] as &$student) {
         $data['u'] = intval($student['user_id']);
@@ -54,7 +55,10 @@ if (!empty($s)) {
         $student['acceptUrl'] = $plugin->getQueueUrl($data);
         $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
         $student['rejectUrl'] = $plugin->getQueueUrl($data);
-        $student['complete_name'] = $student['lastname'] . ', ' . $student['firstname'];
+        $student['complete_name'] = $isWesternNameOrder ?
+            $student['firstname'] . ', ' . $student['lastname'] :
+            $student['lastname'] . ', ' . $student['firstname']
+        ;
         $student['picture'] = UserManager::get_user_picture_path_by_id($student['user_id'], 'web', false, true);
         $student['picture'] = UserManager::get_picture_user($student['user_id'], $student['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
     }

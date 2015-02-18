@@ -76,8 +76,12 @@ if ($verified) {
                 }
                 // Get admin data
                 $adminsArray = UserManager::get_all_administrators();
+                $isWesternNameOrder = api_is_western_name_order();
                 foreach ($adminsArray as &$admin) {
-                    $admin['complete_name'] = $admin['lastname'] . ', ' . $admin['firstname'];
+                    $admin['complete_name'] = $isWesternNameOrder ?
+                        $admin['firstname'] . ', ' . $admin['lastname'] :
+                        $admin['lastname'] . ', ' . $admin['firstname']
+                    ;
                 }
                 unset($admin);
                 // Set data
@@ -182,8 +186,12 @@ if ($verified) {
                     }
                     // Prepare admin data
                     $adminsArray = UserManager::get_all_administrators();
+                    $isWesternNameOrder = api_is_western_name_order();
                     foreach ($adminsArray as &$admin) {
-                        $admin['complete_name'] = $admin['lastname'] . ', ' . $admin['firstname'];
+                        $admin['complete_name'] = $isWesternNameOrder ?
+                            $admin['firstname'] . ', ' . $admin['lastname'] :
+                            $admin['lastname'] . ', ' . $admin['firstname']
+                        ;
                     }
                     unset($admin);
                     // Set data

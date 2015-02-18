@@ -71,6 +71,10 @@ $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || api_is_drh();
 
 $title[0] = get_lang('StatsOfCourse') . " : " . $_course['official_code'];
 
+
+$courseInfo = api_get_course_info($_course['official_code']);
+$courseId = $courseInfo['real_id'];
+
 // check if uid is prof of this group
 
 if ($is_allowedToTrack) {
@@ -95,15 +99,14 @@ if ($is_allowedToTrack) {
 
         // BEGIN users in this course
         $sql = "SELECT $TABLECOURSUSER.user_i, $table_user.lastname, $table_user.firstname
-                    FROM $TABLECOURSUSER, $table_user
-                    WHERE $TABLECOURSUSER.course_code = '" . $_cid . "' AND $TABLECOURSUSER.user_id = $table_user.user_id AND $TABLECOURSUSER.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
-                    ORDER BY $table_user.lastname";
+                FROM $TABLECOURSUSER, $table_user
+                WHERE $TABLECOURSUSER.course_code = '" . $_cid . "' AND $TABLECOURSUSER.user_id = $table_user.user_id AND $TABLECOURSUSER.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
+                ORDER BY $table_user.lastname";
         $results = getManyResults3Col($sql);
 
         //BUGFIX: get visual code instead of real course code. Scormpaths use the visual code... (should be fixed in future versions)
         $sql = "SELECT visual_code FROM $TABLECOURSE WHERE code = '" . $_cid . "'";
         $_course['visual_code'] = getOneResult($sql);
-
 
         if (is_array($results)) {
             $line = '';
@@ -138,12 +141,14 @@ if ($is_allowedToTrack) {
                 // END % visited
                 // BEGIN first/last access
                 // first access
-                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2 WHERE access_user_id = '" . $results[$j][0] . "' AND access_cours_code = '" . $_course['official_code'] . "' AND access_tool = 'learnpath' AND access_session_id = '" . api_get_session_id() . "' ORDER BY access_id ASC LIMIT 1";
+                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2
+                        WHERE access_user_id = '" . $results[$j][0] . "' AND c_id = '" . $courseId . "' AND access_tool = 'learnpath' AND access_session_id = '" . api_get_session_id() . "'
+                        ORDER BY access_id ASC LIMIT 1";
                 $first_access = getOneResult($sql);
                 $first_access = empty($first_access) ? "-" : date('d.m.y', strtotime($first_access));
 
                 // last access
-                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE access_user_id = '" . $results[$j][0] . "' AND access_cours_code = '" . $_course['official_code'] . "' AND access_tool = 'learnpath'";
+                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE access_user_id = '" . $results[$j][0] . "' AND c_id = '" . $courseId . "' AND access_tool = 'learnpath'";
                 $last_access = getOneResult($sql);
                 $last_access = empty($last_access) ? "-" : date('d.m.y', strtotime($last_access));
                 // END first/last access
@@ -157,70 +162,62 @@ if ($is_allowedToTrack) {
         }
     }
 
-
-
     /* 	Main */
-
     $tempView = $view;
     if ($view[0] == '1') {
         $title[1] = $nameTools;
         $tempView[0] = '0';
 
         $sql = "SELECT count(*)
-                    FROM $TABLECOURSUSER
-                    WHERE course_code = '" . $_cid . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
+                FROM $TABLECOURSUSER
+                WHERE course_code = '" . $_cid . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
         $count = getOneResult($sql);
-
         $title_line = get_lang('CountUsers') . " ; " . $count . "\n";
     }
-
 
     /* 	Access to this course */
     $tempView = $view;
     if ($view[1] == '1') {
-
         $tempView[1] = '0';
-
-
         $title[1] = get_lang('ConnectionsToThisCourse');
         $title_line = '';
         $line = '';
 
         //Total
         $sql = "SELECT count(*)
-                    FROM $TABLETRACK_ACCESS
-                    WHERE access_cours_code = '" . $_cid . "'
-                        AND access_tool IS NULL";
+                FROM $TABLETRACK_ACCESS
+                WHERE c_id = '" . $courseId . "'
+                    AND access_tool IS NULL";
         $count = getOneResult($sql);
 
         $line .= get_lang('CountToolAccess') . " ; " . $count . "\n";
 
         // last 31 days
         $sql = "SELECT count(*)
-                    FROM $TABLETRACK_ACCESS
-                    WHERE access_cours_code = '$_cid'
-                        AND (access_date > DATE_ADD(CURDATE(), INTERVAL -31 DAY))
-                        AND access_tool IS NULL";
+                FROM $TABLETRACK_ACCESS
+                WHERE c_id = '$courseId'
+                    AND (access_date > DATE_ADD(CURDATE(), INTERVAL -31 DAY))
+                    AND access_tool IS NULL";
         $count = getOneResult($sql);
 
         $line .= get_lang('Last31days') . " ; " . $count . "\n";
 
         // last 7 days
         $sql = "SELECT count(*)
-                    FROM $TABLETRACK_ACCESS
-                    WHERE access_cours_code = '$_cid'
-                        AND (access_date > DATE_ADD(CURDATE(), INTERVAL -7 DAY))
-                        AND access_tool IS NULL";
+                FROM $TABLETRACK_ACCESS
+                WHERE c_id = '$courseId'
+                    AND (access_date > DATE_ADD(CURDATE(), INTERVAL -7 DAY))
+                    AND access_tool IS NULL";
         $count = getOneResult($sql);
 
         $line .= get_lang('Last7days') . " ; " . $count . "\n";
 
         // today
         $sql = "SELECT count(*)
-                    FROM $TABLETRACK_ACCESS
-                    WHERE access_cours_code = '$_cid'
-                        AND ( access_date > CURDATE() )
-                        AND access_tool IS NULL";
+                FROM $TABLETRACK_ACCESS
+                WHERE c_id = '$courseId'
+                    AND ( access_date > CURDATE() )
+                    AND access_tool IS NULL";
         $count = getOneResult($sql);
         $line .= get_lang('Thisday') . " ; " . $count . "\n";
     }
@@ -241,7 +238,7 @@ if ($is_allowedToTrack) {
         $sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool )
                 FROM $TABLETRACK_ACCESS
                 WHERE access_tool IS NOT NULL
-                    AND access_cours_code = '$_cid'
+                    AND c_id = '$courseId'
                 GROUP BY access_tool";
 
         $results = getManyResults3Col($sql);

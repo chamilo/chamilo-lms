@@ -99,7 +99,7 @@ if (!empty($course_info)) {
 
 			$exercise_stats = Event::get_all_exercise_event_from_lp(
 				$exercise['path'],
-				$course_info['id'],
+				$course_info['real_id'],
 				$session_id
 			);
 

@@ -38,7 +38,7 @@ function LoginCheck($uid) {
 		// if the $_course array exists this means we are in a course and we have to store this in the who's online table also
 		// to have the x users in this course feature working
 		if (is_array($_course) && count($_course)>0 && !empty($_course['id'])) {
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, course, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['id']."' , '$session_id' , '$access_url_id' )";
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, c_id, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['real_id']."' , '$session_id' , '$access_url_id' )";
 		} else {
             $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '$session_id', '$access_url_id')";
 		}
@@ -97,7 +97,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
     global $_configuration, $extAuthSource;
 
     // Database table definition
-    $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
     if (empty($user_id)) {
         $user_id = intval($_GET['uid']);
@@ -159,10 +159,10 @@ function online_logout($user_id = null, $logout_redirect = false) {
  */
 function LoginDelete($user_id)
 {
-	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $user_id = intval($user_id);
 	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".$user_id."'";
-	@Database::query($query);
+	Database::query($query);
 }
 
 /**
@@ -171,7 +171,7 @@ function LoginDelete($user_id)
  */
 function user_is_online($user_id)
 {
-	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
 
 	$access_url_id		= api_get_current_access_url_id();
@@ -230,7 +230,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 
     $online_time 		= time() - $time_limit*60;
 	$current_date		= api_get_utc_datetime($online_time);
-	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
 	$query              = '';
@@ -272,7 +272,8 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
                             LIMIT $from, $number_of_items";
 			} else {
 				// all users online
-				$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." track
+				$query = "SELECT login_user_id, login_date
+						  FROM ".$track_online_table ." track
                           INNER JOIN ".$table_user ." u
                           ON (u.user_id=track.login_user_id)
 						  WHERE u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND
@@ -308,7 +309,7 @@ function who_is_online_count($time_limit = null, $friends = false)
     } else {
         $time_limit = intval($time_limit);
     }
-	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
     $table_user			= Database::get_main_table(TABLE_MAIN_USER);
 
@@ -395,12 +396,14 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $current_date		= api_get_utc_datetime($online_time);
     $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $course_code         = Database::escape_string($course_code);
+	$courseInfo = api_get_course_info($course_code);
+	$courseId = $courseInfo['real_id'];
 
     $from = intval($from);
     $number_of_items = intval($number_of_items);
 
 	$query = "SELECT login_user_id, login_date FROM $track_online_table
-              WHERE login_user_id <> 2 AND course='$course_code' AND login_date >= '$current_date'
+              WHERE login_user_id <> 2 AND c_id='$courseId' AND login_date >= '$current_date'
               LIMIT $from, $number_of_items ";
 
 	$result = Database::query($query);
@@ -430,10 +433,12 @@ function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null)
 
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
+	$courseInfo = api_get_course_info($coursecode);
 
+	$courseId = $courseInfo['real_id'];
 	$query = "SELECT count(login_user_id) as count
               FROM ".$track_online_table ."
-              WHERE login_user_id <> 2 AND course='".$coursecode."' AND login_date >= '$current_date' ";
+              WHERE login_user_id <> 2 AND c_id='".$courseId."' AND login_date >= '$current_date' ";
 	$result = Database::query($query);
 	if (Database::num_rows($result) > 0) {
 		$row = Database::fetch_array($result);

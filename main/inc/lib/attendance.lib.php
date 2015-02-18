@@ -1520,6 +1520,7 @@ class Attendance
 
 		$sessionId = api_get_session_id();
 		$courseCode  = api_get_course_id();
+		$courseId = api_get_course_int_id();
 		if (!empty($sessionId)) {
 			$users = CourseManager:: get_user_list_from_course_code(
 				$courseCode,
@@ -1558,7 +1559,7 @@ class Attendance
 		}
 
 		$accessData = CourseManager::getCourseAccessPerCourseAndSession(
-			$courseCode,
+			$courseId,
 			$sessionId,
 			$dateTimeStartOriginal->format('Y-m-d H:i:s'),
 			$dateTimeEnd->format('Y-m-d H:i:s')

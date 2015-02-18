@@ -33,13 +33,8 @@ $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
-
 $this_section = SECTION_COURSES;
-
-if ($debug) {
-    error_log('--- Enter to the exercise_submit.php ---- ');
-    error_log('0. POST variables : ' . print_r($_POST, 1));
-}
+$debug = false;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
@@ -302,7 +297,7 @@ if (empty($exercise_stat_info)) {
 }
 
 // Array to check in order to block the chat
-create_chat_exercise_session($exe_id);
+ExerciseLib::create_chat_exercise_session($exe_id);
 
 if ($debug) { error_log('6. $objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
 

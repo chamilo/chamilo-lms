@@ -20,7 +20,7 @@ function getTeachersInCourseIds()
         'login_user_id', $table . $joinStatement,
         array(
             'where' => array(
-                'course IS NOT NULL AND status = ?' => array(
+                'c_id IS NOT NULL AND status = ?' => array(
                     COURSEMANAGER
                 )
             )
@@ -87,7 +87,7 @@ function updateTeachersInCourseIdleForTimeLimit($teachersInCourseIds)
          */
         $userId = intval($value);
         $updateOnLineSql = "UPDATE $onLineTrackTable SET "
-            . "COURSE = NULL "
+            . "c_id = NULL "
             . "WHERE login_user_id = $userId";
         Database::query($updateOnLineSql);
     }

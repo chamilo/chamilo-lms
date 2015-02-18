@@ -19,7 +19,7 @@ use \ChamiloSession as Session;
 $language_file = array('exercice');
 
 require_once '../inc/global.inc.php';
-
+$debug = false;
 if (empty($origin) ) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
 }
@@ -462,9 +462,8 @@ foreach ($questionList as $questionId) {
                     $url=$url_hotspot;
                 } else {
                     //show if no error
-                    //echo 'no error';
-                    $comment=$answerComment=$objAnswerTmp->selectComment($nbrAnswers);
-                    $answerDestination=$objAnswerTmp->selectDestination($nbrAnswers);
+                    $comment=$answerComment = $objAnswerTmp->selectComment($nbrAnswers);
+                    $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
                 }
             }
 
@@ -685,7 +684,12 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
 	    }
-        $total_score_text .= get_question_ribbon($objExercise, $my_total_score_temp, $totalWeighting, true);
+        $total_score_text .= ExerciseLib::get_question_ribbon(
+            $objExercise,
+            $my_total_score_temp,
+            $totalWeighting,
+            true
+        );
         $total_score_text .= '</div>';
 	}
 }

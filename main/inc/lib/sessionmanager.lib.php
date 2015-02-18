@@ -981,10 +981,10 @@ class SessionManager
             $sql = "SELECT count(*) as count
                     FROM $table_stats_access
                     WHERE access_tool = 'course_description'
-                    AND access_cours_code = '%s'
+                    AND c_id = '%s'
                     AND access_session_id = %s
                     AND access_user_id = %s ";
-            $sql_query = sprintf($sql, $course['code'], $user['id_session'], $user['user_id']);
+            $sql_query = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
 
             $result = Database::query($sql_query);
             $row = Database::fetch_array($result);
@@ -1028,12 +1028,13 @@ class SessionManager
             //count visited wiki pages
             $sql = "SELECT count(distinct default_value) as count
                     FROM $table_stats_default
-                    WHERE default_user_id = %s
-                    AND default_cours_code = '%s'
-                    AND default_event_type = 'wiki_page_view'
-                    AND default_value_type = 'wiki_page_id'
-                    AND c_id = %s";
-            $sql_query = sprintf($sql, $user['user_id'], $course['code'], $course['real_id']);
+                    WHERE
+                        default_user_id = %s AND
+                        default_event_type = 'wiki_page_view' AND
+                        default_value_type = 'wiki_page_id' AND
+                        c_id = %s
+                    ";
+            $sql_query = sprintf($sql, $user['user_id'], $course['real_id']);
             $result = Database::query($sql_query);
             $row = Database::fetch_array($result);
 
@@ -1231,7 +1232,7 @@ class SessionManager
                 a.session_id
             FROM $track_e_course_access a
             INNER JOIN $user u ON a.user_id = u.user_id
-            INNER JOIN $course c ON a.course_code = c.code
+            INNER JOIN $course c ON a.c_id = c.id
             $where $order $limit";
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 

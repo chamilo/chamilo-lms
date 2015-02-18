@@ -476,7 +476,6 @@ $offline_icon = Display::return_icon('offline.png', get_lang('Invisible'), array
 
 $exercise_list = array();
 $exercise_obj = new Exercise();
-//$list_ordered = $exercise_obj->get_exercise_list_ordered();
 $list_ordered = null;
 
 while ($row = Database :: fetch_array($result, 'ASSOC')) {
@@ -623,7 +622,13 @@ if (!empty($exercise_list)) {
                     $title = $cut_title;
                 }
 
-                $count_exercise_not_validated = intval(Event::count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
+                $count_exercise_not_validated = intval(
+                    Event::count_exercise_result_not_validated(
+                        $my_exercise_id,
+                        $courseId,
+                        $session_id
+                    )
+                );
 
                 $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
                 $move = null;

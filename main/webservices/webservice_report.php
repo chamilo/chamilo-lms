@@ -47,7 +47,7 @@ class WSReport extends WS {
         } else {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
-        return Tracking::get_time_spent_on_the_course($user_id, $course_code);
+        return Tracking::get_time_spent_on_the_course($user_id, $course_id);
 	}
 
     /**
@@ -74,7 +74,7 @@ class WSReport extends WS {
         if($session_id instanceof WSError) {
             return $session_id;
         }
-        return Tracking::get_time_spent_on_the_course($user_id, $course_code, $session_id);
+        return Tracking::get_time_spent_on_the_course($user_id, $course_id, $session_id);
     }
     /**
      * Gets a list of learning paths by course

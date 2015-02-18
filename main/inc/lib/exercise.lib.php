@@ -684,7 +684,7 @@ class ExerciseLib
                      */
                     if ($origin !== null) {
                         global $exe_id;
-                        $trackAttempts = Database::get_statistic_table(
+                        $trackAttempts = Database::get_main_table(
                             TABLE_STATISTIC_TRACK_E_ATTEMPT
                         );
                         $sqlTrackAttempt = 'SELECT answer FROM ' . $trackAttempts . ' WHERE exe_id=' . $exe_id . ' AND question_id=' . $questionId;
@@ -1137,7 +1137,7 @@ class ExerciseLib
     public static function get_exercise_track_exercise_info($exe_id)
     {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $TBL_TRACK_EXERCICES = Database::get_statistic_table(
+        $TBL_TRACK_EXERCICES = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_EXERCICES
         );
         $TBL_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1224,7 +1224,13 @@ class ExerciseLib
         $exercise_id = intval($exercise_id);
         $lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
-        return api_get_course_int_id() . '_' . api_get_session_id() . '_' . $exercise_id . '_' . api_get_user_id() . '_' . $lp_id . '_' . $lp_item_id;
+        return
+            api_get_course_int_id() . '_' .
+            api_get_session_id() . '_' .
+            $exercise_id . '_' .
+            api_get_user_id() . '_' .
+            $lp_id . '_' .
+            $lp_item_id;
     }
 
     /**
@@ -1313,7 +1319,7 @@ class ExerciseLib
         $in_number_of_items = intval($in_number_of_items);
         $in_from = intval($in_from);
 
-        $TBL_TRACK_HOTPOTATOES = Database:: get_statistic_table(
+        $TBL_TRACK_HOTPOTATOES = Database:: get_main_table(
             TABLE_STATISTIC_TRACK_E_HOTPOTATOES
         );
         $TBL_USER = Database:: get_main_table(TABLE_MAIN_USER);
@@ -1381,7 +1387,7 @@ class ExerciseLib
         $courseId,
         $sessionId
     ) {
-        $table = Database:: get_statistic_table(
+        $table = Database:: get_main_table(
             TABLE_STATISTIC_TRACK_E_HOTPOTATOES
         );
 
@@ -1443,13 +1449,13 @@ class ExerciseLib
         $TBL_EXERCICES = Database:: get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database:: get_course_table(TABLE_GROUP_USER);
         $TBL_GROUP = Database:: get_course_table(TABLE_GROUP);
-        $TBL_TRACK_EXERCICES = Database:: get_statistic_table(
+        $TBL_TRACK_EXERCICES = Database:: get_main_table(
             TABLE_STATISTIC_TRACK_E_EXERCICES
         );
-        $TBL_TRACK_HOTPOTATOES = Database:: get_statistic_table(
+        $TBL_TRACK_HOTPOTATOES = Database:: get_main_table(
             TABLE_STATISTIC_TRACK_E_HOTPOTATOES
         );
-        $TBL_TRACK_ATTEMPT_RECORDING = Database:: get_statistic_table(
+        $TBL_TRACK_ATTEMPT_RECORDING = Database:: get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING
         );
 
@@ -2407,7 +2413,7 @@ class ExerciseLib
         $my_score,
         $my_exe_id,
         $exercise_id,
-        $course_code,
+        $courseId,
         $session_id = 0,
         $return_string = true
     ) {
@@ -2419,7 +2425,7 @@ class ExerciseLib
         }
         $user_results = Event::get_all_exercise_results(
             $exercise_id,
-            $course_code,
+            $courseId,
             $session_id,
             false
         );
@@ -2472,16 +2478,16 @@ class ExerciseLib
     /**
      * Get the best attempt in a exercise (NO Exercises in LPs )
      * @param int $exercise_id
-     * @param string $course_code
+     * @param int $courseId
      * @param int $session_id
      *
      * @return array
      */
-    public static function get_best_attempt_in_course($exercise_id, $course_code, $session_id)
+    public static function get_best_attempt_in_course($exercise_id, $courseId, $session_id)
     {
         $user_results = Event::get_all_exercise_results(
             $exercise_id,
-            $course_code,
+            $courseId,
             $session_id,
             false
         );
@@ -2508,7 +2514,7 @@ class ExerciseLib
      * Get the best score in a exercise (NO Exercises in LPs )
      * @param int $user_id
      * @param int $exercise_id
-     * @param string $course_code
+     * @param int $courseId
      * @param int $session_id
      *
      * @return array
@@ -2516,12 +2522,12 @@ class ExerciseLib
     public static function get_best_attempt_by_user(
         $user_id,
         $exercise_id,
-        $course_code,
+        $courseId,
         $session_id
     ) {
         $user_results = Event::get_all_exercise_results(
             $exercise_id,
-            $course_code,
+            $courseId,
             $session_id,
             false,
             $user_id
@@ -2546,15 +2552,15 @@ class ExerciseLib
     /**
      * Get average score (NO Exercises in LPs )
      * @param    int    exercise id
-     * @param    string    course code
+     * @param    int    $courseId
      * @param    int    session id
      * @return    float    Average score
      */
-    public static function get_average_score($exercise_id, $course_code, $session_id)
+    public static function get_average_score($exercise_id, $courseId, $session_id)
     {
         $user_results = Event::get_all_exercise_results(
             $exercise_id,
-            $course_code,
+            $courseId,
             $session_id
         );
         $avg_score = 0;
@@ -2577,14 +2583,14 @@ class ExerciseLib
     /**
      * Get average score by score (NO Exercises in LPs )
      * @param    int    exercise id
-     * @param    string    course code
+     * @param    int    $courseId
      * @param    int    session id
      * @return    float    Average score
      */
-    public static function get_average_score_by_course($course_code, $session_id)
+    public static function get_average_score_by_course($courseId, $session_id)
     {
         $user_results = Event::get_all_exercise_results_by_course(
-            $course_code,
+            $courseId,
             $session_id,
             false
         );
@@ -2601,7 +2607,6 @@ class ExerciseLib
                 }
             }
             //We asume that all exe_weighting
-            //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
             $avg_score = ($avg_score / count($user_results));
         }
 
@@ -2610,19 +2615,19 @@ class ExerciseLib
 
     /**
      * @param int $user_id
-     * @param string $course_code
+     * @param int $courseId
      * @param int $session_id
      *
      * @return float|int
      */
     public static function get_average_score_by_course_by_user(
         $user_id,
-        $course_code,
+        $courseId,
         $session_id
     ) {
         $user_results = Event::get_all_exercise_results_by_user(
             $user_id,
-            $course_code,
+            $courseId,
             $session_id
         );
         $avg_score = 0;
@@ -2647,28 +2652,25 @@ class ExerciseLib
     /**
      * Get average score by score (NO Exercises in LPs )
      * @param    int        exercise id
-     * @param    string    course code
+     * @param    int    $courseId
      * @param    int        session id
      * @return    float    Best average score
      */
     public static function get_best_average_score_by_exercise(
         $exercise_id,
-        $course_code,
+        $courseId,
         $session_id,
         $user_count
     ) {
         $user_results = Event::get_best_exercise_results_by_user(
             $exercise_id,
-            $course_code,
+            $courseId,
             $session_id
         );
         $avg_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval(
-                        $result['exe_weighting']
-                    ) != 0
-                ) {
+                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                     $score = $result['exe_result'] / $result['exe_weighting'];
                     $avg_score += $score;
                 }
@@ -2682,6 +2684,7 @@ class ExerciseLib
                 $avg_score = 0;
             }
         }
+
         return $avg_score;
     }
 
@@ -3210,6 +3213,9 @@ class ExerciseLib
         return $res;
     }
 
+    /**
+     * @param int $exe_id
+     */
     public static function create_chat_exercise_session($exe_id)
     {
         if (!isset($_SESSION['current_exercises'])) {
@@ -3218,6 +3224,9 @@ class ExerciseLib
         $_SESSION['current_exercises'][$exe_id] = true;
     }
 
+    /**
+     * @param int $exe_id
+     */
     public static function delete_chat_exercise_session($exe_id)
     {
         if (isset($_SESSION['current_exercises'])) {
@@ -3450,7 +3459,7 @@ class ExerciseLib
         if ($origin != 'learnpath') {
             if ($show_results || $show_only_score) {
                 $total_score_text .= '<div class="question_row">';
-                $total_score_text .= get_question_ribbon(
+                $total_score_text .= self::get_question_ribbon(
                     $objExercise,
                     $total_score,
                     $total_weight,

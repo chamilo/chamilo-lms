@@ -386,7 +386,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 if (api_is_allowed_to_edit(null, true)) {
     // Unregister user from course
-    if ($_REQUEST['unregister']) {
+    if (isset($_REQUEST['unregister']) && $_REQUEST['unregister']) {
         if (isset($_GET['user_id']) && is_numeric($_GET['user_id']) &&
             ($_GET['user_id'] != $_user['user_id'] || api_is_platform_admin())
         ) {
@@ -443,7 +443,10 @@ if (!$is_allowed_in_course) {
 }
 
 /*	Header */
-if ($origin != 'learnpath') {
+if (isset($origin) && $origin == 'learnpath') {
+    Display::display_reduced_header();
+} else {
+
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
         $tool_name = get_lang('SearchResults');
@@ -452,8 +455,6 @@ if ($origin != 'learnpath') {
         $origin = 'users';
     }
     Display::display_header($tool_name, "User");
-} else {
-    Display::display_reduced_header();
 }
 
 // Statistics
@@ -500,7 +501,9 @@ if (api_is_allowed_to_edit(null, true)) {
         $actions .= ' <a class="btn" href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
     }
 
-    if (api_is_allowed_to_edit() && $_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
+    if (api_is_allowed_to_edit() &&
+        isset($_configuration['allow_tutors_to_assign_students_to_session']) &&
+        $_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
         $actions .= ' <a class="btn" href="session_list.php?'.api_get_cidreq().'">'.get_lang('Sessions').'</a>';
     }
 

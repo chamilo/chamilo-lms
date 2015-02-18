@@ -76,17 +76,19 @@ Display::display_header(get_lang('UserOnlineListSession'));
 
 		$students_online = array();
 		foreach ($session_is_coach as $session) {
-			$sql = "SELECT 	DISTINCT last_access.access_user_id,
-							last_access.access_date,
-							last_access.access_cours_code,
-							last_access.access_session_id,
-							".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." as name,
-							user.email
-					FROM ".Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS)." AS last_access
+			$sql = "SELECT DISTINCT
+						last_access.access_user_id,
+						last_access.access_date,
+						last_access.c_id,
+						last_access.access_session_id,
+						".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." as name,
+						user.email
+					FROM ".Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS)." AS last_access
 					INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." AS user
 						ON user.user_id = last_access.access_user_id
 					WHERE access_session_id='".$session['id']."'
-					AND NOW()-access_date<1000 GROUP BY access_user_id";
+					AND NOW()-access_date<1000
+					GROUP BY access_user_id";
 
 			$result = Database::query($sql);
 
@@ -104,7 +106,8 @@ Display::display_header(get_lang('UserOnlineListSession'));
 				echo "	</td>
 						<td align='center'>
 					 ";
-				echo $student_online['access_cours_code'];
+				$courseInfo = api_get_course_info($student_online['c_id']);
+				echo $courseInfo['title'];
 				echo "	</td>
 						<td align='center'>
 					 ";
@@ -116,7 +119,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 				echo "	</td>
 						<td align='center'>
 					 ";
-				echo '<a href="main/chat/chat.php?cidReq='.$student_online['access_cours_code'].'&id_session='.$student_online['access_session_id'].'"> -> </a>';
+				echo '<a href="main/chat/chat.php?cidReq='.$courseInfo['code'].'&id_session='.$student_online['access_session_id'].'"> -> </a>';
 				echo "	</td>
 					</tr>
 					 ";

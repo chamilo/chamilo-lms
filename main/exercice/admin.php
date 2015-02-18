@@ -116,7 +116,7 @@ $cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
 Event::delete_all_incomplete_attempts(
 	api_get_user_id(),
 	$exerciseId,
-	api_get_course_id(),
+	api_get_course_int_id(),
 	api_get_session_id()
 );
 

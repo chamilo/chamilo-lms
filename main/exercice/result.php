@@ -65,7 +65,7 @@ if ($show_headers) {
 	Display::display_reduced_header();
 }
 
-display_question_list_by_attempt($objExercise, $id, false);
+ExerciseLib::display_question_list_by_attempt($objExercise, $id, false);
 
 if ($show_headers) {
 	Display::display_footer();

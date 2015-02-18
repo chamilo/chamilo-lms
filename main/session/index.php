@@ -145,7 +145,7 @@ if (!empty($course_list)) {
             }
         }
 
-        $course_info    = api_get_course_info($course_data['code']);
+        $course_info = api_get_course_info($course_data['code']);
         $exercise_count = count(
             ExerciseLib::get_all_exercises(
                 $course_info,
@@ -160,7 +160,7 @@ if (!empty($course_list)) {
 
         $last_date = Tracking::get_last_connection_date_on_the_course(
             api_get_user_id(),
-            $course_data['code'],
+            $course_info['real_id'],
             $session_id,
             false
         );
@@ -244,6 +244,7 @@ foreach ($final_array as $session_data) {
     $my_course_list = isset($session_data['data']) ? $session_data['data']: array();
     if (!empty($my_course_list)) {
         foreach ($my_course_list as $my_course_code=>$course_data) {
+            $courseInfo = api_get_course_info($my_course_code);
             if (isset($course_id) && !empty($course_id)) {
                 if ($course_id != $course_data['id']) {
                     continue;
@@ -253,7 +254,11 @@ foreach ($final_array as $session_data) {
             if (!empty($course_data['exercises'])) {
                 // Exercises
                 foreach ($course_data['exercises'] as $my_exercise_id => $exercise_data) {
-                    $best_score_data = ExerciseLib::get_best_attempt_in_course($my_exercise_id, $my_course_code, $session_id);
+                    $best_score_data = ExerciseLib::get_best_attempt_in_course(
+                        $my_exercise_id,
+                        $courseInfo['real_id'],
+                        $session_id
+                    );
 
                     $best_score = '';
                     if (!empty($best_score_data)) {

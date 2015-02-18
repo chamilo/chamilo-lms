@@ -140,7 +140,11 @@ foreach($course_list  as $current_course ) {
 		$attempt_result = array();
 		//Looping Chamilo Exercises in LP
 		foreach ($exercise_list as $exercise) {
-			$exercise_stats = Event::get_all_exercise_event_from_lp($exercise['path'], $course_info['id'], $session_id);
+			$exercise_stats = Event::get_all_exercise_event_from_lp(
+				$exercise['path'],
+				$course_info['real_id'],
+				$session_id
+			);
 			//Looping Exercise Attempts
 			foreach($exercise_stats as $stats) {
 				//$attempt_result[$exercise['id']]['users'][$stats['exe_user_id']][$stats['exe_id']] = array('exe_result' =>$stats['exe_result'],'exe_weighting' =>$stats['exe_weighting']);

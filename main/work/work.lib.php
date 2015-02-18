@@ -3882,44 +3882,6 @@ function sendAlertToTeacher($workId, $courseInfo, $session_id)
 }
 
 /**
- * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @author Julio Montoya
- * @desc Record information for upload event
- * @param int $docId
- * @param int $userId
- * @param string $courseCode
- * @param int $sessionId
- * @return int
- */
-function event_upload($docId, $userId, $courseCode, $sessionId)
-{
-    $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
-    $reallyNow = api_get_utc_datetime();
-    $userId = intval($userId);
-    $docId = intval($docId);
-    $sessionId = intval($sessionId);
-    $courseCode = Database::escape_string($courseCode);
-
-    $sql = "INSERT INTO ".$table."
-                ( upload_user_id,
-                  upload_cours_id,
-                  upload_work_id,
-                  upload_date,
-                  upload_session_id
-                )
-                VALUES (
-                 ".$userId.",
-                 '".$courseCode."',
-                 '".$docId."',
-                 '".$reallyNow."',
-                 '".$sessionId."'
-                )";
-    Database::query($sql);
-
-    return 1;
-}
-
-/**
  * @param array $workInfo
  * @param array $values
  * @param array $courseInfo
@@ -4007,7 +3969,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
                 $groupId
             );
             sendAlertToTeacher($workId, $courseInfo, $sessionId);
-            Event::event_upload($workId, $userId, $courseInfo['code'], $sessionId);
+            Event::event_upload($workId);
             $message = Display::return_message(get_lang('DocAdd'));
         }
     } else {

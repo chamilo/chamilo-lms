@@ -1571,8 +1571,8 @@ class Exercise
      */
     public function clean_results($cleanLpTests = false, $cleanResultBeforeDate = null)
     {
-        $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $table_track_e_attempt   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql_where = '  AND
                         orig_lp_id = 0 AND
@@ -1710,7 +1710,7 @@ class Exercise
         $lp_item_view_id = 0,
         $status = 'incomplete'
     ) {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         if (empty($lp_id)) {
             $lp_id = 0;
         }
@@ -1758,7 +1758,7 @@ class Exercise
         $questionList = array(),
         $weight = 0
     ) {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $safe_lp_id = intval($safe_lp_id);
         $safe_lp_item_id = intval($safe_lp_item_id);
         $safe_lp_item_view_id = intval($safe_lp_item_view_id);
@@ -1772,20 +1772,30 @@ class Exercise
         if (empty($clock_expired_time)) {
             $clock_expired_time = 0;
         }
-        if ($this->expired_time != 0) {
-            $sql_fields = "expired_time_control, ";
-            $sql_fields_values = "'"."$clock_expired_time"."',";
-        } else {
-            $sql_fields = "";
-            $sql_fields_values = "";
-        }
+
         $questionList = array_map('intval', $questionList);
 
-        $weight = Database::escape_string($weight);
-        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, orig_lp_item_view_id, exe_weighting)
-                VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "', '" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id', '$safe_lp_item_view_id', '$weight')";
-        Database::query($sql);
-        $id = Database::insert_id();
+        $params = array(
+            'exe_exo_id' => $this->id ,
+            'exe_user_id' => api_get_user_id(),
+            'exe_cours_id' => api_get_course_id(),
+            'c_id' => api_get_course_int_id(),
+            'status' =>  'incomplete',
+            'session_id'  => api_get_session_id(),
+            'data_tracking'  => implode(',', $questionList) ,
+            'start_date' => api_get_utc_datetime(),
+            'orig_lp_id' => $safe_lp_id,
+            'orig_lp_item_id'  => $safe_lp_item_id,
+            'orig_lp_item_view_id'  => $safe_lp_item_view_id,
+            'exe_weighting'=> $weight,
+        );
+
+        if ($this->expired_time != 0) {
+            $params['expired_time_control'] = $clock_expired_time;
+        }
+
+        $id = Database::insert($track_exercises, $params);
+
         return $id;
     }
 
@@ -2141,7 +2151,7 @@ class Exercise
 
         $questionId   = intval($questionId);
         $exeId        = intval($exeId);
-        $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         // Creates a temporary Question object
@@ -2809,7 +2819,7 @@ class Exercise
                     }
                 case HOT_SPOT :
                     if ($from_database) {
-                        $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                        $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         $sql = "SELECT hotspot_correct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE
@@ -2847,7 +2857,7 @@ class Exercise
                 case HOT_SPOT_DELINEATION :
                     if ($from_database) {
                         // getting the user answer
-                        $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                        $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         $query   = "SELECT hotspot_correct, hotspot_coordinate
                                     FROM $TBL_TRACK_HOTSPOT
                                     WHERE
@@ -2949,11 +2959,7 @@ class Exercise
                             $user_array = substr($user_array,0,-1);
 
                             if ($next) {
-                                //$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                                // Save into db
-                                /*	$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate )
-                                VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($user_array)."')";
-                                $result = api_sql_query($sql,__FILE__,__LINE__);*/
+
                                 $user_answer = $user_array;
 
                                 // we compare only the delineation not the other points
@@ -3144,7 +3150,7 @@ class Exercise
                         case HOT_SPOT_DELINEATION:
                             $user_answer = $user_array;
                             if ($next) {
-                                //$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                                //$tbl_track_e_hotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                                 // Save into db
                                 /*	$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate )
                                 VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($user_array)."')";
@@ -3593,7 +3599,7 @@ class Exercise
         }
 
         if ($saved_results) {
-            $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+            $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
             $sql = 'UPDATE ' . $stat_table . ' SET
                         exe_result = exe_result + ' . floatval($questionScore) . '
                     WHERE exe_id = ' . $exeId;
@@ -4275,7 +4281,7 @@ class Exercise
 
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $exe_id = intval($exe_id);
         $sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
         $result = Database::query($sql_track);
@@ -4309,7 +4315,7 @@ class Exercise
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
         $question_id = intval($question_id);
         $exe_id = intval($exe_id);
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         if ($exercise_info) {
 
             if (empty($exercise_info['questions_to_check'])) {
@@ -4547,7 +4553,7 @@ class Exercise
         $ids = is_array($quizId) ? $quizId : array($quizId);
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         if ($sessionId != 0) {
             $sql = "SELECT * FROM $track_exercises te "
               . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "

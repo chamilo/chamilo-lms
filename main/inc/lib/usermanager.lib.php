@@ -5073,22 +5073,22 @@ EOF;
     /**
      * Calc the expended time (in seconds) by a user in a course
      * @param int $userId The user id
-     * @param string $courseCode The course id
+     * @param int $courseId The course id
      * @param int $sessionId Optional. The session id
      * @param string $from Optional. From date
      * @param string $until Optional. Until date
      * @return int The time
      */
-    public static function getExpendedTimeInCourses($userId, $courseCode, $sessionId = 0, $from = '', $until = '')
+    public static function getExpendedTimeInCourses($userId, $courseId, $sessionId = 0, $from = '', $until = '')
     {
         $userId = intval($userId);
         $sessionId = intval($sessionId);
 
-        $trackCourseAccessTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $trackCourseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         $whereConditions = array(
             'user_id = ? ' => $userId,
-            "AND course_code = '?' " => $courseCode,
+            "AND c_i = '?' " => $courseId,
             'AND session_id = ? ' => $sessionId
         );
 

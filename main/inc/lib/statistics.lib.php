@@ -142,7 +142,7 @@ class Statistics
     {
         // Database table definitions
         global $_configuration;
-        $track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $track_e_default  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
@@ -173,7 +173,7 @@ class Statistics
     static function get_activities_data($from, $number_of_items, $column, $direction)
     {
         global $dateTimeFormatLong;
-        $track_e_default    		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $track_e_default    		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user 				= Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table	= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id 			= api_get_current_access_url_id();
@@ -354,7 +354,7 @@ class Statistics
      */
     static function print_login_stats($type)
     {
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
 
@@ -430,7 +430,7 @@ class Statistics
     static function print_recent_login_stats()
     {
         $total_logins = array();
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
@@ -456,23 +456,40 @@ class Statistics
      */
     static function print_tool_stats()
     {
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
-        $tools = array('announcement','assignment','calendar_event',
-            'chat','conference','course_description','document',
-            'dropbox','group','learnpath','link','quiz',
-            'student_publication','user','forum');
+        $tools = array(
+            'announcement',
+            'assignment',
+            'calendar_event',
+            'chat',
+            'conference',
+            'course_description',
+            'document',
+            'dropbox',
+            'group',
+            'learnpath',
+            'link',
+            'quiz',
+            'student_publication',
+            'user',
+            'forum'
+        );
         $tool_names = array();
         foreach ($tools as $tool) {
             $tool_names[$tool] = get_lang(ucfirst($tool), '');
         }
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT access_tool, count( access_id ) ".
-                   "AS number_of_logins FROM $table, $access_url_rel_course_table ".
-                   "WHERE access_tool IN ('".implode("','",$tools)."') AND  course_code = access_cours_code AND access_url_id='".$current_url_id."' ".
-                   "GROUP BY access_tool ";
+            $sql = "SELECT access_tool, count( access_id ) AS number_of_logins
+                    FROM $table t , $access_url_rel_course_table a
+                    WHERE
+                        access_tool IN ('".implode("','",$tools)."') AND
+                        t.c_id = a.c_id AND
+                        access_url_id='".$current_url_id."'
+                        GROUP BY access_tool
+                    ";
         } else {
             $sql = "SELECT access_tool, count( access_id ) ".
                 "AS number_of_logins FROM $table ".
@@ -583,7 +600,7 @@ class Statistics
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
-        $columns[0] = 'access_cours_code';
+        $columns[0] = 'c_id';
         $columns[1] = 'access_date';
         $sql_order[SORT_ASC] = 'ASC';
         $sql_order[SORT_DESC] = 'DESC';
@@ -610,20 +627,22 @@ class Statistics
         $form->display();
         $values = $form->exportValues();
         $date_diff = $values['date_diff'];
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT * FROM $table, $access_url_rel_course_table WHERE course_code = access_cours_code AND access_url_id='".$current_url_id."' ".
-                   "GROUP BY access_cours_code ".
-                   "HAVING access_cours_code <> '' ".
-                   "AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
+            $sql = "SELECT * FROM $table t , $access_url_rel_course_table a
+                   WHERE
+                        t.c_id = a.c_id AND
+                        access_url_id='".$current_url_id."'
+                   GROUP BY c_id
+                   HAVING c_id <> ''
+                   AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
         } else {
             $sql = "SELECT * FROM $table ".
-                   "GROUP BY access_cours_code ".
-                   "HAVING access_cours_code <> '' ".
+                   "GROUP BY c_id ".
+                   "HAVING c_id <> '' ".
                    "AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
         }
         $res = Database::query($sql);
-        $number_of_courses = Database::num_rows($res);
         $sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
         $from = ($page_nr -1) * $per_page;
         $sql .= ' LIMIT '.$from.','.$per_page;
@@ -632,8 +651,9 @@ class Statistics
         if (Database::num_rows($res) > 0) {
             $courses = array ();
             while ($obj = Database::fetch_object($res)) {
+                $courseInfo = api_get_course_info_by_id($obj->c_id);
                 $course = array ();
-                $course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
+                $course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$courseInfo['code'].'">'.$courseInfo['code'].' <a>';
                                 //Allow sort by date hiding the numerical date
                 $course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date);
                 $courses[] = $course;
@@ -731,7 +751,7 @@ class Statistics
     static function print_users_not_logged_in_stats()
     {
         $total_logins = array();
-        $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
         $total = self::count_users();

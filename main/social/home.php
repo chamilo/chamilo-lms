@@ -139,9 +139,18 @@ if (api_get_setting('allow_skills_tool') == 'true') {
     $lis = '';
     if (!empty($skills)) {
         foreach ($skills as $skill) {
+            $badgeImage = null;
+
+            if (!empty($skill['icon'])) {
+                $badgeImage = Display::img(
+                    api_get_path(WEB_DATA_PATH) . $skill['iconThumb'],
+                    $skill['name']
+                );
+            }
+
             $lis .= Display::tag(
                 'li',
-                Display::span(
+                $badgeImage . Display::span(
                     $skill['name'],
                     array('class' => 'label_tag skill')
                 )

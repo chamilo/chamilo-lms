@@ -3168,7 +3168,7 @@ class AddCourse
 
                 // Add event to the system log.
                 $user_id = api_get_user_id();
-                event_system(
+                Event::addEvent(
                     LOG_COURSE_CREATE,
                     LOG_COURSE_CODE,
                     $code,

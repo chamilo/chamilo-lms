@@ -194,7 +194,7 @@ if ($check) {
                 !empty($student_id)
             ) {
                 $course_info = api_get_course_info($course);
-                delete_student_lp_events(
+                Event::delete_student_lp_events(
                     $student_id,
                     $lp_id,
                     $course_info,

@@ -91,13 +91,13 @@ if (!empty($course_info)) {
 	$_course = $course_info;
 	$main_question_list = array();
 	foreach ($lp_list as $lp_id =>$lp) {
-		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['real_id']);
+		$exercise_list = Event:: get_all_exercises_from_lp($lp_id, $course_info['real_id']);
 		foreach ($exercise_list as $exercise) {
 			$my_exercise = new Exercise();
 			$my_exercise->read($exercise['path']);
 			$question_list = $my_exercise->selectQuestionList();
 
-			$exercise_stats = get_all_exercise_event_from_lp(
+			$exercise_stats = Event::get_all_exercise_event_from_lp(
 				$exercise['path'],
 				$course_info['id'],
 				$session_id

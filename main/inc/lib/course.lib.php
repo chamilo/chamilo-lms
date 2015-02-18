@@ -464,7 +464,7 @@ class CourseManager
 
             // add event to system log
             $user_id = api_get_user_id();
-            event_system(
+            Event::addEvent(
                 LOG_UNSUBSCRIBE_USER_FROM_COURSE,
                 LOG_COURSE_CODE,
                 $course_code,
@@ -474,7 +474,7 @@ class CourseManager
 
             foreach ($user_list as $userId) {
                 $userInfo = api_get_user_info($userId);
-                event_system(
+                Event::addEvent(
                     LOG_UNSUBSCRIBE_USER_FROM_COURSE,
                     LOG_USER_OBJECT,
                     $userInfo,
@@ -592,7 +592,7 @@ class CourseManager
             $result = @Database::query($sql);
 
             // Add event to the system log
-            event_system(
+            Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_COURSE_CODE,
                 $course_code,
@@ -601,7 +601,7 @@ class CourseManager
             );
 
             $user_info = api_get_user_info($user_id);
-            event_system(
+            Event::addEvent(
                 LOG_SUBSCRIBE_USER_TO_COURSE,
                 LOG_USER_OBJECT,
                 $user_info,
@@ -2405,7 +2405,7 @@ class CourseManager
 
             // Add event to system log
             $user_id = api_get_user_id();
-            event_system(
+            Event::addEvent(
                 LOG_COURSE_DELETE,
                 LOG_COURSE_CODE,
                 $code,

@@ -18,7 +18,7 @@ Display :: display_header('');
 Display::display_introduction_section($tool);
 
 // Tracking
-event_access_tool($tool);
+Event::event_access_tool($tool);
 
 // Display
 echo $content;

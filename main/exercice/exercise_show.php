@@ -70,7 +70,7 @@ $maxEditors = isset($_configuration['exercise_max_fckeditors_in_page']) ? $_conf
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
-$track_exercise_info = get_exercise_track_exercise_info($id);
+$track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
 
 //No track info
 if (empty($track_exercise_info)) {
@@ -527,7 +527,7 @@ foreach ($questionList as $questionId) {
 			echo '<br />';
 
             echo '<div id="feedback_'.$name.'" style="width:100%">';
-			$comnt = trim(get_comments($id, $questionId));
+			$comnt = trim(Event::get_comments($id, $questionId));
 			if (empty($comnt)) {
 				echo '<br />';
 			} else {
@@ -542,7 +542,7 @@ foreach ($questionList as $questionId) {
 			$renderer =& $feedback_form->defaultRenderer();
 			$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
-			$comnt = get_comments($id, $questionId);
+			$comnt = Event::get_comments($id, $questionId);
 			$default = array('comments_'.$questionId =>  $comnt);
             if ($useAdvancedEditor) {
                 $feedback_form->addElement(
@@ -565,7 +565,7 @@ foreach ($questionList as $questionId) {
 			echo '</div>';
 
 		} else {
-			$comnt = get_comments($id, $questionId);
+			$comnt = Event::get_comments($id, $questionId);
 			echo '<br />';
 			if (!empty($comnt)) {
 				echo '<b>'.get_lang('Feedback').'</b>';
@@ -650,7 +650,7 @@ foreach ($questionList as $questionId) {
 
     $score = array();
     if ($show_results) {
-		$score['result'] = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
+		$score['result'] = get_lang('Score')." : ".ExerciseLib::show_score($my_total_score, $my_total_weight, false, false);
         $score['pass']   = $my_total_score >= $my_total_weight ? true : false;
         $score['type']   = $answerType;
         $score['score']  = $my_total_score;

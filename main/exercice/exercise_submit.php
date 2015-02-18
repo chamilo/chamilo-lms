@@ -148,7 +148,7 @@ if ($objExercise->expired_time != 0) {
 }
 
 // Generating the time control key for the user
-$current_expired_time_key = get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
@@ -161,7 +161,7 @@ $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
 	$attempt_html = '';
-    $attempt_count = get_attempt_count(
+    $attempt_count = Event::get_attempt_count(
         $user_id,
         $exerciseId,
         $learnpath_id,
@@ -175,7 +175,7 @@ if ($objExercise->selectAttempts() > 0) {
             if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
 
                 // Showing latest attempt according with task BT#1628
-                $exercise_stat_info = get_exercise_results_by_user(
+                $exercise_stat_info = Event::getExerciseResultsByUser(
                     $user_id,
                     $exerciseId,
                     api_get_course_id(),
@@ -199,7 +199,7 @@ if ($objExercise->selectAttempts() > 0) {
                             $attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
                         }
                     }
-					$score =  show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
+					$score =  ExerciseLib::show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
 					$attempt_html .= Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
 				} else {
 					$attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
@@ -281,7 +281,7 @@ if (empty($exercise_stat_info)) {
     // Remember last question id position.
     $isFirstTime = Session::read('firstTime');
     if ($isFirstTime && $objExercise->type == ONE_PER_PAGE) {
-        $resolvedQuestions = get_all_exercise_event_by_exe_id($exe_id);
+        $resolvedQuestions = Event::getAllExerciseEventByExeId($exe_id);
         if (!empty($resolvedQuestions) &&
             !empty($exercise_stat_info['data_tracking'])
         ) {
@@ -337,7 +337,7 @@ if ($time_control) {
 	        $expired_time_of_this_attempt = $exercise_stat_info['expired_time_control'];
 			if ($debug) {error_log('7.5 $expired_time_of_this_attempt: '.$expired_time_of_this_attempt); }
 	        // Get the last attempt of an exercise
-	    	$last_attempt_date = get_last_attempt_date_of_exercise($exercise_stat_info['exe_id']);
+	    	$last_attempt_date = Event::getLastAttemptDateOfExercise($exercise_stat_info['exe_id']);
 
 	    	/* This means that the user enters the exam but do not answer the
 	    	   first question we get the date from the track_e_exercises not from
@@ -504,7 +504,7 @@ if ($formSent && isset($_POST)) {
 
                 //We check if the user attempts before sending to the exercise_result.php
                 if ($objExercise->selectAttempts() > 0) {
-                    $attempt_count = get_attempt_count(
+                    $attempt_count = Event::get_attempt_count(
                         api_get_user_id(),
                         $exerciseId,
                         $learnpath_id,
@@ -563,7 +563,7 @@ if ($question_count != 0) {
 
 	            //We check if the user attempts before sending to the exercise_result.php
 	            if ($objExercise->selectAttempts() > 0) {
-	                $attempt_count = get_attempt_count(
+	                $attempt_count = Event::get_attempt_count(
                         api_get_user_id(),
                         $exerciseId,
                         $learnpath_id,
@@ -1028,7 +1028,7 @@ if (!empty($error)) {
     $attempt_list = array();
 
     if (isset($exe_id)) {
-        $attempt_list = get_all_exercise_event_by_exe_id($exe_id);
+        $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
     }
 
     $remind_list  = array();
@@ -1086,7 +1086,7 @@ if (!empty($error)) {
         echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
         // Shows the question and its answers
-        showQuestion($questionId, false, $origin, $i, true, false, $user_choice, false);
+        ExerciseLib::showQuestion($questionId, false, $origin, $i, true, false, $user_choice, false);
 
         // Button save and continue
         switch ($objExercise->type) {

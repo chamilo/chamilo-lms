@@ -396,7 +396,7 @@ class Login
                     if (!isset($_SESSION['login_as'])) {
                         //Course login
                         if (isset($_user['user_id'])) {
-                            event_course_login($_course['sysCode'], $_user['user_id'], api_get_session_id());
+                            Event::event_course_login($_course['sysCode'], $_user['user_id'], api_get_session_id());
                         }
                     }
                 } else {

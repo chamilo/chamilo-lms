@@ -457,7 +457,7 @@ if ($origin != 'learnpath') {
 }
 
 // Statistics
-event_access_tool(TOOL_USER);
+Event::event_access_tool(TOOL_USER);
 
 /*	Setting the permissions for this page */
 $is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);

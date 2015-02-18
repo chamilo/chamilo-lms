@@ -66,7 +66,7 @@ $_setting['display_courses_to_anonymous_users'] = 'true';
  */
 if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     $i = api_get_anonymous_id();
-    event_system(LOG_ATTEMPTED_FORCED_LOGIN, 'tried_hacking_get', $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),null,$i);
+    Event::addEvent(LOG_ATTEMPTED_FORCED_LOGIN, 'tried_hacking_get', $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),null,$i);
     echo 'Attempted breakin - sysadmins notified.';
     session_destroy();
     die();
@@ -110,7 +110,7 @@ if (!empty($_POST['submitAuth'])) {
         }
         Database::free_result($result_last_login);
 
-        //event_login();
+        //Event::event_login();
         if (api_is_platform_admin()) {
             // decode all open event informations and fill the track_c_* tables
             include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
@@ -120,7 +120,7 @@ if (!empty($_POST['submitAuth'])) {
     // End login -- if ($_POST['submitAuth'])
 } else {
     // Only if login form was not sent because if the form is sent the user was already on the page.
-    event_open();
+    Event::event_open();
 }
 
 if (api_get_setting('display_categories_on_homepage') == 'true') {

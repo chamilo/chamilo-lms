@@ -80,7 +80,7 @@ if (isset($_REQUEST['tool'])) {
 /**
  * Process
  */
-event_access_tool(TOOL_UPLOAD);
+Event::event_access_tool(TOOL_UPLOAD);
 
 /**
  *	Prepare the header

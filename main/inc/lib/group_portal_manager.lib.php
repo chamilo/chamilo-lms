@@ -38,7 +38,7 @@ class GroupPortalManager
         Database::query($sql);
         $id = Database::insert_id();
         if ($id) {
-            event_system(LOG_GROUP_PORTAL_CREATED, LOG_GROUP_PORTAL_ID, $id);
+            Event::addEvent(LOG_GROUP_PORTAL_CREATED, LOG_GROUP_PORTAL_ID, $id);
 
             return $id;
         }
@@ -99,7 +99,7 @@ class GroupPortalManager
         self::delete_users($id);
         // Delete group image
         self::delete_group_picture($id);
-        event_system(LOG_GROUP_PORTAL_DELETED, LOG_GROUP_PORTAL_ID, $id);
+        Event::addEvent(LOG_GROUP_PORTAL_DELETED, LOG_GROUP_PORTAL_ID, $id);
 
         return $result;
     }
@@ -594,7 +594,7 @@ class GroupPortalManager
                 $sql = "INSERT INTO $table_url_rel_group
            				SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type);
                 $result = Database::query($sql);
-                event_system(
+                Event::addEvent(
                     LOG_GROUP_PORTAL_USER_SUBSCRIBED,
                     LOG_GROUP_PORTAL_REL_USER_ARRAY,
                     array('user_id' => $user_id, 'group_id' => $group_id, 'relation_type' => $relation_type)
@@ -653,7 +653,7 @@ class GroupPortalManager
         $sql = "DELETE FROM $table_ WHERE group_id = ".intval($group_id).$condition_relation;
         $result = Database::query($sql);
 
-        event_system(
+        Event::addEvent(
             LOG_GROUP_PORTAL_USER_DELETE_ALL,
             LOG_GROUP_PORTAL_REL_USER_ARRAY,
             array('group_id' => $group_id, 'relation_type' => $relation_type)
@@ -675,7 +675,7 @@ class GroupPortalManager
         $sql = "DELETE FROM $table WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id);
         $result = Database::query($sql);
 
-        event_system(
+        Event::addEvent(
             LOG_GROUP_PORTAL_USER_UNSUBSCRIBED,
             LOG_GROUP_PORTAL_REL_USER_ARRAY,
             array('user_id' => $user_id, 'group_id' => $group_id)
@@ -710,7 +710,7 @@ class GroupPortalManager
             ";
         Database::query($sql);
 
-        event_system(
+        Event::addEvent(
             LOG_GROUP_PORTAL_USER_UPDATE_ROLE,
             LOG_GROUP_PORTAL_REL_USER_ARRAY,
             array('user_id' => $user_id, 'group_id' => $group_id, 'relation_type' => $relation_type)

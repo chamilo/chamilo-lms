@@ -42,14 +42,14 @@ if (!empty($question_list)) {
 	foreach ($question_list as $question_id) {
         $question_obj = Question::read($question_id);
 
-        $exercise_stats = get_student_stats_by_question(
+        $exercise_stats = ExerciseLib::get_student_stats_by_question(
             $question_id,
             $exercise_id,
             $courseCode,
             $sessionId
         );
 
-        $count_users = get_number_students_question_with_answer_count(
+        $count_users = ExerciseLib::get_number_students_question_with_answer_count(
             $question_id,
             $exercise_id,
             $courseCode,
@@ -111,7 +111,7 @@ if (!empty($question_list)) {
     $id = 0;
 	foreach ($question_list as $question_id) {
 		$question_obj = Question::read($question_id);
-        $exercise_stats = get_student_stats_by_question(
+        $exercise_stats = ExerciseLib::get_student_stats_by_question(
             $question_id,
             $exercise_id,
             $courseCode,
@@ -148,7 +148,7 @@ if (!empty($question_list)) {
 
                         $data[$id]['correct'] 	= '-';
 
-                        $count = get_number_students_answer_count(
+                        $count = ExerciseLib::get_number_students_answer_count(
                             $real_answer_id,
                             $question_id,
                             $exercise_id,
@@ -188,7 +188,7 @@ if (!empty($question_list)) {
                         $data[$id]['answer'] = $correct;
                         $data[$id]['correct'] = $answer_info;
 
-                        $count = get_number_students_answer_count(
+                        $count = ExerciseLib::get_number_students_answer_count(
                             $answer_id,
                             $question_id,
                             $exercise_id,
@@ -212,7 +212,7 @@ if (!empty($question_list)) {
                     $data[$id]['answer'] = $answer_info;
                     $data[$id]['correct'] = '-';
 
-                    $count = get_number_students_answer_hotspot_count(
+                    $count = ExerciseLib::get_number_students_answer_hotspot_count(
                         $answer_id,
                         $question_id,
                         $exercise_id,
@@ -234,7 +234,7 @@ if (!empty($question_list)) {
                     $data[$id]['answer'] = $answer_info;
                     $data[$id]['correct'] = $correct_answer;
 
-                    $count = get_number_students_answer_count(
+                    $count = ExerciseLib::get_number_students_answer_count(
                         $real_answer_id,
                         $question_id,
                         $exercise_id,

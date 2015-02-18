@@ -346,14 +346,14 @@ class Tracking
                                         if ($maxscore == 0) {
                                             $view_score = $score;
                                         } else {
-                                            $view_score = show_score($score, $maxscore, false);
+                                            $view_score = ExerciseLib::show_score($score, $maxscore, false);
                                         }
                                         break;
                                     case 'document':
-                                        $view_score = ($score == 0 ? '/' : show_score($score, $maxscore, false));
+                                        $view_score = ($score == 0 ? '/' : ExerciseLib::show_score($score, $maxscore, false));
                                         break;
                                     default:
-                                        $view_score = show_score($score, $maxscore, false);
+                                        $view_score = ExerciseLib::show_score($score, $maxscore, false);
                                         break;
                                 }
                             }
@@ -717,7 +717,7 @@ class Tracking
                                         get_lang('ResultsHiddenByExerciseSetting')
                                     );
                                 } else {
-                                    $scoreItem .= show_score($score, $maxscore, false);
+                                    $scoreItem .= ExerciseLib::show_score($score, $maxscore, false);
                                 }
                             } else {
                                 $scoreItem .= $score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore);
@@ -857,12 +857,12 @@ class Tracking
                                         } else {
                                             // Show only float when need it
                                             if ($my_score == 0) {
-                                                $view_score = show_score(0, $my_maxscore, false);
+                                                $view_score = ExerciseLib::show_score(0, $my_maxscore, false);
                                             } else {
                                                 if ($my_maxscore == 0) {
                                                     $view_score = $my_score;
                                                 } else {
-                                                    $view_score = show_score($my_score, $my_maxscore, false);
+                                                    $view_score = ExerciseLib::show_score($my_score, $my_maxscore, false);
                                                 }
                                             }
                                         }
@@ -1832,7 +1832,7 @@ class Tracking
         if (!empty($exercise_list)) {
             foreach ($exercise_list as $exercise_data) {
                 $exercise_id = $exercise_data['id'];
-                $best_attempt = get_best_attempt_exercise_results_per_user(
+                $best_attempt = Event::get_best_attempt_exercise_results_per_user(
                     $user_id,
                     $exercise_id,
                     $course_code,
@@ -4075,7 +4075,7 @@ class Tracking
                 $exercise_graph_list = array();
 
                 foreach ($course_list as $course_data) {
-                    $exercise_list = get_all_exercises(
+                    $exercise_list = ExerciseLib::get_all_exercises(
                         $course_data,
                         $my_session_id,
                         false,
@@ -4092,7 +4092,7 @@ class Tracking
                         if ($exercise_data['results_disabled'] == 0 || $exercise_data['results_disabled'] == 2) {
 
                             $best_average = intval(
-                                get_best_average_score_by_exercise(
+                                ExerciseLib::get_best_average_score_by_exercise(
                                     $exercise_data['id'],
                                     $course_data['code'],
                                     $my_session_id,
@@ -4102,7 +4102,7 @@ class Tracking
                             $exercise_graph_list[] 		= $best_average;
                             $all_exercise_graph_list[] 	= $best_average;
 
-                            $user_result_data = get_best_attempt_by_user(
+                            $user_result_data = ExerciseLib::get_best_attempt_by_user(
                                 api_get_user_id(),
                                 $exercise_data['id'],
                                 $course_data['code'],
@@ -4187,20 +4187,20 @@ class Tracking
 
                 foreach($course_list as $course_data) {
                     //All exercises in the course @todo change for a real count
-                    $exercises          = get_all_exercises($course_data, $my_session_id);
+                    $exercises          = ExerciseLib::get_all_exercises($course_data, $my_session_id);
                     $count_exercises = 0;
                     if (is_array($exercises) && !empty($exercises)) {
                         $count_exercises 	= count($exercises);
                     }
 
                     //Count of user results
-                    //$done_exercises     = get_count_exercises_attempted_by_course($course_data['code'], $my_session_id);
+                    //$done_exercises     = Event::get_count_exercises_attempted_by_course($course_data['code'], $my_session_id);
                     $done_exercises     = null;
 
                     $answered_exercises = 0;
                     if (!empty($exercises)) {
                         foreach($exercises as $exercise_item) {
-                            $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $course_data['code'], $my_session_id);
+                            $attempts = Event::count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $course_data['code'], $my_session_id);
                             if ($attempts > 1)  {
                                 $answered_exercises++;
                             }
@@ -4208,7 +4208,7 @@ class Tracking
                     }
 
                     // Average
-                    $average = get_average_score_by_course($course_data['code'], $my_session_id);
+                    $average = ExerciseLib::get_average_score_by_course($course_data['code'], $my_session_id);
 
                     $all_exercises += $count_exercises;
 
@@ -4232,7 +4232,7 @@ class Tracking
                 $html .= Display::tag('td', $all_unanswered_exercises_by_user);
 
                 //$html .= Display::tag('td', $all_done_exercise);
-                $html .= Display::tag('td', convert_to_percentage($all_average));
+                $html .= Display::tag('td', ExerciseLib::convert_to_percentage($all_average));
 
                 if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
                     $icon = Display::url(Display::return_icon('2rightarrow_na.gif', get_lang('Details')), '?session_id='.$my_session_id);
@@ -4276,7 +4276,7 @@ class Tracking
                     $course_title 	= $course_data['title'];
 
                     //All exercises in the course @todo change for a real count
-                    $exercises          = get_all_exercises($course_data, $session_id_from_get);
+                    $exercises          = ExerciseLib::get_all_exercises($course_data, $session_id_from_get);
                     $count_exercises = 0;
                     if (!empty($exercises)) {
                         $count_exercises 	= count($exercises);
@@ -4285,10 +4285,10 @@ class Tracking
                     //$done_exercises     = get_best_exercise_results_by_course($course_code, $session_id_from_get);
 
                     //From course exercises NOT from LP exercises!!!
-                    //$done_exercises     = get_count_exercises_attempted_by_course($course_code, $session_id_from_get);
+                    //$done_exercises     = Event::get_count_exercises_attempted_by_course($course_code, $session_id_from_get);
                     $answered_exercises = 0;
                     foreach($exercises as $exercise_item) {
-                        $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $course_code, $session_id_from_get);
+                        $attempts = Event::count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $course_code, $session_id_from_get);
                         if ($attempts > 1)  {
                             $answered_exercises++;
                         }
@@ -4297,8 +4297,8 @@ class Tracking
                     $unanswered_exercises = $count_exercises - $answered_exercises;
 
                     // Average
-                    $average = get_average_score_by_course($course_code, $session_id_from_get);
-                    $my_average	= get_average_score_by_course_by_user(api_get_user_id(), $course_code, $session_id_from_get);
+                    $average = ExerciseLib::get_average_score_by_course($course_code, $session_id_from_get);
+                    $my_average	= ExerciseLib::get_average_score_by_course_by_user(api_get_user_id(), $course_code, $session_id_from_get);
 
                     $stats_array[$course_code] = array(
                         'exercises'						=> $count_exercises,
@@ -4329,9 +4329,9 @@ class Tracking
                     $html .= Display::tag('td', $stats_array[$course_code]['exercises']);
                     $html .= Display::tag('td', $stats_array[$course_code]['unanswered_exercises_by_user']);
                     //$html .= Display::tag('td', $stats_array[$course_code]['done_exercises']);
-                    $html .= Display::tag('td', convert_to_percentage($stats_array[$course_code]['my_average']));
+                    $html .= Display::tag('td', ExerciseLib::convert_to_percentage($stats_array[$course_code]['my_average']));
 
-                    $html .= Display::tag('td', $stats_array[$course_code]['average'] == 0 ? '-' : '('.convert_to_percentage($stats_array[$course_code]['average']).')');
+                    $html .= Display::tag('td', $stats_array[$course_code]['average'] == 0 ? '-' : '('.ExerciseLib::convert_to_percentage($stats_array[$course_code]['average']).')');
                     $html .= Display::tag('td', $time, array('align'=>'center'));
 
                     if (is_numeric($progress)) {
@@ -4412,9 +4412,9 @@ class Tracking
                 $user_list  = CourseManager::get_user_list_from_course_code($course, $session_id, null, null, 0);
             }
 
-            //$exercise_list = get_all_exercises($course_info, $session_id, true);
+            //$exercise_list = ExerciseLib::get_all_exercises($course_info, $session_id, true);
             // Show exercise results of invisible exercises? see BT#4091
-            $exercise_list = get_all_exercises(
+            $exercise_list = ExerciseLib::get_all_exercises(
                 $course_info,
                 $session_id,
                 false,
@@ -4436,7 +4436,7 @@ class Tracking
                     $score = $weighting = $attempts = 0;
 
                     //Getting count of attempts by user
-                    $attempts      = count_exercise_attempts_by_user(api_get_user_id(), $exercices['id'], $course_info['code'], $session_id);
+                    $attempts = Event::count_exercise_attempts_by_user(api_get_user_id(), $exercices['id'], $course_info['code'], $session_id);
 
                     $html .= '<tr class="row_even">';
                     $url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
@@ -4450,7 +4450,7 @@ class Tracking
                     //Exercise configuration show results or show only score
                     if ($exercices['results_disabled'] == 0 || $exercices['results_disabled'] == 2) {
                         //For graphics
-                        $best_exercise_stats = get_best_exercise_results_by_user($exercices['id'], $course_info['code'], $session_id);
+                        $best_exercise_stats = Event::get_best_exercise_results_by_user($exercices['id'], $course_info['code'], $session_id);
                         $to_graph_exercise_result[$exercices['id']] = array('title'=>$exercices['title'], 'data'=>$best_exercise_stats);
 
                         $latest_attempt_url = '';
@@ -4458,11 +4458,11 @@ class Tracking
                         $graph = $normal_graph = null;
 
                         //Getting best results
-                        $best_score_data = get_best_attempt_in_course($exercices['id'], $course_info['code'], $session_id);
-                        $best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
+                        $best_score_data = ExerciseLib::get_best_attempt_in_course($exercices['id'], $course_info['code'], $session_id);
+                        $best_score      = ExerciseLib::show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
 
                         if ($attempts > 0) {
-                            $exercise_stat = get_best_attempt_by_user(api_get_user_id(), $exercices['id'], $course_info['code'], $session_id);
+                            $exercise_stat = ExerciseLib::get_best_attempt_by_user(api_get_user_id(), $exercices['id'], $course_info['code'], $session_id);
                             if (!empty($exercise_stat)) {
 
                                 //Always getting the BEST attempt
@@ -4471,13 +4471,13 @@ class Tracking
                                 $exe_id         = $exercise_stat['exe_id'];
 
                                 $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
-                                $percentage_score_result = Display::url(show_score($score, $weighting), $latest_attempt_url);
+                                $percentage_score_result = Display::url(ExerciseLib::show_score($score, $weighting), $latest_attempt_url);
                                 $my_score = 0;
                                 if (!empty($weighting) && intval($weighting) != 0) {
                                     $my_score = $score/$weighting;
                                 }
                                 //@todo this function slows the page
-                                $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
+                                $position = ExerciseLib::get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
 
                                 $graph         = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
                                 $normal_graph  = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
@@ -5944,7 +5944,7 @@ class TrackingCourseLog
 
         $course_info = api_get_course_info($course_code);
         $total_surveys = 0;
-        $total_exercises = get_all_exercises(
+        $total_exercises = ExerciseLib::get_all_exercises(
             $course_info,
             $session_id,
             false,

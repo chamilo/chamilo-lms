@@ -81,16 +81,13 @@ require_once $libdir.'notebook.lib.php';
 
 /**This files need be inside a buffering to clean the objects*/
 ob_start();
-require_once $libdir.'main_api.lib.php';
 require_once $libdir.'course_document.lib.php';
 require_once $libdir.'add_course.lib.inc.php';
 require_once $libdir.'geometry.lib.php';
 ob_end_clean();
 
-/**Problem with this file to test objects*/
-//require_once $maindir.'exercice/exercise.lib.php';
-
-class TestManager {
+class TestManager
+{
 
 /* MAIN CODE */
 

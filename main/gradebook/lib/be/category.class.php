@@ -1600,7 +1600,7 @@ class Category implements GradebookItem
             if ($locked == 1) {
                 $event_type = LOG_GRADEBOOK_LOCKED;
             }
-            event_system($event_type, LOG_GRADEBOOK_ID, $this->id);
+            Event::addEvent($event_type, LOG_GRADEBOOK_ID, $this->id);
         }
     }
 

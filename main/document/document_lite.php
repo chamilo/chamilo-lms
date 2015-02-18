@@ -71,7 +71,7 @@ switch ($action) {
 			exit;
 		}
 		// Launch event
-		event_download($document_data['url']);
+        Event::event_download($document_data['url']);
 		// Check visibility of document and paths
 		if (!($is_allowed_to_edit || $group_member_with_upload_rights) && !DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id())) {
 			api_not_allowed(true);
@@ -294,7 +294,7 @@ $(document).ready( function() {
 
 
 // Lib for event log, stats & tracking & record of the access
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 /*	DISPLAY */
 if ($to_group_id != 0) { // Add group name after for group documents

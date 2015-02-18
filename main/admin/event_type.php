@@ -38,12 +38,12 @@ if ($action == 'modEventType') {
     if (!empty($event_name)) {
         $eventName = $event_name;
     }
-    save_event_type_message($eventName, $users, $eventMessage, $eventSubject, $eventMessageLanguage, $activated);
+    Event::save_event_type_message($eventName, $users, $eventMessage, $eventSubject, $eventMessageLanguage, $activated);
     header('location: event_controller.php');
     exit;
 }
 
-$ets = get_all_event_types();
+$ets = Event::get_all_event_types();
 
 $languages = api_get_languages();
 

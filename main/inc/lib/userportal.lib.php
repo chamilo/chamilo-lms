@@ -67,14 +67,13 @@ class IndexManager
 
     function return_exercise_block($personal_course_list)
     {
-        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_list = array();
         if (!empty($personal_course_list)) {
             foreach($personal_course_list as  $course_item) {
                 $course_code     = $course_item['c'];
                 $session_id     = $course_item['id_session'];
 
-                $exercises = get_exercises_to_be_taken($course_code, $session_id);
+                $exercises = ExerciseLib::get_exercises_to_be_taken($course_code, $session_id);
 
                 foreach($exercises as $exercise_item) {
                     $exercise_item['course_code']     = $course_code;

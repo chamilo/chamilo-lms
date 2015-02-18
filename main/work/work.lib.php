@@ -4007,7 +4007,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
                 $groupId
             );
             sendAlertToTeacher($workId, $courseInfo, $sessionId);
-            event_upload($workId, $userId, $courseInfo['code'], $sessionId);
+            Event::event_upload($workId, $userId, $courseInfo['code'], $sessionId);
             $message = Display::return_message(get_lang('DocAdd'));
         }
     } else {
@@ -4920,7 +4920,7 @@ function getFileContents($id, $course_info, $sessionId = 0)
                     $title = $row['filename'];
                 }
                 $title = str_replace(' ', '_', $title);
-                event_download($title);
+                Event::event_download($title);
                 if (Security::check_abs_path(
                     $full_file_name,
                     api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')
@@ -5178,7 +5178,7 @@ function downloadAllFilesPerUser($userId, $courseInfo)
 
         // Start download of created file
         $name = basename(replace_dangerous_char($userInfo['complete_name'])).'.zip';
-        event_download($name.'.zip (folder)');
+        Event::event_download($name.'.zip (folder)');
         if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
             DocumentManager::file_send_for_download($tempZipFile, true, $name);
             @unlink($tempZipFile);

@@ -14,17 +14,17 @@ use Javascript;
 
 /**
  * Controller for notebook. Dispatch request and peform required action.
- * 
+ *
  *      - list notes for course
  *      - add/edit notes entry
  *      - change view from table to details
- * 
+ *
  * Usage:
- * 
+ *
  *      $controller = Controller::instance();
  *      $controller->run();
- * 
- * @package chamilo.course_description 
+ *
+ * @package chamilo.course_description
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license see /license.txt
@@ -42,7 +42,7 @@ class Controller extends \Controller
 
     /**
      * Return the instance of the controller.
-     * 
+     *
      * @return  \Noteboook\Controller
      */
     public static function instance()
@@ -55,9 +55,9 @@ class Controller extends \Controller
     }
 
     /**
-     * Action to perform. 
+     * Action to perform.
      * Returns the request parameter.
-     * 
+     *
      * @return string
      */
     public function get_action()
@@ -77,7 +77,7 @@ class Controller extends \Controller
     }
 
     /**
-     * Prepare the environment. Set up breadcrumps and raise tracking event. 
+     * Prepare the environment. Set up breadcrumps and raise tracking event.
      */
     protected function prolog()
     {
@@ -93,15 +93,15 @@ class Controller extends \Controller
         $current_course_tool = TOOL_NOTEBOOK;
 
         // Tracking
-        event_access_tool(TOOL_NOTEBOOK);
+        Event::event_access_tool(TOOL_NOTEBOOK);
     }
 
     /**
      * Returns a url for an action that the controller can process
-     * 
+     *
      * @param string $action
      * @param array $params
-     * @return string 
+     * @return string
      */
     public function url($action = '', $params = array())
     {
@@ -129,8 +129,8 @@ class Controller extends \Controller
 
     /**
      * List course descriptions.
-     * 
-     * @param array messages 
+     *
+     * @param array messages
      */
     public function index()
     {
@@ -154,7 +154,7 @@ class Controller extends \Controller
     }
 
     /**
-     * Performs the edit action. 
+     * Performs the edit action.
      */
     public function edit()
     {
@@ -224,7 +224,7 @@ class Controller extends \Controller
 
     /**
      * Performs the delete action.
-     * 
+     *
      * @see AjaxController
      */
     public function delete()
@@ -286,10 +286,10 @@ class Controller extends \Controller
 
     /**
      * Render a template using data. Adds a few common parameters to the data array.
-     * 
+     *
      * @see /main/template/default/course_description/
      * @param string $template
-     * @param array $data 
+     * @param array $data
      */
     protected function render($template, $data)
     {

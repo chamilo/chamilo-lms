@@ -102,14 +102,12 @@ require_once dirname(__FILE__).'/../../vendor/autoload.php';
 require_once $lib_path.'database.lib.php';
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'array.lib.php';
-require_once $lib_path.'events.lib.inc.php';
 require_once $lib_path.'course.lib.php';
 require_once $lib_path.'online.inc.php';
 require_once $lib_path.'banner.lib.php';
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
 require_once $lib_path.'fileDisplay.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once $lib_path.'course_category.lib.php';
 
 define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
@@ -622,7 +620,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
             // it isn't, we should create a fresh entry
-            event_login();
+            Event::event_login();
             // now that it's created, we can get its ID and carry on
             $q_last_connection = Database::query($sql_last_connection);
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');

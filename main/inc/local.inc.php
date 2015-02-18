@@ -128,7 +128,7 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
     Session::write('_user', $_user);
     Session::erase('conditional_login');
     $uidReset=true;
-    event_login();
+    Event::event_login();
 }
 
 // parameters passed via GET
@@ -351,7 +351,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status']  = $uData['status'];
                                         Session::write('_user', $_user);
-                                        event_login();
+                                        Event::event_login();
                                         $logging_in = true;
                                     } else {
                                         $loginFailed = true;
@@ -377,14 +377,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status']  = $uData['status'];
                                         Session::write('_user', $_user);
-                                        event_login();
+                                        Event::event_login();
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             $_user['user_id'] = $uData['user_id'];
                                             $_user['status']  = $uData['status'];
                                             Session::write('_user', $_user);
-                                            event_login();
+                                            Event::event_login();
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
@@ -403,7 +403,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 $_user['status']  = $uData['status'];
 
                                 Session::write('_user', $_user);
-                                event_login();
+                                Event::event_login();
                                 $logging_in = true;
                             }
                         } else {
@@ -650,7 +650,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     $_user['status']  = $uData['status'];
 
                                     Session::write('_user', $_user);
-                                    event_login();
+                                    Event::event_login();
                                 } else {
                                     $loginFailed = true;
                                     Session::erase('_uid');
@@ -837,7 +837,7 @@ if (isset($cidReset) && $cidReset) {
             if (!isset($_SESSION['login_as'])) {
                 //Course login
                 if (isset($_user['user_id'])) {
-                    event_course_login($_course['code'], $_user['user_id'], api_get_session_id());
+                    Event::event_course_login($_course['code'], $_user['user_id'], api_get_session_id());
                 }
             }
         } else {

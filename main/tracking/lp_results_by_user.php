@@ -136,11 +136,11 @@ foreach($course_list  as $current_course ) {
 	// Looping LPs
 	$lps = array();
 	foreach ($lp_list as $lp_id =>$lp) {
-		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['real_id']);
+		$exercise_list = Event::get_all_exercises_from_lp($lp_id, $course_info['real_id']);
 		$attempt_result = array();
 		//Looping Chamilo Exercises in LP
 		foreach ($exercise_list as $exercise) {
-			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'], $course_info['id'], $session_id);
+			$exercise_stats = Event::get_all_exercise_event_from_lp($exercise['path'], $course_info['id'], $session_id);
 			//Looping Exercise Attempts
 			foreach($exercise_stats as $stats) {
 				//$attempt_result[$exercise['id']]['users'][$stats['exe_user_id']][$stats['exe_id']] = array('exe_result' =>$stats['exe_result'],'exe_weighting' =>$stats['exe_weighting']);

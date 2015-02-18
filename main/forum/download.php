@@ -56,7 +56,7 @@ $tbl_forum_post 	   = Database::get_course_table(TABLE_FORUM_POST);
 $course_id = api_get_course_int_id();
 
 // launch event
-event_download($doc_url);
+Event::event_download($doc_url);
 
 $sql = 'SELECT thread_id, forum_id,filename
         FROM '.$tbl_forum_post.'  f

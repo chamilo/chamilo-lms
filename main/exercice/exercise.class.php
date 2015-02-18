@@ -1625,7 +1625,7 @@ class Exercise
                 AND session_id = ".$session_id."";
         Database::query($sql);
 
-        event_system(
+        Event::addEvent(
             LOG_EXERCISE_RESULT_DELETE,
             LOG_EXERCISE_ID,
             $this->id,
@@ -2192,7 +2192,7 @@ class Exercise
         $nano = null;
 
         if ($answerType == ORAL_EXPRESSION) {
-            $exe_info = get_exercise_results_by_attempt($exeId);
+            $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 
             $params = array();
@@ -3461,24 +3461,24 @@ class Exercise
                         if ($final_answer == 0) {
                             $questionScore = 0;
                         }
-                        exercise_attempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
+                        Event::saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
-                        exercise_attempt_hotspot($exeId,$quesId,1, $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
+                        Event::saveExerciseAttemptHotspot($exeId,$quesId,1, $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
                     } else {
                         if ($final_answer==0) {
                             $questionScore = 0;
                             $answer=0;
-                            exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+                            Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    exercise_attempt_hotspot($exeId,$quesId,$idx,0,$val);
+                                    Event::saveExerciseAttemptHotspot($exeId,$quesId,$idx,0,$val);
                                 }
                             }
                         } else {
-                            exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+                            Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val);
+                                    Event::saveExerciseAttemptHotspot($exeId,$quesId,$idx,$choice[$idx],$val);
                                 }
                             }
                         }
@@ -3531,11 +3531,11 @@ class Exercise
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        exercise_attempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
+                        Event::saveQuestionAttempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
                         if ($debug) error_log('result =>'.$questionScore.' '.$ans.':'.$choice[$ans]);
                     }
                 } else {
-                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 if ($choice != 0) {
@@ -3544,47 +3544,47 @@ class Exercise
                     if ($debug) error_log("reply ".print_r($reply, 1)."");
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
                 } else {
-                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
                 } else {
-                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MATCHING) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
-                        exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
+                        Event::saveQuestionAttempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
                     }
                 }
             } elseif ($answerType == FREE_ANSWER) {
                 $answer = $choice;
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
 
             } elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
                 $answer = $choice;
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT) {
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
-                        exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);
+                        Event::saveExerciseAttemptHotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);
                     }
                 }
             } else {
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0,$this->id);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0,$this->id);
             }
         }
 
@@ -3962,9 +3962,10 @@ class Exercise
      * @param 	int		attempt id
      * @return 	float 	exercise result
      */
-    public function get_exercise_result($exe_id) {
+    public function get_exercise_result($exe_id)
+    {
         $result = array();
-        $track_exercise_info = get_exercise_track_exercise_info($exe_id);
+        $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($exe_id);
 
         if (!empty($track_exercise_info)) {
             $totalScore = 0;
@@ -4091,7 +4092,7 @@ class Exercise
         if ($is_visible) {
             if ($exerciseAttempts > 0) {
 
-                $attempt_count = get_attempt_count_not_finished(
+                $attempt_count = Event::get_attempt_count_not_finished(
                     api_get_user_id(),
                     $this->id,
                     $lp_id,

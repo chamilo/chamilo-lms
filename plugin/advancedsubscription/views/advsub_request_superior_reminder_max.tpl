@@ -3,17 +3,6 @@
 <head>
 <meta charset="utf-8">
 <title>Solicitud recibida para el curso {{ session.name }}</title>
-<style type="text/css">
-.titulo {
-	color: #93c5cd;
-	font-family: "Times New Roman", Times, serif;
-	font-size: 24px;
-	font-weight: bold;
-	border-bottom-width: 2px;
-	border-bottom-style: solid;
-	border-bottom-color: #93c5cd;
- }
-</style>
 </head>
 
 <body>

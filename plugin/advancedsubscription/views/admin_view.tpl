@@ -1,68 +1,3 @@
-<style type="text/css">
-    .text-title-select{
-        display: inline-block;
-    }
-    #session-select{
-        display: inline-block;
-    }
-    .title-name-session{
-        display: block;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        font-weight: normal;
-        margin-top: 5px;
-        margin-bottom: 5px;
-    }
-    .badge-dis{
-        background-color: #008080;
-        font-size: 20px;
-    }
-    .badge-recom{
-        background-color:#88aa00 ;
-        font-size: 20px;
-    }
-    .separate-badge{
-        margin-bottom: 20px;
-        margin-top: 20px;
-    }
-    .date, .mode{
-        display: inline-block;
-    }
-    .img-circle{
-        border-radius: 500px;
-        -moz-border-radius: 500px;
-        -webkit-border-radius: 500px;
-    }
-    #student_table.table td{
-        vertical-align: middle;
-        text-align: center;
-    }
-    #student_table.table td.name{
-        color: #084B8A;
-        text-align: left;
-
-    }
-    #student_table.table th{
-        font-size: 14px;
-        vertical-align: middle;
-        text-align: center;
-    }
-    #modalMail{
-        width: 770px;
-        margin-top: -180px !important;
-        margin-left:  -385px !important;
-    }
-
-    #modalMail .modal-body {
-        height: 360px;
-        overflow: visible;
-    }
-
-    #iframeAdvsub {
-
-    }
-</style>
-
 <form id="form_advsub_admin" class="form-search" method="post" action="/plugin/advancedsubscription/src/admin_view.php" name="form_advsub_admin">
     <div class="row">
         <div class="span6">
@@ -151,7 +86,7 @@
                 <h4 class="modal-title" id="privacidadLabel">{{ "AdvancedSubscriptionAdminViewTitle" | get_plugin_lang('AdvancedSubscriptionPlugin')}}</h4>
             </div>
             <div class="modal-body">
-                <iframe id="iframeAdvsub" style="width: 100%; height: 100%;" frameBorder="0">
+                <iframe id="iframeAdvsub" frameBorder="0">
                 </iframe>
             </div>
             <div class="modal-footer">
@@ -160,6 +95,7 @@
         </div>
     </div>
 </div>
+<link href="{{ _p.web_plugin }}advancedsubscription/views/css/style.css" rel="stylesheet" type="text/css">
 <script>
     $(document).ready(function(){
         $("#session-select").change(function () {

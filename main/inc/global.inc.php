@@ -366,7 +366,7 @@ if (!empty($_POST['language_list'])) {
 }
 
 if (empty($user_language) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !isset($_SESSION['_user'])) {
-    $l = subLanguageManager::getLanguageFromBrowserPreference($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    $l = SubLanguageManager::getLanguageFromBrowserPreference($_SERVER['HTTP_ACCEPT_LANGUAGE']);
     if (!empty($l)) {
         $user_language = $browser_language = $l;
     }

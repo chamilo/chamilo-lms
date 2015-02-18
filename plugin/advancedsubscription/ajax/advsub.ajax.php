@@ -31,7 +31,7 @@ if ($verified) {
     switch($data['a']) {
         case 'check': // Check minimum requirements
             try {
-                $res = AdvancedSubscriptionPlugin::create()->isAbleToRequest($data['u'], $data);
+                $res = AdvancedSubscriptionPlugin::create()->isAllowedToDoRequest($data['u'], $data);
                 if ($res) {
                     $result['error'] = false;
                     $result['errorMessage'] = 'No error';
@@ -54,15 +54,15 @@ if ($verified) {
                 $sessionArray = api_get_session_info($data['s']);
                 $extraSession = new ExtraFieldValue('session');
                 $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'description');
-                $sessionArray['description'] = $var['field_valiue'];
+                $sessionArray['description'] = $var['field_value'];
                 $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'target');
-                $sessionArray['target'] = $var['field_valiue'];
+                $sessionArray['target'] = $var['field_value'];
                 $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'mode');
-                $sessionArray['mode'] = $var['field_valiue'];
+                $sessionArray['mode'] = $var['field_value'];
                 $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'publication_end_date');
                 $sessionArray['publication_end_date'] = $var['field_value'];
                 $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'recommended_number_of_participants');
-                $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
+                $sessionArray['recommended_number_of_participants'] = $var['field_value'];
                 // Get student data
                 $studentArray = api_get_user_info($data['u']);
                 $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);
@@ -160,15 +160,15 @@ if ($verified) {
                     $sessionArray = api_get_session_info($data['s']);
                     $extraSession = new ExtraFieldValue('session');
                     $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'description');
-                    $sessionArray['description'] = $var['field_valiue'];
+                    $sessionArray['description'] = $var['field_value'];
                     $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'target');
-                    $sessionArray['target'] = $var['field_valiue'];
+                    $sessionArray['target'] = $var['field_value'];
                     $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'mode');
-                    $sessionArray['mode'] = $var['field_valiue'];
+                    $sessionArray['mode'] = $var['field_value'];
                     $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'publication_end_date');
                     $sessionArray['publication_end_date'] = $var['field_value'];
                     $var = $extraSession->get_values_by_handler_and_field_variable($data['s'], 'recommended_number_of_participants');
-                    $sessionArray['recommended_number_of_participants'] = $var['field_valiue'];
+                    $sessionArray['recommended_number_of_participants'] = $var['field_value'];
                     // Prepare student data
                     $studentArray = api_get_user_info($data['u']);
                     $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);

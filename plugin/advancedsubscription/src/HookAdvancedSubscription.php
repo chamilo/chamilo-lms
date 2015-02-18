@@ -436,7 +436,7 @@ class HookAdvancedSubscription extends HookObserver implements
                     $data['action_url'] = $advsubPlugin->getSessionUrl($sessionId);
                 } else {
                     try {
-                        $isAble = $advsubPlugin->isAbleToRequest($userId, $params);
+                        $isAble = $advsubPlugin->isAllowedToDoRequest($userId, $params);
                         $data['message'] = $advsubPlugin->getStatusMessage($status, $isAble);
                     } catch (\Exception $e) {
                         $data['message'] = $e->getMessage();

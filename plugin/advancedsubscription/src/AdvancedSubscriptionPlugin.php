@@ -111,7 +111,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      * @throws Exception
      * @return bool
      */
-    public function isAbleToRequest($userId, $params = array())
+    public function isAllowedToDoRequest($userId, $params = array())
     {
         if (isset($params['is_connected']) && isset($params['profile_completed'])) {
             $isAble = false;
@@ -232,7 +232,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         if (!empty($sessionId) && !empty($userId)) {
             $advSub = self::create();
             try {
-                if ($advSub->isAbleToRequest($userId, $params)) {
+                if ($advSub->isAllowedToDoRequest($userId, $params)) {
                     $result = (bool) $advSub->addToQueue($userId, $sessionId);
                 } else {
                     throw new \Exception($this->get_lang('AdvancedSubscriptionNotMoreAble'));

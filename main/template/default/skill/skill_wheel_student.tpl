@@ -292,10 +292,10 @@ $(document).ready(function() {
                             <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default btn-block" target="_blank">{{ 'YourSkillRankingX' | get_lang | format(ranking) }}</a>
                         </p>
                         {% for i in 1..ranking if ranking > 0 %}
-                            <img src="{{ _p.web }}main/img/icons/22/award_red.png"/>
+                            <img src="{{ 'award_red.png' | icon(22) }}">
                         {% endfor %}
                         {% for i in 1..(countSkill - ranking) %}
-                            <img src="{{ _p.web }}main/img/icons/22/award_red_na.png"/>
+                            <img src="{{ 'award_red_na.png' | icon(22) }}">
                         {% endfor %}
                     </div>
                 </div>

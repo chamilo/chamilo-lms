@@ -103,7 +103,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Return true if user is able to be added to queue for session subscription
+     * Return true if user is allowed to be added to queue for session subscription
      * @param int $userId
      * @param array $params MUST have keys:
      * "is_connected" Indicate if the user is online on external web
@@ -181,6 +181,9 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function addToQueue($userId, $sessionId)
     {
+        // Filter input variables
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
         $now = api_get_utc_datetime();
         $pAdvSubQueueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
         $attributes = array(
@@ -205,6 +208,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function saveLastMessage($mailId, $userId, $sessionId)
     {
+        // Filter variables
+        $mailId = intval($mailId);
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
         $queueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
         $attributes = array(
             'last_message_id' => $mailId,
@@ -259,19 +266,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function sendMailMessage($studentId, $receiverId, $subject, $content, $sessionId, $save = false)
     {
-        global $_configuration; // @TODO: Add $_configuration['no_reply_user_id'] to configuration file
-
         $mailId = MessageManager::send_message(
             $receiverId,
             $subject,
-            $content,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $_configuration['no_reply_user_id']
+            $content
         );
 
         if ($save && !empty($mailId)) {
@@ -287,7 +285,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      * @param string $fieldVariable
      * @return bool
      */
-    public function isSessionOpen($sessionId, $fieldVariable = 'es_abierta')
+    public function isSessionOpen($sessionId, $fieldVariable = 'is_open_session')
     {
         $sessionId = (int) $sessionId;
         $fieldVariable = Database::escape_string($fieldVariable);
@@ -321,15 +319,16 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function updateQueueStatus($params, $newStatus)
     {
+        $newStatus = intval($newStatus);
         if (isset($params['queue']['id'])) {
             $where = array(
-                'id = ?' => $params['queue']['id'],
+                'id = ?' => intval($params['queue']['id']),
             );
         } elseif(isset($params['u']) && isset($params['s'])) {
             $where = array(
                 'user_id = ? AND session_id = ? AND status <> ? AND status <> ?' => array(
-                    $params['u'],
-                    $params['s'],
+                    intval($params['u']),
+                    intval($params['s']),
                     $newStatus,
                     ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED,
                 ),
@@ -750,7 +749,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getSessionUrl($sessionId)
     {
-        $url = api_get_path(WEB_CODE_PATH) . 'session/?session_id=' . $sessionId;
+        $url = api_get_path(WEB_CODE_PATH) . 'session/?session_id=' . intval($sessionId);
         return $url;
     }
 
@@ -762,14 +761,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function getQueueUrl($params)
     {
         $url = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
-            'a=' . $params['a'] . '&' .
-            's=' . $params['s'] . '&' .
-            'current_user_id=' . $params['current_user_id'] . '&' .
-            'e=' . $params['e'] . '&' .
-            'u=' . $params['u'] . '&' .
-            'q=' . $params['q'] . '&' .
-            'is_connected=' . $params['is_connected'] . '&' .
-            'profile_completed=' . $params['profile_completed'] . '&' .
+            'a=' . Security::remove_XSS($params['a']) . '&' .
+            's=' . intval($params['s']) . '&' .
+            'current_user_id=' . intval($params['current_user_id']) . '&' .
+            'e=' . intval($params['e']) . '&' .
+            'u=' . intval($params['u']) . '&' .
+            'q=' . intval($params['q']) . '&' .
+            'is_connected=' . intval($params['is_connected']) . '&' .
+            'profile_completed=' . intval($params['profile_completed']) . '&' .
             'v=' . $this->generateHash($params);
         return $url;
     }
@@ -781,6 +780,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function listAllStudentsInQueueBySession($sessionId)
     {
+        // Filter input variable
+        $sessionId = intval($sessionId);
         // Assign variables
         $fieldsArray = array('target', 'publication_end_date', 'mode', 'recommended_number_of_participants', 'vacancies');
         $sessionArray = api_get_session_info($sessionId);
@@ -851,13 +852,26 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
     /**
      * List all session (id, name) for select input
+     * @param int $length
      * @return array
      */
-    public function listAllSessions()
+    public function listAllSessions($length = 100)
     {
+        $length = intval($length);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $columns = 'id, name';
-        return Database::select($columns, $sessionTable);
+        $conditions = array();
+        if ($length > 0) {
+            $conditions = array(
+                'order' => array(
+                    'BY name LIMIT ?' => array(
+                        $length
+                    )
+                )
+            );
+        }
+
+        return Database::select($columns, $sessionTable, $conditions);
     }
 
     /**

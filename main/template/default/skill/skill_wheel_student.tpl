@@ -66,17 +66,6 @@ function load_skill_info(skill_id) {
     });
 }
 
-function load_my_skills() {
-    $.ajax({
-        url: url+'&a=get_user_skills&user_id='+{{ _u.user_id}},
-        //async: false,
-        success: function(data) {
-            $('#my_skills').html(data);
-        }
-    });
-}
-
-
 $(document).ready(function() {
     /* Skill search */
 
@@ -205,8 +194,6 @@ $(document).ready(function() {
 
     load_nodes(0, main_depth);
 
-    load_my_skills();
-
     function open_popup(skill_id, parent_id) {
         //Cleaning selected
         $("#gradebook_id").find('option').remove();
@@ -291,9 +278,15 @@ $(document).ready(function() {
                         <p>
                             <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default btn-block" target="_blank">{{ 'YourSkillRankingX' | get_lang | format(ranking) }}</a>
                         </p>
-                        {% for i in 1..ranking if ranking > 0 %}
-                            <img src="{{ 'award_red.png' | icon(22) }}">
-                        {% endfor %}
+                        {% if mySkills is not empty %}
+                            {%for skill in mySkills %}
+                                {% if skill.iconThumb is empty %}
+                                    <img src="{{ 'award_red.png' | icon(22) }}">
+                                {% else %}
+                                    <img src="{{ _p.web_data }}{{ skill.iconThumb }}" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                         {% for i in 1..(countSkill - ranking) %}
                             <img src="{{ 'award_red_na.png' | icon(22) }}">
                         {% endfor %}
@@ -309,21 +302,30 @@ $(document).ready(function() {
                 <!-- End Legend -->
                 <!-- ACCORDION -->
                 <div class="accordion" id="accordion2">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                <h4 class="title-skill">{{ 'MySkills'|get_lang }}</h4>
-                            </a>
-                        </div>
-                        <div id="collapseOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <!-- MY SKILLS -->
-                                <div id="my_skills" class="skill-items">
+                    {% if mySkills is not empty %}
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                                    <h4 class="title-skill">{{ 'MySkills'|get_lang }}</h4>
+                                </a>
+                            </div>
+                            <div id="collapseOne" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <!-- MY SKILLS -->
+                                    <div id="my_skills" class="skill-items">
+                                        <ul class="skill-winner">
+                                            {%for skill in mySkills %}
+                                                <li>
+                                                    <a class="" rel="{{ skill.id}}" href="#">{{ skill.name }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <!-- MY SKILLS -->
                                 </div>
-                                <!-- MY SKILLS -->
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">

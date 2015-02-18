@@ -504,6 +504,15 @@ define('SOCIAL_RIGHT_PLUGIN', 3);
 define('CUT_GROUP_NAME', 50);
 
 /**
+ * FormValidator Filter
+ */
+define('NO_HTML', 1);
+define('STUDENT_HTML', 2);
+define('TEACHER_HTML', 3);
+define('STUDENT_HTML_FULLPAGE', 4);
+define('TEACHER_HTML_FULLPAGE', 5);
+
+/**
  * Inclusion of internationalization libraries
  */
 require_once __DIR__.'/internationalization.lib.php';

@@ -2,15 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Filter
- */
-define('NO_HTML', 1);
-define('STUDENT_HTML', 2);
-define('TEACHER_HTML', 3);
-define('STUDENT_HTML_FULLPAGE', 4);
-define('TEACHER_HTML_FULLPAGE', 5);
-
-/**
  * Objects of this class can be used to create/manipulate/validate user input.
  */
 class FormValidator extends HTML_QuickForm
@@ -59,7 +50,7 @@ class FormValidator extends HTML_QuickForm
         $form_target = isset($form_data['target']) ? $form_data['target'] : '';
         $form_attributes = isset($form_data['attributes']) ? $form_data['attributes'] : null;
         $form_track_submit = isset($form_data['track_submit']) ? $form_data['track_submit'] : true;
-
+        $reset = null;
         $result = new FormValidator($form_name, $form_method, $form_action, $form_target, $form_attributes, $form_track_submit);
 
         $defaults = array();

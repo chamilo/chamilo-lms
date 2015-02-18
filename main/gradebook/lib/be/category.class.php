@@ -1625,6 +1625,14 @@ class Category implements GradebookItem
         $category = $cats_course[0];
 
         if (!$category->getGenerateCetificates()) {
+            $skill = new Skill();
+            $skill->add_skill_to_user(
+                $user_id,
+                $category_id,
+                api_get_course_int_id(),
+                api_get_session_id()
+            );
+
             return false;
         }
 

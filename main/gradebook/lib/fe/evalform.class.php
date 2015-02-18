@@ -271,12 +271,18 @@ class EvalForm extends FormValidator
             );
         }
 
+        $firstUser = true;
         foreach ($tblusers as $user) {
 
             $element_name = 'score[' . $user[0] . ']';
-
+            
+            $scoreColumnProperties = array('class' => 'span1', 'maxlength' => 5);
+            if ($firstUser) {
+                $scoreColumnProperties['autofocus'] = '';
+                $firstUser = false;
+            }
             //user_id, user.username, lastname, firstname
-            $this->add_textfield($element_name, $this->build_stud_label($user[0], $user[1], $user[2], $user[3]), false, array('class' => 'span1', 'maxlength' => 5));
+            $this->add_textfield($element_name, $this->build_stud_label($user[0], $user[1], $user[2], $user[3]), false, $scoreColumnProperties);
 
             $this->addRule($element_name, get_lang('OnlyNumbers'), 'numeric');
             $this->addRule(array($element_name, 'maxvalue'), get_lang('OverMax'), 'compare', '<=');

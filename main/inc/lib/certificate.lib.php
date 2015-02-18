@@ -185,7 +185,9 @@ class Certificate extends Model
             $skill = new Skill();
             $skill->add_skill_to_user(
                 $this->user_id,
-                $this->certificate_data['cat_id']
+                $this->certificate_data['cat_id'],
+                $courseId,
+                $sessionId
             );
 
             if (is_dir($this->certification_user_path)) {

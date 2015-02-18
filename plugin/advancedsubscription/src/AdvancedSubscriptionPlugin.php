@@ -852,22 +852,19 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
     /**
      * List all session (id, name) for select input
-     * @param int $length
+     * @param int $limit
      * @return array
      */
-    public function listAllSessions($length = 100)
+    public function listAllSessions($limit = 100)
     {
-        $length = intval($length);
+        $limit = intval($limit);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $columns = 'id, name';
         $conditions = array();
-        if ($length > 0) {
+        if ($limit > 0) {
             $conditions = array(
-                'order' => array(
-                    'BY name LIMIT ?' => array(
-                        $length
-                    )
-                )
+                'order' => 'name',
+                'limit' => $limit,
             );
         }
 

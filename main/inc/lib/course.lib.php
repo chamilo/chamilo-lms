@@ -3433,12 +3433,16 @@ class CourseManager
         // image name for courses
         $courseImage = $storePath.'/course-pic.png';
         $courseMediumImage = $storePath.'/course-pic85x85.png';
+        $courseSmallImage = $storePath.'/course-pic32.png';
 
         if (file_exists($courseImage)) {
             unlink($courseImage);
         }
         if (file_exists($courseMediumImage)) {
             unlink($courseMediumImage);
+        }
+        if (file_exists($courseSmallImage)) {
+            unlink($courseSmallImage);
         }
     }
 

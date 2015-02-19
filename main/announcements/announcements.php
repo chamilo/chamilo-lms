@@ -57,7 +57,7 @@ $course_id = api_get_course_int_id();
 $_course = api_get_course_info();
 
 /*	Tracking	*/
-event_access_tool(TOOL_ANNOUNCEMENT);
+Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
 /*	POST TO	*/
 $safe_emailTitle = isset($_POST['emailTitle']) ? $_POST['emailTitle'] : null;

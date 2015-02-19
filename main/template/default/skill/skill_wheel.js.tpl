@@ -349,7 +349,7 @@ function open_popup(skill_id, parent_id) {
         if ("{{ isAdministration }}") {
             $("#dialog-form").dialog({
                 buttons: {
-                    "{{ "Edit"|get_lang }}": function () {
+                    "{{ "Save"|get_lang }}": function () {
                         var params = $("#add_item").find(':input').serialize();
                         add_skill(params);
                     },

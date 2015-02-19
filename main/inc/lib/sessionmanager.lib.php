@@ -5431,7 +5431,7 @@ class SessionManager
     }
 
     /**
-     * Get a session list filtered by name, description or short description extra field
+     * Get a session list filtered by name, description or any of the given extra fields
      * @param string $term The term to search
      * @param array $extraFieldsToInclude Extra fields to include in the session data
      * @return array The list

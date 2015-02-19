@@ -4,12 +4,12 @@
 /**
 * A drop down list with all languages to use with QuickForm
 */
-class HTML_QuickForm_Select_Ajax extends HTML_QuickForm_select
+class SelectAjax extends HTML_QuickForm_select
 {
     /**
      * Class constructor
      */
-    function HTML_QuickForm_Select_Ajax($elementName = null, $elementLabel = null, $options = null, $attributes = null)
+    function SelectAjax($elementName = null, $elementLabel = null, $options = null, $attributes = null)
     {
         parent::HTML_QuickForm_Select($elementName, $elementLabel, $options, $attributes);
     }

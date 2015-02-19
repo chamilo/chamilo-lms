@@ -1015,21 +1015,21 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
     {
         $js = '@data_dir@' . DIRECTORY_SEPARATOR
             . '@package_name@' . DIRECTORY_SEPARATOR;
-        
-        $js = api_get_path(LIBRARY_PATH).'javascript'.DIRECTORY_SEPARATOR.'pear'.DIRECTORY_SEPARATOR; 
-		
+
+        $js = api_get_path(LIBRARY_PATH).'javascript'.DIRECTORY_SEPARATOR.'pear'.DIRECTORY_SEPARATOR;
+
         if ($min) {
             $js .= 'qfamsHandler-min.js';
         } else {
             $js .= 'qfamsHandler.js';
         }
 
-        if (file_exists($js)) {        	
-            $js = file_get_contents($js);            
+        if (file_exists($js)) {
+            $js = file_get_contents($js);
         } else {
             $js = '';
         }
-		
+
         if ($raw !== true) {
             $js = '<script type="text/javascript">'
                 . PHP_EOL . '//<![CDATA['
@@ -1174,9 +1174,4 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
         return $options;
     }
-}
-
-// @todo this fires an PHP notice, needed in order to parse the advmultiselect test it in main/group/group_edit.php
-if (class_exists('HTML_QuickForm')) {    
-    @HTML_QuickForm::registerElementType('advmultiselect','HTML/QuickForm/advmultiselect.php', 'HTML_QuickForm_advmultiselect');
 }

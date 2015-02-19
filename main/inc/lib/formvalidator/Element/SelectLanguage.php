@@ -4,12 +4,13 @@
 /**
 * A dropdownlist with all languages to use with QuickForm
 */
-class HTML_QuickForm_Select_Language extends HTML_QuickForm_select
+class SelectLanguage extends HTML_QuickForm_select
 {
 	/**
 	 * Class constructor
 	 */
-	function HTML_QuickForm_Select_Language($elementName=null, $elementLabel=null, $options=null, $attributes=null){
+	function SelectLanguage($elementName=null, $elementLabel=null, $options=null, $attributes=null)
+	{
 		if (!isset($attributes['class'])) {
 			$attributes['class'] = 'chzn-select';
 		}

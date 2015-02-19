@@ -786,3 +786,19 @@ function bracketsToArray($array)
 {
     return preg_split('/[\[\]]+/', $array, -1, PREG_SPLIT_NO_EMPTY);
 }
+
+/**
+ * @param string $string
+ * @param bool $capitalizeFirstCharacter
+ * @return mixed
+ */
+function underScoreToCamelCase($string, $capitalizeFirstCharacter = true)
+{
+    $str = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
+
+    if (!$capitalizeFirstCharacter) {
+        $str[0] = strtolower($str[0]);
+    }
+
+    return $str;
+}

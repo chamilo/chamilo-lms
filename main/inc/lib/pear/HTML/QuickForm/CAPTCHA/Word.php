@@ -72,13 +72,3 @@ class HTML_QuickForm_CAPTCHA_Word extends HTML_QuickForm_CAPTCHA
      */
     var $_CAPTCHA_driver = 'Word';
 }
-
-/**
- * Registers the class with QuickForm
- */
-if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerElementType('CAPTCHA_Word',
-            'HTML/QuickForm/CAPTCHA/Word.php', 'HTML_QuickForm_CAPTCHA_Word');
-}
-
-?>

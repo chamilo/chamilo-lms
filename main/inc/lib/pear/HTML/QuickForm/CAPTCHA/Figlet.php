@@ -107,14 +107,3 @@ class HTML_QuickForm_CAPTCHA_Figlet extends HTML_QuickForm_CAPTCHA
         return $html;
     }
 }
-
-/**
- * Registers the class with QuickForm
- */
-if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerElementType('CAPTCHA_Figlet',
-            'HTML/QuickForm/CAPTCHA/Figlet.php',
-            'HTML_QuickForm_CAPTCHA_Figlet');
-}
-
-?>

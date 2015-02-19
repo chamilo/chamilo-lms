@@ -74,14 +74,3 @@ class HTML_QuickForm_CAPTCHA_Equation extends HTML_QuickForm_CAPTCHA
      */
     var $_CAPTCHA_driver = 'Equation';
 }
-
-/**
- * Registers the class with QuickForm
- */
-if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerElementType('CAPTCHA_Equation',
-            'HTML/QuickForm/CAPTCHA/Equation.php',
-            'HTML_QuickForm_CAPTCHA_Equation');
-}
-
-?>

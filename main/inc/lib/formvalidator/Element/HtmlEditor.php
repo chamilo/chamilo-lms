@@ -6,7 +6,7 @@ use \Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 /**
  * A html editor field to use with QuickForm
  */
-class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
+class HtmlEditor extends HTML_QuickForm_textarea
 {
     /** @var \Chamilo\CoreBundle\Component\Editor\Editor */
     public $editor;
@@ -26,7 +26,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      * @param array $config	Optional configuration settings for the online editor.
      * @return bool
      */
-    public function HTML_QuickForm_html_editor($name = null, $elementLabel = null, $attributes = null, $config = null)
+    public function HtmlEditor($name = null, $elementLabel = null, $attributes = null, $config = null)
     {
         if (empty($name)) {
             return false;

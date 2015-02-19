@@ -287,7 +287,7 @@ $(document).ready(function() {
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
-                        {% for i in 1..(countSkill - ranking) %}
+                        {% for i in 1..(9 - ranking) %}
                             <img src="{{ 'award_red_na.png' | icon(22) }}">
                         {% endfor %}
                     </div>

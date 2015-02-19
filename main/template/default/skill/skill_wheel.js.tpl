@@ -369,8 +369,10 @@ function open_popup(skill_id, parent_id) {
             close: function() {
                 $("#name").attr('value','');
                 $("#description").attr('value', '');
-                //Redirect to the main root
-                load_nodes(0, main_depth);
+                if ("{{ isAdministration }}") {
+                    //Redirect to the main root
+                    load_nodes(0, main_depth);
+                }
             }
         });
 

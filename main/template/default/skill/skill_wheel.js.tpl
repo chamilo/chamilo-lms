@@ -324,10 +324,16 @@ function open_popup(skill_id, parent_id) {
     if (skill) {
         var parent_info = get_skill_info(skill.extra.parent_id);
 
-        $("#id").attr('value',   skill.id);
-        $("#name").attr('value', skill.name);
-        $("#short_code").attr('value', skill.short_code);                        
-        $("#description").attr('value', skill.description);                
+        if ("{{ isAdministration }}") {
+            $("#id").attr('value', skill.id);
+            $("#name").attr('value', skill.name);
+            $("#short_code").attr('value', skill.short_code);
+            $("#description").attr('value', skill.description);
+        } else {
+            $("#name").text(skill.name);
+            $("#short_code").text(skill.short_code);
+            $("#description").text(skill.description);
+        }
 
         //Filling parent_id                        
         $("#parent_id").append('<option class="selected" value="'+skill.extra.parent_id+'" selected="selected" >');            
@@ -338,32 +344,37 @@ function open_popup(skill_id, parent_id) {
         jQuery.each(skill.gradebooks, function(index, data) {                    
             $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
             $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
-        });            
+        });
+
+        if ("{{ isAdministration }}") {
+            $("#dialog-form").dialog({
+                buttons: {
+                    "{{ "Edit"|get_lang }}": function () {
+                        var params = $("#add_item").find(':input').serialize();
+                        add_skill(params);
+                    },
+                    /*"{{ "Delete"|get_lang }}" : function() {
+                     },*/
+                    "{{ "CreateChildSkill"|get_lang }}": function () {
+                        open_popup(0, skill.id);
+                    },
+                    "{{ "AddSkillToProfileSearch"|get_lang }}": function () {
+                        add_skill_in_profile_list(skill.id, skill.name);
+                    }
+                }
+            });
+        }
 
         $("#dialog-form").dialog({
-            buttons: {
-                 "{{ "Edit"|get_lang }}" : function() {
-                     var params = $("#add_item").find(':input').serialize();
-                     add_skill(params);                     
-                  },                                    
-                  /*"{{ "Delete"|get_lang }}" : function() {
-                  },*/
-                  "{{ "CreateChildSkill"|get_lang }}" : function() {                          
-                      open_popup(0, skill.id);
-                  },
-                  "{{ "AddSkillToProfileSearch"|get_lang }}" : function() {                          
-                      add_skill_in_profile_list(skill.id, skill.name);
-                  }
-            },
-            close: function() {     
+            close: function() {
                 $("#name").attr('value','');
                 $("#description").attr('value', '');
                 //Redirect to the main root
                 load_nodes(0, main_depth);
-
             }
-        });            
-        $("#dialog-form").dialog("open");            
+        });
+
+        $("#dialog-form").dialog("open");
     }  
 
     if (parent) {

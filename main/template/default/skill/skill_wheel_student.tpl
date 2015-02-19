@@ -388,3 +388,53 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
+
+<div id="dialog-form" style="">
+    <p class="validateTips"></p>
+    <form id="add_item" class="form-horizontal" name="form">
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label" for="name">{{ 'Name' | get_lang }}</label>
+                <div class="controls">
+                    <!--<input type="text" name="name" id="name" class="span4" readonly />-->
+                    <p id="name" class="span4">
+                    </p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">{{ 'ShortCode' | get_lang }}</label>
+                <div class="controls">
+                    <!--<input type="text" name="short_code" id="short_code" class="span2" readonly />-->
+                    <p id="short_code" class="span4">
+                    </p>
+                </div>
+            </div>
+            <div id="skill_row" class="control-group">
+                <label class="control-label" for="name">{{'Parent'|get_lang}}</label>
+                <div class="controls">
+                    <ul id="skill_edit_holder" class="holder holder_simple">
+                    </ul>
+                </div>
+            </div>
+            <div id="gradebook_row" class="control-group">
+                <label class="control-label" for="name">{{'Gradebook'|get_lang}}</label>
+                <div class="controls">
+                    <ul id="gradebook_holder" class="holder holder_simple">
+                    </ul>
+                    <span class="help-block">
+                    {{ 'WithCertificate'|get_lang }}
+                    </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="name">{{ 'Description'|get_lang }}</label>
+                <div class="controls">
+                    <!--<textarea name="description" id="description" class="span4" rows="7" readonly>
+                    </textarea>-->
+                    <p id="description" class="span4">
+                    </p>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

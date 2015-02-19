@@ -5533,6 +5533,113 @@ function WSUserSubscribedInCourse ($params)
     return (CourseManager::is_user_subscribed_in_course($userId,$courseCode));
 }
 
+/* Search session Web Service start */
+
+// Input params for WSSearchSession
+$server->wsdl->addComplexType(
+    'SearchSession',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'term' => array('name' => 'term', 'type' => 'xsd:string'),
+        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string')
+    )
+);
+
+//Output params for WSSearchSession
+$server->wsdl->addComplexType(
+    'searchedSessionExtra',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'variable' => array('name'=>'variable','type'=>'xsd:string'),
+        'value' => array('name'=>'value','type'=>'xsd:string')
+    )
+);
+
+$server->wsdl->addComplexType(
+    'searchedSessionExtras',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+        array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:searchedSessionExtra[]')
+    ),
+    'tns:searchedSessionExtra'
+);
+
+$server->wsdl->addComplexType(
+    'searchedSession',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'id' => array('name' => 'id', 'type' => 'xsd:int'),
+        'name' => array('name' => 'name', 'type' => 'xsd:string'),
+        'date_start' => array('name' => 'date_start', 'type' => 'xsd:string'),
+        'date_end' => array('name' => 'date_end', 'type' => 'xsd:string'),
+        'duration' => array('name' => 'duration', 'type' => 'xsd:string'),
+        'description' => array('name' => 'description', 'type' => 'xsd:string'),
+        'extra' => array('name' => 'extra', 'type' => 'tns:searchedSessionExtras'),
+    )
+);
+
+$server->wsdl->addComplexType(
+    'searchedSessionList',
+    'complexType',
+    'array', 
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+    array('ref' => 'SOAP-ENC:arrayType',
+        'wsdl:arrayType' => 'tns:searchedSession[]')
+    ),
+    'tns:searchedSession'
+);
+
+//Reister WSSearchSession
+$server->register(
+    'WSSearchSession',
+    array('SearchSession' => 'tns:SearchSession'),      // input parameters
+    array('return' => 'tns:searchedSessionList'),       // output parameters
+    'urn:WSRegistration',                               // namespace
+    'urn:WSRegistration#WSSearchSession',               // soapaction
+    'rpc',                                              // style
+    'encoded',                                          // use
+    'This service to get a session list filtered by name, description or short description extra field'    // documentation
+);
+
+/**
+* Web service to get a session list filtered by name, description or short description extra field
+* @param string Secret key
+* @param string $extraFields Extrafields to include in request result
+* @return array The list
+*/
+function WSSearchSession($term, $extraFields)
+{
+    $fieldsToInclude = explode(',', $extraFields);
+
+    foreach ($fieldsToInclude as &$field) {
+        if (empty($field)) {
+            continue;
+        }
+
+        $field = trim($field);
+    }
+
+    return SessionManager::searchSession($term, $fieldsToInclude);
+}
+
+/* Search session Web Service end */
+
 // Add more webservices by Hooks
 if (!empty($hook)) {
     $hook->setEventData(array('server' => $server));

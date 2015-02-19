@@ -5430,4 +5430,87 @@ class SessionManager
         ));
     }
 
+    /**
+     * Get a session list filtered by name, description or any of the given extra fields
+     * @param string $term The term to search
+     * @param array $extraFieldsToInclude Extra fields to include in the session data
+     * @return array The list
+     */
+    public static function searchSession($term, $extraFieldsToInclude = array())
+    {
+        $sTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+
+        $term = Database::escape_string($term);
+
+        $resultData = Database::select('id, name, date_start, date_end, duration, description', $sTable, array(
+            'where' => array(
+                "name LIKE %?% " => $term,
+                "OR description LIKE %?% " => $term,
+                "OR id IN (
+                    SELECT session_id
+                    FROM $sfvTable
+                    WHERE field_value LIKE %?%
+                ) " => $term
+            )
+        ));
+
+        if (empty($extraFieldsToInclude)) {
+            return $resultData;
+        }
+
+        $variables = array();
+        $variablePlaceHolders = array();
+
+        foreach ($extraFieldsToInclude as $sessionExtraField) {
+            $variablePlaceHolders[] = "?";
+            $variables[] = Database::escape_string($sessionExtraField);
+        }
+
+        $sessionExtraField = new ExtraField('session');
+        $fieldList = $sessionExtraField->get_all(array(
+            "field_variable IN ( " . implode(", ", $variablePlaceHolders) . " ) " => $variables
+        ));
+
+        $fields = array();
+
+        // Index session fields
+        foreach ($fieldList as $field) {
+            $fields[$field['id']] = $field['field_variable'];
+        }
+
+        // Get session field values
+        $extra = new ExtraFieldValue('session');
+        $sessionFieldValueList = $extra->get_all(
+            array(
+                "field_id IN ( " . implode(", ", $variablePlaceHolders) . " )" => array_keys($fields)
+            )
+        );
+
+        // Add session fields values to session list
+        foreach ($resultData as $id => &$session) {
+            foreach ($sessionFieldValueList as $sessionFieldValue) {
+                // Match session field values to session
+                if ($sessionFieldValue['session_id'] != $id) {
+                    continue;
+                }
+
+                // Check if session field value is set in session field list
+                if (!isset($fields[$sessionFieldValue['field_id']])) {
+                    continue;
+                }
+
+                $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
+                $extrafieldValue = $sessionFieldValue['field_value'];
+
+                $session['extra'][] = array(
+                    'variable' => $extrafieldVariable,
+                    'value' => $extrafieldValue
+                );
+            }
+        }
+
+        return $resultData;
+    }
+
 }

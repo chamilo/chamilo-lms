@@ -58,12 +58,7 @@ $form->addElement('hidden', 'description_type',$description_type);
 $form->addElement('hidden', 'sec_token',$token);
 $form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
-
-if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-	WCAG_rendering::prepare_admin_form($description_content, $form);
-} else {
-	$form->add_html_editor('contentDescription', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
-}
+$form->add_html_editor('contentDescription', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 
 // Set some default values
@@ -82,12 +77,4 @@ if (isset ($question[$description_type])) {
 	$message .= $question[$description_type];
 	Display::display_normal_message($message, false);
 }
-
-if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-	echo (WCAG_Rendering::editor_header());
-}
-
 $form->display();
-if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-	echo (WCAG_Rendering::editor_footer());
-}

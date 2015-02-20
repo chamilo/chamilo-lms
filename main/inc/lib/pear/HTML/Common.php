@@ -130,7 +130,7 @@ class HTML_Common
 
     /**
      * Returns an HTML formatted attribute string
-     * @param    array   $attributes
+     * @param array   $attributes
      * @return   string
      * @access   private
      */
@@ -142,9 +142,8 @@ class HTML_Common
             $charset = HTML_Common::charset();
             foreach ($attributes as $key => $value) {
             	// Modified by Ivan Tcholakov, 16-MAR-2010
-                //$strAttr .= ' ' . $key . '="' . htmlspecialchars($value, ENT_COMPAT, $charset) . '"';
-                $strAttr .= ' ' . $key . '="' . @htmlspecialchars($value, ENT_COMPAT, $charset) . '"';
-                //
+                $value = @htmlspecialchars($value, ENT_COMPAT, $charset);
+                $strAttr .= ' ' . $key . '="' . $value. '"';
             }
         }
         return $strAttr;

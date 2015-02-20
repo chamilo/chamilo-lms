@@ -389,5 +389,16 @@ $HumanAndTechnicalResources = "人力及科技資源";
 $Assessment = "評估程序";
 $AssessmentQuestions = "使用者如何被評估？有沒有策略以協助使用者掌握課題？";
 $AssessmentInformation = "考試問題範例、及格因素、提示及小技巧";
+$Height = "高度";
+$ResizingComment = "將圖像的尺寸改編為下面的尺寸(用像素表示)";
+$Width = "寬度";
+$Resizing = "重新定義尺寸";
+$NoResizingComment = "顯示所有圖像的原始尺寸, 沒有重新定義尺寸, 如果圖像大於顯示器的尺寸滾動條將自動顯示.";
+$ShowThumbnails = "顯示略圖";
+$SetSlideshowOptions = "幻燈設定";
+$SlideshowOptions = "幻燈選項";
+$NoResizing = "不可重新定義尺寸(預設)";
+$SlideShow = "幻燈片";
+$ViewSlideshow = "檢視幻燈";
 $UploadADocument = "上載文件";
 ?>

@@ -630,5 +630,16 @@ $HumanAndTechnicalResourcesInformation = "Scurta descriere a diferitelor persoan
 $Assessment = "Evaluare";
 $AssessmentQuestions = "Cum vor fi utilizatorii evaluati? Exista si alte strategii suplimentare pentru o intelegere cat mai buna a acestui subiect de discutie?";
 $AssessmentInformation = "Exemple de intrebari la examen. Crieteriu de succes. Indicatii si trucuri.";
+$Height = "Lungime";
+$ResizingComment = "redimensionati poza la dimensiunile urmatoare (in pixeli)";
+$Width = "Latime";
+$Resizing = "REDIMENSIONATI";
+$NoResizingComment = "Toate imaginile sunt la dimensiunile originale. Nu sunt redimensionate. Pentru imaginile prea mari folositi barele ajutatoare.";
+$ShowThumbnails = "Aratati Thumbnails";
+$SetSlideshowOptions = "Setati optiunile prezentarii";
+$SlideshowOptions = "Optiunile prezentarii";
+$NoResizing = "NEREDIMENSIONAT (original)";
+$SlideShow = "Prezentare";
+$ViewSlideshow = "Vedeti prezentarea";
 $UploadADocument = "Incarcati documentul";
 ?>

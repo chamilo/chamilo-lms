@@ -359,5 +359,16 @@ $HumanAndTechnicalResourcesInformation = "Değişik bağlantı kurulabilecek ki�
 $Assessment = "Değerlendirme";
 $AssessmentQuestions = "Kullanıcılar nasıl değerlendirilecek? Ana başlıklar düzenini geliştirirken bir strateji varmı?";
 $AssessmentInformation = "Örnek sınav soruları. Başarı ölçütleri. İpuçları.";
+$Height = "Yükseklik";
+$ResizingComment = "görüntüyü şu boyutlara göre ayarla (pixel olarak)";
+$Width = "Genişlik";
+$Resizing = "YENİDEN BOYUTLANDIR";
+$NoResizingComment = "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size.";
+$ShowThumbnails = "Tırnak resimleri göster";
+$SetSlideshowOptions = "Slayt Gösterisi seçeneklerini ayarla";
+$SlideshowOptions = "Slayt Gösterisi seçenekleri";
+$NoResizing = "YENİDEN BOYUTLANDIRMA YOK (Varsayılan)";
+$SlideShow = "Slayt Gösterisi";
+$ViewSlideshow = "Slayt Gösterisini görüntüle";
 $UploadADocument = "Belge gönder";
 ?>

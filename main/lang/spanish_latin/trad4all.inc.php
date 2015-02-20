@@ -397,6 +397,17 @@ $HumanAndTechnicalResourcesInformation = "Breve descripción de las personas de 
 $Assessment = "Asignaciones";
 $AssessmentQuestions = "¿ Cómo van a ser evaluados los estudiantes ? ¿ Cuáles son las estrategias para que éstos acaben dominando la materia ?";
 $AssessmentInformation = "Ejemplos de las preguntas de examen. Criterios de evaluación. Pistas y trucos.";
+$Height = "Alto";
+$ResizingComment = "reajuste la imagen a las siguientes dimensiones (en pixeles)";
+$Width = "Ancho";
+$Resizing = "REDIMENSIONAR";
+$NoResizingComment = "Muestra todas las imágenes en su tamaño original. Ningún reajuste se ha hecho. Las barras de desplazamiento aparecerán automáticamente si la imagen es más larga que el tamaño de su monitor.";
+$ShowThumbnails = "Mostrar Miniaturas";
+$SetSlideshowOptions = "Configurar Opciones de la Presentación";
+$SlideshowOptions = "Opciones de la Presentación";
+$NoResizing = "NO REDIMENSIONADO (por defecto)";
+$SlideShow = "Presentación";
+$ViewSlideshow = "Ver Presentación";
 $UploadADocument = "Subir un documento";
 $LowerCaseUser = "usuario";
 ?>

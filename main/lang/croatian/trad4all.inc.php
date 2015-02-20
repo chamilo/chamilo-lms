@@ -595,5 +595,16 @@ $HumanAndTechnicalResourcesInformation = "Kratki opis za identifikaciju različi
 $Assessment = "Ocjenjivanje";
 $AssessmentQuestions = "Kako će korisnici biti ocjenjivani? Postoje li određene tehnike za svladavanje pojedinih tema?";
 $AssessmentInformation = "Primjer ispitnog pitanja. Kriteriji uspješnosti. Savjeti i naputci.";
+$Height = "Visina";
+$ResizingComment = "izmijeni veličinu slike prema sljedećim dimenzijama (u pikselima)";
+$Width = "Širina";
+$Resizing = "IZMIJENI VELIČINU";
+$NoResizingComment = "Sve slike prikaži u izvornim veličinama. Ne izmjenjuj veličinu. Pomične vrpce automatski će se pojaviti ako je slika veća od veličine vašeg monitora.";
+$ShowThumbnails = "Prikaži projekcijske minijature";
+$SetSlideshowOptions = "Prilagodite projekcijske mogućnosti";
+$SlideshowOptions = "Projekcijske mogućnosti";
+$NoResizing = "NEMA IZMJENE VELIČINA (izvorna postavka)";
+$SlideShow = "Projekcija";
+$ViewSlideshow = "Prikaži projekciju";
 $UploadADocument = "Učitaj dokument";
 ?>

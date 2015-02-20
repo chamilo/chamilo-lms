@@ -652,5 +652,16 @@ $HumanAndTechnicalResourcesInformation = "A különböző kapcsolattartó szemé
 $Assessment = "Értékelés";
 $AssessmentQuestions = "Hogyan lesznek értékelve a résztvevők?";
 $AssessmentInformation = "Példa teszt kérdések. A sikeres teljesítés feltétele. Tippek és trükkök.";
+$Height = "Szélesség";
+$ResizingComment = "Kép átméretezése a következő kiterjedésre (pixelben)";
+$Width = "Hosszúság";
+$Resizing = "Átméretezés";
+$NoResizingComment = "Minden kép eredeti méretben látszik. Nem lett átméretezés végrehajtva. Ha a kép nagyobb, mint a képernyő mérete, gördítősáv fog megjelenni automatikusan.";
+$ShowThumbnails = "Bélyegképek mutatása";
+$SetSlideshowOptions = "Diavetítés tulajdonságainak beállítása";
+$SlideshowOptions = "Diavetítés tulajdonságai";
+$NoResizing = "NINCS ÁTMÉRETEZÉS (alapértelmezett)";
+$SlideShow = "Diavetítés";
+$ViewSlideshow = "Diavetítés megtekintése";
 $UploadADocument = "Dokumentum feltöltése";
 ?>

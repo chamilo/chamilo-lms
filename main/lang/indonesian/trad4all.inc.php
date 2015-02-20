@@ -332,5 +332,16 @@ $HumanAndTechnicalResourcesInformation = "Deskripsi singkat identitas contact pe
 $Assessment = "Evaluasi";
 $AssessmentQuestions = "Bagaimana user akan divaluasi? Adakah strategi yang dikembangkan untuk menguasai topik tsb?";
 $AssessmentInformation = "Contoh pertanyaan ujian. Kreteria sukses. Tips dan trik.";
+$Height = "Tinggi";
+$ResizingComment = "ubah ukuran gambar ke dimensi berikut ini (dalam pixel)";
+$Width = "Lebar";
+$Resizing = "UBAH UKURAN";
+$NoResizingComment = "Tampilkan semua image dalam ukuran aslinya. Tidak ada perubahan ukuran. Scrollbars akan otomatis tampil jika gambar lebih besar dari ukuran monitor anda.";
+$ShowThumbnails = "Tampilkan Thumbnails";
+$SetSlideshowOptions = "Set opsi Slideshow";
+$SlideshowOptions = "Opsi Slideshow";
+$NoResizing = "TANPA PERUBAHAN UKURAN (default)";
+$SlideShow = "Slideshow";
+$ViewSlideshow = "Lihat Slideshow";
 $UploadADocument = "Upload dokumen";
 ?>

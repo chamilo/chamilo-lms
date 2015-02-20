@@ -320,5 +320,16 @@ $UserOnlineListSession = "Seznam studentů aktualně přihlášených - Výuka";
 $From = "Od";
 $To = "Komu";
 $NoUsersInCourse = "Žádný uživatelé v kurzu";
+$Height = "Výška";
+$ResizingComment = "změnit velikost obrázku na nasledující rozměry (v pixlech)";
+$Width = "Šířka";
+$Resizing = "ZMĚNIT VELIKOST";
+$NoResizingComment = "Zobraz všechny obrázky v jejich původním rozměru. Nenastane změna velikosti. Rolovací lišty se vám zobrazí automaticky, když bude obrázek větší než je rozměr vaší obrazovky.";
+$ShowThumbnails = "Zobraz Miniatury";
+$SetSlideshowOptions = "Nastavit možnosti prezentace";
+$SlideshowOptions = "Možnosti prezentace";
+$NoResizing = "NEMĚNIT VELIKOST (přednastavené)";
+$SlideShow = "Prezentace";
+$ViewSlideshow = "Zobraz prezentaci";
 $UploadADocument = "Uložit dokument na server";
 ?>

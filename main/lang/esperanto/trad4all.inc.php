@@ -349,5 +349,16 @@ $HumanAndTechnicalResourcesInformation = "Mallonga priskribo pri la diversaj kon
 $Assessment = "Pritakso";
 $AssessmentQuestions = "Kiel oni prijuĝos la uzulojn? Ĉu ekzistas utilaj strategioj por regi la studobjekton?";
 $AssessmentInformation = "Ekzemplaj ekzamenaj demandoj. Sukceskriterioj. Konsiletoj.";
+$Height = "Alto";
+$ResizingComment = "Adapti la grandon de la bildo al jenaj dimensioj (en rastrumeroj)";
+$Width = "Larĝo";
+$Resizing = "ADAPTI DIMENSIOJN";
+$NoResizingComment = "Montru ĉiujn bildojn laŭ ilia originala grando. La bildoj ne estos pligrandigitaj aŭ malpligrandigitaj. Ŝoviloj aperos, se la bildo pli grandas ol via ekrano.";
+$ShowThumbnails = "Montru miniaturojn";
+$SetSlideshowOptions = "Agordoj de la lumbilda prezentado";
+$SlideshowOptions = "Opcioj de la lumbilda prezentado";
+$NoResizing = "NE ADAPTI DIMENSIOJN (elektu apriorajn)";
+$SlideShow = "Lumbilda prezentado";
+$ViewSlideshow = "Montri prezentadon";
 $UploadADocument = "alŝuti dokumenton";
 ?>

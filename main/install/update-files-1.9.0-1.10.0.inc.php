@@ -26,6 +26,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     foreach ($list as $entry) {
         if (is_dir($langPath.$entry)) {
             unlink($langPath.$entry.'/chat.inc.php');
+            unlink($langPath.$entry.'/slideshow.inc.php');
         }
     }
 

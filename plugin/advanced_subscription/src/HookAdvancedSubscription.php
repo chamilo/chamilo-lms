@@ -3,7 +3,7 @@
 /**
  * Hook Observer for Advanced subscription plugin
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
- * @package chamilo.plugin.advancedsubscription
+ * @package chamilo.plugin.advanced_subscription
  */
 
 require_once __DIR__ . '/../config.php';
@@ -17,8 +17,8 @@ class HookAdvancedSubscription extends HookObserver implements
     protected function __construct()
     {
         parent::__construct(
-            'plugin/advancedsubscription/src/HookAdvancedSubscription.class.php',
-            'advancedsubscription'
+            'plugin/advanced_subscription/src/HookAdvancedSubscription.class.php',
+            'advanced_subscription'
         );
     }
 
@@ -35,7 +35,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
             if (isset($data['blocks'])) {
                 $data['blocks']['sessions']['items'][] = array(
-                    'url' => '../../plugin/advancedsubscription/src/admin_view.php',
+                    'url' => '../../plugin/advanced_subscription/src/admin_view.php',
                     'label' => get_plugin_lang('plugin_title', 'AdvancedSubscriptionPlugin'),
                 );
             }

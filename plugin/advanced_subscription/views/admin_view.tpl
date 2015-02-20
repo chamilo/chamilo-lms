@@ -1,4 +1,4 @@
-<form id="form_advsub_admin" class="form-search" method="post" action="/plugin/advancedsubscription/src/admin_view.php" name="form_advsub_admin">
+<form id="form_advsub_admin" class="form-search" method="post" action="/plugin/advanced_subscription/src/admin_view.php" name="form_advsub_admin">
     <div class="row">
         <div class="span6">
             <p class="text-title-select">{{ 'SelectASession' | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>

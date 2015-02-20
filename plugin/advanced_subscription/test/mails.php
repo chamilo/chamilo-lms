@@ -79,7 +79,7 @@ $data['admin'] = current($adminsArray);
 $data['session'] = $sessionArray;
 $data['signature'] = api_get_setting('Institution');
 $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) .
-    'advancedsubscription/src/admin_view.php?s=' . $data['s'];
+    'advanced_subscription/src/admin_view.php?s=' . $data['s'];
 $data['e'] = ADV_SUB_QUEUE_STATUS_BOSS_APPROVED;
 $data['student']['acceptUrl'] = $plugin->getQueueUrl($data);
 $data['e'] = ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED;
@@ -115,7 +115,7 @@ foreach ($files as $k =>&$file) {
         $file != 'admin_view.tpl'
     ) {
         echo '<pre>', $file, '</pre>';
-        echo $tpl->fetch('/advancedsubscription/views/' . $file);
+        echo $tpl->fetch('/advanced_subscription/views/' . $file);
     } else {
         unset($files[$k]);
     }

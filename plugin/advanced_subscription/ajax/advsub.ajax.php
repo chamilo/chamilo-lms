@@ -3,7 +3,7 @@
 /**
  * Script to receipt request to subscribe and confirmation action to queue
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
- * @package chamilo.plugin.advancedsubscription
+ * @package chamilo.plugin.advanced_subscription
  */
 
 /**
@@ -113,7 +113,7 @@ if ($verified) {
                     if (!empty($res)) {
                         // Prepare admin url
                         $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) .
-                            'advancedsubscription/src/admin_view.php?s=' . $data['s'];
+                            'advanced_subscription/src/admin_view.php?s=' . $data['s'];
                         // Send mails
                         $result['mailIds'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS);
                         // Check if mails were sent
@@ -225,7 +225,7 @@ if ($verified) {
                     $data['admins'] = $adminsArray;
                     $data['session'] = $sessionArray;
                     $data['signature'] = api_get_setting('Institution');
-                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/src/admin_view.php?s=' . $data['s'];
+                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/admin_view.php?s=' . $data['s'];
                     // Check if exist and action in data
                     if (empty($data['action'])) {
                         // set action in data by new status

@@ -2,7 +2,7 @@
 /* For license terms, see /license.txt */
 /**
  * Index of the Advanced subscription plugin courses list
- * @package chamilo.plugin.advancedsubscription
+ * @package chamilo.plugin.advanced_subscription
  */
 /**
  * Init
@@ -81,7 +81,7 @@ $tpl->assign('sessionItems', $sessionList);
 $tpl->assign('approveAdmin', ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED);
 $tpl->assign('disapproveAdmin', ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED);
 // Get rendered template
-$content = $tpl->fetch('/advancedsubscription/views/admin_view.tpl');
+$content = $tpl->fetch('/advanced_subscription/views/admin_view.tpl');
 // Assign into content
 $tpl->assign('content', $content);
 // Display

@@ -4,12 +4,13 @@
  * @TODO: Improve description
  * This class is used to add an advanced subscription allowing the admin to
  * create user queues requesting a subscribe to a session
- * @package chamilo.plugin.advancedsubscription
+ * @package chamilo.plugin.advanced_subscription
  */
 
 
 class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 {
+    protected $strings;
     /**
      * Constructor
      */
@@ -99,7 +100,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
         /* Delete settings */
         $tSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        Database::query("DELETE FROM $tSettings WHERE subkey = 'advancedsubscription'");
+        Database::query("DELETE FROM $tSettings WHERE subkey = 'advanced_subscription'");
     }
 
     /**
@@ -383,7 +384,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
-                    $tpl->fetch('/advancedsubscription/views/student_notice_student.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/student_notice_student.tpl'),
                     $data['s']
                 );
                 // Mail to superior
@@ -391,7 +392,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
-                    $tpl->fetch('/advancedsubscription/views/student_notice_superior.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/student_notice_superior.tpl'),
                     $data['s'],
                     true
                 );
@@ -402,7 +403,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailBossAccept'),
-                    $tpl->fetch('/advancedsubscription/views/superior_accepted_notice_student.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/superior_accepted_notice_student.tpl'),
                     $data['s']
                 );
                 // Mail to superior
@@ -410,7 +411,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailBossAccept'),
-                    $tpl->fetch('/advancedsubscription/views/superior_accepted_notice_superior.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/superior_accepted_notice_superior.tpl'),
                     $data['s']
                 );
                 // Mail to admin
@@ -420,7 +421,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $data['u'],
                         $adminId,
                         $this->get_lang('MailBossAccept'),
-                        $tpl->fetch('/advancedsubscription/views/superior_accepted_notice_admin.tpl'),
+                        $tpl->fetch('/advanced_subscription/views/superior_accepted_notice_admin.tpl'),
                         $data['s'],
                         true
                     );
@@ -432,7 +433,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailBossReject'),
-                    $tpl->fetch('/advancedsubscription/views/superior_rejected_notice_student.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/superior_rejected_notice_student.tpl'),
                     $data['s'],
                     true
                 );
@@ -441,7 +442,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailBossReject'),
-                    $tpl->fetch('/advancedsubscription/views/superior_rejected_notice_superior.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/superior_rejected_notice_superior.tpl'),
                     $data['s']
                 );
                 break;
@@ -451,7 +452,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequestSelect'),
-                    $tpl->fetch('/advancedsubscription/views/student_notice_student.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/student_notice_student.tpl'),
                     $data['s']
                 );
                 // Mail to superior
@@ -459,7 +460,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequestSelect'),
-                    $tpl->fetch('/advancedsubscription/views/student_notice_superior.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/student_notice_superior.tpl'),
                     $data['s'],
                     true
                 );
@@ -470,7 +471,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailAdminAccept'),
-                    $tpl->fetch('/advancedsubscription/views/admin_accepted_notice_student.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/admin_accepted_notice_student.tpl'),
                     $data['s']
                 );
                 // Mail to superior
@@ -478,7 +479,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailAdminAccept'),
-                    $tpl->fetch('/advancedsubscription/views/admin_accepted_notice_superior.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/admin_accepted_notice_superior.tpl'),
                     $data['s']
                 );
                 // Mail to admin
@@ -488,7 +489,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $adminId,
                     $this->get_lang('MailAdminAccept'),
-                    $tpl->fetch('/advancedsubscription/views/admin_accepted_notice_admin.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/admin_accepted_notice_admin.tpl'),
                     $data['s'],
                     true
                 );
@@ -499,7 +500,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailAdminReject'),
-                    $tpl->fetch('/advancedsubscription/views/admin_rejected_notice_student.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/admin_rejected_notice_student.tpl'),
                     $data['s'],
                     true
                 );
@@ -508,7 +509,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailAdminReject'),
-                    $tpl->fetch('/advancedsubscription/views/admin_rejected_notice_superior.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/admin_rejected_notice_superior.tpl'),
                     $data['s']
                 );
                 // Mail to admin
@@ -518,7 +519,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $adminId,
                     $this->get_lang('MailAdminReject'),
-                    $tpl->fetch('/advancedsubscription/views/admin_rejected_notice_admin.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/admin_rejected_notice_admin.tpl'),
                     $data['s']
                 );
                 break;
@@ -528,7 +529,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequestNoBoss'),
-                    $tpl->fetch('/advancedsubscription/views/student_no_superior_notice_student.tpl'),
+                    $tpl->fetch('/advanced_subscription/views/student_no_superior_notice_student.tpl'),
                     $data['s']
                 );
                 // Mail to admin
@@ -538,7 +539,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $data['u'],
                         $adminId,
                         $this->get_lang('MailStudentRequestNoBoss'),
-                        $tpl->fetch('/advancedsubscription/views/student_no_superior_notice_admin.tpl'),
+                        $tpl->fetch('/advanced_subscription/views/student_no_superior_notice_admin.tpl'),
                         $data['s'],
                         true
                     );
@@ -760,7 +761,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getQueueUrl($params)
     {
-        $url = api_get_path(WEB_PLUGIN_PATH) . 'advancedsubscription/ajax/advsub.ajax.php?' .
+        $url = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/ajax/advsub.ajax.php?' .
             'a=' . Security::remove_XSS($params['a']) . '&' .
             's=' . intval($params['s']) . '&' .
             'current_user_id=' . intval($params['current_user_id']) . '&' .
@@ -899,5 +900,15 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function checkHash($data, $hash)
     {
         return $this->generateHash($data) == $hash;
+    }
+
+    /**
+     * Copied and fixed from plugin.class.php
+     * Returns the "system" name of the plugin in lowercase letters
+     * @return string
+     */
+    public function get_name()
+    {
+        return 'advanced_subscription';
     }
 }

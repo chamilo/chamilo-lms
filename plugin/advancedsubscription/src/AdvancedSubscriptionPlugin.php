@@ -528,7 +528,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['u'],
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequestNoBoss'),
-                    $tpl->fetch('/advancedsubscription/views/advsub_request_received_no_boss.tpl'),
+                    $tpl->fetch('/advancedsubscription/views/advsub_request_received_no_superior.tpl'),
                     $data['s']
                 );
                 // Mail to admin
@@ -538,7 +538,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $data['u'],
                         $adminId,
                         $this->get_lang('MailStudentRequestNoBoss'),
-                        $tpl->fetch('/advancedsubscription/views/advsub_request_approved_info_admin.tpl'),
+                        $tpl->fetch('/advancedsubscription/views/advsub_request_no_superior_info_admin.tpl'),
                         $data['s'],
                         true
                     );

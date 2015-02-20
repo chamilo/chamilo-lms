@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Solicitud recibida para el curso {{ session.name }}</title>
+    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</title>
 </head>
 
 <body>
@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">Información: Solicitud pendiente de aprobación para el curso {{ session.name }}</td>
+                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleReminderStudent"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -47,12 +47,12 @@
                 </tr>
                 <tr>
                     <td height="356">&nbsp;</td>
-                    <td valign="top"><p>Estimado:</p>
+                    <td valign="top"><p>{{ "MailDear" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h2>{{ student.complete_name }}</h2>
-                        <p>Este correo es para confirmar que hemos recibido y registrado su solicitud de inscripción al  curso <strong>{{ session.name }}</strong>, por iniciarse el <strong>{{ session.date_start }}</strong>. </p>
-                        <p>Su inscripción todavía no ha sido aprobada por su superior, por lo que hemos vuelto a enviarle un correo electrónico de recordatorio.</p>
-                        <p>Gracias por su paciencia.</p>
-                        <p><strong>Equipo Forge</strong></p></td>
+                        <p>{{ "MailContentReminderStudent"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name, session.date_start) }}</p>
+                        <p>{{ "MailContentReminderStudentSecond"| get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
+                        <p>{{ "MailThankYouCollaboration"| get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
+                        <p>{{ signature }}</p></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>

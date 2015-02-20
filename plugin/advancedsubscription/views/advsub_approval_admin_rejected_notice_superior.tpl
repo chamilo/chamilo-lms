@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Solicitud recibida para el curso {{ session.name }}</title>
+    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</title>
 </head>
 
 <body>
@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">Información: Rechazo de inscripción de {{ student.complete_name }} al curso {{ session.name }} </td>
+                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleAdminRejectToSuperior"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(student.complete_name, session.name) }}</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -47,10 +47,10 @@
                 </tr>
                 <tr>
                     <td height="356">&nbsp;</td>
-                    <td valign="top"><p>Estimado:</p>
+                    <td valign="top"><p>{{ "MailDear" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h2>{{ superior.complete_name }}</h2>
-                        <p>La inscripción de <strong>{{ student.complete_name }}</strong> al curso <strong>{{ session.name }}</strong>, que había aprobado anteriormente, fue rechazada por falta de cupos. Les presentamos nuestras disculpas sinceras.</p>
-                        <p>Gracias.</p>
+                        <p>{{ "MailContentAdminRejectToSuperior"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(student.complete_name, session.name) }}</p>
+                        <p>{{ "MailThankYou" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h3>{{ signature }}</h3></td>
                     <td>&nbsp;</td>
                 </tr>

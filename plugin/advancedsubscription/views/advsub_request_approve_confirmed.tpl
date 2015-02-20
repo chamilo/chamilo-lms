@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Solicitud recibida para el curso {{ session.name }}</title>
+    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</title>
 </head>
 
 <body>
@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">Confirmación: Aprobación recibida para {{ student.complete_name }} </td>
+                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleSuperiorAcceptToSuperior"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(student.complete_name) }}</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -47,11 +47,11 @@
                 </tr>
                 <tr>
                     <td height="356">&nbsp;</td>
-                    <td valign="top"><p>Estimado:</p>
+                    <td valign="top"><p>{{ "MailDear" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h2>{{ superior.complete_name }}</h2>
-                        <p>Hemos recibido y registrado su decisión de aprobar el curso <strong>{{ session.name }}</strong> para su colaborador <strong>{{ student.complete_name }}</strong></p>
-                        <p>Ahora la inscripción al curso está pendiente de la disponibilidad de cupos. Le mantendremos informado sobre el resultado de esta etapa</p>
-                        <p>Gracias por su colaboración.</p>
+                        <p>{{ "MailContentSuperiorAcceptToSuperior"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name, student.complete_name) }}</p>
+                        <p>{{ "MailContentSuperiorAcceptToSuperiorSecond"| get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
+                        <p>{{ "MailThankYouCollaboration" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h3>{{ signature }}</h3></td>
                     <td>&nbsp;</td>
                 </tr>

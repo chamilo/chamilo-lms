@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Solicitud recibida para el curso {{ session.name }}</title>
+    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</title>
 </head>
 
 <body>
@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">Solicitud recibida para el curso {{ session.name }}</td>
+                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleStudentRequestNoSuperiorToStudent"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name) }}</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -47,12 +47,12 @@
                 </tr>
                 <tr>
                     <td height="356">&nbsp;</td>
-                    <td valign="top"><p>Estimado:</p>
+                    <td valign="top"><p>{{ "MailDear" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h2>{{ student.complete_name }}</h2>
-                        <p>Hemos recibido y registrado su solicitud de inscripción al curso <strong>{{ session.name }}</strong> para iniciarse el <strong>{{ session.date_start }}</strong>.</p>
-                        <p>Su inscripción es pendiente de la disponibilidad de cupos. Pronto recibirá los resultados de su aprobación de su solicitud.</p>
-                        <p>Gracias.</p>
-                        <p><strong>Equipo Forge</strong></p></td>
+                        <p>{{ "MailContentStudentRequestNoSuperiorToStudent"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name, session.date_start) }}</p>
+                        <p>{{ "MailContentStudentRequestNoSuperiorToStudentSecond"| get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
+                        <p>{{ "MailThankYou" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
+                        <p>{{ signature }}</p></td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>

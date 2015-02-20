@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleAdminAcceptToAdmin" | get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</td>
+                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleAdminAcceptToStudent" | get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>

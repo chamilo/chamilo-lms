@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Solicitud recibida para el curso {{ session.name }}</title>
+    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</title>
 </head>
 
 <body>
@@ -32,7 +32,7 @@
       </tr>
       <tr>
         <td>&nbsp;</td>
-        <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">Recordatorio: Solicitud de consideración de curso para colaborador(es)</td>
+        <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleReminderMaxSuperior" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -47,10 +47,11 @@
       </tr>
       <tr>
         <td height="356">&nbsp;</td>
-        <td valign="top"><p>Estimado:</p>
+        <td valign="top">
+          <p>{{ "MailDear" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
           <h2>{{ superior.complete_name }}</h2>
-          <p>Le recordamos que hemos recibido las siguientes solicitudes de suscripción<strong> </strong>al curso <strong>{{ session.name }}</strong> de parte de sus colaboradores. El curso se iniciará el <strong>{{ session.date_start }}</strong>. Detalles del curso: <strong>{{ session.description }}</strong>. </p>
-          <p>Este curso tiene una cantidad de cupos limitados y ha recibido una alta tasa de solicitudes de inscripción, por lo que recomendamos que cada área apruebe un máximo de <strong>{{ session.recommended_number_of_participants }}</strong> candidatos. Le invitamos a aprobar o desaprobar las suscripciones, dando clic en el botón correspondiente a continuación para cada colaborador.</p>
+            <p>{{ "MailContentReminderMaxSuperior" | get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name, session.date_start, session.description) }}</p>
+            <p>{{ "MailContentReminderMaxSuperiorSecond" | get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.recommended_number_of_participants) }}</p>
           <table width="100%" border="0" cellspacing="3" cellpadding="4" style="background:#EDE9EA">
             {% for student in students %}
             <tr>
@@ -61,7 +62,7 @@
             </tr>
             {% endfor %}
             </table>
-          <p>Gracias.</p>
+          <p>{{ "MailThankYou" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
           <h3>{{ signature }}</h3></td>
         <td>&nbsp;</td>
       </tr>

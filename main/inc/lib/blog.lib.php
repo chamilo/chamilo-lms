@@ -1107,144 +1107,30 @@ class Blog {
 	 *
 	 * @param Integer $blog_id
 	 */
-	public static function display_form_new_post ($blog_id) {
-		if(api_is_allowed('BLOG_' . $blog_id, 'article_add')) {
-			echo '<script type="text/javascript">
-					function FCKeditor_OnComplete( editorInstance )
-					{
-					  editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-					}
-
-					function check_for_title()
-					{
-						// This functions shows that you can interact directly with the editor area
-						// DOM. In this way you have the freedom to do anything you want with it.
-
-						// Get the editor instance that we want to interact with.
-						var oEditor = FCKeditorAPI.GetInstance(\'post_full_text\') ;
-
-						// Get the Editor Area DOM (Document object).
-						var oDOM = oEditor.EditorDocument ;
-
-						var iLength ;
-						var contentText ;
-						var contentTextArray;
-						var bestandsnaamNieuw = "";
-						var bestandsnaamOud = "";
-
-						// The are two diffent ways to get the text (without HTML markups).
-						// It is browser specific.
-
-						if( document.all )		// If Internet Explorer.
-						{
-							contentText = oDOM.body.innerText ;
-						}
-						else					// If Gecko.
-						{
-							var r = oDOM.createRange() ;
-							r.selectNodeContents( oDOM.body ) ;
-							contentText = r.toString() ;
-						}
-
-						// Compose title if there is none
-						contentTextArray = contentText.split(\' \') ;
-						var x=0;
-						for(x=0; (x<5 && x<contentTextArray.length); x++)
-						{
-							if(x < 4)
-							{
-								bestandsnaamNieuw += contentTextArray[x] + \' \';
-							}
-							else
-							{
-								bestandsnaamNieuw += contentTextArray[x] + \'...\';
-							}
-						}
-
-						if(document.getElementById(\'post_title_edited\').value == "false")
-						{
-							document.getElementById(\'post_title\').value = bestandsnaamNieuw;
-						}
-					}
-
-					function trim(s) {
-					 while(s.substring(0,1) == \' \') {
-					  s = s.substring(1,s.length);
-					 }
-					 while(s.substring(s.length-1,s.length) == \' \') {
-					  s = s.substring(0,s.length-1);
-					 }
-					 return s;
-					}
-
-					function check_if_still_empty()
-					{
-						if(trim(document.getElementById(\'post_title\').value) != "")
-						{
-							document.getElementById(\'post_title_edited\').value = "true";
-						}
-					}
-
-			</script>';
-
-
-			echo '<form name="add_post" enctype="multipart/form-data"  method="post" action="blog.php?action=new_post&blog_id=' . $blog_id . '">';
-
-			echo '<input type="hidden" name="post_title_edited" id="post_title_edited" value="false" />';
-
-			// form title
-			echo '<legend>' . get_lang('NewPost') . '</legend>';
-
-			// article title
-			echo '<div><span class="form_required">*</span>'.get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" /></div><br />';
-
-			// article text
-			//@todo use formvalidator
-			//$oFCKeditor = new FCKeditor('post_full_text') ;
-            $oFCKeditor = new CKeditor();
-			$oFCKeditor->Width		= '100%';
-			$oFCKeditor->Height		= '200';
-			if(!api_is_allowed_to_edit()) {
-				$oFCKeditor->ToolbarSet = 'Project_Student';
+	public static function display_form_new_post ($blog_id)
+	{
+		if (api_is_allowed('BLOG_' . $blog_id, 'article_add')) {
+			$form = new FormValidator(
+				'add_post',
+				'post',
+				api_get_path(WEB_CODE_PATH)."blog/blog.php?action=new_post&blog_id=" . $blog_id . "&" . api_get_cidreq()
+			);
+			$form->addHidden('post_title_edited', 'false');
+			$form->add_header(get_lang('NewPost'));
+			$form->add_textfield('post_title', get_lang('Title'));
+			$config = array();
+			if (!api_is_allowed_to_edit()) {
+				$config['ToolbarSet'] = 'ProjectStudent';
 			} else {
-				$oFCKeditor->ToolbarSet = 'Project';
+				$config['ToolbarSet'] = 'Project';
 			}
-			$oFCKeditor->Value = isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
+			$form->add_html_editor('post_full_text', get_lang('Content'), false, false, $config);
+			$form->add_file('user_upload', get_lang('AddAnAttachment'));
+			$form->add_textarea('post_file_comment', get_lang('FileComment'));
+			$form->addHidden('new_post_submit', 'true');
+			$form->addButton('save', get_lang('Save'));
 
-			echo '<div class="control-group">';
-            //$oFCKeditor->Create();
-            $oFCKeditor->editor('post_full_text');
-			echo '</div>';
-
-			// attachment
-			echo '<div class="control-group">
-						<label class="control-label">
-							' . get_lang('AddAnAttachment') . '
-						</label>
-						<div class="controls">
-							<input type="file" name="user_upload"/>
-						</div>
-					</div>';
-
-			// comment
-			echo '<div class="control-group">
-						<label class="control-label">
-							' . get_lang('FileComment') . '
-						</label>
-						<div class="controls">
-							<textarea name="post_file_comment" cols="34" /></textarea>
-						</div>
-					</div>';
-
-			// submit
-			echo '<div class="control-group">
-						<div class="controls">
-								 <input type="hidden" name="action" value="" />
-								 <input type="hidden" name="new_post_submit" value="true" />
-								 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
-						</div>
-					</div>';
-			echo '</form>';
+			$form->display();
 		} else {
 			api_not_allowed();
 		}
@@ -1256,7 +1142,8 @@ class Blog {
 	 *
 	 * @param Integer $blog_id
 	 */
-	public static function display_form_edit_post ($blog_id, $post_id) {
+	public static function display_form_edit_post ($blog_id, $post_id)
+	{
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
@@ -2526,12 +2413,11 @@ class Blog {
 				if(($curday == -1) && ($ii == $startdayofweek))
 					$curday = 1;
 
-				if(($curday > 0) && ($curday <= $numberofdays[$month]))
-				{
+				if(($curday > 0) && ($curday <= $numberofdays[$month])) {
 					$bgcolor = $ii < 5 ? $class="class=\"days_week\"" : $class="class=\"days_weekend\"";
 					$dayheader = "$curday";
 
-					if(($curday == $today[mday]) && ($year == $today[year]) && ($month == $today[mon]))
+					if(($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon']))
 					{
 						$dayheader = "$curday";
 						$class = "class=\"days_today\"";

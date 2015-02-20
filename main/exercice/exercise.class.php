@@ -1018,7 +1018,7 @@ class Exercise
             $editor_config = array_merge($editor_config, $type);
         }
 
-        $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
+        $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" style="display:none" >');
         $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
         $form->addElement ('html','</div>');
 
@@ -2692,7 +2692,8 @@ class Exercise
                 // for free answer
                 case FREE_ANSWER:
                     if ($from_database) {
-                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
+                                   WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resq   = Database::query($query);
                         $choice = Database::result($resq,0,'answer');
                         $choice = str_replace('\r\n', '', $choice);
@@ -2719,7 +2720,8 @@ class Exercise
                     break;
                 case ORAL_EXPRESSION:
                     if ($from_database) {
-                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
+                                   WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resq   = Database::query($query);
                         $choice = Database::result($resq,0,'answer');
                         $choice = str_replace('\r\n', '', $choice);

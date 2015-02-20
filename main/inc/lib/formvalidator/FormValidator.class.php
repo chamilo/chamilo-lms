@@ -147,14 +147,14 @@ class FormValidator extends HTML_QuickForm
         $renderer = & $this->defaultRenderer();
 
         //Form template
-        $form_template = '<form{attributes}>
+        $formTemplate = '<form{attributes}>
 <fieldset>
 	{content}
 	<div class="clear"></div>
 </fieldset>
 {hidden}
 </form>';
-        $renderer->setFormTemplate($form_template);
+        $renderer->setFormTemplate($formTemplate);
 
         //Element template
         if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {

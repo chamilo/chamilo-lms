@@ -888,17 +888,12 @@ if (!empty($error)) {
             //3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
 
-            //Checking FCK
-            if (typeof(FCKeditorAPI) !== "undefined") {
-                var oEditor = FCKeditorAPI.GetInstance("choice["+question_id+"]") ;
-                var fck_content = "";
-
-                if (oEditor) {
-                    fck_content = oEditor.GetHTML();
-                    my_choice = {};
-                    my_choice["choice["+question_id+"]"] = fck_content;
-                    my_choice = $.param(my_choice);
-                }
+            // Checking FCK
+            if (CKEDITOR.instances["choice["+question_id+"]"]) {
+                fck_content = CKEDITOR.instances["choice["+question_id+"]"].getData();
+                my_choice = {};
+                my_choice["choice["+question_id+"]"] = fck_content;
+                my_choice = $.param(my_choice);
             }
 
             if ($(\'input[name="remind_list[\'+question_id+\']"]\').is(\':checked\')) {
@@ -962,19 +957,13 @@ if (!empty($error)) {
             var free_answers = {};
 
             $.each(question_list, function(index, my_question_id) {
-                //Checking FCK
-                if (typeof(FCKeditorAPI) !== "undefined") {
-                    var oEditor = FCKeditorAPI.GetInstance("choice["+my_question_id+"]") ;
-                    var fck_content = "";
-                    if (oEditor) {
-                        fck_content = oEditor.GetHTML();
-                        //alert(index + "  " +my_question_id + " " +fck_content);
-                        free_answers["free_choice["+my_question_id+"]"] = fck_content;
-                    }
+                // Checking FCK
+                if (CKEDITOR.instances["choice["+question_id+"]"]) {
+                    fck_content = CKEDITOR.instances["choice["+question_id+"]"].getData();
+                    free_answers["free_choice["+my_question_id+"]"] = fck_content;
                 }
             });
 
-            // lok+(fgt)= data base
             free_answers = $.param(free_answers);
 
             $("#save_all_reponse").html("'.addslashes(Display::return_icon('loading1.gif')).'");

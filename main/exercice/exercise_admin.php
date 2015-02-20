@@ -33,18 +33,6 @@ $htmlHeadXtra[] = '<script>
         }
     }
 
-    function FCKeditor_OnComplete( editorInstance ) {
-       if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
-          HideFCKEditorByInstanceName (editorInstance.Name);
-       }
-    }
-
-    function HideFCKEditorByInstanceName ( editorInstanceName ) {
-        if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
-              document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
-        }
-    }
-
     function show_media() {
         var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
         if(my_display== \'none\' || my_display == \'\') {

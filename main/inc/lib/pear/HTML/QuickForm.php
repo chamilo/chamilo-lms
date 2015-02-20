@@ -1696,7 +1696,7 @@ class HTML_QuickForm extends HTML_Common
     *
     * @access public
     * @since 3.0
-    * @return object a default renderer object
+    * @return HTML_QuickForm_Renderer_Default
     */
     function &defaultRenderer() {
         if (!isset($GLOBALS['_HTML_QuickForm_default_renderer'])) {
